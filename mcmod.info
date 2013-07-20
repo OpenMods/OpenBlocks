@@ -1,0 +1,17 @@
+[
+{
+  "modid" : "JadedLadder",
+  "name" : "JadedLadder",
+  "version" : "1.0.0",
+  "url" : "http://www.feed-the-beast.com",
+  "credits" : "",
+  "authors": [
+    "Mikee"
+  ],
+  "description": "",
+  "logoFile" : "",
+  "updateUrl" : "",
+  "parent" : "",
+  "screenshots": [
+  ]
+}]

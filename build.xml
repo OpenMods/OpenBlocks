@@ -1,0 +1,138 @@
+<!-- nallar's BuildCraft ant build script edited for OpenCCSensors -->
+<project name="OpenCCSensors" default="main">
+	<property environment="env"/>
+	<!-- Properties -->
+
+	<property name="build.dir"           value="build"/>
+	<property name="src.dir"             value="src"/>
+
+	<property name="download.dir"        value="download"/>
+
+	<property name="classes.dir"         value="${build.dir}/classes"/>
+	<property name="jar.dir"             value="${build.dir}/dist"/>
+
+	<property name="forge.dir"           value="${build.dir}/forge"/>
+	<property name="mcp.dir"             value="${forge.dir}/mcp"/>
+
+	<property name="mcpsrc.dir"          value="${mcp.dir}/src/minecraft"/>
+
+	<property name="mc.version"          value="1.5.2"/>
+	<property name="forge.version"       value="7.8.0.703"/>
+	<property name="mod.version"         value="1.0.0"/>
+	<property name="mod.name"	     value="JadedLadder"/>
+	
+	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
+
+	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
+
+	<condition property="out-of-date">
+		<not>
+			<and>
+				<available file="${download.dir}/${forge.name}"/>
+				<available file="${mcpsrc.dir}"/>
+			</and>
+		</not>
+	</condition>
+
+	<mkdir dir="${download.dir}"/>
+
+	<!-- Targets -->
+
+	<!-- Clear build directory -->
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+
+	<!-- Set full version -->
+	<target name="initialize-version">
+		<echo message="Starting build for ${mod.name} v${mod.version}"/>
+	</target>
+
+	<!-- Download necessary files -->
+	<target name="download-files" depends="download-forge"/>
+	
+	<!-- Download forge (if it doesn't exist) -->
+	<target name="download-forge" unless="forge-exists" >
+		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+	</target>
+
+	<!-- Setup mcp and forge -->
+	<target name="setup" depends="download-files" if="out-of-date">
+	
+		<delete dir="${mcp.dir}"/>
+		<delete dir="${forge.dir}"/>
+
+		<!-- Unzip them -->
+		<unzip dest="${build.dir}" src="${download.dir}/${forge.name}"/>
+
+		<!-- Install forge -->
+		<exec dir="${forge.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c install.cmd"/>
+		</exec>
+
+		<exec dir="${forge.dir}" executable="sh" osfamily="unix">
+			<arg value="install.sh"/>
+		</exec>
+
+	</target>
+
+	<target name="compile" depends="initialize-version,setup">
+
+		<delete dir="${classes.dir}"/>
+		<mkdir dir="${classes.dir}"/>
+		
+		<copy todir="${mcpsrc.dir}">
+			<fileset dir="${src.dir}"/>
+			<filterset>
+				<filter token="VERSION" value="${mod.version}"/>
+			</filterset>
+		</copy>
+
+		<!-- Recompile -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c recompile.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+			<arg value="recompile.sh"/>
+		</exec>
+
+		<!-- Reobfuscate -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c reobfuscate_srg.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+			<arg value="reobfuscate_srg.sh"/>
+		</exec>
+
+		<!-- Copy classes -->
+		<copy todir="${classes.dir}/jadedladder">
+			<fileset dir="${mcp.dir}/reobf/minecraft/jadedladder" />
+		</copy>
+
+		<!-- Copy resources -->
+		<copy todir="${classes.dir}/mods/jadedladder">
+			<fileset dir="mods/jadedladder" />
+		</copy>
+		
+		<!-- Copy resources -->
+		<copy todir="${classes.dir}">
+			<fileset dir="." includes="mcmod.info" />
+		</copy>
+
+	</target>
+
+	<!-- Package the compiled files -->
+	<target name="package" depends="compile">
+
+		<delete dir="${jar.dir}"/>
+		<mkdir dir="${jar.dir}"/>
+		<jar destfile="${jar.dir}/${mod.name}-${mod.version}.jar" basedir="${classes.dir}"/>
+
+	</target>
+
+	<!-- Default target to run -->
+	<target name="main" depends="package"/>
+
+</project>
