@@ -9,6 +9,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import jadedladder.JadedLadder;
+import jadedladder.common.block.BlockGuide;
 import jadedladder.common.block.BlockLadder;
 
 public class CommonProxy {
@@ -19,6 +20,9 @@ public class CommonProxy {
 		CraftingManager.getInstance().getRecipeList().add(
 				new ShapelessOreRecipe(new ItemStack(JadedLadder.Blocks.ladder),
 						new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
+		
+
+		JadedLadder.Blocks.guide = new BlockGuide();
 	}
 
 	public void registerRenderInformation() {

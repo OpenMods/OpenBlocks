@@ -9,6 +9,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import jadedladder.common.CommonProxy;
+import jadedladder.common.block.BlockGuide;
 import jadedladder.common.block.BlockLadder;
 
 @Mod(modid = "JadedLadder", name = "JadedLadder", version = "@VERSION@")
@@ -23,12 +24,16 @@ public class JadedLadder {
 
 	public static class Blocks {
 		public static BlockLadder ladder;
+		public static BlockGuide guide;
 	}
 
 	public static class Config {
 		public static int blockLadderId = 800;
+		public static int blockGuideId = 801;
 	}
 
+	public static int renderId;
+	
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
 
@@ -42,6 +47,11 @@ public class JadedLadder {
 		Property prop = configFile.get("block", "blockLadderId",Config.blockLadderId);
 		prop.comment = "The id of the ladder";
 		Config.blockLadderId = prop.getInt();
+		
+		prop = configFile.get("block", "blockGuideId",Config.blockGuideId);
+		prop.comment = "The id of the guide";
+		Config.blockGuideId = prop.getInt();
+		
 		configFile.save();
 
 	}
