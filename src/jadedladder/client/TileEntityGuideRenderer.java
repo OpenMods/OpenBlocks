@@ -20,75 +20,20 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		renderAt(x, y, z);
 		TileEntityGuide guide = (TileEntityGuide) tileentity;
-		int strength = guide.getCurrentStrength();
-		Mode currentMode = guide.getCurrentMode();
-		if (currentMode == Mode.Sphere) {
-			renderSphere(x, y, z, strength);
-		}else if (currentMode == Mode.Pyramid) {
-			renderPyramid(x, y, z, strength);
-		}else if (currentMode == Mode.Cube) {
-			renderCube(x, y, z, strength);
-		}else if (currentMode == Mode.Cylinder) {
-			renderCylinder(x, y, z, strength);
-		}
+		renderShape(guide.getShape(), guide.height, guide.width, guide.depth, x, y, z);
 	}
 	
-	private void renderCylinder(double x, double y, double z,
-			int strength) {
-		for (int x2 = -strength; x2 <= strength; x2++) {
-			for (int y2 = -strength; y2 <= strength; y2++) {
-				for (int z2 = -strength; z2 <= strength; z2++) {
-					if ((int)Math.sqrt(x2*x2 + z2*z2) == strength) {
-						GL11.glEnable(GL11.GL_BLEND);
-						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						renderAt(x + x2, y+strength + y2, z + z2);
-						GL11.glDisable(GL11.GL_BLEND);
-					}
-				}	
-			}	
+	private void renderShape(boolean[][][] shape, int height, int width, int depth, double x, double y, double z) {
+		if (shape == null) {
+			return;
 		}
-	}
-
-
-	private void renderPyramid(double x, double y, double z, int strength) {
-		for (int y2 = strength; y2 >= 0; y2--) {
-			int y3 = strength-y2;
-			for (int x2 = -y3; x2 <= y3; x2++) {
-				for (int z2 = -y3; z2 <= y3; z2++) {
-					if (x2 == -y3 || x2 == y3 || z2 == -y3 || z2 == y3) {
+		for (int y2 = 0; y2 < shape.length; y2++) {
+			for (int x2 = 0; x2 < shape[y2].length; x2++) {
+				for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
+					if (shape[y2][x2][z2]) {
 						GL11.glEnable(GL11.GL_BLEND);
 						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						renderAt(x + x2, y + y2, z + z2);
-						GL11.glDisable(GL11.GL_BLEND);
-					}
-				}
-			}
-		}
-	}
-
-	private void renderCube(double x, double y, double z, int strength) {
-		for (int x2 = -strength; x2 <= strength; x2++) {
-			for (int y2 = -strength; y2 <= strength; y2++) {
-				for (int z2 = -strength; z2 <= strength; z2++) {
-					if (x2 == -strength || x2 == strength || y2 == -strength || y2 == strength || z2 == -strength || z2 == strength) {
-						GL11.glEnable(GL11.GL_BLEND);
-						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						renderAt(x + x2, y+strength + y2, z + z2);
-						GL11.glDisable(GL11.GL_BLEND);
-					}
-				}	
-			}	
-		}
-	}
-	
-	private void renderSphere(double x, double y, double z, int strength) {
-		for (int x2 = -strength; x2 <= strength; x2++) {
-			for (int y2 = -strength; y2 <= strength; y2++) {
-				for (int z2 = -strength; z2 <= strength; z2++) {
-					if ((int)Math.sqrt(x2*x2 + y2*y2 + z2*z2) == strength) {
-						GL11.glEnable(GL11.GL_BLEND);
-						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						renderAt(x + x2, y+strength + y2, z + z2);
+						renderAt(x + x2 - width, y + y2 - height, z + z2 - depth);
 						GL11.glDisable(GL11.GL_BLEND);
 					}
 				}	

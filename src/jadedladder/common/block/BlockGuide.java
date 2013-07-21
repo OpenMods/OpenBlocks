@@ -44,21 +44,6 @@ public class BlockGuide extends BlockContainer {
 		return null;
 	}
 
-	public void updateRedstoneState(World world, int x, int y, int z) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		TileEntityGuide tile = getTileEntity(world, x, y, z);
-		if (tile != null) {
-			tile.updateRedstoneState();
-		}
-	}
-
-	public void onNeighborBlockChange(World world, int x, int y, int z,
-			int blockId) {
-		if (!world.isRemote) {
-			updateRedstoneState(world, x, y, z);
-		}
-	}
-
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
@@ -94,12 +79,16 @@ public class BlockGuide extends BlockContainer {
 		return false;
 	}
 	
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float what, float are, float you) {
     	TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		if (player.isSneaking() || tileEntity == null || !(tileEntity instanceof TileEntityGuide)) {
+		if (tileEntity == null || !(tileEntity instanceof TileEntityGuide)) {
 			return false;
 		}
-		((TileEntityGuide)tileEntity).switchMode();
+		if (player.isSneaking()) {
+			((TileEntityGuide)tileEntity).switchMode();
+		}else  {
+			((TileEntityGuide)tileEntity).changeDimension(ForgeDirection.getOrientation(side));
+		}
 		
 		return true;
     }
