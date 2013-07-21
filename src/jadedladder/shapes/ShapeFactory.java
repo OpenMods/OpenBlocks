@@ -10,7 +10,8 @@ public class ShapeFactory {
 
 	public enum Mode {
 		Sphere("Sphere"),
-		Cylinder("Cylinder");
+		Cylinder("Cylinder"),
+		Cuboid("Cuboid");
 		
 		private String displayName;
 		
@@ -29,6 +30,7 @@ public class ShapeFactory {
 		_shapeMap = new HashMap<ShapeFactory.Mode, IShapeGenerator>();
 		_shapeMap.put(Mode.Sphere, new ShapeSphereGenerator());
 		_shapeMap.put(Mode.Cylinder, new ShapeCylinderGenerator());
+		_shapeMap.put(Mode.Cuboid, new ShapeCuboidGenerator());
 	}
 	
 	public static void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable, Mode mode){
