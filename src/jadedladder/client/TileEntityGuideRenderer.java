@@ -2,7 +2,6 @@ package jadedladder.client;
 
 import jadedladder.JadedLadder;
 import jadedladder.common.tileentity.TileEntityGuide;
-import jadedladder.common.tileentity.TileEntityGuide.Mode;
 
 import org.lwjgl.opengl.GL11;
 
