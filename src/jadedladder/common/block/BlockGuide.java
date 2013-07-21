@@ -81,13 +81,17 @@ public class BlockGuide extends BlockContainer {
 	
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float what, float are, float you) {
     	TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		if (tileEntity == null || !(tileEntity instanceof TileEntityGuide)) {
+		
+    	if (tileEntity == null || !(tileEntity instanceof TileEntityGuide)) {
 			return false;
 		}
-		if (player.isSneaking()) {
-			((TileEntityGuide)tileEntity).switchMode();
-		}else  {
-			((TileEntityGuide)tileEntity).changeDimension(ForgeDirection.getOrientation(side));
+		
+		if (!world.isRemote) { 
+			if (player.isSneaking()) {
+				((TileEntityGuide)tileEntity).switchMode(player);
+			}else  {
+				((TileEntityGuide)tileEntity).changeDimensions(ForgeDirection.getOrientation(side));
+			}
 		}
 		
 		return true;

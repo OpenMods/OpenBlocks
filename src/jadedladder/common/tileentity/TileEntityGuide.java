@@ -11,6 +11,7 @@ import jadedladder.common.IShapeable;
 import jadedladder.common.block.BlockGuide;
 import jadedladder.shapes.ShapeFactory;
 import jadedladder.shapes.ShapeFactory.Mode;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -59,9 +60,8 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 		ShapeFactory.generateShape(width, height, depth, this, currentMode);
 	}	
 	
-	public boolean setBlock(double x, double y, double z) {
-		shape[height+(int)y][width+(int)x][depth+(int)z] = true;
-		return true;
+	public void setBlock(int x, int y, int z) {
+		shape[height+y][width+x][depth+z] = true;
 	}
     
 	public boolean[][][] getShape() {
@@ -99,18 +99,24 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 		return box.expand(width, height, depth);
 	}
 
+
+	public void switchMode(EntityPlayer player) {
+		switchMode();
+		if (player != null) {
+			player.sendChatToPlayer(String.format("Changing to %s mode", currentMode.getDisplayName()));
+		}
+	}
+	
 	public void switchMode() {
 		int nextMode = currentMode.ordinal() + 1;
 		if (nextMode >= Mode.values().length) {
 			nextMode = 0;
 		}
 		currentMode = Mode.values()[nextMode];
-		System.out.println(currentMode);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
-	public void changeDimension(ForgeDirection orientation) {
-
+	public void changeDimensions(ForgeDirection orientation) {
 		if (width > 0 && orientation == ForgeDirection.EAST) {
 			width--;
 		}else if (orientation == ForgeDirection.WEST) {
