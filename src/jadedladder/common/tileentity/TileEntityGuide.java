@@ -20,12 +20,11 @@ import net.minecraftforge.common.ForgeDirection;
 public class TileEntityGuide extends TileEntity {
 
 	public enum Mode {
-		Sphere, Cube, Pyramid, Cylinder
+		Sphere, Cube, Pyramid, Cylinder, Car, HousesOfParliment, ACat
 	}
 
 	private boolean shape[][][];
 	
-
 	public int width = 8;
 	public int height = 8;
 	public int depth = 8;
@@ -59,6 +58,8 @@ public class TileEntityGuide extends TileEntity {
 		shape = new boolean[height * 2 + 1][width * 2 + 1][depth * 2 + 1];
 		if (currentMode == Mode.Sphere) { 
 			makeSphere(width, height, depth);
+		}else if (currentMode == Mode.Cylinder) {
+			makeCylinder(width, depth, height);
 		}
 	}
 	
@@ -89,7 +90,7 @@ public class TileEntityGuide extends TileEntity {
             final double xn = nextXn;
             nextXn = (x + 1) * invRadiusX;
             double nextYn = 0;
-            forY: for (int y = 0; y <= ceilRadiusY; ++y) {
+            forY: for (int y = -ceilRadiusY; y <= ceilRadiusY; ++y) {
                 final double yn = nextYn;
                 nextYn = (y + 1) * invRadiusY;
                 double nextZn = 0;
@@ -144,6 +145,63 @@ public class TileEntityGuide extends TileEntity {
         return affected;
     }
 	
+	public int makeCylinder(double radiusX, double radiusZ, int height) {
+        int affected = 0;
+
+        radiusX += 0.5;
+        radiusZ += 0.5;
+
+        if (height == 0) {
+            return 0;
+        }
+
+        final double invRadiusX = 1 / radiusX;
+        final double invRadiusZ = 1 / radiusZ;
+
+        final int ceilRadiusX = (int) Math.ceil(radiusX);
+        final int ceilRadiusZ = (int) Math.ceil(radiusZ);
+
+        double nextXn = 0;
+        forX: for (int x = 0; x <= ceilRadiusX; ++x) {
+            final double xn = nextXn;
+            nextXn = (x + 1) * invRadiusX;
+            double nextZn = 0;
+            forZ: for (int z = 0; z <= ceilRadiusZ; ++z) {
+                final double zn = nextZn;
+                nextZn = (z + 1) * invRadiusZ;
+
+                double distanceSq = lengthSq(xn, zn);
+                if (distanceSq > 1) {
+                    if (z == 0) {
+                        break forX;
+                    }
+                    break forZ;
+                }
+
+                if (lengthSq(nextXn, zn) <= 1 && lengthSq(xn, nextZn) <= 1) {
+                    continue;
+                }
+
+                for (int y = 0; y < height; ++y) {
+                    if (setBlock(x, y, z)) {
+                        ++affected;
+                    }
+                    if (setBlock(-x, y, z)) {
+                        ++affected;
+                    }
+                    if (setBlock(x, y, -z)) {
+                        ++affected;
+                    }
+                    if (setBlock(-x, y, -z)) {
+                        ++affected;
+                    }
+                }
+            }
+        }
+
+        return affected;
+    }
+	
 	private boolean setBlock(double x, double y, double z) {
 		shape[height+(int)y][width+(int)x][depth+(int)z] = true;
 		return true;
@@ -153,6 +211,9 @@ public class TileEntityGuide extends TileEntity {
         return (x * x) + (y * y) + (z * z);
     }
 
+    private static final double lengthSq(double x, double z) {
+        return (x * x) + (z * z);
+    }
     
 	public boolean[][][] getShape() {
 		return shape;
@@ -195,6 +256,7 @@ public class TileEntityGuide extends TileEntity {
 			nextMode = 0;
 		}
 		currentMode = Mode.values()[nextMode];
+		System.out.println(currentMode);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
