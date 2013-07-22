@@ -11,4 +11,5 @@ public class MathUtils {
     public static final double lengthSq(double x, double z) {
         return (x * x) + (z * z);
     }
+    
 }

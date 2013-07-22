@@ -117,6 +117,9 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 			nextMode = 0;
 		}
 		currentMode = Mode.values()[nextMode];
+		if (currentMode.isFixedRatio()) {
+			height = depth = width;
+		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
@@ -133,6 +136,15 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 			height++;
 		}else if (height > 0 && orientation == ForgeDirection.DOWN) {
 			height--;
+		}
+		if (currentMode.isFixedRatio()) {
+			if (width != height && width != depth) {
+				height = depth = width;
+			}else if (height != width && height != depth) {
+				depth = width = height;
+			}else if (depth != width && depth != height) {
+				width = height = depth;
+			}
 		}
 		
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

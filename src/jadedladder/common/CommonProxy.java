@@ -11,6 +11,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import jadedladder.JadedLadder;
 import jadedladder.common.block.BlockGuide;
 import jadedladder.common.block.BlockLadder;
+import jadedladder.common.block.BlockDrop;
 
 public class CommonProxy {
 
@@ -23,6 +24,7 @@ public class CommonProxy {
 		
 
 		JadedLadder.Blocks.guide = new BlockGuide();
+		JadedLadder.Blocks.drop = new BlockDrop();
 	}
 
 	public void registerRenderInformation() {
