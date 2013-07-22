@@ -1,4 +1,4 @@
-<!-- nallar's BuildCraft ant build script edited for OpenCCSensors -->
+<!-- nallar's BuildCraft ant build script edited for OpenBlocks-->
 <project name="OpenCCSensors" default="main">
 	<property environment="env"/>
 	<!-- Properties -->
@@ -19,7 +19,7 @@
 	<property name="mc.version"          value="1.5.2"/>
 	<property name="forge.version"       value="7.8.0.703"/>
 	<property name="mod.version"         value="1.0.0"/>
-	<property name="mod.name"	     value="JadedLadder"/>
+	<property name="mod.name"	     value="OpenBlocks"/>
 	
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
 
