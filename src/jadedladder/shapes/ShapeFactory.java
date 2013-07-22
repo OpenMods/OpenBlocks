@@ -12,6 +12,7 @@ public class ShapeFactory {
 		Sphere(false),
 		Cylinder(false),
 		Cuboid(false),
+		Dome(false),
 		Triangle(true),
 		Pentagon(true),
 		Hexagon(true),
@@ -45,6 +46,7 @@ public class ShapeFactory {
 		_shapeMap.put(Mode.Sphere, new ShapeSphereGenerator());
 		_shapeMap.put(Mode.Cylinder, new ShapeCylinderGenerator());
 		_shapeMap.put(Mode.Cuboid, new ShapeCuboidGenerator());
+		_shapeMap.put(Mode.Dome, new ShapeDomeGenerator());
 		_shapeMap.put(Mode.Triangle, new ShapeEquilateral2dGenerator(3));
 		_shapeMap.put(Mode.Pentagon, new ShapeEquilateral2dGenerator(5));
 		_shapeMap.put(Mode.Hexagon, new ShapeEquilateral2dGenerator(6));
