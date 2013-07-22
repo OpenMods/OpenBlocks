@@ -5,7 +5,7 @@ import jadedladder.common.IShapeable;
 
 public class ShapeCuboidGenerator implements IShapeGenerator {
 
-	private void makeFace (int startX, int startY, int startZ, int finishX, int finishY, int finishZ, iShapeable shapeable) {
+	private void makeFace (int startX, int startY, int startZ, int finishX, int finishY, int finishZ, IShapeable shapeable) {
 		for (int x = startX; x <= finishX; x++) {
 			for (int y = startY; y <= finishY; y++) {
 				for (int z = startZ; z <= finishZ; z++) {
@@ -16,7 +16,7 @@ public class ShapeCuboidGenerator implements IShapeGenerator {
 	}
 	
 	@Override
-	public void generateShape(int xSize, int ySize, int zSize, iShapeable shapeable) {
+	public void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable) {
 		makeFace(-xSize,  ySize, -zSize,  xSize,  ySize,  zSize, shapeable); //top
 		makeFace(-xSize, -ySize, -zSize,  xSize, -ySize,  zSize, shapeable); //bottom
 		makeFace( xSize, -ySize, -zSize,  xSize,  ySize,  zSize, shapeable); //south
