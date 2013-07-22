@@ -9,18 +9,32 @@ import jadedladder.common.IShapeable;
 public class ShapeFactory {
 
 	public enum Mode {
-		Sphere("Sphere"),
-		Cylinder("Cylinder"),
-		Cuboid("Cuboid");
+		Sphere(false),
+		Cylinder(false),
+		Cuboid(false),
+		Triangle(true),
+		Pentagon(true),
+		Hexagon(true),
+		Octagon(true);
 		
 		private String displayName;
+		private boolean fixedRatio = false;
+
+		Mode(boolean fixedRatio) {
+			this(null, fixedRatio);
+		}
 		
-		Mode(String displayName) {
+		Mode(String displayName, boolean fixedRatio) {
 			this.displayName = displayName;
+			this.fixedRatio = fixedRatio;
 		}
 		
 		public String getDisplayName() {
-			return displayName;
+			return displayName == null ? name() : displayName;
+		}
+		
+		public boolean isFixedRatio() {
+			return fixedRatio;
 		}
 	}
 	
@@ -31,6 +45,10 @@ public class ShapeFactory {
 		_shapeMap.put(Mode.Sphere, new ShapeSphereGenerator());
 		_shapeMap.put(Mode.Cylinder, new ShapeCylinderGenerator());
 		_shapeMap.put(Mode.Cuboid, new ShapeCuboidGenerator());
+		_shapeMap.put(Mode.Triangle, new ShapeEquilateral2dGenerator(3));
+		_shapeMap.put(Mode.Pentagon, new ShapeEquilateral2dGenerator(5));
+		_shapeMap.put(Mode.Hexagon, new ShapeEquilateral2dGenerator(6));
+		_shapeMap.put(Mode.Octagon, new ShapeEquilateral2dGenerator(8));
 	}
 	
 	public static void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable, Mode mode){
