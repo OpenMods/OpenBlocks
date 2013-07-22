@@ -9,6 +9,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import jadedladder.common.CommonProxy;
+import jadedladder.common.block.BlockDrop;
 import jadedladder.common.block.BlockGuide;
 import jadedladder.common.block.BlockLadder;
 
@@ -25,11 +26,13 @@ public class JadedLadder {
 	public static class Blocks {
 		public static BlockLadder ladder;
 		public static BlockGuide guide;
+		public static BlockDrop drop;
 	}
 
 	public static class Config {
 		public static int blockLadderId = 800;
 		public static int blockGuideId = 801;
+		public static int blockDropId = 802;
 	}
 
 	public static int renderId;
@@ -51,6 +54,10 @@ public class JadedLadder {
 		prop = configFile.get("block", "blockGuideId",Config.blockGuideId);
 		prop.comment = "The id of the guide";
 		Config.blockGuideId = prop.getInt();
+		
+		prop = configFile.get("block", "blockDropId",Config.blockDropId);
+		prop.comment = "The id of the drop block";
+		Config.blockDropId = prop.getInt();
 		
 		configFile.save();
 
