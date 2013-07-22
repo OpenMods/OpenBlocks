@@ -6,17 +6,6 @@ import jadedladder.common.IShapeable;
 import jadedladder.utils.GeometryUtils;
 
 public class ShapeCuboidGenerator implements IShapeGenerator {
-
-	private void makeFace (int startX, int startY, int startZ, int finishX, int finishY, int finishZ, IShapeable shapeable) {
-		for (int x = startX; x <= finishX; x++) {
-			for (int y = startY; y <= finishY; y++) {
-				for (int z = startZ; z <= finishZ; z++) {
-					shapeable.setBlock(x, y, z);
-				}	
-			}
-		}
-	}
-
 	
 	@Override
 	public void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable) {
