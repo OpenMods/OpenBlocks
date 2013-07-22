@@ -7,7 +7,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import jadedladder.JadedLadder;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
@@ -19,6 +24,8 @@ public class TileEntityDropBlock extends TileEntity {
 	private int upperLevel = 0;
 	
 	private HashMap<String, Integer> cooldown = new HashMap<String, Integer>();
+	
+	public int colorIndex = 0;
 	
 	@Override
 	public void updateEntity() {
@@ -95,7 +102,6 @@ public class TileEntityDropBlock extends TileEntity {
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
 				if (blockId == JadedLadder.Config.blockDropId) {
-					//ffs. mikee is a derp.
 					if (worldObj.isAirBlock(xCoord, yPos+1, zCoord) && worldObj.isAirBlock(xCoord, yPos+2, zCoord)) {
 						return yPos;
 					}
@@ -109,6 +115,18 @@ public class TileEntityDropBlock extends TileEntity {
 		}
 		return 0;
 	}
-	
+
+	public void onActivated(EntityPlayer player) {
+		ItemStack stack = player.getHeldItem();
+		if (stack != null) {
+			Item item = stack.getItem();
+			if (item instanceof ItemDye) {
+				System.out.println(stack.getItemDamage());
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, stack.getItemDamage(), 3);
+			}
+			
+		}
+        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+	}
 
 }
