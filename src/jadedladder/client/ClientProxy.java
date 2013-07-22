@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import jadedladder.JadedLadder;
 import jadedladder.common.CommonProxy;
+import jadedladder.common.tileentity.TileEntityDropBlock;
 import jadedladder.common.tileentity.TileEntityGuide;
 
 public class ClientProxy extends CommonProxy {
