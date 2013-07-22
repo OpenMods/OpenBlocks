@@ -1,7 +1,9 @@
 package jadedladder.shapes;
 
+import net.minecraftforge.common.ForgeDirection;
 import jadedladder.common.IShapeGenerator;
 import jadedladder.common.IShapeable;
+import jadedladder.utils.GeometryUtils;
 
 public class ShapeCuboidGenerator implements IShapeGenerator {
 
@@ -14,15 +16,32 @@ public class ShapeCuboidGenerator implements IShapeGenerator {
 			}
 		}
 	}
+
 	
 	@Override
 	public void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable) {
-		makeFace(-xSize,  ySize, -zSize,  xSize,  ySize,  zSize, shapeable); //top
-		makeFace(-xSize, -ySize, -zSize,  xSize, -ySize,  zSize, shapeable); //bottom
-		makeFace( xSize, -ySize, -zSize,  xSize,  ySize,  zSize, shapeable); //south
-		makeFace(-xSize, -ySize, -zSize, -xSize,  ySize,  zSize, shapeable); //north
-		makeFace(-xSize, -ySize, -zSize,  xSize,  ySize, -zSize, shapeable); //west
-		makeFace(-xSize, -ySize,  zSize,  xSize,  ySize,  zSize, shapeable); //east
+		
+		/* 
+		 * The up direction is up when doing a side plane, and the origin is of course bottom left
+		 * However this is not the case when doing the top and bottom, as their up direction is depth
+		 */
+
+		// front (north)
+		GeometryUtils.makePlane(-xSize, -ySize, -zSize, xSize * 2, ySize * 2, ForgeDirection.EAST, ForgeDirection.UP, shapeable); 
+		// back ( south )
+		GeometryUtils.makePlane(xSize, -ySize, zSize, xSize * 2, ySize * 2, ForgeDirection.WEST, ForgeDirection.UP, shapeable); 
+		// left ( west )
+		GeometryUtils.makePlane(-xSize, -ySize, zSize, zSize * 2, ySize * 2, ForgeDirection.NORTH, ForgeDirection.UP, shapeable);
+		// right ( east )
+		GeometryUtils.makePlane(xSize, -ySize, -zSize, zSize * 2, ySize * 2, ForgeDirection.SOUTH, ForgeDirection.UP, shapeable);
+		// top ( up )
+		GeometryUtils.makePlane(-xSize, ySize, -zSize, xSize * 2, zSize * 2, ForgeDirection.EAST, ForgeDirection.SOUTH, shapeable);
+		// bottom ( down ) 
+		// Notice the 'Normal' of this plane is up, not down. If you were wondering why it's the same as the top plane
+		// Normally if you were rendering a cube in GL you would have to flip it so the normal would be away from the center
+		// But that doesn't matter in this case.
+		GeometryUtils.makePlane(-xSize, -ySize, -zSize, xSize * 2, zSize * 2, ForgeDirection.EAST, ForgeDirection.SOUTH, shapeable);
+		
 	}
 
 }

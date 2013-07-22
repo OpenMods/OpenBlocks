@@ -61,7 +61,11 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 	}	
 	
 	public void setBlock(int x, int y, int z) {
-		shape[height+y][width+x][depth+z] = true;
+		try{
+			shape[height+y][width+x][depth+z] = true;
+		}catch(IndexOutOfBoundsException iobe){
+			System.out.println(String.format("Index out of bounds setting block at %s,%s,%s", x,y,z));
+		}
 	}
     
 	public boolean[][][] getShape() {
