@@ -47,7 +47,7 @@ public class BlockLadder extends BlockTrapDoor {
 
 	@Override
 	public void registerIcons(IconRegister registry) {
-		blockIcon = registry.registerIcon("openblocks:openblocks");
+		blockIcon = registry.registerIcon("openblocks:ladder");
 	}
 
 	public boolean renderAsNormalBlock() {
