@@ -13,6 +13,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockLightbox;
 
 public class CommonProxy {
 
@@ -27,6 +28,7 @@ public class CommonProxy {
 		OpenBlocks.Blocks.guide = new BlockGuide();
 		OpenBlocks.Blocks.drop = new BlockDrop();
 		OpenBlocks.Blocks.heal = new BlockHeal();
+		OpenBlocks.Blocks.lightbox = new BlockLightbox();
 	}
 
 	public void registerRenderInformation() {
