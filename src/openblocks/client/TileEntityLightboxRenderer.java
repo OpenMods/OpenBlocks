@@ -7,6 +7,7 @@ import openblocks.utils.BlockUtils;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -32,10 +33,14 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		ForgeDirection surface = lightbox.getSurface();
 		ForgeDirection rotation = lightbox.getRotation();
 
+        RenderHelper.disableStandardItemLighting();
 		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
 			GL11.glRotatef(
 					BlockUtils.getRotationFromDirection(surface.getOpposite()),
 					1, 0, 0);
+			GL11.glRotatef(
+					-BlockUtils.getRotationFromDirection(rotation.getOpposite()),
+					0, 0, 1);
 		} else {
 			GL11.glRotatef(
 					BlockUtils.getRotationFromDirection(surface.getOpposite()),
@@ -43,17 +48,18 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		}
 
 		GL11.glPushMatrix();
-		GL11.glDisable(2896);
 
 		Tessellator t = Tessellator.instance;
 		renderBlocks.setRenderBounds(0D, 0.0D, 0.8D, 1D, 1D, 1d);
 		t.startDrawingQuads();
-		t.setColorRGBA(255, 255, 255, 255);
-		//TODO: tidy
+
+		t.setColorRGBA(200, 200, 200, 255);
+		t.setBrightness(255);
 		if (lightbox.worldObj != null) {
-			t.setBrightness(200 + (lightbox.worldObj.getBlockMetadata(lightbox.xCoord, lightbox.yCoord, lightbox.zCoord) * 30));
-		}else {
-			t.setBrightness(200);
+			int metadata = lightbox.worldObj.getBlockMetadata(lightbox.xCoord, lightbox.yCoord, lightbox.zCoord);
+			if (metadata > 0) {
+				t.setColorRGBA(255, 255, 255, 255);
+			}
 		}
 		this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
 		Icon renderingIcon = OpenBlocks.Blocks.lightbox
@@ -70,9 +76,8 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 				-0.5D, renderingIcon);
 		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
 				-0.5D, renderingIcon);
-		t.draw();
 
-		GL11.glEnable(2896);
+		t.draw();
 
 		ItemStack mapStack = lightbox.getStackInSlot(0);
 		if (mapStack != null) {
@@ -90,6 +95,8 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		}
 
 		GL11.glPopMatrix();
+
+        RenderHelper.enableStandardItemLighting();
 		GL11.glPopMatrix();
 	}
 
