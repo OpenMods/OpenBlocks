@@ -23,9 +23,22 @@ public class TileEntityDropBlock extends TileEntity {
 	private int lowerLevel = 0;
 	private int upperLevel = 0;
 	
+	/**
+	 * The distance that findBlock will look for another teleport block
+	 */
+	private static final int BLOCK_SEARCH_DISTANCE = 30;
+	/**
+	 * Indicates if the player must be looking in the direction they want to teleport
+	 */
+	private static final boolean MUST_FACE_DIRECTION = true;
+	/**
+	 * How far a player must be looking in a direction to be teleported 
+	 */
+	private static final float DIRECTION_MAGNITUDE = 0.95f;
+	
 	private HashMap<String, Integer> cooldown = new HashMap<String, Integer>();
 	
-	public int colorIndex = 0;
+	public int colorIndex = 0; // What is the point in colorIndex if we use Metadata?
 	
 	@Override
 	public void updateEntity() {
@@ -63,10 +76,14 @@ public class TileEntityDropBlock extends TileEntity {
 					if (cooldown.containsKey(player.username)) {
 						continue;
 					}
-					if (lowerLevel != 0 && player.isSneaking()) {
+					/* Don't activate when a player is flying around in creative, it's annoying */
+					
+					if(player.capabilities.isCreativeMode && player.capabilities.isFlying) continue;
+					if (lowerLevel != 0 && player.isSneaking() && (!MUST_FACE_DIRECTION || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = lowerLevel;
-					}else if (upperLevel != 0 && player.posY > yCoord + 1.2) {
+					/* player.isJumping doesn't seem to work server side ? */
+					}else if (upperLevel != 0 && player.posY > yCoord + 1.2 && (!MUST_FACE_DIRECTION || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = upperLevel;
 					}
@@ -97,11 +114,16 @@ public class TileEntityDropBlock extends TileEntity {
 			throw new Exception("Must be either up or down... for now");
 		}
 		
-		for (int y = 2; y < 30; y++) {
+		for (int y = 2; y < BLOCK_SEARCH_DISTANCE; y++) {
 			int yPos = yCoord + (y * direction.offsetY);
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
 				if (blockId == JadedLadder.Config.blockDropId) {
+					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord, yPos, zCoord);					
+					// Check that it is a drop block and that it has the same color index.
+					if(!(otherBlock instanceof TileEntityDropBlock)) continue;
+					if(((TileEntityDropBlock)otherBlock).getBlockMetadata() != this.getBlockMetadata()) continue; 
+					
 					if (worldObj.isAirBlock(xCoord, yPos+1, zCoord) && worldObj.isAirBlock(xCoord, yPos+2, zCoord)) {
 						return yPos;
 					}
@@ -116,17 +138,18 @@ public class TileEntityDropBlock extends TileEntity {
 		return 0;
 	}
 
-	public void onActivated(EntityPlayer player) {
+	public boolean onActivated(EntityPlayer player) {
 		ItemStack stack = player.getHeldItem();
 		if (stack != null) {
 			Item item = stack.getItem();
 			if (item instanceof ItemDye) {
 				System.out.println(stack.getItemDamage());
 				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, stack.getItemDamage(), 3);
-			}
-			
+		        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		        return true;
+			}			
 		}
-        worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		return false; // Don't update the block and don't block placement if it's not dye we're using
 	}
 
 }
