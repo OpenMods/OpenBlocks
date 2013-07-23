@@ -2,57 +2,94 @@ package openblocks.client;
 
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityLightbox;
+import openblocks.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
 			double z, float f) {
-		
+
 		GL11.glPushMatrix();
-			GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
-			TileEntityLightbox lightbox = (TileEntityLightbox) tileentity;
-			ForgeDirection surface = lightbox.getSurface();
-			//ForgeDirection rotation = lightbox.getSurface();
-			System.out.println(surface);
-			if (surface == ForgeDirection.UP) { 
-				GL11.glRotatef(90.0f, 1, 0, 0);
-			}else if (surface == ForgeDirection.DOWN) { 
-				GL11.glRotatef(-90.0f, 1, 0, 0);
-			} else {
-				GL11.glRotatef(90.0f * -surface.ordinal(), 0, 1, 0);
+		GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5f, (float) z + 0.5F);
+		TileEntityLightbox lightbox = (TileEntityLightbox) tileentity;
+		ForgeDirection surface = lightbox.getSurface();
+		ForgeDirection rotation = lightbox.getRotation();
+
+		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
+			GL11.glRotatef(
+					BlockUtils.getRotationFromDirection(surface.getOpposite()),
+					1, 0, 0);
+		} else {
+			GL11.glRotatef(
+					BlockUtils.getRotationFromDirection(surface.getOpposite()),
+					0, 1, 0);
+		}
+
+		GL11.glPushMatrix();
+		GL11.glDisable(2896);
+
+		Tessellator t = Tessellator.instance;
+		renderBlocks.setRenderBounds(0D, 0.0D, 0.8D, 1D, 1D, 1d);
+		t.startDrawingQuads();
+		t.setColorRGBA(255, 255, 255, 255);
+		//TODO: tidy
+		if (lightbox.worldObj != null) {
+			t.setBrightness(200 + (lightbox.worldObj.getBlockMetadata(lightbox.xCoord, lightbox.yCoord, lightbox.zCoord) * 30));
+		}else {
+			t.setBrightness(200);
+		}
+		this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
+		Icon renderingIcon = OpenBlocks.Blocks.lightbox
+				.getBlockTextureFromSide(0);
+		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
+				-0.5D, renderingIcon);
+		t.draw();
+
+		GL11.glEnable(2896);
+
+		ItemStack mapStack = lightbox.getStackInSlot(0);
+		if (mapStack != null) {
+			MapData mapdata = Item.map
+					.getMapData(mapStack, tileentity.worldObj);
+			GL11.glTranslatef(0.5f, 0.5F, 0.299f);
+			GL11.glScaled(0.0078125, 0.0078125, 0.0078125);
+			GL11.glRotatef(180, 0, 0, 1);
+			if (mapdata != null) {
+				mapdata.playersVisibleOnMap.clear();
+				RenderManager.instance.itemRenderer.mapItemRenderer.renderMap(
+						(EntityPlayer) null,
+						RenderManager.instance.renderEngine, mapdata);
 			}
-			GL11.glPushMatrix();
-				GL11.glDisable(2896);
-				
-				Tessellator t = Tessellator.instance;
-				renderBlocks.setRenderBounds(0.8D, 0.0D, 0.0D, 1D, 1D, 1d);
-				t.startDrawingQuads();
-				t.setColorRGBA(255, 255, 255, 100);
-				t.setBrightness(230);
-				this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
-				Icon renderingIcon = OpenBlocks.Blocks.lightbox.getBlockTextureFromSide(0);
-				renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.lightbox, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceXPos(OpenBlocks.Blocks.lightbox, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.lightbox, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceYPos(OpenBlocks.Blocks.lightbox, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.lightbox, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceZPos(OpenBlocks.Blocks.lightbox, -0.5D, 0.0D, -0.5D, renderingIcon);
-				t.draw();
-				
-			GL11.glEnable(2896);
-			GL11.glPopMatrix();
+		}
+
+		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 

@@ -37,7 +37,7 @@ public class BlockLadder extends BlockTrapDoor {
 		super(OpenBlocks.Config.blockLadderId, Material.wood);
 		setHardness(3.0F);
 		setStepSound(soundWoodFootstep);
-		GameRegistry.registerBlock(this, "openblocks");
+		GameRegistry.registerBlock(this, "ladder");
 		// naughty
 		LanguageRegistry.instance().addStringLocalization("tile.openblocks.ladder.name", "Jaded Ladder");
 		setUnlocalizedName("openblocks.ladder");

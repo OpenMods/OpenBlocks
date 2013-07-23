@@ -25,7 +25,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDrop extends BlockContainer {
+public class BlockDrop extends OpenBlock {
 	
 	public static final int[] colors = new int[] {
 
@@ -51,20 +51,8 @@ public class BlockDrop extends BlockContainer {
 	public BlockDrop() {
 		super(OpenBlocks.Config.blockDropId, Material.ground);
 		setHardness(3.0F);
-		GameRegistry.registerBlock(this, "openblocks_dropblock");
-		GameRegistry.registerTileEntity(TileEntityDropBlock.class,"openblocks_dropblock");
-		LanguageRegistry.instance().addStringLocalization("tile.openblocks.dropblock.name", "Drop Block");
-		setUnlocalizedName("openblocks.dropblock");
+		setupBlock(this, "drop", "Drop Block", TileEntityDropBlock.class);
 		setCreativeTab(CreativeTabs.tabMisc);
-	}
-
-	public void registerIcons(IconRegister registry) {
-		this.blockIcon = registry.registerIcon("openblocks:drop");
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityDropBlock();
 	}
 
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {

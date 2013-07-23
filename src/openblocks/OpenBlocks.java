@@ -40,6 +40,10 @@ public class OpenBlocks {
 		public static int blockHealId = 803;
 		public static int blockLightboxId = 804;
 	}
+	
+	public static enum Gui {
+		Lightbox
+	}
 
 	public static int renderId;
 	
