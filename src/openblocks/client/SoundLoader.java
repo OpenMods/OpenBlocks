@@ -1,6 +1,6 @@
-package jadedladder.client;
+package openblocks.client;
 
-import jadedladder.JadedLadder;
+import openblocks.OpenBlocks;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -24,7 +24,7 @@ public class SoundLoader {
 				"teleport.ogg"
 		};
 
-		File resourcesDirectory = new File(mc.mcDataDir, "resources/jadedladder/");
+		File resourcesDirectory = new File(mc.mcDataDir, "resources/openblocks/");
 
 		if (!resourcesDirectory.exists()) {
 			resourcesDirectory.mkdir();
@@ -35,7 +35,7 @@ public class SoundLoader {
 				File soundFile = new File(resourcesDirectory, fileName);
 				if (!soundFile.exists()) {
 
-					InputStream streamIn = JadedLadder.class.getResourceAsStream("/mods/jadedladder/sounds/" + fileName);
+					InputStream streamIn = OpenBlocks.class.getResourceAsStream("/mods/openblocks/sounds/" + fileName);
 					BufferedOutputStream streamOut = new BufferedOutputStream(new FileOutputStream(soundFile));
 					byte[] buffer = new byte[1024];
 					for (int len = 0; (len = streamIn.read(buffer)) >= 0;) {
@@ -44,7 +44,7 @@ public class SoundLoader {
 					streamIn.close();
 					streamOut.close();
 				}
-				event.manager.soundPoolSounds.addSound("jadedladder/" + fileName, soundFile);
+				event.manager.soundPoolSounds.addSound("openblocks/" + fileName, soundFile);
 			} catch (Exception e) {
 				System.out.println("Couldnt load "+ fileName);
 			}

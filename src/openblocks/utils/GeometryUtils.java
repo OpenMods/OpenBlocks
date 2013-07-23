@@ -1,10 +1,10 @@
-package jadedladder.utils;
+package openblocks.utils;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
 
-import jadedladder.common.IShapeable;
+import openblocks.common.IShapeable;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 

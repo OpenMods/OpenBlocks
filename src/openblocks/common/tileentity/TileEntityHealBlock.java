@@ -1,4 +1,4 @@
-package jadedladder.common.tileentity;
+package openblocks.common.tileentity;
 
 import java.util.List;
 

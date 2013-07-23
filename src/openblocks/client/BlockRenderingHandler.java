@@ -1,6 +1,6 @@
-package jadedladder.client;
-import jadedladder.JadedLadder;
-import jadedladder.common.tileentity.TileEntityGuide;
+package openblocks.client;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityGuide;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -19,14 +19,14 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-		return JadedLadder.renderId;
+		return OpenBlocks.renderId;
 	}
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		if (block == JadedLadder.Blocks.guide) {
+		if (block == OpenBlocks.Blocks.guide) {
 			TileEntityRenderer.instance.renderTileEntityAt(tileEntity, 0.0D, 0.0D, 0.0D, 0.0F);
 		}
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

@@ -1,9 +1,9 @@
-package jadedladder.shapes;
+package openblocks.shapes;
 
-import jadedladder.common.IShapeGenerator;
-import jadedladder.common.IShapeable;
-import jadedladder.utils.GeometryUtils;
-import jadedladder.utils.GeometryUtils.Octant;
+import openblocks.common.IShapeGenerator;
+import openblocks.common.IShapeable;
+import openblocks.utils.GeometryUtils;
+import openblocks.utils.GeometryUtils.Octant;
 
 public class ShapeDomeGenerator implements IShapeGenerator {
 

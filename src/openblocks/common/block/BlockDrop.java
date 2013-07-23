@@ -1,10 +1,10 @@
-package jadedladder.common.block;
+package openblocks.common.block;
 
 import java.util.List;
 
-import jadedladder.JadedLadder;
-import jadedladder.common.tileentity.TileEntityDropBlock;
-import jadedladder.common.tileentity.TileEntityGuide;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityDropBlock;
+import openblocks.common.tileentity.TileEntityGuide;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -49,17 +49,17 @@ public class BlockDrop extends BlockContainer {
 	};
 
 	public BlockDrop() {
-		super(JadedLadder.Config.blockDropId, Material.ground);
+		super(OpenBlocks.Config.blockDropId, Material.ground);
 		setHardness(3.0F);
 		GameRegistry.registerBlock(this, "openblocks_dropblock");
 		GameRegistry.registerTileEntity(TileEntityDropBlock.class,"openblocks_dropblock");
-		LanguageRegistry.instance().addStringLocalization("tile.jadedladder.dropblock.name", "Drop Block");
-		setUnlocalizedName("jadedladder.dropblock");
+		LanguageRegistry.instance().addStringLocalization("tile.openblocks.dropblock.name", "Drop Block");
+		setUnlocalizedName("openblocks.dropblock");
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	public void registerIcons(IconRegister registry) {
-		this.blockIcon = registry.registerIcon("jadedladder:drop");
+		this.blockIcon = registry.registerIcon("openblocks:drop");
 	}
 
 	@Override

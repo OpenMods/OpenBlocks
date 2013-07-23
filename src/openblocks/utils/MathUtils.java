@@ -1,4 +1,4 @@
-package jadedladder.utils;
+package openblocks.utils;
 
 import net.minecraftforge.common.ForgeDirection;
 

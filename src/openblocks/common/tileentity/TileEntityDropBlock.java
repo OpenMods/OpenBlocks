@@ -1,4 +1,4 @@
-package jadedladder.common.tileentity;
+package openblocks.common.tileentity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import jadedladder.JadedLadder;
+import openblocks.OpenBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -89,7 +89,7 @@ public class TileEntityDropBlock extends TileEntity {
 					}
 					if (doTeleport) {
 						player.setPositionAndUpdate(player.posX, teleportTo + 1.1, player.posZ);
-						worldObj.playSoundAtEntity(player, "jadedladder.teleport", 1F, 1F);
+						worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
 						TileEntity targetTile = worldObj.getBlockTileEntity(xCoord, teleportTo, zCoord);
 						if (targetTile instanceof TileEntityDropBlock) {
 							((TileEntityDropBlock)targetTile).addPlayerCooldown(player);
@@ -118,7 +118,7 @@ public class TileEntityDropBlock extends TileEntity {
 			int yPos = yCoord + (y * direction.offsetY);
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
-				if (blockId == JadedLadder.Config.blockDropId) {
+				if (blockId == OpenBlocks.Config.blockDropId) {
 					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord, yPos, zCoord);					
 					// Check that it is a drop block and that it has the same color index.
 					if(!(otherBlock instanceof TileEntityDropBlock)) continue;

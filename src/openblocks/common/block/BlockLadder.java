@@ -1,4 +1,4 @@
-package jadedladder.common.block;
+package openblocks.common.block;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jadedladder.JadedLadder;
+import openblocks.OpenBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHalfSlab;
@@ -34,20 +34,20 @@ public class BlockLadder extends BlockTrapDoor {
 	public static boolean disableValidation = false;
 
 	public BlockLadder() {
-		super(JadedLadder.Config.blockLadderId, Material.wood);
+		super(OpenBlocks.Config.blockLadderId, Material.wood);
 		setHardness(3.0F);
 		setStepSound(soundWoodFootstep);
-		GameRegistry.registerBlock(this, "jadedladder");
+		GameRegistry.registerBlock(this, "openblocks");
 		// naughty
-		LanguageRegistry.instance().addStringLocalization("tile.jadedladder.ladder.name", "Jaded Ladder");
-		setUnlocalizedName("jadedladder.ladder");
+		LanguageRegistry.instance().addStringLocalization("tile.openblocks.ladder.name", "Jaded Ladder");
+		setUnlocalizedName("openblocks.ladder");
 		setCreativeTab(CreativeTabs.tabMisc);
 		this.setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);
 	}
 
 	@Override
 	public void registerIcons(IconRegister registry) {
-		blockIcon = registry.registerIcon("jadedladder:jadedladder");
+		blockIcon = registry.registerIcon("openblocks:openblocks");
 	}
 
 	public boolean renderAsNormalBlock() {

@@ -1,4 +1,4 @@
-package jadedladder.common;
+package openblocks.common;
 
 public interface IShapeGenerator {
 		

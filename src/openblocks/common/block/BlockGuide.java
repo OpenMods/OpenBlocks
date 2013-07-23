@@ -1,9 +1,9 @@
-package jadedladder.common.block;
+package openblocks.common.block;
 
 import java.util.List;
 
-import jadedladder.JadedLadder;
-import jadedladder.common.tileentity.TileEntityGuide;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityGuide;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.block.BlockContainer;
@@ -21,13 +21,13 @@ import net.minecraftforge.common.ForgeDirection;
 public class BlockGuide extends BlockContainer {
 	
 	public BlockGuide() {
-		super(JadedLadder.Config.blockGuideId, Material.ground);
+		super(OpenBlocks.Config.blockGuideId, Material.ground);
 		setHardness(3.0F);
 		GameRegistry.registerBlock(this, "openblocks_guide");
 		GameRegistry.registerTileEntity(TileEntityGuide.class, "openblocks_guide");
 		
-		LanguageRegistry.instance().addStringLocalization("tile.jadedladder.guide.name", "Guide");
-		setUnlocalizedName("jadedladder.guide");
+		LanguageRegistry.instance().addStringLocalization("tile.openblocks.guide.name", "Guide");
+		setUnlocalizedName("openblocks.guide");
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 	
@@ -56,7 +56,7 @@ public class BlockGuide extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return JadedLadder.renderId;
+		return OpenBlocks.renderId;
 	}
 	
 	@Override
@@ -66,7 +66,7 @@ public class BlockGuide extends BlockContainer {
 
 	@Override
 	public void registerIcons(IconRegister registry) {
-		blockIcon = registry.registerIcon("jadedladder:guide");
+		blockIcon = registry.registerIcon("openblocks:guide");
 	}
 	
 	@Override

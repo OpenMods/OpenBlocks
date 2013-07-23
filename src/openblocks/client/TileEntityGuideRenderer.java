@@ -1,7 +1,7 @@
-package jadedladder.client;
+package openblocks.client;
 
-import jadedladder.JadedLadder;
-import jadedladder.common.tileentity.TileEntityGuide;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityGuide;
 
 import org.lwjgl.opengl.GL11;
 
@@ -51,14 +51,14 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 				t.startDrawingQuads();
 				t.setColorRGBA(255, 255, 255, 100);
 				t.setBrightness(200);
-				this.bindTextureByName("/mods/jadedladder/textures/blocks/guide.png");
-				Icon renderingIcon = JadedLadder.Blocks.guide.getBlockTextureFromSide(0);
-				renderBlocks.renderFaceXNeg(JadedLadder.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceXPos(JadedLadder.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceYNeg(JadedLadder.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceYPos(JadedLadder.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceZNeg(JadedLadder.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceZPos(JadedLadder.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+				this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
+				Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
+				renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+				renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+				renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+				renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+				renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+				renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
 				t.draw();
 				
 				GL11.glEnable(2896);

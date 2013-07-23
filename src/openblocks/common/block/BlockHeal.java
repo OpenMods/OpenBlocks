@@ -1,8 +1,8 @@
-package jadedladder.common.block;
+package openblocks.common.block;
 
-import jadedladder.JadedLadder;
-import jadedladder.common.tileentity.TileEntityDropBlock;
-import jadedladder.common.tileentity.TileEntityHealBlock;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityDropBlock;
+import openblocks.common.tileentity.TileEntityHealBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.block.BlockContainer;
@@ -17,17 +17,17 @@ import net.minecraftforge.common.ForgeDirection;
 public class BlockHeal extends BlockContainer {
 
 	public BlockHeal(){
-		super(JadedLadder.Config.blockHealId, Material.ground);
+		super(OpenBlocks.Config.blockHealId, Material.ground);
 		setHardness(3.0F);
 		GameRegistry.registerBlock(this, "openblocks_healblock");
 		GameRegistry.registerTileEntity(TileEntityHealBlock.class,"openblocks_healblock");
-		LanguageRegistry.instance().addStringLocalization("tile.jadedladder.healblock.name", "Heal Block");
-		setUnlocalizedName("jadedladder.healblock");
+		LanguageRegistry.instance().addStringLocalization("tile.openblocks.healblock.name", "Heal Block");
+		setUnlocalizedName("openblocks.healblock");
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 	
 	public void registerIcons(IconRegister registry) {
-		this.blockIcon = registry.registerIcon("jadedladder:heal");
+		this.blockIcon = registry.registerIcon("openblocks:heal");
 	}
 
 	@Override

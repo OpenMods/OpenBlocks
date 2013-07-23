@@ -1,9 +1,9 @@
-package jadedladder.shapes;
+package openblocks.shapes;
 
 import net.minecraftforge.common.ForgeDirection;
-import jadedladder.common.IShapeGenerator;
-import jadedladder.common.IShapeable;
-import jadedladder.utils.GeometryUtils;
+import openblocks.common.IShapeGenerator;
+import openblocks.common.IShapeable;
+import openblocks.utils.GeometryUtils;
 
 public class ShapeCuboidGenerator implements IShapeGenerator {
 	

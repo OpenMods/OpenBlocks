@@ -1,9 +1,9 @@
-package jadedladder.shapes;
+package openblocks.shapes;
 
-import jadedladder.JadedLadder;
-import jadedladder.common.IShapeGenerator;
-import jadedladder.common.IShapeable;
-import jadedladder.utils.MathUtils;
+import openblocks.OpenBlocks;
+import openblocks.common.IShapeGenerator;
+import openblocks.common.IShapeable;
+import openblocks.utils.MathUtils;
 
 public class ShapeCylinderGenerator implements IShapeGenerator {
 

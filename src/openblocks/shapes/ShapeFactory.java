@@ -1,10 +1,10 @@
-package jadedladder.shapes;
+package openblocks.shapes;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import jadedladder.common.IShapeGenerator;
-import jadedladder.common.IShapeable;
+import openblocks.common.IShapeGenerator;
+import openblocks.common.IShapeable;
 
 public class ShapeFactory {
 

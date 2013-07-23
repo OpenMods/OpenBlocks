@@ -1,4 +1,4 @@
-package jadedladder.common.tileentity;
+package openblocks.common.tileentity;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -6,11 +6,11 @@ import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import jadedladder.JadedLadder;
-import jadedladder.common.IShapeable;
-import jadedladder.common.block.BlockGuide;
-import jadedladder.shapes.ShapeFactory;
-import jadedladder.shapes.ShapeFactory.Mode;
+import openblocks.OpenBlocks;
+import openblocks.common.IShapeable;
+import openblocks.common.block.BlockGuide;
+import openblocks.shapes.ShapeFactory;
+import openblocks.shapes.ShapeFactory.Mode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;

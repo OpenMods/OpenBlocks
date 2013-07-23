@@ -1,4 +1,4 @@
-package jadedladder;
+package openblocks;
 
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
@@ -8,20 +8,20 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import jadedladder.common.CommonProxy;
-import jadedladder.common.block.BlockDrop;
-import jadedladder.common.block.BlockGuide;
-import jadedladder.common.block.BlockHeal;
-import jadedladder.common.block.BlockLadder;
+import openblocks.common.CommonProxy;
+import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockGuide;
+import openblocks.common.block.BlockHeal;
+import openblocks.common.block.BlockLadder;
 
-@Mod(modid = "JadedLadder", name = "JadedLadder", version = "@VERSION@")
+@Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
-public class JadedLadder {
+public class OpenBlocks {
 
-	@Instance(value = "JadedLadder")
-	public static JadedLadder instance;
+	@Instance(value = "OpenBlocks")
+	public static OpenBlocks instance;
 
-	@SidedProxy(clientSide = "jadedladder.client.ClientProxy", serverSide = "jadedladder.common.CommonProxy")
+	@SidedProxy(clientSide = "openblocks.client.ClientProxy", serverSide = "openblocks.common.CommonProxy")
 	public static CommonProxy proxy;
 
 	public static class Blocks {
