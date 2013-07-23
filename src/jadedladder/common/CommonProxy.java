@@ -10,6 +10,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import jadedladder.JadedLadder;
 import jadedladder.common.block.BlockGuide;
+import jadedladder.common.block.BlockHeal;
 import jadedladder.common.block.BlockLadder;
 import jadedladder.common.block.BlockDrop;
 
@@ -25,6 +26,7 @@ public class CommonProxy {
 
 		JadedLadder.Blocks.guide = new BlockGuide();
 		JadedLadder.Blocks.drop = new BlockDrop();
+		JadedLadder.Blocks.heal = new BlockHeal();
 	}
 
 	public void registerRenderInformation() {

@@ -11,6 +11,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import jadedladder.common.CommonProxy;
 import jadedladder.common.block.BlockDrop;
 import jadedladder.common.block.BlockGuide;
+import jadedladder.common.block.BlockHeal;
 import jadedladder.common.block.BlockLadder;
 
 @Mod(modid = "JadedLadder", name = "JadedLadder", version = "@VERSION@")
@@ -27,12 +28,14 @@ public class JadedLadder {
 		public static BlockLadder ladder;
 		public static BlockGuide guide;
 		public static BlockDrop drop;
+		public static BlockHeal heal;
 	}
 
 	public static class Config {
 		public static int blockLadderId = 800;
 		public static int blockGuideId = 801;
 		public static int blockDropId = 802;
+		public static int blockHealId = 803;
 	}
 
 	public static int renderId;
@@ -47,17 +50,18 @@ public class JadedLadder {
 		Configuration configFile = new Configuration(
 				evt.getSuggestedConfigurationFile());
 
-		Property prop = configFile.get("block", "blockLadderId",Config.blockLadderId);
-		prop.comment = "The id of the ladder";
+		/* getBlock makes this mod anti-block-id-collision-forge-thingy compliant.. Don't be a redpower :P */
+		Property prop = configFile.getBlock("block", "blockLadderId",Config.blockLadderId, "The id of the ladder");
 		Config.blockLadderId = prop.getInt();
 		
-		prop = configFile.get("block", "blockGuideId",Config.blockGuideId);
-		prop.comment = "The id of the guide";
+		prop = configFile.getBlock("block", "blockGuideId",Config.blockGuideId, "The id of the guide");
 		Config.blockGuideId = prop.getInt();
 		
-		prop = configFile.get("block", "blockDropId",Config.blockDropId);
-		prop.comment = "The id of the drop block";
+		prop = configFile.getBlock("block", "blockDropId",Config.blockDropId, "The id of the drop block");
 		Config.blockDropId = prop.getInt();
+		
+		prop = configFile.getBlock("block", "blockHealId", Config.blockHealId, "The id of the heal block");
+		Config.blockHealId = prop.getInt();
 		
 		configFile.save();
 
