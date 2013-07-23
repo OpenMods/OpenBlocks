@@ -18,24 +18,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class BlockGuide extends BlockContainer {
+public class BlockGuide extends OpenBlock {
 	
 	public BlockGuide() {
 		super(OpenBlocks.Config.blockGuideId, Material.ground);
 		setHardness(3.0F);
-		GameRegistry.registerBlock(this, "openblocks_guide");
-		GameRegistry.registerTileEntity(TileEntityGuide.class, "openblocks_guide");
-		
-		LanguageRegistry.instance().addStringLocalization("tile.openblocks.guide.name", "Guide");
-		setUnlocalizedName("openblocks.guide");
+		setupBlock(this, "guide", "Guide", TileEntityGuide.class);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 	
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityGuide();
-	}
-
 	protected TileEntityGuide getTileEntity(World world, int x, int y, int z) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile != null && tile instanceof TileEntityGuide) {
