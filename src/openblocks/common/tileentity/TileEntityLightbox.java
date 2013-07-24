@@ -54,17 +54,17 @@ public class TileEntityLightbox extends TileEntity implements IInventory {
 			// I mean, the maps will take longer to load in
 			// but less lag..
 			if (tickCounter % 3 == 0) {
-				
+
 				ItemStack itemstack = inventory.getStackInSlot(0);
 
 				for (EntityPlayer player : (List<EntityPlayer>) worldObj
 						.getEntitiesWithinAABB(
 								EntityPlayer.class,
 								AxisAlignedBB
-									.getAABBPool()
-									.getAABB(xCoord, yCoord, zCoord,
-											xCoord + 1, yCoord + 1,
-											zCoord + 1).expand(10, 10, 10))) {
+										.getAABBPool()
+										.getAABB(xCoord, yCoord, zCoord,
+												xCoord + 1, yCoord + 1,
+												zCoord + 1).expand(10, 10, 10))) {
 
 					if (player instanceof EntityPlayerMP) {
 

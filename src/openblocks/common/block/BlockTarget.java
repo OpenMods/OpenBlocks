@@ -45,10 +45,10 @@ public class BlockTarget extends OpenBlock {
 	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null && te instanceof TileEntityTarget) {
-			((TileEntityTarget)te).neighbourBlockChanged();
+			((TileEntityTarget) te).neighbourBlockChanged();
 		}
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
@@ -89,7 +89,7 @@ public class BlockTarget extends OpenBlock {
 			lastEntityHit = entity.entityId;
 
 			TileEntityTarget target = (TileEntityTarget) tile;
-			
+
 			if (!target.isPowered()) {
 				return;
 			}
@@ -123,12 +123,13 @@ public class BlockTarget extends OpenBlock {
 
 			target.setStrength(15 - ((int) Math.min(15,
 					Math.max(0, Math.round(distance * 32)))));
-            
+
 		}
 	}
 
 	@Override
-	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int m) {
+	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z,
+			int m) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if ((tile != null) && ((tile instanceof TileEntityTarget))) {
 			return ((TileEntityTarget) tile).getStrength();
@@ -137,8 +138,8 @@ public class BlockTarget extends OpenBlock {
 	}
 
 	@Override
-	public int isProvidingStrongPower(IBlockAccess world, int x, int y,
-			int z, int m) {
+	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z,
+			int m) {
 		return isProvidingWeakPower(world, x, y, z, m);
 	}
 
@@ -154,7 +155,7 @@ public class BlockTarget extends OpenBlock {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
-	
+
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
 			int z) {
@@ -164,14 +165,14 @@ public class BlockTarget extends OpenBlock {
 		if (tile == null || !(tile instanceof TileEntityTarget)) {
 			return;
 		}
-		
+
 		TileEntityTarget target = (TileEntityTarget) tile;
 
 		if (!target.isPowered()) {
 			setBlockBounds(0, 0, 0, 1.0f, 0.1f, 1.0f);
 			return;
 		}
-		
+
 		ForgeDirection direction = target.getRotation();
 
 		switch (direction) {

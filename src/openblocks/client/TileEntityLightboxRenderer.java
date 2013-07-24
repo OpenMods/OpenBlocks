@@ -33,14 +33,13 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		ForgeDirection surface = lightbox.getSurface();
 		ForgeDirection rotation = lightbox.getRotation();
 
-        RenderHelper.disableStandardItemLighting();
+		RenderHelper.disableStandardItemLighting();
 		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
 			GL11.glRotatef(
 					BlockUtils.getRotationFromDirection(surface.getOpposite()),
 					1, 0, 0);
-			GL11.glRotatef(
-					-BlockUtils.getRotationFromDirection(rotation.getOpposite()),
-					0, 0, 1);
+			GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation
+					.getOpposite()), 0, 0, 1);
 		} else {
 			GL11.glRotatef(
 					BlockUtils.getRotationFromDirection(surface.getOpposite()),
@@ -56,7 +55,8 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		t.setColorRGBA(200, 200, 200, 255);
 		t.setBrightness(255);
 		if (lightbox.worldObj != null) {
-			int metadata = lightbox.worldObj.getBlockMetadata(lightbox.xCoord, lightbox.yCoord, lightbox.zCoord);
+			int metadata = lightbox.worldObj.getBlockMetadata(lightbox.xCoord,
+					lightbox.yCoord, lightbox.zCoord);
 			if (metadata > 0) {
 				t.setColorRGBA(255, 255, 255, 255);
 			}
@@ -96,7 +96,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 		GL11.glPopMatrix();
 
-        RenderHelper.enableStandardItemLighting();
+		RenderHelper.enableStandardItemLighting();
 		GL11.glPopMatrix();
 	}
 

@@ -14,15 +14,18 @@ import net.minecraft.util.Icon;
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-	
+
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
+			double z, float f) {
 		renderAt(x, y, z);
 		TileEntityGuide guide = (TileEntityGuide) tileentity;
-		renderShape(guide.getShape(), guide.height, guide.width, guide.depth, x, y, z);
+		renderShape(guide.getShape(), guide.height, guide.width, guide.depth,
+				x, y, z);
 	}
-	
-	private void renderShape(boolean[][][] shape, int height, int width, int depth, double x, double y, double z) {
+
+	private void renderShape(boolean[][][] shape, int height, int width,
+			int depth, double x, double y, double z) {
 		if (shape == null) {
 			return;
 		}
@@ -31,38 +34,46 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 				for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
 					if (shape[y2][x2][z2]) {
 						GL11.glEnable(GL11.GL_BLEND);
-						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						renderAt(x + x2 - width, y + y2 - height, z + z2 - depth);
+						GL11.glBlendFunc(GL11.GL_SRC_ALPHA,
+								GL11.GL_ONE_MINUS_SRC_ALPHA);
+						renderAt(x + x2 - width, y + y2 - height, z + z2
+								- depth);
 						GL11.glDisable(GL11.GL_BLEND);
 					}
-				}	
-			}	
+				}
+			}
 		}
 	}
 
 	private void renderAt(double x, double y, double z) {
 		GL11.glPushMatrix();
-			GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
-			GL11.glPushMatrix();
-				GL11.glDisable(2896);
-				
-				Tessellator t = Tessellator.instance;
-				renderBlocks.setRenderBounds(0.05D, 0.05D, 0.05D, 0.95D, 0.95D, 0.95D);
-				t.startDrawingQuads();
-				t.setColorRGBA(255, 255, 255, 100);
-				t.setBrightness(200);
-				this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
-				Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
-				renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-				t.draw();
-				
-				GL11.glEnable(2896);
-			GL11.glPopMatrix();
+		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
+		GL11.glPushMatrix();
+		GL11.glDisable(2896);
+
+		Tessellator t = Tessellator.instance;
+		renderBlocks.setRenderBounds(0.05D, 0.05D, 0.05D, 0.95D, 0.95D, 0.95D);
+		t.startDrawingQuads();
+		t.setColorRGBA(255, 255, 255, 100);
+		t.setBrightness(200);
+		this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
+		Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
+		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
+				-0.5D, renderingIcon);
+		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
+				-0.5D, renderingIcon);
+		t.draw();
+
+		GL11.glEnable(2896);
+		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 }

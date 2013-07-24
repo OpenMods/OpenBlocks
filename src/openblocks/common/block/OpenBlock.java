@@ -17,7 +17,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	private String uniqueBlockId;
 	private Class<? extends TileEntity> teClass = null;
-	
+
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
 
@@ -25,13 +25,14 @@ public abstract class OpenBlock extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		try{
-			if(teClass != null){
+		try {
+			if (teClass != null) {
 				return teClass.getConstructor(new Class[0]).newInstance();
 			}
-		}catch(NoSuchMethodException nsm){
-			System.out.println("Notice: Cannot create TE automatically due to constructor requirements");
-		}catch(Exception ex){
+		} catch (NoSuchMethodException nsm) {
+			System.out
+					.println("Notice: Cannot create TE automatically due to constructor requirements");
+		} catch (Exception ex) {
 			System.out.println("Notice: Error creating tile entity");
 			ex.printStackTrace();
 		}
@@ -39,27 +40,35 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	public void registerIcons(IconRegister registry) {
-		this.blockIcon = registry.registerIcon(OpenBlocks.proxy.getModId() + ":" + uniqueBlockId);
+		this.blockIcon = registry.registerIcon(OpenBlocks.proxy.getModId()
+				+ ":" + uniqueBlockId);
 	}
-	
+
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		BlockUtils.dropInventoryItems(tile);
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
-	
-	public void setupBlock(Block instance, String uniqueName, String friendlyName){
+
+	public void setupBlock(Block instance, String uniqueName,
+			String friendlyName) {
 		setupBlock(instance, uniqueName, friendlyName, null);
 	}
-	
-	public void setupBlock(Block instance, String uniqueName, String friendlyName, Class<? extends TileEntity> tileEntity){
+
+	public void setupBlock(Block instance, String uniqueName,
+			String friendlyName, Class<? extends TileEntity> tileEntity) {
 		uniqueBlockId = uniqueName;
-		GameRegistry.registerBlock(instance, OpenBlocks.proxy.getModId() + "_" + uniqueName);
-		LanguageRegistry.instance().addStringLocalization("tile." + OpenBlocks.proxy.getModId() + "." + uniqueName + ".name", friendlyName);
-		instance.setUnlocalizedName(OpenBlocks.proxy.getModId() + "." + uniqueName);
-		if(tileEntity != null){
-			GameRegistry.registerTileEntity(tileEntity, OpenBlocks.proxy.getModId() + "_" + uniqueName);
+		GameRegistry.registerBlock(instance, OpenBlocks.proxy.getModId() + "_"
+				+ uniqueName);
+		LanguageRegistry.instance().addStringLocalization(
+				"tile." + OpenBlocks.proxy.getModId() + "." + uniqueName
+						+ ".name", friendlyName);
+		instance.setUnlocalizedName(OpenBlocks.proxy.getModId() + "."
+				+ uniqueName);
+		if (tileEntity != null) {
+			GameRegistry.registerTileEntity(tileEntity,
+					OpenBlocks.proxy.getModId() + "_" + uniqueName);
 			this.teClass = tileEntity;
 		}
 	}

@@ -59,7 +59,8 @@ public class GenericInventory implements IInventory, ISidedInventory {
 				this.onInventoryChanged(stackIndex);
 				return itemstack;
 			} else {
-				itemstack = this.inventoryContents[stackIndex].splitStack(byAmount);
+				itemstack = this.inventoryContents[stackIndex]
+						.splitStack(byAmount);
 
 				if (this.inventoryContents[stackIndex].stackSize == 0) {
 					this.inventoryContents[stackIndex] = null;
@@ -115,7 +116,8 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	}
 
 	public boolean isItem(int slot, Item item) {
-		return inventoryContents[slot] != null && inventoryContents[slot].getItem() == item;
+		return inventoryContents[slot] != null
+				&& inventoryContents[slot].getItem() == item;
 	}
 
 	@Override
@@ -154,7 +156,8 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		this.inventoryContents[i] = itemstack;
 
-		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit()) {
+		if (itemstack != null
+				&& itemstack.stackSize > this.getInventoryStackLimit()) {
 			itemstack.stackSize = this.getInventoryStackLimit();
 		}
 
@@ -177,7 +180,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	}
 
 	/**
-	 *  This bastard never even gets called, so ignore it
+	 * This bastard never even gets called, so ignore it
 	 */
 	@Override
 	public void onInventoryChanged() {

@@ -15,7 +15,8 @@ import net.minecraftforge.common.ForgeDirection;
 public class BlockUtils {
 
 	public static ForgeDirection get2dOrientation(EntityLiving entity) {
-		int l = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
+		int l = MathHelper
+				.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
 		switch (l) {
 		case 0:
 			return ForgeDirection.SOUTH;
@@ -29,9 +30,9 @@ public class BlockUtils {
 		return ForgeDirection.SOUTH;
 
 	}
-	
-	public static float getRotationFromDirection(ForgeDirection direction){
-		switch (direction){
+
+	public static float getRotationFromDirection(ForgeDirection direction) {
+		switch (direction) {
 		case NORTH:
 			return 0F;
 		case SOUTH:
@@ -57,20 +58,28 @@ public class BlockUtils {
 		}
 		return get2dOrientation(entity);
 	}
-	
-	public static void dropItemStackInWorld(World worldObj, int x, int y, int z, ItemStack stack) {
-		dropItemStackInWorld(worldObj, (double)x, (double)y, (double)z, stack);
+
+	public static void dropItemStackInWorld(World worldObj, int x, int y,
+			int z, ItemStack stack) {
+		dropItemStackInWorld(worldObj, (double) x, (double) y, (double) z,
+				stack);
 	}
 
-	public static void dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
+	public static void dropItemStackInWorld(World worldObj, double x, double y,
+			double z, ItemStack stack) {
 		float f = 0.7F;
-		double d0 = (double) (worldObj.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-		double d1 = (double) (worldObj.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-		double d2 = (double) (worldObj.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-		EntityItem entityitem = new EntityItem(worldObj, (double) x + d0, (double) y + d1, (double) z + d2, stack);
+		double d0 = (double) (worldObj.rand.nextFloat() * f)
+				+ (double) (1.0F - f) * 0.5D;
+		double d1 = (double) (worldObj.rand.nextFloat() * f)
+				+ (double) (1.0F - f) * 0.5D;
+		double d2 = (double) (worldObj.rand.nextFloat() * f)
+				+ (double) (1.0F - f) * 0.5D;
+		EntityItem entityitem = new EntityItem(worldObj, (double) x + d0,
+				(double) y + d1, (double) z + d2, stack);
 		entityitem.delayBeforeCanPickup = 10;
 		if (stack.hasTagCompound()) {
-			entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+			entityitem.getEntityItem().setTagCompound(
+					(NBTTagCompound) stack.getTagCompound().copy());
 		}
 		worldObj.spawnEntityInWorld(entityitem);
 	}
@@ -82,13 +91,16 @@ public class BlockUtils {
 			for (int i = 0; i < inventory.getSizeInventory(); ++i) {
 				ItemStack itemStack = inventory.getStackInSlot(i);
 				if (itemStack != null) {
-					dropItemStackInWorld(tileEntity.worldObj, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, itemStack);
+					dropItemStackInWorld(tileEntity.worldObj,
+							tileEntity.xCoord, tileEntity.yCoord,
+							tileEntity.zCoord, itemStack);
 				}
 			}
 		}
 	}
 
-	public static TileEntity getTileInDirection(TileEntity tile, ForgeDirection direction) {
+	public static TileEntity getTileInDirection(TileEntity tile,
+			ForgeDirection direction) {
 		int targetX = tile.xCoord + direction.offsetX;
 		int targetY = tile.yCoord + direction.offsetY;
 		int targetZ = tile.zCoord + direction.offsetZ;

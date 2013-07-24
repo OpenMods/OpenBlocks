@@ -25,10 +25,10 @@ public class TorchBowRecipe implements IRecipe {
 				if (stack.getItem() == Item.bow && bowStack == null) {
 					bowStack = stack;
 					continue;
-				}else if (stack.getItem() == Item.flint && flintStack == null) {
+				} else if (stack.getItem() == Item.flint && flintStack == null) {
 					flintStack = stack;
 					continue;
-				}else if (stack.getItem() == Item.bone && boneStack == null) {
+				} else if (stack.getItem() == Item.bone && boneStack == null) {
 					boneStack = stack;
 					continue;
 				}
@@ -50,7 +50,7 @@ public class TorchBowRecipe implements IRecipe {
 				tag.setBoolean("openblocks_torchmode", false);
 				clone.setTagCompound(tag);
 				return clone;
-			}else if (boneStack == null) {
+			} else if (boneStack == null) {
 				System.out.println("torch mode");
 				tag.setBoolean("openblocks_torchmode", true);
 				clone.setTagCompound(tag);

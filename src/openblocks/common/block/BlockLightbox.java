@@ -87,12 +87,14 @@ public class BlockLightbox extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
+			int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
+			int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
@@ -100,7 +102,7 @@ public class BlockLightbox extends OpenBlock {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
 			int z) {
-		
+
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
 		if (tile == null || !(tile instanceof TileEntityLightbox)) {
@@ -110,8 +112,8 @@ public class BlockLightbox extends OpenBlock {
 		TileEntityLightbox lightbox = (TileEntityLightbox) tile;
 
 		ForgeDirection direction = lightbox.getSurface();
-		
-		switch(direction) {
+
+		switch (direction) {
 		case EAST:
 			setBlockBounds(0.8f, 0, 0, 1f, 1f, 1f);
 			break;

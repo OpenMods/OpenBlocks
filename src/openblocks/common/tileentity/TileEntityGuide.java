@@ -23,9 +23,8 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityGuide extends TileEntity implements IShapeable {
 
-
 	private boolean shape[][][];
-	
+
 	public int width = 8;
 	public int height = 8;
 	public int depth = 8;
@@ -58,16 +57,17 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 	private void recreateShape() {
 		shape = new boolean[height * 2 + 1][width * 2 + 1][depth * 2 + 1];
 		ShapeFactory.generateShape(width, height, depth, this, currentMode);
-	}	
-	
+	}
+
 	public void setBlock(int x, int y, int z) {
-		try{
-			shape[height+y][width+x][depth+z] = true;
-		}catch(IndexOutOfBoundsException iobe){
-			System.out.println(String.format("Index out of bounds setting block at %s,%s,%s", x,y,z));
+		try {
+			shape[height + y][width + x][depth + z] = true;
+		} catch (IndexOutOfBoundsException iobe) {
+			System.out.println(String.format(
+					"Index out of bounds setting block at %s,%s,%s", x, y, z));
 		}
 	}
-    
+
 	public boolean[][][] getShape() {
 		return shape;
 	}
@@ -96,21 +96,20 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 		nbt.setInteger("mode", currentMode.ordinal());
 	}
 
-
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB box = super.getRenderBoundingBox();
 		return box.expand(width, height, depth);
 	}
 
-
 	public void switchMode(EntityPlayer player) {
 		switchMode();
 		if (player != null) {
-			player.sendChatToPlayer(String.format("Changing to %s mode", currentMode.getDisplayName()));
+			player.sendChatToPlayer(String.format("Changing to %s mode",
+					currentMode.getDisplayName()));
 		}
 	}
-	
+
 	public void switchMode() {
 		int nextMode = currentMode.ordinal() + 1;
 		if (nextMode >= Mode.values().length) {
@@ -126,27 +125,27 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 	public void changeDimensions(ForgeDirection orientation) {
 		if (width > 0 && orientation == ForgeDirection.EAST) {
 			width--;
-		}else if (orientation == ForgeDirection.WEST) {
+		} else if (orientation == ForgeDirection.WEST) {
 			width++;
-		}else if (orientation == ForgeDirection.NORTH) {
+		} else if (orientation == ForgeDirection.NORTH) {
 			depth++;
-		}else if (depth > 0 && orientation == ForgeDirection.SOUTH) {
+		} else if (depth > 0 && orientation == ForgeDirection.SOUTH) {
 			depth--;
-		}else if (orientation == ForgeDirection.UP) {
+		} else if (orientation == ForgeDirection.UP) {
 			height++;
-		}else if (height > 0 && orientation == ForgeDirection.DOWN) {
+		} else if (height > 0 && orientation == ForgeDirection.DOWN) {
 			height--;
 		}
 		if (currentMode.isFixedRatio()) {
 			if (width != height && width != depth) {
 				height = depth = width;
-			}else if (height != width && height != depth) {
+			} else if (height != width && height != depth) {
 				depth = width = height;
-			}else if (depth != width && depth != height) {
+			} else if (depth != width && depth != height) {
 				width = height = depth;
 			}
 		}
-		
+
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 

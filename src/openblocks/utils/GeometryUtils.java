@@ -164,112 +164,118 @@ public class GeometryUtils {
 			}
 		}
 	}
-	
-	public static void line2D(int y, int x0, int z0, int x1, int z1, IShapeable shapeable)
-	{
-		   int dx =  Math.abs(x1-x0), sx = x0<x1 ? 1 : -1;
-		   int dy = -Math.abs(z1-z0), sy = z0<z1 ? 1 : -1; 
-		   int err = dx+dy, e2;
-		 
-		   for(;;){
-			   shapeable.setBlock(x0, y, z0);
-		      if (x0==x1 && z0==z1) break;
-		      e2 = 2*err;
-		      if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
-		      if (e2 <= dx) { err += dx; z0 += sy; } /* e_xy+e_y < 0 */
-		   }
+
+	public static void line2D(int y, int x0, int z0, int x1, int z1,
+			IShapeable shapeable) {
+		int dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+		int dy = -Math.abs(z1 - z0), sy = z0 < z1 ? 1 : -1;
+		int err = dx + dy, e2;
+
+		for (;;) {
+			shapeable.setBlock(x0, y, z0);
+			if (x0 == x1 && z0 == z1)
+				break;
+			e2 = 2 * err;
+			if (e2 >= dy) {
+				err += dy;
+				x0 += sx;
+			} /* e_xy+e_x > 0 */
+			if (e2 <= dx) {
+				err += dx;
+				z0 += sy;
+			} /* e_xy+e_y < 0 */
 		}
-	
+	}
+
 	public static void line3D(Vec3 start, Vec3 end, IShapeable shapeable) {
 
-		
-        int dx = (int) (end.xCoord - start.xCoord);
-        int dy = (int) (end.yCoord - start.yCoord);
-        int dz = (int) (end.zCoord - start.zCoord);
+		int dx = (int) (end.xCoord - start.xCoord);
+		int dy = (int) (end.yCoord - start.yCoord);
+		int dz = (int) (end.zCoord - start.zCoord);
 
-        int ax = Math.abs(dx) << 1;
-        int ay = Math.abs(dy) << 1;
-        int az = Math.abs(dz) << 1;
+		int ax = Math.abs(dx) << 1;
+		int ay = Math.abs(dy) << 1;
+		int az = Math.abs(dz) << 1;
 
-        int signx = (int) Math.signum(dx);
-        int signy = (int) Math.signum(dy);
-        int signz = (int) Math.signum(dz);
+		int signx = (int) Math.signum(dx);
+		int signy = (int) Math.signum(dy);
+		int signz = (int) Math.signum(dz);
 
-        int x = (int) start.xCoord;
-        int y = (int) start.yCoord;
-        int z = (int) start.zCoord;
+		int x = (int) start.xCoord;
+		int y = (int) start.yCoord;
+		int z = (int) start.zCoord;
 
-        int deltax, deltay, deltaz;
-        if (ax >= Math.max(ay, az)) {
-            deltay = ay - (ax >> 1);
-            deltaz = az - (ax >> 1);
-            while (true) {
-            	shapeable.setBlock(x, y, z);
-                if (x == (int)end.xCoord) {
-                    return;
-                }
+		int deltax, deltay, deltaz;
+		if (ax >= Math.max(ay, az)) {
+			deltay = ay - (ax >> 1);
+			deltaz = az - (ax >> 1);
+			while (true) {
+				shapeable.setBlock(x, y, z);
+				if (x == (int) end.xCoord) {
+					return;
+				}
 
-                if (deltay >= 0) {
-                    y += signy;
-                    deltay -= ax;
-                }
+				if (deltay >= 0) {
+					y += signy;
+					deltay -= ax;
+				}
 
-                if (deltaz >= 0) {
-                    z += signz;
-                    deltaz -= ax;
-                }
+				if (deltaz >= 0) {
+					z += signz;
+					deltaz -= ax;
+				}
 
-                x += signx;
-                deltay += ay;
-                deltaz += az;
-            }
-        } else if (ay >= Math.max(ax, az)) {
-            deltax = ax - (ay >> 1);
-            deltaz = az - (ay >> 1);
-            while (true) {
-                shapeable.setBlock(x, y, z);
-                if (y == (int)end.yCoord) {
-                    return;
-                }
+				x += signx;
+				deltay += ay;
+				deltaz += az;
+			}
+		} else if (ay >= Math.max(ax, az)) {
+			deltax = ax - (ay >> 1);
+			deltaz = az - (ay >> 1);
+			while (true) {
+				shapeable.setBlock(x, y, z);
+				if (y == (int) end.yCoord) {
+					return;
+				}
 
-                if (deltax >= 0) {
-                    x += signx;
-                    deltax -= ay;
-                }
+				if (deltax >= 0) {
+					x += signx;
+					deltax -= ay;
+				}
 
-                if (deltaz >= 0) {
-                    z += signz;
-                    deltaz -= ay;
-                }
+				if (deltaz >= 0) {
+					z += signz;
+					deltaz -= ay;
+				}
 
-                y += signy;
-                deltax += ax;
-                deltaz += az;
-            }
-        } else if (az >= Math.max(ax, ay)){
-            deltax = ax - (az >> 1);
-            deltay = ay - (az >> 1);
-            while (true) {
-                shapeable.setBlock(x, y, z);
-                if (z == (int)end.zCoord) {
-                    return;
-                }
+				y += signy;
+				deltax += ax;
+				deltaz += az;
+			}
+		} else if (az >= Math.max(ax, ay)) {
+			deltax = ax - (az >> 1);
+			deltay = ay - (az >> 1);
+			while (true) {
+				shapeable.setBlock(x, y, z);
+				if (z == (int) end.zCoord) {
+					return;
+				}
 
-                if (deltax >= 0) {
-                    x += signx;
-                    deltax -= az;
-                }
+				if (deltax >= 0) {
+					x += signx;
+					deltax -= az;
+				}
 
-                if (deltay >= 0) {
-                    y += signy;
-                    deltay -= az;
-                }
+				if (deltay >= 0) {
+					y += signy;
+					deltay -= az;
+				}
 
-                z += signz;
-                deltax += ax;
-                deltay += ay;
-            }
-        }
-    }
+				z += signz;
+				deltax += ax;
+				deltay += ay;
+			}
+		}
+	}
 
 }

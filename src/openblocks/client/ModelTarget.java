@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
 public class ModelTarget extends ModelBase {
-	
+
 	ModelRenderer stand1;
 	ModelRenderer target;
 	ModelRenderer stand2;

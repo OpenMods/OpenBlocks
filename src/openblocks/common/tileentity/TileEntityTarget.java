@@ -60,26 +60,32 @@ public class TileEntityTarget extends TileEntity {
 	}
 
 	private void onRedstoneChanged() {
-		if (!isPowered) { 
-			List<EntityArrow> arrows = (List<EntityArrow>)worldObj.getEntitiesWithinAABB(
-					EntityArrow.class,
-					AxisAlignedBB.getAABBPool().getAABB((double) xCoord - 0.1,
-							(double) yCoord - 0.1, (double) zCoord - 0.1,
-							(double) xCoord + 1.1, (double) yCoord + 1.1,
-							(double) zCoord + 1.1));
+		if (!isPowered) {
+			List<EntityArrow> arrows = (List<EntityArrow>) worldObj
+					.getEntitiesWithinAABB(
+							EntityArrow.class,
+							AxisAlignedBB.getAABBPool().getAABB(
+									(double) xCoord - 0.1,
+									(double) yCoord - 0.1,
+									(double) zCoord - 0.1,
+									(double) xCoord + 1.1,
+									(double) yCoord + 1.1,
+									(double) zCoord + 1.1));
 
 			if (arrows.size() > 0) {
 				ItemStack newStack = new ItemStack(Item.arrow, arrows.size(), 0);
-				EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, newStack);
+				EntityItem item = new EntityItem(worldObj, xCoord + 0.5,
+						yCoord + 0.5, zCoord + 0.5, newStack);
 				worldObj.spawnEntityInWorld(item);
 			}
 			for (EntityArrow arrow : arrows) {
 				arrow.setDead();
 			}
-			
+
 		}
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered ? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
-		
+		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5,
+				isPowered ? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
+
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 

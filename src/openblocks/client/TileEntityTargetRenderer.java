@@ -11,21 +11,20 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityTargetRenderer extends TileEntitySpecialRenderer {
 
 	private ModelTarget model = new ModelTarget();
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
 			double z, float f) {
-		
+
 		TileEntityTarget target = (TileEntityTarget) tileentity;
-		
+
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.0f, (float) z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
 		GL11.glRotatef(
-				-BlockUtils.getRotationFromDirection(target.getRotation()),
-				0, 1, 0
-		);
+				-BlockUtils.getRotationFromDirection(target.getRotation()), 0,
+				1, 0);
 		this.bindTextureByName("/mods/openblocks/textures/models/target.png");
 		model.render(tileentity, f);
 		GL11.glPopMatrix();

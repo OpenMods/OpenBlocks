@@ -32,11 +32,14 @@ public class CommonProxy implements IGuiHandler {
 
 		if (Config.blockLadderId > -1) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
-			CraftingManager.getInstance().getRecipeList().add(
-					new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder),
-							new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
+			CraftingManager
+					.getInstance()
+					.getRecipeList()
+					.add(new ShapelessOreRecipe(new ItemStack(
+							OpenBlocks.Blocks.ladder), new ItemStack(
+							Block.ladder), new ItemStack(Block.trapdoor)));
 		}
-		
+
 		if (Config.blockGuideId > -1) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
 		}
@@ -49,22 +52,22 @@ public class CommonProxy implements IGuiHandler {
 		if (Config.blockLightboxId > -1) {
 			OpenBlocks.Blocks.lightbox = new BlockLightbox();
 		}
-		
+
 		if (Config.blockTargetId > -1) {
 			OpenBlocks.Blocks.target = new BlockTarget();
 		}
-		
 
-	    GameRegistry.addRecipe(new TorchBowRecipe());
-		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
+		GameRegistry.addRecipe(new TorchBowRecipe());
+		NetworkRegistry.instance()
+				.registerGuiHandler(OpenBlocks.instance, this);
 		MinecraftForge.EVENT_BUS.register(new BowEventHandler());
 	}
 
 	public void registerRenderInformation() {
 
 	}
-	
-	public String getModId(){
+
+	public String getModId() {
 		return OpenBlocks.class.getAnnotation(Mod.class).modid();
 	}
 
@@ -73,8 +76,9 @@ public class CommonProxy implements IGuiHandler {
 			int x, int y, int z) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (ID == OpenBlocks.Gui.Lightbox.ordinal()) {
-			return new ContainerLightbox(player.inventory, (TileEntityLightbox)tile);
-		} 
+			return new ContainerLightbox(player.inventory,
+					(TileEntityLightbox) tile);
+		}
 		return null;
 	}
 

@@ -43,13 +43,13 @@ public class OpenBlocks {
 		public static int blockLightboxId = 804;
 		public static int blockTargetId = 805;
 	}
-	
+
 	public static enum Gui {
 		Lightbox
 	}
 
 	public static int renderId;
-	
+
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
 
@@ -60,25 +60,34 @@ public class OpenBlocks {
 		Configuration configFile = new Configuration(
 				evt.getSuggestedConfigurationFile());
 
-		/* getBlock makes this mod anti-block-id-collision-forge-thingy compliant.. Don't be a redpower :P */
-		Property prop = configFile.getBlock("block", "blockLadderId",Config.blockLadderId, "The id of the ladder");
+		/*
+		 * getBlock makes this mod anti-block-id-collision-forge-thingy
+		 * compliant.. Don't be a redpower :P
+		 */
+		Property prop = configFile.getBlock("block", "blockLadderId",
+				Config.blockLadderId, "The id of the ladder");
 		Config.blockLadderId = prop.getInt();
-		
-		prop = configFile.getBlock("block", "blockGuideId",Config.blockGuideId, "The id of the guide");
+
+		prop = configFile.getBlock("block", "blockGuideId",
+				Config.blockGuideId, "The id of the guide");
 		Config.blockGuideId = prop.getInt();
-		
-		prop = configFile.getBlock("block", "blockDropId",Config.blockDropId, "The id of the drop block");
+
+		prop = configFile.getBlock("block", "blockDropId", Config.blockDropId,
+				"The id of the drop block");
 		Config.blockDropId = prop.getInt();
-		
-		prop = configFile.getBlock("block", "blockHealId", Config.blockHealId, "The id of the heal block");
+
+		prop = configFile.getBlock("block", "blockHealId", Config.blockHealId,
+				"The id of the heal block");
 		Config.blockHealId = prop.getInt();
-		
-		prop = configFile.getBlock("block", "blockLightboxId", Config.blockLightboxId, "The id of the lightbox block");
+
+		prop = configFile.getBlock("block", "blockLightboxId",
+				Config.blockLightboxId, "The id of the lightbox block");
 		Config.blockLightboxId = prop.getInt();
-		
-		prop = configFile.getBlock("block", "blockTargetId", Config.blockTargetId, "The id of the target block");
+
+		prop = configFile.getBlock("block", "blockTargetId",
+				Config.blockTargetId, "The id of the target block");
 		Config.blockTargetId = prop.getInt();
-		
+
 		configFile.save();
 
 	}
@@ -87,7 +96,7 @@ public class OpenBlocks {
 	public void init(FMLInitializationEvent evt) {
 		proxy.init();
 		proxy.registerRenderInformation();
-		
+
 	}
 
 	public void destroyTheWorld() {

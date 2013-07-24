@@ -22,25 +22,29 @@ public class ClientProxy extends CommonProxy {
 	public ClientProxy() {
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 	}
-	
+
 	public void registerRenderInformation() {
 
 		OpenBlocks.renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new BlockRenderingHandler());
 
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLightbox.class, new TileEntityLightboxRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
-		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class,
+				new TileEntityGuideRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLightbox.class,
+				new TileEntityLightboxRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class,
+				new TileEntityTargetRenderer());
+
 	}
-	
+
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {
 		if ((world instanceof WorldClient)) {
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 			if (ID == Gui.Lightbox.ordinal()) {
-				return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile));
+				return new GuiLightbox(new ContainerLightbox(player.inventory,
+						(TileEntityLightbox) tile));
 			}
 		}
 		return null;

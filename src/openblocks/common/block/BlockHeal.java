@@ -17,10 +17,10 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class BlockHeal extends OpenBlock {
 
-	public BlockHeal(){
+	public BlockHeal() {
 		super(OpenBlocks.Config.blockHealId, Material.ground);
 		setHardness(3.0F);
-		setupBlock(this,"heal", "Heal Block", TileEntityHealBlock.class);
+		setupBlock(this, "heal", "Heal Block", TileEntityHealBlock.class);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
@@ -30,7 +30,8 @@ public class BlockHeal extends OpenBlock {
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face) {
+	public boolean isFlammable(IBlockAccess world, int x, int y, int z,
+			int metadata, ForgeDirection face) {
 		return false;
 	}
 
