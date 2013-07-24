@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -53,7 +54,10 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Blocks.target = new BlockTarget();
 		}
 		
+
+	    GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
+		MinecraftForge.EVENT_BUS.register(new BowEventHandler());
 	}
 
 	public void registerRenderInformation() {
