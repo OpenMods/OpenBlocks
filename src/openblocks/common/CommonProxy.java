@@ -19,6 +19,7 @@ import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockDrop;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockTarget;
 import openblocks.common.block.OpenBlock;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.tileentity.TileEntityHealBlock;
@@ -46,6 +47,10 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (Config.blockLightboxId > -1) {
 			OpenBlocks.Blocks.lightbox = new BlockLightbox();
+		}
+		
+		if (Config.blockTargetId > -1) {
+			OpenBlocks.Blocks.target = new BlockTarget();
 		}
 		
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);

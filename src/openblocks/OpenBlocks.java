@@ -14,6 +14,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockTarget;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
@@ -31,6 +32,7 @@ public class OpenBlocks {
 		public static BlockDrop drop;
 		public static BlockHeal heal;
 		public static BlockLightbox lightbox;
+		public static BlockTarget target;
 	}
 
 	public static class Config {
@@ -39,6 +41,7 @@ public class OpenBlocks {
 		public static int blockDropId = 802;
 		public static int blockHealId = 803;
 		public static int blockLightboxId = 804;
+		public static int blockTargetId = 805;
 	}
 	
 	public static enum Gui {
@@ -72,6 +75,9 @@ public class OpenBlocks {
 		
 		prop = configFile.getBlock("block", "blockLightboxId", Config.blockLightboxId, "The id of the lightbox block");
 		Config.blockLightboxId = prop.getInt();
+		
+		prop = configFile.getBlock("block", "blockTargetId", Config.blockTargetId, "The id of the target block");
+		Config.blockTargetId = prop.getInt();
 		
 		configFile.save();
 

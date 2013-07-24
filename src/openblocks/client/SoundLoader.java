@@ -21,7 +21,9 @@ public class SoundLoader {
 		Minecraft mc = Minecraft.getMinecraft();
 
 		String[] soundFiles = {
-				"teleport.ogg"
+				"teleport.ogg",
+				"open.ogg",
+				"close.ogg"
 		};
 
 		File resourcesDirectory = new File(mc.mcDataDir, "resources/openblocks/");

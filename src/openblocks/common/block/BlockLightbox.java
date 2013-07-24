@@ -133,6 +133,5 @@ public class BlockLightbox extends OpenBlock {
 		default:
 			setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
-		
 	}
 }

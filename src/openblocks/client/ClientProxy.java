@@ -15,6 +15,7 @@ import openblocks.common.container.ContainerLightbox;
 import openblocks.common.tileentity.TileEntityDropBlock;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
+import openblocks.common.tileentity.TileEntityTarget;
 
 public class ClientProxy extends CommonProxy {
 
@@ -29,6 +30,7 @@ public class ClientProxy extends CommonProxy {
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLightbox.class, new TileEntityLightboxRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
 		
 	}
 	

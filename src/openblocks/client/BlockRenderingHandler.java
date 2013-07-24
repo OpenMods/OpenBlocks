@@ -2,6 +2,7 @@ package openblocks.client;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
+import openblocks.common.tileentity.TileEntityTarget;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -19,7 +20,12 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	private TileEntityGuide teGuide = new TileEntityGuide();
 	private TileEntityLightbox teLightbox = new TileEntityLightbox();
-
+	private TileEntityTarget teTarget = new TileEntityTarget();
+	
+	public BlockRenderingHandler() {
+		teTarget.setPowered(true);
+	}
+	
 	@Override
 	public int getRenderId() {
 		return OpenBlocks.renderId;
@@ -33,6 +39,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			te = teGuide;
 		}else if (block == OpenBlocks.Blocks.lightbox) {
 			te = teLightbox;
+		}else if (block == OpenBlocks.Blocks.target) {
+			te = teTarget;
 		}
 		if (te != null) {
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
