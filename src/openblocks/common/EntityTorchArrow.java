@@ -15,6 +15,7 @@ public class EntityTorchArrow extends EntityArrow {
 
 	public void onUpdate() {
 		super.onUpdate();
+		// TODO: Check that this works in an unmodified, out-of-debug-env client.
 		if (this.ticksInGround == 1) {
 			int closestX = (int) Math.round(posX);
 			int closestY = (int) Math.round(posY);
