@@ -50,9 +50,7 @@ public class BlockDrop extends OpenBlock {
 
 	public BlockDrop() {
 		super(OpenBlocks.Config.blockDropId, Material.ground);
-		setHardness(3.0F);
 		setupBlock(this, "drop", "Drop Block", TileEntityDropBlock.class);
-		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {

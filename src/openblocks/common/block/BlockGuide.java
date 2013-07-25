@@ -22,9 +22,7 @@ public class BlockGuide extends OpenBlock {
 
 	public BlockGuide() {
 		super(OpenBlocks.Config.blockGuideId, Material.ground);
-		setHardness(3.0F);
 		setupBlock(this, "guide", "Guide", TileEntityGuide.class);
-		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	protected TileEntityGuide getTileEntity(World world, int x, int y, int z) {

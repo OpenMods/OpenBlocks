@@ -10,6 +10,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import openblocks.common.CommonProxy;
 import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockGrave;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
@@ -33,6 +34,7 @@ public class OpenBlocks {
 		public static BlockHeal heal;
 		public static BlockLightbox lightbox;
 		public static BlockTarget target;
+		public static BlockGrave grave;
 	}
 
 	public static class Config {
@@ -42,6 +44,7 @@ public class OpenBlocks {
 		public static int blockHealId = 803;
 		public static int blockLightboxId = 804;
 		public static int blockTargetId = 805;
+		public static int blockGraveId = 806;
 	}
 
 	public static enum Gui {
@@ -87,6 +90,10 @@ public class OpenBlocks {
 		prop = configFile.getBlock("block", "blockTargetId",
 				Config.blockTargetId, "The id of the target block");
 		Config.blockTargetId = prop.getInt();
+		
+		prop = configFile.getBlock("block", "blockGraveId", 
+				Config.blockGraveId, "The id of the grave block");
+		Config.blockGraveId = prop.getInt();
 
 		configFile.save();
 
