@@ -15,6 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
+import openblocks.common.block.BlockGrave;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
@@ -52,9 +53,11 @@ public class CommonProxy implements IGuiHandler {
 		if (Config.blockLightboxId > -1) {
 			OpenBlocks.Blocks.lightbox = new BlockLightbox();
 		}
-
 		if (Config.blockTargetId > -1) {
 			OpenBlocks.Blocks.target = new BlockTarget();
+		}
+		if(Config.blockGraveId > -1){
+			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
 
 		GameRegistry.addRecipe(new TorchBowRecipe());

@@ -26,9 +26,7 @@ public class BlockTarget extends OpenBlock {
 
 	public BlockTarget() {
 		super(OpenBlocks.Config.blockTargetId, Material.ground);
-		setHardness(3.0F);
 		setupBlock(this, "target", "Target", TileEntityTarget.class);
-		setCreativeTab(CreativeTabs.tabMisc);
 		setLightValue(0.3f);
 	}
 

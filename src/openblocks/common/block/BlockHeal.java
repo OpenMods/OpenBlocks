@@ -19,9 +19,7 @@ public class BlockHeal extends OpenBlock {
 
 	public BlockHeal() {
 		super(OpenBlocks.Config.blockHealId, Material.ground);
-		setHardness(3.0F);
 		setupBlock(this, "heal", "Heal Block", TileEntityHealBlock.class);
-		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	@Override

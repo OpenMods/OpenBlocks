@@ -23,9 +23,7 @@ public class BlockLightbox extends OpenBlock {
 
 	public BlockLightbox() {
 		super(OpenBlocks.Config.blockLightboxId, Material.glass);
-		setHardness(3.0F);
 		setupBlock(this, "lightbox", "Lightbox", TileEntityLightbox.class);
-		setCreativeTab(CreativeTabs.tabMisc);
 		setLightValue(1.0f);
 	}
 

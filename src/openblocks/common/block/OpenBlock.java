@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -20,7 +21,8 @@ public abstract class OpenBlock extends BlockContainer {
 
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
-
+		setCreativeTab(CreativeTabs.tabMisc);
+		setHardness(3.0F);
 	}
 
 	@Override
