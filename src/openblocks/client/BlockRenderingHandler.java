@@ -1,6 +1,7 @@
 package openblocks.client;
 
 import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntityTarget;
@@ -22,6 +23,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntityGuide teGuide = new TileEntityGuide();
 	private TileEntityLightbox teLightbox = new TileEntityLightbox();
 	private TileEntityTarget teTarget = new TileEntityTarget();
+	private TileEntityGrave teGrave = new TileEntityGrave();
 
 	public BlockRenderingHandler() {
 		teTarget.setPowered(true);
@@ -43,12 +45,13 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			te = teLightbox;
 		} else if (block == OpenBlocks.Blocks.target) {
 			te = teTarget;
+		} else if (block == OpenBlocks.Blocks.grave) {
+			te = teGrave;
 		}
 		if (te != null) {
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-			TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D,
-					0.0D, 0.0F);
+			TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
 	}

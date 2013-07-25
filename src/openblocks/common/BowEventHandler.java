@@ -2,6 +2,8 @@ package openblocks.common;
 
 import java.util.Random;
 
+import openblocks.common.entity.EntityTorchArrow;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -79,7 +81,6 @@ public class BowEventHandler {
 			EntityArrow entityarrow = new EntityTorchArrow(player.worldObj,
 					player, f * 2.0F);
 
-			System.out.println("new arrow");
 			if (f == 1.0F) {
 				entityarrow.setIsCritical(true);
 			}

@@ -1,4 +1,6 @@
-package openblocks.common;
+package openblocks.common.entity;
+
+import java.lang.reflect.Field;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,14 +11,33 @@ import net.minecraft.world.World;
 
 public class EntityTorchArrow extends EntityArrow {
 
+	private Field ticksInGroundField = null;
+	
 	public EntityTorchArrow(World worldObj, EntityPlayer player, float f) {
 		super(worldObj, player, f);
+	}
+	
+	public int getTicksInGround() {
+		if (ticksInGroundField == null) {
+			try {
+				ticksInGroundField = this.getClass().getField("ticksInGround");
+				ticksInGroundField.setAccessible(true);
+			} catch (Exception e) {
+				setDead();
+			}
+		}
+		if (ticksInGroundField != null) {
+			try {
+				return (Integer) ticksInGroundField.get(this);
+			} catch (Exception e) {
+			}
+		}
+		return 1;
 	}
 
 	public void onUpdate() {
 		super.onUpdate();
-		// TODO: Check that this works in an unmodified, out-of-debug-env client.
-		if (this.ticksInGround == 1) {
+		if (getTicksInGround() == 1) {
 			int closestX = (int) Math.round(posX);
 			int closestY = (int) Math.round(posY);
 			int closestZ = (int) Math.round(posZ);

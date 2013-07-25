@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Config;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,23 +25,11 @@ public class TileEntityDropBlock extends TileEntity {
 	private int upperLevel = 0;
 
 	/**
-	 * The distance that findBlock will look for another teleport block
-	 */
-	private static final int BLOCK_SEARCH_DISTANCE = 30;
-	/**
-	 * Indicates if the player must be looking in the direction they want to
-	 * teleport
-	 */
-	private static final boolean MUST_FACE_DIRECTION = true;
-	/**
 	 * How far a player must be looking in a direction to be teleported
 	 */
 	private static final float DIRECTION_MAGNITUDE = 0.95f;
 
 	private HashMap<String, Integer> cooldown = new HashMap<String, Integer>();
-
-	public int colorIndex = 0; // What is the point in colorIndex if we use
-								// Metadata?
 
 	@Override
 	public void updateEntity() {
@@ -93,13 +82,13 @@ public class TileEntityDropBlock extends TileEntity {
 						continue;
 					if (lowerLevel != 0
 							&& player.isSneaking()
-							&& (!MUST_FACE_DIRECTION || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
+							&& (!Config.dropBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = lowerLevel;
 						/* player.isJumping doesn't seem to work server side ? */
 					} else if (upperLevel != 0
 							&& player.posY > yCoord + 1.2
-							&& (!MUST_FACE_DIRECTION || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
+							&& (!Config.dropBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = upperLevel;
 					}
@@ -134,7 +123,8 @@ public class TileEntityDropBlock extends TileEntity {
 			throw new Exception("Must be either up or down... for now");
 		}
 
-		for (int y = 2; y < BLOCK_SEARCH_DISTANCE; y++) {
+		int blocksInTheWay = 0;
+		for (int y = 2; y < Config.dropBlockSearchDistance; y++) {
 			int yPos = yCoord + (y * direction.offsetY);
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
@@ -155,7 +145,10 @@ public class TileEntityDropBlock extends TileEntity {
 					}
 					return 0;
 				} else if (blockId != 0) {
-					return 0;
+					if (blocksInTheWay++ > 3) {
+						System.out.println("blocksInTheWay = "+ blocksInTheWay);
+						return 0;
+					}
 				}
 			} else {
 				return 0;
@@ -169,9 +162,14 @@ public class TileEntityDropBlock extends TileEntity {
 		if (stack != null) {
 			Item item = stack.getItem();
 			if (item instanceof ItemDye) {
-				System.out.println(stack.getItemDamage());
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord,
-						stack.getItemDamage(), 3);
+				int dmg = stack.getItemDamage();
+				// temp hack, dont tell anyone.
+				if (dmg == 15) {
+					dmg = 0;
+				}else if (dmg == 0) {
+					dmg = 15;
+				}
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, dmg, 3);
 				worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 				return true;
 			}

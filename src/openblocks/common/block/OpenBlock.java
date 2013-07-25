@@ -42,14 +42,14 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	public void registerIcons(IconRegister registry) {
-		this.blockIcon = registry.registerIcon(OpenBlocks.proxy.getModId()
+		this.blockIcon = registry.registerIcon(OpenBlocks.proxy.getModId().toLowerCase()
 				+ ":" + uniqueBlockId);
 	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		BlockUtils.dropInventoryItems(tile);
+		BlockUtils.dropTileInventory(tile);
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
@@ -64,13 +64,10 @@ public abstract class OpenBlock extends BlockContainer {
 		GameRegistry.registerBlock(instance, OpenBlocks.proxy.getModId() + "_"
 				+ uniqueName);
 		LanguageRegistry.instance().addStringLocalization(
-				"tile." + OpenBlocks.proxy.getModId() + "." + uniqueName
-						+ ".name", friendlyName);
-		instance.setUnlocalizedName(OpenBlocks.proxy.getModId() + "."
-				+ uniqueName);
+				"tile." + OpenBlocks.proxy.getModId().toLowerCase() + "." + uniqueName + ".name", friendlyName);
+		instance.setUnlocalizedName(OpenBlocks.proxy.getModId().toLowerCase() + "." + uniqueName);
 		if (tileEntity != null) {
-			GameRegistry.registerTileEntity(tileEntity,
-					OpenBlocks.proxy.getModId() + "_" + uniqueName);
+			GameRegistry.registerTileEntity(tileEntity, OpenBlocks.proxy.getModId().toLowerCase() + "_" + uniqueName);
 			this.teClass = tileEntity;
 		}
 	}

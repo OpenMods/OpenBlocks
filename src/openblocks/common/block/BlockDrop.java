@@ -28,8 +28,7 @@ import net.minecraft.world.World;
 public class BlockDrop extends OpenBlock {
 
 	public static final int[] colors = new int[] {
-
-	0x252525, // 0
+			0xe0e0e0, // 15
 			0xc54a4a, // 1
 			0x2b6631, // 2
 			0x5d4b3f, // 3
@@ -44,7 +43,7 @@ public class BlockDrop extends OpenBlock {
 			0x728abb, // 12
 			0xaf60b6, // 13
 			0xbd6c36, // 14
-			0xe0e0e0, // 15
+			0x252525, // 0
 
 	};
 

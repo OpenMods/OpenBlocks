@@ -45,6 +45,8 @@ public class OpenBlocks {
 		public static int blockLightboxId = 804;
 		public static int blockTargetId = 805;
 		public static int blockGraveId = 806;
+		public static int dropBlockSearchDistance = 30;
+		public static boolean dropBlockMustFaceDirection = false;
 	}
 
 	public static enum Gui {
@@ -94,6 +96,12 @@ public class OpenBlocks {
 		prop = configFile.getBlock("block", "blockGraveId", 
 				Config.blockGraveId, "The id of the grave block");
 		Config.blockGraveId = prop.getInt();
+	
+		prop = configFile.get("dropblock", "searchDistance", Config.dropBlockSearchDistance, "The range of the drop block");
+		Config.dropBlockSearchDistance = prop.getInt();
+
+		prop = configFile.get("dropblock", "mustFaceDirection", Config.dropBlockMustFaceDirection, "Must the user face the direction they want to travel?");
+		Config.dropBlockMustFaceDirection = prop.getBoolean(Config.dropBlockMustFaceDirection);
 
 		configFile.save();
 

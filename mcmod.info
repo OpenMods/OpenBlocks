@@ -1,9 +1,9 @@
 [
 {
-  "modid" : "JadedLadder",
-  "name" : "JadedLadder",
+  "modid" : "OpenBlocks",
+  "name" : "OpenBlocks",
   "version" : "1.0.0",
-  "url" : "http://www.feed-the-beast.com",
+  "url" : "http://www.openperipheral.info",
   "credits" : "",
   "authors": [
     "Mikee",

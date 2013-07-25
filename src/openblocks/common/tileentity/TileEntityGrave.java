@@ -1,35 +1,37 @@
 package openblocks.common.tileentity;
 
+import openblocks.api.IInventoryContainer;
+import openblocks.common.GenericInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityGrave extends TileEntity {
+public class TileEntityGrave extends TileEntity implements IInventoryContainer {
 
-	private ForgeDirection rotation;
+	private ForgeDirection rotation = ForgeDirection.SOUTH;
 	private String perishedUsername;
-	private ItemStack[] loot;
+	private GenericInventory inventory = new GenericInventory("grave", false, 40);
 	
 	public TileEntityGrave(){
-		rotation = ForgeDirection.NORTH;
-		perishedUsername = "UNKNOWN";
 	}
 	
 	public String getUsername(){
-		return perishedUsername;
+		return perishedUsername == null ? "Unknown" : perishedUsername;
 	}
 	
-	public ItemStack[] getLoot(){
-		return loot;
+	public IInventory getLoot(){
+		return inventory;
 	}
 	
 	public void setUsername(String username){
 		this.perishedUsername = username;
 	}
 	
-	public void setLoot(ItemStack[] itemStack){
-		if(itemStack == null) itemStack = new ItemStack[0];
-		this.loot = itemStack;
+	public void setLoot(IInventory invent){
+		inventory.copyFrom(invent);
 	}	
 
 	public void setRotation(ForgeDirection rotation){
@@ -37,14 +39,39 @@ public class TileEntityGrave extends TileEntity {
 	}
 	
 	public ForgeDirection getRotation() {
-		if(		rotation == null ||
-				rotation == ForgeDirection.UNKNOWN ||
-				rotation == ForgeDirection.UP ||
-				rotation == ForgeDirection.DOWN){
+		if(	rotation == null ||
+			rotation == ForgeDirection.UNKNOWN ||
+			rotation == ForgeDirection.UP ||
+			rotation == ForgeDirection.DOWN){
 			rotation = ForgeDirection.NORTH;
 			System.out.println("OpenBlocks: WARNING: Grave was badly rotated, I fixed it for you. You're welcome.");
 		}
 		return rotation;
+	}
+
+	@Override
+	public IInventory[] getInternalInventories() {
+		return new IInventory[] { inventory };
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
+		if (tag.hasKey("perishedUsername")) {
+			perishedUsername = tag.getString("perishedUsername");
+		}
+		if (tag.hasKey("rotation")) {
+			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+		tag.setString("perishedUsername", getUsername());
+		tag.setInteger("rotation", rotation.ordinal());
 	}
 
 }

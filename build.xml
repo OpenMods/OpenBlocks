@@ -107,13 +107,13 @@
 		</exec>
 
 		<!-- Copy classes -->
-		<copy todir="${classes.dir}/jadedladder">
-			<fileset dir="${mcp.dir}/reobf/minecraft/jadedladder" />
+		<copy todir="${classes.dir}/openblocks">
+			<fileset dir="${mcp.dir}/reobf/minecraft/openblocks" />
 		</copy>
 
 		<!-- Copy resources -->
-		<copy todir="${classes.dir}/mods/jadedladder">
-			<fileset dir="mods/jadedladder" />
+		<copy todir="${classes.dir}/mods/openblocks">
+			<fileset dir="mods/openblocks" />
 		</copy>
 		
 		<!-- Copy resources -->

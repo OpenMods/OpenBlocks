@@ -2,6 +2,8 @@ package openblocks.utils;
 
 import java.util.Random;
 
+import openblocks.api.IInventoryContainer;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -84,21 +86,32 @@ public class BlockUtils {
 		worldObj.spawnEntityInWorld(entityitem);
 	}
 
-	public static void dropInventoryItems(TileEntity tileEntity) {
+	public static void dropTileInventory(TileEntity tileEntity) {
+		
 		if (tileEntity != null && tileEntity instanceof IInventory) {
 			IInventory inventory = (IInventory) tileEntity;
-			Random rand = tileEntity.worldObj.rand;
-			for (int i = 0; i < inventory.getSizeInventory(); ++i) {
-				ItemStack itemStack = inventory.getStackInSlot(i);
-				if (itemStack != null) {
-					dropItemStackInWorld(tileEntity.worldObj,
-							tileEntity.xCoord, tileEntity.yCoord,
-							tileEntity.zCoord, itemStack);
-				}
+			dropInventory(inventory, tileEntity.worldObj, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+		}
+	}
+	
+	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
+		Random rand = world.rand;
+		if (inventory == null) {
+			return;
+		}
+		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+			ItemStack itemStack = inventory.getStackInSlot(i);
+			if (itemStack != null) {
+				dropItemStackInWorld(world,
+						x, y, z, itemStack);
 			}
 		}
 	}
-
+	
+	public static void dropInventory(IInventory inventory, World world, int x, int y, int z) {
+		dropInventory(inventory, world, (double)x + 0.5, (double)y + 0.5, (double)z + 0.5);
+	}
+	
 	public static TileEntity getTileInDirection(TileEntity tile,
 			ForgeDirection direction) {
 		int targetX = tile.xCoord + direction.offsetX;
