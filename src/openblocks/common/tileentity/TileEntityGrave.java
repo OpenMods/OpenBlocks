@@ -10,6 +10,11 @@ public class TileEntityGrave extends TileEntity {
 	private String perishedUsername;
 	private ItemStack[] loot;
 	
+	public TileEntityGrave(){
+		rotation = ForgeDirection.NORTH;
+		perishedUsername = "UNKNOWN";
+	}
+	
 	public String getUsername(){
 		return perishedUsername;
 	}
