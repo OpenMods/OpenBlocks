@@ -1,13 +1,11 @@
 package openblocks.common.tileentity;
 
-import openblocks.api.IInventoryContainer;
-import openblocks.common.GenericInventory;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.api.IInventoryContainer;
+import openblocks.common.GenericInventory;
 
 public class TileEntityGrave extends TileEntity implements IInventoryContainer {
 

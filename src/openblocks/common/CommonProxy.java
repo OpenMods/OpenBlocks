@@ -8,26 +8,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Config;
+import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockGrave;
+import openblocks.common.block.BlockGuide;
+import openblocks.common.block.BlockHeal;
+import openblocks.common.block.BlockLadder;
+import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockTarget;
+import openblocks.common.container.ContainerLightbox;
+import openblocks.common.entity.EntityGhost;
+import openblocks.common.tileentity.TileEntityLightbox;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Config;
-import openblocks.common.block.BlockGrave;
-import openblocks.common.block.BlockGuide;
-import openblocks.common.block.BlockHeal;
-import openblocks.common.block.BlockLadder;
-import openblocks.common.block.BlockDrop;
-import openblocks.common.block.BlockLightbox;
-import openblocks.common.block.BlockTarget;
-import openblocks.common.block.OpenBlock;
-import openblocks.common.container.ContainerLightbox;
-import openblocks.common.entity.EntityGhost;
-import openblocks.common.tileentity.TileEntityHealBlock;
-import openblocks.common.tileentity.TileEntityLightbox;
 
 public class CommonProxy implements IGuiHandler {
 

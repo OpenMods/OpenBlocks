@@ -1,10 +1,9 @@
 package openblocks.client;
 
-import openblocks.common.tileentity.TileEntityGrave;
-import openblocks.common.tileentity.TileEntityTarget;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityGrave;
 
 public class ModelGrave extends ModelBase {
 

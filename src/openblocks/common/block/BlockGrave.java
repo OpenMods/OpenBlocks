@@ -2,14 +2,8 @@ package openblocks.common.block;
 
 import java.util.Random;
 
-import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Config;
-import openblocks.common.entity.EntityGhost;
-import openblocks.common.tileentity.TileEntityGrave;
-import openblocks.utils.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,6 +11,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Config;
+import openblocks.common.entity.EntityGhost;
+import openblocks.common.tileentity.TileEntityGrave;
+import openblocks.utils.BlockUtils;
 
 public class BlockGrave extends OpenBlock {
 

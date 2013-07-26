@@ -1,10 +1,8 @@
 package openblocks.shapes;
 
-import openblocks.OpenBlocks;
 import openblocks.common.IShapeGenerator;
 import openblocks.common.IShapeable;
 import openblocks.utils.GeometryUtils;
-import openblocks.utils.MathUtils;
 import openblocks.utils.GeometryUtils.Octant;
 
 public class ShapeSphereGenerator implements IShapeGenerator {

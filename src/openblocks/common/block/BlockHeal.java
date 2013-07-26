@@ -1,19 +1,11 @@
 package openblocks.common.block;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityDropBlock;
-import openblocks.common.tileentity.TileEntityHealBlock;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityHealBlock;
 
 public class BlockHeal extends OpenBlock {
 

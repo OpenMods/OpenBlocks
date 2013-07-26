@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import openblocks.common.GenericInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -16,8 +15,8 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.storage.MapData;
-import net.minecraft.world.storage.MapInfo;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.common.GenericInventory;
 
 public class TileEntityLightbox extends TileEntity implements IInventory {
 

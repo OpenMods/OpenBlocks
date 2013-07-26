@@ -1,16 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
-import openblocks.common.IShapeable;
-import openblocks.common.block.BlockGuide;
-import openblocks.shapes.ShapeFactory;
-import openblocks.shapes.ShapeFactory.Mode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -18,8 +7,12 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.common.IShapeable;
+import openblocks.shapes.ShapeFactory;
+import openblocks.shapes.ShapeFactory.Mode;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGuide extends TileEntity implements IShapeable {
 

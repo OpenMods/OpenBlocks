@@ -1,13 +1,12 @@
 package openblocks.common;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityGrave;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityGrave;
 
 public class PlayerDeathHandler {
 

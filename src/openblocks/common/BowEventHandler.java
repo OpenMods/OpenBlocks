@@ -2,8 +2,6 @@ package openblocks.common;
 
 import java.util.Random;
 
-import openblocks.common.entity.EntityTorchArrow;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import openblocks.common.entity.EntityTorchArrow;
 
 public class BowEventHandler {
 
