@@ -45,6 +45,7 @@ public class OpenBlocks {
 		public static int blockLightboxId = 804;
 		public static int blockTargetId = 805;
 		public static int blockGraveId = 806;
+		public static int blockFlagId = 807;
 		public static int dropBlockSearchDistance = 30;
 		public static boolean dropBlockMustFaceDirection = false;
 	}
@@ -96,6 +97,10 @@ public class OpenBlocks {
 		prop = configFile.getBlock("block", "blockGraveId", 
 				Config.blockGraveId, "The id of the grave block");
 		Config.blockGraveId = prop.getInt();
+		
+		prop = configFile.getBlock("block", "blockFlagId", 
+				Config.blockFlagId, "The id of the flag block");
+		Config.blockFlagId = prop.getInt();
 	
 		prop = configFile.get("dropblock", "searchDistance", Config.dropBlockSearchDistance, "The range of the drop block");
 		Config.dropBlockSearchDistance = prop.getInt();
