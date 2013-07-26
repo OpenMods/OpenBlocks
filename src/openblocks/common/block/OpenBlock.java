@@ -1,18 +1,16 @@
 package openblocks.common.block;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityHealBlock;
-import openblocks.utils.BlockUtils;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
+import openblocks.utils.BlockUtils;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public abstract class OpenBlock extends BlockContainer {
 

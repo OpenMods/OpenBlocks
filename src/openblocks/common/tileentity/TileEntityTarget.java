@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import openblocks.OpenBlocks;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
@@ -14,6 +13,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 
 public class TileEntityTarget extends TileEntity {
 

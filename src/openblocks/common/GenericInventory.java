@@ -3,8 +3,6 @@ package openblocks.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import openblocks.api.IInventoryCallback;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -12,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import openblocks.api.IInventoryCallback;
 
 public class GenericInventory implements IInventory, ISidedInventory {
 

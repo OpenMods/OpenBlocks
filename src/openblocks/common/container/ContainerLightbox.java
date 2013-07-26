@@ -1,11 +1,11 @@
 package openblocks.common.container;
 
-import openblocks.common.tileentity.TileEntityLightbox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import openblocks.common.tileentity.TileEntityLightbox;
 
 public class ContainerLightbox extends Container {
 

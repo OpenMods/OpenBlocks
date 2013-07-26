@@ -1,6 +1,5 @@
 package openblocks.utils;
 
-import net.minecraftforge.common.ForgeDirection;
 
 public class MathUtils {
 

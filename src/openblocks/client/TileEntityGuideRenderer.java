@@ -1,15 +1,14 @@
 package openblocks.client;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityGuide;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityGuide;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 

@@ -1,6 +1,5 @@
 package openblocks.shapes;
 
-import java.util.ArrayList;
 import openblocks.common.IShapeGenerator;
 import openblocks.common.IShapeable;
 import openblocks.utils.GeometryUtils;

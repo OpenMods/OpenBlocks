@@ -1,12 +1,11 @@
 package openblocks.utils;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
 
-import openblocks.common.IShapeable;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.common.IShapeable;
 
 public class GeometryUtils {
 

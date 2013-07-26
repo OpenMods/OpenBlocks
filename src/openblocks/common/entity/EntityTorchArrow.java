@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.Item;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityTorchArrow extends EntityArrow {

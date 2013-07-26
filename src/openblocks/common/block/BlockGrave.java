@@ -2,13 +2,8 @@ package openblocks.common.block;
 
 import java.util.Random;
 
-import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Config;
-import openblocks.common.entity.EntityGhost;
-import openblocks.common.tileentity.TileEntityGrave;
-import openblocks.utils.BlockUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +11,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Config;
+import openblocks.common.entity.EntityGhost;
+import openblocks.common.tileentity.TileEntityGrave;
+import openblocks.utils.BlockUtils;
 
 public class BlockGrave extends OpenBlock {
 
@@ -43,7 +43,25 @@ public class BlockGrave extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
+		
+	private void updateOnSoilStatus(World worldObj, int x, int y, int z){
+		TileEntityGrave graveEnt = (TileEntityGrave)worldObj.getBlockTileEntity(x,y,z);
+		if(graveEnt != null){
+			int id = 0;
+			Block block = Block.blocksList[(id = worldObj.getBlockId(x,y-1,z))];
+			if(block != null){
+				graveEnt.onSoil = (block == Block.dirt || block == Block.grass);
+			}
+		}
+	}
 	
+	@Override
+	public void onNeighborBlockChange(World worldObj, int x, int y,
+			int z, int changedBlockId) {
+		super.onNeighborBlockChange(worldObj, x, y, z, changedBlockId);
+		updateOnSoilStatus(worldObj, x, y, z);
+	}
+
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int par5) {
 		
@@ -90,6 +108,7 @@ public class BlockGrave extends OpenBlock {
 	public void onBlockPlacedBy(World world, int x, int y, int z,
 			EntityLiving living, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, living, stack);
+		updateOnSoilStatus(world, x, y, z);
 		TileEntityGrave grave = (TileEntityGrave)world.getBlockTileEntity(x, y, z);
 		if(living instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer) living;

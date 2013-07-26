@@ -1,13 +1,10 @@
 package openblocks.client;
 
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLiving;
+
+import org.lwjgl.opengl.GL11;
 
 public class EntityGhostRenderer extends RenderLiving {
 
