@@ -11,13 +11,16 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
+import openblocks.common.block.BlockValve;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.relauncher.RelaunchClassLoader;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
@@ -38,6 +41,8 @@ public class OpenBlocks {
 		public static BlockTarget target;
 		public static BlockGrave grave;
 		public static BlockFlag flag;
+		public static BlockValve valve;
+		public static BlockTank tank;
 	}
 
 	public static class Config {
@@ -49,6 +54,8 @@ public class OpenBlocks {
 		public static int blockTargetId = 805;
 		public static int blockGraveId = 806;
 		public static int blockFlagId = 807;
+		public static int blockValveId = 808;
+		public static int blockTankId = 809;
 		public static int dropBlockSearchDistance = 30;
 		public static boolean dropBlockMustFaceDirection = false;
 	}
@@ -61,7 +68,7 @@ public class OpenBlocks {
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
-
+	
 		if (Mods.areInstalled("That", "I", "Dont", "Like")) {
 			destroyTheWorld();
 		}
@@ -120,6 +127,10 @@ public class OpenBlocks {
 		proxy.init();
 		proxy.registerRenderInformation();
 
+	}
+	
+	public static void onSetBlock() {
+		System.out.println("Set block!");
 	}
 
 	public void destroyTheWorld() {

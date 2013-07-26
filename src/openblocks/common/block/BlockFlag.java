@@ -5,6 +5,7 @@ import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.utils.BlockUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -41,5 +42,18 @@ public class BlockFlag extends OpenBlock {
 			TileEntityFlag flag = (TileEntityFlag) tile;
 			flag.setRotation(entity.rotationYawHead);
 		}
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int par6, float par7, float par8, float par9) {
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te != null && te instanceof TileEntityFlag) {
+			if (!world.isRemote) { 
+				((TileEntityFlag)te).onActivated(player);
+			}
+			return false;
+		}
+		return true;
 	}
 }
