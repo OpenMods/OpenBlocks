@@ -1,15 +1,13 @@
 package openblocks.common.block;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityFlag;
-import openblocks.utils.BlockUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityFlag;
 
 public class BlockFlag extends OpenBlock {
 

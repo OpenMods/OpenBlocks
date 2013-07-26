@@ -15,6 +15,13 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer {
 	public boolean onSoil = false;
 	
 	public TileEntityGrave(){
+		
+	}
+	
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		/* TODO: Implement ambient sound */
 	}
 	
 	public String getUsername(){

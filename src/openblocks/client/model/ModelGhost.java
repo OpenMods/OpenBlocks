@@ -1,13 +1,12 @@
 package openblocks.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.MathHelper;
+import openblocks.common.entity.EntityGhost;
+
+import org.lwjgl.opengl.GL11;
 
 public class ModelGhost extends ModelBiped {
 	
@@ -32,17 +31,17 @@ public class ModelGhost extends ModelBiped {
 		this.tailBody.addChild(tailEnd);
 	}
 	
-	 public void render(Entity ent, float par2, float par3, float par4, float par5, float par6, float par7) {
-		 this.setRotationAngles(par2, par3, par4, par5, par6, par7, ent);
-		 
-		 float scaryAngle = 60;
+	private void renderGhost(EntityGhost ghost, float par2, float par3, float par4, float par5, float par6, float par7){
+ float scaryAngle = 50;
 		 
 		 GL11.glPushMatrix();
-		 if((ent.getDataWatcher().getWatchableObjectByte(11) & 0x1) == 0x1) {
+		 if(ghost.shouldRenderFlying()) {
 			 GL11.glRotatef(scaryAngle, 1, 0, 0);
 			 this.bipedHead.rotateAngleX -= Math.toRadians(scaryAngle);
+			 this.bipedHead.rotateAngleZ = 0;
+			 this.bipedHead.rotateAngleY = 0;
 			 this.bipedLeftArm.rotateAngleX -= Math.toRadians(scaryAngle);
-			 this.bipedRightArm.rotateAngleX -= Math.toDegrees(scaryAngle);
+			 this.bipedRightArm.rotateAngleX -= Math.toRadians(scaryAngle);
 		 }
 		 GL11.glTranslatef(0f, -(float)(MathHelper.cos(par4 * 0.066f)) * 0.2f ,0f);
 		 
@@ -57,6 +56,12 @@ public class ModelGhost extends ModelBiped {
          this.bipedHeadwear.render(par7);
          
          GL11.glPopMatrix();
+	}
+	
+	 public void render(Entity ent, float par2, float par3, float par4, float par5, float par6, float par7) {
+		 if(!(ent instanceof EntityGhost)) return;
+		 this.setRotationAngles(par2, par3, par4, par5, par6, par7, ent);
+		renderGhost((EntityGhost)ent, par2, par3, par4, par5, par6, par7);
 	 }
 	 
 	 public void setRotationAngles(float par1, float par2, float par3, float headYaw, float par5, float par6, Entity ent) {
