@@ -1,4 +1,4 @@
-package openblocks.client;
+package openblocks.client.renderer.entity;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLiving;

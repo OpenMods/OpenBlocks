@@ -1,4 +1,4 @@
-package openblocks.common;
+package openblocks.common.recipe;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;

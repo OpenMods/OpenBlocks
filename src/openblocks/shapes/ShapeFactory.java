@@ -3,9 +3,6 @@ package openblocks.shapes;
 import java.util.HashMap;
 import java.util.Map;
 
-import openblocks.common.IShapeGenerator;
-import openblocks.common.IShapeable;
-
 public class ShapeFactory {
 
 	public enum Mode {

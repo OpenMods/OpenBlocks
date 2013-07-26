@@ -1,4 +1,4 @@
-package openblocks.common;
+package openblocks.shapes;
 
 public interface IShapeGenerator {
 
