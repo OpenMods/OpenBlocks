@@ -3,13 +3,14 @@ package openblocks.client.renderer.entity;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.EntityLiving;
+import openblocks.client.model.ModelGhost;
 
 import org.lwjgl.opengl.GL11;
 
 public class EntityGhostRenderer extends RenderLiving {
 
 	public EntityGhostRenderer() {
-        super(new ModelBiped(0.0F), 0.5F);
+        super(new ModelGhost(0.0F), 0.5F);
 	}
 	
 	public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)

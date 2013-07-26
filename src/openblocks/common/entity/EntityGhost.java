@@ -1,5 +1,8 @@
 package openblocks.common.entity;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -26,6 +29,32 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 
 	private String playerName;
 	protected GenericInventory inventory = new GenericInventory("ghost", false, 40);
+	/**
+	 * Is this Ghost an aggressive scary attacking ghost, or a sad wandering safe ghost 
+	 */
+	public boolean aggresive;
+	public GhostModifier modifier = GhostModifier.NONE;
+	
+	/**
+	 * Synced data
+	 */
+	private byte syncedData = 0;
+	
+	/**
+	 * Out of data tracker for syncedData, don't change directly!
+	 */
+	private byte lastSyncedData = 0;
+	
+	/**
+	 * Modifiers to a ghost that change the way it is rendered
+	 * Based on how the player died.
+	 */
+	public enum GhostModifier {
+		NONE,
+		FIRE,
+		ARROW,
+		WATER
+	}
 	
 	public EntityGhost(World world) {
 		super(world);
@@ -34,13 +63,15 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		this.moveSpeed = 0.5F;
 		this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityPlayer.class, this.moveSpeed, false));
-        this.tasks.addTask(2, new EntityAIWander(this, this.moveSpeed));
+        this.tasks.addTask(2, new EntityAIWander(this, this.moveSpeed * 0.1f));
         this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(4, new EntityAILookIdle(this));
+       // this.tasks.addTask(4, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 16.0F, 0, true));
 		this.getNavigator().setAvoidsWater(true);
         this.texture = "/mob/char.png";
+        /* Is this entity attacking */
+        this.dataWatcher.addObject(11, Byte.valueOf(syncedData));
 	}
 
 	public EntityGhost(World world, String playerName, IInventory playerInvent) {
@@ -87,7 +118,6 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		if (tag.hasKey("playerName")) {
 			playerName = tag.getString("playerName");
 			skinUrl = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(playerName) + ".png";
-			
 		}
 		inventory.readFromNBT(tag);
     }
@@ -99,9 +129,24 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		super.onDeath(damageSource);
     }
 	
+	private boolean shouldByFlying(){
+		return getAttackTarget() != null && getAttackTarget().getDistanceToEntity(this) > 2f;
+	}
+	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(!worldObj.isRemote) {			
+			if(shouldByFlying() && (syncedData & 0x1) == 0x0) {
+				 syncedData |= 0x1;
+			}else if((syncedData & 0x1) == 0x1 && !shouldByFlying()){
+				syncedData &= 0xFE;
+			}
+			if(syncedData != lastSyncedData){
+				lastSyncedData = syncedData;
+				dataWatcher.updateObject(11, Byte.valueOf(syncedData));
+			}
+		}
 	}
 	
 	/**
