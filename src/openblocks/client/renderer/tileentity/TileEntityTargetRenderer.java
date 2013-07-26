@@ -1,7 +1,8 @@
-package openblocks.client;
+package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import openblocks.client.model.ModelTarget;
 import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.utils.BlockUtils;
 

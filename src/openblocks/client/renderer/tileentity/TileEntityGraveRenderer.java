@@ -1,8 +1,9 @@
-package openblocks.client;
+package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import openblocks.client.model.ModelGrave;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.utils.BlockUtils;
 

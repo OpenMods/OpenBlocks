@@ -19,6 +19,7 @@ import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
+import openblocks.common.recipe.TorchBowRecipe;
 import openblocks.common.tileentity.TileEntityLightbox;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;

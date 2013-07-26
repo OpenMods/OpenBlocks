@@ -1,7 +1,5 @@
 package openblocks.shapes;
 
-import openblocks.common.IShapeGenerator;
-import openblocks.common.IShapeable;
 import openblocks.utils.MathUtils;
 
 public class ShapeCylinderGenerator implements IShapeGenerator {

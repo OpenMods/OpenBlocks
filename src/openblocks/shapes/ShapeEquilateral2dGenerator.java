@@ -1,7 +1,5 @@
 package openblocks.shapes;
 
-import openblocks.common.IShapeGenerator;
-import openblocks.common.IShapeable;
 import openblocks.utils.GeometryUtils;
 
 public class ShapeEquilateral2dGenerator implements IShapeGenerator {

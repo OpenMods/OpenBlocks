@@ -8,7 +8,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.common.IShapeable;
+import openblocks.shapes.IShapeable;
 import openblocks.shapes.ShapeFactory;
 import openblocks.shapes.ShapeFactory.Mode;
 import cpw.mods.fml.relauncher.Side;
