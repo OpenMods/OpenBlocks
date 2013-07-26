@@ -14,6 +14,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
@@ -44,6 +45,11 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 	 * Out of data tracker for syncedData, don't change directly!
 	 */
 	private byte lastSyncedData = 0;
+	
+	/**
+	 * Used to smooth out changes in flight
+	 */
+	private long ticksUntilNoFlight = 0;
 	
 	/**
 	 * Modifiers to a ghost that change the way it is rendered
@@ -129,25 +135,71 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		super.onDeath(damageSource);
     }
 	
-	private boolean shouldByFlying(){
+	private boolean shouldBeFlying(){
 		return getAttackTarget() != null && getAttackTarget().getDistanceToEntity(this) > 2f;
+	}
+	
+	public boolean shouldRenderFlying(){
+		return ticksUntilNoFlight > 0 || (syncedData & 0x1) == 0x1;
 	}
 	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(ticksUntilNoFlight > 0) ticksUntilNoFlight--;
 		if(!worldObj.isRemote) {			
-			if(shouldByFlying() && (syncedData & 0x1) == 0x0) {
+			if((shouldBeFlying() || ticksUntilNoFlight > 0)&& (syncedData & 0x1) == 0x0) {
 				 syncedData |= 0x1;
-			}else if((syncedData & 0x1) == 0x1 && !shouldByFlying()){
+				 if(shouldBeFlying()) ticksUntilNoFlight = 30;					 
+			}else if((syncedData & 0x1) == 0x1 && !shouldBeFlying()){
 				syncedData &= 0xFE;
 			}
 			if(syncedData != lastSyncedData){
 				lastSyncedData = syncedData;
 				dataWatcher.updateObject(11, Byte.valueOf(syncedData));
 			}
+		}else{
+			syncedData = dataWatcher.getWatchableObjectByte(11);
+			if((syncedData & 0x1) == 0x1) ticksUntilNoFlight = 30;
 		}
+//		if((syncedData & 0x1) == 0x1) {
+//			setSize(1.8f, 0.2f);
+//		}else{
+//			setSize(0.8f, 1.8f);
+//		}
 	}
+	
+//	private boolean hasRoomToFly(){
+//		// Get my bounding box, copy it
+//		AxisAlignedBB axisalignedbb = this.boundingBox.copy();
+//		axisalignedbb.maxY += 1; /* Make it a meter higher to avoid all bad obsticles */
+//		return this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).isEmpty();
+//	}
+//	
+//	private boolean targetIsAboveMe() {
+//		if(worldObj.isRemote || getAttackTarget() == null) 
+//			return false;
+//		return getAttackTarget().posY > posY;
+//	}
+//	
+//	/* Replacement to the onLadder crap */
+//	private boolean shouldFly() {
+//		return (isCollidedHorizontally || targetIsAboveMe()) && hasRoomToFly();
+//	}
+//	
+//	/* Used when moving this mob around the place */
+//	@Override
+//	public boolean isOnLadder() {
+//		return false; /* We handle this in our onUpdate */
+//	}
+//	
+//	@Override
+//	public void onUpdate() {
+//		super.onUpdate();
+//		/* Small tinker with the ladder code */
+//		if(shouldFly()) /* Handle the or case, which EntityLiving neglects */
+//			motionY = 0.2D;
+//	}
 	
 	/**
 	 * These two methods are for sending data down to the client
