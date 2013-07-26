@@ -51,6 +51,7 @@ public class OpenBlocks {
 		public static int blockFlagId = 807;
 		public static int dropBlockSearchDistance = 30;
 		public static boolean dropBlockMustFaceDirection = false;
+		public static int ghostSpawnProbability = 100;
 	}
 
 	public static enum Gui {
@@ -111,6 +112,14 @@ public class OpenBlocks {
 		prop = configFile.get("dropblock", "mustFaceDirection", Config.dropBlockMustFaceDirection, "Must the user face the direction they want to travel?");
 		Config.dropBlockMustFaceDirection = prop.getBoolean(Config.dropBlockMustFaceDirection);
 
+		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
+		Config.ghostSpawnProbability = prop.getInt();
+		
+		if(Config.ghostSpawnProbability > 100)
+			Config.ghostSpawnProbability = 100;
+		else if(Config.ghostSpawnProbability < 0)
+			Config.ghostSpawnProbability = 0;
+		
 		configFile.save();
 
 	}

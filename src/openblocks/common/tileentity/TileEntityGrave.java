@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -15,6 +17,13 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer {
 	public boolean onSoil = false;
 	
 	public TileEntityGrave(){
+		
+	}
+	
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		/* TODO: Implement ambient sound */
 	}
 	
 	public String getUsername(){

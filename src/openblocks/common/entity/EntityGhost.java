@@ -2,6 +2,7 @@ package openblocks.common.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -161,6 +162,7 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		}else{
 			syncedData = dataWatcher.getWatchableObjectByte(11);
 			if((syncedData & 0x1) == 0x1) ticksUntilNoFlight = 30;
+			//Minecraft.getMinecraft().renderViewEntity = this;
 		}
 //		if((syncedData & 0x1) == 0x1) {
 //			setSize(1.8f, 0.2f);

@@ -67,19 +67,28 @@ public class BlockGrave extends OpenBlock {
 		
 	}
 	
+	private boolean shouldSpawnGhost(World world){
+		if(world.difficultySetting == 0) return false;
+		return OpenBlocks.Config.ghostSpawnProbability > world.rand.nextInt(100);
+	}
+	
+	private void handleGhostSpawn(TileEntityGrave grave, World world, int x, int y, int z) {
+		if (shouldSpawnGhost(world)) {
+			EntityGhost ghost = new EntityGhost(world, grave.getUsername(), grave.getLoot());
+			ghost.setPositionAndRotation(x, y, z, 0, 0);
+			world.spawnEntityInWorld(ghost);
+		}else {
+			BlockUtils.dropInventory(grave.getLoot(), world, x, y, z);
+		}
+	}
+	
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		if (!world.isRemote) { 
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 			if (tile != null && tile instanceof TileEntityGrave) {
 				TileEntityGrave grave = (TileEntityGrave) tile;
-				if (world.difficultySetting == 0) {
-					BlockUtils.dropInventory(grave.getLoot(), world, x, y, z);
-				}else {
-					EntityGhost ghost = new EntityGhost(world, grave.getUsername(), grave.getLoot());
-					ghost.setPositionAndRotation(x, y, z, 0, 0);
-					world.spawnEntityInWorld(ghost);
-				}
+				handleGhostSpawn(grave, world, x, y, z);
 			}
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
