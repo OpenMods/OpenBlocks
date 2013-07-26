@@ -1,15 +1,12 @@
 package openblocks.client.model;
 
-import openblocks.common.entity.EntityGhost;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.MathHelper;
+import openblocks.common.entity.EntityGhost;
+
+import org.lwjgl.opengl.GL11;
 
 public class ModelGhost extends ModelBiped {
 	

@@ -1,6 +1,5 @@
 package openblocks;
 
-import net.minecraft.block.Block;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;

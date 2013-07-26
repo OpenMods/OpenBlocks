@@ -1,13 +1,12 @@
 package openblocks.common.tileentity;
 
-import openblocks.OpenBlocks;
-import openblocks.common.block.BlockFlag;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import openblocks.OpenBlocks;
 
 public class TileEntityFlag extends TileEntity {
 
