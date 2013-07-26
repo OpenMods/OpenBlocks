@@ -1,5 +1,6 @@
 package openblocks.client;
 
+import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityTarget;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -30,11 +31,11 @@ public class ModelGrave extends ModelBase {
 	}
 
 	public void render(TileEntity te, float f) {
-
+		if(!(te instanceof TileEntityGrave)) return;
 		float f5 = 0.0625F;
 		setRotationAngles(te, f);
 		stone.render(f5);
-		floor.render(f5);
+		if(((TileEntityGrave)te).onSoil) floor.render(f5);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

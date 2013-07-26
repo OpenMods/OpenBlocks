@@ -14,6 +14,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer {
 	private ForgeDirection rotation = ForgeDirection.SOUTH;
 	private String perishedUsername;
 	private GenericInventory inventory = new GenericInventory("grave", false, 40);
+	public boolean onSoil = false;
 	
 	public TileEntityGrave(){
 	}
