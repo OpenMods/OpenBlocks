@@ -11,6 +11,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
@@ -57,6 +58,9 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if(Config.blockGraveId > -1){
 			OpenBlocks.Blocks.grave = new BlockGrave();
+		}
+		if(Config.blockFlagId > -1){
+			OpenBlocks.Blocks.flag = new BlockFlag();
 		}
 
 		GameRegistry.addRecipe(new TorchBowRecipe());

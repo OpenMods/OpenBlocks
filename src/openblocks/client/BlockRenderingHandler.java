@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
@@ -22,6 +23,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntityLightbox teLightbox = new TileEntityLightbox();
 	private TileEntityTarget teTarget = new TileEntityTarget();
 	private TileEntityGrave teGrave = new TileEntityGrave();
+	private TileEntityFlag teFlag = new TileEntityFlag();
 
 	public BlockRenderingHandler() {
 		teTarget.setPowered(true);
@@ -45,6 +47,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			te = teTarget;
 		} else if (block == OpenBlocks.Blocks.grave) {
 			te = teGrave;
+		} else if (block == OpenBlocks.Blocks.flag) {
+			te = teFlag;
 		}
 		if (te != null) {
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);

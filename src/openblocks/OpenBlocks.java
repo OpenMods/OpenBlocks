@@ -1,9 +1,11 @@
 package openblocks;
 
+import net.minecraft.block.Block;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;
 import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
@@ -35,6 +37,7 @@ public class OpenBlocks {
 		public static BlockLightbox lightbox;
 		public static BlockTarget target;
 		public static BlockGrave grave;
+		public static BlockFlag flag;
 	}
 
 	public static class Config {
