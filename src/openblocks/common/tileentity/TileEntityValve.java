@@ -231,6 +231,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 		super.writeToNBT(tag);
 		tank.writeToNBT(tag);
 		tankCapacity.writeToNBT(tag, "tankCapacity");
+		System.out.println("tank capacity = "+ tankCapacity.getValue());
 		linkedTiles.writeToNBT(tag, "linkedTiles");
 		flags.writeToNBT(tag, "flags");
 	}
@@ -241,6 +242,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 		tank.readFromNBT(tag);
 		tankCapacity.readFromNBT(tag, "tankCapacity");
 		tank.setCapacity((Integer)tankCapacity.getValue());
+		System.out.println("tank capacity = "+ tankCapacity.getValue());
 		flags.readFromNBT(tag, "flags");
 		linkedTiles.readFromNBT(tag, "linkedTiles");
 	}
@@ -292,6 +294,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 			if (liquid == null || !tankLiquidId.equals(liquid.itemID) || !tankLiquidMeta.equals(liquid.itemMeta)) {
 				recreateLiquid = true;
 			}
+			tank.setCapacity((Integer)tankCapacity.getValue());
 			if (recreateLiquid) {
 				LiquidStack newLiquid = new LiquidStack(
 						(Integer)tankLiquidId.getValue(),
@@ -299,10 +302,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 						(Integer)tankLiquidMeta.getValue());
 				tank.setLiquid(newLiquid);
 			}
-			int[] tiles = (int[]) linkedTiles.getValue();
-			System.out.println("client length = "+tiles.length);
-			System.out.println("tankCapacity = "+tankCapacity.getValue());
-			System.out.println("Tankamount = "+tankAmount.getValue());
+			int[] tiles = (int[]) linkedTiles.getValue();;
 			HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
 			for (int i = 0; i < tiles.length; i+=3) {
 				int f = 0;
