@@ -8,11 +8,11 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import openblocks.OpenBlocks;
+import openblocks.common.block.BlockFlag;
 
 public class TileEntityFlag extends TileEntity {
 
 	private float rotation = 0f;
-	private int color = 8450847;
 	private int colorIndex = 0;
 	
 	public TileEntityFlag() {
@@ -51,14 +51,14 @@ public class TileEntityFlag extends TileEntity {
 			rotation = tag.getFloat("rotation");
 		}
 		if (tag.hasKey("color")) {
-			color = tag.getInteger("color");
+			colorIndex = tag.getInteger("color");
 		}
 	}
 	
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setFloat("rotation", rotation);
-		tag.setInteger("color", color);
+		tag.setInteger("color", colorIndex);
 	}
 
 	public Icon getIcon() {
@@ -66,20 +66,15 @@ public class TileEntityFlag extends TileEntity {
 	}
 
 	public int getColor() {
-		return color;
+		if(colorIndex >= BlockFlag.COLORS.length) colorIndex = 0;
+		return BlockFlag.COLORS[colorIndex];
 	}
 	
-	public void setColor(int color) {
-		this.color = color;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-	}
-
 	public void onActivated(EntityPlayer player) {
 		colorIndex++;
-		int red   = (int) (Math.sin(0.4*colorIndex + 0) * 127 + 128) % 255;
-		int green = (int) (Math.sin(0.4*colorIndex + 2) * 127 + 128) % 255;
-		int blue  = (int) (Math.sin(0.4*colorIndex + 4) * 127 + 128) % 255;
-		setColor(red << 16 | green << 8 | blue);
+		if(colorIndex >= BlockFlag.COLORS.length)
+			colorIndex = 0;
+		player.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	
