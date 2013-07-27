@@ -68,7 +68,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 				needsRecheck = false;
 			}
 
-			// TODO: optimise. No point sending everything every fecking 20
+			// TODO: optimise. No point sending everything every fecking 100
 			// ticks
 			if (checkTicker % 20 == 0) {
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -96,8 +96,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 
 			while (queue.size() > 0 && validAreas.size() < 100) {
 				Coord coord = queue.poll();
-				int blockId = worldObj.getBlockId(xCoord + coord.x, yCoord
-						+ coord.y, zCoord + coord.z);
+				int blockId = worldObj.getBlockId(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z);
 				if (blockId == 0 || blockId == OpenBlocks.Config.blockTankId) {
 					validAreas.put(coord, null);
 					if (coord.x > -127 && coord.x < 127 && coord.y > -127
@@ -197,6 +196,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tank.writeToNBT(tag);
+		tag.setInteger("capacity", tank.getCapacity());
 		if (linkedCoords != null) {
 			int[] coords = new int[linkedCoords.size() * 3];
 			int j = 0;
@@ -214,6 +214,9 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		tank.readFromNBT(tag);
+		if (tag.hasKey("capacity")) {
+			tank.setCapacity(tag.getInteger("capacity"));
+		}
 		linkedCoords = new HashMap<Coord, Void>();
 		levelCapacity = new HashMap<Integer, Integer>();
 		spread = new HashMap<Integer, Double>();
@@ -253,7 +256,6 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 		Collections.sort(sortedKeys);
 		LiquidStack liquid = tank.getLiquid();
 		int remaining = liquid != null ? liquid.amount : 0;
-		System.out.println("Remaining = " + remaining);
 		for (Integer level : sortedKeys) {
 			int tanksOnLevel = levelCapacity.get(level);
 			int capacityForLevel = capacityPerTank * tanksOnLevel;
@@ -261,7 +263,6 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 			if (remaining > 0) {
 				usedByLevel = Math.min(remaining, capacityForLevel);
 			}
-			System.out.println("Used = " + usedByLevel);
 			remaining -= usedByLevel;
 			spread.put(level,
 					((double) usedByLevel / (double) capacityForLevel));
@@ -275,7 +276,8 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 
 	@Override
 	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
+		int filled = tank.fill(resource, doFill);
+		return filled;
 	}
 
 	@Override

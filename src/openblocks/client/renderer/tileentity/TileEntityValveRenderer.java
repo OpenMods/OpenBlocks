@@ -37,7 +37,6 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 				if (spread != null && spread.containsKey(coord.y)) {
 					yLevel = spread.get(coord.y);
 				}
-				System.out.println(spread);
 				renderAt(coord.x + x, coord.y + y, coord.z + z, yLevel);
 			}
 		}
