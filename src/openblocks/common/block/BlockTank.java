@@ -16,10 +16,13 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
-		super.onNeighborBlockChange(world, x, y, z, blockId);
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null && te instanceof TileEntityTank) {
-			((TileEntityTank) te).notifyTank();
+		if (blockId != this.blockID) { 
+			super.onNeighborBlockChange(world, x, y, z, blockId);
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if (te != null && te instanceof TileEntityTank) {
+				System.out.println("Change");
+				((TileEntityTank) te).notifyTank();
+			}
 		}
 	}
 

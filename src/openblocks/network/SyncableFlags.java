@@ -13,14 +13,9 @@ public class SyncableFlags implements ISyncableObject {
 	
 	private short value;
 	private boolean hasChanged = false;
-	private ArrayList<IChangeListener> listeners = new ArrayList<IChangeListener>();
 	
 	public SyncableFlags() {
 		
-	}
-
-	public void addChangeListener(IChangeListener listener) {
-		listeners.add(listener);
 	}
 	
 	public void on(int slot) {
@@ -56,9 +51,6 @@ public class SyncableFlags implements ISyncableObject {
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readShort();
-		for (int i = 0; i < listeners.size(); i++) {
-			listeners.get(i).onChanged(this);
-		}
 	}
 
 	@Override

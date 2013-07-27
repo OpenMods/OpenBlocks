@@ -10,8 +10,8 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import openblocks.OpenBlocks;
-import openblocks.network.IChangeListener;
 import openblocks.network.ISyncableObject;
+import openblocks.network.ISyncedTile;
 import openblocks.network.SyncMap;
 import openblocks.network.SyncableFlags;
 import openblocks.network.SyncableInt;
@@ -31,13 +31,15 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 
-public class TileEntityValve extends TileEntity implements ITankContainer, IChangeListener {
+public class TileEntityValve extends TileEntity implements ITankContainer, ISyncedTile {
 
 	public static enum Keys {
 		tankAmount,
 		tankCapacity,
 		flags,
-		linkedTiles
+		linkedTiles,
+		liquidId,
+		liquidMeta
 	}
 	
 	public static final int FLAG_ENABLED = 0;
@@ -55,15 +57,22 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 
 	public final LiquidTank tank = new LiquidTank(CAPACITY_PER_TANK);
 	
-	private SyncMap syncMap = null;
+	private SyncMap syncMap = new SyncMap();
 	
 	private SyncableInt tankAmount = new SyncableInt(0);
 	private SyncableInt tankCapacity = new SyncableInt(0);
+	private SyncableInt tankLiquidId = new SyncableInt(0);
+	private SyncableInt tankLiquidMeta = new SyncableInt(0);
 	private SyncableFlags flags = new SyncableFlags();
 	private SyncableIntArray linkedTiles = new SyncableIntArray();
 	
 	public TileEntityValve() {
-		linkedTiles.addChangeListener(this);
+		syncMap.put(Keys.tankAmount.ordinal(), tankAmount);
+		syncMap.put(Keys.tankCapacity.ordinal(), tankCapacity);
+		syncMap.put(Keys.flags.ordinal(), flags);
+		syncMap.put(Keys.linkedTiles.ordinal(), linkedTiles);
+		syncMap.put(Keys.liquidId.ordinal(), tankLiquidId);
+		syncMap.put(Keys.liquidMeta.ordinal(), tankLiquidMeta);
 	}
 	
 	public int[] getLinkedCoords() {
@@ -88,33 +97,21 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 	@Override
 	public void updateEntity() {
 		
-		LiquidStack liquid = tank.getLiquid();
-		tankAmount.setValue(liquid == null ? 0 : liquid.amount);
-		
-		initializeSync();
-		
-		if (worldObj != null && !worldObj.isRemote && checkTicker++ % 20 == 0) {
-			if (needsRecheck) {
-				checkTank();
+		if (!worldObj.isRemote) {
+			LiquidStack liquid = tank.getLiquid();
+			tankAmount.setValue(liquid == null ? 0 : liquid.amount);
+			if (liquid != null) {
+				tankLiquidId.setValue(liquid.itemID);
+				tankLiquidMeta.setValue(liquid.itemMeta);
 			}
-			syncMap.syncNearbyUsers(this);
+			if (checkTicker++ % 10 == 0) {
+				if (needsRecheck) {
+					checkTank();
+				}
+				syncMap.syncNearbyUsers(this);
+			}
 		}
 
-	}
-	
-	private void initializeSync() {
-		if (syncMap == null) {
-			syncMap = OpenBlocks.syncableManager.newSyncMap(!worldObj.isRemote);
-			syncMap.put(Keys.tankAmount.ordinal(), tankAmount);
-			syncMap.put(Keys.tankCapacity.ordinal(), tankCapacity);
-			syncMap.put(Keys.flags.ordinal(), flags);
-			syncMap.put(Keys.linkedTiles.ordinal(), linkedTiles);
-			
-			if (!worldObj.isRemote){
-				System.out.println("Marking block for update");
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			}
-		}
 	}
 
 	public void markForRecheck() {
@@ -219,42 +216,14 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 				newLinkedTiles[i++] = coord.z;
 			}
 			linkedTiles.setValue(newLinkedTiles);
-			tank.setCapacity(newLinkedTiles.length * (CAPACITY_PER_TANK));
+			int capacity = newLinkedTiles.length * (CAPACITY_PER_TANK);
+			tankCapacity.setValue(capacity);
+			tank.setCapacity(capacity);
 		}
 	}
 
 	public void setDirection(ForgeDirection direction) {
 		this.direction = direction;
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		packet.actionType = 0;
-		packet.xPosition = xCoord;
-		packet.yPosition = yCoord;
-		packet.zPosition = zCoord;
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNetwork(nbt);
-		packet.customParam1 = nbt;
-		System.out.println("Got packet");
-		return packet;
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNetwork(pkt.customParam1);
-	}
-
-	public void writeToNetwork(NBTTagCompound tag) {
-		if (syncMap != null) {
-			syncMap.writeToNetwork(tag);
-		}
-	}
-	
-	public void readFromNetwork(NBTTagCompound tag) {
-		initializeSync();
-		syncMap.readFromNetwork(tag);
 	}
 	
 	@Override
@@ -272,6 +241,8 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 		tank.readFromNBT(tag);
 		tankCapacity.readFromNBT(tag, "tankCapacity");
 		tank.setCapacity((Integer)tankCapacity.getValue());
+		flags.readFromNBT(tag, "flags");
+		linkedTiles.readFromNBT(tag, "linkedTiles");
 	}
 
 	@Override
@@ -304,42 +275,68 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
 		return tank;
 	}
+	
+	public LiquidStack getLiquid() {
+		return tank.getLiquid();
+	}
+
+	public boolean isEnabled() {
+		return flags.get(FLAG_ENABLED);
+	}
+	
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		if (worldObj.isRemote){
+			LiquidStack liquid = tank.getLiquid();
+			boolean recreateLiquid = false;
+			if (liquid == null || !tankLiquidId.equals(liquid.itemID) || !tankLiquidMeta.equals(liquid.itemMeta)) {
+				recreateLiquid = true;
+			}
+			if (recreateLiquid) {
+				LiquidStack newLiquid = new LiquidStack(
+						(Integer)tankLiquidId.getValue(),
+						(Integer)tankCapacity.getValue(),
+						(Integer)tankLiquidMeta.getValue());
+				tank.setLiquid(newLiquid);
+			}
+			int[] tiles = (int[]) linkedTiles.getValue();
+			System.out.println("client length = "+tiles.length);
+			System.out.println("tankCapacity = "+tankCapacity.getValue());
+			System.out.println("Tankamount = "+tankAmount.getValue());
+			HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
+			for (int i = 0; i < tiles.length; i+=3) {
+				int f = 0;
+				int y = tiles[i + 1];
+				if (levelCapacity.containsKey(y)) {
+					f = levelCapacity.get(y);
+				}
+				f++;
+				levelCapacity.put(y, f);
+			}
+			
+			List<Integer> sortedKeys = new ArrayList<Integer>(levelCapacity.keySet());
+			Collections.sort(sortedKeys);
+			spread.clear();
+			int remaining = (Integer)tankAmount.getValue();
+
+			for (Integer level : sortedKeys) {
+				int tanksOnLevel = levelCapacity.get(level);
+				int capacityForLevel = CAPACITY_PER_TANK * tanksOnLevel;
+				int usedByLevel = 0;
+				if (remaining > 0) {
+					usedByLevel = Math.min(remaining, capacityForLevel);
+				}
+//				System.out.println("Used by level " + level + " = "+ usedByLevel);
+//				System.out.println(((double) usedByLevel / (double) capacityForLevel));
+				remaining -= usedByLevel;
+				spread.put(level, ((double) usedByLevel / (double) capacityForLevel));
+			}
+//			System.out.println("linked tiles value = "+ linkedTiles.size());
+		}
+	}
 
 	@Override
-	public void onChanged(ISyncableObject object) {
-		if (object == linkedTiles) {
-			if (worldObj.isRemote){
-
-				int[] tiles = (int[]) linkedTiles.getValue();
-				HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
-				for (int i = 0; i < tiles.length; i+=3) {
-					int f = 0;
-					int y = tiles[i + 1];
-					if (levelCapacity.containsKey(y)) {
-						f = levelCapacity.get(y);
-					}
-					f++;
-					levelCapacity.put(y, f);
-				}
-				
-				List<Integer> sortedKeys = new ArrayList<Integer>(levelCapacity.keySet());
-				Collections.sort(sortedKeys);
-				spread.clear();
-				int remaining = (Integer)tankAmount.getValue();
-
-				for (Integer level : sortedKeys) {
-					int tanksOnLevel = levelCapacity.get(level);
-					int capacityForLevel = CAPACITY_PER_TANK * tanksOnLevel;
-					int usedByLevel = 0;
-					if (remaining > 0) {
-						usedByLevel = Math.min(remaining, capacityForLevel);
-					}
-					remaining -= usedByLevel;
-					spread.put(level, ((double) usedByLevel / (double) capacityForLevel));
-				}
-			}
-		} else if (object == tankAmount) {
-			System.out.println("synced tank amount");
-		}
+	public SyncMap getSyncMap() {
+		return syncMap;
 	}
 }

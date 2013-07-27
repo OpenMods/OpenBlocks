@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class SyncableInt extends SyncableObject implements ISyncableObject {
@@ -15,7 +16,6 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readInt();
-		notifyListeners();
 	}
 
 	@Override

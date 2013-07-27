@@ -15,7 +15,6 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readFloat();
-		notifyListeners();
 	}
 
 	@Override

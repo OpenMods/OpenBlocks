@@ -13,5 +13,4 @@ public interface ISyncableObject {
 	public void writeToStream(DataOutputStream stream) throws IOException;
 	public void writeToNBT(NBTTagCompound tag, String name);
 	public void readFromNBT(NBTTagCompound tag, String name);
-	public void addChangeListener(IChangeListener listener);
 }

@@ -17,15 +17,19 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		super(new int[0]);
 	}
 
-	public void setValue(Object value) {
-		if (!Arrays.equals((int[])this.value, (int[])value)) {
-			hasChanged = true;
-			this.value = value;
+	public boolean equals(Object otherValue) {
+		return Arrays.equals((int[])this.value, (int[])otherValue);
+	}
+	
+	public int size() {
+		if (value == null) {
+			return 0;
 		}
+		return ((int[]) value).length;
 	}
 
 	public boolean isEmpty() {
-		return value == null || ((int[]) value).length == 0;
+		return size() == 0;
 	}
 	
 	@Override
@@ -35,7 +39,6 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		for (int i = 0; i < length; i++) {
 			((int[])value)[i] = stream.readInt();
 		}
-		notifyListeners();
 	}
 
 	@Override

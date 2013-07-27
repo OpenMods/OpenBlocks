@@ -20,9 +20,8 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class SyncMap {
 	
-	private ArrayList<String> usersInRange = new ArrayList<String>();
+	private List<Integer> usersInRange = new ArrayList<Integer>();
 	
-	private int id = -1;
 	private ISyncableObject[] objects = new ISyncableObject[16];
 	
 	public SyncMap() {
@@ -31,32 +30,17 @@ public class SyncMap {
 	public void put(int id, ISyncableObject value) {
 		objects[id] = value;
 	}
-
-	public int getId() {
-		return id;
-	}
 	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public void writeToNetwork(NBTTagCompound tag) {
-		tag.setInteger("syncId", id);
-	}
-
-	public void readFromNetwork(NBTTagCompound tag) {
-		if (tag.hasKey("syncId")) {
-			id = tag.getInteger("syncId");
-		}
-	}
-
-	public void readFromStream(DataInputStream dis) throws IOException {
+	public List<ISyncableObject> readFromStream(DataInputStream dis) throws IOException {
 		short mask = dis.readShort();
+		List<ISyncableObject> changes = new ArrayList<ISyncableObject>();
 		for (int i = 0; i < 16; i++) {
 			if (ByteUtils.get(mask, i) && objects[i] != null) {
 				objects[i].readFromStream(dis);
+				changes.add(objects[i]);
 			}
 		}
+		return changes;
 	}
 	
 	public void writeToStream(DataOutputStream dos, boolean regardless) throws IOException {
@@ -83,13 +67,28 @@ public class SyncMap {
 	public void syncNearbyUsers(TileEntity tile) {
 		List<EntityPlayer> players = (List<EntityPlayer>)tile.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(tile.xCoord, tile.yCoord, tile.zCoord, tile.xCoord+ 1, tile.yCoord+ 1,  tile.zCoord + 1).expand(20, 20, 20));
 		if (players.size() > 0) {
-			Packet packet;
+			Packet changePacket = null;
+			Packet fullPacket = null;
 			try {
-				packet = createFullPacket();
+				List<Integer> newUsersInRange = new ArrayList<Integer>();
 				for (EntityPlayer player : players) {
+					newUsersInRange.add(player.entityId);
 					if (player != null) {
-						((EntityPlayerMP) player).playerNetServerHandler.sendPacketToPlayer(packet);
+						Packet packetToSend = null;
+						if (usersInRange.contains(player.entityId)) {
+							if (changePacket == null) {
+								changePacket = createPacket(tile.xCoord, tile.yCoord, tile.zCoord, false);
+							}
+							packetToSend = changePacket;
+						}else {
+							if (fullPacket == null) {
+								fullPacket = createPacket(tile.xCoord, tile.yCoord, tile.zCoord, true);
+							}
+							packetToSend = fullPacket;
+						}
+						((EntityPlayerMP) player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
 					}
+					usersInRange = newUsersInRange;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -97,11 +96,13 @@ public class SyncMap {
 		}
 	}
 
-	private Packet createFullPacket() throws IOException {
+	private Packet createPacket(int x, int y, int z, boolean fullPacket) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 		DataOutputStream outputStream = new DataOutputStream(bos);
-		outputStream.writeShort(getId());
-		writeToStream(outputStream, true);
+		outputStream.writeInt(x);
+		outputStream.writeInt(y);
+		outputStream.writeInt(z);
+		writeToStream(outputStream, fullPacket);
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = "OpenBlocks";
 		packet.data = bos.toByteArray();
