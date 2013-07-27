@@ -91,6 +91,18 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 		LiquidStack liquid = tank.getLiquid();
 		tankAmount.setValue(liquid == null ? 0 : liquid.amount);
 		
+		initializeSync();
+		
+		if (worldObj != null && !worldObj.isRemote && checkTicker++ % 20 == 0) {
+			if (needsRecheck) {
+				checkTank();
+			}
+			syncMap.syncNearbyUsers(this);
+		}
+
+	}
+	
+	private void initializeSync() {
 		if (syncMap == null) {
 			syncMap = OpenBlocks.syncableManager.newSyncMap(!worldObj.isRemote);
 			syncMap.put(Keys.tankAmount.ordinal(), tankAmount);
@@ -98,15 +110,11 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 			syncMap.put(Keys.flags.ordinal(), flags);
 			syncMap.put(Keys.linkedTiles.ordinal(), linkedTiles);
 			
-			if (worldObj.isRemote){
+			if (!worldObj.isRemote){
+				System.out.println("Marking block for update");
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 		}
-		
-		if (worldObj != null && !worldObj.isRemote && checkTicker++ % 20 == 0) {
-			syncMap.syncNearbyUsers(this);
-		}
-
 	}
 
 	public void markForRecheck() {
@@ -164,6 +172,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 				}
 				checkedAreas.put(coord.getHash(), coord);
 			}
+			
 
 			if (queue.size() == 0) {
 				flags.on(FLAG_ENABLED);
@@ -228,6 +237,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNetwork(nbt);
 		packet.customParam1 = nbt;
+		System.out.println("Got packet");
 		return packet;
 	}
 
@@ -237,13 +247,14 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 	}
 
 	public void writeToNetwork(NBTTagCompound tag) {
-		syncMap.writeToNetwork(tag);
+		if (syncMap != null) {
+			syncMap.writeToNetwork(tag);
+		}
 	}
 	
 	public void readFromNetwork(NBTTagCompound tag) {
-		if (syncMap != null) {
-			syncMap.readFromNetwork(tag);
-		}
+		initializeSync();
+		syncMap.readFromNetwork(tag);
 	}
 	
 	@Override
@@ -296,7 +307,6 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 
 	@Override
 	public void onChanged(ISyncableObject object) {
-		System.out.println(object);
 		if (object == linkedTiles) {
 			if (worldObj.isRemote){
 
@@ -304,17 +314,19 @@ public class TileEntityValve extends TileEntity implements ITankContainer, IChan
 				HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
 				for (int i = 0; i < tiles.length; i+=3) {
 					int f = 0;
-					if (levelCapacity.containsKey(i)) {
-						f = levelCapacity.get(i);
+					int y = tiles[i + 1];
+					if (levelCapacity.containsKey(y)) {
+						f = levelCapacity.get(y);
 					}
-					levelCapacity.put(i, f);
+					f++;
+					levelCapacity.put(y, f);
 				}
 				
 				List<Integer> sortedKeys = new ArrayList<Integer>(levelCapacity.keySet());
 				Collections.sort(sortedKeys);
-				LiquidStack liquid = tank.getLiquid();
 				spread.clear();
-				int remaining = liquid != null ? liquid.amount : 0;
+				int remaining = (Integer)tankAmount.getValue();
+
 				for (Integer level : sortedKeys) {
 					int tanksOnLevel = levelCapacity.get(level);
 					int capacityForLevel = CAPACITY_PER_TANK * tanksOnLevel;

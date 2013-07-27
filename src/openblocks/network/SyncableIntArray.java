@@ -33,8 +33,9 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		int length = stream.readInt();
 		value = new int[length];
 		for (int i = 0; i < length; i++) {
-			((Integer[])value)[i] = stream.readInt();
+			((int[])value)[i] = stream.readInt();
 		}
+		notifyListeners();
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		int length = ((int[])value).length;
 		stream.writeInt(length);
 		for (int i = 0; i < length; i++) {
-			stream.writeInt(((Integer[])value)[i]);
+			stream.writeInt(((int[])value)[i]);
 		}
 	}
 

@@ -34,7 +34,7 @@ public class SyncableManager {
 	
 	public void handlePacket(Packet250CustomPayload packet) throws IOException {
 		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
-		int id = dis.readInt();
+		int id = dis.readShort();
 		SyncMap map = getByMapId(id);
 		if (map != null) {
 			map.readFromStream(dis);

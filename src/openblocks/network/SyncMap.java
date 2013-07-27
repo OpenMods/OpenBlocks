@@ -64,6 +64,7 @@ public class SyncMap {
 		for (int i = 0; i < 16; i++) {
 			mask = ByteUtils.set(mask, i, objects[i] != null && (regardless || objects[i].hasChanged()));
 		}
+		dos.writeShort(mask);
 		for (int i = 0; i < 16; i++) {
 			if (objects[i] != null && (regardless || objects[i].hasChanged())) {
 				objects[i].writeToStream(dos);

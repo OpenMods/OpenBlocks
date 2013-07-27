@@ -20,10 +20,13 @@ public abstract class SyncableObject implements ISyncableObject {
 	public void setValue(Object value) {
 		if (this.value != value) {
 			hasChanged = true;
-			for (IChangeListener listener : listeners) {
-				listener.onChanged(this);
-			}
 			this.value = value;
+		}
+	}
+	
+	public void notifyListeners() {
+		for (IChangeListener listener : listeners) {
+			listener.onChanged(this);
 		}
 	}
 	

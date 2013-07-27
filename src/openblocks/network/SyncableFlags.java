@@ -56,6 +56,9 @@ public class SyncableFlags implements ISyncableObject {
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readShort();
+		for (int i = 0; i < listeners.size(); i++) {
+			listeners.get(i).onChanged(this);
+		}
 	}
 
 	@Override

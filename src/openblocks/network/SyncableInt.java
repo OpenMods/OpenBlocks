@@ -15,6 +15,7 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readInt();
+		notifyListeners();
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setInteger(name, (Integer)value);	
+		tag.setInteger(name, (Integer)value);
 	}
 
 	@Override
