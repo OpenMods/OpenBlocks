@@ -24,6 +24,32 @@ import openblocks.common.tileentity.TileEntityFlag;
 
 public class BlockFlag extends OpenBlock {
 
+	public static final int[] COLORS;
+	private static void setColor(int index, int red, int green, int blue){
+		COLORS[index] = red % 256 << 16 | green % 256 << 8 | blue % 256;
+	}
+	
+	static {
+		COLORS = new int[16];
+		setColor(0,20,198,0);
+		setColor(1,41,50,156);
+		setColor(2,221,0,0);
+		setColor(3,255,174,201);
+		setColor(4,185,122,87);
+		setColor(5,181,230,29);
+		setColor(6,0,162,232);
+		setColor(7,128,0,64);
+		setColor(8,255,242,0);
+		setColor(9,255,127,39);
+		setColor(10,255,45,45);
+		setColor(11,255,23,151);
+		setColor(12,195,195,195);
+		setColor(13,163,73,164);
+		setColor(14,0,0,0);
+		setColor(15,255,255,255);
+	}
+	
+	
 	public BlockFlag() {
 		super(OpenBlocks.Config.blockFlagId, Material.ground);
 		setupBlock(this, "flag", "Flag", TileEntityFlag.class);
