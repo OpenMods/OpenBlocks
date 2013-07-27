@@ -13,6 +13,8 @@ import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockValve;
+import openblocks.network.PacketHandler;
+import openblocks.network.SyncableManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
@@ -22,7 +24,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.relauncher.RelaunchClassLoader;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@")
-@NetworkMod(serverSideRequired = true, clientSideRequired = true)
+@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { "OpenBlocks" }, packetHandler = PacketHandler.class)
 public class OpenBlocks {
 
 	@Instance(value = "OpenBlocks")
@@ -65,6 +67,8 @@ public class OpenBlocks {
 	}
 
 	public static int renderId;
+
+	public static SyncableManager syncableManager = new SyncableManager();
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {

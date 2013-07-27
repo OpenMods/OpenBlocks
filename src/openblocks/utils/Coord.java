@@ -10,15 +10,12 @@ public class Coord {
 		this.y = y;
 		this.z = z;
 	}
-
-	@Override
-	public int hashCode() {
-		return x + 128 << 16 | y + 128 << 8 | z + 128;
+	
+	public int getHash() {
+		return getHash(x, y, z);
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		return o != null && o instanceof Coord
-				&& ((Coord) o).hashCode() == hashCode();
+	public static int getHash(int x, int y, int z) {
+		return x + 128 << 16 | y + 128 << 8 | z + 128;
 	}
 }

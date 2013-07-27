@@ -10,6 +10,13 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import openblocks.OpenBlocks;
+import openblocks.network.IChangeListener;
+import openblocks.network.ISyncableObject;
+import openblocks.network.SyncMap;
+import openblocks.network.SyncableFlags;
+import openblocks.network.SyncableInt;
+import openblocks.network.SyncableIntArray;
+import openblocks.network.SyncableManager;
 import openblocks.utils.Coord;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,56 +31,82 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 
-public class TileEntityValve extends TileEntity implements ITankContainer {
+public class TileEntityValve extends TileEntity implements ITankContainer, IChangeListener {
 
+	public static enum Keys {
+		tankAmount,
+		tankCapacity,
+		flags,
+		linkedTiles
+	}
+	
+	public static final int FLAG_ENABLED = 0;
+
+	public static final int CAPACITY_PER_TANK = LiquidContainerRegistry.BUCKET_VOLUME * 16;
+	
 	private ForgeDirection direction = ForgeDirection.EAST;
-	private boolean needsRecheck = false;
-	private boolean enabled = false;
 
 	private int checkTicker = 0;
+	
+	private boolean needsRecheck = false;
 
 	private HashMap<Integer, Double> spread = new HashMap<Integer, Double>();
 	private HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
 
-	private HashMap<Coord, Void> linkedCoords = null;
-
-	public static int capacityPerTank = LiquidContainerRegistry.BUCKET_VOLUME * 16;
-
-	public final LiquidTank tank = new LiquidTank(capacityPerTank);
-
-	public Set<Coord> getLinkedCoords() {
-		return linkedCoords != null ? linkedCoords.keySet() : null;
+	public final LiquidTank tank = new LiquidTank(CAPACITY_PER_TANK);
+	
+	private SyncMap syncMap = null;
+	
+	private SyncableInt tankAmount = new SyncableInt(0);
+	private SyncableInt tankCapacity = new SyncableInt(0);
+	private SyncableFlags flags = new SyncableFlags();
+	private SyncableIntArray linkedTiles = new SyncableIntArray();
+	
+	public TileEntityValve() {
+		linkedTiles.addChangeListener(this);
+	}
+	
+	public int[] getLinkedCoords() {
+		return (int[])linkedTiles.getValue();
 	}
 
 	public void destroyTank() {
-		if (linkedCoords != null) {
-			for (Coord linkedCoord : linkedCoords.keySet()) {
-				int x = xCoord + linkedCoord.x;
-				int y = yCoord + linkedCoord.y;
-				int z = zCoord + linkedCoord.z;
+		if (!linkedTiles.isEmpty()) {
+			int[] coords = (int[])linkedTiles.getValue();
+			for (int i = 0; i < coords.length; i += 3) {
+				int x = xCoord + coords[i];
+				int y = yCoord + coords[i+1];
+				int z = zCoord + coords[i+2];
 				if (worldObj.getBlockId(x, y, z) == OpenBlocks.Config.blockTankId) {
 					worldObj.setBlockToAir(x, y, z);
 				}
 			}
 		}
-		linkedCoords = null;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		linkedTiles.clear();
 	}
 
 	@Override
 	public void updateEntity() {
-		if (worldObj != null && !worldObj.isRemote) {
-			if (needsRecheck && ++checkTicker % 15 == 0) {
-				checkTank();
-				needsRecheck = false;
-			}
-
-			// TODO: optimise. No point sending everything every fecking 100
-			// ticks
-			if (checkTicker % 20 == 0) {
+		
+		LiquidStack liquid = tank.getLiquid();
+		tankAmount.setValue(liquid == null ? 0 : liquid.amount);
+		
+		if (syncMap == null) {
+			syncMap = OpenBlocks.syncableManager.newSyncMap(!worldObj.isRemote);
+			syncMap.put(Keys.tankAmount.ordinal(), tankAmount);
+			syncMap.put(Keys.tankCapacity.ordinal(), tankCapacity);
+			syncMap.put(Keys.flags.ordinal(), flags);
+			syncMap.put(Keys.linkedTiles.ordinal(), linkedTiles);
+			
+			if (worldObj.isRemote){
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 		}
+		
+		if (worldObj != null && !worldObj.isRemote && checkTicker++ % 20 == 0) {
+			syncMap.syncNearbyUsers(this);
+		}
+
 	}
 
 	public void markForRecheck() {
@@ -87,8 +120,8 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 	public void checkTank() {
 
 		if (!worldObj.isRemote) {
-			HashMap<Coord, Void> validAreas = new HashMap<Coord, Void>();
-			HashMap<Coord, Void> checkedAreas = new HashMap<Coord, Void>();
+			HashMap<Integer, Coord> validAreas = new HashMap<Integer, Coord>();
+			HashMap<Integer, Coord> checkedAreas = new HashMap<Integer, Coord>();
 
 			Queue<Coord> queue = new LinkedBlockingQueue<Coord>();
 			queue.add(new Coord(direction.offsetX, direction.offsetY,
@@ -98,41 +131,43 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 				Coord coord = queue.poll();
 				int blockId = worldObj.getBlockId(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z);
 				if (blockId == 0 || blockId == OpenBlocks.Config.blockTankId) {
-					validAreas.put(coord, null);
+					validAreas.put(coord.getHash(), coord);
 					if (coord.x > -127 && coord.x < 127 && coord.y > -127
 							&& coord.y < 127 && coord.z > -127 && coord.z < 127) {
-						Coord c = new Coord(coord.x + 1, coord.y, coord.z);
-						if (!checkedAreas.containsKey(c)) {
-							queue.add(c);
+						int x = coord.x + 1;
+						int y = coord.y;
+						int z = coord.z;
+						if (!checkedAreas.containsKey(Coord.getHash(x, y, z))) {
+							queue.add(new Coord(x, y, z));
 						}
-						c = new Coord(coord.x, coord.y + 1, coord.z);
-						if (!checkedAreas.containsKey(c)) {
-							queue.add(c);
+						x--; y++;
+						if (!checkedAreas.containsKey(Coord.getHash(x, y, z))) {
+							queue.add(new Coord(x, y, z));
 						}
-						c = new Coord(coord.x, coord.y, coord.z + 1);
-						if (!checkedAreas.containsKey(c)) {
-							queue.add(c);
+						y--; z++;
+						if (!checkedAreas.containsKey(Coord.getHash(x, y, z))) {
+							queue.add(new Coord(x, y, z));
 						}
-						c = new Coord(coord.x - 1, coord.y, coord.z);
-						if (!checkedAreas.containsKey(c)) {
-							queue.add(c);
+						x--; z--;
+						if (!checkedAreas.containsKey(Coord.getHash(x, y, z))) {
+							queue.add(new Coord(x, y, z));
 						}
-						c = new Coord(coord.x, coord.y - 1, coord.z);
-						if (!checkedAreas.containsKey(c)) {
-							queue.add(c);
+						y--; x++;
+						if (!checkedAreas.containsKey(Coord.getHash(x, y, z))) {
+							queue.add(new Coord(x, y, z));
 						}
-						c = new Coord(coord.x, coord.y, coord.z - 1);
-						if (!checkedAreas.containsKey(c)) {
-							queue.add(c);
+						z--; y++;
+						if (!checkedAreas.containsKey(Coord.getHash(x, y, z))) {
+							queue.add(new Coord(x, y, z));
 						}
 					}
 				}
-				checkedAreas.put(coord, null);
+				checkedAreas.put(coord.getHash(), coord);
 			}
 
 			if (queue.size() == 0) {
-				enabled = true;
-				for (Coord coord : validAreas.keySet()) {
+				flags.on(FLAG_ENABLED);
+				for (Coord coord : validAreas.values()) {
 					int x = xCoord + coord.x;
 					int y = yCoord + coord.y;
 					int z = zCoord + coord.z;
@@ -144,17 +179,22 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 					}
 				}
 			} else {
-				enabled = false;
+				flags.off(FLAG_ENABLED);
 				destroyTank();
 				return;
 			}
 
-			if (linkedCoords != null) {
-				for (Coord linkedCoord : linkedCoords.keySet()) {
-					if (!validAreas.containsKey(linkedCoord)) {
-						int x = xCoord + linkedCoord.x;
-						int y = yCoord + linkedCoord.y;
-						int z = zCoord + linkedCoord.z;
+			if (!linkedTiles.isEmpty()) {
+				int[] alreadyLinked = (int[]) linkedTiles.getValue();
+				for (int i = 0; i < alreadyLinked.length; i+= 3) {
+					int x = alreadyLinked[i];
+					int y = alreadyLinked[i+1];
+					int z = alreadyLinked[i+2];
+					int hash = Coord.getHash(x, y, z);
+					if (!validAreas.containsKey(hash)) {
+						x += xCoord;
+						y += yCoord;
+						z += zCoord;
 						if (worldObj.getBlockId(x, y, z) == OpenBlocks.Config.blockTankId) {
 							worldObj.setBlockToAir(x, y, z);
 						}
@@ -162,11 +202,15 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 				}
 			}
 
-			linkedCoords = validAreas;
-			if (linkedCoords != null) {
-				tank.setCapacity(linkedCoords.size() * (capacityPerTank));
+			int[] newLinkedTiles = new int[validAreas.size() * 3];
+			int i = 0;
+			for (Coord coord : validAreas.values()) {
+				newLinkedTiles[i++] = coord.x;
+				newLinkedTiles[i++] = coord.y;
+				newLinkedTiles[i++] = coord.z;
 			}
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			linkedTiles.setValue(newLinkedTiles);
+			tank.setCapacity(newLinkedTiles.length * (CAPACITY_PER_TANK));
 		}
 	}
 
@@ -182,91 +226,41 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 		packet.yPosition = yCoord;
 		packet.zPosition = zCoord;
 		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
+		writeToNetwork(nbt);
 		packet.customParam1 = nbt;
 		return packet;
 	}
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.customParam1);
+		readFromNetwork(pkt.customParam1);
 	}
 
+	public void writeToNetwork(NBTTagCompound tag) {
+		syncMap.writeToNetwork(tag);
+	}
+	
+	public void readFromNetwork(NBTTagCompound tag) {
+		if (syncMap != null) {
+			syncMap.readFromNetwork(tag);
+		}
+	}
+	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tank.writeToNBT(tag);
-		tag.setInteger("capacity", tank.getCapacity());
-		if (linkedCoords != null) {
-			int[] coords = new int[linkedCoords.size() * 3];
-			int j = 0;
-			for (Coord coord : linkedCoords.keySet()) {
-				coords[j++] = coord.x;
-				coords[j++] = coord.y;
-				coords[j++] = coord.z;
-			}
-			tag.setIntArray("coords", coords);
-		}
-		tag.setBoolean("enabled", enabled);
+		tankCapacity.writeToNBT(tag, "tankCapacity");
+		linkedTiles.writeToNBT(tag, "linkedTiles");
+		flags.writeToNBT(tag, "flags");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		tank.readFromNBT(tag);
-		if (tag.hasKey("capacity")) {
-			tank.setCapacity(tag.getInteger("capacity"));
-		}
-		linkedCoords = new HashMap<Coord, Void>();
-		levelCapacity = new HashMap<Integer, Integer>();
-		spread = new HashMap<Integer, Double>();
-		if (tag.hasKey("enabled")) {
-			enabled = tag.getBoolean("enabled");
-		}
-		if (tag.hasKey("coords")) {
-			int[] coords = tag.getIntArray("coords");
-			int x = 0;
-			int y = 0;
-			int z = 0;
-			for (int i = 0; i < coords.length; i++) {
-				switch (i % 3) {
-				case 0:
-					x = coords[i];
-					break;
-				case 1:
-					y = coords[i];
-					break;
-				default:
-					z = coords[i];
-					linkedCoords.put(new Coord(x, y, z), null);
-					int levelSpread = 0;
-					if (levelCapacity.containsKey(y)) {
-						levelSpread = levelCapacity.get(y);
-					}
-					levelCapacity.put(y, levelSpread + 1);
-				}
-			}
-		}
-		recalculateSpread();
-	}
-
-	private void recalculateSpread() {
-		List<Integer> sortedKeys = new ArrayList<Integer>(
-				levelCapacity.keySet());
-		Collections.sort(sortedKeys);
-		LiquidStack liquid = tank.getLiquid();
-		int remaining = liquid != null ? liquid.amount : 0;
-		for (Integer level : sortedKeys) {
-			int tanksOnLevel = levelCapacity.get(level);
-			int capacityForLevel = capacityPerTank * tanksOnLevel;
-			int usedByLevel = 0;
-			if (remaining > 0) {
-				usedByLevel = Math.min(remaining, capacityForLevel);
-			}
-			remaining -= usedByLevel;
-			spread.put(level,
-					((double) usedByLevel / (double) capacityForLevel));
-		}
+		tankCapacity.readFromNBT(tag, "tankCapacity");
+		tank.setCapacity((Integer)tankCapacity.getValue());
 	}
 
 	@Override
@@ -298,5 +292,42 @@ public class TileEntityValve extends TileEntity implements ITankContainer {
 	@Override
 	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
 		return tank;
+	}
+
+	@Override
+	public void onChanged(ISyncableObject object) {
+		System.out.println(object);
+		if (object == linkedTiles) {
+			if (worldObj.isRemote){
+
+				int[] tiles = (int[]) linkedTiles.getValue();
+				HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
+				for (int i = 0; i < tiles.length; i+=3) {
+					int f = 0;
+					if (levelCapacity.containsKey(i)) {
+						f = levelCapacity.get(i);
+					}
+					levelCapacity.put(i, f);
+				}
+				
+				List<Integer> sortedKeys = new ArrayList<Integer>(levelCapacity.keySet());
+				Collections.sort(sortedKeys);
+				LiquidStack liquid = tank.getLiquid();
+				spread.clear();
+				int remaining = liquid != null ? liquid.amount : 0;
+				for (Integer level : sortedKeys) {
+					int tanksOnLevel = levelCapacity.get(level);
+					int capacityForLevel = CAPACITY_PER_TANK * tanksOnLevel;
+					int usedByLevel = 0;
+					if (remaining > 0) {
+						usedByLevel = Math.min(remaining, capacityForLevel);
+					}
+					remaining -= usedByLevel;
+					spread.put(level, ((double) usedByLevel / (double) capacityForLevel));
+				}
+			}
+		} else if (object == tankAmount) {
+			System.out.println("synced tank amount");
+		}
 	}
 }

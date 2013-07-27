@@ -27,17 +27,20 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		TileEntityValve valve = (TileEntityValve) tileentity;
 		renderValve(x, y, z);
 		if (valve != null) {
-			Set<Coord> coords = valve.getLinkedCoords();
+			int[] coords = valve.getLinkedCoords();
 			HashMap<Integer, Double> spread = valve.getSpread();
 			if (coords == null) {
 				return;
 			}
-			for (Coord coord : coords) {
+			for (int i = 0; i < coords.length; i += 3) {
+				int _x = coords[i];
+				int _y = coords[i+1];
+				int _z = coords[i+2];
 				double yLevel = 0;
-				if (spread != null && spread.containsKey(coord.y)) {
-					yLevel = spread.get(coord.y);
+				if (spread != null && spread.containsKey(y)) {
+					yLevel = spread.get(y);
 				}
-				renderAt(coord.x + x, coord.y + y, coord.z + z, yLevel);
+				renderAt(_x + x, _y + y, _z + z, yLevel);
 			}
 		}
 	}
