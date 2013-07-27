@@ -69,5 +69,20 @@ public abstract class OpenBlock extends BlockContainer {
 			this.teClass = tileEntity;
 		}
 	}
+	
+
+
+	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
+		setupDimensions(x - width, y, z - depth, x + width, y + height, z + depth);
+	}
+	
+	protected void setupDimensions(float minX, float minY, float minZ, float maxX, float maxY, float maxZ){
+		this.minX = minX;
+		this.minY = minY;
+		this.minZ = minZ;		
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.maxZ = maxZ;
+	}
 
 }

@@ -10,6 +10,7 @@ import openblocks.OpenBlocks.Gui;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.entity.EntityGhostRenderer;
+import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
 import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
