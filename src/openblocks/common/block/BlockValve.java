@@ -14,7 +14,7 @@ public class BlockValve extends OpenBlock {
 
 	public BlockValve() {
 		super(OpenBlocks.Config.blockValveId, Material.glass);
-		setupBlock(this, "valve", "Valve", TileEntityValve.class);
+		setupBlock(this, "valve", TileEntityValve.class);
 	}
 
 	@Override

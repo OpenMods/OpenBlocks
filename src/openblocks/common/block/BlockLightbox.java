@@ -19,7 +19,7 @@ public class BlockLightbox extends OpenBlock {
 	
 	public BlockLightbox() {
 		super(OpenBlocks.Config.blockLightboxId, Material.glass);
-		setupBlock(this, "lightbox", "Lightbox", TileEntityLightbox.class);
+		setupBlock(this, "lightbox", TileEntityLightbox.class);
 		setLightValue(1.0f);
 	}
 

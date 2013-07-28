@@ -11,7 +11,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
-import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
 import openblocks.common.block.BlockGuide;
@@ -49,8 +49,8 @@ public class CommonProxy implements IGuiHandler {
 		if (Config.blockGuideId > -1) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
 		}
-		if (Config.blockDropId > -1) {
-			OpenBlocks.Blocks.drop = new BlockDrop();
+		if (Config.blockElevatorId > -1) {
+			OpenBlocks.Blocks.elevator = new BlockElevator();
 		}
 		if (Config.blockHealId > -1) {
 			OpenBlocks.Blocks.heal = new BlockHeal();

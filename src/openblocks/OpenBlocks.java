@@ -1,9 +1,11 @@
 package openblocks;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;
-import openblocks.common.block.BlockDrop;
+import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
 import openblocks.common.block.BlockGuide;
@@ -35,7 +37,7 @@ public class OpenBlocks {
 	public static class Blocks {
 		public static BlockLadder ladder;
 		public static BlockGuide guide;
-		public static BlockDrop drop;
+		public static BlockElevator elevator;
 		public static BlockHeal heal;
 		public static BlockLightbox lightbox;
 		public static BlockTarget target;
@@ -48,7 +50,7 @@ public class OpenBlocks {
 	public static class Config {
 		public static int blockLadderId = 800;
 		public static int blockGuideId = 801;
-		public static int blockDropId = 802;
+		public static int blockElevatorId = 802;
 		public static int blockHealId = 803;
 		public static int blockLightboxId = 804;
 		public static int blockTargetId = 805;
@@ -56,14 +58,20 @@ public class OpenBlocks {
 		public static int blockFlagId = 807;
 		public static int blockValveId = 808;
 		public static int blockTankId = 809;
-		public static int dropBlockSearchDistance = 30;
-		public static boolean dropBlockMustFaceDirection = false;
+		public static int elevatorTravelDistance = 30;
+		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
 	}
 
 	public static enum Gui {
 		Lightbox
 	}
+	
+	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
+		public ItemStack getIconItemStack() {
+			return new ItemStack(OpenBlocks.Blocks.flag, 1, 0);
+		}
+	};
 
 	public static int renderId;
 
@@ -93,9 +101,9 @@ public class OpenBlocks {
 				Config.blockGuideId, "The id of the guide");
 		Config.blockGuideId = prop.getInt();
 
-		prop = configFile.getBlock("block", "blockDropId", Config.blockDropId,
+		prop = configFile.getBlock("block", "blockDropId", Config.blockElevatorId,
 				"The id of the drop block");
-		Config.blockDropId = prop.getInt();
+		Config.blockElevatorId = prop.getInt();
 
 		prop = configFile.getBlock("block", "blockHealId", Config.blockHealId,
 				"The id of the heal block");
@@ -117,11 +125,11 @@ public class OpenBlocks {
 				Config.blockFlagId, "The id of the flag block");
 		Config.blockFlagId = prop.getInt();
 	
-		prop = configFile.get("dropblock", "searchDistance", Config.dropBlockSearchDistance, "The range of the drop block");
-		Config.dropBlockSearchDistance = prop.getInt();
+		prop = configFile.get("dropblock", "searchDistance", Config.elevatorTravelDistance, "The range of the drop block");
+		Config.elevatorTravelDistance = prop.getInt();
 
-		prop = configFile.get("dropblock", "mustFaceDirection", Config.dropBlockMustFaceDirection, "Must the user face the direction they want to travel?");
-		Config.dropBlockMustFaceDirection = prop.getBoolean(Config.dropBlockMustFaceDirection);
+		prop = configFile.get("dropblock", "mustFaceDirection", Config.elevatorBlockMustFaceDirection, "Must the user face the direction they want to travel?");
+		Config.elevatorBlockMustFaceDirection = prop.getBoolean(Config.elevatorBlockMustFaceDirection);
 
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
@@ -156,9 +164,17 @@ public class OpenBlocks {
 			return false;
 		}
 	}
+	
+	public static String getResourcesPath() {
+		return "/mods/openblocks";
+	}
 
 	public static String getLanguagePath() {
-		return "/mods/openblocks/languages";
+		return String.format("%s/languages", getResourcesPath());
+	}
+
+	public static String getTexturesPath() {
+		return String.format("%s/textures", getResourcesPath());
 	}
 
 }

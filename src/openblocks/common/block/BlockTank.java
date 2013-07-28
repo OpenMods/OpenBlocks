@@ -14,7 +14,7 @@ public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
 		super(OpenBlocks.Config.blockTankId, Material.glass);
-		setupBlock(this, "Tank", "Tank", TileEntityTank.class);
+		setupBlock(this, "Tank", TileEntityTank.class);
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class BlockHeal extends OpenBlock {
 
 	public BlockHeal() {
 		super(OpenBlocks.Config.blockHealId, Material.ground);
-		setupBlock(this, "heal", "Heal Block", TileEntityHealBlock.class);
+		setupBlock(this, "heal", TileEntityHealBlock.class);
 	}
 
 	@Override

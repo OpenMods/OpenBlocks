@@ -33,7 +33,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
-		setCreativeTab(CreativeTabs.tabMisc);
+		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHardness(3.0F);
 	}
 
@@ -64,23 +64,19 @@ public abstract class OpenBlock extends BlockContainer {
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
-	public void setupBlock(Block instance, String uniqueName,
-			String friendlyName) {
-		setupBlock(instance, uniqueName, friendlyName, null);
+	public void setupBlock(Block instance, String uniqueName) {
+		setupBlock(instance, uniqueName, null);
 	}
 	
-	public void setupBlock(Block instance, String uniqueName,
-			String friendlyName, Class<? extends TileEntity> tileEntity) {
-		setupBlock(instance, uniqueName, friendlyName, tileEntity, ItemOpenBlock.class);
+	public void setupBlock(Block instance, String uniqueName, Class<? extends TileEntity> tileEntity) {
+		setupBlock(instance, uniqueName, tileEntity, ItemOpenBlock.class);
 	}
 
-	public void setupBlock(Block instance, String uniqueName,
-			String friendlyName, Class<? extends TileEntity> tileEntity, Class<? extends ItemOpenBlock> itemClass) {
+	public void setupBlock(Block instance, String uniqueName, Class<? extends TileEntity> tileEntity, Class<? extends ItemOpenBlock> itemClass) {
 		uniqueBlockId = uniqueName;
 		modKey = OpenBlocks.proxy.getModId().toLowerCase();
 		
 		GameRegistry.registerBlock(instance, itemClass, String.format("%s_%s", modKey, uniqueName));
-		LanguageRegistry.instance().addStringLocalization(String.format("tile.%s.%s.name", modKey, uniqueName), friendlyName);
 		instance.setUnlocalizedName(String.format("%s.%s", modKey, uniqueName));
 		
 		if (tileEntity != null) {

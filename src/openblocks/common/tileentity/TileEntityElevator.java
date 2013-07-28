@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 
-public class TileEntityDropBlock extends TileEntity {
+public class TileEntityElevator extends TileEntity {
 
 	private int lowerLevel = 0;
 	private int upperLevel = 0;
@@ -78,13 +78,13 @@ public class TileEntityDropBlock extends TileEntity {
 						continue;
 					if (lowerLevel != 0
 							&& player.isSneaking()
-							&& (!Config.dropBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
+							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = lowerLevel;
 						/* player.isJumping doesn't seem to work server side ? */
 					} else if (upperLevel != 0
 							&& player.posY > yCoord + 1.2
-							&& (!Config.dropBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
+							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = upperLevel;
 					}
@@ -95,8 +95,8 @@ public class TileEntityDropBlock extends TileEntity {
 								"openblocks.teleport", 1F, 1F);
 						TileEntity targetTile = worldObj.getBlockTileEntity(
 								xCoord, teleportTo, zCoord);
-						if (targetTile instanceof TileEntityDropBlock) {
-							((TileEntityDropBlock) targetTile)
+						if (targetTile instanceof TileEntityElevator) {
+							((TileEntityElevator) targetTile)
 									.addPlayerCooldown(player);
 						}
 					}
@@ -120,18 +120,18 @@ public class TileEntityDropBlock extends TileEntity {
 		}
 
 		int blocksInTheWay = 0;
-		for (int y = 2; y < Config.dropBlockSearchDistance; y++) {
+		for (int y = 2; y < Config.elevatorTravelDistance; y++) {
 			int yPos = yCoord + (y * direction.offsetY);
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
-				if (blockId == OpenBlocks.Config.blockDropId) {
+				if (blockId == OpenBlocks.Config.blockElevatorId) {
 					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord,
 							yPos, zCoord);
 					// Check that it is a drop block and that it has the same
 					// color index.
-					if (!(otherBlock instanceof TileEntityDropBlock))
+					if (!(otherBlock instanceof TileEntityElevator))
 						continue;
-					if (((TileEntityDropBlock) otherBlock).getBlockMetadata() != this
+					if (((TileEntityElevator) otherBlock).getBlockMetadata() != this
 							.getBlockMetadata())
 						continue;
 

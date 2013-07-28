@@ -49,7 +49,7 @@ public class BlockFlag extends OpenBlock {
 
 	public BlockFlag() {
 		super(OpenBlocks.Config.blockFlagId, Material.ground);
-		setupBlock(this, "flag", "Flag", TileEntityFlag.class, ItemFlagBlock.class);
+		setupBlock(this, "flag", TileEntityFlag.class, ItemFlagBlock.class);
 		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
 	}
 

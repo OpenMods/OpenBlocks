@@ -21,7 +21,7 @@ public class BlockGrave extends OpenBlock {
 
 	public BlockGrave() {
 		super(Config.blockGraveId, Material.anvil); /* Requires tool and immovable */
-		setupBlock(this, "grave", "Grave", TileEntityGrave.class);
+		setupBlock(this, "grave", TileEntityGrave.class);
 	}
 	
 	@Override

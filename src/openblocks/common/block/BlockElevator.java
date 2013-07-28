@@ -6,9 +6,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityDropBlock;
+import openblocks.common.tileentity.TileEntityElevator;
 
-public class BlockDrop extends OpenBlock {
+public class BlockElevator extends OpenBlock {
 
 	public static final int[] colors = new int[] {
 			0xe0e0e0, // 15
@@ -30,9 +30,9 @@ public class BlockDrop extends OpenBlock {
 
 	};
 
-	public BlockDrop() {
-		super(OpenBlocks.Config.blockDropId, Material.ground);
-		setupBlock(this, "drop", "Drop Block", TileEntityDropBlock.class);
+	public BlockElevator() {
+		super(OpenBlocks.Config.blockElevatorId, Material.ground);
+		setupBlock(this, "elevator", TileEntityElevator.class);
 	}
 
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
@@ -42,7 +42,7 @@ public class BlockDrop extends OpenBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z,
 			EntityPlayer player, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		TileEntityDropBlock drop = (TileEntityDropBlock) te;
+		TileEntityElevator drop = (TileEntityElevator) te;
 		return drop.onActivated(player);
 	}
 }

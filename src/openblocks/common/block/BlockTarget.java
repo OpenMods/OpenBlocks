@@ -22,7 +22,7 @@ public class BlockTarget extends OpenBlock {
 
 	public BlockTarget() {
 		super(OpenBlocks.Config.blockTargetId, Material.ground);
-		setupBlock(this, "target", "Target", TileEntityTarget.class);
+		setupBlock(this, "target", TileEntityTarget.class);
 		setLightValue(0.3f);
 	}
 

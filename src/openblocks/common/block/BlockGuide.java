@@ -14,7 +14,7 @@ public class BlockGuide extends OpenBlock {
 
 	public BlockGuide() {
 		super(OpenBlocks.Config.blockGuideId, Material.ground);
-		setupBlock(this, "guide", "Guide", TileEntityGuide.class);
+		setupBlock(this, "guide", TileEntityGuide.class);
 	}
 
 	protected TileEntityGuide getTileEntity(World world, int x, int y, int z) {
