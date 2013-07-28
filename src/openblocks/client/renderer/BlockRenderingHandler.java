@@ -51,6 +51,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			te = teGrave;
 		} else if (block == OpenBlocks.Blocks.flag) {
 			te = teFlag;
+			teFlag.setColorIndex(metadata);
 		} else if (block == OpenBlocks.Blocks.valve) {
 			te = teValve;
 		}

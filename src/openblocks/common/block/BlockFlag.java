@@ -1,59 +1,56 @@
 package openblocks.common.block;
 
+import static net.minecraftforge.common.ForgeDirection.DOWN;
 import static net.minecraftforge.common.ForgeDirection.EAST;
-import static net.minecraftforge.common.ForgeDirection.NORTH;
-import static net.minecraftforge.common.ForgeDirection.SOUTH;
 import static net.minecraftforge.common.ForgeDirection.WEST;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AABBPool;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.common.item.ItemFlagBlock;
 import openblocks.common.tileentity.TileEntityFlag;
+import openblocks.utils.BlockUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFlag extends OpenBlock {
 
 	public static final int[] COLORS;
-	private static void setColor(int index, int red, int green, int blue){
+
+	private static void setColor(int index, int red, int green, int blue) {
 		COLORS[index] = red % 256 << 16 | green % 256 << 8 | blue % 256;
 	}
-	
+
 	static {
 		COLORS = new int[16];
-		setColor(0,20,198,0);
-		setColor(1,41,50,156);
-		setColor(2,221,0,0);
-		setColor(3,255,174,201);
-		setColor(4,185,122,87);
-		setColor(5,181,230,29);
-		setColor(6,0,162,232);
-		setColor(7,128,0,64);
-		setColor(8,255,242,0);
-		setColor(9,255,127,39);
-		setColor(10,255,45,45);
-		setColor(11,255,23,151);
-		setColor(12,195,195,195);
-		setColor(13,163,73,164);
-		setColor(14,0,0,0);
-		setColor(15,255,255,255);
+		setColor(0, 20, 198, 0);
+		setColor(1, 41, 50, 156);
+		setColor(2, 221, 0, 0);
+		setColor(3, 255, 174, 201);
+		setColor(4, 185, 122, 87);
+		setColor(5, 181, 230, 29);
+		setColor(6, 0, 162, 232);
+		setColor(7, 128, 0, 64);
+		setColor(8, 255, 242, 0);
+		setColor(9, 255, 127, 39);
+		setColor(10, 255, 45, 45);
+		setColor(11, 255, 23, 151);
+		setColor(12, 195, 195, 195);
+		setColor(13, 163, 73, 164);
+		setColor(14, 0, 0, 0);
+		setColor(15, 255, 255, 255);
 	}
-	
-	
+
 	public BlockFlag() {
 		super(OpenBlocks.Config.blockFlagId, Material.ground);
-		setupBlock(this, "flag", "Flag", TileEntityFlag.class);
-		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1/16f, 1f, 1/16f);
+		setupBlock(this, "flag", "Flag", TileEntityFlag.class, ItemFlagBlock.class);
+		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
 	}
 
 	@Override
@@ -63,6 +60,11 @@ public class BlockFlag extends OpenBlock {
 
 	@Override
 	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
+	@Override
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return false;
 	}
 
@@ -83,135 +85,91 @@ public class BlockFlag extends OpenBlock {
 					.canPlaceTorchOnTop(par1World, par2, par3, par4));
 		}
 	}
+
+	@Override
+	public void onBlockPlacedBy(World world, EntityPlayer player,
+			ItemStack stack, int x, int y, int z, ForgeDirection side,
+			float hitX, float hitY, float hitZ, int meta) {
+		
+		TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
+		
+		if (flag != null) {
+			float rotation = player.rotationYawHead;
+			if (side != ForgeDirection.UP) {
+				rotation = -BlockUtils.getRotationFromDirection(side.getOpposite());
+			}
+			flag.setColorIndex(stack.getItemDamage());
+			flag.setSurfaceAndRotation(side.getOpposite(), rotation);
+			
+		}
+	}
+
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World,
+			int par2, int par3, int par4) {
+		return null;
+	}
+
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
+			int z) {
+		TileEntityFlag flag = getTileEntity(world, x, y, z,
+				TileEntityFlag.class);
+		if (flag != null) {
+			ForgeDirection onSurface = flag.getSurfaceDirection();
+			if (onSurface == DOWN) {
+				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
+			} else if (onSurface == EAST || onSurface == WEST) {
+				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 5 / 16f, 1f, 1 / 16f);
+			} else {
+				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 5 / 16f);
+			}
+		}
+	}
 	
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
-    {
-        return null;
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+		if (side == DOWN) {
+			int targetX = x + side.offsetX;
+			int targetY = y + side.offsetY;
+			int targetZ = z + side.offsetZ;
+			int belowBlockId = world.getBlockId(targetX, targetY, targetZ);
+			Block belowBlock = Block.blocksList[belowBlockId];
+			if (belowBlock != null) {
+				if (belowBlock == Block.fence) {
+					return true;
+				}else if (belowBlock == this) {
+					TileEntityFlag flag = getTileEntity(world, targetX, targetY, targetZ, TileEntityFlag.class);
+					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) {
+						return true;
+					}
+				}
+			}
+		}
+		return super.canPlaceBlockOnSide(world, x, y, z, side);
+	}
+
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int par6, float par7, float par8, float par9) {
+		if (player != null && player.isSneaking()) {
+			return true;
+		}
+		if (!world.isRemote) {
+			TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
+			ForgeDirection surface = flag.getSurfaceDirection();
+			if (flag != null && surface == ForgeDirection.DOWN) {
+				System.out.println("Changing surface and rotation");
+				flag.setSurfaceAndRotation(surface, flag.getRotation() + 10f);
+				return false;
+			}
+		}
+		return true;
     }
 	
-	 public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3)
-	    {
-	        int l = par1World.getBlockMetadata(par2, par3, par4) & 7;
-	        float depth = 0.45F;
-	        float width = 1/16f;
-	        float height = 1f;
-	        if (l == 1)
-	        {
-	            this.setBlockBounds(0.0F, 0.2F, 0.5F - width, depth * 2.0F, height, 0.5F + width);
-	        }
-	        else if (l == 2)
-	        {
-	            this.setBlockBounds(1.0F - depth * 2.0F, 0.2F, 0.5F - width, 1.0F, height, 0.5F + width);
-	        }
-	        else if (l == 3)
-	        {
-	            this.setBlockBounds(0.5F - width, 0.2F, 0.0F, 0.5F + width, height, depth * 2.0F);
-	        }
-	        else if (l == 4)
-	        {
-	            this.setBlockBounds(0.5F - width, 0.2F, 1.0F - depth * 2.0F, 0.5F + width, height, 1.0F);
-	        }
-	        else
-	        {
-	            depth = 1/16f;
-	            setupDimensionsFromCenter(0.5f, 0f, 0.5f, depth, 1f, depth);
-	        }
-
-	        return super.collisionRayTrace(par1World, par2, par3, par4, par5Vec3, par6Vec3);
-	    }
-
-	
-	@Override
-	public boolean canBlockStay(World par1World, int par2, int par3, int par4) {
-		return canPlaceFlagOn(par1World, par2, par3 - 1, par4);
-	}
-
-	@Override
-	public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
-		return par1World.isBlockSolidOnSide(par2 - 1, par3, par4, EAST,  true) ||
-	               par1World.isBlockSolidOnSide(par2 + 1, par3, par4, WEST,  true) ||
-	               par1World.isBlockSolidOnSide(par2, par3, par4 - 1, SOUTH, true) ||
-	               par1World.isBlockSolidOnSide(par2, par3, par4 + 1, NORTH, true) ||
-	               canPlaceFlagOn(par1World, par2, par3 - 1, par4);
-	}
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int par1, int par2) {
 		return Block.planks.getIcon(par1, par2);
 	}
 
-	/**
-     * Called when a block is placed using its ItemBlock. Args: World, X, Y, Z, side, hitX, hitY, hitZ, block metadata
-     * returns metadata
-     */
-    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int side, float par6, float par7, float par8, int par9)
-    {
-        int metadata = par9;
-
-        if (side == 1 && this.canPlaceFlagOn(par1World, par2, par3 - 1, par4))
-        {
-            metadata = 5;
-        }
-
-        if (side == 2 && par1World.isBlockSolidOnSide(par2, par3, par4 + 1, NORTH, true))
-        {
-            metadata = 4;
-        }
-
-        if (side == 3 && par1World.isBlockSolidOnSide(par2, par3, par4 - 1, SOUTH, true))
-        {
-            metadata = 3;
-        }
-
-        if (side == 4 && par1World.isBlockSolidOnSide(par2 + 1, par3, par4, WEST, true))
-        {
-            metadata = 2;
-        }
-
-        if (side == 5 && par1World.isBlockSolidOnSide(par2 - 1, par3, par4, EAST, true))
-        {
-            metadata = 1;
-        }
-
-        return metadata;
-    }
-	
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z,
-			EntityLiving entity, ItemStack itemstack) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		int meta = world.getBlockMetadata(x,y,z);
-		if (tile != null && tile instanceof TileEntityFlag) {
-			TileEntityFlag flag = (TileEntityFlag) tile;
-			if(meta == 5){
-				flag.setRotation(entity.rotationYawHead + 90f);
-			}else{
-				flag.setRotation(getRotationForMeta(meta));
-			}				
-		}
-	}
-
-	public float getRotationForMeta(int meta) {
-		switch(meta){
-		case 1: return 270f;
-		case 2: return 90f;
-		case 3: return 0f;
-		case 4: return 180f;
-		default: return 0f;
-		}		
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null && te instanceof TileEntityFlag) {
-			if (!world.isRemote) {
-				((TileEntityFlag) te).onActivated(player);
-			}
-			return true;
-		}
-		return false;
-	}
 }

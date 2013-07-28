@@ -4,25 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import openblocks.OpenBlocks;
-import openblocks.network.ISyncableObject;
-import openblocks.network.ISyncedTile;
-import openblocks.network.SyncMap;
-import openblocks.network.SyncableFlags;
-import openblocks.network.SyncableInt;
-import openblocks.network.SyncableIntArray;
-import openblocks.network.SyncableManager;
-import openblocks.utils.Coord;
-
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
@@ -30,6 +15,14 @@ import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
+import openblocks.OpenBlocks;
+import openblocks.network.ISyncableObject;
+import openblocks.network.ISyncedTile;
+import openblocks.network.SyncMap;
+import openblocks.network.SyncableFlags;
+import openblocks.network.SyncableInt;
+import openblocks.network.SyncableIntArray;
+import openblocks.utils.Coord;
 
 public class TileEntityValve extends TileEntity implements ITankContainer, ISyncedTile {
 

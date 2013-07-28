@@ -14,8 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.api.ISurfaceAttachment;
 
-public class TileEntityTarget extends TileEntity {
+public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 
 	private ForgeDirection rotation = ForgeDirection.WEST;
 
@@ -141,5 +142,10 @@ public class TileEntityTarget extends TileEntity {
 
 	public void setPowered(boolean powered) {
 		isPowered = powered;
+	}
+
+	@Override
+	public ForgeDirection getSurfaceDirection() {
+		return ForgeDirection.DOWN;
 	}
 }

@@ -1,8 +1,5 @@
 package openblocks.network;
 
-import java.util.ArrayList;
-
-import net.minecraft.tileentity.TileEntity;
 
 public abstract class SyncableObject implements ISyncableObject {
 

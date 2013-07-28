@@ -16,9 +16,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.api.ISurfaceAttachment;
 import openblocks.common.GenericInventory;
 
-public class TileEntityLightbox extends TileEntity implements IInventory {
+public class TileEntityLightbox extends TileEntity implements IInventory, ISurfaceAttachment {
 
 	private GenericInventory inventory = new GenericInventory("lightbox",
 			false, 1);
@@ -215,5 +216,10 @@ public class TileEntityLightbox extends TileEntity implements IInventory {
 		inventory.writeToNBT(tag);
 		tag.setInteger("rotation", rotation.ordinal());
 		tag.setInteger("surface", surface.ordinal());
+	}
+
+	@Override
+	public ForgeDirection getSurfaceDirection() {
+		return surface;
 	}
 }

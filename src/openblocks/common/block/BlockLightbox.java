@@ -1,11 +1,9 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -33,19 +31,24 @@ public class BlockLightbox extends OpenBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		boolean powered = world.isBlockIndirectlyGettingPowered(x, y, z);
 		world.setBlockMetadataWithNotify(x, y, z, powered ? 1 : 0, 3);
+		super.onNeighborBlockChange(world, x, y, z, blockId);
 	}
-
+	
+	public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
+        return meta;
+    }
+	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z,
-			EntityLiving entity, ItemStack itemstack) {
+	public void onBlockPlacedBy(World world, EntityPlayer player,
+			ItemStack stack, int x, int y, int z, ForgeDirection side,
+			float hitX, float hitY, float hitZ, int meta) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile != null && tile instanceof TileEntityLightbox) {
 			TileEntityLightbox lightbox = (TileEntityLightbox) tile;
-			lightbox.setSurfaceAndRotation(BlockUtils.get3dOrientation(entity),
-					BlockUtils.get2dOrientation(entity));
+			lightbox.setSurfaceAndRotation(side.getOpposite(), BlockUtils.get2dOrientation(player));
 		}
 	}
 
@@ -78,18 +81,6 @@ public class BlockLightbox extends OpenBlock {
 		return OpenBlocks.renderId;
 	}
 
-	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
-			int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
-		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
-	}
-
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
-			int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
-		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
-	}
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,

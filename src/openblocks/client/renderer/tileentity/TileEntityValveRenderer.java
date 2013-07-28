@@ -1,15 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
-
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityGuide;
-import openblocks.common.tileentity.TileEntityValve;
-import openblocks.utils.Coord;
-
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -19,6 +10,10 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.liquids.LiquidStack;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityValve;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 

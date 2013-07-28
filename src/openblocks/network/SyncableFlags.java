@@ -3,10 +3,8 @@ package openblocks.network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import net.minecraft.nbt.NBTTagCompound;
-
 import openblocks.utils.ByteUtils;
 
 public class SyncableFlags implements ISyncableObject {

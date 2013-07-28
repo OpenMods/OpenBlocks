@@ -1,11 +1,9 @@
 package openblocks.client.renderer.tileentity;
 
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.ModelFlag;
 import openblocks.common.tileentity.TileEntityFlag;
 
@@ -22,15 +20,12 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 		TileEntityFlag flag = (TileEntityFlag) tileentity;
 		if(flag == null) return;
 		int meta = 0;
-		if(flag.worldObj != null) {
-			meta = flag.worldObj.getBlockMetadata(tileentity.xCoord, tileentity.yCoord,tileentity.zCoord);
-		}
 		
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
 		GL11.glPushMatrix();
-		if(flag.worldObj != null) GL11.glRotatef(-flag.getRotation(), 0, 1, 0);
-		if(meta != 5 && meta != 0){
+		GL11.glRotatef(-flag.getRotation(), 0, 1, 0);
+		if(flag.getSurfaceDirection() != ForgeDirection.DOWN){
 			GL11.glRotatef(45, 1f, 0f, 0f);
 			GL11.glTranslatef(0f, -0.2f, -0.7f);
 		}

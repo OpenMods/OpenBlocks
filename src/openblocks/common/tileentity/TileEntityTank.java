@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityTank extends TileEntity {
 
