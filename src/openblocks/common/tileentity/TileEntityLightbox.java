@@ -53,7 +53,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory, ISurfa
 			// it doesnt matter if we're not updating constantly, right?
 			// I mean, the maps will take longer to load in
 			// but less lag..
-			if (tickCounter % 3 == 0) {
+			if (tickCounter % 2 == 0) {
 
 				ItemStack itemstack = inventory.getStackInSlot(0);
 

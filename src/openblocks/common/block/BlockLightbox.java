@@ -1,9 +1,11 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -13,6 +15,8 @@ import openblocks.utils.BlockUtils;
 
 public class BlockLightbox extends OpenBlock {
 
+	public Icon sideIcon;
+	
 	public BlockLightbox() {
 		super(OpenBlocks.Config.blockLightboxId, Material.glass);
 		setupBlock(this, "lightbox", "Lightbox", TileEntityLightbox.class);
@@ -80,6 +84,12 @@ public class BlockLightbox extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
+	
+	@Override
+	public void registerIcons(IconRegister registry) {
+		super.registerIcons(registry);
+		this.sideIcon = registry.registerIcon(String.format("%s:%s", modKey, "lightbox_side"));
+	}
 
 
 	@Override
@@ -119,4 +129,12 @@ public class BlockLightbox extends OpenBlock {
 			setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
+	
+	@Override
+    public Icon getIcon(int side, int meta) {
+		if (side == 2 || side == 3) {
+			return super.getIcon(side, meta);
+		}
+        return sideIcon;
+    }
 }

@@ -110,13 +110,13 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		}catch(Exception e) {
 			return;
 		}
-		
-		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(0));
-		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(0));
+
 		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(0));
-		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(0));
-		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(0));
-		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(0));
+		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(1));
+		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(2));
+		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(3));
+		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(4));
+		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(5));
 		t.draw();
 
 		GL11.glEnable(2896);

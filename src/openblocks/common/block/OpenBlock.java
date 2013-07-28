@@ -29,6 +29,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	private String uniqueBlockId;
 	private Class<? extends TileEntity> teClass = null;
+	protected String modKey = "";
 
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
@@ -53,8 +54,7 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	public void registerIcons(IconRegister registry) {
-		this.blockIcon = registry.registerIcon(OpenBlocks.proxy.getModId().toLowerCase()
-				+ ":" + uniqueBlockId);
+		this.blockIcon = registry.registerIcon(String.format("%s:%s", modKey, uniqueBlockId));
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public abstract class OpenBlock extends BlockContainer {
 	public void setupBlock(Block instance, String uniqueName,
 			String friendlyName, Class<? extends TileEntity> tileEntity, Class<? extends ItemOpenBlock> itemClass) {
 		uniqueBlockId = uniqueName;
-		String modKey = OpenBlocks.proxy.getModId().toLowerCase();
+		modKey = OpenBlocks.proxy.getModId().toLowerCase();
 		
 		GameRegistry.registerBlock(instance, itemClass, String.format("%s_%s", modKey, uniqueName));
 		LanguageRegistry.instance().addStringLocalization(String.format("tile.%s.%s.name", modKey, uniqueName), friendlyName);
@@ -104,18 +104,7 @@ public abstract class OpenBlock extends BlockContainer {
 		z += side.offsetZ;
 		return world.isBlockSolidOnSide(x, y, z, side.getOpposite());
 	}
-	
-/*
-	@Override
-	public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
-		return par1World.isBlockSolidOnSide(par2 - 1, par3, par4, EAST,  true) ||
-	               par1World.isBlockSolidOnSide(par2 + 1, par3, par4, WEST,  true) ||
-	               par1World.isBlockSolidOnSide(par2, par3, par4 - 1, SOUTH, true) ||
-	               par1World.isBlockSolidOnSide(par2, par3, par4 + 1, NORTH, true) ||
-	               canPlaceFlagOn(par1World, par2, par3 - 1, par4);
-	}
-	*/
-	
+
 	public boolean canPlaceBlockOnSides(World world, int x, int y, int z, ForgeDirection ... sides) {
 		for (ForgeDirection side : sides) {
 			if (canPlaceBlockOnSide(world, x, y, z, side)) {

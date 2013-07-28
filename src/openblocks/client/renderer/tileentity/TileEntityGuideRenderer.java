@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -15,12 +16,19 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	RenderBlocks renderBlocks = new RenderBlocks();
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
-		renderAt(x, y, z);
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide) tileentity;
-		renderShape(guide.getShape(), guide.height, guide.width, guide.depth,
-				x, y, z);
+		int blockId = tileentity.worldObj.getBlockId(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
+		bindTextureByName("/terrain.png");
+
+		GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
+			GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glPushMatrix();
+				OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, Block.blocksList[blockId], null);
+			GL11.glPopMatrix();
+		GL11.glPopMatrix();
+		renderShape(guide.getShape(), guide.height, guide.width, guide.depth, x, y, z);
 	}
 
 	private void renderShape(boolean[][][] shape, int height, int width,

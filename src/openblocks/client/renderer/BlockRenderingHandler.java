@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import openblocks.OpenBlocks;
+import openblocks.client.renderer.tileentity.OpenRenderHelper;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -41,9 +42,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			RenderBlocks renderer) {
 
 		TileEntity te = null;
-		if (block == OpenBlocks.Blocks.guide) {
-			te = teGuide;
-		} else if (block == OpenBlocks.Blocks.lightbox) {
+		if (block == OpenBlocks.Blocks.lightbox) {
 			te = teLightbox;
 		} else if (block == OpenBlocks.Blocks.target) {
 			te = teTarget;
@@ -55,12 +54,14 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		} else if (block == OpenBlocks.Blocks.valve) {
 			te = teValve;
 		}
+		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 		if (te != null) {
-			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+			GL11.glTranslated(-0.5, -0.5, -0.5);
 			TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		}else {
+			OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, block, null);
 		}
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 
 	@Override

@@ -26,76 +26,55 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
 			double z, float f) {
 
+		bindTextureByName("/terrain.png");
+		
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 0.5f, (float) z + 0.5F);
-		TileEntityLightbox lightbox = (TileEntityLightbox) tileentity;
-		ForgeDirection surface = lightbox.getSurface();
-		ForgeDirection rotation = lightbox.getRotation();
-
-		RenderHelper.disableStandardItemLighting();
-		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
-			GL11.glRotatef(
-					BlockUtils.getRotationFromDirection(surface.getOpposite()),
-					1, 0, 0);
-			GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation
-					.getOpposite()), 0, 0, 1);
-		} else {
-			GL11.glRotatef(
-					BlockUtils.getRotationFromDirection(surface.getOpposite()),
-					0, 1, 0);
-		}
-
-		GL11.glPushMatrix();
-
-		Tessellator t = Tessellator.instance;
-		renderBlocks.setRenderBounds(0D, 0.0D, 0.8D, 1D, 1D, 1d);
-		t.startDrawingQuads();
-
-		t.setColorRGBA(200, 200, 200, 255);
-		t.setBrightness(255);
-		if (lightbox.worldObj != null) {
-			int metadata = lightbox.worldObj.getBlockMetadata(lightbox.xCoord,
-					lightbox.yCoord, lightbox.zCoord);
-			if (metadata > 0) {
-				t.setColorRGBA(255, 255, 255, 255);
+		
+			// move to the middle of the block
+			GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
+		
+			// rotate to the correct rotation
+			TileEntityLightbox lightbox = (TileEntityLightbox) tileentity;
+			ForgeDirection surface = lightbox.getSurface();
+			ForgeDirection rotation = lightbox.getRotation();
+			if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
+				GL11.glRotatef(
+						BlockUtils.getRotationFromDirection(surface.getOpposite()),
+						1, 0, 0);
+				GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation
+						.getOpposite()), 0, 0, 1);
+			} else {
+				GL11.glRotatef(
+						BlockUtils.getRotationFromDirection(surface.getOpposite()),
+						0, 1, 0);
 			}
-		}
-		this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
-		Icon renderingIcon = OpenBlocks.Blocks.lightbox
-				.getBlockTextureFromSide(0);
-		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.lightbox, -0.5D, -0.5D,
-				-0.5D, renderingIcon);
-
-		t.draw();
-
-		ItemStack mapStack = lightbox.getStackInSlot(0);
-		if (mapStack != null) {
-			MapData mapdata = Item.map
-					.getMapData(mapStack, tileentity.worldObj);
-			GL11.glTranslatef(0.5f, 0.5F, 0.299f);
-			GL11.glScaled(0.0078125, 0.0078125, 0.0078125);
-			GL11.glRotatef(180, 0, 0, 1);
-			if (mapdata != null) {
-				mapdata.playersVisibleOnMap.clear();
-				RenderManager.instance.itemRenderer.mapItemRenderer.renderMap(
-						(EntityPlayer) null,
-						RenderManager.instance.renderEngine, mapdata);
+			int meta =  0;
+			if (lightbox.worldObj != null) {
+				meta = lightbox.worldObj.getBlockMetadata(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
 			}
-		}
+			
+			// render a cube
+			OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5, OpenBlocks.Blocks.lightbox, null);
+	
+			// render the map
+			ItemStack mapStack = lightbox.getStackInSlot(0);
+			if (mapStack != null) {
+				MapData mapdata = Item.map
+						.getMapData(mapStack, tileentity.worldObj);
+				if (mapdata != null) {
+					GL11.glTranslatef(0.5f, 0.5F, 0.299f);
+					GL11.glScaled(1.0/128, 1.0/128, 1.0/128);
+					GL11.glRotatef(180, 0, 0, 1);
 
-		GL11.glPopMatrix();
+					RenderHelper.disableStandardItemLighting();
+					mapdata.playersVisibleOnMap.clear();
+					RenderManager.instance.itemRenderer.mapItemRenderer.renderMap(
+							(EntityPlayer) null,
+							RenderManager.instance.renderEngine, mapdata);
+					RenderHelper.enableStandardItemLighting();
+				}
+			}
 
-		RenderHelper.enableStandardItemLighting();
 		GL11.glPopMatrix();
 	}
 
