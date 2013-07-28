@@ -72,6 +72,8 @@ public class OpenBlocks {
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
 	
+		Log.init();
+		
 		if (Mods.areInstalled("That", "I", "Dont", "Like")) {
 			destroyTheWorld();
 		}
@@ -153,6 +155,10 @@ public class OpenBlocks {
 		public static boolean areInstalled(String... mods) {
 			return false;
 		}
+	}
+
+	public static String getLanguagePath() {
+		return "/mods/openblocks/languages";
 	}
 
 }

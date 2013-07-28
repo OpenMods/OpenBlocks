@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.common.block.BlockDrop;
@@ -24,6 +25,7 @@ import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.recipe.TorchBowRecipe;
 import openblocks.common.tileentity.TileEntityLightbox;
+import openblocks.utils.LanguageUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -33,7 +35,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class CommonProxy implements IGuiHandler {
 
 	public void init() {
-
+		
 		if (Config.blockLadderId > -1) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
 			CraftingManager
@@ -80,6 +82,8 @@ public class CommonProxy implements IGuiHandler {
 		
 
 		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
+	
+		LanguageUtils.setupLanguages();
 	}
 
 	public void registerRenderInformation() {
