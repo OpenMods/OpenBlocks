@@ -1,0 +1,14 @@
+openblocks.gui.lightbox=Lichtbox
+
+tile.openblocks.elevator.name=Fahrstuhl
+tile.openblocks.heal.name=Heiler
+tile.openblocks.guide.name=Bau-Hilfe
+tile.openblocks.ladder.name=Jaded-Leiter
+tile.openblocks.lightbox.name=Lichtbox
+tile.openblocks.valve.name=Überall-Tank
+tile.openblocks.tank.name=Tank
+tile.openblocks.target.name=Zielscheibe
+tile.openblocks.grave.name=Grab
+tile.openblocks.flag.name=Flagge
+
+itemGroup.tabOpenBlocks=OpenBlocks
