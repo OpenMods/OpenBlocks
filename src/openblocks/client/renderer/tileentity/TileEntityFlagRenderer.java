@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.client.ModelFlag;
+import openblocks.client.model.ModelFlag;
 import openblocks.common.tileentity.TileEntityFlag;
 
 import org.lwjgl.opengl.GL11;

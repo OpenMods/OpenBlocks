@@ -1,11 +1,19 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IInventoryContainer;
 import openblocks.api.ISurfaceAttachment;
@@ -26,6 +34,31 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer, 
 	public void updateEntity() {
 		super.updateEntity();
 		/* TODO: Implement ambient sound */
+		
+		if (!worldObj.isRemote) {
+			if (worldObj.difficultySetting > 0 && worldObj.rand.nextDouble() < 0.002) {
+				List<Entity> mobs = worldObj.getEntitiesWithinAABB(
+													IMob.class,
+													AxisAlignedBB.getAABBPool().getAABB(
+														xCoord, yCoord, zCoord,
+														xCoord+1, yCoord+1, zCoord+1
+												).expand(7, 7, 7));
+				if (mobs.size() < 5) {
+					EntityLiving living = null;
+					double chance = worldObj.rand.nextDouble();
+					if (chance < 0.5) {
+						living = new EntitySkeleton(worldObj);
+					}else {
+						living = new EntityBat(worldObj);
+					}
+
+					living.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextFloat() * 360, 0);
+					if (living.getCanSpawnHere()) {
+						worldObj.spawnEntityInWorld(living);
+					}
+				}
+			}
+		}
 	}
 	
 	public String getUsername(){

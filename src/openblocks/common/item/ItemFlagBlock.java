@@ -14,8 +14,6 @@ public class ItemFlagBlock extends ItemOpenBlock {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world,
 			int par4, int par5, int par6, int par7, float par8, float par9,
 			float par10) {
-
-		System.out.println("onItemUse");
 		if (player.isSneaking()) {
 			return false;
 		}
@@ -25,7 +23,6 @@ public class ItemFlagBlock extends ItemOpenBlock {
 
 	public ItemStack onItemRightClick(ItemStack stack, World world,
 			EntityPlayer player) {
-		System.out.println("onItemRightClick");
 		stack.setItemDamage((stack.getItemDamage() + 1) % BlockFlag.COLORS.length);
 		return stack.copy();
 	}

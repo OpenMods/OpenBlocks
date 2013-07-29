@@ -61,6 +61,22 @@ public class ModelGhost extends ModelBiped {
 	 public void render(Entity ent, float par2, float par3, float par4, float par5, float par6, float par7) {
 		 if(!(ent instanceof EntityGhost)) return;
 		 this.setRotationAngles(par2, par3, par4, par5, par6, par7, ent);
+		 if (ent instanceof EntityGhost) {
+			 EntityGhost ghost = (EntityGhost) ent;
+			 int sinceLastHeadChange = ghost.ticksSinceHeadChange();
+			 
+			 bipedRightArm.rotateAngleY = sinceLastHeadChange < 8 ? -MathHelper.sin((float)sinceLastHeadChange * 0.4f) : 0;
+		     
+			 if (ghost.hasHeadInHand() && sinceLastHeadChange > 6) {
+				 bipedHead.rotationPointX = bipedRightArm.rotationPointX;
+				 bipedHead.rotationPointY = bipedRightArm.rotationPointY;
+				 bipedHead.rotationPointZ = bipedRightArm.rotationPointZ - 10.0f;
+			 }else {
+				 bipedHead.rotationPointX = 0;
+				 bipedHead.rotationPointY = -0.5f;
+				 bipedHead.rotationPointZ = 0;
+			 }
+		 }
 		renderGhost((EntityGhost)ent, par2, par3, par4, par5, par6, par7);
 	 }
 	 
@@ -83,5 +99,7 @@ public class ModelGhost extends ModelBiped {
 		 this.tailBody.rotateAngleZ = this.tailEnd.rotateAngleZ = 0f;
 	     this.tailBody.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.3F;
 	     this.tailEnd.rotateAngleX = -MathHelper.sin(par3 * 0.067F) * 0.5F;
+
+	     
 	 }
 }

@@ -3,6 +3,7 @@ package openblocks.client.renderer.entity;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.EntityLiving;
 import openblocks.client.model.ModelGhost;
+import openblocks.common.entity.EntityGhost;
 
 import org.lwjgl.opengl.GL11;
 
@@ -17,14 +18,13 @@ public class EntityGhostRenderer extends RenderLiving {
 		super.doRenderLiving(par1EntityLiving, par2, par4, par6, par8, par9);
     }
 	
-	
-	
 	protected void renderModel(EntityLiving living, float par2, float par3, float par4, float par5, float par6, float par7)
     {
+		EntityGhost ghost = (EntityGhost) living;
         this.loadDownloadableImageTexture(living.skinUrl, living.getTexture());
         GL11.glPushMatrix();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.3F);
-        GL11.glDepthMask(false);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, ghost.getOpacity());
+       //GL11.glDepthMask(false);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
@@ -32,7 +32,7 @@ public class EntityGhostRenderer extends RenderLiving {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
         GL11.glPopMatrix();
-        GL11.glDepthMask(true);
+        //GL11.glDepthMask(true);
         
     }
 }

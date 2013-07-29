@@ -181,4 +181,8 @@ public class OpenBlocks {
 		return String.format("%s/textures", getResourcesPath());
 	}
 
+	public static String getTexturesPath(String path) {
+		return String.format("%s/%s", getTexturesPath(), path);
+	}
+
 }

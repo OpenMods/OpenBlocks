@@ -63,8 +63,7 @@ public class ClientProxy extends CommonProxy {
 		
 		attachPlayerRenderer();
 		
-		ClientTickHandler tickHandler = new ClientTickHandler();
-		TickRegistry.registerTickHandler(tickHandler, Side.CLIENT);
+		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 	}
 	
 	private void attachPlayerRenderer(){

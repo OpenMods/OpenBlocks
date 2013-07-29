@@ -6,38 +6,32 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableFloat extends SyncableObject implements ISyncableObject {
+public class SyncableDouble extends SyncableObject implements ISyncableObject {
 
-	public static final float EPSILON = 0.0001f;
-	
-	public SyncableFloat(float value) {
+	public SyncableDouble(Object value) {
 		super(value);
 	}
 
 	@Override
-	public boolean equals(Object otherValue) {
-		return Math.abs((Float)otherValue - (Float)value) < EPSILON;
-	}
-	
-	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
-		value = stream.readFloat();
+		value = stream.readDouble();
 	}
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		stream.writeFloat((Float)value);
+		stream.writeDouble((Double)value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setFloat(name, (Float)value);	
+		tag.setDouble(name, (Double)value);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		if (tag.hasKey(name)) {
-			value = tag.getFloat(name);
+			value = tag.getDouble(name);
 		}
 	}
+
 }

@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,14 +19,15 @@ import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.network.ISyncableObject;
-import openblocks.network.ISyncedTile;
+import openblocks.network.ISyncHandler;
 import openblocks.network.SyncMap;
+import openblocks.network.SyncMapTile;
 import openblocks.network.SyncableFlags;
 import openblocks.network.SyncableInt;
 import openblocks.network.SyncableIntArray;
 import openblocks.utils.Coord;
 
-public class TileEntityValve extends TileEntity implements ITankContainer, ISyncedTile {
+public class TileEntityValve extends TileEntity implements ITankContainer, ISyncHandler {
 
 	public static enum Keys {
 		tankAmount,
@@ -50,7 +53,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 
 	public final LiquidTank tank = new LiquidTank(CAPACITY_PER_TANK);
 	
-	private SyncMap syncMap = new SyncMap();
+	private SyncMapTile syncMap = new SyncMapTile();
 	
 	private SyncableInt tankAmount = new SyncableInt(0);
 	private SyncableInt tankCapacity = new SyncableInt(0);
@@ -101,7 +104,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 				if (needsRecheck) {
 					checkTank();
 				}
-				syncMap.syncNearbyUsers(this);
+				syncMap.sync(worldObj, this, (double)xCoord, (double)yCoord, (double)zCoord);
 			}
 		}
 
@@ -331,5 +334,12 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 	@Override
 	public SyncMap getSyncMap() {
 		return syncMap;
+	}
+
+	@Override
+	public void writeIdentifier(DataOutputStream dos) throws IOException {
+		dos.writeInt(xCoord);
+		dos.writeInt(yCoord);
+		dos.writeInt(zCoord);
 	}
 }
