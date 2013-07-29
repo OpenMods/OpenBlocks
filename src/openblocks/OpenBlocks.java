@@ -61,6 +61,7 @@ public class OpenBlocks {
 		public static int elevatorTravelDistance = 30;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
+		public static boolean hookPlayerRenderer = true;
 	}
 
 	public static enum Gui {
@@ -133,6 +134,9 @@ public class OpenBlocks {
 
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
+		
+		prop = configFile.get("hacks", "hookPlayerRenderer", Config.hookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
+		Config.hookPlayerRenderer = prop.getBoolean(Config.hookPlayerRenderer);
 		
 		if(Config.ghostSpawnProbability > 100)
 			Config.ghostSpawnProbability = 100;

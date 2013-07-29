@@ -1,12 +1,14 @@
 package openblocks.client;
 
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Config;
 import openblocks.OpenBlocks.Gui;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.client.renderer.BlockRenderingHandler;
@@ -58,13 +60,23 @@ public class ClientProxy extends CommonProxy {
 				new TileEntityValveRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
-
-		EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
-		playerRenderer.setRenderManager(RenderManager.instance);
-		RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
+		
+		attachPlayerRenderer();
 		
 		ClientTickHandler tickHandler = new ClientTickHandler();
 		TickRegistry.registerTickHandler(tickHandler, Side.CLIENT);
+	}
+	
+	private void attachPlayerRenderer(){
+		if(Config.hookPlayerRenderer){
+			// Get current renderer and check that it's Mojangs
+			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
+			if(render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)){
+				EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
+				playerRenderer.setRenderManager(RenderManager.instance);
+				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
+			}
+		}
 	}
 
 	@Override
