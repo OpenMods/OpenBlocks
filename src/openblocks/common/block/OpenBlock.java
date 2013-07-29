@@ -64,6 +64,10 @@ public abstract class OpenBlock extends BlockContainer {
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
+	public void breakBlockDontDrop(World world, int x, int y, int z, int par5, int par6) {
+		super.breakBlock(world, x, y, z, par5, par6);
+	}
+
 	public void setupBlock(Block instance, String uniqueName) {
 		setupBlock(instance, uniqueName, null);
 	}

@@ -17,14 +17,6 @@ public class BlockGuide extends OpenBlock {
 		setupBlock(this, "guide", TileEntityGuide.class);
 	}
 
-	protected TileEntityGuide getTileEntity(World world, int x, int y, int z) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if (tile != null && tile instanceof TileEntityGuide) {
-			return (TileEntityGuide) tile;
-		}
-		return null;
-	}
-
 	@Override
 	public boolean isOpaqueCube() {
 		return false;

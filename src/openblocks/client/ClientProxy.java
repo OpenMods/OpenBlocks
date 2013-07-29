@@ -1,6 +1,7 @@
 package openblocks.client;
 
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -10,6 +11,7 @@ import openblocks.OpenBlocks.Gui;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.entity.EntityGhostRenderer;
+import openblocks.client.renderer.entity.EntityPlayerRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
@@ -17,6 +19,7 @@ import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
 import openblocks.client.renderer.tileentity.TileEntityValveRenderer;
 import openblocks.common.CommonProxy;
+import openblocks.common.PlayerDeathHandler;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.tileentity.TileEntityFlag;
@@ -27,6 +30,8 @@ import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.TileEntityValve;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
@@ -53,7 +58,13 @@ public class ClientProxy extends CommonProxy {
 				new TileEntityValveRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
+
+		EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
+		playerRenderer.setRenderManager(RenderManager.instance);
+		RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
 		
+		ClientTickHandler tickHandler = new ClientTickHandler();
+		TickRegistry.registerTickHandler(tickHandler, Side.CLIENT);
 	}
 
 	@Override

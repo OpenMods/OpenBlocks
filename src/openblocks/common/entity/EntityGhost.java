@@ -1,5 +1,7 @@
 package openblocks.common.entity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -13,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
+import openblocks.client.ClientTickHandler;
 import openblocks.common.GenericInventory;
 import openblocks.utils.BlockUtils;
 
@@ -63,16 +66,19 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		this.health = this.getMaxHealth();
 		this.moveSpeed = 0.5F;
 		this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityPlayer.class, this.moveSpeed, false));
-        this.tasks.addTask(2, new EntityAIWander(this, this.moveSpeed * 0.1f));
-        this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-       // this.tasks.addTask(4, new EntityAILookIdle(this));
+        this.tasks.addTask(1, new EntityAIDragPlayer(this, 8.0F));
+        this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, this.moveSpeed, false));
+        this.tasks.addTask(3, new EntityAIWander(this, this.moveSpeed * 0.1f));
+        this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        
+        // this.tasks.addTask(4, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 16.0F, 0, true));
 		this.getNavigator().setAvoidsWater(true);
         this.texture = "/mob/char.png";
         /* Is this entity attacking */
         this.dataWatcher.addObject(11, Byte.valueOf(syncedData));
+        this.dataWatcher.addObject(12, 0);
 	}
 
 	public EntityGhost(World world, String playerName, IInventory playerInvent) {
@@ -156,7 +162,14 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		}else{
 			syncedData = dataWatcher.getWatchableObjectByte(11);
 			if((syncedData & 0x1) == 0x1) ticksUntilNoFlight = 30;
-			//Minecraft.getMinecraft().renderViewEntity = this;
+			if (getDragPlayer() == Minecraft.getMinecraft().thePlayer) {
+				Minecraft.getMinecraft().renderViewEntity = this;
+				ClientTickHandler.isBeingDragged = true;
+			} else {
+				Minecraft.getMinecraft().renderViewEntity = Minecraft.getMinecraft().thePlayer;
+				ClientTickHandler.isBeingDragged = false;
+			}
+			//;
 		}
 //		if((syncedData & 0x1) == 0x1) {
 //			setSize(1.8f, 0.2f);
@@ -207,7 +220,22 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		data.writeUTF(playerName == null ? "Unknown" : playerName);
 	}
 
-
+	public void setDragPlayer(EntityPlayer dragPlayer) {
+		dataWatcher.updateObject(12, dragPlayer != null ? dragPlayer.entityId : 0);
+	}
+	
+	public EntityPlayer getDragPlayer() {
+		int id = dataWatcher.getWatchableObjectInt(12);
+		if (id == 0) {
+			return null;
+		}
+		Entity entity = worldObj.getEntityByID(id);
+		if (entity != null && entity instanceof EntityPlayer) {
+			return (EntityPlayer) entity;
+		}
+		return null;
+	}
+	
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
 		playerName = data.readUTF();

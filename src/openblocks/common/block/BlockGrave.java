@@ -38,6 +38,17 @@ public class BlockGrave extends OpenBlock {
 	public int quantityDropped(Random rand){
         return 0;
     }
+	
+	@Override
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+		if (!world.isRemote) { 
+			TileEntityGrave tile = getTileEntity(world, x, y, z, TileEntityGrave.class);
+			if (tile != null) {
+				handleGhostSpawn(tile, world, x, y, z);
+			}
+		}
+		super.breakBlock(world, x, y, z, par5, par6);
+	}
 
 	@Override
 	public int getRenderType() {
@@ -80,18 +91,6 @@ public class BlockGrave extends OpenBlock {
 		}else {
 			BlockUtils.dropInventory(grave.getLoot(), world, x, y, z);
 		}
-	}
-	
-	@Override
-	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
-		if (!world.isRemote) { 
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
-			if (tile != null && tile instanceof TileEntityGrave) {
-				TileEntityGrave grave = (TileEntityGrave) tile;
-				handleGhostSpawn(grave, world, x, y, z);
-			}
-		}
-		super.breakBlock(world, x, y, z, par5, par6);
 	}
 	
 	@Override
