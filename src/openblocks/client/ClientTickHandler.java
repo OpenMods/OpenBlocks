@@ -78,60 +78,15 @@ public class ClientTickHandler implements ITickHandler, ILineReadMethod {
 			return;
 		}
 
-		createFramebuffer();
 	}
 	
-	private void createFramebuffer() {
-		Minecraft mc = FMLClientHandler.instance().getClient();
-		renderTextureWidth = mc.displayWidth;
-		renderTextureHeight = mc.displayHeight;
-
-		framebufferID = GL30.glGenFramebuffers();
-		textureID = GL11.glGenTextures();
-		int currentTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebufferID);
-
-		// Set our texture up, empty.
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, renderTextureWidth, renderTextureHeight, 0, GL12.GL_BGRA,
-				GL11.GL_UNSIGNED_BYTE, (java.nio.ByteBuffer) null);
-
-		// Restore old texture
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, currentTexture);
-
-		// Create depth buffer
-		depthbufferID = GL30.glGenRenderbuffers();
-		GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthbufferID);
-		GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL11.GL_DEPTH_COMPONENT, renderTextureWidth, renderTextureHeight);
-
-		// Bind depth buffer to the framebuffer
-		GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, depthbufferID);
-
-		// Bind our texture to the framebuffer
-		GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, textureID, 0);
-
-		// Revert to default framebuffer
-		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-	}
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		if (type.contains(TickType.RENDER) && isBeingDragged && mc.theWorld != null && mc.currentScreen == null) {
 
-			// Render to our texture
-			GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebufferID);
-
-
-			viewportInfo = GLAllocation.createDirectIntBuffer(16);
-			GL11.glGetInteger(GL11.GL_VIEWPORT, viewportInfo);
-			GL11.glViewport(0, 0, renderTextureWidth, renderTextureHeight);
-			originalTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+			ARBShaderObjects.glUseProgramObjectARB(program);
 
 		}
 	}
@@ -141,54 +96,8 @@ public class ClientTickHandler implements ITickHandler, ILineReadMethod {
 
 		Minecraft mc = FMLClientHandler.instance().getClient();
 		if (type.contains(TickType.RENDER) && isBeingDragged && mc.theWorld != null && mc.currentScreen == null) {
-			// Revert to default viewport
-			GL11.glViewport(viewportInfo.get(0), viewportInfo.get(1), viewportInfo.get(2), viewportInfo.get(3));
-
-			// Revert to default framebuffer
-			GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 			
-			GL11.glClearColor(0.2f, 0, 0, 0);
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			
-			// Bind framebuffer texture
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-			ARBShaderObjects.glUseProgramObjectARB(program);
-			int originalTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-			GL11.glTranslatef((renderTextureWidth/2), (renderTextureHeight/2), 0);
-			GL11.glRotatef(180f, 0, 0, 1);
-			
-			// Bind framebuffer texture
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-			int texCoord = GL20.glGetAttribLocation(program, "TexCoord");
-			int col = GL20.glGetAttribLocation(program, "Color");
-			GL11.glBegin(GL11.GL_QUADS);
-
-			GL20.glVertexAttrib4f(col, 100, 0, 0, 0.7f);
-			GL20.glVertexAttrib2f(texCoord, 1, 0);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2i(0, 0);
-
-		
-			GL20.glVertexAttrib4f(col, 100, 0, 0, 0.7f);
-			GL20.glVertexAttrib2f(texCoord, 1, 1);
-			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2i(0, renderTextureHeight/2);
-
-			GL20.glVertexAttrib4f(col, 100, 0, 0, 0.7f);
-			GL20.glVertexAttrib2f(texCoord, 0, 1);
-
-			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2i(renderTextureWidth/2, renderTextureHeight/2);
-
-			GL20.glVertexAttrib4f(col, 100, 0, 0, 0.7f);
-			GL20.glVertexAttrib2f(texCoord, 0, 0);
-			GL11.glTexCoord2f(0, 0);
-			GL11.glVertex2i(renderTextureWidth/2, 0);
-
-			GL11.glEnd();
 			ARBShaderObjects.glUseProgramObjectARB(0);
-			// Restore old texture
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, originalTexture);
 		}
 	}
 
