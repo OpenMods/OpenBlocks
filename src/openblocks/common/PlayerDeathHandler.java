@@ -25,7 +25,7 @@ public class PlayerDeathHandler {
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
 			World world = player.worldObj;
 			
-			if (!world.isRemote) {
+			if (OpenBlocks.proxy.isServer()) {
 				int x = (int)player.posX;
 				int y = (int)player.posY;
 				int z = (int)player.posZ;

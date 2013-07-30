@@ -15,6 +15,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.api.IInventoryContainer;
 import openblocks.api.ISurfaceAttachment;
 import openblocks.common.GenericInventory;
@@ -35,7 +36,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer, 
 		super.updateEntity();
 		/* TODO: Implement ambient sound */
 		
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			if (worldObj.difficultySetting > 0 && worldObj.rand.nextDouble() < 0.002) {
 				List<Entity> mobs = worldObj.getEntitiesWithinAABB(
 													IMob.class,

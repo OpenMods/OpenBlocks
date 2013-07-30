@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -17,8 +18,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.network.ISyncHandler;
 import openblocks.network.ISyncableObject;
@@ -36,6 +39,10 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData, IMob, ISyncHandler {
 
 	private String playerName;
+	/**
+	 * Just disable it for now while I work on other stuff.
+	 */
+	private static final boolean DISABLE_HEAD_ANIMATION = true; 
 
 	protected GenericInventory inventory = new GenericInventory("ghost", false, 40);
 	/**
@@ -125,6 +132,14 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		// copy the inventory from the player inventory
 		inventory.copyFrom(playerInvent);
 	}
+	
+	/* Following the code of EntityFlying */
+    protected void fall(float par1) {}
+    protected void updateFallState(double par1, boolean par3) {}
+    public boolean isOnLadder()
+    {
+        return false;
+    }
 
 	private boolean shouldBeFlying(){
 
@@ -170,7 +185,7 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 
 		super.onLivingUpdate();
 
-		if(!worldObj.isRemote) {
+		if(OpenBlocks.proxy.isServer()) {
 
 			opacity.setValue(0.3f);
 
@@ -187,20 +202,30 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 
 			int ticksSinceHeadChange = flags.ticksSinceChange(FlagKeys.HEAD_IN_HAND);
 
-			// if we're not idle, we dont want the head/hand behaviour
-			if (!isIdle) {
+			if(DISABLE_HEAD_ANIMATION){
 				headInHand = false;
-			} else {
-				if (!headInHand && Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand.nextDouble())) {
-					headInHand = true;
-				}else if (headInHand && ticksSinceHeadChange > 50) {
+			}else{
+				// if we're not idle, we dont want the head/hand behaviour
+				if (!isIdle) {
 					headInHand = false;
+				} else {
+					if (!headInHand && Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand.nextDouble())) {
+						headInHand = true;
+					}else if (headInHand && ticksSinceHeadChange > 50) {
+						headInHand = false;
+					}
 				}
 			}
 
+			if(flags.get(FlagKeys.IS_FLYING) && worldObj.getHeightValue((int)posX, (int)posZ) + 1 > posY) {
+				motionY = Math.max(motionY, 0.1D); /* Fly over blocks */
+			}
+			
 			flags.set(FlagKeys.HEAD_IN_HAND, headInHand);
 
 		}
+		
+		
 
 		// send all our data to nearby users
 		syncMap.sync(worldObj, this, posX, posY, posZ);
@@ -263,7 +288,7 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 	}
 
 	public void onDeath(DamageSource damageSource) {
-		if (!worldObj.isRemote){ 
+		if (OpenBlocks.proxy.isServer()){ 
 			BlockUtils.dropInventory(inventory, worldObj, posX, posY, posZ);
 		}
 		super.onDeath(damageSource);
@@ -278,7 +303,7 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 	//	}
 	//	
 	//	private boolean targetIsAboveMe() {
-	//		if(worldObj.isRemote || getAttackTarget() == null) 
+	//		if(OpenBlocks.proxy.isClient() || getAttackTarget() == null) 
 	//			return false;
 	//		return getAttackTarget().posY > posY;
 	//	}

@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import openblocks.OpenBlocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -16,7 +17,7 @@ public class TileEntityTank extends TileEntity {
 	
 	@Override
 	public void updateEntity() {
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			if (valve == null) {
 				TileEntity te = worldObj.getBlockTileEntity(
 						valveX,

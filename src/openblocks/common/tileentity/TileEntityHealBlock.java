@@ -2,6 +2,8 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import openblocks.OpenBlocks;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -11,8 +13,7 @@ public class TileEntityHealBlock extends TileEntity {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (worldObj.isRemote)
-			return;
+		if (OpenBlocks.proxy.isClient()) return;
 		List<EntityPlayer> playersOnTop = (List<EntityPlayer>) worldObj
 				.getEntitiesWithinAABB(
 						EntityPlayer.class,

@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityTorchArrow;
 
 public class BowEventHandler {
@@ -20,7 +21,7 @@ public class BowEventHandler {
 
 	@ForgeSubscribe
 	public void onArrowNock(ArrowNockEvent event) {
-		if (!event.entity.worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			NBTTagCompound tag = event.result.getTagCompound();
 			if (tag != null && tag.hasKey("openblocks_torchmode")) {
 				System.out.println("torch mode");
@@ -114,7 +115,7 @@ public class BowEventHandler {
 				player.inventory.consumeInventoryItem(Item.arrow.itemID);
 			}
 
-			if (!player.worldObj.isRemote) {
+			if (OpenBlocks.proxy.isServer()) {
 				player.worldObj.spawnEntityInWorld(entityarrow);
 			}
 			event.setCanceled(true);

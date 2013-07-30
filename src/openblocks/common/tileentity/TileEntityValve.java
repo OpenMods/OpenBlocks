@@ -93,7 +93,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 	@Override
 	public void updateEntity() {
 		
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			LiquidStack liquid = tank.getLiquid();
 			tankAmount.setValue(liquid == null ? 0 : liquid.amount);
 			if (liquid != null) {
@@ -120,7 +120,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 
 	public void checkTank() {
 
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			HashMap<Integer, Coord> validAreas = new HashMap<Integer, Coord>();
 			HashMap<Integer, Coord> checkedAreas = new HashMap<Integer, Coord>();
 
@@ -284,7 +284,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer, ISync
 	
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		if (worldObj.isRemote){
+		if (OpenBlocks.proxy.isClient()){
 			LiquidStack liquid = tank.getLiquid();
 			boolean recreateLiquid = false;
 			if (liquid == null || !tankLiquidId.equals(liquid.itemID) || !tankLiquidMeta.equals(liquid.itemMeta)) {

@@ -90,4 +90,20 @@ public class ClientProxy extends CommonProxy {
 		}
 		return null;
 	}
+	
+	/**
+	 * Is this the server 
+	 * @return true if this is the server
+	 */
+	public boolean isServer() {
+		return false; // Why have this method? If the checking method changes in the future we fix it in one place.
+	}
+	
+	/**
+	 * Is this the client
+	 * @return true if this is the client
+	 */
+	public boolean isClient() {
+		return true;
+	}
 }

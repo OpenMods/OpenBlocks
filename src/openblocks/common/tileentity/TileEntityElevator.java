@@ -31,7 +31,7 @@ public class TileEntityElevator extends TileEntity {
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 
 			Iterator<Entry<String, Integer>> cooldownIter = cooldown.entrySet()
 					.iterator();

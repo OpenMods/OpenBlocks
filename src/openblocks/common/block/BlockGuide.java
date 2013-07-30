@@ -62,7 +62,7 @@ public class BlockGuide extends OpenBlock {
 			return false;
 		}
 
-		if (!world.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			if (player.isSneaking()) {
 				((TileEntityGuide) tileEntity).switchMode(player);
 			} else {

@@ -154,7 +154,7 @@ public class BlockFlag extends OpenBlock {
 		if (player != null && player.isSneaking()) {
 			return true;
 		}
-		if (!world.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
 			ForgeDirection surface = flag.getSurfaceDirection();
 			if (flag != null && surface == ForgeDirection.DOWN) {

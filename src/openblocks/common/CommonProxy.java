@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -109,6 +110,33 @@ public class CommonProxy implements IGuiHandler {
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {
 		return null;
+	}
+	
+	/**
+	 * Is this the server 
+	 * @return true if this is the server
+	 */
+	public boolean isServer() {
+		return true; // Why have this method? If the checking method changes in the future we fix it in one place.
+	}
+	
+	/**
+	 * Is this the client
+	 * @return true if this is the client
+	 */
+	public boolean isClient() {
+		return false;
+	}
+	
+	/** 
+	 * Checks if this game is SinglePlayer
+	 * @return true if this is single player
+	 */
+	public boolean isSinglePlayer() {
+		// Yeah I know it doesn't matter now but why not have it :P
+		MinecraftServer serverInstance = MinecraftServer.getServer();
+		if(serverInstance == null) return false;
+		return serverInstance.isSinglePlayer();
 	}
 
 }

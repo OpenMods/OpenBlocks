@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.api.ISurfaceAttachment;
 import openblocks.common.GenericInventory;
 
@@ -48,7 +49,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory, ISurfa
 	@Override
 	public void updateEntity() {
 
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 
 			// it doesnt matter if we're not updating constantly, right?
 			// I mean, the maps will take longer to load in

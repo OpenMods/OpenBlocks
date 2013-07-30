@@ -41,7 +41,7 @@ public class BlockGrave extends OpenBlock {
 	
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
-		if (!world.isRemote) { 
+		if (OpenBlocks.proxy.isServer()) { 
 			TileEntityGrave tile = getTileEntity(world, x, y, z, TileEntityGrave.class);
 			if (tile != null) {
 				handleGhostSpawn(tile, world, x, y, z);
