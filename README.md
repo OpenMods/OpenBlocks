@@ -32,14 +32,16 @@ Use Github for Windows or use a command prompt/powershell with git binaries in t
 #### Change directory
 ```cd OpenBlocks```
 #### Run ant build
-```ant```
-The resulting file should be in the bin folder.
+```ant ```
+
+The resulting file should be in the bin folder
 
 ### Linux or OSX
 Much the same as Windows, open a terminal window where you wish to checkout the repo and type
 ```git clone https://github.com/OpenMods/OpenBlocks.git && cd OpenBlocks```
 #### Then run ant
-```ant```
+```ant ```
+
 The mod jar will be in the bin folder after the completion of the build process.
 
 Contact
