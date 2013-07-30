@@ -62,6 +62,7 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 
 	public void clear() {
 		value = new int[0];
+		hasChanged = true;
 	}
 	
 }

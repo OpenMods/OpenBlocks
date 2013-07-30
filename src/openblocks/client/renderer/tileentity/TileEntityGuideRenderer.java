@@ -16,23 +16,27 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	RenderBlocks renderBlocks = new RenderBlocks();
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
+			double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide) tileentity;
-		int blockId = tileentity.worldObj.getBlockId(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
 		bindTextureByName("/terrain.png");
 
 		GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-			GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glPushMatrix();
-				OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, Block.blocksList[blockId], null);
-			GL11.glPopMatrix();
+		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
+		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+		GL11.glPushMatrix();
+		OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, OpenBlocks.Blocks.guide, null);
 		GL11.glPopMatrix();
-		renderShape(guide.getShape(), guide.height, guide.width, guide.depth, x, y, z);
+		GL11.glPopMatrix();
+		float scaleDelta = guide.getTimeSinceChange();
+		renderShape(guide.getShape(), guide.height, guide.width, guide.depth, x, y, z, scaleDelta);
+		if (scaleDelta < 1.0) {
+			renderShape(guide.getPreviousShape(), guide.height, guide.width, guide.depth, x, y, z, 1.0f - scaleDelta);
+		}
 	}
 
 	private void renderShape(boolean[][][] shape, int height, int width,
-			int depth, double x, double y, double z) {
+			int depth, double x, double y, double z, float scale) {
 		if (shape == null) {
 			return;
 		}
@@ -44,7 +48,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 						GL11.glBlendFunc(GL11.GL_SRC_ALPHA,
 								GL11.GL_ONE_MINUS_SRC_ALPHA);
 						renderAt(x + x2 - width, y + y2 - height, z + z2
-								- depth);
+								- depth, scale);
 						GL11.glDisable(GL11.GL_BLEND);
 					}
 				}
@@ -52,12 +56,12 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		}
 	}
 
-	private void renderAt(double x, double y, double z) {
+	private void renderAt(double x, double y, double z, float scale) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
 		GL11.glPushMatrix();
 		GL11.glDisable(2896);
-
+		GL11.glScalef(scale, scale, scale);
 		Tessellator t = Tessellator.instance;
 		renderBlocks.setRenderBounds(0.05D, 0.05D, 0.05D, 0.95D, 0.95D, 0.95D);
 		t.startDrawingQuads();

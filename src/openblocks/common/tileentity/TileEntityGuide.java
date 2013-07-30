@@ -17,6 +17,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityGuide extends TileEntity implements IShapeable {
 
 	private boolean shape[][][];
+	private boolean previousShape[][][];
+	private float timeSinceChange = 0;
 
 	public int width = 8;
 	public int height = 8;
@@ -26,6 +28,19 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 
 	public Mode getCurrentMode() {
 		return currentMode;
+	}
+	
+	@Override
+	public void updateEntity() {
+		if (worldObj.isRemote){
+			if (timeSinceChange < 1.0) {
+				timeSinceChange = (float) Math.min(1.0f, timeSinceChange + 0.1);
+			}
+		}
+	}
+	
+	public float getTimeSinceChange() {
+		return timeSinceChange;
 	}
 
 	@Override
@@ -48,8 +63,10 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 	}
 
 	private void recreateShape() {
+		previousShape = shape;
 		shape = new boolean[height * 2 + 1][width * 2 + 1][depth * 2 + 1];
 		ShapeFactory.generateShape(width, height, depth, this, currentMode);
+		timeSinceChange = 0;
 	}
 
 	public void setBlock(int x, int y, int z) {
@@ -65,6 +82,10 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 		return shape;
 	}
 
+	public boolean[][][] getPreviousShape() {
+		return previousShape;
+	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		if (nbt.hasKey("width")) {

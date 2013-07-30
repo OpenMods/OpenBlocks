@@ -2,6 +2,9 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import org.lwjgl.util.vector.Vector3f;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -25,6 +28,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer, 
 	private String perishedUsername;
 	private GenericInventory inventory = new GenericInventory("grave", false, 40);
 	public boolean onSoil = true;
+	private int ticksSinceLastSound = 0;
 	
 	public TileEntityGrave(){
 		
@@ -33,7 +37,14 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer, 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		/* TODO: Implement ambient sound */
+		
+		if (worldObj.isRemote) {
+			//System.out.println(ticksSinceLastSound);
+			if (ticksSinceLastSound++ > 100) {
+				//worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks.grave_ambient", 1.0f, 1.0f);
+				ticksSinceLastSound = 0;
+			}
+		}
 		
 		if (!worldObj.isRemote) {
 			if (worldObj.difficultySetting > 0 && worldObj.rand.nextDouble() < 0.002) {
@@ -146,5 +157,4 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer, 
 	public boolean isOnSoil() {
 		return onSoil;
 	}
-
 }

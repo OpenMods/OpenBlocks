@@ -13,7 +13,7 @@ import openblocks.common.tileentity.TileEntityTank;
 public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
-		super(OpenBlocks.Config.blockTankId, Material.glass);
+		super(OpenBlocks.Config.blockTankId, Material.air);
 		setupBlock(this, "Tank", TileEntityTank.class);
 	}
 
@@ -30,7 +30,7 @@ public class BlockTank extends OpenBlock {
 	
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		return null;
+		return AxisAlignedBB.getAABBPool().getAABB(0, 0, 0, 0, 0, 0);
 	}
 	
 	/**
@@ -48,6 +48,11 @@ public class BlockTank extends OpenBlock {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
+	
+	@Override
+    public boolean isAirBlock(World world, int x, int y, int z) {
+        return true;
+    }
 
 	@Override
 	public int getRenderType() {

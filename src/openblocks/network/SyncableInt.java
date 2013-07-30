@@ -16,6 +16,10 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readInt();
 	}
+	
+	public boolean equals(Object otherValue) {
+		return ((Integer)value).intValue() == ((Integer)otherValue).intValue();
+	}
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {

@@ -6,20 +6,29 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundPool;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class SoundLoader {
 
+	String[] soundFiles = new String[]{ "grave_ambient.ogg", "teleport.ogg", "open.ogg", "close.ogg", "ambient_grave.ogg" };
+	String[] streamingFiles = new String[]{ };
+
+	
 	@SideOnly(Side.CLIENT)
 	@ForgeSubscribe
 	public void loadingSounds(SoundLoadEvent event) {
+		loadSounds(event, event.manager.soundPoolSounds, soundFiles);
+		loadSounds(event, event.manager.soundPoolStreaming, streamingFiles);
+	}
+	
+	public void loadSounds(SoundLoadEvent event, SoundPool pool, String[] fileNames) {
 		Minecraft mc = Minecraft.getMinecraft();
-
-		String[] soundFiles = { "teleport.ogg", "open.ogg", "close.ogg", "ambient_grave.ogg" };
 
 		File resourcesDirectory = new File(mc.mcDataDir,
 				"resources/openblocks/");
@@ -28,7 +37,7 @@ public class SoundLoader {
 			resourcesDirectory.mkdir();
 		}
 
-		for (String fileName : soundFiles) {
+		for (String fileName : fileNames) {
 			try {
 				File soundFile = new File(resourcesDirectory, fileName);
 				if (!soundFile.exists()) {
@@ -45,7 +54,8 @@ public class SoundLoader {
 					streamIn.close();
 					streamOut.close();
 				}
-				event.manager.soundPoolSounds.addSound(
+				Log.info("Added sound " + fileName);
+				pool.addSound(
 						"openblocks/" + fileName, soundFile);
 			} catch (Exception e) {
 				System.out.println("Couldnt load " + fileName);
