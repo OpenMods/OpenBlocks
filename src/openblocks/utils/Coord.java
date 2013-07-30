@@ -10,7 +10,7 @@ public class Coord {
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	public int getHash() {
 		return getHash(x, y, z);
 	}

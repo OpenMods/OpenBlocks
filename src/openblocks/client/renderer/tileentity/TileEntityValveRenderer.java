@@ -18,22 +18,19 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-	
+
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityValve valve = (TileEntityValve) tileentity;
 		renderValve(x, y, z);
 		if (valve != null && valve.worldObj != null) {
 			int[] coords = valve.getLinkedCoords();
 			HashMap<Integer, Double> spread = valve.getSpread();
-			if (coords == null) {
-				return;
-			}
+			if (coords == null) { return; }
 			for (int i = 0; i < coords.length; i += 3) {
 				int _x = coords[i];
-				int _y = coords[i+1];
-				int _z = coords[i+2];
+				int _y = coords[i + 1];
+				int _z = coords[i + 2];
 				double yLevel = 0;
 				if (spread != null && spread.containsKey(_y)) {
 					yLevel = spread.get(_y);
@@ -42,7 +39,6 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 			}
 		}
 	}
-
 
 	private void renderValve(double x, double y, double z) {
 		GL11.glPushMatrix();
@@ -57,18 +53,12 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		t.setBrightness(200);
 		this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
 		Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
-		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
-				-0.5D, renderingIcon);
-		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D,
-				-0.5D, renderingIcon);
+		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
 		t.draw();
 
 		GL11.glEnable(2896);
@@ -76,13 +66,10 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 	}
 
-
 	private void renderAt(double x, double y, double z, double yLevel, LiquidStack liquid) {
-		if (yLevel == 0) {
-			return;
-		}
+		if (yLevel == 0) { return; }
 		if (liquid == null) {
-			//System.out.println("no liquid");
+			// System.out.println("no liquid");
 			return;
 		}
 		liquid = liquid.canonical();
@@ -98,7 +85,8 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		Block block = null;
 		Icon texture = null;
 		try {
-			if (liquid.itemID < Block.blocksList.length && Block.blocksList[liquid.itemID] != null) {
+			if (liquid.itemID < Block.blocksList.length
+					&& Block.blocksList[liquid.itemID] != null) {
 				block = Block.blocksList[liquid.itemID];
 				texture = getLiquidTexture(liquid);
 			} else if (Item.itemsList[liquid.itemID] != null) {
@@ -107,7 +95,7 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 			} else {
 				return;
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return;
 		}
 
@@ -123,19 +111,13 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
-	
+
 	public static Icon getLiquidTexture(LiquidStack liquid) throws Exception {
-		if (liquid == null || liquid.itemID <= 0) {
-			return null;
-		}
+		if (liquid == null || liquid.itemID <= 0) { return null; }
 		LiquidStack canon = liquid.canonical();
-		if (canon == null) {
-			throw new Exception();
-		}
+		if (canon == null) { throw new Exception(); }
 		Icon icon = canon.getRenderingIcon();
-		if (icon == null) {
-			throw new Exception();
-		}
+		if (icon == null) { throw new Exception(); }
 		return icon;
 	}
 

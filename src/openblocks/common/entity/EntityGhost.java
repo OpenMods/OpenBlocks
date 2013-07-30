@@ -36,64 +36,60 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData, IMob, ISyncHandler {
+public class EntityGhost extends EntityMob implements
+		IEntityAdditionalSpawnData, IMob, ISyncHandler {
 
 	private String playerName;
 	/**
 	 * Just disable it for now while I work on other stuff.
 	 */
-	private static final boolean DISABLE_HEAD_ANIMATION = true; 
+	private static final boolean DISABLE_HEAD_ANIMATION = true;
 
 	protected GenericInventory inventory = new GenericInventory("ghost", false, 40);
 	/**
-	 * Is this Ghost an aggressive scary attacking ghost, or a sad wandering safe ghost 
+	 * Is this Ghost an aggressive scary attacking ghost, or a sad wandering
+	 * safe ghost
 	 */
 	public boolean aggresive;
 
 	public GhostModifier modifier = GhostModifier.NONE;
 
 	/**
-	 * Modifiers to a ghost that change the way it is rendered
-	 * Based on how the player died.
+	 * Modifiers to a ghost that change the way it is rendered Based on how the
+	 * player died.
 	 */
 	public enum GhostModifier {
-		NONE,
-		FIRE,
-		ARROW,
-		WATER
+		NONE, FIRE, ARROW, WATER
 	}
 
 	/**
 	 * Keys of values that are synced when they change
-	 *
+	 * 
 	 */
 	public enum SyncKeys {
-		FLAGS,
-		OPACITY
+		FLAGS, OPACITY
 	}
 
 	/**
 	 * Keys of booleans that are packed into the 'flags' member
-	 *
+	 * 
 	 */
 	public enum FlagKeys {
-		IS_FLYING,
-		HEAD_IN_HAND,
-		IS_IDLE
+		IS_FLYING, HEAD_IN_HAND, IS_IDLE
 	}
 
 	/**
 	 * A map of synced values that get automatically synced down to the client
 	 * It has a default tracking range of 20, and new users will receive full
-	 * changes, but then they receive only changed. A change mask is automatically
-	 * sent along with the changeset. Currently stores up to 16 values, but I might
-	 * make this configurable
+	 * changes, but then they receive only changed. A change mask is
+	 * automatically sent along with the changeset. Currently stores up to 16
+	 * values, but I might make this configurable
 	 */
 	SyncMapEntity syncMap = new SyncMapEntity();
 
 	/**
-	 * 16 packed booleans in a short. If any of the booleans change the
-	 * whole short gets send down to the client (boohoo).
+	 * 16 packed booleans in a short. If any of the booleans change the whole
+	 * short gets send down to the client (boohoo).
 	 */
 	SyncableFlags flags = new SyncableFlags();
 
@@ -102,14 +98,13 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 	 */
 	SyncableFloat opacity = new SyncableFloat(0.3f);
 
-
 	public EntityGhost(World world) {
 		super(world);
 		this.setSize(0.6F, 1.8F);
 		this.health = this.getMaxHealth();
 		this.moveSpeed = 0.5F;
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		//this.tasks.addTask(1, new EntityAIDragPlayer(this, 8.0F));
+		// this.tasks.addTask(1, new EntityAIDragPlayer(this, 8.0F));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, this.moveSpeed, false));
 		this.tasks.addTask(3, new EntityAIWander(this, this.moveSpeed * 0.1f));
 		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -128,20 +123,22 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		this(world);
 		this.playerName = playerName;
 		// use the dead players skin (ew)
-		this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(playerName) + ".png";
+		this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+				+ StringUtils.stripControlCodes(playerName) + ".png";
 		// copy the inventory from the player inventory
 		inventory.copyFrom(playerInvent);
 	}
-	
-	/* Following the code of EntityFlying */
-    protected void fall(float par1) {}
-    protected void updateFallState(double par1, boolean par3) {}
-    public boolean isOnLadder()
-    {
-        return false;
-    }
 
-	private boolean shouldBeFlying(){
+	/* Following the code of EntityFlying */
+	protected void fall(float par1) {}
+
+	protected void updateFallState(double par1, boolean par3) {}
+
+	public boolean isOnLadder() {
+		return false;
+	}
+
+	private boolean shouldBeFlying() {
 
 		EntityLiving attackTarget = getAITarget();
 
@@ -156,9 +153,7 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 			}
 		}
 		// if we're still in the "flight" cooldown, we still want to fly
-		if (flags.ticksSinceSet(FlagKeys.IS_FLYING) < 20) {
-			return true;
-		}
+		if (flags.ticksSinceSet(FlagKeys.IS_FLYING) < 20) { return true; }
 
 		// na, lets not fly
 		return false;
@@ -169,7 +164,7 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 	}
 
 	public float getOpacity() {
-		return (Float)opacity.getValue();
+		return (Float) opacity.getValue();
 	}
 
 	public boolean hasHeadInHand() {
@@ -185,7 +180,7 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 
 		super.onLivingUpdate();
 
-		if(OpenBlocks.proxy.isServer()) {
+		if (OpenBlocks.proxy.isServer()) {
 
 			opacity.setValue(0.3f);
 
@@ -195,37 +190,46 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 			flags.set(FlagKeys.IS_FLYING, shouldBeFlying());
 			flags.set(FlagKeys.IS_IDLE, isIdle);
 
-
 			int sinceIdle = flags.ticksSinceSet(FlagKeys.IS_IDLE);
 
 			boolean headInHand = flags.get(FlagKeys.HEAD_IN_HAND);
 
 			int ticksSinceHeadChange = flags.ticksSinceChange(FlagKeys.HEAD_IN_HAND);
 
-			if(DISABLE_HEAD_ANIMATION){
+			if (DISABLE_HEAD_ANIMATION) {
 				headInHand = false;
-			}else{
+			} else {
 				// if we're not idle, we dont want the head/hand behaviour
 				if (!isIdle) {
 					headInHand = false;
 				} else {
-					if (!headInHand && Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand.nextDouble())) {
+					if (!headInHand
+							&& Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand.nextDouble())) {
 						headInHand = true;
-					}else if (headInHand && ticksSinceHeadChange > 50) {
+					} else if (headInHand && ticksSinceHeadChange > 50) {
 						headInHand = false;
 					}
 				}
 			}
 
-			if(flags.get(FlagKeys.IS_FLYING) && worldObj.getHeightValue((int)posX, (int)posZ) + 1 > posY) {
+			if (flags.get(FlagKeys.IS_FLYING)
+					&& worldObj.getHeightValue((int) posX, (int) posZ) + 1 > posY) {
+				/*
+				 * Flying up causes the entity onGround to be false, nullifying
+				 * any movement. There is one option, override the movement
+				 * methods and implement them ourselves. This does provide the
+				 * opportunity for the ghost to fly through walls, but does make
+				 * life harder.
+				 * 
+				 * Also some research needs to be done regarding how this fits
+				 * with AI
+				 */
 				motionY = Math.max(motionY, 0.1D); /* Fly over blocks */
 			}
-			
+
 			flags.set(FlagKeys.HEAD_IN_HAND, headInHand);
 
 		}
-		
-		
 
 		// send all our data to nearby users
 		syncMap.sync(worldObj, this, posX, posY, posZ);
@@ -244,7 +248,6 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		// this is called on the client whenever a value has been sycned
 		// it passes a list of the objects that have changed
 	}
-
 
 	public String getTranslatedEntityName() {
 		return String.format("Ghost of %s", playerName);
@@ -282,54 +285,56 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 		super.readFromNBT(tag);
 		if (tag.hasKey("playerName")) {
 			playerName = tag.getString("playerName");
-			skinUrl = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(playerName) + ".png";
+			skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+					+ StringUtils.stripControlCodes(playerName) + ".png";
 		}
 		inventory.readFromNBT(tag);
 	}
 
 	public void onDeath(DamageSource damageSource) {
-		if (OpenBlocks.proxy.isServer()){ 
+		if (OpenBlocks.proxy.isServer()) {
 			BlockUtils.dropInventory(inventory, worldObj, posX, posY, posZ);
 		}
 		super.onDeath(damageSource);
 	}
 
-
-	//	private boolean hasRoomToFly(){
-	//		// Get my bounding box, copy it
-	//		AxisAlignedBB axisalignedbb = this.boundingBox.copy();
-	//		axisalignedbb.maxY += 1; /* Make it a meter higher to avoid all bad obsticles */
-	//		return this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).isEmpty();
-	//	}
-	//	
-	//	private boolean targetIsAboveMe() {
-	//		if(OpenBlocks.proxy.isClient() || getAttackTarget() == null) 
-	//			return false;
-	//		return getAttackTarget().posY > posY;
-	//	}
-	//	
-	//	/* Replacement to the onLadder crap */
-	//	private boolean shouldFly() {
-	//		return (isCollidedHorizontally || targetIsAboveMe()) && hasRoomToFly();
-	//	}
-	//	
-	//	/* Used when moving this mob around the place */
-	//	@Override
-	//	public boolean isOnLadder() {
-	//		return false; /* We handle this in our onUpdate */
-	//	}
-	//	
-	//	@Override
-	//	public void onUpdate() {
-	//		super.onUpdate();
-	//		/* Small tinker with the ladder code */
-	//		if(shouldFly()) /* Handle the or case, which EntityLiving neglects */
-	//			motionY = 0.2D;
-	//	}
+	// private boolean hasRoomToFly(){
+	// // Get my bounding box, copy it
+	// AxisAlignedBB axisalignedbb = this.boundingBox.copy();
+	// axisalignedbb.maxY += 1; /* Make it a meter higher to avoid all bad
+	// obsticles */
+	// return this.worldObj.getCollidingBoundingBoxes(this,
+	// axisalignedbb).isEmpty();
+	// }
+	//
+	// private boolean targetIsAboveMe() {
+	// if(OpenBlocks.proxy.isClient() || getAttackTarget() == null)
+	// return false;
+	// return getAttackTarget().posY > posY;
+	// }
+	//
+	// /* Replacement to the onLadder crap */
+	// private boolean shouldFly() {
+	// return (isCollidedHorizontally || targetIsAboveMe()) && hasRoomToFly();
+	// }
+	//
+	// /* Used when moving this mob around the place */
+	// @Override
+	// public boolean isOnLadder() {
+	// return false; /* We handle this in our onUpdate */
+	// }
+	//
+	// @Override
+	// public void onUpdate() {
+	// super.onUpdate();
+	// /* Small tinker with the ladder code */
+	// if(shouldFly()) /* Handle the or case, which EntityLiving neglects */
+	// motionY = 0.2D;
+	// }
 
 	/**
-	 * These two methods are for sending data down to the client
-	 * When the mob first spawns
+	 * These two methods are for sending data down to the client When the mob
+	 * first spawns
 	 */
 
 	@Override
@@ -340,7 +345,8 @@ public class EntityGhost extends EntityMob implements IEntityAdditionalSpawnData
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
 		playerName = data.readUTF();
-		skinUrl = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(playerName) + ".png";
+		skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+				+ StringUtils.stripControlCodes(playerName) + ".png";
 	}
 
 	@Override

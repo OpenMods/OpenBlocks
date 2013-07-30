@@ -19,12 +19,12 @@ public class SyncableDouble extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		stream.writeDouble((Double)value);
+		stream.writeDouble((Double) value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setDouble(name, (Double)value);
+		tag.setDouble(name, (Double) value);
 	}
 
 	@Override

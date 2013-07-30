@@ -20,10 +20,10 @@ import openblocks.OpenBlocks;
 import openblocks.api.ISurfaceAttachment;
 import openblocks.common.GenericInventory;
 
-public class TileEntityLightbox extends TileEntity implements IInventory, ISurfaceAttachment {
+public class TileEntityLightbox extends TileEntity implements IInventory,
+		ISurfaceAttachment {
 
-	private GenericInventory inventory = new GenericInventory("lightbox",
-			false, 1);
+	private GenericInventory inventory = new GenericInventory("lightbox", false, 1);
 
 	/**
 	 * The surface it's attached to. Could be any of the 6 main directions
@@ -58,14 +58,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory, ISurfa
 
 				ItemStack itemstack = inventory.getStackInSlot(0);
 
-				for (EntityPlayer player : (List<EntityPlayer>) worldObj
-						.getEntitiesWithinAABB(
-								EntityPlayer.class,
-								AxisAlignedBB
-										.getAABBPool()
-										.getAABB(xCoord, yCoord, zCoord,
-												xCoord + 1, yCoord + 1,
-												zCoord + 1).expand(10, 10, 10))) {
+				for (EntityPlayer player : (List<EntityPlayer>) worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(10, 10, 10))) {
 
 					if (player instanceof EntityPlayerMP) {
 
@@ -75,18 +68,14 @@ public class TileEntityLightbox extends TileEntity implements IInventory, ISurfa
 								&& Item.itemsList[itemstack.itemID].isMap()
 								&& mpPlayer.playerNetServerHandler.packetSize() <= 5) {
 
-							MapData mapdata = Item.map.getMapData(itemstack,
-									worldObj);
+							MapData mapdata = Item.map.getMapData(itemstack, worldObj);
 
 							mapdata.func_82568_a(mpPlayer);
 
-							Packet packet = ((ItemMapBase) Item.itemsList[itemstack.itemID])
-									.createMapDataPacket(itemstack,
-											this.worldObj, mpPlayer);
+							Packet packet = ((ItemMapBase) Item.itemsList[itemstack.itemID]).createMapDataPacket(itemstack, this.worldObj, mpPlayer);
 
 							if (packet != null) {
-								mpPlayer.playerNetServerHandler
-										.sendPacketToPlayer(packet);
+								mpPlayer.playerNetServerHandler.sendPacketToPlayer(packet);
 							}
 						}
 					}
@@ -97,8 +86,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory, ISurfa
 		tickCounter++;
 	}
 
-	public void setSurfaceAndRotation(ForgeDirection surface,
-			ForgeDirection rotation) {
+	public void setSurfaceAndRotation(ForgeDirection surface, ForgeDirection rotation) {
 		this.surface = surface;
 		this.rotation = rotation;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -203,8 +191,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory, ISurfa
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 		if (tag.hasKey("rotation")) {
-			rotation = ForgeDirection
-					.getOrientation(tag.getInteger("rotation"));
+			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
 		}
 		if (tag.hasKey("surface")) {
 			surface = ForgeDirection.getOrientation(tag.getInteger("surface"));

@@ -11,8 +11,7 @@ public class ShapeEquilateral2dGenerator implements IShapeGenerator {
 	}
 
 	@Override
-	public void generateShape(int xSize, int ySize, int zSize,
-			IShapeable shapeable) {
+	public void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable) {
 		int firstX = 0;
 		int firstZ = 0;
 		int previousX = 0;
@@ -31,8 +30,7 @@ public class ShapeEquilateral2dGenerator implements IShapeGenerator {
 				previousZ = z;
 			}
 		}
-		GeometryUtils
-				.line2D(0, previousX, previousZ, firstX, firstZ, shapeable);
+		GeometryUtils.line2D(0, previousX, previousZ, firstX, firstZ, shapeable);
 	}
 
 }

@@ -9,16 +9,16 @@ import net.minecraft.nbt.NBTTagCompound;
 public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	public static final float EPSILON = 0.0001f;
-	
+
 	public SyncableFloat(float value) {
 		super(value);
 	}
 
 	@Override
 	public boolean equals(Object otherValue) {
-		return Math.abs((Float)otherValue - (Float)value) < EPSILON;
+		return Math.abs((Float) otherValue - (Float) value) < EPSILON;
 	}
-	
+
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readFloat();
@@ -26,12 +26,12 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		stream.writeFloat((Float)value);
+		stream.writeFloat((Float) value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setFloat(name, (Float)value);	
+		tag.setFloat(name, (Float) value);
 	}
 
 	@Override

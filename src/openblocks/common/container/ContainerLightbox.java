@@ -13,8 +13,7 @@ public class ContainerLightbox extends Container {
 	protected IInventory playerInventory;
 	private TileEntityLightbox lightbox;
 
-	public ContainerLightbox(IInventory playerInventory,
-			TileEntityLightbox lightbox) {
+	public ContainerLightbox(IInventory playerInventory, TileEntityLightbox lightbox) {
 		this.inventorySize = lightbox.getSizeInventory();
 		this.playerInventory = playerInventory;
 		this.lightbox = lightbox;
@@ -38,14 +37,13 @@ public class ContainerLightbox extends Container {
 	protected void addPlayerInventorySlots(int offsetY) {
 		for (int l = 0; l < 3; l++) {
 			for (int k1 = 0; k1 < 9; k1++) {
-				addSlotToContainer(new Slot(playerInventory, k1 + l * 9 + 9,
-						8 + k1 * 18, offsetY + l * 18));
+				addSlotToContainer(new Slot(playerInventory, k1 + l * 9 + 9, 8 + k1 * 18, offsetY
+						+ l * 18));
 			}
 		}
 
 		for (int i1 = 0; i1 < 9; i1++) {
-			addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18,
-					offsetY + 58));
+			addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, offsetY + 58));
 		}
 	}
 
@@ -66,11 +64,8 @@ public class ContainerLightbox extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 			if (i < inventorySize) {
-				if (!mergeItemStack(itemstack1, inventorySize,
-						inventorySlots.size(), true))
-					return null;
-			} else if (!mergeItemStack(itemstack1, 0, inventorySize, false))
-				return null;
+				if (!mergeItemStack(itemstack1, inventorySize, inventorySlots.size(), true)) return null;
+			} else if (!mergeItemStack(itemstack1, 0, inventorySize, false)) return null;
 			if (itemstack1.stackSize == 0) {
 				slot.putStack(null);
 			} else {

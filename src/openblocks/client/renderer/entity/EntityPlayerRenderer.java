@@ -16,5 +16,5 @@ public class EntityPlayerRenderer extends RenderPlayer {
 		if (player == Minecraft.getMinecraft().thePlayer) {
 			GL11.glRotatef(90, 1, 0, 0);
 		}
-    }
+	}
 }

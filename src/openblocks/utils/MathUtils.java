@@ -1,6 +1,5 @@
 package openblocks.utils;
 
-
 public class MathUtils {
 
 	public static final double lengthSq(double x, double y, double z) {

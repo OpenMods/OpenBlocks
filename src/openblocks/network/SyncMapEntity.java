@@ -20,5 +20,5 @@ public class SyncMapEntity extends SyncMap {
 	protected void writeMapType(DataOutputStream dos) throws IOException {
 		dos.writeByte(SyncableManager.TYPE_ENTITY);
 	}
-	
+
 }

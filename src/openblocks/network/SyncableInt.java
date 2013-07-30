@@ -19,12 +19,12 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		stream.writeInt((Integer)value);
+		stream.writeInt((Integer) value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setInteger(name, (Integer)value);
+		tag.setInteger(name, (Integer) value);
 	}
 
 	@Override

@@ -12,7 +12,6 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.CommonProxy;
 
-
 public class LanguageUtils {
 	public static void setupLanguages() {
 
@@ -32,9 +31,7 @@ public class LanguageUtils {
 				public void read(String line) {
 
 					URL url = CommonProxy.class.getResource(String.format("%s/%s.lang", OpenBlocks.getLanguagePath(), line));
-					if (url == null) {
-						return;
-					}
+					if (url == null) { return; }
 					LanguageRegistry.instance().loadLocalization(url, line, false);
 				}
 			});

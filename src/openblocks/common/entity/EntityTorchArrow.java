@@ -10,11 +10,11 @@ import net.minecraft.world.World;
 public class EntityTorchArrow extends EntityArrow {
 
 	private Field ticksInGroundField = null;
-	
+
 	public EntityTorchArrow(World worldObj, EntityPlayer player, float f) {
 		super(worldObj, player, f);
 	}
-	
+
 	public int getTicksInGround() {
 		if (ticksInGroundField == null) {
 			try {
@@ -27,8 +27,7 @@ public class EntityTorchArrow extends EntityArrow {
 		if (ticksInGroundField != null) {
 			try {
 				return (Integer) ticksInGroundField.get(this);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 		}
 		return 1;
 	}
@@ -44,10 +43,8 @@ public class EntityTorchArrow extends EntityArrow {
 						&& shootingEntity instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) shootingEntity;
 					if (player.inventory.hasItem(Block.torchWood.blockID)) {
-						player.inventory
-								.consumeInventoryItem(Block.torchWood.blockID);
-						worldObj.setBlock(closestX, closestY, closestZ,
-								Block.torchWood.blockID);
+						player.inventory.consumeInventoryItem(Block.torchWood.blockID);
+						worldObj.setBlock(closestX, closestY, closestZ, Block.torchWood.blockID);
 						setDead();
 					}
 				}

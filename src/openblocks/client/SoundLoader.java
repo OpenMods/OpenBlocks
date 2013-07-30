@@ -21,8 +21,7 @@ public class SoundLoader {
 
 		String[] soundFiles = { "teleport.ogg", "open.ogg", "close.ogg", "ambient_grave.ogg" };
 
-		File resourcesDirectory = new File(mc.mcDataDir,
-				"resources/openblocks/");
+		File resourcesDirectory = new File(mc.mcDataDir, "resources/openblocks/");
 
 		if (!resourcesDirectory.exists()) {
 			resourcesDirectory.mkdir();
@@ -33,11 +32,9 @@ public class SoundLoader {
 				File soundFile = new File(resourcesDirectory, fileName);
 				if (!soundFile.exists()) {
 
-					InputStream streamIn = OpenBlocks.class
-							.getResourceAsStream("/mods/openblocks/sounds/"
-									+ fileName);
-					BufferedOutputStream streamOut = new BufferedOutputStream(
-							new FileOutputStream(soundFile));
+					InputStream streamIn = OpenBlocks.class.getResourceAsStream("/mods/openblocks/sounds/"
+							+ fileName);
+					BufferedOutputStream streamOut = new BufferedOutputStream(new FileOutputStream(soundFile));
 					byte[] buffer = new byte[1024];
 					for (int len = 0; (len = streamIn.read(buffer)) >= 0;) {
 						streamOut.write(buffer, 0, len);
@@ -45,8 +42,7 @@ public class SoundLoader {
 					streamIn.close();
 					streamOut.close();
 				}
-				event.manager.soundPoolSounds.addSound(
-						"openblocks/" + fileName, soundFile);
+				event.manager.soundPoolSounds.addSound("openblocks/" + fileName, soundFile);
 			} catch (Exception e) {
 				System.out.println("Couldnt load " + fileName);
 			}

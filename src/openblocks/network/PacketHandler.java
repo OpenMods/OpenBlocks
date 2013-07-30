@@ -14,8 +14,7 @@ public class PacketHandler implements IPacketHandler {
 		if (packet.channel.equals("OpenBlocks")) {
 			try {
 				OpenBlocks.syncableManager.handlePacket(packet);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 		}
 	}
 }

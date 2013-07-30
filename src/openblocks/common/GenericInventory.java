@@ -44,8 +44,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public ItemStack decrStackSize(int stackIndex, int byAmount) {
@@ -58,8 +57,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 				this.onInventoryChanged(stackIndex);
 				return itemstack;
 			} else {
-				itemstack = this.inventoryContents[stackIndex]
-						.splitStack(byAmount);
+				itemstack = this.inventoryContents[stackIndex].splitStack(byAmount);
 
 				if (this.inventoryContents[stackIndex].stackSize == 0) {
 					this.inventoryContents[stackIndex] = null;
@@ -136,8 +134,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	public void readFromNBT(NBTTagCompound tag) {
 		NBTTagList nbttaglist = tag.getTagList("Items");
@@ -182,15 +179,14 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	 * This bastard never even gets called, so ignore it
 	 */
 	@Override
-	public void onInventoryChanged() {
-	}
+	public void onInventoryChanged() {}
 
 	public void copyFrom(IInventory inventory) {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack != null) {
 				setInventorySlotContents(i, stack.copy());
-			}else {
+			} else {
 				setInventorySlotContents(i, null);
 			}
 		}

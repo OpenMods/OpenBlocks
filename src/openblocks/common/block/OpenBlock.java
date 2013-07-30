@@ -40,12 +40,9 @@ public abstract class OpenBlock extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		try {
-			if (teClass != null) {
-				return teClass.getConstructor(new Class[0]).newInstance();
-			}
+			if (teClass != null) { return teClass.getConstructor(new Class[0]).newInstance(); }
 		} catch (NoSuchMethodException nsm) {
-			System.out
-					.println("Notice: Cannot create TE automatically due to constructor requirements");
+			System.out.println("Notice: Cannot create TE automatically due to constructor requirements");
 		} catch (Exception ex) {
 			System.out.println("Notice: Error creating tile entity");
 			ex.printStackTrace();
@@ -71,7 +68,7 @@ public abstract class OpenBlock extends BlockContainer {
 	public void setupBlock(Block instance, String uniqueName) {
 		setupBlock(instance, uniqueName, null);
 	}
-	
+
 	public void setupBlock(Block instance, String uniqueName, Class<? extends TileEntity> tileEntity) {
 		setupBlock(instance, uniqueName, tileEntity, ItemOpenBlock.class);
 	}
@@ -79,23 +76,28 @@ public abstract class OpenBlock extends BlockContainer {
 	public void setupBlock(Block instance, String uniqueName, Class<? extends TileEntity> tileEntity, Class<? extends ItemOpenBlock> itemClass) {
 		uniqueBlockId = uniqueName;
 		modKey = OpenBlocks.proxy.getModId().toLowerCase();
-		
+
 		GameRegistry.registerBlock(instance, itemClass, String.format("%s_%s", modKey, uniqueName));
 		instance.setUnlocalizedName(String.format("%s.%s", modKey, uniqueName));
-		
+
 		if (tileEntity != null) {
 			GameRegistry.registerTileEntity(tileEntity, String.format("%s_%s", modKey, uniqueName));
 			this.teClass = tileEntity;
 		}
 	}
-	
+
 	/**
 	 * Can we place the block on this
+	 * 
 	 * @param world
-	 * @param x of the block we're placing
-	 * @param y of the block we're placing
-	 * @param z of the block we're placing
-	 * @param side the side of the block that's attached to the other block
+	 * @param x
+	 *            of the block we're placing
+	 * @param y
+	 *            of the block we're placing
+	 * @param z
+	 *            of the block we're placing
+	 * @param side
+	 *            the side of the block that's attached to the other block
 	 * @return
 	 */
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
@@ -105,69 +107,62 @@ public abstract class OpenBlock extends BlockContainer {
 		return world.isBlockSolidOnSide(x, y, z, side.getOpposite());
 	}
 
-	public boolean canPlaceBlockOnSides(World world, int x, int y, int z, ForgeDirection ... sides) {
+	public boolean canPlaceBlockOnSides(World world, int x, int y, int z, ForgeDirection... sides) {
 		for (ForgeDirection side : sides) {
-			if (canPlaceBlockOnSide(world, x, y, z, side)) {
-				return true;
-			}
+			if (canPlaceBlockOnSide(world, x, y, z, side)) { return true; }
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null && te instanceof ISurfaceAttachment) {
 			ForgeDirection direction = ((ISurfaceAttachment) te).getSurfaceDirection();
 			if (!canPlaceBlockOnSide(world, x, y, z, direction)) {
-		        dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-		        world.setBlockToAir(x, y, z);
+				dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+				world.setBlockToAir(x, y, z);
 			}
 		}
 	}
-	
+
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
-		setupDimensions(x - width, y, z - depth, x + width, y + height, z + depth);
+		setupDimensions(x - width, y, z - depth, x + width, y + height, z
+				+ depth);
 	}
-	
-	protected void setupDimensions(float minX, float minY, float minZ, float maxX, float maxY, float maxZ){
+
+	protected void setupDimensions(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
 		this.minX = minX;
 		this.minY = minY;
-		this.minZ = minZ;		
+		this.minZ = minZ;
 		this.maxX = maxX;
 		this.maxY = maxY;
 		this.maxZ = maxZ;
 	}
-	
+
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
-			int y, int z) {
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
-			int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return canPlaceBlockOnSides(world, x, y, z, EAST, WEST, SOUTH, NORTH, UP, DOWN );
+		return canPlaceBlockOnSides(world, x, y, z, EAST, WEST, SOUTH, NORTH, UP, DOWN);
 	}
 
 	public <U extends TileEntity> U getTileEntity(IBlockAccess world, int x, int y, int z, Class<U> T) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null && T.isAssignableFrom(te.getClass())) {
-			return (U) te;
-		}
+		if (te != null && T.isAssignableFrom(te.getClass())) { return (U) te; }
 		return null;
 	}
-	
-	public void onBlockPlacedBy(World world, EntityPlayer player,
-			ItemStack stack, int x, int y, int z, ForgeDirection side,
-			float hitX, float hitY, float hitZ, int meta) {
-		
+
+	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
+
 	}
 }

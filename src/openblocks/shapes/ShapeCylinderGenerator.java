@@ -5,13 +5,10 @@ import openblocks.utils.MathUtils;
 public class ShapeCylinderGenerator implements IShapeGenerator {
 
 	@Override
-	public void generateShape(int radiusX, int height, int radiusZ,
-			IShapeable shapeable) {
+	public void generateShape(int radiusX, int height, int radiusZ, IShapeable shapeable) {
 		int affected = 0;
 
-		if (height == 0) {
-			return;
-		}
+		if (height == 0) { return; }
 
 		final double invRadiusX = 1.0 / radiusX;
 		final double invRadiusZ = 1.0 / radiusZ;

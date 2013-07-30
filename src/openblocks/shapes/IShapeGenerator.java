@@ -15,7 +15,6 @@ public interface IShapeGenerator {
 	 *            Object that needs to be shaped
 	 * @return the amount of blocks that were set
 	 */
-	public void generateShape(int xSize, int ySize, int zSize,
-			IShapeable shapeable);
+	public void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable);
 
 }

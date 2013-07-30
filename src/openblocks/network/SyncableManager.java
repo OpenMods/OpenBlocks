@@ -12,20 +12,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class SyncableManager {
-	
+
 	public static final byte TYPE_TILE = 0;
 	public static final byte TYPE_ENTITY = 1;
-	
+
 	public void handlePacket(Packet250CustomPayload packet) throws IOException {
-		
+
 		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
-		
+
 		byte type = dis.readByte();
 
 		World world = Minecraft.getMinecraft().theWorld;
-		
+
 		ISyncHandler handler = null;
-		
+
 		if (type == TYPE_TILE) {
 			int x = dis.readInt();
 			int y = dis.readInt();
@@ -38,7 +38,7 @@ public class SyncableManager {
 					}
 				}
 			}
-		}else if (type == TYPE_ENTITY) {
+		} else if (type == TYPE_ENTITY) {
 			int entityId = dis.readInt();
 			Entity entity = world.getEntityByID(entityId);
 			if (entity != null && entity instanceof ISyncHandler) {
