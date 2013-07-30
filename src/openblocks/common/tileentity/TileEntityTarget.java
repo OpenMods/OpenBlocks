@@ -45,7 +45,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 	}
 
 	public float getTargetRotation() {
-		return isPowered ? 0 : -(float) (Math.PI / 2);
+		return isPowered? 0 : -(float)(Math.PI / 2);
 	}
 
 	public int getStrength() {
@@ -60,7 +60,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 
 	private void onRedstoneChanged() {
 		if (!isPowered) {
-			List<EntityArrow> arrows = (List<EntityArrow>) worldObj.getEntitiesWithinAABB(EntityArrow.class, AxisAlignedBB.getAABBPool().getAABB((double) xCoord - 0.1, (double) yCoord - 0.1, (double) zCoord - 0.1, (double) xCoord + 1.1, (double) yCoord + 1.1, (double) zCoord + 1.1));
+			List<EntityArrow> arrows = (List<EntityArrow>)worldObj.getEntitiesWithinAABB(EntityArrow.class, AxisAlignedBB.getAABBPool().getAABB((double)xCoord - 0.1, (double)yCoord - 0.1, (double)zCoord - 0.1, (double)xCoord + 1.1, (double)yCoord + 1.1, (double)zCoord + 1.1));
 
 			if (arrows.size() > 0) {
 				ItemStack newStack = new ItemStack(Item.arrow, arrows.size(), 0);
@@ -72,7 +72,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 			}
 
 		}
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered ? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
+		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
 
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}

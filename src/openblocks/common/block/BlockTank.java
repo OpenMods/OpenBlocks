@@ -23,7 +23,7 @@ public class BlockTank extends OpenBlock {
 			super.onNeighborBlockChange(world, x, y, z, blockId);
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if (te != null && te instanceof TileEntityTank) {
-				((TileEntityTank) te).notifyTank();
+				((TileEntityTank)te).notifyTank();
 			}
 		}
 	}

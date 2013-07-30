@@ -40,7 +40,7 @@ public class BlockElevator extends OpenBlock {
 
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		TileEntityElevator drop = (TileEntityElevator) te;
+		TileEntityElevator drop = (TileEntityElevator)te;
 		return drop.onActivated(player);
 	}
 }

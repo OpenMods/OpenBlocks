@@ -21,7 +21,7 @@ public class TileEntityTank extends TileEntity {
 			if (valve == null) {
 				TileEntity te = worldObj.getBlockTileEntity(valveX, valveY, valveZ);
 				if (te != null && te instanceof TileEntityValve) {
-					valve = (TileEntityValve) te;
+					valve = (TileEntityValve)te;
 				}
 				if (valve == null) {
 					worldObj.setBlockToAir(xCoord, yCoord, zCoord);

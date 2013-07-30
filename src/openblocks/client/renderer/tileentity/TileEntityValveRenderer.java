@@ -21,7 +21,7 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		TileEntityValve valve = (TileEntityValve) tileentity;
+		TileEntityValve valve = (TileEntityValve)tileentity;
 		renderValve(x, y, z);
 		if (valve != null && valve.worldObj != null) {
 			int[] coords = valve.getLinkedCoords();
@@ -42,7 +42,7 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 
 	private void renderValve(double x, double y, double z) {
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
+		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
 		GL11.glPushMatrix();
 		GL11.glDisable(2896);
 
@@ -74,7 +74,7 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		}
 		liquid = liquid.canonical();
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
+		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
 		GL11.glPushMatrix();
 		GL11.glDisable(2896);
 		bindTextureByName("/terrain.png");
@@ -99,12 +99,12 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 			return;
 		}
 
-		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(0));
-		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(1));
-		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(2));
-		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(3));
-		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(4));
-		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null ? texture : block.getBlockTextureFromSide(5));
+		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null? texture : block.getBlockTextureFromSide(0));
+		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null? texture : block.getBlockTextureFromSide(1));
+		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null? texture : block.getBlockTextureFromSide(2));
+		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null? texture : block.getBlockTextureFromSide(3));
+		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null? texture : block.getBlockTextureFromSide(4));
+		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, texture != null? texture : block.getBlockTextureFromSide(5));
 		t.draw();
 
 		GL11.glEnable(2896);

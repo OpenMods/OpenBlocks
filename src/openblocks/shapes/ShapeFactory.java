@@ -22,7 +22,7 @@ public class ShapeFactory {
 		}
 
 		public String getDisplayName() {
-			return displayName == null ? name() : displayName;
+			return displayName == null? name() : displayName;
 		}
 
 		public boolean isFixedRatio() {

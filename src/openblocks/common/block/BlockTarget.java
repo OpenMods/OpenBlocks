@@ -30,7 +30,7 @@ public class BlockTarget extends OpenBlock {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity, ItemStack itemstack) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile != null && tile instanceof TileEntityTarget) {
-			TileEntityTarget target = (TileEntityTarget) tile;
+			TileEntityTarget target = (TileEntityTarget)tile;
 			target.setRotation(BlockUtils.get2dOrientation(entity));
 		}
 	}
@@ -39,7 +39,7 @@ public class BlockTarget extends OpenBlock {
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null && te instanceof TileEntityTarget) {
-			((TileEntityTarget) te).neighbourBlockChanged();
+			((TileEntityTarget)te).neighbourBlockChanged();
 		}
 	}
 
@@ -80,7 +80,7 @@ public class BlockTarget extends OpenBlock {
 			}
 			lastEntityHit = entity.entityId;
 
-			TileEntityTarget target = (TileEntityTarget) tile;
+			TileEntityTarget target = (TileEntityTarget)tile;
 
 			if (!target.isPowered()) { return; }
 
@@ -88,9 +88,9 @@ public class BlockTarget extends OpenBlock {
 			ForgeDirection opposite = rotation.getOpposite();
 			ForgeDirection parallel = opposite.getRotation(ForgeDirection.UP);
 
-			double centerX = (double) x + 0.5 + (opposite.offsetX * 0.5);
-			double centerY = (double) y + 0.55 + (opposite.offsetY * 0.45);
-			double centerZ = (double) z + 0.5 + (opposite.offsetZ * 0.5);
+			double centerX = (double)x + 0.5 + (opposite.offsetX * 0.5);
+			double centerY = (double)y + 0.55 + (opposite.offsetY * 0.45);
+			double centerZ = (double)z + 0.5 + (opposite.offsetZ * 0.5);
 
 			double entityX = entity.posX;
 			double entityY = entity.posY;
@@ -111,7 +111,7 @@ public class BlockTarget extends OpenBlock {
 
 			double distance = arrow.distanceTo(bullseye);
 
-			target.setStrength(15 - ((int) Math.min(15, Math.max(0, Math.round(distance * 32)))));
+			target.setStrength(15 - ((int)Math.min(15, Math.max(0, Math.round(distance * 32)))));
 
 		}
 	}
@@ -119,7 +119,7 @@ public class BlockTarget extends OpenBlock {
 	@Override
 	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int m) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if ((tile != null) && ((tile instanceof TileEntityTarget))) { return ((TileEntityTarget) tile).getStrength(); }
+		if ((tile != null) && ((tile instanceof TileEntityTarget))) { return ((TileEntityTarget)tile).getStrength(); }
 		return 0;
 	}
 
@@ -146,7 +146,7 @@ public class BlockTarget extends OpenBlock {
 
 		if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
 
-		TileEntityTarget target = (TileEntityTarget) tile;
+		TileEntityTarget target = (TileEntityTarget)tile;
 
 		if (!target.isPowered()) {
 			setBlockBounds(0, 0, 0, 1.0f, 0.1f, 1.0f);

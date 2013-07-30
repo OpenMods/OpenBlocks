@@ -16,7 +16,7 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public boolean equals(Object otherValue) {
-		return Math.abs((Float) otherValue - (Float) value) < EPSILON;
+		return Math.abs((Float)otherValue - (Float)value) < EPSILON;
 	}
 
 	@Override
@@ -26,12 +26,12 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		stream.writeFloat((Float) value);
+		stream.writeFloat((Float)value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setFloat(name, (Float) value);
+		tag.setFloat(name, (Float)value);
 	}
 
 	@Override

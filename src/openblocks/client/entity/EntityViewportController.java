@@ -34,7 +34,7 @@ public class EntityViewportController extends EntityLiving {
 		ticks += 4;
 		if (entity == null || entity.isDead) { return; }
 
-		double yawRad = ((double) (ticks % 360) / 180) * Math.PI;
+		double yawRad = ((double)(ticks % 360) / 180) * Math.PI;
 		System.out.println(yawRad);
 		double x = Math.cos(yawRad);
 		double z = Math.sin(yawRad);
@@ -49,10 +49,10 @@ public class EntityViewportController extends EntityLiving {
 		double distanceY = entity.posY - posY;
 		double distanceZ = entity.posZ - posZ;
 
-		double d3 = (double) MathHelper.sqrt_double(distanceX * distanceX
+		double d3 = (double)MathHelper.sqrt_double(distanceX * distanceX
 				+ distanceZ * distanceZ);
-		float f2 = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
-		float f3 = (float) (-(Math.atan2(distanceY, d3) * 180.0D / Math.PI));
+		float f2 = (float)(Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
+		float f3 = (float)(-(Math.atan2(distanceY, d3) * 180.0D / Math.PI));
 
 		this.rotationPitch = this.prevRotationPitch = this.cameraPitch = this.prevCameraPitch = f3 + 20;
 		this.rotationYaw = this.rotationYawHead = this.prevRotationYaw = this.prevRotationYawHead = renderYawOffset = f2;

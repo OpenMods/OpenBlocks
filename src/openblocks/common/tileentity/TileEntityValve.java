@@ -68,12 +68,12 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	}
 
 	public int[] getLinkedCoords() {
-		return (int[]) linkedTiles.getValue();
+		return (int[])linkedTiles.getValue();
 	}
 
 	public void destroyTank() {
 		if (!linkedTiles.isEmpty()) {
-			int[] coords = (int[]) linkedTiles.getValue();
+			int[] coords = (int[])linkedTiles.getValue();
 			for (int i = 0; i < coords.length; i += 3) {
 				int x = xCoord + coords[i];
 				int y = yCoord + coords[i + 1];
@@ -91,7 +91,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 
 		if (OpenBlocks.proxy.isServer()) {
 			LiquidStack liquid = tank.getLiquid();
-			tankAmount.setValue(liquid == null ? 0 : liquid.amount);
+			tankAmount.setValue(liquid == null? 0 : liquid.amount);
 			if (liquid != null) {
 				tankLiquidId.setValue(liquid.itemID);
 				tankLiquidMeta.setValue(liquid.itemMeta);
@@ -100,7 +100,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 				if (needsRecheck) {
 					checkTank();
 				}
-				syncMap.sync(worldObj, this, (double) xCoord, (double) yCoord, (double) zCoord);
+				syncMap.sync(worldObj, this, (double)xCoord, (double)yCoord, (double)zCoord);
 			}
 		}
 
@@ -176,7 +176,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 					worldObj.setBlock(x, y, z, OpenBlocks.Config.blockTankId);
 					TileEntity te = worldObj.getBlockTileEntity(x, y, z);
 					if (te != null && te instanceof TileEntityTank) {
-						TileEntityTank tankBlock = (TileEntityTank) te;
+						TileEntityTank tankBlock = (TileEntityTank)te;
 						tankBlock.setValve(this);
 					}
 				}
@@ -187,7 +187,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 			}
 
 			if (!linkedTiles.isEmpty()) {
-				int[] alreadyLinked = (int[]) linkedTiles.getValue();
+				int[] alreadyLinked = (int[])linkedTiles.getValue();
 				for (int i = 0; i < alreadyLinked.length; i += 3) {
 					int x = alreadyLinked[i];
 					int y = alreadyLinked[i + 1];
@@ -237,7 +237,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		super.readFromNBT(tag);
 		tank.readFromNBT(tag);
 		tankCapacity.readFromNBT(tag, "tankCapacity");
-		tank.setCapacity((Integer) tankCapacity.getValue());
+		tank.setCapacity((Integer)tankCapacity.getValue());
 		System.out.println("tank capacity = " + tankCapacity.getValue());
 		flags.readFromNBT(tag, "flags");
 		linkedTiles.readFromNBT(tag, "linkedTiles");
@@ -291,12 +291,12 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 					|| !tankLiquidMeta.equals(liquid.itemMeta)) {
 				recreateLiquid = true;
 			}
-			tank.setCapacity((Integer) tankCapacity.getValue());
+			tank.setCapacity((Integer)tankCapacity.getValue());
 			if (recreateLiquid) {
-				LiquidStack newLiquid = new LiquidStack((Integer) tankLiquidId.getValue(), (Integer) tankCapacity.getValue(), (Integer) tankLiquidMeta.getValue());
+				LiquidStack newLiquid = new LiquidStack((Integer)tankLiquidId.getValue(), (Integer)tankCapacity.getValue(), (Integer)tankLiquidMeta.getValue());
 				tank.setLiquid(newLiquid);
 			}
-			int[] tiles = (int[]) linkedTiles.getValue();;
+			int[] tiles = (int[])linkedTiles.getValue();;
 			HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
 			for (int i = 0; i < tiles.length; i += 3) {
 				int f = 0;
@@ -311,7 +311,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 			List<Integer> sortedKeys = new ArrayList<Integer>(levelCapacity.keySet());
 			Collections.sort(sortedKeys);
 			spread.clear();
-			int remaining = (Integer) tankAmount.getValue();
+			int remaining = (Integer)tankAmount.getValue();
 
 			for (Integer level : sortedKeys) {
 				int tanksOnLevel = levelCapacity.get(level);
@@ -325,7 +325,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 				// System.out.println(((double) usedByLevel / (double)
 				// capacityForLevel));
 				remaining -= usedByLevel;
-				spread.put(level, ((double) usedByLevel / (double) capacityForLevel));
+				spread.put(level, ((double)usedByLevel / (double)capacityForLevel));
 			}
 			// System.out.println("linked tiles value = "+ linkedTiles.size());
 		}

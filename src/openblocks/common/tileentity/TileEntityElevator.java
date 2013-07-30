@@ -43,7 +43,7 @@ public class TileEntityElevator extends TileEntity {
 				}
 			}
 
-			List<EntityPlayer> playersInRange = (List<EntityPlayer>) worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
+			List<EntityPlayer> playersInRange = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
 
 			if (playersInRange.size() > 0) {
 
@@ -87,7 +87,7 @@ public class TileEntityElevator extends TileEntity {
 						worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
 						TileEntity targetTile = worldObj.getBlockTileEntity(xCoord, teleportTo, zCoord);
 						if (targetTile instanceof TileEntityElevator) {
-							((TileEntityElevator) targetTile).addPlayerCooldown(player);
+							((TileEntityElevator)targetTile).addPlayerCooldown(player);
 						}
 					}
 
@@ -117,7 +117,7 @@ public class TileEntityElevator extends TileEntity {
 					// Check that it is a drop block and that it has the same
 					// color index.
 					if (!(otherBlock instanceof TileEntityElevator)) continue;
-					if (((TileEntityElevator) otherBlock).getBlockMetadata() != this.getBlockMetadata()) continue;
+					if (((TileEntityElevator)otherBlock).getBlockMetadata() != this.getBlockMetadata()) continue;
 
 					if (worldObj.isAirBlock(xCoord, yPos + 1, zCoord)
 							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) { return yPos; }

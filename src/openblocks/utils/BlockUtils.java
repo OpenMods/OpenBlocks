@@ -57,22 +57,22 @@ public class BlockUtils {
 	}
 
 	public static void dropItemStackInWorld(World worldObj, int x, int y, int z, ItemStack stack) {
-		dropItemStackInWorld(worldObj, (double) x, (double) y, (double) z, stack);
+		dropItemStackInWorld(worldObj, (double)x, (double)y, (double)z, stack);
 	}
 
 	public static void dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
 		float f = 0.7F;
-		double d0 = (double) (worldObj.rand.nextFloat() * f)
-				+ (double) (1.0F - f) * 0.5D;
-		double d1 = (double) (worldObj.rand.nextFloat() * f)
-				+ (double) (1.0F - f) * 0.5D;
-		double d2 = (double) (worldObj.rand.nextFloat() * f)
-				+ (double) (1.0F - f) * 0.5D;
-		EntityItem entityitem = new EntityItem(worldObj, (double) x + d0, (double) y
-				+ d1, (double) z + d2, stack);
+		double d0 = (double)(worldObj.rand.nextFloat() * f)
+				+ (double)(1.0F - f) * 0.5D;
+		double d1 = (double)(worldObj.rand.nextFloat() * f)
+				+ (double)(1.0F - f) * 0.5D;
+		double d2 = (double)(worldObj.rand.nextFloat() * f)
+				+ (double)(1.0F - f) * 0.5D;
+		EntityItem entityitem = new EntityItem(worldObj, (double)x + d0, (double)y
+				+ d1, (double)z + d2, stack);
 		entityitem.delayBeforeCanPickup = 10;
 		if (stack.hasTagCompound()) {
-			entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+			entityitem.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 		}
 		worldObj.spawnEntityInWorld(entityitem);
 	}
@@ -80,7 +80,7 @@ public class BlockUtils {
 	public static void dropTileInventory(TileEntity tileEntity) {
 
 		if (tileEntity != null && tileEntity instanceof IInventory) {
-			IInventory inventory = (IInventory) tileEntity;
+			IInventory inventory = (IInventory)tileEntity;
 			dropInventory(inventory, tileEntity.worldObj, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 		}
 	}
@@ -97,7 +97,7 @@ public class BlockUtils {
 	}
 
 	public static void dropInventory(IInventory inventory, World world, int x, int y, int z) {
-		dropInventory(inventory, world, (double) x + 0.5, (double) y + 0.5, (double) z + 0.5);
+		dropInventory(inventory, world, (double)x + 0.5, (double)y + 0.5, (double)z + 0.5);
 	}
 
 	public static TileEntity getTileInDirection(TileEntity tile, ForgeDirection direction) {

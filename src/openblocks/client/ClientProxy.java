@@ -63,7 +63,7 @@ public class ClientProxy extends CommonProxy {
 	private void attachPlayerRenderer() {
 		if (Config.hookPlayerRenderer) {
 			// Get current renderer and check that it's Mojangs
-			Render render = (Render) RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
+			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
 			if (render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)) {
 				EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
 				playerRenderer.setRenderManager(RenderManager.instance);
@@ -76,7 +76,7 @@ public class ClientProxy extends CommonProxy {
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if ((world instanceof WorldClient)) {
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
-			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox) tile)); }
+			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
 		}
 		return null;
 	}

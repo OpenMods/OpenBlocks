@@ -18,7 +18,7 @@ public class EntityGhostRenderer extends RenderLiving {
 	}
 
 	protected void renderModel(EntityLiving living, float par2, float par3, float par4, float par5, float par6, float par7) {
-		EntityGhost ghost = (EntityGhost) living;
+		EntityGhost ghost = (EntityGhost)living;
 		this.loadDownloadableImageTexture(living.skinUrl, living.getTexture());
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, ghost.getOpacity());

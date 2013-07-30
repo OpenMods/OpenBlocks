@@ -31,8 +31,8 @@ public class ShapeCuboidGenerator implements IShapeGenerator {
 		 * Basically, the size is size * 2 - 2 unless that's less than 1 and
 		 * size is > 0
 		 */
-		int xSizeAdj = xSize == 1 ? 1 : xSize * 2 - 2;
-		int zSizeAdj = zSize == 1 ? 1 : zSize * 2 - 2;
+		int xSizeAdj = xSize == 1? 1 : xSize * 2 - 2;
+		int zSizeAdj = zSize == 1? 1 : zSize * 2 - 2;
 		// front (north)
 		GeometryUtils.makePlane(-xSize, -ySize, -zSize, xSize * 2, ySize * 2, ForgeDirection.EAST, ForgeDirection.UP, shapeable);
 		// back ( south )

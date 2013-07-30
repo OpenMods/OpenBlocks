@@ -67,7 +67,7 @@ public class ItemOpenBlock extends ItemBlock {
 			// int k1 = Block.blocksList[getBlockID()].onBlockPlaced(par3World,
 			// par4, par5, par6, par7, par8, par9, par10, j1);
 
-			OpenBlock openBlock = (OpenBlock) Block.blocksList[getBlockID()];
+			OpenBlock openBlock = (OpenBlock)Block.blocksList[getBlockID()];
 
 			ForgeDirection direction = null;
 			// Bottom = 0, Top = 1, East = 2, West = 3, North = 4, South = 5.
@@ -99,7 +99,7 @@ public class ItemOpenBlock extends ItemBlock {
 			if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10, j1)) {
 
 				openBlock.onBlockPlacedBy(par3World, par2EntityPlayer, par1ItemStack, par4, par5, par6, direction, par8, par9, par10, j1);
-				par3World.playSoundEffect((double) ((float) par4 + 0.5F), (double) ((float) par5 + 0.5F), (double) ((float) par6 + 0.5F), block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+				par3World.playSoundEffect((double)((float)par4 + 0.5F), (double)((float)par5 + 0.5F), (double)((float)par6 + 0.5F), block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 				--par1ItemStack.stackSize;
 			}
 

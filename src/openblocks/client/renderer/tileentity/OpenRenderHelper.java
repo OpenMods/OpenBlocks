@@ -20,22 +20,22 @@ public class OpenRenderHelper {
 		renderBlocks.setRenderBounds(x1, y1, z1, x2, y2, z2);
 		t.startDrawingQuads();
 
-		Icon useTexture = overrideTexture != null ? overrideTexture : block.getBlockTextureFromSide(0);
+		Icon useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(0);
 		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
 
-		useTexture = overrideTexture != null ? overrideTexture : block.getBlockTextureFromSide(1);
+		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(1);
 		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
 
-		useTexture = overrideTexture != null ? overrideTexture : block.getBlockTextureFromSide(2);
+		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(2);
 		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
 
-		useTexture = overrideTexture != null ? overrideTexture : block.getBlockTextureFromSide(3);
+		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(3);
 		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
 
-		useTexture = overrideTexture != null ? overrideTexture : block.getBlockTextureFromSide(4);
+		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(4);
 		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
 
-		useTexture = overrideTexture != null ? overrideTexture : block.getBlockTextureFromSide(5);
+		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(5);
 		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
 		t.draw();
 

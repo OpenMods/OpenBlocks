@@ -164,7 +164,7 @@ public class EntityGhost extends EntityMob implements
 	}
 
 	public float getOpacity() {
-		return (Float) opacity.getValue();
+		return (Float)opacity.getValue();
 	}
 
 	public boolean hasHeadInHand() {
@@ -213,7 +213,7 @@ public class EntityGhost extends EntityMob implements
 			}
 
 			if (flags.get(FlagKeys.IS_FLYING)
-					&& worldObj.getHeightValue((int) posX, (int) posZ) + 1 > posY) {
+					&& worldObj.getHeightValue((int)posX, (int)posZ) + 1 > posY) {
 				/*
 				 * Flying up causes the entity onGround to be false, nullifying
 				 * any movement. There is one option, override the movement
@@ -339,7 +339,7 @@ public class EntityGhost extends EntityMob implements
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		data.writeUTF(playerName == null ? "Unknown" : playerName);
+		data.writeUTF(playerName == null? "Unknown" : playerName);
 	}
 
 	@Override

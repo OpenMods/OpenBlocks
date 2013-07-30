@@ -118,7 +118,7 @@ public abstract class OpenBlock extends BlockContainer {
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null && te instanceof ISurfaceAttachment) {
-			ForgeDirection direction = ((ISurfaceAttachment) te).getSurfaceDirection();
+			ForgeDirection direction = ((ISurfaceAttachment)te).getSurfaceDirection();
 			if (!canPlaceBlockOnSide(world, x, y, z, direction)) {
 				dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 				world.setBlockToAir(x, y, z);
@@ -158,7 +158,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	public <U extends TileEntity> U getTileEntity(IBlockAccess world, int x, int y, int z, Class<U> T) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null && T.isAssignableFrom(te.getClass())) { return (U) te; }
+		if (te != null && T.isAssignableFrom(te.getClass())) { return (U)te; }
 		return null;
 	}
 

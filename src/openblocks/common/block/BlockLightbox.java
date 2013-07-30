@@ -31,13 +31,13 @@ public class BlockLightbox extends OpenBlock {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		boolean powered = world.isBlockIndirectlyGettingPowered(x, y, z);
-		world.setBlockMetadataWithNotify(x, y, z, powered ? 1 : 0, 3);
+		world.setBlockMetadataWithNotify(x, y, z, powered? 1 : 0, 3);
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		boolean powered = world.isBlockIndirectlyGettingPowered(x, y, z);
-		world.setBlockMetadataWithNotify(x, y, z, powered ? 1 : 0, 3);
+		world.setBlockMetadataWithNotify(x, y, z, powered? 1 : 0, 3);
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 	}
 
@@ -49,7 +49,7 @@ public class BlockLightbox extends OpenBlock {
 	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile != null && tile instanceof TileEntityLightbox) {
-			TileEntityLightbox lightbox = (TileEntityLightbox) tile;
+			TileEntityLightbox lightbox = (TileEntityLightbox)tile;
 			lightbox.setSurfaceAndRotation(side.getOpposite(), BlockUtils.get2dOrientation(player));
 		}
 	}
@@ -92,7 +92,7 @@ public class BlockLightbox extends OpenBlock {
 
 		if (tile == null || !(tile instanceof TileEntityLightbox)) { return; }
 
-		TileEntityLightbox lightbox = (TileEntityLightbox) tile;
+		TileEntityLightbox lightbox = (TileEntityLightbox)tile;
 
 		ForgeDirection direction = lightbox.getSurface();
 

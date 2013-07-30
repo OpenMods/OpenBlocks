@@ -154,8 +154,8 @@ public class GeometryUtils {
 	}
 
 	public static void line2D(int y, int x0, int z0, int x1, int z1, IShapeable shapeable) {
-		int dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-		int dy = -Math.abs(z1 - z0), sy = z0 < z1 ? 1 : -1;
+		int dx = Math.abs(x1 - x0), sx = x0 < x1? 1 : -1;
+		int dy = -Math.abs(z1 - z0), sy = z0 < z1? 1 : -1;
 		int err = dx + dy, e2;
 
 		for (;;) {
@@ -175,21 +175,21 @@ public class GeometryUtils {
 
 	public static void line3D(Vec3 start, Vec3 end, IShapeable shapeable) {
 
-		int dx = (int) (end.xCoord - start.xCoord);
-		int dy = (int) (end.yCoord - start.yCoord);
-		int dz = (int) (end.zCoord - start.zCoord);
+		int dx = (int)(end.xCoord - start.xCoord);
+		int dy = (int)(end.yCoord - start.yCoord);
+		int dz = (int)(end.zCoord - start.zCoord);
 
 		int ax = Math.abs(dx) << 1;
 		int ay = Math.abs(dy) << 1;
 		int az = Math.abs(dz) << 1;
 
-		int signx = (int) Math.signum(dx);
-		int signy = (int) Math.signum(dy);
-		int signz = (int) Math.signum(dz);
+		int signx = (int)Math.signum(dx);
+		int signy = (int)Math.signum(dy);
+		int signz = (int)Math.signum(dz);
 
-		int x = (int) start.xCoord;
-		int y = (int) start.yCoord;
-		int z = (int) start.zCoord;
+		int x = (int)start.xCoord;
+		int y = (int)start.yCoord;
+		int z = (int)start.zCoord;
 
 		int deltax, deltay, deltaz;
 		if (ax >= Math.max(ay, az)) {
@@ -197,7 +197,7 @@ public class GeometryUtils {
 			deltaz = az - (ax >> 1);
 			while (true) {
 				shapeable.setBlock(x, y, z);
-				if (x == (int) end.xCoord) { return; }
+				if (x == (int)end.xCoord) { return; }
 
 				if (deltay >= 0) {
 					y += signy;
@@ -218,7 +218,7 @@ public class GeometryUtils {
 			deltaz = az - (ay >> 1);
 			while (true) {
 				shapeable.setBlock(x, y, z);
-				if (y == (int) end.yCoord) { return; }
+				if (y == (int)end.yCoord) { return; }
 
 				if (deltax >= 0) {
 					x += signx;
@@ -239,7 +239,7 @@ public class GeometryUtils {
 			deltay = ay - (az >> 1);
 			while (true) {
 				shapeable.setBlock(x, y, z);
-				if (z == (int) end.zCoord) { return; }
+				if (z == (int)end.zCoord) { return; }
 
 				if (deltax >= 0) {
 					x += signx;

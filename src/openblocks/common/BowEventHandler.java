@@ -62,10 +62,10 @@ public class BowEventHandler {
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, bowStack) > 0;
 
 		if (flag || player.inventory.hasItem(Item.arrow.itemID)) {
-			float f = (float) j / 20.0F;
+			float f = (float)j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
-			if ((double) f < 0.1D) { return; }
+			if ((double)f < 0.1D) { return; }
 
 			if (f > 1.0F) {
 				f = 1.0F;
@@ -80,7 +80,7 @@ public class BowEventHandler {
 			int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, bowStack);
 
 			if (k > 0) {
-				entityarrow.setDamage(entityarrow.getDamage() + (double) k
+				entityarrow.setDamage(entityarrow.getDamage() + (double)k
 						* 0.5D + 0.5D);
 			}
 

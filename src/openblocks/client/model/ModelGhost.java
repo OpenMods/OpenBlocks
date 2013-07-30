@@ -44,7 +44,7 @@ public class ModelGhost extends ModelBiped {
 			this.bipedLeftArm.rotateAngleX -= Math.toRadians(scaryAngle);
 			this.bipedRightArm.rotateAngleX -= Math.toRadians(scaryAngle);
 		}
-		GL11.glTranslatef(0f, -(float) (MathHelper.cos(par4 * 0.066f)) * 0.2f, 0f);
+		GL11.glTranslatef(0f, -(float)(MathHelper.cos(par4 * 0.066f)) * 0.2f, 0f);
 
 		this.bipedBody.render(par7);
 		this.bipedHead.render(par7);
@@ -63,10 +63,10 @@ public class ModelGhost extends ModelBiped {
 		if (!(ent instanceof EntityGhost)) return;
 		this.setRotationAngles(par2, par3, par4, par5, par6, par7, ent);
 		if (ent instanceof EntityGhost) {
-			EntityGhost ghost = (EntityGhost) ent;
+			EntityGhost ghost = (EntityGhost)ent;
 			int sinceLastHeadChange = ghost.ticksSinceHeadChange();
 
-			bipedRightArm.rotateAngleY = sinceLastHeadChange < 8 ? -MathHelper.sin((float) sinceLastHeadChange * 0.4f) : 0;
+			bipedRightArm.rotateAngleY = sinceLastHeadChange < 8? -MathHelper.sin((float)sinceLastHeadChange * 0.4f) : 0;
 
 			if (ghost.hasHeadInHand() && sinceLastHeadChange > 6) {
 				bipedHead.rotationPointX = bipedRightArm.rotationPointX;
@@ -78,7 +78,7 @@ public class ModelGhost extends ModelBiped {
 				bipedHead.rotationPointZ = 0;
 			}
 		}
-		renderGhost((EntityGhost) ent, par2, par3, par4, par5, par6, par7);
+		renderGhost((EntityGhost)ent, par2, par3, par4, par5, par6, par7);
 	}
 
 	public void setRotationAngles(float par1, float par2, float par3, float headYaw, float par5, float par6, Entity ent) {
@@ -87,7 +87,7 @@ public class ModelGhost extends ModelBiped {
 		this.tailBody.rotateAngleX = /*
 									 * MathHelper.cos(par1 * 0.3662F) * 0.7F *
 									 * par2 +
-									 */(float) Math.toRadians(60);
+									 */(float)Math.toRadians(60);
 		// this.tailEnd.rotateAngleX = MathHelper.cos(par1 * 0.1662F); // * 1.4F
 		// * par2 * 0.2f;// + (float)Math.toRadians(60);
 

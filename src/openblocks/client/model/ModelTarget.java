@@ -51,7 +51,7 @@ public class ModelTarget extends ModelBase {
 	}
 
 	public void setRotationAngles(TileEntity te, float f) {
-		TileEntityTarget targetTe = (TileEntityTarget) te;
+		TileEntityTarget targetTe = (TileEntityTarget)te;
 		target.rotateAngleX = targetTe.getTargetRotation();
 	}
 

@@ -17,7 +17,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		TileEntityGuide guide = (TileEntityGuide) tileentity;
+		TileEntityGuide guide = (TileEntityGuide)tileentity;
 		int blockId = tileentity.worldObj.getBlockId(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
 		bindTextureByName("/terrain.png");
 
@@ -50,7 +50,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 	private void renderAt(double x, double y, double z) {
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
+		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
 		GL11.glPushMatrix();
 		GL11.glDisable(2896);
 

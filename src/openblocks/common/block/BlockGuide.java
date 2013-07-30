@@ -59,9 +59,9 @@ public class BlockGuide extends OpenBlock {
 
 		if (OpenBlocks.proxy.isServer()) {
 			if (player.isSneaking()) {
-				((TileEntityGuide) tileEntity).switchMode(player);
+				((TileEntityGuide)tileEntity).switchMode(player);
 			} else {
-				((TileEntityGuide) tileEntity).changeDimensions(ForgeDirection.getOrientation(side));
+				((TileEntityGuide)tileEntity).changeDimensions(ForgeDirection.getOrientation(side));
 			}
 		}
 

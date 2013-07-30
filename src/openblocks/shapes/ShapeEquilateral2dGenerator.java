@@ -19,8 +19,8 @@ public class ShapeEquilateral2dGenerator implements IShapeGenerator {
 
 		for (int i = 0; i < sides; i++) {
 			double d = 2 * Math.PI * i / sides;
-			int x = (int) Math.round(Math.cos(d) * xSize);
-			int z = (int) Math.round(Math.sin(d) * xSize);
+			int x = (int)Math.round(Math.cos(d) * xSize);
+			int z = (int)Math.round(Math.sin(d) * xSize);
 			if (i == 0) {
 				firstX = previousX = x;
 				firstZ = previousZ = z;

@@ -59,7 +59,7 @@ public class BlockGrave extends OpenBlock {
 	}
 
 	private void updateOnSoilStatus(World worldObj, int x, int y, int z) {
-		TileEntityGrave graveEnt = (TileEntityGrave) worldObj.getBlockTileEntity(x, y, z);
+		TileEntityGrave graveEnt = (TileEntityGrave)worldObj.getBlockTileEntity(x, y, z);
 		if (graveEnt != null) {
 			int id = 0;
 			Block block = Block.blocksList[(id = worldObj.getBlockId(x, y - 1, z))];
@@ -115,9 +115,9 @@ public class BlockGrave extends OpenBlock {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving living, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, living, stack);
 		updateOnSoilStatus(world, x, y, z);
-		TileEntityGrave grave = (TileEntityGrave) world.getBlockTileEntity(x, y, z);
+		TileEntityGrave grave = (TileEntityGrave)world.getBlockTileEntity(x, y, z);
 		if (living instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) living;
+			EntityPlayer player = (EntityPlayer)living;
 			grave.setUsername(player.username);
 			grave.setLoot(player.inventory);
 		}

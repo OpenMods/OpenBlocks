@@ -18,12 +18,12 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 	}
 
 	public boolean equals(Object otherValue) {
-		return Arrays.equals((int[]) this.value, (int[]) otherValue);
+		return Arrays.equals((int[])this.value, (int[])otherValue);
 	}
 
 	public int size() {
 		if (value == null) { return 0; }
-		return ((int[]) value).length;
+		return ((int[])value).length;
 	}
 
 	public boolean isEmpty() {
@@ -35,22 +35,22 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		int length = stream.readInt();
 		value = new int[length];
 		for (int i = 0; i < length; i++) {
-			((int[]) value)[i] = stream.readInt();
+			((int[])value)[i] = stream.readInt();
 		}
 	}
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		int length = ((int[]) value).length;
+		int length = ((int[])value).length;
 		stream.writeInt(length);
 		for (int i = 0; i < length; i++) {
-			stream.writeInt(((int[]) value)[i]);
+			stream.writeInt(((int[])value)[i]);
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setIntArray(name, (int[]) value);
+		tag.setIntArray(name, (int[])value);
 	}
 
 	@Override

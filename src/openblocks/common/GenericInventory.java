@@ -140,7 +140,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 		NBTTagList nbttaglist = tag.getTagList("Items");
 		inventoryContents = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound stacktag = (NBTTagCompound) nbttaglist.tagAt(i);
+			NBTTagCompound stacktag = (NBTTagCompound)nbttaglist.tagAt(i);
 			int j = stacktag.getByte("Slot") & 0xff;
 			if (j >= 0 && j < inventoryContents.length) {
 				inventoryContents[j] = ItemStack.loadItemStackFromNBT(stacktag);
@@ -166,7 +166,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 		for (int i = 0; i < inventoryContents.length; i++) {
 			if (inventoryContents[i] != null) {
 				NBTTagCompound stacktag = new NBTTagCompound();
-				stacktag.setByte("Slot", (byte) i);
+				stacktag.setByte("Slot", (byte)i);
 				inventoryContents[i].writeToNBT(stacktag);
 				nbttaglist.appendTag(stacktag);
 			}

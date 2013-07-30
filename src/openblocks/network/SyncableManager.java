@@ -34,7 +34,7 @@ public class SyncableManager {
 				if (world.blockExists(x, y, z)) {
 					TileEntity tile = world.getBlockTileEntity(x, y, z);
 					if (tile instanceof ISyncHandler) {
-						handler = (ISyncHandler) tile;
+						handler = (ISyncHandler)tile;
 					}
 				}
 			}
@@ -42,7 +42,7 @@ public class SyncableManager {
 			int entityId = dis.readInt();
 			Entity entity = world.getEntityByID(entityId);
 			if (entity != null && entity instanceof ISyncHandler) {
-				handler = (ISyncHandler) entity;
+				handler = (ISyncHandler)entity;
 			}
 		}
 		if (handler != null) {

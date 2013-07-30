@@ -60,7 +60,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 	}
 
 	public String getUsername() {
-		return perishedUsername == null ? "Unknown" : perishedUsername;
+		return perishedUsername == null? "Unknown" : perishedUsername;
 	}
 
 	public IInventory getLoot() {

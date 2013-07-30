@@ -33,7 +33,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 
 		// rotate to the correct rotation
-		TileEntityLightbox lightbox = (TileEntityLightbox) tileentity;
+		TileEntityLightbox lightbox = (TileEntityLightbox)tileentity;
 		ForgeDirection surface = lightbox.getSurface();
 		ForgeDirection rotation = lightbox.getRotation();
 		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
@@ -61,7 +61,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 				RenderHelper.disableStandardItemLighting();
 				mapdata.playersVisibleOnMap.clear();
-				RenderManager.instance.itemRenderer.mapItemRenderer.renderMap((EntityPlayer) null, RenderManager.instance.renderEngine, mapdata);
+				RenderManager.instance.itemRenderer.mapItemRenderer.renderMap((EntityPlayer)null, RenderManager.instance.renderEngine, mapdata);
 				RenderHelper.enableStandardItemLighting();
 			}
 		}

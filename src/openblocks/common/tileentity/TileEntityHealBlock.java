@@ -14,7 +14,7 @@ public class TileEntityHealBlock extends TileEntity {
 	public void updateEntity() {
 		super.updateEntity();
 		if (OpenBlocks.proxy.isClient()) return;
-		List<EntityPlayer> playersOnTop = (List<EntityPlayer>) worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
+		List<EntityPlayer> playersOnTop = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
 		if (worldObj.getTotalWorldTime() % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {

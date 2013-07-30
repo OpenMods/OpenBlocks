@@ -32,7 +32,7 @@ public class ModelGrave extends ModelBase {
 		if (!(te instanceof TileEntityGrave)) return;
 		float f5 = 0.0625F;
 		setRotationAngles(te, f);
-		if (((TileEntityGrave) te).isOnSoil()) {
+		if (((TileEntityGrave)te).isOnSoil()) {
 			stone.setRotationPoint(0F, 15.5F, 6F);
 			floor.render(f5);
 		} else {

@@ -64,9 +64,9 @@ public class ClientEventHandler {
 			mc.renderEngine.bindTexture(OpenBlocks.getTexturesPath("gui/blur.png"));
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(0.0D, (double) height, -90.0D, 0.0D, 1.0D);
-			tessellator.addVertexWithUV((double) width, (double) height, -90.0D, 1.0D, 1.0D);
-			tessellator.addVertexWithUV((double) width, 0.0D, -90.0D, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(0.0D, (double)height, -90.0D, 0.0D, 1.0D);
+			tessellator.addVertexWithUV((double)width, (double)height, -90.0D, 1.0D, 1.0D);
+			tessellator.addVertexWithUV((double)width, 0.0D, -90.0D, 1.0D, 0.0D);
 			tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
 			tessellator.draw();
 			GL11.glDepthMask(true);

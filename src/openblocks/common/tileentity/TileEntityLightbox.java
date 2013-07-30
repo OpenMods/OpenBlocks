@@ -58,11 +58,11 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 
 				ItemStack itemstack = inventory.getStackInSlot(0);
 
-				for (EntityPlayer player : (List<EntityPlayer>) worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(10, 10, 10))) {
+				for (EntityPlayer player : (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(10, 10, 10))) {
 
 					if (player instanceof EntityPlayerMP) {
 
-						EntityPlayerMP mpPlayer = (EntityPlayerMP) player;
+						EntityPlayerMP mpPlayer = (EntityPlayerMP)player;
 
 						if (itemstack != null
 								&& Item.itemsList[itemstack.itemID].isMap()
@@ -72,7 +72,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 
 							mapdata.func_82568_a(mpPlayer);
 
-							Packet packet = ((ItemMapBase) Item.itemsList[itemstack.itemID]).createMapDataPacket(itemstack, this.worldObj, mpPlayer);
+							Packet packet = ((ItemMapBase)Item.itemsList[itemstack.itemID]).createMapDataPacket(itemstack, this.worldObj, mpPlayer);
 
 							if (packet != null) {
 								mpPlayer.playerNetServerHandler.sendPacketToPlayer(packet);

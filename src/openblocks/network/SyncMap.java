@@ -78,7 +78,7 @@ public abstract class SyncMap {
 
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (OpenBlocks.proxy.isServer()) {
-			List<EntityPlayer> players = (List<EntityPlayer>) worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
+			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;
@@ -112,7 +112,7 @@ public abstract class SyncMap {
 								packetToSend = fullPacket;
 							}
 							if (packetToSend != null) {
-								((EntityPlayerMP) player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
+								((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
 							}
 						}
 						usersInRange = newUsersInRange;
