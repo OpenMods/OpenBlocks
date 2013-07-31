@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	public static final float EPSILON = 0.0001f;
-	
+
 	public SyncableFloat(float value) {
 		super(value);
 	}
@@ -18,7 +18,7 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 	public boolean equals(Object otherValue) {
 		return Math.abs((Float)otherValue - (Float)value) < EPSILON;
 	}
-	
+
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readFloat();
@@ -31,7 +31,7 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setFloat(name, (Float)value);	
+		tag.setFloat(name, (Float)value);
 	}
 
 	@Override
@@ -42,20 +42,20 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void merge(ISyncableObject o) {
 		if (o instanceof SyncableFloat) {
-			modify((Float)((SyncableFloat) o).getValue());
-			((SyncableFloat) o).setValue(0);
+			modify((Float)((SyncableFloat)o).getValue());
+			((SyncableFloat)o).setValue(0);
 		}
 	}
-	
+
 	@Override
 	public void clear() {
 		value = 0;
 	}
-	
+
 	public void modify(float by) {
 		this.setValue((Float)this.getValue() + by);
 	}

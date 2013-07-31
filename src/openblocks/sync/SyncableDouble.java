@@ -36,20 +36,20 @@ public class SyncableDouble extends SyncableObject implements ISyncableObject {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void merge(ISyncableObject o) {
 		if (o instanceof SyncableDouble) {
-			modify((Double)((SyncableDouble) o).getValue());
-			((SyncableDouble) o).setValue(0);
+			modify((Double)((SyncableDouble)o).getValue());
+			((SyncableDouble)o).setValue(0);
 		}
 	}
-	
+
 	@Override
 	public void clear() {
 		value = 0;
 	}
-	
+
 	public void modify(double by) {
 		this.setValue((Double)this.getValue() + by);
 	}

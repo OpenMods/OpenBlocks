@@ -34,17 +34,11 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		ISyncHandler {
 
 	public enum Keys {
-		tankAmount,
-		tankCapacity,
-		flags,
-		linkedTiles,
-		liquidId,
-		liquidMeta
+		tankAmount, tankCapacity, flags, linkedTiles, liquidId, liquidMeta
 	}
 
 	public enum Flags {
-		enabled,
-		isOwner
+		enabled, isOwner
 	}
 
 	public static final int CAPACITY_PER_TANK = LiquidContainerRegistry.BUCKET_VOLUME * 8;
@@ -69,7 +63,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	private SyncableInt tankLiquidMeta = new SyncableInt(0);
 	private SyncableFlags flags = new SyncableFlags();
 	private SyncableIntArray linkedTiles = new SyncableIntArray();
-	
+
 	// not streamed downstream
 	private SyncableInt ownerX = new SyncableInt(0);
 	private SyncableInt ownerY = new SyncableInt(0);
@@ -85,12 +79,12 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	}
 
 	public int[] getLinkedCoords() {
-		return (int[]) linkedTiles.getValue();
+		return (int[])linkedTiles.getValue();
 	}
 
 	public void destroyTank() {
 		if (!linkedTiles.isEmpty()) {
-			int[] coords = (int[]) linkedTiles.getValue();
+			int[] coords = (int[])linkedTiles.getValue();
 			for (int i = 0; i < coords.length; i += 3) {
 				int x = xCoord + coords[i];
 				int y = yCoord + coords[i + 1];
@@ -109,7 +103,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 			parent.markForRecheck();
 		}
 	}
-	
+
 	public void onBlockPlaced() {
 		flags.set(Flags.isOwner, true);
 		needsRecheck = true;
@@ -117,10 +111,10 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 
 	@Override
 	public void updateEntity() {
-		
+
 		if (!worldObj.isRemote) {
 			LiquidStack liquid = tank.getLiquid();
-			tankAmount.setValue(liquid == null ? 0 : liquid.amount);
+			tankAmount.setValue(liquid == null? 0 : liquid.amount);
 			if (liquid != null) {
 				tankLiquidId.setValue(liquid.itemID);
 				tankLiquidMeta.setValue(liquid.itemMeta);
@@ -129,8 +123,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 				checkTank();
 			}
 		}
-		syncMap.sync(worldObj, this, (double) xCoord, (double) yCoord,
-				(double) zCoord);
+		syncMap.sync(worldObj, this, (double)xCoord, (double)yCoord, (double)zCoord);
 
 	}
 
@@ -141,7 +134,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	public HashMap<Integer, Double> getSpread() {
 		return spread;
 	}
-	
+
 	public void setOwner(TileEntityValve parent) {
 		ownerX.setValue(parent.xCoord);
 		ownerY.setValue(parent.yCoord);
@@ -156,7 +149,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		if (!worldObj.isRemote) {
 
 			flags.on(Flags.isOwner);
-			
+
 			needsRecheck = false;
 
 			HashSet<Coord> validAreas = new HashSet<Coord>();
@@ -234,7 +227,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 								queue.add(checkCoord.clone());
 							}
 						}
-					}else if (blockId == OpenBlocks.Config.blockValveId) {
+					} else if (blockId == OpenBlocks.Config.blockValveId) {
 						if (coord.x != 0 || coord.y != 0 || coord.z != 0) {
 							otherValves.add(coord);
 						}
@@ -245,19 +238,20 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 
 			// none left in the queue, this means we've got a complete area
 			if (queue.size() == 0) {
-				
+
 				flags.on(Flags.enabled);
-				
+
 				// make all the others children to this one
 				// and copy their liquid across
 				TileEntity te = null;
 				for (Coord other : otherValves) {
-					te = worldObj.getBlockTileEntity(xCoord + other.x, yCoord + other.y, zCoord + other.z);
+					te = worldObj.getBlockTileEntity(xCoord + other.x, yCoord
+							+ other.y, zCoord + other.z);
 					if (te != null && te instanceof TileEntityValve) {
-						((TileEntityValve) te).setOwner(this);
+						((TileEntityValve)te).setOwner(this);
 					}
 				}
-				
+
 				for (Coord validCoord : validAreas) {
 					int x = xCoord + validCoord.x;
 					int y = yCoord + validCoord.y;
@@ -265,7 +259,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 					worldObj.setBlock(x, y, z, OpenBlocks.Config.blockTankId, 0, 2);
 					te = worldObj.getBlockTileEntity(x, y, z);
 					if (te != null && te instanceof TileEntityTank) {
-						TileEntityTank tankBlock = (TileEntityTank) te;
+						TileEntityTank tankBlock = (TileEntityTank)te;
 						tankBlock.setValve(this);
 					}
 				}
@@ -275,7 +269,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 			}
 
 			if (!linkedTiles.isEmpty()) {
-				int[] alreadyLinked = (int[]) linkedTiles.getValue();
+				int[] alreadyLinked = (int[])linkedTiles.getValue();
 				Coord alreadyLinkedCoord = new Coord();
 				for (int i = 0; i < alreadyLinked.length; i += 3) {
 					int x = alreadyLinked[i];
@@ -300,7 +294,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 			tank.setCapacity(capacity);
 		}
 	}
-	
+
 	private int[] coordsToIntArray(Set<Coord> coords) {
 		int[] arr = new int[coords.size() * 3];
 		int i = 0;
@@ -315,7 +309,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	public boolean isOwner() {
 		return flags.get(Flags.isOwner);
 	}
-	
+
 	public void setDirection(ForgeDirection direction) {
 		this.direction = direction;
 	}
@@ -338,15 +332,14 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		super.readFromNBT(tag);
 		tank.readFromNBT(tag);
 		tankCapacity.readFromNBT(tag, "tankCapacity");
-		tank.setCapacity((Integer) tankCapacity.getValue());
+		tank.setCapacity((Integer)tankCapacity.getValue());
 		flags.readFromNBT(tag, "flags");
 		linkedTiles.readFromNBT(tag, "linkedTiles");
 		ownerX.readFromNBT(tag, "ownerX");
 		ownerY.readFromNBT(tag, "ownerY");
 		ownerZ.readFromNBT(tag, "ownerZ");
 		if (tag.hasKey("direction")) {
-			direction = ForgeDirection.getOrientation(tag
-					.getInteger("direction"));
+			direction = ForgeDirection.getOrientation(tag.getInteger("direction"));
 		}
 	}
 
@@ -358,9 +351,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	@Override
 	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
 		ILiquidTank parentTank = getParentTank();
-		if (parentTank != null) {
-			return parentTank.fill(resource, doFill);
-		}
+		if (parentTank != null) { return parentTank.fill(resource, doFill); }
 		return 0;
 	}
 
@@ -372,9 +363,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	@Override
 	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
 		ILiquidTank parentTank = getParentTank();
-		if (parentTank != null) {
-			return parentTank.drain(maxDrain, doDrain);
-		}
+		if (parentTank != null) { return parentTank.drain(maxDrain, doDrain); }
 		return null;
 	}
 
@@ -387,7 +376,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
 		return getParentTank();
 	}
-	
+
 	public ILiquidTank getTank() {
 		return tank;
 	}
@@ -399,25 +388,18 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	public boolean isEnabled() {
 		return flags.get(Flags.enabled);
 	}
-	
+
 	private TileEntityValve getParentTile() {
 		if (!flags.get(Flags.isOwner)) {
-			TileEntity te = worldObj.getBlockTileEntity(
-					(Integer)ownerX.getValue(),
-					(Integer)ownerY.getValue(),
-					(Integer)ownerZ.getValue());
-			if (te != null && te instanceof TileEntityValve) {
-				return (TileEntityValve) te;
-			}
+			TileEntity te = worldObj.getBlockTileEntity((Integer)ownerX.getValue(), (Integer)ownerY.getValue(), (Integer)ownerZ.getValue());
+			if (te != null && te instanceof TileEntityValve) { return (TileEntityValve)te; }
 		}
 		return this;
 	}
-	
+
 	public ILiquidTank getParentTank() {
 		TileEntityValve valve = getParentTile();
-		if (valve != null) {
-			return valve.getTank();
-		}
+		if (valve != null) { return valve.getTank(); }
 		return null;
 	}
 
@@ -434,15 +416,12 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 					|| !tankLiquidMeta.equals(liquid.itemMeta)) {
 				recreateLiquid = true;
 			}
-			tank.setCapacity((Integer) tankCapacity.getValue());
+			tank.setCapacity((Integer)tankCapacity.getValue());
 			if (recreateLiquid) {
-				LiquidStack newLiquid = new LiquidStack(
-						(Integer) tankLiquidId.getValue(),
-						(Integer) tankCapacity.getValue(),
-						(Integer) tankLiquidMeta.getValue());
+				LiquidStack newLiquid = new LiquidStack((Integer)tankLiquidId.getValue(), (Integer)tankCapacity.getValue(), (Integer)tankLiquidMeta.getValue());
 				tank.setLiquid(newLiquid);
 			}
-			int[] tiles = (int[]) linkedTiles.getValue();
+			int[] tiles = (int[])linkedTiles.getValue();
 			HashMap<Integer, Integer> levelCapacity = new HashMap<Integer, Integer>();
 			for (int i = 0; i < tiles.length; i += 3) {
 				int f = 0;
@@ -454,11 +433,10 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 				levelCapacity.put(y, f);
 			}
 
-			List<Integer> sortedKeys = new ArrayList<Integer>(
-					levelCapacity.keySet());
+			List<Integer> sortedKeys = new ArrayList<Integer>(levelCapacity.keySet());
 			Collections.sort(sortedKeys);
 			spread.clear();
-			int remaining = (Integer) tankAmount.getValue();
+			int remaining = (Integer)tankAmount.getValue();
 
 			for (Integer level : sortedKeys) {
 				int tanksOnLevel = levelCapacity.get(level);
@@ -468,8 +446,7 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 					usedByLevel = Math.min(remaining, capacityForLevel);
 				}
 				remaining -= usedByLevel;
-				spread.put(level,
-						((double) usedByLevel / (double) capacityForLevel));
+				spread.put(level, ((double)usedByLevel / (double)capacityForLevel));
 			}
 		}
 	}

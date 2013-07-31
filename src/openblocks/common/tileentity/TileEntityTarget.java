@@ -18,16 +18,15 @@ import openblocks.api.ISurfaceAttachment;
 import openblocks.sync.SyncableInt;
 
 public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
-	
+
 	private ForgeDirection rotation = ForgeDirection.WEST;
 
 	private float targetRotation = 0;
 	private int strength = 0;
 	private int tickCounter = -1;
 	private boolean isPowered = false;
-	
-	public TileEntityTarget() {
-	}
+
+	public TileEntityTarget() {}
 
 	@Override
 	public void updateEntity() {

@@ -47,11 +47,11 @@ public class BlockTank extends OpenBlock {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
+
 	@Override
-    public boolean isAirBlock(World world, int x, int y, int z) {
-        return true;
-    }
+	public boolean isAirBlock(World world, int x, int y, int z) {
+		return true;
+	}
 
 	@Override
 	public int getRenderType() {

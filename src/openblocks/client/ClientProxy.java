@@ -82,10 +82,11 @@ public class ClientProxy extends CommonProxy {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public File getWorldDir(World world) {
-		return new File(OpenBlocks.getBaseDir(), "saves/" + world.getSaveHandler().getWorldDirectoryName());
+		return new File(OpenBlocks.getBaseDir(), "saves/"
+				+ world.getSaveHandler().getWorldDirectoryName());
 	}
 
 	/**

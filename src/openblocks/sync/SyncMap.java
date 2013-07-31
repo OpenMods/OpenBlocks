@@ -17,29 +17,29 @@ import net.minecraft.world.World;
 import openblocks.utils.ByteUtils;
 
 public abstract class SyncMap {
-	
+
 	private int trackingRange = 20;
-	
-	public SyncMap() {	
-	}
-	
+
+	public SyncMap() {}
+
 	public SyncMap(int trackingRange) {
 		this.trackingRange = trackingRange;
 	}
-	
+
 	public List<Integer> usersInRange = new ArrayList<Integer>();
-	
+
 	private ISyncableObject[] objects = new ISyncableObject[16];
-	
+
 	public void put(Enum id, ISyncableObject value) {
 		put(id.ordinal(), value);
 	}
-	
+
 	public void put(int id, ISyncableObject value) {
 		objects[id] = value;
 	}
-	
-	public List<ISyncableObject> readFromStream(DataInputStream dis) throws IOException {
+
+	public List<ISyncableObject> readFromStream(DataInputStream dis)
+			throws IOException {
 		short mask = dis.readShort();
 		List<ISyncableObject> changes = new ArrayList<ISyncableObject>();
 		for (int i = 0; i < 16; i++) {
@@ -51,11 +51,13 @@ public abstract class SyncMap {
 		}
 		return changes;
 	}
-	
-	public void writeToStream(DataOutputStream dos, boolean regardless) throws IOException {
+
+	public void writeToStream(DataOutputStream dos, boolean regardless)
+			throws IOException {
 		short mask = 0;
 		for (int i = 0; i < 16; i++) {
-			mask = ByteUtils.set(mask, i, objects[i] != null && (regardless || objects[i].hasChanged()));
+			mask = ByteUtils.set(mask, i, objects[i] != null
+					&& (regardless || objects[i].hasChanged()));
 		}
 		dos.writeShort(mask);
 		for (int i = 0; i < 16; i++) {
@@ -64,7 +66,7 @@ public abstract class SyncMap {
 			}
 		}
 	}
-	
+
 	public void resetChangeStatus() {
 		for (int i = 0; i < 16; i++) {
 			if (objects[i] != null) {
@@ -75,20 +77,20 @@ public abstract class SyncMap {
 
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (!worldObj.isRemote) {
-			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1, z+1).expand(trackingRange, trackingRange, trackingRange));
+			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;
-				
+
 				boolean hasChanges = false;
-				
+
 				for (ISyncableObject obj : objects) {
 					if (obj != null && obj.hasChanged()) {
 						hasChanges = true;
 						break;
 					}
 				}
-				
+
 				try {
 					List<Integer> newUsersInRange = new ArrayList<Integer>();
 					for (EntityPlayer player : players) {
@@ -102,14 +104,14 @@ public abstract class SyncMap {
 									}
 									packetToSend = changePacket;
 								}
-							}else {
+							} else {
 								if (fullPacket == null) {
 									fullPacket = createPacket(handler, true);
 								}
 								packetToSend = fullPacket;
 							}
 							if (packetToSend != null) {
-								((EntityPlayerMP) player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
+								((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
 							}
 						}
 						usersInRange = newUsersInRange;
@@ -122,7 +124,8 @@ public abstract class SyncMap {
 		resetChangeStatus();
 	}
 
-	protected Packet createPacket(ISyncHandler handler, boolean fullPacket) throws IOException {
+	protected Packet createPacket(ISyncHandler handler, boolean fullPacket)
+			throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		writeMapType(outputStream);
@@ -134,6 +137,7 @@ public abstract class SyncMap {
 		packet.length = packet.data.length;
 		return packet;
 	}
-	
-	protected abstract void writeMapType(DataOutputStream dos) throws IOException;
+
+	protected abstract void writeMapType(DataOutputStream dos)
+			throws IOException;
 }

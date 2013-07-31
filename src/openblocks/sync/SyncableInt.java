@@ -11,7 +11,7 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 	public SyncableInt(int value) {
 		super(value);
 	}
-	
+
 	public SyncableInt() {
 		this(0);
 	}
@@ -20,26 +20,26 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readInt();
 	}
-	
+
 	public void modify(int by) {
-		int current = (Integer) getValue();
+		int current = (Integer)getValue();
 		current += by;
 		setValue(current);
 	}
-	
+
 	@Override
 	public void merge(ISyncableObject o) {
 		if (o instanceof SyncableInt) {
-			modify((Integer)((SyncableInt) o).getValue());
-			((SyncableInt) o).setValue(0);
+			modify((Integer)((SyncableInt)o).getValue());
+			((SyncableInt)o).setValue(0);
 		}
 	}
-	
+
 	@Override
 	public void clear() {
 		value = 0;
 	}
-	
+
 	public boolean equals(Object otherValue) {
 		return ((Integer)value).intValue() == ((Integer)otherValue).intValue();
 	}

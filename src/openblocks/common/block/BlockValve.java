@@ -44,15 +44,14 @@ public class BlockValve extends OpenBlock {
 		}
 	}
 
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9){
-    	TileEntityValve valve = getTileEntity(world, x, y, z, TileEntityValve.class);
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
+		TileEntityValve valve = getTileEntity(world, x, y, z, TileEntityValve.class);
 		if (valve != null) {
 			valve.markForRecheck();
 		}
 		return true;
-    }
+	}
 
-	
 	@Override
 	public boolean isOpaqueCube() {
 		return false;

@@ -65,11 +65,10 @@ public class TileEntityMultiblock extends TileEntity {
 
 			TileEntity checkTile = worldObj.getBlockTileEntity(blockX, blockY, blockZ);
 
-			if (checkTile instanceof TileEntityMultiblock && isValidNeighbour(checkTile)) {
+			if (checkTile instanceof TileEntityMultiblock
+					&& isValidNeighbour(checkTile)) {
 
-				if (unlessMatches != null && unlessMatches.contains(checkTile)) {
-					return validTiles;
-				}
+				if (unlessMatches != null && unlessMatches.contains(checkTile)) { return validTiles; }
 
 				validCoords.add(coord);
 				validTiles.add(checkTile);
@@ -79,7 +78,8 @@ public class TileEntityMultiblock extends TileEntity {
 					checkCoord.setFrom(coord);
 					checkCoord.offset(checkDirection);
 
-					if (!checkedCoords.contains(checkCoord) && !coordQueue.contains(checkCoord)) {
+					if (!checkedCoords.contains(checkCoord)
+							&& !coordQueue.contains(checkCoord)) {
 						coordQueue.add(checkCoord.clone());
 					}
 				}
@@ -98,7 +98,6 @@ public class TileEntityMultiblock extends TileEntity {
 	public boolean isValidNeighbour(TileEntity tile) {
 		return tile instanceof TileEntityHealBlock && !tile.isInvalid();
 	}
-
 
 	public ISyncableObject replaceObject(ISyncableObject current, ISyncableObject newObj) {
 		if (newObj == null) {

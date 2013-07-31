@@ -12,7 +12,7 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 	public SyncableIntArray(Object value) {
 		super(value);
 	}
-	
+
 	public SyncableIntArray() {
 		super(new int[0]);
 	}
@@ -20,18 +20,16 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 	public boolean equals(Object otherValue) {
 		return Arrays.equals((int[])this.value, (int[])otherValue);
 	}
-	
+
 	public int size() {
-		if (value == null) {
-			return 0;
-		}
-		return ((int[]) value).length;
+		if (value == null) { return 0; }
+		return ((int[])value).length;
 	}
 
 	public boolean isEmpty() {
 		return size() == 0;
 	}
-	
+
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		int length = stream.readInt();
@@ -68,8 +66,8 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		value = new int[0];
 		hasChanged = true;
 	}
-	
+
 	public void merge(ISyncableObject o) {
-		
+
 	}
 }

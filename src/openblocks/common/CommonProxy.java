@@ -37,7 +37,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy implements IGuiHandler {
-	
+
 	public void init() {
 
 		if (Config.blockLadderId > -1) {
@@ -105,8 +105,9 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public File getWorldDir(World world) {
-	    return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0).getSaveHandler().getWorldDirectoryName());
+		return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0).getSaveHandler().getWorldDirectoryName());
 	}
+
 	/**
 	 * Is this the server
 	 * 

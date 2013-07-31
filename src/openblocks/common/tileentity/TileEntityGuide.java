@@ -29,16 +29,16 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 	public Mode getCurrentMode() {
 		return currentMode;
 	}
-	
+
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote){
+		if (worldObj.isRemote) {
 			if (timeSinceChange < 1.0) {
-				timeSinceChange = (float) Math.min(1.0f, timeSinceChange + 0.1);
+				timeSinceChange = (float)Math.min(1.0f, timeSinceChange + 0.1);
 			}
 		}
 	}
-	
+
 	public float getTimeSinceChange() {
 		return timeSinceChange;
 	}
@@ -84,7 +84,7 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 	public boolean[][][] getPreviousShape() {
 		return previousShape;
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		if (nbt.hasKey("width")) {

@@ -178,12 +178,12 @@ public class OpenBlocks {
 	public static String getTexturesPath(String path) {
 		return String.format("%s/%s", getTexturesPath(), path);
 	}
-	
+
 	public static File getBaseDir() {
-	    return FMLCommonHandler.instance().getMinecraftServerInstance().getFile(".");
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getFile(".");
 	}
-	
+
 	public static File getWorldDir(World world) {
-	    return proxy.getWorldDir(world);
+		return proxy.getWorldDir(world);
 	}
 }

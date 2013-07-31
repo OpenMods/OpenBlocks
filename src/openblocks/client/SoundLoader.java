@@ -16,17 +16,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class SoundLoader {
 
-	String[] soundFiles = new String[]{ "grave_ambient.ogg", "teleport.ogg", "open.ogg", "close.ogg", "ambient_grave.ogg" };
-	String[] streamingFiles = new String[]{ };
+	String[] soundFiles = new String[] { "grave_ambient.ogg", "teleport.ogg", "open.ogg", "close.ogg", "ambient_grave.ogg" };
+	String[] streamingFiles = new String[] {};
 
-	
 	@SideOnly(Side.CLIENT)
 	@ForgeSubscribe
 	public void loadingSounds(SoundLoadEvent event) {
 		loadSounds(event, event.manager.soundPoolSounds, soundFiles);
 		loadSounds(event, event.manager.soundPoolStreaming, streamingFiles);
 	}
-	
+
 	public void loadSounds(SoundLoadEvent event, SoundPool pool, String[] fileNames) {
 		Minecraft mc = Minecraft.getMinecraft();
 

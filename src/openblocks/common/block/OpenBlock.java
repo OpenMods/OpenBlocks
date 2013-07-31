@@ -136,26 +136,24 @@ public abstract class OpenBlock extends BlockContainer {
 		}
 	}
 
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null) {
-			if (IAwareTile.class.isAssignableFrom(teClass)) {
-				return ((IAwareTile)te).onBlockActivated(player, side, hitX, hitY, hitZ);
-			}
+			if (IAwareTile.class.isAssignableFrom(teClass)) { return ((IAwareTile)te).onBlockActivated(player, side, hitX, hitY, hitZ); }
 		}
 		return false;
-    }
+	}
 
-    public void onBlockAdded(World world, int x, int y, int z) {
-    	TileEntity te = world.getBlockTileEntity(x, y, z);
+	public void onBlockAdded(World world, int x, int y, int z) {
+		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null) {
 			if (IAwareTile.class.isAssignableFrom(teClass)) {
 				((IAwareTile)te).onBlockAdded();
 			}
 		}
 		super.onBlockAdded(world, x, y, z);
-    }
-	
+	}
+
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
 		setupDimensions(x - width, y, z - depth, x + width, y + height, z
 				+ depth);
@@ -191,10 +189,8 @@ public abstract class OpenBlock extends BlockContainer {
 		if (te != null && T.isAssignableFrom(te.getClass())) { return (U)te; }
 		return null;
 	}
-	
-	public void onBlockPlacedBy(World world, EntityPlayer player,
-			ItemStack stack, int x, int y, int z, ForgeDirection side,
-			float hitX, float hitY, float hitZ, int meta) {
+
+	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null) {
 			if (IAwareTile.class.isAssignableFrom(teClass)) {
