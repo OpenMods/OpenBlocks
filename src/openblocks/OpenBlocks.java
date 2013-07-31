@@ -72,7 +72,7 @@ public class OpenBlocks {
 	public static enum Gui {
 		Lightbox
 	}
-	
+
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		public ItemStack getIconItemStack() {
 			return new ItemStack(OpenBlocks.Blocks.flag, 1, 0);
@@ -85,52 +85,43 @@ public class OpenBlocks {
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {
-	
+
 		Log.init();
-		
+
 		if (Mods.areInstalled("That", "I", "Dont", "Like")) {
 			destroyTheWorld();
 		}
 
-		Configuration configFile = new Configuration(
-				evt.getSuggestedConfigurationFile());
+		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 
 		/*
 		 * getBlock makes this mod anti-block-id-collision-forge-thingy
 		 * compliant.. Don't be a redpower :P
 		 */
-		Property prop = configFile.getBlock("block", "blockLadderId",
-				Config.blockLadderId, "The id of the ladder");
+		Property prop = configFile.getBlock("block", "blockLadderId", Config.blockLadderId, "The id of the ladder");
 		Config.blockLadderId = prop.getInt();
 
-		prop = configFile.getBlock("block", "blockGuideId",
-				Config.blockGuideId, "The id of the guide");
+		prop = configFile.getBlock("block", "blockGuideId", Config.blockGuideId, "The id of the guide");
 		Config.blockGuideId = prop.getInt();
 
-		prop = configFile.getBlock("block", "blockDropId", Config.blockElevatorId,
-				"The id of the drop block");
+		prop = configFile.getBlock("block", "blockDropId", Config.blockElevatorId, "The id of the drop block");
 		Config.blockElevatorId = prop.getInt();
 
-		prop = configFile.getBlock("block", "blockHealId", Config.blockHealId,
-				"The id of the heal block");
+		prop = configFile.getBlock("block", "blockHealId", Config.blockHealId, "The id of the heal block");
 		Config.blockHealId = prop.getInt();
 
-		prop = configFile.getBlock("block", "blockLightboxId",
-				Config.blockLightboxId, "The id of the lightbox block");
+		prop = configFile.getBlock("block", "blockLightboxId", Config.blockLightboxId, "The id of the lightbox block");
 		Config.blockLightboxId = prop.getInt();
 
-		prop = configFile.getBlock("block", "blockTargetId",
-				Config.blockTargetId, "The id of the target block");
+		prop = configFile.getBlock("block", "blockTargetId", Config.blockTargetId, "The id of the target block");
 		Config.blockTargetId = prop.getInt();
-		
-		prop = configFile.getBlock("block", "blockGraveId", 
-				Config.blockGraveId, "The id of the grave block");
+
+		prop = configFile.getBlock("block", "blockGraveId", Config.blockGraveId, "The id of the grave block");
 		Config.blockGraveId = prop.getInt();
-		
-		prop = configFile.getBlock("block", "blockFlagId", 
-				Config.blockFlagId, "The id of the flag block");
+
+		prop = configFile.getBlock("block", "blockFlagId", Config.blockFlagId, "The id of the flag block");
 		Config.blockFlagId = prop.getInt();
-	
+
 		prop = configFile.get("dropblock", "searchDistance", Config.elevatorTravelDistance, "The range of the drop block");
 		Config.elevatorTravelDistance = prop.getInt();
 
@@ -139,15 +130,13 @@ public class OpenBlocks {
 
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
-		
+
 		prop = configFile.get("hacks", "hookPlayerRenderer", Config.hookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.hookPlayerRenderer = prop.getBoolean(Config.hookPlayerRenderer);
-		
-		if(Config.ghostSpawnProbability > 100)
-			Config.ghostSpawnProbability = 100;
-		else if(Config.ghostSpawnProbability < 0)
-			Config.ghostSpawnProbability = 0;
-		
+
+		if (Config.ghostSpawnProbability > 100) Config.ghostSpawnProbability = 100;
+		else if (Config.ghostSpawnProbability < 0) Config.ghostSpawnProbability = 0;
+
 		configFile.save();
 
 	}
@@ -158,7 +147,7 @@ public class OpenBlocks {
 		proxy.registerRenderInformation();
 
 	}
-	
+
 	public static void onSetBlock() {
 		System.out.println("Set block!");
 	}
@@ -173,7 +162,7 @@ public class OpenBlocks {
 			return false;
 		}
 	}
-	
+
 	public static String getResourcesPath() {
 		return "/mods/openblocks";
 	}

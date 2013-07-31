@@ -11,19 +11,14 @@ public class ItemFlagBlock extends ItemOpenBlock {
 		super(id);
 	}
 
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world,
-			int par4, int par5, int par6, int par7, float par8, float par9,
-			float par10) {
-		if (player.isSneaking()) {
-			return false;
-		}
-		return super.onItemUse(stack, player, world, par4, par5, par6, par7,
-				par8, par9, par10);
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
+		if (player.isSneaking()) { return false; }
+		return super.onItemUse(stack, player, world, par4, par5, par6, par7, par8, par9, par10);
 	}
 
-	public ItemStack onItemRightClick(ItemStack stack, World world,
-			EntityPlayer player) {
-		stack.setItemDamage((stack.getItemDamage() + 1) % BlockFlag.COLORS.length);
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		stack.setItemDamage((stack.getItemDamage() + 1)
+				% BlockFlag.COLORS.length);
 		return stack.copy();
 	}
 

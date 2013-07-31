@@ -62,7 +62,7 @@ public class BlockFlag extends OpenBlock {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return false;
@@ -81,18 +81,15 @@ public class BlockFlag extends OpenBlock {
 			return true;
 		} else {
 			int l = par1World.getBlockId(par2, par3, par4);
-			return (Block.blocksList[l] != null && Block.blocksList[l]
-					.canPlaceTorchOnTop(par1World, par2, par3, par4));
+			return (Block.blocksList[l] != null && Block.blocksList[l].canPlaceTorchOnTop(par1World, par2, par3, par4));
 		}
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, EntityPlayer player,
-			ItemStack stack, int x, int y, int z, ForgeDirection side,
-			float hitX, float hitY, float hitZ, int meta) {
-		
+	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
+
 		TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
-		
+
 		if (flag != null) {
 			float rotation = player.rotationYawHead;
 			if (side != ForgeDirection.UP) {
@@ -100,20 +97,17 @@ public class BlockFlag extends OpenBlock {
 			}
 			flag.setColorIndex(stack.getItemDamage());
 			flag.setSurfaceAndRotation(side.getOpposite(), rotation);
-			
+
 		}
 	}
 
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World,
-			int par2, int par3, int par4) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		return null;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
-			int z) {
-		TileEntityFlag flag = getTileEntity(world, x, y, z,
-				TileEntityFlag.class);
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+		TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
 		if (flag != null) {
 			ForgeDirection onSurface = flag.getSurfaceDirection();
 			if (onSurface == DOWN) {
@@ -125,7 +119,7 @@ public class BlockFlag extends OpenBlock {
 			}
 		}
 	}
-	
+
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		if (side == DOWN) {
 			int targetX = x + side.offsetX;
@@ -136,25 +130,19 @@ public class BlockFlag extends OpenBlock {
 			if (belowBlock != null) {
 				if (belowBlock == Block.fence) {
 					return true;
-				}else if (belowBlock == this) {
+				} else if (belowBlock == this) {
 					TileEntityFlag flag = getTileEntity(world, targetX, targetY, targetZ, TileEntityFlag.class);
-					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) {
-						return true;
-					}
+					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) { return true; }
 				}
 			}
 		}
 		return super.canPlaceBlockOnSide(world, x, y, z, side);
 	}
 
-
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int par6, float par7, float par8, float par9) {
-		if (player != null && player.isSneaking()) {
-			return true;
-		}
-		if (!world.isRemote) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+		if (player != null && player.isSneaking()) { return true; }
+		if (OpenBlocks.proxy.isServer()) {
 			TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
 			ForgeDirection surface = flag.getSurfaceDirection();
 			if (flag != null && surface == ForgeDirection.DOWN) {
@@ -164,8 +152,8 @@ public class BlockFlag extends OpenBlock {
 			}
 		}
 		return true;
-    }
-	
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int par1, int par2) {

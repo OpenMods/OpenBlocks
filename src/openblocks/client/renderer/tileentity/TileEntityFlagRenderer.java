@@ -14,18 +14,17 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 	ModelFlag model = new ModelFlag();
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
-		TileEntityFlag flag = (TileEntityFlag) tileentity;
-		if(flag == null) return;
+		TileEntityFlag flag = (TileEntityFlag)tileentity;
+		if (flag == null) return;
 		int meta = 0;
-		
+
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
+		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-flag.getRotation(), 0, 1, 0);
-		if(flag.getSurfaceDirection() != ForgeDirection.DOWN){
+		if (flag.getSurfaceDirection() != ForgeDirection.DOWN) {
 			GL11.glRotatef(45, 1f, 0f, 0f);
 			GL11.glTranslatef(0f, -0.2f, -0.7f);
 		}
@@ -46,16 +45,16 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 		this.bindTextureByName("/mods/openblocks/textures/models/flag.png");
 		int color = flag.getColor();
 
-		float r = (float) ((color >> 16) & 0xFF) / 255;
-		float g = (float) ((color >> 8) & 0xFF) / 255;
-		float b = (float) (color & 0xFF) / 255;
-        float par1 = 0;
-        float par2 = 0;
-        float par3 = 1f;
-        float par4 = 1f;
-        float par7 = 0.001f;
+		float r = (float)((color >> 16) & 0xFF) / 255;
+		float g = (float)((color >> 8) & 0xFF) / 255;
+		float b = (float)(color & 0xFF) / 255;
+		float par1 = 0;
+		float par2 = 0;
+		float par3 = 1f;
+		float par4 = 1f;
+		float par7 = 0.001f;
 		tessellator.startDrawingQuads();
-        tessellator.setColorRGBA_F(r, g, b, 1);
+		tessellator.setColorRGBA_F(r, g, b, 1);
 		tessellator.setNormal(0.0F, 0.0F, 1.0F);
 		tessellator.addVertexWithUV(0.0D, 0.0D, 0.0D, (double)par1, (double)par4);
 		tessellator.addVertexWithUV(1.0D, 0.0D, 0.0D, (double)par3, (double)par4);
@@ -63,7 +62,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 		tessellator.addVertexWithUV(0.0D, 1.0D, 0.0D, (double)par1, (double)par2);
 		tessellator.draw();
 		tessellator.startDrawingQuads();
-        tessellator.setColorOpaque_F(r, g, b);
+		tessellator.setColorOpaque_F(r, g, b);
 		tessellator.setNormal(0.0F, 0.0F, -1.0F);
 		tessellator.addVertexWithUV(0.0D, 1.0D, (double)(0.0F - par7), (double)par1, (double)par2);
 		tessellator.addVertexWithUV(1.0D, 1.0D, (double)(0.0F - par7), (double)par3, (double)par2);

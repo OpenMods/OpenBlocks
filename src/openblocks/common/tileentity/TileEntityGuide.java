@@ -73,8 +73,7 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 		try {
 			shape[height + y][width + x][depth + z] = true;
 		} catch (IndexOutOfBoundsException iobe) {
-			System.out.println(String.format(
-					"Index out of bounds setting block at %s,%s,%s", x, y, z));
+			System.out.println(String.format("Index out of bounds setting block at %s,%s,%s", x, y, z));
 		}
 	}
 
@@ -119,8 +118,7 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 	public void switchMode(EntityPlayer player) {
 		switchMode();
 		if (player != null) {
-			player.sendChatToPlayer(String.format("Changing to %s mode",
-					currentMode.getDisplayName()));
+			player.sendChatToPlayer(String.format("Changing to %s mode", currentMode.getDisplayName()));
 		}
 	}
 

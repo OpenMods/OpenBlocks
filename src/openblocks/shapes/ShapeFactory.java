@@ -22,7 +22,7 @@ public class ShapeFactory {
 		}
 
 		public String getDisplayName() {
-			return displayName == null ? name() : displayName;
+			return displayName == null? name() : displayName;
 		}
 
 		public boolean isFixedRatio() {
@@ -30,8 +30,8 @@ public class ShapeFactory {
 		}
 	}
 
-	private static Map<Mode, IShapeGenerator> _shapeMap;// = new Map<Mode,
-														// IShapeGenerator>
+	private static Map<Mode, IShapeGenerator> _shapeMap; // = new Map<Mode,
+															// IShapeGenerator>
 
 	static {
 		_shapeMap = new HashMap<ShapeFactory.Mode, IShapeGenerator>();
@@ -45,12 +45,9 @@ public class ShapeFactory {
 		_shapeMap.put(Mode.Octagon, new ShapeEquilateral2dGenerator(8));
 	}
 
-	public static void generateShape(int xSize, int ySize, int zSize,
-			IShapeable shapeable, Mode mode) {
-		if (!_shapeMap.containsKey(mode))
-			return; // Unavailable shape
-		System.out.println(String.format("%s,%s,%s : %s", xSize, ySize, zSize,
-				mode.toString()));
+	public static void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable, Mode mode) {
+		if (!_shapeMap.containsKey(mode)) return; // Unavailable shape
+		System.out.println(String.format("%s,%s,%s : %s", xSize, ySize, zSize, mode.toString()));
 		_shapeMap.get(mode).generateShape(xSize, ySize, zSize, shapeable);
 	}
 }

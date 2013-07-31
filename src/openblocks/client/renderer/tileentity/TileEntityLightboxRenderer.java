@@ -23,57 +23,48 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 	RenderBlocks renderBlocks = new RenderBlocks();
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		bindTextureByName("/terrain.png");
-		
-		GL11.glPushMatrix();
-		
-			// move to the middle of the block
-			GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-		
-			// rotate to the correct rotation
-			TileEntityLightbox lightbox = (TileEntityLightbox) tileentity;
-			ForgeDirection surface = lightbox.getSurface();
-			ForgeDirection rotation = lightbox.getRotation();
-			if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
-				GL11.glRotatef(
-						BlockUtils.getRotationFromDirection(surface.getOpposite()),
-						1, 0, 0);
-				GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation
-						.getOpposite()), 0, 0, 1);
-			} else {
-				GL11.glRotatef(
-						BlockUtils.getRotationFromDirection(surface.getOpposite()),
-						0, 1, 0);
-			}
-			int meta =  0;
-			if (lightbox.worldObj != null) {
-				meta = lightbox.worldObj.getBlockMetadata(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
-			}
-			
-			// render a cube
-			OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5, OpenBlocks.Blocks.lightbox, null);
-	
-			// render the map
-			ItemStack mapStack = lightbox.getStackInSlot(0);
-			if (mapStack != null) {
-				MapData mapdata = Item.map
-						.getMapData(mapStack, tileentity.worldObj);
-				if (mapdata != null) {
-					GL11.glTranslatef(0.5f, 0.5F, 0.299f);
-					GL11.glScaled(1.0/128, 1.0/128, 1.0/128);
-					GL11.glRotatef(180, 0, 0, 1);
 
-					RenderHelper.disableStandardItemLighting();
-					mapdata.playersVisibleOnMap.clear();
-					RenderManager.instance.itemRenderer.mapItemRenderer.renderMap(
-							(EntityPlayer) null,
-							RenderManager.instance.renderEngine, mapdata);
-					RenderHelper.enableStandardItemLighting();
-				}
+		GL11.glPushMatrix();
+
+		// move to the middle of the block
+		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
+
+		// rotate to the correct rotation
+		TileEntityLightbox lightbox = (TileEntityLightbox)tileentity;
+		ForgeDirection surface = lightbox.getSurface();
+		ForgeDirection rotation = lightbox.getRotation();
+		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
+			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 1, 0, 0);
+			GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation.getOpposite()), 0, 0, 1);
+		} else {
+			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 0, 1, 0);
+		}
+		int meta = 0;
+		if (lightbox.worldObj != null) {
+			meta = lightbox.worldObj.getBlockMetadata(tileentity.xCoord, tileentity.yCoord, tileentity.zCoord);
+		}
+
+		// render a cube
+		OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5, OpenBlocks.Blocks.lightbox, null);
+
+		// render the map
+		ItemStack mapStack = lightbox.getStackInSlot(0);
+		if (mapStack != null) {
+			MapData mapdata = Item.map.getMapData(mapStack, tileentity.worldObj);
+			if (mapdata != null) {
+				GL11.glTranslatef(0.5f, 0.5F, 0.299f);
+				GL11.glScaled(1.0 / 128, 1.0 / 128, 1.0 / 128);
+				GL11.glRotatef(180, 0, 0, 1);
+
+				RenderHelper.disableStandardItemLighting();
+				mapdata.playersVisibleOnMap.clear();
+				RenderManager.instance.itemRenderer.mapItemRenderer.renderMap((EntityPlayer)null, RenderManager.instance.renderEngine, mapdata);
+				RenderHelper.enableStandardItemLighting();
 			}
+		}
 
 		GL11.glPopMatrix();
 	}

@@ -48,31 +48,25 @@ public class ClientProxy extends CommonProxy {
 		OpenBlocks.renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new BlockRenderingHandler());
 
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class,
-				new TileEntityGuideRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLightbox.class,
-				new TileEntityLightboxRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class,
-				new TileEntityTargetRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class,
-				new TileEntityGraveRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class,
-				new TileEntityFlagRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValve.class,
-				new TileEntityValveRenderer());
-		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLightbox.class, new TileEntityLightboxRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValve.class, new TileEntityValveRenderer());
+
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
-		
+
 		attachPlayerRenderer();
-		
+
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 	}
-	
-	private void attachPlayerRenderer(){
-		if(Config.hookPlayerRenderer){
+
+	private void attachPlayerRenderer() {
+		if (Config.hookPlayerRenderer) {
 			// Get current renderer and check that it's Mojangs
 			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
-			if(render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)){
+			if (render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)) {
 				EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
 				playerRenderer.setRenderManager(RenderManager.instance);
 				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
@@ -81,14 +75,10 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if ((world instanceof WorldClient)) {
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
-			if (ID == Gui.Lightbox.ordinal()) {
-				return new GuiLightbox(new ContainerLightbox(player.inventory,
-						(TileEntityLightbox) tile));
-			}
+			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
 		}
 		return null;
 	}
@@ -96,5 +86,24 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public File getWorldDir(World world) {
 		return new File(OpenBlocks.getBaseDir(), "saves/" + world.getSaveHandler().getWorldDirectoryName());
+	}
+
+	/**
+	 * Is this the server
+	 * 
+	 * @return true if this is the server
+	 */
+	public boolean isServer() {
+		return false; // Why have this method? If the checking method changes in
+						// the future we fix it in one place.
+	}
+
+	/**
+	 * Is this the client
+	 * 
+	 * @return true if this is the client
+	 */
+	public boolean isClient() {
+		return true;
 	}
 }

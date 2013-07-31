@@ -7,7 +7,6 @@ import openblocks.common.tileentity.TileEntityGrave;
 
 public class ModelGrave extends ModelBase {
 
-	
 	ModelRenderer stone;
 	ModelRenderer floor;
 
@@ -30,13 +29,13 @@ public class ModelGrave extends ModelBase {
 	}
 
 	public void render(TileEntity te, float f) {
-		if(!(te instanceof TileEntityGrave)) return;
+		if (!(te instanceof TileEntityGrave)) return;
 		float f5 = 0.0625F;
 		setRotationAngles(te, f);
-		if(((TileEntityGrave)te).isOnSoil()) {
+		if (((TileEntityGrave)te).isOnSoil()) {
 			stone.setRotationPoint(0F, 15.5F, 6F);
 			floor.render(f5);
-		}else {
+		} else {
 			stone.setRotationPoint(0F, 16.5F, 6F);
 		}
 		stone.render(f5);
@@ -48,7 +47,6 @@ public class ModelGrave extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(TileEntity te, float f) {
-	}
+	public void setRotationAngles(TileEntity te, float f) {}
 
 }

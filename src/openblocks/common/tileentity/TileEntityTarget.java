@@ -35,8 +35,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord,
-					OpenBlocks.Config.blockTargetId);
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTargetId);
 		}
 	}
 
@@ -50,7 +49,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 	}
 
 	public float getTargetRotation() {
-		return isPowered ? 0 : -(float) (Math.PI / 2);
+		return isPowered? 0 : -(float)(Math.PI / 2);
 	}
 
 	public int getStrength() {
@@ -60,27 +59,16 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 	public void setStrength(int strength) {
 		this.strength = strength;
 		tickCounter = 10;
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord,
-				OpenBlocks.Config.blockTargetId);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTargetId);
 	}
 
 	private void onRedstoneChanged() {
 		if (!isPowered) {
-			List<EntityArrow> arrows = (List<EntityArrow>) worldObj
-					.getEntitiesWithinAABB(
-							EntityArrow.class,
-							AxisAlignedBB.getAABBPool().getAABB(
-									(double) xCoord - 0.1,
-									(double) yCoord - 0.1,
-									(double) zCoord - 0.1,
-									(double) xCoord + 1.1,
-									(double) yCoord + 1.1,
-									(double) zCoord + 1.1));
+			List<EntityArrow> arrows = (List<EntityArrow>)worldObj.getEntitiesWithinAABB(EntityArrow.class, AxisAlignedBB.getAABBPool().getAABB((double)xCoord - 0.1, (double)yCoord - 0.1, (double)zCoord - 0.1, (double)xCoord + 1.1, (double)yCoord + 1.1, (double)zCoord + 1.1));
 
 			if (arrows.size() > 0) {
 				ItemStack newStack = new ItemStack(Item.arrow, arrows.size(), 0);
-				EntityItem item = new EntityItem(worldObj, xCoord + 0.5,
-						yCoord + 0.5, zCoord + 0.5, newStack);
+				EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, newStack);
 				worldObj.spawnEntityInWorld(item);
 			}
 			for (EntityArrow arrow : arrows) {
@@ -88,8 +76,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 			}
 
 		}
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5,
-				isPowered ? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
+		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
 
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
@@ -116,8 +103,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		if (tag.hasKey("rotation")) {
-			rotation = ForgeDirection
-					.getOrientation(tag.getInteger("rotation"));
+			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
 		}
 		if (tag.hasKey("powered")) {
 			isPowered = tag.getBoolean("powered");
@@ -132,8 +118,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 	}
 
 	public void neighbourBlockChanged() {
-		boolean nowPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord,
-				yCoord, zCoord);
+		boolean nowPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (isPowered != nowPowered) {
 			isPowered = nowPowered;
 			onRedstoneChanged();

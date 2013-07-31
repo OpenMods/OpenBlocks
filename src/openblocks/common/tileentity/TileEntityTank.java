@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import openblocks.OpenBlocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -9,22 +10,18 @@ public class TileEntityTank extends TileEntity {
 	private int valveX;
 	private int valveY;
 	private int valveZ;
-	
+
 	public void setValve(TileEntityValve valve) {
 		this.valve = valve;
 	}
-	
+
 	@Override
 	public void updateEntity() {
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 			if (valve == null) {
-				TileEntity te = worldObj.getBlockTileEntity(
-						valveX,
-						valveY,
-						valveZ
-				);
+				TileEntity te = worldObj.getBlockTileEntity(valveX, valveY, valveZ);
 				if (te != null && te instanceof TileEntityValve) {
-					valve = (TileEntityValve) te;
+					valve = (TileEntityValve)te;
 				}
 				if (valve == null) {
 					worldObj.setBlock(xCoord, yCoord, zCoord, 0, 0, 2);
@@ -40,7 +37,7 @@ public class TileEntityTank extends TileEntity {
 		}
 		this.valve.markForRecheck();
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
@@ -50,11 +47,12 @@ public class TileEntityTank extends TileEntity {
 			tag.setInteger("valvez", valve.zCoord);
 		}
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		if (tag.hasKey("valvex") && tag.hasKey("valvey") && tag.hasKey("valvez")) {
+		if (tag.hasKey("valvex") && tag.hasKey("valvey")
+				&& tag.hasKey("valvez")) {
 			valveX = tag.getInteger("valvex");
 			valveY = tag.getInteger("valvey");
 			valveZ = tag.getInteger("valvez");

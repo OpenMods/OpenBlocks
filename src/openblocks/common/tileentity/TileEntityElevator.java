@@ -31,10 +31,9 @@ public class TileEntityElevator extends TileEntity {
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (!worldObj.isRemote) {
+		if (OpenBlocks.proxy.isServer()) {
 
-			Iterator<Entry<String, Integer>> cooldownIter = cooldown.entrySet()
-					.iterator();
+			Iterator<Entry<String, Integer>> cooldownIter = cooldown.entrySet().iterator();
 			while (cooldownIter.hasNext()) {
 				Entry<String, Integer> entry = cooldownIter.next();
 				int less = entry.getValue() - 1;
@@ -44,11 +43,7 @@ public class TileEntityElevator extends TileEntity {
 				}
 			}
 
-			List<EntityPlayer> playersInRange = (List<EntityPlayer>) worldObj
-					.getEntitiesWithinAABB(
-							EntityPlayer.class,
-							AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord,
-									zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
+			List<EntityPlayer> playersInRange = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
 
 			if (playersInRange.size() > 0) {
 
@@ -74,8 +69,7 @@ public class TileEntityElevator extends TileEntity {
 					 */
 
 					if (player.capabilities.isCreativeMode
-							&& player.capabilities.isFlying)
-						continue;
+							&& player.capabilities.isFlying) continue;
 					if (lowerLevel != 0
 							&& player.isSneaking()
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
@@ -89,15 +83,11 @@ public class TileEntityElevator extends TileEntity {
 						teleportTo = upperLevel;
 					}
 					if (doTeleport) {
-						player.setPositionAndUpdate(player.posX,
-								teleportTo + 1.1, player.posZ);
-						worldObj.playSoundAtEntity(player,
-								"openblocks.teleport", 1F, 1F);
-						TileEntity targetTile = worldObj.getBlockTileEntity(
-								xCoord, teleportTo, zCoord);
+						player.setPositionAndUpdate(player.posX, teleportTo + 1.1, player.posZ);
+						worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
+						TileEntity targetTile = worldObj.getBlockTileEntity(xCoord, teleportTo, zCoord);
 						if (targetTile instanceof TileEntityElevator) {
-							((TileEntityElevator) targetTile)
-									.addPlayerCooldown(player);
+							((TileEntityElevator)targetTile).addPlayerCooldown(player);
 						}
 					}
 
@@ -115,9 +105,7 @@ public class TileEntityElevator extends TileEntity {
 	}
 
 	private int findLevel(ForgeDirection direction) throws Exception {
-		if (direction != ForgeDirection.UP && direction != ForgeDirection.DOWN) {
-			throw new Exception("Must be either up or down... for now");
-		}
+		if (direction != ForgeDirection.UP && direction != ForgeDirection.DOWN) { throw new Exception("Must be either up or down... for now"); }
 
 		int blocksInTheWay = 0;
 		for (int y = 2; y < Config.elevatorTravelDistance; y++) {
@@ -125,24 +113,18 @@ public class TileEntityElevator extends TileEntity {
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
 				if (blockId == OpenBlocks.Config.blockElevatorId) {
-					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord,
-							yPos, zCoord);
+					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord, yPos, zCoord);
 					// Check that it is a drop block and that it has the same
 					// color index.
-					if (!(otherBlock instanceof TileEntityElevator))
-						continue;
-					if (((TileEntityElevator) otherBlock).getBlockMetadata() != this
-							.getBlockMetadata())
-						continue;
+					if (!(otherBlock instanceof TileEntityElevator)) continue;
+					if (((TileEntityElevator)otherBlock).getBlockMetadata() != this.getBlockMetadata()) continue;
 
 					if (worldObj.isAirBlock(xCoord, yPos + 1, zCoord)
-							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) {
-						return yPos;
-					}
+							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) { return yPos; }
 					return 0;
 				} else if (blockId != 0) {
 					if (blocksInTheWay++ > 3) {
-						System.out.println("blocksInTheWay = "+ blocksInTheWay);
+						System.out.println("blocksInTheWay = " + blocksInTheWay);
 						return 0;
 					}
 				}
@@ -162,7 +144,7 @@ public class TileEntityElevator extends TileEntity {
 				// temp hack, dont tell anyone.
 				if (dmg == 15) {
 					dmg = 0;
-				}else if (dmg == 0) {
+				} else if (dmg == 0) {
 					dmg = 15;
 				}
 				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, dmg, 3);

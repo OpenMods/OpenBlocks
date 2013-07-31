@@ -38,8 +38,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID,
-			RenderBlocks renderer) {
+	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 
 		TileEntity te = null;
 		if (block == OpenBlocks.Blocks.lightbox) {
@@ -58,15 +57,14 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		if (te != null) {
 			GL11.glTranslated(-0.5, -0.5, -0.5);
 			TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
-		}else {
+		} else {
 			OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, block, null);
 		}
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-			Block block, int modelId, RenderBlocks renderer) {
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		return false;
 	}
 
