@@ -12,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -19,6 +20,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.api.IAwareTile;
 import openblocks.api.ISurfaceAttachment;
 import openblocks.common.item.ItemOpenBlock;
 import openblocks.utils.BlockUtils;
@@ -59,12 +61,15 @@ public abstract class OpenBlock extends BlockContainer {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		BlockUtils.dropTileInventory(tile);
-		super.breakBlock(world, x, y, z, par5, par6);
-	}
-
-	public void breakBlockDontDrop(World world, int x, int y, int z, int par5, int par6) {
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te != null) {
+			if (IInventory.class.isAssignableFrom(teClass)) {
+				BlockUtils.dropTileInventory(te);
+			}
+			if (IAwareTile.class.isAssignableFrom(teClass)) {
+				((IAwareTile)te).onBlockBroken();
+			}
+		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
@@ -117,6 +122,11 @@ public abstract class OpenBlock extends BlockContainer {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te != null) {
+			if (IAwareTile.class.isAssignableFrom(teClass)) {
+				((IAwareTile)te).onNeighbourChanged(blockId);
+			}
+		}
 		if (te != null && te instanceof ISurfaceAttachment) {
 			ForgeDirection direction = ((ISurfaceAttachment) te).getSurfaceDirection();
 			if (!canPlaceBlockOnSide(world, x, y, z, direction)) {
@@ -125,6 +135,26 @@ public abstract class OpenBlock extends BlockContainer {
 			}
 		}
 	}
+	
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te != null) {
+			if (IAwareTile.class.isAssignableFrom(teClass)) {
+				return ((IAwareTile)te).onBlockActivated(player, side, hitX, hitY, hitZ);
+			}
+		}
+		return false;
+    }
+
+    public void onBlockAdded(World world, int x, int y, int z) {
+    	TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te != null) {
+			if (IAwareTile.class.isAssignableFrom(teClass)) {
+				((IAwareTile)te).onBlockAdded();
+			}
+		}
+		super.onBlockAdded(world, x, y, z);
+    }
 	
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
 		setupDimensions(x - width, y, z - depth, x + width, y + height, z + depth);
@@ -168,6 +198,11 @@ public abstract class OpenBlock extends BlockContainer {
 	public void onBlockPlacedBy(World world, EntityPlayer player,
 			ItemStack stack, int x, int y, int z, ForgeDirection side,
 			float hitX, float hitY, float hitZ, int meta) {
-		
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if (te != null) {
+			if (IAwareTile.class.isAssignableFrom(teClass)) {
+				((IAwareTile)te).onBlockPlacedBy(player, side, hitX, hitY, hitZ);
+			}
+		}
 	}
 }

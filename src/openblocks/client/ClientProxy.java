@@ -1,5 +1,7 @@
 package openblocks.client;
 
+import java.io.File;
+
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -89,5 +91,10 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public File getWorldDir(World world) {
+		return new File(OpenBlocks.getBaseDir(), "saves/" + world.getSaveHandler().getWorldDirectoryName());
 	}
 }

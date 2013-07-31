@@ -23,7 +23,7 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
 			double z, float f) {
 		TileEntityValve valve = (TileEntityValve) tileentity;
-		renderValve(x, y, z);
+		renderValve(valve, x, y, z);
 		if (valve != null && valve.worldObj != null) {
 			int[] coords = valve.getLinkedCoords();
 			HashMap<Integer, Double> spread = valve.getSpread();
@@ -44,7 +44,7 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 	}
 
 
-	private void renderValve(double x, double y, double z) {
+	private void renderValve(TileEntityValve valve, double x, double y, double z) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
 		GL11.glPushMatrix();
@@ -53,7 +53,13 @@ public class TileEntityValveRenderer extends TileEntitySpecialRenderer {
 		Tessellator t = Tessellator.instance;
 		renderBlocks.setRenderBounds(0.0D, 0, 0.0D, 1.0, 1.0, 1.0);
 		t.startDrawingQuads();
-		t.setColorRGBA(0, 0, 0, 255);
+		if (!valve.isEnabled()) {
+			t.setColorRGBA(255, 0, 0, 255);
+		}else if (valve.isOwner()) {
+			t.setColorRGBA(255, 255, 255, 255);
+		}else if (valve.isEnabled()) {
+			t.setColorRGBA(0, 0, 0, 255);
+		}
 		t.setBrightness(200);
 		this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
 		Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);

@@ -1,8 +1,12 @@
 package openblocks;
 
+import java.io.File;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;
 import openblocks.common.block.BlockElevator;
@@ -16,7 +20,8 @@ import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockValve;
 import openblocks.network.PacketHandler;
-import openblocks.network.SyncableManager;
+import openblocks.sync.SyncableManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
@@ -184,5 +189,12 @@ public class OpenBlocks {
 	public static String getTexturesPath(String path) {
 		return String.format("%s/%s", getTexturesPath(), path);
 	}
-
+	
+	public static File getBaseDir() {
+	    return FMLCommonHandler.instance().getMinecraftServerInstance().getFile(".");
+	}
+	
+	public static File getWorldDir(World world) {
+	    return proxy.getWorldDir(world);
+	}
 }

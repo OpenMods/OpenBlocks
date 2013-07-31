@@ -34,19 +34,28 @@ public class BlockValve extends OpenBlock {
 		if (te != null && te instanceof TileEntityValve) {
 			TileEntityValve valve = (TileEntityValve) te;
 			valve.setDirection(BlockUtils.get3dOrientation(player));
-			valve.markForRecheck();
+			valve.onBlockPlaced();
 		}
 	}
 	
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		super.onNeighborBlockChange(world, x, y, z, blockId);
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null && te instanceof TileEntityValve) {
-			((TileEntityValve) te).markForRecheck();
+		TileEntityValve valve = getTileEntity(world, x, y, z, TileEntityValve.class);
+		if (valve != null) {
+			valve.markForRecheck();
 		}
 	}
 
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9){
+    	TileEntityValve valve = getTileEntity(world, x, y, z, TileEntityValve.class);
+		if (valve != null) {
+			valve.markForRecheck();
+		}
+		return true;
+    }
+
+	
 	@Override
 	public boolean isOpaqueCube() {
 		return false;

@@ -1,11 +1,14 @@
 package openblocks.common;
 
+import java.io.File;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.Log;
@@ -33,7 +36,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy implements IGuiHandler {
-
+	
 	public void init() {
 		
 		if (Config.blockLadderId > -1) {
@@ -79,7 +82,6 @@ public class CommonProxy implements IGuiHandler {
 
 		MinecraftForge.EVENT_BUS.register(new BowEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
-		
 
 		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
 	
@@ -111,4 +113,7 @@ public class CommonProxy implements IGuiHandler {
 		return null;
 	}
 
+	public File getWorldDir(World world) {
+	    return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0).getSaveHandler().getWorldDirectoryName());
+	}
 }

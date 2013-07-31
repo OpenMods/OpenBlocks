@@ -20,12 +20,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import openblocks.common.GenericInventory;
-import openblocks.network.ISyncHandler;
-import openblocks.network.ISyncableObject;
-import openblocks.network.SyncMap;
-import openblocks.network.SyncMapEntity;
-import openblocks.network.SyncableFlags;
-import openblocks.network.SyncableFloat;
+import openblocks.sync.ISyncHandler;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncMap;
+import openblocks.sync.SyncMapEntity;
+import openblocks.sync.SyncableFlags;
+import openblocks.sync.SyncableFloat;
 import openblocks.utils.BlockUtils;
 
 import com.google.common.io.ByteArrayDataInput;

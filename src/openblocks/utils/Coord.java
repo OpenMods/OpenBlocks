@@ -1,5 +1,7 @@
 package openblocks.utils;
 
+import net.minecraftforge.common.ForgeDirection;
+
 public class Coord {
 	public int x;
 	public int y;
@@ -9,12 +11,24 @@ public class Coord {
 		
 	}
 	
+	public Coord(ForgeDirection direction) {
+		x = direction.offsetX;
+		y = direction.offsetY;
+		z = direction.offsetZ;
+	}
+	
 	public Coord(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	public void offset(ForgeDirection direction) {
+		x += direction.offsetX;
+		y += direction.offsetY;
+		z += direction.offsetZ;
+	}
+	
 	public void set(int x, int y, int z) {
 		this.x = x;
 		this.y = x;
@@ -31,7 +45,10 @@ public class Coord {
 		if (!(that instanceof Coord)) {
 			return false;
 		}
-		return ((Coord) that).hashCode() == hashCode();
+		Coord otherCoord = (Coord) that;
+		return otherCoord.x == x &&
+				otherCoord.y == y &&
+				otherCoord.z == z;
 	}
 	
 	@Override

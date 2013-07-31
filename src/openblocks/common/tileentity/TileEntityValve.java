@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,27 +21,33 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
-import openblocks.network.ISyncableObject;
-import openblocks.network.ISyncHandler;
-import openblocks.network.SyncMap;
-import openblocks.network.SyncMapTile;
-import openblocks.network.SyncableFlags;
-import openblocks.network.SyncableInt;
-import openblocks.network.SyncableIntArray;
+import openblocks.sync.ISyncHandler;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncMap;
+import openblocks.sync.SyncMapTile;
+import openblocks.sync.SyncableFlags;
+import openblocks.sync.SyncableInt;
+import openblocks.sync.SyncableIntArray;
 import openblocks.utils.Coord;
 
 public class TileEntityValve extends TileEntity implements ITankContainer,
 		ISyncHandler {
 
-	public static enum Keys {
-		tankAmount, tankCapacity, flags, linkedTiles, liquidId, liquidMeta
+	public enum Keys {
+		tankAmount,
+		tankCapacity,
+		flags,
+		linkedTiles,
+		liquidId,
+		liquidMeta
 	}
 
 	public enum Flags {
-		enabled
+		enabled,
+		isOwner
 	}
 
-	public static final int CAPACITY_PER_TANK = LiquidContainerRegistry.BUCKET_VOLUME * 16;
+	public static final int CAPACITY_PER_TANK = LiquidContainerRegistry.BUCKET_VOLUME * 8;
 
 	private ForgeDirection direction = ForgeDirection.EAST;
 
@@ -55,12 +62,18 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 
 	private SyncMapTile syncMap = new SyncMapTile();
 
+	// synced with the client
 	private SyncableInt tankAmount = new SyncableInt(0);
 	private SyncableInt tankCapacity = new SyncableInt(0);
 	private SyncableInt tankLiquidId = new SyncableInt(0);
 	private SyncableInt tankLiquidMeta = new SyncableInt(0);
 	private SyncableFlags flags = new SyncableFlags();
 	private SyncableIntArray linkedTiles = new SyncableIntArray();
+	
+	// not streamed downstream
+	private SyncableInt ownerX = new SyncableInt(0);
+	private SyncableInt ownerY = new SyncableInt(0);
+	private SyncableInt ownerZ = new SyncableInt(0);
 
 	public TileEntityValve() {
 		syncMap.put(Keys.tankAmount, tankAmount);
@@ -91,11 +104,20 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		tankCapacity.setValue(0);
 		tankAmount.setValue(0);
 		linkedTiles.clear();
+		TileEntityValve parent = getParentTile();
+		if (parent != null) {
+			parent.markForRecheck();
+		}
+	}
+	
+	public void onBlockPlaced() {
+		flags.set(Flags.isOwner, true);
+		needsRecheck = true;
 	}
 
 	@Override
 	public void updateEntity() {
-
+		
 		if (!worldObj.isRemote) {
 			LiquidStack liquid = tank.getLiquid();
 			tankAmount.setValue(liquid == null ? 0 : liquid.amount);
@@ -119,21 +141,33 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 	public HashMap<Integer, Double> getSpread() {
 		return spread;
 	}
+	
+	public void setOwner(TileEntityValve parent) {
+		ownerX.setValue(parent.xCoord);
+		ownerY.setValue(parent.yCoord);
+		ownerZ.setValue(parent.zCoord);
+		int filledBy = parent.fill(ForgeDirection.UNKNOWN, getTank().getLiquid(), true);
+		tank.drain(filledBy, true);
+		flags.set(Flags.isOwner, false);
+		flags.set(Flags.enabled, false);
+	}
 
 	public void checkTank() {
 		if (!worldObj.isRemote) {
 
+			flags.on(Flags.isOwner);
+			
 			needsRecheck = false;
 
 			HashSet<Coord> validAreas = new HashSet<Coord>();
 			HashSet<Coord> checkedAreas = new HashSet<Coord>();
+			HashSet<Coord> otherValves = new HashSet<Coord>();
 
 			Queue<Coord> queue = new LinkedList<Coord>();
 
 			// add the coordinate in the direction the valve is facing. that's
 			// out starting block
-			Coord pos = new Coord(direction.offsetX, direction.offsetY,
-					direction.offsetZ);
+			Coord pos = new Coord(direction.offsetX, direction.offsetY, direction.offsetZ);
 			queue.add(pos);
 
 			Coord coord;
@@ -183,7 +217,8 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 							}
 
 							checkCoord.offset(-1, 0, -1); // -1, 0, 0
-							if (!checkedAreas.contains(checkCoord)) {
+							if (!checkedAreas.contains(checkCoord)
+									&& !queue.contains(checkCoord)) {
 								queue.add(checkCoord.clone());
 							}
 
@@ -199,19 +234,36 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 								queue.add(checkCoord.clone());
 							}
 						}
+					}else if (blockId == OpenBlocks.Config.blockValveId) {
+						if (coord.x != 0 || coord.y != 0 || coord.z != 0) {
+							otherValves.add(coord);
+						}
 					}
 				}
 				checkedAreas.add(coord);
 			}
+
+			// none left in the queue, this means we've got a complete area
 			if (queue.size() == 0) {
+				
 				flags.on(Flags.enabled);
+				
+				// make all the others children to this one
+				// and copy their liquid across
+				TileEntity te = null;
+				for (Coord other : otherValves) {
+					te = worldObj.getBlockTileEntity(xCoord + other.x, yCoord + other.y, zCoord + other.z);
+					if (te != null && te instanceof TileEntityValve) {
+						((TileEntityValve) te).setOwner(this);
+					}
+				}
+				
 				for (Coord validCoord : validAreas) {
 					int x = xCoord + validCoord.x;
 					int y = yCoord + validCoord.y;
 					int z = zCoord + validCoord.z;
-					worldObj.setBlock(x, y, z, OpenBlocks.Config.blockTankId,
-							0, 2);
-					TileEntity te = worldObj.getBlockTileEntity(x, y, z);
+					worldObj.setBlock(x, y, z, OpenBlocks.Config.blockTankId, 0, 2);
+					te = worldObj.getBlockTileEntity(x, y, z);
 					if (te != null && te instanceof TileEntityTank) {
 						TileEntityTank tankBlock = (TileEntityTank) te;
 						tankBlock.setValve(this);
@@ -241,20 +293,29 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 				}
 			}
 
-			int[] newLinkedTiles = new int[validAreas.size() * 3];
-			int i = 0;
-			for (Coord validCoord : validAreas) {
-				newLinkedTiles[i++] = validCoord.x;
-				newLinkedTiles[i++] = validCoord.y;
-				newLinkedTiles[i++] = validCoord.z;
-			}
+			int[] newLinkedTiles = coordsToIntArray(validAreas);
 			linkedTiles.setValue(newLinkedTiles);
 			int capacity = newLinkedTiles.length * (CAPACITY_PER_TANK);
 			tankCapacity.setValue(capacity);
 			tank.setCapacity(capacity);
 		}
 	}
+	
+	private int[] coordsToIntArray(Set<Coord> coords) {
+		int[] arr = new int[coords.size() * 3];
+		int i = 0;
+		for (Coord coord : coords) {
+			arr[i++] = coord.x;
+			arr[i++] = coord.y;
+			arr[i++] = coord.z;
+		}
+		return arr;
+	}
 
+	public boolean isOwner() {
+		return flags.get(Flags.isOwner);
+	}
+	
 	public void setDirection(ForgeDirection direction) {
 		this.direction = direction;
 	}
@@ -266,6 +327,9 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		tankCapacity.writeToNBT(tag, "tankCapacity");
 		linkedTiles.writeToNBT(tag, "linkedTiles");
 		flags.writeToNBT(tag, "flags");
+		ownerX.writeToNBT(tag, "ownerX");
+		ownerY.writeToNBT(tag, "ownerY");
+		ownerZ.writeToNBT(tag, "ownerZ");
 		tag.setInteger("direction", direction.ordinal());
 	}
 
@@ -277,6 +341,9 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		tank.setCapacity((Integer) tankCapacity.getValue());
 		flags.readFromNBT(tag, "flags");
 		linkedTiles.readFromNBT(tag, "linkedTiles");
+		ownerX.readFromNBT(tag, "ownerX");
+		ownerY.readFromNBT(tag, "ownerY");
+		ownerZ.readFromNBT(tag, "ownerZ");
 		if (tag.hasKey("direction")) {
 			direction = ForgeDirection.getOrientation(tag
 					.getInteger("direction"));
@@ -285,49 +352,73 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		if (!flags.get(Flags.enabled))
-			return 0;
 		return fill(0, resource, doFill);
 	}
 
 	@Override
 	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		if (!flags.get(Flags.enabled))
-			return 0;
-		int filled = tank.fill(resource, doFill);
-		return filled;
+		ILiquidTank parentTank = getParentTank();
+		if (parentTank != null) {
+			return parentTank.fill(resource, doFill);
+		}
+		return 0;
 	}
 
 	@Override
 	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		if (!flags.get(Flags.enabled))
-			return null;
 		return drain(0, maxDrain, doDrain);
 	}
 
 	@Override
 	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		if (!flags.get(Flags.enabled))
-			return null;
-		return tank.drain(maxDrain, doDrain);
+		ILiquidTank parentTank = getParentTank();
+		if (parentTank != null) {
+			return parentTank.drain(maxDrain, doDrain);
+		}
+		return null;
 	}
 
 	@Override
 	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		return new ILiquidTank[] { tank };
+		return new ILiquidTank[] { getParentTank() };
 	}
 
 	@Override
 	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
+		return getParentTank();
+	}
+	
+	public ILiquidTank getTank() {
 		return tank;
 	}
 
 	public LiquidStack getLiquid() {
-		return tank.getLiquid();
+		return getTank().getLiquid();
 	}
 
 	public boolean isEnabled() {
 		return flags.get(Flags.enabled);
+	}
+	
+	private TileEntityValve getParentTile() {
+		if (!flags.get(Flags.isOwner)) {
+			TileEntity te = worldObj.getBlockTileEntity(
+					(Integer)ownerX.getValue(),
+					(Integer)ownerY.getValue(),
+					(Integer)ownerZ.getValue());
+			if (te != null && te instanceof TileEntityValve) {
+				return (TileEntityValve) te;
+			}
+		}
+		return this;
+	}
+	
+	public ILiquidTank getParentTank() {
+		TileEntityValve valve = getParentTile();
+		if (valve != null) {
+			return valve.getTank();
+		}
+		return null;
 	}
 
 	@Override
@@ -335,7 +426,6 @@ public class TileEntityValve extends TileEntity implements ITankContainer,
 		if (worldObj.isRemote) {
 			if (!flags.get(Flags.enabled)) {
 				spread.clear();
-				System.out.println(linkedTiles.size());
 				return;
 			}
 			LiquidStack liquid = tank.getLiquid();
