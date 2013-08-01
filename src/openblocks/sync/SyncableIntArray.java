@@ -51,15 +51,15 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setIntArray(name, (int[])value);
+		super.writeToNBT(tag, name);
 	}
 
 	@Override
-	public boolean readFromNBT(NBTTagCompound tag, String name) {
+	public void readFromNBT(NBTTagCompound tag, String name) {
 		if (tag.hasKey(name)) {
 			value = tag.getIntArray(name);
-			return true;
 		}
-		return false;
+		super.readFromNBT(tag, name);
 	}
 
 	public void clear() {

@@ -29,5 +29,8 @@ public interface ISyncableObject {
 
 	public void writeToNBT(NBTTagCompound tag, String name);
 
-	public boolean readFromNBT(NBTTagCompound tag, String name);
+	public void readFromNBT(NBTTagCompound tag, String name);
+	
+	public long getUUID();
+
 }

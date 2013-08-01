@@ -95,8 +95,7 @@ public class ClientProxy extends CommonProxy {
 	 * @return true if this is the server
 	 */
 	public boolean isServer() {
-		return false; // Why have this method? If the checking method changes in
-						// the future we fix it in one place.
+		return false;
 	}
 
 	/**

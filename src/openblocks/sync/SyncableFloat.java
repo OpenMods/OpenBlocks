@@ -31,16 +31,18 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setFloat(name, (Float)value);
+		if (tiles.size() > 1) {
+			tag.setFloat(name, (Float)value / tiles.size());
+		}else {
+			tag.setFloat(name, (Float)value);
+		}
+		super.writeToNBT(tag, name);
 	}
 
 	@Override
-	public boolean readFromNBT(NBTTagCompound tag, String name) {
-		if (tag.hasKey(name)) {
-			value = tag.getFloat(name);
-			return true;
-		}
-		return false;
+	public void readFromNBT(NBTTagCompound tag, String name) {
+		value = tag.getFloat(name);
+		super.readFromNBT(tag, name);
 	}
 
 	@Override

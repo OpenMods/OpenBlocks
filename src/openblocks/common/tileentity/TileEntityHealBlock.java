@@ -10,6 +10,7 @@ import java.util.Queue;
 import openblocks.OpenBlocks;
 import openblocks.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableDouble;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.Coord;
 
@@ -22,16 +23,17 @@ import net.minecraftforge.common.ForgeDirection;
 public class TileEntityHealBlock extends TileEntityMultiblock implements
 		IAwareTile {
 
-	SyncableInt myTestObject = null;
+	SyncableDouble myTestObject = null;
 
 	public TileEntityHealBlock() {}
 
-	public void setTestObject(SyncableInt newObject) {
-		myTestObject = (SyncableInt)replaceObject(myTestObject, newObject);
+	public void setTestObject(SyncableDouble newObject) {
+		myTestObject = (SyncableDouble)replaceObject(myTestObject, newObject);
 	}
 
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
 
 		if (worldObj.isRemote) return;
 
@@ -49,10 +51,8 @@ public class TileEntityHealBlock extends TileEntityMultiblock implements
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		myTestObject = new SyncableInt(0);
-		if (!myTestObject.readFromNBT(nbt, "test")) {
-			myTestObject = null;
-		}
+		myTestObject = new SyncableDouble(0.0d);
+		myTestObject.readFromNBT(nbt, "test");
 	}
 
 	@Override
@@ -64,17 +64,19 @@ public class TileEntityHealBlock extends TileEntityMultiblock implements
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {}
+	public void onNeighbourChanged(int blockId) {
+
+	}
 
 	public void onBlockBroken() {
 		if (!worldObj.isRemote) {
 			if (myTestObject != null) {
 
 				invalidate();
-
+				
 				Collection<HashSet<TileEntity>> branches = findBranches();
 
-				int currentValue = (Integer)myTestObject.getValue();
+				Double currentValue = (Double)myTestObject.getValue();
 
 				int totalTiles = 0;
 				for (HashSet<TileEntity> branch : branches) {
@@ -87,7 +89,7 @@ public class TileEntityHealBlock extends TileEntityMultiblock implements
 				myTestObject.clear();
 
 				for (HashSet<TileEntity> branch : branches) {
-					SyncableInt splitValue = new SyncableInt((int)(valuePerBlock * (double)branch.size()));
+					SyncableDouble splitValue = new SyncableDouble((valuePerBlock * (double)branch.size()));
 					for (TileEntity tile : branch) {
 						((TileEntityHealBlock)tile).setTestObject(splitValue);
 					}
@@ -107,6 +109,7 @@ public class TileEntityHealBlock extends TileEntityMultiblock implements
 		if (!worldObj.isRemote) {
 			if (myTestObject != null) {
 				myTestObject.modify(1);
+				System.out.println(myTestObject.getValue());
 			}
 		}
 		return true;
@@ -115,10 +118,15 @@ public class TileEntityHealBlock extends TileEntityMultiblock implements
 	@Override
 	public void onBlockAdded() {
 		if (!worldObj.isRemote) {
-			SyncableInt val = new SyncableInt();
+			SyncableDouble val = new SyncableDouble();
 			for (TileEntity tile : floodFill(null, null)) {
 				((TileEntityHealBlock)tile).setTestObject(val);
 			}
 		}
+	}
+	
+	@Override
+	public void initialize() {
+		onBlockAdded();
 	}
 }

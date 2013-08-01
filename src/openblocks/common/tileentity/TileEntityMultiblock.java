@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.Coord;
@@ -14,6 +13,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityMultiblock extends TileEntity {
+	
+	private boolean initialized = false;
+	
+	@Override
+	public void updateEntity() {
+		if (!initialized) {
+			initialize();
+			initialized = true;
+		}
+	}
 
 	public Collection<HashSet<TileEntity>> findBranches() {
 
@@ -115,5 +124,9 @@ public class TileEntityMultiblock extends TileEntity {
 			current.registerTile(this);
 		}
 		return current;
+	}
+
+	public void initialize() {
+		System.out.println("initialize " + worldObj.isRemote);
 	}
 }

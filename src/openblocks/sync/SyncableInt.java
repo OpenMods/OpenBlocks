@@ -3,6 +3,7 @@ package openblocks.sync;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -51,15 +52,20 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setInteger(name, (Integer)value);
+		if (tiles.size() > 1) {
+			double valPerTile = ((double)(int)(Integer)value) / (double)this.tiles.size();
+			tag.setInteger(name, (int)valPerTile);
+		}else {
+			tag.setInteger(name, (Integer)value);
+		}
+		super.writeToNBT(tag, name);
 	}
 
 	@Override
-	public boolean readFromNBT(NBTTagCompound tag, String name) {
+	public void readFromNBT(NBTTagCompound tag, String name) {
 		if (tag.hasKey(name)) {
 			value = tag.getInteger(name);
-			return true;
 		}
-		return false;
+		super.readFromNBT(tag, name);
 	}
 }

@@ -9,8 +9,12 @@ import net.minecraft.tileentity.TileEntity;
 
 public class SyncableDouble extends SyncableObject implements ISyncableObject {
 
-	public SyncableDouble(Object value) {
+	public SyncableDouble(Double value) {
 		super(value);
+	}
+	
+	public SyncableDouble() {
+		this(0.0d);
 	}
 
 	@Override
@@ -25,29 +29,33 @@ public class SyncableDouble extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setDouble(name, (Double)value);
+		if (tiles.size() > 1) {
+			tag.setDouble(name, (Double)value / tiles.size());
+		}else {
+			tag.setDouble(name, (Double)value);
+		}
+		super.writeToNBT(tag, name);
 	}
 
 	@Override
-	public boolean readFromNBT(NBTTagCompound tag, String name) {
+	public void readFromNBT(NBTTagCompound tag, String name) {
 		if (tag.hasKey(name)) {
 			value = tag.getDouble(name);
-			return true;
 		}
-		return false;
+		super.readFromNBT(tag, name);
 	}
 
 	@Override
 	public void merge(ISyncableObject o) {
 		if (o instanceof SyncableDouble) {
 			modify((Double)((SyncableDouble)o).getValue());
-			((SyncableDouble)o).setValue(0);
+			((SyncableDouble)o).setValue(0.0);
 		}
 	}
 
 	@Override
 	public void clear() {
-		value = 0;
+		value = 0.0d;
 	}
 
 	public void modify(double by) {

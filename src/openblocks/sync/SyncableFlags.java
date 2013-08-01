@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Random;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
@@ -20,15 +21,17 @@ public class SyncableFlags implements ISyncableObject {
 	protected int[] ticksSinceSet = new int[16];
 	protected int[] ticksSinceUnset = new int[16];
 	protected int ticksSinceChanged = 0;
-	private UUID id = null;
+	private long uid = new Random().nextLong();
 	public WeakHashMap<TileEntity, Void> tiles;
-
+	
+	
 	public SyncableFlags() {
 
 	}
-
-	public void setOwner(TileEntity o) {
-		tiles = new WeakHashMap<TileEntity, Void>();
+	
+	@Override
+	public long getUUID() {
+		return uid;
 	}
 
 	public void on(Enum slot) {
@@ -138,15 +141,17 @@ public class SyncableFlags implements ISyncableObject {
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setShort(name, value);
+		tag.setLong(name+"_id", uid);
 	}
 
 	@Override
-	public boolean readFromNBT(NBTTagCompound tag, String name) {
+	public void readFromNBT(NBTTagCompound tag, String name) {
 		if (tag.hasKey(name)) {
 			value = tag.getShort(name);
-			return true;
 		}
-		return false;
+		if (tag.hasKey(name+"_id")) {
+			uid = tag.getLong(name+"_id");
+		}
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package openblocks.sync;
 
 import java.lang.ref.WeakReference;
+import java.util.Random;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class SyncableObject implements ISyncableObject {
@@ -12,12 +14,17 @@ public abstract class SyncableObject implements ISyncableObject {
 	protected boolean hasChanged = false;
 	private int ticksSinceChanged = 0;
 	public WeakHashMap<TileEntity, Void> tiles;
+	public long uid = new Random().nextLong();
 
 	public SyncableObject(Object value) {
 		this.value = value;
 		tiles = new WeakHashMap<TileEntity, Void>();
 	}
 
+	public long getUUID() {
+		return uid;
+	}
+	
 	public void clear() {
 		value = null;
 	}
@@ -65,4 +72,15 @@ public abstract class SyncableObject implements ISyncableObject {
 		tiles.remove(tile);
 	}
 
+	@Override
+	public void writeToNBT(NBTTagCompound tag, String name) {
+		tag.setLong(name+"_id", uid);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag, String name) {
+		if (tag.hasKey(name + "_id")) {
+			uid = tag.getLong(name + "_id");
+		}
+	}
 }
