@@ -17,21 +17,12 @@ public class SyncableFlags implements ISyncableObject {
 	private short value;
 	private short previousValue;
 	private boolean hasChanged = false;
-
 	protected int[] ticksSinceSet = new int[16];
 	protected int[] ticksSinceUnset = new int[16];
 	protected int ticksSinceChanged = 0;
-	private long uid = new Random().nextLong();
-	public WeakHashMap<TileEntity, Void> tiles;
-	
 	
 	public SyncableFlags() {
 
-	}
-	
-	@Override
-	public long getUUID() {
-		return uid;
 	}
 
 	public void on(Enum slot) {
@@ -141,7 +132,6 @@ public class SyncableFlags implements ISyncableObject {
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setShort(name, value);
-		tag.setLong(name+"_id", uid);
 	}
 
 	@Override
@@ -149,30 +139,5 @@ public class SyncableFlags implements ISyncableObject {
 		if (tag.hasKey(name)) {
 			value = tag.getShort(name);
 		}
-		if (tag.hasKey(name+"_id")) {
-			uid = tag.getLong(name+"_id");
-		}
 	}
-
-	@Override
-	public void registerTile(TileEntity tile) {
-		tiles.put(tile, null);
-	}
-
-	@Override
-	public void unregisterTile(TileEntity tile) {
-		tiles.remove(tile);
-	}
-
-	@Override
-	public void clear() {
-		value = 0;
-	}
-
-	@Override
-	public void merge(ISyncableObject o) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

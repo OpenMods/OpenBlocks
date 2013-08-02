@@ -5,16 +5,30 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
-public class SyncableDouble extends SyncableObject implements ISyncableObject {
+public class SyncableDouble implements ISyncableObject {
 
-	public SyncableDouble(Double value) {
-		super(value);
+	private double value;
+	private boolean hasChanged = false;
+	private int ticksSinceChanged = 0;
+	
+	public SyncableDouble(double value) {
+		this.value = value;
 	}
 	
 	public SyncableDouble() {
-		this(0.0d);
+		this(0.0f);
+	}
+	
+	public void setValue(double newValue) {
+		if (newValue != value) {
+			value = newValue;
+			setHasChanged();
+		}
+	}
+	
+	public double getValue() {
+		return value;
 	}
 
 	@Override
@@ -24,17 +38,12 @@ public class SyncableDouble extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		stream.writeDouble((Double)value);
+		stream.writeDouble(value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		if (tiles.size() > 1) {
-			tag.setDouble(name, (Double)value / tiles.size());
-		}else {
-			tag.setDouble(name, (Double)value);
-		}
-		super.writeToNBT(tag, name);
+		tag.setDouble(name, value);
 	}
 
 	@Override
@@ -42,23 +51,26 @@ public class SyncableDouble extends SyncableObject implements ISyncableObject {
 		if (tag.hasKey(name)) {
 			value = tag.getDouble(name);
 		}
-		super.readFromNBT(tag, name);
+	}
+
+	public void modify(float by) {
+		setValue(value + by);
 	}
 
 	@Override
-	public void merge(ISyncableObject o) {
-		if (o instanceof SyncableDouble) {
-			modify((Double)((SyncableDouble)o).getValue());
-			((SyncableDouble)o).setValue(0.0);
-		}
+	public boolean hasChanged() {
+		return hasChanged;
 	}
 
 	@Override
-	public void clear() {
-		value = 0.0d;
+	public void resetChangeStatus() {
+		hasChanged = false;
+		ticksSinceChanged++;
 	}
 
-	public void modify(double by) {
-		this.setValue((Double)this.getValue() + by);
+	@Override
+	public void setHasChanged() {
+		hasChanged = true;
+		ticksSinceChanged = 0;
 	}
 }

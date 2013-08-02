@@ -7,23 +7,30 @@ import java.util.Arrays;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableIntArray extends SyncableObject implements ISyncableObject {
+public class SyncableIntArray implements ISyncableObject {
 
-	public SyncableIntArray(Object value) {
-		super(value);
+	private int[] value;
+	private boolean hasChanged = false;
+	private int ticksSinceChanged = 0;
+	
+	public SyncableIntArray(int[] value) {
+		this.value = value;
 	}
 
 	public SyncableIntArray() {
-		super(new int[0]);
+		this(new int[0]);
 	}
-
-	public boolean equals(Object otherValue) {
-		return Arrays.equals((int[])this.value, (int[])otherValue);
+	
+	public void setValue(int[] newValue) {
+		if (!Arrays.equals(value, newValue)) {
+			value = newValue;
+			setHasChanged();
+		}
 	}
 
 	public int size() {
 		if (value == null) { return 0; }
-		return ((int[])value).length;
+		return value.length;
 	}
 
 	public boolean isEmpty() {
@@ -35,23 +42,21 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		int length = stream.readInt();
 		value = new int[length];
 		for (int i = 0; i < length; i++) {
-			((int[])value)[i] = stream.readInt();
+			value[i] = stream.readInt();
 		}
 	}
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		int length = ((int[])value).length;
-		stream.writeInt(length);
-		for (int i = 0; i < length; i++) {
-			stream.writeInt(((int[])value)[i]);
+		stream.writeInt(size());
+		for (int i = 0; i < size(); i++) {
+			stream.writeInt(value[i]);
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setIntArray(name, (int[])value);
-		super.writeToNBT(tag, name);
+		tag.setIntArray(name, value);
 	}
 
 	@Override
@@ -59,7 +64,6 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		if (tag.hasKey(name)) {
 			value = tag.getIntArray(name);
 		}
-		super.readFromNBT(tag, name);
 	}
 
 	public void clear() {
@@ -67,7 +71,20 @@ public class SyncableIntArray extends SyncableObject implements ISyncableObject 
 		hasChanged = true;
 	}
 
-	public void merge(ISyncableObject o) {
+	@Override
+	public boolean hasChanged() {
+		return hasChanged;
+	}
 
+	@Override
+	public void resetChangeStatus() {
+		hasChanged = false;
+		ticksSinceChanged++;
+	}
+
+	@Override
+	public void setHasChanged() {
+		hasChanged = true;
+		ticksSinceChanged = 0;
 	}
 }

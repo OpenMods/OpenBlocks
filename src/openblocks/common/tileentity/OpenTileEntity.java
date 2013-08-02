@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 
 public abstract class OpenTileEntity extends TileEntity {
 
@@ -40,5 +41,20 @@ public abstract class OpenTileEntity extends TileEntity {
 	@Override
 	public void onChunkUnload() {
 		isActive = false;
+	}
+	
+	public TileEntity getTileInDirection(ForgeDirection direction) {
+		int x = xCoord + direction.offsetX;
+		int y = yCoord + direction.offsetY;
+		int z = zCoord + direction.offsetZ;
+		if (worldObj != null && worldObj.blockExists(x, y, z)) {
+			return worldObj.getBlockTileEntity(x, y, z);
+		}
+		return null;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s,%s,%s", xCoord, yCoord, zCoord);
 	}
 }

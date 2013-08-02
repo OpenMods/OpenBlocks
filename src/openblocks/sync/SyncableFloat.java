@@ -6,17 +6,34 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableFloat extends SyncableObject implements ISyncableObject {
+public class SyncableFloat implements ISyncableObject {
 
 	public static final float EPSILON = 0.0001f;
-
+	private float value;
+	private boolean hasChanged = false;
+	private int ticksSinceChanged = 0;
+	
 	public SyncableFloat(float value) {
-		super(value);
+		this.value = value;
+	}
+	
+	public SyncableFloat() {
+		this(0.0f);
+	}
+	
+	public void setValue(float newValue) {
+		if (!equals(newValue)) {
+			value = newValue;
+			setHasChanged();
+		}
+	}
+	
+	public float getValue() {
+		return value;
 	}
 
-	@Override
-	public boolean equals(Object otherValue) {
-		return Math.abs((Float)otherValue - (Float)value) < EPSILON;
+	public boolean equals(float otherValue) {
+		return Math.abs(otherValue - value) < EPSILON;
 	}
 
 	@Override
@@ -26,39 +43,39 @@ public class SyncableFloat extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToStream(DataOutputStream stream) throws IOException {
-		stream.writeFloat((Float)value);
+		stream.writeFloat(value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		if (tiles.size() > 1) {
-			tag.setFloat(name, (Float)value / tiles.size());
-		}else {
-			tag.setFloat(name, (Float)value);
-		}
-		super.writeToNBT(tag, name);
+		tag.setFloat(name, value);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		value = tag.getFloat(name);
-		super.readFromNBT(tag, name);
-	}
-
-	@Override
-	public void merge(ISyncableObject o) {
-		if (o instanceof SyncableFloat) {
-			modify((Float)((SyncableFloat)o).getValue());
-			((SyncableFloat)o).setValue(0);
+		if (tag.hasKey(name)) {
+			value = tag.getFloat(name);
 		}
 	}
 
-	@Override
-	public void clear() {
-		value = 0;
+	public void modify(float by) {
+		setValue(value + by);
 	}
 
-	public void modify(float by) {
-		this.setValue((Float)this.getValue() + by);
+	@Override
+	public boolean hasChanged() {
+		return hasChanged;
+	}
+
+	@Override
+	public void resetChangeStatus() {
+		hasChanged = false;
+		ticksSinceChanged++;
+	}
+
+	@Override
+	public void setHasChanged() {
+		hasChanged = true;
+		ticksSinceChanged = 0;
 	}
 }

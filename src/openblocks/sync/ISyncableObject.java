@@ -15,15 +15,6 @@ public interface ISyncableObject {
 
 	public void setHasChanged();
 
-
-	public void merge(ISyncableObject o);
-
-	public void clear();
-	
-	public void registerTile(TileEntity tile);
-	
-	public void unregisterTile(TileEntity tile);
-
 	public void readFromStream(DataInputStream stream) throws IOException;
 
 	public void writeToStream(DataOutputStream stream) throws IOException;
@@ -31,7 +22,5 @@ public interface ISyncableObject {
 	public void writeToNBT(NBTTagCompound tag, String name);
 
 	public void readFromNBT(NBTTagCompound tag, String name);
-	
-	public long getUUID();
 
 }

@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
-public class SyncableInt extends SyncableObject implements ISyncableObject {
+public class SyncableInt implements ISyncableObject {
 
+	private int value = 0;
+	private boolean hasChanged = false;
+	private int ticksSinceChanged = 0;
+	
 	public SyncableInt(int value) {
-		super(value);
+		this.value = value;
 	}
 
 	public SyncableInt() {
@@ -23,26 +28,18 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 	}
 
 	public void modify(int by) {
-		int current = (Integer)getValue();
-		current += by;
-		setValue(current);
+		setValue(value + by);
 	}
 
-	@Override
-	public void merge(ISyncableObject o) {
-		if (o instanceof SyncableInt) {
-			modify((Integer)((SyncableInt)o).getValue());
-			((SyncableInt)o).setValue(0);
+	public void setValue(int val) {
+		if (val != value) {
+			value = val;
+			setHasChanged();
 		}
 	}
-
-	@Override
-	public void clear() {
-		value = 0;
-	}
-
-	public boolean equals(Object otherValue) {
-		return ((Integer)value).intValue() == ((Integer)otherValue).intValue();
+	
+	public int getValue() {
+		return value;
 	}
 
 	@Override
@@ -52,13 +49,7 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		if (tiles.size() > 1) {
-			double valPerTile = ((double)(int)(Integer)value) / (double)this.tiles.size();
-			tag.setInteger(name, (int)valPerTile);
-		}else {
-			tag.setInteger(name, (Integer)value);
-		}
-		super.writeToNBT(tag, name);
+		tag.setInteger(name, value);
 	}
 
 	@Override
@@ -66,6 +57,20 @@ public class SyncableInt extends SyncableObject implements ISyncableObject {
 		if (tag.hasKey(name)) {
 			value = tag.getInteger(name);
 		}
-		super.readFromNBT(tag, name);
+	}
+
+	public boolean hasChanged() {
+		return hasChanged;
+	}
+
+	public void resetChangeStatus() {
+		hasChanged = false;
+		ticksSinceChanged++;
+	}
+
+	@Override
+	public void setHasChanged() {
+		hasChanged = true;
+		ticksSinceChanged = 0;
 	}
 }

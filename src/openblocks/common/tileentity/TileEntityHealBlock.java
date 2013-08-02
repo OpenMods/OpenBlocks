@@ -20,8 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityHealBlock extends TileEntityMultiblock implements
-		IAwareTile {
+public class TileEntityHealBlock extends OpenTileEntity {
 	
 	int value = 0;
 	
@@ -42,43 +41,10 @@ public class TileEntityHealBlock extends TileEntityMultiblock implements
 		}
 	}
 
-	public TileEntityHealBlock getHealBlockOwner() {
-		return (TileEntityHealBlock) getOwner();
-	}
-	
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) { 
-			getHealBlockOwner().value += 1;
-			System.out.println("Owner value = "+getHealBlockOwner().value);
-			System.out.println("My value = "+value);
-			System.out.println("My children is "+children.size());
-		}
-		return true;
-	}
-	
-	@Override
-	public void transferDataTo(TileEntityMultiblock ... tiles) {
-		int remainder = value % tiles.length;
-		int perTile = (int)Math.floor((double) value / tiles.length);
-		for (TileEntityMultiblock tile : tiles) {
-			((TileEntityHealBlock)tile).value += perTile + remainder;
-			remainder = 0;
-		}
-		value = 0;
-	}
-	
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		tag.setInteger("value", value);
+	protected void initialize() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		if (tag.hasKey("value")) {
-			value = tag.getInteger("value");
-		}
-	}
 }
