@@ -22,15 +22,9 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityHealBlock extends TileEntityMultiblock implements
 		IAwareTile {
-
-	SyncableDouble myTestObject = null;
-
-	public TileEntityHealBlock() {}
-
-	public void setTestObject(SyncableDouble newObject) {
-		myTestObject = (SyncableDouble)replaceObject(myTestObject, newObject);
-	}
-
+	
+	int value = 0;
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -48,85 +42,43 @@ public class TileEntityHealBlock extends TileEntityMultiblock implements
 		}
 	}
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		myTestObject = new SyncableDouble(0.0d);
-		myTestObject.readFromNBT(nbt, "test");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		if (myTestObject != null) {
-			myTestObject.writeToNBT(nbt, "test");
-		}
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {
-
-	}
-
-	public void onBlockBroken() {
-		if (!worldObj.isRemote) {
-			if (myTestObject != null) {
-
-				invalidate();
-				
-				Collection<HashSet<TileEntity>> branches = findBranches();
-
-				Double currentValue = (Double)myTestObject.getValue();
-
-				int totalTiles = 0;
-				for (HashSet<TileEntity> branch : branches) {
-					totalTiles += branch.size();
-				}
-
-				double valuePerBlock = (double)currentValue
-						/ (double)totalTiles;
-
-				myTestObject.clear();
-
-				for (HashSet<TileEntity> branch : branches) {
-					SyncableDouble splitValue = new SyncableDouble((valuePerBlock * (double)branch.size()));
-					for (TileEntity tile : branch) {
-						((TileEntityHealBlock)tile).setTestObject(splitValue);
-					}
-				}
-
-				myTestObject.unregisterTile(this);
-				myTestObject = null;
-			}
-		}
-	}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, float hitX, float hitY, float hitZ) {}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) {
-			if (myTestObject != null) {
-				myTestObject.modify(1);
-				System.out.println(myTestObject.getValue());
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public void onBlockAdded() {
-		if (!worldObj.isRemote) {
-			SyncableDouble val = new SyncableDouble();
-			for (TileEntity tile : floodFill(null, null)) {
-				((TileEntityHealBlock)tile).setTestObject(val);
-			}
-		}
+	public TileEntityHealBlock getHealBlockOwner() {
+		return (TileEntityHealBlock) getOwner();
 	}
 	
 	@Override
-	public void initialize() {
-		onBlockAdded();
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (!worldObj.isRemote) { 
+			getHealBlockOwner().value += 1;
+			System.out.println("Owner value = "+getHealBlockOwner().value);
+			System.out.println("My value = "+value);
+			System.out.println("My children is "+children.size());
+		}
+		return true;
+	}
+	
+	@Override
+	public void transferDataTo(TileEntityMultiblock ... tiles) {
+		int remainder = value % tiles.length;
+		int perTile = (int)Math.floor((double) value / tiles.length);
+		for (TileEntityMultiblock tile : tiles) {
+			((TileEntityHealBlock)tile).value += perTile + remainder;
+			remainder = 0;
+		}
+		value = 0;
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		tag.setInteger("value", value);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		if (tag.hasKey("value")) {
+			value = tag.getInteger("value");
+		}
 	}
 }

@@ -15,12 +15,13 @@ public interface ISyncableObject {
 
 	public void setHasChanged();
 
-	public void registerTile(TileEntity tile);
 
 	public void merge(ISyncableObject o);
 
 	public void clear();
-
+	
+	public void registerTile(TileEntity tile);
+	
 	public void unregisterTile(TileEntity tile);
 
 	public void readFromStream(DataInputStream stream) throws IOException;

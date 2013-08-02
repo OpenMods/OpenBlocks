@@ -12,7 +12,6 @@ import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntityTarget;
-import openblocks.common.tileentity.TileEntityValve;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -26,7 +25,6 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntityTarget teTarget = new TileEntityTarget();
 	private TileEntityGrave teGrave = new TileEntityGrave();
 	private TileEntityFlag teFlag = new TileEntityFlag();
-	private TileEntityValve teValve = new TileEntityValve();
 
 	public BlockRenderingHandler() {
 		teTarget.setPowered(true);
@@ -50,8 +48,6 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		} else if (block == OpenBlocks.Blocks.flag) {
 			te = teFlag;
 			teFlag.setColorIndex(metadata);
-		} else if (block == OpenBlocks.Blocks.valve) {
-			te = teValve;
 		}
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 		if (te != null) {

@@ -24,7 +24,6 @@ import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
-import openblocks.common.block.BlockValve;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.recipe.TorchBowRecipe;
@@ -70,9 +69,6 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (Config.blockTankId > -1) {
 			OpenBlocks.Blocks.tank = new BlockTank();
-		}
-		if (Config.blockValveId > -1) {
-			OpenBlocks.Blocks.valve = new BlockValve();
 		}
 
 		GameRegistry.addRecipe(new TorchBowRecipe());

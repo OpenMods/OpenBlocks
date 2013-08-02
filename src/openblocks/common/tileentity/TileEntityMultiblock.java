@@ -1,38 +1,124 @@
 package openblocks.common.tileentity;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.WeakHashMap;
+
+import openblocks.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.Coord;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityMultiblock extends TileEntity {
+public abstract class TileEntityMultiblock extends OpenTileEntity implements IAwareTile {
 	
-	private boolean initialized = false;
-	
+	private WeakReference<TileEntityMultiblock> owner;
+	protected WeakHashMap<TileEntityMultiblock, Void> children = new WeakHashMap<TileEntityMultiblock, Void>();
+	protected boolean isOwner = false;
+
 	@Override
-	public void updateEntity() {
-		if (!initialized) {
-			initialize();
-			initialized = true;
+	public void initialize() {
+		if (!worldObj.isRemote) { 
+			if (getOwner() == null) {
+				isOwner = true;
+				children.clear();
+				ArrayList<TileEntityMultiblock> children = floodFill();
+				for (TileEntityMultiblock tile : children) {
+					tile.setOwner(this);
+				}
+			}
 		}
 	}
 
-	public Collection<HashSet<TileEntity>> findBranches() {
+	public TileEntityMultiblock getOwner() {
+		if (owner != null) {
+			TileEntityMultiblock ownertile = owner.get();
+			if (ownertile != null && !ownertile.isInvalid() && ownertile.isActive()) {
+				return ownertile;
+			}
+		}
+		return null;
+	}
 
-		HashMap<ForgeDirection, HashSet<TileEntity>> branches = new HashMap<ForgeDirection, HashSet<TileEntity>>();
+	@Override
+	public void onBlockBroken() {
+		if (!worldObj.isRemote) { 
+			TileEntityMultiblock o = getOwner();
+			invalidate();
+			children.clear();
+			o.removeChild(this);
+			if (o == this) {
+				isOwner = false;
+				Collection<ArrayList<TileEntityMultiblock>> branches = findBranches();
+				ArrayList<TileEntityMultiblock> owners = new ArrayList<TileEntityMultiblock>();
+				for(ArrayList<TileEntityMultiblock> branch : branches) {
+					TileEntityMultiblock branchOwner = null;
+					for (TileEntityMultiblock child : branch) {
+						if (branchOwner == null) {
+							branchOwner = child;
+							owners.add(branchOwner);
+						}
+						child.setOwner(branchOwner);
+					}
+				}
+				if (owners.size() > 0) {
+					transferDataTo(owners.toArray(new TileEntityMultiblock[owners.size()]));
+				}
+			}
+		}
+	}
+	
+	protected void addChild(TileEntityMultiblock tile) {
+		children.put(tile, null);
+	}
+	
+	protected void removeChild(TileEntityMultiblock tile) {
+		children.remove(tile);
+	}
+	
+	protected void setOwner(TileEntityMultiblock tile) {
+		tile.isOwner = true;
+		tile.addChild(this);
+		owner = new WeakReference(tile);
+		if (tile != this) {
+			isOwner = false;
+			children.clear();
+			transferDataTo(tile);
+		}
+	}
 
-		HashSet<TileEntity> alreadyFound = new HashSet<TileEntity>();
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		getOwner().removeChild(this);
+	}
+	
+	public abstract void transferDataTo(TileEntityMultiblock ... tile);
+
+	@Override
+	public void onBlockAdded() {
+	}
+	
+	
+	public Collection<ArrayList<TileEntityMultiblock>> findBranches() {
+
+		HashMap<ForgeDirection, ArrayList<TileEntityMultiblock>> branches = new HashMap<ForgeDirection, ArrayList<TileEntityMultiblock>>();
+
+		HashSet<TileEntityMultiblock> alreadyFound = new HashSet<TileEntityMultiblock>();
 
 		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 
-			HashSet<TileEntity> branchTiles = floodFill(direction, alreadyFound);
+			ArrayList<TileEntityMultiblock> branchTiles = floodFill(direction, alreadyFound);
 
 			if (branchTiles.size() > 0) {
 				branches.put(direction, branchTiles);
@@ -44,16 +130,16 @@ public class TileEntityMultiblock extends TileEntity {
 		return branches.values();
 	}
 
-	public HashSet<TileEntity> floodFill() {
+	public ArrayList<TileEntityMultiblock> floodFill() {
 		return floodFill(null, null);
 	}
 
-	public HashSet<TileEntity> floodFill(ForgeDirection direction, HashSet<TileEntity> unlessMatches) {
+	public ArrayList<TileEntityMultiblock> floodFill(ForgeDirection direction, HashSet<TileEntityMultiblock> unlessMatches) {
 
 		HashSet<Coord> validCoords = new HashSet<Coord>();
 		HashSet<Coord> checkedCoords = new HashSet<Coord>();
 		Queue<Coord> coordQueue = new LinkedList<Coord>();
-		HashSet<TileEntity> validTiles = new HashSet<TileEntity>();
+		ArrayList<TileEntityMultiblock> validTiles = new ArrayList<TileEntityMultiblock>();
 
 		// add our starting position
 		Coord pos = new Coord();
@@ -71,30 +157,39 @@ public class TileEntityMultiblock extends TileEntity {
 			int blockX = xCoord + coord.x;
 			int blockY = yCoord + coord.y;
 			int blockZ = zCoord + coord.z;
+			
+			if (worldObj.blockExists(blockX, blockY, blockZ)) {
 
-			TileEntity checkTile = worldObj.getBlockTileEntity(blockX, blockY, blockZ);
-
-			if (checkTile instanceof TileEntityMultiblock
-					&& isValidNeighbour(checkTile)) {
-
-				if (unlessMatches != null && unlessMatches.contains(checkTile)) { return validTiles; }
-
-				validCoords.add(coord);
-				validTiles.add(checkTile);
-
-				for (ForgeDirection checkDirection : ForgeDirection.VALID_DIRECTIONS) {
-
-					checkCoord.setFrom(coord);
-					checkCoord.offset(checkDirection);
-
-					if (!checkedCoords.contains(checkCoord)
-							&& !coordQueue.contains(checkCoord)) {
-						coordQueue.add(checkCoord.clone());
+				TileEntity tile = worldObj.getBlockTileEntity(blockX, blockY, blockZ);
+	
+				if (tile instanceof TileEntityMultiblock) {
+					
+					TileEntityMultiblock checkTile = (TileEntityMultiblock) tile;
+					
+					if (isValidNeighbour(checkTile)) {
+						
+						if (unlessMatches != null && unlessMatches.contains(checkTile)) {
+							return validTiles;
+						}
+		
+						validCoords.add(coord);
+						validTiles.add(checkTile);
+		
+						for (ForgeDirection checkDirection : ForgeDirection.VALID_DIRECTIONS) {
+		
+							checkCoord.setFrom(coord);
+							checkCoord.offset(checkDirection);
+		
+							if (!checkedCoords.contains(checkCoord)
+									&& !coordQueue.contains(checkCoord)) {
+								coordQueue.add(checkCoord.clone());
+							}
+						}
 					}
 				}
+	
+				checkedCoords.add(coord);
 			}
-
-			checkedCoords.add(coord);
 		}
 
 		if (coordQueue.size() > 0) {
@@ -104,29 +199,35 @@ public class TileEntityMultiblock extends TileEntity {
 		return validTiles;
 	}
 
-	public boolean isValidNeighbour(TileEntity tile) {
-		return tile instanceof TileEntityHealBlock && !tile.isInvalid();
+	public boolean isValidNeighbour(TileEntityMultiblock tile) {
+		return !tile.isInvalid();
 	}
 
-	public ISyncableObject replaceObject(ISyncableObject current, ISyncableObject newObj) {
-		if (newObj == null) {
-			if (current != null) {
-				current.unregisterTile(this);
-				current = null;
-			}
-		} else {
-			if (current != null) {
-				current.unregisterTile(this);
-				newObj.merge(current);
-				current.clear();
-			}
-			current = newObj;
-			current.registerTile(this);
-		}
-		return current;
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	public void initialize() {
-		System.out.println("initialize " + worldObj.isRemote);
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, float hitX, float hitY, float hitZ) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
 	}
 }

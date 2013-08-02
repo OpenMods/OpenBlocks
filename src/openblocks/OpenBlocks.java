@@ -18,7 +18,6 @@ import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
-import openblocks.common.block.BlockValve;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -48,7 +47,6 @@ public class OpenBlocks {
 		public static BlockTarget target;
 		public static BlockGrave grave;
 		public static BlockFlag flag;
-		public static BlockValve valve;
 		public static BlockTank tank;
 	}
 
