@@ -49,7 +49,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 	@Override
 	public void updateEntity() {
 
-		if (OpenBlocks.proxy.isServer()) {
+		if (!worldObj.isRemote) {
 
 			// it doesnt matter if we're not updating constantly, right?
 			// I mean, the maps will take longer to load in

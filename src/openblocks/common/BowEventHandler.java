@@ -21,7 +21,7 @@ public class BowEventHandler {
 
 	@ForgeSubscribe
 	public void onArrowNock(ArrowNockEvent event) {
-		if (OpenBlocks.proxy.isServer()) {
+		if (!event.entity.worldObj.isRemote) {
 			NBTTagCompound tag = event.result.getTagCompound();
 			if (tag != null && tag.hasKey("openblocks_torchmode")) {
 				System.out.println("torch mode");
@@ -104,7 +104,7 @@ public class BowEventHandler {
 				player.inventory.consumeInventoryItem(Item.arrow.itemID);
 			}
 
-			if (OpenBlocks.proxy.isServer()) {
+			if (!player.worldObj.isRemote) {
 				player.worldObj.spawnEntityInWorld(entityarrow);
 			}
 			event.setCanceled(true);

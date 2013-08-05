@@ -180,7 +180,7 @@ public class EntityGhost extends EntityMob implements
 
 		super.onLivingUpdate();
 
-		if (OpenBlocks.proxy.isServer()) {
+		if (!worldObj.isRemote) {
 
 			opacity.setValue(0.3f);
 
@@ -292,7 +292,7 @@ public class EntityGhost extends EntityMob implements
 	}
 
 	public void onDeath(DamageSource damageSource) {
-		if (OpenBlocks.proxy.isServer()) {
+		if (!worldObj.isRemote) {
 			BlockUtils.dropInventory(inventory, worldObj, posX, posY, posZ);
 		}
 		super.onDeath(damageSource);

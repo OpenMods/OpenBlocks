@@ -56,7 +56,7 @@ public class BlockLightbox extends OpenBlock {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		if (OpenBlocks.proxy.isServer()) {
+		if (!world.isRemote) {
 			player.openGui(OpenBlocks.instance, OpenBlocks.Gui.Lightbox.ordinal(), world, x, y, z);
 		}
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);

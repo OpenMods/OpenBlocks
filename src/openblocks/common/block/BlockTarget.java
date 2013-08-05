@@ -61,7 +61,7 @@ public class BlockTarget extends OpenBlock {
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
 
-		if (OpenBlocks.proxy.isServer() && entity != null
+		if (!world.isRemote && entity != null
 				&& entity instanceof EntityArrow) {
 
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
