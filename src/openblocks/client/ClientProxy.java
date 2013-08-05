@@ -20,6 +20,7 @@ import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
 import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
+import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
 import openblocks.common.CommonProxy;
 import openblocks.common.PlayerDeathHandler;
@@ -30,6 +31,8 @@ import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntityTarget;
+import openblocks.common.tileentity.tank.TileEntityTank;
+import openblocks.common.tileentity.tank.TileEntityTankValve;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -51,6 +54,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
 

@@ -3,136 +3,164 @@ package openblocks.common.tileentity.tank;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.WeakHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import openblocks.OpenBlocks;
 import openblocks.api.IAwareTile;
-import openblocks.common.tileentity.TileEntityHealBlock;
-import openblocks.common.tileentity.TileEntityMultiblock;
+import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapEntity;
 import openblocks.sync.SyncMapTile;
-import openblocks.sync.SyncableDouble;
-import openblocks.sync.SyncableIntArray;
+import openblocks.sync.SyncableTank;
 
+public abstract class TileEntityTankBase extends OpenTileEntity implements ISyncHandler, IAwareTile {
 
-public abstract class TileEntityTankBase extends TileEntityMultiblock implements ISyncHandler {
+	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
+	
+	public static final ForgeDirection[] horizontalDirections = new ForgeDirection[] { 
+		ForgeDirection.NORTH,
+		ForgeDirection.SOUTH,
+		ForgeDirection.EAST,
+		ForgeDirection.WEST
+	};
 
-	public enum ClientSyncKeys {
-		childCoords
-	}
+	protected Comparator<TileEntityTank> sortBySpace = new Comparator<TileEntityTank>() {
+	    public int compare(TileEntityTank c1, TileEntityTank c2) {
+	        return c2.getSpace() - c1.getSpace();
+	    }
+	};
 	
-	protected int value = 0;
-	
-	protected SyncableIntArray childCoords = new SyncableIntArray();
-	
-	SyncMapTile syncMap = new SyncMapTile();
+	protected SyncMapTile syncMap = new SyncMapTile();
 	
 	public TileEntityTankBase() {
-		syncMap.put(ClientSyncKeys.childCoords, childCoords);
-	}
-	
-	public void updateEntity() {
-		super.updateEntity();
-		syncMap.sync(worldObj, this, (double)xCoord + 0.5, (double)yCoord + 0.5, (double)zCoord + 0.5);
-	}
-	
-	protected void onChildAdded(TileEntityMultiblock tile) {
-		refreshChildCoords();
-	}
-
-	@Override
-	protected void onChildRemoved(TileEntityMultiblock tile) {
-		refreshChildCoords();
-	}
-	
-	private void refreshChildCoords() {
-		Set<TileEntityMultiblock> children = getChildren();
-		int[] childCoordArray = new int[children.size() * 3];
-		int j = 0;
-		for (TileEntityMultiblock child : children) {
-			childCoordArray[j++] = child.xCoord;
-			childCoordArray[j++] = child.yCoord;
-			childCoordArray[j++] = child.zCoord;
-		}
-		childCoords.setValue(childCoordArray);
-	}
-	
-	public TileEntityTankBase getOwnerTank() {
-		return (TileEntityTankBase) getOwner();
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
-	public void initialize() {
-		super.initialize();
+	public void updateEntity() {
+		// if we call super, initialize() will fire
+		super.updateEntity();
+	}
+
+	/**
+	 * This method fires on the first tick. worldObj and coords will all be valid
+	 */
+	@Override
+	protected void initialize() {
+		findNeighbours();
+	}
+	
+	/**
+	 * Find the neighbouring tanks and store them in a hashmap
+	 */
+	protected void findNeighbours() {
+		neighbours.clear();
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+			TileEntity neighbour = getTileInDirection(direction);
+			if (neighbour != null && neighbour instanceof TileEntityTank) {
+				neighbours.put(direction, new WeakReference<TileEntityTank>((TileEntityTank)neighbour));
+			}
+		}
+		if (!worldObj.isRemote) {
+			worldObj.addBlockEvent(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTankId, 0, 0);
+		}
+	}
+	
+	public TileEntityTank getTankInDirection(ForgeDirection direction) {
+		if (neighbours.containsKey(direction)) {
+			WeakReference<TileEntityTank> neighbour = neighbours.get(direction);
+			if (neighbour != null) {
+				TileEntityTank tank = neighbour.get();
+				return tank != null && !tank.isInvalid() ? tank : null;
+			}
+		}
+		return null;
+	}
+	
+	public TileEntityTank[] getSurroundingTanks() {
+		ArrayList<TileEntityTank> tanks = new ArrayList<TileEntityTank>();
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+			TileEntityTank t = getTankInDirection(direction);
+			if (t != null) {
+				tanks.add(t);
+			}
+		}
+		return tanks.toArray(new TileEntityTank[tanks.size()]);
+	}
+	
+	public ArrayList<TileEntityTank> getHorizontalTanksOrdererdBySpace(HashSet<TileEntityTank> except) {
+		ArrayList<TileEntityTank> horizontalTanks = new ArrayList<TileEntityTank>();
+		for (ForgeDirection direction : horizontalDirections) {
+			TileEntityTank tank = getTankInDirection(direction);
+			if (tank != null && !except.contains(tank)) {
+				horizontalTanks.add(tank);
+			}
+		}
+		Collections.sort(horizontalTanks, sortBySpace);
+		return horizontalTanks;
+	}
+	
+	@Override
+	public void onBlockBroken() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public boolean isValidNeighbour(TileEntity tile) {
-		return tile instanceof TileEntityTankBase && super.isValidNeighbour(tile);
+	public void onBlockAdded() {
+		// TODO Auto-generated method stub
+		
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) { 
-			getOwnerTank().value += 1;
-		}
-		return true;
+		// TODO Auto-generated method stub
+		return false;
 	}
-	
+
+	/**
+	 * Refresh the neighbours because something changed
+	 */
 	@Override
-	public void transferDataTo(TileEntityMultiblock ... tiles) {
-		int remainder = value % tiles.length;
-		int perTile = (int)Math.floor((double) value / tiles.length);
-		for (TileEntityMultiblock tile : tiles) {
-			((TileEntityTankBase)tile).value += perTile + remainder;
-			remainder = 0;
-		}
-		value = 0;
-	}
-	
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		tag.setInteger("value", value);
+	public void onNeighbourChanged(int blockId) {
+		findNeighbours();
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		if (tag.hasKey("value")) {
-			value = tag.getInteger("value");
-		}
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, float hitX, float hitY, float hitZ) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	@Override
-	public SyncMap getSyncMap() {
-		return syncMap;
-	}
-	
-	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		System.out.println(this + ": Coords synced = "+childCoords.size());
-	}
-	
 	@Override
 	public void writeIdentifier(DataOutputStream dos) throws IOException {
 		dos.writeInt(xCoord);
 		dos.writeInt(yCoord);
 		dos.writeInt(zCoord);
+	}
+	
+	@Override
+	public SyncMap getSyncMap() {
+		return syncMap;
+	}
+
+	@Override
+	public boolean onBlockEventReceived(int eventId, int eventParam) {
+		if (worldObj.isRemote) { 
+			findNeighbours();
+		}
+		return true;
 	}
 }

@@ -137,22 +137,29 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
 		if (te != null) {
-			if (IAwareTile.class.isAssignableFrom(teClass)) { return ((IAwareTile)te).onBlockActivated(player, side, hitX, hitY, hitZ); }
+			return te.onBlockActivated(player, side, hitX, hitY, hitZ);
 		}
 		return false;
 	}
 
 	public void onBlockAdded(World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
 		if (te != null) {
-			if (IAwareTile.class.isAssignableFrom(teClass)) {
-				((IAwareTile)te).onBlockAdded();
-			}
+			te.onBlockAdded();
 		}
 		super.onBlockAdded(world, x, y, z);
 	}
+	
+	@Override
+    public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
+		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
+		if (te != null) {
+			return te.onBlockEventReceived(eventId, eventParam);
+		}
+		return super.onBlockEventReceived(world, x, y, z, eventId, eventParam );
+    }
 
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
 		setupDimensions(x - width, y, z - depth, x + width, y + height, z
@@ -184,18 +191,16 @@ public abstract class OpenBlock extends BlockContainer {
 		return canPlaceBlockOnSides(world, x, y, z, EAST, WEST, SOUTH, NORTH, UP, DOWN);
 	}
 
-	public <U extends TileEntity> U getTileEntity(IBlockAccess world, int x, int y, int z, Class<U> T) {
+	public <U> U getTileEntity(IBlockAccess world, int x, int y, int z, Class<U> T) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null && T.isAssignableFrom(te.getClass())) { return (U)te; }
 		return null;
 	}
 
 	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
 		if (te != null) {
-			if (IAwareTile.class.isAssignableFrom(teClass)) {
-				((IAwareTile)te).onBlockPlacedBy(player, side, hitX, hitY, hitZ);
-			}
+			te.onBlockPlacedBy(player, side, hitX, hitY, hitZ);
 		}
 	}
 }

@@ -11,12 +11,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.tank.TileEntityTank;
+import openblocks.common.tileentity.tank.TileEntityTankValve;
 
-public class BlockTank extends OpenBlock {
+public class BlockTankValve extends OpenBlock {
 
-	public BlockTank() {
-		super(OpenBlocks.Config.blockTankId, Material.glass);
-		setupBlock(this, "Tank", TileEntityTank.class);
+	public BlockTankValve() {
+		super(OpenBlocks.Config.blockValveId, Material.glass);
+		setupBlock(this, "Valve", TileEntityTankValve.class);
 	}
 
 	@Override
@@ -29,22 +30,4 @@ public class BlockTank extends OpenBlock {
 		return false;
 	}
 
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
-	}
-	
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return true;
-	}
 }

@@ -57,4 +57,8 @@ public abstract class OpenTileEntity extends TileEntity {
 	public String toString() {
 		return String.format("%s,%s,%s", xCoord, yCoord, zCoord);
 	}
+	
+	public boolean isAirBlock(ForgeDirection direction) {
+		return worldObj != null && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+	}
 }

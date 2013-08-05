@@ -17,6 +17,7 @@ import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
+import openblocks.common.block.BlockTankValve;
 import openblocks.common.block.BlockTarget;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
@@ -48,6 +49,7 @@ public class OpenBlocks {
 		public static BlockGrave grave;
 		public static BlockFlag flag;
 		public static BlockTank tank;
+		public static BlockTankValve valve;
 	}
 
 	public static class Config {

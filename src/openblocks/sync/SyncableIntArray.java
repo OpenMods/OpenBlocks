@@ -28,6 +28,10 @@ public class SyncableIntArray implements ISyncableObject {
 		}
 	}
 
+	public int[] getValue() {
+		return value;
+	}
+	
 	public int size() {
 		if (value == null) { return 0; }
 		return value.length;

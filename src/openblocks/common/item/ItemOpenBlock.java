@@ -53,7 +53,6 @@ public class ItemOpenBlock extends ItemBlock {
 				++par4;
 			}
 		}
-
 		if (par1ItemStack.stackSize == 0) {
 			return false;
 		} else if (!par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack)) {
@@ -94,7 +93,6 @@ public class ItemOpenBlock extends ItemBlock {
 			}
 
 			if (!openBlock.canPlaceBlockOnSide(par3World, par4, par5, par6, direction.getOpposite())) { return false; }
-
 			// dont replace it!
 			if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10, j1)) {
 
