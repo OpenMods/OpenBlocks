@@ -15,6 +15,8 @@ import net.minecraftforge.liquids.LiquidStack;
 public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	private LiquidStack liquid;
+	private LiquidStack previousLiquid;
+	private int previousCapacity;
 	private int capacity;
 	private int tankPressure;
 	private boolean hasChanged;
@@ -57,7 +59,6 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 			if (resource.amount <= capacity) {
 				if (doFill) {
 					this.liquid = resource.copy();
-					setHasChanged();
 					changeMask = ByteUtils.set(changeMask, Flags.liquid, true);
 					changeMask = ByteUtils.set(changeMask, Flags.amount, true);
 				}
@@ -66,7 +67,6 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 				if (doFill) {
 					this.liquid = resource.copy();
 					this.liquid.amount = capacity;
-					setHasChanged();
 					changeMask = ByteUtils.set(changeMask, Flags.liquid, true);
 					changeMask = ByteUtils.set(changeMask, Flags.amount, true);
 				}
@@ -79,14 +79,12 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 		if (resource.amount <= space) {
 			if (doFill) {
 				this.liquid.amount += resource.amount;
-				setHasChanged();
 				changeMask = ByteUtils.set(changeMask, Flags.amount, true);
 			}
 			return resource.amount;
 		} else {
 			if (doFill) {
 				this.liquid.amount = capacity;
-				setHasChanged();
 				changeMask = ByteUtils.set(changeMask, Flags.amount, true);
 			}
 			return space;
@@ -128,11 +126,16 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	}
 
 	public boolean hasChanged() {
-		return hasChanged;
+		return previousLiquid != liquid || previousCapacity != capacity;
 	}
 
 	public void resetChangeStatus() {
-		hasChanged = false;
+		if (liquid != null) {
+			previousLiquid = liquid.copy();
+		}else {
+			liquid = null;
+		}
+		previousCapacity = capacity;
 		ticksSinceChanged++;
 		changeMask = 0;
 	}
@@ -149,7 +152,6 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	public void setLiquid(LiquidStack liquid) {
 		this.liquid = liquid;
-		setHasChanged();
 		changeMask = ByteUtils.set(changeMask, Flags.liquid, true);
 		changeMask = ByteUtils.set(changeMask, Flags.amount, true);
 	}
@@ -157,7 +159,6 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	public void setCapacity(int capacity) {
 		if (capacity != this.capacity) {
 			this.capacity = capacity;
-			setHasChanged();
 			changeMask = ByteUtils.set(changeMask, Flags.capacity, true);
 		}
 	}
