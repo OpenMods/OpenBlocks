@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import openblocks.OpenBlocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -60,5 +61,9 @@ public abstract class OpenTileEntity extends TileEntity {
 	
 	public boolean isAirBlock(ForgeDirection direction) {
 		return worldObj != null && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
+	}
+	
+	public void sendBlockEvent(int key, int value) {
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord), key, value);
 	}
 }

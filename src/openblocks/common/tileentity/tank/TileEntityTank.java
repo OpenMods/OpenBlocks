@@ -69,10 +69,12 @@ public class TileEntityTank extends TileEntityTankBase {
 				if (below != null) {
 					if (below.getSpace() > 0) {
 						LiquidStack myLiquid = tank.getLiquid().copy();
-						int toFill = Math.min(below.getSpace(), myLiquid.amount);
-						myLiquid.amount = toFill;
-						below.fill(myLiquid, true, except);
-						tank.drain(toFill, true);
+						if (below.canReceiveLiquid(myLiquid)) {
+							int toFill = Math.min(below.getSpace(), myLiquid.amount);
+							myLiquid.amount = toFill;
+							below.fill(myLiquid, true, except);
+							tank.drain(toFill, true);
+						}
 					}
 				}
 			}
@@ -81,19 +83,35 @@ public class TileEntityTank extends TileEntityTankBase {
 			ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
 			for (TileEntityTank horizontal : horizontals) {
 				LiquidStack liquid = tank.getLiquid();
-				int difference = getAmount() - horizontal.getAmount();
-				if (difference > 1) {
-					int halfDifference = difference / 2;
-					LiquidStack liquidCopy = liquid.copy();
-					liquidCopy.amount = Math.min(500, halfDifference);
-					int filled = horizontal.fill(liquidCopy, true, except);
-					tank.drain(filled, true);
+				if (horizontal.canReceiveLiquid(liquid)) {
+					int difference = getAmount() - horizontal.getAmount();
+					if (difference > 1) {
+						int halfDifference = difference / 2;
+						LiquidStack liquidCopy = liquid.copy();
+						liquidCopy.amount = Math.min(500, halfDifference);
+						int filled = horizontal.fill(liquidCopy, true, except);
+						tank.drain(filled, true);
+					}
 				}
 			}
 			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 		} else {
 			flowTimer += 0.1;
 		}
+	}
+	
+	public boolean canReceiveLiquid(LiquidStack liquid) {
+		if (!tank.containsValidLiquid()) {
+			return true;
+		}
+		if (liquid == null) {
+			return true;
+		}
+		LiquidStack otherLiquid = tank.getLiquid();
+		if (otherLiquid != null) {
+			return otherLiquid.isLiquidEqual(liquid);
+		}
+		return true;
 	}
 	
 	public SyncableTank getInternalTank() {
@@ -128,7 +146,7 @@ public class TileEntityTank extends TileEntityTankBase {
 		int count = 1;
 		for (ForgeDirection side : sides) {
 			TileEntityTank sideTank = getTankInDirection(side);
-			if (sideTank != null) {
+			if (sideTank != null && sideTank.canReceiveLiquid(tank.getLiquid())) {
 				fullness += sideTank.getInternalTank().getPercentFull() + sideTank.getFlowOffset();
 				count++;
 			}
@@ -143,6 +161,9 @@ public class TileEntityTank extends TileEntityTankBase {
 			except = new HashSet<TileEntityTank>();
 		}
 		int startAmount = resource.amount;
+		if (except.contains(this)) {
+			return 0;
+		}
 		except.add(this);
 		
 		// fill the tank below as much as possible
@@ -192,11 +213,23 @@ public class TileEntityTank extends TileEntityTankBase {
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		//System.out.println(tank.getAmount());
+		//System.out.println(tank.getCapacity());
 	}
 	
 	@Override
 	public void onBlockBroken() {
 		invalidate();
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		tank.writeToNBT(tag, "tank");
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		tank.readFromNBT(tag, "tank");
 	}
 }

@@ -109,6 +109,9 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 			Block block = null;
 			Icon texture = null;
+
+			GL11.glPushMatrix();
+			GL11.glDisable(2896);
 			try {
 				if (liquid.itemID < Block.blocksList.length && Block.blocksList[liquid.itemID] != null) {
 					block = Block.blocksList[liquid.itemID];
@@ -119,8 +122,6 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				} else {
 				}
 				
-				GL11.glPushMatrix();
-				GL11.glDisable(2896);
 				Tessellator t = Tessellator.instance;
 				
 				double ySouthEast = tankTile.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.EAST);
@@ -128,59 +129,67 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				double ySouthWest = tankTile.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.WEST);
 				double yNorthWest = tankTile.getLiquidHeightForSide(ForgeDirection.NORTH, ForgeDirection.WEST);
 				
+		        double uMin = (double)texture.getInterpolatedU(0.0);
+		        double uMax = (double)texture.getInterpolatedU(16.0);
+		        double vMin = (double)texture.getInterpolatedV(0.0);
+		        double vMax = (double)texture.getInterpolatedV(16.0);
+
+		        double vHeight = vMax - vMin;
+		        
+				
 				// north side
 				t.startDrawingQuads();
-				t.addVertex( 0.5,-0.5,-0.5); // bottom 
-				t.addVertex(-0.5,-0.5,-0.5 ); // bottom
-				t.addVertex(-0.5, -0.5 + yNorthWest,-0.5 ); // top north/west
-				t.addVertex( 0.5, -0.5 + yNorthEast,-0.5 ); // top north/east
+				t.addVertexWithUV( 0.5,-0.5,-0.5, uMax, vMin); // bottom 
+				t.addVertexWithUV(-0.5,-0.5,-0.5, uMin, vMin); // bottom
+				t.addVertexWithUV(-0.5, -0.5 + yNorthWest,-0.5, uMin, vMin + (vHeight * yNorthWest)); // top north/west
+				t.addVertexWithUV( 0.5, -0.5 + yNorthEast,-0.5, uMax, vMin + (vHeight * yNorthEast)); // top north/east
 				t.draw();
 			
 				// south side
 				t.startDrawingQuads();
-				t.addVertex( 0.5,-0.5, 0.5);
-				t.addVertex( 0.5, -0.5 + ySouthEast, 0.5); // top south east
-				t.addVertex(-0.5, -0.5 + ySouthWest, 0.5); // top south west
-				t.addVertex(-0.5,-0.5, 0.5);
+				t.addVertexWithUV( 0.5,-0.5, 0.5, 				uMin, vMin);
+				t.addVertexWithUV( 0.5, -0.5 + ySouthEast, 0.5, uMin, vMin + (vHeight * ySouthEast)); // top south east
+				t.addVertexWithUV(-0.5, -0.5 + ySouthWest, 0.5, uMax, vMin + (vHeight * ySouthWest)); // top south west
+				t.addVertexWithUV(-0.5,-0.5, 0.5, 				uMax, vMin);
 				t.draw();
 			
 				// east side
 				t.startDrawingQuads();
-				t.addVertex( 0.5, -0.5, -0.5 );
-				t.addVertex( 0.5, -0.5 + yNorthEast, -0.5); // top north/east
-				t.addVertex(0.5,  -0.5 + ySouthEast,  0.5); // top south/east
-				t.addVertex(0.5, -0.5,  0.5 );
+				t.addVertexWithUV( 0.5, -0.5, -0.5, 			uMin, vMin);
+				t.addVertexWithUV( 0.5, -0.5 + yNorthEast, -0.5,uMin, vMin + (vHeight * yNorthEast)); // top north/east
+				t.addVertexWithUV(0.5,  -0.5 + ySouthEast,  0.5,uMax, vMin + (vHeight * ySouthEast)); // top south/east
+				t.addVertexWithUV(0.5, -0.5,  0.5, 				uMax, vMin );
 				t.draw();
 			
 				// west side
 				t.startDrawingQuads();
-				t.addVertex( -0.5, -0.5,  0.5 );
-				t.addVertex( -0.5, -0.5 + ySouthWest,  0.5); // top south/west
-				t.addVertex(-0.5, -0.5 + yNorthWest, -0.5 ); // top north/west
-				t.addVertex(-0.5, -0.5, -0.5 );
+				t.addVertexWithUV( -0.5, -0.5,  0.5, 			uMin, vMin);
+				t.addVertexWithUV( -0.5, -0.5 + ySouthWest, 0.5,uMin, vMin + (vHeight * ySouthWest)); // top south/west
+				t.addVertexWithUV(-0.5, -0.5 + yNorthWest, -0.5,uMax, vMin + (vHeight * yNorthWest)); // top north/west
+				t.addVertexWithUV(-0.5, -0.5, -0.5,				uMax, vMin);
 				t.draw();
 			
 				// top
 				t.startDrawingQuads();
-				t.addVertex( 0.5,  -0.5 + ySouthEast,  0.5 ); // south east
-				t.addVertex(0.5,  -0.5 + yNorthEast, -0.5); // north east
-				t.addVertex(-0.5,  -0.5 + yNorthWest, -0.5 ); // north west
-				t.addVertex(-0.5,  -0.5 + ySouthWest,  0.5 ); // south west
+				t.addVertexWithUV( 0.5,  -0.5 + ySouthEast,  0.5,uMax, vMin); // south east
+				t.addVertexWithUV(0.5,  -0.5 + yNorthEast, -0.5, uMin, vMin); // north east
+				t.addVertexWithUV(-0.5,  -0.5 + yNorthWest, -0.5,uMin, vMax); // north west
+				t.addVertexWithUV(-0.5,  -0.5 + ySouthWest,  0.5,uMax, vMax); // south west
 				t.draw();
 			
 				// bottom
 				t.startDrawingQuads();
-				t.addVertex( 0.5, -0.5, -0.5 );
-				t.addVertex(0.5, -0.5,  0.5 );
-				t.addVertex(-0.5, -0.5,  0.5 );
-				t.addVertex( -0.5, -0.5, -0.5 );
+				t.addVertexWithUV( 0.5, -0.5, -0.5, uMax, vMin);
+				t.addVertexWithUV(0.5, -0.5,  0.5, 	uMin, vMin);
+				t.addVertexWithUV(-0.5, -0.5,  0.5, uMin, vMax);
+				t.addVertexWithUV( -0.5, -0.5, -0.5,uMax, vMax);
 				t.draw();
 			
-				GL11.glEnable(2896);
-				GL11.glPopMatrix();
 				
 			}catch(Exception e) {
 			}
+			GL11.glEnable(2896);
+			GL11.glPopMatrix();
 			
 		}
 		

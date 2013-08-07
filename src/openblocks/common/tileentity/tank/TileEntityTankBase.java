@@ -24,10 +24,12 @@ import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableTank;
+import openblocks.utils.BlockUtils;
 
 public abstract class TileEntityTankBase extends OpenTileEntity implements ISyncHandler, IAwareTile {
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
+	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
 	
 	public static final ForgeDirection[] horizontalDirections = new ForgeDirection[] { 
 		ForgeDirection.NORTH,
@@ -72,18 +74,35 @@ public abstract class TileEntityTankBase extends OpenTileEntity implements ISync
 			if (neighbour != null && neighbour instanceof TileEntityTank) {
 				neighbours.put(direction, new WeakReference<TileEntityTank>((TileEntityTank)neighbour));
 			}
+			surroundingBlocks.put(direction, !worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ));
 		}
 		if (!worldObj.isRemote) {
-			worldObj.addBlockEvent(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTankId, 0, 0);
+			sendBlockEvent(0, 0);
 		}
+	}
+	
+	public boolean hasBlockOnSide(ForgeDirection side) {
+		return surroundingBlocks.containsKey(side) && surroundingBlocks.get(side);
 	}
 	
 	public TileEntityTank getTankInDirection(ForgeDirection direction) {
 		if (neighbours.containsKey(direction)) {
 			WeakReference<TileEntityTank> neighbour = neighbours.get(direction);
 			if (neighbour != null) {
-				TileEntityTank tank = neighbour.get();
-				return tank != null && !tank.isInvalid() ? tank : null;
+				TileEntityTank otherTank = neighbour.get();
+				if (otherTank == null) {
+					return null;
+				}
+				if (otherTank.isInvalid()) {
+					return null;
+				}
+				if (this instanceof TileEntityTank) {
+					if (otherTank.canReceiveLiquid(((TileEntityTank)this).getInternalTank().getLiquid())) {
+						return otherTank;
+					}
+				}else {
+					return otherTank;
+				}
 			}
 		}
 		return null;
@@ -140,8 +159,7 @@ public abstract class TileEntityTankBase extends OpenTileEntity implements ISync
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

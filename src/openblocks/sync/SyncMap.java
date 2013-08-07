@@ -62,7 +62,7 @@ public abstract class SyncMap {
 		dos.writeShort(mask);
 		for (int i = 0; i < 16; i++) {
 			if (objects[i] != null && (regardless || objects[i].hasChanged())) {
-				objects[i].writeToStream(dos);
+				objects[i].writeToStream(dos, regardless);
 			}
 		}
 	}

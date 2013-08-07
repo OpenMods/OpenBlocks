@@ -17,7 +17,7 @@ public interface ISyncableObject {
 
 	public void readFromStream(DataInputStream stream) throws IOException;
 
-	public void writeToStream(DataOutputStream stream) throws IOException;
+	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException;
 
 	public void writeToNBT(NBTTagCompound tag, String name);
 

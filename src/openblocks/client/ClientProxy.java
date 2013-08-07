@@ -22,6 +22,7 @@ import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
 import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
+import openblocks.client.renderer.tileentity.TileEntityValveRenderer;
 import openblocks.common.CommonProxy;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.container.ContainerLightbox;
@@ -55,6 +56,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTankValve.class, new TileEntityValveRenderer());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
 

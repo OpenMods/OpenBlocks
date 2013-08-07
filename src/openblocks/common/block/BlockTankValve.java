@@ -24,10 +24,32 @@ public class BlockTankValve extends OpenBlock {
 	public boolean canBeReplacedByLeaves(World world, int x, int y, int z) {
 		return false;
 	}
+	
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
+	public int getRenderType() {
+		return OpenBlocks.renderId;
+	}
+	
 	@Override
 	public boolean isFlammable(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+		x += side.offsetX;
+		y += side.offsetY;
+		z += side.offsetZ;
+		return world.getBlockId(x, y, z) == OpenBlocks.Blocks.tank.blockID;
+	}
 }
