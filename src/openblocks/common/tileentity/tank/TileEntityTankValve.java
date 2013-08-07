@@ -24,12 +24,21 @@ import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
+import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 
 public class TileEntityTankValve extends TileEntityTankBase implements ISurfaceAttachment, ITankContainer, IAwareTile {
 
-	private LiquidTank fakeTank = new LiquidTank(0);
+	private SyncableTank fakeTank = new SyncableTank(1);
 	private ForgeDirection rotation = ForgeDirection.EAST;
+	
+	public enum Keys {
+		fakeTank
+	}
+	
+	public TileEntityTankValve() {
+		syncMap.put(Keys.fakeTank, fakeTank);
+	}
 	
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
@@ -41,6 +50,7 @@ public class TileEntityTankValve extends TileEntityTankBase implements ISurfaceA
 		TileEntityTank tank = getTankInDirection(rotation);
 		int filled = 0;
 		if (tank != null) {
+			fakeTank.setLiquid(resource.copy());
 			filled = tank.fill(resource, doFill, null);
 		}
 		return filled;
@@ -137,13 +147,14 @@ public class TileEntityTankValve extends TileEntityTankBase implements ISurfaceA
 	public void updateEntity() {
 		super.updateEntity();
 		if (worldObj.isRemote) {
-			/*
-			if (false) {
-				FXLiquidSpray fx = new FXLiquidSpray(worldObj, lastLiquid, xCoord, yCoord, zCoord, 1.5F, 0xFF0000, 6);
+			LiquidStack lastLiquid = fakeTank.getLiquid();
+			if (lastLiquid != null) {
+				FXLiquidSpray fx = new FXLiquidSpray(worldObj, lastLiquid, xCoord + 0.5, yCoord, zCoord + 0.5, 1.5F, 0xFF0000, 6);
 				fx.noClip = true;
 				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 			}
-			*/
+			
 		}
+		syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 	}
 }
