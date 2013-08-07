@@ -23,7 +23,6 @@ import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
-import openblocks.common.block.BlockTankValve;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
@@ -71,10 +70,7 @@ public class CommonProxy implements IGuiHandler {
 		if (Config.blockTankId > -1) {
 			OpenBlocks.Blocks.tank = new BlockTank();
 		}
-		if (Config.blockValveId > -1) {
-			OpenBlocks.Blocks.valve = new BlockTankValve();
-		}
-
+		
 		GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
 

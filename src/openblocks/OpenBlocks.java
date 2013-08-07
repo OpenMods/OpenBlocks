@@ -17,7 +17,6 @@ import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
-import openblocks.common.block.BlockTankValve;
 import openblocks.common.block.BlockTarget;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
@@ -49,7 +48,6 @@ public class OpenBlocks {
 		public static BlockGrave grave;
 		public static BlockFlag flag;
 		public static BlockTank tank;
-		public static BlockTankValve valve;
 	}
 
 	public static class Config {
@@ -61,12 +59,11 @@ public class OpenBlocks {
 		public static int blockTargetId = 805;
 		public static int blockGraveId = 806;
 		public static int blockFlagId = 807;
-		public static int blockValveId = 808;
 		public static int blockTankId = 809;
 		public static int elevatorTravelDistance = 30;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
-		public static boolean hookPlayerRenderer = true;
+		public static boolean hookPlayerRenderer = false;
 	}
 
 	public static enum Gui {

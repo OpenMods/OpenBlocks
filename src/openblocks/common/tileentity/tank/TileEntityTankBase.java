@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ITankContainer;
@@ -158,7 +159,7 @@ public abstract class TileEntityTankBase extends OpenTileEntity implements ISync
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 
 	}
 

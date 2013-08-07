@@ -200,7 +200,7 @@ public abstract class OpenBlock extends BlockContainer {
 	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
 		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
 		if (te != null) {
-			te.onBlockPlacedBy(player, side, hitX, hitY, hitZ);
+			te.onBlockPlacedBy(player, side, stack, hitX, hitY, hitZ);
 		}
 	}
 }

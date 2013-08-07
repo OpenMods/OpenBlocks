@@ -9,21 +9,28 @@ import java.util.List;
 
 import openblocks.OpenBlocks;
 import openblocks.api.IAwareTile;
+import openblocks.client.fx.FXLiquidSpray;
 import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
+import openblocks.sync.SyncableDirection;
 import openblocks.sync.SyncableFlags;
+import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableTank;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.ITankContainer;
 
-public class TileEntityTank extends TileEntityTankBase {
+public class TileEntityTank extends TileEntityTankBase implements ITankContainer {
 
 	/**
 	 * This tank gets synced to the client
@@ -31,16 +38,40 @@ public class TileEntityTank extends TileEntityTankBase {
 	private SyncableTank tank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * 8);
 	
 	/**
-	 * Not yet used
+	 * The direction the tank is being filled from
+	 */
+	private SyncableDirection fillDirection = new SyncableDirection();
+	
+	/**
+	 * A collection is booleans that get packed and synced
 	 */
 	private SyncableFlags flags = new SyncableFlags();
+
+	/**
+	 * The Id of the last liquid filled
+	 */
+	private SyncableInt lastLiquidId = new SyncableInt();
+	
+	/**
+	 * The meta of the last liquid filled
+	 */
+	private SyncableInt lastLiquidMeta = new SyncableInt();
+	
+	private int ticksSinceFill = 1000;
 	
 	/**
 	 * Keys of things what get synced
 	 */
 	public enum Keys {
 		tank,
-		flags
+		flags,
+		fillDirection,
+		lastLiquidId,
+		lastLiquidMeta
+	}
+	
+	public enum Flags {
+		isFilling
 	}
 
 	/**
@@ -51,12 +82,20 @@ public class TileEntityTank extends TileEntityTankBase {
 	public TileEntityTank() {
 		syncMap.put(Keys.tank, tank);
 		syncMap.put(Keys.flags, flags);
+		syncMap.put(Keys.fillDirection, fillDirection);
+		syncMap.put(Keys.lastLiquidId, lastLiquidId);
+		syncMap.put(Keys.lastLiquidMeta, lastLiquidMeta);
 	}
 	
 	public void updateEntity() {
 		super.updateEntity();
 		
 		if (!worldObj.isRemote) { 
+
+			if (ticksSinceFill < 5) {
+				ticksSinceFill++;
+			}
+			flags.set(Flags.isFilling, ticksSinceFill < 5);
 			
 			HashSet<TileEntityTank> except = new HashSet<TileEntityTank>();
 			except.add(this);
@@ -94,8 +133,14 @@ public class TileEntityTank extends TileEntityTankBase {
 					}
 				}
 			}
+			
 			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 		} else {
+			if (flags.get(Flags.isFilling)) {
+				//FXLiquidSpray fx = new FXLiquidSpray(worldObj, new LiquidStack(lastLiquidId.getValue(), 1, lastLiquidMeta.getValue()), countDownwardsTanks(), xCoord + 0.5, yCoord + 1, zCoord + 0.5, 1.5F, 0xFF0000, 6);
+				//fx.noClip = true;
+				//Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
 			flowTimer += 0.1;
 		}
 	}
@@ -188,7 +233,7 @@ public class TileEntityTank extends TileEntityTankBase {
 		}
 		
 		// finally, distribute any remaining to the sides
-		if (resource.amount > 0) {
+		if (resource.amount > 0 && canReceiveLiquid(resource)) {
 			ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
 			if (horizontals.size() > 0) {
 				int amountPerSide = resource.amount / horizontals.size();
@@ -213,12 +258,19 @@ public class TileEntityTank extends TileEntityTankBase {
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		//System.out.println(tank.getCapacity());
+		//System.out.println("synced");
 	}
 	
 	@Override
 	public void onBlockBroken() {
-		invalidate();
+		//invalidate();
+	}
+	
+	@Override
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+		if (stack.hasTagCompound()) {
+			tank.readFromNBT(stack.getTagCompound(), "tank");
+		}
 	}
 	
 	@Override
@@ -231,5 +283,55 @@ public class TileEntityTank extends TileEntityTankBase {
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		tank.readFromNBT(tag, "tank");
+	}
+
+	@Override
+	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+		int filled = fill(resource, doFill, null);
+		if (doFill && filled > 0) {
+			fillDirection.setValue(from);
+			ticksSinceFill = 0;
+			if (resource != null) {
+				lastLiquidId.setValue(resource.itemID);
+				lastLiquidMeta.setValue(resource.itemMeta);
+			}
+		}
+		return filled;
+	}
+
+	@Override
+	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+		return fill(ForgeDirection.UNKNOWN, resource, doFill);
+	}
+
+	@Override
+	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILiquidTank[] getTanks(ForgeDirection direction) {
+		return new ILiquidTank[] { tank };
+	}
+
+	@Override
+	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
+		return tank;
+	}
+	
+	public int countDownwardsTanks() {
+		int count = 1;
+		TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
+		if (below != null){
+			count += below.countDownwardsTanks();
+		}
+		return count;
 	}
 }

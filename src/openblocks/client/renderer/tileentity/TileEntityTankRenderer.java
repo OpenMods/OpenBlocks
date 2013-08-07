@@ -104,6 +104,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		SyncableTank internalTank = tankTile.getInternalTank();
 		
 		LiquidStack liquid = internalTank.getLiquid();
+		
 		bindTextureByName("/terrain.png");
 		if (liquid != null && liquid.amount > 100) {
 

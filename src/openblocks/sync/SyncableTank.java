@@ -15,13 +15,10 @@ import net.minecraftforge.liquids.LiquidStack;
 public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	private LiquidStack liquid;
-	private LiquidStack previousLiquid;
-	private int previousCapacity;
 	private int capacity;
 	private int tankPressure;
 	private boolean hasChanged;
 	private int ticksSinceChanged = 0;
-	private short changeMask = 0;
 	
 	public enum Flags {
 		capacity,
@@ -59,16 +56,14 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 			if (resource.amount <= capacity) {
 				if (doFill) {
 					this.liquid = resource.copy();
-					changeMask = ByteUtils.set(changeMask, Flags.liquid, true);
-					changeMask = ByteUtils.set(changeMask, Flags.amount, true);
+					setHasChanged();
 				}
 				return resource.amount;
 			} else {
 				if (doFill) {
 					this.liquid = resource.copy();
 					this.liquid.amount = capacity;
-					changeMask = ByteUtils.set(changeMask, Flags.liquid, true);
-					changeMask = ByteUtils.set(changeMask, Flags.amount, true);
+					setHasChanged();
 				}
 				return capacity;
 			}
@@ -79,13 +74,13 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 		if (resource.amount <= space) {
 			if (doFill) {
 				this.liquid.amount += resource.amount;
-				changeMask = ByteUtils.set(changeMask, Flags.amount, true);
+				setHasChanged();
 			}
 			return resource.amount;
 		} else {
 			if (doFill) {
 				this.liquid.amount = capacity;
-				changeMask = ByteUtils.set(changeMask, Flags.amount, true);
+				setHasChanged();
 			}
 			return space;
 		}
@@ -102,7 +97,6 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 		if (doDrain) {
 			liquid.amount -= used;
 			setHasChanged();
-			changeMask = ByteUtils.set(changeMask, Flags.amount, true);
 		}
 
 		LiquidStack drained = new LiquidStack(liquid.itemID, used, liquid.itemMeta);
@@ -110,7 +104,7 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 		// Reset liquid if emptied
 		if (liquid.amount <= 0) {
 			liquid = null;
-			changeMask = ByteUtils.set(changeMask, Flags.liquid, true);
+			setHasChanged();
 		}
 
 		return drained;
@@ -126,30 +120,12 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	}
 
 	public boolean hasChanged() {
-		if (previousLiquid == null) {
-			if (liquid == null) {
-				return false;
-			}
-			return true;
-		}else {
-			if (liquid == null) {
-				return true;
-			}else if (previousLiquid.isLiquidEqual(liquid) && previousLiquid.amount != liquid.amount){
-				return true;
-			}
-			return previousCapacity != capacity;
-		}
+		return hasChanged;
 	}
 
 	public void resetChangeStatus() {
-		if (liquid != null) {
-			previousLiquid = liquid.copy();
-		}else {
-			liquid = null;
-		}
-		previousCapacity = capacity;
 		ticksSinceChanged++;
-		changeMask = 0;
+		hasChanged = false;
 	}
 
 	@Override
@@ -164,59 +140,44 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	public void setLiquid(LiquidStack liquid) {
 		this.liquid = liquid;
-		changeMask = ByteUtils.set(changeMask, Flags.liquid, true);
-		changeMask = ByteUtils.set(changeMask, Flags.amount, true);
+		setHasChanged();
 	}
 
 	public void setCapacity(int capacity) {
 		if (capacity != this.capacity) {
 			this.capacity = capacity;
-			changeMask = ByteUtils.set(changeMask, Flags.capacity, true);
+			setHasChanged();
 		}
 	}
 
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
-		short changeMask = stream.readShort();
-		if (ByteUtils.get(changeMask, Flags.liquid)) {
-			short liquidId = stream.readShort();
-			short liquidMeta = stream.readShort();
-			if (liquidId == 0 && liquidMeta == 0) {
-				liquid = null;
-			}else {
-				if (liquid == null || (liquid.itemID != liquidId || liquid.itemMeta != liquidMeta)) {
-					liquid = new LiquidStack(liquidId, 0, liquidMeta);
-				}
+		short liquidId = stream.readShort();
+		short liquidMeta = stream.readShort();
+		if (liquidId == 0 && liquidMeta == 0) {
+			liquid = null;
+		}else {
+			if (liquid == null || (liquid.itemID != liquidId || liquid.itemMeta != liquidMeta)) {
+				liquid = new LiquidStack(liquidId, 0, liquidMeta);
 			}
 		}
-		if (ByteUtils.get(changeMask, Flags.amount)) {
-			int amount = stream.readInt();
-			if (liquid != null) {
-				liquid.amount = amount;
-			}
-			if (amount == 0) {
-				liquid = null;
-			}
+
+		int amount = stream.readInt();
+		if (liquid != null) {
+			liquid.amount = amount;
 		}
-		if (ByteUtils.get(changeMask, Flags.capacity)) {
-			capacity = stream.readInt();
+		if (amount == 0) {
+			liquid = null;
 		}
+		capacity = stream.readInt();
 	}
 
 	@Override
 	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
-		short sendMask = fullData ? Short.MAX_VALUE : changeMask;
-		stream.writeShort(sendMask);
-		if (ByteUtils.get(sendMask, Flags.liquid)) {
-			stream.writeShort(liquid == null ? 0 : liquid.itemID);
-			stream.writeShort(liquid == null ? 0 : liquid.itemMeta);
-		}
-		if (ByteUtils.get(sendMask, Flags.amount)) {
-			stream.writeInt(liquid == null ? 0 : liquid.amount);
-		}
-		if (ByteUtils.get(sendMask, Flags.capacity)) {
-			stream.writeInt(capacity);
-		}
+		stream.writeShort(liquid == null ? 0 : liquid.itemID);
+		stream.writeShort(liquid == null ? 0 : liquid.itemMeta);
+		stream.writeInt(liquid == null ? 0 : liquid.amount);
+		stream.writeInt(capacity);
 	}
 
 	@Override
