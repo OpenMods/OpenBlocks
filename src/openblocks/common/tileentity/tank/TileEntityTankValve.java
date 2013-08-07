@@ -41,7 +41,6 @@ public class TileEntityTankValve extends TileEntityTankBase implements ISurfaceA
 		TileEntityTank tank = getTankInDirection(rotation);
 		int filled = 0;
 		if (tank != null) {
-			lastLiquid = resource;
 			filled = tank.fill(resource, doFill, null);
 		}
 		return filled;
@@ -138,11 +137,13 @@ public class TileEntityTankValve extends TileEntityTankBase implements ISurfaceA
 	public void updateEntity() {
 		super.updateEntity();
 		if (worldObj.isRemote) {
-			if (lastLiquid != null) {
+			/*
+			if (false) {
 				FXLiquidSpray fx = new FXLiquidSpray(worldObj, lastLiquid, xCoord, yCoord, zCoord, 1.5F, 0xFF0000, 6);
 				fx.noClip = true;
 				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 			}
+			*/
 		}
 	}
 }
