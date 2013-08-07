@@ -126,7 +126,19 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	}
 
 	public boolean hasChanged() {
-		return previousLiquid != liquid || previousCapacity != capacity;
+		if (previousLiquid == null) {
+			if (liquid == null) {
+				return false;
+			}
+			return true;
+		}else {
+			if (liquid == null) {
+				return true;
+			}else if (previousLiquid.isLiquidEqual(liquid) && previousLiquid.amount != liquid.amount){
+				return true;
+			}
+			return previousCapacity != capacity;
+		}
 	}
 
 	public void resetChangeStatus() {
