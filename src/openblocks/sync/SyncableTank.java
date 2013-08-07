@@ -47,6 +47,10 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	public double getPercentFull() {
 		return (double) getAmount() / (double) getCapacity();
 	}
+	
+	public void clear() {
+		liquid = null;
+	}
 
 	@Override
 	public int fill(LiquidStack resource, boolean doFill) {
