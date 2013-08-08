@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class SoundLoader {
 
-	String[] soundFiles = new String[] { "grave_ambient.ogg", "teleport.ogg", "open.ogg", "close.ogg", "ambient_grave.ogg" };
+	String[] soundFiles = new String[] { "teleport.ogg", "open.ogg", "close.ogg" };
 	String[] streamingFiles = new String[] {};
 
 	@SideOnly(Side.CLIENT)

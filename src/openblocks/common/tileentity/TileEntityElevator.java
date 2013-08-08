@@ -72,12 +72,14 @@ public class TileEntityElevator extends TileEntity {
 							&& player.capabilities.isFlying) continue;
 					if (lowerLevel != 0
 							&& player.isSneaking()
+							&& player.ridingEntity == null 
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = lowerLevel;
 						/* player.isJumping doesn't seem to work server side ? */
 					} else if (upperLevel != 0
 							&& player.posY > yCoord + 1.2
+							&& player.ridingEntity == null 
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = upperLevel;

@@ -1,9 +1,11 @@
 package openblocks.common.block;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -38,6 +40,10 @@ public class BlockGrave extends OpenBlock {
 	public int quantityDropped(Random rand) {
 		return 0;
 	}
+	
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+        // remove from creative
+    }
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
