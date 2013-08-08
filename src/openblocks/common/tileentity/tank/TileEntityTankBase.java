@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidStack;
 import openblocks.OpenBlocks;
 import openblocks.api.IAwareTile;
 import openblocks.common.tileentity.OpenTileEntity;
@@ -144,11 +145,7 @@ public abstract class TileEntityTankBase extends OpenTileEntity implements ISync
 		
 	}
 
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 
 	/**
 	 * Refresh the neighbours because something changed

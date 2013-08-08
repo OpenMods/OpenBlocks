@@ -36,7 +36,7 @@ public abstract class OpenBlock extends BlockContainer {
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setHardness(3.0F);
+		setHardness(1.0F);
 	}
 
 	@Override

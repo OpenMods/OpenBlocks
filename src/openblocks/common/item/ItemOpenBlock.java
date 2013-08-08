@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.block.OpenBlock;
+import openblocks.utils.BlockUtils;
 
 public class ItemOpenBlock extends ItemBlock {
 
@@ -68,29 +69,7 @@ public class ItemOpenBlock extends ItemBlock {
 
 			OpenBlock openBlock = (OpenBlock)Block.blocksList[getBlockID()];
 
-			ForgeDirection direction = null;
-			// Bottom = 0, Top = 1, East = 2, West = 3, North = 4, South = 5.
-			switch (par7) {
-				case 0:
-					direction = ForgeDirection.DOWN;
-					break;
-				case 1:
-					direction = ForgeDirection.UP;
-					break;
-				case 2:
-					direction = ForgeDirection.NORTH;
-					break;
-				case 3:
-					direction = ForgeDirection.SOUTH;
-					break;
-				case 4:
-					direction = ForgeDirection.WEST;
-					break;
-				default:
-				case 5:
-					direction = ForgeDirection.EAST;
-					break;
-			}
+			ForgeDirection direction = BlockUtils.sideToDirection(par7);
 
 			if (!openBlock.canPlaceBlockOnSide(par3World, par4, par5, par6, direction.getOpposite())) { return false; }
 			// dont replace it!

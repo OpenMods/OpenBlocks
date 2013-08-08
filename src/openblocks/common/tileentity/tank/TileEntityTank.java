@@ -19,6 +19,8 @@ import openblocks.sync.SyncableDirection;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableTank;
+import openblocks.utils.BlockUtils;
+import openblocks.utils.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -35,7 +37,7 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 	/**
 	 * This tank gets synced to the client
 	 */
-	private SyncableTank tank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * 8);
+	private SyncableTank tank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * 16);
 	
 	/**
 	 * The direction the tank is being filled from
@@ -333,5 +335,55 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 			count += below.countDownwardsTanks();
 		}
 		return count;
+	}
+	
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+
+		ForgeDirection direction = BlockUtils.sideToDirection(side);
+		
+		ItemStack current = player.inventory.getCurrentItem();
+		if (current != null) {
+
+			LiquidStack liquid = LiquidContainerRegistry.getLiquidForFilledItem(current);
+
+			// Handle filled containers
+			if (liquid != null) {
+				int qty = fill(direction, liquid, true);
+
+				if (qty != 0 && !player.capabilities.isCreativeMode) {
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
+				}
+
+				return true;
+			} else {
+
+				LiquidStack available = tank.getLiquid();
+				if (available != null) {
+					ItemStack filled = LiquidContainerRegistry.fillLiquidContainer(available, current);
+
+					liquid = LiquidContainerRegistry.getLiquidForFilledItem(filled);
+
+					if (liquid != null) {
+						if (!player.capabilities.isCreativeMode) {
+							if (current.stackSize > 1) {
+								if (!player.inventory.addItemStackToInventory(filled))
+									return false;
+								else {
+									player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
+								}
+							} else {
+								player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
+								player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
+							}
+						}
+						drain(ForgeDirection.UNKNOWN, liquid.amount, true);
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 }
