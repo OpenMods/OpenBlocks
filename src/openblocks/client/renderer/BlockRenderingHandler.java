@@ -12,7 +12,6 @@ import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntityTarget;
-import openblocks.common.tileentity.tank.TileEntityTank;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

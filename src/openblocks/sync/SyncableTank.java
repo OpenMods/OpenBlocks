@@ -4,12 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import openblocks.utils.ByteUtils;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidEvent;
 import net.minecraftforge.liquids.LiquidStack;
 
 public class SyncableTank implements ISyncableObject, ILiquidTank {

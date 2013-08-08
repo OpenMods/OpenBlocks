@@ -1,36 +1,25 @@
 package openblocks.common.tileentity.tank;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidStack;
 import openblocks.OpenBlocks;
-import openblocks.api.IAwareTile;
-import openblocks.client.fx.FXLiquidSpray;
-import openblocks.common.tileentity.OpenTileEntity;
-import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableDirection;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.ItemUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.ITankContainer;
 
 public class TileEntityTank extends TileEntityTankBase implements ITankContainer {
 

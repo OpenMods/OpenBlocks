@@ -6,11 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
-
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.CommonProxy;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class LanguageUtils {
 	public static void setupLanguages() {

@@ -1,13 +1,12 @@
 package openblocks.client.renderer;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import openblocks.client.renderer.tileentity.OpenRenderHelper;
-import openblocks.common.tileentity.tank.TileEntityTank;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import openblocks.common.tileentity.tank.TileEntityTank;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class ItemRendererTank implements IItemRenderer {
 

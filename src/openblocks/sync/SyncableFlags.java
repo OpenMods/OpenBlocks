@@ -3,13 +3,8 @@ package openblocks.sync;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.util.Random;
-import java.util.UUID;
-import java.util.WeakHashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import openblocks.utils.ByteUtils;
 
 public class SyncableFlags implements ISyncableObject {

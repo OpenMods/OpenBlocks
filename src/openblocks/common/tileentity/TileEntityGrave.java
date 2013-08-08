@@ -2,9 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySkeleton;

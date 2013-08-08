@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import openblocks.OpenBlocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;

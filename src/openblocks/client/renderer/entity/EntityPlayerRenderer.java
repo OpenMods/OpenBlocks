@@ -1,9 +1,5 @@
 package openblocks.client.renderer.entity;
 
-import openblocks.client.ClientEventHandler;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;

@@ -16,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
 import openblocks.api.ISurfaceAttachment;
 import openblocks.common.GenericInventory;
 

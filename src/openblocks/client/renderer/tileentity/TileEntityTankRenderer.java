@@ -1,14 +1,5 @@
 package openblocks.client.renderer.tileentity;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityTarget;
-import openblocks.common.tileentity.tank.TileEntityTank;
-import openblocks.common.tileentity.tank.TileEntityTankBase;
-import openblocks.sync.SyncableTank;
-import openblocks.utils.BlockUtils;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -18,6 +9,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidStack;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.tank.TileEntityTank;
+import openblocks.sync.SyncableTank;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
@@ -106,6 +102,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		LiquidStack liquid = internalTank.getLiquid();
 		
 		bindTextureByName("/terrain.png");
+		
 		if (liquid != null && liquid.amount > 100) {
 
 			Block block = null;

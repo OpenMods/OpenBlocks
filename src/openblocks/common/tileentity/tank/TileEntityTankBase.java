@@ -8,25 +8,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.WeakHashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidStack;
-import openblocks.OpenBlocks;
 import openblocks.api.IAwareTile;
 import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.sync.ISyncHandler;
-import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
-import openblocks.sync.SyncableTank;
-import openblocks.utils.BlockUtils;
 
 public abstract class TileEntityTankBase extends OpenTileEntity implements ISyncHandler, IAwareTile {
 

@@ -6,7 +6,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;
 import openblocks.common.block.BlockElevator;
@@ -79,7 +78,7 @@ public class OpenBlocks {
 
 	public static int renderId;
 
-	public static SyncableManager syncableManager = new SyncableManager();
+	public static SyncableManager syncableManager;
 
 	@Mod.PreInit
 	public void preInit(FMLPreInitializationEvent evt) {

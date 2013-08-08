@@ -14,7 +14,6 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.common.block.BlockElevator;
@@ -36,8 +35,6 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy implements IGuiHandler {
 
@@ -119,7 +116,7 @@ public class CommonProxy implements IGuiHandler {
 		GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
 
-		MinecraftForge.EVENT_BUS.register(new BowEventHandler());
+		//MinecraftForge.EVENT_BUS.register(new BowEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 
 		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);

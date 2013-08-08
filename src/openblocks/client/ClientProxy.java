@@ -25,8 +25,6 @@ import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
 import openblocks.common.CommonProxy;
-import openblocks.common.PlayerDeathHandler;
-import openblocks.common.block.BlockTank;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.tileentity.TileEntityFlag;
@@ -35,14 +33,14 @@ import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.tank.TileEntityTank;
+import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
 	public ClientProxy() {
+		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 	}
 

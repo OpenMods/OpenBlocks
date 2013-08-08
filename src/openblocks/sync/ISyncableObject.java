@@ -3,10 +3,8 @@ package openblocks.sync;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
 public interface ISyncableObject {
 	public boolean hasChanged();

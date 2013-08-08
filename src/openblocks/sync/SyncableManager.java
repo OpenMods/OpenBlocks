@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
@@ -22,7 +21,7 @@ public class SyncableManager {
 
 		byte type = dis.readByte();
 
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = net.minecraft.client.Minecraft.getMinecraft().theWorld;
 
 		ISyncHandler handler = null;
 
