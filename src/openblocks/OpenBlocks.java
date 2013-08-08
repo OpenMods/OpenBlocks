@@ -60,7 +60,8 @@ public class OpenBlocks {
 		public static int blockGraveId = 806;
 		public static int blockFlagId = 807;
 		public static int blockTankId = 809;
-		public static int elevatorTravelDistance = 30;
+		public static int elevatorTravelDistance = 20;
+		public static int bucketsPerTank = 16;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
 		public static boolean hookPlayerRenderer = false;
@@ -127,6 +128,10 @@ public class OpenBlocks {
 
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
+		
+		prop = configFile.get("tanks", "bucketsPerTank", Config.bucketsPerTank, "The amount of buckets each tank can hold");
+		Config.bucketsPerTank = prop.getInt();
+		
 
 		prop = configFile.get("hacks", "hookPlayerRenderer", Config.hookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.hookPlayerRenderer = prop.getBoolean(Config.hookPlayerRenderer);

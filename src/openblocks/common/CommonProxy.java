@@ -4,6 +4,7 @@ import java.io.File;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.server.MinecraftServer;
@@ -11,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.Log;
 import openblocks.OpenBlocks;
@@ -48,27 +50,70 @@ public class CommonProxy implements IGuiHandler {
 
 		if (Config.blockGuideId > -1) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
+			CraftingManager
+				.getInstance()
+				.getRecipeList()
+				.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide),
+						new Object[] { "ggg", "gtg", "ggg",
+						'g', new ItemStack(Block.glass), 
+						't', new ItemStack(Block.torchWood)}));
 		}
 		if (Config.blockElevatorId > -1) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
+			CraftingManager
+			.getInstance()
+			.getRecipeList()
+			.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator),
+					new Object[] { "www", "wgw", "www",
+					'w', new ItemStack(Block.cloth), 
+					'g', new ItemStack(Item.ingotGold)}));
 		}
 		if (Config.blockHealId > -1) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
 		}
 		if (Config.blockLightboxId > -1) {
 			OpenBlocks.Blocks.lightbox = new BlockLightbox();
+			CraftingManager
+			.getInstance()
+			.getRecipeList()
+			.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.lightbox),
+					new Object[] { "igi", "iti", "iii",
+					'i', new ItemStack(Item.ingotIron), 
+					'g', new ItemStack(Block.thinGlass), 
+					't', new ItemStack(Block.torchWood)}));
 		}
 		if (Config.blockTargetId > -1) {
 			OpenBlocks.Blocks.target = new BlockTarget();
+			CraftingManager
+			.getInstance()
+			.getRecipeList()
+			.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target),
+					new Object[] { "www", "www", "s s",
+					'w', new ItemStack(Block.cloth), 
+					's', new ItemStack(Item.stick)}));
 		}
 		if (Config.blockGraveId > -1) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
 		if (Config.blockFlagId > -1) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
+			CraftingManager
+			.getInstance()
+			.getRecipeList()
+			.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag),
+					new Object[] { "sw ", "sww", "s  ",
+					'w', new ItemStack(Block.cloth), 
+					's', new ItemStack(Item.stick)}));
 		}
 		if (Config.blockTankId > -1) {
 			OpenBlocks.Blocks.tank = new BlockTank();
+			CraftingManager
+			.getInstance()
+			.getRecipeList()
+			.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank),
+					new Object[] { "sgs", "ggg", "sgs",
+					'g', new ItemStack(Block.thinGlass), 
+					's', new ItemStack(Item.stick)}));
 		}
 		
 		GameRegistry.addRecipe(new TorchBowRecipe());

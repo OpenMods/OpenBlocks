@@ -124,7 +124,7 @@ public class TileEntityElevator extends TileEntity {
 					return 0;
 				} else if (blockId != 0) {
 					if (blocksInTheWay++ > 3) {
-						System.out.println("blocksInTheWay = " + blocksInTheWay);
+						//System.out.println("blocksInTheWay = " + blocksInTheWay);
 						return 0;
 					}
 				}

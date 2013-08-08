@@ -10,7 +10,7 @@ import openblocks.common.block.BlockTank;
 import openblocks.sync.SyncableTank;
 
 public class ItemTankBlock extends ItemOpenBlock {
-	private SyncableTank fakeTank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * 16);
+	private SyncableTank fakeTank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * OpenBlocks.Config.bucketsPerTank);
 	public ItemTankBlock(int id) {
 		super(id);
 		BlockTank.itemId = id;

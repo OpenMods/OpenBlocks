@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -16,6 +17,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -138,6 +140,11 @@ public class EntityGhost extends EntityMob implements
 		return false;
 	}
 
+	@Override
+    public int getAttackStrength(Entity par1Entity) {
+		return 10;
+    }
+	
 	private boolean shouldBeFlying() {
 
 		EntityLiving attackTarget = getAITarget();

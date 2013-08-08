@@ -22,7 +22,6 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
 		OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, OpenBlocks.Blocks.guide, null);
 		GL11.glPopMatrix();

@@ -61,7 +61,7 @@ public class BlockTank extends OpenBlock {
 	}
 	
 	public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer) {
-		System.out.println(getTileEntity(par1World, par2, par3, par3, TileEntityTank.class));
+		//System.out.println(getTileEntity(par1World, par2, par3, par3, TileEntityTank.class));
 	}
 	
     public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)

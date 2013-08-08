@@ -20,10 +20,7 @@ import openblocks.utils.BlockUtils;
 public class BlockGrave extends OpenBlock {
 
 	public BlockGrave() {
-		super(Config.blockGraveId, Material.anvil); /*
-													 * Requires tool and
-													 * immovable
-													 */
+		super(Config.blockGraveId, Material.anvil);
 		setupBlock(this, "grave", TileEntityGrave.class);
 	}
 

@@ -52,7 +52,7 @@ public class SoundLoader {
 				}
 				event.manager.soundPoolSounds.addSound("openblocks/" + fileName, soundFile);
 			} catch (Exception e) {
-				System.out.println("Couldnt load " + fileName);
+				//System.out.println("Couldnt load " + fileName);
 			}
 		}
 	}

@@ -146,7 +146,7 @@ public class BlockFlag extends OpenBlock {
 			TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
 			ForgeDirection surface = flag.getSurfaceDirection();
 			if (flag != null && surface == ForgeDirection.DOWN) {
-				System.out.println("Changing surface and rotation");
+				//System.out.println("Changing surface and rotation");
 				flag.setSurfaceAndRotation(surface, flag.getRotation() + 10f);
 				return false;
 			}

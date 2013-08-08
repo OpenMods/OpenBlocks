@@ -37,7 +37,7 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 	/**
 	 * This tank gets synced to the client
 	 */
-	private SyncableTank tank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * 16);
+	private SyncableTank tank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * OpenBlocks.Config.bucketsPerTank);
 	
 	/**
 	 * The direction the tank is being filled from

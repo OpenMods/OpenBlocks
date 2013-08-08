@@ -35,7 +35,7 @@ public class EntityViewportController extends EntityLiving {
 		if (entity == null || entity.isDead) { return; }
 
 		double yawRad = ((double)(ticks % 360) / 180) * Math.PI;
-		System.out.println(yawRad);
+		//System.out.println(yawRad);
 		double x = Math.cos(yawRad);
 		double z = Math.sin(yawRad);
 		double mag = Math.sqrt(x * x + z * z);
