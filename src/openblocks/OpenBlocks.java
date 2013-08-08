@@ -50,17 +50,18 @@ public class OpenBlocks {
 	}
 
 	public static class Config {
-		public static int blockLadderId = 800;
-		public static int blockGuideId = 801;
-		public static int blockElevatorId = 802;
-		public static int blockHealId = 803;
-		public static int blockLightboxId = 804;
-		public static int blockTargetId = 805;
-		public static int blockGraveId = 806;
-		public static int blockFlagId = 807;
-		public static int blockTankId = 809;
+		public static int blockLadderId = 2540;
+		public static int blockGuideId = 2541;
+		public static int blockElevatorId = 2542;
+		public static int blockHealId = 2543;
+		public static int blockLightboxId = 2544;
+		public static int blockTargetId = 2545;
+		public static int blockGraveId = 2546;
+		public static int blockFlagId = 2547;
+		public static int blockTankId = 2548;
 		public static int elevatorTravelDistance = 20;
 		public static int bucketsPerTank = 16;
+		public static boolean enableGraves = true;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
 		public static boolean hookPlayerRenderer = false;
@@ -127,10 +128,13 @@ public class OpenBlocks {
 
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
+
+		prop = configFile.get("grave", "enableGraves", Config.enableGraves, "Enable graves on player death");
+		Config.enableGraves = prop.getBoolean(Config.enableGraves);
 		
 		prop = configFile.get("tanks", "bucketsPerTank", Config.bucketsPerTank, "The amount of buckets each tank can hold");
 		Config.bucketsPerTank = prop.getInt();
-		
+
 
 		prop = configFile.get("hacks", "hookPlayerRenderer", Config.hookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.hookPlayerRenderer = prop.getBoolean(Config.hookPlayerRenderer);

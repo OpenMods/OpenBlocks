@@ -117,7 +117,9 @@ public class CommonProxy implements IGuiHandler {
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
 
 		//MinecraftForge.EVENT_BUS.register(new BowEventHandler());
-		MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
+		if (OpenBlocks.Config.enableGraves) {
+			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
+		}
 
 		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
 		
