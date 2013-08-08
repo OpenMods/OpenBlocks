@@ -254,7 +254,7 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 	 * TODO
 	 */
 	public LiquidStack drain(int amount, boolean doDrain) {
-		return null;
+		return tank.drain(amount, doDrain);
 	}
 
 
@@ -308,14 +308,12 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 
 	@Override
 	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		// TODO Auto-generated method stub
-		return null;
+		return drain(maxDrain, doDrain);
 	}
 
 	@Override
 	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		// TODO Auto-generated method stub
-		return null;
+		return drain(maxDrain, doDrain);
 	}
 
 	@Override
