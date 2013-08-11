@@ -76,7 +76,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	private void attachPlayerRenderer() {
-		if (Config.hookPlayerRenderer) {
+		if (Config.tryHookPlayerRenderer) {
 			// Get current renderer and check that it's Mojangs
 			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
 			if (render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)) {

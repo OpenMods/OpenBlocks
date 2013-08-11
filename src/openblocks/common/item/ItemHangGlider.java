@@ -24,7 +24,7 @@ public class ItemHangGlider extends Item {
 	
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World world, Entity entity, int par4, boolean par5) {
-		if (!world.isRemote && entity instanceof EntityPlayer && !EntityHangGlider.gliderMap.containsKey(entity)) {
+		if (!world.isRemote && entity instanceof EntityPlayer && !OpenBlocks.proxy.gliderMap.containsKey(entity)) {
 			EntityPlayer player = (EntityPlayer) entity;
 			ItemStack heldStack = player.getHeldItem();
 			if (heldStack != null && heldStack.getItem() == this) {

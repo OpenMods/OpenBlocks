@@ -70,7 +70,7 @@ public class OpenBlocks {
 		public static boolean enableGraves = true;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
-		public static boolean hookPlayerRenderer = false;
+		public static boolean tryHookPlayerRenderer = true;
 	}
 
 	public static enum Gui {
@@ -142,8 +142,8 @@ public class OpenBlocks {
 		Config.bucketsPerTank = prop.getInt();
 
 
-		prop = configFile.get("hacks", "hookPlayerRenderer", Config.hookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
-		Config.hookPlayerRenderer = prop.getBoolean(Config.hookPlayerRenderer);
+		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
+		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
 
 		if (Config.ghostSpawnProbability > 100) Config.ghostSpawnProbability = 100;
 		else if (Config.ghostSpawnProbability < 0) Config.ghostSpawnProbability = 0;
@@ -160,7 +160,7 @@ public class OpenBlocks {
 	}
 
 	public static void onSetBlock() {
-		System.out.println("Set block!");
+		//System.out.println("Set block!");
 	}
 
 	public void destroyTheWorld() {

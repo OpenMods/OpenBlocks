@@ -2,6 +2,7 @@ package openblocks.client;
 
 import java.util.EnumSet;
 
+import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 
 import net.minecraft.client.Minecraft;
@@ -38,8 +39,7 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	public void preRenderTick(Minecraft mc, World world, float renderTick) {
-		for (int id : EntityHangGlider.gliderMap.values()) {
-			EntityHangGlider glider = (EntityHangGlider)world.getEntityByID(id);
+		for (EntityHangGlider glider : OpenBlocks.proxy.gliderMap.values()) {
 			if (glider != null) {
 				glider.fixPositions();
 			}

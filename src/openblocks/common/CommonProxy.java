@@ -1,6 +1,8 @@
 package openblocks.common;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.WeakHashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +42,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy implements IGuiHandler {
 
+	public WeakHashMap<EntityPlayer, EntityHangGlider> gliderMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
+	
 	public void init() {
 
 		if (Config.blockLadderId > -1) {

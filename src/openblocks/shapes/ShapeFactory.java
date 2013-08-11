@@ -47,7 +47,7 @@ public class ShapeFactory {
 
 	public static void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable, Mode mode) {
 		if (!_shapeMap.containsKey(mode)) return; // Unavailable shape
-		System.out.println(String.format("%s,%s,%s : %s", xSize, ySize, zSize, mode.toString()));
+		//System.out.println(String.format("%s,%s,%s : %s", xSize, ySize, zSize, mode.toString()));
 		_shapeMap.get(mode).generateShape(xSize, ySize, zSize, shapeable);
 	}
 }

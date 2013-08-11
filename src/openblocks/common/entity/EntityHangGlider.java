@@ -16,8 +16,6 @@ import net.minecraft.world.World;
 
 public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
 
-	public static WeakHashMap<EntityPlayer, Integer> gliderMap = new WeakHashMap<EntityPlayer, Integer>();
-	
 	private EntityPlayer player;
 	
 	public EntityHangGlider(World world) {
@@ -27,34 +25,43 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	public EntityHangGlider(World world, EntityPlayer player) {
 		this(world);
 		this.player = player;
+		OpenBlocks.proxy.gliderMap.put(player, this);
 	}
 
 	@Override
 	protected void entityInit() {
-		if (player != null) {
-			gliderMap.put(player, entityId);
-		}
 	}
 	
 	@Override
 	public void onUpdate() {
 		if (player == null) {
 			setDead();
-			gliderMap.remove(player);	
 		}else {
-			ItemStack held = player.getHeldItem();
-			if (held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider) {
+			if (!worldObj.isRemote &&
+				OpenBlocks.proxy.gliderMap.containsKey(player) &&
+				OpenBlocks.proxy.gliderMap.get(player) != null
+				&& OpenBlocks.proxy.gliderMap.get(player) != this) {
 				setDead();
-				gliderMap.remove(player);
+				EntityHangGlider otherGilder = OpenBlocks.proxy.gliderMap.get(player);
+				otherGilder.setDead();
+				OpenBlocks.proxy.gliderMap.remove(player);
 			}else {
-				fixPositions();
-				if (!player.onGround && player.motionY < 0 && !player.isSneaking()) {
-				 	player.motionY *= 0.4;
-					motionY *= 0.4;
-					double x = Math.cos(Math.toRadians(player.rotationYawHead+90)) * 0.05;
-					double z = Math.sin(Math.toRadians(player.rotationYawHead+90)) * 0.05;
-					player.motionX += x;
-					player.motionZ += z;
+				ItemStack held = player.getHeldItem();
+				if (held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider) {
+					if (!worldObj.isRemote) { 
+						setDead();
+						OpenBlocks.proxy.gliderMap.remove(player);
+					}
+				}else {
+					fixPositions();
+					if (!player.onGround && player.motionY < 0 && !player.isSneaking()) {
+					 	player.motionY *= 0.4;
+						motionY *= 0.4;
+						double x = Math.cos(Math.toRadians(player.rotationYawHead+90)) * 0.05;
+						double z = Math.sin(Math.toRadians(player.rotationYawHead+90)) * 0.05;
+						player.motionX += x;
+						player.motionZ += z;
+					}
 				}
 			}
 		}
@@ -100,13 +107,13 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		data.writeInt(player.entityId);
+		data.writeUTF(player.username);
 	}
 
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
-		player = (EntityPlayer)worldObj.getEntityByID(data.readInt());
-		gliderMap.put(player, entityId);
+		player = worldObj.getPlayerEntityByName(data.readUTF());
+		OpenBlocks.proxy.gliderMap.put(player, this);
 	}
 
 }

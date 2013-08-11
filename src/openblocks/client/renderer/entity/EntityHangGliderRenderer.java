@@ -17,10 +17,14 @@ public class EntityHangGliderRenderer extends Render {
 		EntityHangGlider glider = (EntityHangGlider) entity;
 
         GL11.glPushMatrix();
-        GL11.glTranslatef((float)x, (float)y+0.4f, (float)z);
+        if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+            GL11.glTranslatef((float)x, (float)y+0.4f, (float)z);
+        }else {
+            GL11.glTranslatef((float)x, (float)y-0.2f, (float)z);
+        }
         
         float f3 = this.interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);
-
+        
         GL11.glRotatef(180.0F - f3, 0.0F, 1.0F, 0.0F);
         GL11.glScalef(3f, 3f, 3f);
 		
