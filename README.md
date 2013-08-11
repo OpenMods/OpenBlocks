@@ -12,11 +12,11 @@ What does it contain?
 -----------
 
 * Colored mining flags
-* The anywhere tank, fill any hole with a liquid
+* Liquid tank
 * Player graves, fight the ghost of the perished to obtain their inventory
 * Light boxes to display your maps on the wall, ceiling or floor
 * Archery targets for a shooting range
-* Even torch arrows!
+* Even hand gliders!
 * Exciting graphics and much more to come.
 
 Compiling
