@@ -43,6 +43,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class CommonProxy implements IGuiHandler {
 
 	public WeakHashMap<EntityPlayer, EntityHangGlider> gliderMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
+	public WeakHashMap<EntityPlayer, EntityHangGlider> gliderClientMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
 	
 	public void init() {
 

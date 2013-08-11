@@ -39,7 +39,7 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	public void preRenderTick(Minecraft mc, World world, float renderTick) {
-		for (EntityHangGlider glider : OpenBlocks.proxy.gliderMap.values()) {
+		for (EntityHangGlider glider : OpenBlocks.proxy.gliderClientMap.values()) {
 			if (glider != null) {
 				glider.fixPositions();
 			}
