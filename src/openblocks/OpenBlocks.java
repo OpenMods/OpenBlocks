@@ -17,6 +17,7 @@ import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
+import openblocks.common.item.ItemHangGlider;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -48,6 +49,10 @@ public class OpenBlocks {
 		public static BlockFlag flag;
 		public static BlockTank tank;
 	}
+	
+	public static class Items {
+		public static ItemHangGlider hangGlider;
+	}
 
 	public static class Config {
 		public static int blockLadderId = 2540;
@@ -59,6 +64,7 @@ public class OpenBlocks {
 		public static int blockGraveId = 2546;
 		public static int blockFlagId = 2547;
 		public static int blockTankId = 2548;
+		public static int itemHangGliderId = 3620;
 		public static int elevatorTravelDistance = 20;
 		public static int bucketsPerTank = 16;
 		public static boolean enableGraves = true;

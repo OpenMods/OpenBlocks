@@ -39,7 +39,6 @@ public class PlayerDeathHandler {
 						world.setBlock(x, checkY, z, OpenBlocks.Config.blockGraveId, 0, 2);
 						TileEntity tile = world.getBlockTileEntity(x, checkY, z);
 						if (tile != null && tile instanceof TileEntityGrave) {
-							System.out.println("Found the grave");
 							TileEntityGrave grave = (TileEntityGrave)tile;
 							grave.setUsername(player.username);
 							grave.setLoot(player.inventory);
@@ -51,7 +50,6 @@ public class PlayerDeathHandler {
 					}
 				}
 			}
-
 		}
 	}
 }

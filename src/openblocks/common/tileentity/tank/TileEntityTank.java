@@ -249,7 +249,6 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		//System.out.println("synced");
 	}
 	
 	@Override

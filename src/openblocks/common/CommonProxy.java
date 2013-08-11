@@ -27,6 +27,8 @@ import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
+import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.item.ItemHangGlider;
 import openblocks.common.recipe.TorchBowRecipe;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.utils.LanguageUtils;
@@ -113,6 +115,8 @@ public class CommonProxy implements IGuiHandler {
 					's', new ItemStack(Item.stick)}));
 		}
 		
+		OpenBlocks.Items.hangGlider = new ItemHangGlider();
+		
 		GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
 
@@ -122,6 +126,7 @@ public class CommonProxy implements IGuiHandler {
 		}
 
 		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
 		
 		LanguageUtils.setupLanguages();
 	}

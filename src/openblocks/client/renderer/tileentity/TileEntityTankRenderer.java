@@ -120,6 +120,8 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				} else {
 				}
 				
+				bindTextureByName(getLiquidSheet(liquid));
+				
 				Tessellator t = Tessellator.instance;
 				
 				double ySouthEast = tankTile.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.EAST);
@@ -208,5 +210,16 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			throw new Exception();
 		}
 		return icon;
+	}
+	
+	public static String getLiquidSheet(LiquidStack liquid) {
+		if (liquid == null || liquid.itemID <= 0) {
+			return "/terrain.png";
+		}
+		LiquidStack canon = liquid.canonical();
+		if (canon == null) {
+			return "/terrain.png";
+		}
+		return canon.getTextureSheet();
 	}
 }

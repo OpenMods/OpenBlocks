@@ -153,16 +153,13 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
-		short liquidId = stream.readShort();
-		short liquidMeta = stream.readShort();
+		int liquidId = stream.readInt();
+		int liquidMeta = stream.readInt();
 		if (liquidId == 0 && liquidMeta == 0) {
 			liquid = null;
 		}else {
-			if (liquid == null || (liquid.itemID != liquidId || liquid.itemMeta != liquidMeta)) {
-				liquid = new LiquidStack(liquidId, 0, liquidMeta);
-			}
+			liquid = new LiquidStack(liquidId, 1, liquidMeta);
 		}
-
 		int amount = stream.readInt();
 		if (liquid != null) {
 			liquid.amount = amount;
@@ -175,8 +172,8 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	@Override
 	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
-		stream.writeShort(liquid == null ? 0 : liquid.itemID);
-		stream.writeShort(liquid == null ? 0 : liquid.itemMeta);
+		stream.writeInt(liquid == null ? 0 : liquid.itemID);
+		stream.writeInt(liquid == null ? 0 : liquid.itemMeta);
 		stream.writeInt(liquid == null ? 0 : liquid.amount);
 		stream.writeInt(capacity);
 	}
