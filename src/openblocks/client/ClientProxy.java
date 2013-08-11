@@ -39,6 +39,8 @@ import openblocks.common.tileentity.tank.TileEntityTank;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
@@ -67,6 +69,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
 
+		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 		attachPlayerRenderer();
 
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());

@@ -40,44 +40,49 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	public void onUpdate() {
 		if (player == null) {
 			setDead();
-			gliderMap.remove(player);
+			gliderMap.remove(player);	
 		}else {
 			ItemStack held = player.getHeldItem();
 			if (held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider) {
 				setDead();
 				gliderMap.remove(player);
 			}else {
-				
-			    this.lastTickPosX = prevPosX = player.prevPosX;// * Math.sin(Math.toRadians(player.prevRenderYawOffset));
-			    this.lastTickPosY = prevPosY = player.prevPosY;
-			    this.lastTickPosZ = prevPosZ = player.prevPosZ;// * Math.cos(Math.toRadians(player.prevRenderYawOffset));
-
-			    setPosition(posX, posY, posZ);
-			    this.posX = player.posX;// * Math.sin(Math.toRadians(player.renderYawOffset));
-			    this.posY = player.posY;
-			    this.posZ = player.posZ;// * Math.cos(Math.toRadians(player.renderYawOffset));
-
-			    this.prevRotationYaw = player.prevRotationYaw;
-			    this.rotationYaw = player.rotationYaw;
-
-			    this.prevRotationPitch = player.prevRotationPitch;
-			    this.rotationPitch = player.rotationPitch;
-
-			    this.motionX = this.posX - this.prevPosX;
-			    this.motionY = this.posY - this.prevPosY;
-			    this.motionZ = this.posZ - this.prevPosZ;
-			    
-				/*
-				 if (!player.onGround || player.motionY < 0 && !player.isSneaking()) {
-				 	player.motionY /= 3;
-					motionY /= 3;
+				fixPositions();
+				if (!player.onGround && player.motionY < 0 && !player.isSneaking()) {
+				 	player.motionY *= 0.4;
+					motionY *= 0.4;
+					double x = Math.cos(Math.toRadians(player.rotationYawHead+90)) * 0.05;
+					double z = Math.sin(Math.toRadians(player.rotationYawHead+90)) * 0.05;
+					player.motionX += x;
+					player.motionZ += z;
 				}
-				*/
-			    
-				System.out.println(posZ + ": "+player.posZ);
-				
 			}
 		}
+	}
+	
+	public void fixPositions() {
+
+		if (player != null) {
+		    this.lastTickPosX = prevPosX = player.prevPosX;
+		    this.lastTickPosY = prevPosY = player.prevPosY;
+		    this.lastTickPosZ = prevPosZ = player.prevPosZ;
+	
+		    this.posX = player.posX;
+		    this.posY = player.posY;
+		    this.posZ = player.posZ;
+	
+		    setPosition(posX, posY, posZ);
+		    this.prevRotationYaw = player.prevRenderYawOffset;
+		    this.rotationYaw = player.renderYawOffset;
+	
+		    this.prevRotationPitch = player.prevRotationPitch;
+		    this.rotationPitch = player.rotationPitch;
+	
+		    this.motionX = this.posX - this.prevPosX;
+		    this.motionY = this.posY - this.prevPosY;
+		    this.motionZ = this.posZ - this.prevPosZ;
+		}
+	    
 	}
 		
 

@@ -1,5 +1,7 @@
 package openblocks.client.renderer.entity;
 
+import openblocks.common.entity.EntityHangGlider;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -11,6 +13,8 @@ public class EntityPlayerRenderer extends RenderPlayer {
 	@Override
 	protected void rotatePlayer(EntityPlayer player, float par2, float par3, float par4) {
 		super.rotatePlayer(player, par2, par3, par4);
-		GL11.glRotatef(75, -1, 0, 0);
+		if (EntityHangGlider.gliderMap.containsKey(player) && !player.onGround) {
+			GL11.glRotatef(75, -1, 0, 0);
+		}
 	}
 }
