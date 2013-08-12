@@ -136,6 +136,10 @@ public class CommonProxy implements IGuiHandler {
 		LanguageUtils.setupLanguages();
 	}
 
+	public void assertItemHangGliderRenderer() {
+		
+	}
+	
 	public void registerRenderInformation() {
 
 	}

@@ -17,6 +17,8 @@ import net.minecraft.world.World;
 public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
 
 	private EntityPlayer player;
+	/* Let the glider handle it's own disposal to centralize reference management in one place. */
+	private boolean shouldDespawn = false;
 	
 	public EntityHangGlider(World world) {
 		super(world);
@@ -32,13 +34,17 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	protected void entityInit() {
 	}
 	
+	public void despawnGlider(){
+		shouldDespawn = true;
+	}
+	
 	@Override
 	public void onUpdate() {
 		if (player == null) {
 			setDead();
 		}else {
 			ItemStack held = player.getHeldItem();
-			if (held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider) {
+			if (held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider || shouldDespawn) {
 				if (worldObj.isRemote) { 
 					OpenBlocks.proxy.gliderClientMap.remove(player);
 				}else {

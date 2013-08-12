@@ -6,8 +6,10 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
@@ -44,6 +46,8 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
+	private ItemRendererHangGlider hangGliderRenderer;
+	
 	public ClientProxy() {
 		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
@@ -62,8 +66,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
 		
-		ItemRendererHangGlider hangGliderRenderer = new ItemRendererHangGlider();
-		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
+		assertItemHangGliderRenderer();
 		MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
@@ -73,6 +76,13 @@ public class ClientProxy extends CommonProxy {
 		attachPlayerRenderer();
 
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+	}
+
+	public void assertItemHangGliderRenderer() {
+		if(hangGliderRenderer == null) hangGliderRenderer = new ItemRendererHangGlider();		
+		if(MinecraftForgeClient.getItemRenderer(new ItemStack(OpenBlocks.Items.hangGlider), ItemRenderType.EQUIPPED) == null){
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
+		}
 	}
 
 	private void attachPlayerRenderer() {
