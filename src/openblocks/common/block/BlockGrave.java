@@ -39,10 +39,10 @@ public class BlockGrave extends OpenBlock {
 	public int quantityDropped(Random rand) {
 		return 0;
 	}
-	
+
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
-        // remove from creative
-    }
+		// remove from creative
+	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {

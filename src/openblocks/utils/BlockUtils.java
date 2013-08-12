@@ -106,7 +106,7 @@ public class BlockUtils {
 		int targetZ = tile.zCoord + direction.offsetZ;
 		return tile.worldObj.getBlockTileEntity(targetX, targetY, targetZ);
 	}
-	
+
 	public static ForgeDirection sideToDirection(int side) {
 		ForgeDirection direction = ForgeDirection.UNKNOWN;
 		// Bottom = 0, Top = 1, East = 2, West = 3, North = 4, South = 5.

@@ -12,7 +12,7 @@ public class SyncableIntArray implements ISyncableObject {
 	private int[] value;
 	private boolean hasChanged = false;
 	private int ticksSinceChanged = 0;
-	
+
 	public SyncableIntArray(int[] value) {
 		this.value = value;
 	}
@@ -20,7 +20,7 @@ public class SyncableIntArray implements ISyncableObject {
 	public SyncableIntArray() {
 		this(new int[0]);
 	}
-	
+
 	public void setValue(int[] newValue) {
 		if (!Arrays.equals(value, newValue)) {
 			value = newValue;
@@ -31,7 +31,7 @@ public class SyncableIntArray implements ISyncableObject {
 	public int[] getValue() {
 		return value;
 	}
-	
+
 	public int size() {
 		if (value == null) { return 0; }
 		return value.length;
@@ -51,7 +51,8 @@ public class SyncableIntArray implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
 		stream.writeInt(size());
 		for (int i = 0; i < size(); i++) {
 			stream.writeInt(value[i]);

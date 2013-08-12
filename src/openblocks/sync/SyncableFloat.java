@@ -12,22 +12,22 @@ public class SyncableFloat implements ISyncableObject {
 	private float value;
 	private boolean hasChanged = false;
 	private int ticksSinceChanged = 0;
-	
+
 	public SyncableFloat(float value) {
 		this.value = value;
 	}
-	
+
 	public SyncableFloat() {
 		this(0.0f);
 	}
-	
+
 	public void setValue(float newValue) {
 		if (!equals(newValue)) {
 			value = newValue;
 			setHasChanged();
 		}
 	}
-	
+
 	public float getValue() {
 		return value;
 	}
@@ -42,7 +42,8 @@ public class SyncableFloat implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
 		stream.writeFloat(value);
 	}
 

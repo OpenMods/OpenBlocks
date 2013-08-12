@@ -11,22 +11,22 @@ public class SyncableDouble implements ISyncableObject {
 	private double value;
 	private boolean hasChanged = false;
 	private int ticksSinceChanged = 0;
-	
+
 	public SyncableDouble(double value) {
 		this.value = value;
 	}
-	
+
 	public SyncableDouble() {
 		this(0.0f);
 	}
-	
+
 	public void setValue(double newValue) {
 		if (newValue != value) {
 			value = newValue;
 			setHasChanged();
 		}
 	}
-	
+
 	public double getValue() {
 		return value;
 	}
@@ -37,7 +37,8 @@ public class SyncableDouble implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
 		stream.writeDouble(value);
 	}
 

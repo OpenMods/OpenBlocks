@@ -11,16 +11,12 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableDirection;
-import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableShort;
-import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.ItemUtils;
 
@@ -28,9 +24,10 @@ public class TileEntityTank extends TileEntityTankBase implements
 		ITankContainer {
 
 	public static int getTankCapacity() {
-		return LiquidContainerRegistry.BUCKET_VOLUME * OpenBlocks.Config.bucketsPerTank;
+		return LiquidContainerRegistry.BUCKET_VOLUME
+				* OpenBlocks.Config.bucketsPerTank;
 	}
-	
+
 	/**
 	 * The tank holding the liquid
 	 */
@@ -50,7 +47,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 	 * The level of the liquid that is rendered on the client
 	 */
 	private SyncableShort liquidRenderAmount = new SyncableShort();
-	
+
 	/**
 	 * The amount that will be rendered by the client, interpolated towards
 	 * liquidRenderAmount each tick
@@ -62,54 +59,80 @@ public class TileEntityTank extends TileEntityTankBase implements
 	 */
 	private static final short adjustRate = 1000;
 
+	private double flowTimer = Math.random() * 100;
+
 	/**
 	 * Keys of things what get synced
 	 */
 	public enum Keys {
 		liquidId, liquidMeta, renderLevel
 	}
-	
+
 	/**
 	 * Attemps to fill a list of tanks evenly
-	 * @param liquidType the type of liquid that is being provided
-	 * @param liquidAvailable the amount of liquid in mB that is available
-	 * @param tanks the list of tanks to be filled
+	 * 
+	 * @param liquidType
+	 *            the type of liquid that is being provided
+	 * @param liquidAvailable
+	 *            the amount of liquid in mB that is available
+	 * @param tanks
+	 *            the list of tanks to be filled
 	 * @return the amount of liquid consumed
 	 */
-	public static int evenlyFillTanks(LiquidStack liquidType, int liquidAvailable, TileEntityTank ... tanks) {
+	public static int evenlyFillTanks(LiquidStack liquidType, int liquidAvailable, TileEntityTank... tanks) {
 		int startingAmount = liquidAvailable;
-		/* Firstly iterate all the tanks and get the ones that can accept at least some liquid */
+		/*
+		 * Firstly iterate all the tanks and get the ones that can accept at
+		 * least some liquid
+		 */
 		HashSet<TileEntityTank> candidates = new HashSet<TileEntityTank>();
-		for(TileEntityTank tank : tanks) {
-			if(tank.canReceiveLiquid(liquidType) && !tank.isFull()) {
+		for (TileEntityTank tank : tanks) {
+			if (tank.canReceiveLiquid(liquidType) && !tank.isFull()) {
 				candidates.add(tank);
 			}
 		}
-		/* While candidates are available and liquid is available, fill them by fullest tank */
-		while(candidates.size() > 0 && liquidAvailable > 0) {
-			/* Iterate each tank, and find the full most tank. This is the max amount of liquid we can provide in this iteration */
+		/*
+		 * While candidates are available and liquid is available, fill them by
+		 * fullest tank
+		 */
+		while (candidates.size() > 0 && liquidAvailable > 0) {
+			/*
+			 * Iterate each tank, and find the full most tank. This is the max
+			 * amount of liquid we can provide in this iteration
+			 */
 			int highestLevel = 0;
-			for(TileEntityTank tank : candidates) {
-				if(tank.getAmount() > highestLevel) highestLevel = tank.getAmount();
+			for (TileEntityTank tank : candidates) {
+				if (tank.getAmount() > highestLevel) highestLevel = tank.getAmount();
 			}
 			int maxProvision = getTankCapacity() - highestLevel;
-			if(maxProvision > liquidAvailable) maxProvision = liquidAvailable;
+			if (maxProvision > liquidAvailable) maxProvision = liquidAvailable;
 			/* Split the liquid available over each tank */
 			int splitProvision = maxProvision / candidates.size();
-			if(splitProvision < 1) splitProvision = 1; /* prevent a while(forever) loop ;) */
-			liquidType.amount = splitProvision; // Set the liquidStack amount for dispensing
-			for(TileEntityTank tank : candidates) {
-				if(liquidAvailable < 1) break; /* Out of liquid? Lets leave */
-				if(liquidAvailable < liquidType.amount) liquidType.amount = liquidAvailable; /* Running dry */					
+			if (splitProvision < 1) splitProvision = 1; /*
+														 * prevent a
+														 * while(forever) loop
+														 * ;)
+														 */
+			liquidType.amount = splitProvision; // Set the liquidStack amount
+												// for dispensing
+			for (TileEntityTank tank : candidates) {
+				if (liquidAvailable < 1) break; /* Out of liquid? Lets leave */
+				if (liquidAvailable < liquidType.amount) liquidType.amount = liquidAvailable; /*
+																							 * Running
+																							 * dry
+																							 */
 				int dispensedAmount = tank.fill(ForgeDirection.UNKNOWN, liquidType, true);
 				liquidAvailable -= dispensedAmount;
 			}
-			/* Now that we've dispensed what we can this iteration, we'll re-calculate our candidates */
+			/*
+			 * Now that we've dispensed what we can this iteration, we'll
+			 * re-calculate our candidates
+			 */
 			HashSet<TileEntityTank> removal = new HashSet<TileEntityTank>();
-			for(TileEntityTank tank : candidates) {
-				if(tank.isFull()) removal.add(tank);
+			for (TileEntityTank tank : candidates) {
+				if (tank.isFull()) removal.add(tank);
 			}
-			for(TileEntityTank tank : removal) {
+			for (TileEntityTank tank : removal) {
 				candidates.remove(tank);
 			}
 		}
@@ -134,7 +157,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 		} else if (interpolatedRenderAmount - adjustRate > liquidRenderAmount.getValue()) {
 			interpolatedRenderAmount -= adjustRate;
 		} else {
-			interpolatedRenderAmount = liquidRenderAmount.getValue(); 
+			interpolatedRenderAmount = liquidRenderAmount.getValue();
 		}
 	}
 
@@ -157,8 +180,8 @@ public class TileEntityTank extends TileEntityTankBase implements
 						if (below.canReceiveLiquid(myLiquid)) {
 							int toFill = Math.min(below.getSpace(), myLiquid.amount);
 							myLiquid.amount = toFill;
-							below.fill(myLiquid, true, except);
-							tank.drain(toFill, true);
+							int filled = below.fill(myLiquid, true, except);
+							tank.drain(filled, true);
 						}
 					}
 				}
@@ -178,7 +201,8 @@ public class TileEntityTank extends TileEntityTankBase implements
 						}
 					}
 				}
-				if(tank.getLiquid() != null) {
+
+				if (tank.getLiquid() != null) {
 					// set the sync values for this liquid
 					liquidId.setValue(tank.getLiquid().itemID);
 					liquidMeta.setValue(tank.getLiquid().itemMeta);
@@ -190,10 +214,8 @@ public class TileEntityTank extends TileEntityTankBase implements
 				/* ratio the liquid amount in to the entire short, clamp it */
 				short newLiquidRender = (short)Math.max(0, Math.min(Short.MAX_VALUE, Short.MAX_VALUE
 						* tank.getLiquid().amount / (float)tank.getCapacity()));
-				System.out.println("Setting liquidRender to " + newLiquidRender);
 				liquidRenderAmount.setValue(newLiquidRender);
 			} else {
-				System.out.println("Setting liquidRender to ZERO");
 				liquidRenderAmount.setValue((short)0);
 				liquidId.setValue(0);
 				liquidMeta.setValue(0);
@@ -202,6 +224,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 		} else {
 			interpolateLiquidLevel();
+			flowTimer += 0.1f;
 		}
 	}
 
@@ -220,13 +243,13 @@ public class TileEntityTank extends TileEntityTankBase implements
 	public int getSpace() {
 		return getInternalTank().getCapacity() - getAmount();
 	}
-	
+
 	public boolean isFull() {
 		return getAmount() == getInternalTank().getCapacity();
 	}
 
 	public int getAmount() {
-		if(getInternalTank() == null || getInternalTank().getLiquid() == null) return 0;
+		if (getInternalTank() == null || getInternalTank().getLiquid() == null) return 0;
 		return getInternalTank().getLiquid().amount;
 	}
 
@@ -236,9 +259,13 @@ public class TileEntityTank extends TileEntityTankBase implements
 		if (except == null) {
 			except = new HashSet<TileEntityTank>();
 		}
+		if (resource == null) { return 0; }
+
 		int startAmount = resource.amount;
 		if (except.contains(this)) { return 0; }
 		except.add(this);
+
+		resource = resource.copy();
 
 		// fill the tank below as much as possible
 		if (below != null && below.getSpace() > 0) {
@@ -288,6 +315,13 @@ public class TileEntityTank extends TileEntityTankBase implements
 	public void onSynced(List<ISyncableObject> changes) {
 		// Mikee, we don't need to create the liquid client side cause we don't
 		// care, right? :D
+		if (changes.contains(liquidId) || changes.contains(liquidMeta)) {
+			if (liquidId.getValue() == 0) {
+				tank.setLiquid(null);
+			} else {
+				tank.setLiquid(new LiquidStack(liquidId.getValue(), 1, liquidMeta.getValue()));
+			}
+		}
 	}
 
 	@Override
@@ -299,30 +333,22 @@ public class TileEntityTank extends TileEntityTankBase implements
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")) {
 			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag("tank");
-			tank.readFromNBT(tankTag);
+			this.tank.readFromNBT(tankTag);
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		NBTTagCompound tankTag = new NBTTagCompound();
-		if (containsValidLiquid()) {
-			tank.getLiquid().writeToNBT(tankTag);
-		}
-		tag.setTag("tank", tankTag);
+		tank.writeToNBT(tag);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		if (tag.hasKey("tank")) {
-			NBTTagCompound tankTag = tag.getCompoundTag("tank");
-			LiquidStack liquid = LiquidStack.loadLiquidStackFromNBT(tankTag);
-			if (liquid != null) {
-				tank.setLiquid(liquid);
-			}
-		}
+		tank.readFromNBT(tag);
+		interpolatedRenderAmount = (short)((double)getAmount()
+				/ (double)tank.getCapacity() * Short.MAX_VALUE);
 	}
 
 	@Override
@@ -420,11 +446,44 @@ public class TileEntityTank extends TileEntityTankBase implements
 		return false;
 	}
 
-	public double getLiquidHeightForSide(ForgeDirection south, ForgeDirection east) {
-		if(containsValidLiquid()) {
+	public double getHeightForRender() {
+		if (containsValidLiquid()) {
 			return interpolatedRenderAmount / (double)Short.MAX_VALUE;
-		}else{
+		} else {
 			return 0D; /* No D for you ;) */
 		}
+	}
+
+	public double getFlowOffset() {
+		return Math.sin(flowTimer) / 35;
+	}
+
+	public double getLiquidHeightForSide(ForgeDirection... sides) {
+		if (containsValidLiquid()) {
+			double percentFull = getHeightForRender();
+			if (percentFull > 0.98) { return 1.0; }
+			double fullness = percentFull + getFlowOffset();
+			int count = 1;
+			for (ForgeDirection side : sides) {
+				TileEntityTank sideTank = getTankInDirection(side);
+				if (sideTank != null
+						&& sideTank.canReceiveLiquid(tank.getLiquid())) {
+					fullness += sideTank.getHeightForRender()
+							+ sideTank.getFlowOffset();
+					count++;
+				}
+			}
+			return Math.max(0, Math.min(1, fullness / count));
+		} else {
+			return 0D; /* No D for you ;) */
+		}
+	}
+
+	public void setClientLiquidId(int itemID) {
+		liquidId.setValue(itemID);
+	}
+
+	public void setClientLiquidMeta(int itemMeta) {
+		liquidMeta.setValue(itemMeta);
 	}
 }

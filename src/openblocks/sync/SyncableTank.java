@@ -16,11 +16,9 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	private int tankPressure;
 	private boolean hasChanged;
 	private int ticksSinceChanged = 0;
-	
+
 	public enum Flags {
-		capacity,
-		amount,
-		liquid
+		capacity, amount, liquid
 	}
 
 	public SyncableTank(int capacity) {
@@ -36,15 +34,15 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	public int getCapacity() {
 		return capacity;
 	}
-	
+
 	public int getAmount() {
-		return liquid != null ? liquid.amount : 0;
+		return liquid != null? liquid.amount : 0;
 	}
-	
+
 	public double getPercentFull() {
-		return (double) getAmount() / (double) getCapacity();
+		return (double)getAmount() / (double)getCapacity();
 	}
-	
+
 	public void clear() {
 		liquid = null;
 	}
@@ -157,7 +155,7 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 		int liquidMeta = stream.readInt();
 		if (liquidId == 0 && liquidMeta == 0) {
 			liquid = null;
-		}else {
+		} else {
 			liquid = new LiquidStack(liquidId, 1, liquidMeta);
 		}
 		int amount = stream.readInt();
@@ -171,10 +169,11 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
-		stream.writeInt(liquid == null ? 0 : liquid.itemID);
-		stream.writeInt(liquid == null ? 0 : liquid.itemMeta);
-		stream.writeInt(liquid == null ? 0 : liquid.amount);
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
+		stream.writeInt(liquid == null? 0 : liquid.itemID);
+		stream.writeInt(liquid == null? 0 : liquid.itemMeta);
+		stream.writeInt(liquid == null? 0 : liquid.amount);
 		stream.writeInt(capacity);
 	}
 

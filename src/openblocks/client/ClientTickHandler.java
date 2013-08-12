@@ -2,12 +2,10 @@ package openblocks.client;
 
 import java.util.EnumSet;
 
-import openblocks.OpenBlocks;
-import openblocks.common.entity.EntityHangGlider;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
-
+import openblocks.OpenBlocks;
+import openblocks.common.entity.EntityHangGlider;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 

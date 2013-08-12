@@ -49,7 +49,7 @@ public class OpenBlocks {
 		public static BlockFlag flag;
 		public static BlockTank tank;
 	}
-	
+
 	public static class Items {
 		public static ItemHangGlider hangGlider;
 	}
@@ -137,10 +137,9 @@ public class OpenBlocks {
 
 		prop = configFile.get("grave", "enableGraves", Config.enableGraves, "Enable graves on player death");
 		Config.enableGraves = prop.getBoolean(Config.enableGraves);
-		
+
 		prop = configFile.get("tanks", "bucketsPerTank", Config.bucketsPerTank, "The amount of buckets each tank can hold");
 		Config.bucketsPerTank = prop.getInt();
-
 
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
@@ -160,7 +159,7 @@ public class OpenBlocks {
 	}
 
 	public static void onSetBlock() {
-		//System.out.println("Set block!");
+		// System.out.println("Set block!");
 	}
 
 	public void destroyTheWorld() {

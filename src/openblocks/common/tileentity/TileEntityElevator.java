@@ -72,14 +72,14 @@ public class TileEntityElevator extends TileEntity {
 							&& player.capabilities.isFlying) continue;
 					if (lowerLevel != 0
 							&& player.isSneaking()
-							&& player.ridingEntity == null 
+							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = lowerLevel;
 						/* player.isJumping doesn't seem to work server side ? */
 					} else if (upperLevel != 0
 							&& player.posY > yCoord + 1.2
-							&& player.ridingEntity == null 
+							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						doTeleport = true;
 						teleportTo = upperLevel;
@@ -126,7 +126,8 @@ public class TileEntityElevator extends TileEntity {
 					return 0;
 				} else if (blockId != 0) {
 					if (blocksInTheWay++ > 3) {
-						//System.out.println("blocksInTheWay = " + blocksInTheWay);
+						// System.out.println("blocksInTheWay = " +
+						// blocksInTheWay);
 						return 0;
 					}
 				}

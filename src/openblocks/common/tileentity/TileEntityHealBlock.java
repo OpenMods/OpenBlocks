@@ -6,9 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityHealBlock extends OpenTileEntity {
-	
+
 	int value = 0;
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -29,7 +29,7 @@ public class TileEntityHealBlock extends OpenTileEntity {
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

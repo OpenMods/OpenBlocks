@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 public class OpenRenderHelper {
 
 	protected static RenderBlocks renderBlocks = new RenderBlocks();
-	
+
 	public static void renderCube(double x1, double y1, double z1, double x2, double y2, double z2, Block block, Icon overrideTexture) {
 		GL11.glPushMatrix();
 		GL11.glDisable(2896);

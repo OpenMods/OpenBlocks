@@ -15,7 +15,7 @@ public class SyncableFlags implements ISyncableObject {
 	protected int[] ticksSinceSet = new int[16];
 	protected int[] ticksSinceUnset = new int[16];
 	protected int ticksSinceChanged = 0;
-	
+
 	public SyncableFlags() {
 
 	}
@@ -120,7 +120,8 @@ public class SyncableFlags implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
 		stream.writeShort(value);
 	}
 

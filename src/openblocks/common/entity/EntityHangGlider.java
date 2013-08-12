@@ -1,29 +1,31 @@
 package openblocks.common.entity;
 
-import java.util.WeakHashMap;
-
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
-public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
+public class EntityHangGlider extends Entity implements
+		IEntityAdditionalSpawnData {
 
 	private EntityPlayer player;
-	/* Let the glider handle it's own disposal to centralize reference management in one place. */
+	/*
+	 * Let the glider handle it's own disposal to centralize reference
+	 * management in one place.
+	 */
 	private boolean shouldDespawn = false;
-	
+
 	public EntityHangGlider(World world) {
 		super(world);
 	}
-	
+
 	public EntityHangGlider(World world, EntityPlayer player) {
 		this(world);
 		this.player = player;
@@ -31,27 +33,28 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	}
 
 	@Override
-	protected void entityInit() {
-	}
-	
-	public void despawnGlider(){
+	protected void entityInit() {}
+
+	public void despawnGlider() {
 		shouldDespawn = true;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		if (player == null) {
 			setDead();
-		}else {
+		} else {
 			ItemStack held = player.getHeldItem();
-			if (held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider || shouldDespawn) {
-				if (worldObj.isRemote) { 
+			if (held == null || held.getItem() == null
+					|| held.getItem() != OpenBlocks.Items.hangGlider
+					|| shouldDespawn) {
+				if (worldObj.isRemote) {
 					OpenBlocks.proxy.gliderClientMap.remove(player);
-				}else {
+				} else {
 					OpenBlocks.proxy.gliderMap.remove(player);
 				}
 				setDead();
-			}else {
+			} else {
 				fixPositions();
 				double horizontalSpeed = 0.03;
 				double verticalSpeed = 0.4;
@@ -60,10 +63,12 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 					verticalSpeed = 0.7;
 				}
 				if (!player.onGround && player.motionY < 0) {
-				 	player.motionY *= verticalSpeed;
+					player.motionY *= verticalSpeed;
 					motionY *= verticalSpeed;
-					double x = Math.cos(Math.toRadians(player.rotationYawHead+90)) * horizontalSpeed;
-					double z = Math.sin(Math.toRadians(player.rotationYawHead+90)) * horizontalSpeed;
+					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90))
+							* horizontalSpeed;
+					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90))
+							* horizontalSpeed;
 					player.motionX += x;
 					player.motionZ += z;
 					player.fallDistance = 0f; /* Don't like getting hurt :( */
@@ -71,35 +76,34 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			}
 		}
 	}
-	
+
 	public EntityPlayer getPlayer() {
 		return player;
 	}
-	
+
 	public void fixPositions() {
 		if (player != null) {
-		    this.lastTickPosX = prevPosX = player.prevPosX;
-		    this.lastTickPosY = prevPosY = player.prevPosY;
-		    this.lastTickPosZ = prevPosZ = player.prevPosZ;
-	
-		    this.posX = player.posX;
-		    this.posY = player.posY;
-		    this.posZ = player.posZ;
-	
-		    setPosition(posX, posY, posZ);
-		    this.prevRotationYaw = player.prevRenderYawOffset;
-		    this.rotationYaw = player.renderYawOffset;
-	
-		    this.prevRotationPitch = player.prevRotationPitch;
-		    this.rotationPitch = player.rotationPitch;
-	
-		    this.motionX = this.posX - this.prevPosX;
-		    this.motionY = this.posY - this.prevPosY;
-		    this.motionZ = this.posZ - this.prevPosZ;
+			this.lastTickPosX = prevPosX = player.prevPosX;
+			this.lastTickPosY = prevPosY = player.prevPosY;
+			this.lastTickPosZ = prevPosZ = player.prevPosZ;
+
+			this.posX = player.posX;
+			this.posY = player.posY;
+			this.posZ = player.posZ;
+
+			setPosition(posX, posY, posZ);
+			this.prevRotationYaw = player.prevRenderYawOffset;
+			this.rotationYaw = player.renderYawOffset;
+
+			this.prevRotationPitch = player.prevRotationPitch;
+			this.rotationPitch = player.rotationPitch;
+
+			this.motionX = this.posX - this.prevPosX;
+			this.motionY = this.posY - this.prevPosY;
+			this.motionZ = this.posZ - this.prevPosZ;
 		}
-	    
+
 	}
-		
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {

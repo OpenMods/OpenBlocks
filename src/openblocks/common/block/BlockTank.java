@@ -15,7 +15,7 @@ import openblocks.common.tileentity.tank.TileEntityTank;
 public class BlockTank extends OpenBlock {
 
 	public static int itemId;
-	
+
 	public BlockTank() {
 		super(OpenBlocks.Config.blockTankId, Material.ground);
 		setupBlock(this, "tank", TileEntityTank.class, ItemTankBlock.class);
@@ -45,44 +45,50 @@ public class BlockTank extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
-	
+
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
-	
+
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side){
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
-	
+
 	public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer) {
-		//System.out.println(getTileEntity(par1World, par2, par3, par3, TileEntityTank.class));
+		// System.out.println(getTileEntity(par1World, par2, par3, par3,
+		// TileEntityTank.class));
 	}
-	
-    public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z)
-    {
-		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
-        	ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
-        	TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
-        	if (tank != null) {
-        		itemStack.setItemDamage(Math.round(tank.getAmount() * 16));
-        		NBTTagCompound nbt = new NBTTagCompound();
-        		tank.writeToNBT(nbt);
-        		itemStack.setTagCompound(nbt);
-        	}
-        	float f = 0.7F;
-            double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-            double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-            double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-            EntityItem entityitem = new EntityItem(world, (double)x + d0, (double)y + d1, (double)z + d2, itemStack);
-            entityitem.delayBeforeCanPickup = 10;
-            world.spawnEntityInWorld(entityitem);
-        }
-        return world.setBlockToAir(x, y, z);
-    }
-	
+
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+		if (!world.isRemote
+				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
+			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
+			if (tank != null) {
+				NBTTagCompound nbt = new NBTTagCompound();
+				NBTTagCompound tankTag = new NBTTagCompound();
+				tank.writeToNBT(tankTag);
+				nbt.setCompoundTag("tank", tankTag);
+				itemStack.setTagCompound(nbt);
+			}
+			float f = 0.7F;
+			double d0 = (double)(world.rand.nextFloat() * f)
+					+ (double)(1.0F - f) * 0.5D;
+			double d1 = (double)(world.rand.nextFloat() * f)
+					+ (double)(1.0F - f) * 0.5D;
+			double d2 = (double)(world.rand.nextFloat() * f)
+					+ (double)(1.0F - f) * 0.5D;
+			EntityItem entityitem = new EntityItem(world, (double)x + d0, (double)y
+					+ d1, (double)z + d2, itemStack);
+			entityitem.delayBeforeCanPickup = 10;
+			world.spawnEntityInWorld(entityitem);
+		}
+		return world.setBlockToAir(x, y, z);
+	}
+
 	@Override
-    protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack) {
-        
-    }
+	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack) {
+
+	}
 }

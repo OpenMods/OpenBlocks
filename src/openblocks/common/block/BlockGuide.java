@@ -13,7 +13,7 @@ import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.utils.BlockUtils;
 
 public class BlockGuide extends OpenBlock {
-	
+
 	public static class Icons {
 		public static Icon side;
 	}
@@ -75,12 +75,10 @@ public class BlockGuide extends OpenBlock {
 
 		return true;
 	}
-	
+
 	public Icon getIcon(int side, int metadata) {
 		ForgeDirection direction = BlockUtils.sideToDirection(side);
-		if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) {
-			return blockIcon;
-		}
-        return Icons.side;
-    }
+		if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) { return blockIcon; }
+		return Icons.side;
+	}
 }

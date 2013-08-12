@@ -47,7 +47,7 @@ import cpw.mods.fml.relauncher.Side;
 public class ClientProxy extends CommonProxy {
 
 	private ItemRendererHangGlider hangGliderRenderer;
-	
+
 	public ClientProxy() {
 		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
@@ -65,10 +65,10 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
-		
+
 		assertItemHangGliderRenderer();
 		MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
-		
+
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
 
@@ -79,8 +79,8 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void assertItemHangGliderRenderer() {
-		if(hangGliderRenderer == null) hangGliderRenderer = new ItemRendererHangGlider();		
-		if(MinecraftForgeClient.getItemRenderer(new ItemStack(OpenBlocks.Items.hangGlider), ItemRenderType.EQUIPPED) == null){
+		if (hangGliderRenderer == null) hangGliderRenderer = new ItemRendererHangGlider();
+		if (MinecraftForgeClient.getItemRenderer(new ItemStack(OpenBlocks.Items.hangGlider), ItemRenderType.EQUIPPED) == null) {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
 		}
 	}

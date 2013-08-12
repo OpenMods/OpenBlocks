@@ -23,14 +23,14 @@ public class BowEventHandler {
 		if (!event.entity.worldObj.isRemote) {
 			NBTTagCompound tag = event.result.getTagCompound();
 			if (tag != null && tag.hasKey("openblocks_torchmode")) {
-				//System.out.println("torch mode");
+				// System.out.println("torch mode");
 			}
 		}
 	}
 
 	@ForgeSubscribe
 	public void onArrowLoose(ArrowLooseEvent event) {
-		//System.out.println("onArrowLoose");
+		// System.out.println("onArrowLoose");
 		EntityPlayer player = event.entityPlayer;
 		ItemStack bowStack = event.bow;
 		if (player == null) { return; }
@@ -38,23 +38,23 @@ public class BowEventHandler {
 		if (!player.isSneaking()) { return; }
 
 		if (!bowStack.hasTagCompound()) {
-			//System.out.println("no nbt");
+			// System.out.println("no nbt");
 			return;
 		}
 
 		NBTTagCompound tag = bowStack.getTagCompound();
 
 		if (!tag.hasKey("openblocks_torchmode")) {
-			//System.out.println("no key");
+			// System.out.println("no key");
 			return;
 		}
 
 		if (!tag.getBoolean("openblocks_torchmode")) {
-			//System.out.println("no torchmode");
+			// System.out.println("no torchmode");
 			return;
 		}
 
-		//System.out.println("fine");
+		// System.out.println("fine");
 		int j = event.charge;
 
 		boolean flag = player.capabilities.isCreativeMode

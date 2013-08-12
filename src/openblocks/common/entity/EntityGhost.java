@@ -121,9 +121,9 @@ public class EntityGhost extends EntityMob implements
 		this(world);
 		this.playerName = playerName;
 		// use the dead players skin (ew)
-		if (world.isRemote) { 
+		if (world.isRemote) {
 			this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-				+ StringUtils.stripControlCodes(playerName) + ".png";
+					+ StringUtils.stripControlCodes(playerName) + ".png";
 		}
 		// copy the inventory from the player inventory
 		inventory.copyFrom(playerInvent);
@@ -139,10 +139,10 @@ public class EntityGhost extends EntityMob implements
 	}
 
 	@Override
-    public int getAttackStrength(Entity par1Entity) {
+	public int getAttackStrength(Entity par1Entity) {
 		return 10;
-    }
-	
+	}
+
 	private boolean shouldBeFlying() {
 
 		EntityLiving attackTarget = getAITarget();
@@ -290,9 +290,9 @@ public class EntityGhost extends EntityMob implements
 		super.readFromNBT(tag);
 		if (tag.hasKey("playerName")) {
 			playerName = tag.getString("playerName");
-			if (worldObj.isRemote) { 
+			if (worldObj.isRemote) {
 				skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-					+ StringUtils.stripControlCodes(playerName) + ".png";
+						+ StringUtils.stripControlCodes(playerName) + ".png";
 			}
 		}
 		inventory.readFromNBT(tag);

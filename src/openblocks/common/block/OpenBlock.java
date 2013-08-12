@@ -136,9 +136,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
-		if (te != null) {
-			return te.onBlockActivated(player, side, hitX, hitY, hitZ);
-		}
+		if (te != null) { return te.onBlockActivated(player, side, hitX, hitY, hitZ); }
 		return false;
 	}
 
@@ -149,15 +147,13 @@ public abstract class OpenBlock extends BlockContainer {
 		}
 		super.onBlockAdded(world, x, y, z);
 	}
-	
+
 	@Override
-    public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
+	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
 		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
-		if (te != null) {
-			return te.onBlockEventReceived(eventId, eventParam);
-		}
-		return super.onBlockEventReceived(world, x, y, z, eventId, eventParam );
-    }
+		if (te != null) { return te.onBlockEventReceived(eventId, eventParam); }
+		return super.onBlockEventReceived(world, x, y, z, eventId, eventParam);
+	}
 
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
 		setupDimensions(x - width, y, z - depth, x + width, y + height, z

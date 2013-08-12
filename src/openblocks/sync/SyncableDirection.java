@@ -27,11 +27,11 @@ public class SyncableDirection implements ISyncableObject {
 		hasChanged = true;
 		ticksSinceChanged = 0;
 	}
-	
+
 	public ForgeDirection getValue() {
 		return value;
 	}
-	
+
 	public void setValue(ForgeDirection direction) {
 		if (direction != value) {
 			setHasChanged();

@@ -11,7 +11,7 @@ public class SyncableInt implements ISyncableObject {
 	private int value = 0;
 	private boolean hasChanged = false;
 	private int ticksSinceChanged = 0;
-	
+
 	public SyncableInt(int value) {
 		this.value = value;
 	}
@@ -35,13 +35,14 @@ public class SyncableInt implements ISyncableObject {
 			setHasChanged();
 		}
 	}
-	
+
 	public int getValue() {
 		return value;
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
 		stream.writeInt(value);
 	}
 

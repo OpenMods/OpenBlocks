@@ -16,7 +16,7 @@ public class ByteUtils {
 	public static boolean get(short val, int slot) {
 		return (val & (1 << slot)) != 0;
 	}
-	
+
 	public static boolean get(short val, Enum slot) {
 		return get(val, slot.ordinal());
 	}

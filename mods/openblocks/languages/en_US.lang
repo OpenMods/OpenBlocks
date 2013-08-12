@@ -10,4 +10,6 @@ tile.openblocks.target.name=Target
 tile.openblocks.grave.name=Grave
 tile.openblocks.flag.name=Flag
 
+item.openblocks.hangglider.name=Hang Glider
+
 itemGroup.tabOpenBlocks=OpenBlocks

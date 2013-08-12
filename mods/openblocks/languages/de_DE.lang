@@ -10,4 +10,6 @@ tile.openblocks.target.name=Zielscheibe
 tile.openblocks.grave.name=Grab
 tile.openblocks.flag.name=Flagge
 
+item.openblocks.hangglider.name=Gleitschirm
+
 itemGroup.tabOpenBlocks=OpenBlocks
