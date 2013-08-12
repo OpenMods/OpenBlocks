@@ -19,7 +19,8 @@ public class EntityHangGliderRenderer extends Render {
 		EntityHangGlider glider = (EntityHangGlider) entity;
 
         GL11.glPushMatrix();
-        if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+        /* Only shift to first person if FP and we're on glider */
+        if(glider.getPlayer() == Minecraft.getMinecraft().thePlayer && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
             GL11.glTranslatef((float)x, (float)y+0.4f, (float)z);
         }else {
             GL11.glTranslatef((float)x, (float)y-0.2f, (float)z);

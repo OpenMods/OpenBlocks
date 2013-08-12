@@ -59,6 +59,10 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		}
 	}
 	
+	public EntityPlayer getPlayer() {
+		return player;
+	}
+	
 	public void fixPositions() {
 		if (player != null) {
 		    this.lastTickPosX = prevPosX = player.prevPosX;
