@@ -67,7 +67,7 @@ public class BlockTank extends OpenBlock {
         	if (tank != null) {
         		itemStack.setItemDamage(Math.round(tank.getAmount() * 16));
         		NBTTagCompound nbt = new NBTTagCompound();
-        		tank.getInternalTank().writeToNBT(nbt, "tank");
+        		tank.writeToNBT(nbt);
         		itemStack.setTagCompound(nbt);
         	}
         	float f = 0.7F;

@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.tank.TileEntityTank;
 import openblocks.sync.SyncableTank;
@@ -97,7 +98,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		
 		GL11.glEnable(2896);
 		
-		SyncableTank internalTank = tankTile.getInternalTank();
+		LiquidTank internalTank = tankTile.getInternalTank();
 		
 		LiquidStack liquid = internalTank.getLiquid();
 		

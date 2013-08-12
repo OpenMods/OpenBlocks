@@ -29,9 +29,9 @@ public class ItemRendererTank implements IItemRenderer {
 		if (type != ItemRenderType.INVENTORY) {
 			GL11.glTranslated(0, 0.5, 0);
 		}
-		teTank.getInternalTank().clear();
+		// teTank.clear() // not sure if this is needed now
 		if (item.hasTagCompound()) {
-			teTank.getInternalTank().readFromNBT(item.getTagCompound(), "tank");
+			teTank.readFromNBT(item.getTagCompound());
 		}
 		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, 0.0D, 0.0D, 0.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
