@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 public class EntityHangGliderRenderer extends Render {
 
 	private static final float QUAD_HALF_SIZE = 2.4f;
+	private static final float ONGROUND_ROTATION = 90f;
 	
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float f, float f1) {
@@ -25,10 +26,16 @@ public class EntityHangGliderRenderer extends Render {
         }else {
             GL11.glTranslatef((float)x, (float)y-0.2f, (float)z);
         }
-
         float rotation = this.interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);        
         // Maybe this should be pushed in to the matrix and popped out too
         GL11.glRotatef(180.0F - rotation, 0.0F, 1.0F, 0.0F);
+        
+        /* Rotate glider backwards when the player hits the ground */
+        if(glider.getPlayer() != null && glider.getPlayer().onGround) {
+        	GL11.glTranslatef(0f, 0f, 0.3f); 
+        	GL11.glRotatef(ONGROUND_ROTATION, 1f, 0f, 0f);
+        	GL11.glScalef(0.4f, 1f, 0.4f);
+        }
         
         // Push matrix to hold it's location for rendering other stuff */
         GL11.glPushMatrix();		
