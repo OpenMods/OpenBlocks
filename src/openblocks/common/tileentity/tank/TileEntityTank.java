@@ -47,6 +47,16 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 	private SyncableShort liquidRenderAmount = new SyncableShort();
 	
 	/**
+	 * The amount that will be rendered by the client, interpolated towards liquidRenderAmount each tick
+	 */
+	private short interpolatedRenderAmount = 0;
+	
+	/**
+	 * How quickly the interpolatedRenderAmount approaches liquidRenderAmount
+	 */
+	private static final short adjustRate = 10;
+	
+	/**
 	 * Keys of things what get synced
 	 */
 	public enum Keys {
@@ -65,7 +75,18 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 		return liquidId.getValue() != 0 && tank.getLiquidName() != null;
 	}
 	
-	//TODO: if renderLevel < waterLevel + renderChangeAmount then renderLevel += renderChangeAmount elseif renderLevel > waterLevel - renderChangeAmount then renderLevel -= renderChangeAmount else renderLevel = waterLevel end
+		
+	private void interpolateLiquidLevel() {
+		/* Client interpolates render amount */
+		if(!worldObj.isRemote) return;
+		if(interpolatedRenderAmount + adjustRate < liquidRenderAmount.getValue()) {
+			interpolatedRenderAmount += adjustRate;
+		}else if(interpolatedRenderAmount - adjustRate > liquidRenderAmount.getValue()){
+			interpolatedRenderAmount -= adjustRate;
+		}else{
+			interpolatedRenderAmount = liquidRenderAmount.getValue(); // Close enough, set it.
+		}
+	}
 	
 	public void updateEntity() {
 		super.updateEntity();
@@ -110,7 +131,9 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 			}
 			
 			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-		} 
+		}else {
+			interpolateLiquidLevel();
+		}
 	}
 	
 	public boolean canReceiveLiquid(LiquidStack liquid) {
