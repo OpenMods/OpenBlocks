@@ -16,7 +16,7 @@ What does it contain?
 * Player graves, fight the ghost of the perished to obtain their inventory
 * Light boxes to display your maps on the wall, ceiling or floor
 * Archery targets for a shooting range
-* Even hand gliders!
+* Even hang gliders!
 * Exciting graphics and much more to come.
 
 Compiling
