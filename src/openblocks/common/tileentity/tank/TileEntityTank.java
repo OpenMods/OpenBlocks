@@ -11,12 +11,15 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDirection;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
+import openblocks.sync.SyncableShort;
 import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.ItemUtils;
@@ -24,69 +27,50 @@ import openblocks.utils.ItemUtils;
 public class TileEntityTank extends TileEntityTankBase implements ITankContainer {
 
 	/**
-	 * This tank gets synced to the client
+	 * The tank holding the liquid
 	 */
-	private SyncableTank tank = new SyncableTank(LiquidContainerRegistry.BUCKET_VOLUME * OpenBlocks.Config.bucketsPerTank);
+	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME * OpenBlocks.Config.bucketsPerTank);	
+		
+	/**
+	 * The Id of the liquid in the tank
+	 */
+	private SyncableInt liquidId = new SyncableInt();
 	
 	/**
-	 * The direction the tank is being filled from
+	 * The meta of the liquid metadata in the tank
 	 */
-	private SyncableDirection fillDirection = new SyncableDirection();
+	private SyncableInt liquidMeta = new SyncableInt();
 	
 	/**
-	 * A collection is booleans that get packed and synced
+	 * The level of the liquid that is rendered on the client
 	 */
-	private SyncableFlags flags = new SyncableFlags();
-
-	/**
-	 * The Id of the last liquid filled
-	 */
-	private SyncableInt lastLiquidId = new SyncableInt();
-	
-	/**
-	 * The meta of the last liquid filled
-	 */
-	private SyncableInt lastLiquidMeta = new SyncableInt();
-	
-	private int ticksSinceFill = 1000;
+	private SyncableShort liquidRenderAmount = new SyncableShort();
 	
 	/**
 	 * Keys of things what get synced
 	 */
 	public enum Keys {
-		tank,
-		flags,
-		fillDirection,
-		lastLiquidId,
-		lastLiquidMeta
+		liquidId,
+		liquidMeta,
+		renderLevel
 	}
-	
-	public enum Flags {
-		isFilling
-	}
-
-	/**
-	 * This is used to give the water a bit of a.. wave
-	 */
-	private double flowTimer = Math.random() * 100;
-	
+		
 	public TileEntityTank() {
-		syncMap.put(Keys.tank, tank);
-		syncMap.put(Keys.flags, flags);
-		syncMap.put(Keys.fillDirection, fillDirection);
-		syncMap.put(Keys.lastLiquidId, lastLiquidId);
-		syncMap.put(Keys.lastLiquidMeta, lastLiquidMeta);
+		syncMap.put(Keys.liquidId, liquidId);
+		syncMap.put(Keys.liquidMeta, liquidMeta);
+		syncMap.put(Keys.renderLevel, liquidRenderAmount);
 	}
+	
+	public boolean containsValidLiquid() {
+		return liquidId.getValue() != 0 && tank.getLiquidName() != null;
+	}
+	
+	//TODO: if renderLevel < waterLevel + renderChangeAmount then renderLevel += renderChangeAmount elseif renderLevel > waterLevel - renderChangeAmount then renderLevel -= renderChangeAmount else renderLevel = waterLevel end
 	
 	public void updateEntity() {
 		super.updateEntity();
 		
 		if (!worldObj.isRemote) { 
-
-			if (ticksSinceFill < 5) {
-				ticksSinceFill++;
-			}
-			flags.set(Flags.isFilling, ticksSinceFill < 5);
 			
 			HashSet<TileEntityTank> except = new HashSet<TileEntityTank>();
 			except.add(this);
@@ -126,14 +110,7 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 			}
 			
 			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-		} else {
-			if (flags.get(Flags.isFilling)) {
-				//FXLiquidSpray fx = new FXLiquidSpray(worldObj, new LiquidStack(lastLiquidId.getValue(), 1, lastLiquidMeta.getValue()), countDownwardsTanks(), xCoord + 0.5, yCoord + 1, zCoord + 0.5, 1.5F, 0xFF0000, 6);
-				//fx.noClip = true;
-				//Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-			}
-			flowTimer += 0.1;
-		}
+		} 
 	}
 	
 	public boolean canReceiveLiquid(LiquidStack liquid) {
@@ -150,44 +127,16 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 		return true;
 	}
 	
-	public SyncableTank getInternalTank() {
+	public LiquidTank getInternalTank() {
 		return tank;
 	}
 	
 	public int getSpace() {
-		return tank.getSpace();
+		return tank.getCapacity() - tank.getLiquid().amount; 
 	}
 
 	public int getAmount() {
-		return tank.getAmount();
-	}
-	
-	/**
-	 * Gives the liquid a wobble
-	 * @return
-	 */
-	public double getFlowOffset() {
-		return Math.sin(flowTimer) / 35;
-	}
-	
-	/**
-	 * Get the average liquid level on the sides of the current tank
-	 */
-	public double getLiquidHeightForSide(ForgeDirection ... sides) {
-		double percentFull = tank.getPercentFull();
-		if (percentFull > 0.98) {
-			return 1.0;
-		}
-		double fullness = percentFull + getFlowOffset();
-		int count = 1;
-		for (ForgeDirection side : sides) {
-			TileEntityTank sideTank = getTankInDirection(side);
-			if (sideTank != null && sideTank.canReceiveLiquid(tank.getLiquid())) {
-				fullness += sideTank.getInternalTank().getPercentFull() + sideTank.getFlowOffset();
-				count++;
-			}
-		}
-		return Math.max(0, Math.min(1, fullness / count));
+		return tank.getLiquid().amount;
 	}
 	
 	public int fill(LiquidStack resource, boolean doFill, HashSet<TileEntityTank> except) {
@@ -258,32 +207,41 @@ public class TileEntityTank extends TileEntityTankBase implements ITankContainer
 	
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (stack.hasTagCompound()) {
-			tank.readFromNBT(stack.getTagCompound(), "tank");
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")){
+			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag("tank");
+			tank.readFromNBT(tankTag);			
 		}
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tank.writeToNBT(tag, "tank");
+		NBTTagCompound tankTag = new NBTTagCompound();
+		if(containsValidLiquid()){
+			tank.getLiquid().writeToNBT(tankTag);
+		}
+		tag.setTag("tank", tankTag);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		tank.readFromNBT(tag, "tank");
+		if(tag.hasKey("tank")) {
+			NBTTagCompound tankTag = tag.getCompoundTag("tank");
+			LiquidStack liquid = LiquidStack.loadLiquidStackFromNBT(tankTag);
+			if(liquid != null) {
+				tank.setLiquid(liquid);
+			}
+		}
 	}
 
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
 		int filled = fill(resource, doFill, null);
 		if (doFill && filled > 0) {
-			fillDirection.setValue(from);
-			ticksSinceFill = 0;
 			if (resource != null) {
-				lastLiquidId.setValue(resource.itemID);
-				lastLiquidMeta.setValue(resource.itemMeta);
+				liquidId.setValue(resource.itemID);
+				liquidMeta.setValue(resource.itemMeta);
 			}
 		}
 		return filled;
