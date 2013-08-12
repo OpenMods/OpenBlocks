@@ -42,7 +42,7 @@ public class SyncableShort implements ISyncableObject {
 
 	@Override
 	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
-		stream.writeInt(value);
+		stream.writeShort(value);
 	}
 
 	@Override

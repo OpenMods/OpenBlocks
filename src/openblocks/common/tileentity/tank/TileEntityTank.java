@@ -27,11 +27,14 @@ import openblocks.utils.ItemUtils;
 public class TileEntityTank extends TileEntityTankBase implements
 		ITankContainer {
 
+	public static int getTankCapacity() {
+		return LiquidContainerRegistry.BUCKET_VOLUME * OpenBlocks.Config.bucketsPerTank;
+	}
+	
 	/**
 	 * The tank holding the liquid
 	 */
-	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME
-			* OpenBlocks.Config.bucketsPerTank);
+	private LiquidTank tank = new LiquidTank(getTankCapacity());
 
 	/**
 	 * The Id of the liquid in the tank
@@ -47,7 +50,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 	 * The level of the liquid that is rendered on the client
 	 */
 	private SyncableShort liquidRenderAmount = new SyncableShort();
-
+	
 	/**
 	 * The amount that will be rendered by the client, interpolated towards
 	 * liquidRenderAmount each tick
@@ -64,6 +67,53 @@ public class TileEntityTank extends TileEntityTankBase implements
 	 */
 	public enum Keys {
 		liquidId, liquidMeta, renderLevel
+	}
+	
+	/**
+	 * Attemps to fill a list of tanks evenly
+	 * @param liquidType the type of liquid that is being provided
+	 * @param liquidAvailable the amount of liquid in mB that is available
+	 * @param tanks the list of tanks to be filled
+	 * @return the amount of liquid consumed
+	 */
+	public static int evenlyFillTanks(LiquidStack liquidType, int liquidAvailable, TileEntityTank ... tanks) {
+		int startingAmount = liquidAvailable;
+		/* Firstly iterate all the tanks and get the ones that can accept at least some liquid */
+		HashSet<TileEntityTank> candidates = new HashSet<TileEntityTank>();
+		for(TileEntityTank tank : tanks) {
+			if(tank.canReceiveLiquid(liquidType) && !tank.isFull()) {
+				candidates.add(tank);
+			}
+		}
+		/* While candidates are available and liquid is available, fill them by fullest tank */
+		while(candidates.size() > 0 && liquidAvailable > 0) {
+			/* Iterate each tank, and find the full most tank. This is the max amount of liquid we can provide in this iteration */
+			int highestLevel = 0;
+			for(TileEntityTank tank : candidates) {
+				if(tank.getAmount() > highestLevel) highestLevel = tank.getAmount();
+			}
+			int maxProvision = getTankCapacity() - highestLevel;
+			if(maxProvision > liquidAvailable) maxProvision = liquidAvailable;
+			/* Split the liquid available over each tank */
+			int splitProvision = maxProvision / candidates.size();
+			if(splitProvision < 1) splitProvision = 1; /* prevent a while(forever) loop ;) */
+			liquidType.amount = splitProvision; // Set the liquidStack amount for dispensing
+			for(TileEntityTank tank : candidates) {
+				if(liquidAvailable < 1) break; /* Out of liquid? Lets leave */
+				if(liquidAvailable < liquidType.amount) liquidType.amount = liquidAvailable; /* Running dry */					
+				int dispensedAmount = tank.fill(ForgeDirection.UNKNOWN, liquidType, true);
+				liquidAvailable -= dispensedAmount;
+			}
+			/* Now that we've dispensed what we can this iteration, we'll re-calculate our candidates */
+			HashSet<TileEntityTank> removal = new HashSet<TileEntityTank>();
+			for(TileEntityTank tank : candidates) {
+				if(tank.isFull()) removal.add(tank);
+			}
+			for(TileEntityTank tank : removal) {
+				candidates.remove(tank);
+			}
+		}
+		return startingAmount - liquidAvailable;
 	}
 
 	public TileEntityTank() {
@@ -84,10 +134,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 		} else if (interpolatedRenderAmount - adjustRate > liquidRenderAmount.getValue()) {
 			interpolatedRenderAmount -= adjustRate;
 		} else {
-			interpolatedRenderAmount = liquidRenderAmount.getValue(); // Close
-																		// enough,
-																		// set
-																		// it.
+			interpolatedRenderAmount = liquidRenderAmount.getValue(); 
 		}
 	}
 
@@ -172,6 +219,10 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 	public int getSpace() {
 		return getInternalTank().getCapacity() - getAmount();
+	}
+	
+	public boolean isFull() {
+		return getAmount() == getInternalTank().getCapacity();
 	}
 
 	public int getAmount() {
