@@ -11,6 +11,8 @@ import net.minecraft.entity.Entity;
 
 public class EntityHangGliderRenderer extends Render {
 
+	private static final float QUAD_HALF_SIZE = 2.4f;
+	
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float f, float f1) {
 
@@ -22,42 +24,51 @@ public class EntityHangGliderRenderer extends Render {
         }else {
             GL11.glTranslatef((float)x, (float)y-0.2f, (float)z);
         }
-        
-        float f3 = this.interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);
-        
-        GL11.glRotatef(180.0F - f3, 0.0F, 1.0F, 0.0F);
-        GL11.glScalef(3f, 3f, 3f);
-		
-    	this.renderManager.renderEngine.bindTexture("/mods/openblocks/textures/models/hangglider.png");
 
+        float rotation = this.interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);        
+        // Maybe this should be pushed in to the matrix and popped out too
+        GL11.glRotatef(180.0F - rotation, 0.0F, 1.0F, 0.0F);
+        
+        // Push matrix to hold it's location for rendering other stuff */
+        GL11.glPushMatrix();		
+    	this.renderManager.renderEngine.bindTexture("/mods/openblocks/textures/models/hangglider.png");
+    	renderGlider();
+    	GL11.glPopMatrix();
+    	
+    	// Render other stuff here if you wish
+        GL11.glPopMatrix();        
+	}
+	
+	private void renderGlider() {
         GL11.glDisable(GL11.GL_CULL_FACE);
 		Tessellator t = Tessellator.instance;
 		t.startDrawingQuads();
 		t.setColorRGBA(255, 255, 255, 255);
-		t.addVertexWithUV( 0.8, 0,  0.8, 1, 1);
-		t.addVertexWithUV( -0.8, 0, 0.8, 0, 1);
-		t.addVertexWithUV(-0.8, 0, -0.8, 0, 0);
-		t.addVertexWithUV(0.8, 0,  -0.8,  1, 0);
+		t.addVertexWithUV(QUAD_HALF_SIZE, 0, QUAD_HALF_SIZE, 1, 1);
+		t.addVertexWithUV(-QUAD_HALF_SIZE, 0, QUAD_HALF_SIZE, 0, 1);
+		t.addVertexWithUV(-QUAD_HALF_SIZE, 0, -QUAD_HALF_SIZE, 0, 0);
+		t.addVertexWithUV(QUAD_HALF_SIZE, 0, -QUAD_HALF_SIZE, 1, 0);
 		t.draw();
-        GL11.glEnable(GL11.GL_CULL_FACE);      
-        GL11.glPopMatrix();
-        
+        GL11.glEnable(GL11.GL_CULL_FACE);    
 	}
 	
-    private float interpolateRotation(float par1, float par2, float par3)
+	
+	
+	/* Interpolate rotation */
+    private float interpolateRotation(float prevRotation, float nextRotation, float modifier)
     {
-        float f3;
+        float rotation;
 
-        for (f3 = par2 - par1; f3 < -180.0F; f3 += 360.0F)
+        for (rotation = nextRotation - prevRotation; rotation < -180.0F; rotation += 360.0F)
         {
             ;
         }
 
-        while (f3 >= 180.0F)
+        while (rotation >= 180.0F)
         {
-            f3 -= 360.0F;
+            rotation -= 360.0F;
         }
 
-        return par1 + par3 * f3;
+        return prevRotation + modifier * rotation;
     }
 }
