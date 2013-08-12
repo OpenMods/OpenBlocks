@@ -20,13 +20,22 @@ public class EntityHangGliderRenderer extends Render {
 		EntityHangGlider glider = (EntityHangGlider) entity;
 
         GL11.glPushMatrix();
+
+        float rotation = this.interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);        
+        double x2 = Math.cos(Math.toRadians(rotation+90)) * 1.5;
+		double z2 = Math.sin(Math.toRadians(rotation+90)) * 1.5;
+		
         /* Only shift to first person if FP and we're on glider */
         if(glider.getPlayer() == Minecraft.getMinecraft().thePlayer && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
             GL11.glTranslatef((float)x, (float)y+0.4f, (float)z);
         }else {
-            GL11.glTranslatef((float)x, (float)y-0.2f, (float)z);
+        	if (glider.getPlayer() != null && glider.getPlayer().onGround) {
+                GL11.glTranslatef((float)x, (float)y-0.2f, (float)z);
+        	}else {
+                GL11.glTranslatef((float)x+(float)x2, (float)y-0.2f, (float)z+(float)z2);
+        	}
         }
-        float rotation = this.interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);        
+		
         // Maybe this should be pushed in to the matrix and popped out too
         GL11.glRotatef(180.0F - rotation, 0.0F, 1.0F, 0.0F);
         
