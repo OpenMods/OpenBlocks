@@ -47,11 +47,17 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 				setDead();
 			}else {
 				fixPositions();
-				if (!player.onGround && player.motionY < 0 && !player.isSneaking()) {
-				 	player.motionY *= 0.4;
-					motionY *= 0.4;
-					double x = Math.cos(Math.toRadians(player.rotationYawHead+90)) * 0.05;
-					double z = Math.sin(Math.toRadians(player.rotationYawHead+90)) * 0.05;
+				double horizontalSpeed = 0.03;
+				double verticalSpeed = 0.4;
+				if (player.isSneaking()) {
+					horizontalSpeed = 0.1;
+					verticalSpeed = 0.7;
+				}
+				if (!player.onGround && player.motionY < 0) {
+				 	player.motionY *= verticalSpeed;
+					motionY *= verticalSpeed;
+					double x = Math.cos(Math.toRadians(player.rotationYawHead+90)) * horizontalSpeed;
+					double z = Math.sin(Math.toRadians(player.rotationYawHead+90)) * horizontalSpeed;
 					player.motionX += x;
 					player.motionZ += z;
 				}
