@@ -54,6 +54,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 					double z = Math.sin(Math.toRadians(player.rotationYawHead+90)) * 0.05;
 					player.motionX += x;
 					player.motionZ += z;
+					player.fallDistance = 0f; /* Don't like getting hurt :( */
 				}
 			}
 		}
