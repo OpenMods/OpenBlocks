@@ -17,6 +17,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
+import openblocks.OpenBlocks.Items;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
@@ -29,6 +30,7 @@ import openblocks.common.block.BlockTarget;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.recipe.TorchBowRecipe;
 import openblocks.common.tileentity.TileEntityLightbox;
@@ -79,10 +81,14 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (Config.blockTankId > -1) {
 			OpenBlocks.Blocks.tank = new BlockTank();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Item.stick) }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
 		}
-
-		OpenBlocks.Items.hangGlider = new ItemHangGlider();
+		
+		OpenBlocks.Items.generic = new ItemGeneric();
+		if (Config.itemHangGliderId > -1) {
+			OpenBlocks.Items.hangGlider = new ItemHangGlider();
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', new ItemStack(Item.stick) }));
+		}
 
 		GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
@@ -95,6 +101,7 @@ public class CommonProxy implements IGuiHandler {
 		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
 
+		OpenBlocks.Items.generic.initRecipes();
 		LanguageUtils.setupLanguages();
 	}
 

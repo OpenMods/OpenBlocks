@@ -11,5 +11,6 @@ tile.openblocks.grave.name=Grab
 tile.openblocks.flag.name=Flagge
 
 item.openblocks.hangglider.name=Gleitschirm
+item.openblocks.gliderwing.name=Glider Wing
 
 itemGroup.tabOpenBlocks=OpenBlocks

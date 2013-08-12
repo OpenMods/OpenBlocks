@@ -17,7 +17,7 @@ public class ItemHangGlider extends Item {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		return "item.openblocks.hangglider.name";
+		return "item.openblocks.hangglider";
 	}
 
 	@Override

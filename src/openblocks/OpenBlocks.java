@@ -17,6 +17,7 @@ import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
+import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
@@ -52,6 +53,7 @@ public class OpenBlocks {
 
 	public static class Items {
 		public static ItemHangGlider hangGlider;
+		public static ItemGeneric generic;
 	}
 
 	public static class Config {
@@ -64,7 +66,8 @@ public class OpenBlocks {
 		public static int blockGraveId = 2546;
 		public static int blockFlagId = 2547;
 		public static int blockTankId = 2548;
-		public static int itemHangGliderId = 3620;
+		public static int itemHangGliderId = 14975;
+		public static int itemGenericId = 14976;
 		public static int elevatorTravelDistance = 20;
 		public static int bucketsPerTank = 16;
 		public static boolean enableGraves = true;
@@ -125,6 +128,15 @@ public class OpenBlocks {
 
 		prop = configFile.getBlock("block", "blockFlagId", Config.blockFlagId, "The id of the flag block");
 		Config.blockFlagId = prop.getInt();
+		
+		prop = configFile.getBlock("block", "blockTankId", Config.blockTankId, "The id of the tank block");
+		Config.blockTankId = prop.getInt();
+
+		prop = configFile.getItem("item", "itemHangGliderId", Config.itemHangGliderId, "The id of the hang glider");
+		Config.itemHangGliderId = prop.getInt();
+
+		prop = configFile.getItem("item", "itemGenericId", Config.itemGenericId, "The id of the generic item");
+		Config.itemGenericId = prop.getInt();
 
 		prop = configFile.get("dropblock", "searchDistance", Config.elevatorTravelDistance, "The range of the drop block");
 		Config.elevatorTravelDistance = prop.getInt();
