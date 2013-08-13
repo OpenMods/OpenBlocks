@@ -3,6 +3,7 @@ package openblocks.client.renderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import openblocks.common.tileentity.tank.TileEntityTank;
 
@@ -34,7 +35,7 @@ public class ItemRendererTank implements IItemRenderer {
 		if (item.hasTagCompound() && item.getTagCompound().hasKey("tank")) {
 			teTank.readFromNBT(item.getTagCompound().getCompoundTag("tank"));
 			LiquidStack lstack = teTank.getInternalTank().getLiquid();
-			if (lstack != null) {
+			if (lstack != null && LiquidDictionary.findLiquidName(lstack) != null) {
 				teTank.setClientLiquidId(lstack.itemID);
 				teTank.setClientLiquidMeta(lstack.itemMeta);
 			}
