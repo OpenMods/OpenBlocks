@@ -68,77 +68,6 @@ public class TileEntityTank extends TileEntityTankBase implements
 		liquidId, liquidMeta, renderLevel
 	}
 
-	/**
-	 * Attemps to fill a list of tanks evenly
-	 * 
-	 * @param liquidType
-	 *            the type of liquid that is being provided
-	 * @param liquidAvailable
-	 *            the amount of liquid in mB that is available
-	 * @param tanks
-	 *            the list of tanks to be filled
-	 * @return the amount of liquid consumed
-	 */
-	public static int evenlyFillTanks(LiquidStack liquidType, int liquidAvailable, TileEntityTank... tanks) {
-		int startingAmount = liquidAvailable;
-		/*
-		 * Firstly iterate all the tanks and get the ones that can accept at
-		 * least some liquid
-		 */
-		HashSet<TileEntityTank> candidates = new HashSet<TileEntityTank>();
-		for (TileEntityTank tank : tanks) {
-			if (tank.canReceiveLiquid(liquidType) && !tank.isFull()) {
-				candidates.add(tank);
-			}
-		}
-		/*
-		 * While candidates are available and liquid is available, fill them by
-		 * fullest tank
-		 */
-		while (candidates.size() > 0 && liquidAvailable > 0) {
-			/*
-			 * Iterate each tank, and find the full most tank. This is the max
-			 * amount of liquid we can provide in this iteration
-			 */
-			int highestLevel = 0;
-			for (TileEntityTank tank : candidates) {
-				if (tank.getAmount() > highestLevel) highestLevel = tank.getAmount();
-			}
-			int maxProvision = getTankCapacity() - highestLevel;
-			if (maxProvision > liquidAvailable) maxProvision = liquidAvailable;
-			/* Split the liquid available over each tank */
-			int splitProvision = maxProvision / candidates.size();
-			if (splitProvision < 1) splitProvision = 1; /*
-														 * prevent a
-														 * while(forever) loop
-														 * ;)
-														 */
-			liquidType.amount = splitProvision; // Set the liquidStack amount
-												// for dispensing
-			for (TileEntityTank tank : candidates) {
-				if (liquidAvailable < 1) break; /* Out of liquid? Lets leave */
-				if (liquidAvailable < liquidType.amount) liquidType.amount = liquidAvailable; /*
-																							 * Running
-																							 * dry
-																							 */
-				int dispensedAmount = tank.fill(ForgeDirection.UNKNOWN, liquidType, true);
-				liquidAvailable -= dispensedAmount;
-			}
-			/*
-			 * Now that we've dispensed what we can this iteration, we'll
-			 * re-calculate our candidates
-			 */
-			HashSet<TileEntityTank> removal = new HashSet<TileEntityTank>();
-			for (TileEntityTank tank : candidates) {
-				if (tank.isFull()) removal.add(tank);
-			}
-			for (TileEntityTank tank : removal) {
-				candidates.remove(tank);
-			}
-		}
-		return startingAmount - liquidAvailable;
-	}
-
 	public TileEntityTank() {
 		syncMap.put(Keys.liquidId, liquidId);
 		syncMap.put(Keys.liquidMeta, liquidMeta);
@@ -186,14 +115,15 @@ public class TileEntityTank extends TileEntityTankBase implements
 					}
 				}
 
-				// now fill up the horizontal tanks, start with the least full
-				ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
-				for (TileEntityTank horizontal : horizontals) {
-					LiquidStack liquid = tank.getLiquid();
-					if (horizontal.canReceiveLiquid(liquid)) {
-						int difference = getAmount() - horizontal.getAmount();
-						if (difference > 1) {
-							int halfDifference = difference / 2;
+				if(getAmount() > 0 && containsValidLiquid()) {
+					// now fill up the horizontal tanks, start with the least full
+					ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
+					for (TileEntityTank horizontal : horizontals) {
+						LiquidStack liquid = tank.getLiquid();
+						if (horizontal.canReceiveLiquid(liquid) && liquid != null) {
+							int difference = getAmount() - horizontal.getAmount();
+							if(difference <= 0) continue;
+							int halfDifference = Math.max(difference / 2, 1);
 							LiquidStack liquidCopy = liquid.copy();
 							liquidCopy.amount = Math.min(500, halfDifference);
 							int filled = horizontal.fill(liquidCopy, true, except);
@@ -448,7 +378,11 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 	public double getHeightForRender() {
 		if (containsValidLiquid()) {
-			return interpolatedRenderAmount / (double)Short.MAX_VALUE;
+			if(worldObj == null || worldObj.isRemote){
+				return interpolatedRenderAmount / (double)Short.MAX_VALUE;
+			}else{
+				return liquidRenderAmount.getValue() / (double)Short.MAX_VALUE;
+			}
 		} else {
 			return 0D; /* No D for you ;) */
 		}
