@@ -30,6 +30,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 			}
 			double percent = 100.0 / fakeTank.getCapacity() * amount;
 			list.add(Math.round(percent) + "%");
+			list.add(amount + "mB");
 		}
 	}
 
