@@ -486,4 +486,10 @@ public class TileEntityTank extends TileEntityTankBase implements
 	public void setClientLiquidMeta(int itemMeta) {
 		liquidMeta.setValue(itemMeta);
 	}
+
+	public NBTTagCompound getItemNBT() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		tank.writeToNBT(nbt);
+		return nbt;
+	}
 }

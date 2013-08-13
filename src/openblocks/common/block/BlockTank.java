@@ -67,8 +67,7 @@ public class BlockTank extends OpenBlock {
 			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
 			if (tank != null) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				NBTTagCompound tankTag = new NBTTagCompound();
-				tank.writeToNBT(tankTag);
+				NBTTagCompound tankTag = tank.getItemNBT();
 				nbt.setCompoundTag("tank", tankTag);
 				itemStack.setTagCompound(nbt);
 			}
