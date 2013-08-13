@@ -66,7 +66,7 @@ public class BlockTank extends OpenBlock {
 			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
 			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
 			/* Maybe you lose a small amount of liquid, but you ARE breaking a block here */
-			if (tank != null && tank.getHeightForRender() > 0.09) {
+			if (tank != null && tank.getAmount() > 10) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				NBTTagCompound tankTag = tank.getItemNBT();
 				nbt.setCompoundTag("tank", tankTag);

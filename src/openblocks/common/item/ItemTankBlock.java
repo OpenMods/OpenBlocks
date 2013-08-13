@@ -28,7 +28,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 			if (liquid != null) {
 				amount = liquid.amount;
 			}
-			double percent = 100.0 / fakeTank.getCapacity() * amount;
+			double percent = Math.max(100.0 / fakeTank.getCapacity() * amount, amount > 0 ? 1 : 0);
 			list.add(Math.round(percent) + "%");
 			list.add(amount + "mB");
 		}
