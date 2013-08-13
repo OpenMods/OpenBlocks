@@ -28,6 +28,7 @@ import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
 import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
+import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.common.CommonProxy;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
@@ -37,6 +38,7 @@ import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntityTarget;
+import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.common.tileentity.tank.TileEntityTank;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -64,6 +66,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
 		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
 
 		assertItemHangGliderRenderer();

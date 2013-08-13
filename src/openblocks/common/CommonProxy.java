@@ -27,6 +27,7 @@ import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
+import openblocks.common.block.BlockTrophy;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
@@ -82,6 +83,9 @@ public class CommonProxy implements IGuiHandler {
 		if (Config.blockTankId > -1) {
 			OpenBlocks.Blocks.tank = new BlockTank();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
+		}
+		if (Config.blockTrophyId > -1) {
+			OpenBlocks.Blocks.trophy = new BlockTrophy();
 		}
 		
 		OpenBlocks.Items.generic = new ItemGeneric();

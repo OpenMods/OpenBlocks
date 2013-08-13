@@ -17,6 +17,7 @@ import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
+import openblocks.common.block.BlockTrophy;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.network.PacketHandler;
@@ -49,6 +50,7 @@ public class OpenBlocks {
 		public static BlockGrave grave;
 		public static BlockFlag flag;
 		public static BlockTank tank;
+		public static BlockTrophy trophy;
 	}
 
 	public static class Items {
@@ -66,6 +68,7 @@ public class OpenBlocks {
 		public static int blockGraveId = 2546;
 		public static int blockFlagId = 2547;
 		public static int blockTankId = 2548;
+		public static int blockTrophyId = 2549;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int elevatorTravelDistance = 20;
