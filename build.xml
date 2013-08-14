@@ -3,7 +3,7 @@
 	<property environment="env"/>
 	<!-- Properties -->
 
-	<property name="env.BUILD_NUMBER"           value="0"/>
+	<property name="env.BUILD_NUMBER"    value="0"/>
 	
 	<property name="build.dir"           value="build"/>
 	<property name="src.dir"             value="src"/>
@@ -129,7 +129,7 @@
 	<target name="package" depends="compile">
 		<delete dir="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
-		<jar destfile="${jar.dir}/${mod.name}-${mod.version}-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}"/>
+		<jar destfile="${jar.dir}/${mod.name}-${mod.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}"/>
 	</target>
 
 	<!-- Default target to run -->
