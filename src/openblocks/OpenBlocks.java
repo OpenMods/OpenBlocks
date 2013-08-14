@@ -77,7 +77,7 @@ public class OpenBlocks {
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
 		public static boolean tryHookPlayerRenderer = true;
-		public static double trophyDropChance = 1.0;
+		public static double trophyDropChance = 0.001;
 	}
 
 	public static enum Gui {

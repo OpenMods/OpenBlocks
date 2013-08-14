@@ -17,7 +17,7 @@ import openblocks.utils.ByteUtils;
 
 public abstract class SyncMap {
 
-	private int trackingRange = 20;
+	private int trackingRange = 64;
 
 	public SyncMap() {}
 
@@ -99,12 +99,14 @@ public abstract class SyncMap {
 							if (usersInRange.contains(player.entityId)) {
 								if (hasChanges) {
 									if (changePacket == null) {
+										System.out.println("Creating change packet");
 										changePacket = createPacket(handler, false);
 									}
 									packetToSend = changePacket;
 								}
 							} else {
 								if (fullPacket == null) {
+									System.out.println("Creating full packet");
 									fullPacket = createPacket(handler, true);
 								}
 								packetToSend = fullPacket;
@@ -113,11 +115,13 @@ public abstract class SyncMap {
 								((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
 							}
 						}
-						usersInRange = newUsersInRange;
 					}
+					usersInRange = newUsersInRange;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}else {
+				usersInRange.clear();
 			}
 		}
 		resetChangeStatus();

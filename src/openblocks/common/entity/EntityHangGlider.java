@@ -45,7 +45,7 @@ public class EntityHangGlider extends Entity implements
 			setDead();
 		} else {
 			ItemStack held = player.getHeldItem();
-			if (held == null || held.getItem() == null
+			if (player.isDead || held == null || held.getItem() == null
 					|| held.getItem() != OpenBlocks.Items.hangGlider
 					|| shouldDespawn) {
 				if (worldObj.isRemote) {

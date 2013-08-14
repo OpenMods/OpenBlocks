@@ -1,8 +1,11 @@
 package openblocks.client;
 
 import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
@@ -37,9 +40,17 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	public void preRenderTick(Minecraft mc, World world, float renderTick) {
-		for (EntityHangGlider glider : OpenBlocks.proxy.gliderClientMap.values()) {
-			if (glider != null) {
-				glider.fixPositions();
+		Iterator<Entry<EntityPlayer, EntityHangGlider>> it = OpenBlocks.proxy.gliderClientMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<EntityPlayer, EntityHangGlider> next = it.next();
+			EntityPlayer player = next.getKey();
+			EntityHangGlider glider = next.getValue();
+			if (player == null || glider == null || glider.isDead || player.isDead || player.getHeldItem() == null || player.getHeldItem().getItem() != OpenBlocks.Items.hangGlider) {
+				it.remove();
+			}else {
+				if (glider != null) {
+					glider.fixPositions();
+				}
 			}
 		}
 	}
