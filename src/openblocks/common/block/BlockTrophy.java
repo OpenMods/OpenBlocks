@@ -17,6 +17,7 @@ public class BlockTrophy extends OpenBlock {
 	public BlockTrophy() {
 		super(OpenBlocks.Config.blockTrophyId, Material.ground);
 		setupBlock(this, "trophy", TileEntityTrophy.class, ItemTrophyBlock.class);
+		setBlockBounds(0.3f, 0f, 0.3f, 0.7f, 0.8f, 0.7f);
 	}
 
 	@Override

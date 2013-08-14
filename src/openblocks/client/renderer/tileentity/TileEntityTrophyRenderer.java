@@ -8,6 +8,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.common.TrophyHandler;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -28,6 +29,8 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f) {
 		TileEntityTrophy trophy = (TileEntityTrophy) tileentity;
+		GL11.glPushMatrix();
+		
 		Trophy type = trophy.getTrophyType();
 		if (type != null) {
 			Entity entity = type.getEntity();
@@ -39,6 +42,8 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);
 				GL11.glTranslated(0.5, 0.2 + type.getVerticalOffset(), 0.5);
+				GL11.glRotatef(-BlockUtils.getRotationFromDirection(trophy.getRotation()), 0, 1, 0);
+				
 				GL11.glScaled(ratio, ratio, ratio);
 				Render renderer = RenderManager.instance.getEntityRenderObject(entity);
 				// yeah we dont care about fonts, but we do care that the renderManager is available
@@ -54,6 +59,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glPopMatrix();
 			}
 		}
+		GL11.glPopMatrix();
 	}
 
 }

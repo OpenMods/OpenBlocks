@@ -27,12 +27,15 @@ import openblocks.trophy.EndermanBehavior;
 import openblocks.trophy.ITrophyBehavior;
 import openblocks.trophy.SkeletonBehavior;
 import openblocks.trophy.SnowmanBehavior;
+import openblocks.utils.BlockUtils;
 
 public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 	
 	public Trophy trophyType;
+	
+	private ForgeDirection rotation = ForgeDirection.EAST;
 	
 	
 	@Override
@@ -115,6 +118,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 			    debugTrophy = Trophy.values()[next];
 			    trophyType = debugTrophy;
 			}
+			rotation = BlockUtils.get2dOrientation(player);
 		    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	    }
 	}
@@ -130,11 +134,19 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		if (tag.hasKey("trophytype")) {
 			trophyType = Trophy.valueOf(tag.getString("trophytype"));
 		}
+		if (tag.hasKey("rotation")) {
+			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
+		}
 	}
 
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setString("trophytype", trophyType.toString());
+		tag.setInteger("rotation", rotation.ordinal());
+	}
+
+	public ForgeDirection getRotation() {
+		return rotation;
 	}
 	
 }
