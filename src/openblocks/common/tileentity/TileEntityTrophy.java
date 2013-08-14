@@ -37,6 +37,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	
 	private ForgeDirection rotation = ForgeDirection.EAST;
 	
+	private int sinceLastActivate = 0;
 	
 	@Override
 	public Packet getDescriptionPacket() {
@@ -60,6 +61,9 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 			trophyType.executeTickBehavior(this);
+			if (sinceLastActivate < Integer.MAX_VALUE) {
+				sinceLastActivate++;
+			}
 		}
 	}
 	
@@ -137,12 +141,24 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		if (tag.hasKey("rotation")) {
 			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
 		}
+		if (tag.hasKey("sinceLastActivate")) {
+			sinceLastActivate = tag.getInteger("sinceLastActivate");
+		}
 	}
 
+	public int sinceLastActivate() {
+		return sinceLastActivate;
+	}
+	
+	public void resetActivationTimer() {
+		sinceLastActivate = 0;
+	}
+	
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setString("trophytype", trophyType.toString());
 		tag.setInteger("rotation", rotation.ordinal());
+		tag.setInteger("sinceLastActivate", sinceLastActivate);
 	}
 
 	public ForgeDirection getRotation() {

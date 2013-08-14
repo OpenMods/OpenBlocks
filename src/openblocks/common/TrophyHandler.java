@@ -4,7 +4,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityTrophy;
+import openblocks.trophy.BlazeBehavior;
 import openblocks.trophy.CaveSpiderBehavior;
+import openblocks.trophy.ChickenBehavior;
 import openblocks.trophy.CreeperBehavior;
 import openblocks.trophy.EndermanBehavior;
 import openblocks.trophy.ITrophyBehavior;
@@ -54,7 +57,7 @@ public class TrophyHandler {
 	
 	public enum Trophy {
 		Wolf(),
-		Chicken(),
+		Chicken(new ChickenBehavior()),
 		Cow(),
 		Creeper(new CreeperBehavior()),
 		Skeleton(new SkeletonBehavior()),
@@ -65,7 +68,7 @@ public class TrophyHandler {
 		Villager(),
 		Ozelot(),
 		Sheep(),
-		Blaze(),
+		Blaze(new BlazeBehavior()),
 		Silverfish(),
 		Spider(),
 		CaveSpider(new CaveSpiderBehavior()),
@@ -139,13 +142,13 @@ public class TrophyHandler {
 			}
 		}
 		
-		public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
+		public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 			if (behavior != null) {
 				behavior.executeActivateBehavior(tile, player);
 			}
 		}
 		
-		public void executeTickBehavior(TileEntity tile) {
+		public void executeTickBehavior(TileEntityTrophy tile) {
 			if (behavior != null) {
 				behavior.executeTickBehavior(tile);
 			}

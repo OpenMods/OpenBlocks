@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -50,11 +51,11 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				if (renderer.getFontRendererFromRenderManager() != null) {
 					renderer.doRender(entity, 0, 0, 0, f, 0.5f);
 				}
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 				GL11.glPopMatrix();
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);
-		        GL11.glColor4f(1, 1, 1, 1);
-				bindTextureByName("/mods/openblocks/textures/blocks/tank.png");
+		        bindTextureByName("/mods/openblocks/textures/blocks/tank.png");
 				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8, OpenBlocks.Blocks.trophy, null);
 				GL11.glPopMatrix();
 			}

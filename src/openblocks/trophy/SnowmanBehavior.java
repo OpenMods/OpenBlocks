@@ -1,5 +1,6 @@
 package openblocks.trophy;
 
+import openblocks.common.tileentity.TileEntityTrophy;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -9,7 +10,7 @@ import net.minecraft.util.MathHelper;
 public class SnowmanBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
+	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		if (tile.worldObj.isRemote) {
 			return;
 		}
@@ -26,7 +27,7 @@ public class SnowmanBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntity tile) {
+	public void executeTickBehavior(TileEntityTrophy tile) {
 		// TODO Auto-generated method stub
 		
 	}

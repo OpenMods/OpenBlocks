@@ -1,5 +1,6 @@
 package openblocks.trophy;
 
+import openblocks.common.tileentity.TileEntityTrophy;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -8,13 +9,13 @@ import net.minecraft.util.MathHelper;
 public class EndermanBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
+	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		if (tile.worldObj.isRemote) {
 			return;	
 		}
-        double d0 = player.posX + (tile.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
+        double d0 = player.posX + (tile.worldObj.rand.nextDouble() - 0.5D) * 16.0D;
         double d1 = player.posY + (double)(tile.worldObj.rand.nextInt(64) - 16);
-        double d2 = player.posZ + (tile.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
+        double d2 = player.posZ + (tile.worldObj.rand.nextDouble() - 0.5D) * 16.0D;
         teleportTo(tile, player, d0, d1, d2);
 	}
 
@@ -88,7 +89,7 @@ public class EndermanBehavior implements ITrophyBehavior {
     }
 
 	@Override
-	public void executeTickBehavior(TileEntity tile) {
+	public void executeTickBehavior(TileEntityTrophy tile) {
 		// TODO Auto-generated method stub
 		
 	}

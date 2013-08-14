@@ -1,5 +1,6 @@
 package openblocks.trophy;
 
+import openblocks.common.tileentity.TileEntityTrophy;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 public class SkeletonBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
+	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		if (tile.worldObj.isRemote) {
 			return;
 		}
@@ -23,7 +24,7 @@ public class SkeletonBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntity tile) {
+	public void executeTickBehavior(TileEntityTrophy tile) {
 		// TODO Auto-generated method stub
 		
 	}
