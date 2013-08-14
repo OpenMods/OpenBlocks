@@ -60,7 +60,7 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (Config.blockElevatorId > -1) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth), 'g', new ItemStack(Item.ingotGold) }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth), 'g', "oreGold" }));
 		}
 		if (Config.blockHealId > -1) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
@@ -71,18 +71,18 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (Config.blockTargetId > -1) {
 			OpenBlocks.Blocks.target = new BlockTarget();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth), 's', new ItemStack(Item.stick) }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth), 's', "stickWood" }));
 		}
 		if (Config.blockGraveId > -1) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
 		if (Config.blockFlagId > -1) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth), 's', new ItemStack(Item.stick) }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth), 's', "stickWood" }));
 		}
 		if (Config.blockTankId > -1) {
 			OpenBlocks.Blocks.tank = new BlockTank();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
 		}
 		if (Config.blockTrophyId > -1) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
@@ -92,10 +92,10 @@ public class CommonProxy implements IGuiHandler {
 		OpenBlocks.Items.generic = new ItemGeneric();
 		if (Config.itemHangGliderId > -1) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', new ItemStack(Item.stick) }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
 		}
 
-		GameRegistry.addRecipe(new TorchBowRecipe());
+		//GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
 
 		// MinecraftForge.EVENT_BUS.register(new BowEventHandler());

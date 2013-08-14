@@ -99,14 +99,14 @@ public abstract class SyncMap {
 							if (usersInRange.contains(player.entityId)) {
 								if (hasChanges) {
 									if (changePacket == null) {
-										System.out.println("Creating change packet");
+										//System.out.println("Creating change packet");
 										changePacket = createPacket(handler, false);
 									}
 									packetToSend = changePacket;
 								}
 							} else {
 								if (fullPacket == null) {
-									System.out.println("Creating full packet");
+									//System.out.println("Creating full packet");
 									fullPacket = createPacket(handler, true);
 								}
 								packetToSend = fullPacket;
