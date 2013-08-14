@@ -10,7 +10,9 @@ public class SnowmanBehavior implements ITrophyBehavior {
 
 	@Override
 	public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
-
+		if (tile.worldObj.isRemote) {
+			return;
+		}
         for (int x = -1; x <= 1; x++) {
         	for (int z = -1; z <= 1; z++) {
         		int pX = x + tile.xCoord;

@@ -21,6 +21,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import openblocks.api.IAwareTile;
+import openblocks.common.TrophyHandler.Trophy;
 import openblocks.trophy.CaveSpiderBehavior;
 import openblocks.trophy.EndermanBehavior;
 import openblocks.trophy.ITrophyBehavior;
@@ -29,128 +30,10 @@ import openblocks.trophy.SnowmanBehavior;
 
 public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 
-	
-	public enum Trophy {
-		Wolf(),
-		Chicken(),
-		Cow(),
-		Creeper(),
-		Skeleton(new SkeletonBehavior()),
-		PigZombie(),
-		Bat(1.0, -0.3),
-		Zombie(),
-		Witch(0.35),
-		Villager(),
-		Ozelot(),
-		Sheep(),
-		Blaze(),
-		Silverfish(),
-		Spider(),
-		CaveSpider(new CaveSpiderBehavior()),
-		Slime(0.4),
-		Ghast(0.1, 0.2),
-		Enderman(0.3, new EndermanBehavior()),
-		LavaSlime(0.8),
-		Squid(0.3, 0.5),
-		MushroomCow(),
-		VillagerGolem(0.3),
-		SnowMan(new SnowmanBehavior());
-		
-		private double scale = 0.4;
-		private double verticalOffset = 0.0;
-		private ITrophyBehavior behavior;
-		
-		Trophy() {	
-		}
-		
-		Trophy(ITrophyBehavior behavior) {	
-			this.behavior = behavior;
-		}
-		
-		Trophy(double scale) {
-			this.scale = scale;
-		}
-		
-		Trophy(double scale, ITrophyBehavior behavior) {
-			this.scale = scale;
-			this.behavior = behavior;
-		}
-		
-		Trophy(double scale, double verticalOffset) {
-			this(scale);
-			this.verticalOffset = verticalOffset;
-		}
-
-		Trophy(double scale, double verticalOffset, ITrophyBehavior behavior) {
-			this(scale, verticalOffset);
-			this.behavior = behavior;
-		}
-
-		public double getVerticalOffset() {
-			return verticalOffset;
-		}
-		
-		public double getScale() {
-			return scale;
-		}
-		
-		public Entity getEntity() {
-			return getEntityFromCache(this);
-		}
-		
-		public void playSound(World world, double x, double y, double z) {
-			Entity e = getEntity();
-			e.posX = x;
-			e.posY = y;
-			e.posZ = z;
-			e.worldObj = world;
-			if (e instanceof EntityLiving) {
-				((EntityLiving)e).playLivingSound();
-			}
-		}
-		
-		public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
-			if (behavior != null) {
-				behavior.executeActivateBehavior(tile, player);
-			}
-		}
-		
-		public void executeTickBehavior(TileEntity tile) {
-			if (behavior != null) {
-				behavior.executeTickBehavior(tile);
-			}
-		}
-	}
-	
-
 	public static Trophy debugTrophy = Trophy.Wolf;
 	
-	private Trophy trophyType;
+	public Trophy trophyType;
 	
-	public static HashMap<Trophy, Entity> entityCache = new HashMap<Trophy, Entity>();
-
-	public static Entity getEntityFromCache(Trophy trophy) {
-		Entity entity = entityCache.get(trophy);
-		if (entity == null) {
-			entity = EntityList.createEntityByName(trophy.toString(), null);
-			if (entity instanceof EntitySlime) {
-				try {
-					Method slimeSizeMethod = EntitySlime.class.getDeclaredMethod("setSlimeSize", int.class);
-					if (slimeSizeMethod == null) {
-						slimeSizeMethod = EntitySlime.class.getDeclaredMethod("func_70799_a", int.class);
-					}
-					if (slimeSizeMethod != null) {
-						slimeSizeMethod.setAccessible(true);
-						slimeSizeMethod.invoke(entity, 1);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			entityCache.put(trophy, entity);
-		}
-		return entity;
-	}
 	
 	@Override
 	public Packet getDescriptionPacket() {
@@ -220,9 +103,18 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	     * Debug only. These will be dropped randomly with mobs!
 	     */
 		if (!worldObj.isRemote) {
-		    int next = (debugTrophy.ordinal() + 1) % Trophy.values().length; 
-		    debugTrophy = Trophy.values()[next];
-		    trophyType = debugTrophy;
+			if (stack.hasTagCompound()) {
+				NBTTagCompound tag = stack.getTagCompound();
+				if (tag.hasKey("entity")) {
+					String entityKey = tag.getString("entity");
+					trophyType = Trophy.valueOf(entityKey);
+				}
+			}
+			if (trophyType == null) {
+			    int next = (debugTrophy.ordinal() + 1) % Trophy.values().length; 
+			    debugTrophy = Trophy.values()[next];
+			    trophyType = debugTrophy;
+			}
 		    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	    }
 	}

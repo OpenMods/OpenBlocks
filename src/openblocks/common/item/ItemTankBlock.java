@@ -16,7 +16,6 @@ public class ItemTankBlock extends ItemOpenBlock {
 
 	public ItemTankBlock(int id) {
 		super(id);
-		BlockTank.itemId = id;
 	}
 
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {

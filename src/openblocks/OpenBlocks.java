@@ -77,6 +77,7 @@ public class OpenBlocks {
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
 		public static boolean tryHookPlayerRenderer = true;
+		public static double trophyDropChance = 1.0;
 	}
 
 	public static enum Gui {
@@ -155,6 +156,9 @@ public class OpenBlocks {
 
 		prop = configFile.get("tanks", "bucketsPerTank", Config.bucketsPerTank, "The amount of buckets each tank can hold");
 		Config.bucketsPerTank = prop.getInt();
+
+		prop = configFile.get("trophy", "trophyDropChance", Config.trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
+		Config.trophyDropChance = prop.getDouble(Config.trophyDropChance);
 
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);

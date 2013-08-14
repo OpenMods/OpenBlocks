@@ -67,6 +67,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
+		
 		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
 
 		assertItemHangGliderRenderer();

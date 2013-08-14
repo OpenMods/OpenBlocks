@@ -6,12 +6,14 @@ import java.util.HashMap;
 
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.common.tileentity.TileEntityTrophy.Trophy;
+import openblocks.common.TrophyHandler;
+import openblocks.common.TrophyHandler.Trophy;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
@@ -38,7 +40,11 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glTranslated(d0, d1, d2);
 				GL11.glTranslated(0.5, 0.2 + type.getVerticalOffset(), 0.5);
 				GL11.glScaled(ratio, ratio, ratio);
-		        RenderManager.instance.getEntityRenderObject(entity).doRender(entity, 0, 0, 0, f, 0.5f);
+				Render renderer = RenderManager.instance.getEntityRenderObject(entity);
+				// yeah we dont care about fonts, but we do care that the renderManager is available
+				if (renderer.getFontRendererFromRenderManager() != null) {
+					renderer.doRender(entity, 0, 0, 0, f, 0.5f);
+				}
 				GL11.glPopMatrix();
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);

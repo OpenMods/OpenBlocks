@@ -14,8 +14,6 @@ import openblocks.common.tileentity.tank.TileEntityTank;
 
 public class BlockTank extends OpenBlock {
 
-	public static int itemId;
-
 	public BlockTank() {
 		super(OpenBlocks.Config.blockTankId, Material.ground);
 		setupBlock(this, "tank", TileEntityTank.class, ItemTankBlock.class);

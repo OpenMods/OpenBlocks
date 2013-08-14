@@ -10,6 +10,9 @@ public class SkeletonBehavior implements ITrophyBehavior {
 
 	@Override
 	public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
+		if (tile.worldObj.isRemote) {
+			return;
+		}
 		double midX = tile.xCoord + 0.5;
 		double midZ = tile.zCoord + 0.5;
 		EntityArrow entityarrow = new EntityArrow(tile.worldObj, midX, tile.yCoord + 1, midZ);
