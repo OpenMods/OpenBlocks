@@ -9,8 +9,14 @@ import net.minecraft.tileentity.TileEntity;
 public class CaveSpiderBehavior implements ITrophyBehavior {
 
 	@Override
-	public void execute(TileEntity tile, EntityPlayer player) {
+	public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
 	    player.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 3));
+	}
+
+	@Override
+	public void executeTickBehavior(TileEntity tile) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

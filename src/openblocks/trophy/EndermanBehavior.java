@@ -8,7 +8,7 @@ import net.minecraft.util.MathHelper;
 public class EndermanBehavior implements ITrophyBehavior {
 
 	@Override
-	public void execute(TileEntity tile, EntityPlayer player) {
+	public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
         double d0 = player.posX + (tile.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
         double d1 = player.posY + (double)(tile.worldObj.rand.nextInt(64) - 16);
         double d2 = player.posZ + (tile.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
@@ -83,4 +83,10 @@ public class EndermanBehavior implements ITrophyBehavior {
             player.playSound("mob.endermen.portal", 1.0F, 1.0F);
         }
     }
+
+	@Override
+	public void executeTickBehavior(TileEntity tile) {
+		// TODO Auto-generated method stub
+		
+	}
 }

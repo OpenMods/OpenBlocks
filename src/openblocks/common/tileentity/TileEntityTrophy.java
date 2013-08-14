@@ -24,6 +24,8 @@ import openblocks.api.IAwareTile;
 import openblocks.trophy.CaveSpiderBehavior;
 import openblocks.trophy.EndermanBehavior;
 import openblocks.trophy.ITrophyBehavior;
+import openblocks.trophy.SkeletonBehavior;
+import openblocks.trophy.SnowmanBehavior;
 
 public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 
@@ -33,7 +35,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		Chicken(),
 		Cow(),
 		Creeper(),
-		Skeleton(),
+		Skeleton(new SkeletonBehavior()),
 		PigZombie(),
 		Bat(1.0, -0.3),
 		Zombie(),
@@ -51,7 +53,8 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		LavaSlime(0.8),
 		Squid(0.3, 0.5),
 		MushroomCow(),
-		VillagerGolem(0.3);
+		VillagerGolem(0.3),
+		SnowMan(new SnowmanBehavior());
 		
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
@@ -106,9 +109,15 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 			}
 		}
 		
-		public void executeBehavior(TileEntity tile, EntityPlayer player) {
+		public void executeActivateBehavior(TileEntity tile, EntityPlayer player) {
 			if (behavior != null) {
-				behavior.execute(tile, player);
+				behavior.executeActivateBehavior(tile, player);
+			}
+		}
+		
+		public void executeTickBehavior(TileEntity tile) {
+			if (behavior != null) {
+				behavior.executeTickBehavior(tile);
 			}
 		}
 	}
@@ -161,6 +170,12 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		readFromNBT(pkt.customParam1);
 	}
 	
+	public void updateEntity() {
+		super.updateEntity();
+		if (!worldObj.isRemote) {
+			trophyType.executeTickBehavior(this);
+		}
+	}
 	
 	@Override
 	protected void initialize() {
@@ -184,7 +199,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			trophyType.playSound(worldObj, xCoord, yCoord, zCoord);
-			trophyType.executeBehavior(this, player);
+			trophyType.executeActivateBehavior(this, player);
 		}
 		return true;
 	}
