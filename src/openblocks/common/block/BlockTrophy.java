@@ -1,11 +1,14 @@
 package openblocks.common.block;
 
+import java.util.List;
+
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.common.tileentity.tank.TileEntityTank;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,7 +22,7 @@ public class BlockTrophy extends OpenBlock {
 		setupBlock(this, "trophy", TileEntityTrophy.class, ItemTrophyBlock.class);
 		setBlockBounds(0.3f, 0f, 0.3f, 0.7f, 0.8f, 0.7f);
 	}
-
+	
 	@Override
 	public boolean isOpaqueCube() {
 		return false;

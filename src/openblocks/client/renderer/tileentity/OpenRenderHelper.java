@@ -20,22 +20,22 @@ public class OpenRenderHelper {
 		t.startDrawingQuads();
 
 		Icon useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(0);
-		renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
+		renderBlocks.renderFaceYNeg(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(1);
-		renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
+		renderBlocks.renderFaceYPos(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(2);
-		renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
+		renderBlocks.renderFaceZNeg(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(3);
-		renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
+		renderBlocks.renderFaceZPos(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(4);
-		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
+		renderBlocks.renderFaceXNeg(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(5);
-		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, 0, 0, 0, useTexture);
+		renderBlocks.renderFaceXPos(block, 0, 0, 0, useTexture);
 		t.draw();
 
 		GL11.glEnable(2896);

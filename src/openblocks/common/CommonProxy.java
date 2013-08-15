@@ -53,7 +53,6 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
 			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
 		}
-
 		if (Config.blockGuideId > -1) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg", "ggg", 'g', new ItemStack(Block.glass), 't', new ItemStack(Block.torchWood) }));

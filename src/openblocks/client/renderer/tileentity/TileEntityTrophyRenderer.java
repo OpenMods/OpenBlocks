@@ -43,7 +43,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);
 				GL11.glTranslated(0.5, 0.2 + type.getVerticalOffset(), 0.5);
-				GL11.glRotatef(-BlockUtils.getRotationFromDirection(trophy.getRotation()), 0, 1, 0);
+				GL11.glRotatef(BlockUtils.getRotationFromDirection(trophy.getRotation()), 0, 1, 0);
 				
 				GL11.glScaled(ratio, ratio, ratio);
 				Render renderer = RenderManager.instance.getEntityRenderObject(entity);
@@ -52,12 +52,15 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 					renderer.doRender(entity, 0, 0, 0, f, 0.5f);
 				}
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+				
 				GL11.glPopMatrix();
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);
-		        bindTextureByName("/mods/openblocks/textures/blocks/tank.png");
+				
+				bindTextureByName("/terrain.png");
 				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8, OpenBlocks.Blocks.trophy, null);
 				GL11.glPopMatrix();
+				
 			}
 		}
 		GL11.glPopMatrix();

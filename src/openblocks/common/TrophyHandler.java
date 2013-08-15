@@ -7,10 +7,11 @@ import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.BlazeBehavior;
 import openblocks.trophy.CaveSpiderBehavior;
-import openblocks.trophy.ChickenBehavior;
+import openblocks.trophy.ItemDropBehavior;
 import openblocks.trophy.CreeperBehavior;
 import openblocks.trophy.EndermanBehavior;
 import openblocks.trophy.ITrophyBehavior;
+import openblocks.trophy.MooshroomBehavior;
 import openblocks.trophy.SkeletonBehavior;
 import openblocks.trophy.SnowmanBehavior;
 import openblocks.trophy.SquidBehavior;
@@ -20,6 +21,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -57,11 +59,11 @@ public class TrophyHandler {
 	
 	public enum Trophy {
 		Wolf(),
-		Chicken(new ChickenBehavior()),
-		Cow(),
+		Chicken(new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")),
+		Cow(new ItemDropBehavior(20000, Item.leather.itemID)),
 		Creeper(new CreeperBehavior()),
 		Skeleton(new SkeletonBehavior()),
-		PigZombie(),
+		PigZombie(new ItemDropBehavior(20000, Item.goldNugget.itemID)),
 		Bat(1.0, -0.3),
 		Zombie(),
 		Witch(0.35),
@@ -77,9 +79,10 @@ public class TrophyHandler {
 		Enderman(0.3, new EndermanBehavior()),
 		LavaSlime(0.8),
 		Squid(0.3, 0.5, new SquidBehavior()),
-		MushroomCow(),
+		MushroomCow(new MooshroomBehavior()),
 		VillagerGolem(0.3),
-		SnowMan(new SnowmanBehavior());
+		SnowMan(new SnowmanBehavior()),
+		Pig(new ItemDropBehavior(20000, Item.porkRaw.itemID));
 		
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
