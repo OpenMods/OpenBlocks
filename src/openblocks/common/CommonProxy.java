@@ -59,7 +59,7 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (Config.blockElevatorId > -1) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth), 'g', "oreGold" }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth), 'g', new ItemStack(Item.ingotGold) }));
 		}
 		if (Config.blockHealId > -1) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
