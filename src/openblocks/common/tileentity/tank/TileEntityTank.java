@@ -156,8 +156,8 @@ public class TileEntityTank extends TileEntityTankBase implements
 				liquidId.setValue(0);
 				liquidMeta.setValue(0);
 			}
-
-			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+			/* Update EVERY tick */
+			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 1);
 		} else {
 			interpolateLiquidLevel();
 			flowTimer += 0.1f;
