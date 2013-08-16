@@ -72,9 +72,11 @@ public class OpenBlocks {
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int elevatorTravelDistance = 20;
+		public static boolean elevatorBlockMustFaceDirection = false;
+		public static boolean elevatorIgnoreHalfBlocks = false;
+		public static int elevatorMaxBlockPassCount = 4;
 		public static int bucketsPerTank = 16;
 		public static boolean enableGraves = true;
-		public static boolean elevatorBlockMustFaceDirection = false;
 		public static int ghostSpawnProbability = 100;
 		public static boolean tryHookPlayerRenderer = true;
 		public static double trophyDropChance = 0.001;
@@ -147,10 +149,26 @@ public class OpenBlocks {
 
 		prop = configFile.get("dropblock", "mustFaceDirection", Config.elevatorBlockMustFaceDirection, "Must the user face the direction they want to travel?");
 		Config.elevatorBlockMustFaceDirection = prop.getBoolean(Config.elevatorBlockMustFaceDirection);
+		
+		prop = configFile.get("dropblock", "maxPassThrough", Config.elevatorMaxBlockPassCount, "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this");
+		Config.elevatorMaxBlockPassCount = prop.getInt();
+		
+		if(Config.elevatorMaxBlockPassCount < -1){
+			Config.elevatorMaxBlockPassCount = -1;
+		}
+		prop.set(Config.elevatorMaxBlockPassCount);
+		
+		prop = configFile.get("dropblock", "ignoreHalfBlocks", Config.elevatorIgnoreHalfBlocks, "The elevator will ignore half blocks when counting the blocks it can pass through");
+		Config.elevatorIgnoreHalfBlocks = prop.getBoolean(Config.elevatorIgnoreHalfBlocks);
 
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
 
+		if (Config.ghostSpawnProbability > 100) Config.ghostSpawnProbability = 100;
+		else if (Config.ghostSpawnProbability < 0) Config.ghostSpawnProbability = 0;
+		
+		prop.set(Config.ghostSpawnProbability);
+		
 		prop = configFile.get("grave", "enableGraves", Config.enableGraves, "Enable graves on player death");
 		Config.enableGraves = prop.getBoolean(Config.enableGraves);
 
@@ -163,8 +181,6 @@ public class OpenBlocks {
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
 
-		if (Config.ghostSpawnProbability > 100) Config.ghostSpawnProbability = 100;
-		else if (Config.ghostSpawnProbability < 0) Config.ghostSpawnProbability = 0;
 
 		configFile.save();
 

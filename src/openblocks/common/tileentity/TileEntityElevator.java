@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
@@ -124,10 +125,10 @@ public class TileEntityElevator extends TileEntity {
 					if (worldObj.isAirBlock(xCoord, yPos + 1, zCoord)
 							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) { return yPos; }
 					return 0;
-				} else if (blockId != 0) {
-					if (blocksInTheWay++ > 3) {
-						// System.out.println("blocksInTheWay = " +
-						// blocksInTheWay);
+				/* Check if the block is passable */
+				/* I think inverting this logic could make life happy */
+				} else if (blockId != 0 || !(OpenBlocks.Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId)) || OpenBlocks.Config.elevatorMaxBlockPassCount != -1) {
+					if (++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) {
 						return 0;
 					}
 				}
