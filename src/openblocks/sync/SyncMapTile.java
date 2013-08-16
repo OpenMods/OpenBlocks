@@ -6,14 +6,32 @@ import java.io.IOException;
 import openblocks.OpenBlocks;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
 
 public class SyncMapTile extends SyncMap {
 
 	@Override
 	protected void writeMapType(DataOutputStream dos) throws IOException {
 		dos.writeByte(SyncableManager.TYPE_TILE);
+	}	
+
+	/* Dirty wrapper for 250 packets to be sent with Chunk data. We should really do this properly.. one day */
+	public Packet getDescriptionPacket(ISyncHandler handler) {
+		try{
+			if(!(handler instanceof TileEntity)) return null; /* Tile Entities only */
+			TileEntity ent = (TileEntity)handler;
+			Packet250CustomPayload packet250 = (Packet250CustomPayload)createPacket(handler, true);
+			/* We now turn it in to a TileEntityUpdate packet */
+			NBTTagCompound extraData = new NBTTagCompound();
+			extraData.setByteArray("payload", packet250.data);
+			Packet132TileEntityData tileEntityDataPacket = new Packet132TileEntityData(ent.xCoord, ent.yCoord, ent.zCoord, 0, extraData); 
+			return tileEntityDataPacket;
+		}catch(Exception ex){
+			return null;
+		}
 	}
 	
 	public void handleTileDataPacket(ISyncHandler handler, Packet132TileEntityData packet) {
