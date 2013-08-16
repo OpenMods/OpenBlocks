@@ -18,6 +18,7 @@ import openblocks.utils.ByteUtils;
 public abstract class SyncMap {
 
 	private int trackingRange = 64;
+	private long totalTrackingTime = 0;
 
 	public SyncMap() {}
 
@@ -76,6 +77,11 @@ public abstract class SyncMap {
 
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (!worldObj.isRemote) {
+			long worldTotalTime = worldObj.getTotalWorldTime();
+			if(totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
+			if(worldTotalTime - totalTrackingTime < 1000) return;
+			totalTrackingTime = worldTotalTime;		
+			/* This function is super expensive */
 			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
 			if (players.size() > 0) {
 				Packet changePacket = null;

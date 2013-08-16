@@ -47,18 +47,7 @@ public class TileEntityElevator extends TileEntity {
 			List<EntityPlayer> playersInRange = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
 
 			if (playersInRange.size() > 0) {
-
-				try {
-					upperLevel = findLevel(ForgeDirection.UP);
-					lowerLevel = findLevel(ForgeDirection.DOWN);
-				} catch (Exception e) {
-					upperLevel = 0;
-					lowerLevel = 0;
-					return;
-				}
-
-				boolean doTeleport = false;
-				int teleportTo = 0;
+				ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
 
 				for (EntityPlayer player : playersInRange) {
 					if (cooldown.containsKey(player.username)) {
@@ -71,26 +60,29 @@ public class TileEntityElevator extends TileEntity {
 
 					if (player.capabilities.isCreativeMode
 							&& player.capabilities.isFlying) continue;
-					if (lowerLevel != 0
-							&& player.isSneaking()
+					if (player.isSneaking()
 							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
-						doTeleport = true;
-						teleportTo = lowerLevel;
+						teleportDirection = ForgeDirection.DOWN;
 						/* player.isJumping doesn't seem to work server side ? */
-					} else if (upperLevel != 0
-							&& player.posY > yCoord + 1.2
+					} else if (player.posY > yCoord + 1.2
 							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
-						doTeleport = true;
-						teleportTo = upperLevel;
+						teleportDirection = ForgeDirection.UP;
 					}
-					if (doTeleport) {
-						player.setPositionAndUpdate(player.posX, teleportTo + 1.1, player.posZ);
-						worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
-						TileEntity targetTile = worldObj.getBlockTileEntity(xCoord, teleportTo, zCoord);
-						if (targetTile instanceof TileEntityElevator) {
-							((TileEntityElevator)targetTile).addPlayerCooldown(player);
+					if(teleportDirection != ForgeDirection.UNKNOWN) {
+						try{
+							int level = findLevel(teleportDirection);
+							if(level != 0) {
+								player.setPositionAndUpdate(player.posX, level + 1.1, player.posZ);
+								worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
+								TileEntity targetTile = worldObj.getBlockTileEntity(xCoord, level, zCoord);
+								if (targetTile instanceof TileEntityElevator) {
+									((TileEntityElevator)targetTile).addPlayerCooldown(player);
+								}
+							}							
+						}catch(Exception ex) {
+							/* Teleport failed */
 						}
 					}
 
