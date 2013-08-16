@@ -378,8 +378,16 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 		return false;
 	}
-
+	
 	public double getHeightForRender() {
+		double percent = getPercentFull();
+		if(worldObj == null || worldObj.isRemote){
+			return Math.max(percent > 0 ? 0.1 : 0, percent);
+		}
+		return percent;
+	}
+
+	public double getPercentFull() {
 		if (containsValidLiquid()) {
 			if (worldObj == null || worldObj.isRemote) {
 				return interpolatedRenderAmount / (double)Short.MAX_VALUE;
