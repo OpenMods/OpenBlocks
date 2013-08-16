@@ -35,7 +35,8 @@ public class PlayerDeathHandler {
 				boolean aboveIsAir = false;
 
 				for (int checkY = y; checkY > 1; checkY--) {
-					if (!world.isAirBlock(x, checkY, z) && aboveIsAir) {
+					boolean thisIsAir = world.isAirBlock(x, checkY, z);
+					if (!thisIsAir && aboveIsAir) {
 						checkY++;
 						world.setBlock(x, checkY, z, OpenBlocks.Config.blockGraveId, 0, 2);
 						TileEntity tile = world.getBlockTileEntity(x, checkY, z);
@@ -46,7 +47,7 @@ public class PlayerDeathHandler {
 							player.inventory.clearInventory(-1, -1);
 							break;
 						}
-					} else {
+					} else if(thisIsAir) {
 						aboveIsAir = true;
 					}
 				}
