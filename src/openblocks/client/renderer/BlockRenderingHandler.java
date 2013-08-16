@@ -70,8 +70,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				}
 				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			}
-		}catch (Exception e) {
-			
+		} catch (Exception e) {
+
 		}
 	}
 

@@ -75,12 +75,20 @@ public abstract class SyncMap {
 		}
 	}
 
+	/*
+	 * By registering each sync map statically with a primary sync manager, and
+	 * then running that at the end of each tick. We could spare a lot of
+	 * processing time and resources
+	 * Just saying -NeverCast :)
+	 */
+
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (!worldObj.isRemote) {
 			long worldTotalTime = worldObj.getTotalWorldTime();
-			if(totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
-			if(worldTotalTime - totalTrackingTime < 1000) return;
-			totalTrackingTime = worldTotalTime;		
+			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
+			if (worldTotalTime - totalTrackingTime < 20) return;
+			totalTrackingTime = worldTotalTime;
+			System.out.println("Sync Handler: " + handler.toString());
 			/* This function is super expensive */
 			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
 			if (players.size() > 0) {
@@ -105,14 +113,14 @@ public abstract class SyncMap {
 							if (usersInRange.contains(player.entityId)) {
 								if (hasChanges) {
 									if (changePacket == null) {
-										//System.out.println("Creating change packet");
+										// System.out.println("Creating change packet");
 										changePacket = createPacket(handler, false);
 									}
 									packetToSend = changePacket;
 								}
 							} else {
 								if (fullPacket == null) {
-									//System.out.println("Creating full packet");
+									// System.out.println("Creating full packet");
 									fullPacket = createPacket(handler, true);
 								}
 								packetToSend = fullPacket;
@@ -126,7 +134,7 @@ public abstract class SyncMap {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}else {
+			} else {
 				usersInRange.clear();
 			}
 		}

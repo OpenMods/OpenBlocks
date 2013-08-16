@@ -134,7 +134,7 @@ public class OpenBlocks {
 
 		prop = configFile.getBlock("block", "blockFlagId", Config.blockFlagId, "The id of the flag block");
 		Config.blockFlagId = prop.getInt();
-		
+
 		prop = configFile.getBlock("block", "blockTankId", Config.blockTankId, "The id of the tank block");
 		Config.blockTankId = prop.getInt();
 
@@ -149,15 +149,15 @@ public class OpenBlocks {
 
 		prop = configFile.get("dropblock", "mustFaceDirection", Config.elevatorBlockMustFaceDirection, "Must the user face the direction they want to travel?");
 		Config.elevatorBlockMustFaceDirection = prop.getBoolean(Config.elevatorBlockMustFaceDirection);
-		
+
 		prop = configFile.get("dropblock", "maxPassThrough", Config.elevatorMaxBlockPassCount, "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this");
 		Config.elevatorMaxBlockPassCount = prop.getInt();
-		
-		if(Config.elevatorMaxBlockPassCount < -1){
+
+		if (Config.elevatorMaxBlockPassCount < -1) {
 			Config.elevatorMaxBlockPassCount = -1;
 		}
 		prop.set(Config.elevatorMaxBlockPassCount);
-		
+
 		prop = configFile.get("dropblock", "ignoreHalfBlocks", Config.elevatorIgnoreHalfBlocks, "The elevator will ignore half blocks when counting the blocks it can pass through");
 		Config.elevatorIgnoreHalfBlocks = prop.getBoolean(Config.elevatorIgnoreHalfBlocks);
 
@@ -166,9 +166,9 @@ public class OpenBlocks {
 
 		if (Config.ghostSpawnProbability > 100) Config.ghostSpawnProbability = 100;
 		else if (Config.ghostSpawnProbability < 0) Config.ghostSpawnProbability = 0;
-		
+
 		prop.set(Config.ghostSpawnProbability);
-		
+
 		prop = configFile.get("grave", "enableGraves", Config.enableGraves, "Enable graves on player death");
 		Config.enableGraves = prop.getBoolean(Config.enableGraves);
 
@@ -180,7 +180,6 @@ public class OpenBlocks {
 
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
-
 
 		configFile.save();
 

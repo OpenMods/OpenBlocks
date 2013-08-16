@@ -73,26 +73,26 @@ public class MetaGeneric implements IMetaItem {
 		if (recipes == null) return;
 		for (int i = 0; i < recipes.length; i++) {
 			Object[] recipe = recipes[i];
-			int amount = (Integer) recipe[0];
+			int amount = (Integer)recipe[0];
 			boolean smelting = false;
 			int itemId = 0;
 			int itemMeta = 0;
 			if (recipe[1] instanceof Integer) {
 				itemId = amount;
-				itemMeta = (Integer) recipe[1];
+				itemMeta = (Integer)recipe[1];
 				smelting = true;
-			}else {
+			} else {
 				recipe = Arrays.copyOfRange(recipe, 1, recipe.length);
 			}
 			for (int j = 0; j < recipe.length; j++) {
 				if (recipe[j] instanceof Metas) {
-					recipe[j] = ((Metas) recipe[j]).newItemStack();
+					recipe[j] = ((Metas)recipe[j]).newItemStack();
 				}
 			}
 			IRecipe r = null;
 			if (smelting) {
 				FurnaceRecipes.smelting().addSmelting(itemId, itemMeta, (ItemStack)recipe[2], (Float)recipe[3]);
-			}else {
+			} else {
 				if (recipe[0] instanceof String) {
 					r = new ShapedOreRecipe(OpenBlocks.Items.generic.newItemStack(this, amount), recipe);
 				} else {

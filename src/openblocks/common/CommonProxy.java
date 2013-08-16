@@ -87,21 +87,22 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
 		}
-		
+
 		OpenBlocks.Items.generic = new ItemGeneric();
 		if (Config.itemHangGliderId > -1) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
 		}
 
-		//GameRegistry.addRecipe(new TorchBowRecipe());
+		// GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
 
 		// MinecraftForge.EVENT_BUS.register(new BowEventHandler());
 		if (OpenBlocks.Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
-		
+		// Ignore me
+		MinecraftForge.EVENT_BUS.register(this);
 
 		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);

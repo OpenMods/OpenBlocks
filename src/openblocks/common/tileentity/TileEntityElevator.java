@@ -70,18 +70,18 @@ public class TileEntityElevator extends TileEntity {
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						teleportDirection = ForgeDirection.UP;
 					}
-					if(teleportDirection != ForgeDirection.UNKNOWN) {
-						try{
+					if (teleportDirection != ForgeDirection.UNKNOWN) {
+						try {
 							int level = findLevel(teleportDirection);
-							if(level != 0) {
+							if (level != 0) {
 								player.setPositionAndUpdate(player.posX, level + 1.1, player.posZ);
 								worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
 								TileEntity targetTile = worldObj.getBlockTileEntity(xCoord, level, zCoord);
 								if (targetTile instanceof TileEntityElevator) {
 									((TileEntityElevator)targetTile).addPlayerCooldown(player);
 								}
-							}							
-						}catch(Exception ex) {
+							}
+						} catch (Exception ex) {
 							/* Teleport failed */
 						}
 					}
@@ -117,13 +117,14 @@ public class TileEntityElevator extends TileEntity {
 					if (worldObj.isAirBlock(xCoord, yPos + 1, zCoord)
 							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) { return yPos; }
 					return 0;
-					 		/* air */							/* disabled */												/* ignoring half blocks */
-				} else if(blockId == 0 || OpenBlocks.Config.elevatorMaxBlockPassCount == -1 || OpenBlocks.Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId)) {
+					/* air *//* disabled *//* ignoring half blocks */
+				} else if (blockId == 0
+						|| OpenBlocks.Config.elevatorMaxBlockPassCount == -1
+						|| OpenBlocks.Config.elevatorIgnoreHalfBlocks
+						&& !Block.isNormalCube(blockId)) {
 					continue;
-				}else {
-					if (++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) {
-						return 0;
-					}
+				} else {
+					if (++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) { return 0; }
 				}
 			} else {
 				return 0;

@@ -30,7 +30,6 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class TrophyHandler {
-	
 
 	public static HashMap<Trophy, Entity> entityCache = new HashMap<Trophy, Entity>();
 
@@ -56,54 +55,40 @@ public class TrophyHandler {
 		}
 		return entity;
 	}
-	
+
 	public enum Trophy {
-		Wolf(),
-		Chicken(new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")),
-		Cow(new ItemDropBehavior(20000, Item.leather.itemID)),
-		Creeper(new CreeperBehavior()),
-		Skeleton(new SkeletonBehavior()),
-		PigZombie(new ItemDropBehavior(20000, Item.goldNugget.itemID)),
-		Bat(1.0, -0.3),
-		Zombie(),
-		Witch(0.35),
-		Villager(),
-		Ozelot(),
-		Sheep(),
-		Blaze(new BlazeBehavior()),
-		Silverfish(),
-		Spider(),
-		CaveSpider(new CaveSpiderBehavior()),
-		Slime(0.4),
-		Ghast(0.1, 0.2),
-		Enderman(0.3, new EndermanBehavior()),
-		LavaSlime(0.8),
-		Squid(0.3, 0.5, new SquidBehavior()),
-		MushroomCow(new MooshroomBehavior()),
-		VillagerGolem(0.3),
-		SnowMan(new SnowmanBehavior()),
-		Pig(new ItemDropBehavior(20000, Item.porkRaw.itemID));
-		
+		Wolf(), Chicken(
+				new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")), Cow(
+				new ItemDropBehavior(20000, Item.leather.itemID)), Creeper(
+				new CreeperBehavior()), Skeleton(new SkeletonBehavior()), PigZombie(
+				new ItemDropBehavior(20000, Item.goldNugget.itemID)), Bat(1.0,
+				-0.3), Zombie(), Witch(0.35), Villager(), Ozelot(), Sheep(), Blaze(
+				new BlazeBehavior()), Silverfish(), Spider(), CaveSpider(
+				new CaveSpiderBehavior()), Slime(0.4), Ghast(0.1, 0.2), Enderman(
+				0.3, new EndermanBehavior()), LavaSlime(0.8), Squid(0.3, 0.5,
+				new SquidBehavior()), MushroomCow(new MooshroomBehavior()), VillagerGolem(
+				0.3), SnowMan(new SnowmanBehavior()), Pig(
+				new ItemDropBehavior(20000, Item.porkRaw.itemID));
+
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
 		private ITrophyBehavior behavior;
-		
-		Trophy() {	
-		}
-		
-		Trophy(ITrophyBehavior behavior) {	
+
+		Trophy() {}
+
+		Trophy(ITrophyBehavior behavior) {
 			this.behavior = behavior;
 		}
-		
+
 		Trophy(double scale) {
 			this.scale = scale;
 		}
-		
+
 		Trophy(double scale, ITrophyBehavior behavior) {
 			this.scale = scale;
 			this.behavior = behavior;
 		}
-		
+
 		Trophy(double scale, double verticalOffset) {
 			this(scale);
 			this.verticalOffset = verticalOffset;
@@ -117,15 +102,15 @@ public class TrophyHandler {
 		public double getVerticalOffset() {
 			return verticalOffset;
 		}
-		
+
 		public double getScale() {
 			return scale;
 		}
-		
+
 		public Entity getEntity() {
 			return getEntityFromCache(this);
 		}
-		
+
 		public ItemStack getItemStack() {
 			ItemStack stack = new ItemStack(OpenBlocks.Blocks.trophy, 1, ordinal());
 			NBTTagCompound tag = new NBTTagCompound();
@@ -133,7 +118,7 @@ public class TrophyHandler {
 			stack.setTagCompound(tag);
 			return stack;
 		}
-		
+
 		public void playSound(World world, double x, double y, double z) {
 			Entity e = getEntity();
 			e.posX = x;
@@ -144,20 +129,20 @@ public class TrophyHandler {
 				((EntityLiving)e).playLivingSound();
 			}
 		}
-		
+
 		public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 			if (behavior != null) {
 				behavior.executeActivateBehavior(tile, player);
 			}
 		}
-		
+
 		public void executeTickBehavior(TileEntityTrophy tile) {
 			if (behavior != null) {
 				behavior.executeTickBehavior(tile);
 			}
 		}
 	}
-	
+
 	@ForgeSubscribe
 	public void onLivingDeath(LivingDeathEvent event) {
 		if (!event.entity.worldObj.isRemote) {
@@ -165,16 +150,10 @@ public class TrophyHandler {
 				Entity entity = event.entity;
 				Trophy mobTrophy = Trophy.valueOf(EntityList.getEntityString(entity));
 				if (mobTrophy != null) {
-					BlockUtils.dropItemStackInWorld(
-							entity.worldObj,
-							entity.posX,
-							entity.posY,
-							entity.posZ,
-							mobTrophy.getItemStack()
-					);
+					BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
 				}
 			}
 		}
 	}
-	
+
 }

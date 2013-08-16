@@ -22,7 +22,7 @@ public class BlockTrophy extends OpenBlock {
 		setupBlock(this, "trophy", TileEntityTrophy.class, ItemTrophyBlock.class);
 		setBlockBounds(0.3f, 0f, 0.3f, 0.7f, 0.8f, 0.7f);
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
@@ -37,7 +37,6 @@ public class BlockTrophy extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
-	
 
 	public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer) {
 		// System.out.println(getTileEntity(par1World, par2, par3, par3,
@@ -45,7 +44,8 @@ public class BlockTrophy extends OpenBlock {
 	}
 
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+		if (!world.isRemote
+				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			TileEntityTrophy trophy = getTileEntity(world, x, y, z, TileEntityTrophy.class);
 			if (trophy.trophyType != null) {
 				ItemStack itemStack = trophy.trophyType.getItemStack();

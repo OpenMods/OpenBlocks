@@ -9,11 +9,9 @@ public class SquidBehavior implements ITrophyBehavior {
 
 	@Override
 	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		if (tile.worldObj.isRemote) {
-			return;
-		}
+		if (tile.worldObj.isRemote) { return; }
 		int x = (int)Math.round(player.posX);
-		int y = (int)Math.round(player.posY+1);
+		int y = (int)Math.round(player.posY + 1);
 		int z = (int)Math.round(player.posZ);
 		if (tile.worldObj.isAirBlock(x, y, z)) {
 			tile.worldObj.setBlock(x, y, z, Block.waterMoving.blockID);

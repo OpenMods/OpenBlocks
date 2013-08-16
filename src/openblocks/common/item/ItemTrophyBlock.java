@@ -13,7 +13,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	public ItemTrophyBlock(int par1) {
 		super(par1);
 	}
-	
+
 	public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List list, boolean par4) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();

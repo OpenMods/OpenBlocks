@@ -115,14 +115,17 @@ public class TileEntityTank extends TileEntityTankBase implements
 					}
 				}
 
-				if(getAmount() > 0 && containsValidLiquid()) {
-					// now fill up the horizontal tanks, start with the least full
+				if (getAmount() > 0 && containsValidLiquid()) {
+					// now fill up the horizontal tanks, start with the least
+					// full
 					ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
 					for (TileEntityTank horizontal : horizontals) {
 						LiquidStack liquid = tank.getLiquid();
-						if (horizontal.canReceiveLiquid(liquid) && liquid != null) {
-							int difference = getAmount() - horizontal.getAmount();
-							if(difference <= 0) continue;
+						if (horizontal.canReceiveLiquid(liquid)
+								&& liquid != null) {
+							int difference = getAmount()
+									- horizontal.getAmount();
+							if (difference <= 0) continue;
 							int halfDifference = Math.max(difference / 2, 1);
 							LiquidStack liquidCopy = liquid.copy();
 							liquidCopy.amount = Math.min(500, halfDifference);
@@ -378,9 +381,9 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 	public double getHeightForRender() {
 		if (containsValidLiquid()) {
-			if(worldObj == null || worldObj.isRemote){
+			if (worldObj == null || worldObj.isRemote) {
 				return interpolatedRenderAmount / (double)Short.MAX_VALUE;
-			}else{
+			} else {
 				return liquidRenderAmount.getValue() / (double)Short.MAX_VALUE;
 			}
 		} else {

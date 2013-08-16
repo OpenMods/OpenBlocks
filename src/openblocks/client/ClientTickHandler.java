@@ -45,9 +45,14 @@ public class ClientTickHandler implements ITickHandler {
 			Entry<EntityPlayer, EntityHangGlider> next = it.next();
 			EntityPlayer player = next.getKey();
 			EntityHangGlider glider = next.getValue();
-			if (player == null || glider == null || glider.isDead || player.isDead || player.getHeldItem() == null || player.getHeldItem().getItem() != OpenBlocks.Items.hangGlider) {
+			if (player == null
+					|| glider == null
+					|| glider.isDead
+					|| player.isDead
+					|| player.getHeldItem() == null
+					|| player.getHeldItem().getItem() != OpenBlocks.Items.hangGlider) {
 				it.remove();
-			}else {
+			} else {
 				if (glider != null) {
 					glider.fixPositions();
 				}

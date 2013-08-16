@@ -1,6 +1,7 @@
 package openblocks.client;
 
 import java.io.File;
+import java.util.Calendar;
 
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.entity.Render;
@@ -12,6 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.OpenBlocks.Gui;
@@ -67,7 +70,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
-		
+
 		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
 
 		assertItemHangGliderRenderer();
@@ -108,6 +111,20 @@ public class ClientProxy extends CommonProxy {
 			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
 		}
 		return null;
+	}
+	
+	/* I'll just sneak this in here ;) -NeverCast */
+	@ForgeSubscribe
+	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+		if(event.world != null && event.world.isRemote) {
+			if(event.entity instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer)event.entity;
+				Calendar cal = Calendar.getInstance();
+				if(cal.get(Calendar.MONTH)== Calendar.AUGUST && cal.get(Calendar.DATE) == 16) {
+					player.sendChatToPlayer("Happy Birthday Mikee!! :)");
+				}
+			}
+		}
 	}
 
 	@Override
