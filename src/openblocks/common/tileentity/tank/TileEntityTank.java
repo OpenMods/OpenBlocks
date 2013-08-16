@@ -7,6 +7,9 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -328,6 +331,17 @@ public class TileEntityTank extends TileEntityTankBase implements
 			count += below.countDownwardsTanks();
 		}
 		return count;
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		return syncMap.getDescriptionPacket(this);
+	}
+	
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		syncMap.handleTileDataPacket(this, pkt);
+		interpolatedRenderAmount = liquidRenderAmount.getValue();		
 	}
 
 	@Override
