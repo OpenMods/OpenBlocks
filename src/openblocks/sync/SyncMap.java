@@ -87,7 +87,7 @@ public abstract class SyncMap {
 			//TODO: Test the shit out of this.
 			long worldTotalTime = worldObj.getTotalWorldTime();
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
-			if (worldTotalTime - totalTrackingTime < 20) return;
+			if (worldTotalTime - totalTrackingTime < 5) return;
 			totalTrackingTime = worldTotalTime;
 			/* This function is super expensive */
 			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
