@@ -125,9 +125,10 @@ public class TileEntityElevator extends TileEntity {
 					if (worldObj.isAirBlock(xCoord, yPos + 1, zCoord)
 							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) { return yPos; }
 					return 0;
-				/* Check if the block is passable */
-				/* I think inverting this logic could make life happy */
-				} else if (blockId != 0 || !(OpenBlocks.Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId)) || OpenBlocks.Config.elevatorMaxBlockPassCount != -1) {
+					 		/* air */							/* disabled */												/* ignoring half blocks */
+				} else if(blockId == 0 || OpenBlocks.Config.elevatorMaxBlockPassCount == -1 || OpenBlocks.Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId)) {
+					continue;
+				}else {
 					if (++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) {
 						return 0;
 					}
