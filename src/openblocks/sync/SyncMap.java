@@ -84,11 +84,11 @@ public abstract class SyncMap {
 
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (!worldObj.isRemote) {
+			//TODO: Test the shit out of this.
 			long worldTotalTime = worldObj.getTotalWorldTime();
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
 			if (worldTotalTime - totalTrackingTime < 20) return;
 			totalTrackingTime = worldTotalTime;
-			System.out.println("Sync Handler: " + handler.toString());
 			/* This function is super expensive */
 			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
 			if (players.size() > 0) {
