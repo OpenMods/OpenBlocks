@@ -16,6 +16,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
 
 public abstract class SyncMap {
@@ -95,9 +96,8 @@ public abstract class SyncMap {
 			long worldTotalTime = worldObj.getTotalWorldTime();
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
 			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
-			totalTrackingTime = worldTotalTime;
-			/* This function is super expensive */
-			List<EntityPlayer> players = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
+			totalTrackingTime = worldTotalTime;		 																	// Out with the old
+			List<EntityPlayer> players = (List<EntityPlayer>)PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);	//worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;
