@@ -43,7 +43,7 @@ public class EntityGhost extends EntityMob implements
 	 */
 	private static final boolean DISABLE_HEAD_ANIMATION = true;
 
-	protected GenericInventory inventory = new GenericInventory("ghost", false, 40);
+	protected GenericInventory inventory = new GenericInventory("ghost", false, 100);
 	/**
 	 * Is this Ghost an aggressive scary attacking ghost, or a sad wandering
 	 * safe ghost

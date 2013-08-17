@@ -183,11 +183,13 @@ public class GenericInventory implements IInventory, ISidedInventory {
 
 	public void copyFrom(IInventory inventory) {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack != null) {
-				setInventorySlotContents(i, stack.copy());
-			} else {
-				setInventorySlotContents(i, null);
+			if (i < getSizeInventory()) {
+				ItemStack stack = inventory.getStackInSlot(i);
+				if (stack != null) {
+					setInventorySlotContents(i, stack.copy());
+				} else {
+					setInventorySlotContents(i, null);
+				}
 			}
 		}
 	}
