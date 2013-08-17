@@ -76,8 +76,8 @@ public class OpenBlocks {
 		public static boolean elevatorIgnoreHalfBlocks = false;
 		public static int elevatorMaxBlockPassCount = 4;
 		public static int bucketsPerTank = 16;
-		public static boolean enableGraves = true;
-		public static int ghostSpawnProbability = 100;
+		public static boolean enableGraves = false;
+		public static int ghostSpawnProbability = 0;
 		public static boolean tryHookPlayerRenderer = true;
 		public static double trophyDropChance = 0.001;
 	}
