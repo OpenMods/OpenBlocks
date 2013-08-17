@@ -137,6 +137,9 @@ public class OpenBlocks {
 
 		prop = configFile.getBlock("block", "blockTankId", Config.blockTankId, "The id of the tank block");
 		Config.blockTankId = prop.getInt();
+		
+		prop = configFile.getBlock("block", "blockTrophyId", Config.blockTrophyId, "The id of the trophy block");
+		Config.blockTrophyId = prop.getInt();
 
 		prop = configFile.getItem("item", "itemHangGliderId", Config.itemHangGliderId, "The id of the hang glider");
 		Config.itemHangGliderId = prop.getInt();
