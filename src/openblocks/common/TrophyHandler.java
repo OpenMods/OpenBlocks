@@ -148,9 +148,16 @@ public class TrophyHandler {
 		if (!event.entity.worldObj.isRemote) {
 			if (Math.random() < OpenBlocks.Config.trophyDropChance) {
 				Entity entity = event.entity;
-				Trophy mobTrophy = Trophy.valueOf(EntityList.getEntityString(entity));
-				if (mobTrophy != null) {
-					BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
+				String entityName = EntityList.getEntityString(entity);
+				if (!entityName.isEmpty()) {
+					Trophy mobTrophy = null;
+					try {
+						mobTrophy = Trophy.valueOf(EntityList.getEntityString(entity));
+					}catch(Exception e) {
+						if (mobTrophy != null) {
+							BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
+						}
+					}
 				}
 			}
 		}
