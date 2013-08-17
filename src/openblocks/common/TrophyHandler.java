@@ -149,7 +149,7 @@ public class TrophyHandler {
 			if (Math.random() < OpenBlocks.Config.trophyDropChance) {
 				Entity entity = event.entity;
 				String entityName = EntityList.getEntityString(entity);
-				if (!entityName.isEmpty()) {
+				if (entityName != null && !entityName.isEmpty()) {
 					Trophy mobTrophy = null;
 					try {
 						mobTrophy = Trophy.valueOf(EntityList.getEntityString(entity));
