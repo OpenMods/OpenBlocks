@@ -347,6 +347,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 
+		/* TODO: Fix some bugs here with client/server side stuff */
 		ForgeDirection direction = BlockUtils.sideToDirection(side);
 
 		ItemStack current = player.inventory.getCurrentItem();
@@ -364,7 +365,9 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 				return true;
 			} else {
-
+				// Fix for #15
+				if(worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true; 
+				// End of fix
 				LiquidStack available = tank.getLiquid();
 				if (available != null) {
 					ItemStack filled = LiquidContainerRegistry.fillLiquidContainer(available, current);
