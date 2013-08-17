@@ -154,9 +154,9 @@ public class TrophyHandler {
 					try {
 						mobTrophy = Trophy.valueOf(EntityList.getEntityString(entity));
 					}catch(Exception e) {
-						if (mobTrophy != null) {
-							BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
-						}
+					}
+					if (mobTrophy != null) {
+						BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
 					}
 				}
 			}
