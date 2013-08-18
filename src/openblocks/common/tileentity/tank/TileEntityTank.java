@@ -399,7 +399,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 	public double getHeightForRender() {
 		double percent = getPercentFull();
 		if(worldObj == null || worldObj.isRemote){
-			return Math.max(percent > 0 ? 0.1 : 0, percent);
+			return Math.max(percent > 0.001 ? 0.1 : 0, percent);
 		}
 		return percent;
 	}
