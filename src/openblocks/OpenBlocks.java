@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;
+import openblocks.common.block.BlockBearTrap;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
@@ -51,6 +52,7 @@ public class OpenBlocks {
 		public static BlockFlag flag;
 		public static BlockTank tank;
 		public static BlockTrophy trophy;
+		public static BlockBearTrap bearTrap;
 	}
 
 	public static class Items {
@@ -69,6 +71,7 @@ public class OpenBlocks {
 		public static int blockFlagId = 2547;
 		public static int blockTankId = 2548;
 		public static int blockTrophyId = 2549;
+		public static int blockBearTrapId = 2550;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int elevatorTravelDistance = 20;

@@ -9,6 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.OpenRenderHelper;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -29,6 +30,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntityGrave teGrave = new TileEntityGrave();
 	private TileEntityFlag teFlag = new TileEntityFlag();
 	private TileEntityTrophy teTrophy = new TileEntityTrophy();
+	private TileEntityBearTrap teBearTrap = new TileEntityBearTrap();
 
 	public BlockRenderingHandler() {
 		teTarget.setPowered(true);
@@ -57,6 +59,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				te = teTrophy;
 				teTrophy.trophyType = Trophy.values()[metadata];
 			}
+		}else if (block == OpenBlocks.Blocks.bearTrap) {
+			te = teBearTrap;
+			teBearTrap.setOpen();
 		}
 		try {
 			if (Minecraft.getMinecraft().theWorld != null) {

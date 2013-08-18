@@ -10,6 +10,7 @@ tile.openblocks.target.name=Target
 tile.openblocks.grave.name=Grave
 tile.openblocks.flag.name=Flag
 tile.openblocks.trophy.name=Trophy
+tile.openblocks.beartrap.name=Bear Trap
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing

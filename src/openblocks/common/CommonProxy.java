@@ -18,6 +18,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.OpenBlocks.Items;
+import openblocks.common.block.BlockBearTrap;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
@@ -86,6 +87,9 @@ public class CommonProxy implements IGuiHandler {
 		if (Config.blockTrophyId > -1) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
+		}
+		if (Config.blockBearTrapId > -1) {
+			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
 		}
 
 		OpenBlocks.Items.generic = new ItemGeneric();
