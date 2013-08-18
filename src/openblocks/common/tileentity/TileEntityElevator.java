@@ -16,7 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 
-public class TileEntityElevator extends TileEntity {
+public class TileEntityElevator extends OpenTileEntity {
 
 	private int lowerLevel = 0;
 	private int upperLevel = 0;
@@ -76,10 +76,7 @@ public class TileEntityElevator extends TileEntity {
 							if (level != 0) {
 								player.setPositionAndUpdate(player.posX, level + 1.1, player.posZ);
 								worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
-								TileEntity targetTile = worldObj.getBlockTileEntity(xCoord, level, zCoord);
-								if (targetTile instanceof TileEntityElevator) {
-									((TileEntityElevator)targetTile).addPlayerCooldown(player);
-								}
+								addPlayerCooldownToTargetAndNeighbours(player, xCoord, level, zCoord);
 							}
 						} catch (Exception ex) {
 							/* Teleport failed */
@@ -95,8 +92,19 @@ public class TileEntityElevator extends TileEntity {
 
 	}
 
+	private void addPlayerCooldownToTargetAndNeighbours(EntityPlayer player, int xCoord, int level, int zCoord) {
+		for (int x = xCoord-1; x <= xCoord+1; x++) {
+			for (int z = zCoord-1; z <= zCoord+1; z++) {
+				TileEntity targetTile = worldObj.getBlockTileEntity(x, level, z);
+				if (targetTile instanceof TileEntityElevator) {
+					((TileEntityElevator) targetTile).addPlayerCooldown(player);
+				}
+			}
+		}
+	}
+
 	private void addPlayerCooldown(EntityPlayer player) {
-		cooldown.put(player.username, 10);
+		cooldown.put(player.username, 6);
 	}
 
 	private int findLevel(ForgeDirection direction) throws Exception {
@@ -152,6 +160,12 @@ public class TileEntityElevator extends TileEntity {
 		}
 		return false; // Don't update the block and don't block placement if
 						// it's not dye we're using
+	}
+
+	@Override
+	protected void initialize() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
