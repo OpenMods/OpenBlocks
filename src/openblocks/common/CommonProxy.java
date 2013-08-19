@@ -30,8 +30,10 @@ import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
 import openblocks.common.container.ContainerLightbox;
+import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.entity.EntityLuggage;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.recipe.TorchBowRecipe;
@@ -108,9 +110,14 @@ public class CommonProxy implements IGuiHandler {
 		// Ignore me
 		MinecraftForge.EVENT_BUS.register(this);
 
-		EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
+		if (OpenBlocks.Config.enableGraves) {
+			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
+		}
+		if (OpenBlocks.Config.enableLuggage) {
+			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
+		}
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
-
+		
 		OpenBlocks.Items.generic.initRecipes();
 		LanguageUtils.setupLanguages();
 	}
@@ -129,8 +136,11 @@ public class CommonProxy implements IGuiHandler {
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if (ID == OpenBlocks.Gui.Luggage.ordinal()) { return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)); }
+		
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (ID == OpenBlocks.Gui.Lightbox.ordinal()) { return new ContainerLightbox(player.inventory, (TileEntityLightbox)tile); }
+		
 		return null;
 	}
 

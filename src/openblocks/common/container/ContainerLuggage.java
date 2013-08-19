@@ -1,38 +1,39 @@
 package openblocks.common.container;
 
+import openblocks.common.entity.EntityLuggage;
+import openblocks.common.tileentity.TileEntityLightbox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import openblocks.common.tileentity.TileEntityLightbox;
 
-public class ContainerLightbox extends Container {
+public class ContainerLuggage extends Container {
 
 	protected int inventorySize;
 	protected IInventory playerInventory;
-	private TileEntityLightbox lightbox;
+	private EntityLuggage luggage;	
 
-	public ContainerLightbox(IInventory playerInventory, TileEntityLightbox lightbox) {
-		this.inventorySize = lightbox.getSizeInventory();
+	public ContainerLuggage(IInventory playerInventory, EntityLuggage luggage) {
+		this.inventorySize = luggage.getInventory().getSizeInventory();
 		this.playerInventory = playerInventory;
-		this.lightbox = lightbox;
-		addInventorySlot(0, 80, 23);
-		addPlayerInventorySlots(60);
+		this.luggage = luggage;
+		addInventoryGrid(8, 18, 9);
+		addPlayerInventorySlots(85);
+	}
+
+	protected void addInventoryGrid(int xOffset, int yOffset, int width) {
+		int height = (int)Math.ceil((double)inventorySize / width);
+		for (int y = 0, slotId = 0; y < height; y++) {
+			for (int x = 0; x < width; x++, slotId++) {
+				addSlotToContainer(new Slot(luggage.getInventory(), slotId, xOffset + x * 18, yOffset + y * 18));
+			}
+		}
 	}
 
 	public void addInventorySlot(int slotId, int x, int y) {
-		addSlotToContainer(new Slot(lightbox, slotId, x, y));
+		addSlotToContainer(new Slot(luggage.getInventory(), slotId, x, y));
 	}
-
-	/*
-	 * protected void addInventoryGrid(int xOffset, int yOffset, int width) {
-	 * int height = (int) Math.ceil((double)inventorySize / width); for (int y =
-	 * 0, slotId = 0; y < width; y++) { for (int x = 0; x < height; x++,
-	 * slotId++) { System.out.println("Adding slot " + slotId);
-	 * addSlotToContainer(new Slot(lightbox, slotId, xOffset + x * 18, yOffset +
-	 * y * 18)); } } }
-	 */
 
 	protected void addPlayerInventorySlots(int offsetY) {
 		for (int l = 0; l < 3; l++) {
@@ -49,11 +50,7 @@ public class ContainerLightbox extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return lightbox.isUseableByPlayer(entityplayer);
-	}
-
-	public TileEntityLightbox getTileEntity() {
-		return lightbox;
+		return true;
 	}
 
 	@Override
@@ -74,9 +71,4 @@ public class ContainerLightbox extends Container {
 		}
 		return itemstack;
 	}
-
-	public int getInventorySize() {
-		return inventorySize;
-	}
-
 }

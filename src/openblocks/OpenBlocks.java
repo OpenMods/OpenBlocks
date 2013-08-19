@@ -77,6 +77,7 @@ public class OpenBlocks {
 		public static int elevatorTravelDistance = 20;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static boolean elevatorIgnoreHalfBlocks = false;
+		public static boolean enableLuggage = false;
 		public static int elevatorMaxBlockPassCount = 4;
 		public static int bucketsPerTank = 16;
 		public static boolean enableGraves = false;
@@ -86,7 +87,8 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox
+		Lightbox,
+		Luggage
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
@@ -187,6 +189,9 @@ public class OpenBlocks {
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
 
+		//TODO: Add luggage enable/disable.. but not until luggage is feature-complete
+		//I dont want people who download from jenkins finding a half-borked luggage
+		
 		configFile.save();
 
 	}

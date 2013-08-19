@@ -19,11 +19,13 @@ import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.OpenBlocks.Gui;
 import openblocks.client.gui.GuiLightbox;
+import openblocks.client.gui.GuiLuggage;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.ItemRendererHangGlider;
 import openblocks.client.renderer.ItemRendererTank;
 import openblocks.client.renderer.entity.EntityGhostRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
+import openblocks.client.renderer.entity.EntityLuggageRenderer;
 import openblocks.client.renderer.entity.EntityPlayerRenderer;
 import openblocks.client.renderer.tileentity.TileEntityBearTrapRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
@@ -35,8 +37,10 @@ import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.common.CommonProxy;
 import openblocks.common.container.ContainerLightbox;
+import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.entity.EntityLuggage;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
@@ -81,6 +85,7 @@ public class ClientProxy extends CommonProxy {
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
+		RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
 
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 		attachPlayerRenderer();
@@ -110,6 +115,9 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if ((world instanceof WorldClient)) {
+			if (ID == Gui.Luggage.ordinal()) {
+				return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)));
+			}
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
 		}
