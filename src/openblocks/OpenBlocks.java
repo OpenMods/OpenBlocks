@@ -77,7 +77,7 @@ public class OpenBlocks {
 		public static int elevatorTravelDistance = 20;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static boolean elevatorIgnoreHalfBlocks = false;
-		public static boolean enableLuggage = false;
+		public static boolean enableLuggage = true;
 		public static int elevatorMaxBlockPassCount = 4;
 		public static int bucketsPerTank = 16;
 		public static boolean enableGraves = false;

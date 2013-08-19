@@ -126,10 +126,6 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 
 		if (!worldObj.isRemote) {
-			EntityLuggage luggage = new EntityLuggage(worldObj);
-			luggage.setPositionAndRotation(xCoord, yCoord, zCoord + 2, 0, 0);
-			luggage.setOwner(player.username);
-			worldObj.spawnEntityInWorld(luggage);
 			if (flags.get(Flags.isShut)) {
 				flags.off(Flags.isShut);
 				player.worldObj.playSoundAtEntity(player, "openblocks.beartrapopen", 0.5F, 1.0F);

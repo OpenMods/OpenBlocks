@@ -27,8 +27,6 @@ public class EntityLuggage extends EntityTameable {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAICollectItem(this));
 		this.tasks.addTask(3, new EntityAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(5, new EntityAILookIdle(this));
 	}
 
 	public boolean isAIEnabled() {
