@@ -76,7 +76,7 @@ public class OpenBlocks {
 		public static int blockBearTrapId = 2550;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
-		public static int itemLuggageId = -1;//14977;
+		public static int itemLuggageId = 14977;
 		public static int elevatorTravelDistance = 20;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static boolean elevatorIgnoreHalfBlocks = false;

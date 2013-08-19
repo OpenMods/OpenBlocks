@@ -8,10 +8,13 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.entity.ai.EntityAICollectItem;
+import openblocks.utils.BlockUtils;
 
 public class EntityLuggage extends EntityTameable {
 
@@ -38,10 +41,10 @@ public class EntityLuggage extends EntityTameable {
 		return 100;
 	}
 
-	public IInventory getInventory() {
+	public GenericInventory getInventory() {
 		return inventory;
 	}
-
+	
 	@Override
 	public EntityAgeable createChild(EntityAgeable entityageable) {
 		return null;
@@ -51,6 +54,11 @@ public class EntityLuggage extends EntityTameable {
 	public boolean interact(EntityPlayer player) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
+				ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
+				NBTTagCompound tag = new NBTTagCompound();
+				inventory.writeToNBT(tag);
+				luggageItem.setTagCompound(tag);
+				BlockUtils.dropItemStackInWorld(worldObj, posX, posY, posZ, luggageItem);
 				setDead();
 			} else {
 				player.openGui(OpenBlocks.instance, OpenBlocks.Gui.Luggage.ordinal(), player.worldObj, entityId, 0, 0);
@@ -58,6 +66,18 @@ public class EntityLuggage extends EntityTameable {
 		}
 		return false;
 	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound tag) {
+        super.writeEntityToNBT(tag);
+        inventory.writeToNBT(tag);
+    }
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound tag) {
+        super.readEntityFromNBT(tag);
+        inventory.readFromNBT(tag);
+    }
 
 	@Override
 	public boolean isEntityInvulnerable() {
