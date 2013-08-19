@@ -1,9 +1,7 @@
 package openblocks.client.renderer.entity;
 
-import openblocks.client.model.ModelLuggage;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import openblocks.client.model.ModelLuggage;
 
 public class EntityLuggageRenderer extends RenderLiving {
 

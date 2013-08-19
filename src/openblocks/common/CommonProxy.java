@@ -17,7 +17,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
-import openblocks.OpenBlocks.Items;
 import openblocks.common.block.BlockBearTrap;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
@@ -36,14 +35,12 @@ import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
-import openblocks.common.recipe.TorchBowRecipe;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.utils.LanguageUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy implements IGuiHandler {
 
@@ -117,7 +114,7 @@ public class CommonProxy implements IGuiHandler {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
 		}
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
-		
+
 		OpenBlocks.Items.generic.initRecipes();
 		LanguageUtils.setupLanguages();
 	}
@@ -137,10 +134,10 @@ public class CommonProxy implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (ID == OpenBlocks.Gui.Luggage.ordinal()) { return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)); }
-		
+
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (ID == OpenBlocks.Gui.Lightbox.ordinal()) { return new ContainerLightbox(player.inventory, (TileEntityLightbox)tile); }
-		
+
 		return null;
 	}
 

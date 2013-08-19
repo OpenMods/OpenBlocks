@@ -3,19 +3,6 @@ package openblocks.common;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.trophy.BlazeBehavior;
-import openblocks.trophy.CaveSpiderBehavior;
-import openblocks.trophy.ItemDropBehavior;
-import openblocks.trophy.CreeperBehavior;
-import openblocks.trophy.EndermanBehavior;
-import openblocks.trophy.ITrophyBehavior;
-import openblocks.trophy.MooshroomBehavior;
-import openblocks.trophy.SkeletonBehavior;
-import openblocks.trophy.SnowmanBehavior;
-import openblocks.trophy.SquidBehavior;
-import openblocks.utils.BlockUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -24,10 +11,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityTrophy;
+import openblocks.trophy.BlazeBehavior;
+import openblocks.trophy.CaveSpiderBehavior;
+import openblocks.trophy.CreeperBehavior;
+import openblocks.trophy.EndermanBehavior;
+import openblocks.trophy.ITrophyBehavior;
+import openblocks.trophy.ItemDropBehavior;
+import openblocks.trophy.MooshroomBehavior;
+import openblocks.trophy.SkeletonBehavior;
+import openblocks.trophy.SnowmanBehavior;
+import openblocks.trophy.SquidBehavior;
+import openblocks.utils.BlockUtils;
 
 public class TrophyHandler {
 
@@ -153,8 +152,7 @@ public class TrophyHandler {
 					Trophy mobTrophy = null;
 					try {
 						mobTrophy = Trophy.valueOf(EntityList.getEntityString(entity));
-					}catch(Exception e) {
-					}
+					} catch (Exception e) {}
 					if (mobTrophy != null) {
 						BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
 					}

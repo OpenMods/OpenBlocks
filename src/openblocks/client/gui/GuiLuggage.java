@@ -1,14 +1,12 @@
 package openblocks.client.gui;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.common.container.ContainerLightbox;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
 
 import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.util.StatCollector;
 
 public class GuiLuggage extends GuiContainer {
 

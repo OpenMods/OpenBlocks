@@ -2,9 +2,6 @@ package openblocks.common.item;
 
 import java.util.Arrays;
 
-import openblocks.OpenBlocks;
-import openblocks.common.item.ItemGeneric.Metas;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +13,8 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import openblocks.OpenBlocks;
+import openblocks.common.item.ItemGeneric.Metas;
 
 public class MetaGeneric implements IMetaItem {
 

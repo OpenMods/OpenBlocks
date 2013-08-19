@@ -1,32 +1,14 @@
 package openblocks.common.tileentity;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import openblocks.api.IAwareTile;
 import openblocks.common.TrophyHandler.Trophy;
-import openblocks.trophy.CaveSpiderBehavior;
-import openblocks.trophy.EndermanBehavior;
-import openblocks.trophy.ITrophyBehavior;
-import openblocks.trophy.SkeletonBehavior;
-import openblocks.trophy.SnowmanBehavior;
 import openblocks.utils.BlockUtils;
 
 public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {

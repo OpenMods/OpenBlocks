@@ -1,9 +1,8 @@
 package openblocks.trophy;
 
-import openblocks.common.tileentity.TileEntityTrophy;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityTrophy;
 
 public class SquidBehavior implements ITrophyBehavior {
 

@@ -332,16 +332,16 @@ public class TileEntityTank extends TileEntityTankBase implements
 		}
 		return count;
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket() {
 		return syncMap.getDescriptionPacket(this);
 	}
-	
+
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		syncMap.handleTileDataPacket(this, pkt);
-		interpolatedRenderAmount = liquidRenderAmount.getValue();		
+		interpolatedRenderAmount = liquidRenderAmount.getValue();
 	}
 
 	@Override
@@ -366,7 +366,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 				return true;
 			} else {
 				// Fix for #15
-				if(worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true; 
+				if (worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true;
 				// End of fix
 				LiquidStack available = tank.getLiquid();
 				if (available != null) {
@@ -395,12 +395,10 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 		return false;
 	}
-	
+
 	public double getHeightForRender() {
 		double percent = getPercentFull();
-		if(worldObj == null || worldObj.isRemote){
-			return Math.max(percent > 0.001 ? 0.1 : 0, percent);
-		}
+		if (worldObj == null || worldObj.isRemote) { return Math.max(percent > 0.001? 0.1 : 0, percent); }
 		return percent;
 	}
 

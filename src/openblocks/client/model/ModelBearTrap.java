@@ -144,7 +144,7 @@ public class ModelBearTrap extends ModelBase {
 		float f5 = 0.0625F;
 
 		float rot = 1.4F;
-		
+
 		if (!shut) {
 			rot = Math.max(0.0f, 1.4f - (ticksSinceOpened * 0.1f));
 		}

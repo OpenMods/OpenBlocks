@@ -59,7 +59,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				te = teTrophy;
 				teTrophy.trophyType = Trophy.values()[metadata];
 			}
-		}else if (block == OpenBlocks.Blocks.bearTrap) {
+		} else if (block == OpenBlocks.Blocks.bearTrap) {
 			te = teBearTrap;
 			teBearTrap.setOpen();
 		}

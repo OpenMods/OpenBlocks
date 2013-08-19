@@ -87,8 +87,7 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox,
-		Luggage
+		Lightbox, Luggage
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
@@ -142,7 +141,7 @@ public class OpenBlocks {
 
 		prop = configFile.getBlock("block", "blockTankId", Config.blockTankId, "The id of the tank block");
 		Config.blockTankId = prop.getInt();
-		
+
 		prop = configFile.getBlock("block", "blockTrophyId", Config.blockTrophyId, "The id of the trophy block");
 		Config.blockTrophyId = prop.getInt();
 
@@ -189,9 +188,11 @@ public class OpenBlocks {
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
 
-		//TODO: Add luggage enable/disable.. but not until luggage is feature-complete
-		//I dont want people who download from jenkins finding a half-borked luggage
-		
+		// TODO: Add luggage enable/disable.. but not until luggage is
+		// feature-complete
+		// I dont want people who download from jenkins finding a half-borked
+		// luggage
+
 		configFile.save();
 
 	}

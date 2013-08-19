@@ -190,7 +190,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 				} else {
 					setInventorySlotContents(i, null);
 				}
-			}	
+			}
 		}
 	}
 }

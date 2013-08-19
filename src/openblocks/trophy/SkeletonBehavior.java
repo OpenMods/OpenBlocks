@@ -1,11 +1,8 @@
 package openblocks.trophy;
 
-import openblocks.common.tileentity.TileEntityTrophy;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityTrophy;
 
 public class SkeletonBehavior implements ITrophyBehavior {
 

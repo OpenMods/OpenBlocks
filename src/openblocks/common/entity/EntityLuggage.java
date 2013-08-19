@@ -1,28 +1,17 @@
 package openblocks.common.entity;
 
-import openblocks.OpenBlocks;
-import openblocks.common.GenericInventory;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBeg;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITargetNonTamed;
-import net.minecraft.entity.ai.EntityAIWander;
-import openblocks.common.entity.ai.EntityAICollectItem;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
+import openblocks.common.GenericInventory;
+import openblocks.common.entity.ai.EntityAICollectItem;
 
 public class EntityLuggage extends EntityTameable {
 
@@ -59,13 +48,13 @@ public class EntityLuggage extends EntityTameable {
 	public EntityAgeable createChild(EntityAgeable entityageable) {
 		return null;
 	}
-	
+
 	@Override
 	public boolean interact(EntityPlayer player) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
 				setDead();
-			}else {
+			} else {
 				player.openGui(OpenBlocks.instance, OpenBlocks.Gui.Luggage.ordinal(), player.worldObj, entityId, 0, 0);
 			}
 		}

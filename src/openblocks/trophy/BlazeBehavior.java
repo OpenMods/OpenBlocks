@@ -1,8 +1,7 @@
 package openblocks.trophy;
 
-import openblocks.common.tileentity.TileEntityTrophy;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityTrophy;
 
 public class BlazeBehavior implements ITrophyBehavior {
 

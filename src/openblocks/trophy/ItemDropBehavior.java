@@ -1,7 +1,6 @@
 package openblocks.trophy;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class ItemDropBehavior implements ITrophyBehavior {

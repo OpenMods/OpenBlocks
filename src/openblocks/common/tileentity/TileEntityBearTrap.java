@@ -4,6 +4,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IAwareTile;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.sync.ISyncHandler;
@@ -12,43 +17,37 @@ import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler, IAwareTile {
+public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
+		IAwareTile {
 
 	public enum Keys {
-		flags,
-		trappedEntityId
+		flags, trappedEntityId
 	}
-	
+
 	public enum Flags {
 		isShut
 	}
-	
+
 	private SyncableFlags flags = new SyncableFlags();
-	
+
 	private boolean hasBeenSnapped = false;
-	
+
 	private SyncableInt trappedEntityId = new SyncableInt();
-	
+
 	private SyncMapTile syncMap = new SyncMapTile();
-	
+
 	public TileEntityBearTrap() {
 		syncMap.put(Keys.flags, flags);
 		flags.on(Flags.isShut);
 		syncMap.put(Keys.trappedEntityId, trappedEntityId);
 	}
-	
+
 	@Override
 	protected void initialize() {
 
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -59,13 +58,13 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler, 
 				trappedEntity.distanceWalkedModified = 0.0f;
 				trappedEntity.posX = 0.5 + xCoord;
 				trappedEntity.posZ = 0.5 + zCoord;
-				trappedEntity.posY = (double) yCoord;
+				trappedEntity.posY = (double)yCoord;
 				trappedEntity.prevPosX = 0.5 + xCoord;
 				trappedEntity.prevPosZ = 0.5 + zCoord;
-				trappedEntity.prevPosY = (double) yCoord;
+				trappedEntity.prevPosY = (double)yCoord;
 				trappedEntity.lastTickPosX = 0.5 + xCoord;
 				trappedEntity.lastTickPosZ = 0.5 + zCoord;
-				trappedEntity.lastTickPosY = (double) yCoord;
+				trappedEntity.lastTickPosY = (double)yCoord;
 				trappedEntity.motionX = 0;
 				trappedEntity.motionY = 0;
 				trappedEntity.motionZ = 0;
@@ -78,10 +77,7 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler, 
 		if (!worldObj.isRemote) {
 			if (!flags.get(Flags.isShut) && entity instanceof EntityCreature) {
 				trappedEntityId.setValue(entity.entityId);
-				entity.worldObj.playSoundAtEntity(entity,
-						worldObj.rand.nextBoolean() ?
-								"openblocks.beartrapclose" : "openblocks.beartrapcloseb",
-						0.5F, 1.0F);
+				entity.worldObj.playSoundAtEntity(entity, worldObj.rand.nextBoolean()? "openblocks.beartrapclose" : "openblocks.beartrapcloseb", 0.5F, 1.0F);
 				flags.set(Flags.isShut, true);
 			}
 		}
@@ -113,25 +109,25 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler, 
 	@Override
 	public void onBlockBroken() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onBlockAdded() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public int tickSinceOpened() {
 		return flags.ticksSinceChange(Flags.isShut);
 	}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		
+
 		if (!worldObj.isRemote) {
 			EntityLuggage luggage = new EntityLuggage(worldObj);
-			luggage.setPositionAndRotation(xCoord, yCoord, zCoord+2, 0, 0);
+			luggage.setPositionAndRotation(xCoord, yCoord, zCoord + 2, 0, 0);
 			luggage.setOwner(player.username);
 			worldObj.spawnEntityInWorld(luggage);
 			if (flags.get(Flags.isShut)) {
@@ -145,13 +141,13 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler, 
 	@Override
 	public void onNeighbourChanged(int blockId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

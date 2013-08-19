@@ -9,12 +9,8 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
@@ -85,19 +81,33 @@ public abstract class SyncMap {
 	 * processing time and resources
 	 * Just saying -NeverCast :)
 	 */
-	
+
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
-		sync(worldObj, handler, x, y,z, 20);
+		sync(worldObj, handler, x, y, z, 20);
 	}
 
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z, int tickUpdatePeriod) {
 		if (!worldObj.isRemote) {
-			//TODO: Test the shit out of this.
+			// TODO: Test the shit out of this.
 			long worldTotalTime = worldObj.getTotalWorldTime();
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
 			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
-			totalTrackingTime = worldTotalTime;		 																	// Out with the old
-			List<EntityPlayer> players = (List<EntityPlayer>)PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);	//worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1).expand(trackingRange, trackingRange, trackingRange));
+			totalTrackingTime = worldTotalTime; // Out with the old
+			List<EntityPlayer> players = (List<EntityPlayer>)PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange); // worldObj.getEntitiesWithinAABB(EntityPlayer.class,
+																																		// AxisAlignedBB.getBoundingBox(x,
+																																		// y,
+																																		// z,
+																																		// x
+																																		// +
+																																		// 1,
+																																		// y
+																																		// +
+																																		// 1,
+																																		// z
+																																		// +
+																																		// 1).expand(trackingRange,
+																																		// trackingRange,
+																																		// trackingRange));
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;

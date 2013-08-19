@@ -115,23 +115,22 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if ((world instanceof WorldClient)) {
-			if (ID == Gui.Luggage.ordinal()) {
-				return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)));
-			}
+			if (ID == Gui.Luggage.ordinal()) { return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x))); }
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
 		}
 		return null;
 	}
-	
+
 	/* I'll just sneak this in here ;) -NeverCast */
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-		if(event.world != null && event.world.isRemote) {
-			if(event.entity instanceof EntityPlayer) {
+		if (event.world != null && event.world.isRemote) {
+			if (event.entity instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer)event.entity;
 				Calendar cal = Calendar.getInstance();
-				if(cal.get(Calendar.MONTH)== Calendar.AUGUST && cal.get(Calendar.DATE) == 16) {
+				if (cal.get(Calendar.MONTH) == Calendar.AUGUST
+						&& cal.get(Calendar.DATE) == 16) {
 					player.sendChatToPlayer("Happy Birthday Mikee!! :)");
 				}
 			}

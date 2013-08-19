@@ -1,18 +1,17 @@
 package openblocks.common.container;
 
-import openblocks.common.entity.EntityLuggage;
-import openblocks.common.tileentity.TileEntityLightbox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import openblocks.common.entity.EntityLuggage;
 
 public class ContainerLuggage extends Container {
 
 	protected int inventorySize;
 	protected IInventory playerInventory;
-	private EntityLuggage luggage;	
+	private EntityLuggage luggage;
 
 	public ContainerLuggage(IInventory playerInventory, EntityLuggage luggage) {
 		this.inventorySize = luggage.getInventory().getSizeInventory();
@@ -26,7 +25,8 @@ public class ContainerLuggage extends Container {
 		int height = (int)Math.ceil((double)inventorySize / width);
 		for (int y = 0, slotId = 0; y < height; y++) {
 			for (int x = 0; x < width; x++, slotId++) {
-				addSlotToContainer(new Slot(luggage.getInventory(), slotId, xOffset + x * 18, yOffset + y * 18));
+				addSlotToContainer(new Slot(luggage.getInventory(), slotId, xOffset
+						+ x * 18, yOffset + y * 18));
 			}
 		}
 	}

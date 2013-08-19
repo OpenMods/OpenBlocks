@@ -1,29 +1,17 @@
 package openblocks.client.renderer.tileentity;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.common.TrophyHandler;
-import openblocks.common.TrophyHandler.Trophy;
-import openblocks.utils.BlockUtils;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import openblocks.OpenBlocks;
+import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.tileentity.TileEntityTrophy;
+import openblocks.utils.BlockUtils;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 

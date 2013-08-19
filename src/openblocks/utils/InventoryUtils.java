@@ -13,9 +13,13 @@ public class InventoryUtils {
 				stack.stackSize = 0;
 			} else {
 				boolean valid = targetInventory.isStackValidForSlot(slot, stack);
-				if (valid && stack.itemID == targetStack.itemID && (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
-						&& ItemStack.areItemStackTagsEqual(stack, targetStack) && targetStack.stackSize < targetStack.getMaxStackSize()) {
-					int space = targetStack.getMaxStackSize() - targetStack.stackSize;
+				if (valid
+						&& stack.itemID == targetStack.itemID
+						&& (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
+						&& ItemStack.areItemStackTagsEqual(stack, targetStack)
+						&& targetStack.stackSize < targetStack.getMaxStackSize()) {
+					int space = targetStack.getMaxStackSize()
+							- targetStack.stackSize;
 					int mergeAmount = Math.min(space, stack.stackSize);
 					ItemStack copy = targetStack.copy();
 					copy.stackSize += mergeAmount;
@@ -33,13 +37,11 @@ public class InventoryUtils {
 			i++;
 		}
 	}
-	
+
 	public static int moveItemInto(IInventory fromInventory, int slot, IInventory targetInventory, int intoSlot, int maxAmount) {
 		int merged = 0;
 		ItemStack stack = fromInventory.getStackInSlot(slot);
-		if (stack == null) {
-			return merged;
-		}
+		if (stack == null) { return merged; }
 		ItemStack clonedStack = stack.copy();
 		clonedStack.stackSize = Math.min(clonedStack.stackSize, maxAmount);
 		int amountToMerge = clonedStack.stackSize;
@@ -52,9 +54,7 @@ public class InventoryUtils {
 	public static int moveItem(IInventory fromInventory, int slot, IInventory targetInventory, int maxAmount) {
 		int merged = 0;
 		ItemStack stack = fromInventory.getStackInSlot(slot);
-		if (stack == null) {
-			return 0;
-		}
+		if (stack == null) { return 0; }
 		ItemStack clonedStack = stack.copy();
 		clonedStack.stackSize = Math.min(clonedStack.stackSize, maxAmount);
 		int amountToMerge = clonedStack.stackSize;

@@ -93,11 +93,11 @@ public class TileEntityElevator extends OpenTileEntity {
 	}
 
 	private void addPlayerCooldownToTargetAndNeighbours(EntityPlayer player, int xCoord, int level, int zCoord) {
-		for (int x = xCoord-1; x <= xCoord+1; x++) {
-			for (int z = zCoord-1; z <= zCoord+1; z++) {
+		for (int x = xCoord - 1; x <= xCoord + 1; x++) {
+			for (int z = zCoord - 1; z <= zCoord + 1; z++) {
 				TileEntity targetTile = worldObj.getBlockTileEntity(x, level, z);
 				if (targetTile instanceof TileEntityElevator) {
-					((TileEntityElevator) targetTile).addPlayerCooldown(player);
+					((TileEntityElevator)targetTile).addPlayerCooldown(player);
 				}
 			}
 		}
@@ -165,7 +165,7 @@ public class TileEntityElevator extends OpenTileEntity {
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

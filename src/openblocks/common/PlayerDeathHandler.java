@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGrave;
@@ -28,7 +27,8 @@ public class PlayerDeathHandler {
 			EntityPlayer player = (EntityPlayer)event.entityLiving;
 			World world = player.worldObj;
 
-			if (!world.isRemote && !world.getGameRules().getGameRuleBooleanValue("keepInventory")) {
+			if (!world.isRemote
+					&& !world.getGameRules().getGameRuleBooleanValue("keepInventory")) {
 				int x = (int)player.posX;
 				int y = (int)player.posY;
 				int z = (int)player.posZ;
@@ -47,7 +47,7 @@ public class PlayerDeathHandler {
 							player.inventory.clearInventory(-1, -1);
 							break;
 						}
-					} else if(thisIsAir) {
+					} else if (thisIsAir) {
 						aboveIsAir = true;
 					}
 				}
