@@ -10,7 +10,7 @@ tile.openblocks.target.name=Zielscheibe
 tile.openblocks.grave.name=Grab
 tile.openblocks.flag.name=Flagge
 tile.openblocks.trophy.name=Trophäe
-tile.openblocks.beartrap.name=Bear Trap
+tile.openblocks.beartrap.name=Bärenfalle
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
