@@ -35,6 +35,7 @@ import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
+import openblocks.common.item.ItemLuggage;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.utils.LanguageUtils;
 import cpw.mods.fml.common.Mod;
@@ -96,6 +97,10 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
 		}
+		
+		if (Config.itemLuggageId > -1) {
+			OpenBlocks.Items.luggage = new ItemLuggage();
+		}
 
 		// GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
@@ -110,7 +115,7 @@ public class CommonProxy implements IGuiHandler {
 		if (OpenBlocks.Config.enableGraves) {
 			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
 		}
-		if (OpenBlocks.Config.enableLuggage) {
+		if (OpenBlocks.Config.itemLuggageId > -1) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
 		}
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);

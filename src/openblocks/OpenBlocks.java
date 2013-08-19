@@ -21,6 +21,7 @@ import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
+import openblocks.common.item.ItemLuggage;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -58,6 +59,7 @@ public class OpenBlocks {
 	public static class Items {
 		public static ItemHangGlider hangGlider;
 		public static ItemGeneric generic;
+		public static ItemLuggage luggage;
 	}
 
 	public static class Config {
@@ -74,10 +76,10 @@ public class OpenBlocks {
 		public static int blockBearTrapId = 2550;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
+		public static int itemLuggageId = -1;//14977;
 		public static int elevatorTravelDistance = 20;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static boolean elevatorIgnoreHalfBlocks = false;
-		public static boolean enableLuggage = true;
 		public static int elevatorMaxBlockPassCount = 4;
 		public static int bucketsPerTank = 16;
 		public static boolean enableGraves = false;
