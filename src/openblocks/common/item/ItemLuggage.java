@@ -20,7 +20,7 @@ public class ItemLuggage extends Item {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		return "item.openblocks.luggage";
+		return "item.openblocks.luggage.name";
 	}
 
 	@Override

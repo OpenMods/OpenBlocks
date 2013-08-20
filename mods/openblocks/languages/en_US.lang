@@ -1,4 +1,5 @@
 openblocks.gui.lightbox=Lightbox
+openblocks.gui.luggage=Luggage
 
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
@@ -14,5 +15,6 @@ tile.openblocks.beartrap.name=Bear Trap
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
+item.openblocks.luggage.name=Luggage
 
 itemGroup.tabOpenBlocks=OpenBlocks
