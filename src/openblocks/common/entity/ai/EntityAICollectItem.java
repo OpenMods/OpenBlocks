@@ -77,17 +77,20 @@ public class EntityAICollectItem extends EntityAIBase {
 			if (targetItem != null
 					&& luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
-				if (luggage.lastSound > 15) {
-					if (stack.getItem() instanceof ItemFood) {
-						luggage.playSound("openblocks.slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
-					} else {
-						luggage.playSound("openblocks.chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));	
-					}
-					luggage.lastSound = 0;
-				}
+				int preEatSize = stack.stackSize;
 				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
-				if (stack.stackSize == 0) {
-					targetItem.setDead();
+				if(preEatSize != stack.stackSize) { 
+					if (luggage.lastSound > 15) {
+						if (stack.getItem() instanceof ItemFood) {
+							luggage.playSound("openblocks.slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
+						} else {
+							luggage.playSound("openblocks.chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));	
+						}
+						luggage.lastSound = 0;
+					}
+					if (stack.stackSize == 0) {
+						targetItem.setDead();
+					}
 				}
 			}
 		}
