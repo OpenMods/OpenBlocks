@@ -1,4 +1,5 @@
 openblocks.gui.lightbox=Lichtbox
+openblocks.gui.luggage=Reisegepäck
 
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.heal.name=Heiler
@@ -14,5 +15,6 @@ tile.openblocks.beartrap.name=Bärenfalle
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
+item.openblocks.luggage.name=Reisegepäck
 
 itemGroup.tabOpenBlocks=OpenBlocks
