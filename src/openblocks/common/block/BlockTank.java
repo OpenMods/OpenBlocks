@@ -18,7 +18,7 @@ public class BlockTank extends OpenBlock {
 		super(OpenBlocks.Config.blockTankId, Material.ground);
 		setupBlock(this, "tank", TileEntityTank.class, ItemTankBlock.class);
 	}
-
+	
 	@Override
 	public boolean canBeReplacedByLeaves(World world, int x, int y, int z) {
 		return false;
