@@ -20,16 +20,23 @@ public class EntityLuggage extends EntityTameable {
 
 	private GenericInventory inventory = new GenericInventory("luggage", false, 27);
 
+	public int lastSound = 0;
+	
 	public EntityLuggage(World world) {
 		super(world);
 		this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
-		this.setSize(0.6F, 0.8F);
+		this.setSize(0.5F, 0.5F);
 		this.moveSpeed = 0.4F;
 		setTamed(true);
 		this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAICollectItem(this));
-		this.tasks.addTask(3, new EntityAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
+		this.tasks.addTask(2, new EntityAIFollowOwner(this, this.moveSpeed, 10.0F, 2.0F));
+		this.tasks.addTask(3, new EntityAICollectItem(this));
+	}
+	
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		lastSound++;
 	}
 
 	public boolean isAIEnabled() {
@@ -68,7 +75,7 @@ public class EntityLuggage extends EntityTameable {
 	}
 	
     protected void playStepSound(int par1, int par2, int par3, int par4) {
-        this.playSound("openblocks.feet", 0.5F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+        this.playSound("openblocks.feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
     }
 	
 	@Override

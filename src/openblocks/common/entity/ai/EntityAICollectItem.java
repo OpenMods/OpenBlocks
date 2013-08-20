@@ -2,8 +2,11 @@ package openblocks.common.entity.ai;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
@@ -17,8 +20,6 @@ public class EntityAICollectItem extends EntityAIBase {
 	private PathNavigate pathFinder;
 
 	private EntityItem targetItem = null;
-
-	private int lastSound = 0;
 	
 	public EntityAICollectItem(EntityLuggage luggage) {
 		this.luggage = luggage;
@@ -31,11 +32,20 @@ public class EntityAICollectItem extends EntityAIBase {
 		if (!pathFinder.noPath()) { return false; }
 		if (luggage.worldObj != null) {
 			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
+			EntityItem closest = null;
+			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {
 				if (!item.isDead && item.onGround) {
-					targetItem = item;
-					return true;
+					double dist = item.getDistanceToEntity(luggage);
+					if (closest == null || dist < closestDistance) {
+						closest = item;
+						closestDistance = dist;
+					}
 				}
+			}
+			if (closest != null) {
+				targetItem = closest;
+				return true;
 			}
 		}
 		return false;
@@ -55,7 +65,6 @@ public class EntityAICollectItem extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		lastSound = 30;
 		if (targetItem != null) {
 			pathFinder.tryMoveToXYZ(targetItem.posX, targetItem.posY, targetItem.posZ, 0.4f);
 		}
@@ -65,13 +74,16 @@ public class EntityAICollectItem extends EntityAIBase {
 	public void updateTask() {
 		super.updateTask();
 		if (!luggage.worldObj.isRemote) {
-			lastSound++;
 			if (targetItem != null
 					&& luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
-				if (lastSound > 20) {
-					luggage.playSound("openblocks.slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
-					lastSound = 0;
+				if (luggage.lastSound > 15) {
+					if (stack.getItem() instanceof ItemFood) {
+						luggage.playSound("openblocks.slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
+					} else {
+						luggage.playSound("openblocks.chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));	
+					}
+					luggage.lastSound = 0;
 				}
 				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
 				if (stack.stackSize == 0) {

@@ -22,6 +22,7 @@ import openblocks.client.gui.GuiLightbox;
 import openblocks.client.gui.GuiLuggage;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.ItemRendererHangGlider;
+import openblocks.client.renderer.ItemRendererLuggage;
 import openblocks.client.renderer.ItemRendererTank;
 import openblocks.client.renderer.entity.EntityGhostRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
@@ -86,7 +87,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
-
+		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 		attachPlayerRenderer();
 

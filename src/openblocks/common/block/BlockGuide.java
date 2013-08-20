@@ -71,7 +71,6 @@ public class BlockGuide extends OpenBlock {
 				((TileEntityGuide)tileEntity).changeDimensions(player, ForgeDirection.getOrientation(side));
 			}
 		}
-
 		return true;
 	}
 

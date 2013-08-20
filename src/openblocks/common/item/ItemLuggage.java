@@ -34,18 +34,16 @@ public class ItemLuggage extends Item {
 
 	        Vec3 vec3 = world.getWorldVec3Pool().getVecFromPool(player.posX, player.posY, player.posZ);
 	        Vec3 vec31 = player.getLook(1.0f);
-	        Vec3 vec32 = vec3.addVector(vec31.xCoord * 10.0f, vec31.yCoord * 10.0f, vec31.zCoord * 10.0f);
-	        MovingObjectPosition mop = world.rayTraceBlocks(vec3, vec32);
-	        if (mop.typeOfHit == EnumMovingObjectType.TILE) {
-				EntityLuggage luggage = new EntityLuggage(world);
-				luggage.setPositionAndRotation(0.5 + mop.blockX, 1 + mop.blockY, 0.5+mop.blockZ, 0, 0);
-				luggage.setOwner(player.username);
-				if (itemStack.hasTagCompound()) {
-					luggage.getInventory().readFromNBT(itemStack.getTagCompound());
-				}
-				world.spawnEntityInWorld(luggage);
-				itemStack.stackSize--;
-	        }
+	        Vec3 vec32 = vec3.addVector(vec31.xCoord * 2.0f, vec31.yCoord * 2.0f, vec31.zCoord * 2.0f);
+	        EntityLuggage luggage = new EntityLuggage(world);
+			luggage.setPositionAndRotation(0.5 + vec32.xCoord, vec3.yCoord, 0.5+vec32.zCoord, 0, 0);
+			luggage.setOwner(player.username);
+			if (itemStack.hasTagCompound()) {
+				luggage.getInventory().readFromNBT(itemStack.getTagCompound());
+			}
+			world.spawnEntityInWorld(luggage);
+			itemStack.stackSize--;
+	        
 	        
 		}
 		return itemStack;

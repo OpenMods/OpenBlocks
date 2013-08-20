@@ -101,6 +101,8 @@ public class CommonProxy implements IGuiHandler {
 		
 		if (Config.itemLuggageId > -1) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
+			
 		}
 
 		// GameRegistry.addRecipe(new TorchBowRecipe());
