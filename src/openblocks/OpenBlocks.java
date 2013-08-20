@@ -16,6 +16,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
@@ -54,6 +55,7 @@ public class OpenBlocks {
 		public static BlockTank tank;
 		public static BlockTrophy trophy;
 		public static BlockBearTrap bearTrap;
+		public static BlockSprinkler sprinkler;
 	}
 
 	public static class Items {
@@ -74,6 +76,7 @@ public class OpenBlocks {
 		public static int blockTankId = 2548;
 		public static int blockTrophyId = 2549;
 		public static int blockBearTrapId = 2550;
+		public static int blockSprinklerId = 2551;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int itemLuggageId = 14977;
@@ -144,6 +147,9 @@ public class OpenBlocks {
 		prop = configFile.getBlock("block", "blockTankId", Config.blockTankId, "The id of the tank block");
 		Config.blockTankId = prop.getInt();
 
+		prop = configFile.getBlock("block", "blockSprinklerId", Config.blockSprinklerId, "The id of the sprinkler block");
+		Config.blockSprinklerId = prop.getInt();
+		
 		prop = configFile.getBlock("block", "blockTrophyId", Config.blockTrophyId, "The id of the trophy block");
 		Config.blockTrophyId = prop.getInt();
 
@@ -152,6 +158,9 @@ public class OpenBlocks {
 
 		prop = configFile.getItem("item", "itemGenericId", Config.itemGenericId, "The id of the generic item");
 		Config.itemGenericId = prop.getInt();
+		
+		prop = configFile.getItem("item", "itemLuggageId", Config.itemLuggageId, "The id of the luggage item");
+		Config.itemLuggageId = prop.getInt();
 
 		prop = configFile.get("dropblock", "searchDistance", Config.elevatorTravelDistance, "The range of the drop block");
 		Config.elevatorTravelDistance = prop.getInt();
@@ -190,10 +199,6 @@ public class OpenBlocks {
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
 
-		// TODO: Add luggage enable/disable.. but not until luggage is
-		// feature-complete
-		// I dont want people who download from jenkins finding a half-borked
-		// luggage
 
 		configFile.save();
 

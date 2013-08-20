@@ -25,6 +25,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
@@ -92,6 +93,10 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
+		
+		if (Config.blockSprinklerId > -1) {
+			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
+		}
 
 		OpenBlocks.Items.generic = new ItemGeneric();
 		if (Config.itemHangGliderId > -1) {
@@ -102,8 +107,8 @@ public class CommonProxy implements IGuiHandler {
 		if (Config.itemLuggageId > -1) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
-			
 		}
+		
 
 		// GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
