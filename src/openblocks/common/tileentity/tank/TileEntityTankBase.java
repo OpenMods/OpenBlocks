@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.api.IAwareTile;
+import openblocks.common.api.IAwareTile;
 import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.SyncMap;

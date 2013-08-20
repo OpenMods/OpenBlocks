@@ -7,8 +7,8 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.api.IAwareTile;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.api.IAwareTile;
 import openblocks.utils.BlockUtils;
 
 public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {

@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.api.ISurfaceAttachment;
+import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.block.BlockFlag;
 
 public class TileEntityFlag extends TileEntity implements ISurfaceAttachment {

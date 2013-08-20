@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.api.ISurfaceAttachment;
+import openblocks.common.api.ISurfaceAttachment;
 
 public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 

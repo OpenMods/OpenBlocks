@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -7,14 +9,16 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.api.IShapeProvider;
 import openblocks.shapes.IShapeable;
 import openblocks.shapes.ShapeFactory;
 import openblocks.shapes.ShapeFactory.Mode;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends TileEntity implements IShapeable {
+public class TileEntityGuide extends TileEntity implements IShapeable, IShapeProvider {
 
 	private boolean shape[][][];
 	private boolean previousShape[][][];
@@ -132,6 +136,7 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 		if (currentMode.isFixedRatio()) {
 			height = depth = width;
 		}
+		recreateShape();
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
@@ -163,8 +168,32 @@ public class TileEntityGuide extends TileEntity implements IShapeable {
 				width = height = depth;
 			}
 		}
-
+		recreateShape();
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public ChunkCoordinates[] getShapeCoordinates() {
+		if (shape == null) { 
+			recreateShape();
+		}
+		ArrayList<ChunkCoordinates> coords = new ArrayList<ChunkCoordinates>();
+		if (shape != null) {
+			for (int y2 = 0; y2 < shape.length; y2++) {
+				for (int x2 = 0; x2 < shape[y2].length; x2++) {
+					for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
+						if (shape[y2][x2][z2]) {
+							coords.add(new ChunkCoordinates(
+									xCoord + x2,
+									yCoord + y2,
+									zCoord + z2
+							));
+						}
+					}
+				}
+			}
+		}
+		return coords.toArray(new ChunkCoordinates[coords.size()]);
 	}
 
 }

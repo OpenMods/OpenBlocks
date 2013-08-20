@@ -1,4 +1,4 @@
-package openblocks.api;
+package openblocks.common.api;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

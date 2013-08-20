@@ -15,9 +15,9 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.api.IInventoryContainer;
-import openblocks.api.ISurfaceAttachment;
 import openblocks.common.GenericInventory;
+import openblocks.common.api.IInventoryContainer;
+import openblocks.common.api.ISurfaceAttachment;
 
 public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 		ISurfaceAttachment {

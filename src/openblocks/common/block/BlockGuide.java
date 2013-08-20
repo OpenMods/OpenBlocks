@@ -64,7 +64,6 @@ public class BlockGuide extends OpenBlock {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
 		if (tileEntity == null || !(tileEntity instanceof TileEntityGuide)) { return false; }
-
 		if (!world.isRemote) {
 			if (player.isSneaking()) {
 				((TileEntityGuide)tileEntity).switchMode(player);

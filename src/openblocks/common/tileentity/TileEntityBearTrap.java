@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.api.IAwareTile;
+import openblocks.common.api.IAwareTile;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
