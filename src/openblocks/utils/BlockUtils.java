@@ -133,4 +133,40 @@ public class BlockUtils {
 		}
 		return direction;
 	}
+	
+	/**
+	 * Tests to see if an item stack can be inserted in to an inventory
+	 * Does not perform the insertion, only tests the possibility
+	 * @param inventory The inventory to insert the stack into
+	 * @param item the stack to insert
+	 * @return the amount of items that could be put in to the stack
+	 */
+	public static int testInventoryInsertion(IInventory inventory, ItemStack item) {
+		if(item == null || item.stackSize == 0) return 0;
+		if(inventory == null) return 0;
+		int slotCount = inventory.getSizeInventory();
+		/* Allows counting down the item size, without cloning or changing the object */
+		int itemSizeCounter = item.stackSize; 
+		for(int i = 0; i < slotCount && itemSizeCounter > 0; i++) {
+			if(!inventory.isStackValidForSlot(i, item)) continue;
+			ItemStack inventorySlot = inventory.getStackInSlot(i);
+			/* If the slot is empty, dump the biggest stack we can, taking in to consideration, the remaining amount of stack */
+			if(inventorySlot == null) itemSizeCounter -= Math.min(Math.min(itemSizeCounter, inventory.getInventoryStackLimit()), item.getMaxStackSize());
+			/* If the slot is not empty, check that these items stack */
+			else if(item.itemID == inventorySlot.itemID
+					&& (!item.getHasSubtypes() || item.getItemDamage() == inventorySlot.getItemDamage())
+					&& ItemStack.areItemStackTagsEqual(item, inventorySlot)
+					&& inventorySlot.stackSize < inventorySlot.getMaxStackSize()) {
+				/* If they stack, decrement by the amount of space that remains */
+				int space = inventorySlot.getMaxStackSize() - inventorySlot.stackSize;
+				itemSizeCounter -= Math.min(itemSizeCounter, space);
+			}
+		}
+		// itemSizeCounter might be less than zero here. It shouldn't be, but I don't trust me. -NC
+		if(itemSizeCounter != item.stackSize) {
+			itemSizeCounter = Math.max(itemSizeCounter, 0);
+			return item.stackSize - itemSizeCounter;
+		}
+		return 0;
+	}
 }

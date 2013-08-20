@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.common.entity.EntityLuggage;
+import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class EntityAICollectItem extends EntityAIBase {
@@ -36,8 +37,8 @@ public class EntityAICollectItem extends EntityAIBase {
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {
 				if (!item.isDead && item.onGround) {
-					double dist = item.getDistanceToEntity(luggage);
-					if (closest == null || dist < closestDistance) {
+					double dist = item.getDistanceToEntity(luggage); // Check that the stack can actually be consumed by luggage
+					if (closest == null || dist < closestDistance && luggage.canConsumeStackPartially(item.getEntityItem())) {
 						closest = item;
 						closestDistance = dist;
 					}
@@ -79,6 +80,7 @@ public class EntityAICollectItem extends EntityAIBase {
 				ItemStack stack = targetItem.getEntityItem();
 				int preEatSize = stack.stackSize;
 				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
+				// Check that the size changed
 				if(preEatSize != stack.stackSize) { 
 					if (luggage.lastSound > 15) {
 						if (stack.getItem() instanceof ItemFood) {
