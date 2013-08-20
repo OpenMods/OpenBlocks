@@ -75,7 +75,7 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (!flags.get(Flags.isShut) && entity instanceof EntityCreature) {
+			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20 && entity instanceof EntityCreature) {
 				trappedEntityId.setValue(entity.entityId);
 				entity.worldObj.playSoundAtEntity(entity, worldObj.rand.nextBoolean()? "openblocks.beartrapclose" : "openblocks.beartrapcloseb", 0.5F, 1.0F);
 				flags.set(Flags.isShut, true);
@@ -128,6 +128,7 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 		if (!worldObj.isRemote) {
 			if (flags.get(Flags.isShut)) {
 				flags.off(Flags.isShut);
+				trappedEntityId.setValue(0);
 				player.worldObj.playSoundAtEntity(player, "openblocks.beartrapopen", 0.5F, 1.0F);
 			}
 		}

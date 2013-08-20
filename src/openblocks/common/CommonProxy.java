@@ -90,6 +90,7 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (Config.blockBearTrapId > -1) {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
 
 		OpenBlocks.Items.generic = new ItemGeneric();

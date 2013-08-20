@@ -67,6 +67,10 @@ public class EntityLuggage extends EntityTameable {
 		return false;
 	}
 	
+    protected void playStepSound(int par1, int par2, int par3, int par4) {
+        this.playSound("openblocks.feet", 0.5F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+    }
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
