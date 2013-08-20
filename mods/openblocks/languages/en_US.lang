@@ -1,14 +1,20 @@
 openblocks.gui.lightbox=Lightbox
+openblocks.gui.luggage=Luggage
 
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
 tile.openblocks.guide.name=Building Guide
 tile.openblocks.ladder.name=Jaded Ladder
 tile.openblocks.lightbox.name=Lightbox
-tile.openblocks.valve.name=Any-valve
 tile.openblocks.tank.name=Tank
 tile.openblocks.target.name=Target
 tile.openblocks.grave.name=Grave
 tile.openblocks.flag.name=Flag
+tile.openblocks.trophy.name=Trophy
+tile.openblocks.beartrap.name=Bear Trap
+
+item.openblocks.hangglider.name=Hang Glider
+item.openblocks.gliderwing.name=Glider Wing
+item.openblocks.luggage.name=Luggage
 
 itemGroup.tabOpenBlocks=OpenBlocks

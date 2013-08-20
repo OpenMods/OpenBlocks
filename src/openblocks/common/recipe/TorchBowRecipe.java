@@ -42,16 +42,14 @@ public class TorchBowRecipe implements IRecipe {
 			if (tag == null) {
 				tag = new NBTTagCompound();
 			}
-			if (flintStack == null && boneStack == null) {
-				return null;
-			}
+			if (flintStack == null && boneStack == null) { return null; }
 			if (flintStack == null) {
-				System.out.println("clear torch mode");
+				// System.out.println("clear torch mode");
 				tag.setBoolean("openblocks_torchmode", false);
 				clone.setTagCompound(tag);
 				return clone;
 			} else if (boneStack == null) {
-				System.out.println("torch mode");
+				// System.out.println("torch mode");
 				tag.setBoolean("openblocks_torchmode", true);
 				clone.setTagCompound(tag);
 				return clone;

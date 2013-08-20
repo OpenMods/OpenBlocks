@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
@@ -15,7 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 
-public class TileEntityElevator extends TileEntity {
+public class TileEntityElevator extends OpenTileEntity {
 
 	private int lowerLevel = 0;
 	private int upperLevel = 0;
@@ -33,8 +34,7 @@ public class TileEntityElevator extends TileEntity {
 
 		if (!worldObj.isRemote) {
 
-			Iterator<Entry<String, Integer>> cooldownIter = cooldown.entrySet()
-					.iterator();
+			Iterator<Entry<String, Integer>> cooldownIter = cooldown.entrySet().iterator();
 			while (cooldownIter.hasNext()) {
 				Entry<String, Integer> entry = cooldownIter.next();
 				int less = entry.getValue() - 1;
@@ -44,25 +44,10 @@ public class TileEntityElevator extends TileEntity {
 				}
 			}
 
-			List<EntityPlayer> playersInRange = (List<EntityPlayer>) worldObj
-					.getEntitiesWithinAABB(
-							EntityPlayer.class,
-							AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord,
-									zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
+			List<EntityPlayer> playersInRange = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
 
 			if (playersInRange.size() > 0) {
-
-				try {
-					upperLevel = findLevel(ForgeDirection.UP);
-					lowerLevel = findLevel(ForgeDirection.DOWN);
-				} catch (Exception e) {
-					upperLevel = 0;
-					lowerLevel = 0;
-					return;
-				}
-
-				boolean doTeleport = false;
-				int teleportTo = 0;
+				ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
 
 				for (EntityPlayer player : playersInRange) {
 					if (cooldown.containsKey(player.username)) {
@@ -74,30 +59,27 @@ public class TileEntityElevator extends TileEntity {
 					 */
 
 					if (player.capabilities.isCreativeMode
-							&& player.capabilities.isFlying)
-						continue;
-					if (lowerLevel != 0
-							&& player.isSneaking()
+							&& player.capabilities.isFlying) continue;
+					if (player.isSneaking()
+							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
-						doTeleport = true;
-						teleportTo = lowerLevel;
+						teleportDirection = ForgeDirection.DOWN;
 						/* player.isJumping doesn't seem to work server side ? */
-					} else if (upperLevel != 0
-							&& player.posY > yCoord + 1.2
+					} else if (player.posY > yCoord + 1.2
+							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
-						doTeleport = true;
-						teleportTo = upperLevel;
+						teleportDirection = ForgeDirection.UP;
 					}
-					if (doTeleport) {
-						player.setPositionAndUpdate(player.posX,
-								teleportTo + 1.1, player.posZ);
-						worldObj.playSoundAtEntity(player,
-								"openblocks.teleport", 1F, 1F);
-						TileEntity targetTile = worldObj.getBlockTileEntity(
-								xCoord, teleportTo, zCoord);
-						if (targetTile instanceof TileEntityElevator) {
-							((TileEntityElevator) targetTile)
-									.addPlayerCooldown(player);
+					if (teleportDirection != ForgeDirection.UNKNOWN) {
+						try {
+							int level = findLevel(teleportDirection);
+							if (level != 0) {
+								player.setPositionAndUpdate(player.posX, level + 1.1, player.posZ);
+								worldObj.playSoundAtEntity(player, "openblocks.teleport", 1F, 1F);
+								addPlayerCooldownToTargetAndNeighbours(player, xCoord, level, zCoord);
+							}
+						} catch (Exception ex) {
+							/* Teleport failed */
 						}
 					}
 
@@ -110,14 +92,23 @@ public class TileEntityElevator extends TileEntity {
 
 	}
 
+	private void addPlayerCooldownToTargetAndNeighbours(EntityPlayer player, int xCoord, int level, int zCoord) {
+		for (int x = xCoord - 1; x <= xCoord + 1; x++) {
+			for (int z = zCoord - 1; z <= zCoord + 1; z++) {
+				TileEntity targetTile = worldObj.getBlockTileEntity(x, level, z);
+				if (targetTile instanceof TileEntityElevator) {
+					((TileEntityElevator)targetTile).addPlayerCooldown(player);
+				}
+			}
+		}
+	}
+
 	private void addPlayerCooldown(EntityPlayer player) {
-		cooldown.put(player.username, 10);
+		cooldown.put(player.username, 6);
 	}
 
 	private int findLevel(ForgeDirection direction) throws Exception {
-		if (direction != ForgeDirection.UP && direction != ForgeDirection.DOWN) {
-			throw new Exception("Must be either up or down... for now");
-		}
+		if (direction != ForgeDirection.UP && direction != ForgeDirection.DOWN) { throw new Exception("Must be either up or down... for now"); }
 
 		int blocksInTheWay = 0;
 		for (int y = 2; y < Config.elevatorTravelDistance; y++) {
@@ -125,26 +116,23 @@ public class TileEntityElevator extends TileEntity {
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
 				if (blockId == OpenBlocks.Config.blockElevatorId) {
-					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord,
-							yPos, zCoord);
+					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord, yPos, zCoord);
 					// Check that it is a drop block and that it has the same
 					// color index.
-					if (!(otherBlock instanceof TileEntityElevator))
-						continue;
-					if (((TileEntityElevator) otherBlock).getBlockMetadata() != this
-							.getBlockMetadata())
-						continue;
+					if (!(otherBlock instanceof TileEntityElevator)) continue;
+					if (((TileEntityElevator)otherBlock).getBlockMetadata() != this.getBlockMetadata()) continue;
 
 					if (worldObj.isAirBlock(xCoord, yPos + 1, zCoord)
-							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) {
-						return yPos;
-					}
+							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) { return yPos; }
 					return 0;
-				} else if (blockId != 0) {
-					if (blocksInTheWay++ > 3) {
-						System.out.println("blocksInTheWay = "+ blocksInTheWay);
-						return 0;
-					}
+					/* air *//* disabled *//* ignoring half blocks */
+				} else if (blockId == 0
+						|| OpenBlocks.Config.elevatorMaxBlockPassCount == -1
+						|| OpenBlocks.Config.elevatorIgnoreHalfBlocks
+						&& !Block.isNormalCube(blockId)) {
+					continue;
+				} else {
+					if (++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) { return 0; }
 				}
 			} else {
 				return 0;
@@ -162,7 +150,7 @@ public class TileEntityElevator extends TileEntity {
 				// temp hack, dont tell anyone.
 				if (dmg == 15) {
 					dmg = 0;
-				}else if (dmg == 0) {
+				} else if (dmg == 0) {
 					dmg = 15;
 				}
 				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, dmg, 3);
@@ -172,6 +160,12 @@ public class TileEntityElevator extends TileEntity {
 		}
 		return false; // Don't update the block and don't block placement if
 						// it's not dye we're using
+	}
+
+	@Override
+	protected void initialize() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

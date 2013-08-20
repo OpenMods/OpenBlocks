@@ -4,25 +4,23 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
+import openblocks.utils.BlockUtils;
 
 public class BlockGuide extends OpenBlock {
+
+	public static class Icons {
+		public static Icon side;
+	}
 
 	public BlockGuide() {
 		super(OpenBlocks.Config.blockGuideId, Material.ground);
 		setupBlock(this, "guide", TileEntityGuide.class);
-	}
-
-	protected TileEntityGuide getTileEntity(World world, int x, int y, int z) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if (tile != null && tile instanceof TileEntityGuide) {
-			return (TileEntityGuide) tile;
-		}
-		return null;
 	}
 
 	@Override
@@ -41,14 +39,14 @@ public class BlockGuide extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
 	@Override
 	public void registerIcons(IconRegister registry) {
 		blockIcon = registry.registerIcon("openblocks:guide");
+		Icons.side = registry.registerIcon("openblocks:guide_side");
 	}
 
 	@Override
@@ -57,28 +55,30 @@ public class BlockGuide extends OpenBlock {
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z,
-			int metadata, ForgeDirection face) {
+	public boolean isFlammable(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face) {
 		return false;
 	}
 
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int side, float what, float are, float you) {
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float what, float are, float you) {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 
-		if (tileEntity == null || !(tileEntity instanceof TileEntityGuide)) {
-			return false;
-		}
+		if (tileEntity == null || !(tileEntity instanceof TileEntityGuide)) { return false; }
 
 		if (!world.isRemote) {
 			if (player.isSneaking()) {
-				((TileEntityGuide) tileEntity).switchMode(player);
+				((TileEntityGuide)tileEntity).switchMode(player);
 			} else {
-				((TileEntityGuide) tileEntity).changeDimensions(ForgeDirection
-						.getOrientation(side));
+				((TileEntityGuide)tileEntity).changeDimensions(player, ForgeDirection.getOrientation(side));
 			}
 		}
 
 		return true;
+	}
+
+	public Icon getIcon(int side, int metadata) {
+		ForgeDirection direction = BlockUtils.sideToDirection(side);
+		if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) { return blockIcon; }
+		return Icons.side;
 	}
 }

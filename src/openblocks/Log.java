@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import cpw.mods.fml.common.FMLLog;
 
 public class Log {
-	
+
 	private static Logger logger;
 
 	public static void info(String format, Object... data) {

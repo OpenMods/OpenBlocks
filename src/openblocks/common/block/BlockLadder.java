@@ -3,7 +3,6 @@ package openblocks.common.block;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -22,11 +21,9 @@ public class BlockLadder extends BlockTrapDoor {
 		setHardness(3.0F);
 		setStepSound(soundWoodFootstep);
 		GameRegistry.registerBlock(this, "ladder");
-		// naughty
-		LanguageRegistry.instance().addStringLocalization(
-				"tile.openblocks.ladder.name", "Jaded Ladder");
+		LanguageRegistry.instance().addStringLocalization("tile.openblocks.ladder.name", "Jaded Ladder");
 		setUnlocalizedName("openblocks.ladder");
-		setCreativeTab(CreativeTabs.tabMisc);
+		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		this.setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);
 	}
 
@@ -39,25 +36,19 @@ public class BlockLadder extends BlockTrapDoor {
 		return false;
 	}
 
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World,
-			int par2, int par3, int par4) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
-		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3,
-				par4);
+		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World,
-			int par2, int par3, int par4) {
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
-		return super
-				.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
+		return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
-	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
-			int par2, int par3, int par4) {
-		this.setBlockBoundsForBlockRender(par1IBlockAccess.getBlockMetadata(
-				par2, par3, par4));
+	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
+		this.setBlockBoundsForBlockRender(par1IBlockAccess.getBlockMetadata(par2, par3, par4));
 	}
 
 	public void setBlockBoundsForBlockRender(int par1) {

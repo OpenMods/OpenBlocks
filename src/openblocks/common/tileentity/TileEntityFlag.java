@@ -16,9 +16,8 @@ public class TileEntityFlag extends TileEntity implements ISurfaceAttachment {
 	private float rotation = 0f;
 	private int colorIndex = 0;
 	private ForgeDirection surface = ForgeDirection.DOWN;
-	
-	public TileEntityFlag() {
-	}
+
+	public TileEntityFlag() {}
 
 	public float getRotation() {
 		return rotation;
@@ -41,7 +40,7 @@ public class TileEntityFlag extends TileEntity implements ISurfaceAttachment {
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		readFromNBT(pkt.customParam1);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
@@ -55,7 +54,7 @@ public class TileEntityFlag extends TileEntity implements ISurfaceAttachment {
 			colorIndex = tag.getInteger("color");
 		}
 	}
-	
+
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setFloat("rotation", rotation);
@@ -68,16 +67,15 @@ public class TileEntityFlag extends TileEntity implements ISurfaceAttachment {
 	}
 
 	public int getColor() {
-		if(colorIndex >= BlockFlag.COLORS.length) colorIndex = 0;
+		if (colorIndex >= BlockFlag.COLORS.length) colorIndex = 0;
 		return BlockFlag.COLORS[colorIndex];
 	}
-	
+
 	public void setColorIndex(int colorIndex) {
 		this.colorIndex = colorIndex;
 	}
 
-	public void setSurfaceAndRotation(ForgeDirection surface,
-			float rotation) {
+	public void setSurfaceAndRotation(ForgeDirection surface, float rotation) {
 		this.surface = surface;
 		this.rotation = rotation;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -88,5 +86,4 @@ public class TileEntityFlag extends TileEntity implements ISurfaceAttachment {
 		return surface;
 	}
 
-	
 }

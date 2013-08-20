@@ -3,6 +3,8 @@
 	<property environment="env"/>
 	<!-- Properties -->
 
+	<property name="env.BUILD_NUMBER"    value="0"/>
+	
 	<property name="build.dir"           value="build"/>
 	<property name="src.dir"             value="src"/>
 
@@ -18,7 +20,7 @@
 
 	<property name="mc.version"          value="1.5.2"/>
 	<property name="forge.version"       value="7.8.0.703"/>
-	<property name="mod.version"         value="1.0.0"/>
+	<property name="mod.version"         value="1.0.1"/>
 	<property name="mod.name"	     value="OpenBlocks"/>
 	
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
@@ -125,11 +127,9 @@
 
 	<!-- Package the compiled files -->
 	<target name="package" depends="compile">
-
 		<delete dir="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
-		<jar destfile="${jar.dir}/${mod.name}-${mod.version}.jar" basedir="${classes.dir}"/>
-
+		<jar destfile="${jar.dir}/${mod.name}-${mod.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}"/>
 	</target>
 
 	<!-- Default target to run -->

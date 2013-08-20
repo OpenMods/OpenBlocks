@@ -23,84 +23,73 @@ public class BowEventHandler {
 		if (!event.entity.worldObj.isRemote) {
 			NBTTagCompound tag = event.result.getTagCompound();
 			if (tag != null && tag.hasKey("openblocks_torchmode")) {
-				System.out.println("torch mode");
+				// System.out.println("torch mode");
 			}
 		}
 	}
 
 	@ForgeSubscribe
 	public void onArrowLoose(ArrowLooseEvent event) {
-		System.out.println("onArrowLoose");
+		// System.out.println("onArrowLoose");
 		EntityPlayer player = event.entityPlayer;
 		ItemStack bowStack = event.bow;
-		if (player == null) {
-			return;
-		}
+		if (player == null) { return; }
 
-		if (!player.isSneaking()) {
-			return;
-		}
+		if (!player.isSneaking()) { return; }
 
 		if (!bowStack.hasTagCompound()) {
-			System.out.println("no nbt");
+			// System.out.println("no nbt");
 			return;
 		}
 
 		NBTTagCompound tag = bowStack.getTagCompound();
 
 		if (!tag.hasKey("openblocks_torchmode")) {
-			System.out.println("no key");
+			// System.out.println("no key");
 			return;
 		}
 
 		if (!tag.getBoolean("openblocks_torchmode")) {
-			System.out.println("no torchmode");
+			// System.out.println("no torchmode");
 			return;
 		}
 
-		System.out.println("fine");
+		// System.out.println("fine");
 		int j = event.charge;
 
 		boolean flag = player.capabilities.isCreativeMode
-				|| EnchantmentHelper.getEnchantmentLevel(
-						Enchantment.infinity.effectId, bowStack) > 0;
+				|| EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, bowStack) > 0;
 
 		if (flag || player.inventory.hasItem(Item.arrow.itemID)) {
-			float f = (float) j / 20.0F;
+			float f = (float)j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
-			if ((double) f < 0.1D) {
-				return;
-			}
+			if ((double)f < 0.1D) { return; }
 
 			if (f > 1.0F) {
 				f = 1.0F;
 			}
 
-			EntityArrow entityarrow = new EntityTorchArrow(player.worldObj,
-					player, f * 2.0F);
+			EntityArrow entityarrow = new EntityTorchArrow(player.worldObj, player, f * 2.0F);
 
 			if (f == 1.0F) {
 				entityarrow.setIsCritical(true);
 			}
 
-			int k = EnchantmentHelper.getEnchantmentLevel(
-					Enchantment.power.effectId, bowStack);
+			int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, bowStack);
 
 			if (k > 0) {
-				entityarrow.setDamage(entityarrow.getDamage() + (double) k
+				entityarrow.setDamage(entityarrow.getDamage() + (double)k
 						* 0.5D + 0.5D);
 			}
 
-			int l = EnchantmentHelper.getEnchantmentLevel(
-					Enchantment.punch.effectId, bowStack);
+			int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, bowStack);
 
 			if (l > 0) {
 				entityarrow.setKnockbackStrength(l);
 			}
 
-			if (EnchantmentHelper.getEnchantmentLevel(
-					Enchantment.flame.effectId, bowStack) > 0) {
+			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, bowStack) > 0) {
 				entityarrow.setFire(100);
 			}
 

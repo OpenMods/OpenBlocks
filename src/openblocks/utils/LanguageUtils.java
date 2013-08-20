@@ -6,12 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
-
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.CommonProxy;
-
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class LanguageUtils {
 	public static void setupLanguages() {
@@ -32,9 +30,7 @@ public class LanguageUtils {
 				public void read(String line) {
 
 					URL url = CommonProxy.class.getResource(String.format("%s/%s.lang", OpenBlocks.getLanguagePath(), line));
-					if (url == null) {
-						return;
-					}
+					if (url == null) { return; }
 					LanguageRegistry.instance().loadLocalization(url, line, false);
 				}
 			});
