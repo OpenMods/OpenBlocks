@@ -45,7 +45,6 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	protected void setSpecial() {
 		if(special) return;
 		special = true;
-		this.texture = OpenBlocks.getTexturesPath("models/luggage_special.png");
 		GenericInventory inventory = new GenericInventory("luggage", false, 54);
 		inventory.copyFrom(this.inventory);
 		if (this.dataWatcher != null) {
@@ -65,6 +64,8 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	        if (inventory.getSizeInventory() != inventorySize) {
 	        	inventory = new GenericInventory("luggage", false, inventorySize);
 	        }
+
+			this.texture = OpenBlocks.getTexturesPath(inventorySize == 27 ? "models/luggage.png" : "models/luggage_special.png");
         }
 		lastSound++;
 	}
