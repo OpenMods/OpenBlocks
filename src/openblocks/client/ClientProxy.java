@@ -3,21 +3,25 @@ package openblocks.client;
 import java.io.File;
 import java.util.Calendar;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.liquids.LiquidStack;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.OpenBlocks.Gui;
+import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.client.gui.GuiLuggage;
 import openblocks.client.renderer.BlockRenderingHandler;
@@ -163,5 +167,11 @@ public class ClientProxy extends CommonProxy {
 	 */
 	public boolean isClient() {
 		return true;
+	}
+	
+
+	public void spawnLiquidSpray(World worldObj, LiquidStack water, double d, double e, double f, Vec3 vec, float g) {
+		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, d, e, f, vec, g);
+		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
 	}
 }

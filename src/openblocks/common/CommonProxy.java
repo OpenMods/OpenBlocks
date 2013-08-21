@@ -4,19 +4,23 @@ import java.io.File;
 import java.util.WeakHashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
+import openblocks.client.fx.FXLiquidSpray;
 import openblocks.common.block.BlockBearTrap;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
@@ -192,6 +196,9 @@ public class CommonProxy implements IGuiHandler {
 		MinecraftServer serverInstance = MinecraftServer.getServer();
 		if (serverInstance == null) return false;
 		return serverInstance.isSinglePlayer();
+	}
+
+	public void spawnLiquidSpray(World worldObj, LiquidStack water, double d, double e, double f, Vec3 vecFromPool, float g) {
 	}
 
 }

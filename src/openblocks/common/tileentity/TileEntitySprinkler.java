@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidStack;
-import openblocks.client.fx.FXLiquidSpray;
+import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncHandler;
@@ -70,8 +69,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			}
 		} else {
 			for (int i = 0; i < 5; i++) {
-				FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch() * rotation.offsetX, 0, getSprayPitch() * rotation.offsetZ), 0.5f);
-				Minecraft.getMinecraft().effectRenderer.addEffect(spray);
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch() * rotation.offsetX, 0, getSprayPitch() * rotation.offsetZ), 0.5f);
+				
 			}
 		}
 		syncMap.sync(worldObj, this, xCoord, yCoord, zCoord, 1);
