@@ -9,6 +9,10 @@ import net.minecraft.block.BlockCrops;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -20,6 +24,7 @@ import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
+import openblocks.sync.SyncableDirection;
 import openblocks.sync.SyncableFlags;
 import openblocks.utils.BlockUtils;
 
@@ -28,11 +33,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public static final int TICKS_PER_DIRECTION = 100;
 	
-	private ForgeDirection rotation = ForgeDirection.EAST;
-	
 	private SyncMapTile syncMap = new SyncMapTile();
 	
 	private SyncableFlags flags = new SyncableFlags();
+	
+	private SyncableDirection rotation = new SyncableDirection();
 	
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
 	
@@ -41,11 +46,13 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 	
 	public enum Keys {
-		flags
+		flags,
+		rotation
 	}
 	
 	public TileEntitySprinkler() {
 		syncMap.put(Keys.flags, flags);
+		syncMap.put(Keys.rotation, rotation);
 	}
 	
 	public void updateEntity() {
@@ -69,7 +76,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			}
 		} else {
 			for (int i = 0; i < 5; i++) {
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch() * rotation.offsetX, 0, getSprayPitch() * rotation.offsetZ), 0.5f);
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch() * rotation.getValue().offsetX, 0, getSprayPitch() * rotation.getValue().offsetZ), 0.5f);
 				
 			}
 		}
@@ -223,7 +230,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		rotation = BlockUtils.get2dOrientation(player);
+		rotation.setValue(BlockUtils.get2dOrientation(player));
 	}
 
 	@Override
@@ -232,14 +239,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		return false;
 	}
 
-	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public ForgeDirection getRotation() {
-		return rotation;
+		return rotation.getValue();
 	}
 
 	@Override
@@ -269,6 +270,23 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			angle = -angle;
 		}
 		return angle;
+	}
+
+	@Override
+	protected void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		rotation.writeToNBT(tag, "rotation");
+	}
+
+	
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		rotation.readFromNBT(tag, "rotation");
 	}
 
 }
