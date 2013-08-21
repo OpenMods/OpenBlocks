@@ -1,5 +1,9 @@
 package openblocks.common.entity;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -17,9 +21,9 @@ import openblocks.common.GenericInventory;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openblocks.utils.BlockUtils;
 
-public class EntityLuggage extends EntityTameable {
+public class EntityLuggage extends EntityTameable implements IEntityAdditionalSpawnData {
 
-	private GenericInventory inventory = new GenericInventory("luggage", false, 27);
+	protected GenericInventory inventory = new GenericInventory("luggage", false, 27);
 	private boolean special;
 	
 	public int lastSound = 0;
@@ -35,6 +39,7 @@ public class EntityLuggage extends EntityTameable {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIFollowOwner(this, this.moveSpeed, 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
+        this.dataWatcher.addObject(18, Integer.valueOf(inventory.getSizeInventory())); // inventory size
 	}
 	
 	protected void setSpecial() {
@@ -43,6 +48,9 @@ public class EntityLuggage extends EntityTameable {
 		this.texture = OpenBlocks.getTexturesPath("models/luggage_special.png");
 		GenericInventory inventory = new GenericInventory("luggage", false, 54);
 		inventory.copyFrom(this.inventory);
+		if (this.dataWatcher != null) {
+			this.dataWatcher.updateObject(18, Integer.valueOf(inventory.getSizeInventory()));
+		}
 		this.inventory = inventory;
 	}
 	
@@ -52,6 +60,12 @@ public class EntityLuggage extends EntityTameable {
 	
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+        if (worldObj.isRemote) { 
+        	int inventorySize = dataWatcher.getWatchableObjectInt(18);
+	        if (inventory.getSizeInventory() != inventorySize) {
+	        	inventory = new GenericInventory("luggage", false, inventorySize);
+	        }
+        }
 		lastSound++;
 	}
 
@@ -120,5 +134,17 @@ public class EntityLuggage extends EntityTameable {
 	@Override
 	public boolean isEntityInvulnerable() {
 		return true;
+	}
+
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		data.writeInt(inventory.getSizeInventory());
+	}
+
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		inventory = new GenericInventory("luggage", false, data.readInt());
 	}
 }
