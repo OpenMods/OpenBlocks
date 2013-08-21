@@ -89,6 +89,7 @@ public class OpenBlocks {
 		public static int ghostSpawnProbability = 0;
 		public static boolean tryHookPlayerRenderer = true;
 		public static double trophyDropChance = 0.001;
+		public static boolean irregularBlocksArePassable = false;
 	}
 
 	public static enum Gui {
@@ -179,6 +180,9 @@ public class OpenBlocks {
 		prop = configFile.get("dropblock", "ignoreHalfBlocks", Config.elevatorIgnoreHalfBlocks, "The elevator will ignore half blocks when counting the blocks it can pass through");
 		Config.elevatorIgnoreHalfBlocks = prop.getBoolean(Config.elevatorIgnoreHalfBlocks);
 
+		prop = configFile.get("dropblock", "irregularBlocksArePassable", Config.irregularBlocksArePassable, "The elevator will try to pass through blocks that have custom collision boxes");
+		Config.irregularBlocksArePassable = prop.getBoolean(Config.irregularBlocksArePassable);
+		
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
 

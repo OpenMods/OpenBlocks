@@ -106,6 +106,19 @@ public class TileEntityElevator extends OpenTileEntity {
 	private void addPlayerCooldown(EntityPlayer player) {
 		cooldown.put(player.username, 6);
 	}
+	
+	private boolean isPassable(int x, int y, int z, boolean canStandHere) {
+		int blockId = worldObj.getBlockId(x, y, z);
+		if(canStandHere) {
+			return worldObj.isAirBlock(x, y, z) || Block.blocksList[blockId] == null || ( OpenBlocks.Config.irregularBlocksArePassable && Block.blocksList[blockId].getCollisionBoundingBoxFromPool(worldObj,x,y,z) == null );
+		} else {
+			/* Ugly logic makes NC sad :( */
+			return !(blockId == 0
+					|| OpenBlocks.Config.elevatorMaxBlockPassCount == -1
+					|| OpenBlocks.Config.elevatorIgnoreHalfBlocks
+					&& !Block.isNormalCube(blockId));
+		}
+	}
 
 	private int findLevel(ForgeDirection direction) throws Exception {
 		if (direction != ForgeDirection.UP && direction != ForgeDirection.DOWN) { throw new Exception("Must be either up or down... for now"); }
@@ -122,17 +135,10 @@ public class TileEntityElevator extends OpenTileEntity {
 					if (!(otherBlock instanceof TileEntityElevator)) continue;
 					if (((TileEntityElevator)otherBlock).getBlockMetadata() != this.getBlockMetadata()) continue;
 
-					if (worldObj.isAirBlock(xCoord, yPos + 1, zCoord)
-							&& worldObj.isAirBlock(xCoord, yPos + 2, zCoord)) { return yPos; }
+					if (isPassable(xCoord, yPos + 1, zCoord, true) && isPassable(xCoord, yPos + 2, zCoord, true)) { return yPos; }
 					return 0;
-					/* air *//* disabled *//* ignoring half blocks */
-				} else if (blockId == 0
-						|| OpenBlocks.Config.elevatorMaxBlockPassCount == -1
-						|| OpenBlocks.Config.elevatorIgnoreHalfBlocks
-						&& !Block.isNormalCube(blockId)) {
-					continue;
-				} else {
-					if (++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) { return 0; }
+				} else if (isPassable(xCoord, yPos, zCoord, false) && ++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) { 
+					return 0; 
 				}
 			} else {
 				return 0;
