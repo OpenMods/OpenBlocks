@@ -101,12 +101,14 @@ public class EntityLuggage extends EntityTameable {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
+        tag.setBoolean("shiny", special);
         inventory.writeToNBT(tag);
     }
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
+        if(tag.hasKey("shiny") && tag.getBoolean("shiny")) setSpecial();
         inventory.readFromNBT(tag);
     }
 	
