@@ -10,6 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
@@ -128,6 +131,16 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	public double getPercentageForDirection() {
 		return flags.get(Flags.enabled) ? 1.0 / TICKS_PER_DIRECTION
 				* flags.ticksSinceChange(Flags.isClockwise) : 0;
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		return syncMap.getDescriptionPacket(this);
+	}
+
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		syncMap.handleTileDataPacket(this, pkt);
 	}
 
 	@Override
