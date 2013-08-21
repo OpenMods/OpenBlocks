@@ -12,6 +12,7 @@ tile.openblocks.grave.name=Grab
 tile.openblocks.flag.name=Flagge
 tile.openblocks.trophy.name=Trophäe
 tile.openblocks.beartrap.name=Bärenfalle
+tile.openblocks.sprinkler.name=Sprinkler
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
