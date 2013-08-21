@@ -41,6 +41,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
 	
 	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
+	
+	private int tickCounter = 0;
 
 	public enum Flags {
 		isClockwise,
@@ -61,11 +63,22 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 		if (!worldObj.isRemote) {
 			
-			if (tank.drain(1, true) != null) {
-				flags.set(Flags.enabled, true);
+			// every 60 ticks drain from the tank
+			// if there's nothing to drain, disable it
+			if (tickCounter++ % 60 == 0) {
+				flags.set(Flags.enabled, tank.drain(1, true) != null);
+			}
+			
+			
+			// if it's enabled..
+			if (flags.get(Flags.enabled)) {
+				
+				// switch the direction every [x] ticks
 				if (flags.ticksSinceChange(Flags.isClockwise) > TICKS_PER_DIRECTION) {
 					flags.set(Flags.isClockwise, !flags.get(Flags.isClockwise));
 				}
+				
+				// there's a 1/100 chance of  attempting to fertilize a crop
 				if (worldObj.rand.nextDouble() < 1.0 / 100) {
 					int x = xCoord + worldObj.rand.nextInt(9) - 5;
 					int y = yCoord;
@@ -78,8 +91,6 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 						}
 					}
 				}
-			}else {
-				flags.set(Flags.enabled, false);
 			}
 		} else {
 			if (flags.get(Flags.enabled)) {
