@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityLuggage;
 
@@ -34,6 +35,7 @@ public class ItemRendererLuggage implements IItemRenderer {
 			}
 			luggage.worldObj = Minecraft.getMinecraft().theWorld;
 			
+			luggage.getInventory().clearAndSetSlotCount(27);
 			if (item.hasTagCompound()) {
 				luggage.getInventory().readFromNBT(item.getTagCompound());
 			}
