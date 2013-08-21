@@ -6,7 +6,7 @@ An open source random collection of blocks and miscellaneous cool stuff
 Version
 -
 
-1.0.1 for Minecraft v1.5.2
+1.0.2 for Minecraft v1.5.2
 
 What does it contain?
 -----------
