@@ -16,7 +16,7 @@ public class GuiLuggage extends GuiContainer {
 		super(container);
 		luggage = container.luggage;
 		xSize = 176;
-		ySize = 167;
+		ySize = luggage.isSpecial() ? 221 : 167;
 	}
 
 	@Override
