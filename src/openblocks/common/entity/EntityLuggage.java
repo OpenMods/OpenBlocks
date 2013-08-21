@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,7 +20,8 @@ import openblocks.utils.BlockUtils;
 public class EntityLuggage extends EntityTameable {
 
 	private GenericInventory inventory = new GenericInventory("luggage", false, 27);
-
+	private boolean special;
+	
 	public int lastSound = 0;
 	
 	public EntityLuggage(World world) {
@@ -27,12 +29,25 @@ public class EntityLuggage extends EntityTameable {
 		this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
 		this.setSize(0.5F, 0.5F);
 		this.moveSpeed = 0.4F;
-		setTamed(true);		
+		setTamed(true);
 		this.getNavigator().setAvoidsWater(true);
 		this.getNavigator().setCanSwim(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIFollowOwner(this, this.moveSpeed, 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
+	}
+	
+	protected void setSpecial() {
+		if(special) return;
+		special = true;
+		this.texture = OpenBlocks.getTexturesPath("models/luggage_special.png");
+		GenericInventory inventory = new GenericInventory("luggage", false, 54);
+		inventory.copyFrom(this.inventory);
+		this.inventory = inventory;
+	}
+	
+	public boolean isSpecial() {
+		return special;
 	}
 	
 	public void onLivingUpdate() {
@@ -94,6 +109,11 @@ public class EntityLuggage extends EntityTameable {
         super.readEntityFromNBT(tag);
         inventory.readFromNBT(tag);
     }
+	
+	@Override
+	public void onStruckByLightning(EntityLightningBolt lightning) {
+		setSpecial();
+	}
 
 	@Override
 	public boolean isEntityInvulnerable() {

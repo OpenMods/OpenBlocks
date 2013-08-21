@@ -38,7 +38,7 @@ public class EntityAICollectItem extends EntityAIBase {
 			for (EntityItem item : items) {
 				if (!item.isDead && item.onGround) {
 					double dist = item.getDistanceToEntity(luggage); // Check that the stack can actually be consumed by luggage
-					if (closest == null || dist < closestDistance && luggage.canConsumeStackPartially(item.getEntityItem())) {
+					if (closest == null || dist < closestDistance && luggage.canConsumeStackPartially(item.getEntityItem()) && !item.isInWater()) {
 						closest = item;
 						closestDistance = dist;
 					}
