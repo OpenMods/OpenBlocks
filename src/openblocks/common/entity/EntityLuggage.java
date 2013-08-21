@@ -71,7 +71,7 @@ public class EntityLuggage extends EntityTameable {
 				player.openGui(OpenBlocks.instance, OpenBlocks.Gui.Luggage.ordinal(), player.worldObj, entityId, 0, 0);
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	public boolean canConsumeStackPartially(ItemStack stack) {
