@@ -69,7 +69,7 @@ public class BlockTank extends OpenBlock {
 			if(tank.containsValidLiquid()) {
 				int blockId = tank.getInternalTank().getLiquid().itemID;
 				if(Block.blocksList[blockId] == null) return 0;
-				return (int)Math.min(15, Math.max(0, (tank.getPercentFull() * (float)Block.lightValue[blockId])));
+				return (int)Math.min(15, Math.max(0, (Math.ceil(tank.getPercentFull() * 10f) / 10f * (float)Block.lightValue[blockId])));
 			}
 		}
 		return 0;
