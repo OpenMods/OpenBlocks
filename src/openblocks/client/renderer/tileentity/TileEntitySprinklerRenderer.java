@@ -1,19 +1,18 @@
 package openblocks.client.renderer.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.common.tileentity.TileEntitySprinkler;
-import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.utils.BlockUtils;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntitySprinklerRenderer extends TileEntitySpecialRenderer {
 
 	private ModelSprinkler model = new ModelSprinkler();
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 

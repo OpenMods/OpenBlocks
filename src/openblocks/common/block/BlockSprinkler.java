@@ -1,8 +1,8 @@
 package openblocks.common.block;
 
+import net.minecraft.block.material.Material;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntitySprinkler;
-import net.minecraft.block.material.Material;
 
 public class BlockSprinkler extends OpenBlock {
 
@@ -25,5 +25,5 @@ public class BlockSprinkler extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
-	
+
 }

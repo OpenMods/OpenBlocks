@@ -10,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
-import openblocks.common.entity.EntityLuggage;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
@@ -75,7 +74,8 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20 && entity instanceof EntityCreature) {
+			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20
+					&& entity instanceof EntityCreature) {
 				trappedEntityId.setValue(entity.entityId);
 				entity.worldObj.playSoundAtEntity(entity, worldObj.rand.nextBoolean()? "openblocks.beartrapclose" : "openblocks.beartrapcloseb", 0.5F, 1.0F);
 				flags.set(Flags.isShut, true);

@@ -2,16 +2,13 @@ package openblocks.common.entity.ai;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.common.entity.EntityLuggage;
-import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class EntityAICollectItem extends EntityAIBase {
@@ -21,7 +18,7 @@ public class EntityAICollectItem extends EntityAIBase {
 	private PathNavigate pathFinder;
 
 	private EntityItem targetItem = null;
-	
+
 	public EntityAICollectItem(EntityLuggage luggage) {
 		this.luggage = luggage;
 		this.pathFinder = luggage.getNavigator();
@@ -37,8 +34,20 @@ public class EntityAICollectItem extends EntityAIBase {
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {
 				if (!item.isDead && item.onGround) {
-					double dist = item.getDistanceToEntity(luggage); // Check that the stack can actually be consumed by luggage
-					if (closest == null || dist < closestDistance && luggage.canConsumeStackPartially(item.getEntityItem()) && !item.isInWater()) {
+					double dist = item.getDistanceToEntity(luggage); // Check
+																		// that
+																		// the
+																		// stack
+																		// can
+																		// actually
+																		// be
+																		// consumed
+																		// by
+																		// luggage
+					if (closest == null
+							|| dist < closestDistance
+							&& luggage.canConsumeStackPartially(item.getEntityItem())
+							&& !item.isInWater()) {
 						closest = item;
 						closestDistance = dist;
 					}
@@ -81,12 +90,12 @@ public class EntityAICollectItem extends EntityAIBase {
 				int preEatSize = stack.stackSize;
 				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
 				// Check that the size changed
-				if(preEatSize != stack.stackSize) { 
+				if (preEatSize != stack.stackSize) {
 					if (luggage.lastSound > 15) {
 						if (stack.getItem() instanceof ItemFood) {
 							luggage.playSound("openblocks.slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						} else {
-							luggage.playSound("openblocks.chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));	
+							luggage.playSound("openblocks.chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						}
 						luggage.lastSound = 0;
 					}

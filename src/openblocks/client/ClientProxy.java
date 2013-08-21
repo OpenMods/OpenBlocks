@@ -168,7 +168,6 @@ public class ClientProxy extends CommonProxy {
 	public boolean isClient() {
 		return true;
 	}
-	
 
 	public void spawnLiquidSpray(World worldObj, LiquidStack water, double d, double e, double f, Vec3 vec, float g) {
 		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, d, e, f, vec, g);

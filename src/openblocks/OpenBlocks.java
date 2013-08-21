@@ -149,7 +149,7 @@ public class OpenBlocks {
 
 		prop = configFile.getBlock("block", "blockSprinklerId", Config.blockSprinklerId, "The id of the sprinkler block");
 		Config.blockSprinklerId = prop.getInt();
-		
+
 		prop = configFile.getBlock("block", "blockTrophyId", Config.blockTrophyId, "The id of the trophy block");
 		Config.blockTrophyId = prop.getInt();
 
@@ -158,7 +158,7 @@ public class OpenBlocks {
 
 		prop = configFile.getItem("item", "itemGenericId", Config.itemGenericId, "The id of the generic item");
 		Config.itemGenericId = prop.getInt();
-		
+
 		prop = configFile.getItem("item", "itemLuggageId", Config.itemLuggageId, "The id of the luggage item");
 		Config.itemLuggageId = prop.getInt();
 
@@ -198,7 +198,6 @@ public class OpenBlocks {
 
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
-
 
 		configFile.save();
 

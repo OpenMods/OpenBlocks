@@ -1,21 +1,20 @@
 package openblocks.client.renderer;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import openblocks.common.entity.EntityLuggage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import openblocks.common.entity.EntityLuggage;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class ItemRendererLuggage implements IItemRenderer {
 
 	private EntityLuggage luggage = new EntityLuggage(null);
-	
+
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		return true;
@@ -38,9 +37,9 @@ public class ItemRendererLuggage implements IItemRenderer {
 			if (renderer.getFontRendererFromRenderManager() != null) {
 				renderer.doRender(luggage, 0, 0, 0, 0, 0.5f);
 			}
-            GL11.glPopMatrix();
+			GL11.glPopMatrix();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 		}
 	}

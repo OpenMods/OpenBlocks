@@ -18,7 +18,8 @@ import openblocks.shapes.ShapeFactory.Mode;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends TileEntity implements IShapeable, IShapeProvider {
+public class TileEntityGuide extends TileEntity implements IShapeable,
+		IShapeProvider {
 
 	private boolean shape[][][];
 	private boolean previousShape[][][];
@@ -174,7 +175,7 @@ public class TileEntityGuide extends TileEntity implements IShapeable, IShapePro
 
 	@Override
 	public ChunkCoordinates[] getShapeCoordinates() {
-		if (shape == null) { 
+		if (shape == null) {
 			recreateShape();
 		}
 		ArrayList<ChunkCoordinates> coords = new ArrayList<ChunkCoordinates>();
@@ -183,11 +184,8 @@ public class TileEntityGuide extends TileEntity implements IShapeable, IShapePro
 				for (int x2 = 0; x2 < shape[y2].length; x2++) {
 					for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
 						if (shape[y2][x2][z2]) {
-							coords.add(new ChunkCoordinates(
-									xCoord + x2,
-									yCoord + y2,
-									zCoord + z2
-							));
+							coords.add(new ChunkCoordinates(xCoord + x2, yCoord
+									+ y2, zCoord + z2));
 						}
 					}
 				}

@@ -1,18 +1,11 @@
 package openblocks.common.entity;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
-import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -21,13 +14,19 @@ import openblocks.common.GenericInventory;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openblocks.utils.BlockUtils;
 
-public class EntityLuggage extends EntityTameable implements IEntityAdditionalSpawnData {
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+public class EntityLuggage extends EntityTameable implements
+		IEntityAdditionalSpawnData {
 
 	protected GenericInventory inventory = new GenericInventory("luggage", false, 27);
 	private boolean special;
-	
+
 	public int lastSound = 0;
-	
+
 	public EntityLuggage(World world) {
 		super(world);
 		this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
@@ -39,11 +38,12 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIFollowOwner(this, this.moveSpeed, 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
-        this.dataWatcher.addObject(18, Integer.valueOf(inventory.getSizeInventory())); // inventory size
+		this.dataWatcher.addObject(18, Integer.valueOf(inventory.getSizeInventory())); // inventory
+																						// size
 	}
-	
+
 	protected void setSpecial() {
-		if(special) return;
+		if (special) return;
 		special = true;
 		GenericInventory inventory = new GenericInventory("luggage", false, 54);
 		inventory.copyFrom(this.inventory);
@@ -52,21 +52,21 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		}
 		this.inventory = inventory;
 	}
-	
+
 	public boolean isSpecial() {
 		return special;
 	}
-	
+
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-        if (worldObj.isRemote) { 
-        	int inventorySize = dataWatcher.getWatchableObjectInt(18);
-	        if (inventory.getSizeInventory() != inventorySize) {
-	        	inventory = new GenericInventory("luggage", false, inventorySize);
-	        }
+		if (worldObj.isRemote) {
+			int inventorySize = dataWatcher.getWatchableObjectInt(18);
+			if (inventory.getSizeInventory() != inventorySize) {
+				inventory = new GenericInventory("luggage", false, inventorySize);
+			}
 
-			this.texture = OpenBlocks.getTexturesPath(inventorySize == 27 ? "models/luggage.png" : "models/luggage_special.png");
-        }
+			this.texture = OpenBlocks.getTexturesPath(inventorySize == 27? "models/luggage.png" : "models/luggage_special.png");
+		}
 		lastSound++;
 	}
 
@@ -82,7 +82,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	public GenericInventory getInventory() {
 		return inventory;
 	}
-	
+
 	@Override
 	public EntityAgeable createChild(EntityAgeable entityageable) {
 		return null;
@@ -104,29 +104,29 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		}
 		return true;
 	}
-	
+
 	public boolean canConsumeStackPartially(ItemStack stack) {
 		return BlockUtils.testInventoryInsertion(inventory, stack) > 0;
 	}
-	
-    protected void playStepSound(int par1, int par2, int par3, int par4) {
-        this.playSound("openblocks.feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
-    }
-	
+
+	protected void playStepSound(int par1, int par2, int par3, int par4) {
+		this.playSound("openblocks.feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+	}
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
-        super.writeEntityToNBT(tag);
-        tag.setBoolean("shiny", special);
-        inventory.writeToNBT(tag);
-    }
+		super.writeEntityToNBT(tag);
+		tag.setBoolean("shiny", special);
+		inventory.writeToNBT(tag);
+	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
-        super.readEntityFromNBT(tag);
-        if(tag.hasKey("shiny") && tag.getBoolean("shiny")) setSpecial();
-        inventory.readFromNBT(tag);
-    }
-	
+		super.readEntityFromNBT(tag);
+		if (tag.hasKey("shiny") && tag.getBoolean("shiny")) setSpecial();
+		inventory.readFromNBT(tag);
+	}
+
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightning) {
 		setSpecial();
@@ -137,12 +137,10 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		return true;
 	}
 
-
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
 		data.writeInt(inventory.getSizeInventory());
 	}
-
 
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {

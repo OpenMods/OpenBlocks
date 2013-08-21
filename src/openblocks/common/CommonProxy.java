@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.WeakHashMap;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +19,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
-import openblocks.client.fx.FXLiquidSpray;
 import openblocks.common.block.BlockBearTrap;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
@@ -97,7 +95,7 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
-		
+
 		if (Config.blockSprinklerId > -1) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
 		}
@@ -107,12 +105,11 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
 		}
-		
+
 		if (Config.itemLuggageId > -1) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
 		}
-		
 
 		// GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
@@ -198,7 +195,6 @@ public class CommonProxy implements IGuiHandler {
 		return serverInstance.isSinglePlayer();
 	}
 
-	public void spawnLiquidSpray(World worldObj, LiquidStack water, double d, double e, double f, Vec3 vecFromPool, float g) {
-	}
+	public void spawnLiquidSpray(World worldObj, LiquidStack water, double d, double e, double f, Vec3 vecFromPool, float g) {}
 
 }

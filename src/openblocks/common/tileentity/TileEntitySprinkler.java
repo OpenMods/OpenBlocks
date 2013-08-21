@@ -10,9 +10,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -32,37 +29,36 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		ISurfaceAttachment, ITankContainer, IInventory, ISyncHandler {
 
 	public static final int TICKS_PER_DIRECTION = 100;
-	
+
 	private SyncMapTile syncMap = new SyncMapTile();
-	
+
 	private SyncableFlags flags = new SyncableFlags();
-	
+
 	private SyncableDirection rotation = new SyncableDirection();
-	
+
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
-	
+
 	public enum Flags {
 		isClockwise
 	}
-	
+
 	public enum Keys {
-		flags,
-		rotation
+		flags, rotation
 	}
-	
+
 	public TileEntitySprinkler() {
 		syncMap.put(Keys.flags, flags);
 		syncMap.put(Keys.rotation, rotation);
 	}
-	
+
 	public void updateEntity() {
 		super.updateEntity();
-		
+
 		if (!worldObj.isRemote) {
 			if (flags.ticksSinceChange(Flags.isClockwise) > TICKS_PER_DIRECTION) {
 				flags.set(Flags.isClockwise, !flags.get(Flags.isClockwise));
 			}
-			if (worldObj.rand.nextDouble() < 1.0/100) {
+			if (worldObj.rand.nextDouble() < 1.0 / 100) {
 				int x = xCoord + worldObj.rand.nextInt(9) - 5;
 				int y = yCoord;
 				int z = zCoord + worldObj.rand.nextInt(9) - 5;
@@ -76,21 +72,24 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			}
 		} else {
 			for (int i = 0; i < 5; i++) {
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch() * rotation.getValue().offsetX, 0, getSprayPitch() * rotation.getValue().offsetZ), 0.5f);
-				
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch()
+						* rotation.getValue().offsetX, 0, getSprayPitch()
+						* rotation.getValue().offsetZ), 0.5f);
+
 			}
 		}
 		syncMap.sync(worldObj, this, xCoord, yCoord, zCoord, 1);
 	}
-	
+
 	public boolean isTurningClockwise() {
 		return flags.get(Flags.isClockwise);
 	}
-	
+
 	public double getPercentageForDirection() {
-		return 1.0 / TICKS_PER_DIRECTION * flags.ticksSinceChange(Flags.isClockwise);
+		return 1.0 / TICKS_PER_DIRECTION
+				* flags.ticksSinceChange(Flags.isClockwise);
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		// TODO Auto-generated method stub
@@ -249,8 +248,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
 	public void writeIdentifier(DataOutputStream dos) throws IOException {
@@ -262,10 +260,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	public float getSprayPitch() {
 		return (float)(getSprayAngle() + (Math.PI / 2));
 	}
-	
+
 	public float getSprayAngle() {
 		double range = Math.PI * 0.4;
-		float angle = (float)((float) -(range / 2) + (range * getPercentageForDirection()));
+		float angle = (float)((float)-(range / 2) + (range * getPercentageForDirection()));
 		if (!isTurningClockwise()) {
 			angle = -angle;
 		}
@@ -275,15 +273,14 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		rotation.writeToNBT(tag, "rotation");
 	}
 
-	
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		rotation.readFromNBT(tag, "rotation");

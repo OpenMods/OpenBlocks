@@ -20,15 +20,12 @@ public class GuiLuggage extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		ySize = inventorySlots.getInventory().size() == 63 ? 167 : 221;
-        guiTop = (this.height - this.ySize) / 2;
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		ySize = inventorySlots.getInventory().size() == 63? 167 : 221;
+		guiTop = (this.height - this.ySize) / 2;
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int left = (this.width - this.xSize) / 2;
 		int top = (this.height - this.ySize) / 2;
-		this.mc.renderEngine.bindTexture(OpenBlocks.getTexturesPath(
-				inventorySlots.getInventory().size() == 63 ? 
-				"gui/luggage.png" : "gui/luggage_special.png"
-				));
+		this.mc.renderEngine.bindTexture(OpenBlocks.getTexturesPath(inventorySlots.getInventory().size() == 63? "gui/luggage.png" : "gui/luggage_special.png"));
 		this.drawTexturedModalRect(left, top, 0, 0, this.xSize, this.ySize);
 	}
 
