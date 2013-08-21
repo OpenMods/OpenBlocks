@@ -13,7 +13,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
@@ -37,9 +39,12 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	private SyncableDirection rotation = new SyncableDirection();
 
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
+	
+	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
 
 	public enum Flags {
-		isClockwise
+		isClockwise,
+		enabled
 	}
 
 	public enum Keys {
@@ -55,28 +60,37 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		super.updateEntity();
 
 		if (!worldObj.isRemote) {
-			if (flags.ticksSinceChange(Flags.isClockwise) > TICKS_PER_DIRECTION) {
-				flags.set(Flags.isClockwise, !flags.get(Flags.isClockwise));
-			}
-			if (worldObj.rand.nextDouble() < 1.0 / 100) {
-				int x = xCoord + worldObj.rand.nextInt(9) - 5;
-				int y = yCoord;
-				int z = zCoord + worldObj.rand.nextInt(9) - 5;
-				for (int i = -1; i <= 1; i++) {
-					y += i;
-					int blockId = worldObj.getBlockId(x, y, z);
-					if (Block.blocksList[blockId] instanceof BlockCrops) {
-						((BlockCrops)Block.blocksList[blockId]).fertilize(worldObj, x, y, z);
+			
+			if (tank.drain(1, true) != null) {
+				flags.set(Flags.enabled, true);
+				if (flags.ticksSinceChange(Flags.isClockwise) > TICKS_PER_DIRECTION) {
+					flags.set(Flags.isClockwise, !flags.get(Flags.isClockwise));
+				}
+				if (worldObj.rand.nextDouble() < 1.0 / 100) {
+					int x = xCoord + worldObj.rand.nextInt(9) - 5;
+					int y = yCoord;
+					int z = zCoord + worldObj.rand.nextInt(9) - 5;
+					for (int i = -1; i <= 1; i++) {
+						y += i;
+						int blockId = worldObj.getBlockId(x, y, z);
+						if (Block.blocksList[blockId] instanceof BlockCrops) {
+							((BlockCrops)Block.blocksList[blockId]).fertilize(worldObj, x, y, z);
+						}
 					}
 				}
+			}else {
+				flags.set(Flags.enabled, false);
 			}
 		} else {
-			for (int i = 0; i < 5; i++) {
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch()
-						* rotation.getValue().offsetX, 0, getSprayPitch()
-						* rotation.getValue().offsetZ), 0.5f);
-
+			if (flags.get(Flags.enabled)) {
+				for (int i = 0; i < 5; i++) {
+					OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch()
+							* rotation.getValue().offsetX, 0, getSprayPitch()
+							* rotation.getValue().offsetZ), 0.5f);
+	
+				}
 			}
+			
 		}
 		syncMap.sync(worldObj, this, xCoord, yCoord, zCoord, 1);
 	}
@@ -86,8 +100,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public double getPercentageForDirection() {
-		return 1.0 / TICKS_PER_DIRECTION
-				* flags.ticksSinceChange(Flags.isClockwise);
+		return flags.get(Flags.enabled) ? 1.0 / TICKS_PER_DIRECTION
+				* flags.ticksSinceChange(Flags.isClockwise) : 0;
 	}
 
 	@Override
@@ -164,38 +178,35 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		// TODO Auto-generated method stub
+		if (resource != null && resource.isLiquidEqual(water)) {
+			return tank.fill(resource, doFill);
+		}
 		return 0;
 	}
 
 	@Override
 	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		// TODO Auto-generated method stub
-		return 0;
+		return fill(ForgeDirection.UNKNOWN, resource, doFill);
 	}
 
 	@Override
 	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ILiquidTank[] { tank };
 	}
 
 	@Override
 	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		// TODO Auto-generated method stub
-		return null;
+		return tank;
 	}
 
 	@Override
