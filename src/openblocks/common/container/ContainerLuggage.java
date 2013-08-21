@@ -11,14 +11,14 @@ public class ContainerLuggage extends Container {
 
 	protected int inventorySize;
 	protected IInventory playerInventory;
-	private EntityLuggage luggage;
+	public EntityLuggage luggage;
 
 	public ContainerLuggage(IInventory playerInventory, EntityLuggage luggage) {
 		this.inventorySize = luggage.getInventory().getSizeInventory();
 		this.playerInventory = playerInventory;
 		this.luggage = luggage;
 		addInventoryGrid(8, 18, 9);
-		addPlayerInventorySlots(inventorySize == 27? 85 : 139);
+		addPlayerInventorySlots(luggage.isSpecial() ? 139 : 85);
 	}
 
 	protected void addInventoryGrid(int xOffset, int yOffset, int width) {

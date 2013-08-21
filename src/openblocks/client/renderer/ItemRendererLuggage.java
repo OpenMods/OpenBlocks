@@ -33,6 +33,11 @@ public class ItemRendererLuggage implements IItemRenderer {
 				GL11.glTranslatef(0, -0.5f, 0);
 			}
 			luggage.worldObj = Minecraft.getMinecraft().theWorld;
+			
+			if (item.hasTagCompound()) {
+				luggage.getInventory().readFromNBT(item.getTagCompound());
+			}
+			luggage.refreshTexture();
 			Render renderer = RenderManager.instance.getEntityRenderObject(luggage);
 			if (renderer.getFontRendererFromRenderManager() != null) {
 				renderer.doRender(luggage, 0, 0, 0, 0, 0.5f);

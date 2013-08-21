@@ -137,6 +137,9 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	public void openChest() {}
 
 	public void readFromNBT(NBTTagCompound tag) {
+		if (tag.hasKey("size")) {
+			this.slotsCount = tag.getInteger("size");
+		}
 		NBTTagList nbttaglist = tag.getTagList("Items");
 		inventoryContents = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -161,7 +164,7 @@ public class GenericInventory implements IInventory, ISidedInventory {
 	}
 
 	public void writeToNBT(NBTTagCompound tag) {
-
+		tag.setInteger("size", getSizeInventory());
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < inventoryContents.length; i++) {
 			if (inventoryContents[i] != null) {
@@ -171,7 +174,6 @@ public class GenericInventory implements IInventory, ISidedInventory {
 				nbttaglist.appendTag(stacktag);
 			}
 		}
-
 		tag.setTag("Items", nbttaglist);
 	}
 

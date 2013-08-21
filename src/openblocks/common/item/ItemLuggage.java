@@ -38,6 +38,9 @@ public class ItemLuggage extends Item {
 			luggage.setOwner(player.username);
 			if (itemStack.hasTagCompound()) {
 				luggage.getInventory().readFromNBT(itemStack.getTagCompound());
+				if (luggage.getInventory().getSizeInventory() > 27) {
+					luggage.setSpecial();
+				}
 			}
 			world.spawnEntityInWorld(luggage);
 			itemStack.stackSize--;

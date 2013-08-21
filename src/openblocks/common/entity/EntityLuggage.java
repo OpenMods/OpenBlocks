@@ -23,7 +23,7 @@ public class EntityLuggage extends EntityTameable implements
 		IEntityAdditionalSpawnData {
 
 	protected GenericInventory inventory = new GenericInventory("luggage", false, 27);
-	private boolean special;
+	public boolean special;
 
 	public int lastSound = 0;
 
@@ -42,7 +42,7 @@ public class EntityLuggage extends EntityTameable implements
 																						// size
 	}
 
-	protected void setSpecial() {
+	public void setSpecial() {
 		if (special) return;
 		special = true;
 		GenericInventory inventory = new GenericInventory("luggage", false, 54);
@@ -52,8 +52,15 @@ public class EntityLuggage extends EntityTameable implements
 		}
 		this.inventory = inventory;
 	}
+	
+	public void refreshTexture() {
+		this.texture = OpenBlocks.getTexturesPath(isSpecial() ? "models/luggage_special.png" : "models/luggage.png");
+	}
 
 	public boolean isSpecial() {
+		if (worldObj.isRemote){
+			return inventory.getSizeInventory() > 27;
+		}
 		return special;
 	}
 
@@ -65,7 +72,7 @@ public class EntityLuggage extends EntityTameable implements
 				inventory = new GenericInventory("luggage", false, inventorySize);
 			}
 
-			this.texture = OpenBlocks.getTexturesPath(inventorySize == 27? "models/luggage.png" : "models/luggage_special.png");
+			refreshTexture();
 		}
 		lastSound++;
 	}
