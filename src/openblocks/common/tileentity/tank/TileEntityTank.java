@@ -92,6 +92,14 @@ public class TileEntityTank extends TileEntityTankBase implements
 			interpolatedRenderAmount = liquidRenderAmount.getValue();
 		}
 	}
+	
+	
+	@Override
+	protected void initialize() {
+		super.initialize();
+		// Try relight block once the TE is loaded because the lighting depends on the TE being loaded
+		worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, OpenBlocks.Blocks.tank.blockID, 5);
+	}
 
 	public void updateEntity() {
 		super.updateEntity();

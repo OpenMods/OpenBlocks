@@ -1,10 +1,12 @@
 package openblocks.common.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -56,6 +58,37 @@ public class BlockTank extends OpenBlock {
 	public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer) {
 		// System.out.println(getTileEntity(par1World, par2, par3, par3,
 		// TileEntityTank.class));
+	}
+	
+	@Override
+	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+		TileEntity ent = world.getBlockTileEntity(x,y,z);
+		if(ent == null) return 0;
+		if(ent instanceof TileEntityTank) {
+			TileEntityTank tank = (TileEntityTank)ent;
+			if(tank.containsValidLiquid()) {
+				Block liquidBlock = Block.blocksList[tank.getInternalTank().getLiquid().itemID];
+				if(liquidBlock == null) return 0;
+				return (int)Math.min(15, Math.max(0, (tank.getPercentFull() * (float)liquidBlock.getLightValue(world, x, y, z))));
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public int getLightOpacity(World world, int x, int y, int z) {
+		/* As per docs, the tile entity is not guaranteed to exist at the time of calling */
+		TileEntity ent = world.getBlockTileEntity(x, y, z);
+		if(ent == null) return 255;
+		if(ent instanceof TileEntityTank) {
+			TileEntityTank tank = (TileEntityTank)ent;
+			if(tank.containsValidLiquid()) {
+				return (int)Math.min(255,Math.max(0,(tank.getPercentFull() * 255)));
+			}else {
+				return 0;
+			}
+		}
+		return 255;
 	}
 
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
