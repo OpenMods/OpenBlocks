@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -62,6 +63,20 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		super.updateEntity();
 
 		if (!worldObj.isRemote) {
+			
+			if (tank.getLiquid() == null || tank.getLiquid().amount == 0) {
+				TileEntity below = worldObj.getBlockTileEntity(xCoord, yCoord - 1,  zCoord);
+				if (below instanceof ITankContainer) {
+					ITankContainer belowTank = (ITankContainer) below;
+					LiquidStack drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), false);
+					if (drained != null && drained.isLiquidEqual(water)) {
+						drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), true);
+						if (drained != null) {
+							tank.fill(drained, true);
+						}
+					}
+				}
+			}
 			
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it

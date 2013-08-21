@@ -110,7 +110,7 @@ public class BlockGrave extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		this.setBlockBounds(0, 0, 0, 1f, 0.1f, 1f);
+		this.setBlockBounds(0, 0, 0, 1f, 0.3f, 1f);
 	}
 
 	@Override

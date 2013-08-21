@@ -14,6 +14,7 @@ import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
+import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.TileEntityTrophy;
 
@@ -31,6 +32,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntityFlag teFlag = new TileEntityFlag();
 	private TileEntityTrophy teTrophy = new TileEntityTrophy();
 	private TileEntityBearTrap teBearTrap = new TileEntityBearTrap();
+	private TileEntitySprinkler teSprinkler = new TileEntitySprinkler();
 
 	public BlockRenderingHandler() {
 		teTarget.setPowered(true);
@@ -62,6 +64,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		} else if (block == OpenBlocks.Blocks.bearTrap) {
 			te = teBearTrap;
 			teBearTrap.setOpen();
+		} else if (block == OpenBlocks.Blocks.sprinkler) {
+			te = teSprinkler;
 		}
 		try {
 			if (Minecraft.getMinecraft().theWorld != null) {
