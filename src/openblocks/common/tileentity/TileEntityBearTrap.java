@@ -17,8 +17,8 @@ import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 
-public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
-		IAwareTile {
+public class TileEntityBearTrap extends NetworkedTileEntity implements
+		ISyncHandler, IAwareTile {
 
 	public enum Keys {
 		flags, trappedEntityId
@@ -28,18 +28,14 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 		isShut
 	}
 
-	private SyncableFlags flags = new SyncableFlags();
-
 	private boolean hasBeenSnapped = false;
-
+	private SyncableFlags flags = new SyncableFlags();
 	private SyncableInt trappedEntityId = new SyncableInt();
 
-	private SyncMapTile syncMap = new SyncMapTile();
-
 	public TileEntityBearTrap() {
-		syncMap.put(Keys.flags, flags);
+		addSyncedObject(Keys.flags, flags);
+		addSyncedObject(Keys.trappedEntityId, trappedEntityId);
 		flags.on(Flags.isShut);
-		syncMap.put(Keys.trappedEntityId, trappedEntityId);
 	}
 
 	@Override
@@ -69,7 +65,8 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 				trappedEntity.motionZ = 0;
 			}
 		}
-		syncMap.sync(worldObj, this, (double)xCoord, (double)yCoord, (double)zCoord, 2);
+
+		sync(2);
 	}
 
 	public void onEntityCollided(Entity entity) {
@@ -85,25 +82,6 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 
 	public boolean isShut() {
 		return flags.get(Flags.isShut);
-	}
-
-	@Override
-	public SyncMap getSyncMap() {
-		return syncMap;
-	}
-
-	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		if (changes.contains(flags)) {
-			hasBeenSnapped = true;
-		}
-	}
-
-	@Override
-	public void writeIdentifier(DataOutputStream dos) throws IOException {
-		dos.writeInt(xCoord);
-		dos.writeInt(yCoord);
-		dos.writeInt(zCoord);
 	}
 
 	@Override
@@ -124,7 +102,6 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-
 		if (!worldObj.isRemote) {
 			if (flags.get(Flags.isShut)) {
 				flags.off(Flags.isShut);
@@ -155,4 +132,12 @@ public class TileEntityBearTrap extends OpenTileEntity implements ISyncHandler,
 	public void setOpen() {
 		flags.set(Flags.isShut, false);
 	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		if (changes.contains(flags)) {
+			hasBeenSnapped = true;
+		}
+	}
+
 }
