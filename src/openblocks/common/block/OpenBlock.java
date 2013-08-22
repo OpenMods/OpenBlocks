@@ -89,7 +89,7 @@ public abstract class OpenBlock extends BlockContainer {
 		if(rotation == ForgeDirection.UNKNOWN || rotation == ForgeDirection.UP || rotation == ForgeDirection.DOWN) return;
 		int ordinal = rotation.ordinal() - 2;
 		int metadata = (world.getBlockMetadata(x, y, z) & 0xC) | ordinal;
-		world.setBlock(x, y, z, block.blockID, metadata, 2 | (blockUpdate ? 1 : 0));
+		world.setBlockMetadataWithNotify(x, y, z, metadata, 2 | (blockUpdate ? 1 : 0));
 	}
 	
 	/**
