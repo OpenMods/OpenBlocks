@@ -54,7 +54,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public enum Keys {
-		flags, rotation
+		flags
 	}
 
 	public TileEntitySprinkler() {
@@ -320,6 +320,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
+		if(tag.hasKey("rotation")) {
+			byte ordinal = tag.getByte("rotation");
+			BlockSprinkler.setMetadataRotation(worldObj, xCoord, yCoord, zCoord, ForgeDirection.getOrientation(ordinal), true);
+		}
 	}
 
 }
