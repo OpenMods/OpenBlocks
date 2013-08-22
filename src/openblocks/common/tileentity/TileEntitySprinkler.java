@@ -104,12 +104,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	
 	private void setEnabled(boolean b) {
-		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata & 0xB | (b? 4 : 0), 2);
+		BlockSprinkler.setMetaFlag(worldObj, xCoord, yCoord, zCoord, 0, b);
 	}
 
 	private boolean isEnabled() {
-		return (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 4) == 4;
+		return BlockSprinkler.getMetaFlag(worldObj, xCoord, yCoord, zCoord, 0);
 	}
 
 	@Override

@@ -38,6 +38,23 @@ public abstract class OpenBlock extends BlockContainer {
 		setHardness(1.0F);
 	}
 	
+	public static boolean getMetaFlag(World world, int x, int y, int z, int index) {
+		if(index > 1) return false;
+		if(index < 0) return false;
+		index = 4 + 4 * index;
+		int currentMeta = world.getBlockMetadata(x, y, z);
+		boolean result = (currentMeta & index) == index;
+		return result;
+	}
+	
+	public static void setMetaFlag(World world, int x, int y, int z, int index, boolean value) {
+		if(index > 1) return;
+		if(index < 0) return;
+		index = 4 + 4 * index;
+		int newMeta = (value ? index : 0) | (world.getBlockMetadata(x, y, z) & 3);
+		world.setBlockMetadataWithNotify(x, y, z, newMeta, 3);
+	}
+	
 	/**
 	 * Helper function to set rotation in the metadata
 	 * @param world World Object
