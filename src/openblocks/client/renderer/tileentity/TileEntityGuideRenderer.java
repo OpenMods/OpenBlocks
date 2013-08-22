@@ -26,9 +26,9 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 		float scaleDelta = guide.getTimeSinceChange();
-		renderShape(guide.getShape(), guide.height, guide.width, guide.depth, x, y, z, scaleDelta);
+		renderShape(guide.getShape(), guide.getHeight(), guide.getWidth(), guide.getDepth(), x, y, z, scaleDelta);
 		if (scaleDelta < 1.0) {
-			renderShape(guide.getPreviousShape(), guide.height, guide.width, guide.depth, x, y, z, 1.0f - scaleDelta);
+			renderShape(guide.getPreviousShape(), guide.getHeight(), guide.getWidth(), guide.getDepth(), x, y, z, 1.0f - scaleDelta);
 		}
 	}
 
