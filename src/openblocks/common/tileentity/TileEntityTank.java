@@ -1,6 +1,12 @@
-package openblocks.common.tileentity.tank;
+package openblocks.common.tileentity;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -10,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -17,14 +24,17 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
+import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncMap;
+import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableShort;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.ItemUtils;
 
-public class TileEntityTank extends TileEntityTankBase implements
-		ITankContainer {
+public class TileEntityTank extends NetworkedTileEntity implements
+		ITankContainer, IAwareTile {
 
 	public static int getTankCapacity() {
 		return LiquidContainerRegistry.BUCKET_VOLUME
@@ -72,11 +82,120 @@ public class TileEntityTank extends TileEntityTankBase implements
 	}
 
 	public TileEntityTank() {
-		syncMap.put(Keys.liquidId, liquidId);
-		syncMap.put(Keys.liquidMeta, liquidMeta);
-		syncMap.put(Keys.renderLevel, liquidRenderAmount);
+		addSyncedObject(Keys.liquidId, liquidId);
+		addSyncedObject(Keys.liquidMeta, liquidMeta);
+		addSyncedObject(Keys.renderLevel, liquidRenderAmount);
 	}
 
+	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
+	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
+
+	public static final ForgeDirection[] horizontalDirections = new ForgeDirection[] { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST };
+
+	protected Comparator<TileEntityTank> sortBySpace = new Comparator<TileEntityTank>() {
+		public int compare(TileEntityTank c1, TileEntityTank c2) {
+			return c2.getSpace() - c1.getSpace();
+		}
+	};
+
+	/**
+	 * Tell neighbour tanks to update themselves
+	 */
+	protected void updateNeighbours() {
+		TileEntityTank up, down, north, south, east, west;
+		up = getTankInDirection(ForgeDirection.UP);
+		down = getTankInDirection(ForgeDirection.DOWN);
+		north = getTankInDirection(ForgeDirection.NORTH);
+		south = getTankInDirection(ForgeDirection.SOUTH);
+		east = getTankInDirection(ForgeDirection.EAST);
+		west = getTankInDirection(ForgeDirection.WEST);
+		if (up != null) up.findNeighbours();
+		if (down != null) down.findNeighbours();
+		if (north != null) north.findNeighbours();
+		if (south != null) south.findNeighbours();
+		if (east != null) east.findNeighbours();
+		if (west != null) west.findNeighbours();
+	}
+
+	/**
+	 * Find the neighbouring tanks and store them in a hashmap
+	 */
+	protected void findNeighbours() {
+		neighbours.clear();
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+			TileEntity neighbour = getTileInDirection(direction);
+			if (neighbour != null && neighbour instanceof TileEntityTank) {
+				neighbours.put(direction, new WeakReference<TileEntityTank>((TileEntityTank)neighbour));
+			}
+			surroundingBlocks.put(direction, !worldObj.isAirBlock(xCoord
+					+ direction.offsetX, yCoord + direction.offsetY, zCoord
+					+ direction.offsetZ));
+		}
+		if (!worldObj.isRemote) {
+			sendBlockEvent(0, 0);
+		}
+	}
+
+	public boolean hasBlockOnSide(ForgeDirection side) {
+		return surroundingBlocks.containsKey(side)
+				&& surroundingBlocks.get(side);
+	}
+
+	public TileEntityTank getTankInDirection(ForgeDirection direction) {
+		if (neighbours.containsKey(direction)) {
+			WeakReference<TileEntityTank> neighbour = neighbours.get(direction);
+			if (neighbour != null) {
+				TileEntityTank otherTank = neighbour.get();
+				if (otherTank == null) { return null; }
+				if (otherTank.isInvalid()) { return null; }
+				if (this instanceof TileEntityTank) {
+					if (otherTank.canReceiveLiquid(((TileEntityTank)this).getInternalTank().getLiquid())) { return otherTank; }
+				} else {
+					return otherTank;
+				}
+			}
+		}
+		return null;
+	}
+
+	public TileEntityTank[] getSurroundingTanks() {
+		ArrayList<TileEntityTank> tanks = new ArrayList<TileEntityTank>();
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+			TileEntityTank t = getTankInDirection(direction);
+			if (t != null) {
+				tanks.add(t);
+			}
+		}
+		return tanks.toArray(new TileEntityTank[tanks.size()]);
+	}
+
+	public ArrayList<TileEntityTank> getHorizontalTanksOrdererdBySpace(HashSet<TileEntityTank> except) {
+		ArrayList<TileEntityTank> horizontalTanks = new ArrayList<TileEntityTank>();
+		for (ForgeDirection direction : horizontalDirections) {
+			TileEntityTank tank = getTankInDirection(direction);
+			if (tank != null && !except.contains(tank)) {
+				horizontalTanks.add(tank);
+			}
+		}
+		Collections.sort(horizontalTanks, sortBySpace);
+		return horizontalTanks;
+	}
+
+	/**
+	 * Refresh the neighbours because something changed
+	 */
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		findNeighbours();
+	}
+
+	public boolean onBlockEventReceived(int eventId, int eventParam) {
+		if (worldObj.isRemote) {
+			findNeighbours();
+		}
+		return true;
+	}
+	
 	public boolean containsValidLiquid() {
 		return liquidId.getValue() != 0 && tank.getLiquidName() != null;
 	}
@@ -95,8 +214,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 	@Override
 	protected void initialize() {
-		super.initialize();
-		// Fix #29
+		findNeighbours();
 		updateNeighbours();
 	}
 
@@ -163,7 +281,6 @@ public class TileEntityTank extends TileEntityTankBase implements
 				liquidId.setValue(0);
 				liquidMeta.setValue(0);
 			}
-			/* Update EVERY tick */
 			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 1);
 		} else {
 			interpolateLiquidLevel();
@@ -247,9 +364,6 @@ public class TileEntityTank extends TileEntityTankBase implements
 		return startAmount - resource.amount;
 	}
 
-	/**
-	 * TODO
-	 */
 	public LiquidStack drain(int amount, boolean doDrain) {
 		return tank.drain(amount, doDrain);
 	}
@@ -355,7 +469,6 @@ public class TileEntityTank extends TileEntityTankBase implements
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 
-		/* TODO: Fix some bugs here with client/server side stuff */
 		ForgeDirection direction = BlockUtils.sideToDirection(side);
 
 		ItemStack current = player.inventory.getCurrentItem();
@@ -459,5 +572,11 @@ public class TileEntityTank extends TileEntityTankBase implements
 		NBTTagCompound nbt = new NBTTagCompound();
 		tank.writeToNBT(nbt);
 		return nbt;
+	}
+
+	@Override
+	public void onBlockAdded() {
+		// TODO Auto-generated method stub
+		
 	}
 }
