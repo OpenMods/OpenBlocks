@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -10,80 +12,71 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.block.BlockFlag;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableFloat;
+import openblocks.sync.SyncableInt;
 
-public class TileEntityFlag extends TileEntity implements ISurfaceAttachment {
+public class TileEntityFlag extends NetworkedTileEntity implements
+		ISurfaceAttachment {
 
-	private float rotation = 0f;
-	private int colorIndex = 0;
-	private ForgeDirection surface = ForgeDirection.DOWN;
+	public enum Keys {
+		rotation, colorIndex
+	}
 
-	public TileEntityFlag() {}
+	private SyncableFloat rotation = new SyncableFloat(0.0f);
+	private SyncableInt colorIndex = new SyncableInt(0);
 
-	public float getRotation() {
-		return rotation;
+	public TileEntityFlag() {
+		addSyncedObject(Keys.rotation, rotation);
+		addSyncedObject(Keys.colorIndex, colorIndex);
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		packet.actionType = 0;
-		packet.xPosition = xCoord;
-		packet.yPosition = yCoord;
-		packet.zPosition = zCoord;
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
-		packet.customParam1 = nbt;
-		return packet;
-	}
+	protected void initialize() {}
 
 	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.customParam1);
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		if (tag.hasKey("rotation")) {
-			rotation = tag.getFloat("rotation");
-		}
-		if (tag.hasKey("surface")) {
-			surface = ForgeDirection.getOrientation(tag.getInteger("surface"));
-		}
-		if (tag.hasKey("color")) {
-			colorIndex = tag.getInteger("color");
-		}
+		colorIndex.readFromNBT(tag, "color");
+		rotation.readFromNBT(tag, "rotation");
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setFloat("rotation", rotation);
-		tag.setInteger("surface", surface.ordinal());
-		tag.setInteger("color", colorIndex);
+		colorIndex.writeToNBT(tag, "color");
+		rotation.writeToNBT(tag, "rotation");
+	}
+
+	public float getRotation() {
+		return rotation.getValue();
 	}
 
 	public Icon getIcon() {
 		return OpenBlocks.Blocks.flag.getIcon(0, 0);
 	}
 
+	public void setColorIndex(int index) {
+		colorIndex.setValue(index);
+	}
+
 	public int getColor() {
-		if (colorIndex >= BlockFlag.COLORS.length) colorIndex = 0;
-		return BlockFlag.COLORS[colorIndex];
+		if (colorIndex.getValue() >= BlockFlag.COLORS.length) colorIndex.setValue(0);
+		return BlockFlag.COLORS[colorIndex.getValue()];
 	}
 
-	public void setColorIndex(int colorIndex) {
-		this.colorIndex = colorIndex;
-	}
-
-	public void setSurfaceAndRotation(ForgeDirection surface, float rotation) {
-		this.surface = surface;
-		this.rotation = rotation;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	public void setSurfaceAndRotation(ForgeDirection surface, float rot) {
+		// this.surface = ForgeDirection.DOWN; // TODO: FIX
+		rotation.setValue(rot);
+		sync();
 	}
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {
-		return surface;
+		return ForgeDirection.DOWN; // TODO: fix
 	}
 
 }

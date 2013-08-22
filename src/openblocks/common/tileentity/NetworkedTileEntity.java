@@ -4,6 +4,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
+
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
@@ -27,9 +31,6 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
-
-	@Override
 	public void writeIdentifier(DataOutputStream dos) throws IOException {
 		dos.writeInt(xCoord);
 		dos.writeInt(yCoord);
@@ -39,5 +40,16 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 	@Override
 	public SyncMap getSyncMap() {
 		return syncMap;
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		return syncMap.getDescriptionPacket(this);
+	}
+
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		syncMap.handleTileDataPacket(this, pkt);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 }

@@ -93,8 +93,7 @@ public abstract class SyncMap {
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
 			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
 			totalTrackingTime = worldTotalTime; // Out with the old
-			List<EntityPlayer> players = (List<EntityPlayer>)PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange); // worldObj.getEntitiesWithinAABB(EntityPlayer.class,
-																																		// trackingRange));
+			List<EntityPlayer> players = (List<EntityPlayer>)PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;
