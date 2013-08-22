@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
-import openblocks.common.tileentity.tank.TileEntityTank;
+import openblocks.common.tileentity.TileEntityTank;
 
 public class BlockTank extends OpenBlock {
 

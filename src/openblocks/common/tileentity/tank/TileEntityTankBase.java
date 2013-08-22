@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.tileentity.OpenTileEntity;
+import openblocks.common.tileentity.TileEntityTank;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;

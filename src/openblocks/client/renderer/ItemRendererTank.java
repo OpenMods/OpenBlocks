@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
-import openblocks.common.tileentity.tank.TileEntityTank;
+import openblocks.common.tileentity.TileEntityTank;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
