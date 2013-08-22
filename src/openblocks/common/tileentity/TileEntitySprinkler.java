@@ -80,11 +80,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	
 	private void sprayParticles() {
 		if(worldObj == null || !worldObj.isRemote) return;
-		for (int i = 0; i < 5; i++) {
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch()
-					* getRotation().offsetX, 0, getSprayPitch()
-					* getRotation().offsetZ), 0.5f);
-
+		for (int i = 0; i < 6; i++) {
+			float offset = (i - 2.5f) / 5f;
+			ForgeDirection rotation = getRotation();
+			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5 + (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5 + (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset); 
 		}
 	}
 
@@ -301,12 +300,15 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public float getSprayPitch() {
-		return (float)(getSprayAngle() + (Math.PI / 2));
+		return (float)(getSprayAngle() * Math.PI);
 	}
 
 	public float getSprayAngle() {
-		float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() / 20) * angularRotationLimit);
-		return angle;
+		if(flags.get(Flags.enabled)) {
+			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.01f) * Math.PI * 0.1f);
+			return (float)(angle);
+		}
+		return 0;
 	}
 
 	@Override

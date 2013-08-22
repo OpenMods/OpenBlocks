@@ -8,39 +8,36 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidStack;
 
 public class FXLiquidSpray extends EntityFX {
 
-	private Vec3 direction;
-
-	public FXLiquidSpray(World par1World, LiquidStack liquid, double x, double y, double z, Vec3 vec, float spread) {
+	public FXLiquidSpray(World par1World, LiquidStack liquid, double x, double y, double z, ForgeDirection sprayDirection, float angle, float spread) {
 		super(par1World, x, y, z, 0, 0, 0);
 
-		vec.xCoord = Math.abs(vec.xCoord);
-		vec.yCoord = Math.abs(vec.yCoord);
-		vec.zCoord = Math.abs(vec.zCoord);
+	//	vec.xCoord = Math.abs(vec.xCoord);
+	//	vec.yCoord = Math.abs(vec.yCoord);
+	//	vec.zCoord = Math.abs(vec.zCoord);
 
-		double sinPitch = Math.sin(vec.xCoord);
-		double cosPitch = Math.cos(vec.xCoord);
-		double sinYaw = Math.sin(vec.zCoord);
-		double cosYaw = Math.cos(vec.zCoord);
+		float sprayStrength = 1f;
+		double sinPitch = Math.sin(angle);
+		double cosPitch = Math.cos(angle);
 
-		if (vec.xCoord == 0) {
-			vec.xCoord = -cosYaw * cosPitch;
-			vec.yCoord = sinYaw;
-			vec.zCoord = -cosYaw * sinPitch;
+		double vecX = 0, vecY = 0, vecZ = 0;
+		
+		if (sprayDirection.offsetZ == 0) {
+			vecY = Math.abs(cosPitch);
+			vecZ = sinPitch * sprayDirection.offsetX;
 		} else {
-			vec.xCoord = -cosPitch * sinYaw;
-			vec.yCoord = sinPitch;
-			vec.zCoord = -cosPitch * cosYaw;
+			vecY = Math.abs(cosPitch);
+			vecX = -sinPitch * sprayDirection.offsetZ;
 		}
 
 		this.posX = x;
 		this.posY = y;
 		this.posZ = z;
 
-		direction = vec;
 		particleGravity = 0.7f;
 		this.particleMaxAge = 50;
 		setSize(0.5F, 0.5F);
@@ -49,14 +46,14 @@ public class FXLiquidSpray extends EntityFX {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		if (vec.zCoord == 0.0) {
-			vec.zCoord = (rand.nextDouble() - 0.5) * spread;
+		if (sprayDirection.offsetX == 0) {
+			vecZ = (rand.nextDouble() - 0.5) * spread;
 		} else {
-			vec.xCoord = (rand.nextDouble() - 0.5) * spread;
+			vecX = (rand.nextDouble() - 0.5) * spread;
 		}
-		motionX = vec.xCoord / 2;
-		motionY = vec.yCoord / 2;
-		motionZ = vec.zCoord / 2;
+		motionX = vecX /2;
+		motionY = vecY /2;
+		motionZ = vecZ /2;
 
 		Block block = null;
 		Icon texture = null;
