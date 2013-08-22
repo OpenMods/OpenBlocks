@@ -15,6 +15,7 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
+import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.utils.BlockUtils;
@@ -25,6 +26,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
 
 	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
+
+	private GenericInventory inventory = new GenericInventory("sprinkler", true, 9);
 
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
@@ -100,56 +103,47 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public int getSizeInventory() {
-		// TODO Auto-generated method stub
-		return 0;
+		return inventory.getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getStackInSlot(i);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.decrStackSize(i, j);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getStackInSlotOnClosing(i);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-
+		inventory.setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public String getInvName() {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getInvName();
 	}
 
 	@Override
 	public boolean isInvNameLocalized() {
-		// TODO Auto-generated method stub
-		return false;
+		return inventory.isInvNameLocalized();
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
-		return 0;
+		return inventory.getInventoryStackLimit();
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		// TODO Auto-generated method stub
-		return false;
+		return inventory.isUseableByPlayer(entityplayer);
 	}
 
 	@Override
@@ -166,8 +160,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		return false;
+		return inventory.isStackValidForSlot(i, itemstack);
 	}
 
 	@Override
@@ -220,8 +213,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		return false;
+		if (player.isSneaking()) { return false; }
+		if (!worldObj.isRemote) {
+			openGui(player, OpenBlocks.Gui.Sprinkler);
+		}
+		return true;
 	}
 
 	@Override
@@ -255,8 +251,14 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		return 0;
 	}
 
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+	}
+
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 		if (tag.hasKey("rotation")) {
 			byte ordinal = tag.getByte("rotation");
 			setRotation(ForgeDirection.getOrientation(ordinal));

@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -26,8 +23,6 @@ import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableShort;
 import openblocks.utils.BlockUtils;
@@ -195,7 +190,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		}
 		return true;
 	}
-	
+
 	public boolean containsValidLiquid() {
 		return liquidId.getValue() != 0 && tank.getLiquidName() != null;
 	}
@@ -572,6 +567,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	@Override
 	public void onBlockAdded() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

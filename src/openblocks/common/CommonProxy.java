@@ -33,6 +33,7 @@ import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.container.ContainerLuggage;
+import openblocks.common.container.ContainerSprinkler;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -40,6 +41,7 @@ import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemLuggage;
 import openblocks.common.tileentity.TileEntityLightbox;
+import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.utils.LanguageUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -151,7 +153,7 @@ public class CommonProxy implements IGuiHandler {
 
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (ID == OpenBlocks.Gui.Lightbox.ordinal()) { return new ContainerLightbox(player.inventory, (TileEntityLightbox)tile); }
-
+		if (ID == OpenBlocks.Gui.Sprinkler.ordinal()) { return new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile); }
 		return null;
 	}
 

@@ -96,7 +96,7 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox, Luggage
+		Lightbox, Luggage, Sprinkler
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

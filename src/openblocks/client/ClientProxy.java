@@ -24,6 +24,7 @@ import openblocks.OpenBlocks.Gui;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.client.gui.GuiLuggage;
+import openblocks.client.gui.GuiSprinkler;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.ItemRendererHangGlider;
 import openblocks.client.renderer.ItemRendererLuggage;
@@ -44,6 +45,7 @@ import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.common.CommonProxy;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.container.ContainerLuggage;
+import openblocks.common.container.ContainerSprinkler;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -126,6 +128,8 @@ public class ClientProxy extends CommonProxy {
 			if (ID == Gui.Luggage.ordinal()) { return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x))); }
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
+			if (ID == Gui.Sprinkler.ordinal()) { return new GuiSprinkler(new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile)); }
+
 		}
 		return null;
 	}

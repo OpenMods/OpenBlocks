@@ -1,10 +1,12 @@
 package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.common.block.OpenBlock;
 
 public abstract class OpenTileEntity extends TileEntity {
@@ -164,5 +166,9 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	public int getMetadata() {
 		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+	}
+
+	public void openGui(EntityPlayer player, Enum gui) {
+		player.openGui(OpenBlocks.instance, gui.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 }
