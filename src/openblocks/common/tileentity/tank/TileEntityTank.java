@@ -265,6 +265,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 			} else {
 				tank.setLiquid(new LiquidStack(liquidId.getValue(), 1, liquidMeta.getValue()));
 			}
+			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 		}
 	}
 
