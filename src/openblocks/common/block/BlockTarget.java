@@ -32,6 +32,7 @@ public class BlockTarget extends OpenBlock {
 		if (tile != null && tile instanceof TileEntityTarget) {
 			TileEntityTarget target = (TileEntityTarget)tile;
 			target.setRotation(BlockUtils.get2dOrientation(entity));
+			target.sync();
 		}
 	}
 
@@ -81,7 +82,7 @@ public class BlockTarget extends OpenBlock {
 
 			TileEntityTarget target = (TileEntityTarget)tile;
 
-			if (!target.isPowered()) { return; }
+			if (!target.isEnabled()) { return; }
 
 			ForgeDirection rotation = target.getRotation();
 			ForgeDirection opposite = rotation.getOpposite();
@@ -147,7 +148,7 @@ public class BlockTarget extends OpenBlock {
 
 		TileEntityTarget target = (TileEntityTarget)tile;
 
-		if (!target.isPowered()) {
+		if (!target.isEnabled()) {
 			setBlockBounds(0, 0, 0, 1.0f, 0.1f, 1.0f);
 			return;
 		}

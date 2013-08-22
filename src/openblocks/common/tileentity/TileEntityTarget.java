@@ -16,19 +16,19 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.api.ISurfaceAttachment;
 
-public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
+public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachment {
 
 	private ForgeDirection rotation = ForgeDirection.WEST;
 
 	private float targetRotation = 0;
 	private int strength = 0;
 	private int tickCounter = -1;
-	private boolean isPowered = false;
 
 	public TileEntityTarget() {}
 
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
 		tickCounter--;
 		if (tickCounter == 0) {
 			tickCounter = -1;
@@ -36,18 +36,17 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTargetId);
 		}
 	}
-
-	public void setRotation(ForgeDirection rotation) {
-		this.rotation = rotation;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	
+	public void setEnabled(boolean en) {
+		setFlag1(en);
 	}
-
-	public ForgeDirection getRotation() {
-		return rotation;
+	
+	public boolean isEnabled() {
+		return getFlag1();
 	}
 
 	public float getTargetRotation() {
-		return isPowered? 0 : -(float)(Math.PI / 2);
+		return isEnabled() ? 0 : -(float)(Math.PI / 2);
 	}
 
 	public int getStrength() {
@@ -61,6 +60,7 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 	}
 
 	private void onRedstoneChanged() {
+		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (!isPowered) {
 			List<EntityArrow> arrows = (List<EntityArrow>)worldObj.getEntitiesWithinAABB(EntityArrow.class, AxisAlignedBB.getAABBPool().getAABB((double)xCoord - 0.1, (double)yCoord - 0.1, (double)zCoord - 0.1, (double)xCoord + 1.1, (double)yCoord + 1.1, (double)zCoord + 1.1));
 
@@ -76,59 +76,12 @@ public class TileEntityTarget extends TileEntity implements ISurfaceAttachment {
 		}
 		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
 
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		packet.actionType = 0;
-		packet.xPosition = xCoord;
-		packet.yPosition = yCoord;
-		packet.zPosition = zCoord;
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
-		packet.customParam1 = nbt;
-		return packet;
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.customParam1);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		if (tag.hasKey("rotation")) {
-			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
-		}
-		if (tag.hasKey("powered")) {
-			isPowered = tag.getBoolean("powered");
-		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		tag.setInteger("rotation", rotation.ordinal());
-		tag.setBoolean("powered", isPowered);
+		setEnabled(isPowered);
+		sync();
 	}
 
 	public void neighbourBlockChanged() {
-		boolean nowPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-		if (isPowered != nowPowered) {
-			isPowered = nowPowered;
-			onRedstoneChanged();
-		}
-	}
-
-	public boolean isPowered() {
-		return isPowered;
-	}
-
-	public void setPowered(boolean powered) {
-		isPowered = powered;
+		onRedstoneChanged();
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntitySprinkler teSprinkler = new TileEntitySprinkler();
 
 	public BlockRenderingHandler() {
-		teTarget.setPowered(true);
+		teTarget.setEnabled(true);
 	}
 
 	@Override
