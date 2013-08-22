@@ -34,32 +34,11 @@ import openblocks.sync.SyncableFlags;
 import openblocks.utils.BlockUtils;
 
 public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, ITankContainer, IInventory, ISyncHandler {
-
-	public static final int TICKS_PER_DIRECTION = 100;
-
-	private SyncMapTile syncMap = new SyncMapTile();
-
-	private SyncableFlags flags = new SyncableFlags();
+		ISurfaceAttachment, ITankContainer, IInventory {
 
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
 	
 	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
-	
-	/* Apx 60 degrees */
-	private static final double angularRotationLimit = (5D * Math.PI) / 3D;
-
-	public enum Flags {
-		enabled
-	}
-
-	public enum Keys {
-		flags
-	}
-
-	public TileEntitySprinkler() {
-		syncMap.put(Keys.flags, flags);
-	}
 	
 	private void attemptFertilize() {
 		if(worldObj == null || worldObj.isRemote) return;
@@ -109,7 +88,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
 			if (worldObj.getTotalWorldTime() % 60 == 0) {
-				flags.set(Flags.enabled, tank.drain(1, true) != null);
+				setEnabled(tank.drain(1, true) != null);
 			}
 			
 			
@@ -117,21 +96,20 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			
 		} 
 		// simplified this action because only one of these will execute depending on worldObj.isRemote
-		if (flags.get(Flags.enabled)) {
+		if (isEnabled()) {
 			attemptFertilize();
 			sprayParticles();
 		}
-		syncMap.sync(worldObj, this, xCoord, yCoord, zCoord, 1);
 	}
 
-	@Override
-	public Packet getDescriptionPacket() {
-		return syncMap.getDescriptionPacket(this);
+	
+	private void setEnabled(boolean b) {
+		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, metadata & 0xB | (b? 4 : 0), 2);
 	}
 
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		syncMap.handleTileDataPacket(this, pkt);
+	private boolean isEnabled() {
+		return (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) & 4) == 4;
 	}
 
 	@Override
@@ -284,40 +262,17 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		return BlockSprinkler.getMetadataRotation(worldObj, xCoord, yCoord, zCoord, ForgeDirection.NORTH);
 	}
 
-	@Override
-	public SyncMap getSyncMap() {
-		return syncMap;
-	}
-
-	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
-
-	@Override
-	public void writeIdentifier(DataOutputStream dos) throws IOException {
-		dos.writeInt(xCoord);
-		dos.writeInt(yCoord);
-		dos.writeInt(zCoord);
-	}
 
 	public float getSprayPitch() {
 		return (float)(getSprayAngle() * Math.PI);
 	}
 
 	public float getSprayAngle() {
-		if(flags.get(Flags.enabled)) {
+		if(isEnabled()) {
 			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.01f) * Math.PI * 0.1f);
 			return (float)(angle);
 		}
 		return 0;
-	}
-
-	@Override
-	protected void initialize() {
-
-	}
-
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
 	}
 
 	public void readFromNBT(NBTTagCompound tag) {
@@ -326,6 +281,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			byte ordinal = tag.getByte("rotation");
 			BlockSprinkler.setMetadataRotation(worldObj, xCoord, yCoord, zCoord, ForgeDirection.getOrientation(ordinal), true);
 		}
+	}
+
+	@Override
+	protected void initialize() {		
 	}
 
 }
