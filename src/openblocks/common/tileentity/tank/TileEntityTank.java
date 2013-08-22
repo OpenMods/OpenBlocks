@@ -98,7 +98,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 	protected void initialize() {
 		super.initialize();
 		// Try relight block once the TE is loaded because the lighting depends on the TE being loaded
-		worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, OpenBlocks.Blocks.tank.blockID, 5);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 		// Fix #29
 		updateNeighbours();
 	}
