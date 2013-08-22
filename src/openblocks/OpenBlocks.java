@@ -90,6 +90,9 @@ public class OpenBlocks {
 		public static boolean tryHookPlayerRenderer = true;
 		public static double trophyDropChance = 0.001;
 		public static boolean irregularBlocksArePassable = false;
+		public static boolean tanksEmitLight = true;
+		public static boolean tanksAreTransparent = true;
+		public static boolean tanksHaveDynamicTransparency = true;
 	}
 
 	public static enum Gui {
@@ -195,7 +198,16 @@ public class OpenBlocks {
 		Config.enableGraves = prop.getBoolean(Config.enableGraves);
 
 		prop = configFile.get("tanks", "bucketsPerTank", Config.bucketsPerTank, "The amount of buckets each tank can hold");
-		Config.bucketsPerTank = prop.getInt();
+		Config.bucketsPerTank = prop.getInt(Config.bucketsPerTank);
+		
+		prop = configFile.get("tanks", "emitLight", Config.tanksEmitLight, "Tanks will emit light when they contain a liquid that glows (eg. lava)");
+		Config.tanksEmitLight = prop.getBoolean(Config.tanksEmitLight);
+		
+		prop = configFile.get("tanks", "transparent", Config.tanksAreTransparent, "Tanks will pass light");
+		Config.tanksAreTransparent = prop.getBoolean(Config.tanksAreTransparent);
+		
+		prop = configFile.get("tanks", "dynamicTransparency", Config.tanksHaveDynamicTransparency, "The tank opacity changes with the amount of liquid");
+		Config.tanksHaveDynamicTransparency = prop.getBoolean(Config.tanksHaveDynamicTransparency);
 
 		prop = configFile.get("trophy", "trophyDropChance", Config.trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
 		Config.trophyDropChance = prop.getDouble(Config.trophyDropChance);
