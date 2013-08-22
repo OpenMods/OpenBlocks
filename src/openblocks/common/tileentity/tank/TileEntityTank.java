@@ -257,8 +257,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		// Mikee, we don't need to create the liquid client side cause we don't
-		// care, right? :D
+		interpolatedRenderAmount = liquidRenderAmount.getValue();
 		if (changes.contains(liquidId) || changes.contains(liquidMeta)) {
 			if (liquidId.getValue() == 0) {
 				tank.setLiquid(null);
