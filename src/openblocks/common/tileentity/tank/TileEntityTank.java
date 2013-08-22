@@ -97,8 +97,6 @@ public class TileEntityTank extends TileEntityTankBase implements
 	@Override
 	protected void initialize() {
 		super.initialize();
-		// Try relight block once the TE is loaded because the lighting depends on the TE being loaded
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 		// Fix #29
 		updateNeighbours();
 	}
@@ -352,6 +350,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		syncMap.handleTileDataPacket(this, pkt);
 		interpolatedRenderAmount = liquidRenderAmount.getValue();
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
