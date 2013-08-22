@@ -68,7 +68,6 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public void updateEntity() {
 		super.updateEntity();
-
 		if (!worldObj.isRemote) {
 			
 			if (tank.getLiquid() == null || tank.getLiquid().amount == 0) {
@@ -89,8 +88,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			// if there's nothing to drain, disable it
 			if (worldObj.getTotalWorldTime() % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
+				sync();
 			}
-			
 			
 			// if it's enabled..
 			
@@ -104,11 +103,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	
 	private void setEnabled(boolean b) {
-		BlockSprinkler.setMetaFlag(worldObj, xCoord, yCoord, zCoord, 0, b);
+		setFlag1(b);
 	}
 
 	private boolean isEnabled() {
-		return BlockSprinkler.getMetaFlag(worldObj, xCoord, yCoord, zCoord, 0);
+		return getFlag1();
 	}
 
 	@Override
@@ -247,8 +246,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		// I've no idea if we want to fire a block update here. Will that double the updates for the tick ?
-		BlockSprinkler.setMetadataRotation(worldObj, xCoord, yCoord, zCoord, BlockUtils.get2dOrientation(player), true);
+		setRotation(BlockUtils.get2dOrientation(player));
+		sync();
 	}
 
 	@Override
@@ -256,11 +255,6 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	public ForgeDirection getRotation() {
-		return BlockSprinkler.getMetadataRotation(worldObj, xCoord, yCoord, zCoord, ForgeDirection.NORTH);
-	}
-
 
 	public float getSprayPitch() {
 		return (float)(getSprayAngle() * Math.PI);
@@ -278,12 +272,9 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		super.readFromNBT(tag);
 		if(tag.hasKey("rotation")) {
 			byte ordinal = tag.getByte("rotation");
-			BlockSprinkler.setMetadataRotation(worldObj, xCoord, yCoord, zCoord, ForgeDirection.getOrientation(ordinal), true);
+			setRotation(ForgeDirection.getOrientation(ordinal));
+			sync();
 		}
-	}
-
-	@Override
-	protected void initialize() {		
 	}
 
 }

@@ -23,7 +23,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
 		GL11.glPushMatrix();
-		GL11.glRotatef(-flag.getRotation(), 0, 1, 0);
+		GL11.glRotatef(-flag.getAngle(), 0, 1, 0);
 		if (flag.getSurfaceDirection() != ForgeDirection.DOWN) {
 			GL11.glRotatef(45, 1f, 0f, 0f);
 			GL11.glTranslatef(0f, -0.2f, -0.7f);

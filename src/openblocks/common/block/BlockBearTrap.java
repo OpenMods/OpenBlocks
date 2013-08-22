@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityBearTrap;
 
@@ -47,5 +48,9 @@ public class BlockBearTrap extends OpenBlock {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 0.4f, 0.9f);
+	}
+	
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+		return super.canPlaceBlockOnSide(world, x, y, z, ForgeDirection.DOWN);
 	}
 }

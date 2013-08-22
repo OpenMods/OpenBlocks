@@ -23,9 +23,11 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 	}
 
 	public void sync(int timeout) {
+		super.sync();
 		syncMap.sync(worldObj, this, (double)xCoord, (double)yCoord, (double)zCoord, timeout);
 	}
 
+	@Override
 	public void sync() {
 		sync(1);
 	}

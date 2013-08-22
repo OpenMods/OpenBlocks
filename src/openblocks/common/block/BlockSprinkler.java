@@ -52,4 +52,9 @@ public class BlockSprinkler extends OpenBlock {
 			}
 		}
 	}
+
+	@Override
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+		return super.canPlaceBlockOnSide(world, x, y, z, ForgeDirection.DOWN);
+	}
 }

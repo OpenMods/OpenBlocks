@@ -1,7 +1,10 @@
 package openblocks.common.tileentity;
 
+import openblocks.common.block.OpenBlock;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 public abstract class OpenTileEntity extends TileEntity {
@@ -9,7 +12,68 @@ public abstract class OpenTileEntity extends TileEntity {
 	private boolean initialized = false;
 	private boolean isActive = false;
 	private boolean isLoaded = false;
+	
+	/**
+	 * The block rotation stored in metadata. This can be used for NORTH/EAST/SOUTH/WEST
+	 */
+	private ForgeDirection rotation = ForgeDirection.UNKNOWN;
+	
+	/**
+	 * A random flag that can be stored in metadata
+	 */
+	private boolean flag1 = false;
+	
+	/**
+	 * A random flag that can be stored in metadata
+	 */
+	private boolean flag2 = false;
+	
+	/**
+	 * Get the current block rotation
+	 * @return the block rotation
+	 */
+	public ForgeDirection getRotation() {
+		int ordinal = (getMetadata() & 0x3) + 2;
+		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
+		return direction;
+	}
+	
+	/**
+	 * Set the block rotation. To sync to the client call sync()
+	 * @param rot
+	 */
+	public void setRotation(ForgeDirection rot) {
+		if (rot == ForgeDirection.UP || rot == ForgeDirection.DOWN || rot == ForgeDirection.UNKNOWN) {
+			rot = ForgeDirection.EAST;
+		}
+		rotation = rot;
+	}
+	
+	private boolean getFlag(int index) {
+		if(index > 1) return false;
+		if(index < 0) return false;
+		index = 4 + 4 * index;
+		int currentMeta = getMetadata();
+		boolean result = (currentMeta & index) == index;
+		return result;
+	}
+	
+	public boolean getFlag1() {
+		return getFlag(0);
+	}
 
+	public boolean getFlag2() {
+		return getFlag(1);
+	}
+	
+	public void setFlag1(boolean on) {
+		flag1 = on;
+	}
+
+	public void setFlag2(boolean on) {
+		flag2 = on;
+	}
+	
 	@Override
 	public void updateEntity() {
 		isActive = true;
@@ -27,7 +91,11 @@ public abstract class OpenTileEntity extends TileEntity {
 		return worldObj != null;
 	}
 
-	protected abstract void initialize();
+	protected void initialize() {
+		flag1 = getFlag1();
+		flag2 = getFlag2();
+		rotation = getRotation();
+	}
 
 	protected boolean isActive() {
 		return isActive;
@@ -65,4 +133,34 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void sendBlockEvent(int key, int value) {
 		worldObj.addBlockEvent(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord), key, value);
 	}
+
+	public void sync() {
+		OpenBlock block = getBlock();
+		if (block != null) {
+			int ordinal = rotation.ordinal() - 2;
+			int currentMeta = getMetadata();
+			int newMeta = ordinal;
+			newMeta = (flag1 ? 4 : 0) | (newMeta & 3);
+			newMeta = (flag2 ? 8 : 0) | (newMeta & 7);
+			if (currentMeta != newMeta) {
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 3);
+			}
+		}
+	}
+	
+    public boolean shouldRefresh(int oldID, int newID, int oldMeta, int newMeta, World world, int x, int y, int z) {
+    	return oldID != newID;
+    }
+    
+    public OpenBlock getBlock() {
+    	Block block = Block.blocksList[worldObj.getBlockId(xCoord, yCoord, zCoord)];
+		if (block instanceof OpenBlock) {
+			return (OpenBlock) block;
+		}
+		return null;
+    }
+    
+    public int getMetadata() {
+    	return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+    }
 }

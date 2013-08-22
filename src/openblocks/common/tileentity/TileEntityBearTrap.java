@@ -10,15 +10,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
+import openblocks.utils.BlockUtils;
 
 public class TileEntityBearTrap extends NetworkedTileEntity implements
-		ISyncHandler, IAwareTile {
+		ISyncHandler, IAwareTile, ISurfaceAttachment {
 
 	public enum Keys {
 		flags, trappedEntityId
@@ -120,8 +122,8 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-
+		setRotation(BlockUtils.get2dOrientation(player));
+		sync();
 	}
 
 	@Override
@@ -138,6 +140,11 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 		if (changes.contains(flags)) {
 			hasBeenSnapped = true;
 		}
+	}
+
+	@Override
+	public ForgeDirection getSurfaceDirection() {
+		return ForgeDirection.DOWN;
 	}
 
 }

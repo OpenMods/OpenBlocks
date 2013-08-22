@@ -2,6 +2,8 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -10,24 +12,27 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.block.BlockFlag;
+import openblocks.common.block.BlockSprinkler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFloat;
 import openblocks.sync.SyncableInt;
+import openblocks.utils.BlockUtils;
 
 public class TileEntityFlag extends NetworkedTileEntity implements
-		ISurfaceAttachment {
+		ISurfaceAttachment, IAwareTile {
 
 	public enum Keys {
-		rotation, colorIndex
+		angle, colorIndex
 	}
 
-	private SyncableFloat rotation = new SyncableFloat(0.0f);
+	private SyncableFloat angle = new SyncableFloat(0.0f);
 	private SyncableInt colorIndex = new SyncableInt(0);
 
 	public TileEntityFlag() {
-		addSyncedObject(Keys.rotation, rotation);
+		addSyncedObject(Keys.angle, angle);
 		addSyncedObject(Keys.colorIndex, colorIndex);
 	}
 
@@ -41,18 +46,14 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		colorIndex.readFromNBT(tag, "color");
-		rotation.readFromNBT(tag, "rotation");
+		angle.readFromNBT(tag, "angle");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		colorIndex.writeToNBT(tag, "color");
-		rotation.writeToNBT(tag, "rotation");
-	}
-
-	public float getRotation() {
-		return rotation.getValue();
+		angle.writeToNBT(tag, "angle");
 	}
 
 	public Icon getIcon() {
@@ -62,21 +63,90 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	public void setColorIndex(int index) {
 		colorIndex.setValue(index);
 	}
+	
+	public void setAngle(float ang) {
+		angle.setValue(ang);
+	}
 
+	public void setOnGround(boolean onGround) {
+		setFlag1(onGround);
+	}
+	
+	public boolean isOnGround() {
+		return getFlag1();
+	}
+	
 	public int getColor() {
 		if (colorIndex.getValue() >= BlockFlag.COLORS.length) colorIndex.setValue(0);
 		return BlockFlag.COLORS[colorIndex.getValue()];
 	}
 
-	public void setSurfaceAndRotation(ForgeDirection surface, float rot) {
-		// this.surface = ForgeDirection.DOWN; // TODO: FIX
-		rotation.setValue(rot);
+	@Override
+	public ForgeDirection getSurfaceDirection() {
+		ForgeDirection rotation;
+		if (getFlag1()) {
+			rotation = ForgeDirection.DOWN;
+		}else {
+			rotation = getRotation();
+		}
+		return rotation;
+	}
+	
+	public float getAngle() {
+		return angle.getValue();
+	}
+
+	@Override
+	public void onBlockBroken() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onBlockAdded() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (player != null && player.isSneaking()) { return true; }
+		if (!worldObj.isRemote) {
+			if (getSurfaceDirection() == ForgeDirection.DOWN) {
+				angle.setValue(angle.getValue() + 10f);
+				sync();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+		float ang = player.rotationYawHead;
+		ForgeDirection surface = side.getOpposite();
+		
+		if (surface != ForgeDirection.DOWN) {
+			ang = -BlockUtils.getRotationFromDirection(side.getOpposite());
+		}
+		
+		setAngle(ang);
+		setColorIndex(stack.getItemDamage());
+		setRotation(side.getOpposite());
+		setOnGround(surface == ForgeDirection.DOWN);
 		sync();
 	}
 
 	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return ForgeDirection.DOWN; // TODO: fix
+	public boolean onBlockEventReceived(int eventId, int eventParam) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

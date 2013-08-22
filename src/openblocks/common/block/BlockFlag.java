@@ -85,22 +85,6 @@ public class BlockFlag extends OpenBlock {
 		}
 	}
 
-	@Override
-	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
-
-		TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
-
-		if (flag != null) {
-			float rotation = player.rotationYawHead;
-			if (side != ForgeDirection.UP) {
-				rotation = -BlockUtils.getRotationFromDirection(side.getOpposite());
-			}
-			flag.setColorIndex(stack.getItemDamage());
-			flag.setSurfaceAndRotation(side.getOpposite(), rotation);
-
-		}
-	}
-
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		return null;
 	}
@@ -137,21 +121,6 @@ public class BlockFlag extends OpenBlock {
 			}
 		}
 		return super.canPlaceBlockOnSide(world, x, y, z, side);
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		if (player != null && player.isSneaking()) { return true; }
-		if (!world.isRemote) {
-			TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
-			ForgeDirection surface = flag.getSurfaceDirection();
-			if (flag != null && surface == ForgeDirection.DOWN) {
-				// System.out.println("Changing surface and rotation");
-				flag.setSurfaceAndRotation(surface, flag.getRotation() + 10f);
-				return false;
-			}
-		}
-		return true;
 	}
 
 	@Override
