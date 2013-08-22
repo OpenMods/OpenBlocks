@@ -38,6 +38,15 @@ public abstract class OpenBlock extends BlockContainer {
 		setHardness(1.0F);
 	}
 	
+	/**
+	 * Gets a meta flag from this block
+	 * @param world World Object
+	 * @param x Block XCoord
+	 * @param y Block YCoord
+	 * @param z Block ZCoord
+	 * @param index The index of the flag, either 0 or 1
+	 * @return returns true if the flag is set
+	 */
 	public static boolean getMetaFlag(World world, int x, int y, int z, int index) {
 		if(index > 1) return false;
 		if(index < 0) return false;
@@ -47,6 +56,15 @@ public abstract class OpenBlock extends BlockContainer {
 		return result;
 	}
 	
+	/**
+	 * Sets a meta flag to this block
+	 * @param world World Object
+	 * @param x Block XCoord
+	 * @param y Block YCoord
+	 * @param z Block ZCoord
+	 * @param index The index of the flag, either 0 or 1
+	 * @param value The boolean value for this flag
+	 */
 	public static void setMetaFlag(World world, int x, int y, int z, int index, boolean value) {
 		if(index > 1) return;
 		if(index < 0) return;
