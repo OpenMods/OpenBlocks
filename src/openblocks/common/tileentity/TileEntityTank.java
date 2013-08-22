@@ -281,7 +281,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 				liquidId.setValue(0);
 				liquidMeta.setValue(0);
 			}
-			syncMap.sync(worldObj, this, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 1);
+			sync(1);
 		} else {
 			interpolateLiquidLevel();
 			flowTimer += 0.1f;
@@ -455,13 +455,8 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		return syncMap.getDescriptionPacket(this);
-	}
-
-	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		syncMap.handleTileDataPacket(this, pkt);
+		super.onDataPacket(net, pkt);
 		interpolatedRenderAmount = liquidRenderAmount.getValue();
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
