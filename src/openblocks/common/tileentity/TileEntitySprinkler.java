@@ -40,16 +40,14 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	private SyncableFlags flags = new SyncableFlags();
 
-	private SyncableDirection rotation = new SyncableDirection();
-
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
 	
 	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
 	
-	private int tickCounter = 0;
+	/* Apx 60 degrees */
+	private static final double angularRotationLimit = (5D * Math.PI) / 3D;
 
 	public enum Flags {
-		isClockwise,
 		enabled
 	}
 
@@ -59,7 +57,6 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public TileEntitySprinkler() {
 		syncMap.put(Keys.flags, flags);
-		syncMap.put(Keys.rotation, rotation);
 	}
 	
 	private void attemptFertilize() {
@@ -338,12 +335,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		rotation.writeToNBT(tag, "rotation");
 	}
 
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		rotation.readFromNBT(tag, "rotation");
 	}
 
 }

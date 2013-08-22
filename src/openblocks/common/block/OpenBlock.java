@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
@@ -36,6 +37,45 @@ public abstract class OpenBlock extends BlockContainer {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHardness(1.0F);
 	}
+	
+	/**
+	 * Helper function to set rotation in the metadata
+	 * @param world World Object
+	 * @param x X Coord
+	 * @param y Y Coord
+	 * @param z Z Coord
+	 * @param rotation ForgeDirection of the rotation, does not support up and down (2bit number)
+	 * @param blockUpdate Trigger a block update or not
+	 */
+	public static void setMetadataRotation(World world, int x, int y, int z, ForgeDirection rotation, boolean blockUpdate) { 
+		Block block = Block.blocksList[world.getBlockId(x, y, z)];
+		if(block == null) return;
+		if(!(block instanceof OpenBlock)) return; /* Nope */
+		if(rotation == ForgeDirection.UNKNOWN || rotation == ForgeDirection.UP || rotation == ForgeDirection.DOWN) return;
+		int ordinal = rotation.ordinal() - 2;
+		int metadata = (world.getBlockMetadata(x, y, z) & 0xC) | ordinal;
+		world.setBlock(x, y, z, block.blockID, metadata, 2 | (blockUpdate ? 1 : 0));
+	}
+	
+	/**
+	 * Helper function to get rotation in metadata
+	 * @param world World Object
+	 * @param x X Coord
+	 * @param y Y Coord
+	 * @param z Z Coord
+	 * @param defaultDirection Default rotation if the block does not have valid metadata rotation
+	 * @return Rotation derived from metadata, or defaultDirection
+	 */
+	public static ForgeDirection getMetadataRotation(World world, int x, int y, int z, ForgeDirection defaultDirection) {
+		Block block = Block.blocksList[world.getBlockId(x,y,z)];
+		if(block == null) return defaultDirection;
+		if(!(block instanceof OpenBlock)) return defaultDirection;
+		int ordinal = (world.getBlockMetadata(x,y,z) & 0x3) + 2;
+		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
+		if(direction == ForgeDirection.UNKNOWN) return defaultDirection;
+		return direction;
+	}
+
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
