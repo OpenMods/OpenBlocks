@@ -14,6 +14,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -23,6 +24,7 @@ import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
+import openblocks.common.block.BlockSprinkler;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
@@ -80,8 +82,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		if(worldObj == null || !worldObj.isRemote) return;
 		for (int i = 0; i < 5; i++) {
 			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch()
-					* rotation.getValue().offsetX, 0, getSprayPitch()
-					* rotation.getValue().offsetZ), 0.5f);
+					* getRotation().offsetX, 0, getSprayPitch()
+					* getRotation().offsetZ), 0.5f);
 
 		}
 	}
@@ -107,37 +109,20 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
-			if (tickCounter++ % 60 == 0) {
+			if (worldObj.getTotalWorldTime() % 60 == 0) {
 				flags.set(Flags.enabled, tank.drain(1, true) != null);
 			}
 			
 			
 			// if it's enabled..
-			if (flags.get(Flags.enabled)) {
-				
-				// switch the direction every [x] ticks
-				if (flags.ticksSinceChange(Flags.isClockwise) > TICKS_PER_DIRECTION) {
-					flags.set(Flags.isClockwise, !flags.get(Flags.isClockwise));
-				}
-				
-				attemptFertilize();
-			}
-		} else {
-			if (flags.get(Flags.enabled)) {
-				sprayParticles();
-			}
 			
+		} 
+		// simplified this action because only one of these will execute depending on worldObj.isRemote
+		if (flags.get(Flags.enabled)) {
+			attemptFertilize();
+			sprayParticles();
 		}
 		syncMap.sync(worldObj, this, xCoord, yCoord, zCoord, 1);
-	}
-
-	public boolean isTurningClockwise() {
-		return flags.get(Flags.isClockwise);
-	}
-
-	public double getPercentageForDirection() {
-		return flags.get(Flags.enabled) ? 1.0 / TICKS_PER_DIRECTION
-				* flags.ticksSinceChange(Flags.isClockwise) : 0;
 	}
 
 	@Override
@@ -286,7 +271,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		rotation.setValue(BlockUtils.get2dOrientation(player));
+		// I've no idea if we want to fire a block update here. Will that double the updates for the tick ?
+		BlockSprinkler.setMetadataRotation(worldObj, xCoord, yCoord, zCoord, BlockUtils.get2dOrientation(player), true);
 	}
 
 	@Override
@@ -296,7 +282,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public ForgeDirection getRotation() {
-		return rotation.getValue();
+		return BlockSprinkler.getMetadataRotation(worldObj, xCoord, yCoord, zCoord, ForgeDirection.NORTH);
 	}
 
 	@Override
@@ -319,17 +305,12 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public float getSprayAngle() {
-		double range = Math.PI * 0.4;
-		float angle = (float)((float)-(range / 2) + (range * getPercentageForDirection()));
-		if (!isTurningClockwise()) {
-			angle = -angle;
-		}
+		float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() / 20) * angularRotationLimit);
 		return angle;
 	}
 
 	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub
 
 	}
 
