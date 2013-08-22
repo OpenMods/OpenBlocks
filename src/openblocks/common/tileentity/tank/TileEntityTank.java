@@ -1,4 +1,4 @@
-package openblocks.common.tileentity;
+package openblocks.common.tileentity.tank;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +17,6 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
-import openblocks.common.tileentity.tank.TileEntityTankBase;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableShort;
