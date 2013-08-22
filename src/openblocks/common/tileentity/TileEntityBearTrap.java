@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -13,8 +11,6 @@ import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapTile;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;

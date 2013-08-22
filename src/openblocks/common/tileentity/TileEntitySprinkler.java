@@ -1,18 +1,11 @@
 package openblocks.common.tileentity;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
@@ -24,25 +17,18 @@ import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
-import openblocks.common.block.BlockSprinkler;
-import openblocks.sync.ISyncHandler;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapTile;
-import openblocks.sync.SyncableDirection;
-import openblocks.sync.SyncableFlags;
 import openblocks.utils.BlockUtils;
 
 public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		ISurfaceAttachment, ITankContainer, IInventory {
 
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
-	
+
 	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
-	
+
 	private void attemptFertilize() {
-		if(worldObj == null || worldObj.isRemote) return;
-		// there's a 1/100 chance of  attempting to fertilize a crop
+		if (worldObj == null || worldObj.isRemote) return;
+		// there's a 1/100 chance of attempting to fertilize a crop
 		if (worldObj.rand.nextDouble() < 1.0 / 100) {
 			int x = xCoord + worldObj.rand.nextInt(9) - 5;
 			int y = yCoord;
@@ -56,24 +42,26 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			}
 		}
 	}
-	
+
 	private void sprayParticles() {
-		if(worldObj == null || !worldObj.isRemote) return;
+		if (worldObj == null || !worldObj.isRemote) return;
 		for (int i = 0; i < 6; i++) {
 			float offset = (i - 2.5f) / 5f;
 			ForgeDirection rotation = getRotation();
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5 + (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5 + (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset); 
+			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5
+					+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
+					+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
 		}
 	}
 
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			
+
 			if (tank.getLiquid() == null || tank.getLiquid().amount == 0) {
-				TileEntity below = worldObj.getBlockTileEntity(xCoord, yCoord - 1,  zCoord);
+				TileEntity below = worldObj.getBlockTileEntity(xCoord, yCoord - 1, zCoord);
 				if (below instanceof ITankContainer) {
-					ITankContainer belowTank = (ITankContainer) below;
+					ITankContainer belowTank = (ITankContainer)below;
 					LiquidStack drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), false);
 					if (drained != null && drained.isLiquidEqual(water)) {
 						drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), true);
@@ -83,25 +71,25 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 					}
 				}
 			}
-			
+
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
 			if (worldObj.getTotalWorldTime() % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
 				sync();
 			}
-			
+
 			// if it's enabled..
-			
-		} 
-		// simplified this action because only one of these will execute depending on worldObj.isRemote
+
+		}
+		// simplified this action because only one of these will execute
+		// depending on worldObj.isRemote
 		if (isEnabled()) {
 			attemptFertilize();
 			sprayParticles();
 		}
 	}
 
-	
 	private void setEnabled(boolean b) {
 		setFlag1(b);
 	}
@@ -184,9 +172,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		if (resource != null && resource.isLiquidEqual(water)) {
-			return tank.fill(resource, doFill);
-		}
+		if (resource != null && resource.isLiquidEqual(water)) { return tank.fill(resource, doFill); }
 		return 0;
 	}
 
@@ -261,8 +247,9 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public float getSprayAngle() {
-		if(isEnabled()) {
-			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.01f) * Math.PI * 0.1f);
+		if (isEnabled()) {
+			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.01f)
+					* Math.PI * 0.1f);
 			return (float)(angle);
 		}
 		return 0;
@@ -270,7 +257,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		if(tag.hasKey("rotation")) {
+		if (tag.hasKey("rotation")) {
 			byte ordinal = tag.getByte("rotation");
 			setRotation(ForgeDirection.getOrientation(ordinal));
 			sync();

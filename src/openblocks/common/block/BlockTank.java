@@ -59,17 +59,17 @@ public class BlockTank extends OpenBlock {
 		// System.out.println(getTileEntity(par1World, par2, par3, par3,
 		// TileEntityTank.class));
 	}
-	
+
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		if(!OpenBlocks.Config.tanksEmitLight) return 0;
-		TileEntity ent = world.getBlockTileEntity(x,y,z);
-		if(ent == null) return 0;
-		if(ent instanceof TileEntityTank) {
+		if (!OpenBlocks.Config.tanksEmitLight) return 0;
+		TileEntity ent = world.getBlockTileEntity(x, y, z);
+		if (ent == null) return 0;
+		if (ent instanceof TileEntityTank) {
 			TileEntityTank tank = (TileEntityTank)ent;
-			if(tank.containsValidLiquid()) {
+			if (tank.containsValidLiquid()) {
 				int blockId = tank.getInternalTank().getLiquid().itemID;
-				if(Block.blocksList[blockId] == null) return 0;
+				if (Block.blocksList[blockId] == null) return 0;
 				return (int)Math.min(Block.lightValue[blockId], Math.max(0, 5 + tank.getPercentFull() * 15));
 			}
 		}
@@ -78,16 +78,19 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public int getLightOpacity(World world, int x, int y, int z) {
-		if(!OpenBlocks.Config.tanksAreTransparent) return 255;
-		if(!OpenBlocks.Config.tanksHaveDynamicTransparency) return 0;
-		/* As per docs, the tile entity is not guaranteed to exist at the time of calling */
+		if (!OpenBlocks.Config.tanksAreTransparent) return 255;
+		if (!OpenBlocks.Config.tanksHaveDynamicTransparency) return 0;
+		/*
+		 * As per docs, the tile entity is not guaranteed to exist at the time
+		 * of calling
+		 */
 		TileEntity ent = world.getBlockTileEntity(x, y, z);
-		if(ent == null) return 255;
-		if(ent instanceof TileEntityTank) {
+		if (ent == null) return 255;
+		if (ent instanceof TileEntityTank) {
 			TileEntityTank tank = (TileEntityTank)ent;
-			if(tank.containsValidLiquid()) {
-				return (int)Math.min(255,Math.max(0,(tank.getPercentFull() * 255)));
-			}else {
+			if (tank.containsValidLiquid()) {
+				return (int)Math.min(255, Math.max(0, (tank.getPercentFull() * 255)));
+			} else {
 				return 0;
 			}
 		}

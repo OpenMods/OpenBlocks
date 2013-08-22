@@ -18,7 +18,7 @@ public class ContainerLuggage extends Container {
 		this.playerInventory = playerInventory;
 		this.luggage = luggage;
 		addInventoryGrid(8, 18, 9);
-		addPlayerInventorySlots(luggage.isSpecial() ? 139 : 85);
+		addPlayerInventorySlots(luggage.isSpecial()? 139 : 85);
 	}
 
 	protected void addInventoryGrid(int xOffset, int yOffset, int width) {

@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -171,7 +170,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void spawnLiquidSpray(World worldObj, LiquidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
-		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x,y,z,direction,angleRadians,spread);
+		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
 	}
 }

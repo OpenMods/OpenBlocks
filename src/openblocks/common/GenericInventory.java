@@ -140,9 +140,9 @@ public class GenericInventory implements IInventory, ISidedInventory {
 		this.slotsCount = amount;
 		inventoryContents = new ItemStack[amount];
 	}
-	
+
 	public void readFromNBT(NBTTagCompound tag) {
-		
+
 		if (tag.hasKey("size")) {
 			this.slotsCount = tag.getInteger("size");
 		}

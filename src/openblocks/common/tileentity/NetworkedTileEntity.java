@@ -2,12 +2,10 @@ package openblocks.common.tileentity;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
-
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;

@@ -6,17 +6,13 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.api.ISurfaceAttachment;
 
-public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachment {
+public class TileEntityTarget extends OpenTileEntity implements
+		ISurfaceAttachment {
 
 	private ForgeDirection rotation = ForgeDirection.WEST;
 
@@ -36,17 +32,17 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTargetId);
 		}
 	}
-	
+
 	public void setEnabled(boolean en) {
 		setFlag1(en);
 	}
-	
+
 	public boolean isEnabled() {
 		return getFlag1();
 	}
 
 	public float getTargetRotation() {
-		return isEnabled() ? 0 : -(float)(Math.PI / 2);
+		return isEnabled()? 0 : -(float)(Math.PI / 2);
 	}
 
 	public int getStrength() {

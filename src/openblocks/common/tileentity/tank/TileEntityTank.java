@@ -92,8 +92,7 @@ public class TileEntityTank extends TileEntityTankBase implements
 			interpolatedRenderAmount = liquidRenderAmount.getValue();
 		}
 	}
-	
-	
+
 	@Override
 	protected void initialize() {
 		super.initialize();

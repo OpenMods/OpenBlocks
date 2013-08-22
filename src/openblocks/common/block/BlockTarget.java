@@ -172,7 +172,7 @@ public class BlockTarget extends OpenBlock {
 				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
-	
+
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return super.canPlaceBlockOnSide(world, x, y, z, ForgeDirection.DOWN);
 	}

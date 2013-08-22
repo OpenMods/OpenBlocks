@@ -52,15 +52,13 @@ public class EntityLuggage extends EntityTameable implements
 		}
 		this.inventory = inventory;
 	}
-	
+
 	public void refreshTexture() {
-		this.texture = OpenBlocks.getTexturesPath(isSpecial() ? "models/luggage_special.png" : "models/luggage.png");
+		this.texture = OpenBlocks.getTexturesPath(isSpecial()? "models/luggage_special.png" : "models/luggage.png");
 	}
 
 	public boolean isSpecial() {
-		if (worldObj.isRemote){
-			return inventory.getSizeInventory() > 27;
-		}
+		if (worldObj.isRemote) { return inventory.getSizeInventory() > 27; }
 		return special;
 	}
 

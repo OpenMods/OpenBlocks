@@ -49,7 +49,7 @@ public class BlockBearTrap extends OpenBlock {
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 0.4f, 0.9f);
 	}
-	
+
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return super.canPlaceBlockOnSide(world, x, y, z, ForgeDirection.DOWN);
 	}

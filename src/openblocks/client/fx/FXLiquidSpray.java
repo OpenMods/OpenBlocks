@@ -6,7 +6,6 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidStack;
@@ -16,16 +15,16 @@ public class FXLiquidSpray extends EntityFX {
 	public FXLiquidSpray(World par1World, LiquidStack liquid, double x, double y, double z, ForgeDirection sprayDirection, float angle, float spread) {
 		super(par1World, x, y, z, 0, 0, 0);
 
-	//	vec.xCoord = Math.abs(vec.xCoord);
-	//	vec.yCoord = Math.abs(vec.yCoord);
-	//	vec.zCoord = Math.abs(vec.zCoord);
+		// vec.xCoord = Math.abs(vec.xCoord);
+		// vec.yCoord = Math.abs(vec.yCoord);
+		// vec.zCoord = Math.abs(vec.zCoord);
 
 		float sprayStrength = 1f;
 		double sinPitch = Math.sin(angle);
 		double cosPitch = Math.cos(angle);
 
 		double vecX = 0, vecY = 0, vecZ = 0;
-		
+
 		if (sprayDirection.offsetZ == 0) {
 			vecY = Math.abs(cosPitch);
 			vecZ = sinPitch * sprayDirection.offsetX;
@@ -51,9 +50,9 @@ public class FXLiquidSpray extends EntityFX {
 		} else {
 			vecX = (rand.nextDouble() - 0.5) * spread;
 		}
-		motionX = vecX /2;
-		motionY = vecY /2;
-		motionZ = vecZ /2;
+		motionX = vecX / 2;
+		motionY = vecY / 2;
+		motionZ = vecZ / 2;
 
 		Block block = null;
 		Icon texture = null;

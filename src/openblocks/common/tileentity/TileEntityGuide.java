@@ -5,10 +5,6 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
@@ -34,39 +30,36 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	protected SyncableInt mode = new SyncableInt(0);
 
 	public enum Keys {
-		width,
-		height,
-		depth,
-		mode
+		width, height, depth, mode
 	}
-	
+
 	public TileEntityGuide() {
 		addSyncedObject(Keys.width, width);
 		addSyncedObject(Keys.height, height);
 		addSyncedObject(Keys.depth, depth);
 		addSyncedObject(Keys.mode, mode);
 	}
-	
+
 	public int getWidth() {
 		return width.getValue();
 	}
-	
+
 	public int getHeight() {
 		return height.getValue();
 	}
-	
+
 	public int getDepth() {
 		return depth.getValue();
 	}
-	
+
 	public void setWidth(int w) {
 		width.setValue(w);
 	}
-	
+
 	public void setDepth(int d) {
 		depth.setValue(d);
 	}
-	
+
 	public void setHeight(int h) {
 		height.setValue(h);
 	}

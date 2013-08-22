@@ -185,7 +185,7 @@ public class OpenBlocks {
 
 		prop = configFile.get("dropblock", "irregularBlocksArePassable", Config.irregularBlocksArePassable, "The elevator will try to pass through blocks that have custom collision boxes");
 		Config.irregularBlocksArePassable = prop.getBoolean(Config.irregularBlocksArePassable);
-		
+
 		prop = configFile.get("grave", "ghostProbability", Config.ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		Config.ghostSpawnProbability = prop.getInt();
 
@@ -199,13 +199,13 @@ public class OpenBlocks {
 
 		prop = configFile.get("tanks", "bucketsPerTank", Config.bucketsPerTank, "The amount of buckets each tank can hold");
 		Config.bucketsPerTank = prop.getInt(Config.bucketsPerTank);
-		
+
 		prop = configFile.get("tanks", "emitLight", Config.tanksEmitLight, "Tanks will emit light when they contain a liquid that glows (eg. lava)");
 		Config.tanksEmitLight = prop.getBoolean(Config.tanksEmitLight);
-		
+
 		prop = configFile.get("tanks", "transparent", Config.tanksAreTransparent, "Tanks will pass light");
 		Config.tanksAreTransparent = prop.getBoolean(Config.tanksAreTransparent);
-		
+
 		prop = configFile.get("tanks", "dynamicTransparency", Config.tanksHaveDynamicTransparency, "The tank opacity changes with the amount of liquid");
 		Config.tanksHaveDynamicTransparency = prop.getBoolean(Config.tanksHaveDynamicTransparency);
 

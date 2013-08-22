@@ -58,21 +58,21 @@ public abstract class TileEntityTankBase extends OpenTileEntity implements
 	 * Tell neighbour tanks to update themselves
 	 */
 	protected void updateNeighbours() {
-		TileEntityTankBase up,down,north,south,east,west;
+		TileEntityTankBase up, down, north, south, east, west;
 		up = getTankInDirection(ForgeDirection.UP);
 		down = getTankInDirection(ForgeDirection.DOWN);
 		north = getTankInDirection(ForgeDirection.NORTH);
 		south = getTankInDirection(ForgeDirection.SOUTH);
 		east = getTankInDirection(ForgeDirection.EAST);
 		west = getTankInDirection(ForgeDirection.WEST);
-		if(up != null) up.findNeighbours();
-		if(down != null) down.findNeighbours();
-		if(north != null) north.findNeighbours();
-		if(south != null) south.findNeighbours();
-		if(east != null) east.findNeighbours();
-		if(west != null) west.findNeighbours();
+		if (up != null) up.findNeighbours();
+		if (down != null) down.findNeighbours();
+		if (north != null) north.findNeighbours();
+		if (south != null) south.findNeighbours();
+		if (east != null) east.findNeighbours();
+		if (west != null) west.findNeighbours();
 	}
-	
+
 	/**
 	 * Find the neighbouring tanks and store them in a hashmap
 	 */

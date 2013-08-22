@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
@@ -37,7 +36,6 @@ public abstract class OpenBlock extends BlockContainer {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHardness(1.0F);
 	}
-
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {

@@ -5,17 +5,12 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.block.BlockFlag;
-import openblocks.common.block.BlockSprinkler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFloat;
 import openblocks.sync.SyncableInt;
@@ -63,7 +58,7 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	public void setColorIndex(int index) {
 		colorIndex.setValue(index);
 	}
-	
+
 	public void setAngle(float ang) {
 		angle.setValue(ang);
 	}
@@ -71,11 +66,11 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	public void setOnGround(boolean onGround) {
 		setFlag1(onGround);
 	}
-	
+
 	public boolean isOnGround() {
 		return getFlag1();
 	}
-	
+
 	public int getColor() {
 		if (colorIndex.getValue() >= BlockFlag.COLORS.length) colorIndex.setValue(0);
 		return BlockFlag.COLORS[colorIndex.getValue()];
@@ -86,12 +81,12 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 		ForgeDirection rotation;
 		if (getFlag1()) {
 			rotation = ForgeDirection.DOWN;
-		}else {
+		} else {
 			rotation = getRotation();
 		}
 		return rotation;
 	}
-	
+
 	public float getAngle() {
 		return angle.getValue();
 	}
@@ -99,13 +94,13 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	@Override
 	public void onBlockBroken() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onBlockAdded() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -124,18 +119,18 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	@Override
 	public void onNeighbourChanged(int blockId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		float ang = player.rotationYawHead;
 		ForgeDirection surface = side.getOpposite();
-		
+
 		if (surface != ForgeDirection.DOWN) {
 			ang = -BlockUtils.getRotationFromDirection(side.getOpposite());
 		}
-		
+
 		setAngle(ang);
 		setColorIndex(stack.getItemDamage());
 		setRotation(side.getOpposite());
