@@ -61,6 +61,33 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		syncMap.put(Keys.flags, flags);
 		syncMap.put(Keys.rotation, rotation);
 	}
+	
+	private void attemptFertilize() {
+		if(worldObj == null || worldObj.isRemote) return;
+		// there's a 1/100 chance of  attempting to fertilize a crop
+		if (worldObj.rand.nextDouble() < 1.0 / 100) {
+			int x = xCoord + worldObj.rand.nextInt(9) - 5;
+			int y = yCoord;
+			int z = zCoord + worldObj.rand.nextInt(9) - 5;
+			for (int i = -1; i <= 1; i++) {
+				y += i;
+				int blockId = worldObj.getBlockId(x, y, z);
+				if (Block.blocksList[blockId] instanceof BlockCrops) {
+					((BlockCrops)Block.blocksList[blockId]).fertilize(worldObj, x, y, z);
+				}
+			}
+		}
+	}
+	
+	private void sprayParticles() {
+		if(worldObj == null || !worldObj.isRemote) return;
+		for (int i = 0; i < 5; i++) {
+			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch()
+					* rotation.getValue().offsetX, 0, getSprayPitch()
+					* rotation.getValue().offsetZ), 0.5f);
+
+		}
+	}
 
 	public void updateEntity() {
 		super.updateEntity();
@@ -96,28 +123,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 					flags.set(Flags.isClockwise, !flags.get(Flags.isClockwise));
 				}
 				
-				// there's a 1/100 chance of  attempting to fertilize a crop
-				if (worldObj.rand.nextDouble() < 1.0 / 100) {
-					int x = xCoord + worldObj.rand.nextInt(9) - 5;
-					int y = yCoord;
-					int z = zCoord + worldObj.rand.nextInt(9) - 5;
-					for (int i = -1; i <= 1; i++) {
-						y += i;
-						int blockId = worldObj.getBlockId(x, y, z);
-						if (Block.blocksList[blockId] instanceof BlockCrops) {
-							((BlockCrops)Block.blocksList[blockId]).fertilize(worldObj, x, y, z);
-						}
-					}
-				}
+				attemptFertilize();
 			}
 		} else {
 			if (flags.get(Flags.enabled)) {
-				for (int i = 0; i < 5; i++) {
-					OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.getWorldVec3Pool().getVecFromPool(getSprayPitch()
-							* rotation.getValue().offsetX, 0, getSprayPitch()
-							* rotation.getValue().offsetZ), 0.5f);
-	
-				}
+				sprayParticles();
 			}
 			
 		}
