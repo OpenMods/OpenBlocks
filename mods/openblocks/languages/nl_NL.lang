@@ -1,0 +1,23 @@
+#nl_NL
+openblocks.gui.lightbox=Diaprojector
+openblocks.gui.luggage=Bagage
+openblocks.gui.sprinkler=Sproeier
+
+tile.openblocks.elevator.name=Lift
+tile.openblocks.heal.name=Verbanddoos
+tile.openblocks.guide.name=Bouwplanner
+tile.openblocks.ladder.name=Jaded Ladder
+tile.openblocks.lightbox.name=Diaprojector
+tile.openblocks.tank.name=Tank
+tile.openblocks.target.name=Doel
+tile.openblocks.grave.name=Graf
+tile.openblocks.flag.name=Vlag
+tile.openblocks.trophy.name=Troffee
+tile.openblocks.beartrap.name=Berenval
+tile.openblocks.sprinkler.name=Sproeier
+
+item.openblocks.hangglider.name=Deltavlieger
+item.openblocks.gliderwing.name=Vleugel
+item.openblocks.luggage.name=Bagage
+
+itemGroup.tabOpenBlocks=OpenBlocks
