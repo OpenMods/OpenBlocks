@@ -40,7 +40,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
 		// there's a 1/100 chance of attempting to fertilize a crop
-		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? 500 : 1000)) {
+		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? 200 : 500)) {
 			int x = xCoord + worldObj.rand.nextInt(9) - 5;
 			int y = yCoord;
 			int z = zCoord + worldObj.rand.nextInt(9) - 5;

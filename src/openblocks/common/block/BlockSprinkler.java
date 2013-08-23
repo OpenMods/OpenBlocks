@@ -11,7 +11,7 @@ import openblocks.common.tileentity.TileEntitySprinkler;
 public class BlockSprinkler extends OpenBlock {
 
 	public BlockSprinkler() {
-		super(OpenBlocks.Config.blockSprinklerId, Material.wood);
+		super(OpenBlocks.Config.blockSprinklerId, Material.water);
 		setupBlock(this, "sprinkler", TileEntitySprinkler.class);
 	}
 
