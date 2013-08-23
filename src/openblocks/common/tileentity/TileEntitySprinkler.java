@@ -4,10 +4,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -19,28 +22,34 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.utils.BlockUtils;
+import openblocks.utils.InventoryUtils;
 
 public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		ISurfaceAttachment, ITankContainer, IInventory {
 
 	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
 
+	private ItemStack bonemeal = new ItemStack(Item.dyePowder, 1, 15);
+
 	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
 
 	private GenericInventory inventory = new GenericInventory("sprinkler", true, 9);
+	
+	private boolean hasBonemeal = false;
 
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
 		// there's a 1/100 chance of attempting to fertilize a crop
-		if (worldObj.rand.nextDouble() < 1.0 / 100) {
+		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? 500 : 1000)) {
 			int x = xCoord + worldObj.rand.nextInt(9) - 5;
 			int y = yCoord;
 			int z = zCoord + worldObj.rand.nextInt(9) - 5;
 			for (int i = -1; i <= 1; i++) {
 				y += i;
-				int blockId = worldObj.getBlockId(x, y, z);
-				if (Block.blocksList[blockId] instanceof BlockCrops) {
-					((BlockCrops)Block.blocksList[blockId]).fertilize(worldObj, x, y, z);
+				for (int a = 0; a < 10; a++) {
+					if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
+						break;
+					}
 				}
 			}
 		}
@@ -77,6 +86,9 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
+			if (worldObj.getTotalWorldTime() % 1200 == 0) {
+				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, bonemeal);
+			}
 			if (worldObj.getTotalWorldTime() % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
 				sync();

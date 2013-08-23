@@ -63,4 +63,18 @@ public class InventoryUtils {
 		fromInventory.decrStackSize(slot, merged);
 		return merged;
 	}
+	
+    public static boolean consumeInventoryItem(IInventory inventory, ItemStack stack) {
+        for (int i = 0; i < inventory.getSizeInventory(); i++) {
+        	ItemStack stackInSlot = inventory.getStackInSlot(i);
+        	if (stackInSlot != null && stackInSlot.isItemEqual(stack)) {
+        		stackInSlot.stackSize--;
+            	if (stackInSlot.stackSize == 0) {
+            		inventory.setInventorySlotContents(i, null);
+            	}
+            	return true;
+        	}
+        }
+        return false;
+    }
 }
