@@ -69,10 +69,12 @@ public class BlockTank extends OpenBlock {
 			TileEntityTank tank = (TileEntityTank)ent;
 			if (tank.containsValidLiquid()) {
 				try {
-					int blockId = tank.getInternalTank().getLiquid().itemID;
+					int blockId = tank.getClientLiquidId();
+					if(blockId < 0 || blockId > Block.blocksList.length) return 0;
 					if (Block.blocksList[blockId] == null) return 0;
 					return (int)Math.min(Block.lightValue[blockId], Math.max(0, 5 + tank.getPercentFull() * 15));
 				}catch(Exception e) {
+					System.out.println("[OpenModsMonitor] Hello, It's OpenBlocks here. We've got a " + e.toString() + " at " + x + "," + y + "," + z + ". Please report this to the OpenMods team, they'll patch this bug up as soon as possible.");
 					return 0;
 				}
 			}

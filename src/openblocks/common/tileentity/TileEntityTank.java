@@ -81,6 +81,14 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		addSyncedObject(Keys.liquidMeta, liquidMeta);
 		addSyncedObject(Keys.renderLevel, liquidRenderAmount);
 	}
+	
+	public int getClientLiquidId() {
+		return liquidId.getValue();
+	}
+	
+	public int getClientLiquidMeta() {
+		return liquidMeta.getValue();
+	}
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
 	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
