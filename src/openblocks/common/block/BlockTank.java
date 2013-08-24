@@ -68,9 +68,13 @@ public class BlockTank extends OpenBlock {
 		if (ent instanceof TileEntityTank) {
 			TileEntityTank tank = (TileEntityTank)ent;
 			if (tank.containsValidLiquid()) {
-				int blockId = tank.getInternalTank().getLiquid().itemID;
-				if (Block.blocksList[blockId] == null) return 0;
-				return (int)Math.min(Block.lightValue[blockId], Math.max(0, 5 + tank.getPercentFull() * 15));
+				try {
+					int blockId = tank.getInternalTank().getLiquid().itemID;
+					if (Block.blocksList[blockId] == null) return 0;
+					return (int)Math.min(Block.lightValue[blockId], Math.max(0, 5 + tank.getPercentFull() * 15));
+				}catch(Exception e) {
+					return 0;
+				}
 			}
 		}
 		return 0;
