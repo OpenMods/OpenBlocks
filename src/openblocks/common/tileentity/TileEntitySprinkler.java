@@ -39,14 +39,20 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
-		// there's a 1/100 chance of attempting to fertilize a crop
-		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? 200 : 500)) {
-			int x = xCoord + worldObj.rand.nextInt(9) - 5;
-			int y = yCoord;
-			int z = zCoord + worldObj.rand.nextInt(9) - 5;
+		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? OpenBlocks.Config.sprinklerBonemealFertizizeChance : OpenBlocks.Config.sprinklerFertilizeChance)) {
+			int x = xCoord + worldObj.rand.nextInt(9) - 4;	// This isn't balanced http://goo.gl/RpQuk9 -NC
+			int z = zCoord + worldObj.rand.nextInt(9) - 4;  // -4, not -5
+			/* What? Okay think about this.
+			 * i = -1 y = yCoord - 1
+			 * i = 0 y = yCoord - 1
+			 * i = 1 y = yCoord
+			 * 
+			 * Is this the intended operation? I've changed it for now -NC
+			 */
 			for (int i = -1; i <= 1; i++) {
-				y += i;
+				int y = yCoord + i;
 				for (int a = 0; a < 10; a++) {
+					// Mikee, why do we try to apply it 10 times? Is it likely to fail? -NC
 					if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
 						break;
 					}
