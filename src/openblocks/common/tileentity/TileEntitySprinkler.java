@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,8 +42,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
 		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? OpenBlocks.Config.sprinklerBonemealFertizizeChance : OpenBlocks.Config.sprinklerFertilizeChance)) {
-			int x = xCoord + worldObj.rand.nextInt(9) - 4;	// This isn't balanced http://goo.gl/RpQuk9 -NC
-			int z = zCoord + worldObj.rand.nextInt(9) - 4;  // -4, not -5
+			// http://goo.gl/RpQuk9
+			Random random = worldObj.rand;
+			int x = (random.nextInt(OpenBlocks.Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + xCoord;
+			int z = (random.nextInt(OpenBlocks.Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + zCoord;
 			/* What? Okay think about this.
 			 * i = -1 y = yCoord - 1
 			 * i = 0 y = yCoord - 1
@@ -262,8 +266,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public float getSprayAngle() {
 		if (isEnabled()) {
-			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.01f)
-					* Math.PI * 0.1f);
+			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.02f)
+					* Math.PI * 0.035f);
 			return (float)(angle);
 		}
 		return 0;

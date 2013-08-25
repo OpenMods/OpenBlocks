@@ -95,6 +95,7 @@ public class OpenBlocks {
 		public static boolean tanksHaveDynamicTransparency = true;
 		public static int sprinklerFertilizeChance = 500;
 		public static int sprinklerBonemealFertizizeChance = 200;
+		public static int sprinklerEffectiveRange = 4;
 	}
 
 	public static enum Gui {
@@ -215,10 +216,13 @@ public class OpenBlocks {
 		Config.trophyDropChance = prop.getDouble(Config.trophyDropChance);
 		
 		prop = configFile.get("sprinkler", "fertilizeChance", Config.sprinklerFertilizeChance, "1/chance that crops will be fertilized without bonemeal");
-		Config.sprinklerFertilizeChance = prop.getInt();
+		Config.sprinklerFertilizeChance = prop.getInt(Config.sprinklerFertilizeChance);
 		
 		prop = configFile.get("sprinkler", "bonemealFertilizeChance", Config.sprinklerBonemealFertizizeChance, "1/chance that crops will be fertilized with bonemeal");
-		Config.sprinklerBonemealFertizizeChance = prop.getInt();
+		Config.sprinklerBonemealFertizizeChance = prop.getInt(Config.sprinklerBonemealFertizizeChance);
+		
+		prop = configFile.get("sprinkler", "effectiveRange", Config.sprinklerEffectiveRange, "The range in each cardinal direction that crops will be affected.");
+		Config.sprinklerEffectiveRange = prop.getInt(Config.sprinklerEffectiveRange);
 
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
