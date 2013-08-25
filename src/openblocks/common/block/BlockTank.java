@@ -84,18 +84,18 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public int getLightOpacity(World world, int x, int y, int z) {
-		if (!OpenBlocks.Config.tanksAreTransparent) return 255;
+		if (!OpenBlocks.Config.tanksAreTransparent) return 16;
 		if (!OpenBlocks.Config.tanksHaveDynamicTransparency) return 0;
 		/*
 		 * As per docs, the tile entity is not guaranteed to exist at the time
 		 * of calling
 		 */
 		TileEntity ent = world.getBlockTileEntity(x, y, z);
-		if (ent == null) return 255;
+		if (ent == null) return 16;
 		if (ent instanceof TileEntityTank) {
 			TileEntityTank tank = (TileEntityTank)ent;
 			if (tank.containsValidLiquid()) {
-				return (int)Math.min(255, Math.max(0, (tank.getPercentFull() * 255)));
+				return (int)Math.min(16, Math.max(0, (tank.getPercentFull() * 16)));
 			} else {
 				return 0;
 			}
