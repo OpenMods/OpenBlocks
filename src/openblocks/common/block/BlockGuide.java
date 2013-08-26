@@ -1,7 +1,9 @@
 package openblocks.common.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -68,7 +70,11 @@ public class BlockGuide extends OpenBlock {
 			if (player.isSneaking()) {
 				((TileEntityGuide)tileEntity).switchMode(player);
 			} else {
-				((TileEntityGuide)tileEntity).changeDimensions(player, ForgeDirection.getOrientation(side));
+				if (player.capabilities.isCreativeMode && world.getBlockId(x, y + 1, z) == Block.obsidian.blockID) {
+					((TileEntityGuide)tileEntity).fill(player);
+				}else {
+					((TileEntityGuide)tileEntity).changeDimensions(player, ForgeDirection.getOrientation(side));
+				}
 			}
 		}
 		return true;
@@ -79,4 +85,5 @@ public class BlockGuide extends OpenBlock {
 		if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) { return blockIcon; }
 		return Icons.side;
 	}
+	
 }

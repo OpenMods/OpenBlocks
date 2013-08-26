@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
@@ -199,8 +201,8 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 				for (int x2 = 0; x2 < shape[y2].length; x2++) {
 					for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
 						if (shape[y2][x2][z2]) {
-							coords.add(new ChunkCoordinates(xCoord + x2, yCoord
-									+ y2, zCoord + z2));
+							coords.add(new ChunkCoordinates(xCoord + x2 - getWidth(), yCoord
+									+ y2 - getHeight(), zCoord + z2 - getDepth()));
 						}
 					}
 				}
@@ -212,6 +214,18 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 		recreateShape();
+	}
+
+	public void fill(EntityPlayer player) {
+		if (player.getHeldItem() != null) {
+			ItemStack held = player.getHeldItem();
+			if (held.getItem() instanceof ItemBlock) {
+				ItemBlock itemblock = (ItemBlock) held.getItem();
+				for (ChunkCoordinates coord : getShapeCoordinates()) {
+					worldObj.setBlock(coord.posX, coord.posY, coord.posZ, itemblock.getBlockID());
+				}
+			}
+		}
 	}
 
 }
