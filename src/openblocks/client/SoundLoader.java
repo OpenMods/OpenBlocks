@@ -49,9 +49,10 @@ public class SoundLoader {
 					streamIn.close();
 					streamOut.close();
 				}
-				event.manager.soundPoolSounds.addSound("openblocks/" + fileName, soundFile);
+				/* TODO: Compatibility Helper for this - NC */
+				event.manager.addSound("/mods/openblocks/sounds/" + fileName);
 			} catch (Exception e) {
-				// System.out.println("Couldnt load " + fileName);
+				System.out.println("Couldnt load " + fileName);
 			}
 		}
 	}

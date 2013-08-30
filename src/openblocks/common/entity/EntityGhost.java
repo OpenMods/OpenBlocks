@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -28,6 +29,7 @@ import openblocks.sync.SyncMapEntity;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableFloat;
 import openblocks.utils.BlockUtils;
+import openblocks.utils.CompatibilityUtils;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -99,19 +101,18 @@ public class EntityGhost extends EntityMob implements
 	public EntityGhost(World world) {
 		super(world);
 		this.setSize(0.6F, 1.8F);
-		this.health = this.getMaxHealth();
-		this.moveSpeed = 0.5F;
+		setEntityHealth( CompatibilityUtils.getEntityMaxHealth(this));
+		setAIMoveSpeed(0.5F);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		// this.tasks.addTask(1, new EntityAIDragPlayer(this, 8.0F));
-		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, this.moveSpeed, false));
-		this.tasks.addTask(3, new EntityAIWander(this, this.moveSpeed * 0.1f));
+		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, getAIMoveSpeed(), false));
+		this.tasks.addTask(3, new EntityAIWander(this, getAIMoveSpeed() * 0.1f));
 		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 
 		// this.tasks.addTask(4, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 16.0F, 0, true));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 		this.getNavigator().setAvoidsWater(true);
-		this.texture = "/mob/char.png";
 
 		syncMap.put(SyncKeys.FLAGS, flags);
 		syncMap.put(SyncKeys.OPACITY, opacity);
@@ -121,10 +122,10 @@ public class EntityGhost extends EntityMob implements
 		this(world);
 		this.playerName = playerName;
 		// use the dead players skin (ew)
-		if (world.isRemote) {
-			this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-					+ StringUtils.stripControlCodes(playerName) + ".png";
-		}
+		//if (world.isRemote) {
+//			this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+					//+ StringUtils.stripControlCodes(playerName) + ".png";
+		//}
 		// copy the inventory from the player inventory
 		inventory.copyFrom(playerInvent);
 	}
@@ -138,14 +139,9 @@ public class EntityGhost extends EntityMob implements
 		return false;
 	}
 
-	@Override
-	public int getAttackStrength(Entity par1Entity) {
-		return 10;
-	}
-
 	private boolean shouldBeFlying() {
 
-		EntityLiving attackTarget = getAITarget();
+		EntityLivingBase attackTarget = getAITarget();
 
 		// if we have an attack target
 		if (attackTarget != null) {
@@ -241,14 +237,6 @@ public class EntityGhost extends EntityMob implements
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource damageSource, int par2) {
-		// We should do something when he's attacked. maybe fly away
-		// then go invisible, then teleport behind the player, then attack
-		// again
-		return super.attackEntityFrom(damageSource, par2);
-	}
-
-	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 		// this is called on the client whenever a value has been sycned
 		// it passes a list of the objects that have changed
@@ -271,12 +259,18 @@ public class EntityGhost extends EntityMob implements
 	protected boolean isAIEnabled() {
 		return true;
 	}
-
-	// maybe calculate the players worth?
-	@Override
-	public int getMaxHealth() {
-		return 60;
+	
+	public String getPlayerName() {
+		return playerName;
 	}
+
+	// TODO: Solve the implementation of this
+	
+	// maybe calculate the players worth?
+	//@Override
+	//public int getMaxHealth() {
+	//	return 60;
+	//}
 
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
@@ -290,10 +284,11 @@ public class EntityGhost extends EntityMob implements
 		super.readFromNBT(tag);
 		if (tag.hasKey("playerName")) {
 			playerName = tag.getString("playerName");
-			if (worldObj.isRemote) {
-				skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-						+ StringUtils.stripControlCodes(playerName) + ".png";
-			}
+			// Depreciated
+			//if (worldObj.isRemote) {
+//				skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+						//+ StringUtils.stripControlCodes(playerName) + ".png";
+			//}
 		}
 		inventory.readFromNBT(tag);
 	}
@@ -352,8 +347,8 @@ public class EntityGhost extends EntityMob implements
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
 		playerName = data.readUTF();
-		skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-				+ StringUtils.stripControlCodes(playerName) + ".png";
+		//skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+				//+ StringUtils.stripControlCodes(playerName) + ".png";
 	}
 
 	@Override

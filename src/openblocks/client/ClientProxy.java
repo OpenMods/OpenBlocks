@@ -59,6 +59,7 @@ import openblocks.common.tileentity.TileEntityTank;
 import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.sync.SyncableManager;
+import openblocks.utils.CompatibilityUtils;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -143,7 +144,7 @@ public class ClientProxy extends CommonProxy {
 				Calendar cal = Calendar.getInstance();
 				if (cal.get(Calendar.MONTH) == Calendar.AUGUST
 						&& cal.get(Calendar.DATE) == 16) {
-					player.sendChatToPlayer("Happy Birthday Mikee!! :)");
+					CompatibilityUtils.sendChatToPlayer(player,"Happy Birthday Mikee!! :)");
 				}
 			}
 		}

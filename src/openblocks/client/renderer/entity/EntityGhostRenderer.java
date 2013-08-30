@@ -1,7 +1,10 @@
 package openblocks.client.renderer.entity;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelGhost;
 import openblocks.common.entity.EntityGhost;
 
@@ -19,7 +22,6 @@ public class EntityGhostRenderer extends RenderLiving {
 
 	protected void renderModel(EntityLiving living, float par2, float par3, float par4, float par5, float par6, float par7) {
 		EntityGhost ghost = (EntityGhost)living;
-		this.loadDownloadableImageTexture(living.skinUrl, living.getTexture());
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, ghost.getOpacity());
 		// GL11.glDepthMask(false);
@@ -32,5 +34,14 @@ public class EntityGhostRenderer extends RenderLiving {
 		GL11.glPopMatrix();
 		// GL11.glDepthMask(true);
 
+	}
+
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) {
+		if(!(entity instanceof EntityGhost)) {
+			/* return steve */
+			return AbstractClientPlayer.field_110314_b;
+		}
+		return AbstractClientPlayer.func_110311_f(((EntityGhost)entity).getPlayerName());
 	}
 }
