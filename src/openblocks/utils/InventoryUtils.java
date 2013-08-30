@@ -6,13 +6,13 @@ import net.minecraft.item.ItemStack;
 public class InventoryUtils {
 
 	public static void tryMergeStacks(IInventory targetInventory, int slot, ItemStack stack) {
-		if (targetInventory.isStackValidForSlot(slot, stack)) {
+		if (targetInventory.isItemValidForSlot(slot, stack)) {
 			ItemStack targetStack = targetInventory.getStackInSlot(slot);
 			if (targetStack == null) {
 				targetInventory.setInventorySlotContents(slot, stack.copy());
 				stack.stackSize = 0;
 			} else {
-				boolean valid = targetInventory.isStackValidForSlot(slot, stack);
+				boolean valid = targetInventory.isItemValidForSlot(slot, stack);
 				if (valid
 						&& stack.itemID == targetStack.itemID
 						&& (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
