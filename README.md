@@ -3,6 +3,12 @@ OpenBlocks
 
 An open source random collection of blocks and miscellaneous cool stuff
 
+Porting Notice
+-
+
+We are currently porting OpenBlocks to 1.6.2. You can find our latest 1.5.2 compatible version in our 1.5 branch https://github.com/OpenMods/OpenBlocks/tree/1.5
+Thanks for your patience.
+
 Version
 -
 
