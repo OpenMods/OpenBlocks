@@ -252,6 +252,11 @@ public class OpenBlocks {
 			return false;
 		}
 	}
+	
+	/* 
+	 * TODO: These either need amending or depreciating, maybe move it from CompatibilityUtils to here 
+	 * - NC
+	 */
 
 	public static String getResourcesPath() {
 		return "/mods/openblocks";
