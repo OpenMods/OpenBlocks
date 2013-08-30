@@ -3,6 +3,7 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.model.ModelFlag;
 import openblocks.common.tileentity.TileEntityFlag;
@@ -13,6 +14,9 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 
 	ModelFlag model = new ModelFlag();
 
+	private static final ResourceLocation textureFlagpole = new ResourceLocation("openblocks", "textures/models/flagpole.png");
+	private static final ResourceLocation textureFlag = new ResourceLocation("openblocks", "textures/models/flag.png");
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
@@ -29,7 +33,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 			GL11.glTranslatef(0f, -0.2f, -0.7f);
 		}
 		// GL11.glTranslatef(0, 0, -0.3F);
-		this.bindTextureByName("/mods/openblocks/textures/models/flagpole.png");
+		func_110628_a(textureFlagpole);
 		model.render(tileentity, f);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-90, 0, 1, 0);
@@ -42,7 +46,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 
 	public void renderFlag(TileEntityFlag flag) {
 		Tessellator tessellator = Tessellator.instance;
-		this.bindTextureByName("/mods/openblocks/textures/models/flag.png");
+		func_110628_a(textureFlag);
 		int color = flag.getColor();
 
 		float r = (float)((color >> 16) & 0xFF) / 255;
