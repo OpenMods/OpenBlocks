@@ -2,6 +2,8 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import openblocks.utils.CompatibilityUtils;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -19,7 +21,7 @@ public class TileEntityHealBlock extends OpenTileEntity {
 		if (worldObj.getTotalWorldTime() % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
-					if (player.getHealth() < player.maxHealth) player.heal(1);
+					if (CompatibilityUtils.getEntityHealth(player) < CompatibilityUtils.getEntityMaxHealth(player)) player.heal(1);
 					if (player.getFoodStats().needFood()) player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + 1);
 				}
 			}

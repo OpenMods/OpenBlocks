@@ -155,7 +155,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 
 	public void changeDimensions(EntityPlayer player, ForgeDirection orientation) {
 		changeDimensions(orientation);
-		player.sendChatToPlayer(String.format("Changing size to %sx%sx%s", width.getValue(), height.getValue(), depth.getValue()));
+		CompatibilityUtils.sendChatToPlayer(player, String.format("Changing size to %sx%sx%s", width.getValue(), height.getValue(), depth.getValue()));
 	}
 
 	public void changeDimensions(ForgeDirection orientation) {

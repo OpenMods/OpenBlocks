@@ -181,8 +181,8 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		return inventory.isStackValidForSlot(i, itemstack);
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		return inventory.isItemValidForSlot(i, itemstack);
 	}
 
 	@Override
