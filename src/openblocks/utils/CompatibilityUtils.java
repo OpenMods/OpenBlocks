@@ -23,8 +23,33 @@ public final class CompatibilityUtils {
 		return entity.func_110138_aP();
 	}
 	
-	public static void bindTextureToClient(Minecraft client, String texture) {
-		client.renderEngine.func_110577_a(getResourceLocation(texture));
+	public static void bindTextureToClient(String texture) {
+		if(Minecraft.getMinecraft() != null) {
+			Minecraft.getMinecraft().renderEngine.func_110577_a(getResourceLocation(texture));
+		} else {
+			System.out.println("[OpenModsMonitor] WARNING: Binding texture to null client.");
+		}
+	}
+	
+	public static void bindIndexedTextureToClient(int index) {
+		if(Minecraft.getMinecraft() != null) {
+			Minecraft.getMinecraft().renderEngine.func_110577_a(Minecraft.getMinecraft().renderEngine.func_130087_a(index));	
+		} else {
+			System.out.println("[OpenModsMonitor] WARNING: Binding indexed texture to null client.");
+		}
+		
+	}
+	
+	public static void bindDefaultTerrainTexture() {
+		bindIndexedTextureToClient(0);
+	}
+	
+	public static void bindDefaultItemsTexture() {
+		bindIndexedTextureToClient(1);
+	}
+	
+	public static int getRandomNumber() {
+		return 4;
 	}
 	
 	public static ResourceLocation getResourceLocation(String resourceName) {

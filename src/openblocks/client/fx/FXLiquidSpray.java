@@ -69,7 +69,9 @@ public class FXLiquidSpray extends EntityFX {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		this.setParticleIcon(Minecraft.getMinecraft().renderEngine, texture);
+		
+		//this.setParticleIcon(Minecraft.getMinecraft().renderEngine, texture);
+		this.func_110125_a(texture);
 
 		// this.setParticleTextureIndex(0 + this.rand.nextInt(7));
 	}

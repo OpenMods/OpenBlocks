@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.OpenBlocks;
+import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -38,9 +39,9 @@ public class ItemRendererHangGlider implements IItemRenderer {
 		}
 
 		if (par2ItemStack.getItemSpriteNumber() == 0) {
-			Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+			CompatibilityUtils.bindDefaultTerrainTexture();
 		} else {
-			Minecraft.getMinecraft().renderEngine.bindTexture("/gui/items.png");
+			CompatibilityUtils.bindDefaultItemsTexture();
 		}
 
 		Tessellator tessellator = Tessellator.instance;
@@ -57,7 +58,7 @@ public class ItemRendererHangGlider implements IItemRenderer {
 		GL11.glRotatef(50.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(335.0F, 0.0F, 0.0F, 1.0F);
 		GL11.glTranslatef(-0.9375F, -0.0625F, 0.0F);
-		ItemRenderer.renderItemIn2D(tessellator, f1, f2, f, f3, icon.getSheetWidth(), icon.getSheetHeight(), 0.0625F);
+		ItemRenderer.renderItemIn2D(tessellator, f1, f2, f, f3, icon.getOriginX(), icon.getOriginY(), 0.0625F);
 
 	}
 }

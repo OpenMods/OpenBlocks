@@ -1,6 +1,7 @@
 package openblocks.client.entity;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -56,11 +57,6 @@ public class EntityViewportController extends EntityLiving {
 		this.rotationPitch = this.prevRotationPitch = this.cameraPitch = this.prevCameraPitch = f3 + 20;
 		this.rotationYaw = this.rotationYawHead = this.prevRotationYaw = this.prevRotationYawHead = renderYawOffset = f2;
 
-	}
-
-	@Override
-	public int getMaxHealth() {
-		return 10;
 	}
 
 }

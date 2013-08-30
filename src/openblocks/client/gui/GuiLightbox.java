@@ -24,7 +24,7 @@ public class GuiLightbox extends GuiContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int left = (this.width - this.xSize) / 2;
 		int top = (this.height - this.ySize) / 2;
-		CompatibilityUtils.bindTextureToClient(mc, "textures/gui/lightbox.png");
+		CompatibilityUtils.bindTextureToClient("textures/gui/lightbox.png");
 		this.drawTexturedModalRect(left, top, 0, 0, this.xSize, this.ySize);
 	}
 
