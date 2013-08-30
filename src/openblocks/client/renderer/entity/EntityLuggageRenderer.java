@@ -2,7 +2,10 @@ package openblocks.client.renderer.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelLuggage;
 import openblocks.common.entity.EntityLuggage;
 
@@ -12,13 +15,14 @@ public class EntityLuggageRenderer extends RenderLiving {
 
 	private static ModelBase luggageModel = new ModelLuggage();
 
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/luggage.png");
+	private static final ResourceLocation textureSpecial = new ResourceLocation("openblocks", "textures/models/luggage_special.png");
+	
 	public EntityLuggageRenderer() {
 		super(luggageModel, 0.5F);
 	}
 
 	private int renderSpecial(EntityLuggage luggage, int p, float m) {
-		/* Disable special renderer for now */
-		if(true) return -1;
 		if (luggage.isSpecial() && luggage.getOwnerName() != null) {
 			if (p == 1) {
 				float f1 = (float)luggage.ticksExisted + m;
@@ -51,7 +55,7 @@ public class EntityLuggageRenderer extends RenderLiving {
 	}
 
 	@Override
-	protected void preRenderCallback(EntityLiving entity, float par2) {
+	protected void preRenderCallback(EntityLivingBase entity, float par2) {
 		EntityLuggage luggage = (EntityLuggage)entity;
 		if (luggage.isSpecial()) {
 			float oscMagnitude = (float)Math.abs(Math.sin((entity.ticksExisted + par2) * 0.05));
@@ -65,6 +69,11 @@ public class EntityLuggageRenderer extends RenderLiving {
 
 	protected int shouldRenderPass(EntityLiving entity, int par2, float par3) {
 		return renderSpecial((EntityLuggage)entity, par2, par3);
+	}
+
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) {
+		return texture;
 	}
 
 }
