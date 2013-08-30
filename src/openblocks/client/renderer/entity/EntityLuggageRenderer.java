@@ -17,10 +17,14 @@ public class EntityLuggageRenderer extends RenderLiving {
 	}
 
 	private int renderSpecial(EntityLuggage luggage, int p, float m) {
+		/* Disable special renderer for now */
+		if(true) return -1;
 		if (luggage.isSpecial() && luggage.getOwnerName() != null) {
 			if (p == 1) {
 				float f1 = (float)luggage.ticksExisted + m;
-				this.loadTexture("/armor/power.png");
+				/* Is this meant to be bind? I don't quite know.. Someone go check Creeper code :P #cbf #lazy #hashtags in sourcecode will annoy mikee */
+				// TODO: FIX THIS!! Then we can have special luggage back :D
+				// this.loadTexture("/armor/power.png");
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
 				float f2 = f1 * 0.01F;

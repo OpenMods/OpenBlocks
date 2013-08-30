@@ -4,7 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import openblocks.common.entity.EntityHangGlider;
+import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -49,7 +51,7 @@ public class EntityHangGliderRenderer extends Render {
 
 		// Push matrix to hold it's location for rendering other stuff */
 		GL11.glPushMatrix();
-		this.renderManager.renderEngine.bindTexture("/mods/openblocks/textures/models/hangglider.png");
+		CompatibilityUtils.bindTextureToClient("textures/models/hangglider.png");
 		renderGlider();
 		GL11.glPopMatrix();
 
@@ -83,5 +85,10 @@ public class EntityHangGliderRenderer extends Render {
 		}
 
 		return prevRotation + modifier * rotation;
+	}
+
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) {
+		return CompatibilityUtils.getResourceLocation("textures/models/hangglider.png");
 	}
 }

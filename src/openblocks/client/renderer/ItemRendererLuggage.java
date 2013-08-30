@@ -38,7 +38,6 @@ public class ItemRendererLuggage implements IItemRenderer {
 			if (item.hasTagCompound()) {
 				luggage.getInventory().readFromNBT(item.getTagCompound());
 			}
-			luggage.refreshTexture();
 			Render renderer = RenderManager.instance.getEntityRenderObject(luggage);
 			if (renderer.getFontRendererFromRenderManager() != null) {
 				renderer.doRender(luggage, 0, 0, 0, 0, 0.5f);
