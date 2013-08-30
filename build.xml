@@ -18,9 +18,9 @@
 
 	<property name="mcpsrc.dir"          value="${mcp.dir}/src/minecraft"/>
 
-	<property name="mc.version"          value="1.5.2"/>
-	<property name="forge.version"       value="7.8.0.703"/>
-	<property name="mod.version"         value="1.0.3"/>
+	<property name="mc.version"          value="1.6.2"/>
+	<property name="forge.version"       value="9.10.0.845"/>
+	<property name="mod.version"         value="1.1.0"/>
 	<property name="mod.name"	     value="OpenBlocks"/>
 	
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
@@ -114,8 +114,8 @@
 		</copy>
 
 		<!-- Copy resources -->
-		<copy todir="${classes.dir}/mods/openblocks">
-			<fileset dir="mods/openblocks" />
+		<copy todir="${classes.dir}/assets/openblocks">
+			<fileset dir="assets/openblocks" />
 		</copy>
 		
 		<!-- Copy resources -->

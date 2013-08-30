@@ -24,8 +24,6 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
-		//bindTextureByName("/terrain.png");
-
 		GL11.glPushMatrix();
 
 		// move to the middle of the block
