@@ -1,9 +1,11 @@
 package openblocks.client.renderer;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.client.IItemRenderer;
@@ -29,7 +31,7 @@ public class ItemRendererHangGlider implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack par2ItemStack, Object... data) {
 
-		EntityLiving par1EntityLiving = (EntityLiving)data[1];
+		EntityLivingBase par1EntityLiving = (EntityLivingBase)data[1];
 		if (OpenBlocks.proxy.gliderClientMap.containsKey(par1EntityLiving)) return;
 		Icon icon = par1EntityLiving.getItemIcon(par2ItemStack, 0);
 
