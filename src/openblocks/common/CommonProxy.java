@@ -100,6 +100,7 @@ public class CommonProxy implements IGuiHandler {
 
 		if (Config.blockSprinklerId > -1) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
 		}
 
 		OpenBlocks.Items.generic = new ItemGeneric();
