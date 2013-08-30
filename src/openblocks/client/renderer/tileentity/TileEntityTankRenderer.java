@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
@@ -18,10 +19,11 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/sprinkler.png");
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		bindTextureByName("/terrain.png");
+		//bindTextureByName("/terrain.png");
 		TileEntityTank tankTile = (TileEntityTank)tileentity;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
@@ -101,7 +103,6 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		LiquidStack liquid = internalTank.getLiquid();
 
-		bindTextureByName("/terrain.png");
 		if (liquid != null && tankTile.getHeightForRender() > 0.05) {
 
 			Block block = null;
@@ -119,7 +120,8 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 					texture = getLiquidTexture(liquid);
 				} else {}
 
-				bindTextureByName(getLiquidSheet(liquid));
+				//TODO: fix
+				//bindTextureByName(getLiquidSheet(liquid));
 
 				Tessellator t = Tessellator.instance;
 

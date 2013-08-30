@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
@@ -19,11 +20,11 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
-		bindTextureByName("/terrain.png");
+		//bindTextureByName("/terrain.png");
 
 		GL11.glPushMatrix();
 

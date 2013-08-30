@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
@@ -14,7 +15,7 @@ import openblocks.utils.BlockUtils;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
-
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f) {
 		TileEntityTrophy trophy = (TileEntityTrophy)tileentity;
@@ -46,7 +47,8 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);
 
-				bindTextureByName("/terrain.png");
+				//TODO: fix
+				//bindTextureByName("/terrain.png");
 				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8, OpenBlocks.Blocks.trophy, null);
 				GL11.glPopMatrix();
 

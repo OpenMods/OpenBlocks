@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 
@@ -13,11 +14,13 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/guide.png");
+	
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide)tileentity;
-		bindTextureByName("/terrain.png");
+		//bindTextureByName("/terrain.png");
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
@@ -60,7 +63,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		t.startDrawingQuads();
 		t.setColorRGBA(255, 255, 255, 100);
 		t.setBrightness(200);
-		this.bindTextureByName("/mods/openblocks/textures/blocks/guide.png");
+		func_110628_a(texture);
 		Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
 		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
 		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
