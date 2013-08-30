@@ -16,6 +16,7 @@ import openblocks.shapes.ShapeFactory;
 import openblocks.shapes.ShapeFactory.Mode;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
+import openblocks.utils.CompatibilityUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -134,7 +135,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	public void switchMode(EntityPlayer player) {
 		switchMode();
 		if (player != null) {
-			player.sendChatToPlayer(String.format("Changing to %s mode", getCurrentMode().getDisplayName()));
+			CompatibilityUtils.sendChatToPlayer(player, String.format("Changing to %s mode", getCurrentMode().getDisplayName()));
 		}
 	}
 
