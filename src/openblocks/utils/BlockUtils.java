@@ -3,6 +3,7 @@ package openblocks.utils;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class BlockUtils {
 
-	public static ForgeDirection get2dOrientation(EntityLiving entity) {
+	public static ForgeDirection get2dOrientation(EntityLivingBase entity) {
 		int l = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
 		switch (l) {
 			case 0:
@@ -49,7 +50,7 @@ public class BlockUtils {
 		}
 	}
 
-	public static ForgeDirection get3dOrientation(EntityLiving entity) {
+	public static ForgeDirection get3dOrientation(EntityLivingBase entity) {
 		if (entity.rotationPitch > 45.5F) {
 			return ForgeDirection.DOWN;
 		} else if (entity.rotationPitch < -45.5F) { return ForgeDirection.UP; }
@@ -154,7 +155,7 @@ public class BlockUtils {
 		 */
 		int itemSizeCounter = item.stackSize;
 		for (int i = 0; i < slotCount && itemSizeCounter > 0; i++) {
-			if (!inventory.isStackValidForSlot(i, item)) continue;
+			if (!inventory.isItemValidForSlot(i, item)) continue;
 			ItemStack inventorySlot = inventory.getStackInSlot(i);
 			/*
 			 * If the slot is empty, dump the biggest stack we can, taking in to

@@ -3,6 +3,7 @@ package openblocks.common.block;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -81,7 +82,7 @@ public class BlockLadder extends BlockTrapDoor {
 	}
 
 	@Override
-	public boolean isLadder(World world, int x, int y, int z) {
+	public boolean isLadder(World world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}
 
