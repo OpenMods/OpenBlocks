@@ -29,14 +29,15 @@ public class EntityLuggage extends EntityTameable implements
 
 	public EntityLuggage(World world) {
 		super(world);
-		this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
+		// Handled in renderer
+		// this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
 		this.setSize(0.5F, 0.5F);
-		this.moveSpeed = 0.4F;
+		setAIMoveSpeed(0.4F);
 		setTamed(true);
 		this.getNavigator().setAvoidsWater(true);
 		this.getNavigator().setCanSwim(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIFollowOwner(this, this.moveSpeed, 10.0F, 2.0F));
+		this.tasks.addTask(2, new EntityAIFollowOwner(this, getAIMoveSpeed(), 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
 		this.dataWatcher.addObject(18, Integer.valueOf(inventory.getSizeInventory())); // inventory
 																						// size
@@ -53,10 +54,6 @@ public class EntityLuggage extends EntityTameable implements
 		this.inventory = inventory;
 	}
 
-	public void refreshTexture() {
-		this.texture = OpenBlocks.getTexturesPath(isSpecial()? "models/luggage_special.png" : "models/luggage.png");
-	}
-
 	public boolean isSpecial() {
 		if (worldObj.isRemote) { return inventory.getSizeInventory() > 27; }
 		return special;
@@ -69,19 +66,12 @@ public class EntityLuggage extends EntityTameable implements
 			if (inventory.getSizeInventory() != inventorySize) {
 				inventory = new GenericInventory("luggage", false, inventorySize);
 			}
-
-			refreshTexture();
 		}
 		lastSound++;
 	}
 
 	public boolean isAIEnabled() {
 		return true;
-	}
-
-	@Override
-	public int getMaxHealth() {
-		return 100;
 	}
 
 	public GenericInventory getInventory() {
