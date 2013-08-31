@@ -56,9 +56,13 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			for (int i = -1; i <= 1; i++) {
 				int y = yCoord + i;
 				for (int a = 0; a < 10; a++) {
-					// Mikee, why do we try to apply it 10 times? Is it likely to fail? -NC
-					if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
-						break;
+					try {
+						// Mikee, why do we try to apply it 10 times? Is it likely to fail? -NC
+						if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
+							break;
+						}
+					}catch(Exception e) {
+						// do nothing, because who gives a fuck really
 					}
 				}
 			}
