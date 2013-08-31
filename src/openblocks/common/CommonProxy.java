@@ -169,7 +169,7 @@ public class CommonProxy implements IGuiHandler {
 
 	/**
 	 * Is this the server
-	 * 
+	 *
 	 * @return true if this is the server
 	 */
 	public boolean isServer() {
@@ -179,7 +179,7 @@ public class CommonProxy implements IGuiHandler {
 
 	/**
 	 * Is this the client
-	 * 
+	 *
 	 * @return true if this is the client
 	 */
 	public boolean isClient() {
@@ -188,7 +188,7 @@ public class CommonProxy implements IGuiHandler {
 
 	/**
 	 * Checks if this game is SinglePlayer
-	 * 
+	 *
 	 * @return true if this is single player
 	 */
 	public boolean isSinglePlayer() {

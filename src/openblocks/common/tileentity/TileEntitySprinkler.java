@@ -36,7 +36,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
 
 	private GenericInventory inventory = new GenericInventory("sprinkler", true, 9);
-	
+
 	private boolean hasBonemeal = false;
 
 	private void attemptFertilize() {
@@ -79,7 +79,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 					+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
 		}
 	}
-	
+
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
@@ -214,7 +214,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	public ILiquidTank[] getTanks(ForgeDirection direction) {
 		return new ILiquidTank[] { tank };
 	}
-	
+
 	@Override
 	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
 		return tank;
