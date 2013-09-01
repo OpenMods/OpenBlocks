@@ -135,21 +135,6 @@ public class ClientProxy extends CommonProxy {
 		return null;
 	}
 
-	/* I'll just sneak this in here ;) -NeverCast */
-	@ForgeSubscribe
-	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-		if (event.world != null && event.world.isRemote) {
-			if (event.entity instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer)event.entity;
-				Calendar cal = Calendar.getInstance();
-				if (cal.get(Calendar.MONTH) == Calendar.AUGUST
-						&& cal.get(Calendar.DATE) == 16) {
-					CompatibilityUtils.sendChatToPlayer(player,"Happy Birthday Mikee!! :)");
-				}
-			}
-		}
-	}
-
 	@Override
 	public File getWorldDir(World world) {
 		return new File(OpenBlocks.getBaseDir(), "saves/"
