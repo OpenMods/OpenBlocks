@@ -2,6 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -14,14 +15,16 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/guide.png");
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/blocks/guide.png");
 	
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide)tileentity;
-		//bindTextureByName("/terrain.png");
 
+		//;
+		func_110628_a(TextureMap.field_110575_b);
+		
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 		GL11.glPushMatrix();
