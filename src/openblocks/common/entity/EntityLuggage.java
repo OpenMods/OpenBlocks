@@ -1,6 +1,7 @@
 package openblocks.common.entity;
 
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -33,6 +34,7 @@ public class EntityLuggage extends EntityTameable implements
 		// this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
 		this.setSize(0.5F, 0.5F);
 		setAIMoveSpeed(0.4F);
+		setMoveForward(0);
 		setTamed(true);
 		this.getNavigator().setAvoidsWater(true);
 		this.getNavigator().setCanSwim(true);
