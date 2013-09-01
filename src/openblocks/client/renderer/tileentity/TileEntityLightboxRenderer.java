@@ -3,6 +3,7 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -25,6 +26,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		GL11.glPushMatrix();
+		func_110628_a(TextureMap.field_110575_b);
 
 		// move to the middle of the block
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
