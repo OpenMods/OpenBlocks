@@ -42,7 +42,6 @@ import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemLuggage;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntitySprinkler;
-import openblocks.utils.LanguageUtils;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -133,7 +132,6 @@ public class CommonProxy implements IGuiHandler {
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
 
 		OpenBlocks.Items.generic.initRecipes();
-		LanguageUtils.setupLanguages();
 	}
 	
 	private boolean canRegisterBlock(int blockId) {
