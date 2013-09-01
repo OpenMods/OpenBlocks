@@ -75,6 +75,11 @@ public class ClientProxy extends CommonProxy {
 		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 	}
+	
+	@Override
+	public void postInit() {
+		SoundEventsManager.instance.init();
+	}
 
 	public void registerRenderInformation() {
 
@@ -106,6 +111,7 @@ public class ClientProxy extends CommonProxy {
 		attachPlayerRenderer();
 
 		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+		MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 	}
 
 	public void assertItemHangGliderRenderer() {

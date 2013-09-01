@@ -7,10 +7,12 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
+
 
 public class ClientEventHandler {
 
@@ -63,5 +65,10 @@ public class ClientEventHandler {
 			GL11.glDisable(GL11.GL_BLEND);
 
 		}
+	}
+	
+	@ForgeSubscribe
+	public void onRenderWorldLast(RenderWorldLastEvent evt) {
+		SoundEventsManager.instance.renderEvents(evt);
 	}
 }
