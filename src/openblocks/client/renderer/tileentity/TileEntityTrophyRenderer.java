@@ -3,6 +3,7 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -48,7 +49,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glTranslated(d0, d1, d2);
 
 				//TODO: fix
-				//bindTextureByName("/terrain.png");
+				func_110628_a(TextureMap.field_110575_b);
 				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8, OpenBlocks.Blocks.trophy, null);
 				GL11.glPopMatrix();
 
