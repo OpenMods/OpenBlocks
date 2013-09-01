@@ -3,6 +3,8 @@ package openblocks.client.renderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import openblocks.common.tileentity.TileEntityTank;
@@ -31,14 +33,13 @@ public class ItemRendererTank implements IItemRenderer {
 		if (type != ItemRenderType.INVENTORY) {
 			GL11.glTranslated(0, 0.5, 0);
 		}
-		teTank.getInternalTank().setLiquid(null);
+		teTank.getInternalTank().setFluid(null);
 		if (item.hasTagCompound() && item.getTagCompound().hasKey("tank")) {
 			teTank.readFromNBT(item.getTagCompound().getCompoundTag("tank"));
-			LiquidStack lstack = teTank.getInternalTank().getLiquid();
+			FluidStack lstack = teTank.getInternalTank().getFluid();
 			if (lstack != null
-					&& LiquidDictionary.findLiquidName(lstack) != null) {
-				teTank.setClientLiquidId(lstack.itemID);
-				teTank.setClientLiquidMeta(lstack.itemMeta);
+					&& FluidRegistry.getFluidName(lstack) != null) {
+				teTank.setClientLiquidId(lstack.fluidID);
 			}
 		}
 		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, 0.0D, 0.0D, 0.0F);

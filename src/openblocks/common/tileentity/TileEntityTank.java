@@ -15,6 +15,12 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
@@ -29,27 +35,22 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.ItemUtils;
 
 public class TileEntityTank extends NetworkedTileEntity implements
-		ITankContainer, IAwareTile {
+	IFluidHandler, IAwareTile {
 
 	public static int getTankCapacity() {
-		return LiquidContainerRegistry.BUCKET_VOLUME
+		return FluidContainerRegistry.BUCKET_VOLUME
 				* OpenBlocks.Config.bucketsPerTank;
 	}
 
 	/**
 	 * The tank holding the liquid
 	 */
-	private LiquidTank tank = new LiquidTank(getTankCapacity());
+	private FluidTank tank = new FluidTank(getTankCapacity());
 
 	/**
 	 * The Id of the liquid in the tank
 	 */
 	private SyncableInt liquidId = new SyncableInt();
-
-	/**
-	 * The meta of the liquid metadata in the tank
-	 */
-	private SyncableInt liquidMeta = new SyncableInt();
 
 	/**
 	 * The level of the liquid that is rendered on the client
@@ -73,21 +74,16 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	 * Keys of things what get synced
 	 */
 	public enum Keys {
-		liquidId, liquidMeta, renderLevel
+		liquidId, renderLevel
 	}
 
 	public TileEntityTank() {
 		addSyncedObject(Keys.liquidId, liquidId);
-		addSyncedObject(Keys.liquidMeta, liquidMeta);
 		addSyncedObject(Keys.renderLevel, liquidRenderAmount);
 	}
 	
 	public int getClientLiquidId() {
 		return liquidId.getValue();
-	}
-	
-	public int getClientLiquidMeta() {
-		return liquidMeta.getValue();
 	}
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
@@ -152,7 +148,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 				if (otherTank == null) { return null; }
 				if (otherTank.isInvalid()) { return null; }
 				if (this instanceof TileEntityTank) {
-					if (otherTank.canReceiveLiquid(((TileEntityTank)this).getInternalTank().getLiquid())) { return otherTank; }
+					if (otherTank.canReceiveLiquid(((TileEntityTank)this).getInternalTank().getFluid())) { return otherTank; }
 				} else {
 					return otherTank;
 				}
@@ -200,7 +196,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	public boolean containsValidLiquid() {
-		return liquidId.getValue() != 0 && tank.getLiquidName() != null;
+		return liquidId.getValue() != 0 && tank.getFluid() != null;
 	}
 
 	private void interpolateLiquidLevel() {
@@ -230,13 +226,13 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			except.add(this);
 
 			// if we have a liquid
-			if (tank.getLiquid() != null) {
+			if (tank.getFluid() != null) {
 
 				// try to fill up the tank below with as much liquid as possible
 				TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
 				if (below != null) {
 					if (below.getSpace() > 0) {
-						LiquidStack myLiquid = tank.getLiquid().copy();
+						FluidStack myLiquid = tank.getFluid().copy();
 						if (below.canReceiveLiquid(myLiquid)) {
 							int toFill = Math.min(below.getSpace(), myLiquid.amount);
 							myLiquid.amount = toFill;
@@ -251,14 +247,14 @@ public class TileEntityTank extends NetworkedTileEntity implements
 					// full
 					ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
 					for (TileEntityTank horizontal : horizontals) {
-						LiquidStack liquid = tank.getLiquid();
+						FluidStack liquid = tank.getFluid();
 						if (horizontal.canReceiveLiquid(liquid)
 								&& liquid != null) {
 							int difference = getAmount()
 									- horizontal.getAmount();
 							if (difference <= 0) continue;
 							int halfDifference = Math.max(difference / 2, 1);
-							LiquidStack liquidCopy = liquid.copy();
+							FluidStack liquidCopy = liquid.copy();
 							liquidCopy.amount = Math.min(500, halfDifference);
 							int filled = horizontal.fill(liquidCopy, true, except);
 							tank.drain(filled, true);
@@ -266,10 +262,10 @@ public class TileEntityTank extends NetworkedTileEntity implements
 					}
 				}
 
-				if (tank.getLiquid() != null) {
+				if (tank.getFluid() != null) {
 					// set the sync values for this liquid
-					liquidId.setValue(tank.getLiquid().itemID);
-					liquidMeta.setValue(tank.getLiquid().itemMeta);
+					liquidId.setValue(tank.getFluid().fluidID);
+					//liquidMeta.setValue(tank.getFluid().areFluidStackTagsEqual(stack1, stack2));
 				}
 			}
 
@@ -277,12 +273,11 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			if (containsValidLiquid()) {
 				/* ratio the liquid amount in to the entire short, clamp it */
 				short newLiquidRender = (short)Math.max(0, Math.min(Short.MAX_VALUE, Short.MAX_VALUE
-						* tank.getLiquid().amount / (float)tank.getCapacity()));
+						* tank.getFluid().amount / (float)tank.getCapacity()));
 				liquidRenderAmount.setValue(newLiquidRender);
 			} else {
 				liquidRenderAmount.setValue((short)0);
 				liquidId.setValue(0);
-				liquidMeta.setValue(0);
 			}
 			sync(1);
 		} else {
@@ -291,15 +286,15 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		}
 	}
 
-	public boolean canReceiveLiquid(LiquidStack liquid) {
-		if (!tank.containsValidLiquid()) { return true; }
+	public boolean canReceiveLiquid(FluidStack liquid) {
+		if (tank.getFluid() == null) { return true; }
 		if (liquid == null) { return true; }
-		LiquidStack otherLiquid = tank.getLiquid();
-		if (otherLiquid != null) { return otherLiquid.isLiquidEqual(liquid); }
+		FluidStack otherLiquid = tank.getFluid();
+		if (otherLiquid != null) { return otherLiquid.isFluidEqual(liquid); }
 		return true;
 	}
 
-	public LiquidTank getInternalTank() {
+	public FluidTank getInternalTank() {
 		return tank;
 	}
 
@@ -312,11 +307,11 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	public int getAmount() {
-		if (getInternalTank() == null || getInternalTank().getLiquid() == null) return 0;
-		return getInternalTank().getLiquid().amount;
+		if (getInternalTank() == null || getInternalTank().getFluid() == null) return 0;
+		return getInternalTank().getFluid().amount;
 	}
 
-	public int fill(LiquidStack resource, boolean doFill, HashSet<TileEntityTank> except) {
+	public int fill(FluidStack resource, boolean doFill, HashSet<TileEntityTank> except) {
 		TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
 		int filled = 0;
 		if (except == null) {
@@ -357,7 +352,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			if (horizontals.size() > 0) {
 				int amountPerSide = resource.amount / horizontals.size();
 				for (TileEntityTank sideTank : horizontals) {
-					LiquidStack copy = resource.copy();
+					FluidStack copy = resource.copy();
 					copy.amount = amountPerSide;
 					filled = sideTank.fill(copy, doFill, except);
 					resource.amount -= filled;
@@ -367,18 +362,18 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		return startAmount - resource.amount;
 	}
 
-	public LiquidStack drain(int amount, boolean doDrain) {
+	public FluidStack drain(int amount, boolean doDrain) {
 		return tank.drain(amount, doDrain);
 	}
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 		interpolatedRenderAmount = liquidRenderAmount.getValue();
-		if (changes.contains(liquidId) || changes.contains(liquidMeta)) {
+		if (changes.contains(liquidId)) {
 			if (liquidId.getValue() == 0) {
-				tank.setLiquid(null);
+				tank.setFluid(null);
 			} else {
-				tank.setLiquid(new LiquidStack(liquidId.getValue(), 1, liquidMeta.getValue()));
+				tank.setFluid(new FluidStack(liquidId.getValue(), 1));
 			}
 			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 		}
@@ -411,42 +406,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 				/ (double)tank.getCapacity() * Short.MAX_VALUE);
 	}
 
-	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		int filled = fill(resource, doFill, null);
-		if (doFill && filled > 0) {
-			if (resource != null) {
-				liquidId.setValue(resource.itemID);
-				liquidMeta.setValue(resource.itemMeta);
-			}
-		}
-		return filled;
-	}
-
-	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		return fill(ForgeDirection.UNKNOWN, resource, doFill);
-	}
-
-	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		return drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		return new ILiquidTank[] { tank };
-	}
-
-	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		return tank;
-	}
 
 	public int countDownwardsTanks() {
 		int count = 1;
@@ -472,7 +431,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		ItemStack current = player.inventory.getCurrentItem();
 		if (current != null) {
 
-			LiquidStack liquid = LiquidContainerRegistry.getLiquidForFilledItem(current);
+			FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(current);
 
 			// Handle filled containers
 			if (liquid != null) {
@@ -487,11 +446,11 @@ public class TileEntityTank extends NetworkedTileEntity implements
 				// Fix for #15
 				if (worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true;
 				// End of fix
-				LiquidStack available = tank.getLiquid();
+				FluidStack available = tank.getFluid();
 				if (available != null) {
-					ItemStack filled = LiquidContainerRegistry.fillLiquidContainer(available, current);
+					ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
 
-					liquid = LiquidContainerRegistry.getLiquidForFilledItem(filled);
+					liquid = FluidContainerRegistry.getFluidForFilledItem(filled);
 
 					if (liquid != null) {
 						if (!player.capabilities.isCreativeMode) {
@@ -546,7 +505,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			for (ForgeDirection side : sides) {
 				TileEntityTank sideTank = getTankInDirection(side);
 				if (sideTank != null
-						&& sideTank.canReceiveLiquid(tank.getLiquid())) {
+						&& sideTank.canReceiveLiquid(tank.getFluid())) {
 					fullness += sideTank.getHeightForRender()
 							+ sideTank.getFlowOffset();
 					count++;
@@ -562,10 +521,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		liquidId.setValue(itemID);
 	}
 
-	public void setClientLiquidMeta(int itemMeta) {
-		liquidMeta.setValue(itemMeta);
-	}
-
 	public NBTTagCompound getItemNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		tank.writeToNBT(nbt);
@@ -576,5 +531,45 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	public void onBlockAdded() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		int filled = fill(resource, doFill, null);
+		if (doFill && filled > 0) {
+			if (resource != null) {
+				liquidId.setValue(resource.fluidID);
+			}
+		}
+		return filled;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (resource == null)
+			return null;
+		if (!resource.isFluidEqual(tank.getFluid()))
+			return null;
+		return drain(from, resource.amount, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[] { tank.getInfo() };
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return drain(maxDrain, doDrain);
 	}
 }

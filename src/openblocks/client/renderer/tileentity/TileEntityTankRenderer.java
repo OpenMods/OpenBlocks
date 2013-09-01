@@ -1,14 +1,19 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.OpenBlocks;
@@ -99,11 +104,11 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		GL11.glEnable(2896);
 
-		LiquidTank internalTank = tankTile.getInternalTank();
+		FluidTank internalTank = tankTile.getInternalTank();
 
-		LiquidStack liquid = internalTank.getLiquid();
+		FluidStack fluidStack = internalTank.getFluid();
 
-		if (liquid != null && tankTile.getHeightForRender() > 0.05) {
+		if (fluidStack != null && tankTile.getHeightForRender() > 0.05) {
 
 			Block block = null;
 			Icon texture = null;
@@ -111,17 +116,17 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			GL11.glPushMatrix();
 			GL11.glDisable(2896);
 			try {
-				if (liquid.itemID < Block.blocksList.length
-						&& Block.blocksList[liquid.itemID] != null) {
-					block = Block.blocksList[liquid.itemID];
-					texture = getLiquidTexture(liquid);
-				} else if (Item.itemsList[liquid.itemID] != null) {
-					block = Block.waterStill;
-					texture = getLiquidTexture(liquid);
-				} else {}
 
-				//TODO: fix
-				//bindTextureByName(getLiquidSheet(liquid));
+				Fluid fluid = fluidStack.getFluid();
+				
+				if (fluid.getBlockID() > 0) {
+					block = Block.blocksList[fluid.getBlockID()];
+					texture = fluidStack.getFluid().getStillIcon();
+				} else {
+					block = Block.waterStill;
+					texture = fluidStack.getFluid().getStillIcon();
+				}
+				func_110628_a(getFluidSheet(fluid));
 
 				Tessellator t = Tessellator.instance;
 
@@ -207,20 +212,14 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 	}
-
-	public static Icon getLiquidTexture(LiquidStack liquid) throws Exception {
-		if (liquid == null || liquid.itemID <= 0) { return null; }
-		LiquidStack canon = liquid.canonical();
-		if (canon == null) { throw new Exception(); }
-		Icon icon = canon.getRenderingIcon();
-		if (icon == null) { throw new Exception(); }
-		return icon;
+	
+	public static ResourceLocation getFluidSheet(FluidStack liquid) {
+		if (liquid == null)
+			return TextureMap.field_110575_b;
+		return getFluidSheet(liquid.getFluid());
 	}
 
-	public static String getLiquidSheet(LiquidStack liquid) {
-		if (liquid == null || liquid.itemID <= 0) { return "/terrain.png"; }
-		LiquidStack canon = liquid.canonical();
-		if (canon == null) { return "/terrain.png"; }
-		return canon.getTextureSheet();
+	public static ResourceLocation getFluidSheet(Fluid liquid) {
+		return TextureMap.field_110575_b;
 	}
 }
