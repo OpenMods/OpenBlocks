@@ -17,6 +17,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.liquids.LiquidStack;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
@@ -159,7 +160,8 @@ public class ClientProxy extends CommonProxy {
 		return true;
 	}
 
-	public void spawnLiquidSpray(World worldObj, LiquidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
+	@Override
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
 		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
 	}

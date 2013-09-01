@@ -14,11 +14,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.liquids.ILiquidTank;
-import net.minecraftforge.liquids.ITankContainer;
-import net.minecraftforge.liquids.LiquidContainerRegistry;
-import net.minecraftforge.liquids.LiquidStack;
-import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
@@ -27,13 +29,14 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, ITankContainer, IInventory {
-
-	private LiquidStack water = new LiquidStack(Block.waterStill, 1);
+		ISurfaceAttachment, IFluidHandler, IInventory {
+	
+	// erpppppp
+	private FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
 
 	private ItemStack bonemeal = new ItemStack(Item.dyePowder, 1, 15);
 
-	private LiquidTank tank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME);
+	private FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
 
 	private GenericInventory inventory = new GenericInventory("sprinkler", true, 9);
 
@@ -83,13 +86,13 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-
-			if (tank.getLiquid() == null || tank.getLiquid().amount == 0) {
+			if (tank.getFluid() == null || tank.getFluid().amount == 0) {
 				TileEntity below = worldObj.getBlockTileEntity(xCoord, yCoord - 1, zCoord);
-				if (below instanceof ITankContainer) {
-					ITankContainer belowTank = (ITankContainer)below;
-					LiquidStack drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), false);
-					if (drained != null && drained.isLiquidEqual(water)) {
+				if (below instanceof IFluidHandler) {
+
+					IFluidHandler belowTank = (IFluidHandler)below;
+					FluidStack drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), false);
+					if (drained != null && drained.isFluidEqual(water)) {
 						drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), true);
 						if (drained != null) {
 							tank.fill(drained, true);
@@ -190,34 +193,9 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		if (resource != null && resource.isLiquidEqual(water)) { return tank.fill(resource, doFill); }
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		if (resource != null && resource.isFluidEqual(water)) { return tank.fill(resource, doFill); }
 		return 0;
-	}
-
-	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		return fill(ForgeDirection.UNKNOWN, resource, doFill);
-	}
-
-	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		return new ILiquidTank[] { tank };
-	}
-
-	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		return tank;
 	}
 
 	@Override
@@ -290,6 +268,33 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			setRotation(ForgeDirection.getOrientation(ordinal));
 			sync();
 		}
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[] { tank.getInfo() };
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -212,6 +213,6 @@ public class CommonProxy implements IGuiHandler {
 		return serverInstance.isSinglePlayer();
 	}
 
-	public void spawnLiquidSpray(World worldObj, LiquidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread) {}
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread) {}
 
 }

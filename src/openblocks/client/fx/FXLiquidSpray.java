@@ -4,15 +4,19 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.liquids.LiquidStack;
 
 public class FXLiquidSpray extends EntityFX {
 
-	public FXLiquidSpray(World par1World, LiquidStack liquid, double x, double y, double z, ForgeDirection sprayDirection, float angle, float spread) {
+	public FXLiquidSpray(World par1World, FluidStack liquid, double x, double y, double z, ForgeDirection sprayDirection, float angle, float spread) {
 		super(par1World, x, y, z, 0, 0, 0);
 
 		// vec.xCoord = Math.abs(vec.xCoord);
@@ -56,22 +60,18 @@ public class FXLiquidSpray extends EntityFX {
 
 		Block block = null;
 		Icon texture = null;
-		try {
-			if (liquid.itemID < Block.blocksList.length
-					&& Block.blocksList[liquid.itemID] != null) {
-				block = Block.blocksList[liquid.itemID];
-				texture = getLiquidTexture(liquid);
-			} else if (Item.itemsList[liquid.itemID] != null) {
-				block = Block.waterStill;
-				texture = getLiquidTexture(liquid);
-			} else {}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		Fluid fluid = liquid.getFluid();
 		
-		//this.setParticleIcon(Minecraft.getMinecraft().renderEngine, texture);
-		this.func_110125_a(texture);
+		if (fluid.getBlockID() > 0) {
+			block = Block.blocksList[fluid.getBlockID()];
+			texture = liquid.getFluid().getStillIcon();
+		} else {
+			block = Block.waterStill;
+			texture = liquid.getFluid().getStillIcon();
+		}
+		func_110125_a(texture);
+		
 
 		// this.setParticleTextureIndex(0 + this.rand.nextInt(7));
 	}
@@ -94,12 +94,4 @@ public class FXLiquidSpray extends EntityFX {
 		super.onUpdate();
 	}
 
-	public static Icon getLiquidTexture(LiquidStack liquid) throws Exception {
-		if (liquid == null || liquid.itemID <= 0) { return null; }
-		LiquidStack canon = liquid.canonical();
-		if (canon == null) { throw new Exception(); }
-		Icon icon = canon.getRenderingIcon();
-		if (icon == null) { throw new Exception(); }
-		return icon;
-	}
 }

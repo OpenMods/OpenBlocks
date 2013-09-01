@@ -28,7 +28,8 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		//bindTextureByName("/terrain.png");
+
+		func_110628_a(TextureMap.field_110575_b);
 		TileEntityTank tankTile = (TileEntityTank)tileentity;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
