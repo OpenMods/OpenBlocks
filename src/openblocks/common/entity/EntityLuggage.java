@@ -33,7 +33,7 @@ public class EntityLuggage extends EntityTameable implements
 		// Handled in renderer
 		// this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
 		this.setSize(0.5F, 0.5F);
-		setAIMoveSpeed(0.4F);
+		setAIMoveSpeed(0.7F);
 		setMoveForward(0);
 		setTamed(true);
 		this.getNavigator().setAvoidsWater(true);
