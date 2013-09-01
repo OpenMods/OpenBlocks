@@ -40,7 +40,6 @@ public class EntityLuggage extends EntityTameable implements
 		this.tasks.addTask(2, new EntityAIFollowOwner(this, getAIMoveSpeed(), 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
 		this.dataWatcher.addObject(18, Integer.valueOf(inventory.getSizeInventory())); // inventory
-																						// size
 	}
 
 	public void setSpecial() {

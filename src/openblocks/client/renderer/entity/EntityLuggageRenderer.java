@@ -17,6 +17,7 @@ public class EntityLuggageRenderer extends RenderLiving {
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/luggage.png");
 	private static final ResourceLocation textureSpecial = new ResourceLocation("openblocks", "textures/models/luggage_special.png");
+	private static final ResourceLocation creeperEffect = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 	
 	public EntityLuggageRenderer() {
 		super(luggageModel, 0.5F);
@@ -26,9 +27,7 @@ public class EntityLuggageRenderer extends RenderLiving {
 		if (luggage.isSpecial() && luggage.getOwnerName() != null) {
 			if (p == 1) {
 				float f1 = (float)luggage.ticksExisted + m;
-				/* Is this meant to be bind? I don't quite know.. Someone go check Creeper code :P #cbf #lazy #hashtags in sourcecode will annoy mikee */
-				// TODO: FIX THIS!! Then we can have special luggage back :D
-				// this.loadTexture("/armor/power.png");
+				this.func_110776_a(creeperEffect);
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
 				float f2 = f1 * 0.01F;
@@ -63,16 +62,21 @@ public class EntityLuggageRenderer extends RenderLiving {
 		}
 	}
 
-	protected int inheritRenderPass(EntityLiving par1EntityLiving, int par2, float par3) {
+	@Override
+	protected int inheritRenderPass(EntityLivingBase par1EntityLiving, int par2, float par3) {
 		return -1;
 	}
 
-	protected int shouldRenderPass(EntityLiving entity, int par2, float par3) {
+	@Override
+	protected int shouldRenderPass(EntityLivingBase entity, int par2, float par3) {
 		return renderSpecial((EntityLuggage)entity, par2, par3);
 	}
 
 	@Override
 	protected ResourceLocation func_110775_a(Entity entity) {
+		if(entity instanceof EntityLuggage && ((EntityLuggage)entity).isSpecial()) {
+			return textureSpecial;
+		}
 		return texture;
 	}
 
