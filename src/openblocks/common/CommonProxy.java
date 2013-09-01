@@ -55,54 +55,56 @@ public class CommonProxy implements IGuiHandler {
 
 	public void init() {
 
-		if (Config.blockLadderId > 0) {
+		if (canRegisterBlock(Config.blockLadderId)) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
 			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
 		}
-		if (Config.blockGuideId > 0) {
+		if (canRegisterBlock(Config.blockGuideId)) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg", "ggg", 'g', new ItemStack(Block.glass), 't', new ItemStack(Block.torchWood) }));
 		}
-		if (Config.blockElevatorId > 0) {
+		if (canRegisterBlock(Config.blockElevatorId)) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth), 'g', new ItemStack(Item.ingotGold) }));
 		}
-		if (Config.blockHealId > 0) {
+		if (canRegisterBlock(Config.blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
 		}
-		if (Config.blockLightboxId > 0) {
+		if (canRegisterBlock(Config.blockLightboxId)) {
 			OpenBlocks.Blocks.lightbox = new BlockLightbox();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.lightbox), new Object[] { "igi", "iti", "iii", 'i', new ItemStack(Item.ingotIron), 'g', new ItemStack(Block.thinGlass), 't', new ItemStack(Block.torchWood) }));
 		}
-		if (Config.blockTargetId > 0) {
+		if (canRegisterBlock(Config.blockTargetId)) {
 			OpenBlocks.Blocks.target = new BlockTarget();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth), 's', "stickWood" }));
 		}
-		if (Config.blockGraveId > 0) {
+		if (canRegisterBlock(Config.blockGraveId)) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
-		if (Config.blockFlagId > 0) {
+		if (canRegisterBlock(Config.blockFlagId)) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth), 's', "stickWood" }));
 		}
-		if (Config.blockTankId > 0) {
+		if (canRegisterBlock(Config.blockTankId)) {
 			OpenBlocks.Blocks.tank = new BlockTank();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
 		}
-		if (Config.blockTrophyId > 0) {
+		if (canRegisterBlock(Config.blockTrophyId)) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
 		}
-		if (Config.blockBearTrapId > 0) {
+		if (canRegisterBlock(Config.blockBearTrapId)) {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
 
-		if (Config.blockSprinklerId > 0) {
+		if (canRegisterBlock(Config.blockSprinklerId)) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
 		}
 
+		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
+		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemGeneric();
 		if (Config.itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
@@ -121,8 +123,6 @@ public class CommonProxy implements IGuiHandler {
 		if (OpenBlocks.Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
-		// Ignore me
-		MinecraftForge.EVENT_BUS.register(this);
 
 		if (OpenBlocks.Config.enableGraves) {
 			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
@@ -134,6 +134,22 @@ public class CommonProxy implements IGuiHandler {
 
 		OpenBlocks.Items.generic.initRecipes();
 		LanguageUtils.setupLanguages();
+	}
+	
+	private boolean canRegisterBlock(int blockId) {
+		if(blockId > 0) {
+			if(Block.blocksList[blockId] != null) {
+				if(!Config.failIdsQuietly) {
+					throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
+				}else {
+					System.out.println("[OpenBlocksMonitor] Block ID " + blockId + " in use. This block will *NOT* be loaded.");
+					return false;
+				}
+			}
+			return true;
+		}else {
+			return false; // Block disabled, fail silently
+		}
 	}
 
 	public void assertItemHangGliderRenderer() {

@@ -65,6 +65,7 @@ public class OpenBlocks {
 	}
 
 	public static class Config {
+		public static boolean failIdsQuietly = true;
 		public static int blockLadderId = 2540;
 		public static int blockGuideId = 2541;
 		public static int blockElevatorId = 2542;
@@ -123,11 +124,13 @@ public class OpenBlocks {
 
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 
+		Property prop = configFile.get("openblocks", "failIdsQuietly", Config.failIdsQuietly, "If true, OpenBlocks will not throw an error when a block cannot be loaded due to ID conflict.");
+		Config.failIdsQuietly = prop.getBoolean(Config.failIdsQuietly);
 		/*
 		 * getBlock makes this mod anti-block-id-collision-forge-thingy
 		 * compliant.. Don't be a redpower :P
 		 */
-		Property prop = configFile.getBlock("block", "blockLadderId", Config.blockLadderId, "The id of the ladder");
+		prop = configFile.getBlock("block", "blockLadderId", Config.blockLadderId, "The id of the ladder");
 		Config.blockLadderId = prop.getInt();
 
 		prop = configFile.getBlock("block", "blockGuideId", Config.blockGuideId, "The id of the guide");
