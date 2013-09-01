@@ -14,6 +14,8 @@ public abstract class OpenTileEntity extends TileEntity {
 	private boolean initialized = false;
 	private boolean isActive = false;
 	private boolean isLoaded = false;
+	
+	private boolean isUsedForClientInventoryRendering = false;
 
 	/**
 	 * The block rotation stored in metadata. This can be used for
@@ -37,9 +39,16 @@ public abstract class OpenTileEntity extends TileEntity {
 	 * @return the block rotation
 	 */
 	public ForgeDirection getRotation() {
+		if (isUsedForClientInventoryRendering) {
+			return rotation;
+		}
 		int ordinal = (getMetadata() & 0x3) + 2;
 		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
 		return direction;
+	}
+	
+	public void setUsedForClientInventoryRendering(boolean used) {
+		isUsedForClientInventoryRendering = used;
 	}
 
 	/**
@@ -65,10 +74,16 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public boolean getFlag1() {
+		if (isUsedForClientInventoryRendering) {
+			return flag1;
+		}
 		return getFlag(0);
 	}
 
 	public boolean getFlag2() {
+		if (isUsedForClientInventoryRendering) {
+			return flag2;
+		}
 		return getFlag(1);
 	}
 

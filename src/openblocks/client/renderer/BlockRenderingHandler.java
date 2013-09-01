@@ -6,9 +6,11 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.OpenRenderHelper;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
@@ -51,11 +53,13 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			te = teLightbox;
 		} else if (block == OpenBlocks.Blocks.target) {
 			te = teTarget;
+			teTarget.setRotation(ForgeDirection.WEST);
 		} else if (block == OpenBlocks.Blocks.grave) {
 			te = teGrave;
 		} else if (block == OpenBlocks.Blocks.flag) {
 			te = teFlag;
 			teFlag.setColorIndex(metadata);
+			teFlag.setFlag1(true);
 		} else if (block == OpenBlocks.Blocks.trophy) {
 			if (metadata < Trophy.values().length) {
 				te = teTrophy;
@@ -66,6 +70,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			teBearTrap.setOpen();
 		} else if (block == OpenBlocks.Blocks.sprinkler) {
 			te = teSprinkler;
+		}
+		if (te instanceof OpenTileEntity) {
+			((OpenTileEntity)te).setUsedForClientInventoryRendering(true);
 		}
 		try {
 			if (Minecraft.getMinecraft().theWorld != null) {

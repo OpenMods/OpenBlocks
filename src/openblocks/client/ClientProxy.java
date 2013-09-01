@@ -35,6 +35,7 @@ import openblocks.client.renderer.entity.EntityHangGliderRenderer;
 import openblocks.client.renderer.entity.EntityLuggageRenderer;
 import openblocks.client.renderer.entity.EntityPlayerRenderer;
 import openblocks.client.renderer.tileentity.TileEntityBearTrapRenderer;
+import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
@@ -51,6 +52,7 @@ import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.tileentity.TileEntityBearTrap;
+import openblocks.common.tileentity.TileEntityCannon;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -89,6 +91,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
 
 		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
 

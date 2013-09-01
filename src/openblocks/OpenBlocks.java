@@ -9,6 +9,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;
 import openblocks.common.block.BlockBearTrap;
+import openblocks.common.block.BlockCannon;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
@@ -56,6 +57,7 @@ public class OpenBlocks {
 		public static BlockTrophy trophy;
 		public static BlockBearTrap bearTrap;
 		public static BlockSprinkler sprinkler;
+		public static BlockCannon cannon;
 	}
 
 	public static class Items {
@@ -78,6 +80,7 @@ public class OpenBlocks {
 		public static int blockTrophyId = 2549;
 		public static int blockBearTrapId = 2550;
 		public static int blockSprinklerId = 2551;
+		public static int blockCannonId = 2552;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int itemLuggageId = 14977;

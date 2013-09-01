@@ -21,6 +21,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.common.block.BlockBearTrap;
+import openblocks.common.block.BlockCannon;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockGrave;
@@ -101,6 +102,10 @@ public class CommonProxy implements IGuiHandler {
 		if (canRegisterBlock(Config.blockSprinklerId)) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
+		}
+
+		if (canRegisterBlock(Config.blockCannonId)) {
+			OpenBlocks.Blocks.cannon = new BlockCannon();
 		}
 
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
