@@ -8,7 +8,7 @@ public class EntityCannon extends Entity {
 
 	public EntityCannon(World world, int x, int y, int z) {
 		this(world);
-		setPosition(x + 0.5, y + 0.5, z + 0.5);
+		setPosition(x + 0.5, y, z + 0.5);
 	}
 
 	public EntityCannon(World par1World) {
@@ -32,7 +32,7 @@ public class EntityCannon extends Entity {
 		if(riddenByEntity == null)
 			setDead();
 
-		if((int) posY == posY) // Fix the client sometimes derping for some odd reason...
-			posY -= 0.5;
+		//if((int) posY == posY) // Fix the client sometimes derping for some odd reason...
+		//	posY -= 0.5;
 	}
 }

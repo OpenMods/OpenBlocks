@@ -3,6 +3,8 @@ package openblocks.common.block;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityCannon;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 public class BlockCannon extends OpenBlock {
 
@@ -25,6 +27,9 @@ public class BlockCannon extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
-	
+
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		return null;
+	}
 
 }

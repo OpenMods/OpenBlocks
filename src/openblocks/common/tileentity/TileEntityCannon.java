@@ -5,6 +5,7 @@ import java.util.List;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -12,11 +13,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.entity.EntityCannon;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
+import openblocks.sync.SyncableInt;
 import openblocks.utils.CompatibilityUtils;
 import openblocks.utils.InventoryUtils;
 
@@ -27,6 +30,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	
 	public SyncableDouble pitch = new SyncableDouble();
 	public SyncableDouble yaw = new SyncableDouble();
+	public SyncableInt cannonId = new SyncableInt(0);
 	
 	public double motionX = 0;
 	public double motionY = 0;
@@ -34,12 +38,14 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	
 	public enum Keys {
 		pitch,
-		yaw
+		yaw,
+		cannonId
 	}
 	
 	public TileEntityCannon() {
 		addSyncedObject(Keys.pitch, pitch);
 		addSyncedObject(Keys.yaw, yaw);
+		addSyncedObject(Keys.cannonId, cannonId);
 	}
 	
 	@Override
@@ -53,6 +59,16 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 			yaw.setValue(y);
 			sync();
 		}
+		
+		if (cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
+			Vec3 pos = getPositionDistanceAway(-0.7, player.rotationPitch, player.rotationYawHead + 90);
+			if (worldObj.isRemote) {
+				cannon.posX = pos.xCoord + 0.5 + xCoord;
+				cannon.posY = yCoord;
+				cannon.posZ = pos.zCoord + 0.5 + zCoord;
+			}
+		}
 
 		if (!worldObj.isRemote) {
 			if (worldObj.getWorldTime() % 20 == 0) {
@@ -62,7 +78,8 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 						if (inventory != null) {
 							ItemStack stack = InventoryUtils.removeItemStack(inventory);
 							if (stack != null) {
-								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 2, zCoord + 0.5, stack);
+								getMotionFromAngles();
+								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
 								item.motionX = motionX;
 								item.motionY = motionY;
@@ -95,6 +112,17 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private Vec3 getPositionDistanceAway(double distance, double pitch, double yaw) {
+		double p = Math.toRadians(pitch);
+		double y = Math.toRadians(yaw);
+		double k = -0.7;
+		double xzLength = Math.cos(p) * k;
+		double dx = xzLength * Math.cos(y);
+		double dz = xzLength * Math.sin(y);
+		double dy = k * Math.sin(p);
+		return worldObj.getWorldVec3Pool().getVecFromPool(dx, dy, dz);
+	}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -102,6 +130,8 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 			cannon = new EntityCannon(worldObj, xCoord, yCoord, zCoord);
 			worldObj.spawnEntityInWorld(cannon);
 			player.mountEntity(cannon);
+			cannonId.setValue(cannon.entityId);
+			sync();
 		}
 		return true;
 	}
@@ -126,6 +156,19 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
+		getMotionFromAngles();
+		int cId = cannonId.getValue();
+		cannon = null;
+		if (cId > 0) {
+			Entity tmpCannon = worldObj.getEntityByID(cannonId.getValue());
+			if (tmpCannon != null && tmpCannon instanceof EntityCannon && !tmpCannon.isDead) {
+				cannon = (EntityCannon) tmpCannon;
+			}
+		}
+		
+	}
+	
+	private void getMotionFromAngles() {
 		double p = Math.toRadians(pitch.getValue() - 180);
 		double y = Math.toRadians(yaw.getValue());
 		motionX = Math.sin(y) * Math.cos(p);
