@@ -54,7 +54,7 @@ public class ClientTickHandler implements ITickHandler {
 				it.remove();
 			} else {
 				if (glider != null) {
-					glider.fixPositions();
+					glider.fixPositions(Minecraft.getMinecraft().thePlayer);
 				}
 			}
 		}

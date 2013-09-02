@@ -27,12 +27,12 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 			for (int i = 0; i < 100; i++) {
 				GL11.glVertex3f(posX, posY, posZ);
 				motionY -= 0.03999999910593033D;
-				motionX *= 0.9800000190734863D;
-				motionY *= 0.9800000190734863D;
-				motionZ *= 0.9800000190734863D;
 				posX += motionX;
 				posY += motionY;
 				posZ += motionZ;
+				motionX *= 0.98;
+				motionY *= 0.9800000190734863D;
+				motionZ *= 0.98;
 			}
 		GL11.glEnd();
 		GL11.glEnable(GL11.GL_CULL_FACE);
