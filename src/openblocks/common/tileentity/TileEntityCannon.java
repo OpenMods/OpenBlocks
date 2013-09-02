@@ -81,9 +81,9 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 								getMotionFromAngles();
 								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
-								item.motionX = motionX;
-								item.motionY = motionY;
-								item.motionZ = motionZ;
+								item.motionX = motionX * 1.4;
+								item.motionY = motionY * 1.4;
+								item.motionZ = motionZ * 1.4;
 								worldObj.spawnEntityInWorld(item);
 								break;
 							}
@@ -129,6 +129,8 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		if (!worldObj.isRemote) {
 			cannon = new EntityCannon(worldObj, xCoord, yCoord, zCoord);
 			worldObj.spawnEntityInWorld(cannon);
+			player.rotationPitch = player.prevRotationPitch = (float)pitch.getValue();
+			player.renderYawOffset = player.prevRotationYawHead = player.rotationYawHead = player.prevRotationYaw = player.rotationYaw = (float)yaw.getValue();
 			player.mountEntity(cannon);
 			cannonId.setValue(cannon.entityId);
 			sync();

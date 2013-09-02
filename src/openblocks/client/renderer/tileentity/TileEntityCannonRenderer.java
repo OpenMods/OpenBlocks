@@ -32,9 +32,9 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBegin(GL11.GL_LINE_STRIP);
 		GL11.glColor4f(0, 0, 0, 0.2f);
-		double motionX = cannon.motionX;
-		double motionY = cannon.motionY;
-		double motionZ = cannon.motionZ;
+		double motionX = cannon.motionX * 1.4;
+		double motionY = cannon.motionY * 1.4;
+		double motionZ = cannon.motionZ * 1.4;
 		float posX = 0.5f;
 		float posY = 0.5f;
 		float posZ = 0.5f;
