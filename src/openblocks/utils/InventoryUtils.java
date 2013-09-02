@@ -1,7 +1,13 @@
 package openblocks.utils;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class InventoryUtils {
 
@@ -63,18 +69,58 @@ public class InventoryUtils {
 		fromInventory.decrStackSize(slot, merged);
 		return merged;
 	}
-	
-    public static boolean consumeInventoryItem(IInventory inventory, ItemStack stack) {
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-        	ItemStack stackInSlot = inventory.getStackInSlot(i);
-        	if (stackInSlot != null && stackInSlot.isItemEqual(stack)) {
-        		stackInSlot.stackSize--;
-            	if (stackInSlot.stackSize == 0) {
-            		inventory.setInventorySlotContents(i, null);
-            	}
-            	return true;
-        	}
-        }
-        return false;
-    }
+
+	public static boolean consumeInventoryItem(IInventory inventory, ItemStack stack) {
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stackInSlot = inventory.getStackInSlot(i);
+			if (stackInSlot != null && stackInSlot.isItemEqual(stack)) {
+				stackInSlot.stackSize--;
+				if (stackInSlot.stackSize == 0) {
+					inventory.setInventorySlotContents(i, null);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static ItemStack removeItemStack(IInventory invent) {
+		for (int i = 0; i < invent.getSizeInventory(); i++) {
+			ItemStack stack = invent.getStackInSlot(i);
+			if (stack != null) {
+				ItemStack copy = stack.copy();
+				invent.setInventorySlotContents(i, null);
+				return copy;
+			}
+		}
+		return null;
+	}
+
+	public static IInventory getInventory(World world, int x, int y, int z, ForgeDirection direction) {
+		if (direction != null && direction != ForgeDirection.UNKNOWN) {
+			x += direction.offsetX;
+			y += direction.offsetY;
+			z += direction.offsetZ;
+			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+			if ((tileEntity != null) && ((tileEntity instanceof IInventory)))
+			{
+				int blockID = world.getBlockId(x, y, z);
+				Block block = Block.blocksList[blockID];
+				if ((block instanceof BlockChest))
+				{
+					if (world.getBlockId(x - 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x - 1, y, z), (IInventory)tileEntity); }
+					if (world.getBlockId(x + 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x + 1, y, z)); }
+					if (world.getBlockId(x, y, z - 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x, y, z - 1), (IInventory)tileEntity); }
+					if (world.getBlockId(x, y, z + 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x, y, z + 1)); }
+				}
+				return (IInventory)tileEntity;
+			}
+		}else {
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if (te instanceof IInventory) {
+				return (IInventory) te;
+			}
+		}
+		return null;
+	}
 }

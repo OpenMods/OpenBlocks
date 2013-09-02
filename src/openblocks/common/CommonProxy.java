@@ -36,6 +36,7 @@ import openblocks.common.block.BlockTrophy;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.container.ContainerSprinkler;
+import openblocks.common.entity.EntityCannon;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -106,6 +107,9 @@ public class CommonProxy implements IGuiHandler {
 
 		if (canRegisterBlock(Config.blockCannonId)) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
+			EntityRegistry.registerModEntity(EntityCannon.class, "Cannon", Integer.MAX_VALUE, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
+			
+
 		}
 
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.

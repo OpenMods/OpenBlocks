@@ -17,10 +17,13 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBegin(GL11.GL_LINE_STRIP);
-		double motionX = cannon.motionX;
-		double motionY = cannon.motionY;
-		double motionZ = cannon.motionZ;
+		GL11.glColor4f(0, 0, 0, 0.2f);
+		double motionX = cannon.motionX.getValue();
+		double motionY = cannon.motionY.getValue();
+		double motionZ = cannon.motionZ.getValue();
 		float posX = 0.5f;
 		float posY = 2.0f;
 		float posZ = 0.5f;
@@ -36,6 +39,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 			}
 		GL11.glEnd();
 		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
