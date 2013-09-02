@@ -25,20 +25,21 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	
 	private EntityCannon cannon = null;
 	
-	public SyncableDouble motionX = new SyncableDouble();
-	public SyncableDouble motionY = new SyncableDouble();
-	public SyncableDouble motionZ = new SyncableDouble();
+	public SyncableDouble pitch = new SyncableDouble();
+	public SyncableDouble yaw = new SyncableDouble();
+	
+	public double motionX = 0;
+	public double motionY = 0;
+	public double motionZ = 0;
 	
 	public enum Keys {
-		motionX,
-		motionY,
-		motionZ
+		pitch,
+		yaw
 	}
 	
 	public TileEntityCannon() {
-		addSyncedObject(Keys.motionX, motionX);
-		addSyncedObject(Keys.motionY, motionY);
-		addSyncedObject(Keys.motionZ, motionZ);
+		addSyncedObject(Keys.pitch, pitch);
+		addSyncedObject(Keys.yaw, yaw);
 	}
 	
 	@Override
@@ -46,13 +47,10 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		super.updateEntity();
 		if (!worldObj.isRemote && cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
-			double pitch = Math.toRadians(player.rotationPitch);
-			double yaw = Math.toRadians(player.rotationYawHead - 180);
-			motionX.setValue(Math.sin(yaw) * Math.cos(pitch));
-			motionY.setValue(Math.sin(-pitch));
-			motionZ.setValue(-Math.cos(yaw) * Math.cos(pitch));
-
-			System.out.println(motionY.getValue());
+			double p = player.rotationPitch;
+			double y = player.rotationYawHead;
+			pitch.setValue(p);
+			yaw.setValue(y);
 			sync();
 		}
 
@@ -66,9 +64,9 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 							if (stack != null) {
 								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 2, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
-								item.motionX = motionX.getValue();
-								item.motionY = motionY.getValue();
-								item.motionZ = motionZ.getValue();
+								item.motionX = motionX;
+								item.motionY = motionY;
+								item.motionZ = motionZ;
 								worldObj.spawnEntityInWorld(item);
 								break;
 							}
@@ -128,8 +126,11 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		// TODO Auto-generated method stub
-		
+		double p = Math.toRadians(pitch.getValue() - 180);
+		double y = Math.toRadians(yaw.getValue());
+		motionX = Math.sin(y) * Math.cos(p);
+		motionY = Math.sin(p);
+		motionZ = -Math.cos(y) * Math.cos(p);
 	}
 
 }
