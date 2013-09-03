@@ -20,5 +20,6 @@ tile.openblocks.vacuumhopper.name=Vakuumtrichter
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
 item.openblocks.luggage.name=Reisegepäck
+item.openblocks.sonicglasses.name=Schallbrille
 
 itemGroup.tabOpenBlocks=OpenBlocks
