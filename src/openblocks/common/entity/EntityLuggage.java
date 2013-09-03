@@ -105,7 +105,7 @@ public class EntityLuggage extends EntityTameable implements
 	}
 
 	protected void playStepSound(int par1, int par2, int par3, int par4) {
-		this.playSound("openblocks.feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+		this.playSound("openblocks:feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
 	}
 
 	@Override

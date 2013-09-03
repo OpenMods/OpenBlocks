@@ -70,7 +70,7 @@ public class TileEntityTarget extends OpenTileEntity implements
 			}
 
 		}
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks.open" : "openblocks.close", 0.5f, 1.0f);
+		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks:open" : "openblocks:close", 0.5f, 1.0f);
 
 		setEnabled(isPowered);
 		sync();

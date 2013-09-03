@@ -81,6 +81,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 								item.motionY = motionY * 1.4;
 								item.motionZ = motionZ * 1.4;
 								worldObj.spawnEntityInWorld(item);
+								worldObj.playSoundEffect((double) xCoord + 0.5, (double) yCoord + 0.5, (double) zCoord + 0.5, "openblocks:mortar", 0.2f, 1.0f);
 								break;
 							}
 						}
