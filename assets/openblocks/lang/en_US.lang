@@ -20,5 +20,6 @@ tile.openblocks.vacuumhopper.name=Vacuum Hopper
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
 item.openblocks.luggage.name=Luggage
+item.openblocks.sonicglasses.name=Sonic Glasses
 
 itemGroup.tabOpenBlocks=OpenBlocks
