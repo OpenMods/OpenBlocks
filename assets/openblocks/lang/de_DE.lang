@@ -1,6 +1,7 @@
 openblocks.gui.lightbox=Lichtbox
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
+openblocks.gui.vacuumhopper=Vakuumtrichter
 
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.heal.name=Heiler
@@ -14,6 +15,7 @@ tile.openblocks.flag.name=Flagge
 tile.openblocks.trophy.name=Trophäe
 tile.openblocks.beartrap.name=Bärenfalle
 tile.openblocks.sprinkler.name=Rasensprenger
+tile.openblocks.vacuumhopper.name=Vakuumtrichter
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
