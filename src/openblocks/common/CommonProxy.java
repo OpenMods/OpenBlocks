@@ -44,6 +44,7 @@ import openblocks.common.entity.EntityLuggage;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemLuggage;
+import openblocks.common.item.ItemSonicGlasses;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
@@ -130,6 +131,11 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Items.luggage = new ItemLuggage();
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
 		}
+		
+		if (Config.itemSonicGlassesId > 0) {
+			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i',  new ItemStack(Item.ingotIron)}));
+		}
 
 		// GameRegistry.addRecipe(new TorchBowRecipe());
 		NetworkRegistry.instance().registerGuiHandler(OpenBlocks.instance, this);
@@ -149,6 +155,8 @@ public class CommonProxy implements IGuiHandler {
 
 		OpenBlocks.Items.generic.initRecipes();
 	}
+	
+	public void postInit() {}
 	
 	private boolean canRegisterBlock(int blockId) {
 		if(blockId > 0) {
@@ -231,5 +239,4 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread) {}
-
 }

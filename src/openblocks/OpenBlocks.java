@@ -25,13 +25,16 @@ import openblocks.common.block.BlockVacuumHopper;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemLuggage;
+import openblocks.common.item.ItemSonicGlasses;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
@@ -66,6 +69,7 @@ public class OpenBlocks {
 		public static ItemHangGlider hangGlider;
 		public static ItemGeneric generic;
 		public static ItemLuggage luggage;
+		public static ItemSonicGlasses sonicGlasses;
 	}
 
 	public static class Config {
@@ -87,6 +91,7 @@ public class OpenBlocks {
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int itemLuggageId = 14977;
+		public static int itemSonicGlassesId = 14978;
 		public static int elevatorTravelDistance = 20;
 		public static boolean elevatorBlockMustFaceDirection = false;
 		public static boolean elevatorIgnoreHalfBlocks = false;
@@ -103,6 +108,7 @@ public class OpenBlocks {
 		public static int sprinklerFertilizeChance = 500;
 		public static int sprinklerBonemealFertizizeChance = 200;
 		public static int sprinklerEffectiveRange = 4;
+		public static boolean sonicGlassesEasyMode = false;
 	}
 
 	public static enum Gui {
@@ -177,6 +183,9 @@ public class OpenBlocks {
 
 		prop = configFile.getItem("item", "itemLuggageId", Config.itemLuggageId, "The id of the luggage item");
 		Config.itemLuggageId = prop.getInt();
+		
+		prop = configFile.getItem("item", "itemSonicGlassesId", Config.itemSonicGlassesId, "The id of the sonic glasses item item");
+		Config.itemSonicGlassesId = prop.getInt();
 
 		prop = configFile.get("dropblock", "searchDistance", Config.elevatorTravelDistance, "The range of the drop block");
 		Config.elevatorTravelDistance = prop.getInt();
@@ -235,16 +244,22 @@ public class OpenBlocks {
 
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
+		
+		prop = configFile.get("glasses", "easyMode", Config.sonicGlassesEasyMode, "If false, only sounds will be visible while wearing sonic glasses");
+		Config.sonicGlassesEasyMode = prop.getBoolean(Config.sonicGlassesEasyMode);
 
 		configFile.save();
-
 	}
 
 	@Mod.Init
 	public void init(FMLInitializationEvent evt) {
 		proxy.init();
 		proxy.registerRenderInformation();
-
+	}
+	
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent evt) {
+		proxy.postInit();
 	}
 
 	public static void onSetBlock() {
