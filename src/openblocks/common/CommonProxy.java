@@ -1,4 +1,4 @@
-package openblocks.common;
+	package openblocks.common;
 
 import java.io.File;
 import java.util.WeakHashMap;
@@ -33,9 +33,11 @@ import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
+import openblocks.common.block.BlockVacuumHopper;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.container.ContainerSprinkler;
+import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityCannon;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
@@ -45,6 +47,7 @@ import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemLuggage;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntitySprinkler;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -108,8 +111,12 @@ public class CommonProxy implements IGuiHandler {
 		if (canRegisterBlock(Config.blockCannonId)) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
 			EntityRegistry.registerModEntity(EntityCannon.class, "Cannon", Integer.MAX_VALUE, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
-			
+			//TODO: add recipe
+		}
 
+		if (canRegisterBlock(Config.blockVacuumHopperId)) {
+			OpenBlocks.Blocks.vacuumHopper = new BlockVacuumHopper();
+			//TODO: add recipe
 		}
 
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
@@ -179,6 +186,8 @@ public class CommonProxy implements IGuiHandler {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (ID == OpenBlocks.Gui.Lightbox.ordinal()) { return new ContainerLightbox(player.inventory, (TileEntityLightbox)tile); }
 		if (ID == OpenBlocks.Gui.Sprinkler.ordinal()) { return new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile); }
+		if (ID == OpenBlocks.Gui.VacuumHopper.ordinal()) { return new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile); }
+		
 		return null;
 	}
 

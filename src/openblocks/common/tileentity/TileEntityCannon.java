@@ -51,7 +51,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (!worldObj.isRemote && cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
+		if (cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
 			double p = player.rotationPitch;
 			double y = player.rotationYawHead;
@@ -76,7 +76,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 					for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 						IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, direction);
 						if (inventory != null) {
-							ItemStack stack = InventoryUtils.removeItemStack(inventory);
+							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
 							if (stack != null) {
 								getMotionFromAngles();
 								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
@@ -126,7 +126,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) {
+		if (!worldObj.isRemote && !player.isSneaking()) {
 			cannon = new EntityCannon(worldObj, xCoord, yCoord, zCoord);
 			worldObj.spawnEntityInWorld(cannon);
 			player.rotationPitch = player.prevRotationPitch = (float)pitch.getValue();

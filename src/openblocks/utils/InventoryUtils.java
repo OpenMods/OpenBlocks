@@ -83,15 +83,23 @@ public class InventoryUtils {
 		}
 		return false;
 	}
-
-	public static ItemStack removeItemStack(IInventory invent) {
+	
+	public static int getSlotIndexOfNextStack(IInventory invent) {
 		for (int i = 0; i < invent.getSizeInventory(); i++) {
 			ItemStack stack = invent.getStackInSlot(i);
 			if (stack != null) {
-				ItemStack copy = stack.copy();
-				invent.setInventorySlotContents(i, null);
-				return copy;
+				return i;
 			}
+		}
+		return -1;
+	}
+	
+	public static ItemStack removeNextItemStack(IInventory invent) {
+		int nextFilledSlot = getSlotIndexOfNextStack(invent);
+		if (nextFilledSlot > -1) {
+			ItemStack copy = invent.getStackInSlot(nextFilledSlot).copy();
+			invent.setInventorySlotContents(nextFilledSlot, null);
+			return copy;
 		}
 		return null;
 	}

@@ -21,6 +21,7 @@ import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
+import openblocks.common.block.BlockVacuumHopper;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemLuggage;
@@ -58,6 +59,7 @@ public class OpenBlocks {
 		public static BlockBearTrap bearTrap;
 		public static BlockSprinkler sprinkler;
 		public static BlockCannon cannon;
+		public static BlockVacuumHopper vacuumHopper;
 	}
 
 	public static class Items {
@@ -81,6 +83,7 @@ public class OpenBlocks {
 		public static int blockBearTrapId = 2550;
 		public static int blockSprinklerId = 2551;
 		public static int blockCannonId = 2552;
+		public static int blockVacuumHopperId = 2553;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int itemLuggageId = 14977;
@@ -103,7 +106,7 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox, Luggage, Sprinkler
+		Lightbox, Luggage, Sprinkler, VacuumHopper
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

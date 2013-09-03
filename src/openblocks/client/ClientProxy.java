@@ -26,6 +26,7 @@ import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.client.gui.GuiLuggage;
 import openblocks.client.gui.GuiSprinkler;
+import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.ItemRendererHangGlider;
 import openblocks.client.renderer.ItemRendererLuggage;
@@ -44,10 +45,12 @@ import openblocks.client.renderer.tileentity.TileEntitySprinklerRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
+import openblocks.client.renderer.tileentity.TileEntityVacuumHopperRenderer;
 import openblocks.common.CommonProxy;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.container.ContainerSprinkler;
+import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -61,6 +64,7 @@ import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityTank;
 import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.TileEntityTrophy;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openblocks.sync.SyncableManager;
 import openblocks.utils.CompatibilityUtils;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -92,6 +96,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVacuumHopper.class, new TileEntityVacuumHopperRenderer());
 
 		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
 
@@ -134,7 +139,7 @@ public class ClientProxy extends CommonProxy {
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
 			if (ID == Gui.Sprinkler.ordinal()) { return new GuiSprinkler(new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile)); }
-
+			if (ID == Gui.VacuumHopper.ordinal()) { return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile)); }
 		}
 		return null;
 	}
