@@ -5,7 +5,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class ContainerVacuumHopper extends Container {
@@ -18,8 +17,8 @@ public class ContainerVacuumHopper extends Container {
 		this.inventorySize = sprinkler.getSizeInventory();
 		this.playerInventory = playerInventory;
 		this.hopper = sprinkler;
-		addInventoryGrid(62, 18, 3);
-		addPlayerInventorySlots(85);
+		addInventoryGrid(44, 20, 5);
+		addPlayerInventorySlots(69);
 	}
 
 	public void addInventorySlot(int slotId, int x, int y) {

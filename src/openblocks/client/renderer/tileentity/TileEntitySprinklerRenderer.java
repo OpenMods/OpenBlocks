@@ -3,7 +3,6 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.utils.BlockUtils;

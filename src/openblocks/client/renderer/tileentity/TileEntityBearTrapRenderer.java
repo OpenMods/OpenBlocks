@@ -3,7 +3,6 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import openblocks.OpenBlocks;
 import openblocks.client.model.ModelBearTrap;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.utils.BlockUtils;

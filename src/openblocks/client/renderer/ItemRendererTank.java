@@ -5,8 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.liquids.LiquidDictionary;
-import net.minecraftforge.liquids.LiquidStack;
 import openblocks.common.tileentity.TileEntityTank;
 
 import org.lwjgl.opengl.GL11;

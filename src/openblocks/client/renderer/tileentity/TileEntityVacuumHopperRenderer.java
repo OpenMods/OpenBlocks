@@ -4,10 +4,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
-import openblocks.client.model.ModelBearTrap;
 import openblocks.client.model.ModelVacuumHopper;
-import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openblocks.utils.BlockUtils;
 

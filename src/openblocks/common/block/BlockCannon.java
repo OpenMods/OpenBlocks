@@ -1,10 +1,10 @@
 package openblocks.common.block;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityCannon;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityCannon;
 
 public class BlockCannon extends OpenBlock {
 

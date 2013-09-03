@@ -1,24 +1,24 @@
 package openblocks.common.tileentity;
 
-import cpw.mods.fml.common.Loader;
-import openblocks.OpenBlocks;
-import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.InventoryUtils;
-import openperipheral.core.Mods;
-import openperipheral.core.integration.ModuleBuildCraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
+import openblocks.common.GenericInventory;
+import openblocks.common.api.IAwareTile;
+import openblocks.utils.InventoryUtils;
+import openperipheral.core.Mods;
+import openperipheral.core.integration.ModuleBuildCraft;
+import cpw.mods.fml.common.Loader;
 
 public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory, IAwareTile {
 
-	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 18);
+	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 	
 	public void updateEntity() {
 		super.updateEntity();
@@ -177,6 +177,18 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 				item.setEntityItemStack(stack);
 			}
 		}
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 
 }

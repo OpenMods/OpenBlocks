@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.ForgeSubscribe;
-import openblocks.OpenBlocks;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;

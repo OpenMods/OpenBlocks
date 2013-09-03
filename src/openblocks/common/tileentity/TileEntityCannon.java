@@ -2,16 +2,11 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
@@ -20,8 +15,9 @@ import openblocks.common.entity.EntityCannon;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
 import openblocks.sync.SyncableInt;
-import openblocks.utils.CompatibilityUtils;
 import openblocks.utils.InventoryUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile {
 

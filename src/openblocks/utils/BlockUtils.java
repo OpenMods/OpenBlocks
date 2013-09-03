@@ -2,7 +2,6 @@ package openblocks.utils;
 
 import java.util.Random;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;

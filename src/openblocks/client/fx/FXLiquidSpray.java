@@ -1,18 +1,13 @@
 package openblocks.client.fx;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.liquids.LiquidStack;
 
 public class FXLiquidSpray extends EntityFX {
 

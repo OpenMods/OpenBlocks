@@ -1,7 +1,6 @@
 package openblocks.client;
 
 import java.io.File;
-import java.util.Calendar;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -15,10 +14,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.liquids.LiquidStack;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.OpenBlocks.Gui;
@@ -66,7 +62,6 @@ import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openblocks.sync.SyncableManager;
-import openblocks.utils.CompatibilityUtils;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;

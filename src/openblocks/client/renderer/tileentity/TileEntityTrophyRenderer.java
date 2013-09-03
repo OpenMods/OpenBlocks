@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;

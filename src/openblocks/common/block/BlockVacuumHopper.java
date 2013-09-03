@@ -1,14 +1,12 @@
 package openblocks.common.block;
 
-import openblocks.OpenBlocks;
-import openblocks.common.item.ItemTrophyBlock;
-import openblocks.common.tileentity.TileEntityVacuumHopper;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class BlockVacuumHopper extends OpenBlock {
 

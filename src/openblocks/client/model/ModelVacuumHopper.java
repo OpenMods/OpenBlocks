@@ -1,10 +1,9 @@
 package openblocks.client.model;
 
-import openblocks.common.tileentity.TileEntitySprinkler;
-import openblocks.common.tileentity.TileEntityVacuumHopper;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class ModelVacuumHopper extends ModelBase {
 

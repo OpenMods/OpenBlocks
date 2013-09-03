@@ -2,10 +2,9 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import openblocks.utils.CompatibilityUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import openblocks.utils.CompatibilityUtils;
 
 public class TileEntityHealBlock extends OpenTileEntity {
 

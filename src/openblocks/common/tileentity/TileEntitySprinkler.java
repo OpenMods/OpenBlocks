@@ -2,8 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;

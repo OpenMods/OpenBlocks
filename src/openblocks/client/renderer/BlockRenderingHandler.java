@@ -19,6 +19,7 @@ import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.TileEntityTrophy;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -35,6 +36,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntityTrophy teTrophy = new TileEntityTrophy();
 	private TileEntityBearTrap teBearTrap = new TileEntityBearTrap();
 	private TileEntitySprinkler teSprinkler = new TileEntitySprinkler();
+	private TileEntityVacuumHopper teHopper = new TileEntityVacuumHopper();
 
 	public BlockRenderingHandler() {
 		teTarget.setEnabled(true);
@@ -70,6 +72,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			teBearTrap.setOpen();
 		} else if (block == OpenBlocks.Blocks.sprinkler) {
 			te = teSprinkler;
+		} else if (block == OpenBlocks.Blocks.vacuumHopper) {
+			te = teHopper;
 		}
 		if (te instanceof OpenTileEntity) {
 			((OpenTileEntity)te).setUsedForClientInventoryRendering(true);

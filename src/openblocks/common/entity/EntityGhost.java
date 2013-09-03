@@ -4,8 +4,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -19,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import openblocks.common.GenericInventory;
 import openblocks.sync.ISyncHandler;

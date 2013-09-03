@@ -2,7 +2,6 @@ package openblocks.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
-import openblocks.OpenBlocks;
 import openblocks.common.container.ContainerSprinkler;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.utils.CompatibilityUtils;

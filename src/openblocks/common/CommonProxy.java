@@ -15,7 +15,6 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;

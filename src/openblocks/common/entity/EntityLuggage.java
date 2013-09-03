@@ -1,7 +1,6 @@
 package openblocks.common.entity;
 
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;

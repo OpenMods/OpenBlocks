@@ -1,9 +1,9 @@
 package openblocks.client.model;
 
-import openblocks.common.tileentity.TileEntityCannon;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityCannon;
 
 public class ModelCannon extends ModelBase
 {

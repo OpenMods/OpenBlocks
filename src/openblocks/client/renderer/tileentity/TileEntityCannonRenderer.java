@@ -1,14 +1,12 @@
 package openblocks.client.renderer.tileentity;
 
-import openblocks.client.model.ModelCannon;
-import openblocks.client.model.ModelTarget;
-import openblocks.common.tileentity.TileEntityCannon;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import openblocks.client.model.ModelCannon;
+import openblocks.common.tileentity.TileEntityCannon;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 	

@@ -2,10 +2,7 @@ package openblocks.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
-import openblocks.OpenBlocks;
-import openblocks.common.container.ContainerSprinkler;
 import openblocks.common.container.ContainerVacuumHopper;
-import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openblocks.utils.CompatibilityUtils;
 
@@ -19,7 +16,7 @@ public class GuiVacuumHopper extends GuiContainer {
 		super(container);
 		hopper = container.getTileEntity();
 		xSize = 176;
-		ySize = 167;
+		ySize = 151;
 	}
 
 	@Override
