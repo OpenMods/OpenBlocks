@@ -9,11 +9,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Mods;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
+import openblocks.integration.ModuleBuildCraft;
 import openblocks.utils.InventoryUtils;
-import openperipheral.core.Mods;
-import openperipheral.core.integration.ModuleBuildCraft;
 import cpw.mods.fml.common.Loader;
 
 public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory, IAwareTile {
@@ -35,7 +35,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 				if (tileOnSurface instanceof IInventory) {
 					InventoryUtils.insertItemIntoInventory((IInventory) tileOnSurface, nextStack);
 				}else {
-					if (Loader.isModLoaded(Mods.BUILDCRAFT)) {
+					if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
 						int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());
 						System.out.println(inserted);
 						nextStack.stackSize -= inserted;

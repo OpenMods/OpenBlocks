@@ -124,10 +124,6 @@ public class OpenBlocks {
 
 		Log.init();
 
-		if (Mods.areInstalled("That", "I", "Dont", "Like")) {
-			destroyTheWorld();
-		}
-
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 
 		Property prop = configFile.get("openblocks", "failIdsQuietly", Config.failIdsQuietly, "If true, OpenBlocks will not throw an error when a block cannot be loaded due to ID conflict.");
@@ -249,17 +245,6 @@ public class OpenBlocks {
 
 	public static void onSetBlock() {
 		// System.out.println("Set block!");
-	}
-
-	public void destroyTheWorld() {
-		boolean notReally;
-		boolean stopBeingDicksEveryone;
-	}
-
-	public static class Mods {
-		public static boolean areInstalled(String... mods) {
-			return false;
-		}
 	}
 	
 	/* 
