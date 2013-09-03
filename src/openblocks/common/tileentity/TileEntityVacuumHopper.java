@@ -9,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Mods;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
