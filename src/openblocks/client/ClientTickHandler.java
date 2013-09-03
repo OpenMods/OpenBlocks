@@ -16,10 +16,14 @@ public class ClientTickHandler implements ITickHandler {
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-		if (type.equals(EnumSet.of(TickType.RENDER))) {
+		if (type.contains(TickType.RENDER)) {
 			if (Minecraft.getMinecraft().theWorld != null) {
 				preRenderTick(Minecraft.getMinecraft(), Minecraft.getMinecraft().theWorld, ((Float)tickData[0]).floatValue());
 			}
+		}
+		
+		if (type.contains(TickType.CLIENT)) {
+			clientTick();
 		}
 	}
 
@@ -31,7 +35,7 @@ public class ClientTickHandler implements ITickHandler {
 
 	@Override
 	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.RENDER);
+		return EnumSet.of(TickType.RENDER, TickType.CLIENT);
 	}
 
 	@Override
@@ -57,6 +61,12 @@ public class ClientTickHandler implements ITickHandler {
 					glider.fixPositions(Minecraft.getMinecraft().thePlayer);
 				}
 			}
+		}
+	}
+	
+	public void clientTick() {
+		if (SoundEventsManager.isPlayerWearingGlasses()) {
+			SoundEventsManager.instance.tickUpdate();
 		}
 	}
 }
