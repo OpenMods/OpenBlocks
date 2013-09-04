@@ -168,6 +168,7 @@ public abstract class OpenTileEntity extends TileEntity {
 				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 3);
 			}
 		}
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public boolean shouldRefresh(int oldID, int newID, int oldMeta, int newMeta, World world, int x, int y, int z) {

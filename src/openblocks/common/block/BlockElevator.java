@@ -26,7 +26,6 @@ public class BlockElevator extends OpenBlock {
 	0xaf60b6, // 13
 	0xbd6c36, // 14
 	0x252525, // 0
-
 	};
 
 	public BlockElevator() {

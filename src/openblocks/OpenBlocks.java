@@ -9,6 +9,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import openblocks.common.CommonProxy;
 import openblocks.common.block.BlockBearTrap;
+import openblocks.common.block.BlockBigButton;
 import openblocks.common.block.BlockCannon;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
@@ -65,6 +66,7 @@ public class OpenBlocks {
 		public static BlockCannon cannon;
 		public static BlockVacuumHopper vacuumHopper;
 		public static BlockSponge sponge;
+		public static BlockBigButton bigButton;
 	}
 
 	public static class Items {
@@ -91,6 +93,7 @@ public class OpenBlocks {
 		public static int blockCannonId = 2552;
 		public static int blockVacuumHopperId = 2553;
 		public static int blockSpongeId = 2554;
+		public static int blockBigButton = 2555;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int itemLuggageId = 14977;
@@ -115,7 +118,7 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox, Luggage, Sprinkler, VacuumHopper
+		Lightbox, Luggage, Sprinkler, VacuumHopper, BigButton
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

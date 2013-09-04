@@ -20,6 +20,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 import openblocks.common.block.BlockBearTrap;
+import openblocks.common.block.BlockBigButton;
 import openblocks.common.block.BlockCannon;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
@@ -34,6 +35,7 @@ import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
 import openblocks.common.block.BlockVacuumHopper;
+import openblocks.common.container.ContainerBigButton;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.container.ContainerSprinkler;
@@ -46,6 +48,7 @@ import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
 import openblocks.common.item.ItemLuggage;
 import openblocks.common.item.ItemSonicGlasses;
+import openblocks.common.tileentity.TileEntityBigButton;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
@@ -124,6 +127,10 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
 			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
 		}
+		if (canRegisterBlock(Config.blockBigButton)) {
+			OpenBlocks.Blocks.bigButton = new BlockBigButton();
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
+		}
 		
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
@@ -200,6 +207,7 @@ public class CommonProxy implements IGuiHandler {
 		if (ID == OpenBlocks.Gui.Lightbox.ordinal()) { return new ContainerLightbox(player.inventory, (TileEntityLightbox)tile); }
 		if (ID == OpenBlocks.Gui.Sprinkler.ordinal()) { return new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile); }
 		if (ID == OpenBlocks.Gui.VacuumHopper.ordinal()) { return new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile); }
+		if (ID == OpenBlocks.Gui.BigButton.ordinal()) { return new ContainerBigButton(player.inventory, (TileEntityBigButton)tile); }
 		
 		return null;
 	}

@@ -12,6 +12,7 @@ import openblocks.client.renderer.tileentity.OpenRenderHelper;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.common.tileentity.TileEntityBearTrap;
+import openblocks.common.tileentity.TileEntityBigButton;
 import openblocks.common.tileentity.TileEntityCannon;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
@@ -39,6 +40,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	private TileEntitySprinkler teSprinkler = new TileEntitySprinkler();
 	private TileEntityVacuumHopper teHopper = new TileEntityVacuumHopper();
 	private TileEntityCannon teCannon = new TileEntityCannon();
+	private TileEntityBigButton teButton = new TileEntityBigButton();
 
 	public BlockRenderingHandler() {
 		teTarget.setEnabled(true);
@@ -79,6 +81,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		} else if (block == OpenBlocks.Blocks.cannon) {
 			te = teCannon;
 			teCannon.disableLineRender();
+		}else if (block == OpenBlocks.Blocks.bigButton) {
+			te = teButton;
+			GL11.glTranslated(-0.5, 0, 0);
 		}
 		if (te instanceof OpenTileEntity) {
 			((OpenTileEntity)te).setUsedForClientInventoryRendering(true);

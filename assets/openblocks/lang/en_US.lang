@@ -2,6 +2,7 @@ openblocks.gui.lightbox=Lightbox
 openblocks.gui.luggage=Luggage
 openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
+openblocks.gui.bigbutton=Big Button
 
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
@@ -18,6 +19,7 @@ tile.openblocks.sprinkler.name=Sprinkler
 tile.openblocks.vacuumhopper.name=Vacuum Hopper
 tile.openblocks.sponge.name=Sponge
 tile.openblocks.cannon.name=Item Cannon
+tile.openblocks.bigbutton.name=Big Button
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
