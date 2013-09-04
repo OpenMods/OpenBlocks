@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
@@ -21,29 +24,57 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	
 	public void updateEntity() {
 		super.updateEntity();
+		
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", (double)xCoord + 0.5, (double)yCoord + 0.5, (double)zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
-		if (!worldObj.isRemote && worldObj.getWorldTime() % 10 == 0) {
-			TileEntity tileOnSurface = getTileInDirection(getSurface());
 
-			int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
-			if (slotId > -1) {
-				ItemStack nextStack = getStackInSlot(slotId);
-				nextStack = nextStack.copy();
-				if (tileOnSurface instanceof IInventory) {
-					InventoryUtils.insertItemIntoInventory((IInventory) tileOnSurface, nextStack);
-				}else {
-					if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
-						int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());
-						nextStack.stackSize -= inserted;
-					}
+		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, getBB().expand(3, 3, 3));
+		
+		for(EntityItem item : surroundingItems) {
+			
+			if (!item.isDead) {
+
+				double x = (xCoord + 0.5D - item.posX) / 15.0D;
+				double y = (yCoord + 0.5D - item.posY) / 15.0D;
+				double z = (zCoord + 0.5D - item.posZ) / 15.0D;
+
+				double distance = Math.sqrt(x * x + y * y + z * z);
+				double var11 = 1.0D - distance;
+
+				if (var11 > 0.0D) {
+					var11 *= var11;
+					item.motionX += x / distance * var11 * 0.05;
+					item.motionY += y / distance * var11 * 0.2;
+					item.motionZ += z / distance * var11 * 0.05;
 				}
-				if (nextStack != null) {
-					if (nextStack.stackSize > 0) {
-						setInventorySlotContents(slotId, nextStack);
+			}
+		}
+		
+		if (!worldObj.isRemote) {
+			
+			if (worldObj.getWorldTime() % 10 == 0) {
+			
+				TileEntity tileOnSurface = getTileInDirection(getSurface());
+	
+				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
+				if (slotId > -1) {
+					ItemStack nextStack = getStackInSlot(slotId);
+					nextStack = nextStack.copy();
+					if (tileOnSurface instanceof IInventory) {
+						InventoryUtils.insertItemIntoInventory((IInventory) tileOnSurface, nextStack);
 					}else {
-						setInventorySlotContents(slotId, null);
+						if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
+							int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());
+							nextStack.stackSize -= inserted;
+						}
+					}
+					if (nextStack != null) {
+						if (nextStack.stackSize > 0) {
+							setInventorySlotContents(slotId, nextStack);
+						}else {
+							setInventorySlotContents(slotId, null);
+						}
 					}
 				}
 			}

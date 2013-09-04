@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
@@ -185,5 +186,9 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	public void openGui(EntityPlayer player, Enum gui) {
 		player.openGui(OpenBlocks.instance, gui.ordinal(), worldObj, xCoord, yCoord, zCoord);
+	}
+	
+	public AxisAlignedBB getBB() {
+		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
 	}
 }
