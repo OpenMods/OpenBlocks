@@ -7,6 +7,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
@@ -31,6 +32,8 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	public double motionX = 0;
 	public double motionY = 0;
 	public double motionZ = 0;
+	
+	public boolean renderLine = true;
 	
 	public enum Keys {
 		pitch,
@@ -173,6 +176,24 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		motionX = Math.sin(y) * Math.cos(p);
 		motionY = Math.sin(p);
 		motionZ = -Math.cos(y) * Math.cos(p);
+	}
+
+	public void disableLineRender() {
+		renderLine = false;
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		pitch.writeToNBT(tag, "pitch");
+		yaw.writeToNBT(tag, "yaw");
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		pitch.readFromNBT(tag, "pitch");
+		yaw.readFromNBT(tag, "yaw");
 	}
 
 }

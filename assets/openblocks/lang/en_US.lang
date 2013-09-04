@@ -16,6 +16,8 @@ tile.openblocks.trophy.name=Trophy
 tile.openblocks.beartrap.name=Bear Trap
 tile.openblocks.sprinkler.name=Sprinkler
 tile.openblocks.vacuumhopper.name=Vacuum Hopper
+tile.openblocks.sponge.name=Sponge
+tile.openblocks.cannon.name=Item Cannon
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing

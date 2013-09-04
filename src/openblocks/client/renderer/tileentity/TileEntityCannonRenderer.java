@@ -25,7 +25,9 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		func_110628_a(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
+		if (cannon.renderLine) { 
 		GL11.glPushMatrix();
+		
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -51,6 +53,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glPopMatrix();
+		}
 		GL11.glPopMatrix();
 	}
 

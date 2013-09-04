@@ -17,6 +17,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockSponge;
 import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
@@ -63,6 +64,7 @@ public class OpenBlocks {
 		public static BlockSprinkler sprinkler;
 		public static BlockCannon cannon;
 		public static BlockVacuumHopper vacuumHopper;
+		public static BlockSponge sponge;
 	}
 
 	public static class Items {
@@ -88,6 +90,7 @@ public class OpenBlocks {
 		public static int blockSprinklerId = 2551;
 		public static int blockCannonId = 2552;
 		public static int blockVacuumHopperId = 2553;
+		public static int blockSpongeId = 2554;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int itemLuggageId = 14977;
@@ -108,7 +111,7 @@ public class OpenBlocks {
 		public static int sprinklerFertilizeChance = 500;
 		public static int sprinklerBonemealFertizizeChance = 200;
 		public static int sprinklerEffectiveRange = 4;
-		public static boolean sonicGlassesEasyMode = false;
+		public static boolean sonicGlassesEasyMode = true;
 	}
 
 	public static enum Gui {

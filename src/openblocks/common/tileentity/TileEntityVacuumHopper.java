@@ -36,7 +36,6 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 				}else {
 					if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
 						int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());
-						System.out.println(inserted);
 						nextStack.stackSize -= inserted;
 					}
 				}

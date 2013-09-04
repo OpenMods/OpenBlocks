@@ -28,6 +28,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockSponge;
 import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
 import openblocks.common.block.BlockTarget;
@@ -70,7 +71,7 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (canRegisterBlock(Config.blockElevatorId)) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth), 'g', new ItemStack(Item.ingotGold) }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'g', new ItemStack(Item.ingotGold) }));
 		}
 		if (canRegisterBlock(Config.blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
@@ -81,14 +82,14 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (canRegisterBlock(Config.blockTargetId)) {
 			OpenBlocks.Blocks.target = new BlockTarget();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth), 's', "stickWood" }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (canRegisterBlock(Config.blockGraveId)) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
 		if (canRegisterBlock(Config.blockFlagId)) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth), 's', "stickWood" }));
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (canRegisterBlock(Config.blockTankId)) {
 			OpenBlocks.Blocks.tank = new BlockTank();
@@ -111,14 +112,19 @@ public class CommonProxy implements IGuiHandler {
 		if (canRegisterBlock(Config.blockCannonId)) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
 			EntityRegistry.registerModEntity(EntityCannon.class, "Cannon", Integer.MAX_VALUE, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
-			//TODO: add recipe
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ", "iri", 'd', new ItemStack(Block.dispenser), 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.blockRedstone) }));
 		}
 
 		if (canRegisterBlock(Config.blockVacuumHopperId)) {
 			OpenBlocks.Blocks.vacuumHopper = new BlockVacuumHopper();
-			//TODO: add recipe
+			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.vacuumHopper), new ItemStack(Block.hopperBlock), new ItemStack(Block.obsidian), new ItemStack(Item.enderPearl)));
 		}
 
+		if (canRegisterBlock(Config.blockSpongeId)) {
+			OpenBlocks.Blocks.sponge = new BlockSponge();
+			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
+		}
+		
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemGeneric();
