@@ -28,6 +28,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	public SyncableDouble pitch = new SyncableDouble();
 	public SyncableDouble yaw = new SyncableDouble();
 	public SyncableInt cannonId = new SyncableInt(0);
+	public SyncableInt ridingEntity = new SyncableInt(0);
 	
 	public double motionX = 0;
 	public double motionY = 0;
@@ -38,18 +39,23 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	public enum Keys {
 		pitch,
 		yaw,
-		cannonId
+		cannonId,
+		ridingEntity
 	}
 	
 	public TileEntityCannon() {
 		addSyncedObject(Keys.pitch, pitch);
 		addSyncedObject(Keys.yaw, yaw);
 		addSyncedObject(Keys.cannonId, cannonId);
+		addSyncedObject(Keys.ridingEntity, ridingEntity);
 	}
 	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+		if (cannon == null) {
+			ridingEntity.setValue(0);
+		}
 		if (cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
 			double p = player.rotationPitch;
@@ -66,6 +72,10 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 				cannon.posX = pos.xCoord + 0.5 + xCoord;
 				cannon.posY = yCoord;
 				cannon.posZ = pos.zCoord + 0.5 + zCoord;
+				cannon.setPosition(cannon.posX, cannon.posY, cannon.posZ);
+				if (player != null) {
+					player.setPosition(cannon.posX, cannon.posY + 1.0, cannon.posZ);
+				}
 			}
 		}
 
@@ -133,6 +143,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 			player.renderYawOffset = player.prevRotationYawHead = player.rotationYawHead = player.prevRotationYaw = player.rotationYaw = (float)yaw.getValue();
 			player.mountEntity(cannon);
 			cannonId.setValue(cannon.entityId);
+			ridingEntity.setValue(player.entityId);
 			sync();
 		}
 		return true;
@@ -165,6 +176,16 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 			Entity tmpCannon = worldObj.getEntityByID(cannonId.getValue());
 			if (tmpCannon != null && tmpCannon instanceof EntityCannon && !tmpCannon.isDead) {
 				cannon = (EntityCannon) tmpCannon;
+			}
+		}
+		int playerId = ridingEntity.getValue();
+		if (playerId > 0) {
+			Entity player = worldObj.getEntityByID(ridingEntity.getValue());
+			if (player != null && player instanceof EntityCannon && !player.isDead) {
+				if (cannon != null) {
+					player.ridingEntity = cannon;
+					cannon.riddenByEntity = player;
+				}
 			}
 		}
 		
