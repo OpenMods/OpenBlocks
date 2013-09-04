@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.event.sound.PlayStreamingEvent;
@@ -97,7 +98,8 @@ public class SoundEventsManager {
 	@ForgeSubscribe
 	public void onSoundEvent(PlayStreamingEvent evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
-			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "." + evt.name;
+			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "."
+					+ evt.name;
 			addEvent(evt.x, evt.y, evt.z, soundName, 1, 10);
 		}
 	}
@@ -111,21 +113,76 @@ public class SoundEventsManager {
 		}
 	}
 
-	private static void clearWorld() {
-		GL11.glDisable(GL11.GL_FOG);
-		GL11.glColor3f(0, 0, 0);
-		GL11.glClearColor(0, 0, 0, 1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+	private Integer renderNotPumpkin;
+	private static final ResourceLocation notPumpkin = new ResourceLocation("openblocks:textures/misc/glasses_obsidian.png");
+
+	private void dimWorld(TextureManager tex, double level) {
+		if (level <= 0) return;
+
+		if (level >= 1) {
+			GL11.glColor3f(0, 0, 0);
+			GL11.glClearColor(0, 0, 0, 1);
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			return;
+		}
+
+		if (renderNotPumpkin == null) {
+			renderNotPumpkin = GL11.glGenLists(1);
+
+			GL11.glNewList(renderNotPumpkin, GL11.GL_COMPILE);
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glPushMatrix();
+			GL11.glLoadIdentity();
+
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glPushMatrix();
+			GL11.glLoadIdentity();
+			GL11.glOrtho(-1, 1, -1, 1, -1, 1);
+
+			Tessellator tes = new Tessellator();
+			tes.startDrawingQuads();
+			tes.setColorRGBA_F(1, 1, 1, (float)level);
+			tes.addVertexWithUV(-1, -1, 0, 0, 0);
+			tes.addVertexWithUV(+1, -1, 0, 1, 0);
+			tes.addVertexWithUV(+1, +1, 0, 1, 1);
+			tes.addVertexWithUV(-1, +1, 0, 0, 1);
+
+			tex.func_110577_a(notPumpkin);
+
+			GL11.glColor3f(1, 1, 1);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			tes.draw();
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_LIGHTING);
+
+			GL11.glPopMatrix();
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glPopMatrix();
+			GL11.glEndList();
+		}
+
+		GL11.glCallList(renderNotPumpkin);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if (renderNotPumpkin != null) GL11.glDeleteLists(renderNotPumpkin, 1);
 	}
 
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Entity rve = evt.context.mc.renderViewEntity;
 		if (!isEntityWearingGlasses(rve)) return;
 
-		if (!Config.sonicGlassesEasyMode)
-			clearWorld();
-
+		GL11.glDisable(GL11.GL_FOG);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		final TextureManager tex = evt.context.renderEngine;
+		dimWorld(tex, Config.sonicGlassesOpacity);
 
 		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX)
 				* evt.partialTicks;
@@ -134,7 +191,6 @@ public class SoundEventsManager {
 		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ)
 				* evt.partialTicks;
 
-		final TextureManager tex = evt.context.renderEngine;
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

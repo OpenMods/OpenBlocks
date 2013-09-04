@@ -114,7 +114,7 @@ public class OpenBlocks {
 		public static int sprinklerFertilizeChance = 500;
 		public static int sprinklerBonemealFertizizeChance = 200;
 		public static int sprinklerEffectiveRange = 4;
-		public static boolean sonicGlassesEasyMode = true;
+		public static double sonicGlassesOpacity = 0.95;
 	}
 
 	public static enum Gui {
@@ -247,8 +247,8 @@ public class OpenBlocks {
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
 		
-		prop = configFile.get("glasses", "easyMode", Config.sonicGlassesEasyMode, "If false, only sounds will be visible while wearing sonic glasses");
-		Config.sonicGlassesEasyMode = prop.getBoolean(Config.sonicGlassesEasyMode);
+		prop = configFile.get("glasses", "opacity", Config.sonicGlassesOpacity, "0.0 - no visible change to world, 1.0 - world fully obscured");
+		Config.sonicGlassesOpacity = prop.getDouble(Config.sonicGlassesOpacity);
 
 		configFile.save();
 	}
