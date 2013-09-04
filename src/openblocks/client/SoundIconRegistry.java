@@ -18,6 +18,8 @@ public class SoundIconRegistry {
 
 	private final static String ICON_FRAME = "openblocks:sound_frame";
 
+	public final static String CATEGORY_STREAMING = "!streaming";
+	
 	private static String iconIdPrefix(String id) {
 		return "openblocks:sound_" + id;
 	}
@@ -235,8 +237,6 @@ public class SoundIconRegistry {
 		DrawableIcon frameGreen = Icons.itemIcon(ICON_FRAME, 0x00FF00);
 		DrawableIcon frameBlue = Icons.itemIcon(ICON_FRAME, 0x0000FF);
 		DrawableIcon frameYellow = Icons.itemIcon(ICON_FRAME, 0xFFFF00);
-		
-		
 
 		MappedCategory ambient = new MappedCategory();
 		ambient.add("rain", simpleIcon("rain", 0x0000FF));
@@ -284,12 +284,12 @@ public class SoundIconRegistry {
 		mobs.addMob("wolf", 95, false);
 
 		TintedIconCategory note = root.add("note", new TintedIconCategory(iconIdPrefix("note")));
-		note.add("bass", 0xFFFFFF);
-		note.add("bassattack", 0xFFFFFF);
-		note.add("bd", 0xFFFFFF);
-		note.add("harp", 0xFFFFFF);
-		note.add("hat", 0xFFFFFF);
-		note.add("pling", 0xFFFFFF);
+		note.add("bass", 0x0000FF);
+		note.add("bassattack", 0xFFFF00);
+		note.add("bd", 0x00FFFF);
+		note.add("harp", 0xFF0000);
+		note.add("hat", 0x00FF00);
+		note.add("pling", 0xFF00FF);
 		note.add("snare", 0xFFFFFF);
 
 		root.add("portal", makeFramedBlockIcon("portal", frameWhite));
@@ -317,7 +317,6 @@ public class SoundIconRegistry {
 
 		DrawableIcon tnt = makeFramedBlockIcon("tnt_side", frameWhite);
 		random.add("explode", tnt);
-		random.add("fizz", tnt);
 		random.add("fuse", tnt);
 
 		DrawableIcon glass = makeFramedBlockIcon("glass", frameWhite);
@@ -339,11 +338,13 @@ public class SoundIconRegistry {
 		random.add("levelup", exp);
 		random.add("orb", exp);
 
-		DrawableIcon click = simpleIcon("click", 0xFFFFFF);
+		DrawableIcon click = simpleIcon("click", DEFAULT_COLOR);
 		random.add("click", click);
 		random.add("wood_click", click);
 		random.add("pop", click);
 
+		random.add("fizz", simpleIcon("fizz", DEFAULT_COLOR));
+		
 		DrawableIcon apple = makeFramedItemIcon("apple", frameWhite);
 		
 		MappedCategory openblocks = root.add("openblocks", new MappedCategory());
@@ -351,6 +352,20 @@ public class SoundIconRegistry {
 		openblocks.add("teleport", unknownIcon);
 		openblocks.add("chump", apple);
 		openblocks.add("slowpokenom", eat);
+		
+		MappedCategory records = root.add(CATEGORY_STREAMING, new MappedCategory());
+		records.add("13", makeFramedItemIcon("record_13", frameBlue));
+		records.add("cat", makeFramedItemIcon("record_cat", frameBlue));
+		records.add("blocks", makeFramedItemIcon("record_blocks", frameBlue));
+		records.add("chirp", makeFramedItemIcon("record_chirp", frameBlue));
+		records.add("far", makeFramedItemIcon("record_far", frameBlue));
+		records.add("mall", makeFramedItemIcon("record_mall", frameBlue));
+		records.add("mellohi", makeFramedItemIcon("record_mellohi", frameBlue));
+		records.add("stal", makeFramedItemIcon("record_stal", frameBlue));
+		records.add("strad", makeFramedItemIcon("record_strad", frameBlue));
+		records.add("ward", makeFramedItemIcon("record_ward", frameBlue));
+		records.add("11", makeFramedItemIcon("record_11", frameBlue));
+		records.add("wait", makeFramedItemIcon("record_wait", frameBlue));
 		
 		/*
 		 * Missing sounds

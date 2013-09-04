@@ -91,12 +91,15 @@ public class SoundEventsManager {
 
 	@ForgeSubscribe
 	public void onSoundEvent(PlaySoundEvent evt) {
-		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, evt.volume, 5 * evt.pitch);
+		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, Math.log(evt.volume + 1), 5 * evt.pitch);
 	}
 
 	@ForgeSubscribe
 	public void onSoundEvent(PlayStreamingEvent evt) {
-		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, 1, 10);
+		if (SoundEventsManager.isPlayerWearingGlasses()) {
+			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "." + evt.name;
+			addEvent(evt.x, evt.y, evt.z, soundName, 1, 10);
+		}
 	}
 
 	public void tickUpdate() {
