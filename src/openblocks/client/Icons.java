@@ -31,10 +31,10 @@ public class Icons {
 	}
 
 	public static void renderQuad(Tessellator tes, double scale, Icon icon) {
-		tes.addVertexWithUV(scale, scale, 0, icon.getMaxU(), icon.getMinV());
-		tes.addVertexWithUV(scale, -scale, 0, icon.getMaxU(), icon.getMaxV());
-		tes.addVertexWithUV(-scale, -scale, 0, icon.getMinU(), icon.getMaxV());
-		tes.addVertexWithUV(-scale, scale, 0, icon.getMinU(), icon.getMinV());
+		tes.addVertexWithUV(scale, scale, 0, icon.getMinU(), icon.getMinV());
+		tes.addVertexWithUV(scale, -scale, 0, icon.getMinU(), icon.getMaxV());
+		tes.addVertexWithUV(-scale, -scale, 0, icon.getMaxU(), icon.getMaxV());
+		tes.addVertexWithUV(-scale, scale, 0, icon.getMaxU(), icon.getMinV());
 	}
 
 	public interface IDrawableIcon {

@@ -223,7 +223,7 @@ public class SoundIconRegistry {
 	private static IDrawableIcon makeBlockIcon(String block, IDrawableIcon front, IDrawableIcon frame) {
 		IDrawableIcon back = blockIcon(block);
 		IDrawableIcon inner = new ComposedIcon(front, back, 1.0, 0.00001);
-		return new DisplayListWrapper(new ComposedIcon(frame, inner, 0.6, 0.0));
+		return new ComposedIcon(frame, inner, 0.6, 0.0);
 	}
 
 	private static void addBlocks(MappedCategory cat, IDrawableIcon front, IDrawableIcon frame) {
@@ -285,6 +285,7 @@ public class SoundIconRegistry {
 		mobs.addMob("endermen", 58, true);
 		mobs.addMob("ghast", 56, true);
 
+		mobs.addMob("bat", 65, false);
 		mobs.addMob("cat", 62, false);
 		mobs.addMob("chicken", 93, false);
 		mobs.addMob("cow", 92, false);
