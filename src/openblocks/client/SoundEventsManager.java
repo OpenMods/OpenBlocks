@@ -15,7 +15,7 @@ import net.minecraftforge.client.event.sound.PlayStreamingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.OpenBlocks.Config;
-import openblocks.client.Icons.DrawableIcon;
+import openblocks.client.Icons.IDrawableIcon;
 import openblocks.common.item.ItemSonicGlasses;
 
 import org.lwjgl.opengl.GL11;
@@ -38,13 +38,13 @@ public class SoundEventsManager {
 
 	private static class SoundEvent {
 		public final float x, y, z;
-		public final DrawableIcon icon;
+		public final IDrawableIcon icon;
 		public final double size;
 
 		private double time;
 		private final double timeDeltaPerTick;
 
-		private SoundEvent(float x, float y, float z, DrawableIcon icon, double size, double TTL) {
+		private SoundEvent(float x, float y, float z, IDrawableIcon icon, double size, double TTL) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
@@ -60,7 +60,7 @@ public class SoundEventsManager {
 		}
 
 		public boolean isAlive() {
-			return timeDeltaPerTick >= 0;
+			return time >= 0;
 		}
 
 		public double getTime(double partialTick) {
@@ -86,7 +86,7 @@ public class SoundEventsManager {
 	}
 
 	private void addEvent(float x, float y, float z, String soundId, double size, double time) {
-		DrawableIcon icon = icons.getIcon(soundId);
+		IDrawableIcon icon = icons.getIcon(soundId);
 		events.add(new SoundEvent(x, y, z, icon, size, time));
 	}
 
@@ -174,6 +174,12 @@ public class SoundEventsManager {
 	protected void finalize() throws Throwable {
 		if (renderNotPumpkin != null) GL11.glDeleteLists(renderNotPumpkin, 1);
 	}
+	
+	public static void setupBillboard(Entity rve, double x, double y, double z) {
+		GL11.glTranslated(x, y, z);
+		GL11.glRotatef(-rve.rotationYaw, 0, 1, 0);
+		GL11.glRotatef(rve.rotationPitch, 1, 0, 0);
+	}
 
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Entity rve = evt.context.mc.renderViewEntity;
@@ -194,13 +200,15 @@ public class SoundEventsManager {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		Tessellator tes = new Tessellator();
 		for (SoundEvent snd : events) {
 			final double px = snd.x - interpX;
 			final double py = snd.y - interpY;
 			final double pz = snd.z - interpZ;
 
-			snd.icon.draw(tex, tes, px, py, pz, snd.getTime(evt.partialTicks), snd.size);
+			GL11.glPushMatrix();
+			setupBillboard(rve, px, py, pz);
+			snd.icon.draw(tex, snd.getTime(evt.partialTicks), snd.size);
+			GL11.glPopMatrix();
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);

@@ -1,5 +1,8 @@
 package openblocks.client;
 
+import static openblocks.client.Icons.blockIcon;
+import static openblocks.client.Icons.itemIcon;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -8,7 +11,9 @@ import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-import openblocks.client.Icons.DrawableIcon;
+import openblocks.client.Icons.ComposedIcon;
+import openblocks.client.Icons.DisplayListWrapper;
+import openblocks.client.Icons.IDrawableIcon;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -19,21 +24,21 @@ public class SoundIconRegistry {
 	private final static String ICON_FRAME = "openblocks:sound_frame";
 
 	public final static String CATEGORY_STREAMING = "!streaming";
-	
+
 	private static String iconIdPrefix(String id) {
 		return "openblocks:sound_" + id;
 	}
 
 	public interface ISoundCategory {
-		public DrawableIcon getIcon(Iterator<String> path);
+		public IDrawableIcon getIcon(Iterator<String> path);
 
 		public void registerIcons(int type, IconRegister registry);
 	}
 
 	public static class ConstantIcon implements ISoundCategory {
-		private final DrawableIcon icon;
+		private final IDrawableIcon icon;
 
-		private ConstantIcon(DrawableIcon icon) {
+		private ConstantIcon(IDrawableIcon icon) {
 			this.icon = icon;
 		}
 
@@ -43,22 +48,22 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public DrawableIcon getIcon(Iterator<String> path) {
+		public IDrawableIcon getIcon(Iterator<String> path) {
 			return icon;
 		}
 	}
 
 	private static class MappedCategory implements ISoundCategory {
-		public DrawableIcon defaultIcon;
+		public IDrawableIcon defaultIcon;
 		private final Map<String, ISoundCategory> subCategories = Maps.newHashMap();
 
 		@Override
-		public DrawableIcon getIcon(Iterator<String> path) {
+		public IDrawableIcon getIcon(Iterator<String> path) {
 			String id = path.next();
 			ISoundCategory result = subCategories.get(id);
 			if (result == null) return defaultIcon;
 
-			DrawableIcon icon = result.getIcon(path);
+			IDrawableIcon icon = result.getIcon(path);
 			return (icon != null)? icon : defaultIcon;
 		}
 
@@ -67,7 +72,7 @@ public class SoundIconRegistry {
 			return subcategory;
 		}
 
-		public void add(String id, DrawableIcon icon) {
+		public void add(String id, IDrawableIcon icon) {
 			subCategories.put(id, new ConstantIcon(icon));
 		}
 
@@ -88,17 +93,17 @@ public class SoundIconRegistry {
 		}
 
 		public void add(String id, int color) {
-			DrawableIcon icon = Icons.itemIcon(iconId, color);
+			IDrawableIcon icon = itemIcon(iconId, color);
 			add(id, new ConstantIcon(icon));
 		}
 	}
 
 	private static class MobIcons {
-		public final DrawableIcon normalIcon;
-		public final DrawableIcon hurtIcon;
-		public final DrawableIcon deathIcon;
+		public final IDrawableIcon normalIcon;
+		public final IDrawableIcon hurtIcon;
+		public final IDrawableIcon deathIcon;
 
-		private MobIcons(DrawableIcon normalIcon, DrawableIcon hurtIcon, DrawableIcon deathIcon) {
+		private MobIcons(IDrawableIcon normalIcon, IDrawableIcon hurtIcon, IDrawableIcon deathIcon) {
 			this.normalIcon = normalIcon;
 			this.hurtIcon = hurtIcon;
 			this.deathIcon = deathIcon;
@@ -116,10 +121,10 @@ public class SoundIconRegistry {
 		private MobIcons unknownMob;
 
 		private static MobIcons createMobIcons(String innerIcon, int innerColor, int frameColor) {
-			DrawableIcon frame = Icons.itemIcon(ICON_FRAME, frameColor);
-			DrawableIcon normal = makeFramedItemIcon(iconIdPrefix(innerIcon), innerColor, frame);
-			DrawableIcon hurt = makeFramedItemIcon(iconIdPrefix("mob_hurt"), innerColor, frame);
-			DrawableIcon death = makeFramedItemIcon(iconIdPrefix("mob_death"), innerColor, frame);
+			IDrawableIcon frame = itemIcon(ICON_FRAME, frameColor);
+			IDrawableIcon normal = makeFramedItemIcon(iconIdPrefix(innerIcon), innerColor, frame);
+			IDrawableIcon hurt = makeFramedItemIcon(iconIdPrefix("mob_hurt"), innerColor, frame);
+			IDrawableIcon death = makeFramedItemIcon(iconIdPrefix("mob_death"), innerColor, frame);
 			return new MobIcons(normal, hurt, death);
 		}
 
@@ -128,7 +133,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public DrawableIcon getIcon(Iterator<String> path) {
+		public IDrawableIcon getIcon(Iterator<String> path) {
 			String mobName = path.next();
 			String actionName = path.next();
 
@@ -167,7 +172,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public DrawableIcon getIcon(Iterator<String> path) {
+		public IDrawableIcon getIcon(Iterator<String> path) {
 			path.next(); // ignore one element
 			return child.getIcon(path);
 		}
@@ -188,63 +193,71 @@ public class SoundIconRegistry {
 		root.registerIcons(evt.map.textureType, evt.map);
 	}
 
-	public DrawableIcon getIcon(String sound) {
+	public IDrawableIcon getIcon(String sound) {
 		Iterable<String> path = Splitter.onPattern("[.:]").split(sound);
 		return root.getIcon(path.iterator());
 	}
 
-	private static DrawableIcon simpleIcon(String id, int color) {
-		return Icons.itemIcon(iconIdPrefix(id), color);
+	private static IDrawableIcon simpleIcon(String id, int color) {
+		return itemIcon(iconIdPrefix(id), color);
 	}
 
-	private static DrawableIcon makeFramedItemIcon(String innerIcon, int innerColor, DrawableIcon frame) {
-		DrawableIcon inner = Icons.itemIcon(innerIcon, innerColor);
-		return Icons.framedIcon(frame, inner, 0.6);
+	private static IDrawableIcon makeFramedItemIcon(String innerIcon, int innerColor, IDrawableIcon frame) {
+		IDrawableIcon inner = itemIcon(innerIcon, innerColor);
+		return new ComposedIcon(frame, inner, 0.6, 0);
 	}
 
-	private static DrawableIcon makeFramedItemIcon(String innerIcon, DrawableIcon frame) {
+	private static IDrawableIcon makeFramedItemIcon(String innerIcon, IDrawableIcon frame) {
 		return makeFramedItemIcon(innerIcon, 0xFFFFFF, frame);
 	}
 
-	private static DrawableIcon makeFramedBlockIcon(String innerIcon, int innerColor, DrawableIcon frame) {
-		DrawableIcon inner = Icons.blockIcon(innerIcon, innerColor);
-		return Icons.framedIcon(frame, inner, 0.6);
+	private static IDrawableIcon makeFramedBlockIcon(String innerIcon, int innerColor, IDrawableIcon frame) {
+		IDrawableIcon inner = blockIcon(innerIcon, innerColor);
+		return new ComposedIcon(frame, inner, 0.6, 0);
 	}
 
-	private static DrawableIcon makeFramedBlockIcon(String innerIcon, DrawableIcon frame) {
+	private static IDrawableIcon makeFramedBlockIcon(String innerIcon, IDrawableIcon frame) {
 		return makeFramedBlockIcon(innerIcon, 0xFFFFFF, frame);
 	}
 
-	private static void addBlocks(MappedCategory cat, DrawableIcon frame) {
-		cat.add("cloth", makeFramedBlockIcon("wool_colored_white", frame));
-		cat.add("grass", makeFramedBlockIcon("dirt", frame));
-		cat.add("gravel", makeFramedBlockIcon("gravel", frame));
-		cat.add("sand", makeFramedBlockIcon("sand", frame));
-		cat.add("snow", makeFramedBlockIcon("snow", frame));
-		cat.add("stone", makeFramedBlockIcon("stone", frame));
-		cat.add("wood", makeFramedBlockIcon("log_oak_top", frame));
-		cat.add("ladder", makeFramedBlockIcon("ladder", frame));
+	private static IDrawableIcon makeBlockIcon(String block, IDrawableIcon front, IDrawableIcon frame) {
+		IDrawableIcon back = blockIcon(block);
+		IDrawableIcon inner = new ComposedIcon(front, back, 1.0, 0.00001);
+		return new DisplayListWrapper(new ComposedIcon(frame, inner, 0.6, 0.0));
+	}
+
+	private static void addBlocks(MappedCategory cat, IDrawableIcon front, IDrawableIcon frame) {
+		cat.add("cloth", makeBlockIcon("wool_colored_white", front, frame));
+		cat.add("grass", makeBlockIcon("dirt", front, frame));
+		cat.add("gravel", makeBlockIcon("gravel", front, frame));
+		cat.add("sand", makeBlockIcon("sand", front, frame));
+		cat.add("snow", makeBlockIcon("snow", front, frame));
+		cat.add("stone", makeBlockIcon("stone", front, frame));
+		cat.add("wood", makeBlockIcon("log_oak_top", front, frame));
+		cat.add("ladder", makeBlockIcon("ladder", front, frame));
 	}
 
 	public void registerDefaults() {
-		DrawableIcon genericIcon = simpleIcon("generic", DEFAULT_COLOR);
-		DrawableIcon unknownIcon = simpleIcon("unknown", DEFAULT_COLOR);
-		
+		IDrawableIcon genericIcon = simpleIcon("generic", DEFAULT_COLOR);
+		IDrawableIcon unknownIcon = simpleIcon("unknown", DEFAULT_COLOR);
+
 		root.defaultIcon = unknownIcon;
 
-		DrawableIcon frameWhite = Icons.itemIcon(ICON_FRAME, 0xFFFFFF);
-		DrawableIcon frameRed = Icons.itemIcon(ICON_FRAME, 0xFF0000);
-		DrawableIcon frameGreen = Icons.itemIcon(ICON_FRAME, 0x00FF00);
-		DrawableIcon frameBlue = Icons.itemIcon(ICON_FRAME, 0x0000FF);
-		DrawableIcon frameYellow = Icons.itemIcon(ICON_FRAME, 0xFFFF00);
+		IDrawableIcon frameWhite = itemIcon(ICON_FRAME, 0xFFFFFF);
+		IDrawableIcon frameRed = itemIcon(ICON_FRAME, 0xFF0000);
+		IDrawableIcon frameGreen = itemIcon(ICON_FRAME, 0x00FF00);
+		IDrawableIcon frameBlue = itemIcon(ICON_FRAME, 0x0000FF);
+		IDrawableIcon frameYellow = itemIcon(ICON_FRAME, 0xFFFF00);
 
 		MappedCategory ambient = new MappedCategory();
 		ambient.add("rain", simpleIcon("rain", 0x0000FF));
 		ambient.add("thunder", genericIcon);
 		root.add("ambient", new SkipPath(ambient));
 
-		addBlocks(root.add("dig", new MappedCategory()), frameYellow);
-		addBlocks(root.add("step", new MappedCategory()), frameGreen);
+		IDrawableIcon pick = itemIcon("diamond_pickaxe");
+		IDrawableIcon boots = itemIcon("diamond_boots");
+		addBlocks(root.add("dig", new MappedCategory()), pick, frameYellow);
+		addBlocks(root.add("step", new MappedCategory()), boots, frameGreen);
 
 		root.add("fire", makeFramedBlockIcon("fire_layer_0", frameRed));
 		root.add("fireworks", makeFramedItemIcon("fireworks", frameRed));
@@ -294,7 +307,7 @@ public class SoundIconRegistry {
 
 		root.add("portal", makeFramedBlockIcon("portal", frameWhite));
 
-		DrawableIcon piston = makeFramedBlockIcon("piston_side", frameWhite);
+		IDrawableIcon piston = makeFramedBlockIcon("piston_side", frameWhite);
 		MappedCategory tile = root.add("tile", new MappedCategory());
 		tile.add("piston", piston);
 
@@ -302,57 +315,57 @@ public class SoundIconRegistry {
 		random.add("bow", makeFramedItemIcon("bow_standby", frameWhite));
 		random.add("bowhit", makeFramedItemIcon("arrow", frameWhite));
 
-		DrawableIcon door = makeFramedItemIcon("door_wood", frameWhite);
+		IDrawableIcon door = makeFramedItemIcon("door_wood", frameWhite);
 		random.add("door_close", door);
 		random.add("door_open", door);
 
-		DrawableIcon chest = makeFramedBlockIcon("planks_oak", frameWhite);
+		IDrawableIcon chest = makeFramedBlockIcon("planks_oak", frameWhite);
 		random.add("chestclosed", chest);
 		random.add("chestopen", chest);
 
-		DrawableIcon anvil = makeFramedBlockIcon("anvil_base", frameWhite);
+		IDrawableIcon anvil = makeFramedBlockIcon("anvil_base", frameWhite);
 		random.add("anvil_land", anvil);
 		random.add("anvil_use", anvil);
 		random.add("anvil_break", anvil);
 
-		DrawableIcon tnt = makeFramedBlockIcon("tnt_side", frameWhite);
+		IDrawableIcon tnt = makeFramedBlockIcon("tnt_side", frameWhite);
 		random.add("explode", tnt);
 		random.add("fuse", tnt);
 
-		DrawableIcon glass = makeFramedBlockIcon("glass", frameWhite);
+		IDrawableIcon glass = makeFramedBlockIcon("glass", frameWhite);
 		random.add("glass", glass);
 		random.add("splash", glass);
 
-		DrawableIcon damage = makeFramedBlockIcon("destroy_stage_5", frameWhite);
+		IDrawableIcon damage = makeFramedBlockIcon("destroy_stage_5", frameWhite);
 		random.add("damage", damage);
 		random.add("break", damage);
 
-		DrawableIcon eat = makeFramedItemIcon("potato_baked", frameWhite);
+		IDrawableIcon eat = makeFramedItemIcon("potato_baked", frameWhite);
 		random.add("eat", eat);
 		random.add("burp", eat);
 
-		DrawableIcon drink = makeFramedItemIcon("potion_bottle_drinkable", frameWhite);
+		IDrawableIcon drink = makeFramedItemIcon("potion_bottle_drinkable", frameWhite);
 		random.add("drink", drink);
 
-		DrawableIcon exp = makeFramedItemIcon("experience_bottle", frameWhite);
+		IDrawableIcon exp = makeFramedItemIcon("experience_bottle", frameWhite);
 		random.add("levelup", exp);
 		random.add("orb", exp);
 
-		DrawableIcon click = simpleIcon("click", DEFAULT_COLOR);
+		IDrawableIcon click = simpleIcon("click", DEFAULT_COLOR);
 		random.add("click", click);
 		random.add("wood_click", click);
 		random.add("pop", click);
 
 		random.add("fizz", simpleIcon("fizz", DEFAULT_COLOR));
-		
-		DrawableIcon apple = makeFramedItemIcon("apple", frameWhite);
-		
+
+		IDrawableIcon apple = makeFramedItemIcon("apple", frameWhite);
+
 		MappedCategory openblocks = root.add("openblocks", new MappedCategory());
 		openblocks.defaultIcon = genericIcon;
 		openblocks.add("teleport", unknownIcon);
 		openblocks.add("chump", apple);
 		openblocks.add("slowpokenom", eat);
-		
+
 		MappedCategory records = root.add(CATEGORY_STREAMING, new MappedCategory());
 		records.add("13", makeFramedItemIcon("record_13", frameBlue));
 		records.add("cat", makeFramedItemIcon("record_cat", frameBlue));
@@ -366,7 +379,7 @@ public class SoundIconRegistry {
 		records.add("ward", makeFramedItemIcon("record_ward", frameBlue));
 		records.add("11", makeFramedItemIcon("record_11", frameBlue));
 		records.add("wait", makeFramedItemIcon("record_wait", frameBlue));
-		
+
 		/*
 		 * Missing sounds
 		 * ambient.cave
