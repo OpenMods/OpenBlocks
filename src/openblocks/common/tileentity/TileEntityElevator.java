@@ -125,7 +125,7 @@ public class TileEntityElevator extends OpenTileEntity {
 		if (direction != ForgeDirection.UP && direction != ForgeDirection.DOWN) { throw new Exception("Must be either up or down... for now"); }
 
 		int blocksInTheWay = 0;
-		for (int y = 2; y < Config.elevatorTravelDistance; y++) {
+		for (int y = 2; y <= Config.elevatorTravelDistance; y++) {
 			int yPos = yCoord + (y * direction.offsetY);
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
