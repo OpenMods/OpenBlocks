@@ -8,13 +8,14 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.event.sound.PlayStreamingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.OpenBlocks.Config;
-import openblocks.client.Icons.DrawableIcon;
+import openblocks.client.Icons.IDrawableIcon;
 import openblocks.common.item.ItemSonicGlasses;
 
 import org.lwjgl.opengl.GL11;
@@ -37,13 +38,13 @@ public class SoundEventsManager {
 
 	private static class SoundEvent {
 		public final float x, y, z;
-		public final DrawableIcon icon;
+		public final IDrawableIcon icon;
 		public final double size;
 
 		private double time;
 		private final double timeDeltaPerTick;
 
-		private SoundEvent(float x, float y, float z, DrawableIcon icon, double size, double TTL) {
+		private SoundEvent(float x, float y, float z, IDrawableIcon icon, double size, double TTL) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
@@ -59,7 +60,7 @@ public class SoundEventsManager {
 		}
 
 		public boolean isAlive() {
-			return timeDeltaPerTick >= 0;
+			return time >= 0;
 		}
 
 		public double getTime(double partialTick) {
@@ -85,18 +86,22 @@ public class SoundEventsManager {
 	}
 
 	private void addEvent(float x, float y, float z, String soundId, double size, double time) {
-		DrawableIcon icon = icons.getIcon(soundId);
+		IDrawableIcon icon = icons.getIcon(soundId);
 		events.add(new SoundEvent(x, y, z, icon, size, time));
 	}
 
 	@ForgeSubscribe
 	public void onSoundEvent(PlaySoundEvent evt) {
-		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, evt.volume, 5 * evt.pitch);
+		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, Math.log(evt.volume + 1), 5 * evt.pitch);
 	}
 
 	@ForgeSubscribe
 	public void onSoundEvent(PlayStreamingEvent evt) {
-		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, 1, 10);
+		if (SoundEventsManager.isPlayerWearingGlasses()) {
+			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "."
+					+ evt.name;
+			addEvent(evt.x, evt.y, evt.z, soundName, 1, 10);
+		}
 	}
 
 	public void tickUpdate() {
@@ -108,21 +113,97 @@ public class SoundEventsManager {
 		}
 	}
 
-	private static void clearWorld() {
-		GL11.glDisable(GL11.GL_FOG);
-		GL11.glColor3f(0, 0, 0);
-		GL11.glClearColor(0, 0, 0, 1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+	private Integer renderNotPumpkin;
+	private static final ResourceLocation notPumpkin = new ResourceLocation("openblocks:textures/misc/glasses_obsidian.png");
+
+	private void dimWorld(TextureManager tex, double level) {
+		if (level <= 0) return;
+
+		if (level >= 1 && !Config.sonicGlassesUseTexture) {
+			GL11.glColor3f(0, 0, 0);
+			GL11.glClearColor(0, 0, 0, 1);
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			return;
+		}
+
+		if (renderNotPumpkin == null) {
+			renderNotPumpkin = GL11.glGenLists(1);
+
+			GL11.glNewList(renderNotPumpkin, GL11.GL_COMPILE);
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glPushMatrix();
+			GL11.glLoadIdentity();
+
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glPushMatrix();
+			GL11.glLoadIdentity();
+			GL11.glOrtho(-1, 1, -1, 1, -1, 1);
+
+			GL11.glColor3f(1, 1, 1);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+			Tessellator tes = new Tessellator();
+			tes.startDrawingQuads();
+
+			if (Config.sonicGlassesUseTexture) {
+				tes.setColorRGBA_F(1, 1, 1, (float)level);
+
+				tex.func_110577_a(notPumpkin);
+				tes.addVertexWithUV(-1, -1, 0, 0, 0);
+				tes.addVertexWithUV(+1, -1, 0, 1, 0);
+				tes.addVertexWithUV(+1, +1, 0, 1, 1);
+				tes.addVertexWithUV(-1, +1, 0, 0, 1);
+
+				tes.draw();
+			} else {
+				tes.setColorRGBA_F(0.085f, 0.074f, 0.129f, (float)level);
+				tes.addVertex(-1, -1, 0);
+				tes.addVertex(+1, -1, 0);
+				tes.addVertex(+1, +1, 0);
+				tes.addVertex(-1, +1, 0);
+
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				tes.draw();
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+			}
+
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_LIGHTING);
+
+			GL11.glPopMatrix();
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glPopMatrix();
+			GL11.glEndList();
+		}
+
+		GL11.glCallList(renderNotPumpkin);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if (renderNotPumpkin != null) GL11.glDeleteLists(renderNotPumpkin, 1);
+	}
+
+	public static void setupBillboard(Entity rve, double x, double y, double z) {
+		GL11.glTranslated(x, y, z);
+		GL11.glRotatef(-rve.rotationYaw, 0, 1, 0);
+		GL11.glRotatef(rve.rotationPitch, 1, 0, 0);
 	}
 
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Entity rve = evt.context.mc.renderViewEntity;
 		if (!isEntityWearingGlasses(rve)) return;
 
-		if (!Config.sonicGlassesEasyMode)
-			clearWorld();
-
+		GL11.glDisable(GL11.GL_FOG);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		final TextureManager tex = evt.context.renderEngine;
+		dimWorld(tex, Config.sonicGlassesOpacity);
 
 		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX)
 				* evt.partialTicks;
@@ -131,17 +212,18 @@ public class SoundEventsManager {
 		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ)
 				* evt.partialTicks;
 
-		final TextureManager tex = evt.context.renderEngine;
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		Tessellator tes = new Tessellator();
 		for (SoundEvent snd : events) {
 			final double px = snd.x - interpX;
 			final double py = snd.y - interpY;
 			final double pz = snd.z - interpZ;
 
-			snd.icon.draw(tex, tes, px, py, pz, snd.getTime(evt.partialTicks), snd.size);
+			GL11.glPushMatrix();
+			setupBillboard(rve, px, py, pz);
+			snd.icon.draw(tex, snd.getTime(evt.partialTicks), snd.size);
+			GL11.glPopMatrix();
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);

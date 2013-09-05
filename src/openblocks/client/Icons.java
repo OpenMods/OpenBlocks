@@ -1,6 +1,5 @@
 package openblocks.client;
 
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -8,6 +7,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import openblocks.Log;
+
+import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Preconditions;
 
@@ -29,26 +30,20 @@ public class Icons {
 		}
 	}
 
-	public static void renderFacingQuad(Tessellator tes, double scale, Icon icon) {
-		double arX = ActiveRenderInfo.rotationX * scale;
-		double arZ = ActiveRenderInfo.rotationZ * scale;
-		double arYZ = ActiveRenderInfo.rotationYZ * scale;
-		double arXY = ActiveRenderInfo.rotationXY * scale;
-		double arXZ = ActiveRenderInfo.rotationXZ * scale;
-
-		tes.addVertexWithUV(-arX - arYZ, -arXZ, -arZ - arXY, icon.getMaxU(), icon.getMaxV());
-		tes.addVertexWithUV(-arX + arYZ, arXZ, -arZ + arXY, icon.getMaxU(), icon.getMinV());
-		tes.addVertexWithUV(arX + arYZ, arXZ, arZ + arXY, icon.getMinU(), icon.getMinV());
-		tes.addVertexWithUV(arX - arYZ, -arXZ, arZ - arXY, icon.getMinU(), icon.getMaxV());
+	public static void renderQuad(Tessellator tes, double scale, Icon icon) {
+		tes.addVertexWithUV(scale, scale, 0, icon.getMinU(), icon.getMinV());
+		tes.addVertexWithUV(scale, -scale, 0, icon.getMinU(), icon.getMaxV());
+		tes.addVertexWithUV(-scale, -scale, 0, icon.getMaxU(), icon.getMaxV());
+		tes.addVertexWithUV(-scale, scale, 0, icon.getMaxU(), icon.getMinV());
 	}
 
-	public interface DrawableIcon {
-		void draw(TextureManager tex, Tessellator tes, double x, double y, double z, double time, double scale);
+	public interface IDrawableIcon {
+		void draw(TextureManager tex, double alpha, double scale);
 
 		void registerIcons(int type, IconRegister registry);
 	}
 
-	public static class SingleIcon implements DrawableIcon {
+	public static class SingleIcon implements IDrawableIcon {
 		protected Icon icon;
 		public final int color;
 		public final int type;
@@ -64,15 +59,14 @@ public class Icons {
 		}
 
 		@Override
-		public void draw(TextureManager tex, Tessellator tes, double x, double y, double z, double time, double scale) {
+		public void draw(TextureManager tex, double alpha, double scale) {
 			Preconditions.checkNotNull(icon);
 			bindIconSheet(tex, type);
-
+			final Tessellator tes = Tessellator.instance;
 			tes.startDrawingQuads();
-			tes.setColorRGBA_I(color, MathHelper.floor_double(255 * time));
-
-			tes.setTranslation(x, y, z);
-			renderFacingQuad(tes, scale, icon);
+			tes.setTranslation(0, 0, 0);
+			tes.setColorRGBA_I(color, MathHelper.floor_double(255 * alpha));
+			renderQuad(tes, scale, icon);
 			tes.draw();
 		}
 
@@ -94,48 +88,78 @@ public class Icons {
 		}
 	}
 
-	private static class ComposedIcon implements DrawableIcon {
-		private final DrawableIcon first;
-		private final DrawableIcon second;
+	public static class ComposedIcon implements IDrawableIcon {
+		private final IDrawableIcon front;
+		private final IDrawableIcon back;
 		private final double scaleRatio;
+		private final double distance;
 
-		public ComposedIcon(DrawableIcon first, DrawableIcon second, double scaleRatio) {
-			this.first = first;
-			this.second = second;
+		public ComposedIcon(IDrawableIcon front, IDrawableIcon back, double scaleRatio, double distance) {
+			this.front = front;
+			this.back = back;
 			this.scaleRatio = scaleRatio;
+			this.distance = distance;
 		}
 
 		@Override
-		public void draw(TextureManager tex, Tessellator tes, double x, double y, double z, double time, double scale) {
-			first.draw(tex, tes, x, y, z, time, scale);
-			second.draw(tex, tes, x, y, z, time, scale * scaleRatio);
+		public void draw(TextureManager tex, double alpha, double scale) {
+			back.draw(tex, alpha, scale * scaleRatio);
+			GL11.glTranslated(0, 0, -distance);
+			front.draw(tex, alpha, scale);
 		}
 
 		@Override
 		public void registerIcons(int type, IconRegister registry) {
-			first.registerIcons(type, registry);
-			second.registerIcons(type, registry);
+			front.registerIcons(type, registry);
+			back.registerIcons(type, registry);
 		}
-
 	}
 
-	public static DrawableIcon itemIcon(String iconId, int color) {
+	public static class DisplayListWrapper implements IDrawableIcon {
+
+		private final IDrawableIcon wrappedIcon;
+		private Integer displayList;
+
+		public DisplayListWrapper(IDrawableIcon wrappedIcon) {
+			this.wrappedIcon = wrappedIcon;
+		}
+
+		@Override
+		public void draw(TextureManager tex, double alpha, double scale) {
+			if (displayList == null) {
+				displayList = GL11.glGenLists(1);
+				GL11.glNewList(displayList, GL11.GL_COMPILE);
+				wrappedIcon.draw(tex, alpha, scale);
+				GL11.glEndList();
+			}
+
+			GL11.glCallList(displayList);
+		}
+
+		@Override
+		public void registerIcons(int type, IconRegister registry) {
+			wrappedIcon.registerIcons(type, registry);
+		}
+
+		@Override
+		protected void finalize() throws Throwable {
+			if (displayList != null) GL11.glDeleteLists(displayList, 1);
+		}
+	}
+
+	public static IDrawableIcon itemIcon(String iconId, int color) {
 		return new LoadableSingleIcon(iconId, color, ICON_TYPE_ITEM);
 	}
 
-	public static DrawableIcon itemIcon(String iconId) {
+	public static IDrawableIcon itemIcon(String iconId) {
 		return itemIcon(iconId, 0xFFFFFF);
 	}
 
-	public static DrawableIcon blockIcon(String iconId, int color) {
+	public static IDrawableIcon blockIcon(String iconId, int color) {
 		return new LoadableSingleIcon(iconId, color, ICON_TYPE_BLOCK);
 	}
 
-	public static DrawableIcon blockIcon(String iconId) {
+	public static IDrawableIcon blockIcon(String iconId) {
 		return blockIcon(iconId, 0xFFFFFF);
-	}
-
-	public static DrawableIcon framedIcon(DrawableIcon frame, DrawableIcon inner, double ratio) {
-		return new Icons.ComposedIcon(frame, inner, ratio);
 	}
 }
