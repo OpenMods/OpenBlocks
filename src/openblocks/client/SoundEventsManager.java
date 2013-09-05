@@ -119,7 +119,7 @@ public class SoundEventsManager {
 	private void dimWorld(TextureManager tex, double level) {
 		if (level <= 0) return;
 
-		if (level >= 1) {
+		if (level >= 1 && !Config.sonicGlassesUseTexture) {
 			GL11.glColor3f(0, 0, 0);
 			GL11.glClearColor(0, 0, 0, 1);
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
@@ -139,23 +139,38 @@ public class SoundEventsManager {
 			GL11.glLoadIdentity();
 			GL11.glOrtho(-1, 1, -1, 1, -1, 1);
 
-			Tessellator tes = new Tessellator();
-			tes.startDrawingQuads();
-			tes.setColorRGBA_F(1, 1, 1, (float)level);
-			tes.addVertexWithUV(-1, -1, 0, 0, 0);
-			tes.addVertexWithUV(+1, -1, 0, 1, 0);
-			tes.addVertexWithUV(+1, +1, 0, 1, 1);
-			tes.addVertexWithUV(-1, +1, 0, 0, 1);
-
-			tex.func_110577_a(notPumpkin);
-
 			GL11.glColor3f(1, 1, 1);
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			tes.draw();
+
+			Tessellator tes = new Tessellator();
+			tes.startDrawingQuads();
+
+			if (Config.sonicGlassesUseTexture) {
+				tes.setColorRGBA_F(1, 1, 1, (float)level);
+
+				tex.func_110577_a(notPumpkin);
+				tes.addVertexWithUV(-1, -1, 0, 0, 0);
+				tes.addVertexWithUV(+1, -1, 0, 1, 0);
+				tes.addVertexWithUV(+1, +1, 0, 1, 1);
+				tes.addVertexWithUV(-1, +1, 0, 0, 1);
+
+				tes.draw();
+			} else {
+				tes.setColorRGBA_F(0.085f, 0.074f, 0.129f, (float)level);
+				tes.addVertex(-1, -1, 0);
+				tes.addVertex(+1, -1, 0);
+				tes.addVertex(+1, +1, 0);
+				tes.addVertex(-1, +1, 0);
+
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				tes.draw();
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+			}
+
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -174,7 +189,7 @@ public class SoundEventsManager {
 	protected void finalize() throws Throwable {
 		if (renderNotPumpkin != null) GL11.glDeleteLists(renderNotPumpkin, 1);
 	}
-	
+
 	public static void setupBillboard(Entity rve, double x, double y, double z) {
 		GL11.glTranslated(x, y, z);
 		GL11.glRotatef(-rve.rotationYaw, 0, 1, 0);

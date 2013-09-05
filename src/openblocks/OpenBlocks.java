@@ -115,6 +115,7 @@ public class OpenBlocks {
 		public static int sprinklerBonemealFertizizeChance = 200;
 		public static int sprinklerEffectiveRange = 4;
 		public static double sonicGlassesOpacity = 0.95;
+		public static boolean sonicGlassesUseTexture = true;
 	}
 
 	public static enum Gui {
@@ -250,6 +251,9 @@ public class OpenBlocks {
 		prop = configFile.get("glasses", "opacity", Config.sonicGlassesOpacity, "0.0 - no visible change to world, 1.0 - world fully obscured");
 		Config.sonicGlassesOpacity = prop.getDouble(Config.sonicGlassesOpacity);
 
+		prop = configFile.get("glasses", "useTexture", Config.sonicGlassesUseTexture, "Use texture for obscuring world");
+		Config.sonicGlassesUseTexture = prop.getBoolean(Config.sonicGlassesUseTexture);
+		
 		configFile.save();
 	}
 
