@@ -8,6 +8,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 
 public class SyncMapTile extends SyncMap {
@@ -23,10 +24,8 @@ public class SyncMapTile extends SyncMap {
 	 */
 	public Packet getDescriptionPacket(ISyncHandler handler) {
 		try {
-			if (!(handler instanceof TileEntity)) return null; /*
-																 * Tile Entities
-																 * only
-																 */
+			// Tile Entities only
+			if (!(handler instanceof TileEntity)) return null; 
 			TileEntity ent = (TileEntity)handler;
 			Packet250CustomPayload packet250 = (Packet250CustomPayload)createPacket(handler, true);
 			/* We now turn it in to a TileEntityUpdate packet */
@@ -35,6 +34,7 @@ public class SyncMapTile extends SyncMap {
 			Packet132TileEntityData tileEntityDataPacket = new Packet132TileEntityData(ent.xCoord, ent.yCoord, ent.zCoord, 0, extraData);
 			return tileEntityDataPacket;
 		} catch (Exception ex) {
+			Log.warn(ex, "Error during packet 250 building");
 			return null;
 		}
 	}
@@ -48,7 +48,9 @@ public class SyncMapTile extends SyncMap {
 					Packet250CustomPayload custom = new Packet250CustomPayload("OpenBlocks", payload);
 					try {
 						OpenBlocks.syncableManager.handlePacket(custom);
-					} catch (IOException e) {}
+					} catch (IOException e) {
+						Log.warn(e, "IOError while handling packet data");
+					}
 				}
 			}
 		}

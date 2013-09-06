@@ -11,6 +11,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
 
@@ -187,7 +188,9 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				t.addVertexWithUV(-0.5, -0.5, -0.5, uMax, vMax);
 				t.draw();
 
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				Log.warn(e, "Error during TileEntityTank rendering");
+			}
 			GL11.glEnable(2896);
 			GL11.glPopMatrix();
 

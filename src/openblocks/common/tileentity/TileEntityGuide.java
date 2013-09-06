@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Log;
 import openblocks.api.IShapeProvider;
 import openblocks.shapes.IShapeable;
 import openblocks.shapes.ShapeFactory;
@@ -96,8 +97,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 		try {
 			shape[getHeight() + y][getWidth() + x][getDepth() + z] = true;
 		} catch (IndexOutOfBoundsException iobe) {
-			// System.out.println(String.format("Index out of bounds setting block at %s,%s,%s",
-			// x, y, z));
+			Log.warn(iobe, "Index out of bounds setting block at %d,%d,%d", x, y, z);
 		}
 	}
 

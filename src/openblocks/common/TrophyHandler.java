@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.BlazeBehavior;
@@ -47,7 +48,7 @@ public class TrophyHandler {
 						slimeSizeMethod.invoke(entity, 1);
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.warn(e, "Field not found?");
 				}
 			}
 			entityCache.put(trophy, entity);
@@ -165,13 +166,10 @@ public class TrophyHandler {
 				Entity entity = event.entity;
 				String entityName = EntityList.getEntityString(entity);
 				if (entityName != null && !entityName.isEmpty()) {
-					Trophy mobTrophy = null;
 					try {
-						mobTrophy = Trophy.valueOf(EntityList.getEntityString(entity));
-					} catch (Exception e) {}
-					if (mobTrophy != null) {
+						Trophy mobTrophy = Trophy.valueOf(entityName);
 						BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
-					}
+					} catch (IllegalArgumentException e) {}
 				}
 			}
 		}

@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
@@ -76,7 +77,7 @@ public class BlockTank extends OpenBlock {
 					if (Block.blocksList[blockId] == null) return 0;
 					return (int)Math.min(Block.lightValue[blockId], Math.max(0, 5 + tank.getPercentFull() * 15));
 				}catch(Exception e) {
-					System.out.println("[OpenModsMonitor] Hello, It's OpenBlocks here. We've got a " + e.toString() + " at " + x + "," + y + "," + z + ". Please report this to the OpenMods team, they'll patch this bug up as soon as possible.");
+					Log.warn(e, "Hello, It's OpenBlocks here. We've got exception at (%d,%d,%d). Please report this to the OpenMods team, they'll patch this bug up as soon as possible", x, y, z);
 					return 0;
 				}
 			}

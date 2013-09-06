@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
+import openblocks.Log;
 import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
 
@@ -135,7 +136,7 @@ public abstract class SyncMap {
 					}
 					usersInRange = newUsersInRange;
 				} catch (IOException e) {
-					e.printStackTrace();
+					Log.warn(e, "IOError during sync");
 				}
 			} else {
 				usersInRange.clear();
@@ -158,6 +159,5 @@ public abstract class SyncMap {
 		return packet;
 	}
 
-	protected abstract void writeMapType(DataOutputStream dos)
-			throws IOException;
+	protected abstract void writeMapType(DataOutputStream dos) throws IOException;
 }

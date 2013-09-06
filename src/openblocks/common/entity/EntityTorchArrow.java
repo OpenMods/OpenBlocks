@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.world.World;
+import openblocks.Log;
 
 public class EntityTorchArrow extends EntityArrow {
 
@@ -21,13 +22,15 @@ public class EntityTorchArrow extends EntityArrow {
 				ticksInGroundField = this.getClass().getField("ticksInGround");
 				ticksInGroundField.setAccessible(true);
 			} catch (Exception e) {
-				setDead();
+				Log.warn(e, "Field missing?");
 			}
 		}
 		if (ticksInGroundField != null) {
 			try {
 				return (Integer)ticksInGroundField.get(this);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				Log.warn(e, "Field missing?");
+			}
 		}
 		return 1;
 	}

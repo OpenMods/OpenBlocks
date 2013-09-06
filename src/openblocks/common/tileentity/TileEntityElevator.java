@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.google.common.base.Preconditions;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -13,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
 
@@ -69,15 +72,11 @@ public class TileEntityElevator extends OpenTileEntity {
 						teleportDirection = ForgeDirection.UP;
 					}
 					if (teleportDirection != ForgeDirection.UNKNOWN) {
-						try {
-							int level = findLevel(teleportDirection);
-							if (level != 0) {
-								player.setPositionAndUpdate(player.posX, level + 1.1, player.posZ);
-								worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
-								addPlayerCooldownToTargetAndNeighbours(player, xCoord, level, zCoord);
-							}
-						} catch (Exception ex) {
-							/* Teleport failed */
+						int level = findLevel(teleportDirection);
+						if (level != 0) {
+							player.setPositionAndUpdate(player.posX, level + 1.1, player.posZ);
+							worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
+							addPlayerCooldownToTargetAndNeighbours(player, xCoord, level, zCoord);
 						}
 					}
 
@@ -116,8 +115,9 @@ public class TileEntityElevator extends OpenTileEntity {
 		}
 	}
 
-	private int findLevel(ForgeDirection direction) throws Exception {
-		if (direction != ForgeDirection.UP && direction != ForgeDirection.DOWN) { throw new Exception("Must be either up or down... for now"); }
+	private int findLevel(ForgeDirection direction){
+		Preconditions.checkArgument(direction == ForgeDirection.UP || direction == ForgeDirection.DOWN,
+				"Must be either up or down... for now");
 
 		int blocksInTheWay = 0;
 		for (int y = 2; y <= Config.elevatorTravelDistance; y++) {

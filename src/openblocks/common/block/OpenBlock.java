@@ -18,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
@@ -42,10 +43,9 @@ public abstract class OpenBlock extends BlockContainer {
 		try {
 			if (teClass != null) { return teClass.getConstructor(new Class[0]).newInstance(); }
 		} catch (NoSuchMethodException nsm) {
-			System.out.println("Notice: Cannot create TE automatically due to constructor requirements");
+			Log.warn(nsm, "Notice: Cannot create TE automatically due to constructor requirements");
 		} catch (Exception ex) {
-			System.out.println("Notice: Error creating tile entity");
-			ex.printStackTrace();
+			Log.warn(ex, "Notice: Error creating tile entity");
 		}
 		return null;
 	}
