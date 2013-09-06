@@ -274,7 +274,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 				liquidRenderAmount.setValue((short)0);
 				liquidId.setValue(0);
 			}
-			sync(1);
+			sync(1, false);
 		} else {
 			interpolateLiquidLevel();
 			flowTimer += 0.1f;

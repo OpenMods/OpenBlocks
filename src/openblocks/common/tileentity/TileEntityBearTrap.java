@@ -63,8 +63,9 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 				trappedEntity.motionZ = 0;
 			}
 		}
-
-		sync(2);
+		
+		sync(2, false);
+		
 	}
 
 	public void onEntityCollided(Entity entity) {
