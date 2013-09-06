@@ -22,7 +22,7 @@ public class EntityHangGliderRenderer extends Render {
 
 		GL11.glPushMatrix();
 
-		float rotation = this.interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);
+		float rotation = interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);
 		double x2 = Math.cos(Math.toRadians(rotation + 90)) * 1.5;
 		double z2 = Math.sin(Math.toRadians(rotation + 90)) * 1.5;
 
@@ -59,7 +59,7 @@ public class EntityHangGliderRenderer extends Render {
 		GL11.glPopMatrix();
 	}
 
-	private void renderGlider() {
+	private static void renderGlider() {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		Tessellator t = Tessellator.instance;
 		t.startDrawingQuads();
@@ -73,7 +73,7 @@ public class EntityHangGliderRenderer extends Render {
 	}
 
 	/* Interpolate rotation */
-	private float interpolateRotation(float prevRotation, float nextRotation, float modifier) {
+	private static float interpolateRotation(float prevRotation, float nextRotation, float modifier) {
 		float rotation = nextRotation - prevRotation;
 
 		while (rotation < -180.0F)

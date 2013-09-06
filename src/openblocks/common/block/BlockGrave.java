@@ -88,7 +88,7 @@ public class BlockGrave extends OpenBlock {
 		return OpenBlocks.Config.ghostSpawnProbability > world.rand.nextInt(100);
 	}
 
-	private void handleGhostSpawn(TileEntityGrave grave, World world, int x, int y, int z) {
+	private static void handleGhostSpawn(TileEntityGrave grave, World world, int x, int y, int z) {
 		if (shouldSpawnGhost(world)) {
 			EntityGhost ghost = new EntityGhost(world, grave.getUsername(), grave.getLoot());
 			ghost.setPositionAndRotation(x, y, z, 0, 0);

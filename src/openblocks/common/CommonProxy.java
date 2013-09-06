@@ -175,7 +175,7 @@ public class CommonProxy implements IGuiHandler {
 	
 	public void postInit() {}
 	
-	private boolean canRegisterBlock(int blockId) {
+	private static boolean canRegisterBlock(int blockId) {
 		if(blockId > 0) {
 			if(Block.blocksList[blockId] != null) {
 				if(!Config.failIdsQuietly) {

@@ -129,7 +129,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void attachPlayerRenderer() {
+	private static void attachPlayerRenderer() {
 		if (Config.tryHookPlayerRenderer) {
 			// Get current renderer and check that it's Mojangs
 			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);

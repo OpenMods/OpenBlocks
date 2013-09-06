@@ -46,7 +46,7 @@ public class ItemHangGlider extends Item {
 		}
 	}
 
-	private void despawnGlider(World world, EntityPlayer player) {
+	private static void despawnGlider(World world, EntityPlayer player) {
 		if (isGliderSpawned(world, player)) {
 			if (world.isRemote) {
 				OpenBlocks.proxy.gliderClientMap.get(player).despawnGlider();
@@ -56,7 +56,7 @@ public class ItemHangGlider extends Item {
 		}
 	}
 
-	private boolean isGliderSpawned(World world, EntityPlayer player) {
+	private static boolean isGliderSpawned(World world, EntityPlayer player) {
 		if (world.isRemote) {
 			return OpenBlocks.proxy.gliderClientMap.containsKey(player);
 		} else {

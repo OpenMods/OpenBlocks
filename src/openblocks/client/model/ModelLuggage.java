@@ -56,7 +56,7 @@ public class ModelLuggage extends ModelBase {
 		lid.rotateAngleX = Math.min(0, MathHelper.cos(par1 * 0.6662F) * 1.4F * par2);
 	}
 
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
