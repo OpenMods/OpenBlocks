@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons.ComposedIcon;
-import openblocks.client.Icons.DisplayListWrapper;
 import openblocks.client.Icons.IDrawableIcon;
 
 import com.google.common.base.Preconditions;
@@ -284,6 +283,7 @@ public class SoundIconRegistry {
 		mobs.addMob("enderdragon", 62, true);
 		mobs.addMob("endermen", 58, true);
 		mobs.addMob("ghast", 56, true);
+		mobs.addMob("witch", 66, true);
 
 		mobs.addMob("bat", 65, false);
 		mobs.addMob("cat", 62, false);
