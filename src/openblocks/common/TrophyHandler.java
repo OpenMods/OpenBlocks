@@ -153,6 +153,9 @@ public class TrophyHandler {
 				behavior.executeTickBehavior(tile);
 			}
 		}
+		
+		
+		public final static Trophy[] VALUES = values(); 
 	}
 
 	@ForgeSubscribe

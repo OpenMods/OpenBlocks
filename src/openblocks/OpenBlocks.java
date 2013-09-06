@@ -133,10 +133,9 @@ public class OpenBlocks {
 
 	public static SyncableManager syncableManager;
 
-	@Mod.PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
-
-		Log.init();
+		Log.logger = evt.getModLog();
 
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 
@@ -258,7 +257,7 @@ public class OpenBlocks {
 		configFile.save();
 	}
 
-	@Mod.Init
+	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		proxy.init();
 		proxy.registerRenderInformation();

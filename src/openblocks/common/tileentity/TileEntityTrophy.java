@@ -1,5 +1,10 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Preconditions;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -138,4 +143,13 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		return rotation;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void prepareForInventoryRender(Block block, int metadata) {
+		Preconditions.checkElementIndex(metadata, Trophy.VALUES.length);
+		super.prepareForInventoryRender(block, metadata);
+		trophyType = Trophy.VALUES[metadata];
+	}
+
+	
 }

@@ -2,6 +2,10 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -134,4 +138,10 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 		return false;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void prepareForInventoryRender(Block block, int metadata) {
+		super.prepareForInventoryRender(block, metadata);
+		setColorIndex(metadata);
+	}
 }

@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,8 +49,9 @@ public abstract class OpenTileEntity extends TileEntity {
 		return direction;
 	}
 	
-	public void setUsedForClientInventoryRendering(boolean used) {
-		isUsedForClientInventoryRendering = used;
+	@SideOnly(Side.CLIENT)
+	public void prepareForInventoryRender(Block block, int metadata) {
+		isUsedForClientInventoryRendering = true;
 	}
 
 	/**
@@ -191,5 +194,9 @@ public abstract class OpenTileEntity extends TileEntity {
 	
 	public AxisAlignedBB getBB() {
 		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
+	}
+	
+	public boolean isRenderedInInventory() {
+		return isUsedForClientInventoryRendering;
 	}
 }

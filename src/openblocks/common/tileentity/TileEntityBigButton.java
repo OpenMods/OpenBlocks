@@ -1,5 +1,10 @@
 package openblocks.common.tileentity;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -154,4 +159,11 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 		inventory.readFromNBT(tag);
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void prepareForInventoryRender(Block block, int metadata) {
+		super.prepareForInventoryRender(block, metadata);
+		GL11.glTranslated(-0.5, 0, 0);
+	}
+	
 }

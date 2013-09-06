@@ -20,7 +20,6 @@ public class ItemSonicGlasses extends ItemArmor {
 	public ItemSonicGlasses() {
 		super(OpenBlocks.Config.itemSonicGlassesId, EnumArmorMaterial.IRON, 2, ARMOR_HELMET);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setMaxStackSize(1);
 	}
 
 	@Override
