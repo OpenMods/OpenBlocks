@@ -15,7 +15,6 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	private int capacity;
 	private int tankPressure;
 	private boolean hasChanged;
-	private int ticksSinceChanged = 0;
 
 	public enum Flags {
 		capacity, amount, liquid
@@ -118,19 +117,19 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 		this.tankPressure = pressure;
 	}
 
+	@Override
 	public boolean hasChanged() {
 		return hasChanged;
 	}
 
+	@Override
 	public void resetChangeStatus() {
-		ticksSinceChanged++;
 		hasChanged = false;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
-		ticksSinceChanged = 0;
 	}
 
 	public boolean containsValidLiquid() {

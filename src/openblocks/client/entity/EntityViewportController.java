@@ -12,22 +12,19 @@ public class EntityViewportController extends EntityLiving {
 		super(world);
 	}
 
+	@Override
 	public boolean isAIEnabled() {
 		return false;
 	}
 
 	@Override
-	public void onEntityUpdate() {
+	public void onEntityUpdate() {}
 
-	}
+	@Override
+	public void onUpdate() {}
 
-	public void onUpdate() {
-
-	}
-
-	public void onLivingUpdate() {
-
-	}
+	@Override
+	public void onLivingUpdate() {}
 
 	public void updateCamera(EntityLiving entity) {
 		ticks += 4;
@@ -48,8 +45,7 @@ public class EntityViewportController extends EntityLiving {
 		double distanceY = entity.posY - posY;
 		double distanceZ = entity.posZ - posZ;
 
-		double d3 = (double)MathHelper.sqrt_double(distanceX * distanceX
-				+ distanceZ * distanceZ);
+		double d3 = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
 		float f2 = (float)(Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
 		float f3 = (float)(-(Math.atan2(distanceY, d3) * 180.0D / Math.PI));
 

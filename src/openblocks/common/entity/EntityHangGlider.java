@@ -120,16 +120,10 @@ public class EntityHangGlider extends Entity implements
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		// TODO Auto-generated method stub
-
-	}
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		// TODO Auto-generated method stub
-
-	}
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {

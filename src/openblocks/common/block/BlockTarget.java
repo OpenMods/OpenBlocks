@@ -36,6 +36,7 @@ public class BlockTarget extends OpenBlock {
 		}
 	}
 
+	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -86,11 +87,10 @@ public class BlockTarget extends OpenBlock {
 
 			ForgeDirection rotation = target.getRotation();
 			ForgeDirection opposite = rotation.getOpposite();
-			ForgeDirection parallel = opposite.getRotation(ForgeDirection.UP);
 
-			double centerX = (double)x + 0.5 + (opposite.offsetX * 0.5);
-			double centerY = (double)y + 0.55 + (opposite.offsetY * 0.45);
-			double centerZ = (double)z + 0.5 + (opposite.offsetZ * 0.5);
+			double centerX = x + 0.5 + (opposite.offsetX * 0.5);
+			double centerY = y + 0.55 + (opposite.offsetY * 0.45);
+			double centerZ = z + 0.5 + (opposite.offsetZ * 0.5);
 
 			double entityX = entity.posX;
 			double entityY = entity.posY;
@@ -134,6 +134,7 @@ public class BlockTarget extends OpenBlock {
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
@@ -173,6 +174,7 @@ public class BlockTarget extends OpenBlock {
 		}
 	}
 
+	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return super.canPlaceBlockOnSide(world, x, y, z, ForgeDirection.DOWN);
 	}

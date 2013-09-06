@@ -1,14 +1,11 @@
 package openblocks.common.block;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityBigButton;
-import openblocks.common.tileentity.TileEntityLightbox;
-import openblocks.utils.BlockUtils;
 import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityBigButton;
 
 
 public class BlockBigButton extends OpenBlock {
@@ -87,7 +84,7 @@ public class BlockBigButton extends OpenBlock {
 
     @Override
     public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side) {
-    	ForgeDirection direction = BlockUtils.sideToDirection(side).getOpposite();
+    	ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
         TileEntityBigButton button = getTileEntity(world, x, y, z, TileEntityBigButton.class);
     	return (direction == button.getRotation() && button.getFlag1()) ? 15 : 0;
     }

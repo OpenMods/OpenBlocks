@@ -19,9 +19,6 @@ public class SkeletonBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {
-		// TODO Auto-generated method stub
-
-	}
+	public void executeTickBehavior(TileEntityTrophy tile) {}
 
 }

@@ -10,17 +10,18 @@ import openblocks.shapes.IShapeable;
 public class GeometryUtils {
 
 	public enum Octant {
-		TopSouthWest(-1, 1, 1, "Top South West"), TopNorthEast(1, 1, -1,
-				"Top North East"), TopNorthWest(1, 1, 1, "Top North West"), TopSouthEast(
-				-1, 1, -1, "Top South East"), BottomSouthWest(-1, -1, 1,
-				"Bottom South West"), BottomNorthEast(1, -1, -1,
-				"Bottom North East"), BottomNorthWest(1, -1, 1,
-				"Bottom North West"), BottomSouthEast(-1, -1, -1,
-				"Bottom South East");
+		TopSouthWest(-1, 1, 1, "Top South West"),
+		TopNorthEast(1, 1, -1, "Top North East"),
+		TopNorthWest(1, 1, 1, "Top North West"),
+		TopSouthEast(-1, 1, -1, "Top South East"),
+		BottomSouthWest(-1, -1, 1, "Bottom South West"),
+		BottomNorthEast(1, -1, -1, "Bottom North East"),
+		BottomNorthWest(1, -1, 1, "Bottom North West"),
+		BottomSouthEast(-1, -1, -1, "Bottom South East");
 
-		public static final EnumSet ALL = EnumSet.allOf(Octant.class);
-		public static final EnumSet TOP = EnumSet.of(Octant.TopSouthEast, Octant.TopSouthWest, Octant.TopNorthEast, Octant.TopNorthWest);
-		public static final EnumSet BOTTOM = EnumSet.of(Octant.BottomSouthEast, Octant.BottomSouthWest, Octant.BottomNorthEast, Octant.BottomNorthWest);
+		public static final EnumSet<Octant> ALL = EnumSet.allOf(Octant.class);
+		public static final EnumSet<Octant> TOP = EnumSet.of(Octant.TopSouthEast, Octant.TopSouthWest, Octant.TopNorthEast, Octant.TopNorthWest);
+		public static final EnumSet<Octant> BOTTOM = EnumSet.of(Octant.BottomSouthEast, Octant.BottomSouthWest, Octant.BottomNorthEast, Octant.BottomNorthWest);
 
 		private final int x, y, z;
 		private final String name;
@@ -106,7 +107,7 @@ public class GeometryUtils {
 		}
 	}
 
-	public static void makeSphere(int radiusX, int radiusY, int radiusZ, IShapeable shapeable, EnumSet octants) {
+	public static void makeSphere(int radiusX, int radiusY, int radiusZ, IShapeable shapeable, EnumSet<Octant> octants) {
 
 		final double invRadiusX = 1.0 / radiusX;
 		final double invRadiusY = 1.0 / radiusY;

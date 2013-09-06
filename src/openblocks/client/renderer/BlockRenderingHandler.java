@@ -16,7 +16,6 @@ import openblocks.common.tileentity.TileEntityBigButton;
 import openblocks.common.tileentity.TileEntityCannon;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
-import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityTarget;
@@ -30,7 +29,6 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
-	private TileEntityGuide teGuide = new TileEntityGuide();
 	private TileEntityLightbox teLightbox = new TileEntityLightbox();
 	private TileEntityTarget teTarget = new TileEntityTarget();
 	private TileEntityGrave teGrave = new TileEntityGrave();

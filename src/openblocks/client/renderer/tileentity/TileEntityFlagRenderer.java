@@ -22,7 +22,6 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 
 		TileEntityFlag flag = (TileEntityFlag)tileentity;
 		if (flag == null) return;
-		int meta = 0;
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
@@ -60,18 +59,18 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 		tessellator.startDrawingQuads();
 		tessellator.setColorRGBA_F(r, g, b, 1);
 		tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		tessellator.addVertexWithUV(0.0D, 0.0D, 0.0D, (double)par1, (double)par4);
-		tessellator.addVertexWithUV(1.0D, 0.0D, 0.0D, (double)par3, (double)par4);
-		tessellator.addVertexWithUV(1.0D, 1.0D, 0.0D, (double)par3, (double)par2);
-		tessellator.addVertexWithUV(0.0D, 1.0D, 0.0D, (double)par1, (double)par2);
+		tessellator.addVertexWithUV(0.0D, 0.0D, 0.0D, par1, par4);
+		tessellator.addVertexWithUV(1.0D, 0.0D, 0.0D, par3, par4);
+		tessellator.addVertexWithUV(1.0D, 1.0D, 0.0D, par3, par2);
+		tessellator.addVertexWithUV(0.0D, 1.0D, 0.0D, par1, par2);
 		tessellator.draw();
 		tessellator.startDrawingQuads();
 		tessellator.setColorOpaque_F(r, g, b);
 		tessellator.setNormal(0.0F, 0.0F, -1.0F);
-		tessellator.addVertexWithUV(0.0D, 1.0D, (double)(0.0F - par7), (double)par1, (double)par2);
-		tessellator.addVertexWithUV(1.0D, 1.0D, (double)(0.0F - par7), (double)par3, (double)par2);
-		tessellator.addVertexWithUV(1.0D, 0.0D, (double)(0.0F - par7), (double)par3, (double)par4);
-		tessellator.addVertexWithUV(0.0D, 0.0D, (double)(0.0F - par7), (double)par1, (double)par4);
+		tessellator.addVertexWithUV(0.0D, 1.0D, 0.0F - par7, par1, par2);
+		tessellator.addVertexWithUV(1.0D, 1.0D, 0.0F - par7, par3, par2);
+		tessellator.addVertexWithUV(1.0D, 0.0D, 0.0F - par7, par3, par4);
+		tessellator.addVertexWithUV(0.0D, 0.0D, 0.0F - par7, par1, par4);
 		tessellator.draw();
 	}
 

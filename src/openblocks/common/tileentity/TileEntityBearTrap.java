@@ -9,14 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
-import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 
 public class TileEntityBearTrap extends NetworkedTileEntity implements
-		ISyncHandler, IAwareTile, ISurfaceAttachment {
+		IAwareTile, ISurfaceAttachment {
 
 	public enum Keys {
 		flags, trappedEntityId
@@ -26,7 +25,6 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 		isShut
 	}
 
-	private boolean hasBeenSnapped = false;
 	private SyncableFlags flags = new SyncableFlags();
 	private SyncableInt trappedEntityId = new SyncableInt();
 
@@ -51,13 +49,13 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 				trappedEntity.distanceWalkedModified = 0.0f;
 				trappedEntity.posX = 0.5 + xCoord;
 				trappedEntity.posZ = 0.5 + zCoord;
-				trappedEntity.posY = (double)yCoord;
+				trappedEntity.posY = yCoord;
 				trappedEntity.prevPosX = 0.5 + xCoord;
 				trappedEntity.prevPosZ = 0.5 + zCoord;
-				trappedEntity.prevPosY = (double)yCoord;
+				trappedEntity.prevPosY = yCoord;
 				trappedEntity.lastTickPosX = 0.5 + xCoord;
 				trappedEntity.lastTickPosZ = 0.5 + zCoord;
-				trappedEntity.lastTickPosY = (double)yCoord;
+				trappedEntity.lastTickPosY = yCoord;
 				trappedEntity.motionX = 0;
 				trappedEntity.motionY = 0;
 				trappedEntity.motionZ = 0;
@@ -84,16 +82,10 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockAdded() {}
 
 	public int tickSinceOpened() {
 		return flags.ticksSinceChange(Flags.isShut);
@@ -112,10 +104,7 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
@@ -133,11 +122,7 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		if (changes.contains(flags)) {
-			hasBeenSnapped = true;
-		}
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {

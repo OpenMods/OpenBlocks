@@ -10,7 +10,6 @@ public class SyncableDouble implements ISyncableObject {
 
 	private double value;
 	private boolean hasChanged = false;
-	private int ticksSinceChanged = 0;
 
 	public SyncableDouble(double value) {
 		this.value = value;
@@ -66,12 +65,10 @@ public class SyncableDouble implements ISyncableObject {
 	@Override
 	public void resetChangeStatus() {
 		hasChanged = false;
-		ticksSinceChanged++;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
-		ticksSinceChanged = 0;
 	}
 }

@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.block.OpenBlock;
-import openblocks.utils.BlockUtils;
 
 public class ItemOpenBlock extends ItemBlock {
 
@@ -69,14 +68,14 @@ public class ItemOpenBlock extends ItemBlock {
 
 			OpenBlock openBlock = (OpenBlock)Block.blocksList[getBlockID()];
 
-			ForgeDirection direction = BlockUtils.sideToDirection(par7);
+			ForgeDirection direction = ForgeDirection.getOrientation(par7);
 
 			if (!openBlock.canPlaceBlockOnSide(par3World, par4, par5, par6, direction.getOpposite())) { return false; }
 			// dont replace it!
 			if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10, j1)) {
 
 				openBlock.onBlockPlacedBy(par3World, par2EntityPlayer, par1ItemStack, par4, par5, par6, direction, par8, par9, par10, j1);
-				par3World.playSoundEffect((double)((float)par4 + 0.5F), (double)((float)par5 + 0.5F), (double)((float)par6 + 0.5F), block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+				par3World.playSoundEffect(par4 + 0.5F, par5 + 0.5F, par6 + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 				--par1ItemStack.stackSize;
 			}
 

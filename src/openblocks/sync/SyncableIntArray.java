@@ -11,7 +11,6 @@ public class SyncableIntArray implements ISyncableObject {
 
 	private int[] value;
 	private boolean hasChanged = false;
-	private int ticksSinceChanged = 0;
 
 	public SyncableIntArray(int[] value) {
 		this.value = value;
@@ -84,12 +83,10 @@ public class SyncableIntArray implements ISyncableObject {
 	@Override
 	public void resetChangeStatus() {
 		hasChanged = false;
-		ticksSinceChanged++;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
-		ticksSinceChanged = 0;
 	}
 }

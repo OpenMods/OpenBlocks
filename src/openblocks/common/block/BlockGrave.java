@@ -40,6 +40,8 @@ public class BlockGrave extends OpenBlock {
 		return 0;
 	}
 
+	@SuppressWarnings("rawtypes")
+	@Override
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
 		// remove from creative
 	}
@@ -60,11 +62,10 @@ public class BlockGrave extends OpenBlock {
 		return OpenBlocks.renderId;
 	}
 
-	private void updateOnSoilStatus(World worldObj, int x, int y, int z) {
+	private static void updateOnSoilStatus(World worldObj, int x, int y, int z) {
 		TileEntityGrave graveEnt = (TileEntityGrave)worldObj.getBlockTileEntity(x, y, z);
 		if (graveEnt != null) {
-			int id = 0;
-			Block block = Block.blocksList[(id = worldObj.getBlockId(x, y - 1, z))];
+			Block block = Block.blocksList[worldObj.getBlockId(x, y - 1, z)];
 			if (block != null) {
 				graveEnt.onSoil = (block == Block.dirt || block == Block.grass);
 			}
@@ -82,7 +83,7 @@ public class BlockGrave extends OpenBlock {
 
 	}
 
-	private boolean shouldSpawnGhost(World world) {
+	private static boolean shouldSpawnGhost(World world) {
 		if (world.difficultySetting == 0) return false;
 		return OpenBlocks.Config.ghostSpawnProbability > world.rand.nextInt(100);
 	}
@@ -103,6 +104,7 @@ public class BlockGrave extends OpenBlock {
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);

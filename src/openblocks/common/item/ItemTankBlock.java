@@ -17,6 +17,8 @@ public class ItemTankBlock extends ItemOpenBlock {
 		super(id);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		fakeTank.setLiquid(null);
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")) {

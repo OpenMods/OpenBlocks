@@ -46,6 +46,7 @@ public class BlockTank extends OpenBlock {
 		return OpenBlocks.renderId;
 	}
 
+	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
@@ -55,6 +56,7 @@ public class BlockTank extends OpenBlock {
 		return true;
 	}
 
+	@Override
 	public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer) {
 		// System.out.println(getTileEntity(par1World, par2, par3, par3,
 		// TileEntityTank.class));
@@ -103,6 +105,7 @@ public class BlockTank extends OpenBlock {
 		return 255;
 	}
 
+	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		if (!world.isRemote
 				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
@@ -119,14 +122,10 @@ public class BlockTank extends OpenBlock {
 				itemStack.setTagCompound(nbt);
 			}
 			float f = 0.7F;
-			double d0 = (double)(world.rand.nextFloat() * f)
-					+ (double)(1.0F - f) * 0.5D;
-			double d1 = (double)(world.rand.nextFloat() * f)
-					+ (double)(1.0F - f) * 0.5D;
-			double d2 = (double)(world.rand.nextFloat() * f)
-					+ (double)(1.0F - f) * 0.5D;
-			EntityItem entityitem = new EntityItem(world, (double)x + d0, (double)y
-					+ d1, (double)z + d2, itemStack);
+			double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5;
+			double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5;
+			double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5;
+			EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, itemStack);
 			entityitem.delayBeforeCanPickup = 10;
 			world.spawnEntityInWorld(entityitem);
 		}

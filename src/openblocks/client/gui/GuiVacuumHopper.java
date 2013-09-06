@@ -3,18 +3,14 @@ package openblocks.client.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerVacuumHopper;
-import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiVacuumHopper extends GuiContainer {
 
-	private TileEntityVacuumHopper hopper;
-
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container);
-		hopper = container.getTileEntity();
 		xSize = 176;
 		ySize = 151;
 	}

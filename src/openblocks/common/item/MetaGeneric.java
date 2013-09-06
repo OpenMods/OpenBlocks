@@ -67,6 +67,7 @@ public class MetaGeneric implements IMetaItem {
 		icon = register.registerIcon(String.format("openblocks:%s", name));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void addRecipe() {
 		if (recipes == null) return;

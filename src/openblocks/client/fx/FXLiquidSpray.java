@@ -1,9 +1,7 @@
 package openblocks.client.fx;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -18,7 +16,6 @@ public class FXLiquidSpray extends EntityFX {
 		// vec.yCoord = Math.abs(vec.yCoord);
 		// vec.zCoord = Math.abs(vec.zCoord);
 
-		float sprayStrength = 1f;
 		double sinPitch = Math.sin(angle);
 		double cosPitch = Math.cos(angle);
 
@@ -53,31 +50,21 @@ public class FXLiquidSpray extends EntityFX {
 		motionY = vecY / 2;
 		motionZ = vecZ / 2;
 
-		Block block = null;
-		Icon texture = null;
-
 		Fluid fluid = liquid.getFluid();
-		
-		if (fluid.getBlockID() > 0) {
-			block = Block.blocksList[fluid.getBlockID()];
-			texture = liquid.getFluid().getStillIcon();
-		} else {
-			block = Block.waterStill;
-			texture = liquid.getFluid().getStillIcon();
-		}
-		func_110125_a(texture);
+		func_110125_a(fluid.getStillIcon());
 		
 
 		// this.setParticleTextureIndex(0 + this.rand.nextInt(7));
 	}
 
+	@Override
 	public int getFXLayer() {
 		return 1;
 	}
 
+	@Override
 	public void renderParticle(Tessellator par1Tessellator, float par2, float par3, float par4, float par5, float par6, float par7) {
-		float f6 = ((float)this.particleAge + par2)
-				/ (float)this.particleMaxAge;
+		// float f6 = (this.particleAge + par2) / this.particleMaxAge;
 		// this.particleScale = this.flameScale * (1.0F - f6 * f6 * 0.5F);
 		super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
 	}
@@ -85,6 +72,7 @@ public class FXLiquidSpray extends EntityFX {
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 	}

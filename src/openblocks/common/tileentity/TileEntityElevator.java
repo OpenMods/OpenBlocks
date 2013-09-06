@@ -18,9 +18,6 @@ import openblocks.OpenBlocks.Config;
 
 public class TileEntityElevator extends OpenTileEntity {
 
-	private int lowerLevel = 0;
-	private int upperLevel = 0;
-
 	/**
 	 * How far a player must be looking in a direction to be teleported
 	 */
@@ -44,7 +41,8 @@ public class TileEntityElevator extends OpenTileEntity {
 				}
 			}
 
-			List<EntityPlayer> playersInRange = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
+			@SuppressWarnings("unchecked")
+			List<EntityPlayer> playersInRange = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
 
 			if (playersInRange.size() > 0) {
 				ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
@@ -85,9 +83,6 @@ public class TileEntityElevator extends OpenTileEntity {
 
 				}
 			}
-
-			lowerLevel = 0;
-			upperLevel = 0;
 		}
 
 	}
@@ -170,9 +165,6 @@ public class TileEntityElevator extends OpenTileEntity {
 	}
 
 	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-
-	}
+	protected void initialize() {}
 
 }

@@ -41,6 +41,7 @@ public class BlockLightbox extends OpenBlock {
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 	}
 
+	@Override
 	public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
 		return meta;
 	}

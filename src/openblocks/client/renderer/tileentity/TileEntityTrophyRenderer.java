@@ -25,8 +25,6 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 		if (type != null) {
 			Entity entity = type.getEntity();
 			if (entity != null) {
-				double width = entity.width * 4;
-				double height = entity.height * 1.5;
 				double ratio = type.getScale();
 				entity.worldObj = tileentity.worldObj;
 				GL11.glPushMatrix();

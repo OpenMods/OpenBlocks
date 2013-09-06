@@ -24,7 +24,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 			if (tickCounter > 0) {
 				tickCounter--;
 				if (tickCounter <= 0) {
-					worldObj.playSoundEffect((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D, "random.click", 0.3F, 0.5F);
+					worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.5F);
 					setFlag1(false);
 					sync();
 				}
@@ -38,16 +38,10 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	}
 	
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -57,7 +51,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 			}else {
 				setFlag1(true);
 				tickCounter = getTickTime();
-				worldObj.playSoundEffect((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D, "random.click", 0.3F, 0.6F);
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);
 				sync();
 			}
 		}
@@ -74,20 +68,16 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		ForgeDirection surface = side.getOpposite();
 		setRotation(side.getOpposite());
 		sync();
 	}
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -142,16 +132,10 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	}
 
 	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

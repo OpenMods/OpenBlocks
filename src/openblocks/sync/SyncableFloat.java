@@ -11,7 +11,6 @@ public class SyncableFloat implements ISyncableObject {
 	public static final float EPSILON = 0.0001f;
 	private float value;
 	private boolean hasChanged = false;
-	private int ticksSinceChanged = 0;
 
 	public SyncableFloat(float value) {
 		this.value = value;
@@ -71,12 +70,10 @@ public class SyncableFloat implements ISyncableObject {
 	@Override
 	public void resetChangeStatus() {
 		hasChanged = false;
-		ticksSinceChanged++;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
-		ticksSinceChanged = 0;
 	}
 }

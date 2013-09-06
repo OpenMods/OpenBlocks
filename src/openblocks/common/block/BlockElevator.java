@@ -33,10 +33,12 @@ public class BlockElevator extends OpenBlock {
 		setupBlock(this, "elevator", TileEntityElevator.class);
 	}
 
+	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 		return colors[world.getBlockMetadata(x, y, z)];
 	}
 
+	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		TileEntityElevator drop = (TileEntityElevator)te;

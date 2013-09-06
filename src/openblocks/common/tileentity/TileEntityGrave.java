@@ -48,6 +48,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 		if (!worldObj.isRemote) {
 			if (worldObj.difficultySetting > 0
 					&& worldObj.rand.nextDouble() < 0.002) {
+				@SuppressWarnings("unchecked")
 				List<Entity> mobs = worldObj.getEntitiesWithinAABB(IMob.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(7, 7, 7));
 				if (mobs.size() < 5) {
 					EntityLiving living = null;

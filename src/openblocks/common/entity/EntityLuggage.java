@@ -59,6 +59,7 @@ public class EntityLuggage extends EntityTameable implements
 		return special;
 	}
 
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (worldObj.isRemote) {
@@ -70,6 +71,7 @@ public class EntityLuggage extends EntityTameable implements
 		lastSound++;
 	}
 
+	@Override
 	public boolean isAIEnabled() {
 		return true;
 	}
@@ -104,6 +106,7 @@ public class EntityLuggage extends EntityTameable implements
 		return BlockUtils.testInventoryInsertion(inventory, stack) > 0;
 	}
 
+	@Override
 	protected void playStepSound(int par1, int par2, int par3, int par4) {
 		this.playSound("openblocks:feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
 	}

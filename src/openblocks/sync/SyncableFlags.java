@@ -20,7 +20,7 @@ public class SyncableFlags implements ISyncableObject {
 
 	}
 
-	public void on(Enum slot) {
+	public void on(Enum<?> slot) {
 		on(slot.ordinal());
 	}
 
@@ -28,7 +28,7 @@ public class SyncableFlags implements ISyncableObject {
 		set(slot, true);
 	}
 
-	public void off(Enum slot) {
+	public void off(Enum<?> slot) {
 		off(slot.ordinal());
 	}
 
@@ -36,7 +36,7 @@ public class SyncableFlags implements ISyncableObject {
 		set(slot, false);
 	}
 
-	public void set(Enum slot, boolean bool) {
+	public void set(Enum<?> slot, boolean bool) {
 		set(slot.ordinal(), bool);
 	}
 
@@ -53,12 +53,13 @@ public class SyncableFlags implements ISyncableObject {
 		value = newVal;
 	}
 
+	@Override
 	public void setHasChanged() {
 		hasChanged = true;
 		ticksSinceChanged = 0;
 	}
 
-	public int ticksSinceSet(Enum slot) {
+	public int ticksSinceSet(Enum<?> slot) {
 		return ticksSinceSet(slot.ordinal());
 	}
 
@@ -66,7 +67,7 @@ public class SyncableFlags implements ISyncableObject {
 		return ticksSinceSet[slot];
 	}
 
-	public int ticksSinceUnset(Enum slot) {
+	public int ticksSinceUnset(Enum<?> slot) {
 		return ticksSinceUnset(slot.ordinal());
 	}
 
@@ -74,7 +75,7 @@ public class SyncableFlags implements ISyncableObject {
 		return ticksSinceUnset[slot];
 	}
 
-	public int ticksSinceChange(Enum slot) {
+	public int ticksSinceChange(Enum<?> slot) {
 		return ticksSinceChange(slot.ordinal());
 	}
 
@@ -82,7 +83,7 @@ public class SyncableFlags implements ISyncableObject {
 		return ticksSinceChanged;
 	}
 
-	public boolean get(Enum slot) {
+	public boolean get(Enum<?> slot) {
 		return get(slot.ordinal());
 	}
 
@@ -95,7 +96,7 @@ public class SyncableFlags implements ISyncableObject {
 		return hasChanged;
 	}
 
-	public boolean hasSlotChanged(Enum slot) {
+	public boolean hasSlotChanged(Enum<?> slot) {
 		return hasSlotChanged(slot.ordinal());
 	}
 

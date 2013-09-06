@@ -14,9 +14,6 @@ import openblocks.common.api.ISurfaceAttachment;
 public class TileEntityTarget extends OpenTileEntity implements
 		ISurfaceAttachment {
 
-	private ForgeDirection rotation = ForgeDirection.WEST;
-
-	private float targetRotation = 0;
 	private int strength = 0;
 	private int tickCounter = -1;
 
@@ -58,7 +55,8 @@ public class TileEntityTarget extends OpenTileEntity implements
 	private void onRedstoneChanged() {
 		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		if (!isPowered) {
-			List<EntityArrow> arrows = (List<EntityArrow>)worldObj.getEntitiesWithinAABB(EntityArrow.class, AxisAlignedBB.getAABBPool().getAABB((double)xCoord - 0.1, (double)yCoord - 0.1, (double)zCoord - 0.1, (double)xCoord + 1.1, (double)yCoord + 1.1, (double)zCoord + 1.1));
+			@SuppressWarnings("unchecked")
+			List<EntityArrow> arrows = worldObj.getEntitiesWithinAABB(EntityArrow.class, AxisAlignedBB.getAABBPool().getAABB(xCoord - 0.1, yCoord - 0.1, zCoord - 0.1, xCoord + 1.1, yCoord + 1.1, zCoord + 1.1));
 
 			if (arrows.size() > 0) {
 				ItemStack newStack = new ItemStack(Item.arrow, arrows.size(), 0);

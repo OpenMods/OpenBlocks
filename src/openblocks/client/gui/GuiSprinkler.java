@@ -3,18 +3,14 @@ package openblocks.client.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerSprinkler;
-import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiSprinkler extends GuiContainer {
 
-	private TileEntitySprinkler sprinkler;
-
 	public GuiSprinkler(ContainerSprinkler container) {
 		super(container);
-		sprinkler = container.getTileEntity();
 		xSize = 176;
 		ySize = 167;
 	}

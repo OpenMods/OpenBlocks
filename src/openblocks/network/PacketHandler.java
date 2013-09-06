@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
@@ -28,7 +30,7 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static List<EntityPlayer> getPlayersInRange(World world, int blockX, int blockZ, int distance) {
-		List<EntityPlayer> playerList = new ArrayList();
+		List<EntityPlayer> playerList = Lists.newArrayList();
 		for (int j = 0; j < world.playerEntities.size(); j++) {
 			EntityPlayerMP player = (EntityPlayerMP)world.playerEntities.get(j);
 			if (Math.abs(player.posX - blockX) <= distance
@@ -56,6 +58,7 @@ public class PacketHandler implements IPacketHandler {
 			EntityPlayerMP mpInstance = (EntityPlayerMP)player;
 			if (mpInstance.loadedChunks != null
 					&& !mpInstance.loadedChunks.isEmpty()) {
+				@SuppressWarnings("unchecked")
 				Iterator<Chunk> iterator = mpInstance.loadedChunks.iterator();
 				while (iterator.hasNext()) {
 					Chunk testChunk = iterator.next();
@@ -82,6 +85,7 @@ public class PacketHandler implements IPacketHandler {
 			return playerList;
 		}
 		Chunk chunk = chunkProvider.provideChunk(sourceX, sourceZ);
+		@SuppressWarnings("unchecked")
 		Iterator<EntityPlayer> it = worldObj.playerEntities.iterator();
 		while (it.hasNext()) {
 			EntityPlayer ent = it.next();
@@ -89,6 +93,7 @@ public class PacketHandler implements IPacketHandler {
 				EntityPlayerMP mpInstance = (EntityPlayerMP)ent;
 				if (mpInstance.loadedChunks != null
 						&& !mpInstance.loadedChunks.isEmpty()) {
+					@SuppressWarnings("unchecked")
 					Iterator<Chunk> iterator = mpInstance.loadedChunks.iterator();
 					while (iterator.hasNext()) {
 						Chunk testChunk = iterator.next();

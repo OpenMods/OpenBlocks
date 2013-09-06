@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons.ComposedIcon;
-import openblocks.client.Icons.DisplayListWrapper;
 import openblocks.client.Icons.IDrawableIcon;
 
 import com.google.common.base.Preconditions;

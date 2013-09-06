@@ -7,9 +7,7 @@ public class Coord {
 	public int y;
 	public int z;
 
-	public Coord() {
-
-	}
+	public Coord() {}
 
 	public Coord(ForgeDirection direction) {
 		x = direction.offsetX;
@@ -64,6 +62,7 @@ public class Coord {
 		z = copy.z;
 	}
 
+	@Override
 	public Coord clone() {
 		return new Coord(x, y, z);
 	}

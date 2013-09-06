@@ -30,7 +30,7 @@ public abstract class SyncMap {
 
 	private ISyncableObject[] objects = new ISyncableObject[16];
 
-	public void put(Enum id, ISyncableObject value) {
+	public void put(Enum<?> id, ISyncableObject value) {
 		put(id.ordinal(), value);
 	}
 
@@ -93,7 +93,7 @@ public abstract class SyncMap {
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
 			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
 			totalTrackingTime = worldTotalTime; // Out with the old
-			List<EntityPlayer> players = (List<EntityPlayer>)PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
+			List<EntityPlayer> players = PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;

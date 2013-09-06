@@ -11,21 +11,20 @@ public class SyncableDirection implements ISyncableObject {
 
 	private ForgeDirection value = ForgeDirection.UNKNOWN;
 	private boolean hasChanged = false;
-	private int ticksSinceChanged = 0;
 
+	@Override
 	public boolean hasChanged() {
 		return hasChanged;
 	}
 
+	@Override
 	public void resetChangeStatus() {
 		hasChanged = false;
-		ticksSinceChanged++;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
-		ticksSinceChanged = 0;
 	}
 
 	public ForgeDirection getValue() {

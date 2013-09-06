@@ -1,6 +1,7 @@
 	package openblocks.common;
 
 import java.io.File;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import net.minecraft.block.Block;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -63,40 +65,42 @@ public class CommonProxy implements IGuiHandler {
 	public WeakHashMap<EntityPlayer, EntityHangGlider> gliderClientMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
 
 	public void init() {
-
+		@SuppressWarnings("unchecked")
+		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
+		
 		if (canRegisterBlock(Config.blockLadderId)) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
-			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
 		}
 		if (canRegisterBlock(Config.blockGuideId)) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg", "ggg", 'g', new ItemStack(Block.glass), 't', new ItemStack(Block.torchWood) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg", "ggg", 'g', new ItemStack(Block.glass), 't', new ItemStack(Block.torchWood) }));
 		}
 		if (canRegisterBlock(Config.blockElevatorId)) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'g', new ItemStack(Item.ingotGold) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'g', new ItemStack(Item.ingotGold) }));
 		}
 		if (canRegisterBlock(Config.blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
 		}
 		if (canRegisterBlock(Config.blockLightboxId)) {
 			OpenBlocks.Blocks.lightbox = new BlockLightbox();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.lightbox), new Object[] { "igi", "iti", "iii", 'i', new ItemStack(Item.ingotIron), 'g', new ItemStack(Block.thinGlass), 't', new ItemStack(Block.torchWood) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.lightbox), new Object[] { "igi", "iti", "iii", 'i', new ItemStack(Item.ingotIron), 'g', new ItemStack(Block.thinGlass), 't', new ItemStack(Block.torchWood) }));
 		}
 		if (canRegisterBlock(Config.blockTargetId)) {
 			OpenBlocks.Blocks.target = new BlockTarget();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (canRegisterBlock(Config.blockGraveId)) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
 		if (canRegisterBlock(Config.blockFlagId)) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (canRegisterBlock(Config.blockTankId)) {
 			OpenBlocks.Blocks.tank = new BlockTank();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
 		}
 		if (canRegisterBlock(Config.blockTrophyId)) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
@@ -104,32 +108,32 @@ public class CommonProxy implements IGuiHandler {
 		}
 		if (canRegisterBlock(Config.blockBearTrapId)) {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
 
 		if (canRegisterBlock(Config.blockSprinklerId)) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
 		}
 
 		if (canRegisterBlock(Config.blockCannonId)) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
 			EntityRegistry.registerModEntity(EntityCannon.class, "Cannon", Integer.MAX_VALUE, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ", "iri", 'd', new ItemStack(Block.dispenser), 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.blockRedstone) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ", "iri", 'd', new ItemStack(Block.dispenser), 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.blockRedstone) }));
 		}
 
 		if (canRegisterBlock(Config.blockVacuumHopperId)) {
 			OpenBlocks.Blocks.vacuumHopper = new BlockVacuumHopper();
-			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.vacuumHopper), new ItemStack(Block.hopperBlock), new ItemStack(Block.obsidian), new ItemStack(Item.enderPearl)));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.vacuumHopper), new ItemStack(Block.hopperBlock), new ItemStack(Block.obsidian), new ItemStack(Item.enderPearl)));
 		}
 
 		if (canRegisterBlock(Config.blockSpongeId)) {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
-			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
 		}
 		if (canRegisterBlock(Config.blockBigButton)) {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
 		}
 		
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
@@ -137,17 +141,17 @@ public class CommonProxy implements IGuiHandler {
 		OpenBlocks.Items.generic = new ItemGeneric();
 		if (Config.itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
 		}
 
 		if (Config.itemLuggageId > 0) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
 		}
 		
 		if (Config.itemSonicGlassesId > 0) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
-			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i',  new ItemStack(Item.ingotIron)}));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i',  new ItemStack(Item.ingotIron)}));
 		}
 
 		// GameRegistry.addRecipe(new TorchBowRecipe());

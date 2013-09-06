@@ -94,7 +94,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 								item.motionY = motionY * 1.4;
 								item.motionZ = motionZ * 1.4;
 								worldObj.spawnEntityInWorld(item);
-								worldObj.playSoundEffect((double) xCoord + 0.5, (double) yCoord + 0.5, (double) zCoord + 0.5, "openblocks:mortar", 0.2f, 1.0f);
+								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:mortar", 0.2f, 1.0f);
 								break;
 							}
 						}
@@ -105,6 +105,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		}
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB box = super.getRenderBoundingBox();
@@ -112,16 +113,10 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	}
 	
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockAdded() {}
 	
 	private Vec3 getPositionDistanceAway(double distance, double pitch, double yaw) {
 		double p = Math.toRadians(pitch);
@@ -150,20 +145,13 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

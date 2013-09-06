@@ -1,6 +1,5 @@
 package openblocks.client.renderer.tileentity;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -20,7 +19,6 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/sprinkler.png");
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
@@ -106,23 +104,13 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		FluidStack fluidStack = internalTank.getFluid();
 
 		if (fluidStack != null && tankTile.getHeightForRender() > 0.05) {
-
-			Block block = null;
-			Icon texture = null;
-
 			GL11.glPushMatrix();
 			GL11.glDisable(2896);
 			try {
 
 				Fluid fluid = fluidStack.getFluid();
 				
-				if (fluid.getBlockID() > 0) {
-					block = Block.blocksList[fluid.getBlockID()];
-					texture = fluidStack.getFluid().getStillIcon();
-				} else {
-					block = Block.waterStill;
-					texture = fluidStack.getFluid().getStillIcon();
-				}
+				Icon texture = fluid.getStillIcon();
 				func_110628_a(getFluidSheet(fluid));
 
 				Tessellator t = Tessellator.instance;
@@ -132,10 +120,10 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				double ySouthWest = tankTile.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.WEST);
 				double yNorthWest = tankTile.getLiquidHeightForSide(ForgeDirection.NORTH, ForgeDirection.WEST);
 
-				double uMin = (double)texture.getInterpolatedU(0.0);
-				double uMax = (double)texture.getInterpolatedU(16.0);
-				double vMin = (double)texture.getInterpolatedV(0.0);
-				double vMax = (double)texture.getInterpolatedV(16.0);
+				double uMin = texture.getInterpolatedU(0.0);
+				double uMax = texture.getInterpolatedU(16.0);
+				double vMin = texture.getInterpolatedV(0.0);
+				double vMax = texture.getInterpolatedV(16.0);
 
 				double vHeight = vMax - vMin;
 

@@ -26,7 +26,6 @@ import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableShort;
-import openblocks.utils.BlockUtils;
 import openblocks.utils.ItemUtils;
 
 public class TileEntityTank extends NetworkedTileEntity implements
@@ -87,6 +86,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	public static final ForgeDirection[] horizontalDirections = new ForgeDirection[] { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST };
 
 	protected Comparator<TileEntityTank> sortBySpace = new Comparator<TileEntityTank>() {
+		@Override
 		public int compare(TileEntityTank c1, TileEntityTank c2) {
 			return c2.getSpace() - c1.getSpace();
 		}
@@ -142,11 +142,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 				TileEntityTank otherTank = neighbour.get();
 				if (otherTank == null) { return null; }
 				if (otherTank.isInvalid()) { return null; }
-				if (this instanceof TileEntityTank) {
-					if (otherTank.canReceiveLiquid(((TileEntityTank)this).getInternalTank().getFluid())) { return otherTank; }
-				} else {
-					return otherTank;
-				}
+				if (otherTank.canReceiveLiquid(getInternalTank().getFluid())) { return otherTank; }
 			}
 		}
 		return null;
@@ -183,6 +179,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		findNeighbours();
 	}
 
+	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
 		if (worldObj.isRemote) {
 			findNeighbours();
@@ -212,6 +209,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		updateNeighbours();
 	}
 
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 
@@ -421,7 +419,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 
-		ForgeDirection direction = BlockUtils.sideToDirection(side);
+		ForgeDirection direction = ForgeDirection.getOrientation(side);
 
 		ItemStack current = player.inventory.getCurrentItem();
 		if (current != null) {
@@ -523,10 +521,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {

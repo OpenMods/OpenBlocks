@@ -74,11 +74,10 @@ public class EntityHangGliderRenderer extends Render {
 
 	/* Interpolate rotation */
 	private float interpolateRotation(float prevRotation, float nextRotation, float modifier) {
-		float rotation;
+		float rotation = nextRotation - prevRotation;
 
-		for (rotation = nextRotation - prevRotation; rotation < -180.0F; rotation += 360.0F) {
-			;
-		}
+		while (rotation < -180.0F)
+			rotation += 360.0F;
 
 		while (rotation >= 180.0F) {
 			rotation -= 360.0F;

@@ -14,7 +14,6 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	private boolean initialized = false;
 	private boolean isActive = false;
-	private boolean isLoaded = false;
 	
 	private boolean isUsedForClientInventoryRendering = false;
 
@@ -123,9 +122,9 @@ public abstract class OpenTileEntity extends TileEntity {
 		return isActive;
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		isLoaded = true;
 	}
 
 	@Override
@@ -171,6 +170,7 @@ public abstract class OpenTileEntity extends TileEntity {
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
+	@Override
 	public boolean shouldRefresh(int oldID, int newID, int oldMeta, int newMeta, World world, int x, int y, int z) {
 		return oldID != newID;
 	}
@@ -185,7 +185,7 @@ public abstract class OpenTileEntity extends TileEntity {
 		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
-	public void openGui(EntityPlayer player, Enum gui) {
+	public void openGui(EntityPlayer player, Enum<?> gui) {
 		player.openGui(OpenBlocks.instance, gui.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 	

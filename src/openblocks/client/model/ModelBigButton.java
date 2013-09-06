@@ -2,9 +2,7 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntityBigButton;
-import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class ModelBigButton extends ModelBase {
 	// fields

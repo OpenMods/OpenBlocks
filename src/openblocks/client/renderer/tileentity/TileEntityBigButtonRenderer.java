@@ -1,6 +1,5 @@
 package openblocks.client.renderer.tileentity;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;

@@ -9,7 +9,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
@@ -22,13 +21,15 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 	
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		
 		if (worldObj.isRemote) {
-			worldObj.spawnParticle("portal", (double)xCoord + 0.5, (double)yCoord + 0.5, (double)zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
+			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
 
+		@SuppressWarnings("unchecked")
 		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, getBB().expand(3, 3, 3));
 		
 		for(EntityItem item : surroundingItems) {
@@ -137,16 +138,10 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	}
 
 	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -154,16 +149,10 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	}
 
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -175,10 +164,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
@@ -191,7 +177,6 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

@@ -33,25 +33,30 @@ public class BlockLadder extends BlockTrapDoor {
 		blockIcon = registry.registerIcon("openblocks:ladder");
 	}
 
+	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
 		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
 		return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
+	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
 		this.setBlockBoundsForBlockRender(par1IBlockAccess.getBlockMetadata(par2, par3, par4));
 	}
 
+	@Override
 	public void setBlockBoundsForBlockRender(int par1) {
 
 		float f = 0.125F;
@@ -86,6 +91,7 @@ public class BlockLadder extends BlockTrapDoor {
 		return true;
 	}
 
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}

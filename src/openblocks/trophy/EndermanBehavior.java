@@ -13,7 +13,7 @@ public class EndermanBehavior implements ITrophyBehavior {
 		if (tile.worldObj.isRemote) { return; }
 		double d0 = player.posX + (tile.worldObj.rand.nextDouble() - 0.5D)
 				* 8.0D;
-		double d1 = player.posY + (double)(tile.worldObj.rand.nextInt(16) - 8);
+		double d1 = player.posY + (tile.worldObj.rand.nextInt(16) - 8);
 		double d2 = player.posZ + (tile.worldObj.rand.nextDouble() - 0.5D)
 				* 8.0D;
 		teleportTo(tile, player, d0, d1, d2);
@@ -63,20 +63,20 @@ public class EndermanBehavior implements ITrophyBehavior {
 			short short1 = 128;
 
 			for (l = 0; l < short1; ++l) {
-				double d6 = (double)l / ((double)short1 - 1.0D);
+				double d6 = l / (short1 - 1.0D);
 				float f = (tile.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
 				float f1 = (tile.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
 				float f2 = (tile.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
 				double d7 = d3 + (player.posX - d3) * d6
 						+ (tile.worldObj.rand.nextDouble() - 0.5D)
-						* (double)player.width * 2.0D;
+						* player.width * 2.0D;
 				double d8 = d4 + (player.posY - d4) * d6
 						+ tile.worldObj.rand.nextDouble()
-						* (double)player.height;
+						* player.height;
 				double d9 = d5 + (player.posZ - d5) * d6
 						+ (tile.worldObj.rand.nextDouble() - 0.5D)
-						* (double)player.width * 2.0D;
-				tile.worldObj.spawnParticle("portal", d7, d8, d9, (double)f, (double)f1, (double)f2);
+						* player.width * 2.0D;
+				tile.worldObj.spawnParticle("portal", d7, d8, d9, f, f1, f2);
 			}
 
 			tile.worldObj.playSoundEffect(d3, d4, d5, "mob.endermen.portal", 1.0F, 1.0F);
@@ -85,8 +85,5 @@ public class EndermanBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {
-		// TODO Auto-generated method stub
-
-	}
+	public void executeTickBehavior(TileEntityTrophy tile) {}
 }

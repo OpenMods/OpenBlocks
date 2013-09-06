@@ -17,7 +17,7 @@ public class BlockVacuumHopper extends OpenBlock {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return AxisAlignedBB.getAABBPool().getAABB((double)x + 0.01, (double)y + 0.01, (double)z + 0.01, (double)x + 0.99, (double)y + 0.99, (double)z + 0.99);
+		return AxisAlignedBB.getAABBPool().getAABB(x + 0.01, y + 0.01, z + 0.01, x + 0.99, y + 0.99, z + 0.99);
 	}
 
 	@Override
@@ -28,6 +28,7 @@ public class BlockVacuumHopper extends OpenBlock {
 		}
 	}
 	
+	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}

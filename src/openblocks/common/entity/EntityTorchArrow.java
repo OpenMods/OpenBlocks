@@ -32,6 +32,7 @@ public class EntityTorchArrow extends EntityArrow {
 		return 1;
 	}
 
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (getTicksInGround() == 1) {

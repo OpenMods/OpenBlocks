@@ -50,6 +50,7 @@ public abstract class OpenBlock extends BlockContainer {
 		return null;
 	}
 
+	@Override
 	public void registerIcons(IconRegister registry) {
 		this.blockIcon = registry.registerIcon(String.format("%s:%s", modKey, uniqueBlockId));
 	}
@@ -134,12 +135,14 @@ public abstract class OpenBlock extends BlockContainer {
 		}
 	}
 
+	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
 		if (te != null) { return te.onBlockActivated(player, side, hitX, hitY, hitZ); }
 		return false;
 	}
 
+	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
 		if (te != null) {
@@ -175,6 +178,7 @@ public abstract class OpenBlock extends BlockContainer {
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
@@ -185,6 +189,7 @@ public abstract class OpenBlock extends BlockContainer {
 		return canPlaceBlockOnSides(world, x, y, z, EAST, WEST, SOUTH, NORTH, UP, DOWN);
 	}
 
+	@SuppressWarnings("unchecked")
 	public <U> U getTileEntity(IBlockAccess world, int x, int y, int z, Class<U> T) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null && T.isAssignableFrom(te.getClass())) { return (U)te; }

@@ -70,18 +70,7 @@ public class BlockFlag extends OpenBlock {
 		return OpenBlocks.renderId;
 	}
 
-	/**
-	 * Same placement logic as torches
-	 */
-	private boolean canPlaceFlagOn(World par1World, int par2, int par3, int par4) {
-		if (par1World.doesBlockHaveSolidTopSurface(par2, par3, par4)) {
-			return true;
-		} else {
-			int l = par1World.getBlockId(par2, par3, par4);
-			return (Block.blocksList[l] != null && Block.blocksList[l].canPlaceTorchOnTop(par1World, par2, par3, par4));
-		}
-	}
-
+	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		return null;
 	}
@@ -101,6 +90,7 @@ public class BlockFlag extends OpenBlock {
 		}
 	}
 
+	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		if (side == DOWN) {
 			int targetX = x + side.offsetX;

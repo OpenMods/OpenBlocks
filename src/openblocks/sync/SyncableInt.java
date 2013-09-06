@@ -10,7 +10,6 @@ public class SyncableInt implements ISyncableObject {
 
 	private int value = 0;
 	private boolean hasChanged = false;
-	private int ticksSinceChanged = 0;
 
 	public SyncableInt(int value) {
 		this.value = value;
@@ -58,18 +57,18 @@ public class SyncableInt implements ISyncableObject {
 		}
 	}
 
+	@Override
 	public boolean hasChanged() {
 		return hasChanged;
 	}
 
+	@Override
 	public void resetChangeStatus() {
 		hasChanged = false;
-		ticksSinceChanged++;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
-		ticksSinceChanged = 0;
 	}
 }

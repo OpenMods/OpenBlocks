@@ -28,10 +28,7 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		// TODO Auto-generated method stub
-
-	}
+	public void tickEnd(EnumSet<TickType> type, Object... tickData) {}
 
 	@Override
 	public EnumSet<TickType> ticks() {

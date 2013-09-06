@@ -1,7 +1,5 @@
 package openblocks.utils;
 
-import java.util.Random;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
@@ -62,14 +60,10 @@ public class BlockUtils {
 
 	public static void dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
 		float f = 0.7F;
-		double d0 = (double)(worldObj.rand.nextFloat() * f)
-				+ (double)(1.0F - f) * 0.5D;
-		double d1 = (double)(worldObj.rand.nextFloat() * f)
-				+ (double)(1.0F - f) * 0.5D;
-		double d2 = (double)(worldObj.rand.nextFloat() * f)
-				+ (double)(1.0F - f) * 0.5D;
-		EntityItem entityitem = new EntityItem(worldObj, (double)x + d0, (double)y
-				+ d1, (double)z + d2, stack);
+		double d0 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+		double d1 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+		double d2 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+		EntityItem entityitem = new EntityItem(worldObj, x + d0, y + d1, z + d2, stack);
 		entityitem.delayBeforeCanPickup = 10;
 		if (stack.hasTagCompound()) {
 			entityitem.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
@@ -86,7 +80,6 @@ public class BlockUtils {
 	}
 
 	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
-		Random rand = world.rand;
 		if (inventory == null) { return; }
 		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
 			ItemStack itemStack = inventory.getStackInSlot(i);
@@ -97,7 +90,7 @@ public class BlockUtils {
 	}
 
 	public static void dropInventory(IInventory inventory, World world, int x, int y, int z) {
-		dropInventory(inventory, world, (double)x + 0.5, (double)y + 0.5, (double)z + 0.5);
+		dropInventory(inventory, world, x + 0.5, y + 0.5, z + 0.5);
 	}
 
 	public static TileEntity getTileInDirection(TileEntity tile, ForgeDirection direction) {
@@ -105,33 +98,6 @@ public class BlockUtils {
 		int targetY = tile.yCoord + direction.offsetY;
 		int targetZ = tile.zCoord + direction.offsetZ;
 		return tile.worldObj.getBlockTileEntity(targetX, targetY, targetZ);
-	}
-
-	public static ForgeDirection sideToDirection(int side) {
-		ForgeDirection direction = ForgeDirection.UNKNOWN;
-		// Bottom = 0, Top = 1, East = 2, West = 3, North = 4, South = 5.
-		switch (side) {
-			case 0:
-				direction = ForgeDirection.DOWN;
-				break;
-			case 1:
-				direction = ForgeDirection.UP;
-				break;
-			case 2:
-				direction = ForgeDirection.NORTH;
-				break;
-			case 3:
-				direction = ForgeDirection.SOUTH;
-				break;
-			case 4:
-				direction = ForgeDirection.WEST;
-				break;
-			default:
-			case 5:
-				direction = ForgeDirection.EAST;
-				break;
-		}
-		return direction;
 	}
 
 	/**

@@ -16,7 +16,8 @@ public class TileEntityHealBlock extends OpenTileEntity {
 
 		if (worldObj.isRemote) return;
 
-		List<EntityPlayer> playersOnTop = (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
+		@SuppressWarnings("unchecked")
+		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
 		if (worldObj.getTotalWorldTime() % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
@@ -25,12 +26,6 @@ public class TileEntityHealBlock extends OpenTileEntity {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

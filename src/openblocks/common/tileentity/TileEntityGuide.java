@@ -91,6 +91,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 		timeSinceChange = 0;
 	}
 
+	@Override
 	public void setBlock(int x, int y, int z) {
 		try {
 			shape[getHeight() + y][getWidth() + x][getDepth() + z] = true;
@@ -126,6 +127,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 		mode.writeToNBT(tag, "mode");
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB box = super.getRenderBoundingBox();

@@ -123,6 +123,7 @@ public class OpenBlocks {
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
+		@Override
 		public ItemStack getIconItemStack() {
 			return new ItemStack(OpenBlocks.Blocks.flag, 1, 0);
 		}

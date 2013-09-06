@@ -85,6 +85,7 @@ public class ClientProxy extends CommonProxy {
 		SoundEventsManager.instance.init();
 	}
 
+	@Override
 	public void registerRenderInformation() {
 
 		OpenBlocks.renderId = RenderingRegistry.getNextAvailableRenderId();
@@ -119,6 +120,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 	}
 
+	@Override
 	public void assertItemHangGliderRenderer() {
 		if (hangGliderRenderer == null) hangGliderRenderer = new ItemRendererHangGlider();
 		if (MinecraftForgeClient.getItemRenderer(new ItemStack(OpenBlocks.Items.hangGlider), ItemRenderType.EQUIPPED) == null) {
@@ -126,6 +128,7 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void attachPlayerRenderer() {
 		if (Config.tryHookPlayerRenderer) {
 			// Get current renderer and check that it's Mojangs
@@ -163,6 +166,7 @@ public class ClientProxy extends CommonProxy {
 	 * 
 	 * @return true if this is the server
 	 */
+	@Override
 	public boolean isServer() {
 		return false;
 	}
@@ -172,6 +176,7 @@ public class ClientProxy extends CommonProxy {
 	 * 
 	 * @return true if this is the client
 	 */
+	@Override
 	public boolean isClient() {
 		return true;
 	}

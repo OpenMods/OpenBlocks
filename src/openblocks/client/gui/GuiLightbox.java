@@ -3,18 +3,14 @@ package openblocks.client.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerLightbox;
-import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiLightbox extends GuiContainer {
 
-	private TileEntityLightbox lightbox;
-
 	public GuiLightbox(ContainerLightbox container) {
 		super(container);
-		lightbox = container.getTileEntity();
 		xSize = 176;
 		ySize = 142;
 	}

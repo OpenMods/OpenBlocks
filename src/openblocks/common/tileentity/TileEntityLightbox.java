@@ -39,12 +39,11 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 	 */
 	private int tickCounter = 0;
 
-	private AxisAlignedBB playerRange = null;
-
 	public TileEntityLightbox() {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void updateEntity() {
 

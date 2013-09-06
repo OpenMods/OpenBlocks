@@ -12,7 +12,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +33,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityGhost extends EntityMob implements
-		IEntityAdditionalSpawnData, IMob, ISyncHandler {
+		IEntityAdditionalSpawnData, ISyncHandler {
 
 	private String playerName;
 	/**
@@ -128,10 +127,13 @@ public class EntityGhost extends EntityMob implements
 	}
 
 	/* Following the code of EntityFlying */
+	@Override
 	protected void fall(float par1) {}
 
+	@Override
 	protected void updateFallState(double par1, boolean par3) {}
 
+	@Override
 	public boolean isOnLadder() {
 		return false;
 	}
@@ -162,7 +164,7 @@ public class EntityGhost extends EntityMob implements
 	}
 
 	public float getOpacity() {
-		return (Float)opacity.getValue();
+		return opacity.getValue();
 	}
 
 	public boolean hasHeadInHand() {
@@ -239,6 +241,7 @@ public class EntityGhost extends EntityMob implements
 		// it passes a list of the objects that have changed
 	}
 
+	@Override
 	public String getTranslatedEntityName() {
 		return String.format("Ghost of %s", playerName);
 	}
@@ -269,6 +272,7 @@ public class EntityGhost extends EntityMob implements
 	//	return 60;
 	//}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		if (playerName != null) {
@@ -277,6 +281,7 @@ public class EntityGhost extends EntityMob implements
 		inventory.writeToNBT(tag);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		if (tag.hasKey("playerName")) {
@@ -290,6 +295,7 @@ public class EntityGhost extends EntityMob implements
 		inventory.readFromNBT(tag);
 	}
 
+	@Override
 	public void onDeath(DamageSource damageSource) {
 		if (!worldObj.isRemote) {
 			BlockUtils.dropInventory(inventory, worldObj, posX, posY, posZ);

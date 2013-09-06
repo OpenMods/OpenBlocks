@@ -3,18 +3,14 @@ package openblocks.client.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerBigButton;
-import openblocks.common.tileentity.TileEntityBigButton;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiBigButton extends GuiContainer {
 
-	private TileEntityBigButton button;
-
 	public GuiBigButton(ContainerBigButton container) {
 		super(container);
-		button = container.getTileEntity();
 		xSize = 176;
 		ySize = 142;
 	}

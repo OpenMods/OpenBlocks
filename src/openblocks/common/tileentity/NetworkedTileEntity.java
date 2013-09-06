@@ -16,7 +16,7 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 
 	protected SyncMapTile syncMap = new SyncMapTile();
 
-	public void addSyncedObject(Enum key, ISyncableObject obj) {
+	public void addSyncedObject(Enum<?> key, ISyncableObject obj) {
 		syncMap.put(key, obj);
 	}
 
@@ -24,7 +24,7 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 		if (syncMeta) {
 			super.sync();
 		}
-		syncMap.sync(worldObj, this, (double)xCoord, (double)yCoord, (double)zCoord, timeout);
+		syncMap.sync(worldObj, this, xCoord, yCoord, zCoord, timeout);
 	}
 
 	public void sync(boolean syncMeta) {

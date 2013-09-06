@@ -10,8 +10,7 @@ public class SyncableShort implements ISyncableObject {
 
 	private short value = 0;
 	private boolean hasChanged = false;
-	private int ticksSinceChanged = 0;
-
+	
 	public SyncableShort(short value) {
 		this.value = value;
 	}
@@ -58,18 +57,18 @@ public class SyncableShort implements ISyncableObject {
 		}
 	}
 
+	@Override
 	public boolean hasChanged() {
 		return hasChanged;
 	}
 
+	@Override
 	public void resetChangeStatus() {
 		hasChanged = false;
-		ticksSinceChanged++;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
-		ticksSinceChanged = 0;
 	}
 }

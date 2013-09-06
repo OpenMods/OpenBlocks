@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
-import openblocks.utils.BlockUtils;
 
 public class BlockGuide extends OpenBlock {
 
@@ -79,8 +78,9 @@ public class BlockGuide extends OpenBlock {
 		return true;
 	}
 
+	@Override
 	public Icon getIcon(int side, int metadata) {
-		ForgeDirection direction = BlockUtils.sideToDirection(side);
+		ForgeDirection direction = ForgeDirection.getOrientation(side);
 		if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) { return blockIcon; }
 		return Icons.side;
 	}

@@ -25,7 +25,7 @@ public class EntityLuggageRenderer extends RenderLiving {
 	private int renderSpecial(EntityLuggage luggage, int p, float m) {
 		if (luggage.isSpecial() && luggage.getOwnerName() != null) {
 			if (p == 1) {
-				float f1 = (float)luggage.ticksExisted + m;
+				float f1 = luggage.ticksExisted + m;
 				this.func_110776_a(creeperEffect);
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();

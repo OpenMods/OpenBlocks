@@ -81,6 +81,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		}
 	}
 
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
@@ -174,16 +175,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -202,16 +197,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -223,10 +212,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
@@ -236,7 +222,6 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -248,16 +233,18 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		if (isEnabled()) {
 			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.02f)
 					* Math.PI * 0.035f);
-			return (float)(angle);
+			return (angle);
 		}
 		return 0;
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
@@ -285,13 +272,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

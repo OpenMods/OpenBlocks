@@ -35,7 +35,7 @@ public class ItemGeneric extends Item {
 			return OpenBlocks.Items.generic.newItemStack(this);
 		}
 
-	};
+	}
 
 	public ItemGeneric() {
 		super(OpenBlocks.Config.itemGenericId);
@@ -74,6 +74,7 @@ public class ItemGeneric extends Item {
 		return true;
 	}
 
+	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
 		IMetaItem meta = getMeta(itemStack.getItemDamage());
 		if (meta != null) { return meta.onItemRightClick(itemStack, player, world); }
@@ -94,6 +95,7 @@ public class ItemGeneric extends Item {
 		return true;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List subItems) {

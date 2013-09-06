@@ -39,6 +39,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		readFromNBT(pkt.customParam1);
 	}
 
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
@@ -50,22 +51,13 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-
-	}
+	protected void initialize() {}
 
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -77,10 +69,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	public Trophy getTrophyType() {
 		return trophyType;
@@ -111,10 +100,10 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		if (tag.hasKey("trophytype")) {
@@ -136,6 +125,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		sinceLastActivate = 0;
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setString("trophytype", trophyType.toString());
@@ -143,6 +133,7 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		tag.setInteger("sinceLastActivate", sinceLastActivate);
 	}
 
+	@Override
 	public ForgeDirection getRotation() {
 		return rotation;
 	}

@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import openblocks.common.api.IInventoryCallback;
 
-public class GenericInventory implements IInventory, ISidedInventory {
+public class GenericInventory implements ISidedInventory {
 
 	protected List<IInventoryCallback> callbacks;
 	protected String inventoryTitle;
@@ -39,7 +39,6 @@ public class GenericInventory implements IInventory, ISidedInventory {
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -56,19 +55,20 @@ public class GenericInventory implements IInventory, ISidedInventory {
 				this.inventoryContents[stackIndex] = null;
 				this.onInventoryChanged(stackIndex);
 				return itemstack;
-			} else {
-				itemstack = this.inventoryContents[stackIndex].splitStack(byAmount);
-
-				if (this.inventoryContents[stackIndex].stackSize == 0) {
-					this.inventoryContents[stackIndex] = null;
-				}
-
-				this.onInventoryChanged(stackIndex);
-				return itemstack;
 			}
-		} else {
-			return null;
+			
+			itemstack = this.inventoryContents[stackIndex].splitStack(byAmount);
+
+			if (this.inventoryContents[stackIndex].stackSize == 0) {
+				this.inventoryContents[stackIndex] = null;
+			}
+
+			this.onInventoryChanged(stackIndex);
+			return itemstack;
+			
 		}
+		
+		return null;
 	}
 
 	@Override

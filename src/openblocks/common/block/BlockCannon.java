@@ -28,6 +28,7 @@ public class BlockCannon extends OpenBlock {
 		return OpenBlocks.renderId;
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;
 	}
