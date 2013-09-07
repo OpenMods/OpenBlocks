@@ -53,8 +53,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 		}
 
 		if (!worldObj.isRemote) {
-
-			if (worldObj.getWorldTime() % 10 == 0) {
+			if (worldObj.getTotalWorldTime() % 10 == 0) {
 
 				TileEntity tileOnSurface = getTileInDirection(getSurface());
 
@@ -73,7 +72,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 					if (nextStack != null) {
 						if (nextStack.stackSize > 0) {
 							setInventorySlotContents(slotId, nextStack);
-						}else {
+						} else {
 							setInventorySlotContents(slotId, null);
 						}
 					}

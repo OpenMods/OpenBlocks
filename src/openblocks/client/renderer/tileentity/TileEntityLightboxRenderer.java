@@ -46,7 +46,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 		// render the map
 		ItemStack mapStack = lightbox.getStackInSlot(0);
-		if (mapStack != null) {
+		if (mapStack != null && mapStack.getItem().isMap()) {
 			MapData mapdata = Item.map.getMapData(mapStack, tileentity.worldObj);
 			if (mapdata != null) {
 				GL11.glTranslatef(0.5f, 0.5F, 0.299f);

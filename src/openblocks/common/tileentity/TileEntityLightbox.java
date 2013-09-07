@@ -39,9 +39,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 	 */
 	private int tickCounter = 0;
 
-	public TileEntityLightbox() {
-
-	}
+	public TileEntityLightbox() {}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -56,24 +54,26 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 
 				ItemStack itemstack = inventory.getStackInSlot(0);
 
-				for (EntityPlayer player : (List<EntityPlayer>)worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(10, 10, 10))) {
+				if (itemstack != null && itemstack.getItem().isMap()) {
+					List<EntityPlayer> nearbyPlayers = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(10, 10, 10));
 
-					if (player instanceof EntityPlayerMP) {
+					for (EntityPlayer player : nearbyPlayers) {
 
-						EntityPlayerMP mpPlayer = (EntityPlayerMP)player;
+						if (player instanceof EntityPlayerMP) {
 
-						if (itemstack != null
-								&& Item.itemsList[itemstack.itemID].isMap()
-								&& mpPlayer.playerNetServerHandler.packetSize() <= 5) {
+							EntityPlayerMP mpPlayer = (EntityPlayerMP)player;
 
-							MapData mapdata = Item.map.getMapData(itemstack, worldObj);
+							if (mpPlayer.playerNetServerHandler.packetSize() <= 5) {
 
-							mapdata.func_82568_a(mpPlayer);
+								MapData mapdata = Item.map.getMapData(itemstack, worldObj);
 
-							Packet packet = ((ItemMapBase)Item.itemsList[itemstack.itemID]).createMapDataPacket(itemstack, this.worldObj, mpPlayer);
+								mapdata.func_82568_a(mpPlayer);
 
-							if (packet != null) {
-								mpPlayer.playerNetServerHandler.sendPacketToPlayer(packet);
+								Packet packet = ((ItemMapBase)Item.itemsList[itemstack.itemID]).createMapDataPacket(itemstack, this.worldObj, mpPlayer);
+
+								if (packet != null) {
+									mpPlayer.playerNetServerHandler.sendPacketToPlayer(packet);
+								}
 							}
 						}
 					}
@@ -155,7 +155,7 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return inventory.isItemValidForSlot(i, itemstack);
+		return (itemstack != null && itemstack.getItem().isMap());
 	}
 
 	@Override

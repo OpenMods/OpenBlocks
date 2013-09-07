@@ -152,5 +152,4 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		trophyType = Trophy.VALUES[metadata];
 	}
 
-
 }

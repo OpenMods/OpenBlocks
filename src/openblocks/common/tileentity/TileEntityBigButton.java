@@ -54,7 +54,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
 				openGui(player, Gui.BigButton);
-			}else {
+			} else {
 				setFlag1(true);
 				tickCounter = getTickTime();
 				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);

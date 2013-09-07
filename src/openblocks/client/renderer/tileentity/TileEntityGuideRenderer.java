@@ -14,9 +14,8 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
-	RenderBlocks renderBlocks = new RenderBlocks();
+	private final RenderBlocks renderBlocks = new RenderBlocks();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/blocks/guide.png");
-
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
