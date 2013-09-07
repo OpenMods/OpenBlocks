@@ -14,9 +14,9 @@ public class PlayerDeathHandler {
 	 * Switched this to the player death event, because the inventory is cleared
 	 * out before the item drop event. Either would work, I guess, but this is a
 	 * bit neater
-	 * 
+	 *
 	 * ... I say neater...
-	 * 
+	 *
 	 * @param event
 	 */
 	@ForgeSubscribe

@@ -1,9 +1,5 @@
 package openblocks.common.tileentity;
 
-import com.google.common.base.Preconditions;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,6 +11,11 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.api.IAwareTile;
 import openblocks.utils.BlockUtils;
+
+import com.google.common.base.Preconditions;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 
@@ -151,5 +152,5 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		trophyType = Trophy.VALUES[metadata];
 	}
 
-	
+
 }

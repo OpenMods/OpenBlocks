@@ -84,7 +84,7 @@ public class EntityHangGlider extends Entity implements
 	public void fixPositions(EntityPlayer thePlayer) {
 
 		if (player != null) {
-			
+
 			this.lastTickPosX = prevPosX = player.prevPosX;
 			this.lastTickPosY = prevPosY = player.prevPosY;
 			this.lastTickPosZ = prevPosZ = player.prevPosZ;
@@ -100,13 +100,13 @@ public class EntityHangGlider extends Entity implements
 			this.prevRotationPitch = player.prevRotationPitch;
 			this.rotationPitch = player.rotationPitch;
 
-			
+
 			if (player != thePlayer) {
 				this.posY += 1.2;
 				this.prevPosY += 1.2;
 				this.lastTickPosY += 1.2;
 			}
-			
+
 			this.motionX = this.posX - this.prevPosX;
 			this.motionY = this.posY - this.prevPosY;
 			this.motionZ = this.posZ - this.prevPosZ;
@@ -114,7 +114,7 @@ public class EntityHangGlider extends Entity implements
 		}
 
 	}
-	
+
 	public void fixPositions() {
 		fixPositions(null);
 	}

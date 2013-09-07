@@ -15,7 +15,7 @@ public class ModelGhost extends ModelBiped {
 
 	/**
 	 * What is this float?
-	 * 
+	 *
 	 * @param f
 	 *            No idea what this is
 	 */

@@ -60,9 +60,9 @@ public class BlockUtils {
 
 	public static void dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
 		float f = 0.7F;
-		double d0 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-		double d1 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-		double d2 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+		float d0 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+		float d1 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+		float d2 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 		EntityItem entityitem = new EntityItem(worldObj, x + d0, y + d1, z + d2, stack);
 		entityitem.delayBeforeCanPickup = 10;
 		if (stack.hasTagCompound()) {
@@ -103,7 +103,7 @@ public class BlockUtils {
 	/**
 	 * Tests to see if an item stack can be inserted in to an inventory
 	 * Does not perform the insertion, only tests the possibility
-	 * 
+	 *
 	 * @param inventory
 	 *            The inventory to insert the stack into
 	 * @param item

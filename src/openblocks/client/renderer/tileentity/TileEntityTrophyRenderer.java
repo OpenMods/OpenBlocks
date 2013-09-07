@@ -15,7 +15,7 @@ import openblocks.utils.BlockUtils;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f) {
 		TileEntityTrophy trophy = (TileEntityTrophy)tileentity;

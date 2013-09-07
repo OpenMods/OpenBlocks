@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
@@ -110,7 +110,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			try {
 
 				Fluid fluid = fluidStack.getFluid();
-				
+
 				Icon texture = fluid.getStillIcon();
 				func_110628_a(getFluidSheet(fluid));
 
@@ -200,7 +200,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 	}
-	
+
 	public static ResourceLocation getFluidSheet(FluidStack liquid) {
 		if (liquid == null)
 			return TextureMap.field_110575_b;

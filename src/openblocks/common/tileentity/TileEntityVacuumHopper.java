@@ -20,20 +20,20 @@ import cpw.mods.fml.common.Loader;
 public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory, IAwareTile {
 
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		
+
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
 
 		@SuppressWarnings("unchecked")
 		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, getBB().expand(3, 3, 3));
-		
+
 		for(EntityItem item : surroundingItems) {
-			
+
 			if (!item.isDead) {
 
 				double x = (xCoord + 0.5D - item.posX) / 15.0D;
@@ -51,13 +51,13 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 				}
 			}
 		}
-		
+
 		if (!worldObj.isRemote) {
-			
+
 			if (worldObj.getWorldTime() % 10 == 0) {
-			
+
 				TileEntity tileOnSurface = getTileInDirection(getSurface());
-	
+
 				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
 				if (slotId > -1) {
 					ItemStack nextStack = getStackInSlot(slotId);
@@ -81,7 +81,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 			}
 		}
 	}
-	
+
 	public ForgeDirection getSurface() {
 		if (getFlag1()) {
 			return ForgeDirection.DOWN;
@@ -91,7 +91,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 			return getRotation();
 		}
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return inventory.getSizeInventory();
@@ -179,7 +179,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
 		return false;
 	}
-	
+
 	public void onEntityCollidedWithBlock(Entity entity) {
 		if (!worldObj.isRemote && entity instanceof EntityItem) {
 			EntityItem item = (EntityItem) entity;
@@ -192,13 +192,13 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 			}
 		}
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);

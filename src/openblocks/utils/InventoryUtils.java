@@ -83,7 +83,7 @@ public class InventoryUtils {
 		}
 		return false;
 	}
-	
+
 	public static int getSlotIndexOfNextStack(IInventory invent) {
 		for (int i = 0; i < invent.getSizeInventory(); i++) {
 			ItemStack stack = invent.getStackInSlot(i);
@@ -93,7 +93,7 @@ public class InventoryUtils {
 		}
 		return -1;
 	}
-	
+
 	public static ItemStack removeNextItemStack(IInventory invent) {
 		int nextFilledSlot = getSlotIndexOfNextStack(invent);
 		if (nextFilledSlot > -1) {

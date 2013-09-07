@@ -52,7 +52,7 @@ public class FXLiquidSpray extends EntityFX {
 
 		Fluid fluid = liquid.getFluid();
 		func_110125_a(fluid.getStillIcon());
-		
+
 
 		// this.setParticleTextureIndex(0 + this.rand.nextInt(7));
 	}

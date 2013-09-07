@@ -38,38 +38,38 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	public BlockRenderingHandler() {
 		inventoryTileEntities = Maps.newIdentityHashMap();
-		
+
 		TileEntityLightbox teLightbox = new TileEntityLightbox();
 		inventoryTileEntities.put(OpenBlocks.Blocks.lightbox, teLightbox);
-		
+
 		TileEntityTarget teTarget = new TileEntityTarget();
 		teTarget.setEnabled(true);
 		teTarget.setRotation(ForgeDirection.WEST);
 		inventoryTileEntities.put(OpenBlocks.Blocks.target, teTarget);
-		
+
 		TileEntityGrave teGrave = new TileEntityGrave();
 		inventoryTileEntities.put(OpenBlocks.Blocks.grave, teGrave);
-		
+
 		TileEntityFlag teFlag = new TileEntityFlag();
 		teFlag.setFlag1(true);
 		inventoryTileEntities.put(OpenBlocks.Blocks.flag, teFlag);
-		
+
 		TileEntityTrophy teTrophy = new TileEntityTrophy();
 		inventoryTileEntities.put(OpenBlocks.Blocks.trophy, teTrophy);
-		
+
 		TileEntityBearTrap teBearTrap = new TileEntityBearTrap();
 		inventoryTileEntities.put(OpenBlocks.Blocks.bearTrap, teBearTrap);
-		
+
 		TileEntitySprinkler teSprinkler = new TileEntitySprinkler();
 		inventoryTileEntities.put(OpenBlocks.Blocks.sprinkler, teSprinkler);
-		
+
 		TileEntityVacuumHopper teHopper = new TileEntityVacuumHopper();
 		inventoryTileEntities.put(OpenBlocks.Blocks.vacuumHopper, teHopper);
-		
+
 		TileEntityCannon teCannon = new TileEntityCannon();
 		teCannon.disableLineRender();
 		inventoryTileEntities.put(OpenBlocks.Blocks.cannon, teCannon);
-		
+
 		TileEntityBigButton teButton = new TileEntityBigButton();
 		inventoryTileEntities.put(OpenBlocks.Blocks.bigButton, teButton);
 	}
@@ -83,11 +83,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 
 		TileEntity te = inventoryTileEntities.get(block);
-		
+
 		if (te instanceof OpenTileEntity) {
 			((OpenTileEntity)te).prepareForInventoryRender(block, metadata);
 		}
-		
+
 		try {
 			final World world = Minecraft.getMinecraft().theWorld;
 			if (world != null) {

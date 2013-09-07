@@ -56,7 +56,7 @@ public class GenericInventory implements ISidedInventory {
 				this.onInventoryChanged(stackIndex);
 				return itemstack;
 			}
-			
+
 			itemstack = this.inventoryContents[stackIndex].splitStack(byAmount);
 
 			if (this.inventoryContents[stackIndex].stackSize == 0) {
@@ -65,9 +65,9 @@ public class GenericInventory implements ISidedInventory {
 
 			this.onInventoryChanged(stackIndex);
 			return itemstack;
-			
+
 		}
-		
+
 		return null;
 	}
 

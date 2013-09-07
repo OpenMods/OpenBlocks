@@ -27,7 +27,7 @@ public class BlockVacuumHopper extends OpenBlock {
 			te.onEntityCollidedWithBlock(entity);
 		}
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;

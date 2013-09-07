@@ -17,7 +17,7 @@ public class EntityLuggageRenderer extends RenderLiving {
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/luggage.png");
 	private static final ResourceLocation textureSpecial = new ResourceLocation("openblocks", "textures/models/luggage_special.png");
 	private static final ResourceLocation creeperEffect = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
-	
+
 	public EntityLuggageRenderer() {
 		super(luggageModel, 0.5F);
 	}

@@ -186,7 +186,7 @@ public class OpenBlocks {
 
 		prop = configFile.getItem("item", "itemLuggageId", Config.itemLuggageId, "The id of the luggage item");
 		Config.itemLuggageId = prop.getInt();
-		
+
 		prop = configFile.getItem("item", "itemSonicGlassesId", Config.itemSonicGlassesId, "The id of the sonic glasses item item");
 		Config.itemSonicGlassesId = prop.getInt();
 
@@ -235,25 +235,25 @@ public class OpenBlocks {
 
 		prop = configFile.get("trophy", "trophyDropChance", Config.trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
 		Config.trophyDropChance = prop.getDouble(Config.trophyDropChance);
-		
+
 		prop = configFile.get("sprinkler", "fertilizeChance", Config.sprinklerFertilizeChance, "1/chance that crops will be fertilized without bonemeal");
 		Config.sprinklerFertilizeChance = prop.getInt(Config.sprinklerFertilizeChance);
-		
+
 		prop = configFile.get("sprinkler", "bonemealFertilizeChance", Config.sprinklerBonemealFertizizeChance, "1/chance that crops will be fertilized with bonemeal");
 		Config.sprinklerBonemealFertizizeChance = prop.getInt(Config.sprinklerBonemealFertizizeChance);
-		
+
 		prop = configFile.get("sprinkler", "effectiveRange", Config.sprinklerEffectiveRange, "The range in each cardinal direction that crops will be affected.");
 		Config.sprinklerEffectiveRange = prop.getInt(Config.sprinklerEffectiveRange);
 
 		prop = configFile.get("hacks", "tryHookPlayerRenderer", Config.tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		Config.tryHookPlayerRenderer = prop.getBoolean(Config.tryHookPlayerRenderer);
-		
+
 		prop = configFile.get("glasses", "opacity", Config.sonicGlassesOpacity, "0.0 - no visible change to world, 1.0 - world fully obscured");
 		Config.sonicGlassesOpacity = prop.getDouble(Config.sonicGlassesOpacity);
 
 		prop = configFile.get("glasses", "useTexture", Config.sonicGlassesUseTexture, "Use texture for obscuring world");
 		Config.sonicGlassesUseTexture = prop.getBoolean(Config.sonicGlassesUseTexture);
-		
+
 		configFile.save();
 	}
 
@@ -262,7 +262,7 @@ public class OpenBlocks {
 		proxy.init();
 		proxy.registerRenderInformation();
 	}
-	
+
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
@@ -271,9 +271,9 @@ public class OpenBlocks {
 	public static void onSetBlock() {
 		// System.out.println("Set block!");
 	}
-	
-	/* 
-	 * TODO: These either need amending or depreciating, maybe move it from CompatibilityUtils to here 
+
+	/*
+	 * TODO: These either need amending or depreciating, maybe move it from CompatibilityUtils to here
 	 * - NC
 	 */
 

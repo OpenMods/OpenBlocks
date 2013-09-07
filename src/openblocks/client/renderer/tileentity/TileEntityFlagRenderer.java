@@ -16,7 +16,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 
 	private static final ResourceLocation textureFlagpole = new ResourceLocation("openblocks", "textures/models/flagpole.png");
 	private static final ResourceLocation textureFlag = new ResourceLocation("openblocks", "textures/models/flag.png");
-		
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 

@@ -30,7 +30,7 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 	public void sync(boolean syncMeta) {
 		sync(1, syncMeta);
 	}
-	
+
 	@Override
 	public void sync() {
 		sync(1, true);

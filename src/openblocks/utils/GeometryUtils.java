@@ -52,7 +52,7 @@ public class GeometryUtils {
 
 	/**
 	 * Makes a link of blocks in a shape
-	 * 
+	 *
 	 * @param startX
 	 *            X position of origin
 	 * @param startY
@@ -77,7 +77,7 @@ public class GeometryUtils {
 
 	/**
 	 * Makes a flat plane along two directions
-	 * 
+	 *
 	 * @param startX
 	 *            X position of origin
 	 * @param startY

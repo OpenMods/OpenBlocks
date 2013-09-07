@@ -15,7 +15,7 @@ public class TileEntityVacuumHopperRenderer extends TileEntitySpecialRenderer {
 	private ModelVacuumHopper model = new ModelVacuumHopper();
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/vacuumhopper.png");
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
@@ -28,7 +28,7 @@ public class TileEntityVacuumHopperRenderer extends TileEntitySpecialRenderer {
 			GL11.glTranslated(0, 0.5, 0.5);
 			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface), 1, 0, 0);
 		}else {
-			GL11.glRotatef(-BlockUtils.getRotationFromDirection(surface), 0, 1, 0);	
+			GL11.glRotatef(-BlockUtils.getRotationFromDirection(surface), 0, 1, 0);
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		model.render(hopper, f);

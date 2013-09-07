@@ -79,7 +79,7 @@ public class ClientProxy extends CommonProxy {
 		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 	}
-	
+
 	@Override
 	public void postInit() {
 		SoundEventsManager.instance.init();
@@ -150,7 +150,7 @@ public class ClientProxy extends CommonProxy {
 			if (ID == Gui.Sprinkler.ordinal()) { return new GuiSprinkler(new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile)); }
 			if (ID == Gui.VacuumHopper.ordinal()) { return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile)); }
 			if (ID == Gui.BigButton.ordinal()) { return new GuiBigButton(new ContainerBigButton(player.inventory, (TileEntityBigButton)tile)); }
-			
+
 		}
 		return null;
 	}
@@ -163,7 +163,7 @@ public class ClientProxy extends CommonProxy {
 
 	/**
 	 * Is this the server
-	 * 
+	 *
 	 * @return true if this is the server
 	 */
 	@Override
@@ -173,7 +173,7 @@ public class ClientProxy extends CommonProxy {
 
 	/**
 	 * Is this the client
-	 * 
+	 *
 	 * @return true if this is the client
 	 */
 	@Override

@@ -10,7 +10,7 @@ public class SyncableShort implements ISyncableObject {
 
 	private short value = 0;
 	private boolean hasChanged = false;
-	
+
 	public SyncableShort(short value) {
 		this.value = value;
 	}

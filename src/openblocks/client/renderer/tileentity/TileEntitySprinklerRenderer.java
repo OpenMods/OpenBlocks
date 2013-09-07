@@ -13,7 +13,7 @@ public class TileEntitySprinklerRenderer extends TileEntitySpecialRenderer {
 
 	private ModelSprinkler model = new ModelSprinkler();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/sprinkler.png");
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 

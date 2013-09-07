@@ -75,7 +75,7 @@ public class ItemOpenBlock extends ItemBlock {
 			if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10, j1)) {
 
 				openBlock.onBlockPlacedBy(par3World, par2EntityPlayer, par1ItemStack, par4, par5, par6, direction, par8, par9, par10, j1);
-				par3World.playSoundEffect(par4 + 0.5F, par5 + 0.5F, par6 + 0.5F, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+				par3World.playSoundEffect(par4 + 0.5, par5 + 0.5, par6 + 0.5, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 				--par1ItemStack.stackSize;
 			}
 

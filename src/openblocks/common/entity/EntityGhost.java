@@ -60,7 +60,7 @@ public class EntityGhost extends EntityMob implements
 
 	/**
 	 * Keys of values that are synced when they change
-	 * 
+	 *
 	 */
 	public enum SyncKeys {
 		FLAGS, OPACITY
@@ -68,7 +68,7 @@ public class EntityGhost extends EntityMob implements
 
 	/**
 	 * Keys of booleans that are packed into the 'flags' member
-	 * 
+	 *
 	 */
 	public enum FlagKeys {
 		IS_FLYING, HEAD_IN_HAND, IS_IDLE
@@ -220,7 +220,7 @@ public class EntityGhost extends EntityMob implements
 				 * methods and implement them ourselves. This does provide the
 				 * opportunity for the ghost to fly through walls, but does make
 				 * life harder.
-				 * 
+				 *
 				 * Also some research needs to be done regarding how this fits
 				 * with AI
 				 */
@@ -259,13 +259,13 @@ public class EntityGhost extends EntityMob implements
 	protected boolean isAIEnabled() {
 		return true;
 	}
-	
+
 	public String getPlayerName() {
 		return playerName;
 	}
 
 	// TODO: Solve the implementation of this
-	
+
 	// maybe calculate the players worth?
 	//@Override
 	//public int getMaxHealth() {

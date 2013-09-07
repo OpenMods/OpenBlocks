@@ -25,7 +25,7 @@ public class SyncMapTile extends SyncMap {
 	public Packet getDescriptionPacket(ISyncHandler handler) {
 		try {
 			// Tile Entities only
-			if (!(handler instanceof TileEntity)) return null; 
+			if (!(handler instanceof TileEntity)) return null;
 			TileEntity ent = (TileEntity)handler;
 			Packet250CustomPayload packet250 = (Packet250CustomPayload)createPacket(handler, true);
 			/* We now turn it in to a TileEntityUpdate packet */

@@ -23,7 +23,6 @@ public class ModelBigButton extends ModelBase {
 
 	public void render(TileEntityBigButton te, float f) {
 		float f5 = 0.0625F;
-		setRotationAngles(te, f);
 		if (te.getFlag1()) {
 			button.rotationPointZ = 1f;
 		}else {
@@ -37,10 +36,4 @@ public class ModelBigButton extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	public void setRotationAngles(TileEntityBigButton te, float f) {
-		
-		
-	}
-
 }

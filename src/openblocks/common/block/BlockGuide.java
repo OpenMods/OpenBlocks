@@ -84,5 +84,5 @@ public class BlockGuide extends OpenBlock {
 		if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) { return blockIcon; }
 		return Icons.side;
 	}
-	
+
 }

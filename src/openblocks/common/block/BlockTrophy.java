@@ -40,9 +40,9 @@ public class BlockTrophy extends OpenBlock {
 			if (trophy.trophyType != null) {
 				ItemStack itemStack = trophy.trophyType.getItemStack();
 				float f = 0.7F;
-				double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-				double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-				double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+				float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+				float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+				float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 				EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, itemStack);
 				entityitem.delayBeforeCanPickup = 10;
 				world.spawnEntityInWorld(entityitem);

@@ -71,8 +71,8 @@ public class MetaGeneric implements IMetaItem {
 	@Override
 	public void addRecipe() {
 		if (recipes == null) return;
-		for (int i = 0; i < recipes.length; i++) {
-			Object[] recipe = recipes[i];
+		for (Object[] recipe2 : recipes) {
+			Object[] recipe = recipe2;
 			int amount = (Integer)recipe[0];
 			boolean smelting = false;
 			int itemId = 0;

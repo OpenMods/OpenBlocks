@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.google.common.base.Preconditions;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,9 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Config;
+
+import com.google.common.base.Preconditions;
 
 public class TileEntityElevator extends OpenTileEntity {
 

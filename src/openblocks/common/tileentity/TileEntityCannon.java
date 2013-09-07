@@ -22,34 +22,34 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile {
 
-	
+
 	private EntityCannon cannon = null;
-	
+
 	public SyncableDouble pitch = new SyncableDouble();
 	public SyncableDouble yaw = new SyncableDouble();
 	public SyncableInt cannonId = new SyncableInt(0);
 	public SyncableInt ridingEntity = new SyncableInt(0);
-	
+
 	public double motionX = 0;
 	public double motionY = 0;
 	public double motionZ = 0;
-	
+
 	public boolean renderLine = true;
-	
+
 	public enum Keys {
 		pitch,
 		yaw,
 		cannonId,
 		ridingEntity
 	}
-	
+
 	public TileEntityCannon() {
 		addSyncedObject(Keys.pitch, pitch);
 		addSyncedObject(Keys.yaw, yaw);
 		addSyncedObject(Keys.cannonId, cannonId);
 		addSyncedObject(Keys.ridingEntity, ridingEntity);
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -64,7 +64,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 			yaw.setValue(y);
 			sync();
 		}
-		
+
 		if (cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
 			Vec3 pos = getPositionDistanceAway(-0.7, player.rotationPitch, player.rotationYawHead + 90);
@@ -99,25 +99,25 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 							}
 						}
 					}
-					
+
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB box = super.getRenderBoundingBox();
 		return box.expand(32.0, 32.0, 32.0);
 	}
-	
+
 	@Override
 	public void onBlockBroken() {}
 
 	@Override
 	public void onBlockAdded() {}
-	
+
 	private Vec3 getPositionDistanceAway(double distance, double pitch, double yaw) {
 		double p = Math.toRadians(pitch);
 		double y = Math.toRadians(yaw);
@@ -176,9 +176,9 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 				}
 			}
 		}
-		
+
 	}
-	
+
 	private void getMotionFromAngles() {
 		double p = Math.toRadians(pitch.getValue() - 180);
 		double y = Math.toRadians(yaw.getValue());
@@ -190,14 +190,14 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	public void disableLineRender() {
 		renderLine = false;
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		pitch.writeToNBT(tag, "pitch");
 		yaw.writeToNBT(tag, "yaw");
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);

@@ -14,7 +14,7 @@ public class TileEntityBearTrapRenderer extends TileEntitySpecialRenderer {
 	private ModelBearTrap model = new ModelBearTrap();
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/beartrap.png");
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();

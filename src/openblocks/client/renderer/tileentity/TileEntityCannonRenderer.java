@@ -9,10 +9,10 @@ import openblocks.common.tileentity.TileEntityCannon;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
-	
+
 	private ModelCannon model = new ModelCannon();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/cannon.png");
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityCannon cannon = (TileEntityCannon) tileentity;
@@ -25,9 +25,9 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		func_110628_a(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
-		if (cannon.renderLine) { 
+		if (cannon.renderLine) {
 		GL11.glPushMatrix();
-		
+
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_BLEND);

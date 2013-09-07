@@ -28,7 +28,7 @@ import openblocks.utils.InventoryUtils;
 
 public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		ISurfaceAttachment, IFluidHandler, IInventory {
-	
+
 	// erpppppp
 	private FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
 
@@ -51,7 +51,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			 * i = -1 y = yCoord - 1
 			 * i = 0 y = yCoord - 1
 			 * i = 1 y = yCoord
-			 * 
+			 *
 			 * Is this the intended operation? I've changed it for now -NC
 			 */
 			for (int i = -1; i <= 1; i++) {
@@ -231,9 +231,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public float getSprayAngle() {
 		if (isEnabled()) {
-			float angle = (float)(MathHelper.sin(worldObj.getTotalWorldTime() * 0.02f)
-					* Math.PI * 0.035f);
-			return (angle);
+			return MathHelper.sin(worldObj.getTotalWorldTime() * 0.02f) * (float)Math.PI * 0.035f;
 		}
 		return 0;
 	}

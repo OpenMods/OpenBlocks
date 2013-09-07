@@ -67,7 +67,7 @@ public class CommonProxy implements IGuiHandler {
 	public void init() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
-		
+
 		if (canRegisterBlock(Config.blockLadderId)) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
@@ -135,7 +135,7 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
 		}
-		
+
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemGeneric();
@@ -148,7 +148,7 @@ public class CommonProxy implements IGuiHandler {
 			OpenBlocks.Items.luggage = new ItemLuggage();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
 		}
-		
+
 		if (Config.itemSonicGlassesId > 0) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i',  new ItemStack(Item.ingotIron)}));
@@ -172,9 +172,9 @@ public class CommonProxy implements IGuiHandler {
 
 		OpenBlocks.Items.generic.initRecipes();
 	}
-	
+
 	public void postInit() {}
-	
+
 	private static boolean canRegisterBlock(int blockId) {
 		if(blockId > 0) {
 			if(Block.blocksList[blockId] != null) {
@@ -212,7 +212,7 @@ public class CommonProxy implements IGuiHandler {
 		if (ID == OpenBlocks.Gui.Sprinkler.ordinal()) { return new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile); }
 		if (ID == OpenBlocks.Gui.VacuumHopper.ordinal()) { return new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile); }
 		if (ID == OpenBlocks.Gui.BigButton.ordinal()) { return new ContainerBigButton(player.inventory, (TileEntityBigButton)tile); }
-		
+
 		return null;
 	}
 

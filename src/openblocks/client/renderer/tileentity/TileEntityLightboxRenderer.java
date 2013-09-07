@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
@@ -40,7 +40,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		} else {
 			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 0, 1, 0);
 		}
-		
+
 		// render a cube
 		OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5, OpenBlocks.Blocks.lightbox, null);
 

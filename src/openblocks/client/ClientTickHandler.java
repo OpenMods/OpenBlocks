@@ -21,7 +21,7 @@ public class ClientTickHandler implements ITickHandler {
 				preRenderTick(Minecraft.getMinecraft(), Minecraft.getMinecraft().theWorld, ((Float)tickData[0]).floatValue());
 			}
 		}
-		
+
 		if (type.contains(TickType.CLIENT)) {
 			clientTick();
 		}
@@ -60,7 +60,7 @@ public class ClientTickHandler implements ITickHandler {
 			}
 		}
 	}
-	
+
 	public void clientTick() {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
 			SoundEventsManager.instance.tickUpdate();

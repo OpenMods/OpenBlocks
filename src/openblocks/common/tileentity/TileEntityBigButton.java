@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,9 +20,9 @@ import openblocks.common.api.ISurfaceAttachment;
 public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, ISurfaceAttachment, IInventory {
 
 	private int tickCounter = 0;
-	
+
 	private GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -36,12 +37,12 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 			}
 		}
 	}
-	
+
 	public int getTickTime() {
 		ItemStack stack = inventory.getStackInSlot(0);
 		return stack == null ? 1 : stack.stackSize;
 	}
-	
+
 	@Override
 	public void onBlockBroken() {}
 
@@ -62,14 +63,14 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void sync() {
 		super.sync();
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton.blockID);
 		ForgeDirection rot = getRotation();
 		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
-		
+
 	}
 
 	@Override
@@ -146,13 +147,13 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return inventory.isItemValidForSlot(i, itemstack);
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
@@ -165,5 +166,5 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 		super.prepareForInventoryRender(block, metadata);
 		GL11.glTranslated(-0.5, 0, 0);
 	}
-	
+
 }

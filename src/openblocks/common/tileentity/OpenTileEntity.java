@@ -16,7 +16,7 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	private boolean initialized = false;
 	private boolean isActive = false;
-	
+
 	private boolean isUsedForClientInventoryRendering = false;
 
 	/**
@@ -37,7 +37,7 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	/**
 	 * Get the current block rotation
-	 * 
+	 *
 	 * @return the block rotation
 	 */
 	public ForgeDirection getRotation() {
@@ -48,7 +48,7 @@ public abstract class OpenTileEntity extends TileEntity {
 		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
 		return direction;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
 		isUsedForClientInventoryRendering = true;
@@ -56,7 +56,7 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	/**
 	 * Set the block rotation. To sync to the client call sync()
-	 * 
+	 *
 	 * @param rot
 	 */
 	public void setRotation(ForgeDirection rot) {
@@ -191,11 +191,11 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void openGui(EntityPlayer player, Enum<?> gui) {
 		player.openGui(OpenBlocks.instance, gui.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
-	
+
 	public AxisAlignedBB getBB() {
 		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
 	}
-	
+
 	public boolean isRenderedInInventory() {
 		return isUsedForClientInventoryRendering;
 	}

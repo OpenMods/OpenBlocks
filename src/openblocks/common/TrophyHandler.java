@@ -57,7 +57,7 @@ public class TrophyHandler {
 	}
 
 	public enum Trophy {
-		Wolf(), 
+		Wolf(),
 		Chicken(new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")),
 		Cow(new ItemDropBehavior(20000, Item.leather.itemID)),
 		Creeper(new CreeperBehavior()),
@@ -154,9 +154,9 @@ public class TrophyHandler {
 				behavior.executeTickBehavior(tile);
 			}
 		}
-		
-		
-		public final static Trophy[] VALUES = values(); 
+
+
+		public final static Trophy[] VALUES = values();
 	}
 
 	@ForgeSubscribe

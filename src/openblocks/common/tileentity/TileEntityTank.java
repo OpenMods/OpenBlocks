@@ -75,7 +75,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		addSyncedObject(Keys.liquidId, liquidId);
 		addSyncedObject(Keys.renderLevel, liquidRenderAmount);
 	}
-	
+
 	public int getClientLiquidId() {
 		return liquidId.getValue();
 	}

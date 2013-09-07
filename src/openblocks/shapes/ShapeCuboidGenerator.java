@@ -21,7 +21,7 @@ public class ShapeCuboidGenerator implements IShapeGenerator {
 		 * directions so they don't overlap any sides. This works for most cases
 		 * unless two directions are the same because of rounding in small
 		 * numbers.
-		 * 
+		 *
 		 * But this should be fairly optimal without adding anything inefficient
 		 * to complicate matters. - NeverCast
 		 */

@@ -7,7 +7,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
 
 public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
-	
+
 	private void clearupLiquid() {
 		if (worldObj.isRemote) {
 			return;
@@ -35,7 +35,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 	public void onBlockAdded() {
 		clearupLiquid();
 	}
-	
+
 	@Override
 	public void onBlockBroken() {}
 
@@ -56,9 +56,9 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		if (worldObj.isRemote) { 
+		if (worldObj.isRemote) {
 			for (int i = 0; i < 20; i++) {
-	            double f = xCoord + worldObj.rand.nextDouble() * 0.1F;
+	            double f = xCoord + worldObj.rand.nextDouble() * 0.1;
 	            double f1 = yCoord + 1.0 + worldObj.rand.nextDouble();
 	            double f2 = zCoord + worldObj.rand.nextDouble();
 				worldObj.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);

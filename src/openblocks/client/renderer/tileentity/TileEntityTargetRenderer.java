@@ -13,7 +13,7 @@ public class TileEntityTargetRenderer extends TileEntitySpecialRenderer {
 
 	private ModelTarget model = new ModelTarget();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/target.png");
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 

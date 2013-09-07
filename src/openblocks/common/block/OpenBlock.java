@@ -92,7 +92,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	/**
 	 * Can we place the block on this
-	 * 
+	 *
 	 * @param world
 	 * @param x
 	 *            of the block we're placing
