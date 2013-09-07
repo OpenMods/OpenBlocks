@@ -283,6 +283,7 @@ public class SoundIconRegistry {
 		mobs.addMob("enderdragon", 62, true);
 		mobs.addMob("endermen", 58, true);
 		mobs.addMob("ghast", 56, true);
+		mobs.addMob("witch", 66, true);
 
 		mobs.addMob("bat", 65, false);
 		mobs.addMob("cat", 62, false);
