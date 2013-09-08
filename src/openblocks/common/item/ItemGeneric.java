@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,7 +39,7 @@ public class ItemGeneric extends Item {
 	}
 
 	public ItemGeneric() {
-		super(OpenBlocks.Config.itemGenericId);
+		super(Config.itemGenericId);
 		setHasSubtypes(true);
 		setMaxDamage(0);
 		setMaxStackSize(64);

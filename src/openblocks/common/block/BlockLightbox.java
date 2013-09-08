@@ -9,6 +9,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityLightbox;
 import openblocks.utils.BlockUtils;
@@ -18,7 +19,7 @@ public class BlockLightbox extends OpenBlock {
 	public Icon sideIcon;
 
 	public BlockLightbox() {
-		super(OpenBlocks.Config.blockLightboxId, Material.glass);
+		super(Config.blockLightboxId, Material.glass);
 		setupBlock(this, "lightbox", TileEntityLightbox.class);
 		setLightValue(1.0f);
 	}

@@ -1,0 +1,285 @@
+package openblocks;
+
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Property;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import openblocks.common.TrophyHandler;
+import openblocks.common.block.*;
+import openblocks.common.entity.*;
+import openblocks.common.item.*;
+import cpw.mods.fml.common.registry.EntityRegistry;
+
+public class Config {
+	public static boolean failIdsQuietly = true;
+	public static int blockLadderId = 2540;
+	public static int blockGuideId = 2541;
+	public static int blockElevatorId = 2542;
+	public static int blockHealId = 2543;
+	public static int blockLightboxId = 2544;
+	public static int blockTargetId = 2545;
+	public static int blockGraveId = 2546;
+	public static int blockFlagId = 2547;
+	public static int blockTankId = 2548;
+	public static int blockTrophyId = 2549;
+	public static int blockBearTrapId = 2550;
+	public static int blockSprinklerId = 2551;
+	public static int blockCannonId = 2552;
+	public static int blockVacuumHopperId = 2553;
+	public static int blockSpongeId = 2554;
+	public static int blockBigButton = 2555;
+	public static int itemHangGliderId = 14975;
+	public static int itemGenericId = 14976;
+	public static int itemLuggageId = 14977;
+	public static int itemSonicGlassesId = 14978;
+	public static int elevatorTravelDistance = 20;
+	public static boolean elevatorBlockMustFaceDirection = false;
+	public static boolean elevatorIgnoreHalfBlocks = false;
+	public static int elevatorMaxBlockPassCount = 4;
+	public static int bucketsPerTank = 16;
+	public static boolean enableGraves = false;
+	public static int ghostSpawnProbability = 0;
+	public static boolean tryHookPlayerRenderer = true;
+	public static double trophyDropChance = 0.001;
+	public static boolean irregularBlocksArePassable = false;
+	public static boolean tanksEmitLight = true;
+	public static boolean tanksAreTransparent = true;
+	public static boolean tanksHaveDynamicTransparency = true;
+	public static int sprinklerFertilizeChance = 500;
+	public static int sprinklerBonemealFertizizeChance = 200;
+	public static int sprinklerEffectiveRange = 4;
+	public static double sonicGlassesOpacity = 0.95;
+	public static boolean sonicGlassesUseTexture = true;
+	
+	static void readConfig(Configuration configFile) {
+		Property prop = configFile.get("openblocks", "failIdsQuietly", failIdsQuietly, "If true, OpenBlocks will not throw an error when a block cannot be loaded due to ID conflict.");
+		failIdsQuietly = prop.getBoolean(failIdsQuietly);
+		/*
+		 * getBlock makes this mod anti-block-id-collision-forge-thingy
+		 * compliant.. Don't be a redpower :P
+		 */
+		prop = configFile.getBlock("block", "blockLadderId", blockLadderId, "The id of the ladder");
+		blockLadderId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockGuideId", blockGuideId, "The id of the guide");
+		blockGuideId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockDropId", blockElevatorId, "The id of the drop block");
+		blockElevatorId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockHealId", blockHealId, "The id of the heal block");
+		blockHealId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockLightboxId", blockLightboxId, "The id of the lightbox block");
+		blockLightboxId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockTargetId", blockTargetId, "The id of the target block");
+		blockTargetId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockGraveId", blockGraveId, "The id of the grave block");
+		blockGraveId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockFlagId", blockFlagId, "The id of the flag block");
+		blockFlagId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockTankId", blockTankId, "The id of the tank block");
+		blockTankId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockSprinklerId", blockSprinklerId, "The id of the sprinkler block");
+		blockSprinklerId = prop.getInt();
+	
+		prop = configFile.getBlock("block", "blockTrophyId", blockTrophyId, "The id of the trophy block");
+		blockTrophyId = prop.getInt();
+	
+		prop = configFile.getItem("item", "itemHangGliderId", itemHangGliderId, "The id of the hang glider");
+		itemHangGliderId = prop.getInt();
+	
+		prop = configFile.getItem("item", "itemGenericId", itemGenericId, "The id of the generic item");
+		itemGenericId = prop.getInt();
+	
+		prop = configFile.getItem("item", "itemLuggageId", itemLuggageId, "The id of the luggage item");
+		itemLuggageId = prop.getInt();
+	
+		prop = configFile.getItem("item", "itemSonicGlassesId", itemSonicGlassesId, "The id of the sonic glasses item item");
+		itemSonicGlassesId = prop.getInt();
+	
+		prop = configFile.get("dropblock", "searchDistance", elevatorTravelDistance, "The range of the drop block");
+		elevatorTravelDistance = prop.getInt();
+	
+		prop = configFile.get("dropblock", "mustFaceDirection", elevatorBlockMustFaceDirection, "Must the user face the direction they want to travel?");
+		elevatorBlockMustFaceDirection = prop.getBoolean(elevatorBlockMustFaceDirection);
+	
+		prop = configFile.get("dropblock", "maxPassThrough", elevatorMaxBlockPassCount, "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this");
+		elevatorMaxBlockPassCount = prop.getInt();
+	
+		if (elevatorMaxBlockPassCount < -1) {
+			elevatorMaxBlockPassCount = -1;
+		}
+		prop.set(elevatorMaxBlockPassCount);
+	
+		prop = configFile.get("dropblock", "ignoreHalfBlocks", elevatorIgnoreHalfBlocks, "The elevator will ignore half blocks when counting the blocks it can pass through");
+		elevatorIgnoreHalfBlocks = prop.getBoolean(elevatorIgnoreHalfBlocks);
+	
+		prop = configFile.get("dropblock", "irregularBlocksArePassable", irregularBlocksArePassable, "The elevator will try to pass through blocks that have custom collision boxes");
+		irregularBlocksArePassable = prop.getBoolean(irregularBlocksArePassable);
+	
+		prop = configFile.get("grave", "ghostProbability", ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
+		ghostSpawnProbability = prop.getInt();
+	
+		if (ghostSpawnProbability > 100) ghostSpawnProbability = 100;
+		else if (ghostSpawnProbability < 0) ghostSpawnProbability = 0;
+	
+		prop.set(ghostSpawnProbability);
+	
+		prop = configFile.get("grave", "enableGraves", enableGraves, "Enable graves on player death");
+		enableGraves = prop.getBoolean(enableGraves);
+	
+		prop = configFile.get("tanks", "bucketsPerTank", bucketsPerTank, "The amount of buckets each tank can hold");
+		bucketsPerTank = prop.getInt(bucketsPerTank);
+	
+		prop = configFile.get("tanks", "emitLight", tanksEmitLight, "Tanks will emit light when they contain a liquid that glows (eg. lava)");
+		tanksEmitLight = prop.getBoolean(tanksEmitLight);
+	
+		prop = configFile.get("tanks", "transparent", tanksAreTransparent, "Tanks will pass light");
+		tanksAreTransparent = prop.getBoolean(tanksAreTransparent);
+	
+		prop = configFile.get("tanks", "dynamicTransparency", tanksHaveDynamicTransparency, "The tank opacity changes with the amount of liquid");
+		tanksHaveDynamicTransparency = prop.getBoolean(tanksHaveDynamicTransparency);
+	
+		prop = configFile.get("trophy", "trophyDropChance", trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
+		trophyDropChance = prop.getDouble(trophyDropChance);
+	
+		prop = configFile.get("sprinkler", "fertilizeChance", sprinklerFertilizeChance, "1/chance that crops will be fertilized without bonemeal");
+		sprinklerFertilizeChance = prop.getInt(sprinklerFertilizeChance);
+	
+		prop = configFile.get("sprinkler", "bonemealFertilizeChance", sprinklerBonemealFertizizeChance, "1/chance that crops will be fertilized with bonemeal");
+		sprinklerBonemealFertizizeChance = prop.getInt(sprinklerBonemealFertizizeChance);
+	
+		prop = configFile.get("sprinkler", "effectiveRange", sprinklerEffectiveRange, "The range in each cardinal direction that crops will be affected.");
+		sprinklerEffectiveRange = prop.getInt(sprinklerEffectiveRange);
+	
+		prop = configFile.get("hacks", "tryHookPlayerRenderer", tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
+		tryHookPlayerRenderer = prop.getBoolean(tryHookPlayerRenderer);
+	
+		prop = configFile.get("glasses", "opacity", sonicGlassesOpacity, "0.0 - no visible change to world, 1.0 - world fully obscured");
+		sonicGlassesOpacity = prop.getDouble(sonicGlassesOpacity);
+	
+		prop = configFile.get("glasses", "useTexture", sonicGlassesUseTexture, "Use texture for obscuring world");
+		sonicGlassesUseTexture = prop.getBoolean(sonicGlassesUseTexture);
+	}
+
+	public static void register() {
+		@SuppressWarnings("unchecked")
+		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
+	
+		if (Config.canRegisterBlock(blockLadderId)) {
+			OpenBlocks.Blocks.ladder = new BlockLadder();
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
+		}
+		if (Config.canRegisterBlock(blockGuideId)) {
+			OpenBlocks.Blocks.guide = new BlockGuide();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg", "ggg", 'g', new ItemStack(Block.glass), 't', new ItemStack(Block.torchWood) }));
+		}
+		if (Config.canRegisterBlock(blockElevatorId)) {
+			OpenBlocks.Blocks.elevator = new BlockElevator();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'g', new ItemStack(Item.ingotGold) }));
+		}
+		if (Config.canRegisterBlock(blockHealId)) {
+			OpenBlocks.Blocks.heal = new BlockHeal();
+		}
+		if (Config.canRegisterBlock(blockLightboxId)) {
+			OpenBlocks.Blocks.lightbox = new BlockLightbox();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.lightbox), new Object[] { "igi", "iti", "iii", 'i', new ItemStack(Item.ingotIron), 'g', new ItemStack(Block.thinGlass), 't', new ItemStack(Block.torchWood) }));
+		}
+		if (Config.canRegisterBlock(blockTargetId)) {
+			OpenBlocks.Blocks.target = new BlockTarget();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
+		}
+		if (Config.canRegisterBlock(blockGraveId)) {
+			OpenBlocks.Blocks.grave = new BlockGrave();
+		}
+		if (Config.canRegisterBlock(blockFlagId)) {
+			OpenBlocks.Blocks.flag = new BlockFlag();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
+		}
+		if (Config.canRegisterBlock(blockTankId)) {
+			OpenBlocks.Blocks.tank = new BlockTank();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
+		}
+		if (Config.canRegisterBlock(blockTrophyId)) {
+			OpenBlocks.Blocks.trophy = new BlockTrophy();
+			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
+		}
+		if (Config.canRegisterBlock(blockBearTrapId)) {
+			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
+		}
+	
+		if (Config.canRegisterBlock(blockSprinklerId)) {
+			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
+		}
+	
+		if (Config.canRegisterBlock(blockCannonId)) {
+			OpenBlocks.Blocks.cannon = new BlockCannon();
+			EntityRegistry.registerModEntity(EntityCannon.class, "Cannon", Integer.MAX_VALUE, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ", "iri", 'd', new ItemStack(Block.dispenser), 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.blockRedstone) }));
+		}
+	
+		if (Config.canRegisterBlock(blockVacuumHopperId)) {
+			OpenBlocks.Blocks.vacuumHopper = new BlockVacuumHopper();
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.vacuumHopper), new ItemStack(Block.hopperBlock), new ItemStack(Block.obsidian), new ItemStack(Item.enderPearl)));
+		}
+	
+		if (Config.canRegisterBlock(blockSpongeId)) {
+			OpenBlocks.Blocks.sponge = new BlockSponge();
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
+		}
+		if (Config.canRegisterBlock(blockBigButton)) {
+			OpenBlocks.Blocks.bigButton = new BlockBigButton();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
+		}
+	
+		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
+		// Too many items would suffer from this. - NC
+		OpenBlocks.Items.generic = new ItemGeneric();
+		if (itemHangGliderId > 0) {
+			OpenBlocks.Items.hangGlider = new ItemHangGlider();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
+		}
+	
+		if (itemLuggageId > 0) {
+			OpenBlocks.Items.luggage = new ItemLuggage();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
+		}
+	
+		if (itemSonicGlassesId > 0) {
+			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i',  new ItemStack(Item.ingotIron)}));
+		}
+	}
+
+	private static boolean canRegisterBlock(int blockId) {
+		if(blockId > 0) {
+			if(Block.blocksList[blockId] != null) {
+				if(!failIdsQuietly) {
+					throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
+				}else {
+					System.out.println("[OpenBlocksMonitor] Block ID " + blockId + " in use. This block will *NOT* be loaded.");
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return false; // Block disabled, fail silently
+		}
+	}
+}

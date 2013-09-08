@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Config;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.utils.BlockUtils;
@@ -85,7 +85,7 @@ public class BlockGrave extends OpenBlock {
 
 	private static boolean shouldSpawnGhost(World world) {
 		if (world.difficultySetting == 0) return false;
-		return OpenBlocks.Config.ghostSpawnProbability > world.rand.nextInt(100);
+		return Config.ghostSpawnProbability > world.rand.nextInt(100);
 	}
 
 	private static void handleGhostSpawn(TileEntityGrave grave, World world, int x, int y, int z) {

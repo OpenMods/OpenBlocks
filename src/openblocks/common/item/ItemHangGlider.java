@@ -5,13 +5,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 
 public class ItemHangGlider extends Item {
 
 	public ItemHangGlider() {
-		super(OpenBlocks.Config.itemHangGliderId);
+		super(Config.itemHangGliderId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
@@ -27,8 +28,9 @@ public class ItemHangGlider extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		if (isGliderSpawned(world, player)) {
-			despawnGlider(world, player);
+		EntityHangGlider glider = EntityHangGlider.getMapForSide(world.isRemote).get(player);
+		if (glider != null) {
+			glider.despawnGlider();
 		} else {
 			spawnGlider(world, player);
 		}
@@ -43,24 +45,6 @@ public class ItemHangGlider extends Item {
 				glider.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationPitch, player.rotationYaw);
 				world.spawnEntityInWorld(glider);
 			}
-		}
-	}
-
-	private static void despawnGlider(World world, EntityPlayer player) {
-		if (isGliderSpawned(world, player)) {
-			if (world.isRemote) {
-				OpenBlocks.proxy.gliderClientMap.get(player).despawnGlider();
-			} else {
-				OpenBlocks.proxy.gliderMap.get(player).despawnGlider();
-			}
-		}
-	}
-
-	private static boolean isGliderSpawned(World world, EntityPlayer player) {
-		if (world.isRemote) {
-			return OpenBlocks.proxy.gliderClientMap.containsKey(player);
-		} else {
-			return OpenBlocks.proxy.gliderMap.containsKey(player);
 		}
 	}
 }

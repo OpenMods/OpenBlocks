@@ -1,5 +1,10 @@
 package openblocks.common.entity;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.WeakHashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,15 +12,55 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
+import openblocks.common.item.ItemHangGlider;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityHangGlider extends Entity implements
 		IEntityAdditionalSpawnData {
 
+	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
+	private static Map<EntityPlayer, EntityHangGlider> gliderClientMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
+	
+	public static Map<EntityPlayer, EntityHangGlider> getMapForSide(boolean isRemote) {
+		return isRemote ? gliderClientMap : gliderMap;
+	}
+	
+	public static boolean isEntityHoldingGlider(Entity player) {
+		return gliderClientMap.containsKey(player);
+	}
+	
+	public static boolean isPlayerOnGround(Entity player) {
+		EntityHangGlider glider = gliderClientMap.get(player);
+		return glider == null || glider.isPlayerOnGround();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void updateGliders() {
+		Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<EntityPlayer, EntityHangGlider> next = it.next();
+			EntityPlayer player = next.getKey();
+			EntityHangGlider glider = next.getValue();
+			if (player == null ||
+				player.isDead || 
+				glider == null ||
+				glider.isDead ||
+				player.getHeldItem() == null ||
+				!(player.getHeldItem().getItem() instanceof ItemHangGlider)) {
+					it.remove();
+			} else {
+				glider.fixPositions(Minecraft.getMinecraft().thePlayer);
+			}
+			
+		}
+	}
+	
 	private EntityPlayer player;
 	/*
 	 * Let the glider handle it's own disposal to centralize reference
@@ -30,7 +75,7 @@ public class EntityHangGlider extends Entity implements
 	public EntityHangGlider(World world, EntityPlayer player) {
 		this(world);
 		this.player = player;
-		OpenBlocks.proxy.gliderMap.put(player, this);
+		gliderMap.put(player, this);
 	}
 
 	@Override
@@ -58,11 +103,8 @@ public class EntityHangGlider extends Entity implements
 			if (player.isDead || held == null || held.getItem() == null
 					|| held.getItem() != OpenBlocks.Items.hangGlider
 					|| shouldDespawn) {
-				if (worldObj.isRemote) {
-					OpenBlocks.proxy.gliderClientMap.remove(player);
-				} else {
-					OpenBlocks.proxy.gliderMap.remove(player);
-				}
+				
+				getMapForSide(worldObj.isRemote).remove(player);
 				setDead();
 			} else {
 				fixPositions();
@@ -91,7 +133,7 @@ public class EntityHangGlider extends Entity implements
 		return player;
 	}
 
-	public void fixPositions(EntityPlayer thePlayer) {
+	private void fixPositions(EntityPlayer thePlayer) {
 
 		if (player != null) {
 
@@ -143,7 +185,7 @@ public class EntityHangGlider extends Entity implements
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
 		player = worldObj.getPlayerEntityByName(data.readUTF());
-		OpenBlocks.proxy.gliderClientMap.put(player, this);
+		gliderClientMap.put(player, this);
 	}
 
 }

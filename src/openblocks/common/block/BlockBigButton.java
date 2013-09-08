@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityBigButton;
 
@@ -11,7 +12,7 @@ import openblocks.common.tileentity.TileEntityBigButton;
 public class BlockBigButton extends OpenBlock {
 
 	public BlockBigButton() {
-		super(OpenBlocks.Config.blockBigButton, Material.circuits);
+		super(Config.blockBigButton, Material.circuits);
 		setupBlock(this, "bigbutton", TileEntityBigButton.class);
 	}
 

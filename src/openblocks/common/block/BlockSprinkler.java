@@ -5,13 +5,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntitySprinkler;
 
 public class BlockSprinkler extends OpenBlock {
 
 	public BlockSprinkler() {
-		super(OpenBlocks.Config.blockSprinklerId, Material.water);
+		super(Config.blockSprinklerId, Material.water);
 		setupBlock(this, "sprinkler", TileEntitySprinkler.class);
 	}
 

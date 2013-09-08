@@ -10,6 +10,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemFlagBlock;
 import openblocks.common.tileentity.TileEntityFlag;
@@ -45,7 +46,7 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	public BlockFlag() {
-		super(OpenBlocks.Config.blockFlagId, Material.ground);
+		super(Config.blockFlagId, Material.ground);
 		setupBlock(this, "flag", TileEntityFlag.class, ItemFlagBlock.class);
 		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
 	}

@@ -15,63 +15,27 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
+import openblocks.Config;
+import openblocks.IProxy;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Config;
 import openblocks.OpenBlocks.Gui;
 import openblocks.client.fx.FXLiquidSpray;
-import openblocks.client.gui.GuiBigButton;
-import openblocks.client.gui.GuiLightbox;
-import openblocks.client.gui.GuiLuggage;
-import openblocks.client.gui.GuiSprinkler;
-import openblocks.client.gui.GuiVacuumHopper;
-import openblocks.client.renderer.BlockRenderingHandler;
-import openblocks.client.renderer.ItemRendererHangGlider;
-import openblocks.client.renderer.ItemRendererLuggage;
-import openblocks.client.renderer.ItemRendererTank;
-import openblocks.client.renderer.entity.EntityGhostRenderer;
-import openblocks.client.renderer.entity.EntityHangGliderRenderer;
-import openblocks.client.renderer.entity.EntityLuggageRenderer;
-import openblocks.client.renderer.entity.EntityPlayerRenderer;
-import openblocks.client.renderer.tileentity.TileEntityBearTrapRenderer;
-import openblocks.client.renderer.tileentity.TileEntityBigButtonRenderer;
-import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
-import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
-import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
-import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
-import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
-import openblocks.client.renderer.tileentity.TileEntitySprinklerRenderer;
-import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
-import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
-import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
-import openblocks.client.renderer.tileentity.TileEntityVacuumHopperRenderer;
-import openblocks.common.CommonProxy;
-import openblocks.common.container.ContainerBigButton;
-import openblocks.common.container.ContainerLightbox;
-import openblocks.common.container.ContainerLuggage;
-import openblocks.common.container.ContainerSprinkler;
-import openblocks.common.container.ContainerVacuumHopper;
+import openblocks.client.gui.*;
+import openblocks.client.renderer.*;
+import openblocks.client.renderer.entity.*;
+import openblocks.client.renderer.tileentity.*;
+import openblocks.common.container.*;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
-import openblocks.common.tileentity.TileEntityBearTrap;
-import openblocks.common.tileentity.TileEntityBigButton;
-import openblocks.common.tileentity.TileEntityCannon;
-import openblocks.common.tileentity.TileEntityFlag;
-import openblocks.common.tileentity.TileEntityGrave;
-import openblocks.common.tileentity.TileEntityGuide;
-import openblocks.common.tileentity.TileEntityLightbox;
-import openblocks.common.tileentity.TileEntitySprinkler;
-import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTarget;
-import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openblocks.common.tileentity.*;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class ClientProxy extends CommonProxy {
+public class ClientProxy implements IProxy {
 
 	private ItemRendererHangGlider hangGliderRenderer;
 
@@ -80,6 +44,9 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 	}
 
+	@Override
+	public void init() {}
+	
 	@Override
 	public void postInit() {
 		SoundEventsManager.instance.init();
@@ -104,7 +71,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVacuumHopper.class, new TileEntityVacuumHopperRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBigButton.class, new TileEntityBigButtonRenderer());
 
-		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Config.blockTankId, new ItemRendererTank());
+		MinecraftForgeClient.registerItemRenderer(Config.blockTankId, new ItemRendererTank());
 
 		assertItemHangGliderRenderer();
 		MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
@@ -120,8 +87,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 	}
 
-	@Override
-	public void assertItemHangGliderRenderer() {
+	private void assertItemHangGliderRenderer() {
 		if (hangGliderRenderer == null) hangGliderRenderer = new ItemRendererHangGlider();
 		if (MinecraftForgeClient.getItemRenderer(new ItemStack(OpenBlocks.Items.hangGlider), ItemRenderType.EQUIPPED) == null) {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
@@ -139,6 +105,11 @@ public class ClientProxy extends CommonProxy {
 				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
 			}
 		}
+	}
+	
+	@Override
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return null;
 	}
 
 	@Override

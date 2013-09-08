@@ -9,6 +9,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 
@@ -19,7 +20,7 @@ public class BlockGuide extends OpenBlock {
 	}
 
 	public BlockGuide() {
-		super(OpenBlocks.Config.blockGuideId, Material.ground);
+		super(Config.blockGuideId, Material.ground);
 		setupBlock(this, "guide", TileEntityGuide.class);
 	}
 

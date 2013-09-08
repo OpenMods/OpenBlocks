@@ -13,8 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Config;
+import openblocks.Config;
 
 import com.google.common.base.Preconditions;
 
@@ -107,11 +106,11 @@ public class TileEntityElevator extends OpenTileEntity {
 		if (canStandHere) {
 			return worldObj.isAirBlock(x, y, z)
 					|| Block.blocksList[blockId] == null
-					|| (OpenBlocks.Config.irregularBlocksArePassable && Block.blocksList[blockId].getCollisionBoundingBoxFromPool(worldObj, x, y, z) == null);
+					|| (Config.irregularBlocksArePassable && Block.blocksList[blockId].getCollisionBoundingBoxFromPool(worldObj, x, y, z) == null);
 		} else {
 			/* Ugly logic makes NC sad :( */
 			return !(blockId == 0
-					|| OpenBlocks.Config.elevatorMaxBlockPassCount == -1 || OpenBlocks.Config.elevatorIgnoreHalfBlocks
+					|| Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks
 					&& !Block.isNormalCube(blockId));
 		}
 	}
@@ -125,7 +124,7 @@ public class TileEntityElevator extends OpenTileEntity {
 			int yPos = yCoord + (y * direction.offsetY);
 			if (worldObj.blockExists(xCoord, yPos, zCoord)) {
 				int blockId = worldObj.getBlockId(xCoord, yPos, zCoord);
-				if (blockId == OpenBlocks.Config.blockElevatorId) {
+				if (blockId == Config.blockElevatorId) {
 					TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord, yPos, zCoord);
 					// Check that it is a drop block and that it has the same
 					// color index.
@@ -136,7 +135,7 @@ public class TileEntityElevator extends OpenTileEntity {
 							&& isPassable(xCoord, yPos + 2, zCoord, true)) { return yPos; }
 					return 0;
 				} else if (isPassable(xCoord, yPos, zCoord, false)
-						&& ++blocksInTheWay > OpenBlocks.Config.elevatorMaxBlockPassCount) { return 0; }
+						&& ++blocksInTheWay > Config.elevatorMaxBlockPassCount) { return 0; }
 			} else {
 				return 0;
 			}
