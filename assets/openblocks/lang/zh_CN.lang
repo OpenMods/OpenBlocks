@@ -1,5 +1,9 @@
 #zh_CN
 openblocks.gui.lightbox=灯盒
+openblocks.gui.luggage=行李
+openblocks.gui.sprinkler=洒水器
+openblocks.gui.vacuumhopper=虚空漏斗
+openblocks.gui.bigbutton=大型按钮
 
 tile.openblocks.elevator.name=电梯
 tile.openblocks.heal.name=治愈器
@@ -12,8 +16,15 @@ tile.openblocks.grave.name=墓碑
 tile.openblocks.flag.name=旗子
 tile.openblocks.trophy.name=纪念雕像
 tile.openblocks.beartrap.name=捕熊陷阱
+tile.openblocks.sprinkler.name=洒水器
+tile.openblocks.vacuumhopper.name=虚空漏斗
+tile.openblocks.sponge.name=海绵
+tile.openblocks.cannon.name=传物加农炮
+tile.openblocks.bigbutton.name=大型按钮
 
 item.openblocks.hangglider.name=悬挂式滑翔机
 item.openblocks.gliderwing.name=滑翔翼
+item.openblocks.luggage.name=行李
+item.openblocks.sonicglasses.name=音波眼镜
 
 itemGroup.tabOpenBlocks=开放式方块
