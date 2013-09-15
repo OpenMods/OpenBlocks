@@ -1,5 +1,10 @@
 package openblocks;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -16,30 +21,85 @@ import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
 import openblocks.common.item.*;
+
+import com.google.common.base.Throwables;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class Config {
 	public static boolean failIdsQuietly = true;
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface BlockId {
+		String description();
+	}
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface ItemId {
+		String description();
+	}
+	
+	@BlockId(description = "The id of the ladder")
 	public static int blockLadderId = 2540;
+	
+	@BlockId(description = "The id of the guide")
 	public static int blockGuideId = 2541;
+	
+	@BlockId(description = "The id of the elevator block")
 	public static int blockElevatorId = 2542;
+	
+	@BlockId(description = "The id of the heal block")
 	public static int blockHealId = 2543;
+	
+	@BlockId(description = "The id of the lightbox block")
 	public static int blockLightboxId = 2544;
+	
+	@BlockId(description = "The id of the target block")
 	public static int blockTargetId = 2545;
+	
+	@BlockId(description = "The id of the grave block")
 	public static int blockGraveId = 2546;
+	
+	@BlockId(description = "The id of the flag block")
 	public static int blockFlagId = 2547;
+	
+	@BlockId(description = "The id of the tank block")
 	public static int blockTankId = 2548;
+	
+	@BlockId(description = "The id of the trophy block")
 	public static int blockTrophyId = 2549;
+	
+	@BlockId(description = "The id of the bear trap")
 	public static int blockBearTrapId = 2550;
+	
+	@BlockId(description = "The id of the sprinkler block")
 	public static int blockSprinklerId = 2551;
+	
+	@BlockId(description = "The id of the cannon block")
 	public static int blockCannonId = 2552;
+	
+	@BlockId(description = "The id of the vacuum hopper block")
 	public static int blockVacuumHopperId = 2553;
+	
+	@BlockId(description = "The id of the sponge block")
 	public static int blockSpongeId = 2554;
+	
+	@BlockId(description = "The id of the big button block")
 	public static int blockBigButton = 2555;
+
+	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
+	
+	@ItemId(description = "The id of the generic item")
 	public static int itemGenericId = 14976;
+	
+	@ItemId(description = "The id of the luggage item")
 	public static int itemLuggageId = 14977;
+	
+	@ItemId(description = "The id of the sonic glasses item")
 	public static int itemSonicGlassesId = 14978;
+	
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
 	public static boolean elevatorIgnoreHalfBlocks = false;
@@ -59,58 +119,51 @@ public class Config {
 	public static double sonicGlassesOpacity = 0.95;
 	public static boolean sonicGlassesUseTexture = true;
 	
+	private static void getBlock(Configuration configFile, Field field, String description) {
+		try {
+			int defaultValue = field.getInt(null);
+			Property prop = configFile.getBlock("block", field.getName(), defaultValue, description);
+			field.set(null, prop.getInt());
+		} catch (Throwable e) {
+			throw Throwables.propagate(e);
+		}
+	}
+	
+	private static void getItem(Configuration configFile, Field field, String description) {
+		try {
+			int defaultValue = field.getInt(null);
+			Property prop = configFile.getItem("item", field.getName(), defaultValue, description);
+			field.set(null, prop.getInt());
+		} catch (Throwable e) {
+			throw Throwables.propagate(e);
+		}
+	}
+	
+	private static void processAnnotations(Configuration configFile) {
+		for (Field f : Config.class.getFields()) {
+			{
+				ItemId a = f.getAnnotation(ItemId.class);
+				if (a != null) {
+					getItem(configFile, f, a.description());
+					continue;
+				}
+			}
+			
+			{
+				BlockId a = f.getAnnotation(BlockId.class);
+				if (a != null) {
+					getBlock(configFile, f, a.description());
+				}
+			}
+		}
+	}
+	
 	static void readConfig(Configuration configFile) {
 		Property prop = configFile.get("openblocks", "failIdsQuietly", failIdsQuietly, "If true, OpenBlocks will not throw an error when a block cannot be loaded due to ID conflict.");
 		failIdsQuietly = prop.getBoolean(failIdsQuietly);
-		/*
-		 * getBlock makes this mod anti-block-id-collision-forge-thingy
-		 * compliant.. Don't be a redpower :P
-		 */
-		prop = configFile.getBlock("block", "blockLadderId", blockLadderId, "The id of the ladder");
-		blockLadderId = prop.getInt();
 	
-		prop = configFile.getBlock("block", "blockGuideId", blockGuideId, "The id of the guide");
-		blockGuideId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockDropId", blockElevatorId, "The id of the drop block");
-		blockElevatorId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockHealId", blockHealId, "The id of the heal block");
-		blockHealId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockLightboxId", blockLightboxId, "The id of the lightbox block");
-		blockLightboxId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockTargetId", blockTargetId, "The id of the target block");
-		blockTargetId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockGraveId", blockGraveId, "The id of the grave block");
-		blockGraveId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockFlagId", blockFlagId, "The id of the flag block");
-		blockFlagId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockTankId", blockTankId, "The id of the tank block");
-		blockTankId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockSprinklerId", blockSprinklerId, "The id of the sprinkler block");
-		blockSprinklerId = prop.getInt();
-	
-		prop = configFile.getBlock("block", "blockTrophyId", blockTrophyId, "The id of the trophy block");
-		blockTrophyId = prop.getInt();
-	
-		prop = configFile.getItem("item", "itemHangGliderId", itemHangGliderId, "The id of the hang glider");
-		itemHangGliderId = prop.getInt();
-	
-		prop = configFile.getItem("item", "itemGenericId", itemGenericId, "The id of the generic item");
-		itemGenericId = prop.getInt();
-	
-		prop = configFile.getItem("item", "itemLuggageId", itemLuggageId, "The id of the luggage item");
-		itemLuggageId = prop.getInt();
-	
-		prop = configFile.getItem("item", "itemSonicGlassesId", itemSonicGlassesId, "The id of the sonic glasses item item");
-		itemSonicGlassesId = prop.getInt();
-	
+		processAnnotations(configFile);
+		
 		prop = configFile.get("dropblock", "searchDistance", elevatorTravelDistance, "The range of the drop block");
 		elevatorTravelDistance = prop.getInt();
 	
@@ -243,6 +296,7 @@ public class Config {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
 		}
+		
 		if (Config.canRegisterBlock(blockBigButton)) {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
