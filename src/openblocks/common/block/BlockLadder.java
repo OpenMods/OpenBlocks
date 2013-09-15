@@ -8,6 +8,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
+import openblocks.common.item.ItemOpenBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -21,9 +22,9 @@ public class BlockLadder extends BlockTrapDoor {
 		super(OpenBlocks.Config.blockLadderId, Material.wood);
 		setHardness(3.0F);
 		setStepSound(soundWoodFootstep);
-		GameRegistry.registerBlock(this, "ladder");
-		LanguageRegistry.instance().addStringLocalization("tile.openblocks.ladder.name", "Jaded Ladder");
-		setUnlocalizedName("openblocks.ladder");
+		String modKey = OpenBlocks.proxy.getModId().toLowerCase();
+		GameRegistry.registerBlock(this,ItemOpenBlock.class,modKey + "_ladder");
+		setUnlocalizedName(modKey + ".ladder");
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		this.setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);
 	}
