@@ -18,6 +18,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockSignSpinner;
 import openblocks.common.block.BlockSponge;
 import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
@@ -67,6 +68,7 @@ public class OpenBlocks {
 		public static BlockVacuumHopper vacuumHopper;
 		public static BlockSponge sponge;
 		public static BlockBigButton bigButton;
+		public static BlockSignSpinner signSpinner;
 	}
 
 	public static class Items {
@@ -94,6 +96,7 @@ public class OpenBlocks {
 		public static int blockVacuumHopperId = 2553;
 		public static int blockSpongeId = 2554;
 		public static int blockBigButton = 2555;
+		public static int blockSignSpinner = 2556;
 		public static int itemHangGliderId = 14975;
 		public static int itemGenericId = 14976;
 		public static int itemLuggageId = 14977;
@@ -116,6 +119,7 @@ public class OpenBlocks {
 		public static int sprinklerEffectiveRange = 4;
 		public static double sonicGlassesOpacity = 0.95;
 		public static boolean sonicGlassesUseTexture = true;
+		public static int signTicksPerMovement = 2;
 	}
 
 	public static enum Gui {
@@ -177,6 +181,9 @@ public class OpenBlocks {
 
 		prop = configFile.getBlock("block", "blockTrophyId", Config.blockTrophyId, "The id of the trophy block");
 		Config.blockTrophyId = prop.getInt();
+		
+		prop = configFile.getBlock("block", "blockSignSpinner", Config.blockSignSpinner, "The id of the sign spinner");
+		Config.blockSignSpinner = prop.getInt();
 
 		prop = configFile.getItem("item", "itemHangGliderId", Config.itemHangGliderId, "The id of the hang glider");
 		Config.itemHangGliderId = prop.getInt();
@@ -253,7 +260,10 @@ public class OpenBlocks {
 
 		prop = configFile.get("glasses", "useTexture", Config.sonicGlassesUseTexture, "Use texture for obscuring world");
 		Config.sonicGlassesUseTexture = prop.getBoolean(Config.sonicGlassesUseTexture);
-
+		
+		prop = configFile.get("signs", "ticksPerMovement", Config.signTicksPerMovement, "How many ticks between each sign movement" + configFile.NEW_LINE + "There are 16 possible movements; 1 second=20 ticks");
+		Config.signTicksPerMovement = prop.getInt(Config.signTicksPerMovement);
+		
 		configFile.save();
 	}
 
