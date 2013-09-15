@@ -15,7 +15,7 @@ public class BlockElevator extends OpenBlock {
 	0x2b6631, // 2
 	0x5d4b3f, // 3
 	0x494c68, // 4
-	0xaa55b2, // 9
+	0xaa55b2, // 9?
 	0x608696, // 6
 	0xb0b0b0, // 7
 	0x595959, // 8

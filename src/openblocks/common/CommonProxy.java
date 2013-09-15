@@ -31,6 +31,7 @@ import openblocks.common.block.BlockGuide;
 import openblocks.common.block.BlockHeal;
 import openblocks.common.block.BlockLadder;
 import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockSignSpinner;
 import openblocks.common.block.BlockSponge;
 import openblocks.common.block.BlockSprinkler;
 import openblocks.common.block.BlockTank;
@@ -134,6 +135,10 @@ public class CommonProxy implements IGuiHandler {
 		if (canRegisterBlock(Config.blockBigButton)) {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
+		}
+		if (canRegisterBlock(Config.blockSignSpinner)) {
+			OpenBlocks.Blocks.signSpinner = new BlockSignSpinner();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.signSpinner), new Object[] { "ccc", "iri", "cqc", 'c', new ItemStack(Block.cobblestone), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Item.redstone), 'q', new ItemStack(Item.comparator)}));
 		}
 
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
