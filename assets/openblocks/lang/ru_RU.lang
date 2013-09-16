@@ -1,0 +1,29 @@
+openblocks.gui.lightbox=Световая коробка
+openblocks.gui.luggage=Багаж
+openblocks.gui.sprinkler=Поливалка
+openblocks.gui.vacuumhopper=Хоппер-сос
+openblocks.gui.bigbutton=Большая кнопка
+
+tile.openblocks.elevator.name=Лифт
+tile.openblocks.heal.name=Целитель
+tile.openblocks.guide.name=Строительный гид
+tile.openblocks.ladder.name=Лестница Джейдед
+tile.openblocks.lightbox.name=Световая коробка
+tile.openblocks.tank.name=Бак
+tile.openblocks.target.name=Мишень
+tile.openblocks.grave.name=Кладбище
+tile.openblocks.flag.name=Флаг
+tile.openblocks.trophy.name=Кубок
+tile.openblocks.beartrap.name=Капкан
+tile.openblocks.sprinkler.name=Поливалка
+tile.openblocks.vacuumhopper.name=Хоппер-сос
+tile.openblocks.sponge.name=Мочалка
+tile.openblocks.cannon.name=Пушка объектов
+tile.openblocks.bigbutton.name=Большая кнопка
+
+item.openblocks.hangglider.name=Дельтаплан
+item.openblocks.gliderwing.name=Крыло дельтаплана
+item.openblocks.luggage.name=Багаж
+item.openblocks.sonicglasses.name=Звуковые очки
+
+itemGroup.tabOpenBlocks=OpenBlocks
