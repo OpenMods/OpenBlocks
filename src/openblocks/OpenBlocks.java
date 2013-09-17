@@ -8,29 +8,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.PlayerDeathHandler;
-import openblocks.common.block.BlockBearTrap;
-import openblocks.common.block.BlockBigButton;
-import openblocks.common.block.BlockCannon;
-import openblocks.common.block.BlockElevator;
-import openblocks.common.block.BlockFlag;
-import openblocks.common.block.BlockGrave;
-import openblocks.common.block.BlockGuide;
-import openblocks.common.block.BlockHeal;
-import openblocks.common.block.BlockLadder;
-import openblocks.common.block.BlockLightbox;
-import openblocks.common.block.BlockSponge;
-import openblocks.common.block.BlockSprinkler;
-import openblocks.common.block.BlockTank;
-import openblocks.common.block.BlockTarget;
-import openblocks.common.block.BlockTrophy;
-import openblocks.common.block.BlockVacuumHopper;
-import openblocks.common.entity.EntityGhost;
-import openblocks.common.entity.EntityHangGlider;
-import openblocks.common.entity.EntityLuggage;
-import openblocks.common.item.ItemGeneric;
-import openblocks.common.item.ItemHangGlider;
-import openblocks.common.item.ItemLuggage;
-import openblocks.common.item.ItemSonicGlasses;
+import openblocks.common.block.*;
+import openblocks.common.entity.*;
+import openblocks.common.item.*;
+import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -72,6 +53,7 @@ public class OpenBlocks {
 		public static BlockVacuumHopper vacuumHopper;
 		public static BlockSponge sponge;
 		public static BlockBigButton bigButton;
+		public static BlockImaginary imaginary;
 	}
 
 	public static class Items {
@@ -79,6 +61,10 @@ public class OpenBlocks {
 		public static ItemGeneric generic;
 		public static ItemLuggage luggage;
 		public static ItemSonicGlasses sonicGlasses;
+		public static ItemImaginationGlasses pencilGlasses;
+		public static ItemCrayonGlasses crayonGlasses;
+		public static ItemImaginationGlasses technicolorGlasses;
+		public static ItemImaginationGlasses seriousGlasses;
 	}
 
 	public static enum Gui {

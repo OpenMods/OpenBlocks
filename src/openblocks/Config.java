@@ -6,12 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
@@ -21,6 +24,9 @@ import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
 import openblocks.common.item.*;
+import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
+import openblocks.common.recipe.*;
+import openblocks.utils.ColorUtils;
 
 import com.google.common.base.Throwables;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -88,6 +94,9 @@ public class Config {
 	@BlockId(description = "The id of the big button block")
 	public static int blockBigButton = 2555;
 
+	@BlockId(description = "The id of the imaginary block")
+	public static int blockImaginaryId = 2556;
+	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 	
@@ -99,7 +108,19 @@ public class Config {
 	
 	@ItemId(description = "The id of the sonic glasses item")
 	public static int itemSonicGlassesId = 14978;
+
+	@ItemId(description = "The id of the imaginary pencil glasses item")
+	public static int itemGlassesPencil = 14979;
 	
+	@ItemId(description = "The id of the imaginary crayon glasses item")
+	public static int itemGlassesCrayon = 14980;
+	
+	@ItemId(description = "The id of the amazing technicolor glasses item")
+	public static int itemGlassesTechnicolor = 14981;
+	
+	@ItemId(description = "The id of the serious admin glasses item")
+	public static int itemGlassesSerious = 14982;
+
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
 	public static boolean elevatorIgnoreHalfBlocks = false;
@@ -301,6 +322,21 @@ public class Config {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
 		}
+		
+		if (Config.canRegisterBlock(blockImaginaryId)) {
+			OpenBlocks.Blocks.imaginary = new BlockImaginary();
+			{
+				ItemStack pencil = ItemImaginary.setupValues(null, new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
+				recipeList.add(new ShapelessOreRecipe(pencil, Item.coal, "stickWood", Item.enderPearl, Item.slimeBall));
+			}
+			
+			for (Map.Entry<String, Integer> e : ColorUtils.COLORS.entrySet()) {
+				ItemStack crayon = ItemImaginary.setupValues(e.getValue(), new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
+				recipeList.add(new ShapelessOreRecipe(crayon, e.getKey(), Item.paper, Item.enderPearl, Item.slimeBall));
+			}
+			
+			recipeList.add(new CrayonMixingRecipe());
+		}
 	
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
@@ -318,6 +354,31 @@ public class Config {
 		if (itemSonicGlassesId > 0) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i',  new ItemStack(Item.ingotIron)}));
+		}
+		
+		if (OpenBlocks.Blocks.imaginary != null) {
+			if (itemGlassesPencil > 0) {
+				OpenBlocks.Items.pencilGlasses = new ItemImaginationGlasses(itemGlassesPencil, ItemImaginationGlasses.Type.PENCIL);
+				ItemStack block =  new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0);
+				ItemImaginary.setupValues(null, block);
+				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.pencilGlasses, block, Item.paper));
+			}
+			
+			if (itemGlassesCrayon > 0) {
+				OpenBlocks.Items.crayonGlasses = new ItemCrayonGlasses(itemGlassesCrayon);
+				recipeList.add(new CrayonGlassesRecipe());
+			}
+			
+			if (itemGlassesTechnicolor > 0) {
+				OpenBlocks.Items.technicolorGlasses = new ItemImaginationGlasses(itemGlassesTechnicolor, ItemImaginationGlasses.Type.TECHNICOLOR);
+				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.technicolorGlasses), 1, 1, 2);
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			}
+			
+			if (itemGlassesSerious > 0) {
+				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(itemGlassesSerious, ItemImaginationGlasses.Type.BASTARD);
+			}
 		}
 	}
 

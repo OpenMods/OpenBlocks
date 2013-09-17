@@ -86,4 +86,9 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread) {}
+
+	@Override
+	public EntityPlayer getThePlayer() {
+		return null;
+	}
 }

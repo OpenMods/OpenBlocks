@@ -30,6 +30,7 @@ import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.tileentity.*;
 import openblocks.sync.SyncableManager;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -70,6 +71,7 @@ public class ClientProxy implements IProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVacuumHopper.class, new TileEntityVacuumHopperRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBigButton.class, new TileEntityBigButtonRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
 
 		MinecraftForgeClient.registerItemRenderer(Config.blockTankId, new ItemRendererTank());
 
@@ -156,5 +158,10 @@ public class ClientProxy implements IProxy {
 	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
 		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
+	}
+
+	@Override
+	public EntityPlayer getThePlayer() {
+		return FMLClientHandler.instance().getClient().thePlayer;
 	}
 }

@@ -2,6 +2,7 @@ package openblocks;
 
 import java.io.File;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -29,4 +30,6 @@ public interface IProxy extends IGuiHandler {
 	public File getWorldDir(World world);
 	
 	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread);
+	
+	public EntityPlayer getThePlayer();
 }
