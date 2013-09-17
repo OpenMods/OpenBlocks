@@ -66,6 +66,8 @@ public class TileEntityElevator extends OpenTileEntity {
 						teleportDirection = ForgeDirection.DOWN;
 						/* player.isJumping doesn't seem to work server side ? */
 					} else if (player.posY > yCoord + 1.2
+							&& player.posY < yCoord + 1.5
+							&& player.fallDistance == 0.0
 							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						teleportDirection = ForgeDirection.UP;
@@ -73,7 +75,7 @@ public class TileEntityElevator extends OpenTileEntity {
 					if (teleportDirection != ForgeDirection.UNKNOWN) {
 						int level = findLevel(teleportDirection);
 						if (level != 0) {
-							player.setPositionAndUpdate(xCoord + 0.5F, level + 1.1, zCoord + 0.5F);
+							player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
 							worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
 							addPlayerCooldownToTargetAndNeighbours(player, xCoord, level, zCoord);
 						}
