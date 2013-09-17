@@ -73,7 +73,7 @@ public class TileEntityElevator extends OpenTileEntity {
 					if (teleportDirection != ForgeDirection.UNKNOWN) {
 						int level = findLevel(teleportDirection);
 						if (level != 0) {
-							player.setPositionAndUpdate(player.posX, level + 1.1, player.posZ);
+							player.setPositionAndUpdate(xCoord + 0.5F, level + 1.1, zCoord + 0.5F);
 							worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
 							addPlayerCooldownToTargetAndNeighbours(player, xCoord, level, zCoord);
 						}
