@@ -66,8 +66,8 @@ public class TileEntityElevator extends OpenTileEntity {
 						teleportDirection = ForgeDirection.DOWN;
 						/* player.isJumping doesn't seem to work server side ? */
 					} else if (player.posY > yCoord + 1.2
-							&& player.posY < yCoord + 1.5
-							&& player.fallDistance == 0.0
+							/*&& player.posY < yCoord + 1.5
+							&& player.fallDistance == 0.0*/
 							&& player.ridingEntity == null
 							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						teleportDirection = ForgeDirection.UP;
