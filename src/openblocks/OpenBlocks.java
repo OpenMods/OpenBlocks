@@ -97,7 +97,7 @@ public class OpenBlocks {
 	public void init(FMLInitializationEvent evt) {
 		Config.register();
 		
-		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
+		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());
 		if (Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}

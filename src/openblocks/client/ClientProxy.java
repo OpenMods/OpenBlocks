@@ -3,12 +3,10 @@ package openblocks.client;
 import java.io.File;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -18,13 +16,13 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.IProxy;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Gui;
 import openblocks.client.fx.FXLiquidSpray;
-import openblocks.client.gui.*;
-import openblocks.client.renderer.*;
+import openblocks.client.renderer.BlockRenderingHandler;
+import openblocks.client.renderer.ItemRendererHangGlider;
+import openblocks.client.renderer.ItemRendererLuggage;
+import openblocks.client.renderer.ItemRendererTank;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
-import openblocks.common.container.*;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -33,6 +31,7 @@ import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -108,25 +107,6 @@ public class ClientProxy implements IProxy {
 			}
 		}
 	}
-	
-	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		return null;
-	}
-
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if ((world instanceof WorldClient)) {
-			if (ID == Gui.Luggage.ordinal()) { return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x))); }
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
-			if (ID == Gui.Lightbox.ordinal()) { return new GuiLightbox(new ContainerLightbox(player.inventory, (TileEntityLightbox)tile)); }
-			if (ID == Gui.Sprinkler.ordinal()) { return new GuiSprinkler(new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile)); }
-			if (ID == Gui.VacuumHopper.ordinal()) { return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile)); }
-			if (ID == Gui.BigButton.ordinal()) { return new GuiBigButton(new ContainerBigButton(player.inventory, (TileEntityBigButton)tile)); }
-
-		}
-		return null;
-	}
 
 	@Override
 	public File getWorldDir(World world) {
@@ -163,5 +143,10 @@ public class ClientProxy implements IProxy {
 	@Override
 	public EntityPlayer getThePlayer() {
 		return FMLClientHandler.instance().getClient().thePlayer;
+	}
+
+	@Override
+	public IGuiHandler createGuiHandler() {
+		return new ClientGuiHandler();
 	}
 }
