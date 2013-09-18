@@ -4,6 +4,9 @@ openblocks.gui.sprinkler=Rasensprenger
 openblocks.gui.vacuumhopper=Vakuumtrichter
 openblocks.gui.bigbutton=Großer Knopf
 
+openblocks.misc.uses=Nutzt: %d
+openblocks.misc.color=Farbe: %06X
+
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.heal.name=Heiler
 tile.openblocks.guide.name=Bau-Hilfe
@@ -25,5 +28,11 @@ item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
 item.openblocks.luggage.name=Reisegepäck
 item.openblocks.sonicglasses.name=Schallbrille
+item.openblocks.crayon.name=Magischer Buntstift
+item.openblocks.pencil.name=Magischer Bleistift
+item.openblocks.glasses.pencil.name=Bleistiftbrille
+item.openblocks.glasses.crayon.name=untstiftbrille
+item.openblocks.glasses.technicolor.name=Erstaunliche Technicolor-Brille
+item.openblocks.glasses.admin.name=Badass-Brille
 
 itemGroup.tabOpenBlocks=OpenBlocks
