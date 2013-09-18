@@ -14,7 +14,7 @@ import openblocks.common.item.ItemImaginationGlasses;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityImaginary extends TileEntity {
+public class TileEntityImaginary extends OpenTileEntity {
 
 	public enum Property {
 		VISIBLE, SELECTABLE, SOLID

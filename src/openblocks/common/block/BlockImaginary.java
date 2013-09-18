@@ -19,47 +19,28 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
+import openblocks.common.tileentity.TileEntityBigButton;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockImaginary extends BlockContainer {
+public class BlockImaginary extends OpenBlock {
 
 	public Icon texturePencil;
 	public Icon textureCrayon;
 
 	public BlockImaginary() {
 		super(Config.blockImaginaryId, Material.glass);
-		setupBlock("imaginary");
+		setupBlock(this, "imaginary", TileEntityImaginary.class);
 		setHardness(5);
-	}
-
-	private static TileEntityImaginary getTileEntity(World world, int x, int y, int z) {
-		TileEntity e = world.getBlockTileEntity(x, y, z);
-		return (e instanceof TileEntityImaginary)? (TileEntityImaginary)e : null;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityImaginary();
-	}
-
-	public void setupBlock(String uniqueName) {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		String modKey = OpenBlocks.getModId().toLowerCase();
-
-		String name = String.format("%s_%s", modKey, uniqueName);
-		GameRegistry.registerBlock(this, ItemImaginary.class, name);
-		setUnlocalizedName(String.format("%s.%s", modKey, uniqueName));
-		GameRegistry.registerTileEntity(TileEntityImaginary.class, name);
 	}
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		if (world.isRemote) {
-			TileEntityImaginary te = getTileEntity(world, x, y, z);
+			TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
 			if (te != null && te.is(Property.SELECTABLE)) return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 1, z + 1);
 		}
 
@@ -74,7 +55,7 @@ public class BlockImaginary extends BlockContainer {
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB region, List result, Entity entity) {
-		TileEntityImaginary te = getTileEntity(world, x, y, z);
+		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
 		if (te != null && te.is(Property.SOLID, entity)) {
 			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 1, z + 1);
 
@@ -85,7 +66,7 @@ public class BlockImaginary extends BlockContainer {
 	@Override
 	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 par5Vec3, Vec3 par6Vec3) {
 		if (world.isRemote) {
-			TileEntityImaginary te = getTileEntity(world, x, y, z);
+			TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
 			if (te == null || !te.is(Property.SELECTABLE)) return null;
 		}
 
@@ -122,13 +103,11 @@ public class BlockImaginary extends BlockContainer {
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-
-		if (te instanceof TileEntityImaginary) {
+		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
+		if (te != null) {
 			TileEntityImaginary img = (TileEntityImaginary)te;
 			return ItemImaginary.setupValues(img.color, new ItemStack(this));
 		}
-
 		return null;
 	}
 }
