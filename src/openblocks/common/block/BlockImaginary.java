@@ -29,7 +29,7 @@ public class BlockImaginary extends OpenBlock {
 
 	public BlockImaginary() {
 		super(Config.blockImaginaryId, Material.glass);
-		setupBlock(this, "imaginary", TileEntityImaginary.class);
+		setupBlock(this, "imaginary", TileEntityImaginary.class, ItemImaginary.class);
 		setHardness(5);
 	}
 
