@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import openblocks.Config;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
@@ -97,9 +98,9 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 		boolean isVisible = te.is(Property.VISIBLE);
 		
 		if (isVisible && te.visibility < 1)
-			te.visibility = Math.min(te.visibility * 1.001f + 0.001f, 1);
+			te.visibility = Math.min(te.visibility + Config.imaginaryFadingSpeed, 1);
 		else if (!isVisible && te.visibility > 0)
-			te.visibility = Math.max(te.visibility * 0.999f - 0.001f, 0);
+			te.visibility = Math.max(te.visibility - Config.imaginaryFadingSpeed, 0);
 		
 		if (te.visibility <= 0)
 			return;

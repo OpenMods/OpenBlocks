@@ -139,6 +139,8 @@ public class Config {
 	public static int sprinklerEffectiveRange = 4;
 	public static double sonicGlassesOpacity = 0.95;
 	public static boolean sonicGlassesUseTexture = true;
+	public static float imaginaryFadingSpeed = 0.0075f;
+	public static int imaginaryItemUseCount = 10;
 	
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -248,6 +250,12 @@ public class Config {
 	
 		prop = configFile.get("glasses", "useTexture", sonicGlassesUseTexture, "Use texture for obscuring world");
 		sonicGlassesUseTexture = prop.getBoolean(sonicGlassesUseTexture);
+		
+		prop = configFile.get("imaginary", "fadingSpeed", imaginaryFadingSpeed, "Speed of imaginary blocks fading/appearing");
+		imaginaryFadingSpeed = (float)prop.getDouble(imaginaryFadingSpeed);
+		
+		prop = configFile.get("imaginary", "numberOfUses", imaginaryItemUseCount, "Number of newly created crayon/pencil uses");
+		imaginaryItemUseCount = prop.getInt(imaginaryItemUseCount);
 	}
 
 	public static void register() {
