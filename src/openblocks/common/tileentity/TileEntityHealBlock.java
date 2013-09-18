@@ -3,12 +3,11 @@ package openblocks.common.tileentity;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
-import openblocks.utils.CompatibilityUtils;
 
 public class TileEntityHealBlock extends OpenTileEntity {
-
-	int value = 0;
 
 	@Override
 	public void updateEntity() {
@@ -21,8 +20,15 @@ public class TileEntityHealBlock extends OpenTileEntity {
 		if (worldObj.getTotalWorldTime() % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
-					if (CompatibilityUtils.getEntityHealth(player) < CompatibilityUtils.getEntityMaxHealth(player)) player.heal(1);
-					if (player.getFoodStats().needFood()) player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + 1);
+					/* TODO: the potion effects are set to 1 tick only to give enough time for the player to regenerate, but without having any overkill
+					 * However, this does have the side-effect of not showing particle effects.
+					 * Personally, I wish that the player could see effects, but I think someone else should ultimately decide if it should be done (you know who you are) 
+					 */
+					player.addPotionEffect(new PotionEffect(Potion.regeneration.id,1,10));
+					player.addPotionEffect(new PotionEffect(23, 1));	//Saturation
+						/* TODO: the saturation potion does not yet have a legible name, so I'm using its ID value
+						 * At the moment, this potion is under the name Potion.field_76443_y. Some name, eh?
+						 */
 				}
 			}
 		}
