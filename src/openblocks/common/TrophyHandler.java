@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import openblocks.Config;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
@@ -162,7 +163,7 @@ public class TrophyHandler {
 	@ForgeSubscribe
 	public void onLivingDeath(LivingDeathEvent event) {
 		if (!event.entity.worldObj.isRemote) {
-			if (Math.random() < OpenBlocks.Config.trophyDropChance) {
+			if (Math.random() < Config.trophyDropChance) {
 				Entity entity = event.entity;
 				String entityName = EntityList.getEntityString(entity);
 				if (entityName != null && !entityName.isEmpty()) {

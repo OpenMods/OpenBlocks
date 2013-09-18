@@ -8,6 +8,7 @@ import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSonicGlasses;
 import cpw.mods.fml.relauncher.Side;
@@ -18,7 +19,7 @@ public class ItemSonicGlasses extends ItemArmor {
 	private static final int ARMOR_HELMET = 0;
 
 	public ItemSonicGlasses() {
-		super(OpenBlocks.Config.itemSonicGlassesId, EnumArmorMaterial.IRON, 2, ARMOR_HELMET);
+		super(Config.itemSonicGlassesId, EnumArmorMaterial.IRON, 2, ARMOR_HELMET);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

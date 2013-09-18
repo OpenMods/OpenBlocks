@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
+import openblocks.Config;
 import openblocks.common.tileentity.TileEntityElevator;
 
 public class BlockElevator extends OpenBlock {
@@ -29,7 +29,7 @@ public class BlockElevator extends OpenBlock {
 	};
 
 	public BlockElevator() {
-		super(OpenBlocks.Config.blockElevatorId, Material.ground);
+		super(Config.blockElevatorId, Material.ground);
 		setupBlock(this, "elevator", TileEntityElevator.class);
 	}
 

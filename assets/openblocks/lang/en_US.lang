@@ -4,6 +4,9 @@ openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
 openblocks.gui.bigbutton=Big Button
 
+openblocks.misc.uses=Uses: %d
+openblocks.misc.color=Color: %06X
+
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
 tile.openblocks.guide.name=Building Guide
@@ -25,5 +28,11 @@ item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
 item.openblocks.luggage.name=Luggage
 item.openblocks.sonicglasses.name=Sonic Glasses
+item.openblocks.crayon.name=Magic Crayon
+item.openblocks.pencil.name=Magic Pencil
+item.openblocks.glasses.pencil.name=Pencil Glasses
+item.openblocks.glasses.crayon.name=Crayon Glasses
+item.openblocks.glasses.technicolor.name=Amazing Technicolor Glasses
+item.openblocks.glasses.admin.name=Badass Glasses
 
 itemGroup.tabOpenBlocks=OpenBlocks

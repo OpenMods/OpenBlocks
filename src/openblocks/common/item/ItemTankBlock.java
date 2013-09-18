@@ -7,11 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
-import openblocks.OpenBlocks;
+import openblocks.Config;
 
 public class ItemTankBlock extends ItemOpenBlock {
 	private LiquidTank fakeTank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME
-			* OpenBlocks.Config.bucketsPerTank);
+			* Config.bucketsPerTank);
 
 	public ItemTankBlock(int id) {
 		super(id);

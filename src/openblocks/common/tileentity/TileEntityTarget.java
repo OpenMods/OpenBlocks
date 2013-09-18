@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
+import openblocks.Config;
 import openblocks.common.api.ISurfaceAttachment;
 
 public class TileEntityTarget extends OpenTileEntity implements
@@ -26,7 +26,7 @@ public class TileEntityTarget extends OpenTileEntity implements
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTargetId);
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockTargetId);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class TileEntityTarget extends OpenTileEntity implements
 	public void setStrength(int strength) {
 		this.strength = strength;
 		tickCounter = 10;
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Config.blockTargetId);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockTargetId);
 	}
 
 	private void onRedstoneChanged() {

@@ -6,13 +6,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityBearTrap;
 
 public class BlockBearTrap extends OpenBlock {
 
 	public BlockBearTrap() {
-		super(OpenBlocks.Config.blockBearTrapId, Material.ground);
+		super(Config.blockBearTrapId, Material.ground);
 		setupBlock(this, "beartrap", TileEntityBearTrap.class);
 	}
 

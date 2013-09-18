@@ -79,7 +79,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	public void setupBlock(Block instance, String uniqueName, Class<? extends TileEntity> tileEntity, Class<? extends ItemOpenBlock> itemClass) {
 		uniqueBlockId = uniqueName;
-		modKey = OpenBlocks.proxy.getModId().toLowerCase();
+		modKey = OpenBlocks.getModId().toLowerCase();
 
 		GameRegistry.registerBlock(instance, itemClass, String.format("%s_%s", modKey, uniqueName));
 		instance.setUnlocalizedName(String.format("%s.%s", modKey, uniqueName));

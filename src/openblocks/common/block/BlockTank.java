@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
@@ -18,7 +19,7 @@ import openblocks.common.tileentity.TileEntityTank;
 public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
-		super(OpenBlocks.Config.blockTankId, Material.ground);
+		super(Config.blockTankId, Material.ground);
 		setupBlock(this, "tank", TileEntityTank.class, ItemTankBlock.class);
 	}
 
@@ -65,7 +66,7 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		if (!OpenBlocks.Config.tanksEmitLight) return 0;
+		if (!Config.tanksEmitLight) return 0;
 		TileEntity ent = world.getBlockTileEntity(x, y, z);
 		if (ent == null) return 0;
 		if (ent instanceof TileEntityTank) {
@@ -87,8 +88,8 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public int getLightOpacity(World world, int x, int y, int z) {
-		if (!OpenBlocks.Config.tanksAreTransparent) return 16;
-		if (!OpenBlocks.Config.tanksHaveDynamicTransparency) return 0;
+		if (!Config.tanksAreTransparent) return 16;
+		if (!Config.tanksHaveDynamicTransparency) return 0;
 		/*
 		 * As per docs, the tile entity is not guaranteed to exist at the time
 		 * of calling

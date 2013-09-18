@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import openblocks.OpenBlocks;
+import openblocks.Config;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
@@ -33,7 +33,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 
 	public static int getTankCapacity() {
 		return FluidContainerRegistry.BUCKET_VOLUME
-				* OpenBlocks.Config.bucketsPerTank;
+				* Config.bucketsPerTank;
 	}
 
 	/**

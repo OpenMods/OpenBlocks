@@ -10,78 +10,64 @@ import openblocks.common.block.OpenBlock;
 
 public class ItemOpenBlock extends ItemBlock {
 
-	public ItemOpenBlock(int par1) {
-		super(par1);
+	public ItemOpenBlock(int id) {
+		super(id);
+	}
+
+	private static boolean canReplace(Block block, World world, int x, int y, int z) {
+		return block != null && block.isBlockReplaceable(world, x, y, z);
+	}
+	
+	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player, World world, int x, int y, int z) {
+		stack.stackSize--;
+	}
+	
+	protected boolean isStackValid(ItemStack stack, EntityPlayer player) {
+		return stack.stackSize >= 0;
 	}
 
 	/**
-	 * Replicates the super method, except we're not switching the metadata on
-	 * onBlockPlaced()
+	 * Replicates the super method, but with our own hooks
 	 */
 	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		int i1 = par3World.getBlockId(par4, par5, par6);
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		if (!isStackValid(stack, player)) return false;
 
-		if (i1 == Block.snow.blockID
-				&& (par3World.getBlockMetadata(par4, par5, par6) & 7) < 1) {
-			par7 = 1;
-		} else if (i1 != Block.vine.blockID
-				&& i1 != Block.tallGrass.blockID
-				&& i1 != Block.deadBush.blockID
-				&& (Block.blocksList[i1] == null || !Block.blocksList[i1].isBlockReplaceable(par3World, par4, par5, par6))) {
-			if (par7 == 0) {
-				--par5;
-			}
+		int blockId = world.getBlockId(x, y, z);
+		Block block = Block.blocksList[blockId];
 
-			if (par7 == 1) {
-				++par5;
-			}
+		if (blockId == Block.snow.blockID && (world.getBlockMetadata(x, y, z) & 7) < 1) side = 1;
 
-			if (par7 == 2) {
-				--par6;
-			}
+		ForgeDirection sideDir = ForgeDirection.getOrientation(side);
 
-			if (par7 == 3) {
-				++par6;
-			}
-
-			if (par7 == 4) {
-				--par4;
-			}
-
-			if (par7 == 5) {
-				++par4;
-			}
+		if (!canReplace(block, world, x, y, z)) {
+			x += sideDir.offsetX;
+			y += sideDir.offsetY;
+			z += sideDir.offsetZ;
 		}
-		if (par1ItemStack.stackSize == 0) {
-			return false;
-		} else if (!par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7, par1ItemStack)) {
-			return false;
-		} else if (par5 == 255
-				&& Block.blocksList[getBlockID()].blockMaterial.isSolid()) {
-			return false;
-		} else if (par3World.canPlaceEntityOnSide(getBlockID(), par4, par5, par6, false, par7, par2EntityPlayer, par1ItemStack)) {
-			Block block = Block.blocksList[getBlockID()];
-			int j1 = this.getMetadata(par1ItemStack.getItemDamage());
-			// int k1 = Block.blocksList[getBlockID()].onBlockPlaced(par3World,
-			// par4, par5, par6, par7, par8, par9, par10, j1);
 
-			OpenBlock openBlock = (OpenBlock)Block.blocksList[getBlockID()];
+		if (!player.canPlayerEdit(x, y, z, side, stack)) return false;
 
-			ForgeDirection direction = ForgeDirection.getOrientation(par7);
+		int ownBlockId = getBlockID();
+		Block ownBlock = Block.blocksList[ownBlockId];
+		if (y == 255 && ownBlock.blockMaterial.isSolid()) return false;
 
-			if (!openBlock.canPlaceBlockOnSide(par3World, par4, par5, par6, direction.getOpposite())) { return false; }
-			// dont replace it!
-			if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, par4, par5, par6, par7, par8, par9, par10, j1)) {
+		if (!world.canPlaceEntityOnSide(ownBlockId, x, y, z, false, side, player, stack)) return false;
 
-				openBlock.onBlockPlacedBy(par3World, par2EntityPlayer, par1ItemStack, par4, par5, par6, direction, par8, par9, par10, j1);
-				par3World.playSoundEffect(par4 + 0.5, par5 + 0.5, par6 + 0.5, block.stepSound.getPlaceSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
-				--par1ItemStack.stackSize;
-			}
+		// B: it's alread called in World.canPlaceEntityOnSide?
+		//if (ownBlock instanceof OpenBlock && !((OpenBlock)ownBlock).canPlaceBlockOnSide(world, x, y, z, sideDir.getOpposite())) return false;
 
-			return true;
-		} else {
-			return false;
-		}
+		int newMeta = getMetadata(stack.getItemDamage());
+		newMeta = ownBlock.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, newMeta);
+		
+		if (!placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, newMeta)) return false;
+
+		if (ownBlock instanceof OpenBlock)
+			((OpenBlock)ownBlock).onBlockPlacedBy(world, player, stack, x, y, z, sideDir, hitX, hitY, hitZ, newMeta);
+			
+		world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, ownBlock.stepSound.getPlaceSound(), (ownBlock.stepSound.getVolume() + 1.0F) / 2.0F, ownBlock.stepSound.getPitch() * 0.8F);
+		afterBlockPlaced(stack, player, world, x, y, z);
+
+		return true;
 	}
 }

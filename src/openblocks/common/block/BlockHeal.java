@@ -4,13 +4,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
+import openblocks.Config;
 import openblocks.common.tileentity.TileEntityHealBlock;
 
 public class BlockHeal extends OpenBlock {
 
 	public BlockHeal() {
-		super(OpenBlocks.Config.blockHealId, Material.ground);
+		super(Config.blockHealId, Material.ground);
 		setupBlock(this, "heal", TileEntityHealBlock.class);
 	}
 

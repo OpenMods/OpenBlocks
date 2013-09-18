@@ -6,13 +6,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
 
 public class ItemLuggage extends Item {
 
 	public ItemLuggage() {
-		super(OpenBlocks.Config.itemLuggageId);
+		super(Config.itemLuggageId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
