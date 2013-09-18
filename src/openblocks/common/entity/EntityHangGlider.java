@@ -1,5 +1,6 @@
 package openblocks.common.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,10 +34,16 @@ public class EntityHangGlider extends Entity implements
 	}
 
 	@Override
-	protected void entityInit() {}
+	protected void entityInit() {
+		this.dataWatcher.addObject(2, Byte.valueOf((byte)0));
+	}
 
 	public void despawnGlider() {
 		shouldDespawn = true;
+	}
+	
+	public boolean isPlayerOnGround() {
+		return this.dataWatcher.getWatchableObjectByte(2) == 1;
 	}
 
 	@Override
@@ -44,6 +51,9 @@ public class EntityHangGlider extends Entity implements
 		if (player == null) {
 			setDead();
 		} else {
+			if (!worldObj.isRemote) {
+				this.dataWatcher.updateObject(2, Byte.valueOf((byte)(player.onGround ? 1 : 0)));
+			}
 			ItemStack held = player.getHeldItem();
 			if (player.isDead || held == null || held.getItem() == null
 					|| held.getItem() != OpenBlocks.Items.hangGlider

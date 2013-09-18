@@ -31,7 +31,7 @@ public class EntityHangGliderRenderer extends Render {
 				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
 			GL11.glTranslatef((float)x, (float)y + 0.4f, (float)z);
 		} else {
-			if (glider.getPlayer() != null && glider.getPlayer().onGround) {
+			if (glider.getPlayer() != null && glider.isPlayerOnGround()) {
 				GL11.glTranslatef((float)x, (float)y - 0.2f, (float)z);
 			} else {
 				GL11.glTranslatef((float)x + (float)x2, (float)y - 0.2f, (float)z
@@ -43,7 +43,7 @@ public class EntityHangGliderRenderer extends Render {
 		GL11.glRotatef(180.0F - rotation, 0.0F, 1.0F, 0.0F);
 
 		/* Rotate glider backwards when the player hits the ground */
-		if (glider.getPlayer() != null && glider.getPlayer().onGround) {
+		if (glider.getPlayer() != null && glider.isPlayerOnGround()) {
 			GL11.glTranslatef(0f, 0f, 0.3f);
 			GL11.glRotatef(ONGROUND_ROTATION, 1f, 0f, 0f);
 			GL11.glScalef(0.4f, 1f, 0.4f);
