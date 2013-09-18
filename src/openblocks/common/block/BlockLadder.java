@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemOpenBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -18,10 +19,10 @@ public class BlockLadder extends BlockTrapDoor {
 	public static boolean disableValidation = false;
 
 	public BlockLadder() {
-		super(OpenBlocks.Config.blockLadderId, Material.wood);
+		super(Config.blockLadderId, Material.wood);
 		setHardness(3.0F);
 		setStepSound(soundWoodFootstep);
-		String modKey = OpenBlocks.proxy.getModId().toLowerCase();
+		String modKey = OpenBlocks.getModId().toLowerCase();
 		GameRegistry.registerBlock(this,ItemOpenBlock.class,modKey + "_ladder");
 		setUnlocalizedName(modKey + ".ladder");
 		setCreativeTab(OpenBlocks.tabOpenBlocks);

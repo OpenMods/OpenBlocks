@@ -5,13 +5,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class BlockVacuumHopper extends OpenBlock {
 
 	public BlockVacuumHopper() {
-		super(OpenBlocks.Config.blockVacuumHopperId, Material.ground);
+		super(Config.blockVacuumHopperId, Material.ground);
 		setupBlock(this, "vacuumhopper", TileEntityVacuumHopper.class);
 	}
 

@@ -12,6 +12,7 @@ import net.minecraft.util.Vec3Pool;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.utils.BlockUtils;
@@ -21,7 +22,7 @@ public class BlockTarget extends OpenBlock {
 	private int lastEntityHit = 0;
 
 	public BlockTarget() {
-		super(OpenBlocks.Config.blockTargetId, Material.ground);
+		super(Config.blockTargetId, Material.ground);
 		setupBlock(this, "target", TileEntityTarget.class);
 		setLightValue(0.3f);
 	}

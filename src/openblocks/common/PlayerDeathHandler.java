@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import openblocks.OpenBlocks;
+import openblocks.Config;
 import openblocks.common.tileentity.TileEntityGrave;
 
 public class PlayerDeathHandler {
@@ -38,7 +38,7 @@ public class PlayerDeathHandler {
 					boolean thisIsAir = world.isAirBlock(x, checkY, z);
 					if (!thisIsAir && aboveIsAir) {
 						checkY++;
-						world.setBlock(x, checkY, z, OpenBlocks.Config.blockGraveId, 0, 2);
+						world.setBlock(x, checkY, z, Config.blockGraveId, 0, 2);
 						TileEntity tile = world.getBlockTileEntity(x, checkY, z);
 						if (tile != null && tile instanceof TileEntityGrave) {
 							TileEntityGrave grave = (TileEntityGrave)tile;

@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import openblocks.Config;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
@@ -43,11 +44,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
-		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? OpenBlocks.Config.sprinklerBonemealFertizizeChance : OpenBlocks.Config.sprinklerFertilizeChance)) {
+		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance)) {
 			// http://goo.gl/RpQuk9
 			Random random = worldObj.rand;
-			int x = (random.nextInt(OpenBlocks.Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + xCoord;
-			int z = (random.nextInt(OpenBlocks.Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + zCoord;
+			int x = (random.nextInt(Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + xCoord;
+			int z = (random.nextInt(Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + zCoord;
 			/* What? Okay think about this.
 			 * i = -1 y = yCoord - 1
 			 * i = 0 y = yCoord - 1
