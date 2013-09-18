@@ -94,9 +94,9 @@ public class EntityAICollectItem extends EntityAIBase {
 				if (preEatSize != stack.stackSize) {
 					if (luggage.lastSound > 15) {
 						if (stack.getItem() instanceof ItemFood) {
-							luggage.playSound("openblocks.slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
+							luggage.playSound("openblocks:slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						} else {
-							luggage.playSound("openblocks.chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
+							luggage.playSound("openblocks:chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						}
 						luggage.lastSound = 0;
 					}
