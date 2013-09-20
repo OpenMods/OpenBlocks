@@ -115,8 +115,7 @@ public class ModelFan extends ModelBase {
 	}
 
 	public void setRotationAngles(TileEntity te, float f) {
-		fan.rotateAngleZ = (float)Math.toRadians(Minecraft.getMinecraft().getSystemTime() % 360);
-		
+		fan.rotateAngleZ = (float)Math.toRadians(Minecraft.getSystemTime() % 360);
 	}
 
 }

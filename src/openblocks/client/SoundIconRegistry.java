@@ -253,9 +253,9 @@ public class SoundIconRegistry {
 		ambient.add("thunder", genericIcon);
 		root.add("ambient", new SkipPath(ambient));
 
-		IDrawableIcon pick = itemIcon("diamond_pickaxe");
+		IDrawableIcon shovel = itemIcon("diamond_shovel");
 		IDrawableIcon boots = itemIcon("diamond_boots");
-		addBlocks(root.add("dig", new MappedCategory()), pick, frameYellow);
+		addBlocks(root.add("dig", new MappedCategory()), shovel, frameYellow);
 		addBlocks(root.add("step", new MappedCategory()), boots, frameGreen);
 
 		root.add("fire", makeFramedBlockIcon("fire_layer_0", frameRed));

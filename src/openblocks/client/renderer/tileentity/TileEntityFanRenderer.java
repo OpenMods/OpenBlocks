@@ -1,14 +1,12 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelFan;
 import openblocks.common.tileentity.TileEntityFan;
 
 import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 
 public class TileEntityFanRenderer extends TileEntitySpecialRenderer {
 

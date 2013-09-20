@@ -16,10 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
-import openblocks.common.tileentity.TileEntityCannon.Keys;
 import openblocks.integration.ModuleBuildCraft;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableFlags;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.common.Loader;
 

@@ -3,6 +3,7 @@ package openblocks.client;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
@@ -116,7 +117,8 @@ public class SoundEventsManager {
 	private Integer renderNotPumpkin;
 	private static final ResourceLocation notPumpkin = new ResourceLocation("openblocks:textures/misc/glasses_obsidian.png");
 
-	private void dimWorld(TextureManager tex, double level) {
+	private void dimWorld(TextureManager tex, Minecraft mc) {
+		final double level = Config.sonicGlassesOpacity;
 		if (level <= 0) return;
 
 		if (level >= 1 && !Config.sonicGlassesUseTexture) {
@@ -149,14 +151,17 @@ public class SoundEventsManager {
 			Tessellator tes = new Tessellator();
 			tes.startDrawingQuads();
 
+			final double maxU = (double)mc.displayWidth / 1024;
+			final double maxV = (double)mc.displayHeight / 1024;
+
 			if (Config.sonicGlassesUseTexture) {
 				tes.setColorRGBA_F(1, 1, 1, (float)level);
 
 				tex.func_110577_a(notPumpkin);
 				tes.addVertexWithUV(-1, -1, 0, 0, 0);
-				tes.addVertexWithUV(+1, -1, 0, 1, 0);
-				tes.addVertexWithUV(+1, +1, 0, 1, 1);
-				tes.addVertexWithUV(-1, +1, 0, 0, 1);
+				tes.addVertexWithUV(+1, -1, 0, maxU, 0);
+				tes.addVertexWithUV(+1, +1, 0, maxU, maxV);
+				tes.addVertexWithUV(-1, +1, 0, 0, maxV);
 
 				tes.draw();
 			} else {
@@ -197,13 +202,16 @@ public class SoundEventsManager {
 	}
 
 	public void renderEvents(RenderWorldLastEvent evt) {
-		final Entity rve = evt.context.mc.renderViewEntity;
+		final Minecraft mc = evt.context.mc;
+
+		if (mc.gameSettings.thirdPersonView != 0) return;
+		final TextureManager tex = evt.context.renderEngine;
+		final Entity rve = mc.renderViewEntity;
 		if (!isEntityWearingGlasses(rve)) return;
 
 		GL11.glDisable(GL11.GL_FOG);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-		final TextureManager tex = evt.context.renderEngine;
-		dimWorld(tex, Config.sonicGlassesOpacity);
+		dimWorld(tex, mc);
 
 		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX)
 				* evt.partialTicks;

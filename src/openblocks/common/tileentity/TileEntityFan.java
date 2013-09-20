@@ -3,7 +3,6 @@ package openblocks.common.tileentity;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +13,6 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFloat;
-import openblocks.utils.BlockUtils;
 
 public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 	
@@ -30,6 +28,7 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 	
 	@Override
 	public void updateEntity() {
+		@SuppressWarnings("unchecked")
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
 		Vec3 blockPos = getBlockPosition();
 		for (Entity entity : entities) {
@@ -38,15 +37,15 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 			double dX = entityPos.xCoord - blockPos.xCoord;
 			double dY = entityPos.yCoord - blockPos.yCoord;
 			double dZ = entityPos.zCoord - blockPos.zCoord;
-			double dist = (double)MathHelper.sqrt_double(dX * dX + dZ * dZ);
+			double dist = MathHelper.sqrt_double(dX * dX + dZ * dZ);
 			if (isLyingInCone(entityPos, blockPos, basePos, 1.3f) || dist < 1.5) {
 				double yaw = Math.atan2(dZ, dX) - (Math.PI / 2);
 				float pitch = (float)(-(Math.atan2(dY, dist)));
 				double f1 = MathHelper.cos((float)-yaw);
 				double f2 = MathHelper.sin((float)-yaw);
-				double f3 = -MathHelper.cos((float)-pitch);
-				double f4 = MathHelper.sin((float)-pitch);
-				Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool((double)(f2 * f3), (double)f4, (double)(f1 * f3));
+				double f3 = -MathHelper.cos(-pitch);
+				double f4 = MathHelper.sin(-pitch);
+				Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(f2 * f3, f4, f1 * f3);
 				double force = 1.0 - (dist / 10.0);
 				entity.motionX -= force * directionVec.xCoord * 0.05;
 				entity.motionZ -= force * directionVec.zCoord * 0.05;
@@ -69,10 +68,9 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 
 	public AxisAlignedBB getEntitySearchBoundingBox() {
 		AxisAlignedBB boundingBox = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord - 4, zCoord, xCoord + 1, yCoord + 5, zCoord + 1);
-		if (true) {
-			return boundingBox.expand(10.0, 10.0, 10.0);
-		}
+		return boundingBox.expand(10.0, 10.0, 10.0);
 		
+		/* Dead code or WIP?
 		double angle = Math.toRadians(getAngle());
 		double spread = Math.toRadians(40);
 		System.out.println(String.format("%s,%s,%s", xCoord, yCoord, zCoord));
@@ -84,6 +82,7 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 		boundingBox = boundingBox.addCoord(Math.cos(angle + spread) * range, 0, Math.sin(angle + spread) * range);
 		System.out.println("---");
 		return boundingBox;
+		*/
 	}
 
 	public boolean isLyingInCone(Vec3 point, Vec3 t, Vec3 b, float aperture) {
