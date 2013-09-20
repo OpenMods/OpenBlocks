@@ -17,6 +17,7 @@ import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityBigButton;
 import openblocks.common.tileentity.TileEntityCannon;
+import openblocks.common.tileentity.TileEntityFan;
 import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityLightbox;
@@ -72,6 +73,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityBigButton teButton = new TileEntityBigButton();
 		inventoryTileEntities.put(OpenBlocks.Blocks.bigButton, teButton);
+		
+		TileEntityFan teFan = new TileEntityFan();
+		inventoryTileEntities.put(OpenBlocks.Blocks.fan, teFan);
 	}
 
 	@Override

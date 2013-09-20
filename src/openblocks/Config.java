@@ -96,6 +96,9 @@ public class Config {
 
 	@BlockId(description = "The id of the imaginary block")
 	public static int blockImaginaryId = 2556;
+
+	@BlockId(description = "The id of the fan block")
+	public static int blockFanId = 2556;
 	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -120,6 +123,7 @@ public class Config {
 	
 	@ItemId(description = "The id of the serious admin glasses item")
 	public static int itemGlassesSerious = 14982;
+
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -336,6 +340,11 @@ public class Config {
 			}
 			
 			recipeList.add(new CrayonMixingRecipe());
+		}
+		
+		if (Config.canRegisterBlock(blockFanId)) {
+			OpenBlocks.Blocks.fan = new BlockFan();
+			// TODO add fan recipe
 		}
 	
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.

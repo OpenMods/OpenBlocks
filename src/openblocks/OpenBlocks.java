@@ -54,6 +54,7 @@ public class OpenBlocks {
 		public static BlockSponge sponge;
 		public static BlockBigButton bigButton;
 		public static BlockImaginary imaginary;
+		public static BlockFan fan;
 	}
 
 	public static class Items {

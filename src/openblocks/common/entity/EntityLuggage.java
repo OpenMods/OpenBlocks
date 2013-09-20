@@ -13,6 +13,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openblocks.utils.BlockUtils;
+import openblocks.utils.InventoryUtils;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -103,7 +104,7 @@ public class EntityLuggage extends EntityTameable implements
 	}
 
 	public boolean canConsumeStackPartially(ItemStack stack) {
-		return BlockUtils.testInventoryInsertion(inventory, stack) > 0;
+		return InventoryUtils.testInventoryInsertion(inventory, stack) > 0;
 	}
 
 	@Override

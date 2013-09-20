@@ -8,12 +8,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.tileentity.TileEntityCannon.Keys;
 import openblocks.integration.ModuleBuildCraft;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableFlags;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.common.Loader;
 
@@ -31,23 +37,27 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 
 		@SuppressWarnings("unchecked")
 		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, getBB().expand(3, 3, 3));
-
+		
 		for(EntityItem item : surroundingItems) {
-
+			
 			if (!item.isDead) {
-
-				double x = (xCoord + 0.5D - item.posX) / 15.0D;
-				double y = (yCoord + 0.5D - item.posY) / 15.0D;
-				double z = (zCoord + 0.5D - item.posZ) / 15.0D;
-
-				double distance = Math.sqrt(x * x + y * y + z * z);
-				double var11 = 1.0D - distance;
-
-				if (var11 > 0.0D) {
-					var11 *= var11;
-					item.motionX += x / distance * var11 * 0.05;
-					item.motionY += y / distance * var11 * 0.2;
-					item.motionZ += z / distance * var11 * 0.05;
+				
+				ItemStack stack = item.getEntityItem();
+				if (InventoryUtils.testInventoryInsertion(this, stack) > 0) {
+					
+					double x = (xCoord + 0.5D - item.posX) / 15.0D;
+					double y = (yCoord + 0.5D - item.posY) / 15.0D;
+					double z = (zCoord + 0.5D - item.posZ) / 15.0D;
+	
+					double distance = Math.sqrt(x * x + y * y + z * z);
+					double var11 = 1.0D - distance;
+	
+					if (var11 > 0.0D) {
+						var11 *= var11;
+						item.motionX += x / distance * var11 * 0.05;
+						item.motionY += y / distance * var11 * 0.2;
+						item.motionZ += z / distance * var11 * 0.05;
+					}
 				}
 			}
 		}
@@ -60,6 +70,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
 				if (slotId > -1) {
 					ItemStack nextStack = getStackInSlot(slotId);
+					int previousSize = nextStack.stackSize;
 					nextStack = nextStack.copy();
 					if (tileOnSurface instanceof IInventory) {
 						InventoryUtils.insertItemIntoInventory((IInventory) tileOnSurface, nextStack);
@@ -74,6 +85,9 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 							setInventorySlotContents(slotId, nextStack);
 						} else {
 							setInventorySlotContents(slotId, null);
+						}
+						if (nextStack.stackSize < previousSize) {
+							worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 						}
 					}
 				}
@@ -184,6 +198,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 			EntityItem item = (EntityItem) entity;
 			ItemStack stack = item.getEntityItem().copy();
 			InventoryUtils.insertItemIntoInventory(inventory, stack);
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			if (stack.stackSize == 0) {
 				item.setDead();
 			}else {
@@ -192,6 +207,24 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 		}
 	}
 
+	@Override
+	public Packet getDescriptionPacket() {
+		Packet132TileEntityData packet = new Packet132TileEntityData();
+		packet.actionType = 0;
+		packet.xPosition = xCoord;
+		packet.yPosition = yCoord;
+		packet.zPosition = zCoord;
+		NBTTagCompound nbt = new NBTTagCompound();
+		writeToNBT(nbt);
+		packet.customParam1 = nbt;
+		return packet;
+	}
+
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		readFromNBT(pkt.customParam1);
+	}
+	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
