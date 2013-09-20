@@ -23,6 +23,7 @@ tile.openblocks.vacuumhopper.name=Vakuumtrichter
 tile.openblocks.sponge.name=Schwamm
 tile.openblocks.cannon.name=Item-Kanone
 tile.openblocks.bigbutton.name=Großer Knopf
+tile.openblocks.fan.name=Ventilator
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
