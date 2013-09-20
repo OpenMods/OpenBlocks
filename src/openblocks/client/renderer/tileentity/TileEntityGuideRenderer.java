@@ -64,7 +64,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		t.startDrawingQuads();
 		t.setColorRGBA(255, 255, 255, 100);
 		t.setBrightness(200);
-		func_110628_a(texture);
+		bindTexture(texture);
 		Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
 		renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
 		renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);

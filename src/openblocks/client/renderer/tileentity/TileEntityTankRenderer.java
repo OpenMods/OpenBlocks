@@ -112,7 +112,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				Fluid fluid = fluidStack.getFluid();
 
 				Icon texture = fluid.getStillIcon();
-				func_110628_a(getFluidSheet(fluid));
+				bindTexture(getFluidSheet(fluid));
 
 				Tessellator t = Tessellator.instance;
 

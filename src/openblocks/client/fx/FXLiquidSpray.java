@@ -46,7 +46,7 @@ public class FXLiquidSpray extends EntityFX {
 		motionZ = vecZ / 2;
 
 		Fluid fluid = liquid.getFluid();
-		func_110125_a(fluid.getStillIcon());
+		setParticleIcon(fluid.getStillIcon());
 	}
 
 	@Override

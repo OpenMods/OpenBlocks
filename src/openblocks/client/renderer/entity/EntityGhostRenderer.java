@@ -38,7 +38,7 @@ public class EntityGhostRenderer extends RenderLiving {
 	}
 
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) {
+	protected ResourceLocation getEntityTexture {
 		if(!(entity instanceof EntityGhost)) {
 			/* return steve */
 			return AbstractClientPlayer.field_110314_b;

@@ -32,7 +32,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 			GL11.glTranslatef(0f, -0.2f, -0.7f);
 		}
 		// GL11.glTranslatef(0, 0, -0.3F);
-		func_110628_a(textureFlagpole);
+		bindTexture(textureFlagpole);
 		model.render(tileentity, f);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-90, 0, 1, 0);
@@ -45,7 +45,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 
 	public void renderFlag(TileEntityFlag flag) {
 		Tessellator tessellator = Tessellator.instance;
-		func_110628_a(textureFlag);
+		bindTexture(textureFlag);
 		int color = flag.getColor();
 
 		float r = (float)((color >> 16) & 0xFF) / 255;
