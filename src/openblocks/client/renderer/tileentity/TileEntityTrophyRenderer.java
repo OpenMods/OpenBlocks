@@ -46,7 +46,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glTranslated(d0, d1, d2);
 
 				//TODO: fix
-				func_110628_a(TextureMap.field_110575_b);
+				bindTexture(TextureMap.locationBlocksTexture);
 				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8, OpenBlocks.Blocks.trophy, null);
 				GL11.glPopMatrix();
 
