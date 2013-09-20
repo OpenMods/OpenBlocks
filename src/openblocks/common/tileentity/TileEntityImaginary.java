@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.tileentity.TileEntity;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginationGlasses;
 import cpw.mods.fml.relauncher.Side;

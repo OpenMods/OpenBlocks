@@ -5,12 +5,10 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
@@ -19,10 +17,8 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
-import openblocks.common.tileentity.TileEntityBigButton;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,7 +29,7 @@ public class BlockImaginary extends OpenBlock {
 
 	public BlockImaginary() {
 		super(Config.blockImaginaryId, Material.glass);
-		setupBlock(this, "imaginary", TileEntityImaginary.class);
+		setupBlock(this, "imaginary", TileEntityImaginary.class, ItemImaginary.class);
 		setHardness(5);
 	}
 
@@ -105,8 +101,7 @@ public class BlockImaginary extends OpenBlock {
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
 		if (te != null) {
-			TileEntityImaginary img = (TileEntityImaginary)te;
-			return ItemImaginary.setupValues(img.color, new ItemStack(this));
+			return ItemImaginary.setupValues(te.color, new ItemStack(this));
 		}
 		return null;
 	}

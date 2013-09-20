@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import openblocks.Config;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.utils.ColorUtils;
 import openblocks.utils.ItemUtils;
@@ -19,7 +20,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemImaginary extends ItemOpenBlock {
 
-	private final static int DEFAULT_USE_COUNT = 10;
 	public static final String TAG_COLOR = "Color";
 	public static final String TAG_USES = "Uses";
 
@@ -42,7 +42,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	public static ItemStack setupValues(Integer color, ItemStack result) {
-		return setupValues(color, result, DEFAULT_USE_COUNT);
+		return setupValues(color, result, Config.imaginaryItemUseCount);
 	}
 
 	public static ItemStack setupValues(Integer color, ItemStack result, int uses) {
