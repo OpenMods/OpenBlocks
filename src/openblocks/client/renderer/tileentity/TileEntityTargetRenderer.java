@@ -24,7 +24,7 @@ public class TileEntityTargetRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-BlockUtils.getRotationFromDirection(target.getRotation()), 0, 1, 0);
-		func_110628_a(texture);
+		bindTexture(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();

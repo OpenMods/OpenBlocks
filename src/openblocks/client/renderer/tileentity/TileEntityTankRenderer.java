@@ -24,7 +24,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
-		func_110628_a(TextureMap.field_110575_b);
+		bindTexture(TextureMap.locationBlocksTexture);
 		TileEntityTank tankTile = (TileEntityTank)tileentity;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
@@ -112,7 +112,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				Fluid fluid = fluidStack.getFluid();
 
 				Icon texture = fluid.getStillIcon();
-				func_110628_a(getFluidSheet(fluid));
+				bindTexture(getFluidSheet(fluid));
 
 				Tessellator t = Tessellator.instance;
 
@@ -203,11 +203,11 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 	public static ResourceLocation getFluidSheet(FluidStack liquid) {
 		if (liquid == null)
-			return TextureMap.field_110575_b;
+			return TextureMap.locationBlocksTexture;
 		return getFluidSheet(liquid.getFluid());
 	}
 
 	public static ResourceLocation getFluidSheet(Fluid liquid) {
-		return TextureMap.field_110575_b;
+		return TextureMap.locationBlocksTexture;
 	}
 }

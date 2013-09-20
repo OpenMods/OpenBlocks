@@ -105,7 +105,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 		if (te.visibility <= 0)
 			return;
 		
-		func_110628_a(TextureMap.field_110575_b);
+		bindTexture(TextureMap.locationBlocksTexture);
 		
 		int displayList;
 		if (!te.isPencil()) {

@@ -12,20 +12,20 @@ public final class CompatibilityUtils {
 
 	/* Bugger me this is ugly, Needs testing! - NC */
 	public static void sendChatToPlayer(EntityPlayer player, String text) {
-		player.sendChatToPlayer(ChatMessageComponent.func_111077_e(text));
+		player.sendChatToPlayer(ChatMessageComponent.createFromText(text));
 	}
 
 	public static float getEntityHealth(EntityLivingBase entity) {
-		return entity.func_110143_aJ();
+		return entity.getHealth();
 	}
 
 	public static float getEntityMaxHealth(EntityLivingBase entity) {
-		return entity.func_110138_aP();
+		return entity.getMaxHealth();
 	}
 
 	public static void bindTextureToClient(String texture) {
 		if(Minecraft.getMinecraft() != null) {
-			Minecraft.getMinecraft().renderEngine.func_110577_a(getResourceLocation(texture));
+			Minecraft.getMinecraft().renderEngine.bindTexture(getResourceLocation(texture));
 		} else {
 			System.out.println("[OpenModsMonitor] WARNING: Binding texture to null client.");
 		}
@@ -33,7 +33,7 @@ public final class CompatibilityUtils {
 
 	public static void bindIndexedTextureToClient(int index) {
 		if(Minecraft.getMinecraft() != null) {
-			Minecraft.getMinecraft().renderEngine.func_110577_a(Minecraft.getMinecraft().renderEngine.func_130087_a(index));
+			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getResourceLocation(index));
 		} else {
 			System.out.println("[OpenModsMonitor] WARNING: Binding indexed texture to null client.");
 		}

@@ -22,7 +22,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslated(0.5, 1.0, 0.5);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-		func_110628_a(texture);
+		bindTexture(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
 		if (cannon.renderLine) {
