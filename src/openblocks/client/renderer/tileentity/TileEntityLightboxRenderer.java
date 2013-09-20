@@ -25,7 +25,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		GL11.glPushMatrix();
-		func_110628_a(TextureMap.field_110575_b);
+		bindTexture(TextureMap.locationBlocksTexture);
 
 		// move to the middle of the block
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);

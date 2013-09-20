@@ -16,16 +16,16 @@ public final class CompatibilityUtils {
 	}
 
 	public static float getEntityHealth(EntityLivingBase entity) {
-		return entity.func_110143_aJ();
+		return entity.getHealth();
 	}
 
 	public static float getEntityMaxHealth(EntityLivingBase entity) {
-		return entity.func_110138_aP();
+		return entity.getMaxHealth();
 	}
 
 	public static void bindTextureToClient(String texture) {
 		if(Minecraft.getMinecraft() != null) {
-			Minecraft.getMinecraft().renderEngine.func_110577_a(getResourceLocation(texture));
+			Minecraft.getMinecraft().renderEngine.bindTexture(getResourceLocation(texture));
 		} else {
 			System.out.println("[OpenModsMonitor] WARNING: Binding texture to null client.");
 		}
@@ -33,7 +33,7 @@ public final class CompatibilityUtils {
 
 	public static void bindIndexedTextureToClient(int index) {
 		if(Minecraft.getMinecraft() != null) {
-			Minecraft.getMinecraft().renderEngine.func_110577_a(Minecraft.getMinecraft().renderEngine.getResourceLocation(index));
+			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getResourceLocation(index));
 		} else {
 			System.out.println("[OpenModsMonitor] WARNING: Binding indexed texture to null client.");
 		}

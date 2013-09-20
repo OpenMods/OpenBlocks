@@ -152,7 +152,7 @@ public class SoundEventsManager {
 			if (Config.sonicGlassesUseTexture) {
 				tes.setColorRGBA_F(1, 1, 1, (float)level);
 
-				tex.func_110577_a(notPumpkin);
+				tex.bindTexture(notPumpkin);
 				tes.addVertexWithUV(-1, -1, 0, 0, 0);
 				tes.addVertexWithUV(+1, -1, 0, 1, 0);
 				tes.addVertexWithUV(+1, +1, 0, 1, 1);

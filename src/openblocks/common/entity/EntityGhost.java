@@ -97,7 +97,7 @@ public class EntityGhost extends EntityMob implements
 	public EntityGhost(World world) {
 		super(world);
 		this.setSize(0.6F, 1.8F);
-		setEntityHealth( CompatibilityUtils.getEntityMaxHealth(this));
+		setHealth( CompatibilityUtils.getEntityMaxHealth(this));
 		setAIMoveSpeed(0.5F);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		// this.tasks.addTask(1, new EntityAIDragPlayer(this, 8.0F));

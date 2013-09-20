@@ -87,7 +87,7 @@ public class EntityHangGliderRenderer extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture {
+	protected ResourceLocation getEntityTexture (Entity entity){
 		return CompatibilityUtils.getResourceLocation("textures/models/hangglider.png");
 	}
 }

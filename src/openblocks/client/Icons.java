@@ -19,10 +19,10 @@ public class Icons {
 	private static void bindIconSheet(TextureManager tex, int type) {
 		switch (type) {
 			case ICON_TYPE_BLOCK:
-				tex.func_110577_a(TextureMap.field_110575_b);
+				tex.bindTexture(TextureMap.locationBlocksTexture);
 				break;
 			case ICON_TYPE_ITEM:
-				tex.func_110577_a(TextureMap.field_110576_c);
+				tex.bindTexture(TextureMap.locationItemsTexture);
 				break;
 			default:
 				Log.warn("Unknown icon sheet: %d", type);
