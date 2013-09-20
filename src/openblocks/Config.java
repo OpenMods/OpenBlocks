@@ -352,7 +352,8 @@ public class Config {
 		
 		if (Config.canRegisterBlock(blockFanId)) {
 			OpenBlocks.Blocks.fan = new BlockFan();
-			// TODO add fan recipe
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.fan), new Object[] { "f", "i", "s", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab) }));
+			
 		}
 	
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
