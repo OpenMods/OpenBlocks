@@ -18,7 +18,7 @@ public class BlockBigButton extends OpenBlock {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return (side != ForgeDirection.UP && side != ForgeDirection.DOWN) && super.canPlaceBlockOnSide(world, x, y, z, side);
+		return (side != ForgeDirection.UP && side != ForgeDirection.DOWN) && isNeighborBlockSolid(world, x, y, z, side);
 	}
 
 	@Override

@@ -49,19 +49,8 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return true;
-	}
-
-	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
-	}
-
-	@Override
-	public void onBlockHarvested(World par1World, int par2, int par3, int par4, int par5, EntityPlayer par6EntityPlayer) {
-		// System.out.println(getTileEntity(par1World, par2, par3, par3,
-		// TileEntityTank.class));
 	}
 
 	@Override

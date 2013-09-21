@@ -54,6 +54,10 @@ public class TileEntityTarget extends OpenTileEntity implements
 
 	private void onRedstoneChanged() {
 		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		
+		if (isPowered == isEnabled())
+			return;
+		
 		if (!isPowered) {
 			@SuppressWarnings("unchecked")
 			List<EntityArrow> arrows = worldObj.getEntitiesWithinAABB(EntityArrow.class, AxisAlignedBB.getAABBPool().getAABB(xCoord - 0.1, yCoord - 0.1, zCoord - 0.1, xCoord + 1.1, yCoord + 1.1, zCoord + 1.1));

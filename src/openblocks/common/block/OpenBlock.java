@@ -1,11 +1,5 @@
 package openblocks.common.block;
 
-import static net.minecraftforge.common.ForgeDirection.DOWN;
-import static net.minecraftforge.common.ForgeDirection.EAST;
-import static net.minecraftforge.common.ForgeDirection.NORTH;
-import static net.minecraftforge.common.ForgeDirection.SOUTH;
-import static net.minecraftforge.common.ForgeDirection.UP;
-import static net.minecraftforge.common.ForgeDirection.WEST;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -90,30 +84,16 @@ public abstract class OpenBlock extends BlockContainer {
 		}
 	}
 
-	/**
-	 * Can we place the block on this
-	 *
-	 * @param world
-	 * @param x
-	 *            of the block we're placing
-	 * @param y
-	 *            of the block we're placing
-	 * @param z
-	 *            of the block we're placing
-	 * @param side
-	 *            the side of the block that's attached to the other block
-	 * @return
-	 */
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public final static boolean isNeighborBlockSolid(World world, int x, int y, int z, ForgeDirection side) {
 		x += side.offsetX;
 		y += side.offsetY;
 		z += side.offsetZ;
 		return world.isBlockSolidOnSide(x, y, z, side.getOpposite());
 	}
 
-	public boolean canPlaceBlockOnSides(World world, int x, int y, int z, ForgeDirection... sides) {
+	public final static boolean areNeighborBlocksSolid(World world, int x, int y, int z, ForgeDirection... sides) {
 		for (ForgeDirection side : sides) {
-			if (canPlaceBlockOnSide(world, x, y, z, side)) { return true; }
+			if (isNeighborBlockSolid(world, x, y, z, side)) { return true; }
 		}
 		return false;
 	}
@@ -128,7 +108,7 @@ public abstract class OpenBlock extends BlockContainer {
 		}
 		if (te != null && te instanceof ISurfaceAttachment) {
 			ForgeDirection direction = ((ISurfaceAttachment)te).getSurfaceDirection();
-			if (!canPlaceBlockOnSide(world, x, y, z, direction)) {
+			if (!isNeighborBlockSolid(world, x, y, z, direction)) {
 				dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 				world.setBlockToAir(x, y, z);
 			}
@@ -184,11 +164,6 @@ public abstract class OpenBlock extends BlockContainer {
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
-	@Override
-	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return canPlaceBlockOnSides(world, x, y, z, EAST, WEST, SOUTH, NORTH, UP, DOWN);
-	}
-
 	@SuppressWarnings("unchecked")
 	public <U> U getTileEntity(IBlockAccess world, int x, int y, int z, Class<U> T) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -201,5 +176,18 @@ public abstract class OpenBlock extends BlockContainer {
 		if (te != null) {
 			te.onBlockPlacedBy(player, side, stack, hitX, hitY, hitZ);
 		}
+	}
+	
+	@Override
+	public final boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
+		return canPlaceBlockOnSide(world, x, y, z, ForgeDirection.getOrientation(side).getOpposite());
+	}
+	
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+		return canPlaceBlockAt(world, x, y, z); //default to vanilla rules
+	}
+	
+	protected boolean canPlaceOnlyOnGround(World world, int x, int y, int z, ForgeDirection side) {
+		return side == ForgeDirection.DOWN && isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
 	}
 }

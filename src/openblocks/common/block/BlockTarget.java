@@ -177,6 +177,6 @@ public class BlockTarget extends OpenBlock {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return super.canPlaceBlockOnSide(world, x, y, z, ForgeDirection.DOWN);
+		return canPlaceOnlyOnGround(world, x, y, z, side);
 	}
 }

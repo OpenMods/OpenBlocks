@@ -127,4 +127,10 @@ public class BlockLightbox extends OpenBlock {
 		if (side == 2 || side == 3) { return super.getIcon(side, meta); }
 		return sideIcon;
 	}
+	
+	@Override
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+		return isNeighborBlockSolid(world, x, y, z, side);
+	}
+
 }
