@@ -13,7 +13,7 @@ public class SoundLoader {
 	@ForgeSubscribe
 	public void loadingSounds(SoundLoadEvent event) {
 		for (String soundFile : soundFiles) {
-			event.manager.soundPoolSounds.addSound("openblocks:" + soundFile);
+			event.manager.addSound("openblocks:" + soundFile);
 		}
 	}
 

@@ -22,11 +22,6 @@ public class MetaGeneric implements IMetaItem {
 	private Icon icon;
 	private Object[][] recipes;
 
-	public MetaGeneric(String name, Object... recipe) {
-		this.name = name;
-		this.recipes = new Object[][] { recipe };
-	}
-
 	public MetaGeneric(String name, Object[]... recipes) {
 		this.name = name;
 		this.recipes = recipes;
