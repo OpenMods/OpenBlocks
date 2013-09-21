@@ -144,7 +144,7 @@ public class Config {
 	public static double sonicGlassesOpacity = 0.95;
 	public static boolean sonicGlassesUseTexture = true;
 	public static float imaginaryFadingSpeed = 0.0075f;
-	public static int imaginaryItemUseCount = 10;
+	public static float imaginaryItemUseCount = 10;
 	
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -259,7 +259,7 @@ public class Config {
 		imaginaryFadingSpeed = (float)prop.getDouble(imaginaryFadingSpeed);
 		
 		prop = configFile.get("imaginary", "numberOfUses", imaginaryItemUseCount, "Number of newly created crayon/pencil uses");
-		imaginaryItemUseCount = prop.getInt(imaginaryItemUseCount);
+		imaginaryItemUseCount = (float)prop.getDouble(imaginaryItemUseCount);
 	}
 
 	public static void register() {

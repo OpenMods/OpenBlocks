@@ -13,6 +13,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -24,20 +25,26 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockImaginary extends OpenBlock {
 
-	public Icon texturePencil;
-	public Icon textureCrayon;
+	public Icon texturePencilBlock;
+	public Icon textureCrayonBlock;
+
+	public Icon texturePencilPanel;
+	public Icon textureCrayonPanel;
+
+	public Icon texturePencilHalfPanel;
+	public Icon textureCrayonHalfPanel;
 
 	public BlockImaginary() {
 		super(Config.blockImaginaryId, Material.glass);
 		setupBlock(this, "imaginary", TileEntityImaginary.class, ItemImaginary.class);
-		setHardness(5);
+		setHardness(0.3f);
 	}
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		if (world.isRemote) {
 			TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
-			if (te != null && te.is(Property.SELECTABLE)) return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 1, z + 1);
+			if (te != null && te.is(Property.SELECTABLE)) return te.getSelectionBox();
 		}
 
 		return AxisAlignedBB.getAABBPool().getAABB(0, 0, 0, 0, 0, 0);
@@ -52,10 +59,21 @@ public class BlockImaginary extends OpenBlock {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB region, List result, Entity entity) {
 		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
-		if (te != null && te.is(Property.SOLID, entity)) {
-			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 1, z + 1);
+		if (te != null && te.is(Property.SOLID, entity)) te.addCollisions(region, result);
+	}
 
-			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z) {
+		TileEntityImaginary te = getTileEntity(access, x, y, z, TileEntityImaginary.class);
+		if (te != null && te.is(Property.SELECTABLE)) {
+			AxisAlignedBB aabb = te.getBlockBounds();
+			minX = aabb.minX;
+			minY = aabb.minY;
+			minZ = aabb.minZ;
+
+			maxX = aabb.maxX;
+			maxY = aabb.maxY;
+			maxZ = aabb.maxZ;
 		}
 	}
 
@@ -72,9 +90,14 @@ public class BlockImaginary extends OpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
-		super.registerIcons(registry);
-		blockIcon = texturePencil = registry.registerIcon("openblocks:pencil");
-		textureCrayon = registry.registerIcon("openblocks:crayon");
+		blockIcon = texturePencilBlock = registry.registerIcon("openblocks:pencilBlock");
+		textureCrayonBlock = registry.registerIcon("openblocks:crayonBlock");
+
+		texturePencilPanel = registry.registerIcon("openblocks:pencilPanel");
+		textureCrayonPanel = registry.registerIcon("openblocks:crayonPanel");
+
+		texturePencilHalfPanel = registry.registerIcon("openblocks:pencilHalfPanel");
+		textureCrayonHalfPanel = registry.registerIcon("openblocks:crayonHalfPanel");
 	}
 
 	@Override
@@ -100,9 +123,7 @@ public class BlockImaginary extends OpenBlock {
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
-		if (te != null) {
-			return ItemImaginary.setupValues(te.color, new ItemStack(this));
-		}
+		if (te != null) { return ItemImaginary.setupValues(te.color, new ItemStack(this)); }
 		return null;
 	}
 }
