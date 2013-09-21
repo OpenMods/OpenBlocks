@@ -4,7 +4,7 @@ openblocks.gui.sprinkler=Rasensprenger
 openblocks.gui.vacuumhopper=Vakuumtrichter
 openblocks.gui.bigbutton=Großer Knopf
 
-openblocks.misc.uses=Nutzt: %d
+openblocks.misc.uses=Nutzt: %.2f
 openblocks.misc.color=Farbe: %06X
 
 tile.openblocks.elevator.name=Fahrstuhl
