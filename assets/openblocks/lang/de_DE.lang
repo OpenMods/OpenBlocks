@@ -6,6 +6,11 @@ openblocks.gui.bigbutton=Großer Knopf
 
 openblocks.misc.uses=Nutzt: %.2f
 openblocks.misc.color=Farbe: %06X
+openblocks.misc.mode=Platzierungs-Modus: %s
+openblocks.misc.mode.block=Block
+openblocks.misc.mode.panel=Platte
+openblocks.misc.mode.half_panel=Halbhohe Platte
+openblocks.misc.mode.stairs=Treppe
 
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.heal.name=Heiler
