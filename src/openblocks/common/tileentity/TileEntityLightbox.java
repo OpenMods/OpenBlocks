@@ -167,13 +167,13 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 		packet.zPosition = zCoord;
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNetwork(nbt);
-		packet.customParam1 = nbt;
+		packet.data = nbt;
 		return packet;
 	}
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNetwork(pkt.customParam1);
+		readFromNetwork(pkt.data);
 	}
 
 	public void writeToNetwork(NBTTagCompound tag) {

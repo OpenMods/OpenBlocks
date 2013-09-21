@@ -58,8 +58,8 @@ public class TileEntityImaginary extends OpenTileEntity {
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		if (pkt.customParam1 != null)
-			readFromNBT(pkt.customParam1);
+		if (pkt.data != null)
+			readFromNBT(pkt.data);
 	}
 	
 	public boolean isPencil() {

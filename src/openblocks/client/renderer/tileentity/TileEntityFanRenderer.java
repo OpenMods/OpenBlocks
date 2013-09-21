@@ -23,7 +23,7 @@ public class TileEntityFanRenderer extends TileEntitySpecialRenderer {
 		
 		GL11.glRotatef(fan.getAngle(), 0F, 1.0F, 0.0F);
 		GL11.glPushMatrix();
-		func_110628_a(texture);
+		bindTexture(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();

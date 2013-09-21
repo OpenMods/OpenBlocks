@@ -213,13 +213,13 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 		packet.zPosition = zCoord;
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-		packet.customParam1 = nbt;
+		packet.data = nbt;
 		return packet;
 	}
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.customParam1);
+		readFromNBT(pkt.data);
 	}
 	
 	@Override

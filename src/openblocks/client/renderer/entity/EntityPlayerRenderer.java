@@ -13,8 +13,8 @@ public class EntityPlayerRenderer extends RenderPlayer {
 		super.rotatePlayer(player, par2, par3, par4);
 		if (!EntityHangGlider.isPlayerOnGround(player)) {
 			player.limbSwing = 0f;
-			player.prevLimbYaw = 0f;
-			player.limbYaw = 0f;
+			player.prevLimbSwingAmount = 0f;
+			player.limbSwingAmount = 0f;
 			GL11.glRotatef(75, -1, 0, 0);
 		}
 	}
