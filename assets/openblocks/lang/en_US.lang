@@ -4,8 +4,13 @@ openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
 openblocks.gui.bigbutton=Big Button
 
-openblocks.misc.uses=Uses: %d
+openblocks.misc.uses=Uses: %.2f
 openblocks.misc.color=Color: %06X
+openblocks.misc.mode=Placement mode: %s
+openblocks.misc.mode.block=Block
+openblocks.misc.mode.panel=Panel
+openblocks.misc.mode.half_panel=Half-height panel
+openblocks.misc.mode.stairs=Stairs
 
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer

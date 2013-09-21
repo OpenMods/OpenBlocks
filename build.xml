@@ -16,7 +16,7 @@
 	<property name="forge.dir"           value="${build.dir}/forge"/>
 	<property name="mcp.dir"             value="${forge.dir}/mcp"/>
     
-    <condition property="python.exe" value="${mcp.dir}/runtime/bin/python/python_mcp" else="python">
+	<condition property="python.exe" value="${mcp.dir}/runtime/bin/python/python_mcp" else="python">
 		<os family="Windows" />
 	</condition>
 
