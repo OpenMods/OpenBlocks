@@ -2,6 +2,8 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import openblocks.OpenBlocks;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -17,7 +19,7 @@ public class TileEntityHealBlock extends OpenTileEntity {
 
 		@SuppressWarnings("unchecked")
 		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
-		if (worldObj.getTotalWorldTime() % 20 == 0) {
+		if (OpenBlocks.proxy.getTicks(worldObj) % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
 					/* TODO: the potion effects are set to 1 tick only to give enough time for the player to regenerate, but without having any overkill

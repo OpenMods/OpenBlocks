@@ -13,6 +13,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import openblocks.Log;
+import openblocks.OpenBlocks;
 import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
 
@@ -90,7 +91,7 @@ public abstract class SyncMap {
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z, int tickUpdatePeriod) {
 		if (!worldObj.isRemote) {
 			// TODO: Test the shit out of this.
-			long worldTotalTime = worldObj.getTotalWorldTime();
+			long worldTotalTime = OpenBlocks.proxy.getTicks(worldObj);
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
 			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
 			totalTrackingTime = worldTotalTime; // Out with the old

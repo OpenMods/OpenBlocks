@@ -76,4 +76,9 @@ public class ServerProxy implements IProxy {
 	public IGuiHandler createGuiHandler() {
 		return new CommonGuiHandler();
 	}
+
+	@Override
+	public long getTicks(World worldObj) {
+		return worldObj.getTotalWorldTime();
+	}
 }

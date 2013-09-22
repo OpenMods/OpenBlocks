@@ -104,10 +104,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
-			if (worldObj.getTotalWorldTime() % 1200 == 0) {
+			if (OpenBlocks.proxy.getTicks(worldObj) % 1200 == 0) {
 				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, bonemeal);
 			}
-			if (worldObj.getTotalWorldTime() % 60 == 0) {
+			if (OpenBlocks.proxy.getTicks(worldObj) % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
 				sync();
 			}
@@ -233,7 +233,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	public float getSprayAngle() {
 		if (isEnabled()) {
-			return MathHelper.sin(worldObj.getTotalWorldTime() * 0.02f) * (float)Math.PI * 0.035f;
+			return MathHelper.sin(OpenBlocks.proxy.getTicks(worldObj) * 0.02f) * (float)Math.PI * 0.035f;
 		}
 		return 0;
 	}

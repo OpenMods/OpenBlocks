@@ -150,4 +150,9 @@ public class ClientProxy implements IProxy {
 	public IGuiHandler createGuiHandler() {
 		return new ClientGuiHandler();
 	}
+
+	@Override
+	public long getTicks(World worldObj) {
+		return ClientTickHandler.getTicks();
+	}
 }

@@ -34,4 +34,6 @@ public interface IProxy {
 	public EntityPlayer getThePlayer();
 	
 	public IGuiHandler createGuiHandler();
+	
+	public long getTicks(World worldObj);
 }
