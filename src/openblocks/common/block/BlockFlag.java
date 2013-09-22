@@ -94,21 +94,18 @@ public class BlockFlag extends OpenBlock {
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		if (side == DOWN) {
-			int targetX = x + side.offsetX;
-			int targetY = y + side.offsetY;
-			int targetZ = z + side.offsetZ;
-			int belowBlockId = world.getBlockId(targetX, targetY, targetZ);
+			int belowBlockId = world.getBlockId(x, y - 1, z);
 			Block belowBlock = Block.blocksList[belowBlockId];
 			if (belowBlock != null) {
 				if (belowBlock == Block.fence) {
 					return true;
 				} else if (belowBlock == this) {
-					TileEntityFlag flag = getTileEntity(world, targetX, targetY, targetZ, TileEntityFlag.class);
+					TileEntityFlag flag = getTileEntity(world, x, y - 1, z, TileEntityFlag.class);
 					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) { return true; }
 				}
 			}
 		}
-		return super.canPlaceBlockOnSide(world, x, y, z, side);
+		return isNeighborBlockSolid(world, x, y, z, side);
 	}
 
 	@Override
