@@ -32,21 +32,21 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
 		Vec3 blockPos = getBlockPosition();
 		for (Entity entity : entities) {
+			if (entity.isSneaking()) {
+				continue;
+			}
 			Vec3 entityPos = getEntityPosition(entity);
 			Vec3 basePos = getConeBaseCenter();
 			double dX = entityPos.xCoord - blockPos.xCoord;
 			double dY = entityPos.yCoord - blockPos.yCoord;
 			double dZ = entityPos.zCoord - blockPos.zCoord;
 			double dist = MathHelper.sqrt_double(dX * dX + dZ * dZ);
-			if (isLyingInCone(entityPos, blockPos, basePos, 1.3f) || dist < 1.5) {
-				double yaw = Math.atan2(dZ, dX) - (Math.PI / 2);
-				float pitch = (float)(-(Math.atan2(dY, dist)));
+			if (isLyingInCone(entityPos, blockPos, basePos, 1.7f) || dist < 1.2) {
+				double yaw = Math.toRadians(getAngle());
 				double f1 = MathHelper.cos((float)-yaw);
 				double f2 = MathHelper.sin((float)-yaw);
-				double f3 = -MathHelper.cos(-pitch);
-				double f4 = MathHelper.sin(-pitch);
-				Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(f2 * f3, f4, f1 * f3);
-				double force = 1.0 - (dist / 10.0);
+				Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(f2, 0, f1);
+				double force = (1.0 - (dist / 10.0)) * 1.4;
 				entity.motionX -= force * directionVec.xCoord * 0.05;
 				entity.motionZ -= force * directionVec.zCoord * 0.05;
 			}
