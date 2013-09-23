@@ -2,6 +2,9 @@ package openblocks;
 
 import java.io.File;
 
+import org.apache.commons.lang3.ObjectUtils;
+
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -75,7 +78,7 @@ public class OpenBlocks {
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
 		public ItemStack getIconItemStack() {
-			return new ItemStack(OpenBlocks.Blocks.flag, 1, 0);
+			return new ItemStack(ObjectUtils.firstNonNull(OpenBlocks.Blocks.flag, Block.sponge), 1, 0);
 		}
 	};
 
