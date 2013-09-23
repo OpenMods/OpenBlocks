@@ -6,9 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,9 +34,6 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy implements IProxy {
-
-	private ItemRendererHangGlider hangGliderRenderer;
-
 	public ClientProxy() {
 		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
@@ -46,7 +41,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void init() {}
-	
+
 	@Override
 	public void postInit() {
 		SoundEventsManager.instance.init();
@@ -73,26 +68,30 @@ public class ClientProxy implements IProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
 
-		MinecraftForgeClient.registerItemRenderer(Config.blockTankId, new ItemRendererTank());
-
-		assertItemHangGliderRenderer();
-		MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
+		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
-		RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
-		RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
-		MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
+
+		if (OpenBlocks.Items.luggage != null) {
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
+			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
+		}
+
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
-		attachPlayerRenderer();
 
-		MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-		MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
-	}
+		if (OpenBlocks.Items.hangGlider != null) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
 
-	private void assertItemHangGliderRenderer() {
-		if (hangGliderRenderer == null) hangGliderRenderer = new ItemRendererHangGlider();
-		if (MinecraftForgeClient.getItemRenderer(new ItemStack(OpenBlocks.Items.hangGlider), ItemRenderType.EQUIPPED) == null) {
+			ItemRendererHangGlider hangGliderRenderer = new ItemRendererHangGlider();
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
+			MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
+
+			attachPlayerRenderer();
+		}
+
+		if (OpenBlocks.Items.sonicGlasses != null) {
+			MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+			MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 		}
 	}
 
@@ -117,7 +116,7 @@ public class ClientProxy implements IProxy {
 
 	/**
 	 * Is this the server
-	 *
+	 * 
 	 * @return true if this is the server
 	 */
 	@Override
@@ -127,7 +126,7 @@ public class ClientProxy implements IProxy {
 
 	/**
 	 * Is this the client
-	 *
+	 * 
 	 * @return true if this is the client
 	 */
 	@Override
