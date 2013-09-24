@@ -41,12 +41,16 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 			double dY = entityPos.yCoord - blockPos.yCoord;
 			double dZ = entityPos.zCoord - blockPos.zCoord;
 			double dist = MathHelper.sqrt_double(dX * dX + dZ * dZ);
-			if (isLyingInCone(entityPos, blockPos, basePos, 1.7f) || dist < 1.2) {
-				double yaw = Math.toRadians(getAngle());
+			if (isLyingInCone(entityPos, blockPos, basePos, 1.2f)) {
+				double yaw = Math.atan2(dZ, dX) - (Math.PI / 2);
+				float pitch = (float)(-(Math.atan2(dY, dist)));
 				double f1 = MathHelper.cos((float)-yaw);
 				double f2 = MathHelper.sin((float)-yaw);
-				Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(f2, 0, f1);
-				double force = (1.0 - (dist / 10.0)) * 1.4;
+				double f3 = -MathHelper.cos(-pitch);
+				double f4 = MathHelper.sin(-pitch);
+				Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(f2 * f3, f4, f1 * f3);
+				double force = 1.0 - (dist / 10.0);
+				force = Math.max(0, force);
 				entity.motionX -= force * directionVec.xCoord * 0.05;
 				entity.motionZ -= force * directionVec.zCoord * 0.05;
 			}
@@ -67,22 +71,8 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 	}
 
 	public AxisAlignedBB getEntitySearchBoundingBox() {
-		AxisAlignedBB boundingBox = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord - 4, zCoord, xCoord + 1, yCoord + 5, zCoord + 1);
+		AxisAlignedBB boundingBox = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord - 2, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
 		return boundingBox.expand(10.0, 10.0, 10.0);
-		
-		/* Dead code or WIP?
-		double angle = Math.toRadians(getAngle());
-		double spread = Math.toRadians(40);
-		System.out.println(String.format("%s,%s,%s", xCoord, yCoord, zCoord));
-		double range = 10;
-
-		System.out.println(String.format("%s,%s,%s", Math.cos(angle - spread) * range, 0, Math.sin(angle - spread) * range));
-		System.out.println(String.format("%s,%s,%s", Math.cos(angle + spread) * range, 0, Math.sin(angle + spread) * range));
-		boundingBox = boundingBox.addCoord(Math.cos(angle - spread) * range, 0, Math.sin(angle - spread) * range);
-		boundingBox = boundingBox.addCoord(Math.cos(angle + spread) * range, 0, Math.sin(angle + spread) * range);
-		System.out.println("---");
-		return boundingBox;
-		*/
 	}
 
 	public boolean isLyingInCone(Vec3 point, Vec3 t, Vec3 b, float aperture) {
