@@ -12,8 +12,7 @@ public class EntityAIMoveTowardsDecoy extends EntityAIBase {
 	private double movePosZ;
 	private double movementSpeed;
 
-	public EntityAIMoveTowardsDecoy(EntityCreature par1EntityCreature,
-			double par2) {
+	public EntityAIMoveTowardsDecoy(EntityCreature par1EntityCreature, double par2) {
 		this.theEntity = par1EntityCreature;
 		this.movementSpeed = par2;
 		this.setMutexBits(1);
@@ -23,8 +22,7 @@ public class EntityAIMoveTowardsDecoy extends EntityAIBase {
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	public boolean shouldExecute() {
-		TileEntityDecoy decoy = TileEntityDecoy
-				.findNearestDecoyWithinRangeOfEntity(theEntity, 20.0);
+		TileEntityDecoy decoy = TileEntityDecoy.findNearestDecoyWithinRangeOfEntity(theEntity, 20.0);
 
 		if (decoy == null) {
 			return false;
@@ -47,7 +45,6 @@ public class EntityAIMoveTowardsDecoy extends EntityAIBase {
 	 * Execute a one shot task or start executing a continuous task
 	 */
 	public void startExecuting() {
-		this.theEntity.getNavigator().tryMoveToXYZ(this.movePosX,
-				this.movePosY, this.movePosZ, this.movementSpeed);
+		this.theEntity.getNavigator().tryMoveToXYZ(this.movePosX, this.movePosY, this.movePosZ, this.movementSpeed);
 	}
 }

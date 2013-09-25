@@ -82,9 +82,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
 	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
 
-	public static final ForgeDirection[] horizontalDirections = new ForgeDirection[] {
-			ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST,
-			ForgeDirection.WEST };
+	public static final ForgeDirection[] horizontalDirections = new ForgeDirection[] { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST };
 
 	protected Comparator<TileEntityTank> sortBySpace = new Comparator<TileEntityTank>() {
 		@Override
@@ -104,18 +102,12 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		south = getTankInDirection(ForgeDirection.SOUTH);
 		east = getTankInDirection(ForgeDirection.EAST);
 		west = getTankInDirection(ForgeDirection.WEST);
-		if (up != null)
-			up.findNeighbours();
-		if (down != null)
-			down.findNeighbours();
-		if (north != null)
-			north.findNeighbours();
-		if (south != null)
-			south.findNeighbours();
-		if (east != null)
-			east.findNeighbours();
-		if (west != null)
-			west.findNeighbours();
+		if (up != null) up.findNeighbours();
+		if (down != null) down.findNeighbours();
+		if (north != null) north.findNeighbours();
+		if (south != null) south.findNeighbours();
+		if (east != null) east.findNeighbours();
+		if (west != null) west.findNeighbours();
 	}
 
 	/**
@@ -126,13 +118,11 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 			TileEntity neighbour = getTileInDirection(direction);
 			if (neighbour != null && neighbour instanceof TileEntityTank) {
-				neighbours.put(direction, new WeakReference<TileEntityTank>(
-						(TileEntityTank) neighbour));
+				neighbours.put(direction, new WeakReference<TileEntityTank>((TileEntityTank)neighbour));
 			}
-			surroundingBlocks.put(
-					direction,
-					!worldObj.isAirBlock(xCoord + direction.offsetX, yCoord
-							+ direction.offsetY, zCoord + direction.offsetZ));
+			surroundingBlocks.put(direction, !worldObj.isAirBlock(xCoord
+					+ direction.offsetX, yCoord + direction.offsetY, zCoord
+					+ direction.offsetZ));
 		}
 		if (!worldObj.isRemote) {
 			sendBlockEvent(0, 0);
@@ -149,15 +139,9 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			WeakReference<TileEntityTank> neighbour = neighbours.get(direction);
 			if (neighbour != null) {
 				TileEntityTank otherTank = neighbour.get();
-				if (otherTank == null) {
-					return null;
-				}
-				if (otherTank.isInvalid()) {
-					return null;
-				}
-				if (otherTank.canReceiveLiquid(getInternalTank().getFluid())) {
-					return otherTank;
-				}
+				if (otherTank == null) { return null; }
+				if (otherTank.isInvalid()) { return null; }
+				if (otherTank.canReceiveLiquid(getInternalTank().getFluid())) { return otherTank; }
 			}
 		}
 		return null;
@@ -174,8 +158,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		return tanks.toArray(new TileEntityTank[tanks.size()]);
 	}
 
-	public ArrayList<TileEntityTank> getHorizontalTanksOrdererdBySpace(
-			HashSet<TileEntityTank> except) {
+	public ArrayList<TileEntityTank> getHorizontalTanksOrdererdBySpace(HashSet<TileEntityTank> except) {
 		ArrayList<TileEntityTank> horizontalTanks = new ArrayList<TileEntityTank>();
 		for (ForgeDirection direction : horizontalDirections) {
 			TileEntityTank tank = getTankInDirection(direction);
@@ -209,13 +192,10 @@ public class TileEntityTank extends NetworkedTileEntity implements
 
 	private void interpolateLiquidLevel() {
 		/* Client interpolates render amount */
-		if (!worldObj.isRemote)
-			return;
-		if (interpolatedRenderAmount + adjustRate < liquidRenderAmount
-				.getValue()) {
+		if (!worldObj.isRemote) return;
+		if (interpolatedRenderAmount + adjustRate < liquidRenderAmount.getValue()) {
 			interpolatedRenderAmount += adjustRate;
-		} else if (interpolatedRenderAmount - adjustRate > liquidRenderAmount
-				.getValue()) {
+		} else if (interpolatedRenderAmount - adjustRate > liquidRenderAmount.getValue()) {
 			interpolatedRenderAmount -= adjustRate;
 		} else {
 			interpolatedRenderAmount = liquidRenderAmount.getValue();
@@ -246,8 +226,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 					if (below.getSpace() > 0) {
 						FluidStack myLiquid = tank.getFluid().copy();
 						if (below.canReceiveLiquid(myLiquid)) {
-							int toFill = Math.min(below.getSpace(),
-									myLiquid.amount);
+							int toFill = Math.min(below.getSpace(), myLiquid.amount);
 							myLiquid.amount = toFill;
 							int filled = below.fill(myLiquid, true, except);
 							tank.drain(filled, true);
@@ -265,13 +244,11 @@ public class TileEntityTank extends NetworkedTileEntity implements
 								&& liquid != null) {
 							int difference = getAmount()
 									- horizontal.getAmount();
-							if (difference <= 0)
-								continue;
+							if (difference <= 0) continue;
 							int halfDifference = Math.max(difference / 2, 1);
 							FluidStack liquidCopy = liquid.copy();
 							liquidCopy.amount = Math.min(500, halfDifference);
-							int filled = horizontal.fill(liquidCopy, true,
-									except);
+							int filled = horizontal.fill(liquidCopy, true, except);
 							tank.drain(filled, true);
 						}
 					}
@@ -288,14 +265,11 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			// calculate render height
 			if (containsValidLiquid()) {
 				/* ratio the liquid amount in to the entire short, clamp it */
-				short newLiquidRender = (short) Math.max(
-						0,
-						Math.min(Short.MAX_VALUE,
-								Short.MAX_VALUE * tank.getFluid().amount
-										/ (float) tank.getCapacity()));
+				short newLiquidRender = (short)Math.max(0, Math.min(Short.MAX_VALUE, Short.MAX_VALUE
+						* tank.getFluid().amount / (float)tank.getCapacity()));
 				liquidRenderAmount.setValue(newLiquidRender);
 			} else {
-				liquidRenderAmount.setValue((short) 0);
+				liquidRenderAmount.setValue((short)0);
 				liquidId.setValue(0);
 			}
 			sync(1, false);
@@ -306,16 +280,10 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	public boolean canReceiveLiquid(FluidStack liquid) {
-		if (tank.getFluid() == null) {
-			return true;
-		}
-		if (liquid == null) {
-			return true;
-		}
+		if (tank.getFluid() == null) { return true; }
+		if (liquid == null) { return true; }
 		FluidStack otherLiquid = tank.getFluid();
-		if (otherLiquid != null) {
-			return otherLiquid.isFluidEqual(liquid);
-		}
+		if (otherLiquid != null) { return otherLiquid.isFluidEqual(liquid); }
 		return true;
 	}
 
@@ -332,26 +300,20 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	public int getAmount() {
-		if (getInternalTank() == null || getInternalTank().getFluid() == null)
-			return 0;
+		if (getInternalTank() == null || getInternalTank().getFluid() == null) return 0;
 		return getInternalTank().getFluid().amount;
 	}
 
-	public int fill(FluidStack resource, boolean doFill,
-			HashSet<TileEntityTank> except) {
+	public int fill(FluidStack resource, boolean doFill, HashSet<TileEntityTank> except) {
 		TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
 		int filled = 0;
 		if (except == null) {
 			except = new HashSet<TileEntityTank>();
 		}
-		if (resource == null) {
-			return 0;
-		}
+		if (resource == null) { return 0; }
 
 		int startAmount = resource.amount;
-		if (except.contains(this)) {
-			return 0;
-		}
+		if (except.contains(this)) { return 0; }
 		except.add(this);
 
 		resource = resource.copy();
@@ -416,11 +378,9 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
-			ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")) {
-			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag(
-					"tank");
+			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag("tank");
 			this.tank.readFromNBT(tankTag);
 		}
 	}
@@ -435,8 +395,8 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		tank.readFromNBT(tag);
-		interpolatedRenderAmount = (short) ((double) getAmount()
-				/ (double) tank.getCapacity() * Short.MAX_VALUE);
+		interpolatedRenderAmount = (short)((double)getAmount()
+				/ (double)tank.getCapacity() * Short.MAX_VALUE);
 	}
 
 	public int countDownwardsTanks() {
@@ -456,58 +416,44 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 
 		ForgeDirection direction = ForgeDirection.getOrientation(side);
 
 		ItemStack current = player.inventory.getCurrentItem();
 		if (current != null) {
 
-			FluidStack liquid = FluidContainerRegistry
-					.getFluidForFilledItem(current);
+			FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(current);
 
 			// Handle filled containers
 			if (liquid != null) {
 				int qty = fill(direction, liquid, true);
 
 				if (qty != 0 && !player.capabilities.isCreativeMode) {
-					player.inventory.setInventorySlotContents(
-							player.inventory.currentItem,
-							ItemUtils.consumeItem(current));
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
 				}
 
 				return true;
 			} else {
 				// Fix for #15
-				if (worldObj.isRemote && liquidRenderAmount.getValue() > 0)
-					return true;
+				if (worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true;
 				// End of fix
 				FluidStack available = tank.getFluid();
 				if (available != null) {
-					ItemStack filled = FluidContainerRegistry
-							.fillFluidContainer(available, current);
+					ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
 
-					liquid = FluidContainerRegistry
-							.getFluidForFilledItem(filled);
+					liquid = FluidContainerRegistry.getFluidForFilledItem(filled);
 
 					if (liquid != null) {
 						if (!player.capabilities.isCreativeMode) {
 							if (current.stackSize > 1) {
-								if (!player.inventory
-										.addItemStackToInventory(filled))
-									return false;
+								if (!player.inventory.addItemStackToInventory(filled)) return false;
 								else {
-									player.inventory.setInventorySlotContents(
-											player.inventory.currentItem,
-											ItemUtils.consumeItem(current));
+									player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
 								}
 							} else {
-								player.inventory.setInventorySlotContents(
-										player.inventory.currentItem,
-										ItemUtils.consumeItem(current));
-								player.inventory.setInventorySlotContents(
-										player.inventory.currentItem, filled);
+								player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
+								player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
 							}
 						}
 						drain(ForgeDirection.UNKNOWN, liquid.amount, true);
@@ -522,18 +468,16 @@ public class TileEntityTank extends NetworkedTileEntity implements
 
 	public double getHeightForRender() {
 		double percent = getPercentFull();
-		if (worldObj == null || worldObj.isRemote) {
-			return Math.max(percent > 0.001 ? 0.1 : 0, percent);
-		}
+		if (worldObj == null || worldObj.isRemote) { return Math.max(percent > 0.001? 0.1 : 0, percent); }
 		return percent;
 	}
 
 	public double getPercentFull() {
 		if (containsValidLiquid()) {
 			if (worldObj == null || worldObj.isRemote) {
-				return interpolatedRenderAmount / (double) Short.MAX_VALUE;
+				return interpolatedRenderAmount / (double)Short.MAX_VALUE;
 			} else {
-				return liquidRenderAmount.getValue() / (double) Short.MAX_VALUE;
+				return liquidRenderAmount.getValue() / (double)Short.MAX_VALUE;
 			}
 		} else {
 			return 0D; /* No D for you ;) */
@@ -547,9 +491,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	public double getLiquidHeightForSide(ForgeDirection... sides) {
 		if (containsValidLiquid()) {
 			double percentFull = getHeightForRender();
-			if (percentFull > 0.98) {
-				return 1.0;
-			}
+			if (percentFull > 0.98) { return 1.0; }
 			double fullness = percentFull + getFlowOffset();
 			int count = 1;
 			for (ForgeDirection side : sides) {
@@ -578,8 +520,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockAdded() {
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
@@ -593,12 +534,9 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource,
-			boolean doDrain) {
-		if (resource == null)
-			return null;
-		if (!resource.isFluidEqual(tank.getFluid()))
-			return null;
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (resource == null) return null;
+		if (!resource.isFluidEqual(tank.getFluid())) return null;
 		return drain(from, resource.amount, doDrain);
 	}
 

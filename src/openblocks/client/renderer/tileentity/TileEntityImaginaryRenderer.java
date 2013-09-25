@@ -42,19 +42,17 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 		}
 
 		public Integer getDisplayList(boolean isPencil) {
-			return isPencil ? getPencilDisplayList() : getCrayonDisplayList();
+			return isPencil? getPencilDisplayList() : getCrayonDisplayList();
 		}
 
 		private Integer getCrayonDisplayList() {
-			if (crayonDisplayList == null)
-				crayonDisplayList = compileList(getCrayonTexture());
+			if (crayonDisplayList == null) crayonDisplayList = compileList(getCrayonTexture());
 
 			return crayonDisplayList;
 		}
 
 		private Integer getPencilDisplayList() {
-			if (pencilDisplayList == null)
-				pencilDisplayList = compileList(getPencilTexture());
+			if (pencilDisplayList == null) pencilDisplayList = compileList(getPencilTexture());
 
 			return pencilDisplayList;
 		}
@@ -185,32 +183,27 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float partialTicks) {
-		final TileEntityImaginary te = (TileEntityImaginary) tileentity;
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTicks) {
+		final TileEntityImaginary te = (TileEntityImaginary)tileentity;
 
 		boolean isVisible = te.is(Property.VISIBLE);
 
-		if (isVisible && te.visibility < 1)
-			te.visibility = Math.min(te.visibility
-					+ Config.imaginaryFadingSpeed, 1);
-		else if (!isVisible && te.visibility > 0)
-			te.visibility = Math.max(te.visibility
-					- Config.imaginaryFadingSpeed, 0);
+		if (isVisible && te.visibility < 1) te.visibility = Math.min(te.visibility
+				+ Config.imaginaryFadingSpeed, 1);
+		else if (!isVisible && te.visibility > 0) te.visibility = Math.max(te.visibility
+				- Config.imaginaryFadingSpeed, 0);
 
-		if (te.visibility <= 0)
-			return;
+		if (te.visibility <= 0) return;
 
 		bindTexture(TextureMap.locationBlocksTexture);
 
 		if (!te.isPencil()) {
-			byte red = (byte) (te.color >> 16);
-			byte green = (byte) (te.color >> 8);
-			byte blue = (byte) (te.color >> 0);
-			GL11.glColor4ub(red, green, blue, (byte) (255 * te.visibility));
+			byte red = (byte)(te.color >> 16);
+			byte green = (byte)(te.color >> 8);
+			byte blue = (byte)(te.color >> 0);
+			GL11.glColor4ub(red, green, blue, (byte)(255 * te.visibility));
 		} else {
-			GL11.glColor4ub((byte) 255, (byte) 255, (byte) 255,
-					(byte) (255 * te.visibility));
+			GL11.glColor4ub((byte)255, (byte)255, (byte)255, (byte)(255 * te.visibility));
 		}
 
 		GL11.glPushMatrix();
@@ -219,38 +212,37 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 		final ICollisionData data = te.collisionData;
 
 		if (data instanceof PanelData) {
-			PanelData pd = (PanelData) data;
+			PanelData pd = (PanelData)data;
 
 			GL11.glTranslated(0, pd.height, 0);
 			int displayList = panelDisplay.getDisplayList(te.isPencil());
 			GL11.glCallList(displayList);
 		} else if (data instanceof StairsData) {
-			StairsData sd = (StairsData) data;
+			StairsData sd = (StairsData)data;
 
 			GL11.glTranslated(0.5, 0, 0.5);
 
 			switch (sd.orientation) {
-			case NORTH:
-				break;
-			case EAST:
-				GL11.glRotatef(-90, 0, 1, 0);
-				break;
-			case SOUTH:
-				GL11.glRotatef(180, 0, 1, 0);
-				break;
-			case WEST:
-				GL11.glRotatef(90, 0, 1, 0);
-				break;
-			default:
-				break;
+				case NORTH:
+					break;
+				case EAST:
+					GL11.glRotatef(-90, 0, 1, 0);
+					break;
+				case SOUTH:
+					GL11.glRotatef(180, 0, 1, 0);
+					break;
+				case WEST:
+					GL11.glRotatef(90, 0, 1, 0);
+					break;
+				default:
+					break;
 			}
 
 			int displayList = halfPanelDisplay.getDisplayList(te.isPencil());
 			GL11.glTranslated(0, sd.lowerPanelHeight, 0);
 			GL11.glCallList(displayList);
 
-			GL11.glTranslated(0, sd.upperPanelHeight - sd.lowerPanelHeight,
-					-0.5);
+			GL11.glTranslated(0, sd.upperPanelHeight - sd.lowerPanelHeight, -0.5);
 			GL11.glCallList(displayList);
 		} else {
 			int displayList = blockDisplay.getDisplayList(te.isPencil());

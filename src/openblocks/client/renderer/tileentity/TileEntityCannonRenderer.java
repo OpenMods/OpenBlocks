@@ -11,13 +11,11 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 
 	private ModelCannon model = new ModelCannon();
-	private static final ResourceLocation texture = new ResourceLocation(
-			"openblocks", "textures/models/cannon.png");
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/cannon.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
-		TileEntityCannon cannon = (TileEntityCannon) tileentity;
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
+		TileEntityCannon cannon = (TileEntityCannon)tileentity;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glPushMatrix();

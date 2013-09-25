@@ -31,14 +31,12 @@ public class BlockCannon extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
-			int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return canPlaceOnlyOnGround(world, x, y, z, side);
 	}
 }

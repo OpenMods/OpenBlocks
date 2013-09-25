@@ -42,16 +42,14 @@ public class BlockGrave extends OpenBlock {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-			List par3List) {
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
 		// remove from creative
 	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		if (!world.isRemote) {
-			TileEntityGrave tile = getTileEntity(world, x, y, z,
-					TileEntityGrave.class);
+			TileEntityGrave tile = getTileEntity(world, x, y, z, TileEntityGrave.class);
 			if (tile != null) {
 				handleGhostSpawn(tile, world, x, y, z);
 			}
@@ -65,8 +63,7 @@ public class BlockGrave extends OpenBlock {
 	}
 
 	private static void updateOnSoilStatus(World worldObj, int x, int y, int z) {
-		TileEntityGrave graveEnt = (TileEntityGrave) worldObj
-				.getBlockTileEntity(x, y, z);
+		TileEntityGrave graveEnt = (TileEntityGrave)worldObj.getBlockTileEntity(x, y, z);
 		if (graveEnt != null) {
 			Block block = Block.blocksList[worldObj.getBlockId(x, y - 1, z)];
 			if (block != null) {
@@ -76,29 +73,24 @@ public class BlockGrave extends OpenBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World worldObj, int x, int y, int z,
-			int changedBlockId) {
+	public void onNeighborBlockChange(World worldObj, int x, int y, int z, int changedBlockId) {
 		super.onNeighborBlockChange(worldObj, x, y, z, changedBlockId);
 		updateOnSoilStatus(worldObj, x, y, z);
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z,
-			int par5) {
+	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int par5) {
 
 	}
 
 	private static boolean shouldSpawnGhost(World world) {
-		if (world.difficultySetting == 0)
-			return false;
+		if (world.difficultySetting == 0) return false;
 		return Config.ghostSpawnProbability > world.rand.nextInt(100);
 	}
 
-	private static void handleGhostSpawn(TileEntityGrave grave, World world,
-			int x, int y, int z) {
+	private static void handleGhostSpawn(TileEntityGrave grave, World world, int x, int y, int z) {
 		if (shouldSpawnGhost(world)) {
-			EntityGhost ghost = new EntityGhost(world, grave.getUsername(),
-					grave.getLoot());
+			EntityGhost ghost = new EntityGhost(world, grave.getUsername(), grave.getLoot());
 			ghost.setPositionAndRotation(x, y, z, 0, 0);
 			world.spawnEntityInWorld(ghost);
 		} else {
@@ -107,34 +99,29 @@ public class BlockGrave extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
-			int y, int z) {
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
-			int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
-			int z) {
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		this.setBlockBounds(0, 0, 0, 1f, 0.3f, 1f);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z,
-			EntityLivingBase living, ItemStack stack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase living, ItemStack stack) {
 		super.onBlockPlacedBy(world, x, y, z, living, stack);
 		updateOnSoilStatus(world, x, y, z);
-		TileEntityGrave grave = (TileEntityGrave) world.getBlockTileEntity(x,
-				y, z);
+		TileEntityGrave grave = (TileEntityGrave)world.getBlockTileEntity(x, y, z);
 		if (living instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) living;
+			EntityPlayer player = (EntityPlayer)living;
 			grave.setUsername(player.username);
 			grave.setLoot(player.inventory);
 		}

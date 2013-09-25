@@ -11,7 +11,7 @@ public class ContainerLuggage extends ContainerInventory<IInventory> {
 		super(playerInventory, luggage.getInventory());
 		this.luggage = luggage;
 		addInventoryGrid(8, 18, 9);
-		addPlayerInventorySlots(luggage.isSpecial() ? 139 : 85);
+		addPlayerInventorySlots(luggage.isSpecial()? 139 : 85);
 	}
 
 }

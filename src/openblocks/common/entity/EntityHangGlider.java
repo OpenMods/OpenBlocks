@@ -27,9 +27,8 @@ public class EntityHangGlider extends Entity implements
 	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
 	private static Map<EntityPlayer, EntityHangGlider> gliderClientMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
 
-	public static Map<EntityPlayer, EntityHangGlider> getMapForSide(
-			boolean isRemote) {
-		return isRemote ? gliderClientMap : gliderMap;
+	public static Map<EntityPlayer, EntityHangGlider> getMapForSide(boolean isRemote) {
+		return isRemote? gliderClientMap : gliderMap;
 	}
 
 	public static boolean isEntityHoldingGlider(Entity player) {
@@ -43,8 +42,7 @@ public class EntityHangGlider extends Entity implements
 
 	@SideOnly(Side.CLIENT)
 	public static void updateGliders() {
-		Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap
-				.entrySet().iterator();
+		Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<EntityPlayer, EntityHangGlider> next = it.next();
 			EntityPlayer player = next.getKey();
@@ -84,7 +82,7 @@ public class EntityHangGlider extends Entity implements
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(2, Byte.valueOf((byte) 0));
+		this.dataWatcher.addObject(2, Byte.valueOf((byte)0));
 	}
 
 	public void despawnGlider() {
@@ -101,8 +99,7 @@ public class EntityHangGlider extends Entity implements
 			setDead();
 		} else {
 			if (!worldObj.isRemote) {
-				this.dataWatcher.updateObject(2,
-						Byte.valueOf((byte) (player.onGround ? 1 : 0)));
+				this.dataWatcher.updateObject(2, Byte.valueOf((byte)(player.onGround? 1 : 0)));
 			}
 			ItemStack held = player.getHeldItem();
 			if (player.isDead || held == null || held.getItem() == null
@@ -121,11 +118,9 @@ public class EntityHangGlider extends Entity implements
 				if (!player.onGround && player.motionY < 0) {
 					player.motionY *= verticalSpeed;
 					motionY *= verticalSpeed;
-					double x = Math.cos(Math
-							.toRadians(player.rotationYawHead + 90))
+					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90))
 							* horizontalSpeed;
-					double z = Math.sin(Math
-							.toRadians(player.rotationYawHead + 90))
+					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90))
 							* horizontalSpeed;
 					player.motionX += x;
 					player.motionZ += z;
@@ -177,12 +172,10 @@ public class EntityHangGlider extends Entity implements
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-	}
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-	}
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {

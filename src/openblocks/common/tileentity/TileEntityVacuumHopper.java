@@ -23,23 +23,18 @@ import cpw.mods.fml.common.Loader;
 public class TileEntityVacuumHopper extends OpenTileEntity implements
 		IInventory, IAwareTile {
 
-	private GenericInventory inventory = new GenericInventory("vacuumhopper",
-			true, 10);
+	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
 
 		if (worldObj.isRemote) {
-			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5,
-					zCoord + 0.5, worldObj.rand.nextDouble() - 0.5,
-					worldObj.rand.nextDouble() - 1.0,
-					worldObj.rand.nextDouble() - 0.5);
+			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
 
 		@SuppressWarnings("unchecked")
-		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(
-				EntityItem.class, getBB().expand(3, 3, 3));
+		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, getBB().expand(3, 3, 3));
 
 		for (EntityItem item : surroundingItems) {
 
@@ -69,20 +64,17 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
 
 				TileEntity tileOnSurface = getTileInDirection(getSurface());
-				IInventory inventory = InventoryUtils.getInventory(worldObj,
-						xCoord, yCoord, zCoord, getSurface());
+				IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, getSurface());
 				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
 				if (slotId > -1) {
 					ItemStack nextStack = getStackInSlot(slotId);
 					int previousSize = nextStack.stackSize;
 					nextStack = nextStack.copy();
 					if (inventory != null) {
-						InventoryUtils.insertItemIntoInventory(inventory,
-								nextStack, getSurface().getOpposite());
+						InventoryUtils.insertItemIntoInventory(inventory, nextStack, getSurface().getOpposite());
 					} else {
 						if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
-							int inserted = ModuleBuildCraft.tryAcceptIntoPipe(
-									tileOnSurface, nextStack, getSurface());
+							int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());
 							nextStack.stackSize -= inserted;
 						}
 					}
@@ -157,12 +149,10 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -170,19 +160,14 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-	}
+	public void onBlockAdded() {}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
-			float hitY, float hitZ) {
-		if (player.isSneaking()) {
-			return false;
-		}
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
 			openGui(player, OpenBlocks.Gui.VacuumHopper);
 		}
@@ -190,12 +175,10 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
-			ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		ForgeDirection surface = side.getOpposite();
 		setRotation(side.getOpposite());
 		setFlag1(surface == ForgeDirection.DOWN);
@@ -210,7 +193,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements
 
 	public void onEntityCollidedWithBlock(Entity entity) {
 		if (!worldObj.isRemote && entity instanceof EntityItem) {
-			EntityItem item = (EntityItem) entity;
+			EntityItem item = (EntityItem)entity;
 			ItemStack stack = item.getEntityItem().copy();
 			InventoryUtils.insertItemIntoInventory(inventory, stack);
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

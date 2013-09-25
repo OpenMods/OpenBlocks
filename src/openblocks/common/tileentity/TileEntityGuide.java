@@ -76,7 +76,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	public void updateEntity() {
 		if (worldObj.isRemote) {
 			if (timeSinceChange < 1.0) {
-				timeSinceChange = (float) Math.min(1.0f, timeSinceChange + 0.1);
+				timeSinceChange = (float)Math.min(1.0f, timeSinceChange + 0.1);
 			}
 		}
 	}
@@ -88,8 +88,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	private void recreateShape() {
 		previousShape = shape;
 		shape = new boolean[getHeight() * 2 + 1][getWidth() * 2 + 1][getDepth() * 2 + 1];
-		ShapeFactory.generateShape(getWidth(), getHeight(), getDepth(), this,
-				getCurrentMode());
+		ShapeFactory.generateShape(getWidth(), getHeight(), getDepth(), this, getCurrentMode());
 		timeSinceChange = 0;
 	}
 
@@ -98,8 +97,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 		try {
 			shape[getHeight() + y][getWidth() + x][getDepth() + z] = true;
 		} catch (IndexOutOfBoundsException iobe) {
-			Log.warn(iobe, "Index out of bounds setting block at %d,%d,%d", x,
-					y, z);
+			Log.warn(iobe, "Index out of bounds setting block at %d,%d,%d", x, y, z);
 		}
 	}
 
@@ -139,8 +137,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	public void switchMode(EntityPlayer player) {
 		switchMode();
 		if (player != null) {
-			CompatibilityUtils.sendChatToPlayer(player, String.format(
-					"Changing to %s mode", getCurrentMode().getDisplayName()));
+			CompatibilityUtils.sendChatToPlayer(player, String.format("Changing to %s mode", getCurrentMode().getDisplayName()));
 		}
 	}
 
@@ -160,9 +157,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 
 	public void changeDimensions(EntityPlayer player, ForgeDirection orientation) {
 		changeDimensions(orientation);
-		CompatibilityUtils.sendChatToPlayer(player, String.format(
-				"Changing size to %sx%sx%s", width.getValue(),
-				height.getValue(), depth.getValue()));
+		CompatibilityUtils.sendChatToPlayer(player, String.format("Changing size to %sx%sx%s", width.getValue(), height.getValue(), depth.getValue()));
 	}
 
 	public void changeDimensions(ForgeDirection orientation) {
@@ -210,8 +205,8 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 					for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
 						if (shape[y2][x2][z2]) {
 							coords.add(new ChunkCoordinates(xCoord + x2
-									- getWidth(), yCoord + y2 - getHeight(),
-									zCoord + z2 - getDepth()));
+									- getWidth(), yCoord + y2 - getHeight(), zCoord
+									+ z2 - getDepth()));
 						}
 					}
 				}
@@ -229,10 +224,9 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 		if (player.getHeldItem() != null) {
 			ItemStack held = player.getHeldItem();
 			if (held.getItem() instanceof ItemBlock) {
-				ItemBlock itemblock = (ItemBlock) held.getItem();
+				ItemBlock itemblock = (ItemBlock)held.getItem();
 				for (ChunkCoordinates coord : getShapeCoordinates()) {
-					worldObj.setBlock(coord.posX, coord.posY, coord.posZ,
-							itemblock.getBlockID());
+					worldObj.setBlock(coord.posX, coord.posY, coord.posZ, itemblock.getBlockID());
 				}
 			}
 		}

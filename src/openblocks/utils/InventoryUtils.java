@@ -12,8 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class InventoryUtils {
 
-	public static void tryMergeStacks(IInventory targetInventory, int slot,
-			ItemStack stack) {
+	public static void tryMergeStacks(IInventory targetInventory, int slot, ItemStack stack) {
 		if (targetInventory.isItemValidForSlot(slot, stack)) {
 			ItemStack targetStack = targetInventory.getStackInSlot(slot);
 			if (targetStack == null) {
@@ -23,11 +22,9 @@ public class InventoryUtils {
 				boolean valid = targetInventory.isItemValidForSlot(slot, stack);
 				if (valid
 						&& stack.itemID == targetStack.itemID
-						&& (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack
-								.getItemDamage())
+						&& (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
 						&& ItemStack.areItemStackTagsEqual(stack, targetStack)
-						&& targetStack.stackSize < targetStack
-								.getMaxStackSize()) {
+						&& targetStack.stackSize < targetStack.getMaxStackSize()) {
 					int space = targetStack.getMaxStackSize()
 							- targetStack.stackSize;
 					int mergeAmount = Math.min(space, stack.stackSize);
@@ -40,8 +37,7 @@ public class InventoryUtils {
 		}
 	}
 
-	public static void insertItemIntoInventory(IInventory inventory,
-			ItemStack stack) {
+	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack) {
 		insertItemIntoInventory(inventory, stack, ForgeDirection.UNKNOWN);
 	}
 
@@ -52,14 +48,12 @@ public class InventoryUtils {
 	 * @param side
 	 *            The side of the block you're inserting into
 	 */
-	public static void insertItemIntoInventory(IInventory inventory,
-			ItemStack stack, ForgeDirection side) {
+	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack, ForgeDirection side) {
 		int i = 0;
 		while (stack.stackSize > 0 && i < inventory.getSizeInventory()) {
 			if (side != ForgeDirection.UNKNOWN
 					&& inventory instanceof ISidedInventory) {
-				if (!((ISidedInventory) inventory).canInsertItem(i, stack,
-						side.ordinal())) {
+				if (!((ISidedInventory)inventory).canInsertItem(i, stack, side.ordinal())) {
 					i++;
 					continue;
 				}
@@ -69,18 +63,11 @@ public class InventoryUtils {
 		}
 	}
 
-	public static int moveItemInto(IInventory fromInventory, int slot,
-			IInventory targetInventory, int intoSlot, int maxAmount,
-			ForgeDirection direction) {
-		if (!InventoryUtils.canMoveItem(fromInventory, targetInventory, slot,
-				intoSlot, direction)) {
-			return 0;
-		}
+	public static int moveItemInto(IInventory fromInventory, int slot, IInventory targetInventory, int intoSlot, int maxAmount, ForgeDirection direction) {
+		if (!InventoryUtils.canMoveItem(fromInventory, targetInventory, slot, intoSlot, direction)) { return 0; }
 		int merged = 0;
 		ItemStack stack = fromInventory.getStackInSlot(slot);
-		if (stack == null) {
-			return merged;
-		}
+		if (stack == null) { return merged; }
 		ItemStack clonedStack = stack.copy();
 		clonedStack.stackSize = Math.min(clonedStack.stackSize, maxAmount);
 		int amountToMerge = clonedStack.stackSize;
@@ -90,24 +77,17 @@ public class InventoryUtils {
 		return merged;
 	}
 
-	public static int moveItem(IInventory fromInventory, int slot,
-			IInventory targetInventory, int maxAmount, ForgeDirection side) {
+	public static int moveItem(IInventory fromInventory, int slot, IInventory targetInventory, int maxAmount, ForgeDirection side) {
 		int merged = 0;
 		ItemStack stack = fromInventory.getStackInSlot(slot);
-		if (stack == null) {
-			return 0;
-		}
+		if (stack == null) { return 0; }
 		if (fromInventory instanceof ISidedInventory) {
-			if (!((ISidedInventory) fromInventory).canExtractItem(slot, stack,
-					side.ordinal())) {
-				return 0;
-			}
+			if (!((ISidedInventory)fromInventory).canExtractItem(slot, stack, side.ordinal())) { return 0; }
 		}
 		ItemStack clonedStack = stack.copy();
 		clonedStack.stackSize = Math.min(clonedStack.stackSize, maxAmount);
 		int amountToMerge = clonedStack.stackSize;
-		InventoryUtils.insertItemIntoInventory(targetInventory, clonedStack,
-				side.getOpposite());
+		InventoryUtils.insertItemIntoInventory(targetInventory, clonedStack, side.getOpposite());
 		merged = (amountToMerge - clonedStack.stackSize);
 		fromInventory.decrStackSize(slot, merged);
 		return merged;
@@ -129,28 +109,12 @@ public class InventoryUtils {
 			int blockID = world.getBlockId(x, y, z);
 			Block block = Block.blocksList[blockID];
 			if ((block instanceof BlockChest)) {
-				if (world.getBlockId(x - 1, y, z) == blockID) {
-					return new InventoryLargeChest("Large chest",
-							(IInventory) world.getBlockTileEntity(x - 1, y, z),
-							(IInventory) tileEntity);
-				}
-				if (world.getBlockId(x + 1, y, z) == blockID) {
-					return new InventoryLargeChest("Large chest",
-							(IInventory) tileEntity,
-							(IInventory) world.getBlockTileEntity(x + 1, y, z));
-				}
-				if (world.getBlockId(x, y, z - 1) == blockID) {
-					return new InventoryLargeChest("Large chest",
-							(IInventory) world.getBlockTileEntity(x, y, z - 1),
-							(IInventory) tileEntity);
-				}
-				if (world.getBlockId(x, y, z + 1) == blockID) {
-					return new InventoryLargeChest("Large chest",
-							(IInventory) tileEntity,
-							(IInventory) world.getBlockTileEntity(x, y, z + 1));
-				}
+				if (world.getBlockId(x - 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x - 1, y, z), (IInventory)tileEntity); }
+				if (world.getBlockId(x + 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x + 1, y, z)); }
+				if (world.getBlockId(x, y, z - 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x, y, z - 1), (IInventory)tileEntity); }
+				if (world.getBlockId(x, y, z + 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x, y, z + 1)); }
 			}
-			return (IInventory) tileEntity;
+			return (IInventory)tileEntity;
 		}
 		return null;
 	}
@@ -165,8 +129,7 @@ public class InventoryUtils {
 	 * @param direction
 	 * @return
 	 */
-	public static IInventory getInventory(World world, int x, int y, int z,
-			ForgeDirection direction) {
+	public static IInventory getInventory(World world, int x, int y, int z, ForgeDirection direction) {
 		if (direction != null && direction != ForgeDirection.UNKNOWN) {
 			x += direction.offsetX;
 			y += direction.offsetY;
@@ -176,26 +139,18 @@ public class InventoryUtils {
 
 	}
 
-	public static boolean canMoveItem(Object fromTile, Object toTile,
-			int fromSlot, int intoSlot, ForgeDirection direction) {
-		ItemStack stack = ((IInventory) fromTile).getStackInSlot(fromSlot);
+	public static boolean canMoveItem(Object fromTile, Object toTile, int fromSlot, int intoSlot, ForgeDirection direction) {
+		ItemStack stack = ((IInventory)fromTile).getStackInSlot(fromSlot);
 		if (stack != null && fromTile instanceof ISidedInventory) {
-			if (!((ISidedInventory) fromTile).canExtractItem(fromSlot, stack,
-					direction.ordinal())) {
-				return false;
-			}
+			if (!((ISidedInventory)fromTile).canExtractItem(fromSlot, stack, direction.ordinal())) { return false; }
 		}
 		if (stack != null && toTile instanceof ISidedInventory) {
-			if (!((ISidedInventory) toTile).canInsertItem(intoSlot, stack,
-					direction.getOpposite().ordinal())) {
-				return false;
-			}
+			if (!((ISidedInventory)toTile).canInsertItem(intoSlot, stack, direction.getOpposite().ordinal())) { return false; }
 		}
 		return true;
 	}
 
-	public static boolean consumeInventoryItem(IInventory inventory,
-			ItemStack stack) {
+	public static boolean consumeInventoryItem(IInventory inventory, ItemStack stack) {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(i);
 			if (stackInSlot != null && stackInSlot.isItemEqual(stack)) {
@@ -212,9 +167,7 @@ public class InventoryUtils {
 	public static int getSlotIndexOfNextStack(IInventory invent) {
 		for (int i = 0; i < invent.getSizeInventory(); i++) {
 			ItemStack stack = invent.getStackInSlot(i);
-			if (stack != null) {
-				return i;
-			}
+			if (stack != null) { return i; }
 		}
 		return -1;
 	}
@@ -239,12 +192,9 @@ public class InventoryUtils {
 	 *            the stack to insert
 	 * @return the amount of items that could be put in to the stack
 	 */
-	public static int testInventoryInsertion(IInventory inventory,
-			ItemStack item) {
-		if (item == null || item.stackSize == 0)
-			return 0;
-		if (inventory == null)
-			return 0;
+	public static int testInventoryInsertion(IInventory inventory, ItemStack item) {
+		if (item == null || item.stackSize == 0) return 0;
+		if (inventory == null) return 0;
 		int slotCount = inventory.getSizeInventory();
 		/*
 		 * Allows counting down the item size, without cloning or changing the
@@ -253,26 +203,20 @@ public class InventoryUtils {
 		int itemSizeCounter = item.stackSize;
 		for (int i = 0; i < slotCount && itemSizeCounter > 0; i++) {
 
-			if (!inventory.isItemValidForSlot(i, item))
-				continue;
+			if (!inventory.isItemValidForSlot(i, item)) continue;
 			ItemStack inventorySlot = inventory.getStackInSlot(i);
 			/*
 			 * If the slot is empty, dump the biggest stack we can, taking in to
 			 * consideration, the remaining amount of stack
 			 */
 			if (inventorySlot == null) {
-				itemSizeCounter -= Math.min(
-						Math.min(itemSizeCounter,
-								inventory.getInventoryStackLimit()),
-						item.getMaxStackSize());
+				itemSizeCounter -= Math.min(Math.min(itemSizeCounter, inventory.getInventoryStackLimit()), item.getMaxStackSize());
 			}
 			/* If the slot is not empty, check that these items stack */
 			else if (item.itemID == inventorySlot.itemID
-					&& (!item.getHasSubtypes() || item.getItemDamage() == inventorySlot
-							.getItemDamage())
+					&& (!item.getHasSubtypes() || item.getItemDamage() == inventorySlot.getItemDamage())
 					&& ItemStack.areItemStackTagsEqual(item, inventorySlot)
-					&& inventorySlot.stackSize < inventorySlot
-							.getMaxStackSize()) {
+					&& inventorySlot.stackSize < inventorySlot.getMaxStackSize()) {
 				/* If they stack, decrement by the amount of space that remains */
 
 				int space = inventorySlot.getMaxStackSize()

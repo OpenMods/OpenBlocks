@@ -27,19 +27,10 @@ public class EntityAICollectItem extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (!pathFinder.noPath()) {
-			return false;
-		}
+		if (!pathFinder.noPath()) { return false; }
 		if (luggage.worldObj != null) {
 			@SuppressWarnings("unchecked")
-			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(
-					EntityItem.class,
-					AxisAlignedBB
-							.getAABBPool()
-							.getAABB(luggage.posX - 1, luggage.posY - 1,
-									luggage.posZ - 1, luggage.posX + 1,
-									luggage.posY + 1, luggage.posZ + 1)
-							.expand(10.0, 10.0, 10.0));
+			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
 			EntityItem closest = null;
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {
@@ -56,8 +47,8 @@ public class EntityAICollectItem extends EntityAIBase {
 																		// luggage
 					if (closest == null
 							|| dist < closestDistance
-							&& luggage.canConsumeStackPartially(item
-									.getEntityItem()) && !item.isInWater()) {
+							&& luggage.canConsumeStackPartially(item.getEntityItem())
+							&& !item.isInWater()) {
 						closest = item;
 						closestDistance = dist;
 					}
@@ -86,8 +77,7 @@ public class EntityAICollectItem extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		if (targetItem != null) {
-			pathFinder.tryMoveToXYZ(targetItem.posX, targetItem.posY,
-					targetItem.posZ, 0.4f);
+			pathFinder.tryMoveToXYZ(targetItem.posX, targetItem.posY, targetItem.posZ, 0.4f);
 		}
 	}
 
@@ -99,21 +89,14 @@ public class EntityAICollectItem extends EntityAIBase {
 					&& luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
 				int preEatSize = stack.stackSize;
-				InventoryUtils.insertItemIntoInventory(luggage.getInventory(),
-						stack);
+				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
 				// Check that the size changed
 				if (preEatSize != stack.stackSize) {
 					if (luggage.lastSound > 15) {
 						if (stack.getItem() instanceof ItemFood) {
-							luggage.playSound(
-									"openblocks:slowpokenom",
-									0.5f,
-									1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
+							luggage.playSound("openblocks:slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						} else {
-							luggage.playSound(
-									"openblocks:chomp",
-									0.5f,
-									1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
+							luggage.playSound("openblocks:chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						}
 						luggage.lastSound = 0;
 					}

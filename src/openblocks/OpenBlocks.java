@@ -104,8 +104,7 @@ public class OpenBlocks {
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
 		public ItemStack getIconItemStack() {
-			return new ItemStack(ObjectUtils.firstNonNull(
-					OpenBlocks.Blocks.flag, Block.sponge), 1, 0);
+			return new ItemStack(ObjectUtils.firstNonNull(OpenBlocks.Blocks.flag, Block.sponge), 1, 0);
 		}
 	};
 
@@ -117,8 +116,7 @@ public class OpenBlocks {
 	public void preInit(FMLPreInitializationEvent evt) {
 		Log.logger = evt.getModLog();
 
-		Configuration configFile = new Configuration(
-				evt.getSuggestedConfigurationFile());
+		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 
 		Config.readConfig(configFile);
 
@@ -129,22 +127,18 @@ public class OpenBlocks {
 	public void init(FMLInitializationEvent evt) {
 		Config.register();
 
-		NetworkRegistry.instance().registerGuiHandler(instance,
-				proxy.createGuiHandler());
+		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());
 		if (Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
 
 		if (Config.enableGraves) {
-			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700,
-					OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
 		}
 		if (Config.itemLuggageId > 0) {
-			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage",
-					702, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
 		}
-		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider",
-				701, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
 
 		OpenBlocks.Items.generic.initRecipes();
 
@@ -184,8 +178,7 @@ public class OpenBlocks {
 	}
 
 	public static File getBaseDir() {
-		return FMLCommonHandler.instance().getMinecraftServerInstance()
-				.getFile(".");
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getFile(".");
 	}
 
 	public static File getWorldDir(World world) {

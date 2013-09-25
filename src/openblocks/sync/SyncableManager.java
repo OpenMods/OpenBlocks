@@ -17,8 +17,7 @@ public class SyncableManager {
 
 	public void handlePacket(Packet250CustomPayload packet) throws IOException {
 
-		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(
-				packet.data));
+		DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
 
 		byte type = dis.readByte();
 
@@ -34,7 +33,7 @@ public class SyncableManager {
 				if (world.blockExists(x, y, z)) {
 					TileEntity tile = world.getBlockTileEntity(x, y, z);
 					if (tile instanceof ISyncHandler) {
-						handler = (ISyncHandler) tile;
+						handler = (ISyncHandler)tile;
 					}
 				}
 			}
@@ -42,12 +41,11 @@ public class SyncableManager {
 			int entityId = dis.readInt();
 			Entity entity = world.getEntityByID(entityId);
 			if (entity != null && entity instanceof ISyncHandler) {
-				handler = (ISyncHandler) entity;
+				handler = (ISyncHandler)entity;
 			}
 		}
 		if (handler != null) {
-			List<ISyncableObject> changes = handler.getSyncMap()
-					.readFromStream(dis);
+			List<ISyncableObject> changes = handler.getSyncMap().readFromStream(dis);
 			handler.onSynced(changes);
 		}
 		dis.close();

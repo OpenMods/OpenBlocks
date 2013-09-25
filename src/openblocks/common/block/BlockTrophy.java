@@ -14,8 +14,7 @@ public class BlockTrophy extends OpenBlock {
 
 	public BlockTrophy() {
 		super(Config.blockTrophyId, Material.ground);
-		setupBlock(this, "trophy", TileEntityTrophy.class,
-				ItemTrophyBlock.class);
+		setupBlock(this, "trophy", TileEntityTrophy.class, ItemTrophyBlock.class);
 		setBlockBounds(0.3f, 0f, 0.3f, 0.7f, 0.8f, 0.7f);
 	}
 
@@ -35,12 +34,10 @@ public class BlockTrophy extends OpenBlock {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x,
-			int y, int z) {
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		if (!world.isRemote
 				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
-			TileEntityTrophy trophy = getTileEntity(world, x, y, z,
-					TileEntityTrophy.class);
+			TileEntityTrophy trophy = getTileEntity(world, x, y, z, TileEntityTrophy.class);
 			if (trophy.trophyType != null) {
 				ItemStack itemStack = trophy.trophyType.getItemStack();
 				float f = 0.7F;
@@ -57,8 +54,7 @@ public class BlockTrophy extends OpenBlock {
 	}
 
 	@Override
-	protected void dropBlockAsItem_do(World world, int x, int y, int z,
-			ItemStack itemStack) {
+	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack) {
 
 	}
 }

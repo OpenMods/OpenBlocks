@@ -41,9 +41,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	 * @return the block rotation
 	 */
 	public ForgeDirection getRotation() {
-		if (isUsedForClientInventoryRendering) {
-			return rotation;
-		}
+		if (isUsedForClientInventoryRendering) { return rotation; }
 		int ordinal = (getMetadata() & 0x3) + 2;
 		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
 		return direction;
@@ -68,10 +66,8 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	private boolean getFlag(int index) {
-		if (index > 1)
-			return false;
-		if (index < 0)
-			return false;
+		if (index > 1) return false;
+		if (index < 0) return false;
 		index = 4 + 4 * index;
 		int currentMeta = getMetadata();
 		boolean result = (currentMeta & index) == index;
@@ -79,16 +75,12 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public boolean getFlag1() {
-		if (isUsedForClientInventoryRendering) {
-			return flag1;
-		}
+		if (isUsedForClientInventoryRendering) { return flag1; }
 		return getFlag(0);
 	}
 
 	public boolean getFlag2() {
-		if (isUsedForClientInventoryRendering) {
-			return flag2;
-		}
+		if (isUsedForClientInventoryRendering) { return flag2; }
 		return getFlag(1);
 	}
 
@@ -141,9 +133,7 @@ public abstract class OpenTileEntity extends TileEntity {
 		int x = xCoord + direction.offsetX;
 		int y = yCoord + direction.offsetY;
 		int z = zCoord + direction.offsetZ;
-		if (worldObj != null && worldObj.blockExists(x, y, z)) {
-			return worldObj.getBlockTileEntity(x, y, z);
-		}
+		if (worldObj != null && worldObj.blockExists(x, y, z)) { return worldObj.getBlockTileEntity(x, y, z); }
 		return null;
 	}
 
@@ -159,8 +149,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public void sendBlockEvent(int key, int value) {
-		worldObj.addBlockEvent(xCoord, yCoord, zCoord,
-				worldObj.getBlockId(xCoord, yCoord, zCoord), key, value);
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord), key, value);
 	}
 
 	public void sync() {
@@ -169,28 +158,23 @@ public abstract class OpenTileEntity extends TileEntity {
 			int ordinal = rotation.ordinal() - 2;
 			int currentMeta = getMetadata();
 			int newMeta = ordinal;
-			newMeta = (flag1 ? 4 : 0) | (newMeta & 3);
-			newMeta = (flag2 ? 8 : 0) | (newMeta & 7);
+			newMeta = (flag1? 4 : 0) | (newMeta & 3);
+			newMeta = (flag2? 8 : 0) | (newMeta & 7);
 			if (currentMeta != newMeta) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord,
-						newMeta, 3);
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 3);
 			}
 		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
-	public boolean shouldRefresh(int oldID, int newID, int oldMeta,
-			int newMeta, World world, int x, int y, int z) {
+	public boolean shouldRefresh(int oldID, int newID, int oldMeta, int newMeta, World world, int x, int y, int z) {
 		return oldID != newID;
 	}
 
 	public OpenBlock getBlock() {
-		Block block = Block.blocksList[worldObj.getBlockId(xCoord, yCoord,
-				zCoord)];
-		if (block instanceof OpenBlock) {
-			return (OpenBlock) block;
-		}
+		Block block = Block.blocksList[worldObj.getBlockId(xCoord, yCoord, zCoord)];
+		if (block instanceof OpenBlock) { return (OpenBlock)block; }
 		return null;
 	}
 
@@ -199,13 +183,11 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public void openGui(EntityPlayer player, Enum<?> gui) {
-		player.openGui(OpenBlocks.instance, gui.ordinal(), worldObj, xCoord,
-				yCoord, zCoord);
+		player.openGui(OpenBlocks.instance, gui.ordinal(), worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public AxisAlignedBB getBB() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord,
-				xCoord + 1, yCoord + 1, zCoord + 1);
+		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
 	}
 
 	public boolean isRenderedInInventory() {

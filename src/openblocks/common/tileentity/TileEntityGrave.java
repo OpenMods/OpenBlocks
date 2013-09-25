@@ -24,8 +24,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 
 	private ForgeDirection rotation = ForgeDirection.SOUTH;
 	private String perishedUsername;
-	private GenericInventory inventory = new GenericInventory("grave", false,
-			100);
+	private GenericInventory inventory = new GenericInventory("grave", false, 100);
 	public boolean onSoil = true;
 	private int ticksSinceLastSound = 0;
 
@@ -50,14 +49,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 			if (worldObj.difficultySetting > 0
 					&& worldObj.rand.nextDouble() < 0.002) {
 				@SuppressWarnings("unchecked")
-				List<Entity> mobs = worldObj
-						.getEntitiesWithinAABB(
-								IMob.class,
-								AxisAlignedBB
-										.getAABBPool()
-										.getAABB(xCoord, yCoord, zCoord,
-												xCoord + 1, yCoord + 1,
-												zCoord + 1).expand(7, 7, 7));
+				List<Entity> mobs = worldObj.getEntitiesWithinAABB(IMob.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1).expand(7, 7, 7));
 				if (mobs.size() < 5) {
 					EntityLiving living = null;
 					double chance = worldObj.rand.nextDouble();
@@ -67,8 +59,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 						living = new EntityBat(worldObj);
 					}
 
-					living.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5,
-							zCoord + 0.5, worldObj.rand.nextFloat() * 360, 0);
+					living.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextFloat() * 360, 0);
 					if (living.getCanSpawnHere()) {
 						worldObj.spawnEntityInWorld(living);
 					}
@@ -78,7 +69,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 	}
 
 	public String getUsername() {
-		return perishedUsername == null ? "Unknown" : perishedUsername;
+		return perishedUsername == null? "Unknown" : perishedUsername;
 	}
 
 	public IInventory getLoot() {
@@ -137,8 +128,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 			perishedUsername = tag.getString("perishedUsername");
 		}
 		if (tag.hasKey("rotation")) {
-			rotation = ForgeDirection
-					.getOrientation(tag.getInteger("rotation"));
+			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
 		}
 		if (tag.hasKey("onsoil")) {
 			onSoil = tag.getBoolean("onsoil");

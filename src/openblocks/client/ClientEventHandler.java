@@ -5,8 +5,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 
 public class ClientEventHandler {
 
-	public ClientEventHandler() {
-	}
+	public ClientEventHandler() {}
 
 	@ForgeSubscribe
 	public void onRenderWorldLast(RenderWorldLastEvent evt) {

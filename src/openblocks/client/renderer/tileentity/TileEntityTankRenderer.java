@@ -22,11 +22,10 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	RenderBlocks renderBlocks = new RenderBlocks();
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		bindTexture(TextureMap.locationBlocksTexture);
-		TileEntityTank tankTile = (TileEntityTank) tileentity;
+		TileEntityTank tankTile = (TileEntityTank)tileentity;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 		GL11.glPushMatrix();
@@ -41,59 +40,49 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		if (!tankInEast) {
 			if (!tankInNorth) {
 				// north east
-				OpenRenderHelper.renderCube(0.475, -0.501, -0.501, 0.501,
-						0.501, -0.475, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(0.475, -0.501, -0.501, 0.501, 0.501, -0.475, OpenBlocks.Blocks.tank, null);
 			}
 			if (!tankInSouth) {
 				// south east
-				OpenRenderHelper.renderCube(0.475, -0.501, 0.475, 0.501, 0.501,
-						0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(0.475, -0.501, 0.475, 0.501, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 
 			if (!tankDown) {
 				// bottom east
-				OpenRenderHelper.renderCube(0.475, -0.501, -0.501, 0.501,
-						-0.475, 0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(0.475, -0.501, -0.501, 0.501, -0.475, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 
 			if (!tankUp) {
 				// top east
-				OpenRenderHelper.renderCube(0.475, 0.475, -0.501, 0.501, 0.501,
-						0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(0.475, 0.475, -0.501, 0.501, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 		}
 		if (!tankInWest) {
 			if (!tankInNorth) {
 				// north west
-				OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, -0.475,
-						0.501, -0.475, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, -0.475, 0.501, -0.475, OpenBlocks.Blocks.tank, null);
 			}
 			if (!tankInSouth) {
 				// south west
-				OpenRenderHelper.renderCube(-0.501, -0.501, 0.475, -0.475,
-						0.501, 0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, -0.501, 0.475, -0.475, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 			if (!tankDown) {
 				// bottom west
-				OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, -0.475,
-						-0.475, 0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, -0.475, -0.475, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 			if (!tankUp) {
 				// top west
-				OpenRenderHelper.renderCube(-0.501, 0.475, -0.501, -0.475,
-						0.501, 0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, 0.475, -0.501, -0.475, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 		}
 		if (!tankInNorth) {
 			if (!tankUp) {
 				// top north
-				OpenRenderHelper.renderCube(-0.501, 0.475, -0.501, 0.501,
-						0.501, -0.475, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, 0.475, -0.501, 0.501, 0.501, -0.475, OpenBlocks.Blocks.tank, null);
 			}
 			if (!tankDown) {
 				// bottom north
-				OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, 0.501,
-						-0.475, -0.475, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, 0.501, -0.475, -0.475, OpenBlocks.Blocks.tank, null);
 			}
 		}
 
@@ -101,13 +90,11 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 			if (!tankUp) {
 				// top south
-				OpenRenderHelper.renderCube(-0.501, 0.475, 0.475, 0.501, 0.501,
-						0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, 0.475, 0.475, 0.501, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 			if (!tankDown) {
 				// bottom south
-				OpenRenderHelper.renderCube(-0.501, -0.501, 0.475, 0.501,
-						-0.475, 0.501, OpenBlocks.Blocks.tank, null);
+				OpenRenderHelper.renderCube(-0.501, -0.501, 0.475, 0.501, -0.475, 0.501, OpenBlocks.Blocks.tank, null);
 			}
 		}
 
@@ -129,14 +116,10 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 				Tessellator t = Tessellator.instance;
 
-				double ySouthEast = tankTile.getLiquidHeightForSide(
-						ForgeDirection.SOUTH, ForgeDirection.EAST);
-				double yNorthEast = tankTile.getLiquidHeightForSide(
-						ForgeDirection.NORTH, ForgeDirection.EAST);
-				double ySouthWest = tankTile.getLiquidHeightForSide(
-						ForgeDirection.SOUTH, ForgeDirection.WEST);
-				double yNorthWest = tankTile.getLiquidHeightForSide(
-						ForgeDirection.NORTH, ForgeDirection.WEST);
+				double ySouthEast = tankTile.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.EAST);
+				double yNorthEast = tankTile.getLiquidHeightForSide(ForgeDirection.NORTH, ForgeDirection.EAST);
+				double ySouthWest = tankTile.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.WEST);
+				double yNorthWest = tankTile.getLiquidHeightForSide(ForgeDirection.NORTH, ForgeDirection.WEST);
 
 				double uMin = texture.getInterpolatedU(0.0);
 				double uMax = texture.getInterpolatedU(16.0);
@@ -219,8 +202,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	}
 
 	public static ResourceLocation getFluidSheet(FluidStack liquid) {
-		if (liquid == null)
-			return TextureMap.locationBlocksTexture;
+		if (liquid == null) return TextureMap.locationBlocksTexture;
 		return getFluidSheet(liquid.getFluid());
 	}
 

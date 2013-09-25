@@ -17,9 +17,8 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
-			double d2, float f) {
-		TileEntityTrophy trophy = (TileEntityTrophy) tileentity;
+	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f) {
+		TileEntityTrophy trophy = (TileEntityTrophy)tileentity;
 		GL11.glPushMatrix();
 
 		Trophy type = trophy.getTrophyType();
@@ -31,19 +30,16 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);
 				GL11.glTranslated(0.5, 0.2 + type.getVerticalOffset(), 0.5);
-				GL11.glRotatef(BlockUtils.getRotationFromDirection(trophy
-						.getRotation()), 0, 1, 0);
+				GL11.glRotatef(BlockUtils.getRotationFromDirection(trophy.getRotation()), 0, 1, 0);
 
 				GL11.glScaled(ratio, ratio, ratio);
-				Render renderer = RenderManager.instance
-						.getEntityRenderObject(entity);
+				Render renderer = RenderManager.instance.getEntityRenderObject(entity);
 				// yeah we dont care about fonts, but we do care that the
 				// renderManager is available
 				if (renderer.getFontRendererFromRenderManager() != null) {
 					renderer.doRender(entity, 0, 0, 0, f, 0.5f);
 				}
-				OpenGlHelper.setLightmapTextureCoords(
-						OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 
 				GL11.glPopMatrix();
 				GL11.glPushMatrix();
@@ -51,8 +47,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 
 				// TODO: fix
 				bindTexture(TextureMap.locationBlocksTexture);
-				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8,
-						OpenBlocks.Blocks.trophy, null);
+				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8, OpenBlocks.Blocks.trophy, null);
 				GL11.glPopMatrix();
 
 			}

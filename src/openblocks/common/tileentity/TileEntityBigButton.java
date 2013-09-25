@@ -22,8 +22,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 
 	private int tickCounter = 0;
 
-	private GenericInventory inventory = new GenericInventory("bigbutton",
-			true, 1);
+	private GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
 
 	@Override
 	public void updateEntity() {
@@ -32,8 +31,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 			if (tickCounter > 0) {
 				tickCounter--;
 				if (tickCounter <= 0) {
-					worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D,
-							zCoord + 0.5D, "random.click", 0.3F, 0.5F);
+					worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.5F);
 					setFlag1(false);
 					sync();
 				}
@@ -43,28 +41,24 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 
 	public int getTickTime() {
 		ItemStack stack = inventory.getStackInSlot(0);
-		return stack == null ? 1 : stack.stackSize;
+		return stack == null? 1 : stack.stackSize;
 	}
 
 	@Override
-	public void onBlockBroken() {
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-	}
+	public void onBlockAdded() {}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
 				openGui(player, Gui.BigButton);
 			} else {
 				setFlag1(true);
 				tickCounter = getTickTime();
-				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D,
-						zCoord + 0.5D, "random.click", 0.3F, 0.6F);
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);
 				sync();
 			}
 		}
@@ -74,22 +68,18 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 	@Override
 	public void sync() {
 		super.sync();
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord,
-				OpenBlocks.Blocks.bigButton.blockID);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton.blockID);
 		ForgeDirection rot = getRotation();
 		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord
-				+ rot.offsetY, zCoord + rot.offsetZ,
-				OpenBlocks.Blocks.bigButton.blockID);
+				+ rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
 
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
-			ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(side.getOpposite());
 		sync();
 	}
@@ -150,12 +140,10 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

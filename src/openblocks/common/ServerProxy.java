@@ -15,12 +15,10 @@ import cpw.mods.fml.common.network.IGuiHandler;
 public class ServerProxy implements IProxy {
 
 	@Override
-	public void init() {
-	}
+	public void init() {}
 
 	@Override
-	public void postInit() {
-	}
+	public void postInit() {}
 
 	@Override
 	public void registerRenderInformation() {
@@ -29,8 +27,7 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public File getWorldDir(World world) {
-		return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0)
-				.getSaveHandler().getWorldDirectoryName());
+		return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0).getSaveHandler().getWorldDirectoryName());
 	}
 
 	/**
@@ -62,16 +59,12 @@ public class ServerProxy implements IProxy {
 	public boolean isSinglePlayer() {
 		// Yeah I know it doesn't matter now but why not have it :P
 		MinecraftServer serverInstance = MinecraftServer.getServer();
-		if (serverInstance == null)
-			return false;
+		if (serverInstance == null) return false;
 		return serverInstance.isSinglePlayer();
 	}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x,
-			double y, double z, ForgeDirection sprayDirection,
-			float angleRadians, float spread) {
-	}
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread) {}
 
 	@Override
 	public EntityPlayer getThePlayer() {

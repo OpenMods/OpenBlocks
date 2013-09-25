@@ -24,15 +24,14 @@ public class PlayerDeathHandler {
 		if (event.entityLiving != null
 				&& event.entityLiving instanceof EntityPlayer) {
 
-			EntityPlayer player = (EntityPlayer) event.entityLiving;
+			EntityPlayer player = (EntityPlayer)event.entityLiving;
 			World world = player.worldObj;
 
 			if (!world.isRemote
-					&& !world.getGameRules().getGameRuleBooleanValue(
-							"keepInventory")) {
-				int x = (int) player.posX;
-				int y = (int) player.posY;
-				int z = (int) player.posZ;
+					&& !world.getGameRules().getGameRuleBooleanValue("keepInventory")) {
+				int x = (int)player.posX;
+				int y = (int)player.posY;
+				int z = (int)player.posZ;
 				boolean aboveIsAir = false;
 
 				for (int checkY = y; checkY > 1; checkY--) {
@@ -40,10 +39,9 @@ public class PlayerDeathHandler {
 					if (!thisIsAir && aboveIsAir) {
 						checkY++;
 						world.setBlock(x, checkY, z, Config.blockGraveId, 0, 2);
-						TileEntity tile = world
-								.getBlockTileEntity(x, checkY, z);
+						TileEntity tile = world.getBlockTileEntity(x, checkY, z);
 						if (tile != null && tile instanceof TileEntityGrave) {
-							TileEntityGrave grave = (TileEntityGrave) tile;
+							TileEntityGrave grave = (TileEntityGrave)tile;
 							grave.setUsername(player.username);
 							grave.setLoot(player.inventory);
 							player.inventory.clearInventory(-1, -1);

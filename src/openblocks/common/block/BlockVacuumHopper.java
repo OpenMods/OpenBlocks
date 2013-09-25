@@ -17,25 +17,20 @@ public class BlockVacuumHopper extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
-			int y, int z) {
-		return AxisAlignedBB.getAABBPool().getAABB(x + 0.01, y + 0.01,
-				z + 0.01, x + 0.99, y + 0.99, z + 0.99);
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		return AxisAlignedBB.getAABBPool().getAABB(x + 0.01, y + 0.01, z + 0.01, x + 0.99, y + 0.99, z + 0.99);
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
-			Entity entity) {
-		TileEntityVacuumHopper te = getTileEntity(world, x, y, z,
-				TileEntityVacuumHopper.class);
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+		TileEntityVacuumHopper te = getTileEntity(world, x, y, z, TileEntityVacuumHopper.class);
 		if (te != null) {
 			te.onEntityCollidedWithBlock(entity);
 		}
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
@@ -45,10 +40,8 @@ public class BlockVacuumHopper extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int x,
-			int y, int z) {
-		return AxisAlignedBB.getAABBPool().getAABB(x + 0.3, y + 0.3, z + 0.3,
-				x + 0.7, y + 0.7, z + 0.7);
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int x, int y, int z) {
+		return AxisAlignedBB.getAABBPool().getAABB(x + 0.3, y + 0.3, z + 0.3, x + 0.7, y + 0.7, z + 0.7);
 	}
 
 	@Override

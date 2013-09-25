@@ -44,15 +44,14 @@ public class ModelTarget extends ModelBase {
 		stand2.render(f5);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y,
-			float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
 	public void setRotationAngles(TileEntity te, float f) {
-		TileEntityTarget targetTe = (TileEntityTarget) te;
+		TileEntityTarget targetTe = (TileEntityTarget)te;
 		target.rotateAngleX = targetTe.getTargetRotation();
 	}
 

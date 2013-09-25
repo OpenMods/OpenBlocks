@@ -31,9 +31,7 @@ public interface IProxy {
 
 	public File getWorldDir(World world);
 
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x,
-			double y, double z, ForgeDirection sprayDirection,
-			float angleRadians, float spread);
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread);
 
 	public EntityPlayer getThePlayer();
 

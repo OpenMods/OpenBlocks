@@ -14,14 +14,10 @@ public class TileEntityHealBlock extends OpenTileEntity {
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (worldObj.isRemote)
-			return;
+		if (worldObj.isRemote) return;
 
 		@SuppressWarnings("unchecked")
-		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(
-				EntityPlayer.class,
-				AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord,
-						xCoord + 1, yCoord + 2, zCoord + 1));
+		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
 		if (OpenBlocks.proxy.getTicks(worldObj) % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
@@ -34,8 +30,7 @@ public class TileEntityHealBlock extends OpenTileEntity {
 					 * someone else should ultimately decide if it should be
 					 * done (you know who you are)
 					 */
-					player.addPotionEffect(new PotionEffect(
-							Potion.regeneration.id, 1, 10));
+					player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 1, 10));
 					player.addPotionEffect(new PotionEffect(23, 1)); // Saturation
 					/*
 					 * TODO: the saturation potion does not yet have a legible

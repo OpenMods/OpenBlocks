@@ -38,21 +38,17 @@ public class MetaGeneric implements IMetaItem {
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target,
-			EntityLivingBase player) {
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player) {
 		return false;
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player,
-			World world, int x, int y, int z, int side, float par8, float par9,
-			float par10) {
+	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
 		return false;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player,
-			World world) {
+	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world) {
 		return itemStack;
 	}
 
@@ -69,39 +65,33 @@ public class MetaGeneric implements IMetaItem {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addRecipe() {
-		if (recipes == null)
-			return;
+		if (recipes == null) return;
 		for (Object[] recipe2 : recipes) {
 			Object[] recipe = recipe2;
-			int amount = (Integer) recipe[0];
+			int amount = (Integer)recipe[0];
 			boolean smelting = false;
 			int itemId = 0;
 			int itemMeta = 0;
 			if (recipe[1] instanceof Integer) {
 				itemId = amount;
-				itemMeta = (Integer) recipe[1];
+				itemMeta = (Integer)recipe[1];
 				smelting = true;
 			} else {
 				recipe = Arrays.copyOfRange(recipe, 1, recipe.length);
 			}
 			for (int j = 0; j < recipe.length; j++) {
 				if (recipe[j] instanceof Metas) {
-					recipe[j] = ((Metas) recipe[j]).newItemStack();
+					recipe[j] = ((Metas)recipe[j]).newItemStack();
 				}
 			}
 			IRecipe r = null;
 			if (smelting) {
-				FurnaceRecipes.smelting().addSmelting(itemId, itemMeta,
-						(ItemStack) recipe[2], (Float) recipe[3]);
+				FurnaceRecipes.smelting().addSmelting(itemId, itemMeta, (ItemStack)recipe[2], (Float)recipe[3]);
 			} else {
 				if (recipe[0] instanceof String) {
-					r = new ShapedOreRecipe(
-							OpenBlocks.Items.generic.newItemStack(this, amount),
-							recipe);
+					r = new ShapedOreRecipe(OpenBlocks.Items.generic.newItemStack(this, amount), recipe);
 				} else {
-					r = new ShapelessOreRecipe(
-							OpenBlocks.Items.generic.newItemStack(this, amount),
-							recipe);
+					r = new ShapelessOreRecipe(OpenBlocks.Items.generic.newItemStack(this, amount), recipe);
 				}
 				if (r != null) {
 					CraftingManager.getInstance().getRecipeList().add(r);

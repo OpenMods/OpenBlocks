@@ -27,7 +27,7 @@ public class EntityTorchArrow extends EntityArrow {
 		}
 		if (ticksInGroundField != null) {
 			try {
-				return (Integer) ticksInGroundField.get(this);
+				return (Integer)ticksInGroundField.get(this);
 			} catch (Exception e) {
 				Log.warn(e, "Field missing?");
 			}
@@ -39,18 +39,16 @@ public class EntityTorchArrow extends EntityArrow {
 	public void onUpdate() {
 		super.onUpdate();
 		if (getTicksInGround() == 1) {
-			int closestX = (int) Math.round(posX);
-			int closestY = (int) Math.round(posY);
-			int closestZ = (int) Math.round(posZ);
+			int closestX = (int)Math.round(posX);
+			int closestY = (int)Math.round(posY);
+			int closestZ = (int)Math.round(posZ);
 			if (worldObj.isAirBlock(closestX, closestY, closestZ)) {
 				if (shootingEntity != null
 						&& shootingEntity instanceof EntityPlayer) {
-					EntityPlayer player = (EntityPlayer) shootingEntity;
+					EntityPlayer player = (EntityPlayer)shootingEntity;
 					if (player.inventory.hasItem(Block.torchWood.blockID)) {
-						player.inventory
-								.consumeInventoryItem(Block.torchWood.blockID);
-						worldObj.setBlock(closestX, closestY, closestZ,
-								Block.torchWood.blockID);
+						player.inventory.consumeInventoryItem(Block.torchWood.blockID);
+						worldObj.setBlock(closestX, closestY, closestZ, Block.torchWood.blockID);
 						setDead();
 					}
 				}

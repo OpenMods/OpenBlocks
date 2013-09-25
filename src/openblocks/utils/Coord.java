@@ -7,8 +7,7 @@ public class Coord {
 	public int y;
 	public int z;
 
-	public Coord() {
-	}
+	public Coord() {}
 
 	public Coord(ForgeDirection direction) {
 		x = direction.offsetX;
@@ -41,10 +40,8 @@ public class Coord {
 
 	@Override
 	public boolean equals(Object that) {
-		if (!(that instanceof Coord)) {
-			return false;
-		}
-		Coord otherCoord = (Coord) that;
+		if (!(that instanceof Coord)) { return false; }
+		Coord otherCoord = (Coord)that;
 		return otherCoord.x == x && otherCoord.y == y && otherCoord.z == z;
 	}
 

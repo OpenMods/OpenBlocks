@@ -41,8 +41,7 @@ public class EntityGhost extends EntityMob implements
 	 */
 	private static final boolean DISABLE_HEAD_ANIMATION = true;
 
-	protected GenericInventory inventory = new GenericInventory("ghost", false,
-			100);
+	protected GenericInventory inventory = new GenericInventory("ghost", false, 100);
 	/**
 	 * Is this Ghost an aggressive scary attacking ghost, or a sad wandering
 	 * safe ghost
@@ -102,17 +101,13 @@ public class EntityGhost extends EntityMob implements
 		setAIMoveSpeed(0.5F);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		// this.tasks.addTask(1, new EntityAIDragPlayer(this, 8.0F));
-		this.tasks.addTask(2, new EntityAIAttackOnCollide(this,
-				EntityPlayer.class, getAIMoveSpeed(), false));
-		this.tasks
-				.addTask(3, new EntityAIWander(this, getAIMoveSpeed() * 0.1f));
-		this.tasks.addTask(4, new EntityAIWatchClosest(this,
-				EntityPlayer.class, 8.0F));
+		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, getAIMoveSpeed(), false));
+		this.tasks.addTask(3, new EntityAIWander(this, getAIMoveSpeed() * 0.1f));
+		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 
 		// this.tasks.addTask(4, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this,
-				EntityPlayer.class, 0, true));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 		this.getNavigator().setAvoidsWater(true);
 
 		syncMap.put(SyncKeys.FLAGS, flags);
@@ -133,12 +128,10 @@ public class EntityGhost extends EntityMob implements
 
 	/* Following the code of EntityFlying */
 	@Override
-	protected void fall(float par1) {
-	}
+	protected void fall(float par1) {}
 
 	@Override
-	protected void updateFallState(double par1, boolean par3) {
-	}
+	protected void updateFallState(double par1, boolean par3) {}
 
 	@Override
 	public boolean isOnLadder() {
@@ -160,9 +153,7 @@ public class EntityGhost extends EntityMob implements
 			}
 		}
 		// if we're still in the "flight" cooldown, we still want to fly
-		if (flags.ticksSinceSet(FlagKeys.IS_FLYING) < 20) {
-			return true;
-		}
+		if (flags.ticksSinceSet(FlagKeys.IS_FLYING) < 20) { return true; }
 
 		// na, lets not fly
 		return false;
@@ -203,8 +194,7 @@ public class EntityGhost extends EntityMob implements
 
 			boolean headInHand = flags.get(FlagKeys.HEAD_IN_HAND);
 
-			int ticksSinceHeadChange = flags
-					.ticksSinceChange(FlagKeys.HEAD_IN_HAND);
+			int ticksSinceHeadChange = flags.ticksSinceChange(FlagKeys.HEAD_IN_HAND);
 
 			if (DISABLE_HEAD_ANIMATION) {
 				headInHand = false;
@@ -214,8 +204,7 @@ public class EntityGhost extends EntityMob implements
 					headInHand = false;
 				} else {
 					if (!headInHand
-							&& Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand
-									.nextDouble())) {
+							&& Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand.nextDouble())) {
 						headInHand = true;
 					} else if (headInHand && ticksSinceHeadChange > 50) {
 						headInHand = false;
@@ -224,7 +213,7 @@ public class EntityGhost extends EntityMob implements
 			}
 
 			if (flags.get(FlagKeys.IS_FLYING)
-					&& worldObj.getHeightValue((int) posX, (int) posZ) + 1 > posY) {
+					&& worldObj.getHeightValue((int)posX, (int)posZ) + 1 > posY) {
 				/*
 				 * Flying up causes the entity onGround to be false, nullifying
 				 * any movement. There is one option, override the movement
@@ -355,7 +344,7 @@ public class EntityGhost extends EntityMob implements
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		data.writeUTF(playerName == null ? "Unknown" : playerName);
+		data.writeUTF(playerName == null? "Unknown" : playerName);
 	}
 
 	@Override

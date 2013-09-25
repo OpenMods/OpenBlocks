@@ -15,8 +15,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer,
-			List list, boolean par4) {
+	public void addInformation(ItemStack stack, EntityPlayer par2EntityPlayer, List list, boolean par4) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey("entity")) {

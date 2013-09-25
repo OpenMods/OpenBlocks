@@ -16,8 +16,7 @@ public class BlockBigButton extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return (side != ForgeDirection.UP && side != ForgeDirection.DOWN)
 				&& isNeighborBlockSolid(world, x, y, z, side);
 	}
@@ -38,45 +37,36 @@ public class BlockBigButton extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z,
-			int side) {
+	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
 		return false;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
-			int z) {
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 
-		TileEntityBigButton tile = getTileEntity(world, x, y, z,
-				TileEntityBigButton.class);
+		TileEntityBigButton tile = getTileEntity(world, x, y, z, TileEntityBigButton.class);
 
-		if (tile == null) {
-			return;
-		}
+		if (tile == null) { return; }
 
 		ForgeDirection direction = tile.getRotation();
 
 		boolean pressed = tile.getFlag1();
 
 		switch (direction) {
-		case EAST:
-			setBlockBounds(pressed ? 0.9375f : 0.875f, 0.0625f, 0.0625f, 1.0f,
-					0.9375f, 0.9375f);
-			break;
-		case WEST:
-			setBlockBounds(0, 0.0625f, 0.0625f, pressed ? 0.0625f : 0.125f,
-					0.9375f, 0.9375f);
-			break;
-		case NORTH:
-			setBlockBounds(0.0625f, 0.0625f, 0, 0.9375f, 0.9375f,
-					pressed ? 0.0625f : 0.125f);
-			break;
-		case SOUTH:
-			setBlockBounds(0.0625f, 0.0625f, pressed ? 0.9375f : 0.875f,
-					0.9375f, 0.9375f, 1f);
-			break;
-		default:
-			setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+			case EAST:
+				setBlockBounds(pressed? 0.9375f : 0.875f, 0.0625f, 0.0625f, 1.0f, 0.9375f, 0.9375f);
+				break;
+			case WEST:
+				setBlockBounds(0, 0.0625f, 0.0625f, pressed? 0.0625f : 0.125f, 0.9375f, 0.9375f);
+				break;
+			case NORTH:
+				setBlockBounds(0.0625f, 0.0625f, 0, 0.9375f, 0.9375f, pressed? 0.0625f : 0.125f);
+				break;
+			case SOUTH:
+				setBlockBounds(0.0625f, 0.0625f, pressed? 0.9375f : 0.875f, 0.9375f, 0.9375f, 1f);
+				break;
+			default:
+				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
 
@@ -86,21 +76,15 @@ public class BlockBigButton extends OpenBlock {
 	}
 
 	@Override
-	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z,
-			int side) {
-		TileEntityBigButton te = getTileEntity(world, x, y, z,
-				TileEntityBigButton.class);
-		return te != null && te.getFlag1() ? 15 : 0;
+	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int side) {
+		TileEntityBigButton te = getTileEntity(world, x, y, z, TileEntityBigButton.class);
+		return te != null && te.getFlag1()? 15 : 0;
 	}
 
 	@Override
-	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z,
-			int side) {
-		ForgeDirection direction = ForgeDirection.getOrientation(side)
-				.getOpposite();
-		TileEntityBigButton button = getTileEntity(world, x, y, z,
-				TileEntityBigButton.class);
-		return (direction == button.getRotation() && button.getFlag1()) ? 15
-				: 0;
+	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side) {
+		ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
+		TileEntityBigButton button = getTileEntity(world, x, y, z, TileEntityBigButton.class);
+		return (direction == button.getRotation() && button.getFlag1())? 15 : 0;
 	}
 }

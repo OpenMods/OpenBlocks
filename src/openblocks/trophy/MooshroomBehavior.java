@@ -7,11 +7,8 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class MooshroomBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile,
-			EntityPlayer player) {
-		if (tile.worldObj.isRemote) {
-			return;
-		}
+	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+		if (tile.worldObj.isRemote) { return; }
 
 		if (tile.sinceLastActivate() > 100) {
 			for (int x = -1; x <= 1; x++) {
@@ -20,10 +17,8 @@ public class MooshroomBehavior implements ITrophyBehavior {
 					int pY = tile.yCoord;
 					int pZ = z + tile.zCoord;
 					if (tile.worldObj.isAirBlock(pX, pY, pZ)
-							&& Block.mushroomBrown.canPlaceBlockAt(
-									tile.worldObj, pX, pY, pZ)) {
-						tile.worldObj.setBlock(pX, pY, pZ,
-								Block.mushroomBrown.blockID);
+							&& Block.mushroomBrown.canPlaceBlockAt(tile.worldObj, pX, pY, pZ)) {
+						tile.worldObj.setBlock(pX, pY, pZ, Block.mushroomBrown.blockID);
 					}
 				}
 			}
@@ -32,7 +27,6 @@ public class MooshroomBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {
-	}
+	public void executeTickBehavior(TileEntityTrophy tile) {}
 
 }

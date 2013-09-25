@@ -32,24 +32,20 @@ public class BlockSprinkler extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
-			int y, int z) {
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
-			int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
-			int z) {
-		TileEntitySprinkler sprinkler = getTileEntity(world, x, y, z,
-				TileEntitySprinkler.class);
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+		TileEntitySprinkler sprinkler = getTileEntity(world, x, y, z, TileEntitySprinkler.class);
 		if (sprinkler != null) {
 			if (sprinkler.getRotation() == ForgeDirection.EAST
 					|| sprinkler.getRotation() == ForgeDirection.WEST) {
@@ -61,8 +57,7 @@ public class BlockSprinkler extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return canPlaceOnlyOnGround(world, x, y, z, side);
 	}
 }

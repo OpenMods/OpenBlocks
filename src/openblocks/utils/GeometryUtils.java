@@ -19,12 +19,8 @@ public class GeometryUtils {
 				"Bottom South East");
 
 		public static final EnumSet<Octant> ALL = EnumSet.allOf(Octant.class);
-		public static final EnumSet<Octant> TOP = EnumSet.of(
-				Octant.TopSouthEast, Octant.TopSouthWest, Octant.TopNorthEast,
-				Octant.TopNorthWest);
-		public static final EnumSet<Octant> BOTTOM = EnumSet.of(
-				Octant.BottomSouthEast, Octant.BottomSouthWest,
-				Octant.BottomNorthEast, Octant.BottomNorthWest);
+		public static final EnumSet<Octant> TOP = EnumSet.of(Octant.TopSouthEast, Octant.TopSouthWest, Octant.TopNorthEast, Octant.TopNorthWest);
+		public static final EnumSet<Octant> BOTTOM = EnumSet.of(Octant.BottomSouthEast, Octant.BottomSouthWest, Octant.BottomNorthEast, Octant.BottomNorthWest);
 
 		private final int x, y, z;
 		private final String name;
@@ -69,10 +65,8 @@ public class GeometryUtils {
 	 * @param shapeable
 	 *            Shapeable object to set the blocks
 	 */
-	public static void makeLine(int startX, int startY, int startZ,
-			ForgeDirection direction, int length, IShapeable shapeable) {
-		if (length == 0)
-			return;
+	public static void makeLine(int startX, int startY, int startZ, ForgeDirection direction, int length, IShapeable shapeable) {
+		if (length == 0) return;
 		for (int offset = 0; offset <= length; offset++)
 			/* Create a line in the direction of direction, length in size */
 			shapeable.setBlock(startX + (offset * direction.offsetX), startY
@@ -100,24 +94,19 @@ public class GeometryUtils {
 	 * @param shapeable
 	 *            The shape to apply the blocks to
 	 */
-	public static void makePlane(int startX, int startY, int startZ, int width,
-			int height, ForgeDirection right, ForgeDirection up,
-			IShapeable shapeable) {
-		if (width == 0 || height == 0)
-			return;
+	public static void makePlane(int startX, int startY, int startZ, int width, int height, ForgeDirection right, ForgeDirection up, IShapeable shapeable) {
+		if (width == 0 || height == 0) return;
 		int lineOffsetX, lineOffsetY, lineOffsetZ;
 		// We offset each line by up, and then apply it right
 		for (int h = 0; h <= height; h++) {
 			lineOffsetX = startX + (h * up.offsetX);
 			lineOffsetY = startY + (h * up.offsetY);
 			lineOffsetZ = startZ + (h * up.offsetZ);
-			makeLine(lineOffsetX, lineOffsetY, lineOffsetZ, right, width,
-					shapeable);
+			makeLine(lineOffsetX, lineOffsetY, lineOffsetZ, right, width, shapeable);
 		}
 	}
 
-	public static void makeSphere(int radiusX, int radiusY, int radiusZ,
-			IShapeable shapeable, EnumSet<Octant> octants) {
+	public static void makeSphere(int radiusX, int radiusY, int radiusZ, IShapeable shapeable, EnumSet<Octant> octants) {
 
 		final double invRadiusX = 1.0 / radiusX;
 		final double invRadiusY = 1.0 / radiusY;
@@ -156,25 +145,22 @@ public class GeometryUtils {
 					}
 
 					for (Octant octant : octantSet) {
-						shapeable.setBlock(x * octant.getXOffset(),
-								y * octant.getYOffset(),
-								z * octant.getZOffset());
+						shapeable.setBlock(x * octant.getXOffset(), y
+								* octant.getYOffset(), z * octant.getZOffset());
 					}
 				}
 			}
 		}
 	}
 
-	public static void line2D(int y, int x0, int z0, int x1, int z1,
-			IShapeable shapeable) {
-		int dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-		int dy = -Math.abs(z1 - z0), sy = z0 < z1 ? 1 : -1;
+	public static void line2D(int y, int x0, int z0, int x1, int z1, IShapeable shapeable) {
+		int dx = Math.abs(x1 - x0), sx = x0 < x1? 1 : -1;
+		int dy = -Math.abs(z1 - z0), sy = z0 < z1? 1 : -1;
 		int err = dx + dy, e2;
 
 		for (;;) {
 			shapeable.setBlock(x0, y, z0);
-			if (x0 == x1 && z0 == z1)
-				break;
+			if (x0 == x1 && z0 == z1) break;
 			e2 = 2 * err;
 			if (e2 >= dy) {
 				err += dy;
@@ -189,21 +175,21 @@ public class GeometryUtils {
 
 	public static void line3D(Vec3 start, Vec3 end, IShapeable shapeable) {
 
-		int dx = (int) (end.xCoord - start.xCoord);
-		int dy = (int) (end.yCoord - start.yCoord);
-		int dz = (int) (end.zCoord - start.zCoord);
+		int dx = (int)(end.xCoord - start.xCoord);
+		int dy = (int)(end.yCoord - start.yCoord);
+		int dz = (int)(end.zCoord - start.zCoord);
 
 		int ax = Math.abs(dx) << 1;
 		int ay = Math.abs(dy) << 1;
 		int az = Math.abs(dz) << 1;
 
-		int signx = (int) Math.signum(dx);
-		int signy = (int) Math.signum(dy);
-		int signz = (int) Math.signum(dz);
+		int signx = (int)Math.signum(dx);
+		int signy = (int)Math.signum(dy);
+		int signz = (int)Math.signum(dz);
 
-		int x = (int) start.xCoord;
-		int y = (int) start.yCoord;
-		int z = (int) start.zCoord;
+		int x = (int)start.xCoord;
+		int y = (int)start.yCoord;
+		int z = (int)start.zCoord;
 
 		int deltax, deltay, deltaz;
 		if (ax >= Math.max(ay, az)) {
@@ -211,9 +197,7 @@ public class GeometryUtils {
 			deltaz = az - (ax >> 1);
 			while (true) {
 				shapeable.setBlock(x, y, z);
-				if (x == (int) end.xCoord) {
-					return;
-				}
+				if (x == (int)end.xCoord) { return; }
 
 				if (deltay >= 0) {
 					y += signy;
@@ -234,9 +218,7 @@ public class GeometryUtils {
 			deltaz = az - (ay >> 1);
 			while (true) {
 				shapeable.setBlock(x, y, z);
-				if (y == (int) end.yCoord) {
-					return;
-				}
+				if (y == (int)end.yCoord) { return; }
 
 				if (deltax >= 0) {
 					x += signx;
@@ -257,9 +239,7 @@ public class GeometryUtils {
 			deltay = ay - (az >> 1);
 			while (true) {
 				shapeable.setBlock(x, y, z);
-				if (z == (int) end.zCoord) {
-					return;
-				}
+				if (z == (int)end.zCoord) { return; }
 
 				if (deltax >= 0) {
 					x += signx;

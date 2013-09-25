@@ -22,8 +22,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 	RenderBlocks renderBlocks = new RenderBlocks();
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		GL11.glPushMatrix();
 		bindTexture(TextureMap.locationBlocksTexture);
@@ -32,30 +31,23 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 
 		// rotate to the correct rotation
-		TileEntityLightbox lightbox = (TileEntityLightbox) tileentity;
+		TileEntityLightbox lightbox = (TileEntityLightbox)tileentity;
 		ForgeDirection surface = lightbox.getSurface();
 		ForgeDirection rotation = lightbox.getRotation();
 		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
-			GL11.glRotatef(
-					BlockUtils.getRotationFromDirection(surface.getOpposite()),
-					1, 0, 0);
-			GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation
-					.getOpposite()), 0, 0, 1);
+			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 1, 0, 0);
+			GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation.getOpposite()), 0, 0, 1);
 		} else {
-			GL11.glRotatef(
-					BlockUtils.getRotationFromDirection(surface.getOpposite()),
-					0, 1, 0);
+			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 0, 1, 0);
 		}
 
 		// render a cube
-		OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5,
-				OpenBlocks.Blocks.lightbox, null);
+		OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5, OpenBlocks.Blocks.lightbox, null);
 
 		// render the map
 		ItemStack mapStack = lightbox.getStackInSlot(0);
 		if (mapStack != null && mapStack.getItem().isMap()) {
-			MapData mapdata = Item.map
-					.getMapData(mapStack, tileentity.worldObj);
+			MapData mapdata = Item.map.getMapData(mapStack, tileentity.worldObj);
 			if (mapdata != null) {
 				GL11.glTranslatef(0.5f, 0.5F, 0.299f);
 				GL11.glScaled(1.0 / 128, 1.0 / 128, 1.0 / 128);
@@ -63,9 +55,7 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 				RenderHelper.disableStandardItemLighting();
 				mapdata.playersVisibleOnMap.clear();
-				RenderManager.instance.itemRenderer.mapItemRenderer.renderMap(
-						(EntityPlayer) null,
-						RenderManager.instance.renderEngine, mapdata);
+				RenderManager.instance.itemRenderer.mapItemRenderer.renderMap((EntityPlayer)null, RenderManager.instance.renderEngine, mapdata);
 				RenderHelper.enableStandardItemLighting();
 			}
 		}

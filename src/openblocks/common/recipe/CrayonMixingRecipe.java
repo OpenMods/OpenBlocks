@@ -15,13 +15,10 @@ public class CrayonMixingRecipe implements IRecipe {
 		int count = 0;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if (stack == null)
-				continue;
+			if (stack == null) continue;
 			if ((!(stack.getItem() instanceof ItemImaginary))
-					|| !ItemImaginary.isCrayon(stack))
-				return false;
-			if (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST)
-				continue;
+					|| !ItemImaginary.isCrayon(stack)) return false;
+			if (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) continue;
 			count++;
 		}
 		return count > 1;
@@ -34,8 +31,7 @@ public class CrayonMixingRecipe implements IRecipe {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack == null
-					|| (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST))
-				continue;
+					|| (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST)) continue;
 			count++;
 
 			int color = ItemUtils.getInt(stack, ItemImaginary.TAG_COLOR);
@@ -45,15 +41,13 @@ public class CrayonMixingRecipe implements IRecipe {
 			b += ((color >> 0) & 0xFF);
 		}
 
-		if (count < 2)
-			return null;
+		if (count < 2) return null;
 
-		int color = (int) (r / count);
-		color = (color << 8) + (int) (g / count);
-		color = (color << 8) + (int) (b / count);
+		int color = (int)(r / count);
+		color = (color << 8) + (int)(g / count);
+		color = (color << 8) + (int)(b / count);
 
-		return ItemImaginary.setupValues(color,
-				new ItemStack(Blocks.imaginary), count * 0.9f);
+		return ItemImaginary.setupValues(color, new ItemStack(Blocks.imaginary), count * 0.9f);
 	}
 
 	@Override

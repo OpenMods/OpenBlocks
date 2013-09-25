@@ -38,22 +38,19 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	private FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
 
-	private GenericInventory inventory = new GenericInventory("sprinkler",
-			true, 9);
+	private GenericInventory inventory = new GenericInventory("sprinkler", true, 9);
 
 	private boolean hasBonemeal = false;
 
 	private void attemptFertilize() {
-		if (worldObj == null || worldObj.isRemote)
-			return;
-		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? Config.sprinklerBonemealFertizizeChance
-				: Config.sprinklerFertilizeChance)) {
+		if (worldObj == null || worldObj.isRemote) return;
+		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance)) {
 			// http://goo.gl/RpQuk9
 			Random random = worldObj.rand;
 			int x = (random.nextInt(Config.sprinklerEffectiveRange) + 1)
-					* (random.nextBoolean() ? 1 : -1) + xCoord;
+					* (random.nextBoolean()? 1 : -1) + xCoord;
 			int z = (random.nextInt(Config.sprinklerEffectiveRange) + 1)
-					* (random.nextBoolean() ? 1 : -1) + zCoord;
+					* (random.nextBoolean()? 1 : -1) + zCoord;
 			/*
 			 * What? Okay think about this. i = -1 y = yCoord - 1 i = 0 y =
 			 * yCoord - 1 i = 1 y = yCoord
@@ -66,8 +63,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 					for (int a = 0; a < 10; a++) {
 						// Mikee, why do we try to apply it 10 times? Is it
 						// likely to fail? -NC
-						if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x,
-								y, z, new FakePlayer(worldObj, "sprinkler"))) {
+						if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
 							break;
 						}
 					}
@@ -79,15 +75,13 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	private void sprayParticles() {
-		if (worldObj == null || !worldObj.isRemote)
-			return;
+		if (worldObj == null || !worldObj.isRemote) return;
 		for (int i = 0; i < 6; i++) {
 			float offset = (i - 2.5f) / 5f;
 			ForgeDirection rotation = getRotation();
 			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5
 					+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
-					+ (offset * 0.6 * rotation.offsetZ), rotation,
-					getSprayPitch(), 2 * offset);
+					+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
 		}
 	}
 
@@ -96,16 +90,13 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 			if (tank.getFluid() == null || tank.getFluid().amount == 0) {
-				TileEntity below = worldObj.getBlockTileEntity(xCoord,
-						yCoord - 1, zCoord);
+				TileEntity below = worldObj.getBlockTileEntity(xCoord, yCoord - 1, zCoord);
 				if (below instanceof IFluidHandler) {
 
-					IFluidHandler belowTank = (IFluidHandler) below;
-					FluidStack drained = belowTank.drain(ForgeDirection.UP,
-							tank.getCapacity(), false);
+					IFluidHandler belowTank = (IFluidHandler)below;
+					FluidStack drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), false);
 					if (drained != null && drained.isFluidEqual(water)) {
-						drained = belowTank.drain(ForgeDirection.UP,
-								tank.getCapacity(), true);
+						drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), true);
 						if (drained != null) {
 							tank.fill(drained, true);
 						}
@@ -116,8 +107,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
 			if (OpenBlocks.proxy.getTicks(worldObj) % 1200 == 0) {
-				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory,
-						bonemeal);
+				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, bonemeal);
 			}
 			if (OpenBlocks.proxy.getTicks(worldObj) % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
@@ -189,12 +179,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -203,9 +191,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource != null && resource.isFluidEqual(water)) {
-			return tank.fill(resource, doFill);
-		}
+		if (resource != null && resource.isFluidEqual(water)) { return tank.fill(resource, doFill); }
 		return 0;
 	}
 
@@ -217,21 +203,16 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	@Override
 	public void onBlockBroken() {
 		if (!worldObj.isRemote && !worldObj.isAirBlock(xCoord, yCoord, zCoord)) {
-			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord,
-					new ItemStack(OpenBlocks.Blocks.sprinkler));
+			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, new ItemStack(OpenBlocks.Blocks.sprinkler));
 		}
 	}
 
 	@Override
-	public void onBlockAdded() {
-	}
+	public void onBlockAdded() {}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
-			float hitY, float hitZ) {
-		if (player.isSneaking()) {
-			return false;
-		}
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
 			openGui(player, OpenBlocks.Gui.Sprinkler);
 		}
@@ -239,12 +220,10 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
-			ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(BlockUtils.get2dOrientation(player));
 		sync();
 	}
@@ -255,14 +234,12 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public float getSprayPitch() {
-		return (float) (getSprayAngle() * Math.PI);
+		return (float)(getSprayAngle() * Math.PI);
 	}
 
 	public float getSprayAngle() {
-		if (isEnabled()) {
-			return MathHelper.sin(OpenBlocks.proxy.getTicks(worldObj) * 0.02f)
-					* (float) Math.PI * 0.035f;
-		}
+		if (isEnabled()) { return MathHelper.sin(OpenBlocks.proxy.getTicks(worldObj) * 0.02f)
+				* (float)Math.PI * 0.035f; }
 		return 0;
 	}
 
@@ -299,8 +276,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource,
-			boolean doDrain) {
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
 		return null;
 	}
 

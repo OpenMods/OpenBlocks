@@ -41,27 +41,21 @@ public class BlockLadder extends BlockTrapDoor {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World,
-			int par2, int par3, int par4) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
-		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3,
-				par4);
+		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World,
-			int par2, int par3, int par4) {
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
-		return super
-				.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
+		return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
-			int par2, int par3, int par4) {
-		this.setBlockBoundsForBlockRender(par1IBlockAccess.getBlockMetadata(
-				par2, par3, par4));
+	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
+		this.setBlockBoundsForBlockRender(par1IBlockAccess.getBlockMetadata(par2, par3, par4));
 	}
 
 	@Override
@@ -95,8 +89,7 @@ public class BlockLadder extends BlockTrapDoor {
 	}
 
 	@Override
-	public boolean isLadder(World world, int x, int y, int z,
-			EntityLivingBase entity) {
+	public boolean isLadder(World world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}
 

@@ -14,16 +14,14 @@ public class TileEntityBigButtonRenderer extends TileEntitySpecialRenderer {
 
 	private ModelBigButton model = new ModelBigButton();
 
-	private static final ResourceLocation texture = new ResourceLocation(
-			"openblocks", "textures/models/bigbutton.png");
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/bigbutton.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
 		bindTexture(texture);
-		TileEntityBigButton button = (TileEntityBigButton) tileentity;
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.0F, (float) z + 0.5F);
+		TileEntityBigButton button = (TileEntityBigButton)tileentity;
+		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0F, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		ForgeDirection surface = button.getRotation();
 		GL11.glRotatef(-BlockUtils.getRotationFromDirection(surface), 0, 1, 0);

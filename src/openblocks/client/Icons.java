@@ -18,15 +18,15 @@ public class Icons {
 
 	private static void bindIconSheet(TextureManager tex, int type) {
 		switch (type) {
-		case ICON_TYPE_BLOCK:
-			tex.bindTexture(TextureMap.locationBlocksTexture);
-			break;
-		case ICON_TYPE_ITEM:
-			tex.bindTexture(TextureMap.locationItemsTexture);
-			break;
-		default:
-			Log.warn("Unknown icon sheet: %d", type);
-			break;
+			case ICON_TYPE_BLOCK:
+				tex.bindTexture(TextureMap.locationBlocksTexture);
+				break;
+			case ICON_TYPE_ITEM:
+				tex.bindTexture(TextureMap.locationItemsTexture);
+				break;
+			default:
+				Log.warn("Unknown icon sheet: %d", type);
+				break;
 		}
 	}
 
@@ -71,8 +71,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
-		}
+		public void registerIcons(int type, IconRegister registry) {}
 	}
 
 	private static class LoadableSingleIcon extends SingleIcon {
@@ -85,8 +84,7 @@ public class Icons {
 
 		@Override
 		public void registerIcons(int type, IconRegister registry) {
-			if (this.type == type)
-				icon = registry.registerIcon(iconId);
+			if (this.type == type) icon = registry.registerIcon(iconId);
 		}
 	}
 
@@ -96,8 +94,7 @@ public class Icons {
 		private final double scaleRatio;
 		private final double distance;
 
-		public ComposedIcon(IDrawableIcon front, IDrawableIcon back,
-				double scaleRatio, double distance) {
+		public ComposedIcon(IDrawableIcon front, IDrawableIcon back, double scaleRatio, double distance) {
 			this.front = front;
 			this.back = back;
 			this.scaleRatio = scaleRatio;
@@ -146,8 +143,7 @@ public class Icons {
 
 		@Override
 		protected void finalize() throws Throwable {
-			if (displayList != null)
-				GL11.glDeleteLists(displayList, 1);
+			if (displayList != null) GL11.glDeleteLists(displayList, 1);
 		}
 	}
 

@@ -27,14 +27,12 @@ public class ModelFlag extends ModelBase {
 		pole.render(f5);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y,
-			float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(TileEntity te, float f) {
-	}
+	public void setRotationAngles(TileEntity te, float f) {}
 
 }

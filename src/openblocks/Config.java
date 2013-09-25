@@ -173,24 +173,20 @@ public class Config {
 	public static float imaginaryFadingSpeed = 0.0075f;
 	public static float imaginaryItemUseCount = 10;
 
-	private static void getBlock(Configuration configFile, Field field,
-			String description) {
+	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
 			int defaultValue = field.getInt(null);
-			Property prop = configFile.getBlock("block", field.getName(),
-					defaultValue, description);
+			Property prop = configFile.getBlock("block", field.getName(), defaultValue, description);
 			field.set(null, prop.getInt());
 		} catch (Throwable e) {
 			throw Throwables.propagate(e);
 		}
 	}
 
-	private static void getItem(Configuration configFile, Field field,
-			String description) {
+	private static void getItem(Configuration configFile, Field field, String description) {
 		try {
 			int defaultValue = field.getInt(null);
-			Property prop = configFile.getItem("item", field.getName(),
-					defaultValue, description);
+			Property prop = configFile.getItem("item", field.getName(), defaultValue, description);
 			field.set(null, prop.getInt());
 		} catch (Throwable e) {
 			throw Throwables.propagate(e);
@@ -217,30 +213,18 @@ public class Config {
 	}
 
 	static void readConfig(Configuration configFile) {
-		Property prop = configFile
-				.get("openblocks",
-						"failIdsQuietly",
-						failIdsQuietly,
-						"If true, OpenBlocks will not throw an error when a block cannot be loaded due to ID conflict.");
+		Property prop = configFile.get("openblocks", "failIdsQuietly", failIdsQuietly, "If true, OpenBlocks will not throw an error when a block cannot be loaded due to ID conflict.");
 		failIdsQuietly = prop.getBoolean(failIdsQuietly);
 
 		processAnnotations(configFile);
 
-		prop = configFile.get("dropblock", "searchDistance",
-				elevatorTravelDistance, "The range of the drop block");
+		prop = configFile.get("dropblock", "searchDistance", elevatorTravelDistance, "The range of the drop block");
 		elevatorTravelDistance = prop.getInt();
 
-		prop = configFile.get("dropblock", "mustFaceDirection",
-				elevatorBlockMustFaceDirection,
-				"Must the user face the direction they want to travel?");
-		elevatorBlockMustFaceDirection = prop
-				.getBoolean(elevatorBlockMustFaceDirection);
+		prop = configFile.get("dropblock", "mustFaceDirection", elevatorBlockMustFaceDirection, "Must the user face the direction they want to travel?");
+		elevatorBlockMustFaceDirection = prop.getBoolean(elevatorBlockMustFaceDirection);
 
-		prop = configFile
-				.get("dropblock",
-						"maxPassThrough",
-						elevatorMaxBlockPassCount,
-						"The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this");
+		prop = configFile.get("dropblock", "maxPassThrough", elevatorMaxBlockPassCount, "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this");
 		elevatorMaxBlockPassCount = prop.getInt();
 
 		if (elevatorMaxBlockPassCount < -1) {
@@ -248,158 +232,100 @@ public class Config {
 		}
 		prop.set(elevatorMaxBlockPassCount);
 
-		prop = configFile
-				.get("dropblock",
-						"ignoreHalfBlocks",
-						elevatorIgnoreHalfBlocks,
-						"The elevator will ignore half blocks when counting the blocks it can pass through");
+		prop = configFile.get("dropblock", "ignoreHalfBlocks", elevatorIgnoreHalfBlocks, "The elevator will ignore half blocks when counting the blocks it can pass through");
 		elevatorIgnoreHalfBlocks = prop.getBoolean(elevatorIgnoreHalfBlocks);
 
-		prop = configFile
-				.get("dropblock", "irregularBlocksArePassable",
-						irregularBlocksArePassable,
-						"The elevator will try to pass through blocks that have custom collision boxes");
-		irregularBlocksArePassable = prop
-				.getBoolean(irregularBlocksArePassable);
+		prop = configFile.get("dropblock", "irregularBlocksArePassable", irregularBlocksArePassable, "The elevator will try to pass through blocks that have custom collision boxes");
+		irregularBlocksArePassable = prop.getBoolean(irregularBlocksArePassable);
 
-		prop = configFile
-				.get("grave", "ghostProbability", ghostSpawnProbability,
-						"Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
+		prop = configFile.get("grave", "ghostProbability", ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		ghostSpawnProbability = prop.getInt();
 
-		if (ghostSpawnProbability > 100)
-			ghostSpawnProbability = 100;
-		else if (ghostSpawnProbability < 0)
-			ghostSpawnProbability = 0;
+		if (ghostSpawnProbability > 100) ghostSpawnProbability = 100;
+		else if (ghostSpawnProbability < 0) ghostSpawnProbability = 0;
 
 		prop.set(ghostSpawnProbability);
 
-		prop = configFile.get("grave", "enableGraves", enableGraves,
-				"Enable graves on player death");
+		prop = configFile.get("grave", "enableGraves", enableGraves, "Enable graves on player death");
 		enableGraves = prop.getBoolean(enableGraves);
 
-		prop = configFile.get("tanks", "bucketsPerTank", bucketsPerTank,
-				"The amount of buckets each tank can hold");
+		prop = configFile.get("tanks", "bucketsPerTank", bucketsPerTank, "The amount of buckets each tank can hold");
 		bucketsPerTank = prop.getInt(bucketsPerTank);
 
-		prop = configFile
-				.get("tanks", "emitLight", tanksEmitLight,
-						"Tanks will emit light when they contain a liquid that glows (eg. lava)");
+		prop = configFile.get("tanks", "emitLight", tanksEmitLight, "Tanks will emit light when they contain a liquid that glows (eg. lava)");
 		tanksEmitLight = prop.getBoolean(tanksEmitLight);
 
-		prop = configFile.get("tanks", "transparent", tanksAreTransparent,
-				"Tanks will pass light");
+		prop = configFile.get("tanks", "transparent", tanksAreTransparent, "Tanks will pass light");
 		tanksAreTransparent = prop.getBoolean(tanksAreTransparent);
 
-		prop = configFile.get("tanks", "dynamicTransparency",
-				tanksHaveDynamicTransparency,
-				"The tank opacity changes with the amount of liquid");
-		tanksHaveDynamicTransparency = prop
-				.getBoolean(tanksHaveDynamicTransparency);
+		prop = configFile.get("tanks", "dynamicTransparency", tanksHaveDynamicTransparency, "The tank opacity changes with the amount of liquid");
+		tanksHaveDynamicTransparency = prop.getBoolean(tanksHaveDynamicTransparency);
 
-		prop = configFile
-				.get("trophy", "trophyDropChance", trophyDropChance,
-						"The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
+		prop = configFile.get("trophy", "trophyDropChance", trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
 		trophyDropChance = prop.getDouble(trophyDropChance);
 
-		prop = configFile.get("sprinkler", "fertilizeChance",
-				sprinklerFertilizeChance,
-				"1/chance that crops will be fertilized without bonemeal");
+		prop = configFile.get("sprinkler", "fertilizeChance", sprinklerFertilizeChance, "1/chance that crops will be fertilized without bonemeal");
 		sprinklerFertilizeChance = prop.getInt(sprinklerFertilizeChance);
 
-		prop = configFile.get("sprinkler", "bonemealFertilizeChance",
-				sprinklerBonemealFertizizeChance,
-				"1/chance that crops will be fertilized with bonemeal");
-		sprinklerBonemealFertizizeChance = prop
-				.getInt(sprinklerBonemealFertizizeChance);
+		prop = configFile.get("sprinkler", "bonemealFertilizeChance", sprinklerBonemealFertizizeChance, "1/chance that crops will be fertilized with bonemeal");
+		sprinklerBonemealFertizizeChance = prop.getInt(sprinklerBonemealFertizizeChance);
 
-		prop = configFile
-				.get("sprinkler", "effectiveRange", sprinklerEffectiveRange,
-						"The range in each cardinal direction that crops will be affected.");
+		prop = configFile.get("sprinkler", "effectiveRange", sprinklerEffectiveRange, "The range in each cardinal direction that crops will be affected.");
 		sprinklerEffectiveRange = prop.getInt(sprinklerEffectiveRange);
 
-		prop = configFile
-				.get("hacks", "tryHookPlayerRenderer", tryHookPlayerRenderer,
-						"Allow OpenBlocks to hook the player renderer to apply special effects");
+		prop = configFile.get("hacks", "tryHookPlayerRenderer", tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
 		tryHookPlayerRenderer = prop.getBoolean(tryHookPlayerRenderer);
 
-		prop = configFile.get("glasses", "opacity", sonicGlassesOpacity,
-				"0.0 - no visible change to world, 1.0 - world fully obscured");
+		prop = configFile.get("glasses", "opacity", sonicGlassesOpacity, "0.0 - no visible change to world, 1.0 - world fully obscured");
 		sonicGlassesOpacity = prop.getDouble(sonicGlassesOpacity);
 
-		prop = configFile.get("glasses", "useTexture", sonicGlassesUseTexture,
-				"Use texture for obscuring world");
+		prop = configFile.get("glasses", "useTexture", sonicGlassesUseTexture, "Use texture for obscuring world");
 		sonicGlassesUseTexture = prop.getBoolean(sonicGlassesUseTexture);
 
-		prop = configFile.get("imaginary", "fadingSpeed", imaginaryFadingSpeed,
-				"Speed of imaginary blocks fading/appearing");
-		imaginaryFadingSpeed = (float) prop.getDouble(imaginaryFadingSpeed);
+		prop = configFile.get("imaginary", "fadingSpeed", imaginaryFadingSpeed, "Speed of imaginary blocks fading/appearing");
+		imaginaryFadingSpeed = (float)prop.getDouble(imaginaryFadingSpeed);
 
-		prop = configFile.get("imaginary", "numberOfUses",
-				imaginaryItemUseCount,
-				"Number of newly created crayon/pencil uses");
-		imaginaryItemUseCount = (float) prop.getDouble(imaginaryItemUseCount);
+		prop = configFile.get("imaginary", "numberOfUses", imaginaryItemUseCount, "Number of newly created crayon/pencil uses");
+		imaginaryItemUseCount = (float)prop.getDouble(imaginaryItemUseCount);
 	}
 
 	public static void register() {
 		@SuppressWarnings("unchecked")
-		final List<IRecipe> recipeList = CraftingManager.getInstance()
-				.getRecipeList();
+		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
 		if (Config.canRegisterBlock(blockLadderId)) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
-			recipeList.add(new ShapelessOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder),
-					new ItemStack(Block.trapdoor)));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
 		}
 		if (Config.canRegisterBlock(blockGuideId)) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg",
-					"ggg", 'g', new ItemStack(Block.glass), 't',
-					new ItemStack(Block.torchWood) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg", "ggg", 'g', new ItemStack(Block.glass), 't', new ItemStack(Block.torchWood) }));
 		}
 		if (Config.canRegisterBlock(blockElevatorId)) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw",
-					"www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE),
-					'g', new ItemStack(Item.ingotGold) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'g', new ItemStack(Item.ingotGold) }));
 		}
 		if (Config.canRegisterBlock(blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
 		}
 		if (Config.canRegisterBlock(blockLightboxId)) {
 			OpenBlocks.Blocks.lightbox = new BlockLightbox();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.lightbox), new Object[] { "igi", "iti",
-					"iii", 'i', new ItemStack(Item.ingotIron), 'g',
-					new ItemStack(Block.thinGlass), 't',
-					new ItemStack(Block.torchWood) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.lightbox), new Object[] { "igi", "iti", "iii", 'i', new ItemStack(Item.ingotIron), 'g', new ItemStack(Block.thinGlass), 't', new ItemStack(Block.torchWood) }));
 		}
 		if (Config.canRegisterBlock(blockTargetId)) {
 			OpenBlocks.Blocks.target = new BlockTarget();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.target), new Object[] { "www", "www",
-					"s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE),
-					's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (Config.canRegisterBlock(blockGraveId)) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
 		if (Config.canRegisterBlock(blockFlagId)) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww",
-					"s  ", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE),
-					's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (Config.canRegisterBlock(blockTankId)) {
 			OpenBlocks.Blocks.tank = new BlockTank();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg",
-					"sgs", 'g', new ItemStack(Block.thinGlass), 's',
-					new ItemStack(Block.obsidian) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
 		}
 		if (Config.canRegisterBlock(blockTrophyId)) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
@@ -407,67 +333,44 @@ public class Config {
 		}
 		if (Config.canRegisterBlock(blockBearTrapId)) {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib",
-					"bib", 'b', new ItemStack(Block.fenceIron), 'i',
-					new ItemStack(Item.ingotIron) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
 
 		if (Config.canRegisterBlock(blockSprinklerId)) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi",
-					"iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r',
-					new ItemStack(Block.torchRedstoneActive), 'g',
-					new ItemStack(Block.fenceIron) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
 		}
 
 		if (Config.canRegisterBlock(blockCannonId)) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ",
-					"iri", 'd', new ItemStack(Block.dispenser), 'f',
-					new ItemStack(Block.fenceIron), 'i',
-					new ItemStack(Item.ingotIron), 'r',
-					new ItemStack(Block.blockRedstone) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ", "iri", 'd', new ItemStack(Block.dispenser), 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.blockRedstone) }));
 		}
 
 		if (Config.canRegisterBlock(blockVacuumHopperId)) {
 			OpenBlocks.Blocks.vacuumHopper = new BlockVacuumHopper();
-			recipeList.add(new ShapelessOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.vacuumHopper), new ItemStack(
-					Block.hopperBlock), new ItemStack(Block.obsidian),
-					new ItemStack(Item.enderPearl)));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.vacuumHopper), new ItemStack(Block.hopperBlock), new ItemStack(Block.obsidian), new ItemStack(Item.enderPearl)));
 		}
 
 		if (Config.canRegisterBlock(blockSpongeId)) {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
-			recipeList.add(new ShapelessOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1,
-					Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
 		}
 
 		if (Config.canRegisterBlock(blockBigButton)) {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb",
-					'b', new ItemStack(Block.stoneButton) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
 		}
 
 		if (Config.canRegisterBlock(blockImaginaryId)) {
 			OpenBlocks.Blocks.imaginary = new BlockImaginary();
 			{
-				ItemStack pencil = ItemImaginary.setupValues(null,
-						new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
-				recipeList.add(new ShapelessOreRecipe(pencil, Item.coal,
-						"stickWood", Item.enderPearl, Item.slimeBall));
+				ItemStack pencil = ItemImaginary.setupValues(null, new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
+				recipeList.add(new ShapelessOreRecipe(pencil, Item.coal, "stickWood", Item.enderPearl, Item.slimeBall));
 			}
 
 			for (Map.Entry<String, Integer> e : ColorUtils.COLORS.entrySet()) {
-				ItemStack crayon = ItemImaginary.setupValues(e.getValue(),
-						new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
-				recipeList.add(new ShapelessOreRecipe(crayon, e.getKey(),
-						Item.paper, Item.enderPearl, Item.slimeBall));
+				ItemStack crayon = ItemImaginary.setupValues(e.getValue(), new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
+				recipeList.add(new ShapelessOreRecipe(crayon, e.getKey(), Item.paper, Item.enderPearl, Item.slimeBall));
 			}
 
 			recipeList.add(new CrayonMixingRecipe());
@@ -475,11 +378,7 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockFanId)) {
 			OpenBlocks.Blocks.fan = new BlockFan();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Blocks.fan), new Object[] { "f", "i", "s", 'f',
-					new ItemStack(Block.fenceIron), 'i',
-					new ItemStack(Item.ingotIron), 's',
-					new ItemStack(Block.stoneSingleSlab) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.fan), new Object[] { "f", "i", "s", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab) }));
 
 		}
 
@@ -494,69 +393,46 @@ public class Config {
 		OpenBlocks.Items.generic = new ItemGeneric();
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w',
-					ItemGeneric.Metas.gliderWing.newItemStack(), 's',
-					"stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
 		}
 
 		if (itemLuggageId > 0) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Items.luggage), new Object[] { "sds", "scs",
-					"sss", 's', "stickWood", 'd', new ItemStack(Item.diamond),
-					'c', new ItemStack(Block.chest) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
 		}
 
 		if (itemSonicGlassesId > 0) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(
-					OpenBlocks.Items.sonicGlasses), new Object[] { "ihi",
-					"oso", "   ", 's', "stickWood", 'h',
-					new ItemStack(Item.helmetIron), 'o',
-					new ItemStack(Block.obsidian), 'i',
-					new ItemStack(Item.ingotIron) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i', new ItemStack(Item.ingotIron) }));
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
 			if (itemGlassesPencil > 0) {
-				OpenBlocks.Items.pencilGlasses = new ItemImaginationGlasses(
-						itemGlassesPencil, ItemImaginationGlasses.Type.PENCIL);
-				ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1,
-						0);
+				OpenBlocks.Items.pencilGlasses = new ItemImaginationGlasses(itemGlassesPencil, ItemImaginationGlasses.Type.PENCIL);
+				ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0);
 				ItemImaginary.setupValues(null, block);
-				recipeList.add(new ShapelessOreRecipe(
-						OpenBlocks.Items.pencilGlasses, block, Item.paper));
+				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.pencilGlasses, block, Item.paper));
 			}
 
 			if (itemGlassesCrayon > 0) {
-				OpenBlocks.Items.crayonGlasses = new ItemCrayonGlasses(
-						itemGlassesCrayon);
+				OpenBlocks.Items.crayonGlasses = new ItemCrayonGlasses(itemGlassesCrayon);
 				recipeList.add(new CrayonGlassesRecipe());
 			}
 
 			if (itemGlassesTechnicolor > 0) {
-				OpenBlocks.Items.technicolorGlasses = new ItemImaginationGlasses(
-						itemGlassesTechnicolor,
-						ItemImaginationGlasses.Type.TECHNICOLOR);
-				WeightedRandomChestContent drop = new WeightedRandomChestContent(
-						new ItemStack(OpenBlocks.Items.technicolorGlasses), 1,
-						1, 2);
-				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST)
-						.addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR)
-						.addItem(drop);
+				OpenBlocks.Items.technicolorGlasses = new ItemImaginationGlasses(itemGlassesTechnicolor, ItemImaginationGlasses.Type.TECHNICOLOR);
+				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.technicolorGlasses), 1, 1, 2);
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
 			}
 
 			if (itemGlassesSerious > 0) {
-				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(
-						itemGlassesSerious, ItemImaginationGlasses.Type.BASTARD);
+				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(itemGlassesSerious, ItemImaginationGlasses.Type.BASTARD);
 			}
 		}
 
 		if (Blocks.cannon != null) {
-			EntityRegistry.registerModEntity(EntityBlock.class, "BlockEntity",
-					99, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
+			EntityRegistry.registerModEntity(EntityBlock.class, "BlockEntity", 99, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
 		}
 	}
 
@@ -564,10 +440,9 @@ public class Config {
 		if (blockId > 0) {
 			if (Block.blocksList[blockId] != null) {
 				if (!failIdsQuietly) {
-					throw new RuntimeException(
-							"OpenBlocks tried to register a block for ID: "
-									+ blockId
-									+ " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
+					throw new RuntimeException("OpenBlocks tried to register a block for ID: "
+							+ blockId
+							+ " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
 				} else {
 					Log.info("Block ID " + blockId
 							+ " in use. This block will *NOT* be loaded.");

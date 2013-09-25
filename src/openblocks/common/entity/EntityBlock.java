@@ -17,23 +17,19 @@ public class EntityBlock extends Entity {
 	}
 
 	@Override
-	protected void entityInit() {
-	}
+	protected void entityInit() {}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-	}
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-	}
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (riddenByEntity == null)
-			setDead();
+		if (riddenByEntity == null) setDead();
 
 		// if((int) posY == posY) // Fix the client sometimes derping for some
 		// odd reason...

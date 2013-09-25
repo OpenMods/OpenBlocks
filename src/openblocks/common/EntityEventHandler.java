@@ -18,7 +18,7 @@ public class EntityEventHandler {
 				&& event.entityLiving instanceof EntityCreature
 				&& event.entityLiving instanceof IMob) {
 
-			EntityCreature creature = (EntityCreature) event.entityLiving;
+			EntityCreature creature = (EntityCreature)event.entityLiving;
 
 			List<EntityAITaskEntry> tasks = creature.targetTasks.taskEntries;
 
@@ -31,9 +31,7 @@ public class EntityEventHandler {
 				}
 			}
 			if (!found) {
-				creature.targetTasks.addTask(
-						creature.targetTasks.taskEntries.size(),
-						new EntityAIMoveTowardsDecoy(creature, 1.0D));
+				creature.targetTasks.addTask(creature.targetTasks.taskEntries.size(), new EntityAIMoveTowardsDecoy(creature, 1.0D));
 			}
 		}
 	}

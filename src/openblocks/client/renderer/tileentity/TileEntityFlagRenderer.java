@@ -14,21 +14,17 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 
 	ModelFlag model = new ModelFlag();
 
-	private static final ResourceLocation textureFlagpole = new ResourceLocation(
-			"openblocks", "textures/models/flagpole.png");
-	private static final ResourceLocation textureFlag = new ResourceLocation(
-			"openblocks", "textures/models/flag.png");
+	private static final ResourceLocation textureFlagpole = new ResourceLocation("openblocks", "textures/models/flagpole.png");
+	private static final ResourceLocation textureFlag = new ResourceLocation("openblocks", "textures/models/flag.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
-		TileEntityFlag flag = (TileEntityFlag) tileentity;
-		if (flag == null)
-			return;
+		TileEntityFlag flag = (TileEntityFlag)tileentity;
+		if (flag == null) return;
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y, (float) z + 0.5F);
+		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-flag.getAngle(), 0, 1, 0);
 		if (flag.getSurfaceDirection() != ForgeDirection.DOWN) {
@@ -52,9 +48,9 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {
 		bindTexture(textureFlag);
 		int color = flag.getColor();
 
-		float r = (float) ((color >> 16) & 0xFF) / 255;
-		float g = (float) ((color >> 8) & 0xFF) / 255;
-		float b = (float) (color & 0xFF) / 255;
+		float r = (float)((color >> 16) & 0xFF) / 255;
+		float g = (float)((color >> 8) & 0xFF) / 255;
+		float b = (float)(color & 0xFF) / 255;
 		float par1 = 0;
 		float par2 = 0;
 		float par3 = 1f;

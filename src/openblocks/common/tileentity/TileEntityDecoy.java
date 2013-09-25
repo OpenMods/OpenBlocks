@@ -14,11 +14,9 @@ import openblocks.sync.ISyncableObject;
 
 public class TileEntityDecoy extends NetworkedTileEntity implements IAwareTile {
 
-	public static Set<TileEntityDecoy> activeDecoys = Collections
-			.newSetFromMap(new WeakHashMap<TileEntityDecoy, Boolean>());
+	public static Set<TileEntityDecoy> activeDecoys = Collections.newSetFromMap(new WeakHashMap<TileEntityDecoy, Boolean>());
 
-	public TileEntityDecoy() {
-	}
+	public TileEntityDecoy() {}
 
 	@Override
 	public void invalidate() {
@@ -54,8 +52,7 @@ public class TileEntityDecoy extends NetworkedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
-			float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -67,8 +64,7 @@ public class TileEntityDecoy extends NetworkedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
-			ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		// TODO Auto-generated method stub
 
 	}
@@ -85,13 +81,11 @@ public class TileEntityDecoy extends NetworkedTileEntity implements IAwareTile {
 
 	}
 
-	public static TileEntityDecoy findNearestDecoyWithinRangeOfEntity(
-			EntityCreature entity, double maxRange) {
+	public static TileEntityDecoy findNearestDecoyWithinRangeOfEntity(EntityCreature entity, double maxRange) {
 		TileEntityDecoy nearest = null;
 		double nearestDistance = Double.MAX_VALUE;
 		for (TileEntityDecoy decoy : activeDecoys) {
-			double distance = entity.getDistance(decoy.xCoord, decoy.yCoord,
-					decoy.zCoord);
+			double distance = entity.getDistance(decoy.xCoord, decoy.yCoord, decoy.zCoord);
 			if (distance <= maxRange && distance < nearestDistance) {
 				nearestDistance = distance;
 				nearest = decoy;

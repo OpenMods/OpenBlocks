@@ -60,8 +60,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 
 		public void writeToNBT(NBTTagCompound tag);
 
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region,
-				List<AxisAlignedBB> result);
+		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result);
 
 		public AxisAlignedBB getBlockBounds();
 	}
@@ -69,12 +68,10 @@ public class TileEntityImaginary extends OpenTileEntity {
 	public final static ICollisionData DUMMY = new ICollisionData() {
 
 		@Override
-		public void readFromNBT(NBTTagCompound tag) {
-		}
+		public void readFromNBT(NBTTagCompound tag) {}
 
 		@Override
-		public void writeToNBT(NBTTagCompound tag) {
-		}
+		public void writeToNBT(NBTTagCompound tag) {}
 
 		@Override
 		public CollisionType getType() {
@@ -82,12 +79,9 @@ public class TileEntityImaginary extends OpenTileEntity {
 		}
 
 		@Override
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region,
-				List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y, z,
-					x + 1, y + 1, z + 1);
-			if (aabb != null && aabb.intersectsWith(region))
-				result.add(aabb);
+		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
+			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 1, z + 1);
+			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
 		}
 
 		@Override
@@ -99,8 +93,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 	public static class PanelData implements ICollisionData {
 		public float height;
 
-		public PanelData() {
-		}
+		public PanelData() {}
 
 		public PanelData(float height) {
 			this.height = height;
@@ -122,18 +115,15 @@ public class TileEntityImaginary extends OpenTileEntity {
 		}
 
 		@Override
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region,
-				List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x,
-					y + height - PANEL_HEIGHT, z, x + 1, y + height, z + 1);
-			if (aabb != null && aabb.intersectsWith(region))
-				result.add(aabb);
+		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
+			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y
+					+ height - PANEL_HEIGHT, z, x + 1, y + height, z + 1);
+			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
 		}
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getAABBPool().getAABB(0,
-					height - PANEL_HEIGHT, 0, 1, height, 1);
+			return AxisAlignedBB.getAABBPool().getAABB(0, height - PANEL_HEIGHT, 0, 1, height, 1);
 		}
 	}
 
@@ -142,11 +132,9 @@ public class TileEntityImaginary extends OpenTileEntity {
 		public float upperPanelHeight;
 		public ForgeDirection orientation;
 
-		public StairsData() {
-		}
+		public StairsData() {}
 
-		public StairsData(float lowerPanelHeight, float upperPanelHeight,
-				ForgeDirection orientation) {
+		public StairsData(float lowerPanelHeight, float upperPanelHeight, ForgeDirection orientation) {
 			this.lowerPanelHeight = lowerPanelHeight;
 			this.upperPanelHeight = upperPanelHeight;
 			this.orientation = orientation;
@@ -156,15 +144,14 @@ public class TileEntityImaginary extends OpenTileEntity {
 		public void readFromNBT(NBTTagCompound tag) {
 			lowerPanelHeight = tag.getFloat("LowerPanelHeight");
 			upperPanelHeight = tag.getFloat("UpperPanelHeight");
-			orientation = ForgeDirection.getOrientation(tag
-					.getByte("Orientation"));
+			orientation = ForgeDirection.getOrientation(tag.getByte("Orientation"));
 		}
 
 		@Override
 		public void writeToNBT(NBTTagCompound tag) {
 			tag.setFloat("LowerPanelHeight", lowerPanelHeight);
 			tag.setFloat("UpperPanelHeight", upperPanelHeight);
-			tag.setByte("Orientation", (byte) orientation.ordinal());
+			tag.setByte("Orientation", (byte)orientation.ordinal());
 		}
 
 		@Override
@@ -173,8 +160,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 		}
 
 		@Override
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region,
-				List<AxisAlignedBB> result) {
+		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
 			AxisAlignedBB lower;
 			AxisAlignedBB upper;
 
@@ -185,45 +171,34 @@ public class TileEntityImaginary extends OpenTileEntity {
 			final double upperBottom = upperTop - PANEL_HEIGHT;
 
 			switch (orientation) {
-			case NORTH:
-				lower = AxisAlignedBB.getAABBPool().getAABB(x, lowerBottom,
-						z + 0.5, x + 1, lowerTop, z + 1.0);
-				upper = AxisAlignedBB.getAABBPool().getAABB(x, upperBottom,
-						z + 0.0, x + 1, upperTop, z + 0.5);
-				break;
-			case SOUTH:
-				lower = AxisAlignedBB.getAABBPool().getAABB(x, lowerBottom,
-						z + 0.0, x + 1, lowerTop, z + 0.5);
-				upper = AxisAlignedBB.getAABBPool().getAABB(x, upperBottom,
-						z + 0.5, x + 1, upperTop, z + 1.0);
-				break;
-			case WEST:
-				lower = AxisAlignedBB.getAABBPool().getAABB(x + 0.5,
-						lowerBottom, z, x + 1.0, lowerTop, z + 1);
-				upper = AxisAlignedBB.getAABBPool().getAABB(x + 0.0,
-						upperBottom, z, x + 0.5, upperTop, z + 1);
-				break;
-			case EAST:
-				lower = AxisAlignedBB.getAABBPool().getAABB(x + 0.0,
-						lowerBottom, z, x + 0.5, lowerTop, z + 1);
-				upper = AxisAlignedBB.getAABBPool().getAABB(x + 0.5,
-						upperBottom, z, x + 1.0, upperTop, z + 1);
-				break;
-			default:
-				lower = upper = null;
-				break;
+				case NORTH:
+					lower = AxisAlignedBB.getAABBPool().getAABB(x, lowerBottom, z + 0.5, x + 1, lowerTop, z + 1.0);
+					upper = AxisAlignedBB.getAABBPool().getAABB(x, upperBottom, z + 0.0, x + 1, upperTop, z + 0.5);
+					break;
+				case SOUTH:
+					lower = AxisAlignedBB.getAABBPool().getAABB(x, lowerBottom, z + 0.0, x + 1, lowerTop, z + 0.5);
+					upper = AxisAlignedBB.getAABBPool().getAABB(x, upperBottom, z + 0.5, x + 1, upperTop, z + 1.0);
+					break;
+				case WEST:
+					lower = AxisAlignedBB.getAABBPool().getAABB(x + 0.5, lowerBottom, z, x + 1.0, lowerTop, z + 1);
+					upper = AxisAlignedBB.getAABBPool().getAABB(x + 0.0, upperBottom, z, x + 0.5, upperTop, z + 1);
+					break;
+				case EAST:
+					lower = AxisAlignedBB.getAABBPool().getAABB(x + 0.0, lowerBottom, z, x + 0.5, lowerTop, z + 1);
+					upper = AxisAlignedBB.getAABBPool().getAABB(x + 0.5, upperBottom, z, x + 1.0, upperTop, z + 1);
+					break;
+				default:
+					lower = upper = null;
+					break;
 			}
 
-			if (lower != null && lower.intersectsWith(region))
-				result.add(lower);
-			if (upper != null && upper.intersectsWith(region))
-				result.add(upper);
+			if (lower != null && lower.intersectsWith(region)) result.add(lower);
+			if (upper != null && upper.intersectsWith(region)) result.add(upper);
 		}
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getAABBPool().getAABB(0, lowerPanelHeight, 0,
-					1, upperPanelHeight, 1);
+			return AxisAlignedBB.getAABBPool().getAABB(0, lowerPanelHeight, 0, 1, upperPanelHeight, 1);
 		}
 	}
 
@@ -246,7 +221,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		color = tag.hasKey("Color") ? tag.getInteger("Color") : null;
+		color = tag.hasKey("Color")? tag.getInteger("Color") : null;
 		CollisionType type = CollisionType.VALUES[tag.getByte("Type")];
 		collisionData = type.createData();
 		collisionData.readFromNBT(tag);
@@ -256,10 +231,9 @@ public class TileEntityImaginary extends OpenTileEntity {
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 
-		if (color != null)
-			tag.setInteger("Color", color);
+		if (color != null) tag.setInteger("Color", color);
 
-		tag.setByte("Type", (byte) collisionData.getType().ordinal());
+		tag.setByte("Type", (byte)collisionData.getType().ordinal());
 		collisionData.writeToNBT(tag);
 	}
 
@@ -277,8 +251,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		if (pkt.data != null)
-			readFromNBT(pkt.data);
+		if (pkt.data != null) readFromNBT(pkt.data);
 	}
 
 	public boolean isPencil() {
@@ -286,19 +259,15 @@ public class TileEntityImaginary extends OpenTileEntity {
 	}
 
 	public boolean is(Property what, EntityPlayer player) {
-		if (what == Property.SOLID && isPencil())
-			return true;
+		if (what == Property.SOLID && isPencil()) return true;
 
 		ItemStack helmet = player.inventory.armorItemInSlot(3);
 
-		if (helmet == null)
-			return false;
+		if (helmet == null) return false;
 
 		Item item = helmet.getItem();
 
-		if (item instanceof ItemImaginationGlasses)
-			return ((ItemImaginationGlasses) item).checkBlock(what, helmet,
-					this);
+		if (item instanceof ItemImaginationGlasses) return ((ItemImaginationGlasses)item).checkBlock(what, helmet, this);
 
 		return false;
 	}
@@ -308,7 +277,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 	}
 
 	public boolean is(Property what, Entity e) {
-		return (e instanceof EntityPlayer) && is(what, (EntityPlayer) e);
+		return (e instanceof EntityPlayer) && is(what, (EntityPlayer)e);
 	}
 
 	public boolean is(Property what) {

@@ -40,11 +40,9 @@ public class TrophyHandler {
 			entity = EntityList.createEntityByName(trophy.toString(), null);
 			if (entity instanceof EntitySlime) {
 				try {
-					Method slimeSizeMethod = EntitySlime.class
-							.getDeclaredMethod("setSlimeSize", int.class);
+					Method slimeSizeMethod = EntitySlime.class.getDeclaredMethod("setSlimeSize", int.class);
 					if (slimeSizeMethod == null) {
-						slimeSizeMethod = EntitySlime.class.getDeclaredMethod(
-								"func_70799_a", int.class);
+						slimeSizeMethod = EntitySlime.class.getDeclaredMethod("func_70799_a", int.class);
 					}
 					if (slimeSizeMethod != null) {
 						slimeSizeMethod.setAccessible(true);
@@ -60,24 +58,24 @@ public class TrophyHandler {
 	}
 
 	public enum Trophy {
-		Wolf(), Chicken(new ItemDropBehavior(10000, Item.egg.itemID,
-				"mob.chicken.plop")), Cow(new ItemDropBehavior(20000,
-				Item.leather.itemID)), Creeper(new CreeperBehavior()), Skeleton(
-				new SkeletonBehavior()), PigZombie(new ItemDropBehavior(20000,
-				Item.goldNugget.itemID)), Bat(1.0, -0.3), Zombie(), Witch(0.35), Villager(), Ozelot(), Sheep(), Blaze(
+		Wolf(), Chicken(
+				new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")), Cow(
+				new ItemDropBehavior(20000, Item.leather.itemID)), Creeper(
+				new CreeperBehavior()), Skeleton(new SkeletonBehavior()), PigZombie(
+				new ItemDropBehavior(20000, Item.goldNugget.itemID)), Bat(1.0,
+				-0.3), Zombie(), Witch(0.35), Villager(), Ozelot(), Sheep(), Blaze(
 				new BlazeBehavior()), Silverfish(), Spider(), CaveSpider(
 				new CaveSpiderBehavior()), Slime(0.4), Ghast(0.1, 0.2), Enderman(
 				0.3, new EndermanBehavior()), LavaSlime(0.8), Squid(0.3, 0.5,
 				new SquidBehavior()), MushroomCow(new MooshroomBehavior()), VillagerGolem(
-				0.3), SnowMan(new SnowmanBehavior()), Pig(new ItemDropBehavior(
-				20000, Item.porkRaw.itemID));
+				0.3), SnowMan(new SnowmanBehavior()), Pig(
+				new ItemDropBehavior(20000, Item.porkRaw.itemID));
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
 		private ITrophyBehavior behavior;
 
-		Trophy() {
-		}
+		Trophy() {}
 
 		Trophy(ITrophyBehavior behavior) {
 			this.behavior = behavior;
@@ -115,8 +113,7 @@ public class TrophyHandler {
 		}
 
 		public ItemStack getItemStack() {
-			ItemStack stack = new ItemStack(OpenBlocks.Blocks.trophy, 1,
-					ordinal());
+			ItemStack stack = new ItemStack(OpenBlocks.Blocks.trophy, 1, ordinal());
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setString("entity", toString());
 			stack.setTagCompound(tag);
@@ -130,12 +127,11 @@ public class TrophyHandler {
 			e.posZ = z;
 			e.worldObj = world;
 			if (e instanceof EntityLiving) {
-				((EntityLiving) e).playLivingSound();
+				((EntityLiving)e).playLivingSound();
 			}
 		}
 
-		public void executeActivateBehavior(TileEntityTrophy tile,
-				EntityPlayer player) {
+		public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 			if (behavior != null) {
 				behavior.executeActivateBehavior(tile, player);
 			}
@@ -159,11 +155,8 @@ public class TrophyHandler {
 				if (entityName != null && !entityName.isEmpty()) {
 					try {
 						Trophy mobTrophy = Trophy.valueOf(entityName);
-						BlockUtils.dropItemStackInWorld(entity.worldObj,
-								entity.posX, entity.posY, entity.posZ,
-								mobTrophy.getItemStack());
-					} catch (IllegalArgumentException e) {
-					}
+						BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
+					} catch (IllegalArgumentException e) {}
 				}
 			}
 		}

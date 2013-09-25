@@ -99,22 +99,21 @@ public class ModelCannon extends ModelBase {
 		handle.render(f5);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y,
-			float z) {
+	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
 	public void setRotationAngles(TileEntity te, float f) {
-		TileEntityCannon cannon = (TileEntityCannon) te;
-		main.rotateAngleX = (float) Math.toRadians(-cannon.pitch.getValue());
+		TileEntityCannon cannon = (TileEntityCannon)te;
+		main.rotateAngleX = (float)Math.toRadians(-cannon.pitch.getValue());
 		maintop.rotateAngleX = rest.rotateAngleX = stand.rotateAngleX = handle.rotateAngleX = shaft.rotateAngleX = shaft2.rotateAngleX = pipe1.rotateAngleX = pipe2.rotateAngleX = main.rotateAngleX;
 		main.rotateAngleZ = 0;
 		stand.rotateAngleZ = 0;
 		maintop.rotateAngleZ = rest.rotateAngleZ = handle.rotateAngleZ = shaft.rotateAngleZ = shaft2.rotateAngleZ = pipe1.rotateAngleZ = pipe2.rotateAngleZ = main.rotateAngleZ;
 
-		main.rotateAngleY = (float) Math.toRadians(cannon.yaw.getValue());
+		main.rotateAngleY = (float)Math.toRadians(cannon.yaw.getValue());
 		maintop.rotateAngleY = rest.rotateAngleY = stand.rotateAngleY = handle.rotateAngleY = shaft.rotateAngleY = shaft2.rotateAngleY = pipe1.rotateAngleY = pipe2.rotateAngleY = main.rotateAngleY;
 	}
 

@@ -65,17 +65,13 @@ public class ItemImaginationGlasses extends ItemArmor {
 		@Override
 		@SideOnly(Side.CLIENT)
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		public void addInformation(ItemStack stack, EntityPlayer player,
-				List result, boolean extended) {
-			result.add(StatCollector.translateToLocalFormatted(
-					"openblocks.misc.color", getColor(stack)));
+		public void addInformation(ItemStack stack, EntityPlayer player, List result, boolean extended) {
+			result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", getColor(stack)));
 		}
 
 		@Override
-		public String getArmorTexture(ItemStack stack, Entity entity, int slot,
-				String type) {
-			if ("overlay".equals(type))
-				return "openblocks:textures/models/glasses_crayon_overlay.png";
+		public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+			if ("overlay".equals(type)) return "openblocks:textures/models/glasses_crayon_overlay.png";
 
 			return super.getArmorTexture(stack, entity, slot, type);
 		}
@@ -96,29 +92,25 @@ public class ItemImaginationGlasses extends ItemArmor {
 	public enum Type {
 		PENCIL("pencil") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack,
-					TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
 				return te.isPencil();
 			}
 		},
 		CRAYON("crayon") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack,
-					TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
 				return !te.isPencil() && getGlassesColor(stack) == te.color;
 			}
 		},
 		TECHNICOLOR("technicolor") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack,
-					TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
 				return property == Property.VISIBLE;
 			}
 		},
 		BASTARD("admin") {
 			@Override
-			protected boolean checkBlock(Property property, ItemStack stack,
-					TileEntityImaginary te) {
+			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
 				return true;
 			}
 		};
@@ -134,8 +126,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 					+ ".png";
 		}
 
-		protected abstract boolean checkBlock(Property property,
-				ItemStack stack, TileEntityImaginary te);
+		protected abstract boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te);
 
 		public static final Type[] VALUES = values();
 	}
@@ -152,13 +143,11 @@ public class ItemImaginationGlasses extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot,
-			String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		return this.type.textureName;
 	}
 
-	public boolean checkBlock(Property property, ItemStack stack,
-			TileEntityImaginary te) {
+	public boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
 		return type.checkBlock(property, stack, te);
 	}
 

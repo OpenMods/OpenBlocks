@@ -20,8 +20,7 @@ public class ItemRendererTank implements IItemRenderer {
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 		return true;
 	}
 
@@ -40,8 +39,7 @@ public class ItemRendererTank implements IItemRenderer {
 				teTank.setClientLiquidId(lstack.fluidID);
 			}
 		}
-		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, 0.0D,
-				0.0D, 0.0F);
+		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, 0.0D, 0.0D, 0.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 

@@ -29,8 +29,7 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z,
-			int metadata, ForgeDirection face) {
+	public boolean isFlammable(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face) {
 		return false;
 	}
 
@@ -50,34 +49,25 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z,
-			ForgeDirection side) {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		if (!Config.tanksEmitLight)
-			return 0;
+		if (!Config.tanksEmitLight) return 0;
 		TileEntity ent = world.getBlockTileEntity(x, y, z);
-		if (ent == null)
-			return 0;
+		if (ent == null) return 0;
 		if (ent instanceof TileEntityTank) {
-			TileEntityTank tank = (TileEntityTank) ent;
+			TileEntityTank tank = (TileEntityTank)ent;
 			if (tank.containsValidLiquid()) {
 				try {
 					int blockId = tank.getClientLiquidId();
-					if (blockId < 0 || blockId > Block.blocksList.length)
-						return 0;
-					if (Block.blocksList[blockId] == null)
-						return 0;
-					return (int) Math.min(Block.lightValue[blockId],
-							Math.max(0, 5 + tank.getPercentFull() * 15));
+					if (blockId < 0 || blockId > Block.blocksList.length) return 0;
+					if (Block.blocksList[blockId] == null) return 0;
+					return (int)Math.min(Block.lightValue[blockId], Math.max(0, 5 + tank.getPercentFull() * 15));
 				} catch (Exception e) {
-					Log.warn(
-							e,
-							"Hello, It's OpenBlocks here. We've got exception at (%d,%d,%d). Please report this to the OpenMods team, they'll patch this bug up as soon as possible",
-							x, y, z);
+					Log.warn(e, "Hello, It's OpenBlocks here. We've got exception at (%d,%d,%d). Please report this to the OpenMods team, they'll patch this bug up as soon as possible", x, y, z);
 					return 0;
 				}
 			}
@@ -87,22 +77,18 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public int getLightOpacity(World world, int x, int y, int z) {
-		if (!Config.tanksAreTransparent)
-			return 16;
-		if (!Config.tanksHaveDynamicTransparency)
-			return 0;
+		if (!Config.tanksAreTransparent) return 16;
+		if (!Config.tanksHaveDynamicTransparency) return 0;
 		/*
 		 * As per docs, the tile entity is not guaranteed to exist at the time
 		 * of calling
 		 */
 		TileEntity ent = world.getBlockTileEntity(x, y, z);
-		if (ent == null)
-			return 16;
+		if (ent == null) return 16;
 		if (ent instanceof TileEntityTank) {
-			TileEntityTank tank = (TileEntityTank) ent;
+			TileEntityTank tank = (TileEntityTank)ent;
 			if (tank.containsValidLiquid()) {
-				return (int) Math.min(16,
-						Math.max(0, (tank.getPercentFull() * 16)));
+				return (int)Math.min(16, Math.max(0, (tank.getPercentFull() * 16)));
 			} else {
 				return 0;
 			}
@@ -111,13 +97,11 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x,
-			int y, int z) {
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		if (!world.isRemote
 				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
-			TileEntityTank tank = getTileEntity(world, x, y, z,
-					TileEntityTank.class);
+			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
 			/*
 			 * Maybe you lose a small amount of liquid, but you ARE breaking a
 			 * block here
@@ -141,8 +125,7 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	protected void dropBlockAsItem_do(World world, int x, int y, int z,
-			ItemStack itemStack) {
+	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack) {
 
 	}
 }

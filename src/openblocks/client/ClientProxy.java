@@ -69,8 +69,7 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public void init() {
-	}
+	public void init() {}
 
 	@Override
 	public void postInit() {
@@ -83,59 +82,37 @@ public class ClientProxy implements IProxy {
 		OpenBlocks.renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new BlockRenderingHandler());
 
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class,
-				new TileEntityGuideRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLightbox.class,
-				new TileEntityLightboxRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class,
-				new TileEntityTargetRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class,
-				new TileEntityGraveRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class,
-				new TileEntityFlagRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class,
-				new TileEntityTankRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class,
-				new TileEntityTrophyRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class,
-				new TileEntityBearTrapRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class,
-				new TileEntitySprinklerRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class,
-				new TileEntityCannonRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(
-				TileEntityVacuumHopper.class,
-				new TileEntityVacuumHopperRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBigButton.class,
-				new TileEntityBigButtonRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class,
-				new TileEntityImaginaryRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class,
-				new TileEntityFanRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLightbox.class, new TileEntityLightboxRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVacuumHopper.class, new TileEntityVacuumHopperRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBigButton.class, new TileEntityBigButtonRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
 
-		if (OpenBlocks.Blocks.tank != null)
-			MinecraftForgeClient.registerItemRenderer(
-					OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
+		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class,
-				new EntityGhostRenderer());
+		RenderingRegistry.registerEntityRenderingHandler(EntityGhost.class, new EntityGhostRenderer());
 
 		if (OpenBlocks.Items.luggage != null) {
-			MinecraftForgeClient.registerItemRenderer(
-					OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
-			RenderingRegistry.registerEntityRenderingHandler(
-					EntityLuggage.class, new EntityLuggageRenderer());
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
+			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
 		}
 
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 
 		if (OpenBlocks.Items.hangGlider != null) {
-			RenderingRegistry.registerEntityRenderingHandler(
-					EntityHangGlider.class, new EntityHangGliderRenderer());
+			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
 
 			ItemRendererHangGlider hangGliderRenderer = new ItemRendererHangGlider();
-			MinecraftForgeClient.registerItemRenderer(
-					OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
 			MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
 
 			attachPlayerRenderer();
@@ -151,14 +128,11 @@ public class ClientProxy implements IProxy {
 	private static void attachPlayerRenderer() {
 		if (Config.tryHookPlayerRenderer) {
 			// Get current renderer and check that it's Mojangs
-			Render render = (Render) RenderManager.instance.entityRenderMap
-					.get(EntityPlayer.class);
-			if (render.getClass().equals(
-					net.minecraft.client.renderer.entity.RenderPlayer.class)) {
+			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
+			if (render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)) {
 				EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
 				playerRenderer.setRenderManager(RenderManager.instance);
-				RenderManager.instance.entityRenderMap.put(EntityPlayer.class,
-						playerRenderer);
+				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
 			}
 		}
 	}
@@ -190,11 +164,8 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x,
-			double y, double z, ForgeDirection direction, float angleRadians,
-			float spread) {
-		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z,
-				direction, angleRadians, spread);
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
+		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
 	}
 

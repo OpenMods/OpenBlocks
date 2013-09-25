@@ -8,9 +8,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class FXLiquidSpray extends EntityFX {
 
-	public FXLiquidSpray(World par1World, FluidStack liquid, double x,
-			double y, double z, ForgeDirection sprayDirection, float angle,
-			float spread) {
+	public FXLiquidSpray(World par1World, FluidStack liquid, double x, double y, double z, ForgeDirection sprayDirection, float angle, float spread) {
 		super(par1World, x, y, z, 0, 0, 0);
 
 		double sinPitch = Math.sin(angle);

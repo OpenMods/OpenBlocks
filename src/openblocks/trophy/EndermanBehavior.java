@@ -9,11 +9,8 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class EndermanBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile,
-			EntityPlayer player) {
-		if (tile.worldObj.isRemote) {
-			return;
-		}
+	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+		if (tile.worldObj.isRemote) { return; }
 		double d0 = player.posX + (tile.worldObj.rand.nextDouble() - 0.5D)
 				* 8.0D;
 		double d1 = player.posY + (tile.worldObj.rand.nextInt(16) - 8);
@@ -22,8 +19,7 @@ public class EndermanBehavior implements ITrophyBehavior {
 		teleportTo(tile, player, d0, d1, d2);
 	}
 
-	protected void teleportTo(TileEntity tile, EntityPlayer player,
-			double par1, double par3, double par5) {
+	protected void teleportTo(TileEntity tile, EntityPlayer player, double par1, double par3, double par5) {
 		double d3 = player.posX;
 		double d4 = player.posY;
 		double d5 = player.posZ;
@@ -52,11 +48,9 @@ public class EndermanBehavior implements ITrophyBehavior {
 			}
 
 			if (flag1) {
-				player.setPositionAndUpdate(player.posX, player.posY,
-						player.posZ);
+				player.setPositionAndUpdate(player.posX, player.posY, player.posZ);
 
-				if (tile.worldObj.getCollidingBoundingBoxes(player,
-						player.boundingBox).isEmpty()
+				if (tile.worldObj.getCollidingBoundingBoxes(player, player.boundingBox).isEmpty()
 						&& !tile.worldObj.isAnyLiquid(player.boundingBox)) {
 					flag = true;
 				}
@@ -84,13 +78,11 @@ public class EndermanBehavior implements ITrophyBehavior {
 				tile.worldObj.spawnParticle("portal", d7, d8, d9, f, f1, f2);
 			}
 
-			tile.worldObj.playSoundEffect(d3, d4, d5, "mob.endermen.portal",
-					1.0F, 1.0F);
+			tile.worldObj.playSoundEffect(d3, d4, d5, "mob.endermen.portal", 1.0F, 1.0F);
 			player.playSound("mob.endermen.portal", 1.0F, 1.0F);
 		}
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {
-	}
+	public void executeTickBehavior(TileEntityTrophy tile) {}
 }

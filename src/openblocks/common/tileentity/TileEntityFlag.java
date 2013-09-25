@@ -35,12 +35,10 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	}
 
 	@Override
-	protected void initialize() {
-	}
+	protected void initialize() {}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
@@ -77,8 +75,7 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	}
 
 	public int getColor() {
-		if (colorIndex.getValue() >= BlockFlag.COLORS.length)
-			colorIndex.setValue(0);
+		if (colorIndex.getValue() >= BlockFlag.COLORS.length) colorIndex.setValue(0);
 		return BlockFlag.COLORS[colorIndex.getValue()];
 	}
 
@@ -98,19 +95,14 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-	}
+	public void onBlockAdded() {}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
-			float hitY, float hitZ) {
-		if (player != null && player.isSneaking()) {
-			return true;
-		}
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (player != null && player.isSneaking()) { return true; }
 		if (!worldObj.isRemote) {
 			if (getSurfaceDirection() == ForgeDirection.DOWN) {
 				angle.setValue(angle.getValue() + 10f);
@@ -122,12 +114,10 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
-			ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		float ang = player.rotationYawHead;
 		ForgeDirection surface = side.getOpposite();
 
