@@ -55,6 +55,7 @@ public class OpenBlocks {
 		public static BlockBigButton bigButton;
 		public static BlockImaginary imaginary;
 		public static BlockFan fan;
+		public static BlockDecoy decoy;
 	}
 
 	public static class Items {

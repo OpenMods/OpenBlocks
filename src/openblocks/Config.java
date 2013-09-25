@@ -20,6 +20,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import openblocks.OpenBlocks.Blocks;
+import openblocks.common.EntityEventHandler;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
@@ -99,6 +101,9 @@ public class Config {
 
 	@BlockId(description = "The id of the fan block")
 	public static int blockFanId = 2556;
+
+	@BlockId(description = "The id of the decoy block")
+	public static int blockDecoyId = 2556;
 	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -145,6 +150,7 @@ public class Config {
 	public static boolean sonicGlassesUseTexture = true;
 	public static float imaginaryFadingSpeed = 0.0075f;
 	public static float imaginaryItemUseCount = 10;
+
 	
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -316,7 +322,6 @@ public class Config {
 	
 		if (Config.canRegisterBlock(blockCannonId)) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
-			EntityRegistry.registerModEntity(EntityCannon.class, "Cannon", Integer.MAX_VALUE, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ", "iri", 'd', new ItemStack(Block.dispenser), 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.blockRedstone) }));
 		}
 	
@@ -354,6 +359,11 @@ public class Config {
 			OpenBlocks.Blocks.fan = new BlockFan();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.fan), new Object[] { "f", "i", "s", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab) }));
 			
+		}
+
+		if (Config.canRegisterBlock(blockDecoyId)) {
+			//OpenBlocks.Blocks.decoy = new BlockDecoy();
+			//MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		}
 	
 		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
@@ -398,6 +408,10 @@ public class Config {
 				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(itemGlassesSerious, ItemImaginationGlasses.Type.BASTARD);
 			}
 		}
+		
+		if (Blocks.cannon != null) {
+			EntityRegistry.registerModEntity(EntityBlock.class, "BlockEntity", 99, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
+		}
 	}
 
 	private static boolean canRegisterBlock(int blockId) {
@@ -406,7 +420,7 @@ public class Config {
 				if(!failIdsQuietly) {
 					throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
 				}else {
-					System.out.println("[OpenBlocksMonitor] Block ID " + blockId + " in use. This block will *NOT* be loaded.");
+					Log.info("Block ID " + blockId + " in use. This block will *NOT* be loaded.");
 					return false;
 				}
 			}

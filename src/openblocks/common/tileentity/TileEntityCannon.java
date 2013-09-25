@@ -12,7 +12,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.api.IAwareTile;
-import openblocks.common.entity.EntityCannon;
+import openblocks.common.entity.EntityBlock;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
 import openblocks.sync.SyncableInt;
@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile {
 
 
-	private EntityCannon cannon = null;
+	private EntityBlock cannon = null;
 
 	public SyncableDouble pitch = new SyncableDouble();
 	public SyncableDouble yaw = new SyncableDouble();
@@ -132,7 +132,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote && !player.isSneaking()) {
-			cannon = new EntityCannon(worldObj, xCoord, yCoord, zCoord);
+			cannon = new EntityBlock(worldObj, xCoord, yCoord, zCoord);
 			worldObj.spawnEntityInWorld(cannon);
 			player.rotationPitch = player.prevRotationPitch = (float)pitch.getValue();
 			player.renderYawOffset = player.prevRotationYawHead = player.rotationYawHead = player.prevRotationYaw = player.rotationYaw = (float)yaw.getValue();
@@ -162,14 +162,14 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		cannon = null;
 		if (cId > 0) {
 			Entity tmpCannon = worldObj.getEntityByID(cannonId.getValue());
-			if (tmpCannon != null && tmpCannon instanceof EntityCannon && !tmpCannon.isDead) {
-				cannon = (EntityCannon) tmpCannon;
+			if (tmpCannon != null && tmpCannon instanceof EntityBlock && !tmpCannon.isDead) {
+				cannon = (EntityBlock) tmpCannon;
 			}
 		}
 		int playerId = ridingEntity.getValue();
 		if (playerId > 0) {
 			Entity player = worldObj.getEntityByID(ridingEntity.getValue());
-			if (player != null && player instanceof EntityCannon && !player.isDead) {
+			if (player != null && player instanceof EntityBlock && !player.isDead) {
 				if (cannon != null) {
 					player.ridingEntity = cannon;
 					cannon.riddenByEntity = player;
