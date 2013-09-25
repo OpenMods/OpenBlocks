@@ -3,6 +3,7 @@ package openblocks.utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -10,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 public class InventoryUtils {
+
 
 	public static void tryMergeStacks(IInventory targetInventory, int slot, ItemStack stack) {
 		if (targetInventory.isItemValidForSlot(slot, stack)) {
@@ -19,13 +21,9 @@ public class InventoryUtils {
 				stack.stackSize = 0;
 			} else {
 				boolean valid = targetInventory.isItemValidForSlot(slot, stack);
-				if (valid
-						&& stack.itemID == targetStack.itemID
-						&& (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
-						&& ItemStack.areItemStackTagsEqual(stack, targetStack)
-						&& targetStack.stackSize < targetStack.getMaxStackSize()) {
-					int space = targetStack.getMaxStackSize()
-							- targetStack.stackSize;
+				if (valid && stack.itemID == targetStack.itemID && (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
+						&& ItemStack.areItemStackTagsEqual(stack, targetStack) && targetStack.stackSize < targetStack.getMaxStackSize()) {
+					int space = targetStack.getMaxStackSize() - targetStack.stackSize;
 					int mergeAmount = Math.min(space, stack.stackSize);
 					ItemStack copy = targetStack.copy();
 					copy.stackSize += mergeAmount;
@@ -37,14 +35,33 @@ public class InventoryUtils {
 	}
 
 	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack) {
+		insertItemIntoInventory(inventory, stack, ForgeDirection.UNKNOWN);
+	}
+	
+	/***
+	 * 
+	 * @param inventory
+	 * @param stack
+	 * @param side The side of the block you're inserting into
+	 */
+	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack, ForgeDirection side) {
 		int i = 0;
 		while (stack.stackSize > 0 && i < inventory.getSizeInventory()) {
+			if (side != ForgeDirection.UNKNOWN && inventory instanceof ISidedInventory) {
+				if (!((ISidedInventory)inventory).canInsertItem(i, stack, side.ordinal())) {
+					i++;
+					continue;
+				}
+			}
 			tryMergeStacks(inventory, i, stack);
 			i++;
 		}
 	}
 
-	public static int moveItemInto(IInventory fromInventory, int slot, IInventory targetInventory, int intoSlot, int maxAmount) {
+	public static int moveItemInto(IInventory fromInventory, int slot, IInventory targetInventory, int intoSlot, int maxAmount, ForgeDirection direction) {
+		if (!InventoryUtils.canMoveItem(fromInventory, targetInventory, slot, intoSlot, direction)) {
+			return 0;
+		}
 		int merged = 0;
 		ItemStack stack = fromInventory.getStackInSlot(slot);
 		if (stack == null) { return merged; }
@@ -57,17 +74,82 @@ public class InventoryUtils {
 		return merged;
 	}
 
-	public static int moveItem(IInventory fromInventory, int slot, IInventory targetInventory, int maxAmount) {
+	public static int moveItem(IInventory fromInventory, int slot, IInventory targetInventory, int maxAmount, ForgeDirection side) {
 		int merged = 0;
 		ItemStack stack = fromInventory.getStackInSlot(slot);
 		if (stack == null) { return 0; }
+		if (fromInventory instanceof ISidedInventory) {
+			if (!((ISidedInventory)fromInventory).canExtractItem(slot, stack, side.ordinal())) {
+				return 0;
+			}
+		}
 		ItemStack clonedStack = stack.copy();
 		clonedStack.stackSize = Math.min(clonedStack.stackSize, maxAmount);
 		int amountToMerge = clonedStack.stackSize;
-		InventoryUtils.insertItemIntoInventory(targetInventory, clonedStack);
+		InventoryUtils.insertItemIntoInventory(targetInventory, clonedStack, side.getOpposite());
 		merged = (amountToMerge - clonedStack.stackSize);
 		fromInventory.decrStackSize(slot, merged);
 		return merged;
+	}
+
+	/***
+	 * Returns the inventory at the passed in coordinates. If it's a double chest it'll wrap the inventory
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public static IInventory getInventory(World world, int x, int y, int z) {
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		if ((tileEntity != null) && ((tileEntity instanceof IInventory)))
+		{
+			int blockID = world.getBlockId(x, y, z);
+			Block block = Block.blocksList[blockID];
+			if ((block instanceof BlockChest))
+			{
+				if (world.getBlockId(x - 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x - 1, y, z), (IInventory)tileEntity); }
+				if (world.getBlockId(x + 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x + 1, y, z)); }
+				if (world.getBlockId(x, y, z - 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x, y, z - 1), (IInventory)tileEntity); }
+				if (world.getBlockId(x, y, z + 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x, y, z + 1)); }
+			}
+			return (IInventory)tileEntity;
+		}
+		return null;
+	}
+	
+	/***
+	 * Gets the inventory relative to the passed in coordinates.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param direction
+	 * @return
+	 */
+	public static IInventory getInventory(World world, int x, int y, int z, ForgeDirection direction) {
+		if (direction != null && direction != ForgeDirection.UNKNOWN) {
+			x += direction.offsetX;
+			y += direction.offsetY;
+			z += direction.offsetZ;
+		}
+		return getInventory(world, x, y, z);
+		
+	}
+
+	public static boolean canMoveItem(Object fromTile, Object toTile, int fromSlot, int intoSlot, ForgeDirection direction) {
+		ItemStack stack = ((IInventory)fromTile).getStackInSlot(fromSlot);
+		if (stack != null && fromTile instanceof ISidedInventory) {
+			if (!((ISidedInventory)fromTile).canExtractItem(fromSlot, stack, direction.ordinal())) {
+				return false;
+			}
+		}
+		if (stack != null && toTile instanceof ISidedInventory) {
+			if (!((ISidedInventory)toTile).canInsertItem(intoSlot, stack, direction.getOpposite().ordinal())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static boolean consumeInventoryItem(IInventory inventory, ItemStack stack) {
@@ -100,34 +182,6 @@ public class InventoryUtils {
 			ItemStack copy = invent.getStackInSlot(nextFilledSlot).copy();
 			invent.setInventorySlotContents(nextFilledSlot, null);
 			return copy;
-		}
-		return null;
-	}
-
-	public static IInventory getInventory(World world, int x, int y, int z, ForgeDirection direction) {
-		if (direction != null && direction != ForgeDirection.UNKNOWN) {
-			x += direction.offsetX;
-			y += direction.offsetY;
-			z += direction.offsetZ;
-			TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-			if ((tileEntity != null) && ((tileEntity instanceof IInventory)))
-			{
-				int blockID = world.getBlockId(x, y, z);
-				Block block = Block.blocksList[blockID];
-				if ((block instanceof BlockChest))
-				{
-					if (world.getBlockId(x - 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x - 1, y, z), (IInventory)tileEntity); }
-					if (world.getBlockId(x + 1, y, z) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x + 1, y, z)); }
-					if (world.getBlockId(x, y, z - 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)world.getBlockTileEntity(x, y, z - 1), (IInventory)tileEntity); }
-					if (world.getBlockId(x, y, z + 1) == blockID) { return new InventoryLargeChest("Large chest", (IInventory)tileEntity, (IInventory)world.getBlockTileEntity(x, y, z + 1)); }
-				}
-				return (IInventory)tileEntity;
-			}
-		}else {
-			TileEntity te = world.getBlockTileEntity(x, y, z);
-			if (te instanceof IInventory) {
-				return (IInventory) te;
-			}
 		}
 		return null;
 	}

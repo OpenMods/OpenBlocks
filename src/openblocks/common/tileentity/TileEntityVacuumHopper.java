@@ -63,14 +63,14 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
 
 				TileEntity tileOnSurface = getTileInDirection(getSurface());
-
+				IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, getSurface());
 				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
 				if (slotId > -1) {
 					ItemStack nextStack = getStackInSlot(slotId);
 					int previousSize = nextStack.stackSize;
 					nextStack = nextStack.copy();
-					if (tileOnSurface instanceof IInventory) {
-						InventoryUtils.insertItemIntoInventory((IInventory) tileOnSurface, nextStack);
+					if (inventory != null) {
+						InventoryUtils.insertItemIntoInventory(inventory, nextStack, getSurface().getOpposite());
 					}else {
 						if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
 							int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());

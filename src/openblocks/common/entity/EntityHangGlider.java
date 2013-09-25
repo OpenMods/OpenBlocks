@@ -52,7 +52,8 @@ public class EntityHangGlider extends Entity implements
 				glider == null ||
 				glider.isDead ||
 				player.getHeldItem() == null ||
-				!(player.getHeldItem().getItem() instanceof ItemHangGlider)) {
+				!(player.getHeldItem().getItem() instanceof ItemHangGlider) ||
+				player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
 					it.remove();
 			} else {
 				glider.fixPositions(Minecraft.getMinecraft().thePlayer);
@@ -102,8 +103,7 @@ public class EntityHangGlider extends Entity implements
 			ItemStack held = player.getHeldItem();
 			if (player.isDead || held == null || held.getItem() == null
 					|| held.getItem() != OpenBlocks.Items.hangGlider
-					|| shouldDespawn) {
-				
+					|| shouldDespawn || player.dimension != this.dimension) {
 				getMapForSide(worldObj.isRemote).remove(player);
 				setDead();
 			} else {
