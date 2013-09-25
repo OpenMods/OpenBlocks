@@ -46,12 +46,13 @@ public class TileEntityElevator extends OpenTileEntity {
 			List<EntityPlayer> playersInRange = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
 
 			if (playersInRange.size() > 0) {
-				ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
-
 				for (EntityPlayer player : playersInRange) {
 					if (cooldown.containsKey(player.username)) {
 						continue;
 					}
+
+                    ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
+
 					/*
 					 * Don't activate when a player is flying around in
 					 * creative, it's annoying
