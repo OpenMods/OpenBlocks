@@ -16,27 +16,32 @@ public class GuiLuggage extends GuiContainer {
 		super(container);
 		luggage = container.luggage;
 		xSize = 176;
-		ySize = luggage.isSpecial()? 221 : 167;
+		ySize = luggage.isSpecial() ? 221 : 167;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		ySize = luggage.isSpecial()? 221 : 167;
+		ySize = luggage.isSpecial() ? 221 : 167;
 		guiTop = (this.height - this.ySize) / 2;
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int left = (this.width - this.xSize) / 2;
 		int top = (this.height - this.ySize) / 2;
-		CompatibilityUtils.bindTextureToClient(luggage.isSpecial()? "textures/gui/luggage_special.png" : "textures/gui/luggage.png");
+		CompatibilityUtils
+				.bindTextureToClient(luggage.isSpecial() ? "textures/gui/luggage_special.png"
+						: "textures/gui/luggage.png");
 		this.drawTexturedModalRect(left, top, 0, 0, this.xSize, this.ySize);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String machineName = StatCollector.translateToLocal("openblocks.gui.luggage");
+		String machineName = StatCollector
+				.translateToLocal("openblocks.gui.luggage");
 		int x = 8;
 		fontRenderer.drawString(machineName, x, 6, 4210752);
-		String translatedName = StatCollector.translateToLocal("container.inventory");
-		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
+		String translatedName = StatCollector
+				.translateToLocal("container.inventory");
+		fontRenderer
+				.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
 	}
 
 }

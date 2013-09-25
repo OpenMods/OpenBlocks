@@ -19,17 +19,17 @@ public class ItemUtils {
 			return stack;
 		}
 	}
-	
+
 	public static NBTTagCompound getItemTag(ItemStack stack) {
 		if (stack.stackTagCompound == null)
 			stack.stackTagCompound = new NBTTagCompound("tag");
-		
+
 		return stack.stackTagCompound;
 	}
 
 	public static Integer getInt(ItemStack stack, String tagName) {
 		NBTTagCompound tag = getItemTag(stack);
 		NBTBase color = tag.getTag(tagName);
-		return (color != null)? ((NBTTagInt)color).data : null;
+		return (color != null) ? ((NBTTagInt) color).data : null;
 	}
 }

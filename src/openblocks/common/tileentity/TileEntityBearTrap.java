@@ -43,7 +43,8 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	public void updateEntity() {
 		super.updateEntity();
 		if (trappedEntityId.getValue() != 0) {
-			Entity trappedEntity = worldObj.getEntityByID(trappedEntityId.getValue());
+			Entity trappedEntity = worldObj.getEntityByID(trappedEntityId
+					.getValue());
 			if (trappedEntity != null) {
 				trappedEntity.distanceWalkedOnStepModified = 0.0f;
 				trappedEntity.distanceWalkedModified = 0.0f;
@@ -70,7 +71,9 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20
 					&& entity instanceof EntityCreature) {
 				trappedEntityId.setValue(entity.entityId);
-				entity.worldObj.playSoundAtEntity(entity, worldObj.rand.nextBoolean()? "openblocks:beartrapclose" : "openblocks:beartrapcloseb", 0.5F, 1.0F);
+				entity.worldObj.playSoundAtEntity(entity, worldObj.rand
+						.nextBoolean() ? "openblocks:beartrapclose"
+						: "openblocks:beartrapcloseb", 0.5F, 1.0F);
 				flags.set(Flags.isShut, true);
 			}
 		}
@@ -81,32 +84,38 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {}
+	public void onBlockBroken() {
+	}
 
 	@Override
-	public void onBlockAdded() {}
+	public void onBlockAdded() {
+	}
 
 	public int tickSinceOpened() {
 		return flags.ticksSinceChange(Flags.isShut);
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
+			float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (flags.get(Flags.isShut)) {
 				flags.off(Flags.isShut);
 				trappedEntityId.setValue(0);
-				player.worldObj.playSoundAtEntity(player, "openblocks:beartrapopen", 0.5F, 1.0F);
+				player.worldObj.playSoundAtEntity(player,
+						"openblocks:beartrapopen", 0.5F, 1.0F);
 			}
 		}
 		return true;
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {}
+	public void onNeighbourChanged(int blockId) {
+	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
+			ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(BlockUtils.get2dOrientation(player));
 		sync();
 	}
@@ -121,7 +130,8 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(List<ISyncableObject> changes) {
+	}
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {

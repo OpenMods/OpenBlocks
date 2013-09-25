@@ -18,19 +18,24 @@ public class EntityViewportController extends EntityLiving {
 	}
 
 	@Override
-	public void onEntityUpdate() {}
+	public void onEntityUpdate() {
+	}
 
 	@Override
-	public void onUpdate() {}
+	public void onUpdate() {
+	}
 
 	@Override
-	public void onLivingUpdate() {}
+	public void onLivingUpdate() {
+	}
 
 	public void updateCamera(EntityLiving entity) {
 		ticks += 4;
-		if (entity == null || entity.isDead) { return; }
+		if (entity == null || entity.isDead) {
+			return;
+		}
 
-		double yawRad = ((double)(ticks % 360) / 180) * Math.PI;
+		double yawRad = ((double) (ticks % 360) / 180) * Math.PI;
 		// System.out.println(yawRad);
 		double x = Math.cos(yawRad);
 		double z = Math.sin(yawRad);
@@ -45,9 +50,10 @@ public class EntityViewportController extends EntityLiving {
 		double distanceY = entity.posY - posY;
 		double distanceZ = entity.posZ - posZ;
 
-		double d3 = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
-		float f2 = (float)(Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
-		float f3 = (float)(-(Math.atan2(distanceY, d3) * 180.0D / Math.PI));
+		double d3 = MathHelper.sqrt_double(distanceX * distanceX + distanceZ
+				* distanceZ);
+		float f2 = (float) (Math.atan2(distanceZ, distanceX) * 180.0D / Math.PI) - 90.0F;
+		float f3 = (float) (-(Math.atan2(distanceY, d3) * 180.0D / Math.PI));
 
 		this.rotationPitch = this.prevRotationPitch = this.cameraPitch = this.prevCameraPitch = f3 + 20;
 		this.rotationYaw = this.rotationYawHead = this.prevRotationYaw = this.prevRotationYawHead = renderYawOffset = f2;

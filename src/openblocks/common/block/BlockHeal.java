@@ -20,7 +20,8 @@ public class BlockHeal extends OpenBlock {
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face) {
+	public boolean isFlammable(IBlockAccess world, int x, int y, int z,
+			int metadata, ForgeDirection face) {
 		return false;
 	}
 

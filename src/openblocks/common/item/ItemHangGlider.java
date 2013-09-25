@@ -27,8 +27,10 @@ public class ItemHangGlider extends Item {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		EntityHangGlider glider = EntityHangGlider.getMapForSide(world.isRemote).get(player);
+	public ItemStack onItemRightClick(ItemStack itemStack, World world,
+			EntityPlayer player) {
+		EntityHangGlider glider = EntityHangGlider
+				.getMapForSide(world.isRemote).get(player);
 		if (glider != null) {
 			glider.despawnGlider();
 		} else {
@@ -42,7 +44,8 @@ public class ItemHangGlider extends Item {
 			ItemStack heldStack = player.getHeldItem();
 			if (heldStack != null && heldStack.getItem() == this) {
 				EntityHangGlider glider = new EntityHangGlider(world, player);
-				glider.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationPitch, player.rotationYaw);
+				glider.setPositionAndRotation(player.posX, player.posY,
+						player.posZ, player.rotationPitch, player.rotationYaw);
 				glider.onUpdate();
 				world.spawnEntityInWorld(glider);
 			}

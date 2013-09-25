@@ -1,8 +1,6 @@
-	package openblocks.common;
+package openblocks.common;
 
 import java.io.File;
-
-import cpw.mods.fml.common.network.IGuiHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -12,14 +10,17 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.IProxy;
 import openblocks.OpenBlocks;
+import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ServerProxy implements IProxy {
-	
-	@Override
-	public void init() {}
 
 	@Override
-	public void postInit() {}
+	public void init() {
+	}
+
+	@Override
+	public void postInit() {
+	}
 
 	@Override
 	public void registerRenderInformation() {
@@ -28,12 +29,13 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public File getWorldDir(World world) {
-		return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0).getSaveHandler().getWorldDirectoryName());
+		return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0)
+				.getSaveHandler().getWorldDirectoryName());
 	}
 
 	/**
 	 * Is this the server
-	 *
+	 * 
 	 * @return true if this is the server
 	 */
 	@Override
@@ -44,7 +46,7 @@ public class ServerProxy implements IProxy {
 
 	/**
 	 * Is this the client
-	 *
+	 * 
 	 * @return true if this is the client
 	 */
 	@Override
@@ -54,18 +56,22 @@ public class ServerProxy implements IProxy {
 
 	/**
 	 * Checks if this game is SinglePlayer
-	 *
+	 * 
 	 * @return true if this is single player
 	 */
 	public boolean isSinglePlayer() {
 		// Yeah I know it doesn't matter now but why not have it :P
 		MinecraftServer serverInstance = MinecraftServer.getServer();
-		if (serverInstance == null) return false;
+		if (serverInstance == null)
+			return false;
 		return serverInstance.isSinglePlayer();
 	}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread) {}
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x,
+			double y, double z, ForgeDirection sprayDirection,
+			float angleRadians, float spread) {
+	}
 
 	@Override
 	public EntityPlayer getThePlayer() {

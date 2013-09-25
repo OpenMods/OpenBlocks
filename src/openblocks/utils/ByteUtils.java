@@ -4,7 +4,7 @@ public class ByteUtils {
 
 	public static short set(short val, int slot, boolean bool) {
 		if (get(val, slot) != bool) {
-			val += bool? (1 << slot) : -(1 << slot);
+			val += bool ? (1 << slot) : -(1 << slot);
 		}
 		return val;
 	}

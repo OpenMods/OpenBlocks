@@ -15,7 +15,7 @@ import openblocks.utils.ItemUtils;
 import com.google.common.collect.Lists;
 
 public class CrayonGlassesRecipe extends ShapelessRecipes {
-	
+
 	private static List<ItemStack> createFakeIngredientsList() {
 		ItemStack block = new ItemStack(Blocks.imaginary);
 		ItemImaginary.setupValues(0x00FFFF, block);
@@ -39,14 +39,18 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack != null) {
 				if (stack.getItem() instanceof ItemImaginary) {
-					if (gotCrayon || ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
+					if (gotCrayon
+							|| ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST)
+						return false;
 
 					gotCrayon = true;
 				} else if (stack.getItem() == Item.paper) {
-					if (gotPaper) return false;
+					if (gotPaper)
+						return false;
 
 					gotPaper = true;
-				} else return false;
+				} else
+					return false;
 			}
 		}
 
@@ -58,7 +62,8 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack != null && stack.getItem() instanceof ItemImaginary) {
-				Integer color = ItemUtils.getInt(stack, ItemImaginary.TAG_COLOR);
+				Integer color = ItemUtils
+						.getInt(stack, ItemImaginary.TAG_COLOR);
 				return Items.crayonGlasses.createCrayon(color);
 			}
 		}

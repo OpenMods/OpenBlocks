@@ -1,11 +1,11 @@
 package openblocks.common.block;
 
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityFan;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityFan;
 
 public class BlockFan extends OpenBlock {
 
@@ -29,9 +29,10 @@ public class BlockFan extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
-	
+
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
+			ForgeDirection side) {
 		return canPlaceOnlyOnGround(world, x, y, z, side);
 	}
 }

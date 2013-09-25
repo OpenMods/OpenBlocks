@@ -54,16 +54,18 @@ public class SoundIconRegistry {
 
 	private static class MappedCategory implements ISoundCategory {
 		public IDrawableIcon defaultIcon;
-		private final Map<String, ISoundCategory> subCategories = Maps.newHashMap();
+		private final Map<String, ISoundCategory> subCategories = Maps
+				.newHashMap();
 
 		@Override
 		public IDrawableIcon getIcon(Iterator<String> path) {
 			String id = path.next();
 			ISoundCategory result = subCategories.get(id);
-			if (result == null) return defaultIcon;
+			if (result == null)
+				return defaultIcon;
 
 			IDrawableIcon icon = result.getIcon(path);
-			return (icon != null)? icon : defaultIcon;
+			return (icon != null) ? icon : defaultIcon;
 		}
 
 		public <T extends ISoundCategory> T add(String id, T subcategory) {
@@ -77,7 +79,8 @@ public class SoundIconRegistry {
 
 		@Override
 		public void registerIcons(int type, IconRegister registry) {
-			if (defaultIcon != null) defaultIcon.registerIcons(type, registry);
+			if (defaultIcon != null)
+				defaultIcon.registerIcons(type, registry);
 
 			for (ISoundCategory cat : subCategories.values())
 				cat.registerIcons(type, registry);
@@ -102,7 +105,8 @@ public class SoundIconRegistry {
 		public final IDrawableIcon hurtIcon;
 		public final IDrawableIcon deathIcon;
 
-		private MobIcons(IDrawableIcon normalIcon, IDrawableIcon hurtIcon, IDrawableIcon deathIcon) {
+		private MobIcons(IDrawableIcon normalIcon, IDrawableIcon hurtIcon,
+				IDrawableIcon deathIcon) {
 			this.normalIcon = normalIcon;
 			this.hurtIcon = hurtIcon;
 			this.deathIcon = deathIcon;
@@ -119,16 +123,21 @@ public class SoundIconRegistry {
 		private Map<String, MobIcons> mobs = Maps.newHashMap();
 		private MobIcons unknownMob;
 
-		private static MobIcons createMobIcons(String innerIcon, int innerColor, int frameColor) {
+		private static MobIcons createMobIcons(String innerIcon,
+				int innerColor, int frameColor) {
 			IDrawableIcon frame = itemIcon(ICON_FRAME, frameColor);
-			IDrawableIcon normal = makeFramedItemIcon(iconIdPrefix(innerIcon), innerColor, frame);
-			IDrawableIcon hurt = makeFramedItemIcon(iconIdPrefix("mob_hurt"), innerColor, frame);
-			IDrawableIcon death = makeFramedItemIcon(iconIdPrefix("mob_death"), innerColor, frame);
+			IDrawableIcon normal = makeFramedItemIcon(iconIdPrefix(innerIcon),
+					innerColor, frame);
+			IDrawableIcon hurt = makeFramedItemIcon(iconIdPrefix("mob_hurt"),
+					innerColor, frame);
+			IDrawableIcon death = makeFramedItemIcon(iconIdPrefix("mob_death"),
+					innerColor, frame);
 			return new MobIcons(normal, hurt, death);
 		}
 
 		public MobSounds() {
-			unknownMob = createMobIcons("mob_unknown", DEFAULT_COLOR, DEFAULT_COLOR);
+			unknownMob = createMobIcons("mob_unknown", DEFAULT_COLOR,
+					DEFAULT_COLOR);
 		}
 
 		@Override
@@ -138,11 +147,14 @@ public class SoundIconRegistry {
 
 			MobIcons mob = mobs.get(mobName);
 
-			if (mob == null) mob = unknownMob;
+			if (mob == null)
+				mob = unknownMob;
 
-			if (actionName.equals("hit")) return mob.hurtIcon;
+			if (actionName.equals("hit"))
+				return mob.hurtIcon;
 
-			if (actionName.equals("death")) return mob.deathIcon;
+			if (actionName.equals("death"))
+				return mob.deathIcon;
 
 			return mob.normalIcon;
 		}
@@ -155,10 +167,17 @@ public class SoundIconRegistry {
 		}
 
 		public void addMob(String soundId, int mobId, boolean isHostile) {
-			EntityEggInfo mobInfo = (EntityEggInfo)EntityList.entityEggs.get(mobId);
+			EntityEggInfo mobInfo = (EntityEggInfo) EntityList.entityEggs
+					.get(mobId);
 
-			if (mobInfo != null) mobs.put(soundId, createMobIcons(isHostile? "mob_hostile" : "mob_friendly", mobInfo.primaryColor, mobInfo.secondaryColor));
-			else mobs.put(soundId, unknownMob);
+			if (mobInfo != null)
+				mobs.put(
+						soundId,
+						createMobIcons(isHostile ? "mob_hostile"
+								: "mob_friendly", mobInfo.primaryColor,
+								mobInfo.secondaryColor));
+			else
+				mobs.put(soundId, unknownMob);
 		}
 	}
 
@@ -201,31 +220,37 @@ public class SoundIconRegistry {
 		return itemIcon(iconIdPrefix(id), color);
 	}
 
-	private static IDrawableIcon makeFramedItemIcon(String innerIcon, int innerColor, IDrawableIcon frame) {
+	private static IDrawableIcon makeFramedItemIcon(String innerIcon,
+			int innerColor, IDrawableIcon frame) {
 		IDrawableIcon inner = itemIcon(innerIcon, innerColor);
 		return new ComposedIcon(frame, inner, 0.6, 0);
 	}
 
-	private static IDrawableIcon makeFramedItemIcon(String innerIcon, IDrawableIcon frame) {
+	private static IDrawableIcon makeFramedItemIcon(String innerIcon,
+			IDrawableIcon frame) {
 		return makeFramedItemIcon(innerIcon, 0xFFFFFF, frame);
 	}
 
-	private static IDrawableIcon makeFramedBlockIcon(String innerIcon, int innerColor, IDrawableIcon frame) {
+	private static IDrawableIcon makeFramedBlockIcon(String innerIcon,
+			int innerColor, IDrawableIcon frame) {
 		IDrawableIcon inner = blockIcon(innerIcon, innerColor);
 		return new ComposedIcon(frame, inner, 0.6, 0);
 	}
 
-	private static IDrawableIcon makeFramedBlockIcon(String innerIcon, IDrawableIcon frame) {
+	private static IDrawableIcon makeFramedBlockIcon(String innerIcon,
+			IDrawableIcon frame) {
 		return makeFramedBlockIcon(innerIcon, 0xFFFFFF, frame);
 	}
 
-	private static IDrawableIcon makeBlockIcon(String block, IDrawableIcon front, IDrawableIcon frame) {
+	private static IDrawableIcon makeBlockIcon(String block,
+			IDrawableIcon front, IDrawableIcon frame) {
 		IDrawableIcon back = blockIcon(block);
 		IDrawableIcon inner = new ComposedIcon(front, back, 1.0, 0.00001);
 		return new ComposedIcon(frame, inner, 0.6, 0.0);
 	}
 
-	private static void addBlocks(MappedCategory cat, IDrawableIcon front, IDrawableIcon frame) {
+	private static void addBlocks(MappedCategory cat, IDrawableIcon front,
+			IDrawableIcon frame) {
 		cat.add("cloth", makeBlockIcon("wool_colored_white", front, frame));
 		cat.add("grass", makeBlockIcon("dirt", front, frame));
 		cat.add("gravel", makeBlockIcon("gravel", front, frame));
@@ -261,7 +286,8 @@ public class SoundIconRegistry {
 		root.add("fire", makeFramedBlockIcon("fire_layer_0", frameRed));
 		root.add("fireworks", makeFramedItemIcon("fireworks", frameRed));
 
-		TintedIconCategory liquid = root.add("liquid", new TintedIconCategory(iconIdPrefix("liquid")));
+		TintedIconCategory liquid = root.add("liquid", new TintedIconCategory(
+				iconIdPrefix("liquid")));
 		liquid.add("lava", makeFramedBlockIcon("lava_still", frameRed));
 		liquid.add("water", makeFramedBlockIcon("water_still", frameBlue));
 		liquid.add("lavapop", 0xFF0000);
@@ -297,7 +323,8 @@ public class SoundIconRegistry {
 		mobs.addMob("zombiepig", 57, false); // YMMV
 		mobs.addMob("wolf", 95, false);
 
-		TintedIconCategory note = root.add("note", new TintedIconCategory(iconIdPrefix("note")));
+		TintedIconCategory note = root.add("note", new TintedIconCategory(
+				iconIdPrefix("note")));
 		note.add("bass", 0x0000FF);
 		note.add("bassattack", 0xFFFF00);
 		note.add("bd", 0x00FFFF);
@@ -337,7 +364,8 @@ public class SoundIconRegistry {
 		random.add("glass", glass);
 		random.add("splash", glass);
 
-		IDrawableIcon damage = makeFramedBlockIcon("destroy_stage_5", frameWhite);
+		IDrawableIcon damage = makeFramedBlockIcon("destroy_stage_5",
+				frameWhite);
 		random.add("damage", damage);
 		random.add("break", damage);
 
@@ -345,7 +373,8 @@ public class SoundIconRegistry {
 		random.add("eat", eat);
 		random.add("burp", eat);
 
-		IDrawableIcon drink = makeFramedItemIcon("potion_bottle_drinkable", frameWhite);
+		IDrawableIcon drink = makeFramedItemIcon("potion_bottle_drinkable",
+				frameWhite);
 		random.add("drink", drink);
 
 		IDrawableIcon exp = makeFramedItemIcon("experience_bottle", frameWhite);
@@ -361,13 +390,15 @@ public class SoundIconRegistry {
 
 		IDrawableIcon apple = makeFramedItemIcon("apple", frameWhite);
 
-		MappedCategory openblocks = root.add("openblocks", new MappedCategory());
+		MappedCategory openblocks = root
+				.add("openblocks", new MappedCategory());
 		openblocks.defaultIcon = genericIcon;
 		openblocks.add("teleport", unknownIcon);
 		openblocks.add("chump", apple);
 		openblocks.add("slowpokenom", eat);
 
-		MappedCategory records = root.add(CATEGORY_STREAMING, new MappedCategory());
+		MappedCategory records = root.add(CATEGORY_STREAMING,
+				new MappedCategory());
 		records.add("13", makeFramedItemIcon("record_13", frameBlue));
 		records.add("cat", makeFramedItemIcon("record_cat", frameBlue));
 		records.add("blocks", makeFramedItemIcon("record_blocks", frameBlue));
@@ -382,10 +413,7 @@ public class SoundIconRegistry {
 		records.add("wait", makeFramedItemIcon("record_wait", frameBlue));
 
 		/*
-		 * Missing sounds
-		 * ambient.cave
-		 * random.breath
-		 * random.classic_hurt
+		 * Missing sounds ambient.cave random.breath random.classic_hurt
 		 * random.successful_hit
 		 */
 	}

@@ -21,7 +21,8 @@ public class ItemRendererLuggage implements IItemRenderer {
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
+			ItemRendererHelper helper) {
 		return true;
 	}
 
@@ -38,14 +39,16 @@ public class ItemRendererLuggage implements IItemRenderer {
 			if (item.hasTagCompound()) {
 				luggage.getInventory().readFromNBT(item.getTagCompound());
 			}
-			Render renderer = RenderManager.instance.getEntityRenderObject(luggage);
+			Render renderer = RenderManager.instance
+					.getEntityRenderObject(luggage);
 			if (renderer.getFontRendererFromRenderManager() != null) {
 				renderer.doRender(luggage, 0, 0, 0, 0, 0.5f);
 			}
 			GL11.glPopMatrix();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,
+					240.0F, 240.0F);
 		}
 	}
 

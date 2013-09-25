@@ -57,16 +57,20 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	protected void initialize() {}
+	protected void initialize() {
+	}
 
 	@Override
-	public void onBlockBroken() {}
+	public void onBlockBroken() {
+	}
 
 	@Override
-	public void onBlockAdded() {}
+	public void onBlockAdded() {
+	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
+			float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			trophyType.playSound(worldObj, xCoord, yCoord, zCoord);
 			trophyType.executeActivateBehavior(this, player);
@@ -75,14 +79,16 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {}
+	public void onNeighbourChanged(int blockId) {
+	}
 
 	public Trophy getTrophyType() {
 		return trophyType;
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
+			ItemStack stack, float hitX, float hitY, float hitZ) {
 		/**
 		 * Debug only. These will be dropped randomly with mobs!
 		 */
@@ -116,7 +122,8 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 			trophyType = Trophy.valueOf(tag.getString("trophytype"));
 		}
 		if (tag.hasKey("rotation")) {
-			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
+			rotation = ForgeDirection
+					.getOrientation(tag.getInteger("rotation"));
 		}
 		if (tag.hasKey("sinceLastActivate")) {
 			sinceLastActivate = tag.getInteger("sinceLastActivate");

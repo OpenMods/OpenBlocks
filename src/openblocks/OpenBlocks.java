@@ -2,8 +2,6 @@ package openblocks;
 
 import java.io.File;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -11,12 +9,39 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.PlayerDeathHandler;
-import openblocks.common.block.*;
-import openblocks.common.entity.*;
-import openblocks.common.item.*;
+import openblocks.common.block.BlockBearTrap;
+import openblocks.common.block.BlockBigButton;
+import openblocks.common.block.BlockCannon;
+import openblocks.common.block.BlockDecoy;
+import openblocks.common.block.BlockElevator;
+import openblocks.common.block.BlockFan;
+import openblocks.common.block.BlockFlag;
+import openblocks.common.block.BlockGrave;
+import openblocks.common.block.BlockGuide;
+import openblocks.common.block.BlockHeal;
+import openblocks.common.block.BlockImaginary;
+import openblocks.common.block.BlockLadder;
+import openblocks.common.block.BlockLightbox;
+import openblocks.common.block.BlockSponge;
+import openblocks.common.block.BlockSprinkler;
+import openblocks.common.block.BlockTank;
+import openblocks.common.block.BlockTarget;
+import openblocks.common.block.BlockTrophy;
+import openblocks.common.block.BlockVacuumHopper;
+import openblocks.common.entity.EntityGhost;
+import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.entity.EntityLuggage;
+import openblocks.common.item.ItemGeneric;
+import openblocks.common.item.ItemHangGlider;
+import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
+import openblocks.common.item.ItemLuggage;
+import openblocks.common.item.ItemSonicGlasses;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
+
+import org.apache.commons.lang3.ObjectUtils;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -79,7 +104,8 @@ public class OpenBlocks {
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
 		public ItemStack getIconItemStack() {
-			return new ItemStack(ObjectUtils.firstNonNull(OpenBlocks.Blocks.flag, Block.sponge), 1, 0);
+			return new ItemStack(ObjectUtils.firstNonNull(
+					OpenBlocks.Blocks.flag, Block.sponge), 1, 0);
 		}
 	};
 
@@ -91,7 +117,8 @@ public class OpenBlocks {
 	public void preInit(FMLPreInitializationEvent evt) {
 		Log.logger = evt.getModLog();
 
-		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
+		Configuration configFile = new Configuration(
+				evt.getSuggestedConfigurationFile());
 
 		Config.readConfig(configFile);
 
@@ -101,24 +128,28 @@ public class OpenBlocks {
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		Config.register();
-		
-		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());
+
+		NetworkRegistry.instance().registerGuiHandler(instance,
+				proxy.createGuiHandler());
 		if (Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
 
 		if (Config.enableGraves) {
-			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700,
+					OpenBlocks.instance, 64, 1, true);
 		}
 		if (Config.itemLuggageId > 0) {
-			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage",
+					702, OpenBlocks.instance, 64, 1, true);
 		}
-		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider",
+				701, OpenBlocks.instance, 64, 1, true);
 
 		OpenBlocks.Items.generic.initRecipes();
-		
+
 		proxy.init();
-		
+
 		proxy.registerRenderInformation();
 	}
 
@@ -132,8 +163,8 @@ public class OpenBlocks {
 	}
 
 	/*
-	 * TODO: These either need amending or depreciating, maybe move it from CompatibilityUtils to here
-	 * - NC
+	 * TODO: These either need amending or depreciating, maybe move it from
+	 * CompatibilityUtils to here - NC
 	 */
 
 	public static String getResourcesPath() {
@@ -153,13 +184,14 @@ public class OpenBlocks {
 	}
 
 	public static File getBaseDir() {
-		return FMLCommonHandler.instance().getMinecraftServerInstance().getFile(".");
+		return FMLCommonHandler.instance().getMinecraftServerInstance()
+				.getFile(".");
 	}
 
 	public static File getWorldDir(World world) {
 		return proxy.getWorldDir(world);
 	}
-	
+
 	public static String getModId() {
 		return OpenBlocks.class.getAnnotation(Mod.class).modid();
 	}

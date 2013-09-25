@@ -16,7 +16,7 @@ public class SyncableShort implements ISyncableObject {
 	}
 
 	public SyncableShort() {
-		this((short)0);
+		this((short) 0);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class SyncableShort implements ISyncableObject {
 	}
 
 	public void modify(short by) {
-		setValue((short)(value + by));
+		setValue((short) (value + by));
 	}
 
 	public void setValue(short val) {

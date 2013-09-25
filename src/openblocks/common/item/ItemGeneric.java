@@ -44,7 +44,12 @@ public class ItemGeneric extends Item {
 		setMaxDamage(0);
 		setMaxStackSize(64);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		metaitems.put(Metas.gliderWing.ordinal(), new MetaGeneric("gliderwing", new Object[] { 1, " sl", "sll", "lll", 's', new ItemStack(Item.stick), 'l', new ItemStack(Item.leather) }, new Object[] { 1, "ls ", "lls", "lll", 's', new ItemStack(Item.stick), 'l', new ItemStack(Item.leather) }));
+		metaitems.put(Metas.gliderWing.ordinal(), new MetaGeneric("gliderwing",
+				new Object[] { 1, " sl", "sll", "lll", 's',
+						new ItemStack(Item.stick), 'l',
+						new ItemStack(Item.leather) }, new Object[] { 1, "ls ",
+						"lls", "lll", 's', new ItemStack(Item.stick), 'l',
+						new ItemStack(Item.leather) }));
 
 	}
 
@@ -57,28 +62,40 @@ public class ItemGeneric extends Item {
 	@Override
 	public Icon getIconFromDamage(int i) {
 		IMetaItem meta = getMeta(i);
-		if (meta != null) { return meta.getIcon(); }
+		if (meta != null) {
+			return meta.getIcon();
+		}
 		return null;
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		IMetaItem meta = getMeta(stack.getItemDamage());
-		if (meta != null) { return "item." + meta.getUnlocalizedName(stack); }
+		if (meta != null) {
+			return "item." + meta.getUnlocalizedName(stack);
+		}
 		return "";
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack itemStack, EntityPlayer player,
+			World world, int x, int y, int z, int side, float par8, float par9,
+			float par10) {
 		IMetaItem meta = getMeta(itemStack.getItemDamage());
-		if (meta != null) { return meta.onItemUse(itemStack, player, world, x, y, z, side, par8, par9, par10); }
+		if (meta != null) {
+			return meta.onItemUse(itemStack, player, world, x, y, z, side,
+					par8, par9, par10);
+		}
 		return true;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
+	public ItemStack onItemRightClick(ItemStack itemStack, World world,
+			EntityPlayer player) {
 		IMetaItem meta = getMeta(itemStack.getItemDamage());
-		if (meta != null) { return meta.onItemRightClick(itemStack, player, world); }
+		if (meta != null) {
+			return meta.onItemRightClick(itemStack, player, world);
+		}
 		return itemStack;
 	}
 
@@ -90,9 +107,12 @@ public class ItemGeneric extends Item {
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player) {
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target,
+			EntityLivingBase player) {
 		IMetaItem meta = getMeta(itemStack.getItemDamage());
-		if (meta != null) { return meta.hitEntity(itemStack, target, player); }
+		if (meta != null) {
+			return meta.hitEntity(itemStack, target, player);
+		}
 		return true;
 	}
 
@@ -125,7 +145,9 @@ public class ItemGeneric extends Item {
 
 	public ItemStack newItemStack(IMetaItem meta, int size) {
 		for (Entry<Integer, IMetaItem> o : metaitems.entrySet()) {
-			if (o.getValue().equals(meta)) { return newItemStack(o.getKey(), size); }
+			if (o.getValue().equals(meta)) {
+				return newItemStack(o.getKey(), size);
+			}
 		}
 		return null;
 	}

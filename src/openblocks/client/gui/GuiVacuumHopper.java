@@ -26,11 +26,14 @@ public class GuiVacuumHopper extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String machineName = StatCollector.translateToLocal("openblocks.gui.vacuumhopper");
+		String machineName = StatCollector
+				.translateToLocal("openblocks.gui.vacuumhopper");
 		int x = this.xSize / 2 - (fontRenderer.getStringWidth(machineName) / 2);
 		fontRenderer.drawString(machineName, x, 6, 4210752);
-		String translatedName = StatCollector.translateToLocal("container.inventory");
-		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
+		String translatedName = StatCollector
+				.translateToLocal("container.inventory");
+		fontRenderer
+				.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
 	}
 
 }

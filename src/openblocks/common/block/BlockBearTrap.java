@@ -18,8 +18,10 @@ public class BlockBearTrap extends OpenBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		TileEntityBearTrap te = getTileEntity(world, x, y, z, TileEntityBearTrap.class);
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
+			Entity entity) {
+		TileEntityBearTrap te = getTileEntity(world, x, y, z,
+				TileEntityBearTrap.class);
 		if (te != null) {
 			te.onEntityCollided(entity);
 		}
@@ -41,17 +43,21 @@ public class BlockBearTrap extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z) {
-		return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1.0, y + 0.1, z + 1.0);
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World,
+			int x, int y, int z) {
+		return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1.0, y + 0.1,
+				z + 1.0);
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
+			int z) {
 		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 0.4f, 0.9f);
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
+			ForgeDirection side) {
 		return canPlaceOnlyOnGround(world, x, y, z, side);
 	}
 }

@@ -1,10 +1,5 @@
 package openblocks.common.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -17,11 +12,18 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 
-public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, ISurfaceAttachment, IInventory {
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
+		ISurfaceAttachment, IInventory {
 
 	private int tickCounter = 0;
 
-	private GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
+	private GenericInventory inventory = new GenericInventory("bigbutton",
+			true, 1);
 
 	@Override
 	public void updateEntity() {
@@ -30,7 +32,8 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 			if (tickCounter > 0) {
 				tickCounter--;
 				if (tickCounter <= 0) {
-					worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.5F);
+					worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D,
+							zCoord + 0.5D, "random.click", 0.3F, 0.5F);
 					setFlag1(false);
 					sync();
 				}
@@ -44,20 +47,24 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	}
 
 	@Override
-	public void onBlockBroken() {}
+	public void onBlockBroken() {
+	}
 
 	@Override
-	public void onBlockAdded() {}
+	public void onBlockAdded() {
+	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
+			float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
 				openGui(player, Gui.BigButton);
 			} else {
 				setFlag1(true);
 				tickCounter = getTickTime();
-				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D,
+						zCoord + 0.5D, "random.click", 0.3F, 0.6F);
 				sync();
 			}
 		}
@@ -67,17 +74,22 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	@Override
 	public void sync() {
 		super.sync();
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton.blockID);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord,
+				OpenBlocks.Blocks.bigButton.blockID);
 		ForgeDirection rot = getRotation();
-		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
+		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord
+				+ rot.offsetY, zCoord + rot.offsetZ,
+				OpenBlocks.Blocks.bigButton.blockID);
 
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {}
+	public void onNeighbourChanged(int blockId) {
+	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
+			ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(side.getOpposite());
 		sync();
 	}
@@ -138,10 +150,12 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	}
 
 	@Override
-	public void openChest() {}
+	public void openChest() {
+	}
 
 	@Override
-	public void closeChest() {}
+	public void closeChest() {
+	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

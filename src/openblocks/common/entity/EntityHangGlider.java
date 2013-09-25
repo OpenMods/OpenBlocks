@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
-import com.sun.istack.internal.logging.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,43 +26,45 @@ public class EntityHangGlider extends Entity implements
 
 	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
 	private static Map<EntityPlayer, EntityHangGlider> gliderClientMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
-	
-	public static Map<EntityPlayer, EntityHangGlider> getMapForSide(boolean isRemote) {
+
+	public static Map<EntityPlayer, EntityHangGlider> getMapForSide(
+			boolean isRemote) {
 		return isRemote ? gliderClientMap : gliderMap;
 	}
-	
+
 	public static boolean isEntityHoldingGlider(Entity player) {
 		return gliderClientMap.containsKey(player);
 	}
-	
+
 	public static boolean isPlayerOnGround(Entity player) {
 		EntityHangGlider glider = gliderClientMap.get(player);
 		return glider == null || glider.isPlayerOnGround();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static void updateGliders() {
-        Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap.entrySet().iterator();
+		Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap
+				.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<EntityPlayer, EntityHangGlider> next = it.next();
 			EntityPlayer player = next.getKey();
 			EntityHangGlider glider = next.getValue();
-			if (player == null ||
-				player.isDead || 
-				glider == null ||
-				glider.isDead ||
-				player.getHeldItem() == null ||
-				!(player.getHeldItem().getItem() instanceof ItemHangGlider) ||
-				player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
-					glider.setDead();
-					it.remove();
+			if (player == null
+					|| player.isDead
+					|| glider == null
+					|| glider.isDead
+					|| player.getHeldItem() == null
+					|| !(player.getHeldItem().getItem() instanceof ItemHangGlider)
+					|| player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
+				glider.setDead();
+				it.remove();
 			} else {
 				glider.fixPositions(Minecraft.getMinecraft().thePlayer);
 			}
-			
+
 		}
 	}
-	
+
 	private EntityPlayer player;
 	/*
 	 * Let the glider handle it's own disposal to centralize reference
@@ -83,13 +84,13 @@ public class EntityHangGlider extends Entity implements
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(2, Byte.valueOf((byte)0));
+		this.dataWatcher.addObject(2, Byte.valueOf((byte) 0));
 	}
 
 	public void despawnGlider() {
 		shouldDespawn = true;
 	}
-	
+
 	public boolean isPlayerOnGround() {
 		return this.dataWatcher.getWatchableObjectByte(2) == 1;
 	}
@@ -100,7 +101,8 @@ public class EntityHangGlider extends Entity implements
 			setDead();
 		} else {
 			if (!worldObj.isRemote) {
-				this.dataWatcher.updateObject(2, Byte.valueOf((byte)(player.onGround ? 1 : 0)));
+				this.dataWatcher.updateObject(2,
+						Byte.valueOf((byte) (player.onGround ? 1 : 0)));
 			}
 			ItemStack held = player.getHeldItem();
 			if (player.isDead || held == null || held.getItem() == null
@@ -119,9 +121,11 @@ public class EntityHangGlider extends Entity implements
 				if (!player.onGround && player.motionY < 0) {
 					player.motionY *= verticalSpeed;
 					motionY *= verticalSpeed;
-					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90))
+					double x = Math.cos(Math
+							.toRadians(player.rotationYawHead + 90))
 							* horizontalSpeed;
-					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90))
+					double z = Math.sin(Math
+							.toRadians(player.rotationYawHead + 90))
 							* horizontalSpeed;
 					player.motionX += x;
 					player.motionZ += z;
@@ -154,7 +158,6 @@ public class EntityHangGlider extends Entity implements
 			this.prevRotationPitch = player.prevRotationPitch;
 			this.rotationPitch = player.rotationPitch;
 
-
 			if (player != thePlayer) {
 				this.posY += 1.2;
 				this.prevPosY += 1.2;
@@ -174,16 +177,18 @@ public class EntityHangGlider extends Entity implements
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+	}
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
 		if (player != null) {
 			data.writeUTF(player.username);
-		}else {
+		} else {
 			data.writeUTF("[none]");
 		}
 	}
@@ -193,7 +198,7 @@ public class EntityHangGlider extends Entity implements
 		String username = data.readUTF();
 		if ("[none]".equals(username)) {
 			setDead();
-		}else {
+		} else {
 			player = worldObj.getPlayerEntityByName(username);
 			gliderClientMap.put(player, this);
 		}

@@ -43,7 +43,8 @@ public class GenericInventory implements ISidedInventory {
 	}
 
 	@Override
-	public void closeChest() {}
+	public void closeChest() {
+	}
 
 	@Override
 	public ItemStack decrStackSize(int stackIndex, int byAmount) {
@@ -134,7 +135,8 @@ public class GenericInventory implements ISidedInventory {
 	}
 
 	@Override
-	public void openChest() {}
+	public void openChest() {
+	}
 
 	public void clearAndSetSlotCount(int amount) {
 		this.slotsCount = amount;
@@ -149,7 +151,7 @@ public class GenericInventory implements ISidedInventory {
 		NBTTagList nbttaglist = tag.getTagList("Items");
 		inventoryContents = new ItemStack[getSizeInventory()];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound stacktag = (NBTTagCompound)nbttaglist.tagAt(i);
+			NBTTagCompound stacktag = (NBTTagCompound) nbttaglist.tagAt(i);
 			int j = stacktag.getByte("Slot") & 0xff;
 			if (j >= 0 && j < inventoryContents.length) {
 				inventoryContents[j] = ItemStack.loadItemStackFromNBT(stacktag);
@@ -175,7 +177,7 @@ public class GenericInventory implements ISidedInventory {
 		for (int i = 0; i < inventoryContents.length; i++) {
 			if (inventoryContents[i] != null) {
 				NBTTagCompound stacktag = new NBTTagCompound();
-				stacktag.setByte("Slot", (byte)i);
+				stacktag.setByte("Slot", (byte) i);
 				inventoryContents[i].writeToNBT(stacktag);
 				nbttaglist.appendTag(stacktag);
 			}
@@ -187,7 +189,8 @@ public class GenericInventory implements ISidedInventory {
 	 * This bastard never even gets called, so ignore it
 	 */
 	@Override
-	public void onInventoryChanged() {}
+	public void onInventoryChanged() {
+	}
 
 	public void copyFrom(IInventory inventory) {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {

@@ -20,11 +20,16 @@ public class ItemDropBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+	public void executeActivateBehavior(TileEntityTrophy tile,
+			EntityPlayer player) {
 		if (!tile.worldObj.isRemote) {
 			if (tile.sinceLastActivate() > minTicks) {
 				if (!sound.isEmpty()) {
-					player.playSound(sound, 1.0F, (tile.worldObj.rand.nextFloat() - tile.worldObj.rand.nextFloat()) * 0.2F + 1.0F);
+					player.playSound(
+							sound,
+							1.0F,
+							(tile.worldObj.rand.nextFloat() - tile.worldObj.rand
+									.nextFloat()) * 0.2F + 1.0F);
 				}
 
 				player.dropItem(itemId, 1);
@@ -34,6 +39,7 @@ public class ItemDropBehavior implements ITrophyBehavior {
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {}
+	public void executeTickBehavior(TileEntityTrophy tile) {
+	}
 
 }

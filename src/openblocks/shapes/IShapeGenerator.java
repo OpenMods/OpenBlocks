@@ -4,7 +4,7 @@ public interface IShapeGenerator {
 
 	/**
 	 * Generates a shape and applies it to the shapeable object
-	 *
+	 * 
 	 * @param xSize
 	 *            Size along the x plane (Width)
 	 * @param ySize
@@ -15,6 +15,7 @@ public interface IShapeGenerator {
 	 *            Object that needs to be shaped
 	 * @return the amount of blocks that were set
 	 */
-	public void generateShape(int xSize, int ySize, int zSize, IShapeable shapeable);
+	public void generateShape(int xSize, int ySize, int zSize,
+			IShapeable shapeable);
 
 }

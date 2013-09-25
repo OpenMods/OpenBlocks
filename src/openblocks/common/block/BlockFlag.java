@@ -62,7 +62,8 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z,
+			ForgeDirection side) {
 		return false;
 	}
 
@@ -72,13 +73,16 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World,
+			int par2, int par3, int par4) {
 		return null;
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
+			int z) {
+		TileEntityFlag flag = getTileEntity(world, x, y, z,
+				TileEntityFlag.class);
 		if (flag != null) {
 			ForgeDirection onSurface = flag.getSurfaceDirection();
 			if (onSurface == DOWN) {
@@ -92,7 +96,8 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
+			ForgeDirection side) {
 		if (side == DOWN) {
 			int belowBlockId = world.getBlockId(x, y - 1, z);
 			Block belowBlock = Block.blocksList[belowBlockId];
@@ -100,8 +105,11 @@ public class BlockFlag extends OpenBlock {
 				if (belowBlock == Block.fence) {
 					return true;
 				} else if (belowBlock == this) {
-					TileEntityFlag flag = getTileEntity(world, x, y - 1, z, TileEntityFlag.class);
-					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) { return true; }
+					TileEntityFlag flag = getTileEntity(world, x, y - 1, z,
+							TileEntityFlag.class);
+					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) {
+						return true;
+					}
 				}
 			}
 		}

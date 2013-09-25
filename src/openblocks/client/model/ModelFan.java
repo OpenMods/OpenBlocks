@@ -19,8 +19,7 @@ public class ModelFan extends ModelBase {
 	ModelRenderer base;
 	ModelRenderer fan;
 
-	public ModelFan()
-	{
+	public ModelFan() {
 		textureWidth = 32;
 		textureHeight = 32;
 		outline1 = new ModelRenderer(this, 0, 0);
@@ -108,14 +107,16 @@ public class ModelFan extends ModelBase {
 		fan.render(f5);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y,
+			float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
 	public void setRotationAngles(TileEntity te, float f) {
-		fan.rotateAngleZ = (float)Math.toRadians(Minecraft.getSystemTime() % 360);
+		fan.rotateAngleZ = (float) Math
+				.toRadians(Minecraft.getSystemTime() % 360);
 	}
 
 }

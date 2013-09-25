@@ -28,21 +28,23 @@ public class BlockTarget extends OpenBlock {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemstack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLivingBase entity, ItemStack itemstack) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile != null && tile instanceof TileEntityTarget) {
-			TileEntityTarget target = (TileEntityTarget)tile;
+			TileEntityTarget target = (TileEntityTarget) tile;
 			target.setRotation(BlockUtils.get2dOrientation(entity));
 			target.sync();
 		}
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
+	public void onNeighborBlockChange(World world, int x, int y, int z,
+			int blockId) {
 		super.onNeighborBlockChange(world, x, y, z, blockId);
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te != null && te instanceof TileEntityTarget) {
-			((TileEntityTarget)te).neighbourBlockChanged();
+			((TileEntityTarget) te).neighbourBlockChanged();
 		}
 	}
 
@@ -62,13 +64,16 @@ public class BlockTarget extends OpenBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z,
+			Entity entity) {
 
 		if (!world.isRemote && entity != null && entity instanceof EntityArrow) {
 
 			TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-			if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
+			if (tile == null || !(tile instanceof TileEntityTarget)) {
+				return;
+			}
 
 			/**
 			 * onEntityCollidedWithBlock is called twice when the arrow is hit
@@ -82,9 +87,11 @@ public class BlockTarget extends OpenBlock {
 			}
 			lastEntityHit = entity.entityId;
 
-			TileEntityTarget target = (TileEntityTarget)tile;
+			TileEntityTarget target = (TileEntityTarget) tile;
 
-			if (!target.isEnabled()) { return; }
+			if (!target.isEnabled()) {
+				return;
+			}
 
 			ForgeDirection rotation = target.getRotation();
 			ForgeDirection opposite = rotation.getOpposite();
@@ -112,43 +119,53 @@ public class BlockTarget extends OpenBlock {
 
 			double distance = arrow.distanceTo(bullseye);
 
-			target.setStrength(15 - ((int)Math.min(15, Math.max(0, Math.round(distance * 32)))));
+			target.setStrength(15 - ((int) Math.min(15,
+					Math.max(0, Math.round(distance * 32)))));
 
 		}
 	}
 
 	@Override
-	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int m) {
+	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z,
+			int m) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if ((tile != null) && ((tile instanceof TileEntityTarget))) { return ((TileEntityTarget)tile).getStrength(); }
+		if ((tile != null) && ((tile instanceof TileEntityTarget))) {
+			return ((TileEntityTarget) tile).getStrength();
+		}
 		return 0;
 	}
 
 	@Override
-	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int m) {
+	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z,
+			int m) {
 		return isProvidingWeakPower(world, x, y, z, m);
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x,
+			int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x,
+			int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y,
+			int z) {
 
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
-		if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
+		if (tile == null || !(tile instanceof TileEntityTarget)) {
+			return;
+		}
 
-		TileEntityTarget target = (TileEntityTarget)tile;
+		TileEntityTarget target = (TileEntityTarget) tile;
 
 		if (!target.isEnabled()) {
 			setBlockBounds(0, 0, 0, 1.0f, 0.1f, 1.0f);
@@ -158,25 +175,26 @@ public class BlockTarget extends OpenBlock {
 		ForgeDirection direction = target.getRotation();
 
 		switch (direction) {
-			case EAST:
-				setBlockBounds(0, 0, 0, 0.1f, 1f, 1f);
-				break;
-			case WEST:
-				setBlockBounds(0.9f, 0, 0, 1f, 1f, 1f);
-				break;
-			case NORTH:
-				setBlockBounds(0, 0, 0.9f, 1f, 1f, 1f);
-				break;
-			case SOUTH:
-				setBlockBounds(0, 0, 0f, 1f, 1f, 0.1f);
-				break;
-			default:
-				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+		case EAST:
+			setBlockBounds(0, 0, 0, 0.1f, 1f, 1f);
+			break;
+		case WEST:
+			setBlockBounds(0.9f, 0, 0, 1f, 1f, 1f);
+			break;
+		case NORTH:
+			setBlockBounds(0, 0, 0.9f, 1f, 1f, 1f);
+			break;
+		case SOUTH:
+			setBlockBounds(0, 0, 0f, 1f, 1f, 0.1f);
+			break;
+		default:
+			setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean canPlaceBlockOnSide(World world, int x, int y, int z,
+			ForgeDirection side) {
 		return canPlaceOnlyOnGround(world, x, y, z, side);
 	}
 }

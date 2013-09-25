@@ -35,11 +35,11 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	}
 
 	public int getAmount() {
-		return liquid != null? liquid.amount : 0;
+		return liquid != null ? liquid.amount : 0;
 	}
 
 	public double getPercentFull() {
-		return (double)getAmount() / (double)getCapacity();
+		return (double) getAmount() / (double) getCapacity();
 	}
 
 	public void clear() {
@@ -48,7 +48,8 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	@Override
 	public int fill(LiquidStack resource, boolean doFill) {
-		if (resource == null || resource.itemID <= 0) return 0;
+		if (resource == null || resource.itemID <= 0)
+			return 0;
 
 		if (liquid == null || liquid.itemID <= 0) {
 			if (resource.amount <= capacity) {
@@ -66,7 +67,8 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 				return capacity;
 			}
 		}
-		if (!liquid.isLiquidEqual(resource)) return 0;
+		if (!liquid.isLiquidEqual(resource))
+			return 0;
 
 		int space = capacity - liquid.amount;
 		if (resource.amount <= space) {
@@ -86,18 +88,22 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 
 	@Override
 	public LiquidStack drain(int maxDrain, boolean doDrain) {
-		if (liquid == null || liquid.itemID <= 0) return null;
-		if (liquid.amount <= 0) return null;
+		if (liquid == null || liquid.itemID <= 0)
+			return null;
+		if (liquid.amount <= 0)
+			return null;
 
 		int used = maxDrain;
-		if (liquid.amount < used) used = liquid.amount;
+		if (liquid.amount < used)
+			used = liquid.amount;
 
 		if (doDrain) {
 			liquid.amount -= used;
 			setHasChanged();
 		}
 
-		LiquidStack drained = new LiquidStack(liquid.itemID, used, liquid.itemMeta);
+		LiquidStack drained = new LiquidStack(liquid.itemID, used,
+				liquid.itemMeta);
 
 		// Reset liquid if emptied
 		if (liquid.amount <= 0) {
@@ -170,9 +176,9 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	@Override
 	public void writeToStream(DataOutputStream stream, boolean fullData)
 			throws IOException {
-		stream.writeInt(liquid == null? 0 : liquid.itemID);
-		stream.writeInt(liquid == null? 0 : liquid.itemMeta);
-		stream.writeInt(liquid == null? 0 : liquid.amount);
+		stream.writeInt(liquid == null ? 0 : liquid.itemID);
+		stream.writeInt(liquid == null ? 0 : liquid.itemMeta);
+		stream.writeInt(liquid == null ? 0 : liquid.amount);
 		stream.writeInt(capacity);
 	}
 

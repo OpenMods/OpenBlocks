@@ -4,7 +4,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Log {
-	private Log() {}
+	private Log() {
+	}
 
 	public static Logger logger;
 
@@ -12,7 +13,8 @@ public final class Log {
 		logger.log(level, String.format(format, data));
 	}
 
-	public static void log(Level level, Throwable ex, String format, Object... data) {
+	public static void log(Level level, Throwable ex, String format,
+			Object... data) {
 		logger.log(level, String.format(format, data), ex);
 	}
 

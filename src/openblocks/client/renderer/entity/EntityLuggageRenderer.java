@@ -14,9 +14,12 @@ public class EntityLuggageRenderer extends RenderLiving {
 
 	private static ModelBase luggageModel = new ModelLuggage();
 
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/luggage.png");
-	private static final ResourceLocation textureSpecial = new ResourceLocation("openblocks", "textures/models/luggage_special.png");
-	private static final ResourceLocation creeperEffect = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+	private static final ResourceLocation texture = new ResourceLocation(
+			"openblocks", "textures/models/luggage.png");
+	private static final ResourceLocation textureSpecial = new ResourceLocation(
+			"openblocks", "textures/models/luggage_special.png");
+	private static final ResourceLocation creeperEffect = new ResourceLocation(
+			"textures/entity/creeper/creeper_armor.png");
 
 	public EntityLuggageRenderer() {
 		super(luggageModel, 0.5F);
@@ -54,26 +57,30 @@ public class EntityLuggageRenderer extends RenderLiving {
 
 	@Override
 	protected void preRenderCallback(EntityLivingBase entity, float par2) {
-		EntityLuggage luggage = (EntityLuggage)entity;
+		EntityLuggage luggage = (EntityLuggage) entity;
 		if (luggage.isSpecial()) {
-			float oscMagnitude = (float)Math.abs(Math.sin((entity.ticksExisted + par2) * 0.05));
-			GL11.glColor3f(oscMagnitude * 0.4f + 0.6f, oscMagnitude * 0.4f + 0.6f, 1f);
+			float oscMagnitude = (float) Math.abs(Math
+					.sin((entity.ticksExisted + par2) * 0.05));
+			GL11.glColor3f(oscMagnitude * 0.4f + 0.6f,
+					oscMagnitude * 0.4f + 0.6f, 1f);
 		}
 	}
 
 	@Override
-	protected int inheritRenderPass(EntityLivingBase par1EntityLiving, int par2, float par3) {
+	protected int inheritRenderPass(EntityLivingBase par1EntityLiving,
+			int par2, float par3) {
 		return -1;
 	}
 
 	@Override
 	protected int shouldRenderPass(EntityLivingBase entity, int par2, float par3) {
-		return renderSpecial((EntityLuggage)entity, par2, par3);
+		return renderSpecial((EntityLuggage) entity, par2, par3);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		if(entity instanceof EntityLuggage && ((EntityLuggage)entity).isSpecial()) {
+		if (entity instanceof EntityLuggage
+				&& ((EntityLuggage) entity).isSpecial()) {
 			return textureSpecial;
 		}
 		return texture;

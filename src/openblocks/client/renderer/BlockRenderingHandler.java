@@ -73,7 +73,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityBigButton teButton = new TileEntityBigButton();
 		inventoryTileEntities.put(OpenBlocks.Blocks.bigButton, teButton);
-		
+
 		TileEntityFan teFan = new TileEntityFan();
 		inventoryTileEntities.put(OpenBlocks.Blocks.fan, teFan);
 	}
@@ -84,12 +84,13 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
+	public void renderInventoryBlock(Block block, int metadata, int modelID,
+			RenderBlocks renderer) {
 
 		TileEntity te = inventoryTileEntities.get(block);
 
 		if (te instanceof OpenTileEntity) {
-			((OpenTileEntity)te).prepareForInventoryRender(block, metadata);
+			((OpenTileEntity) te).prepareForInventoryRender(block, metadata);
 		}
 
 		try {
@@ -100,18 +101,22 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				if (te != null) {
 					te.worldObj = world;
 					GL11.glTranslated(-0.5, -0.5, -0.5);
-					TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
+					TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D,
+							0.0D, 0.0D, 0.0F);
 				} else {
-					OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, block, null);
+					OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5,
+							0.5, block, null);
 				}
 			}
 		} catch (Exception e) {
-			Log.severe(e, "Error during block '%s' rendering", block.getUnlocalizedName());
+			Log.severe(e, "Error during block '%s' rendering",
+					block.getUnlocalizedName());
 		}
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
+			Block block, int modelId, RenderBlocks renderer) {
 		return false;
 	}
 

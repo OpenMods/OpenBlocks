@@ -33,9 +33,13 @@ public class BowEventHandler {
 		// System.out.println("onArrowLoose");
 		EntityPlayer player = event.entityPlayer;
 		ItemStack bowStack = event.bow;
-		if (player == null) { return; }
+		if (player == null) {
+			return;
+		}
 
-		if (!player.isSneaking()) { return; }
+		if (!player.isSneaking()) {
+			return;
+		}
 
 		if (!bowStack.hasTagCompound()) {
 			// System.out.println("no nbt");
@@ -58,38 +62,45 @@ public class BowEventHandler {
 		int j = event.charge;
 
 		boolean flag = player.capabilities.isCreativeMode
-				|| EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, bowStack) > 0;
+				|| EnchantmentHelper.getEnchantmentLevel(
+						Enchantment.infinity.effectId, bowStack) > 0;
 
 		if (flag || player.inventory.hasItem(Item.arrow.itemID)) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
-			if (f < 0.1D) { return; }
+			if (f < 0.1D) {
+				return;
+			}
 
 			if (f > 1.0F) {
 				f = 1.0F;
 			}
 
-			EntityArrow entityarrow = new EntityTorchArrow(player.worldObj, player, f * 2.0F);
+			EntityArrow entityarrow = new EntityTorchArrow(player.worldObj,
+					player, f * 2.0F);
 
 			if (f == 1.0F) {
 				entityarrow.setIsCritical(true);
 			}
 
-			int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, bowStack);
+			int k = EnchantmentHelper.getEnchantmentLevel(
+					Enchantment.power.effectId, bowStack);
 
 			if (k > 0) {
-				entityarrow.setDamage(entityarrow.getDamage() + k
-						* 0.5D + 0.5D);
+				entityarrow
+						.setDamage(entityarrow.getDamage() + k * 0.5D + 0.5D);
 			}
 
-			int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, bowStack);
+			int l = EnchantmentHelper.getEnchantmentLevel(
+					Enchantment.punch.effectId, bowStack);
 
 			if (l > 0) {
 				entityarrow.setKnockbackStrength(l);
 			}
 
-			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, bowStack) > 0) {
+			if (EnchantmentHelper.getEnchantmentLevel(
+					Enchantment.flame.effectId, bowStack) > 0) {
 				entityarrow.setFire(100);
 			}
 

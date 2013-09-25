@@ -19,7 +19,8 @@ public class ItemSonicGlasses extends ItemArmor {
 	private static final int ARMOR_HELMET = 0;
 
 	public ItemSonicGlasses() {
-		super(Config.itemSonicGlassesId, EnumArmorMaterial.IRON, 2, ARMOR_HELMET);
+		super(Config.itemSonicGlassesId, EnumArmorMaterial.IRON, 2,
+				ARMOR_HELMET);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
@@ -49,9 +50,11 @@ public class ItemSonicGlasses extends ItemArmor {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving,
+			ItemStack itemStack, int armorSlot) {
 		if (armorSlot == ARMOR_HELMET) {
-			if (model == null) model = new ModelSonicGlasses();
+			if (model == null)
+				model = new ModelSonicGlasses();
 			return model;
 		}
 
@@ -59,7 +62,8 @@ public class ItemSonicGlasses extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot,
+			int layer) {
 		return "openblocks:textures/models/glasses.png";
 	}
 

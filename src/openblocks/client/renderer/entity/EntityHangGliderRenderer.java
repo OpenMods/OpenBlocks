@@ -16,26 +16,28 @@ public class EntityHangGliderRenderer extends Render {
 	private static final float ONGROUND_ROTATION = 90f;
 
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float f, float f1) {
+	public void doRender(Entity entity, double x, double y, double z, float f,
+			float f1) {
 
-		EntityHangGlider glider = (EntityHangGlider)entity;
+		EntityHangGlider glider = (EntityHangGlider) entity;
 
 		GL11.glPushMatrix();
 
-		float rotation = interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);
+		float rotation = interpolateRotation(glider.prevRotationYaw,
+				glider.rotationYaw, f1);
 		double x2 = Math.cos(Math.toRadians(rotation + 90)) * 1.5;
 		double z2 = Math.sin(Math.toRadians(rotation + 90)) * 1.5;
 
 		/* Only shift to first person if FP and we're on glider */
 		if (glider.getPlayer() == Minecraft.getMinecraft().thePlayer
 				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
-			GL11.glTranslatef((float)x, (float)y + 0.4f, (float)z);
+			GL11.glTranslatef((float) x, (float) y + 0.4f, (float) z);
 		} else {
 			if (glider.getPlayer() != null && glider.isPlayerOnGround()) {
-				GL11.glTranslatef((float)x, (float)y - 0.2f, (float)z);
+				GL11.glTranslatef((float) x, (float) y - 0.2f, (float) z);
 			} else {
-				GL11.glTranslatef((float)x + (float)x2, (float)y - 0.2f, (float)z
-						+ (float)z2);
+				GL11.glTranslatef((float) x + (float) x2, (float) y - 0.2f,
+						(float) z + (float) z2);
 			}
 		}
 
@@ -51,7 +53,8 @@ public class EntityHangGliderRenderer extends Render {
 
 		// Push matrix to hold it's location for rendering other stuff */
 		GL11.glPushMatrix();
-		CompatibilityUtils.bindTextureToClient("textures/models/hangglider.png");
+		CompatibilityUtils
+				.bindTextureToClient("textures/models/hangglider.png");
 		renderGlider();
 		GL11.glPopMatrix();
 
@@ -73,7 +76,8 @@ public class EntityHangGliderRenderer extends Render {
 	}
 
 	/* Interpolate rotation */
-	private static float interpolateRotation(float prevRotation, float nextRotation, float modifier) {
+	private static float interpolateRotation(float prevRotation,
+			float nextRotation, float modifier) {
 		float rotation = nextRotation - prevRotation;
 
 		while (rotation < -180.0F)
@@ -87,7 +91,8 @@ public class EntityHangGliderRenderer extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture (Entity entity){
-		return CompatibilityUtils.getResourceLocation("textures/models/hangglider.png");
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		return CompatibilityUtils
+				.getResourceLocation("textures/models/hangglider.png");
 	}
 }

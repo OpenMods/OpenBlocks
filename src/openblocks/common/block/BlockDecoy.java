@@ -1,8 +1,8 @@
 package openblocks.common.block;
 
+import net.minecraft.block.material.Material;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityDecoy;
-import net.minecraft.block.material.Material;
 
 public class BlockDecoy extends OpenBlock {
 

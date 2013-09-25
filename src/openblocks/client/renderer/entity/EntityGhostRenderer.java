@@ -17,12 +17,14 @@ public class EntityGhostRenderer extends RenderLiving {
 	}
 
 	@Override
-	public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9) {
+	public void doRenderLiving(EntityLiving par1EntityLiving, double par2,
+			double par4, double par6, float par8, float par9) {
 		super.doRenderLiving(par1EntityLiving, par2, par4, par6, par8, par9);
 	}
 
-	protected void renderModel(EntityLiving living, float par2, float par3, float par4, float par5, float par6, float par7) {
-		EntityGhost ghost = (EntityGhost)living;
+	protected void renderModel(EntityLiving living, float par2, float par3,
+			float par4, float par5, float par6, float par7) {
+		EntityGhost ghost = (EntityGhost) living;
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, ghost.getOpacity());
 		// GL11.glDepthMask(false);
@@ -38,11 +40,12 @@ public class EntityGhostRenderer extends RenderLiving {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture (Entity entity) {
-		if(!(entity instanceof EntityGhost)) {
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		if (!(entity instanceof EntityGhost)) {
 			/* return steve */
 			return AbstractClientPlayer.locationStevePng;
 		}
-		return AbstractClientPlayer.getLocationSkin(((EntityGhost)entity).getPlayerName());
+		return AbstractClientPlayer.getLocationSkin(((EntityGhost) entity)
+				.getPlayerName());
 	}
 }

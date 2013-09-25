@@ -24,18 +24,22 @@ public final class CompatibilityUtils {
 	}
 
 	public static void bindTextureToClient(String texture) {
-		if(Minecraft.getMinecraft() != null) {
-			Minecraft.getMinecraft().renderEngine.bindTexture(getResourceLocation(texture));
+		if (Minecraft.getMinecraft() != null) {
+			Minecraft.getMinecraft().renderEngine
+					.bindTexture(getResourceLocation(texture));
 		} else {
-			System.out.println("[OpenModsMonitor] WARNING: Binding texture to null client.");
+			System.out
+					.println("[OpenModsMonitor] WARNING: Binding texture to null client.");
 		}
 	}
 
 	public static void bindIndexedTextureToClient(int index) {
-		if(Minecraft.getMinecraft() != null) {
-			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getResourceLocation(index));
+		if (Minecraft.getMinecraft() != null) {
+			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft
+					.getMinecraft().renderEngine.getResourceLocation(index));
 		} else {
-			System.out.println("[OpenModsMonitor] WARNING: Binding indexed texture to null client.");
+			System.out
+					.println("[OpenModsMonitor] WARNING: Binding indexed texture to null client.");
 		}
 
 	}

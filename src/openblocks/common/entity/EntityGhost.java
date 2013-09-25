@@ -41,7 +41,8 @@ public class EntityGhost extends EntityMob implements
 	 */
 	private static final boolean DISABLE_HEAD_ANIMATION = true;
 
-	protected GenericInventory inventory = new GenericInventory("ghost", false, 100);
+	protected GenericInventory inventory = new GenericInventory("ghost", false,
+			100);
 	/**
 	 * Is this Ghost an aggressive scary attacking ghost, or a sad wandering
 	 * safe ghost
@@ -60,7 +61,7 @@ public class EntityGhost extends EntityMob implements
 
 	/**
 	 * Keys of values that are synced when they change
-	 *
+	 * 
 	 */
 	public enum SyncKeys {
 		FLAGS, OPACITY
@@ -68,7 +69,7 @@ public class EntityGhost extends EntityMob implements
 
 	/**
 	 * Keys of booleans that are packed into the 'flags' member
-	 *
+	 * 
 	 */
 	public enum FlagKeys {
 		IS_FLYING, HEAD_IN_HAND, IS_IDLE
@@ -97,17 +98,21 @@ public class EntityGhost extends EntityMob implements
 	public EntityGhost(World world) {
 		super(world);
 		this.setSize(0.6F, 1.8F);
-		setHealth( CompatibilityUtils.getEntityMaxHealth(this));
+		setHealth(CompatibilityUtils.getEntityMaxHealth(this));
 		setAIMoveSpeed(0.5F);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		// this.tasks.addTask(1, new EntityAIDragPlayer(this, 8.0F));
-		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, getAIMoveSpeed(), false));
-		this.tasks.addTask(3, new EntityAIWander(this, getAIMoveSpeed() * 0.1f));
-		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(2, new EntityAIAttackOnCollide(this,
+				EntityPlayer.class, getAIMoveSpeed(), false));
+		this.tasks
+				.addTask(3, new EntityAIWander(this, getAIMoveSpeed() * 0.1f));
+		this.tasks.addTask(4, new EntityAIWatchClosest(this,
+				EntityPlayer.class, 8.0F));
 
 		// this.tasks.addTask(4, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this,
+				EntityPlayer.class, 0, true));
 		this.getNavigator().setAvoidsWater(true);
 
 		syncMap.put(SyncKeys.FLAGS, flags);
@@ -118,20 +123,22 @@ public class EntityGhost extends EntityMob implements
 		this(world);
 		this.playerName = playerName;
 		// use the dead players skin (ew)
-		//if (world.isRemote) {
-//			this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-					//+ StringUtils.stripControlCodes(playerName) + ".png";
-		//}
+		// if (world.isRemote) {
+		// this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+		// + StringUtils.stripControlCodes(playerName) + ".png";
+		// }
 		// copy the inventory from the player inventory
 		inventory.copyFrom(playerInvent);
 	}
 
 	/* Following the code of EntityFlying */
 	@Override
-	protected void fall(float par1) {}
+	protected void fall(float par1) {
+	}
 
 	@Override
-	protected void updateFallState(double par1, boolean par3) {}
+	protected void updateFallState(double par1, boolean par3) {
+	}
 
 	@Override
 	public boolean isOnLadder() {
@@ -153,7 +160,9 @@ public class EntityGhost extends EntityMob implements
 			}
 		}
 		// if we're still in the "flight" cooldown, we still want to fly
-		if (flags.ticksSinceSet(FlagKeys.IS_FLYING) < 20) { return true; }
+		if (flags.ticksSinceSet(FlagKeys.IS_FLYING) < 20) {
+			return true;
+		}
 
 		// na, lets not fly
 		return false;
@@ -194,7 +203,8 @@ public class EntityGhost extends EntityMob implements
 
 			boolean headInHand = flags.get(FlagKeys.HEAD_IN_HAND);
 
-			int ticksSinceHeadChange = flags.ticksSinceChange(FlagKeys.HEAD_IN_HAND);
+			int ticksSinceHeadChange = flags
+					.ticksSinceChange(FlagKeys.HEAD_IN_HAND);
 
 			if (DISABLE_HEAD_ANIMATION) {
 				headInHand = false;
@@ -204,7 +214,8 @@ public class EntityGhost extends EntityMob implements
 					headInHand = false;
 				} else {
 					if (!headInHand
-							&& Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand.nextDouble())) {
+							&& Math.min(sinceIdle, ticksSinceHeadChange) > 50 + (20 * worldObj.rand
+									.nextDouble())) {
 						headInHand = true;
 					} else if (headInHand && ticksSinceHeadChange > 50) {
 						headInHand = false;
@@ -213,14 +224,14 @@ public class EntityGhost extends EntityMob implements
 			}
 
 			if (flags.get(FlagKeys.IS_FLYING)
-					&& worldObj.getHeightValue((int)posX, (int)posZ) + 1 > posY) {
+					&& worldObj.getHeightValue((int) posX, (int) posZ) + 1 > posY) {
 				/*
 				 * Flying up causes the entity onGround to be false, nullifying
 				 * any movement. There is one option, override the movement
 				 * methods and implement them ourselves. This does provide the
 				 * opportunity for the ghost to fly through walls, but does make
 				 * life harder.
-				 *
+				 * 
 				 * Also some research needs to be done regarding how this fits
 				 * with AI
 				 */
@@ -267,10 +278,10 @@ public class EntityGhost extends EntityMob implements
 	// TODO: Solve the implementation of this
 
 	// maybe calculate the players worth?
-	//@Override
-	//public int getMaxHealth() {
-	//	return 60;
-	//}
+	// @Override
+	// public int getMaxHealth() {
+	// return 60;
+	// }
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
@@ -287,10 +298,10 @@ public class EntityGhost extends EntityMob implements
 		if (tag.hasKey("playerName")) {
 			playerName = tag.getString("playerName");
 			// Depreciated
-			//if (worldObj.isRemote) {
-//				skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-						//+ StringUtils.stripControlCodes(playerName) + ".png";
-			//}
+			// if (worldObj.isRemote) {
+			// skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+			// + StringUtils.stripControlCodes(playerName) + ".png";
+			// }
 		}
 		inventory.readFromNBT(tag);
 	}
@@ -344,14 +355,14 @@ public class EntityGhost extends EntityMob implements
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		data.writeUTF(playerName == null? "Unknown" : playerName);
+		data.writeUTF(playerName == null ? "Unknown" : playerName);
 	}
 
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
 		playerName = data.readUTF();
-		//skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
-				//+ StringUtils.stripControlCodes(playerName) + ".png";
+		// skinUrl = "http://skins.minecraft.net/MinecraftSkins/"
+		// + StringUtils.stripControlCodes(playerName) + ".png";
 	}
 
 	@Override

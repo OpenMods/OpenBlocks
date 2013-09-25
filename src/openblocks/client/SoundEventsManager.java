@@ -27,7 +27,8 @@ import cpw.mods.fml.client.FMLClientHandler;
 
 public class SoundEventsManager {
 
-	private SoundEventsManager() {}
+	private SoundEventsManager() {
+	}
 
 	public void init() {
 		icons.registerDefaults();
@@ -45,7 +46,8 @@ public class SoundEventsManager {
 		private double time;
 		private final double timeDeltaPerTick;
 
-		private SoundEvent(float x, float y, float z, IDrawableIcon icon, double size, double TTL) {
+		private SoundEvent(float x, float y, float z, IDrawableIcon icon,
+				double size, double TTL) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
@@ -73,7 +75,7 @@ public class SoundEventsManager {
 
 	public static boolean isEntityWearingGlasses(Entity e) {
 		if (e instanceof EntityPlayer) {
-			ItemStack helmet = ((EntityPlayer)e).inventory.armorItemInSlot(3);
+			ItemStack helmet = ((EntityPlayer) e).inventory.armorItemInSlot(3);
 			return helmet != null
 					&& helmet.getItem() instanceof ItemSonicGlasses;
 		}
@@ -86,14 +88,17 @@ public class SoundEventsManager {
 		return isEntityWearingGlasses(e);
 	}
 
-	private void addEvent(float x, float y, float z, String soundId, double size, double time) {
+	private void addEvent(float x, float y, float z, String soundId,
+			double size, double time) {
 		IDrawableIcon icon = icons.getIcon(soundId);
 		events.add(new SoundEvent(x, y, z, icon, size, time));
 	}
 
 	@ForgeSubscribe
 	public void onSoundEvent(PlaySoundEvent evt) {
-		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, Math.log(evt.volume + 1), 5 * evt.pitch);
+		if (SoundEventsManager.isPlayerWearingGlasses())
+			addEvent(evt.x, evt.y, evt.z, evt.name, Math.log(evt.volume + 1),
+					5 * evt.pitch);
 	}
 
 	@ForgeSubscribe
@@ -110,16 +115,19 @@ public class SoundEventsManager {
 		while (it.hasNext()) {
 			SoundEvent evt = it.next();
 			evt.update();
-			if (!evt.isAlive()) it.remove();
+			if (!evt.isAlive())
+				it.remove();
 		}
 	}
 
 	private Integer renderNotPumpkin;
-	private static final ResourceLocation notPumpkin = new ResourceLocation("openblocks:textures/misc/glasses_obsidian.png");
+	private static final ResourceLocation notPumpkin = new ResourceLocation(
+			"openblocks:textures/misc/glasses_obsidian.png");
 
 	private void dimWorld(TextureManager tex, Minecraft mc) {
 		final double level = Config.sonicGlassesOpacity;
-		if (level <= 0) return;
+		if (level <= 0)
+			return;
 
 		if (level >= 1 && !Config.sonicGlassesUseTexture) {
 			GL11.glColor3f(0, 0, 0);
@@ -151,11 +159,11 @@ public class SoundEventsManager {
 			Tessellator tes = new Tessellator();
 			tes.startDrawingQuads();
 
-			final double maxU = (double)mc.displayWidth / 1024;
-			final double maxV = (double)mc.displayHeight / 1024;
+			final double maxU = (double) mc.displayWidth / 1024;
+			final double maxV = (double) mc.displayHeight / 1024;
 
 			if (Config.sonicGlassesUseTexture) {
-				tes.setColorRGBA_F(1, 1, 1, (float)level);
+				tes.setColorRGBA_F(1, 1, 1, (float) level);
 
 				tex.bindTexture(notPumpkin);
 				tes.addVertexWithUV(-1, -1, 0, 0, 0);
@@ -165,7 +173,7 @@ public class SoundEventsManager {
 
 				tes.draw();
 			} else {
-				tes.setColorRGBA_F(0.085f, 0.074f, 0.129f, (float)level);
+				tes.setColorRGBA_F(0.085f, 0.074f, 0.129f, (float) level);
 				tes.addVertex(-1, -1, 0);
 				tes.addVertex(+1, -1, 0);
 				tes.addVertex(+1, +1, 0);
@@ -192,7 +200,8 @@ public class SoundEventsManager {
 
 	@Override
 	protected void finalize() throws Throwable {
-		if (renderNotPumpkin != null) GL11.glDeleteLists(renderNotPumpkin, 1);
+		if (renderNotPumpkin != null)
+			GL11.glDeleteLists(renderNotPumpkin, 1);
 	}
 
 	public static void setupBillboard(Entity rve, double x, double y, double z) {
@@ -204,10 +213,12 @@ public class SoundEventsManager {
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Minecraft mc = evt.context.mc;
 
-		if (mc.gameSettings.thirdPersonView != 0) return;
+		if (mc.gameSettings.thirdPersonView != 0)
+			return;
 		final TextureManager tex = evt.context.renderEngine;
 		final Entity rve = mc.renderViewEntity;
-		if (!isEntityWearingGlasses(rve)) return;
+		if (!isEntityWearingGlasses(rve))
+			return;
 
 		GL11.glDisable(GL11.GL_FOG);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);

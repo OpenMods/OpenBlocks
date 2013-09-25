@@ -22,7 +22,8 @@ public abstract class SyncMap {
 	private int trackingRange = 64;
 	private long totalTrackingTime = 0;
 
-	public SyncMap() {}
+	public SyncMap() {
+	}
 
 	public SyncMap(int trackingRange) {
 		this.trackingRange = trackingRange;
@@ -80,22 +81,26 @@ public abstract class SyncMap {
 	/*
 	 * By registering each sync map statically with a primary sync manager, and
 	 * then running that at the end of each tick. We could spare a lot of
-	 * processing time and resources
-	 * Just saying -NeverCast :)
+	 * processing time and resources Just saying -NeverCast :)
 	 */
 
-	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
+	public void sync(World worldObj, ISyncHandler handler, double x, double y,
+			double z) {
 		sync(worldObj, handler, x, y, z, 20);
 	}
 
-	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z, int tickUpdatePeriod) {
+	public void sync(World worldObj, ISyncHandler handler, double x, double y,
+			double z, int tickUpdatePeriod) {
 		if (!worldObj.isRemote) {
 			// TODO: Test the shit out of this.
 			long worldTotalTime = OpenBlocks.proxy.getTicks(worldObj);
-			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
-			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
+			if (totalTrackingTime == 0)
+				totalTrackingTime = worldTotalTime;
+			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod)
+				return;
 			totalTrackingTime = worldTotalTime; // Out with the old
-			List<EntityPlayer> players = PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
+			List<EntityPlayer> players = PacketHandler.getPlayersInRange(
+					worldObj, (int) x, (int) z, trackingRange);
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;
@@ -119,7 +124,8 @@ public abstract class SyncMap {
 								if (hasChanges) {
 									if (changePacket == null) {
 										// System.out.println("Creating change packet");
-										changePacket = createPacket(handler, false);
+										changePacket = createPacket(handler,
+												false);
 									}
 									packetToSend = changePacket;
 								}
@@ -131,7 +137,8 @@ public abstract class SyncMap {
 								packetToSend = fullPacket;
 							}
 							if (packetToSend != null) {
-								((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
+								((EntityPlayerMP) player).playerNetServerHandler
+										.sendPacketToPlayer(packetToSend);
 							}
 						}
 					}
@@ -160,5 +167,6 @@ public abstract class SyncMap {
 		return packet;
 	}
 
-	protected abstract void writeMapType(DataOutputStream dos) throws IOException;
+	protected abstract void writeMapType(DataOutputStream dos)
+			throws IOException;
 }

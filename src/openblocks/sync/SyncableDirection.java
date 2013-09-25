@@ -58,7 +58,7 @@ public class SyncableDirection implements ISyncableObject {
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		tag.setByte(name, (byte)value.ordinal());
+		tag.setByte(name, (byte) value.ordinal());
 	}
 
 }

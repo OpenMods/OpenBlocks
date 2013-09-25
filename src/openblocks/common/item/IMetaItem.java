@@ -13,11 +13,15 @@ public interface IMetaItem {
 
 	public String getUnlocalizedName(ItemStack stack);
 
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player);
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target,
+			EntityLivingBase player);
 
-	public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10);
+	public boolean onItemUse(ItemStack itemStack, EntityPlayer player,
+			World world, int x, int y, int z, int side, float par8, float par9,
+			float par10);
 
-	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world);
+	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player,
+			World world);
 
 	public boolean displayInCreative();
 

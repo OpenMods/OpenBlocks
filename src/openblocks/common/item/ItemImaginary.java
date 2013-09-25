@@ -39,25 +39,29 @@ public class ItemImaginary extends ItemOpenBlock {
 	private enum PlacementMode {
 		BLOCK(1.0f, "block", "overlay_block") {
 			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+			public ICollisionData createCollisionData(ItemStack stack,
+					EntityPlayer player) {
 				return TileEntityImaginary.DUMMY;
 			}
 		},
 		PANEL(0.5f, "panel", "overlay_panel") {
 			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+			public ICollisionData createCollisionData(ItemStack stack,
+					EntityPlayer player) {
 				return new PanelData(1.0f);
 			}
 		},
 		HALF_PANEL(0.5f, "half_panel", "overlay_half") {
 			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+			public ICollisionData createCollisionData(ItemStack stack,
+					EntityPlayer player) {
 				return new PanelData(0.5f);
 			}
 		},
 		STAIRS(0.75f, "stairs", "overlay_stairs") {
 			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+			public ICollisionData createCollisionData(ItemStack stack,
+					EntityPlayer player) {
 				ForgeDirection dir = BlockUtils.get2dOrientation(player);
 				return new StairsData(0.5f, 1.0f, dir);
 			}
@@ -74,16 +78,19 @@ public class ItemImaginary extends ItemOpenBlock {
 			this.overlayName = "openblocks:" + overlayName;
 		}
 
-		public abstract ICollisionData createCollisionData(ItemStack stack, EntityPlayer player);
+		public abstract ICollisionData createCollisionData(ItemStack stack,
+				EntityPlayer player);
 
 		public static final PlacementMode[] VALUES = values();
 	}
 
 	public static float getUses(NBTTagCompound tag) {
 		NBTBase value = tag.getTag(TAG_USES);
-		if (value instanceof NBTTagInt) return ((NBTTagInt)value).data;
+		if (value instanceof NBTTagInt)
+			return ((NBTTagInt) value).data;
 
-		if (value instanceof NBTTagFloat) return ((NBTTagFloat)value).data;
+		if (value instanceof NBTTagFloat)
+			return ((NBTTagFloat) value).data;
 
 		throw new IllegalStateException("Invalid tag type: " + value);
 	}
@@ -118,7 +125,8 @@ public class ItemImaginary extends ItemOpenBlock {
 		return setupValues(color, result, Config.imaginaryItemUseCount);
 	}
 
-	public static ItemStack setupValues(Integer color, ItemStack result, float uses) {
+	public static ItemStack setupValues(Integer color, ItemStack result,
+			float uses) {
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 
 		if (color != null) {
@@ -131,25 +139,30 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player, World world, int x, int y, int z) {
+	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player,
+			World world, int x, int y, int z) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
-		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
+		NBTTagInt color = (NBTTagInt) tag.getTag(TAG_COLOR);
 		PlacementMode mode = getMode(tag);
 		ICollisionData collisions = mode.createCollisionData(stack, player);
-		world.setBlockTileEntity(x, y, z, new TileEntityImaginary(color == null? null : color.data, collisions));
+		world.setBlockTileEntity(x, y, z, new TileEntityImaginary(
+				color == null ? null : color.data, collisions));
 
 		if (!player.capabilities.isCreativeMode) {
 			float uses = Math.max(getUses(tag) - mode.cost, 0);
 			tag.setFloat(TAG_USES, uses);
 
-			if (uses <= 0) stack.stackSize = 0;
+			if (uses <= 0)
+				stack.stackSize = 0;
 		}
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if (stack == null) return false;
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world,
+			int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		if (stack == null)
+			return false;
 
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		float uses = getUses(tag);
@@ -158,15 +171,18 @@ public class ItemImaginary extends ItemOpenBlock {
 			return true;
 		}
 
-		if (uses < getMode(tag).cost) return false;
+		if (uses < getMode(tag).cost)
+			return false;
 
-		return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+		return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY,
+				hitZ);
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
-		return tag.hasKey(TAG_COLOR)? "item.openblocks.crayon" : "item.openblocks.pencil";
+		return tag.hasKey(TAG_COLOR) ? "item.openblocks.crayon"
+				: "item.openblocks.pencil";
 	}
 
 	@Override
@@ -177,17 +193,22 @@ public class ItemImaginary extends ItemOpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void addInformation(ItemStack stack, EntityPlayer player, List result, boolean extended) {
+	public void addInformation(ItemStack stack, EntityPlayer player,
+			List result, boolean extended) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
-		result.add(StatCollector.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
+		result.add(StatCollector.translateToLocalFormatted(
+				"openblocks.misc.uses", getUses(tag)));
 
-		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
-		if (color != null) result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", color.data));
+		NBTTagInt color = (NBTTagInt) tag.getTag(TAG_COLOR);
+		if (color != null)
+			result.add(StatCollector.translateToLocalFormatted(
+					"openblocks.misc.color", color.data));
 
 		PlacementMode mode = getMode(tag);
 		String translatedMode = StatCollector.translateToLocal(mode.name);
-		result.add(StatCollector.translateToLocalFormatted("openblocks.misc.mode", translatedMode));
+		result.add(StatCollector.translateToLocalFormatted(
+				"openblocks.misc.mode", translatedMode));
 	}
 
 	@Override
@@ -221,15 +242,16 @@ public class ItemImaginary extends ItemOpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public final Icon getIcon(ItemStack stack, int pass) {
-		if (!isCrayon(stack)) return pass == 1? getMode(stack).overlay : iconPencil;
+		if (!isCrayon(stack))
+			return pass == 1 ? getMode(stack).overlay : iconPencil;
 
 		switch (pass) {
-			case 0:
-				return iconCrayonBackground;
-			case 1:
-				return iconCrayonColor;
-			case 2:
-				return getMode(stack).overlay;
+		case 0:
+			return iconCrayonBackground;
+		case 1:
+			return iconCrayonColor;
+		case 2:
+			return getMode(stack).overlay;
 		}
 
 		throw new IllegalArgumentException("Invalid pass: " + pass);
@@ -238,7 +260,8 @@ public class ItemImaginary extends ItemOpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int pass) {
-		if (isCrayon(stack) && pass == 1) return ItemUtils.getInt(stack, TAG_COLOR);
+		if (isCrayon(stack) && pass == 1)
+			return ItemUtils.getInt(stack, TAG_COLOR);
 
 		return 0xFFFFFF;
 	}
@@ -251,7 +274,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	public int getRenderPasses(int metadata) {
-		return metadata == DAMAGE_CRAYON? 3 : 2;
+		return metadata == DAMAGE_CRAYON ? 3 : 2;
 	}
 
 	@Override
@@ -276,19 +299,23 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ItemStack onItemRightClick(ItemStack stack, World world,
+			EntityPlayer player) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		if (getUses(tag) <= 0) {
 			stack.stackSize = 0;
 		} else if (player.isSneaking()) {
 			byte modeId = tag.getByte(TAG_MODE);
-			modeId = (byte)((modeId + 1) % PlacementMode.VALUES.length);
+			modeId = (byte) ((modeId + 1) % PlacementMode.VALUES.length);
 			tag.setByte(TAG_MODE, modeId);
 
 			if (world.isRemote) {
 				PlacementMode mode = PlacementMode.VALUES[modeId];
-				ChatMessageComponent modeName = ChatMessageComponent.createFromTranslationKey(mode.name);
-				player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions("openblocks.misc.mode", modeName));
+				ChatMessageComponent modeName = ChatMessageComponent
+						.createFromTranslationKey(mode.name);
+				player.sendChatToPlayer(ChatMessageComponent
+						.createFromTranslationWithSubstitutions(
+								"openblocks.misc.mode", modeName));
 			}
 		}
 

@@ -25,13 +25,16 @@ public class SyncMapTile extends SyncMap {
 	public Packet getDescriptionPacket(ISyncHandler handler) {
 		try {
 			// Tile Entities only
-			if (!(handler instanceof TileEntity)) return null;
-			TileEntity ent = (TileEntity)handler;
-			Packet250CustomPayload packet250 = (Packet250CustomPayload)createPacket(handler, true);
+			if (!(handler instanceof TileEntity))
+				return null;
+			TileEntity ent = (TileEntity) handler;
+			Packet250CustomPayload packet250 = (Packet250CustomPayload) createPacket(
+					handler, true);
 			/* We now turn it in to a TileEntityUpdate packet */
 			NBTTagCompound extraData = new NBTTagCompound();
 			extraData.setByteArray("payload", packet250.data);
-			Packet132TileEntityData tileEntityDataPacket = new Packet132TileEntityData(ent.xCoord, ent.yCoord, ent.zCoord, 0, extraData);
+			Packet132TileEntityData tileEntityDataPacket = new Packet132TileEntityData(
+					ent.xCoord, ent.yCoord, ent.zCoord, 0, extraData);
 			return tileEntityDataPacket;
 		} catch (Exception ex) {
 			Log.warn(ex, "Error during packet 250 building");
@@ -39,13 +42,15 @@ public class SyncMapTile extends SyncMap {
 		}
 	}
 
-	public void handleTileDataPacket(ISyncHandler handler, Packet132TileEntityData packet) {
+	public void handleTileDataPacket(ISyncHandler handler,
+			Packet132TileEntityData packet) {
 		if (packet.actionType == 0) {
 			NBTTagCompound compound = packet.data;
 			if (compound != null && compound.hasKey("payload")) {
 				byte[] payload = compound.getByteArray("payload");
 				if (payload != null) {
-					Packet250CustomPayload custom = new Packet250CustomPayload("OpenBlocks", payload);
+					Packet250CustomPayload custom = new Packet250CustomPayload(
+							"OpenBlocks", payload);
 					try {
 						OpenBlocks.syncableManager.handlePacket(custom);
 					} catch (IOException e) {

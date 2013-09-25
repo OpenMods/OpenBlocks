@@ -22,7 +22,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile {
 
-
 	private EntityBlock cannon = null;
 
 	public SyncableDouble pitch = new SyncableDouble();
@@ -37,10 +36,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	public boolean renderLine = true;
 
 	public enum Keys {
-		pitch,
-		yaw,
-		cannonId,
-		ridingEntity
+		pitch, yaw, cannonId, ridingEntity
 	}
 
 	public TileEntityCannon() {
@@ -67,34 +63,43 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 
 		if (cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
-			Vec3 pos = getPositionDistanceAway(-0.7, player.rotationPitch, player.rotationYawHead + 90);
+			Vec3 pos = getPositionDistanceAway(-0.7, player.rotationPitch,
+					player.rotationYawHead + 90);
 			if (worldObj.isRemote) {
 				cannon.posX = pos.xCoord + 0.5 + xCoord;
 				cannon.posY = yCoord;
 				cannon.posZ = pos.zCoord + 0.5 + zCoord;
 				cannon.setPosition(cannon.posX, cannon.posY, cannon.posZ);
 				if (player != null) {
-					player.setPosition(cannon.posX, cannon.posY + 1.0, cannon.posZ);
+					player.setPosition(cannon.posX, cannon.posY + 1.0,
+							cannon.posZ);
 				}
 			}
 		}
 
 		if (!worldObj.isRemote) {
 			if (worldObj.getWorldTime() % 20 == 0) {
-				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord,
+						zCoord)) {
 					for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-						IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, direction);
+						IInventory inventory = InventoryUtils.getInventory(
+								worldObj, xCoord, yCoord, zCoord, direction);
 						if (inventory != null) {
-							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
+							ItemStack stack = InventoryUtils
+									.removeNextItemStack(inventory);
 							if (stack != null) {
 								getMotionFromAngles();
-								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
+								EntityItem item = new EntityItem(worldObj,
+										xCoord + 0.5, yCoord + 0.5,
+										zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
 								item.motionX = motionX * 1.4;
 								item.motionY = motionY * 1.4;
 								item.motionZ = motionZ * 1.4;
 								worldObj.spawnEntityInWorld(item);
-								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:mortar", 0.2f, 1.0f);
+								worldObj.playSoundEffect(xCoord + 0.5,
+										yCoord + 0.5, zCoord + 0.5,
+										"openblocks:mortar", 0.2f, 1.0f);
 								break;
 							}
 						}
@@ -113,12 +118,15 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	}
 
 	@Override
-	public void onBlockBroken() {}
+	public void onBlockBroken() {
+	}
 
 	@Override
-	public void onBlockAdded() {}
+	public void onBlockAdded() {
+	}
 
-	private Vec3 getPositionDistanceAway(double distance, double pitch, double yaw) {
+	private Vec3 getPositionDistanceAway(double distance, double pitch,
+			double yaw) {
 		double p = Math.toRadians(pitch);
 		double y = Math.toRadians(yaw);
 		double k = -0.7;
@@ -130,12 +138,15 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
+			float hitY, float hitZ) {
 		if (!worldObj.isRemote && !player.isSneaking()) {
 			cannon = new EntityBlock(worldObj, xCoord, yCoord, zCoord);
 			worldObj.spawnEntityInWorld(cannon);
-			player.rotationPitch = player.prevRotationPitch = (float)pitch.getValue();
-			player.renderYawOffset = player.prevRotationYawHead = player.rotationYawHead = player.prevRotationYaw = player.rotationYaw = (float)yaw.getValue();
+			player.rotationPitch = player.prevRotationPitch = (float) pitch
+					.getValue();
+			player.renderYawOffset = player.prevRotationYawHead = player.rotationYawHead = player.prevRotationYaw = player.rotationYaw = (float) yaw
+					.getValue();
 			player.mountEntity(cannon);
 			cannonId.setValue(cannon.entityId);
 			ridingEntity.setValue(player.entityId);
@@ -145,10 +156,13 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {}
+	public void onNeighbourChanged(int blockId) {
+	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side,
+			ItemStack stack, float hitX, float hitY, float hitZ) {
+	}
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
@@ -162,14 +176,16 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		cannon = null;
 		if (cId > 0) {
 			Entity tmpCannon = worldObj.getEntityByID(cannonId.getValue());
-			if (tmpCannon != null && tmpCannon instanceof EntityBlock && !tmpCannon.isDead) {
+			if (tmpCannon != null && tmpCannon instanceof EntityBlock
+					&& !tmpCannon.isDead) {
 				cannon = (EntityBlock) tmpCannon;
 			}
 		}
 		int playerId = ridingEntity.getValue();
 		if (playerId > 0) {
 			Entity player = worldObj.getEntityByID(ridingEntity.getValue());
-			if (player != null && player instanceof EntityBlock && !player.isDead) {
+			if (player != null && player instanceof EntityBlock
+					&& !player.isDead) {
 				if (cannon != null) {
 					player.ridingEntity = cannon;
 					cannon.riddenByEntity = player;

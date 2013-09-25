@@ -134,7 +134,8 @@ public class ModelBearTrap extends ModelBase {
 		setRotation(trigger, 0F, 0F, 0F);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y,
+			float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;

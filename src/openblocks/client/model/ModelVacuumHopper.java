@@ -11,8 +11,7 @@ public class ModelVacuumHopper extends ModelBase {
 	ModelRenderer connector;
 	ModelRenderer collector;
 
-	public ModelVacuumHopper()
-	{
+	public ModelVacuumHopper() {
 		textureWidth = 64;
 		textureHeight = 32;
 
@@ -38,12 +37,14 @@ public class ModelVacuumHopper extends ModelBase {
 		connector.render(f5);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelRenderer model, float x, float y,
+			float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(TileEntity te, float f) {}
+	public void setRotationAngles(TileEntity te, float f) {
+	}
 
 }
