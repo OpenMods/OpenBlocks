@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
+import com.sun.istack.internal.logging.Logger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +43,7 @@ public class EntityHangGlider extends Entity implements
 	
 	@SideOnly(Side.CLIENT)
 	public static void updateGliders() {
-		Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap.entrySet().iterator();
+        Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<EntityPlayer, EntityHangGlider> next = it.next();
 			EntityPlayer player = next.getKey();
