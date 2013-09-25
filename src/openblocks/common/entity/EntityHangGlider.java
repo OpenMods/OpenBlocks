@@ -54,6 +54,7 @@ public class EntityHangGlider extends Entity implements
 				player.getHeldItem() == null ||
 				!(player.getHeldItem().getItem() instanceof ItemHangGlider) ||
 				player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
+					glider.setDead();
 					it.remove();
 			} else {
 				glider.fixPositions(Minecraft.getMinecraft().thePlayer);
