@@ -179,13 +179,22 @@ public class EntityHangGlider extends Entity implements
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		data.writeUTF(player.username);
+		if (player != null) {
+			data.writeUTF(player.username);
+		}else {
+			data.writeUTF("[none]");
+		}
 	}
 
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
-		player = worldObj.getPlayerEntityByName(data.readUTF());
-		gliderClientMap.put(player, this);
+		String username = data.readUTF();
+		if ("[none]".equals(username)) {
+			setDead();
+		}else {
+			player = worldObj.getPlayerEntityByName(username);
+			gliderClientMap.put(player, this);
+		}
 	}
 
 }
