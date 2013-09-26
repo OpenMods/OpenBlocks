@@ -36,8 +36,7 @@ public class ItemOpenBlock extends ItemBlock {
 		int blockId = world.getBlockId(x, y, z);
 		Block block = Block.blocksList[blockId];
 
-		if (blockId == Block.snow.blockID
-				&& (world.getBlockMetadata(x, y, z) & 7) < 1) side = 1;
+		if (blockId == Block.snow.blockID && (world.getBlockMetadata(x, y, z) & 7) < 1) side = 1;
 
 		ForgeDirection sideDir = ForgeDirection.getOrientation(side);
 

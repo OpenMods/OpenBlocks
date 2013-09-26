@@ -20,8 +20,7 @@ import openblocks.integration.ModuleBuildCraft;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityVacuumHopper extends OpenTileEntity implements
-		IInventory, IAwareTile {
+public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory, IAwareTile {
 
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 

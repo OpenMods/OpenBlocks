@@ -12,17 +12,15 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.api.IShapeProvider;
+import openblocks.shapes.GuideShape;
 import openblocks.shapes.IShapeable;
-import openblocks.shapes.ShapeFactory;
-import openblocks.shapes.ShapeFactory.Mode;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.CompatibilityUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
-		IShapeProvider {
+public class TileEntityGuide extends NetworkedTileEntity implements IShapeable, IShapeProvider {
 
 	private boolean shape[][][];
 	private boolean previousShape[][][];
@@ -34,7 +32,10 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	protected SyncableInt mode = new SyncableInt(0);
 
 	public enum Keys {
-		width, height, depth, mode
+		width,
+		height,
+		depth,
+		mode
 	}
 
 	public TileEntityGuide() {
@@ -68,8 +69,8 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 		height.setValue(h);
 	}
 
-	public Mode getCurrentMode() {
-		return Mode.values()[mode.getValue()];
+	public GuideShape getCurrentMode() {
+		return GuideShape.values()[mode.getValue()];
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	private void recreateShape() {
 		previousShape = shape;
 		shape = new boolean[getHeight() * 2 + 1][getWidth() * 2 + 1][getDepth() * 2 + 1];
-		ShapeFactory.generateShape(getWidth(), getHeight(), getDepth(), this, getCurrentMode());
+		getCurrentMode().generator.generateShape(getWidth(), getHeight(), getDepth(), this);
 		timeSinceChange = 0;
 	}
 
@@ -143,11 +144,11 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 
 	public void switchMode() {
 		int nextMode = mode.getValue() + 1;
-		if (nextMode >= Mode.values().length) {
+		if (nextMode >= GuideShape.values().length) {
 			nextMode = 0;
 		}
 		mode.setValue(nextMode);
-		if (getCurrentMode().isFixedRatio()) {
+		if (getCurrentMode().fixedRatio) {
 			setHeight(getWidth());
 			setDepth(getWidth());
 		}
@@ -174,7 +175,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 		} else if (height.getValue() > 0 && orientation == ForgeDirection.DOWN) {
 			height.modify(-1);
 		}
-		if (getCurrentMode().isFixedRatio()) {
+		if (getCurrentMode().fixedRatio) {
 			int h = getHeight();
 			int w = getWidth();
 			int d = getDepth();
@@ -204,9 +205,7 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 				for (int x2 = 0; x2 < shape[y2].length; x2++) {
 					for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
 						if (shape[y2][x2][z2]) {
-							coords.add(new ChunkCoordinates(xCoord + x2
-									- getWidth(), yCoord + y2 - getHeight(), zCoord
-									+ z2 - getDepth()));
+							coords.add(new ChunkCoordinates(xCoord + x2 - getWidth(), yCoord + y2 - getHeight(), zCoord + z2 - getDepth()));
 						}
 					}
 				}

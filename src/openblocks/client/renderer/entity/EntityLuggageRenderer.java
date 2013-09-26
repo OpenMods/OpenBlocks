@@ -26,13 +26,13 @@ public class EntityLuggageRenderer extends RenderLiving {
 		if (luggage.isSpecial() && luggage.getOwnerName() != null) {
 			if (p == 1) {
 				float f1 = luggage.ticksExisted + m;
-				this.bindTexture(creeperEffect);
+				bindTexture(creeperEffect);
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
 				float f2 = f1 * 0.01F;
 				float f3 = f1 * 0.01F;
 				GL11.glTranslatef(f2, f3, 0.0F);
-				this.setRenderPassModel(EntityLuggageRenderer.luggageModel);
+				setRenderPassModel(EntityLuggageRenderer.luggageModel);
 				GL11.glMatrixMode(GL11.GL_MODELVIEW);
 				GL11.glEnable(GL11.GL_BLEND);
 				float f4 = 0.5F;
@@ -73,8 +73,7 @@ public class EntityLuggageRenderer extends RenderLiving {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		if (entity instanceof EntityLuggage
-				&& ((EntityLuggage)entity).isSpecial()) { return textureSpecial; }
+		if (entity instanceof EntityLuggage && ((EntityLuggage)entity).isSpecial()) { return textureSpecial; }
 		return texture;
 	}
 

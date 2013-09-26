@@ -19,8 +19,7 @@ public class ItemFlagBlock extends ItemOpenBlock {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		stack.setItemDamage((stack.getItemDamage() + 1)
-				% BlockFlag.COLORS.length);
+		stack.setItemDamage((stack.getItemDamage() + 1) % BlockFlag.COLORS.length);
 		return stack.copy();
 	}
 

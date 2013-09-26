@@ -22,24 +22,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.common.TrophyHandler;
-import openblocks.common.block.BlockBearTrap;
-import openblocks.common.block.BlockBigButton;
-import openblocks.common.block.BlockCannon;
-import openblocks.common.block.BlockElevator;
-import openblocks.common.block.BlockFan;
-import openblocks.common.block.BlockFlag;
-import openblocks.common.block.BlockGrave;
-import openblocks.common.block.BlockGuide;
-import openblocks.common.block.BlockHeal;
-import openblocks.common.block.BlockImaginary;
-import openblocks.common.block.BlockLadder;
-import openblocks.common.block.BlockLightbox;
-import openblocks.common.block.BlockSponge;
-import openblocks.common.block.BlockSprinkler;
-import openblocks.common.block.BlockTank;
-import openblocks.common.block.BlockTarget;
-import openblocks.common.block.BlockTrophy;
-import openblocks.common.block.BlockVacuumHopper;
+import openblocks.common.block.*;
 import openblocks.common.entity.EntityBlock;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemHangGlider;
@@ -440,12 +423,9 @@ public class Config {
 		if (blockId > 0) {
 			if (Block.blocksList[blockId] != null) {
 				if (!failIdsQuietly) {
-					throw new RuntimeException("OpenBlocks tried to register a block for ID: "
-							+ blockId
-							+ " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
+					throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
 				} else {
-					Log.info("Block ID " + blockId
-							+ " in use. This block will *NOT* be loaded.");
+					Log.info("Block ID " + blockId + " in use. This block will *NOT* be loaded.");
 					return false;
 				}
 			}

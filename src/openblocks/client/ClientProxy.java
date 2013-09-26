@@ -23,37 +23,11 @@ import openblocks.client.renderer.entity.EntityGhostRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
 import openblocks.client.renderer.entity.EntityLuggageRenderer;
 import openblocks.client.renderer.entity.EntityPlayerRenderer;
-import openblocks.client.renderer.tileentity.TileEntityBearTrapRenderer;
-import openblocks.client.renderer.tileentity.TileEntityBigButtonRenderer;
-import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
-import openblocks.client.renderer.tileentity.TileEntityFanRenderer;
-import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
-import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
-import openblocks.client.renderer.tileentity.TileEntityGuideRenderer;
-import openblocks.client.renderer.tileentity.TileEntityImaginaryRenderer;
-import openblocks.client.renderer.tileentity.TileEntityLightboxRenderer;
-import openblocks.client.renderer.tileentity.TileEntitySprinklerRenderer;
-import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
-import openblocks.client.renderer.tileentity.TileEntityTargetRenderer;
-import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
-import openblocks.client.renderer.tileentity.TileEntityVacuumHopperRenderer;
+import openblocks.client.renderer.tileentity.*;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
-import openblocks.common.tileentity.TileEntityBearTrap;
-import openblocks.common.tileentity.TileEntityBigButton;
-import openblocks.common.tileentity.TileEntityCannon;
-import openblocks.common.tileentity.TileEntityFan;
-import openblocks.common.tileentity.TileEntityFlag;
-import openblocks.common.tileentity.TileEntityGrave;
-import openblocks.common.tileentity.TileEntityGuide;
-import openblocks.common.tileentity.TileEntityImaginary;
-import openblocks.common.tileentity.TileEntityLightbox;
-import openblocks.common.tileentity.TileEntitySprinkler;
-import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTarget;
-import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openblocks.common.tileentity.*;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -139,8 +113,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public File getWorldDir(World world) {
-		return new File(OpenBlocks.getBaseDir(), "saves/"
-				+ world.getSaveHandler().getWorldDirectoryName());
+		return new File(OpenBlocks.getBaseDir(), "saves/" + world.getSaveHandler().getWorldDirectoryName());
 	}
 
 	/**

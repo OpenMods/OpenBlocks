@@ -98,8 +98,7 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (!world.isRemote
-				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
 			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
 			/*
@@ -116,8 +115,7 @@ public class BlockTank extends OpenBlock {
 			float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 			float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 			float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-			EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z
-					+ d2, itemStack);
+			EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, itemStack);
 			entityitem.delayBeforeCanPickup = 10;
 			world.spawnEntityInWorld(entityitem);
 		}

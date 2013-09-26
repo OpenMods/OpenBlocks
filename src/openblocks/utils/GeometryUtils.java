@@ -10,13 +10,14 @@ import openblocks.shapes.IShapeable;
 public class GeometryUtils {
 
 	public enum Octant {
-		TopSouthWest(-1, 1, 1, "Top South West"), TopNorthEast(1, 1, -1,
-				"Top North East"), TopNorthWest(1, 1, 1, "Top North West"), TopSouthEast(
-				-1, 1, -1, "Top South East"), BottomSouthWest(-1, -1, 1,
-				"Bottom South West"), BottomNorthEast(1, -1, -1,
-				"Bottom North East"), BottomNorthWest(1, -1, 1,
-				"Bottom North West"), BottomSouthEast(-1, -1, -1,
-				"Bottom South East");
+		TopSouthWest(-1, 1, 1, "Top South West"),
+		TopNorthEast(1, 1, -1, "Top North East"),
+		TopNorthWest(1, 1, 1, "Top North West"),
+		TopSouthEast(-1, 1, -1, "Top South East"),
+		BottomSouthWest(-1, -1, 1, "Bottom South West"),
+		BottomNorthEast(1, -1, -1, "Bottom North East"),
+		BottomNorthWest(1, -1, 1, "Bottom North West"),
+		BottomSouthEast(-1, -1, -1, "Bottom South East");
 
 		public static final EnumSet<Octant> ALL = EnumSet.allOf(Octant.class);
 		public static final EnumSet<Octant> TOP = EnumSet.of(Octant.TopSouthEast, Octant.TopSouthWest, Octant.TopNorthEast, Octant.TopNorthWest);
@@ -69,9 +70,7 @@ public class GeometryUtils {
 		if (length == 0) return;
 		for (int offset = 0; offset <= length; offset++)
 			/* Create a line in the direction of direction, length in size */
-			shapeable.setBlock(startX + (offset * direction.offsetX), startY
-					+ (offset * direction.offsetY), startZ
-					+ (offset * direction.offsetZ));
+			shapeable.setBlock(startX + (offset * direction.offsetX), startY + (offset * direction.offsetY), startZ + (offset * direction.offsetZ));
 	}
 
 	/**
@@ -138,15 +137,12 @@ public class GeometryUtils {
 						break forZ;
 					}
 
-					if (MathUtils.lengthSq(nextXn, yn, zn) <= 1
-							&& MathUtils.lengthSq(xn, nextYn, zn) <= 1
-							&& MathUtils.lengthSq(xn, yn, nextZn) <= 1) {
+					if (MathUtils.lengthSq(nextXn, yn, zn) <= 1 && MathUtils.lengthSq(xn, nextYn, zn) <= 1 && MathUtils.lengthSq(xn, yn, nextZn) <= 1) {
 						continue;
 					}
 
 					for (Octant octant : octantSet) {
-						shapeable.setBlock(x * octant.getXOffset(), y
-								* octant.getYOffset(), z * octant.getZOffset());
+						shapeable.setBlock(x * octant.getXOffset(), y * octant.getYOffset(), z * octant.getZOffset());
 					}
 				}
 			}

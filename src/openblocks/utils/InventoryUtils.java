@@ -20,13 +20,9 @@ public class InventoryUtils {
 				stack.stackSize = 0;
 			} else {
 				boolean valid = targetInventory.isItemValidForSlot(slot, stack);
-				if (valid
-						&& stack.itemID == targetStack.itemID
-						&& (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
-						&& ItemStack.areItemStackTagsEqual(stack, targetStack)
+				if (valid && stack.itemID == targetStack.itemID && (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, targetStack)
 						&& targetStack.stackSize < targetStack.getMaxStackSize()) {
-					int space = targetStack.getMaxStackSize()
-							- targetStack.stackSize;
+					int space = targetStack.getMaxStackSize() - targetStack.stackSize;
 					int mergeAmount = Math.min(space, stack.stackSize);
 					ItemStack copy = targetStack.copy();
 					copy.stackSize += mergeAmount;
@@ -51,8 +47,7 @@ public class InventoryUtils {
 	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack, ForgeDirection side) {
 		int i = 0;
 		while (stack.stackSize > 0 && i < inventory.getSizeInventory()) {
-			if (side != ForgeDirection.UNKNOWN
-					&& inventory instanceof ISidedInventory) {
+			if (side != ForgeDirection.UNKNOWN && inventory instanceof ISidedInventory) {
 				if (!((ISidedInventory)inventory).canInsertItem(i, stack, side.ordinal())) {
 					i++;
 					continue;
@@ -213,14 +208,11 @@ public class InventoryUtils {
 				itemSizeCounter -= Math.min(Math.min(itemSizeCounter, inventory.getInventoryStackLimit()), item.getMaxStackSize());
 			}
 			/* If the slot is not empty, check that these items stack */
-			else if (item.itemID == inventorySlot.itemID
-					&& (!item.getHasSubtypes() || item.getItemDamage() == inventorySlot.getItemDamage())
-					&& ItemStack.areItemStackTagsEqual(item, inventorySlot)
+			else if (item.itemID == inventorySlot.itemID && (!item.getHasSubtypes() || item.getItemDamage() == inventorySlot.getItemDamage()) && ItemStack.areItemStackTagsEqual(item, inventorySlot)
 					&& inventorySlot.stackSize < inventorySlot.getMaxStackSize()) {
 				/* If they stack, decrement by the amount of space that remains */
 
-				int space = inventorySlot.getMaxStackSize()
-						- inventorySlot.stackSize;
+				int space = inventorySlot.getMaxStackSize() - inventorySlot.stackSize;
 				itemSizeCounter -= Math.min(itemSizeCounter, space);
 			}
 		}

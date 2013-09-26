@@ -57,8 +57,7 @@ public class BowEventHandler {
 		// System.out.println("fine");
 		int j = event.charge;
 
-		boolean flag = player.capabilities.isCreativeMode
-				|| EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, bowStack) > 0;
+		boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, bowStack) > 0;
 
 		if (flag || player.inventory.hasItem(Item.arrow.itemID)) {
 			float f = j / 20.0F;
@@ -93,8 +92,7 @@ public class BowEventHandler {
 			}
 
 			bowStack.damageItem(1, player);
-			player.worldObj.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F
-					/ (rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+			player.worldObj.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
 			if (flag) {
 				entityarrow.canBePickedUp = 2;

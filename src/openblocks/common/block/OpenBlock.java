@@ -139,8 +139,7 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
-		setupDimensions(x - width, y, z - depth, x + width, y + height, z
-				+ depth);
+		setupDimensions(x - width, y, z - depth, x + width, y + height, z + depth);
 	}
 
 	protected void setupDimensions(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
@@ -154,13 +153,13 @@ public abstract class OpenBlock extends BlockContainer {
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
@@ -188,7 +187,6 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	protected boolean canPlaceOnlyOnGround(World world, int x, int y, int z, ForgeDirection side) {
-		return side == ForgeDirection.DOWN
-				&& isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
+		return side == ForgeDirection.DOWN && isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
 	}
 }

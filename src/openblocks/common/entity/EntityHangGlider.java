@@ -21,8 +21,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityHangGlider extends Entity implements
-		IEntityAdditionalSpawnData {
+public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
 
 	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
 	private static Map<EntityPlayer, EntityHangGlider> gliderClientMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
@@ -47,12 +46,7 @@ public class EntityHangGlider extends Entity implements
 			Entry<EntityPlayer, EntityHangGlider> next = it.next();
 			EntityPlayer player = next.getKey();
 			EntityHangGlider glider = next.getValue();
-			if (player == null
-					|| player.isDead
-					|| glider == null
-					|| glider.isDead
-					|| player.getHeldItem() == null
-					|| !(player.getHeldItem().getItem() instanceof ItemHangGlider)
+			if (player == null || player.isDead || glider == null || glider.isDead || player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemHangGlider)
 					|| player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
 				glider.setDead();
 				it.remove();
@@ -102,9 +96,7 @@ public class EntityHangGlider extends Entity implements
 				this.dataWatcher.updateObject(2, Byte.valueOf((byte)(player.onGround? 1 : 0)));
 			}
 			ItemStack held = player.getHeldItem();
-			if (player.isDead || held == null || held.getItem() == null
-					|| held.getItem() != OpenBlocks.Items.hangGlider
-					|| shouldDespawn || player.dimension != this.dimension) {
+			if (player.isDead || held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider || shouldDespawn || player.dimension != this.dimension) {
 				getMapForSide(worldObj.isRemote).remove(player);
 				setDead();
 			} else {
@@ -118,10 +110,8 @@ public class EntityHangGlider extends Entity implements
 				if (!player.onGround && player.motionY < 0) {
 					player.motionY *= verticalSpeed;
 					motionY *= verticalSpeed;
-					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90))
-							* horizontalSpeed;
-					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90))
-							* horizontalSpeed;
+					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
+					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
 					player.motionX += x;
 					player.motionZ += z;
 					player.fallDistance = 0f; /* Don't like getting hurt :( */

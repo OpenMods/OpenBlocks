@@ -113,8 +113,7 @@ public class GenericInventory implements ISidedInventory {
 	}
 
 	public boolean isItem(int slot, Item item) {
-		return inventoryContents[slot] != null
-				&& inventoryContents[slot].getItem() == item;
+		return inventoryContents[slot] != null && inventoryContents[slot].getItem() == item;
 	}
 
 	@Override
@@ -161,9 +160,8 @@ public class GenericInventory implements ISidedInventory {
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		this.inventoryContents[i] = itemstack;
 
-		if (itemstack != null
-				&& itemstack.stackSize > this.getInventoryStackLimit()) {
-			itemstack.stackSize = this.getInventoryStackLimit();
+		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
+			itemstack.stackSize = getInventoryStackLimit();
 		}
 
 		this.onInventoryChanged(i);

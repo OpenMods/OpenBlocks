@@ -188,10 +188,8 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 
 		boolean isVisible = te.is(Property.VISIBLE);
 
-		if (isVisible && te.visibility < 1) te.visibility = Math.min(te.visibility
-				+ Config.imaginaryFadingSpeed, 1);
-		else if (!isVisible && te.visibility > 0) te.visibility = Math.max(te.visibility
-				- Config.imaginaryFadingSpeed, 0);
+		if (isVisible && te.visibility < 1) te.visibility = Math.min(te.visibility + Config.imaginaryFadingSpeed, 1);
+		else if (!isVisible && te.visibility > 0) te.visibility = Math.max(te.visibility - Config.imaginaryFadingSpeed, 0);
 
 		if (te.visibility <= 0) return;
 

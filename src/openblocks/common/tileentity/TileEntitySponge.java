@@ -14,8 +14,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 		for (int x = -3; x <= 3; x++) {
 			for (int y = -3; y <= 3; y++) {
 				for (int z = -3; z <= 3; z++) {
-					Material material = worldObj.getBlockMaterial(xCoord + x, yCoord
-							+ y, zCoord + z);
+					Material material = worldObj.getBlockMaterial(xCoord + x, yCoord + y, zCoord + z);
 					if (material.isLiquid()) {
 						if (material == Material.lava) {
 							hitLava = true;
@@ -26,7 +25,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 			}
 		}
 		if (hitLava) {
-			this.sendBlockEvent(0, 0);
+			sendBlockEvent(0, 0);
 		}
 	}
 

@@ -22,7 +22,7 @@ public class EntityAICollectItem extends EntityAIBase {
 	public EntityAICollectItem(EntityLuggage luggage) {
 		this.luggage = luggage;
 		this.pathFinder = luggage.getNavigator();
-		this.setMutexBits(3);
+		setMutexBits(3);
 	}
 
 	@Override
@@ -45,10 +45,7 @@ public class EntityAICollectItem extends EntityAIBase {
 																		// consumed
 																		// by
 																		// luggage
-					if (closest == null
-							|| dist < closestDistance
-							&& luggage.canConsumeStackPartially(item.getEntityItem())
-							&& !item.isInWater()) {
+					if (closest == null || dist < closestDistance && luggage.canConsumeStackPartially(item.getEntityItem()) && !item.isInWater()) {
 						closest = item;
 						closestDistance = dist;
 					}
@@ -70,8 +67,7 @@ public class EntityAICollectItem extends EntityAIBase {
 
 	@Override
 	public boolean continueExecuting() {
-		return luggage.isEntityAlive() && !pathFinder.noPath()
-				&& !targetItem.isDead;
+		return luggage.isEntityAlive() && !pathFinder.noPath() && !targetItem.isDead;
 	}
 
 	@Override
@@ -85,8 +81,7 @@ public class EntityAICollectItem extends EntityAIBase {
 	public void updateTask() {
 		super.updateTask();
 		if (!luggage.worldObj.isRemote) {
-			if (targetItem != null
-					&& luggage.getDistanceToEntity(targetItem) < 1.0) {
+			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
 				int preEatSize = stack.stackSize;
 				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);

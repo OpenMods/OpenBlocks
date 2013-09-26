@@ -40,8 +40,7 @@ public class SyncableInt implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
 		stream.writeInt(value);
 	}
 

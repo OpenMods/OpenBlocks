@@ -9,25 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.PlayerDeathHandler;
-import openblocks.common.block.BlockBearTrap;
-import openblocks.common.block.BlockBigButton;
-import openblocks.common.block.BlockCannon;
-import openblocks.common.block.BlockDecoy;
-import openblocks.common.block.BlockElevator;
-import openblocks.common.block.BlockFan;
-import openblocks.common.block.BlockFlag;
-import openblocks.common.block.BlockGrave;
-import openblocks.common.block.BlockGuide;
-import openblocks.common.block.BlockHeal;
-import openblocks.common.block.BlockImaginary;
-import openblocks.common.block.BlockLadder;
-import openblocks.common.block.BlockLightbox;
-import openblocks.common.block.BlockSponge;
-import openblocks.common.block.BlockSprinkler;
-import openblocks.common.block.BlockTank;
-import openblocks.common.block.BlockTarget;
-import openblocks.common.block.BlockTrophy;
-import openblocks.common.block.BlockVacuumHopper;
+import openblocks.common.block.*;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -98,7 +80,11 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox, Luggage, Sprinkler, VacuumHopper, BigButton
+		Lightbox,
+		Luggage,
+		Sprinkler,
+		VacuumHopper,
+		BigButton
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

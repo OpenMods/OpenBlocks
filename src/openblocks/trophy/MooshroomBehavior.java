@@ -16,8 +16,7 @@ public class MooshroomBehavior implements ITrophyBehavior {
 					int pX = x + tile.xCoord;
 					int pY = tile.yCoord;
 					int pZ = z + tile.zCoord;
-					if (tile.worldObj.isAirBlock(pX, pY, pZ)
-							&& Block.mushroomBrown.canPlaceBlockAt(tile.worldObj, pX, pY, pZ)) {
+					if (tile.worldObj.isAirBlock(pX, pY, pZ) && Block.mushroomBrown.canPlaceBlockAt(tile.worldObj, pX, pY, pZ)) {
 						tile.worldObj.setBlock(pX, pY, pZ, Block.mushroomBrown.blockID);
 					}
 				}

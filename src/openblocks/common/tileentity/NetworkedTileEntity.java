@@ -11,8 +11,7 @@ import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
 
-public abstract class NetworkedTileEntity extends OpenTileEntity implements
-		ISyncHandler {
+public abstract class NetworkedTileEntity extends OpenTileEntity implements ISyncHandler {
 
 	protected SyncMapTile syncMap = new SyncMapTile();
 

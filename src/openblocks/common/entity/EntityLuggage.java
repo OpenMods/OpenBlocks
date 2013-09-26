@@ -20,8 +20,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityLuggage extends EntityTameable implements
-		IEntityAdditionalSpawnData {
+public class EntityLuggage extends EntityTameable implements IEntityAdditionalSpawnData {
 
 	protected GenericInventory inventory = new GenericInventory("luggage", false, 27);
 	public boolean special;
@@ -32,12 +31,12 @@ public class EntityLuggage extends EntityTameable implements
 		super(world);
 		// Handled in renderer
 		// this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
-		this.setSize(0.5F, 0.5F);
+		setSize(0.5F, 0.5F);
 		setAIMoveSpeed(0.7F);
 		setMoveForward(0);
 		setTamed(true);
-		this.getNavigator().setAvoidsWater(true);
-		this.getNavigator().setCanSwim(true);
+		getNavigator().setAvoidsWater(true);
+		getNavigator().setCanSwim(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIFollowOwner(this, getAIMoveSpeed(), 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
@@ -109,7 +108,7 @@ public class EntityLuggage extends EntityTameable implements
 
 	@Override
 	protected void playStepSound(int par1, int par2, int par3, int par4) {
-		this.playSound("openblocks:feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+		playSound("openblocks:feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
 	}
 
 	@Override

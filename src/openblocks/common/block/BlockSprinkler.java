@@ -33,13 +33,13 @@ public class BlockSprinkler extends OpenBlock {
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
@@ -47,8 +47,7 @@ public class BlockSprinkler extends OpenBlock {
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		TileEntitySprinkler sprinkler = getTileEntity(world, x, y, z, TileEntitySprinkler.class);
 		if (sprinkler != null) {
-			if (sprinkler.getRotation() == ForgeDirection.EAST
-					|| sprinkler.getRotation() == ForgeDirection.WEST) {
+			if (sprinkler.getRotation() == ForgeDirection.EAST || sprinkler.getRotation() == ForgeDirection.WEST) {
 				setBlockBounds(0, 0, 0.3f, 1f, 0.3f, 0.7f);
 			} else {
 				setBlockBounds(0.3f, 0, 0, 0.7f, 0.3f, 1f);

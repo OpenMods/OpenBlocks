@@ -36,7 +36,10 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	public boolean renderLine = true;
 
 	public enum Keys {
-		pitch, yaw, cannonId, ridingEntity
+		pitch,
+		yaw,
+		cannonId,
+		ridingEntity
 	}
 
 	public TileEntityCannon() {
@@ -158,16 +161,14 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		cannon = null;
 		if (cId > 0) {
 			Entity tmpCannon = worldObj.getEntityByID(cannonId.getValue());
-			if (tmpCannon != null && tmpCannon instanceof EntityBlock
-					&& !tmpCannon.isDead) {
+			if (tmpCannon != null && tmpCannon instanceof EntityBlock && !tmpCannon.isDead) {
 				cannon = (EntityBlock)tmpCannon;
 			}
 		}
 		int playerId = ridingEntity.getValue();
 		if (playerId > 0) {
 			Entity player = worldObj.getEntityByID(ridingEntity.getValue());
-			if (player != null && player instanceof EntityBlock
-					&& !player.isDead) {
+			if (player != null && player instanceof EntityBlock && !player.isDead) {
 				if (cannon != null) {
 					player.ridingEntity = cannon;
 					cannon.riddenByEntity = player;

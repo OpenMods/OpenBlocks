@@ -14,12 +14,11 @@ public class EntityEventHandler {
 	@ForgeSubscribe
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 
-		if (event.entityLiving.ticksExisted < 5
-				&& event.entityLiving instanceof EntityCreature
-				&& event.entityLiving instanceof IMob) {
+		if (event.entityLiving.ticksExisted < 5 && event.entityLiving instanceof EntityCreature && event.entityLiving instanceof IMob) {
 
 			EntityCreature creature = (EntityCreature)event.entityLiving;
 
+			@SuppressWarnings("unchecked")
 			List<EntityAITaskEntry> tasks = creature.targetTasks.taskEntries;
 
 			boolean found = false;

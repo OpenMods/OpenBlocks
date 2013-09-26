@@ -17,7 +17,9 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	private boolean hasChanged;
 
 	public enum Flags {
-		capacity, amount, liquid
+		capacity,
+		amount,
+		liquid
 	}
 
 	public SyncableTank(int capacity) {
@@ -168,8 +170,7 @@ public class SyncableTank implements ISyncableObject, ILiquidTank {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
 		stream.writeInt(liquid == null? 0 : liquid.itemID);
 		stream.writeInt(liquid == null? 0 : liquid.itemMeta);
 		stream.writeInt(liquid == null? 0 : liquid.amount);
