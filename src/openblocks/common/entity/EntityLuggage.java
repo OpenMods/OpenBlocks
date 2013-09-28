@@ -88,7 +88,7 @@ public class EntityLuggage extends EntityTameable implements
 
 	@Override
 	public boolean interact(EntityPlayer player) {
-		if (!worldObj.isRemote) {
+		if (!worldObj.isRemote && !isDead) {
 			if (player.isSneaking()) {
 				ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
 				NBTTagCompound tag = new NBTTagCompound();
