@@ -40,7 +40,7 @@ public class TileEntityBlockBreaker extends OpenTileEntity {
     }
 
     private void breakBlock() {
-        System.out.println("Breaking block");
+        //System.out.println("Breaking block");
 
         int direction = getMetadata();
         int x = xCoord,
@@ -74,7 +74,7 @@ public class TileEntityBlockBreaker extends OpenTileEntity {
 
                 worldObj.setBlock(x, y, z, 0, 0, 3);
 
-                System.out.println("Dropped " + items.size() + " stacks");
+                //System.out.println("Dropped " + items.size() + " stacks");
 
                 ejectAt(worldObj, backX, backY, backZ, backDirection, items);
             }
