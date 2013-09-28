@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Blocks;
+import openblocks.common.EntityEventHandler;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.EntityBlock;
@@ -155,6 +158,7 @@ public class Config {
 	public static boolean sonicGlassesUseTexture = true;
 	public static float imaginaryFadingSpeed = 0.0075f;
 	public static float imaginaryItemUseCount = 10;
+	public static List<String> disableMobNames = new ArrayList<String>();
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -223,6 +227,9 @@ public class Config {
 
 		prop = configFile.get("grave", "ghostProbability", ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		ghostSpawnProbability = prop.getInt();
+		
+		prop = configFile.get("additional", "disableMobNames", new String[0], "List any mob names you want disabled on the server");
+		disableMobNames = Arrays.asList(prop.getStringList());
 
 		if (ghostSpawnProbability > 100) ghostSpawnProbability = 100;
 		else if (ghostSpawnProbability < 0) ghostSpawnProbability = 0;
@@ -367,8 +374,8 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockDecoyId)) {
 			// OpenBlocks.Blocks.decoy = new BlockDecoy();
-			// MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		}
+		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		// There is no fail checking here because if the Generic item fails,
 		// then I doubt anyone wants this to be silent.
