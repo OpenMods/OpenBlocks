@@ -46,29 +46,28 @@ public class TileEntityElevator extends OpenTileEntity {
 			List<EntityPlayer> playersInRange = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
 
 			if (playersInRange.size() > 0) {
-				ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
-
 				for (EntityPlayer player : playersInRange) {
 					if (cooldown.containsKey(player.username)) {
 						continue;
 					}
+
+					ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
+
 					/*
 					 * Don't activate when a player is flying around in
 					 * creative, it's annoying
 					 */
 
-					if (player.capabilities.isCreativeMode
-							&& player.capabilities.isFlying) continue;
-					if (player.isSneaking()
-							&& player.ridingEntity == null
-							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
+					if (player.capabilities.isCreativeMode && player.capabilities.isFlying) continue;
+					if (player.isSneaking() && player.ridingEntity == null && (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
 						teleportDirection = ForgeDirection.DOWN;
 						/* player.isJumping doesn't seem to work server side ? */
 					} else if (player.posY > yCoord + 1.2
-							/*&& player.posY < yCoord + 1.5
-							&& player.fallDistance == 0.0*/
-							&& player.ridingEntity == null
-							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
+							/*
+							 * && player.posY < yCoord + 1.5 &&
+							 * player.fallDistance == 0.0
+							 */
+							&& player.ridingEntity == null && (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
 						teleportDirection = ForgeDirection.UP;
 					}
 					if (teleportDirection != ForgeDirection.UNKNOWN) {
@@ -104,20 +103,15 @@ public class TileEntityElevator extends OpenTileEntity {
 	private boolean isPassable(int x, int y, int z, boolean canStandHere) {
 		int blockId = worldObj.getBlockId(x, y, z);
 		if (canStandHere) {
-			return worldObj.isAirBlock(x, y, z)
-					|| Block.blocksList[blockId] == null
-					|| (Config.irregularBlocksArePassable && Block.blocksList[blockId].getCollisionBoundingBoxFromPool(worldObj, x, y, z) == null);
+			return worldObj.isAirBlock(x, y, z) || Block.blocksList[blockId] == null || (Config.irregularBlocksArePassable && Block.blocksList[blockId].getCollisionBoundingBoxFromPool(worldObj, x, y, z) == null);
 		} else {
 			/* Ugly logic makes NC sad :( */
-			return !(blockId == 0
-					|| Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks
-					&& !Block.isNormalCube(blockId));
+			return !(blockId == 0 || Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId));
 		}
 	}
 
-	private int findLevel(ForgeDirection direction){
-		Preconditions.checkArgument(direction == ForgeDirection.UP || direction == ForgeDirection.DOWN,
-				"Must be either up or down... for now");
+	private int findLevel(ForgeDirection direction) {
+		Preconditions.checkArgument(direction == ForgeDirection.UP || direction == ForgeDirection.DOWN, "Must be either up or down... for now");
 
 		int blocksInTheWay = 0;
 		for (int y = 2; y <= Config.elevatorTravelDistance; y++) {
@@ -129,13 +123,11 @@ public class TileEntityElevator extends OpenTileEntity {
 					// Check that it is a drop block and that it has the same
 					// color index.
 					if (!(otherBlock instanceof TileEntityElevator)) continue;
-					if (((TileEntityElevator)otherBlock).getBlockMetadata() != this.getBlockMetadata()) continue;
+					if (((TileEntityElevator)otherBlock).getBlockMetadata() != getBlockMetadata()) continue;
 
-					if (isPassable(xCoord, yPos + 1, zCoord, true)
-							&& isPassable(xCoord, yPos + 2, zCoord, true)) { return yPos; }
+					if (isPassable(xCoord, yPos + 1, zCoord, true) && isPassable(xCoord, yPos + 2, zCoord, true)) { return yPos; }
 					return 0;
-				} else if (isPassable(xCoord, yPos, zCoord, false)
-						&& ++blocksInTheWay > Config.elevatorMaxBlockPassCount) { return 0; }
+				} else if (isPassable(xCoord, yPos, zCoord, false) && ++blocksInTheWay > Config.elevatorMaxBlockPassCount) { return 0; }
 			} else {
 				return 0;
 			}

@@ -4,9 +4,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
-import openblocks.common.container.*;
-import openblocks.common.entity.*;
-import openblocks.common.tileentity.*;
+import openblocks.common.container.ContainerBigButton;
+import openblocks.common.container.ContainerLightbox;
+import openblocks.common.container.ContainerLuggage;
+import openblocks.common.container.ContainerSprinkler;
+import openblocks.common.container.ContainerVacuumHopper;
+import openblocks.common.entity.EntityLuggage;
+import openblocks.common.tileentity.TileEntityBigButton;
+import openblocks.common.tileentity.TileEntityLightbox;
+import openblocks.common.tileentity.TileEntitySprinkler;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonGuiHandler implements IGuiHandler {

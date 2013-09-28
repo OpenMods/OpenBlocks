@@ -19,7 +19,10 @@ import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.ItemRendererHangGlider;
 import openblocks.client.renderer.ItemRendererLuggage;
 import openblocks.client.renderer.ItemRendererTank;
-import openblocks.client.renderer.entity.*;
+import openblocks.client.renderer.entity.EntityGhostRenderer;
+import openblocks.client.renderer.entity.EntityHangGliderRenderer;
+import openblocks.client.renderer.entity.EntityLuggageRenderer;
+import openblocks.client.renderer.entity.EntityPlayerRenderer;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
@@ -110,8 +113,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public File getWorldDir(World world) {
-		return new File(OpenBlocks.getBaseDir(), "saves/"
-				+ world.getSaveHandler().getWorldDirectoryName());
+		return new File(OpenBlocks.getBaseDir(), "saves/" + world.getSaveHandler().getWorldDirectoryName());
 	}
 
 	/**

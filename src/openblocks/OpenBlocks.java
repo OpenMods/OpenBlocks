@@ -2,8 +2,6 @@ package openblocks;
 
 import java.io.File;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -12,11 +10,20 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.block.*;
-import openblocks.common.entity.*;
-import openblocks.common.item.*;
+import openblocks.common.entity.EntityGhost;
+import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.entity.EntityLuggage;
+import openblocks.common.item.ItemGeneric;
+import openblocks.common.item.ItemHangGlider;
+import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
+import openblocks.common.item.ItemLuggage;
+import openblocks.common.item.ItemSonicGlasses;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
+
+import org.apache.commons.lang3.ObjectUtils;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -58,6 +65,7 @@ public class OpenBlocks {
 		public static BlockBigButton bigButton;
 		public static BlockImaginary imaginary;
 		public static BlockFan fan;
+		public static BlockDecoy decoy;
 	}
 
 	public static class Items {
@@ -72,7 +80,11 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox, Luggage, Sprinkler, VacuumHopper, BigButton
+		Lightbox,
+		Luggage,
+		Sprinkler,
+		VacuumHopper,
+		BigButton
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
@@ -100,7 +112,7 @@ public class OpenBlocks {
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		Config.register();
-		
+
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());
 		if (Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
@@ -115,9 +127,9 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
 
 		OpenBlocks.Items.generic.initRecipes();
-		
+
 		proxy.init();
-		
+
 		proxy.registerRenderInformation();
 	}
 
@@ -131,8 +143,8 @@ public class OpenBlocks {
 	}
 
 	/*
-	 * TODO: These either need amending or depreciating, maybe move it from CompatibilityUtils to here
-	 * - NC
+	 * TODO: These either need amending or depreciating, maybe move it from
+	 * CompatibilityUtils to here - NC
 	 */
 
 	public static String getResourcesPath() {
@@ -158,7 +170,7 @@ public class OpenBlocks {
 	public static File getWorldDir(World world) {
 		return proxy.getWorldDir(world);
 	}
-	
+
 	public static String getModId() {
 		return OpenBlocks.class.getAnnotation(Mod.class).modid();
 	}

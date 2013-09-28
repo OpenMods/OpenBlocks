@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,6 +9,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.OpenBlock;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class OpenTileEntity extends TileEntity {
 
@@ -37,13 +37,11 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	/**
 	 * Get the current block rotation
-	 *
+	 * 
 	 * @return the block rotation
 	 */
 	public ForgeDirection getRotation() {
-		if (isUsedForClientInventoryRendering) {
-			return rotation;
-		}
+		if (isUsedForClientInventoryRendering) { return rotation; }
 		int ordinal = (getMetadata() & 0x3) + 2;
 		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
 		return direction;
@@ -56,12 +54,11 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	/**
 	 * Set the block rotation. To sync to the client call sync()
-	 *
+	 * 
 	 * @param rot
 	 */
 	public void setRotation(ForgeDirection rot) {
-		if (rot == ForgeDirection.UP || rot == ForgeDirection.DOWN
-				|| rot == ForgeDirection.UNKNOWN) {
+		if (rot == ForgeDirection.UP || rot == ForgeDirection.DOWN || rot == ForgeDirection.UNKNOWN) {
 			rot = ForgeDirection.EAST;
 		}
 		rotation = rot;
@@ -77,16 +74,12 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public boolean getFlag1() {
-		if (isUsedForClientInventoryRendering) {
-			return flag1;
-		}
+		if (isUsedForClientInventoryRendering) { return flag1; }
 		return getFlag(0);
 	}
 
 	public boolean getFlag2() {
-		if (isUsedForClientInventoryRendering) {
-			return flag2;
-		}
+		if (isUsedForClientInventoryRendering) { return flag2; }
 		return getFlag(1);
 	}
 
@@ -149,9 +142,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public boolean isAirBlock(ForgeDirection direction) {
-		return worldObj != null
-				&& worldObj.isAirBlock(xCoord + direction.offsetX, yCoord
-						+ direction.offsetY, zCoord + direction.offsetZ);
+		return worldObj != null && worldObj.isAirBlock(xCoord + direction.offsetX, yCoord + direction.offsetY, zCoord + direction.offsetZ);
 	}
 
 	public void sendBlockEvent(int key, int value) {
@@ -193,7 +184,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public AxisAlignedBB getBB() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1);
+		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
 	}
 
 	public boolean isRenderedInInventory() {

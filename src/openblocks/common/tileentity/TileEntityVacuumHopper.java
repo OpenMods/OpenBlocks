@@ -34,21 +34,21 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 
 		@SuppressWarnings("unchecked")
 		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, getBB().expand(3, 3, 3));
-		
-		for(EntityItem item : surroundingItems) {
-			
+
+		for (EntityItem item : surroundingItems) {
+
 			if (!item.isDead) {
-				
+
 				ItemStack stack = item.getEntityItem();
 				if (InventoryUtils.testInventoryInsertion(this, stack) > 0) {
-					
+
 					double x = (xCoord + 0.5D - item.posX) / 15.0D;
 					double y = (yCoord + 0.5D - item.posY) / 15.0D;
 					double z = (zCoord + 0.5D - item.posZ) / 15.0D;
-	
+
 					double distance = Math.sqrt(x * x + y * y + z * z);
 					double var11 = 1.0D - distance;
-	
+
 					if (var11 > 0.0D) {
 						var11 *= var11;
 						item.motionX += x / distance * var11 * 0.05;
@@ -63,15 +63,15 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
 
 				TileEntity tileOnSurface = getTileInDirection(getSurface());
-
+				IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, getSurface());
 				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
 				if (slotId > -1) {
 					ItemStack nextStack = getStackInSlot(slotId);
 					int previousSize = nextStack.stackSize;
 					nextStack = nextStack.copy();
-					if (tileOnSurface instanceof IInventory) {
-						InventoryUtils.insertItemIntoInventory((IInventory) tileOnSurface, nextStack);
-					}else {
+					if (inventory != null) {
+						InventoryUtils.insertItemIntoInventory(inventory, nextStack, getSurface().getOpposite());
+					} else {
 						if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
 							int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());
 							nextStack.stackSize -= inserted;
@@ -95,9 +95,9 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	public ForgeDirection getSurface() {
 		if (getFlag1()) {
 			return ForgeDirection.DOWN;
-		}else if (getFlag2()) {
+		} else if (getFlag2()) {
 			return ForgeDirection.UP;
-		}else {
+		} else {
 			return getRotation();
 		}
 	}
@@ -192,13 +192,13 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 
 	public void onEntityCollidedWithBlock(Entity entity) {
 		if (!worldObj.isRemote && entity instanceof EntityItem) {
-			EntityItem item = (EntityItem) entity;
+			EntityItem item = (EntityItem)entity;
 			ItemStack stack = item.getEntityItem().copy();
 			InventoryUtils.insertItemIntoInventory(inventory, stack);
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			if (stack.stackSize == 0) {
 				item.setDead();
-			}else {
+			} else {
 				item.setEntityItemStack(stack);
 			}
 		}
@@ -221,7 +221,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		readFromNBT(pkt.data);
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);

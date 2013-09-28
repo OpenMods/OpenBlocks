@@ -97,11 +97,9 @@ public class BlockTarget extends OpenBlock {
 			double entityY = entity.posY;
 			double entityZ = entity.posZ;
 
-			if (opposite == ForgeDirection.NORTH
-					|| opposite == ForgeDirection.SOUTH) {
+			if (opposite == ForgeDirection.NORTH || opposite == ForgeDirection.SOUTH) {
 				entityZ = centerZ;
-			} else if (opposite == ForgeDirection.EAST
-					|| opposite == ForgeDirection.WEST) {
+			} else if (opposite == ForgeDirection.EAST || opposite == ForgeDirection.WEST) {
 				entityX = centerX;
 			}
 
@@ -131,13 +129,13 @@ public class BlockTarget extends OpenBlock {
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		this.setBlockBoundsBasedOnState(world, x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 

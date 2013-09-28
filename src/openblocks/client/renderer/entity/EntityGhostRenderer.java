@@ -38,8 +38,8 @@ public class EntityGhostRenderer extends RenderLiving {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture (Entity entity) {
-		if(!(entity instanceof EntityGhost)) {
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		if (!(entity instanceof EntityGhost)) {
 			/* return steve */
 			return AbstractClientPlayer.locationStevePng;
 		}

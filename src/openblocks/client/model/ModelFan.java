@@ -19,8 +19,7 @@ public class ModelFan extends ModelBase {
 	ModelRenderer base;
 	ModelRenderer fan;
 
-	public ModelFan()
-	{
+	public ModelFan() {
 		textureWidth = 32;
 		textureHeight = 32;
 		outline1 = new ModelRenderer(this, 0, 0);

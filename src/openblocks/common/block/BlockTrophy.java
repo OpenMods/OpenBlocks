@@ -35,8 +35,7 @@ public class BlockTrophy extends OpenBlock {
 
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (!world.isRemote
-				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			TileEntityTrophy trophy = getTileEntity(world, x, y, z, TileEntityTrophy.class);
 			if (trophy.trophyType != null) {
 				ItemStack itemStack = trophy.trophyType.getItemStack();

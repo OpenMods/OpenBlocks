@@ -21,25 +21,24 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityHangGlider extends Entity implements
-		IEntityAdditionalSpawnData {
+public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
 
 	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
 	private static Map<EntityPlayer, EntityHangGlider> gliderClientMap = new WeakHashMap<EntityPlayer, EntityHangGlider>();
-	
+
 	public static Map<EntityPlayer, EntityHangGlider> getMapForSide(boolean isRemote) {
-		return isRemote ? gliderClientMap : gliderMap;
+		return isRemote? gliderClientMap : gliderMap;
 	}
-	
+
 	public static boolean isEntityHoldingGlider(Entity player) {
 		return gliderClientMap.containsKey(player);
 	}
-	
+
 	public static boolean isPlayerOnGround(Entity player) {
 		EntityHangGlider glider = gliderClientMap.get(player);
 		return glider == null || glider.isPlayerOnGround();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static void updateGliders() {
 		Iterator<Entry<EntityPlayer, EntityHangGlider>> it = gliderClientMap.entrySet().iterator();
@@ -47,20 +46,17 @@ public class EntityHangGlider extends Entity implements
 			Entry<EntityPlayer, EntityHangGlider> next = it.next();
 			EntityPlayer player = next.getKey();
 			EntityHangGlider glider = next.getValue();
-			if (player == null ||
-				player.isDead || 
-				glider == null ||
-				glider.isDead ||
-				player.getHeldItem() == null ||
-				!(player.getHeldItem().getItem() instanceof ItemHangGlider)) {
-					it.remove();
+			if (player == null || player.isDead || glider == null || glider.isDead || player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemHangGlider)
+					|| player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
+				glider.setDead();
+				it.remove();
 			} else {
 				glider.fixPositions(Minecraft.getMinecraft().thePlayer);
 			}
-			
+
 		}
 	}
-	
+
 	private EntityPlayer player;
 	/*
 	 * Let the glider handle it's own disposal to centralize reference
@@ -86,7 +82,7 @@ public class EntityHangGlider extends Entity implements
 	public void despawnGlider() {
 		shouldDespawn = true;
 	}
-	
+
 	public boolean isPlayerOnGround() {
 		return this.dataWatcher.getWatchableObjectByte(2) == 1;
 	}
@@ -97,13 +93,10 @@ public class EntityHangGlider extends Entity implements
 			setDead();
 		} else {
 			if (!worldObj.isRemote) {
-				this.dataWatcher.updateObject(2, Byte.valueOf((byte)(player.onGround ? 1 : 0)));
+				this.dataWatcher.updateObject(2, Byte.valueOf((byte)(player.onGround? 1 : 0)));
 			}
 			ItemStack held = player.getHeldItem();
-			if (player.isDead || held == null || held.getItem() == null
-					|| held.getItem() != OpenBlocks.Items.hangGlider
-					|| shouldDespawn) {
-				
+			if (player.isDead || held == null || held.getItem() == null || held.getItem() != OpenBlocks.Items.hangGlider || shouldDespawn || player.dimension != this.dimension) {
 				getMapForSide(worldObj.isRemote).remove(player);
 				setDead();
 			} else {
@@ -117,10 +110,8 @@ public class EntityHangGlider extends Entity implements
 				if (!player.onGround && player.motionY < 0) {
 					player.motionY *= verticalSpeed;
 					motionY *= verticalSpeed;
-					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90))
-							* horizontalSpeed;
-					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90))
-							* horizontalSpeed;
+					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
+					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
 					player.motionX += x;
 					player.motionZ += z;
 					player.fallDistance = 0f; /* Don't like getting hurt :( */
@@ -152,7 +143,6 @@ public class EntityHangGlider extends Entity implements
 			this.prevRotationPitch = player.prevRotationPitch;
 			this.rotationPitch = player.rotationPitch;
 
-
 			if (player != thePlayer) {
 				this.posY += 1.2;
 				this.prevPosY += 1.2;
@@ -179,13 +169,22 @@ public class EntityHangGlider extends Entity implements
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		data.writeUTF(player.username);
+		if (player != null) {
+			data.writeUTF(player.username);
+		} else {
+			data.writeUTF("[none]");
+		}
 	}
 
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
-		player = worldObj.getPlayerEntityByName(data.readUTF());
-		gliderClientMap.put(player, this);
+		String username = data.readUTF();
+		if ("[none]".equals(username)) {
+			setDead();
+		} else {
+			player = worldObj.getPlayerEntityByName(username);
+			gliderClientMap.put(player, this);
+		}
 	}
 
 }

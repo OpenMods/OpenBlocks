@@ -37,8 +37,7 @@ public class PacketHandler implements IPacketHandler {
 		List<EntityPlayer> playerList = Lists.newArrayList();
 		for (int j = 0; j < world.playerEntities.size(); j++) {
 			EntityPlayerMP player = (EntityPlayerMP)world.playerEntities.get(j);
-			if (Math.abs(player.posX - blockX) <= distance
-					&& Math.abs(player.posZ - blockZ) <= distance) {
+			if (Math.abs(player.posX - blockX) <= distance && Math.abs(player.posZ - blockZ) <= distance) {
 				playerList.add(player);
 			}
 		}
@@ -60,8 +59,7 @@ public class PacketHandler implements IPacketHandler {
 		Chunk chunk = chunkProvider.provideChunk(sourceX, sourceZ);
 		if (player instanceof EntityPlayerMP) {
 			EntityPlayerMP mpInstance = (EntityPlayerMP)player;
-			if (mpInstance.loadedChunks != null
-					&& !mpInstance.loadedChunks.isEmpty()) {
+			if (mpInstance.loadedChunks != null && !mpInstance.loadedChunks.isEmpty()) {
 				@SuppressWarnings("unchecked")
 				Iterator<Chunk> iterator = mpInstance.loadedChunks.iterator();
 				while (iterator.hasNext()) {
@@ -95,8 +93,7 @@ public class PacketHandler implements IPacketHandler {
 			EntityPlayer ent = it.next();
 			if (ent instanceof EntityPlayerMP) {
 				EntityPlayerMP mpInstance = (EntityPlayerMP)ent;
-				if (mpInstance.loadedChunks != null
-						&& !mpInstance.loadedChunks.isEmpty()) {
+				if (mpInstance.loadedChunks != null && !mpInstance.loadedChunks.isEmpty()) {
 					@SuppressWarnings("unchecked")
 					Iterator<Chunk> iterator = mpInstance.loadedChunks.iterator();
 					while (iterator.hasNext()) {

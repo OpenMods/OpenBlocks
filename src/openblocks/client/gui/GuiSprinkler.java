@@ -21,7 +21,7 @@ public class GuiSprinkler extends GuiContainer {
 		int left = (this.width - this.xSize) / 2;
 		int top = (this.height - this.ySize) / 2;
 		CompatibilityUtils.bindTextureToClient("textures/gui/sprinkler.png");
-		this.drawTexturedModalRect(left, top, 0, 0, this.xSize, this.ySize);
+		drawTexturedModalRect(left, top, 0, 0, this.xSize, this.ySize);
 	}
 
 	@Override

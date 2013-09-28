@@ -15,7 +15,7 @@ import openblocks.utils.ItemUtils;
 import com.google.common.collect.Lists;
 
 public class CrayonGlassesRecipe extends ShapelessRecipes {
-	
+
 	private static List<ItemStack> createFakeIngredientsList() {
 		ItemStack block = new ItemStack(Blocks.imaginary);
 		ItemImaginary.setupValues(0x00FFFF, block);

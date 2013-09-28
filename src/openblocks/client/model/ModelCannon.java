@@ -5,8 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntityCannon;
 
-public class ModelCannon extends ModelBase
-{
+public class ModelCannon extends ModelBase {
 	ModelRenderer shaft;
 	ModelRenderer shaft2;
 	ModelRenderer main;
@@ -18,8 +17,7 @@ public class ModelCannon extends ModelBase
 	ModelRenderer rest;
 	ModelRenderer handle;
 
-	public ModelCannon()
-	{
+	public ModelCannon() {
 		textureWidth = 64;
 		textureHeight = 32;
 

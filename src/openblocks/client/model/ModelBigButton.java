@@ -8,8 +8,7 @@ public class ModelBigButton extends ModelBase {
 	// fields
 	ModelRenderer button;
 
-	public ModelBigButton()
-	{
+	public ModelBigButton() {
 		textureWidth = 64;
 		textureHeight = 32;
 
@@ -25,7 +24,7 @@ public class ModelBigButton extends ModelBase {
 		float f5 = 0.0625F;
 		if (te.getFlag1()) {
 			button.rotationPointZ = 1f;
-		}else {
+		} else {
 			button.rotationPointZ = 0;
 		}
 		button.render(f5);

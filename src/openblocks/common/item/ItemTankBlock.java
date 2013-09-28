@@ -10,8 +10,7 @@ import net.minecraftforge.liquids.LiquidTank;
 import openblocks.Config;
 
 public class ItemTankBlock extends ItemOpenBlock {
-	private LiquidTank fakeTank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME
-			* Config.bucketsPerTank);
+	private LiquidTank fakeTank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank);
 
 	public ItemTankBlock(int id) {
 		super(id);

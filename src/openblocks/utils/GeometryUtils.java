@@ -52,7 +52,7 @@ public class GeometryUtils {
 
 	/**
 	 * Makes a link of blocks in a shape
-	 *
+	 * 
 	 * @param startX
 	 *            X position of origin
 	 * @param startY
@@ -70,14 +70,12 @@ public class GeometryUtils {
 		if (length == 0) return;
 		for (int offset = 0; offset <= length; offset++)
 			/* Create a line in the direction of direction, length in size */
-			shapeable.setBlock(startX + (offset * direction.offsetX), startY
-					+ (offset * direction.offsetY), startZ
-					+ (offset * direction.offsetZ));
+			shapeable.setBlock(startX + (offset * direction.offsetX), startY + (offset * direction.offsetY), startZ + (offset * direction.offsetZ));
 	}
 
 	/**
 	 * Makes a flat plane along two directions
-	 *
+	 * 
 	 * @param startX
 	 *            X position of origin
 	 * @param startY
@@ -139,15 +137,12 @@ public class GeometryUtils {
 						break forZ;
 					}
 
-					if (MathUtils.lengthSq(nextXn, yn, zn) <= 1
-							&& MathUtils.lengthSq(xn, nextYn, zn) <= 1
-							&& MathUtils.lengthSq(xn, yn, nextZn) <= 1) {
+					if (MathUtils.lengthSq(nextXn, yn, zn) <= 1 && MathUtils.lengthSq(xn, nextYn, zn) <= 1 && MathUtils.lengthSq(xn, yn, nextZn) <= 1) {
 						continue;
 					}
 
 					for (Octant octant : octantSet) {
-						shapeable.setBlock(x * octant.getXOffset(), y
-								* octant.getYOffset(), z * octant.getZOffset());
+						shapeable.setBlock(x * octant.getXOffset(), y * octant.getYOffset(), z * octant.getZOffset());
 					}
 				}
 			}

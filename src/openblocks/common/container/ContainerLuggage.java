@@ -6,7 +6,7 @@ import openblocks.common.entity.EntityLuggage;
 public class ContainerLuggage extends ContainerInventory<IInventory> {
 
 	public final EntityLuggage luggage;
-	
+
 	public ContainerLuggage(IInventory playerInventory, EntityLuggage luggage) {
 		super(playerInventory, luggage.getInventory());
 		this.luggage = luggage;

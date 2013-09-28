@@ -71,7 +71,7 @@ public class BlockGuide extends OpenBlock {
 			} else {
 				if (player.capabilities.isCreativeMode && world.getBlockId(x, y + 1, z) == Block.obsidian.blockID) {
 					((TileEntityGuide)tileEntity).fill(player);
-				}else {
+				} else {
 					((TileEntityGuide)tileEntity).changeDimensions(player, ForgeDirection.getOrientation(side));
 				}
 			}

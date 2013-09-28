@@ -17,11 +17,11 @@ public class ItemOpenBlock extends ItemBlock {
 	private static boolean canReplace(Block block, World world, int x, int y, int z) {
 		return block != null && block.isBlockReplaceable(world, x, y, z);
 	}
-	
+
 	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player, World world, int x, int y, int z) {
 		stack.stackSize--;
 	}
-	
+
 	protected boolean isStackValid(ItemStack stack, EntityPlayer player) {
 		return stack.stackSize >= 0;
 	}
@@ -55,16 +55,17 @@ public class ItemOpenBlock extends ItemBlock {
 		if (!world.canPlaceEntityOnSide(ownBlockId, x, y, z, false, side, player, stack)) return false;
 
 		// B: it's alread called in World.canPlaceEntityOnSide?
-		//if (ownBlock instanceof OpenBlock && !((OpenBlock)ownBlock).canPlaceBlockOnSide(world, x, y, z, sideDir.getOpposite())) return false;
+		// if (ownBlock instanceof OpenBlock &&
+		// !((OpenBlock)ownBlock).canPlaceBlockOnSide(world, x, y, z,
+		// sideDir.getOpposite())) return false;
 
 		int newMeta = getMetadata(stack.getItemDamage());
 		newMeta = ownBlock.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, newMeta);
-		
+
 		if (!placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, newMeta)) return false;
 
-		if (ownBlock instanceof OpenBlock)
-			((OpenBlock)ownBlock).onBlockPlacedBy(world, player, stack, x, y, z, sideDir, hitX, hitY, hitZ, newMeta);
-			
+		if (ownBlock instanceof OpenBlock) ((OpenBlock)ownBlock).onBlockPlacedBy(world, player, stack, x, y, z, sideDir, hitX, hitY, hitZ, newMeta);
+
 		world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, ownBlock.stepSound.getPlaceSound(), (ownBlock.stepSound.getVolume() + 1.0F) / 2.0F, ownBlock.stepSound.getPitch() * 0.8F);
 		afterBlockPlaced(stack, player, world, x, y, z);
 

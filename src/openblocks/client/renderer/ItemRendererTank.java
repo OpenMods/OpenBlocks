@@ -35,8 +35,7 @@ public class ItemRendererTank implements IItemRenderer {
 		if (item.hasTagCompound() && item.getTagCompound().hasKey("tank")) {
 			teTank.readFromNBT(item.getTagCompound().getCompoundTag("tank"));
 			FluidStack lstack = teTank.getInternalTank().getFluid();
-			if (lstack != null
-					&& FluidRegistry.getFluidName(lstack) != null) {
+			if (lstack != null && FluidRegistry.getFluidName(lstack) != null) {
 				teTank.setClientLiquidId(lstack.fluidID);
 			}
 		}

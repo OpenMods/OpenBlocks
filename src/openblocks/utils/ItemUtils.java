@@ -19,11 +19,10 @@ public class ItemUtils {
 			return stack;
 		}
 	}
-	
+
 	public static NBTTagCompound getItemTag(ItemStack stack) {
-		if (stack.stackTagCompound == null)
-			stack.stackTagCompound = new NBTTagCompound("tag");
-		
+		if (stack.stackTagCompound == null) stack.stackTagCompound = new NBTTagCompound("tag");
+
 		return stack.stackTagCompound;
 	}
 

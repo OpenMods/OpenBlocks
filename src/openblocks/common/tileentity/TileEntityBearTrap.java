@@ -14,11 +14,11 @@ import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 
-public class TileEntityBearTrap extends NetworkedTileEntity implements
-		IAwareTile, ISurfaceAttachment {
+public class TileEntityBearTrap extends NetworkedTileEntity implements IAwareTile, ISurfaceAttachment {
 
 	public enum Keys {
-		flags, trappedEntityId
+		flags,
+		trappedEntityId
 	}
 
 	public enum Flags {
@@ -67,8 +67,7 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20
-					&& entity instanceof EntityCreature) {
+			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20 && entity instanceof EntityCreature) {
 				trappedEntityId.setValue(entity.entityId);
 				entity.worldObj.playSoundAtEntity(entity, worldObj.rand.nextBoolean()? "openblocks:beartrapclose" : "openblocks:beartrapcloseb", 0.5F, 1.0F);
 				flags.set(Flags.isShut, true);

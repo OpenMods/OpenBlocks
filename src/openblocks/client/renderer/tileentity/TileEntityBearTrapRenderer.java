@@ -24,10 +24,8 @@ public class TileEntityBearTrapRenderer extends TileEntitySpecialRenderer {
 		TileEntityBearTrap tile = (TileEntityBearTrap)tileentity;
 		GL11.glRotatef(-BlockUtils.getRotationFromDirection(tile.getRotation()), 0, 1, 0);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if (tile.isRenderedInInventory())
-			model.renderAll(false, 15);
-		else
-			model.renderAll(tile.isShut(), tile.tickSinceOpened());
+		if (tile.isRenderedInInventory()) model.renderAll(false, 15);
+		else model.renderAll(tile.isShut(), tile.tickSinceOpened());
 		GL11.glPopMatrix();
 	}
 

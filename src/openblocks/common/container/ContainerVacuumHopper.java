@@ -10,5 +10,5 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 		addInventoryGrid(44, 20, 5);
 		addPlayerInventorySlots(69);
 	}
-	
+
 }

@@ -26,11 +26,11 @@ public class TileEntityVacuumHopperRenderer extends TileEntitySpecialRenderer {
 		ForgeDirection surface = hopper.getSurface();
 		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
 			GL11.glTranslated(0, 0.5, 0.5);
-			if (surface == ForgeDirection.UP){
+			if (surface == ForgeDirection.UP) {
 				GL11.glTranslated(0, 0, -1.0);
 			}
-			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface), 1, 0, 0);	
-		}else {
+			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface), 1, 0, 0);
+		} else {
 			GL11.glRotatef(-BlockUtils.getRotationFromDirection(surface), 0, 1, 0);
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

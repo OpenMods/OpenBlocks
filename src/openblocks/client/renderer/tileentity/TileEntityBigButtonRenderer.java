@@ -10,7 +10,7 @@ import openblocks.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityBigButtonRenderer  extends TileEntitySpecialRenderer {
+public class TileEntityBigButtonRenderer extends TileEntitySpecialRenderer {
 
 	private ModelBigButton model = new ModelBigButton();
 

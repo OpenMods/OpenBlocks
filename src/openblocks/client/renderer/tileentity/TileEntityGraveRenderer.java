@@ -25,7 +25,7 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-BlockUtils.getRotationFromDirection(target.getRotation()), 0, 1, 0);
-		//this.bindTextureByName("/mods/openblocks/textures/models/grave.png");
+		// this.bindTextureByName("/mods/openblocks/textures/models/grave.png");
 		model.render(tileentity, f);
 
 		String username = target.getUsername();

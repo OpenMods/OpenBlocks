@@ -9,9 +9,7 @@ import openblocks.common.api.IAwareTile;
 public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 
 	private void clearupLiquid() {
-		if (worldObj.isRemote) {
-			return;
-		}
+		if (worldObj.isRemote) { return; }
 		boolean hitLava = false;
 		for (int x = -3; x <= 3; x++) {
 			for (int y = -3; y <= 3; y++) {
@@ -27,7 +25,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 			}
 		}
 		if (hitLava) {
-			this.sendBlockEvent(0, 0);
+			sendBlockEvent(0, 0);
 		}
 	}
 
@@ -58,12 +56,12 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
 		if (worldObj.isRemote) {
 			for (int i = 0; i < 20; i++) {
-	            double f = xCoord + worldObj.rand.nextDouble() * 0.1;
-	            double f1 = yCoord + 1.0 + worldObj.rand.nextDouble();
-	            double f2 = zCoord + worldObj.rand.nextDouble();
+				double f = xCoord + worldObj.rand.nextDouble() * 0.1;
+				double f1 = yCoord + 1.0 + worldObj.rand.nextDouble();
+				double f2 = zCoord + worldObj.rand.nextDouble();
 				worldObj.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
 			}
-		}else {
+		} else {
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 		}
 		return true;

@@ -11,8 +11,7 @@ public class ModelVacuumHopper extends ModelBase {
 	ModelRenderer connector;
 	ModelRenderer collector;
 
-	public ModelVacuumHopper()
-	{
+	public ModelVacuumHopper() {
 		textureWidth = 64;
 		textureHeight = 32;
 

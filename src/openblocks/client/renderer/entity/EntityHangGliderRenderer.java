@@ -27,15 +27,13 @@ public class EntityHangGliderRenderer extends Render {
 		double z2 = Math.sin(Math.toRadians(rotation + 90)) * 1.5;
 
 		/* Only shift to first person if FP and we're on glider */
-		if (glider.getPlayer() == Minecraft.getMinecraft().thePlayer
-				&& Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+		if (glider.getPlayer() == Minecraft.getMinecraft().thePlayer && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
 			GL11.glTranslatef((float)x, (float)y + 0.4f, (float)z);
 		} else {
 			if (glider.getPlayer() != null && glider.isPlayerOnGround()) {
 				GL11.glTranslatef((float)x, (float)y - 0.2f, (float)z);
 			} else {
-				GL11.glTranslatef((float)x + (float)x2, (float)y - 0.2f, (float)z
-						+ (float)z2);
+				GL11.glTranslatef((float)x + (float)x2, (float)y - 0.2f, (float)z + (float)z2);
 			}
 		}
 
@@ -87,7 +85,7 @@ public class EntityHangGliderRenderer extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture (Entity entity){
+	protected ResourceLocation getEntityTexture(Entity entity) {
 		return CompatibilityUtils.getResourceLocation("textures/models/hangglider.png");
 	}
 }

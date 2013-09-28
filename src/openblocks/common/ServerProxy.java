@@ -1,8 +1,6 @@
-	package openblocks.common;
+package openblocks.common;
 
 import java.io.File;
-
-import cpw.mods.fml.common.network.IGuiHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -12,9 +10,10 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.IProxy;
 import openblocks.OpenBlocks;
+import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ServerProxy implements IProxy {
-	
+
 	@Override
 	public void init() {}
 
@@ -33,7 +32,7 @@ public class ServerProxy implements IProxy {
 
 	/**
 	 * Is this the server
-	 *
+	 * 
 	 * @return true if this is the server
 	 */
 	@Override
@@ -44,7 +43,7 @@ public class ServerProxy implements IProxy {
 
 	/**
 	 * Is this the client
-	 *
+	 * 
 	 * @return true if this is the client
 	 */
 	@Override
@@ -54,7 +53,7 @@ public class ServerProxy implements IProxy {
 
 	/**
 	 * Checks if this game is SinglePlayer
-	 *
+	 * 
 	 * @return true if this is single player
 	 */
 	public boolean isSinglePlayer() {

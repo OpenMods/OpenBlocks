@@ -63,10 +63,10 @@ public class BlockTank extends OpenBlock {
 			if (tank.containsValidLiquid()) {
 				try {
 					int blockId = tank.getClientLiquidId();
-					if(blockId < 0 || blockId > Block.blocksList.length) return 0;
+					if (blockId < 0 || blockId > Block.blocksList.length) return 0;
 					if (Block.blocksList[blockId] == null) return 0;
 					return (int)Math.min(Block.lightValue[blockId], Math.max(0, 5 + tank.getPercentFull() * 15));
-				}catch(Exception e) {
+				} catch (Exception e) {
 					Log.warn(e, "Hello, It's OpenBlocks here. We've got exception at (%d,%d,%d). Please report this to the OpenMods team, they'll patch this bug up as soon as possible", x, y, z);
 					return 0;
 				}
@@ -98,8 +98,7 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (!world.isRemote
-				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
 			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
 			/*

@@ -28,8 +28,7 @@ import openblocks.common.api.ISurfaceAttachment;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, IFluidHandler, IInventory {
+public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory {
 
 	// erpppppp
 	private FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
@@ -44,28 +43,28 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
-		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal ? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance)) {
+		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance)) {
 			// http://goo.gl/RpQuk9
 			Random random = worldObj.rand;
-			int x = (random.nextInt(Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + xCoord;
-			int z = (random.nextInt(Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean() ? 1 : -1) + zCoord;
-			/* What? Okay think about this.
-			 * i = -1 y = yCoord - 1
-			 * i = 0 y = yCoord - 1
-			 * i = 1 y = yCoord
-			 *
+			int x = (random.nextInt(Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean()? 1 : -1) + xCoord;
+			int z = (random.nextInt(Config.sprinklerEffectiveRange) + 1) * (random.nextBoolean()? 1 : -1) + zCoord;
+			/*
+			 * What? Okay think about this. i = -1 y = yCoord - 1 i = 0 y =
+			 * yCoord - 1 i = 1 y = yCoord
+			 * 
 			 * Is this the intended operation? I've changed it for now -NC
 			 */
 			for (int i = -1; i <= 1; i++) {
 				int y = yCoord + i;
 				try {
 					for (int a = 0; a < 10; a++) {
-							// Mikee, why do we try to apply it 10 times? Is it likely to fail? -NC
-							if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
-								break;
-							}
+						// Mikee, why do we try to apply it 10 times? Is it
+						// likely to fail? -NC
+						if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
+							break;
+						}
 					}
-				} catch(Exception e) {
+				} catch (Exception e) {
 					Log.warn(e, "Exception during bonemeal applying");
 				}
 			}
@@ -77,9 +76,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		for (int i = 0; i < 6; i++) {
 			float offset = (i - 2.5f) / 5f;
 			ForgeDirection rotation = getRotation();
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5
-					+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
-					+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
+			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5 + (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5 + (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
 		}
 	}
 
@@ -236,9 +233,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	public float getSprayAngle() {
-		if (isEnabled()) {
-			return MathHelper.sin(OpenBlocks.proxy.getTicks(worldObj) * 0.02f) * (float)Math.PI * 0.035f;
-		}
+		if (isEnabled()) { return MathHelper.sin(OpenBlocks.proxy.getTicks(worldObj) * 0.02f) * (float)Math.PI * 0.035f; }
 		return 0;
 	}
 

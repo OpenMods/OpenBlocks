@@ -382,10 +382,7 @@ public class SoundIconRegistry {
 		records.add("wait", makeFramedItemIcon("record_wait", frameBlue));
 
 		/*
-		 * Missing sounds
-		 * ambient.cave
-		 * random.breath
-		 * random.classic_hurt
+		 * Missing sounds ambient.cave random.breath random.classic_hurt
 		 * random.successful_hit
 		 */
 	}

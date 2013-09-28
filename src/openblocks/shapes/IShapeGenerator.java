@@ -4,7 +4,7 @@ public interface IShapeGenerator {
 
 	/**
 	 * Generates a shape and applies it to the shapeable object
-	 *
+	 * 
 	 * @param xSize
 	 *            Size along the x plane (Width)
 	 * @param ySize

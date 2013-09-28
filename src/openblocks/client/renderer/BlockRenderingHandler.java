@@ -13,18 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.OpenRenderHelper;
-import openblocks.common.tileentity.OpenTileEntity;
-import openblocks.common.tileentity.TileEntityBearTrap;
-import openblocks.common.tileentity.TileEntityBigButton;
-import openblocks.common.tileentity.TileEntityCannon;
-import openblocks.common.tileentity.TileEntityFan;
-import openblocks.common.tileentity.TileEntityFlag;
-import openblocks.common.tileentity.TileEntityGrave;
-import openblocks.common.tileentity.TileEntityLightbox;
-import openblocks.common.tileentity.TileEntitySprinkler;
-import openblocks.common.tileentity.TileEntityTarget;
-import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openblocks.common.tileentity.*;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -73,7 +62,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityBigButton teButton = new TileEntityBigButton();
 		inventoryTileEntities.put(OpenBlocks.Blocks.bigButton, teButton);
-		
+
 		TileEntityFan teFan = new TileEntityFan();
 		inventoryTileEntities.put(OpenBlocks.Blocks.fan, teFan);
 	}

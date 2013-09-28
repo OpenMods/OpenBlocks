@@ -1,10 +1,5 @@
 package openblocks.common.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -16,6 +11,11 @@ import openblocks.OpenBlocks.Gui;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, ISurfaceAttachment, IInventory {
 
@@ -40,7 +40,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 
 	public int getTickTime() {
 		ItemStack stack = inventory.getStackInSlot(0);
-		return stack == null ? 1 : stack.stackSize;
+		return stack == null? 1 : stack.stackSize;
 	}
 
 	@Override

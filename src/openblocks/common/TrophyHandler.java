@@ -18,16 +18,7 @@ import openblocks.Config;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.trophy.BlazeBehavior;
-import openblocks.trophy.CaveSpiderBehavior;
-import openblocks.trophy.CreeperBehavior;
-import openblocks.trophy.EndermanBehavior;
-import openblocks.trophy.ITrophyBehavior;
-import openblocks.trophy.ItemDropBehavior;
-import openblocks.trophy.MooshroomBehavior;
-import openblocks.trophy.SkeletonBehavior;
-import openblocks.trophy.SnowmanBehavior;
-import openblocks.trophy.SquidBehavior;
+import openblocks.trophy.*;
 import openblocks.utils.BlockUtils;
 
 public class TrophyHandler {
@@ -64,7 +55,7 @@ public class TrophyHandler {
 		Creeper(new CreeperBehavior()),
 		Skeleton(new SkeletonBehavior()),
 		PigZombie(new ItemDropBehavior(20000, Item.goldNugget.itemID)),
-		Bat(1.0,-0.3),
+		Bat(1.0, -0.3),
 		Zombie(),
 		Witch(0.35),
 		Villager(),
@@ -155,7 +146,6 @@ public class TrophyHandler {
 				behavior.executeTickBehavior(tile);
 			}
 		}
-
 
 		public final static Trophy[] VALUES = values();
 	}
