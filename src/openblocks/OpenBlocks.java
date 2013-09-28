@@ -66,6 +66,8 @@ public class OpenBlocks {
 		public static BlockVillageHighlighter villageHighlighter;
 		public static BlockPath path;
 		public static BlockAutoAnvil autoAnvil;
+		public static BlockDecoy decoy;
+        public static BlockBlockBreaker blockBreaker;
 	}
 
 	public static class Items {
