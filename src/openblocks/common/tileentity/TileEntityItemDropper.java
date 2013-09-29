@@ -3,13 +3,9 @@ package openblocks.common.tileentity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
@@ -21,53 +17,55 @@ import openblocks.utils.OpenBlocksFakePlayer;
 /**
  * Created with IntelliJ IDEA.
  * User: Aleksander
- * Date: 28.09.13
- * Time: 22:18
+ * Date: 29.09.13
+ * Time: 14:39
  * To change this template use File | Settings | File Templates.
  */
-public class TileEntityBlockPlacer extends OpenTileEntity
+public class TileEntityItemDropper extends OpenTileEntity
     implements IAwareTile, IInventory {
     static final int BUFFER_SIZE = 9;
 
     private boolean _redstoneSignal;
-    private final GenericInventory inventory = new GenericInventory("blockPlacer", false, BUFFER_SIZE);
+    private final GenericInventory inventory = new GenericInventory("itemDropper", false, 9);
 
     public void setRedstoneSignal(boolean redstoneSignal) {
-        System.out.println("block-placer-redstone-signal: " + redstoneSignal);
         if(redstoneSignal != _redstoneSignal) {
             _redstoneSignal = redstoneSignal;
             if(_redstoneSignal && !InventoryUtils.inventoryIsEmpty(inventory)) {
-                placeBlock();
+                dropItem();
             }
         }
     }
 
-    private void placeBlock() {
+    private void dropItem() {
         if(worldObj.isRemote) return;
 
-        System.out.println("placeBlock");
-
-        ForgeDirection direction = ForgeDirection.getOrientation(getMetadata());
-        int x = xCoord + direction.offsetX,
-            y = yCoord + direction.offsetY,
-            z = zCoord + direction.offsetZ;
+        int x = xCoord,
+            y = yCoord,
+            z = zCoord;
 
         for(int i = 0, l = getSizeInventory(); i < l; i++) {
             ItemStack stack = getStackInSlot(i);
             if(stack == null || stack.stackSize == 0) continue;
 
-            ItemStack newStack = OpenBlocksFakePlayer.getPlayerForWorld(worldObj)
-                .equipWithAndRightClick(stack,
-                    Vec3.createVectorHelper(xCoord, yCoord, zCoord),
-                    Vec3.createVectorHelper(x, y - 1, z),
-                    ForgeDirection.UP,
-                    worldObj.blockExists(x, y, z) && worldObj.getBlockId(x, y, z) != 0 && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
+            ItemStack dropped = ItemStack.copyItemStack(stack);
+            stack.stackSize--;
+            if(stack.stackSize <= 0) {
+                setInventorySlotContents(i, null);
+            }
 
-            setInventorySlotContents(i, newStack.stackSize > 0 ? newStack : null);
+            OpenBlocksFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, 1, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+
+//            ItemStack newStack = OpenBlocksFakePlayer.getPlayerForWorld(worldObj)
+//                    .equipWithAndRightClick(stack,
+//                            Vec3.createVectorHelper(xCoord, yCoord, zCoord),
+//                            Vec3.createVectorHelper(x, y - 1, z),
+//                            ForgeDirection.UP,
+//                            worldObj.blockExists(x, y, z) && worldObj.getBlockId(x, y, z) != 0 && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
+//
+//            setInventorySlotContents(i, newStack.stackSize > 0 ? newStack : null);
             return;
         }
-
-        System.out.println("Inventory empty");
     }
 
     /**
@@ -180,7 +178,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
     public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) { return false; }
         if (!worldObj.isRemote) {
-            openGui(player, OpenBlocks.Gui.BlockPlacer);
+            openGui(player, OpenBlocks.Gui.ItemDropper);
         }
         return true;
     }
@@ -194,7 +192,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 
     @Override
     public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockUtils.get3dOrientation(player).ordinal(), 2);
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

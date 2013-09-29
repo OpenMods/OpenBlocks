@@ -23,6 +23,7 @@ public class CommonGuiHandler implements IGuiHandler {
 		if (ID == OpenBlocks.Gui.XPBottler.ordinal()) { return new ContainerXPBottler(player.inventory, (TileEntityXPBottler)tile); }
 		if (ID == OpenBlocks.Gui.autoAnvil.ordinal()) { return new ContainerAutoAnvil(player.inventory, (TileEntityAutoAnvil)tile); }
         if (ID == OpenBlocks.Gui.blockPlacer.ordinal()) { return new ContainerBlockPlacer(player.inventory, (TileEntityBlockPlacer)tile); }
+        if (ID == OpenBlocks.Gui.itemDropper.ordinal()) { return new ContainerItemDropper(player.inventory, (TileEntityItemDropper)tile); }
 
 		return null;
 	}

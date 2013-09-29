@@ -30,7 +30,7 @@ public class BlockBlockBreaker extends OpenBlock {
     private Icon faceIcon;
 
     public BlockBlockBreaker() {
-        super(Config.blockBreakerId, Material.rock);
+        super(Config.blockBlockBreakerId, Material.rock);
         setupBlock(this, "blockBreaker", TileEntityBlockBreaker.class);
     }
 
@@ -44,7 +44,6 @@ public class BlockBlockBreaker extends OpenBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int side, int metadata) {
-        if(side < 2) return blockIcon;
         return side == metadata ? faceIcon : blockIcon;
     }
 

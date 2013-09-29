@@ -1,6 +1,8 @@
 package openblocks.utils;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
@@ -36,6 +38,8 @@ public class OpenBlocksFakePlayer extends FakePlayer {
     }
 
     public ItemStack equipWithAndRightClick(ItemStack itemStack, Vec3 currentPos, Vec3 hitVector, ForgeDirection side, boolean blockExists) {
+        System.out.println("Place block at " + hitVector.xCoord + "," + hitVector.yCoord + "," + hitVector.zCoord + ". Block exist: " + blockExists);
+
         setPosition(currentPos.xCoord, currentPos.yCoord, currentPos.zCoord);
 
         if(blockExists) {
@@ -68,6 +72,21 @@ public class OpenBlocksFakePlayer extends FakePlayer {
         return ItemStack.copyItemStack(inventory.getCurrentItem());
     }
 
+    public void dropItemAt(ItemStack itemStack, int count, int x, int y, int z, ForgeDirection direction) {
+        setPosition(x + 0.5F, y, z + 0.5F);
+        if(direction == ForgeDirection.DOWN) {
+            setRotation(0, -90);
+        } else {
+            // "Other directions than down is not implemented"
+            throw new IllegalStateException();
+        }
+
+        EntityItem entityItem = dropItemWithOffset(itemStack.itemID, count, -0.5F);
+        entityItem.motionX = 0;
+        entityItem.motionY = 0;
+        entityItem.motionZ = 0;
+    }
+
     private boolean rightClick(ItemStack itemStack, int x, int y, int z, int side, float deltaX, float deltaY, float deltaZ, boolean blockExists) {
         boolean flag = false;
         int blockId;
@@ -92,7 +111,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 
             ItemBlock itemblock = (ItemBlock)itemStack.getItem();
 
-            if (!itemblock.canPlaceItemBlockOnSide(worldObj, x, y, z, side, this, itemStack)) {
+            if (!canPlaceItemBlockOnSide(itemblock, worldObj, x, y, z, side, itemStack)) {
                 return false;
             }
         }
@@ -112,5 +131,27 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 //            }
             return true;
         }
+    }
+    
+    private boolean canPlaceItemBlockOnSide(ItemBlock itemBlock, World world, int x, int y, int z, int side, ItemStack itemStack) {
+    	int blockId = world.getBlockId(x, y, z);
+    	if (blockId == Block.snow.blockID) {
+    		side = 1;
+    	} else if (
+			blockId != Block.vine.blockID &&
+			blockId != Block.tallGrass.blockID &&
+			blockId != Block.deadBush.blockID &&
+			(Block.blocksList[blockId] == null || !Block.blocksList[blockId].isBlockReplaceable(world, x, y, z))) {
+    		switch(side) {
+    		case 0: --y; break;
+    		case 1: ++y; break;
+    		case 2: --z; break;
+    		case 3: ++z; break;
+    		case 4: --x; break;
+    		case 5: ++x; break;
+    		}
+    	}
+    	
+    	return world.canPlaceEntityOnSide(itemBlock.getBlockID(), x, y, z, false, side, this, itemStack);
     }
 }

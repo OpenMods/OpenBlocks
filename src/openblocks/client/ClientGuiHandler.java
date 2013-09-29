@@ -25,6 +25,7 @@ public class ClientGuiHandler extends CommonGuiHandler {
 			if (ID == Gui.XPBottler.ordinal()) { return new GuiXPBottler(new ContainerXPBottler(player.inventory, (TileEntityXPBottler)tile)); }
 			if (ID == Gui.autoAnvil.ordinal()) { return new GuiAutoAnvil(new ContainerAutoAnvil(player.inventory, (TileEntityAutoAnvil)tile)); }
             if (ID == Gui.blockPlacer.ordinal()) { return new GuiBlockPlacer(new ContainerBlockPlacer(player.inventory, (TileEntityBlockPlacer)tile)); }
+            if (ID == Gui.itemDropper.ordinal()) { return new GuiItemDropper(new ContainerItemDropper(player.inventory, (TileEntityItemDropper)tile)); }
 		}
 		return null;
 	}

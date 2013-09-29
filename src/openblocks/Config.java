@@ -120,10 +120,13 @@ public class Config {
 
 
     @BlockId(description = "The id of the block-breaker block")
-    public static int blockBreakerId = 2561;
+    public static int blockBlockBreakerId = 2557;
 
     @BlockId(description = "The id of the block-placer block")
-    public static int blockPlacerId = 2558;
+    public static int blockBlockPlacerId = 2558;
+
+    @BlockId(description = "The id of the item-dropper block")
+    public static int blockItemDropperId = 2559;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -420,14 +423,18 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoAnvil), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.anvil, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
 
-        if (Config.canRegisterBlock(blockBreakerId)) {
+        if (Config.canRegisterBlock(blockBlockBreakerId)) {
             OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
             //recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockBreaker)))
         }
 
-        if(Config.canRegisterBlock(blockPlacerId)) {
+        if(Config.canRegisterBlock(blockBlockPlacerId)) {
             OpenBlocks.Blocks.blockPlacer = new BlockBlockPlacer();
             //recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockPlacer)))
+        }
+
+        if(Config.canRegisterBlock(blockItemDropperId)) {
+            OpenBlocks.Blocks.itemDropper = new BlockItemDropper();
         }
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

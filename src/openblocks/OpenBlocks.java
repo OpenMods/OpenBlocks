@@ -69,6 +69,7 @@ public class OpenBlocks {
 		public static BlockDecoy decoy;
         public static BlockBlockBreaker blockBreaker;
         public static BlockBlockPlacer blockPlacer;
+        public static BlockItemDropper itemDropper;
 	}
 
 	public static class Items {
@@ -98,7 +99,8 @@ public class OpenBlocks {
 		bigButton,
 		XPBottler,
 		autoAnvil,
-		blockPlacer
+		blockPlacer,
+		itemDropper
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

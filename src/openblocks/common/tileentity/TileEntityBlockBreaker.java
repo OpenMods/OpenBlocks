@@ -44,51 +44,40 @@ public class TileEntityBlockBreaker extends OpenTileEntity
     }
 
     private void breakBlock() {
+        if(worldObj.isRemote) return;
         //System.out.println("Breaking block");
 
-        int direction = getMetadata();
-        int x = xCoord,
-            y = yCoord,
-            z = zCoord;
-
-        int backX = xCoord,
-            backY = yCoord,
-            backZ = zCoord;
-
-        ForgeDirection backDirection;
-
-        switch (direction) {
-            case 2: z--; backZ++; backDirection = ForgeDirection.getOrientation(3); break;
-            case 3: z++; backZ--; backDirection = ForgeDirection.getOrientation(2); break;
-            case 4: x--; backX++; backDirection = ForgeDirection.getOrientation(5); break;
-            case 5: x++; backX--; backDirection = ForgeDirection.getOrientation(4); break;
-            default: return;
-        }
-
+        ForgeDirection direction = ForgeDirection.getOrientation(getMetadata());
+        int x = xCoord + direction.offsetX,
+            y = yCoord + direction.offsetY,
+            z = zCoord + direction.offsetZ;
+        
         if(worldObj.blockExists(x, y, z)) {
-            int blockId = worldObj.getBlockId(x, y, z);
-            if(blockId > 0) {
-
-                Block block = Block.blocksList[blockId];
-
-                int metadata = worldObj.getBlockMetadata(x, y, z);
-                worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
-
-                ArrayList<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, worldObj.getBlockMetadata(x, y, z), 0);
-
-                worldObj.setBlock(x, y, z, 0, 0, 3);
-
-                //System.out.println("Dropped " + items.size() + " stacks");
-
-                ejectAt(worldObj, backX, backY, backZ, backDirection, items);
-            }
+        	int blockId = worldObj.getBlockId(x, y, z);
+        	if(blockId > 0) {
+        		Block block = Block.blocksList[blockId];
+        		
+        		int metadata = worldObj.getBlockMetadata(x, y, z);
+        		worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
+        		
+        		ArrayList<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
+        		
+        		worldObj.setBlock(x, y, z, 0, 0, 3);
+        		
+        		ForgeDirection back = direction.getOpposite();
+        		ejectAt(worldObj,
+    				xCoord + back.offsetX,
+    				yCoord + back.offsetY,
+    				zCoord + back.offsetZ,
+    				back, items);
+        	}
         }
     }
 
     static void ejectAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
         IInventory inventory = InventoryUtils.getInventory(world, x, y, z); //getInventoryAt(world, x, y, z);
         if(inventory != null) {
-            insertInto(world, x, y, z, inventory, itemStacks);
+            insertInto(world, x, y, z, inventory, direction, itemStacks);
             return;
         }
 
@@ -109,29 +98,32 @@ public class TileEntityBlockBreaker extends OpenTileEntity
         }
 
         if(itemStacks.size() > 0) {
-            dropItemsAt(world, x, y, z, itemStacks);
+            ejectItemsAt(world, x, y, z, direction, itemStacks);
         }
     }
 
-    static void insertInto(World world, int x, int y, int z, IInventory inventory, ArrayList<ItemStack> itemStacks) {
+    static void insertInto(World world, int x, int y, int z, IInventory inventory, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
         ArrayList<ItemStack> rest = new ArrayList<ItemStack>();
 
         for(int i = 0, l = itemStacks.size(); i < l; i++) {
             ItemStack stack = itemStacks.get(i);
-            InventoryUtils.insertItemIntoInventory(inventory, stack);
+            InventoryUtils.insertItemIntoInventory(inventory, stack, direction);
             if(stack.stackSize > 0)
                 rest.add(stack);
         }
 
         if(rest.size() > 0)
-            dropItemsAt(world, x, y, z, rest);
+        	ejectItemsAt(world, x, y, z, direction, rest);
     }
 
-    static void dropItemsAt(World world, int x, int y, int z, ArrayList<ItemStack> itemStacks) {
+    static void ejectItemsAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
         if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
         {
             for(int i = 0, l = itemStacks.size(); i < l; i++) {
-                BlockUtils.dropItemStackInWorld(world, x, y, z, itemStacks.get(i));
+                EntityItem item = BlockUtils.dropItemStackInWorld(world, x, y, z, itemStacks.get(i));
+                item.motionX = ((float)direction.offsetX) / 5F;
+                item.motionY = ((float)direction.offsetY) / 5F;
+                item.motionZ = ((float)direction.offsetZ) / 5F;
             }
         }
     }
@@ -160,7 +152,7 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 
     @Override
     public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockUtils.get2dOrientation(player).ordinal(), 2);
+        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockUtils.get3dOrientation(player).ordinal(), 2);
     }
 
     @Override
