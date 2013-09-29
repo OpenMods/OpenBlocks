@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -55,10 +56,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
             default: return;
         }
 
-        if(worldObj.blockExists(x, y, z) && worldObj.getBlockId(x, y, z) != 0) {
-            y++;
-        }
-
         for(int i = 0, l = getSizeInventory(); i < l; i++) {
             ItemStack stack = getStackInSlot(i);
             if(stack == null || stack.stackSize == 0) continue;
@@ -67,7 +64,8 @@ public class TileEntityBlockPlacer extends OpenTileEntity
                 .equipWithAndRightClick(stack,
                     Vec3.createVectorHelper(xCoord, yCoord, zCoord),
                     Vec3.createVectorHelper(x, y - 1, z),
-                    ForgeDirection.UP);
+                    ForgeDirection.UP,
+                    worldObj.blockExists(x, y, z) && worldObj.getBlockId(x, y, z) != 0 && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
 
             setInventorySlotContents(i, newStack.stackSize > 0 ? newStack : null);
             return;

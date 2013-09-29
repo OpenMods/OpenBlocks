@@ -35,8 +35,12 @@ public class OpenBlocksFakePlayer extends FakePlayer {
         super(world, "Open Blocks Fake Player");
     }
 
-    public ItemStack equipWithAndRightClick(ItemStack itemStack, Vec3 currentPos, Vec3 hitVector, ForgeDirection side) {
+    public ItemStack equipWithAndRightClick(ItemStack itemStack, Vec3 currentPos, Vec3 hitVector, ForgeDirection side, boolean blockExists) {
         setPosition(currentPos.xCoord, currentPos.yCoord, currentPos.zCoord);
+
+        if(blockExists) {
+            hitVector.yCoord++;
+        }
 
         // find rotations
         float deltaX = (float)(currentPos.xCoord - hitVector.xCoord);
@@ -58,12 +62,13 @@ public class OpenBlocksFakePlayer extends FakePlayer {
             (int)Math.floor(hitVector.yCoord),
             (int)Math.floor(hitVector.zCoord),
             side.ordinal(),
-            deltaX, deltaY, deltaZ);
+            deltaX, deltaY, deltaZ,
+            blockExists);
 
         return ItemStack.copyItemStack(inventory.getCurrentItem());
     }
 
-    private boolean rightClick(ItemStack itemStack, int x, int y, int z, int side, float deltaX, float deltaY, float deltaZ) {
+    private boolean rightClick(ItemStack itemStack, int x, int y, int z, int side, float deltaX, float deltaY, float deltaZ, boolean blockExists) {
         boolean flag = false;
         int blockId;
 
@@ -81,10 +86,13 @@ public class OpenBlocksFakePlayer extends FakePlayer {
         }
 
         if(!flag && itemStack != null && itemStack.getItem() instanceof ItemBlock) {
+            if(blockExists) {
+                return false;
+            }
+
             ItemBlock itemblock = (ItemBlock)itemStack.getItem();
 
-            if (!itemblock.canPlaceItemBlockOnSide(worldObj, x, y, z, side, this, itemStack))
-            {
+            if (!itemblock.canPlaceItemBlockOnSide(worldObj, x, y, z, side, this, itemStack)) {
                 return false;
             }
         }
