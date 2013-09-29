@@ -5,6 +5,7 @@ import net.minecraft.block.BlockChest;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +13,9 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
+import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.ItemUtils;
 
@@ -27,7 +30,8 @@ import java.util.Random;
  * Time: 18:09
  * To change this template use File | Settings | File Templates.
  */
-public class TileEntityBlockBreaker extends OpenTileEntity {
+public class TileEntityBlockBreaker extends OpenTileEntity
+    implements IAwareTile {
     private boolean _redstoneSignal;
 
     public void setRedstoneSignal(boolean redstoneSignal) {
@@ -124,58 +128,43 @@ public class TileEntityBlockBreaker extends OpenTileEntity {
     }
 
     static void dropItemsAt(World world, int x, int y, int z, ArrayList<ItemStack> itemStacks) {
-        float maxOffset = 0.7F;
-
         if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
         {
             for(int i = 0, l = itemStacks.size(); i < l; i++) {
-                double offsetX = (double)(world.rand.nextFloat() * maxOffset) + (double)(1.0F - maxOffset) * 0.5D;
-                double offsetY = (double)(world.rand.nextFloat() * maxOffset) + (double)(1.0F - maxOffset) * 0.5D;
-                double offsetZ = (double)(world.rand.nextFloat() * maxOffset) + (double)(1.0F - maxOffset) * 0.5D;
-
-                EntityItem entityItem = new EntityItem(world, (double)x + offsetX, (double)y + offsetY, (double)z + offsetZ, itemStacks.get(i));
-                entityItem.delayBeforeCanPickup = 10;
-                world.spawnEntityInWorld(entityItem);
+                BlockUtils.dropItemStackInWorld(world, x, y, z, itemStacks.get(i));
             }
         }
     }
 
-    // stolen from TileEntityHopper
-    static IInventory getInventoryAt(World world, int x, int y, int z) {
-        IInventory inventory = null;
+    @Override
+    public void onBlockBroken() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-        TileEntity tileentity = world.getBlockTileEntity(x, y, z);
+    @Override
+    public void onBlockAdded() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-        if (tileentity != null && tileentity instanceof IInventory) {
-            inventory = (IInventory)tileentity;
+    @Override
+    public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-            if (inventory instanceof TileEntityChest) {
-                int blockId = world.getBlockId(x, y, z);
-                Block block = Block.blocksList[blockId];
-
-                if(block instanceof BlockChest) {
-                    inventory = ((BlockChest)block).getInventory(world, x, y, z);
-                }
-            }
+    @Override
+    public void onNeighbourChanged(int blockId) {
+        if(!worldObj.isRemote) {
+            setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
         }
+    }
 
-        if(inventory == null) {
-            List list = world.getEntitiesWithinAABBExcludingEntity(
-                    (Entity)null,
-                    AxisAlignedBB.getAABBPool().getAABB(
-                            (double)x,
-                            (double)y,
-                            (double)z,
-                            (double)x + 1.0D,
-                            (double)y + 1.0D,
-                            (double)z + 1.0D),
-                    IEntitySelector.selectInventories);
+    @Override
+    public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockUtils.get2dOrientation(player).ordinal(), 2);
+    }
 
-            if (list != null && list.size() > 0) {
-                inventory = (IInventory)list.get(world.rand.nextInt(list.size()));
-            }
-        }
-
-        return inventory;
+    @Override
+    public boolean onBlockEventReceived(int eventId, int eventParam) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

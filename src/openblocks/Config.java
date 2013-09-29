@@ -122,6 +122,9 @@ public class Config {
     @BlockId(description = "The id of the block-breaker block")
     public static int blockBreakerId = 2561;
 
+    @BlockId(description = "The id of the block-placer block")
+    public static int blockPlacerId = 2558;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -420,6 +423,11 @@ public class Config {
         if (Config.canRegisterBlock(blockBreakerId)) {
             OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
             //recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockBreaker)))
+        }
+
+        if(Config.canRegisterBlock(blockPlacerId)) {
+            OpenBlocks.Blocks.blockPlacer = new BlockBlockPlacer();
+            //recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockPlacer)))
         }
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
