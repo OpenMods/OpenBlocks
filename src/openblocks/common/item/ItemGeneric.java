@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import cpw.mods.fml.relauncher.Side;
@@ -22,11 +23,54 @@ public class ItemGeneric extends Item {
 	private HashMap<Integer, IMetaItem> metaitems = new HashMap<Integer, IMetaItem>();
 
 	public enum Metas {
-		gliderWing();
-
-		Metas() {
-
-		}
+		gliderWing {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				return new MetaGeneric("gliderwing",
+						new ShapedOreRecipe(result, " sl", "sll", "lll", 's', "stickWood", 'l', Item.leather),
+						new ShapedOreRecipe(result, "ls ", "lls", "lll", 's', "stickWood", 'l', Item.leather)
+				);
+			}
+		},
+		beam {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack(2);
+				return new MetaGeneric("beam",
+						new ShapedOreRecipe(result, "iii", "b y", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow"),
+						new ShapedOreRecipe(result, "iii", "y b", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow")
+				);
+			}
+		},
+		craneEngine {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				return new MetaGeneric("crane_engine",
+						new ShapedOreRecipe(result, "iii", "isi", "iri", 'i', Item.ingotIron, 's', "stickWood", 'r', Item.redstone)
+				);
+			}
+		},
+		craneMagnet {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				return new MetaGeneric("crane_magnet",
+						new ShapedOreRecipe(result, "biy", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow"),
+						new ShapedOreRecipe(result, "yib", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow")
+				);
+			}
+		},
+		line {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack(2);
+				return new MetaGeneric("line",
+						new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', Item.slimeBall)
+				);
+			}
+		};
 
 		public ItemStack newItemStack(int amount) {
 			return OpenBlocks.Items.generic.newItemStack(this, amount);
@@ -36,6 +80,7 @@ public class ItemGeneric extends Item {
 			return OpenBlocks.Items.generic.newItemStack(this);
 		}
 
+		public abstract IMetaItem createMetaItem();
 	}
 
 	public ItemGeneric() {
@@ -44,8 +89,11 @@ public class ItemGeneric extends Item {
 		setMaxDamage(0);
 		setMaxStackSize(64);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		metaitems.put(Metas.gliderWing.ordinal(), new MetaGeneric("gliderwing", new Object[] { 1, " sl", "sll", "lll", 's', new ItemStack(Item.stick), 'l', new ItemStack(Item.leather) }, new Object[] { 1, "ls ", "lls", "lll", 's', new ItemStack(Item.stick), 'l', new ItemStack(Item.leather) }));
+	}
 
+	public void registerItems() {
+		for (Metas m : Metas.values())
+			metaitems.put(m.ordinal(), m.createMetaItem());
 	}
 
 	public void initRecipes() {

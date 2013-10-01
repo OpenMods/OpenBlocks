@@ -13,22 +13,17 @@ import openblocks.common.block.*;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
-import openblocks.common.item.ItemGeneric;
-import openblocks.common.item.ItemHangGlider;
-import openblocks.common.item.ItemImaginationGlasses;
+import openblocks.common.entity.EntityMagnet;
+import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
-import openblocks.common.item.ItemLuggage;
-import openblocks.common.item.ItemSonicGlasses;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 
 import org.apache.commons.lang3.ObjectUtils;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -77,6 +72,8 @@ public class OpenBlocks {
 		public static ItemCrayonGlasses crayonGlasses;
 		public static ItemImaginationGlasses technicolorGlasses;
 		public static ItemImaginationGlasses seriousGlasses;
+		public static ItemCraneControl craneControl;
+		public static ItemCraneBackpack craneBackpack;
 	}
 
 	public static enum Gui {
@@ -126,6 +123,10 @@ public class OpenBlocks {
 		}
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
 
+		if (Config.itemCraneId > 0) {
+			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", 703, OpenBlocks.instance, 64, 1, true);
+		}
+
 		OpenBlocks.Items.generic.initRecipes();
 
 		proxy.init();
@@ -136,10 +137,6 @@ public class OpenBlocks {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
-	}
-
-	public static void onSetBlock() {
-		// System.out.println("Set block!");
 	}
 
 	/*

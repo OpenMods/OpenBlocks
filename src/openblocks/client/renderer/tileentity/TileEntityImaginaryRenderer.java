@@ -10,7 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.OpenBlocks.Blocks;
-import openblocks.common.tileentity.TileEntityImaginary;
+import openblocks.common.tileentity.*;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.Property;

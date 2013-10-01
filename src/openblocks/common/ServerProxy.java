@@ -21,9 +21,7 @@ public class ServerProxy implements IProxy {
 	public void postInit() {}
 
 	@Override
-	public void registerRenderInformation() {
-
-	}
+	public void registerRenderInformation() {}
 
 	@Override
 	public File getWorldDir(World world) {

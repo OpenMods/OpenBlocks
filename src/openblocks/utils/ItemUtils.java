@@ -28,7 +28,7 @@ public class ItemUtils {
 
 	public static Integer getInt(ItemStack stack, String tagName) {
 		NBTTagCompound tag = getItemTag(stack);
-		NBTBase color = tag.getTag(tagName);
-		return (color != null)? ((NBTTagInt)color).data : null;
+		NBTBase data = tag.getTag(tagName);
+		return (data != null)? ((NBTTagInt)data).data : null;
 	}
 }
