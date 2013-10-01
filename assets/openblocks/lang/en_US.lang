@@ -40,5 +40,11 @@ item.openblocks.glasses.pencil.name=Pencil Glasses
 item.openblocks.glasses.crayon.name=Crayon Glasses
 item.openblocks.glasses.technicolor.name=Amazing Technicolor Glasses
 item.openblocks.glasses.admin.name=Badass Glasses
+item.openblocks.crane_backpack.name=Crane Backpack
+item.openblocks.crane_control.name=Crane Control
+item.openblocks.crane_engine.name=Crane Engine
+item.openblocks.crane_magnet.name=Crane Magnet
+item.openblocks.beam.name=Beam
+item.openblocks.line.name=Line
 
 itemGroup.tabOpenBlocks=OpenBlocks

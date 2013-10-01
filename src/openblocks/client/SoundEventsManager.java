@@ -199,6 +199,7 @@ public class SoundEventsManager {
 		GL11.glRotatef(rve.rotationPitch, 1, 0, 0);
 	}
 
+	@ForgeSubscribe
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Minecraft mc = evt.context.mc;
 

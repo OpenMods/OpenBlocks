@@ -5,12 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,12 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import openblocks.common.GenericInventory;
-import openblocks.sync.ISyncHandler;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapEntity;
-import openblocks.sync.SyncableFlags;
-import openblocks.sync.SyncableFloat;
+import openblocks.sync.*;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.CompatibilityUtils;
 

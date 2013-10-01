@@ -15,18 +15,17 @@ import openblocks.Config;
 import openblocks.IProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.fx.FXLiquidSpray;
+import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.ItemRendererHangGlider;
 import openblocks.client.renderer.ItemRendererLuggage;
 import openblocks.client.renderer.ItemRendererTank;
-import openblocks.client.renderer.entity.EntityGhostRenderer;
-import openblocks.client.renderer.entity.EntityHangGliderRenderer;
-import openblocks.client.renderer.entity.EntityLuggageRenderer;
-import openblocks.client.renderer.entity.EntityPlayerRenderer;
+import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
+import openblocks.common.entity.EntityMagnet;
 import openblocks.common.tileentity.*;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -43,7 +42,9 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public void init() {}
+	public void init() {
+		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
+	}
 
 	@Override
 	public void postInit() {
@@ -80,8 +81,6 @@ public class ClientProxy implements IProxy {
 			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
 		}
 
-		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
-
 		if (OpenBlocks.Items.hangGlider != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
 
@@ -93,8 +92,12 @@ public class ClientProxy implements IProxy {
 		}
 
 		if (OpenBlocks.Items.sonicGlasses != null) {
-			MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
 			MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
+		}
+
+		if (OpenBlocks.Items.craneBackpack != null) {
+			ModelCraneBackpack.instance.init();
+			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new EntityMagnetRenderer());
 		}
 	}
 
