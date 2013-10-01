@@ -1,6 +1,6 @@
 package openblocks.common.item;
 
-import java.util.Arrays;
+import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,18 +11,28 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openblocks.OpenBlocks;
-import openblocks.common.item.ItemGeneric.Metas;
 
 public class MetaGeneric implements IMetaItem {
 
+	public static class SmeltingRecipe {
+		public final int itemId;
+		public final int itemMeta;
+		public final ItemStack result;
+		public final float experience;
+
+		private SmeltingRecipe(int itemId, int itemMeta, ItemStack result, float experience) {
+			this.itemId = itemId;
+			this.itemMeta = itemMeta;
+			this.result = result.copy();
+			this.experience = experience;
+		}
+	}
+
 	private String name;
 	private Icon icon;
-	private Object[][] recipes;
+	private Object[] recipes;
 
-	public MetaGeneric(String name, Object[]... recipes) {
+	public MetaGeneric(String name, Object... recipes) {
 		this.name = name;
 		this.recipes = recipes;
 	}
@@ -62,41 +72,20 @@ public class MetaGeneric implements IMetaItem {
 		icon = register.registerIcon(String.format("openblocks:%s", name));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void addRecipe() {
 		if (recipes == null) return;
-		for (Object[] recipe2 : recipes) {
-			Object[] recipe = recipe2;
-			int amount = (Integer)recipe[0];
-			boolean smelting = false;
-			int itemId = 0;
-			int itemMeta = 0;
-			if (recipe[1] instanceof Integer) {
-				itemId = amount;
-				itemMeta = (Integer)recipe[1];
-				smelting = true;
-			} else {
-				recipe = Arrays.copyOfRange(recipe, 1, recipe.length);
-			}
-			for (int j = 0; j < recipe.length; j++) {
-				if (recipe[j] instanceof Metas) {
-					recipe[j] = ((Metas)recipe[j]).newItemStack();
-				}
-			}
-			IRecipe r = null;
-			if (smelting) {
-				FurnaceRecipes.smelting().addSmelting(itemId, itemMeta, (ItemStack)recipe[2], (Float)recipe[3]);
-			} else {
-				if (recipe[0] instanceof String) {
-					r = new ShapedOreRecipe(OpenBlocks.Items.generic.newItemStack(this, amount), recipe);
-				} else {
-					r = new ShapelessOreRecipe(OpenBlocks.Items.generic.newItemStack(this, amount), recipe);
-				}
-				if (r != null) {
-					CraftingManager.getInstance().getRecipeList().add(r);
-				}
-			}
+
+		final FurnaceRecipes furnaceRecipes = FurnaceRecipes.smelting();
+		@SuppressWarnings("unchecked")
+		final List<IRecipe> craftingRecipes = CraftingManager.getInstance().getRecipeList();
+		for (Object tmp : recipes) {
+			if (tmp instanceof SmeltingRecipe) {
+				SmeltingRecipe recipe = (SmeltingRecipe)tmp;
+				furnaceRecipes.addSmelting(recipe.itemId, recipe.itemMeta, recipe.result, recipe.experience);
+			} else if (tmp instanceof IRecipe) {
+				craftingRecipes.add((IRecipe)tmp);
+			} else throw new IllegalArgumentException("Invalid recipe object: " + tmp);
 		}
 	}
 

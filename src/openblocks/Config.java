@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,18 +26,14 @@ import openblocks.common.EntityEventHandler;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.EntityBlock;
-import openblocks.common.item.ItemGeneric;
-import openblocks.common.item.ItemHangGlider;
-import openblocks.common.item.ItemImaginary;
-import openblocks.common.item.ItemImaginationGlasses;
+import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
-import openblocks.common.item.ItemLuggage;
-import openblocks.common.item.ItemSonicGlasses;
 import openblocks.common.recipe.CrayonGlassesRecipe;
 import openblocks.common.recipe.CrayonMixingRecipe;
 import openblocks.utils.ColorUtils;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
 
@@ -138,6 +133,12 @@ public class Config {
 	@ItemId(description = "The id of the serious admin glasses item")
 	public static int itemGlassesSerious = 14982;
 
+	@ItemId(description = "The id of the crane controller item")
+	public static int itemCraneControl = 14983;
+
+	@ItemId(description = "The id of crane backpack item")
+	public static int itemCraneId = 14984;
+
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
 	public static boolean elevatorIgnoreHalfBlocks = false;
@@ -158,7 +159,8 @@ public class Config {
 	public static boolean sonicGlassesUseTexture = true;
 	public static float imaginaryFadingSpeed = 0.0075f;
 	public static float imaginaryItemUseCount = 10;
-	public static List<String> disableMobNames = new ArrayList<String>();
+	public static List<String> disableMobNames = Lists.newArrayList();
+	public static boolean doCraneCollisionCheck = true;
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -227,7 +229,7 @@ public class Config {
 
 		prop = configFile.get("grave", "ghostProbability", ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
 		ghostSpawnProbability = prop.getInt();
-		
+
 		prop = configFile.get("additional", "disableMobNames", new String[0], "List any mob names you want disabled on the server");
 		disableMobNames = Arrays.asList(prop.getStringList());
 
@@ -277,6 +279,9 @@ public class Config {
 
 		prop = configFile.get("imaginary", "numberOfUses", imaginaryItemUseCount, "Number of newly created crayon/pencil uses");
 		imaginaryItemUseCount = (float)prop.getDouble(imaginaryItemUseCount);
+
+		prop = configFile.get("crane", "doCraneCollisionCheck", doCraneCollisionCheck, "Enable collision checking of crane arm");
+		doCraneCollisionCheck = prop.getBoolean(doCraneCollisionCheck);
 	}
 
 	public static void register() {
@@ -381,6 +386,7 @@ public class Config {
 		// then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemGeneric();
+		OpenBlocks.Items.generic.registerItems();
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
@@ -423,6 +429,24 @@ public class Config {
 
 		if (Blocks.cannon != null) {
 			EntityRegistry.registerModEntity(EntityBlock.class, "BlockEntity", 99, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
+		}
+
+		if (itemCraneControl > 0) {
+			OpenBlocks.Items.craneControl = new ItemCraneControl();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', Item.ingotIron, 'g', Item.goldNugget, 'l', Item.glowstone, 'r', Item.redstone));
+		}
+
+		if (itemCraneId > 0) {
+			OpenBlocks.Items.craneBackpack = new ItemCraneBackpack();
+			ItemStack line = ItemGeneric.Metas.line.newItemStack();
+			ItemStack beam = ItemGeneric.Metas.beam.newItemStack();
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack,
+					ItemGeneric.Metas.craneEngine.newItemStack(),
+					ItemGeneric.Metas.craneMagnet.newItemStack(),
+					beam, beam,
+					line, line, line,
+					Item.leather
+					));
 		}
 	}
 
