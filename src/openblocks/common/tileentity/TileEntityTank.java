@@ -12,7 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
