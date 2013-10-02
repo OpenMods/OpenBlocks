@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.EntityGhost;
@@ -60,7 +62,6 @@ public class OpenBlocks {
 		public static BlockBigButton bigButton;
 		public static BlockImaginary imaginary;
 		public static BlockFan fan;
-		public static BlockDecoy decoy;
 	}
 
 	public static class Items {
@@ -74,6 +75,11 @@ public class OpenBlocks {
 		public static ItemImaginationGlasses seriousGlasses;
 		public static ItemCraneControl craneControl;
 		public static ItemCraneBackpack craneBackpack;
+	}
+	
+	public static class Fluids {
+		public static Fluid XPJuice;
+		public static Fluid openBlocksXPJuice;
 	}
 
 	public static enum Gui {
@@ -126,6 +132,10 @@ public class OpenBlocks {
 		if (Config.itemCraneId > 0) {
 			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", 703, OpenBlocks.instance, 64, 1, true);
 		}
+		
+		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setDensity(800).setViscosity(1500);
+		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
+		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
 
 		OpenBlocks.Items.generic.initRecipes();
 

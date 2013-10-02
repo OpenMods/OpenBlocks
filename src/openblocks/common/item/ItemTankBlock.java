@@ -4,13 +4,17 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import openblocks.Config;
+import openblocks.common.tileentity.TileEntityTank;
 
 public class ItemTankBlock extends ItemOpenBlock {
-	private LiquidTank fakeTank = new LiquidTank(LiquidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank);
+	private FluidTank fakeTank = new FluidTank(TileEntityTank.getTankCapacity());
 
 	public ItemTankBlock(int id) {
 		super(id);
@@ -19,10 +23,10 @@ public class ItemTankBlock extends ItemOpenBlock {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-		fakeTank.setLiquid(null);
+		fakeTank.setFluid(null);
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")) {
 			fakeTank.readFromNBT(stack.getTagCompound().getCompoundTag("tank"));
-			LiquidStack liquid = fakeTank.getLiquid();
+			FluidStack liquid = fakeTank.getFluid();
 			int amount = 0;
 			if (liquid != null) {
 				amount = liquid.amount;

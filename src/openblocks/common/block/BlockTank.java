@@ -1,17 +1,21 @@
 package openblocks.common.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
+import openblocks.utils.BlockUtils;
 
 public class BlockTank extends OpenBlock {
 
@@ -55,23 +59,13 @@ public class BlockTank extends OpenBlock {
 		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
 			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
-			/*
-			 * Maybe you lose a small amount of liquid, but you ARE breaking a
-			 * block here
-			 */
 			if (tank != null && tank.getAmount() > 10) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				NBTTagCompound tankTag = tank.getItemNBT();
 				nbt.setCompoundTag("tank", tankTag);
 				itemStack.setTagCompound(nbt);
 			}
-			float f = 0.7F;
-			float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-			float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-			float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-			EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, itemStack);
-			entityitem.delayBeforeCanPickup = 10;
-			world.spawnEntityInWorld(entityitem);
+			BlockUtils.dropItemStackInWorld(world, x, y, z, itemStack);
 		}
 		return world.setBlockToAir(x, y, z);
 	}
@@ -79,5 +73,16 @@ public class BlockTank extends OpenBlock {
 	@Override
 	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack) {
 
+	}
+	
+
+	@Override
+	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+		if (!Config.tanksEmitLight) return 0;
+		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+		if (tile != null) {
+			return tile.getFluidLightLevel();
+		}
+		return 0;
 	}
 }

@@ -106,9 +106,6 @@ public class Config {
 	@BlockId(description = "The id of the fan block")
 	public static int blockFanId = 2556;
 
-	@BlockId(description = "The id of the decoy block")
-	public static int blockDecoyId = 2556;
-
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -150,8 +147,6 @@ public class Config {
 	public static double trophyDropChance = 0.001;
 	public static boolean irregularBlocksArePassable = false;
 	public static boolean tanksEmitLight = true;
-	public static boolean tanksAreTransparent = true;
-	public static boolean tanksHaveDynamicTransparency = true;
 	public static int sprinklerFertilizeChance = 500;
 	public static int sprinklerBonemealFertizizeChance = 200;
 	public static int sprinklerEffectiveRange = 4;
@@ -246,13 +241,7 @@ public class Config {
 
 		prop = configFile.get("tanks", "emitLight", tanksEmitLight, "Tanks will emit light when they contain a liquid that glows (eg. lava)");
 		tanksEmitLight = prop.getBoolean(tanksEmitLight);
-
-		prop = configFile.get("tanks", "transparent", tanksAreTransparent, "Tanks will pass light");
-		tanksAreTransparent = prop.getBoolean(tanksAreTransparent);
-
-		prop = configFile.get("tanks", "dynamicTransparency", tanksHaveDynamicTransparency, "The tank opacity changes with the amount of liquid");
-		tanksHaveDynamicTransparency = prop.getBoolean(tanksHaveDynamicTransparency);
-
+		
 		prop = configFile.get("trophy", "trophyDropChance", trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
 		trophyDropChance = prop.getDouble(trophyDropChance);
 
@@ -377,9 +366,6 @@ public class Config {
 
 		}
 
-		if (Config.canRegisterBlock(blockDecoyId)) {
-			// OpenBlocks.Blocks.decoy = new BlockDecoy();
-		}
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		// There is no fail checking here because if the Generic item fails,

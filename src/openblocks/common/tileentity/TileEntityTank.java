@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
@@ -65,9 +66,6 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 		addSyncedObject(Keys.renderLevel, liquidRenderAmount);
 	}
 
-	public int getClientLiquidId() {
-		return liquidId.getValue();
-	}
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
 	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
@@ -199,7 +197,9 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 	public void updateEntity() {
 		super.updateEntity();
 
+		
 		if (!worldObj.isRemote) {
+			
 
 			HashSet<TileEntityTank> except = new HashSet<TileEntityTank>();
 			except.add(this);
@@ -539,5 +539,16 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		return drain(maxDrain, doDrain);
+	}
+
+	public int getFluidLightLevel() {
+		FluidTank internalTank = getInternalTank();
+		if (internalTank != null && internalTank.getFluid() != null) {
+			try {
+				return internalTank.getFluid().getFluid().getLuminosity();
+			}catch (Exception e) {
+			}
+		}
+		return 0;
 	}
 }
