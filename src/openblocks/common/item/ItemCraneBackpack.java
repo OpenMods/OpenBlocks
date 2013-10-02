@@ -84,4 +84,9 @@ public class ItemCraneBackpack extends ItemArmor {
 			}
 		}
 	}
+
+	public static boolean isWearingCrane(EntityPlayer player) {
+		ItemStack armor = player.getCurrentArmor(2);
+		return armor != null && armor.getItem() instanceof ItemCraneBackpack;
+	}
 }

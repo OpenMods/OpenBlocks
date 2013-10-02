@@ -35,10 +35,6 @@ public class CraneRegistry {
 			if (isExtending && length < MAX_LENGTH) length += LENGTH_DELTA;
 			else if (!isExtending && length > MIN_LENGTH) length -= LENGTH_DELTA;
 		}
-
-		public void switchDirection() {
-			isExtending = !isExtending;
-		}
 	}
 
 	private Map<EntityPlayer, Data> itemData = new MapMaker().weakKeys().makeMap();

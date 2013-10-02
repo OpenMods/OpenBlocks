@@ -156,6 +156,7 @@ public class Config {
 	public static float imaginaryItemUseCount = 10;
 	public static List<String> disableMobNames = Lists.newArrayList();
 	public static boolean doCraneCollisionCheck = true;
+	public static boolean craneShiftControl = true;
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -271,6 +272,9 @@ public class Config {
 
 		prop = configFile.get("crane", "doCraneCollisionCheck", doCraneCollisionCheck, "Enable collision checking of crane arm");
 		doCraneCollisionCheck = prop.getBoolean(doCraneCollisionCheck);
+
+		prop = configFile.get("crane", "boringMode", craneShiftControl, "Use shift to control crane direction (otherwise, toggle every time)");
+		craneShiftControl = prop.getBoolean(craneShiftControl);
 	}
 
 	public static void register() {
