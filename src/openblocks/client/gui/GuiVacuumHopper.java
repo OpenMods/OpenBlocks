@@ -2,6 +2,9 @@ package openblocks.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.FluidStack;
+import openblocks.OpenBlocks;
+import openblocks.client.gui.component.GuiComponentTankLevel;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.utils.CompatibilityUtils;
 
@@ -9,10 +12,13 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiVacuumHopper extends GuiContainer {
 
+	private GuiComponentTankLevel xpLevel;
+	
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container);
 		xSize = 176;
 		ySize = 151;
+		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
 	}
 
 	@Override
@@ -31,6 +37,7 @@ public class GuiVacuumHopper extends GuiContainer {
 		fontRenderer.drawString(machineName, x, 6, 4210752);
 		String translatedName = StatCollector.translateToLocal("container.inventory");
 		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
+		xpLevel.render(this.mc, mouseX, mouseY, new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1), 0.5);
 	}
 
 }

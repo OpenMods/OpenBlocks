@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
@@ -259,6 +260,9 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 		} else {
 			interpolateLiquidLevel();
 			flowTimer += 0.1f;
+			if (OpenBlocks.proxy.getTicks(worldObj) % 20 == 0) {
+				worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+			}
 		}
 	}
 
@@ -351,8 +355,8 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 			} else {
 				tank.setFluid(new FluidStack(liquidId.getValue(), 1));
 			}
-			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 		}
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override

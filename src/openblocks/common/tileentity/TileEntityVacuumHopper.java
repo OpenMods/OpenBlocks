@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -13,17 +14,23 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
+import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory, IAwareTile {
+public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory, IFluidHandler, IAwareTile {
 
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 
+	private FluidTank tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5)));
+	
+	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -33,27 +40,33 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 		}
 
 		@SuppressWarnings("unchecked")
-		List<EntityItem> surroundingItems = worldObj.getEntitiesWithinAABB(EntityItem.class, getBB().expand(3, 3, 3));
+		List<Entity> surroundingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3));
 
-		for (EntityItem item : surroundingItems) {
+		for (Entity entity : surroundingItems) {
+			
+			if (!entity.isDead && (entity instanceof EntityItem || entity instanceof EntityXPOrb)) {
 
-			if (!item.isDead) {
+				boolean shouldPull = true;
+				
+				if (entity instanceof EntityItem) {
+					ItemStack stack = ((EntityItem)entity).getEntityItem();
+					shouldPull = InventoryUtils.testInventoryInsertion(this, stack) <= 0;
+				}
+				
+				if (shouldPull) {
 
-				ItemStack stack = item.getEntityItem();
-				if (InventoryUtils.testInventoryInsertion(this, stack) > 0) {
-
-					double x = (xCoord + 0.5D - item.posX) / 15.0D;
-					double y = (yCoord + 0.5D - item.posY) / 15.0D;
-					double z = (zCoord + 0.5D - item.posZ) / 15.0D;
+					double x = (xCoord + 0.5D - entity.posX) / 15.0D;
+					double y = (yCoord + 0.5D - entity.posY) / 15.0D;
+					double z = (zCoord + 0.5D - entity.posZ) / 15.0D;
 
 					double distance = Math.sqrt(x * x + y * y + z * z);
 					double var11 = 1.0D - distance;
 
 					if (var11 > 0.0D) {
 						var11 *= var11;
-						item.motionX += x / distance * var11 * 0.05;
-						item.motionY += y / distance * var11 * 0.2;
-						item.motionZ += z / distance * var11 * 0.05;
+						entity.motionX += x / distance * var11 * 0.05;
+						entity.motionY += y / distance * var11 * 0.2;
+						entity.motionZ += z / distance * var11 * 0.05;
 					}
 				}
 			}
@@ -64,6 +77,31 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 
 				TileEntity tileOnSurface = getTileInDirection(getSurface());
 				IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, getSurface());
+				
+				IFluidHandler fluidHandler = null;
+				if (tileOnSurface instanceof IFluidHandler) {
+					fluidHandler = (IFluidHandler) tileOnSurface;
+				}
+
+				// if we've got liquid in the tank
+				if (tank.getFluidAmount() > 0) {
+					// drain a bit
+					FluidStack drainedFluid = tank.drain(Math.min(tank.getFluidAmount(), oneLevel), true);
+					if (drainedFluid != null) {
+						// copy what we drained
+						FluidStack clonedFluid = drainedFluid.copy();
+						// try to insert it into a tank or pipe
+						if (fluidHandler != null) {
+							clonedFluid.amount -= fluidHandler.fill(getSurface().getOpposite(), drainedFluid, true);
+						}else if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
+							clonedFluid.amount -= ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, drainedFluid, getSurface());
+						}
+						// fill any remainder
+						if (clonedFluid.amount > 0) {
+							tank.fill(clonedFluid, true);
+						}
+					}
+				}
 				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
 				if (slotId > -1) {
 					ItemStack nextStack = getStackInSlot(slotId);
@@ -191,15 +229,21 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	}
 
 	public void onEntityCollidedWithBlock(Entity entity) {
-		if (!worldObj.isRemote && entity instanceof EntityItem) {
-			EntityItem item = (EntityItem)entity;
-			ItemStack stack = item.getEntityItem().copy();
-			InventoryUtils.insertItemIntoInventory(inventory, stack);
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			if (stack.stackSize == 0) {
-				item.setDead();
-			} else {
-				item.setEntityItemStack(stack);
+		if (!worldObj.isRemote) {
+			if (entity instanceof EntityItem) {
+				EntityItem item = (EntityItem)entity;
+				ItemStack stack = item.getEntityItem().copy();
+				InventoryUtils.insertItemIntoInventory(inventory, stack);
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				if (stack.stackSize == 0) {
+					item.setDead();
+				} else {
+					item.setEntityItemStack(stack);
+				}
+			}else if (entity instanceof EntityXPOrb) {
+				FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.XPJuice, EnchantmentUtils.XPToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
+				tank.fill(newFluid, true);
+				entity.setDead();
 			}
 		}
 	}
@@ -226,12 +270,47 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		tank.writeToNBT(tag);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+		tank.readFromNBT(tag);
+		
+	}
+
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+		if (resource == null) return null;
+		if (!resource.isFluidEqual(tank.getFluid())) return null;
+		return tank.drain(resource.amount, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		return tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+		return true;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		return new FluidTankInfo[] { tank.getInfo() };
 	}
 
 }

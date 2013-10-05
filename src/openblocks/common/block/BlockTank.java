@@ -1,9 +1,11 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -15,11 +17,23 @@ import openblocks.utils.BlockUtils;
 
 public class BlockTank extends OpenBlock {
 
+	public static class Icons {
+		public static Icon xpJuiceStill;
+		public static Icon xpJuiceFlowing;
+	}
+	
 	public BlockTank() {
 		super(Config.blockTankId, Material.ground);
 		setupBlock(this, "tank", TileEntityTank.class, ItemTankBlock.class);
 	}
 
+	@Override
+	public void registerIcons(IconRegister registry) {
+		super.registerIcons(registry);
+		Icons.xpJuiceFlowing = registry.registerIcon(String.format("%s:%s", modKey, "xpjuiceflowing"));
+		Icons.xpJuiceStill = registry.registerIcon(String.format("%s:%s", modKey, "xpjuicestill"));
+	}
+	
 	@Override
 	public boolean canBeReplacedByLeaves(World world, int x, int y, int z) {
 		return false;

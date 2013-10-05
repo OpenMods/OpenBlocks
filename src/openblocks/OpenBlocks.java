@@ -133,7 +133,7 @@ public class OpenBlocks {
 			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", 703, OpenBlocks.instance, 64, 1, true);
 		}
 		
-		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setDensity(800).setViscosity(1500);
+		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500);
 		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
 		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
 

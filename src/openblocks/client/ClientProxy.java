@@ -8,8 +8,10 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.IProxy;
@@ -22,6 +24,7 @@ import openblocks.client.renderer.ItemRendererLuggage;
 import openblocks.client.renderer.ItemRendererTank;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
+import openblocks.common.block.BlockTank;
 import openblocks.common.entity.EntityGhost;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
@@ -39,8 +42,18 @@ public class ClientProxy implements IProxy {
 	public ClientProxy() {
 		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	@ForgeSubscribe
+	public void textureHook(TextureStitchEvent.Post event) {
+		if (event.map.textureType == 0) {
+			if (OpenBlocks.Fluids.openBlocksXPJuice != null) {
+				OpenBlocks.Fluids.openBlocksXPJuice.setIcons(BlockTank.Icons.xpJuiceStill, BlockTank.Icons.xpJuiceFlowing);
+			}
+		}
+	}
+	
 	@Override
 	public void init() {
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
