@@ -5,12 +5,14 @@ import static openblocks.client.Icons.itemIcon;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+import openblocks.Log;
 import openblocks.client.Icons.ComposedIcon;
 import openblocks.client.Icons.IDrawableIcon;
 
@@ -185,6 +187,8 @@ public class SoundIconRegistry {
 
 	private final MappedCategory root = new MappedCategory();
 
+	private Map<String, IDrawableIcon> iconCache = Maps.newConcurrentMap();
+
 	public static final int DEFAULT_COLOR = 0xFFFFFF;
 
 	@ForgeSubscribe
@@ -193,8 +197,21 @@ public class SoundIconRegistry {
 	}
 
 	public IDrawableIcon getIcon(String sound) {
-		Iterable<String> path = Splitter.onPattern("[.:]").split(sound);
-		return root.getIcon(path.iterator());
+		IDrawableIcon result = iconCache.get(sound);
+
+		if (result == null) {
+			try {
+				Iterable<String> path = Splitter.onPattern("[.:]").split(sound);
+				result = root.getIcon(path.iterator());
+			} catch (NoSuchElementException e) {
+				Log.warn("Malformed sound name: %s", sound);
+				result = root.defaultIcon;
+			}
+
+			iconCache.put(sound, result);
+		}
+
+		return result;
 	}
 
 	private static IDrawableIcon simpleIcon(String id, int color) {

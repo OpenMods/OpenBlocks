@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,21 +29,7 @@ public class TrophyHandler {
 	public static Entity getEntityFromCache(Trophy trophy) {
 		Entity entity = entityCache.get(trophy);
 		if (entity == null) {
-			entity = EntityList.createEntityByName(trophy.toString(), null);
-			if (entity instanceof EntitySlime) {
-				try {
-					Method slimeSizeMethod = EntitySlime.class.getDeclaredMethod("setSlimeSize", int.class);
-					if (slimeSizeMethod == null) {
-						slimeSizeMethod = EntitySlime.class.getDeclaredMethod("func_70799_a", int.class);
-					}
-					if (slimeSizeMethod != null) {
-						slimeSizeMethod.setAccessible(true);
-						slimeSizeMethod.invoke(entity, 1);
-					}
-				} catch (Exception e) {
-					Log.warn(e, "Field not found?");
-				}
-			}
+			entity = trophy.createEntity();
 			entityCache.put(trophy, entity);
 		}
 		return entity;
@@ -59,13 +46,45 @@ public class TrophyHandler {
 		Zombie(),
 		Witch(0.35),
 		Villager(),
-		Ozelot(),
+		Ozelot() {
+			@Override
+			protected Entity createEntity() {
+				Entity entity = super.createEntity();
+
+				try {
+					((EntityOcelot)entity).setTamed(true);
+				} catch (ClassCastException e) {
+					Log.warn("Invalid cat entity class: %s", entity.getClass());
+				}
+				return entity;
+			}
+		},
 		Sheep(),
 		Blaze(new BlazeBehavior()),
 		Silverfish(),
 		Spider(),
 		CaveSpider(new CaveSpiderBehavior()),
-		Slime(0.4),
+		Slime(0.4) {
+			@Override
+			protected Entity createEntity() {
+				Entity entity = super.createEntity();
+
+				try {
+					Method slimeSizeMethod = EntitySlime.class.getDeclaredMethod("setSlimeSize", int.class);
+					if (slimeSizeMethod == null) {
+						slimeSizeMethod = EntitySlime.class.getDeclaredMethod("func_70799_a", int.class);
+					}
+					if (slimeSizeMethod != null) {
+						slimeSizeMethod.setAccessible(true);
+						slimeSizeMethod.invoke(entity, 1);
+					}
+				} catch (Exception e) {
+					Log.warn(e, "Can't update slime size. Field not found?");
+				}
+
+				return entity;
+			}
+		},
 		Ghast(0.1, 0.2),
 		Enderman(0.3, new EndermanBehavior()),
 		LavaSlime(0.8),
@@ -145,6 +164,10 @@ public class TrophyHandler {
 			if (behavior != null) {
 				behavior.executeTickBehavior(tile);
 			}
+		}
+
+		protected Entity createEntity() {
+			return EntityList.createEntityByName(toString(), null);
 		}
 
 		public final static Trophy[] VALUES = values();
