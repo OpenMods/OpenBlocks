@@ -1,33 +1,42 @@
 package openblocks.client.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.GuiComponentPanel;
 import openblocks.client.gui.component.GuiComponentTab;
+import openblocks.client.gui.component.GuiComponentTabs;
 import openblocks.client.gui.component.GuiComponentTankLevel;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class GuiVacuumHopper extends GuiContainer {
 
 	private GuiComponentTankLevel xpLevel;
-	private GuiComponentTab itemsTab;
-	private GuiComponentTab xpTab;
+	private GuiComponentTabs tabs;
 	private GuiComponentPanel bg;
-	
+
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container);
 		xSize = 176;
 		ySize = 151;
 		bg = new GuiComponentPanel(0, 0, xSize, ySize, container);
 		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
-		itemsTab = new GuiComponentTab(0, -16, "Items");
-		itemsTab.setActive(true);
-		xpTab = new GuiComponentTab(45, -16, "XP");
+		tabs = new GuiComponentTabs(xSize, 4);
+		tabs.addTab(new GuiComponentTab(0xCC0000));
+		tabs.addTab(new GuiComponentTab(0x00CC00));
 	}
 
 	@Override
@@ -46,8 +55,7 @@ public class GuiVacuumHopper extends GuiContainer {
 		String translatedName = StatCollector.translateToLocal("container.inventory");
 		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
 		xpLevel.render(this.mc, mouseX, mouseY, new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1), 0.5);
-		itemsTab.render(this.mc, mouseX, mouseY);
-		xpTab.render(this.mc, mouseX, mouseY);
+		tabs.render(this.mc, mouseX, mouseY);
 	}
-
+	
 }

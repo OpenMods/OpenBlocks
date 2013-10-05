@@ -11,7 +11,7 @@ public class GuiComponentPanel extends GuiComponentBox {
 	private Container container;
 
 	public GuiComponentPanel(int x, int y, int width, int height, Container container) {
-		super(x, y, width, height, 0, 5, 0xc6c6c6);
+		super(x, y, width, height, 0, 5, 0xFFFFFF);
 		this.container = container;
 	}
 	

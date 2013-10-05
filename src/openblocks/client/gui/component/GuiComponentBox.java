@@ -41,6 +41,32 @@ public class GuiComponentBox extends Gui {
 		return color;
 	}
 	
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	
+	
 	public void renderTopLeftCorner(){
 		drawTexturedModalRect(x, y, u, v, 4, 4);
 	}
@@ -91,28 +117,23 @@ public class GuiComponentBox extends Gui {
 
 
 	public void renderBackground() {
-		int c = getColor();
-        float r = (float)(c >> 16 & 255) / 255.0F;
-        float g = (float)(c >> 8 & 255) / 255.0F;
-        float b = (float)(c & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.instance;
-        GL11.glColor4f(r, g, b, 1);
-        tessellator.startDrawingQuads();
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        tessellator.addVertex((double)(x + 3), (double)(y + getHeight() - 3), 0.0D);
-        tessellator.addVertex((double)(x + getWidth() - 3), (double)(y + getHeight() - 3), 0.0D);
-        tessellator.addVertex((double)(x + getWidth() - 3), (double)(y + 3), 0.0D);
-        tessellator.addVertex((double)(x + 3), (double)(y + 3), 0.0D);
-        tessellator.draw();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glPushMatrix();
+		GL11.glTranslated((double)(x + 3), (double)y + 3, 0);
+		GL11.glScaled(getWidth() - 6, getHeight() - 6, 0);
+		drawTexturedModalRect(0, 0, u + 19, v, 1, 1);
+		GL11.glPopMatrix();
 	}
 	
 	public void render(Minecraft minecraft, int mouseX, int mouseY) {
 
         RenderHelper.disableStandardItemLighting();
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
+		int c = getColor();
+        float r = (float)(c >> 16 & 255) / 255.0F;
+        float g = (float)(c >> 8 & 255) / 255.0F;
+        float b = (float)(c & 255) / 255.0F;
+        GL11.glColor4f(r, g, b, 1);
 		renderBackground();
-		GL11.glColor4f(1, 1, 1, 1);
 		renderTopEdge();
 		renderBottomEdge();
 		renderLeftEdge();
