@@ -62,15 +62,16 @@ public class ItemCraneControl extends Item {
 		CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
 
 		if (data != null) {
-			data.switchDirection();
-			player.setItemInUse(stack, getMaxItemUseDuration(stack));
+			data.isExtending = Config.craneShiftControl ? player.isSneaking() : !data.isExtending;
 		}
+
+		player.setItemInUse(stack, getMaxItemUseDuration(stack));
 		return stack;
 	}
 
 	@Override
 	public void onUsingItemTick(ItemStack stack, EntityPlayer player, int count) {
-		if (player instanceof EntityPlayerMP) {
+		if (player instanceof EntityPlayerMP && ItemCraneBackpack.isWearingCrane(player)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(player, true);
 			data.updateLength();
 		}
@@ -93,20 +94,16 @@ public class ItemCraneControl extends Item {
 
 	@Override
 	public Icon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-		if (player != null) {
-			ItemStack armor = player.getCurrentArmor(2);
+		if (player != null && ItemCraneBackpack.isWearingCrane(player)) {
+			CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
+			if (data != null) {
+				if (usingItem == stack) { return data.isExtending? iconDown : iconUp; }
 
-			if (armor != null && armor.getItem() instanceof ItemCraneBackpack) {
-				CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
-				if (data != null) {
-					if (usingItem == stack) { return data.isExtending? iconDown : iconUp; }
+				EntityMagnet magnet = CraneRegistry.instance.magnetData.get(player);
 
-					EntityMagnet magnet = CraneRegistry.instance.magnetData.get(player);
-
-					if (magnet != null) {
-						if (magnet.isLocked()) return iconLocked;
-						else if (magnet.isAboveTarget()) return iconDetected;
-					}
+				if (magnet != null) {
+					if (magnet.isLocked()) return iconLocked;
+					else if (magnet.isAboveTarget()) return iconDetected;
 				}
 			}
 		}

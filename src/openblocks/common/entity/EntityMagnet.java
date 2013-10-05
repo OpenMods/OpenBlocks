@@ -7,9 +7,10 @@ import java.util.List;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -97,14 +98,8 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 		public boolean isValid(EntityMagnet magnet) {
 			EntityPlayer player = getOwner();
 			if (player == null || player.isDead) return false;
-
 			if (magnet.worldObj != player.worldObj) return false;
-
-			ItemStack chestpiece = player.inventory.armorItemInSlot(2);
-
-			if (chestpiece == null || !(chestpiece.getItem() instanceof ItemCraneBackpack)) return false;
-
-			return true;
+			return ItemCraneBackpack.isWearingCrane(player);
 		}
 
 		@Override
@@ -153,7 +148,10 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 			EntityPlayer player = getOwner();
 			if (player == null) return false;
 
-			return (entity instanceof EntityItem) || (entity instanceof EntityLivingBase && entity != player);
+			return (entity instanceof EntityItem) ||
+					(entity instanceof EntityLivingBase && entity != player) ||
+					(entity instanceof EntityBoat) ||
+					(entity instanceof EntityMinecart);
 		}
 	}
 
@@ -302,7 +300,9 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 
 	@Override
 	public double getMountedYOffset() {
-		return riddenByEntity != null? -riddenByEntity.getMountedYOffset() - 0.25 : 0;
+		if (riddenByEntity == null) return 0;
+
+		return -Math.max(riddenByEntity.getMountedYOffset(), riddenByEntity.height);
 	}
 
 	public void toggleMagnet() {
@@ -315,14 +315,14 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 			tmp.setPosition(tmp.posX, tmpPosY, tmp.posZ);
 
 		} else {
+			Entity target = null;
+
 			List<Entity> result = detectTargets();
 
 			Iterator<Entity> it = result.iterator();
+			if (it.hasNext()) target = it.next();
 
-			if (it.hasNext()) {
-				Entity target = it.next();
-				target.mountEntity(this);
-			}
+			if (target != null) target.mountEntity(this);
 		}
 	}
 

@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -89,9 +88,7 @@ public class ModelCraneBackpack extends ModelBiped {
 	public void renderLines(RenderPlayerEvent.Pre evt) {
 		final EntityPlayer player = evt.entityPlayer;
 
-		ItemStack chestpiece = player.getCurrentArmor(2);
-
-		if (chestpiece == null || !(chestpiece.getItem() instanceof ItemCraneBackpack)) return;
+		if (!ItemCraneBackpack.isWearingCrane(player)) return;
 
 		final EntityMagnet magnet = CraneRegistry.instance.magnetData.get(player);
 
@@ -197,8 +194,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		if (!(rve instanceof EntityPlayer)) return;
 
 		final EntityPlayer player = (EntityPlayer)rve;
-		ItemStack chestpiece = player.inventory.armorInventory[2];
-		if (chestpiece == null || !(chestpiece.getItem() instanceof ItemCraneBackpack)) return;
+		if (!ItemCraneBackpack.isWearingCrane(player)) return;
 
 		drawArm(evt, player);
 		drawLineFPP(player, evt.partialTicks);
