@@ -40,5 +40,11 @@ item.openblocks.glasses.pencil.name=Bleistiftbrille
 item.openblocks.glasses.crayon.name=untstiftbrille
 item.openblocks.glasses.technicolor.name=Erstaunliche Technicolor-Brille
 item.openblocks.glasses.admin.name=Badass-Brille
+item.openblocks.crane_backpack.name=Kranrucksack
+item.openblocks.crane_control.name=Krankontrolle
+item.openblocks.crane_engine.name=Kranmotor
+item.openblocks.crane_magnet.name=Kranmagnet
+item.openblocks.beam.name=Beam
+item.openblocks.line.name=Line
 
 itemGroup.tabOpenBlocks=OpenBlocks
