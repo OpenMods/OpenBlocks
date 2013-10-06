@@ -14,14 +14,23 @@ import net.minecraftforge.fluids.IFluidTank;
 
 public class GuiComponentTankLevel extends GuiComponentBox {
 
+	protected FluidStack stack;
+	protected double percentFull;
+	
 	public GuiComponentTankLevel(int x, int y, int width, int height) {
 		super(x,  y, width, height, 0, 0, 0xc6c6c6);
 	}
 
-	public void render(Minecraft minecraft, int mouseX, int mouseY, FluidStack stack, double percentFull) {
-		
+	public void setPercentFull(double full) {
+		this.percentFull = full;
+	}
+	
+	public void setFluidStack(FluidStack stack) {
+		this.stack = stack;
+	}
+	
+	public void render(Minecraft minecraft, int mouseX, int mouseY) {
 		super.render(minecraft, mouseX, mouseY);
-
 		if (stack != null && stack.getFluid() != null) {
 			minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 			Tessellator tessellator = Tessellator.instance;

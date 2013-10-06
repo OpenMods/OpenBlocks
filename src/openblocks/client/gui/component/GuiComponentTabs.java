@@ -6,29 +6,41 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
-public class GuiComponentTabs extends Gui {
+public class GuiComponentTabs extends BaseComponent {
 	
-	protected int x;
-	protected int y;
-	protected Map<GuiComponentTab, Void> tabs;
+	protected GuiComponentTab activeTab;
 	
 	public GuiComponentTabs(int x, int y) {
-		this.x = x;
-		this.y = y;
-		tabs = new HashMap<GuiComponentTab, Void>();
+		super(x, y);
 	}
 	
-	public void addTab(GuiComponentTab tab) {
-		tabs.put(tab, null);
-		tab.setX(this.x - 3);
+	@Override
+	public void addComponent(BaseComponent component) {
+		super.addComponent(component);
+		if (component instanceof GuiComponentTab) {
+			((GuiComponentTab)component).setX(x);
+			((GuiComponentTab)component).setContainer(this);
+		}
 	}
 	
 	public void render(Minecraft minecraft, int mouseX, int mouseY) {
+		super.render(minecraft, mouseX, mouseY);
 		int offsetY = y;
-		for (GuiComponentTab tab : tabs.keySet()) {
-			tab.setY(offsetY);
-			tab.render(minecraft, mouseX, mouseY);
-			offsetY += tab.getHeight();
+		for (BaseComponent component : components) {
+			if (component instanceof GuiComponentTab) {
+				component.setY(offsetY);
+				offsetY += ((GuiComponentTab)component).getHeight() - 1;
+			}
+		}
+	}
+	
+	public void onTabClicked(GuiComponentTab tab) {
+		if (tab != activeTab) {
+			if (activeTab != null) {
+				activeTab.setActive(false);
+			}
+			tab.setActive(true);
+			activeTab = tab;
 		}
 	}
 	

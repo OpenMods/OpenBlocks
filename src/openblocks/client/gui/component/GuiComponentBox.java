@@ -9,10 +9,8 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 
-public class GuiComponentBox extends Gui {
+public class GuiComponentBox extends BaseComponent {
 
-	protected int x;
-	protected int y;
 	protected int width;
 	protected int height;
 	protected int u;
@@ -20,8 +18,7 @@ public class GuiComponentBox extends Gui {
 	protected int color;
 	
 	public GuiComponentBox(int x, int y, int width, int height, int u, int v, int color) {
-		this.x = x;
-		this.y = y;
+		super(x, y);
 		this.width = width;
 		this.height = height;
 		this.u = u;
@@ -48,24 +45,6 @@ public class GuiComponentBox extends Gui {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-	
-	public void setX(int x) {
-		this.x = x;
-	}
-	
-	public void setY(int y) {
-		this.y = y;
-	}
-	
-	public int getX() {
-		return x;
-	}
-	
-	public int getY() {
-		return y;
-	}
-	
-	
 	
 	public void renderTopLeftCorner(){
 		drawTexturedModalRect(x, y, u, v, 4, 4);
@@ -125,7 +104,6 @@ public class GuiComponentBox extends Gui {
 	}
 	
 	public void render(Minecraft minecraft, int mouseX, int mouseY) {
-
         RenderHelper.disableStandardItemLighting();
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
 		int c = getColor();
@@ -143,5 +121,10 @@ public class GuiComponentBox extends Gui {
 		renderTopRightCorner();
 		renderBottomLeftCorner();
 		renderBottomRightCorner();
+		super.render(minecraft, mouseX, mouseY);
 	}
+	
+	protected boolean isMouseOver(int mouseX, int mouseY) {
+        return mouseX >= x && mouseX < x + width &&  mouseY >= y && mouseY < y + height;
+    }
 }
