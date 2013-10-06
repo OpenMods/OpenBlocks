@@ -25,10 +25,7 @@ import openblocks.client.renderer.ItemRendererTank;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.block.BlockTank;
-import openblocks.common.entity.EntityGhost;
-import openblocks.common.entity.EntityHangGlider;
-import openblocks.common.entity.EntityLuggage;
-import openblocks.common.entity.EntityMagnet;
+import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -111,6 +108,7 @@ public class ClientProxy implements IProxy {
 		if (OpenBlocks.Items.craneBackpack != null) {
 			ModelCraneBackpack.instance.init();
 			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new EntityMagnetRenderer());
+			RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, new EntityBlockRenderer());
 		}
 	}
 
