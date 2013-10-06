@@ -3,11 +3,8 @@ package openblocks.client.gui.component;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 
 public class GuiComponentBox extends BaseComponent {
 
@@ -81,15 +78,15 @@ public class GuiComponentBox extends BaseComponent {
 	public void renderLeftEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
 		GL11.glTranslated((double)offsetX + x, (double)offsetY + y + 3, 0);
-		GL11.glScaled((double)1, getHeight() - 6, 0);
+		GL11.glScaled(1, getHeight() - 6, 0);
 		drawTexturedModalRect(0, 0, u, v + 4, 3, 1);
 		GL11.glPopMatrix();
 	}
 	
 	public void renderRightEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)(offsetX + x + getWidth() - 3), (double)offsetY + y + 3, 0);
-		GL11.glScaled((double)1, getHeight() - 6, 0);
+		GL11.glTranslated(offsetX + x + getWidth() - 3, (double)offsetY + y + 3, 0);
+		GL11.glScaled(1, getHeight() - 6, 0);
 		drawTexturedModalRect(0, 0, u + 8, v, 3, 1);
 		GL11.glPopMatrix();
 	}
@@ -97,7 +94,7 @@ public class GuiComponentBox extends BaseComponent {
 
 	public void renderBackground(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)(offsetX + x + 3), (double)offsetY + y + 3, 0);
+		GL11.glTranslated(offsetX + x + 3, (double)offsetY + y + 3, 0);
 		GL11.glScaled(getWidth() - 6, getHeight() - 6, 0);
 		drawTexturedModalRect(0, 0, u + 19, v, 1, 1);
 		GL11.glPopMatrix();
@@ -107,9 +104,9 @@ public class GuiComponentBox extends BaseComponent {
         RenderHelper.disableStandardItemLighting();
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
 		int c = getColor();
-        float r = (float)(c >> 16 & 255) / 255.0F;
-        float g = (float)(c >> 8 & 255) / 255.0F;
-        float b = (float)(c & 255) / 255.0F;
+        float r = (c >> 16 & 255) / 255.0F;
+        float g = (c >> 8 & 255) / 255.0F;
+        float b = (c & 255) / 255.0F;
         GL11.glColor4f(r, g, b, 1);
 		renderBackground(offsetX, offsetY);
 		renderTopEdge(offsetX, offsetY);
@@ -121,7 +118,7 @@ public class GuiComponentBox extends BaseComponent {
 		renderTopRightCorner(offsetX, offsetY);
 		renderBottomLeftCorner(offsetX, offsetY);
 		renderBottomRightCorner(offsetX, offsetY);
-		super.render(minecraft, x, y, mouseX, mouseY);
+		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 	}
 	
 	protected boolean isMouseOver(int mouseX, int mouseY) {

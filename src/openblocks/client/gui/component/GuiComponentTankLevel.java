@@ -1,16 +1,10 @@
 package openblocks.client.gui.component;
 
-import org.lwjgl.opengl.GL11;
-
-import openblocks.utils.CompatibilityUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Icon;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 
 public class GuiComponentTankLevel extends GuiComponentBox {
 
@@ -37,13 +31,13 @@ public class GuiComponentTankLevel extends GuiComponentBox {
 			tessellator.startDrawingQuads();
 			Icon icon = stack.getFluid().getIcon();
 			if (icon != null) {
-				double fluidHeight = (double)(height - 3) * percentFull;
-				tessellator.addVertexWithUV((double)(offsetX + x + 3), (double)(offsetY + y
-						+ height - 3), (double)this.zLevel, (double)icon.getMinU(), (double)icon.getMaxV());
-				tessellator.addVertexWithUV((double)(offsetX + x + width - 3), (double)(offsetY + y
-						+ height - 3), (double)this.zLevel, (double)icon.getMaxU(), (double)icon.getMaxV());
-				tessellator.addVertexWithUV((double)(offsetX + x + width - 3), (double)(offsetY + y + (height - fluidHeight)), (double)this.zLevel, (double)icon.getMaxU(), (double)icon.getMinV());
-				tessellator.addVertexWithUV((double)(offsetX + x + 3), (double)(offsetY + y + (height - fluidHeight)), (double)this.zLevel, (double)icon.getMinU(), (double)icon.getMinV());
+				double fluidHeight = (height - 3) * percentFull;
+				tessellator.addVertexWithUV(offsetX + x + 3, offsetY + y
+						+ height - 3, this.zLevel, icon.getMinU(), icon.getMaxV());
+				tessellator.addVertexWithUV(offsetX + x + width - 3, offsetY + y
+						+ height - 3, this.zLevel, icon.getMaxU(), icon.getMaxV());
+				tessellator.addVertexWithUV(offsetX + x + width - 3, offsetY + y + (height - fluidHeight), this.zLevel, icon.getMaxU(), icon.getMinV());
+				tessellator.addVertexWithUV(offsetX + x + 3, offsetY + y + (height - fluidHeight), this.zLevel, icon.getMinU(), icon.getMinV());
 				tessellator.draw();
 			}
 		}

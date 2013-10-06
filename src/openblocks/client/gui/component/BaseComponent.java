@@ -1,6 +1,7 @@
 package openblocks.client.gui.component;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -32,7 +33,7 @@ public abstract class BaseComponent extends Gui {
 		return y;
 	}
 	
-	public HashSet<BaseComponent> components = new HashSet<BaseComponent>();
+	public List<BaseComponent> components = new ArrayList<BaseComponent>();
 	
 	public void addComponent(BaseComponent component) {
 		components.add(component);
@@ -46,10 +47,17 @@ public abstract class BaseComponent extends Gui {
 		}
 	}
 
-	public void mouseClicked(int mouseX, int mouseY, int button){
+	public void mouseClicked(int mouseX, int mouseY, int button) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {
 				component.mouseClicked(mouseX - x, mouseY - y, button);
+			}
+		}
+	}
+	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
+		if (renderChildren) {
+			for (BaseComponent component : components) {
+				component.mouseClickMove(mouseX - x, mouseY - y, button, time);
 			}
 		}
 	}

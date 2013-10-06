@@ -1,10 +1,6 @@
 package openblocks.client.gui.component;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 
 public class GuiComponentTabs extends BaseComponent {
 	

@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL11;
 import openblocks.utils.CompatibilityUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 
@@ -20,6 +19,7 @@ public class GuiComponentPanel extends GuiComponentBox {
 		this.container = container;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void render(Minecraft minecraft, int x, int y, int mouseX, int mouseY) {
 		super.render(minecraft, x, y, mouseX, mouseY);
