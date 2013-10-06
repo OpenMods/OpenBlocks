@@ -84,15 +84,12 @@ public class BlockTank extends OpenBlock {
 	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack) {
 
 	}
-	
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
 		if (!Config.tanksEmitLight) return 0;
 		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
-		if (tile != null) {
-			return tile.getFluidLightLevel();
-		}
+		if (tile != null) { return tile.getFluidLightLevel(); }
 		return 0;
 	}
 }

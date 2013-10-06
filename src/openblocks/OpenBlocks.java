@@ -10,12 +10,10 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import openblocks.common.MagnetWhitelists;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.block.*;
-import openblocks.common.entity.EntityGhost;
-import openblocks.common.entity.EntityHangGlider;
-import openblocks.common.entity.EntityLuggage;
-import openblocks.common.entity.EntityMagnet;
+import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.network.PacketHandler;
@@ -76,7 +74,7 @@ public class OpenBlocks {
 		public static ItemCraneControl craneControl;
 		public static ItemCraneBackpack craneBackpack;
 	}
-	
+
 	public static class Fluids {
 		public static Fluid XPJuice;
 		public static Fluid openBlocksXPJuice;
@@ -131,13 +129,16 @@ public class OpenBlocks {
 
 		if (Config.itemCraneId > 0) {
 			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", 703, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityBlock.class, "Block", 704, OpenBlocks.instance, 64, 1, true);
 		}
-		
+
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500);
 		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
 		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
 
 		OpenBlocks.Items.generic.initRecipes();
+
+		MagnetWhitelists.instance.initTesters();
 
 		proxy.init();
 

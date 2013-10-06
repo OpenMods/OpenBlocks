@@ -2,13 +2,12 @@ package openblocks.client.gui.component;
 
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
-import openblocks.utils.CompatibilityUtils;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import openblocks.utils.CompatibilityUtils;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiComponentPanel extends GuiComponentBox {
 	
