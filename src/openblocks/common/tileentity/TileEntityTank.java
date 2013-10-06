@@ -66,7 +66,6 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 		addSyncedObject(Keys.renderLevel, liquidRenderAmount);
 	}
 
-
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
 	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
 
@@ -197,9 +196,7 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 	public void updateEntity() {
 		super.updateEntity();
 
-		
 		if (!worldObj.isRemote) {
-			
 
 			HashSet<TileEntityTank> except = new HashSet<TileEntityTank>();
 			except.add(this);
@@ -549,8 +546,7 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 		if (internalTank != null && internalTank.getFluid() != null) {
 			try {
 				return internalTank.getFluid().getFluid().getLuminosity();
-			}catch (Exception e) {
-			}
+			} catch (Exception e) {}
 		}
 		return 0;
 	}

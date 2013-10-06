@@ -1,11 +1,11 @@
 package openblocks.client.gui.component;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Icon;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiComponentTab extends GuiComponentBox {
 

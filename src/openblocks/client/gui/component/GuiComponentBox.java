@@ -1,10 +1,10 @@
 package openblocks.client.gui.component;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderHelper;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
 
 public class GuiComponentBox extends BaseComponent {
 
