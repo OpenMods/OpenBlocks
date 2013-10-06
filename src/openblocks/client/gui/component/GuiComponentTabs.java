@@ -18,18 +18,17 @@ public class GuiComponentTabs extends BaseComponent {
 	public void addComponent(BaseComponent component) {
 		super.addComponent(component);
 		if (component instanceof GuiComponentTab) {
-			((GuiComponentTab)component).setX(x);
 			((GuiComponentTab)component).setContainer(this);
 		}
 	}
 	
-	public void render(Minecraft minecraft, int mouseX, int mouseY) {
-		super.render(minecraft, mouseX, mouseY);
-		int offsetY = y;
+	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
+		int oY = 0;
 		for (BaseComponent component : components) {
 			if (component instanceof GuiComponentTab) {
-				component.setY(offsetY);
-				offsetY += ((GuiComponentTab)component).getHeight() - 1;
+				component.setY(oY);
+				oY += ((GuiComponentTab)component).getHeight() - 1;
 			}
 		}
 	}

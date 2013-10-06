@@ -38,18 +38,18 @@ public abstract class BaseComponent extends Gui {
 		components.add(component);
 	}
 	
-	public void render(Minecraft minecraft, int x, int y) {
+	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				component.render(minecraft, x, y);
+				component.render(minecraft, offsetX + this.x, offsetY + this.y, mouseX - this.x, mouseY - this.y);
 			}
 		}
 	}
 
-	public void mouseClicked(int x, int y, int button){
+	public void mouseClicked(int mouseX, int mouseY, int button){
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				component.mouseClicked(x, y, button);
+				component.mouseClicked(mouseX - x, mouseY - y, button);
 			}
 		}
 	}

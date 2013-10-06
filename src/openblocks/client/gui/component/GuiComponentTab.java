@@ -22,16 +22,20 @@ public class GuiComponentTab extends GuiComponentBox {
 		this.icon = icon;
 	}
 
-	public void renderTopLeftCorner(){
+	@Override
+	public void renderTopLeftCorner(int offsetX, int offsetY){
 	}
 
-	public void renderBottomLeftCorner(){
+	@Override
+	public void renderBottomLeftCorner(int offsetX, int offsetY){
 	}
 	
-	public void renderLeftEdge() {
+	@Override
+	public void renderLeftEdge(int offsetX, int offsetY) {
 	}
 
-	public void render(Minecraft minecraft, int mouseX, int mouseY) {
+	@Override
+	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		int targetWidth = active ? expandedWidth : 24;
 		int targetHeight = active ? expandedHeight : 24;
 		if (width != targetWidth) {
@@ -41,11 +45,11 @@ public class GuiComponentTab extends GuiComponentBox {
 			height += (targetHeight-height)/2;
 		}
 		renderChildren = active;
-		super.render(minecraft, mouseX, mouseY);
+		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		GL11.glColor4f(1, 1, 1, 1);
         RenderHelper.enableGUIStandardItemLighting();
 		minecraft.renderEngine.bindTexture(TextureMap.locationItemsTexture);
-		drawTexturedModelRectFromIcon(x+3, y+3, icon, 16, 16);
+		drawTexturedModelRectFromIcon(offsetX+x+3, offsetY+y+3, icon, 16, 16);
 	}
 
 	@Override

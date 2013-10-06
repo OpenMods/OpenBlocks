@@ -46,64 +46,64 @@ public class GuiComponentBox extends BaseComponent {
 		this.height = height;
 	}
 	
-	public void renderTopLeftCorner(){
-		drawTexturedModalRect(x, y, u, v, 4, 4);
+	public void renderTopLeftCorner(int offsetX, int offsetY){
+		drawTexturedModalRect(offsetX+x, offsetY+y, u, v, 4, 4);
 	}
 	
-	public void renderTopRightCorner(){
-		drawTexturedModalRect(x + getWidth() - 3, y, u + 5, v, 3, 3);
+	public void renderTopRightCorner(int offsetX, int offsetY){
+		drawTexturedModalRect(offsetX + x + getWidth() - 3, offsetY + y, u + 5, v, 3, 3);
 	}
 	
-	public void renderBottomLeftCorner(){
-		drawTexturedModalRect(x, y + getHeight() - 3, u + 11, v, 3, 3);
+	public void renderBottomLeftCorner(int offsetX, int offsetY){
+		drawTexturedModalRect(offsetX + x, offsetY + y + getHeight() - 3, u + 11, v, 3, 3);
 	}
 	
-	public void renderBottomRightCorner(){
-		drawTexturedModalRect(x + getWidth() - 4, y + getHeight() - 4, u + 15, v, 4, 4);
+	public void renderBottomRightCorner(int offsetX, int offsetY){
+		drawTexturedModalRect(offsetX + x + getWidth() - 4, offsetY + y + getHeight() - 4, u + 15, v, 4, 4);
 	}
 	
-	public void renderBottomEdge() {
+	public void renderBottomEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)x + 3, (double)y + getHeight() - 3, 0);
+		GL11.glTranslated((double)offsetX + x + 3, (double)offsetY + y + getHeight() - 3, 0);
 		GL11.glScaled((double)getWidth() - 6, 1, 0);
 		drawTexturedModalRect(0, 0, u+14, v, 1, 3);
 		GL11.glPopMatrix();
 	}
 	
-	public void renderTopEdge() {
+	public void renderTopEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)x + 3, (double)y, 0);
+		GL11.glTranslated((double)offsetX + x + 3, (double)offsetY + y, 0);
 		GL11.glScaled((double)getWidth() - 6, 1, 0);
 		drawTexturedModalRect(0, 0, u + 4, v, 1, 3);
 		GL11.glPopMatrix();
 	}
 	
-	public void renderLeftEdge() {
+	public void renderLeftEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)x, (double)y + 3, 0);
+		GL11.glTranslated((double)offsetX + x, (double)offsetY + y + 3, 0);
 		GL11.glScaled((double)1, getHeight() - 6, 0);
 		drawTexturedModalRect(0, 0, u, v + 4, 3, 1);
 		GL11.glPopMatrix();
 	}
 	
-	public void renderRightEdge() {
+	public void renderRightEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)(x + getWidth() - 3), (double)y + 3, 0);
+		GL11.glTranslated((double)(offsetX + x + getWidth() - 3), (double)offsetY + y + 3, 0);
 		GL11.glScaled((double)1, getHeight() - 6, 0);
 		drawTexturedModalRect(0, 0, u + 8, v, 3, 1);
 		GL11.glPopMatrix();
 	}
 
 
-	public void renderBackground() {
+	public void renderBackground(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)(x + 3), (double)y + 3, 0);
+		GL11.glTranslated((double)(offsetX + x + 3), (double)offsetY + y + 3, 0);
 		GL11.glScaled(getWidth() - 6, getHeight() - 6, 0);
 		drawTexturedModalRect(0, 0, u + 19, v, 1, 1);
 		GL11.glPopMatrix();
 	}
 	
-	public void render(Minecraft minecraft, int mouseX, int mouseY) {
+	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
         RenderHelper.disableStandardItemLighting();
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
 		int c = getColor();
@@ -111,17 +111,17 @@ public class GuiComponentBox extends BaseComponent {
         float g = (float)(c >> 8 & 255) / 255.0F;
         float b = (float)(c & 255) / 255.0F;
         GL11.glColor4f(r, g, b, 1);
-		renderBackground();
-		renderTopEdge();
-		renderBottomEdge();
-		renderLeftEdge();
-		renderRightEdge();
+		renderBackground(offsetX, offsetY);
+		renderTopEdge(offsetX, offsetY);
+		renderBottomEdge(offsetX, offsetY);
+		renderLeftEdge(offsetX, offsetY);
+		renderRightEdge(offsetX, offsetY);
 
-		renderTopLeftCorner();
-		renderTopRightCorner();
-		renderBottomLeftCorner();
-		renderBottomRightCorner();
-		super.render(minecraft, mouseX, mouseY);
+		renderTopLeftCorner(offsetX, offsetY);
+		renderTopRightCorner(offsetX, offsetY);
+		renderBottomLeftCorner(offsetX, offsetY);
+		renderBottomRightCorner(offsetX, offsetY);
+		super.render(minecraft, x, y, mouseX, mouseY);
 	}
 	
 	protected boolean isMouseOver(int mouseX, int mouseY) {

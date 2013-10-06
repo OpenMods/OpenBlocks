@@ -29,8 +29,8 @@ public class GuiComponentTankLevel extends GuiComponentBox {
 		this.stack = stack;
 	}
 	
-	public void render(Minecraft minecraft, int mouseX, int mouseY) {
-		super.render(minecraft, mouseX, mouseY);
+	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		if (stack != null && stack.getFluid() != null) {
 			minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 			Tessellator tessellator = Tessellator.instance;
@@ -38,12 +38,12 @@ public class GuiComponentTankLevel extends GuiComponentBox {
 			Icon icon = stack.getFluid().getIcon();
 			if (icon != null) {
 				double fluidHeight = (double)(height - 3) * percentFull;
-				tessellator.addVertexWithUV((double)(x + 3), (double)(y
+				tessellator.addVertexWithUV((double)(offsetX + x + 3), (double)(offsetY + y
 						+ height - 3), (double)this.zLevel, (double)icon.getMinU(), (double)icon.getMaxV());
-				tessellator.addVertexWithUV((double)(x + width - 3), (double)(y
+				tessellator.addVertexWithUV((double)(offsetX + x + width - 3), (double)(offsetY + y
 						+ height - 3), (double)this.zLevel, (double)icon.getMaxU(), (double)icon.getMaxV());
-				tessellator.addVertexWithUV((double)(x + width - 3), (double)(y + (height - fluidHeight)), (double)this.zLevel, (double)icon.getMaxU(), (double)icon.getMinV());
-				tessellator.addVertexWithUV((double)(x + 3), (double)(y + (height - fluidHeight)), (double)this.zLevel, (double)icon.getMinU(), (double)icon.getMinV());
+				tessellator.addVertexWithUV((double)(offsetX + x + width - 3), (double)(offsetY + y + (height - fluidHeight)), (double)this.zLevel, (double)icon.getMaxU(), (double)icon.getMinV());
+				tessellator.addVertexWithUV((double)(offsetX + x + 3), (double)(offsetY + y + (height - fluidHeight)), (double)this.zLevel, (double)icon.getMinU(), (double)icon.getMinV());
 				tessellator.draw();
 			}
 		}

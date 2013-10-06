@@ -51,7 +51,7 @@ public class GuiVacuumHopper extends GuiContainer {
 		GL11.glPushMatrix();
 		GL11.glTranslated(this.guiLeft, this.guiTop, 0);
 		xpLevel.setPercentFull(0.5);
-		main.render(this.mc, mouseX, mouseY);
+		main.render(this.mc, 0, 0, mouseX, mouseY);
 		GL11.glPopMatrix();
 	}
 
