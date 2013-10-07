@@ -18,7 +18,7 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 	private GuiComponentSideSelector sideSelector;
 	private GuiComponentTab xpTab;
 	private GuiComponentLabel xpOutputsLabel;
-	
+
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container);
 		xSize = 176;
@@ -28,7 +28,7 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
 		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
 
-		sideSelector = new GuiComponentSideSelector(30, 30, 40.0, new ISideSelectionCallback() {
+		sideSelector = new GuiComponentSideSelector(30, 30, 40.0, container.getTileEntity().getXPOutputs(), new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal());
@@ -70,6 +70,12 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		main.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
 	}
 	
+	@Override
+	protected void mouseMovedOrUp(int x, int y, int button) {
+		super.mouseMovedOrUp(x, y, button);
+		main.mouseMovedOrUp(x - this.guiLeft, y - this.guiTop, button);
+    }
+
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int button, long time) {
 		super.mouseClickMove(mouseX, mouseY, button, time);

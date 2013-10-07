@@ -18,19 +18,19 @@ public class ContainerLightbox extends ContainerInventory<TileEntityLightbox> {
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onServerButtonClicked(EntityPlayer player, int buttonId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onClientButtonClicked(int buttonId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

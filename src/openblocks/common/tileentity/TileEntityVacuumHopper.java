@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -30,7 +31,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 
 	private FluidTank tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5)));
-	
+
 	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
 
 	public enum Keys {
@@ -50,7 +51,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		
+
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
@@ -59,16 +60,16 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		List<Entity> surroundingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3));
 
 		for (Entity entity : surroundingItems) {
-			
+
 			if (!entity.isDead && (entity instanceof EntityItem || entity instanceof EntityXPOrb)) {
 
 				boolean shouldPull = true;
-				
+
 				if (entity instanceof EntityItem) {
 					ItemStack stack = ((EntityItem)entity).getEntityItem();
 					shouldPull = InventoryUtils.testInventoryInsertion(this, stack) <= 0;
 				}
-				
+
 				if (shouldPull) {
 
 					double x = (xCoord + 0.5D - entity.posX) / 15.0D;
@@ -93,10 +94,10 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 				TileEntity tileOnSurface = getTileInDirection(getSurface());
 				IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, getSurface());
-				
+
 				IFluidHandler fluidHandler = null;
 				if (tileOnSurface instanceof IFluidHandler) {
-					fluidHandler = (IFluidHandler) tileOnSurface;
+					fluidHandler = (IFluidHandler)tileOnSurface;
 				}
 
 				// if we've got liquid in the tank
@@ -109,7 +110,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 						// try to insert it into a tank or pipe
 						if (fluidHandler != null) {
 							clonedFluid.amount -= fluidHandler.fill(getSurface().getOpposite(), drainedFluid, true);
-						}else if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
+						} else if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
 							clonedFluid.amount -= ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, drainedFluid, getSurface());
 						}
 						// fill any remainder
@@ -256,7 +257,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 				} else {
 					item.setEntityItemStack(stack);
 				}
-			}else if (entity instanceof EntityXPOrb) {
+			} else if (entity instanceof EntityXPOrb) {
 				FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.XPJuice, EnchantmentUtils.XPToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
 				tank.fill(newFluid, true);
 				entity.setDead();
@@ -294,7 +295,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 		tank.readFromNBT(tag);
-		
+
 	}
 
 	@Override
@@ -331,8 +332,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
