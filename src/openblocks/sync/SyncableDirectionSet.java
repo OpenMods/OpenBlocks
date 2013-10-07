@@ -62,7 +62,8 @@ public class SyncableDirectionSet implements ISyncableObject {
 		int numberOfDirections = stream.readByte();
 		value = new HashSet<ForgeDirection>();
 		for (int i = 0; i < numberOfDirections; i++) {
-			value.add(ForgeDirection.getOrientation(stream.readByte()));
+			byte dir = stream.readByte();
+			value.add(ForgeDirection.getOrientation(dir));
 		}
 	}
 

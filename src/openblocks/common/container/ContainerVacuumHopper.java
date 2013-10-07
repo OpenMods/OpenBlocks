@@ -22,16 +22,17 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 
 	@Override
 	public void onServerButtonClicked(EntityPlayer player, int buttonId) {
+		onClientButtonClicked(buttonId);
+		getTileEntity().sync(false);
+	}
+
+	@Override
+	public void onClientButtonClicked(int buttonId) {
 		if (buttonId >= 0 && buttonId <= 7) {
 			getTileEntity().getXPOutputs().toggleDirection(ForgeDirection.getOrientation(buttonId));
 		} else {
 			getTileEntity().getItemOutputs().toggleDirection(ForgeDirection.getOrientation(buttonId - 7));
 		}
-		getTileEntity().sync();
-	}
-
-	@Override
-	public void onClientButtonClicked(int buttonId) {
 	}
 
 }
