@@ -18,16 +18,23 @@ public class SidePicker {
 		YPos,
 		ZNeg,
 		ZPos;
-		
+
 		public ForgeDirection toForgeDirection() {
-			switch(ordinal()) {
-				case 0: return ForgeDirection.WEST;
-				case 1: return ForgeDirection.EAST;
-				case 2: return ForgeDirection.UP;
-				case 3: return ForgeDirection.DOWN;
-				case 4: return ForgeDirection.NORTH;
-				case 5: return ForgeDirection.SOUTH;
-				default: return ForgeDirection.UNKNOWN;
+			switch (this) {
+				case XNeg:
+					return ForgeDirection.WEST;
+				case XPos:
+					return ForgeDirection.EAST;
+				case YNeg:
+					return ForgeDirection.UP;
+				case YPos:
+					return ForgeDirection.DOWN;
+				case ZNeg:
+					return ForgeDirection.NORTH;
+				case ZPos:
+					return ForgeDirection.SOUTH;
+				default:
+					return ForgeDirection.UNKNOWN;
 			}
 		}
 	}
