@@ -41,12 +41,12 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 	public SyncableDirectionSet xpOutputs = new SyncableDirectionSet();
 	public SyncableDirectionSet itemOutputs = new SyncableDirectionSet();
-	
+
 	public TileEntityVacuumHopper() {
 		addSyncedObject(Keys.xpOutputs, xpOutputs);
 		addSyncedObject(Keys.itemOutputs, itemOutputs);
 	}
-	
+
 	public SyncableDirectionSet getXPOutputs() {
 		return xpOutputs;
 	}
@@ -54,7 +54,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	public SyncableDirectionSet getItemOutputs() {
 		return itemOutputs;
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -62,7 +62,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		List<Entity> surroundingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3));
 
@@ -76,7 +76,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 					ItemStack stack = ((EntityItem)entity).getEntityItem();
 					shouldPull = InventoryUtils.testInventoryInsertion(this, stack) > 0;
 				}
-				
+
 				if (shouldPull) {
 
 					double x = (xCoord + 0.5D - entity.posX) / 15.0D;
@@ -98,20 +98,20 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 		if (!worldObj.isRemote) {
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
-				
+
 				ForgeDirection directionToOutputXP = CollectionUtils.getRandom(xpOutputs.getValue());
-				
+
 				TileEntity tileOnSurface = null;
-				
+
 				if (directionToOutputXP != null) {
-					
+
 					tileOnSurface = getTileInDirection(directionToOutputXP);
-					
+
 					IFluidHandler fluidHandler = null;
 					if (tileOnSurface instanceof IFluidHandler) {
 						fluidHandler = (IFluidHandler)tileOnSurface;
 					}
-	
+
 					// if we've got liquid in the tank
 					if (tank.getFluidAmount() > 0) {
 						// drain a bit
@@ -132,15 +132,15 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 						}
 					}
 				}
-				
+
 				ForgeDirection directionToOutputItem = CollectionUtils.getRandom(itemOutputs.getValue());
-				
+
 				if (directionToOutputItem != null) {
-					
+
 					tileOnSurface = getTileInDirection(directionToOutputItem);
-					
+
 					IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, directionToOutputItem);
-					
+
 					int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
 					if (slotId > -1) {
 						ItemStack nextStack = getStackInSlot(slotId);
@@ -246,7 +246,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		
+
 	}
 
 	@Override
@@ -340,7 +340,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 }

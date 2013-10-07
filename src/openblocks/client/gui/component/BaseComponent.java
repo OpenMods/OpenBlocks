@@ -62,7 +62,7 @@ public abstract class BaseComponent extends Gui {
 			}
 		}
 	}
-	
+
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {

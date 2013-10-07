@@ -26,7 +26,7 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container);
-		
+
 		xSize = 176;
 		ySize = 151;
 		main = new GuiComponentPanel(0, 0, xSize, ySize, container);
@@ -47,17 +47,17 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 				getContainer().sendButtonClick(direction.ordinal() + 7);
 			}
 		});
-		
+
 		tabs = new GuiComponentTabs(xSize - 3, 4);
-		
+
 		xpTab = new GuiComponentTab(0xf6c3ae, new ItemStack(Item.expBottle, 1), 100, 100);
 		xpTab.addComponent(xpSideSelector);
 		xpTab.addComponent(xpOutputsLabel);
-		
+
 		itemsTab = new GuiComponentTab(0x9f95ae, new ItemStack(Block.chest), 100, 100);
 		itemsTab.addComponent(itemSideSelector);
 		itemsTab.addComponent(itemOutputsLabel);
-	
+
 		tabs.addComponent(xpTab);
 		tabs.addComponent(itemsTab);
 
@@ -88,12 +88,12 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		super.mouseClicked(x, y, button);
 		main.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
 	}
-	
+
 	@Override
 	protected void mouseMovedOrUp(int x, int y, int button) {
 		super.mouseMovedOrUp(x, y, button);
 		main.mouseMovedOrUp(x - this.guiLeft, y - this.guiTop, button);
-    }
+	}
 
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int button, long time) {

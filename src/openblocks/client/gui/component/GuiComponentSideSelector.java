@@ -7,34 +7,31 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.sync.SyncableDirectionSet;
 import openblocks.utils.SidePicker;
 import openblocks.utils.SidePicker.HitCoord;
-
+import openblocks.utils.Trackball.TrackballWrapper;
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiComponentSideSelector extends BaseComponent {
-	
+
 	RenderBlocks blockRender = new RenderBlocks();
 
-	public double scale;
-	private int rotX = -10;
-	private int rotY = 10;
+	private TrackballWrapper trackball = new TrackballWrapper(1, 40);
 
-	private int startClickX = 0;
-	private int startClickY = 0;
+	public double scale;
 
 	private ISideSelectionCallback callback;
-	
+
 	private ForgeDirection lastSideHovered;
-	
+
 	private int movedTicks = 0;
-	
+
 	private SyncableDirectionSet enabledDirections;
-	
+
 	public GuiComponentSideSelector(int x, int y, double scale, SyncableDirectionSet directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
@@ -42,21 +39,20 @@ public class GuiComponentSideSelector extends BaseComponent {
 		this.enabledDirections = directions;
 	}
 
-
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
 		GL11.glScaled(scale, scale, scale);
-		GL11.glRotated(rotX, 1, 0, 0);
-		GL11.glRotated(rotY, 0, 1, 0);
+		trackball.update(mouseX - 50, mouseY - 50); // TODO: replace with proper
+													// width,height
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
 		t.startDrawingQuads();
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		
+
 		setFaceColor(ForgeDirection.WEST);
 		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, Block.blockIron.getIcon(0, 0));
 
@@ -79,7 +75,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		GL11.glPointSize(10);
 		SidePicker picker = new SidePicker(0.5);
 		Map<SidePicker.Side, Vec3> hits = picker.calculateMouseHits();
-		
+
 		if (!hits.isEmpty()) {
 			GL11.glBegin(GL11.GL_POINTS);
 			for (Map.Entry<SidePicker.Side, Vec3> e : hits.entrySet()) {
@@ -109,12 +105,9 @@ public class GuiComponentSideSelector extends BaseComponent {
 			GL11.glEnd();
 		}
 
-	
 		HitCoord coord = picker.getNearestHit();
-		if (coord != null)
-			lastSideHovered = coord.side.toForgeDirection();
-		
-		 
+		lastSideHovered = coord == null? ForgeDirection.UNKNOWN : coord.side.toForgeDirection();
+
 		GL11.glEnable(GL11.GL_CULL_FACE);
 
 		GL11.glPopMatrix();
@@ -123,27 +116,17 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private void setFaceColor(ForgeDirection dir) {
 		if (enabledDirections.getValue().contains(dir)) {
 			Tessellator.instance.setColorOpaque_F(1, 0, 0);
-		}else {
+		} else {
 			Tessellator.instance.setColorOpaque_F(1, 1, 1);
 		}
-	}
-
-
-	protected boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= x && mouseX < x + scale && mouseY >= y && mouseY < y + scale;
 	}
 
 	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
 		super.mouseClickMove(mouseX, mouseY, button, time);
-		int dx = mouseX - startClickX;
-		int dy = mouseY - startClickY;
-		rotX -= dy / 4;
-		rotY += dx / 4;
-		rotX = Math.min(20, Math.max(-20, rotX));
 		movedTicks++;
 	}
-	
+
 	@Override
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
@@ -155,8 +138,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
-		startClickX = mouseX;
-		startClickY = mouseY;
 		movedTicks = 0;
 		lastSideHovered = null;
 	}

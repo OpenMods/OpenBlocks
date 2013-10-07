@@ -4,12 +4,11 @@ import java.util.Set;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class ModelVacuumHopper extends ModelBase {
-	
+
 	ModelRenderer middle;
 	ModelRenderer output2;
 	ModelRenderer output;
@@ -80,7 +79,7 @@ public class ModelVacuumHopper extends ModelBase {
 			output.render(f5);
 			output2.render(f5);
 		}
-		
+
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -88,6 +87,5 @@ public class ModelVacuumHopper extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
 
 }

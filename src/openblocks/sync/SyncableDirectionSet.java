@@ -47,11 +47,11 @@ public class SyncableDirectionSet implements ISyncableObject {
 			setHasChanged();
 		}
 	}
-	
+
 	public void toggleDirection(ForgeDirection direction) {
 		if (value.contains(direction)) {
 			value.remove(direction);
-		}else {
+		} else {
 			value.add(direction);
 		}
 		setHasChanged();
@@ -93,8 +93,8 @@ public class SyncableDirectionSet implements ISyncableObject {
 		if (tag.hasKey(name)) {
 			int[] intarr = tag.getIntArray(name);
 			value = new HashSet<ForgeDirection>();
-			for (int i = 0; i < intarr.length; i++) {
-				value.add(ForgeDirection.getOrientation(intarr[i]));
+			for (int element : intarr) {
+				value.add(ForgeDirection.getOrientation(element));
 			}
 		}
 	}
