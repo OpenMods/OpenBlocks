@@ -144,4 +144,9 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	public void readSpawnData(ByteArrayDataInput data) {
 		inventory = new GenericInventory("luggage", false, data.readInt());
 	}
+
+	@Override
+	public double getMountedYOffset() {
+		return 0.825;
+	}
 }

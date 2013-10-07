@@ -25,7 +25,7 @@ import openblocks.OpenBlocks.Blocks;
 import openblocks.common.EntityEventHandler;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
-import openblocks.common.entity.EntityBlock;
+import openblocks.common.entity.EntityMount;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.recipe.CrayonGlassesRecipe;
@@ -155,7 +155,7 @@ public class Config {
 	public static float imaginaryFadingSpeed = 0.0075f;
 	public static float imaginaryItemUseCount = 10;
 	public static List<String> disableMobNames = Lists.newArrayList();
-	public static boolean doCraneCollisionCheck = true;
+	public static boolean doCraneCollisionCheck = false;
 	public static boolean craneShiftControl = true;
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
@@ -242,7 +242,7 @@ public class Config {
 
 		prop = configFile.get("tanks", "emitLight", tanksEmitLight, "Tanks will emit light when they contain a liquid that glows (eg. lava)");
 		tanksEmitLight = prop.getBoolean(tanksEmitLight);
-		
+
 		prop = configFile.get("trophy", "trophyDropChance", trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
 		trophyDropChance = prop.getDouble(trophyDropChance);
 
@@ -418,7 +418,7 @@ public class Config {
 		}
 
 		if (Blocks.cannon != null) {
-			EntityRegistry.registerModEntity(EntityBlock.class, "BlockEntity", 99, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
+			EntityRegistry.registerModEntity(EntityMount.class, "BlockEntity", 99, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
 		}
 
 		if (itemCraneControl > 0) {

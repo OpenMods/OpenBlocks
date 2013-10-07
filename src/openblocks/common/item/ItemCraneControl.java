@@ -1,5 +1,7 @@
 package openblocks.common.item;
 
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -14,6 +16,9 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
+
+import com.google.common.collect.MapMaker;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,26 +33,29 @@ public class ItemCraneControl extends Item {
 		super(Config.itemCraneControl);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setUnlocalizedName("openblocks.crane_control");
+		setMaxStackSize(1);
 	}
 
-	private static void toggleMagnet(final EntityPlayer player) {
-		final EntityMagnet magnet = CraneRegistry.instance.getOrCreateMagnet(player);
-		magnet.toggleMagnet();
-	}
+	private static final Map<EntityLivingBase, Long> debouncerTime = new MapMaker().weakKeys().makeMap();
 
-	private long debouncerTime;
+	private static boolean hasClicked(EntityLivingBase entity) {
+		long currentTime = OpenBlocks.proxy.getTicks(entity.worldObj);
+		Long lastClick = debouncerTime.get(entity);
+		if (lastClick == null || currentTime - lastClick > 5) {
+			debouncerTime.put(entity, currentTime);
+			return true;
+		}
+
+		return false;
+	}
 
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-		final World world = entityLiving.worldObj;
-		if (!world.isRemote && entityLiving instanceof EntityPlayer) {
-			long time = OpenBlocks.proxy.getTicks(world);
-			if (time - debouncerTime > 10) {
-				final EntityPlayer player = (EntityPlayer)entityLiving;
-				debouncerTime = time;
+		if (entityLiving instanceof EntityPlayer && hasClicked(entityLiving)) {
+			final EntityPlayer player = (EntityPlayer)entityLiving;
+			final EntityMagnet magnet = CraneRegistry.instance.magnetData.get(player);
+			if (magnet != null) magnet.toggleMagnet();
 
-				toggleMagnet(player);
-			}
 		}
 		return true;
 	}
@@ -62,7 +70,7 @@ public class ItemCraneControl extends Item {
 		CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
 
 		if (data != null) {
-			data.isExtending = Config.craneShiftControl ? player.isSneaking() : !data.isExtending;
+			data.isExtending = Config.craneShiftControl? player.isSneaking() : !data.isExtending;
 		}
 
 		player.setItemInUse(stack, getMaxItemUseDuration(stack));

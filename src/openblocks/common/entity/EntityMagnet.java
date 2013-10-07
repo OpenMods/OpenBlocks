@@ -7,9 +7,7 @@ import java.util.List;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -17,6 +15,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import openblocks.common.CraneRegistry;
+import openblocks.common.MagnetWhitelists;
 import openblocks.common.item.ItemCraneBackpack;
 
 import com.google.common.collect.ImmutableList;
@@ -148,10 +147,8 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 			EntityPlayer player = getOwner();
 			if (player == null) return false;
 
-			return (entity instanceof EntityItem) ||
-					(entity instanceof EntityLivingBase && entity != player) ||
-					(entity instanceof EntityBoat) ||
-					(entity instanceof EntityMinecart);
+			return (entity instanceof EntityLivingBase && entity != player) ||
+					MagnetWhitelists.instance.entityWhitelist.check(entity);
 		}
 	}
 
@@ -213,7 +210,7 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 		setSize(0.5f, 0.5f);
 
 		if (world.isRemote) smoother = new MoveSmoother(0.25, 1.0, 4.0, 0.01);
-		else smoother = new MoveSmoother(0.1, 2.0, 10.0, 0.01);
+		else smoother = new MoveSmoother(0.5, 5.0, 128.0, 0.01);
 	}
 
 	public EntityMagnet(World world, IOwner owner) {
@@ -275,7 +272,7 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 
 		smoother.update();
 
-		isAboveTarget = !detectTargets().isEmpty();
+		isAboveTarget = !detectEntityTargets().isEmpty();
 	}
 
 	@Override
@@ -302,37 +299,68 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 	public double getMountedYOffset() {
 		if (riddenByEntity == null) return 0;
 
-		return -Math.max(riddenByEntity.getMountedYOffset(), riddenByEntity.height);
+		return getMountedYOffset(riddenByEntity);
+	}
+
+	private static double getMountedYOffset(Entity rider) {
+		if (rider instanceof EntityItem) // yeah, hack
+		return -0.5;
+		double tmp = -Math.max(rider.getMountedYOffset(), rider.height);
+		return tmp;
 	}
 
 	public void toggleMagnet() {
 		if (riddenByEntity != null) {
 			final Entity tmp = riddenByEntity;
+
+			if (tmp instanceof IMagnetAware && !((IMagnetAware)tmp).canRelease()) return;
 			// default unmount position is above entity and it
 			// looks strange, so we hack around that
 			double tmpPosY = tmp.posY;
 			tmp.mountEntity(null);
 			tmp.setPosition(tmp.posX, tmpPosY, tmp.posZ);
 
-		} else {
+		} else if (!worldObj.isRemote) {
 			Entity target = null;
 
-			List<Entity> result = detectTargets();
+			List<Entity> result = detectEntityTargets();
 
 			Iterator<Entity> it = result.iterator();
 			if (it.hasNext()) target = it.next();
+			else target = getBlockEntity();
 
-			if (target != null) target.mountEntity(this);
+			if (target != null) {
+				target.mountEntity(this);
+			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Entity> detectTargets() {
+	private List<Entity> detectEntityTargets() {
 		if (owner == null) return ImmutableList.of();
 
-		AxisAlignedBB aabb = boundingBox.copy();
+		AxisAlignedBB aabb = boundingBox.expand(0.25, 0, 0.25).copy();
 		aabb.minY -= 1;
 		return worldObj.selectEntitiesWithinAABB(Entity.class, aabb, owner);
+	}
+
+	private Entity getBlockEntity() {
+		int x = MathHelper.floor_double(posX);
+		int y = MathHelper.floor_double(posY - 0.5);
+		int z = MathHelper.floor_double(posZ);
+
+		if (!worldObj.blockExists(x, y, z) || worldObj.isAirBlock(x, y, z)) return null;
+
+		Entity result = null;
+
+		if (MagnetWhitelists.instance.testBlock(worldObj, x, y, z)) result = EntityBlock.create(worldObj, x, y, z);
+
+		if (result != null) {
+			result.setPosition(posX, posY + getMountedYOffset(result), posZ);
+			worldObj.spawnEntityInWorld(result);
+		}
+
+		return result;
 	}
 
 	public boolean isAboveTarget() {
@@ -345,5 +373,9 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 
 	public Vec3 getTarget() {
 		return owner != null? owner.getTarget() : null;
+	}
+
+	public boolean isValid() {
+		return owner != null? owner.isValid(this) : false;
 	}
 }

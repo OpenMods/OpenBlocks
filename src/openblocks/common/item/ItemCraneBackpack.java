@@ -53,7 +53,7 @@ public class ItemCraneBackpack extends ItemArmor {
 
 	private static boolean isPointInBlock(World world, EntityPlayer player, double radius) {
 		double posX = player.posX + radius * MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
-		double posY = player.posY + player.height;
+		double posY = player.posY + player.getEyeHeight() + 0.2;
 		double posZ = player.posZ + radius * MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
 
 		AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
