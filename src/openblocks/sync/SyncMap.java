@@ -41,11 +41,11 @@ public abstract class SyncMap {
 	public void put(int id, ISyncableObject value) {
 		objects[id] = value;
 	}
-	
+
 	public ISyncableObject get(Enum<?> id) {
 		return get(id.ordinal());
 	}
-	
+
 	public ISyncableObject get(int id) {
 		return objects[id];
 	}
@@ -93,7 +93,7 @@ public abstract class SyncMap {
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		sync(worldObj, handler, x, y, z, 20);
 	}
-	
+
 	public Set<EntityPlayer> getListeningPlayers(World worldObj, double x, double z, int trackingRange) {
 		return PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
 	}

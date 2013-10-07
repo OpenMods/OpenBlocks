@@ -50,7 +50,7 @@ public class ClientProxy implements IProxy {
 			}
 		}
 	}
-	
+
 	@Override
 	public void init() {
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);

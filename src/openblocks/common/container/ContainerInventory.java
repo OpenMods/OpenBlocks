@@ -103,6 +103,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		return inventorySize;
 	}
 
+	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		sync();
@@ -138,14 +139,15 @@ public abstract class ContainerInventory<T extends IInventory> extends
 	}
 
 	public abstract void onServerButtonClicked(EntityPlayer player, int buttonId);
-	
-	public abstract void onClientButtonClicked(int buttonId);
-	
-    public void sendButtonClick(int buttonId) {
-    	onClientButtonClicked(buttonId);
-    	Minecraft.getMinecraft().playerController.sendEnchantPacket(this.windowId, buttonId);
-    }
 
+	public abstract void onClientButtonClicked(int buttonId);
+
+	public void sendButtonClick(int buttonId) {
+		onClientButtonClicked(buttonId);
+		Minecraft.getMinecraft().playerController.sendEnchantPacket(this.windowId, buttonId);
+	}
+
+	@Override
 	public boolean enchantItem(EntityPlayer player, int button) {
 		onServerButtonClicked(player, button);
 		return false;

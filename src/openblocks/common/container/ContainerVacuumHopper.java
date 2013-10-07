@@ -13,16 +13,16 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 	public enum Keys {
 		test
 	}
-	
+
 	public SyncableInt test = new SyncableInt();
-	
+
 	public ContainerVacuumHopper(IInventory playerInventory, TileEntityVacuumHopper hopper) {
 		super(playerInventory, hopper);
 		addInventoryGrid(44, 20, 5);
 		addPlayerInventorySlots(69);
 		addSyncedObject(Keys.test, test);
 	}
-	
+
 	public SyncableInt getTest() {
 		return test;
 	}
@@ -34,13 +34,13 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 
 	@Override
 	public void onServerButtonClicked(EntityPlayer player, int buttonId) {
-		System.out.println("Server:"+buttonId);
+		System.out.println("Server:" + buttonId);
 	}
 
 	@Override
 	public void onClientButtonClicked(int buttonId) {
-		System.out.println("Client:"+buttonId);
-		
+		System.out.println("Client:" + buttonId);
+
 	}
 
 }

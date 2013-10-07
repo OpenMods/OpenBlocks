@@ -17,7 +17,7 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 	private GuiComponentSideSelector sideSelector;
 	private GuiComponentTab xpTab;
 	private GuiComponentLabel xpOutputsLabel;
-	
+
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container);
 		xSize = 176;
@@ -63,7 +63,7 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		super.mouseClicked(x, y, button);
 		main.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
 	}
-	
+
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int button, long time) {
 		super.mouseClickMove(mouseX, mouseY, button, time);

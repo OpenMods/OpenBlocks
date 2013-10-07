@@ -15,10 +15,10 @@ public class GuiComponentSideSelector extends BaseComponent {
 	public double scale;
 	private int rotX = -10;
 	private int rotY = 10;
-	
+
 	private int startClickX = 0;
 	private int startClickY = 0;
-	
+
 	public GuiComponentSideSelector(int x, int y, double scale) {
 		super(x, y);
 		this.scale = scale;
@@ -30,10 +30,10 @@ public class GuiComponentSideSelector extends BaseComponent {
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
 		GL11.glScaled(scale, scale, scale);
-		//GL11.glRotated(rot, 1, 0, 0);
+		// GL11.glRotated(rot, 1, 0, 0);
 		GL11.glRotated(rotX, 1, 0, 0);
 		GL11.glRotated(rotY, 0, 1, 0);
-		//GL11.glRotated(rot++, 0, 0, 1);
+		// GL11.glRotated(rot++, 0, 0, 1);
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
@@ -51,8 +51,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 	}
 
 	protected boolean isMouseOver(int mouseX, int mouseY) {
-        return mouseX >= x && mouseX < x + scale && mouseY >= y && mouseY < y + scale ;
-    }
+		return mouseX >= x && mouseX < x + scale && mouseY >= y && mouseY < y + scale;
+	}
 
 	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
@@ -63,9 +63,9 @@ public class GuiComponentSideSelector extends BaseComponent {
 		rotY += dx / 4;
 		rotX = Math.min(20, Math.max(-20, rotX));
 	}
-	
+
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int button){
+	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
 		startClickX = mouseX;
 		startClickY = mouseY;

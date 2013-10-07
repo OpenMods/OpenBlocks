@@ -443,9 +443,7 @@ public class Config {
 	private static boolean canRegisterBlock(int blockId) {
 		if (blockId > 0) {
 			if (Block.blocksList[blockId] != null) {
-				if (!failIdsQuietly) {
-					throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
-				}
+				if (!failIdsQuietly) { throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now."); }
 				Log.info("Block ID " + blockId + " in use. This block will *NOT* be loaded.");
 				return false;
 			}

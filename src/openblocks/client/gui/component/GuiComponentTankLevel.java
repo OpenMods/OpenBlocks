@@ -10,19 +10,20 @@ public class GuiComponentTankLevel extends GuiComponentBox {
 
 	protected FluidStack stack;
 	protected double percentFull;
-	
+
 	public GuiComponentTankLevel(int x, int y, int width, int height) {
-		super(x,  y, width, height, 0, 0, 0xc6c6c6);
+		super(x, y, width, height, 0, 0, 0xc6c6c6);
 	}
 
 	public void setPercentFull(double full) {
 		this.percentFull = full;
 	}
-	
+
 	public void setFluidStack(FluidStack stack) {
 		this.stack = stack;
 	}
-	
+
+	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		if (stack != null && stack.getFluid() != null) {
