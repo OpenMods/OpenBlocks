@@ -45,7 +45,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
-		System.out.println(enabledDirections);
 		GL11.glPushMatrix();
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
