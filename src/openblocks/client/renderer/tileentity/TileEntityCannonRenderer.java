@@ -52,6 +52,8 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 			GL11.glEnd();
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();
