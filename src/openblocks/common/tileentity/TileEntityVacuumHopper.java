@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -22,6 +21,7 @@ import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDirectionSet;
+import openblocks.utils.CollectionUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.common.Loader;
@@ -35,17 +35,24 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
 
 	public enum Keys {
-		xpOutputs
+		xpOutputs,
+		itemOutputs
 	}
 
 	public SyncableDirectionSet xpOutputs = new SyncableDirectionSet();
+	public SyncableDirectionSet itemOutputs = new SyncableDirectionSet();
 	
 	public TileEntityVacuumHopper() {
 		addSyncedObject(Keys.xpOutputs, xpOutputs);
+		addSyncedObject(Keys.itemOutputs, itemOutputs);
 	}
 	
 	public SyncableDirectionSet getXPOutputs() {
 		return xpOutputs;
+	}
+
+	public SyncableDirectionSet getItemOutputs() {
+		return itemOutputs;
 	}
 	
 	@Override
@@ -67,9 +74,9 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 				if (entity instanceof EntityItem) {
 					ItemStack stack = ((EntityItem)entity).getEntityItem();
-					shouldPull = InventoryUtils.testInventoryInsertion(this, stack) <= 0;
+					shouldPull = InventoryUtils.testInventoryInsertion(this, stack) > 0;
 				}
-
+				
 				if (shouldPull) {
 
 					double x = (xCoord + 0.5D - entity.posX) / 15.0D;
@@ -91,69 +98,75 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 		if (!worldObj.isRemote) {
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
-
-				TileEntity tileOnSurface = getTileInDirection(getSurface());
-				IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, getSurface());
-
-				IFluidHandler fluidHandler = null;
-				if (tileOnSurface instanceof IFluidHandler) {
-					fluidHandler = (IFluidHandler)tileOnSurface;
-				}
-
-				// if we've got liquid in the tank
-				if (tank.getFluidAmount() > 0) {
-					// drain a bit
-					FluidStack drainedFluid = tank.drain(Math.min(tank.getFluidAmount(), oneLevel), true);
-					if (drainedFluid != null) {
-						// copy what we drained
-						FluidStack clonedFluid = drainedFluid.copy();
-						// try to insert it into a tank or pipe
-						if (fluidHandler != null) {
-							clonedFluid.amount -= fluidHandler.fill(getSurface().getOpposite(), drainedFluid, true);
-						} else if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
-							clonedFluid.amount -= ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, drainedFluid, getSurface());
-						}
-						// fill any remainder
-						if (clonedFluid.amount > 0) {
-							tank.fill(clonedFluid, true);
+				
+				ForgeDirection directionToOutputXP = CollectionUtils.getRandom(xpOutputs.getValue());
+				
+				TileEntity tileOnSurface = null;
+				
+				if (directionToOutputXP != null) {
+					
+					tileOnSurface = getTileInDirection(directionToOutputXP);
+					
+					IFluidHandler fluidHandler = null;
+					if (tileOnSurface instanceof IFluidHandler) {
+						fluidHandler = (IFluidHandler)tileOnSurface;
+					}
+	
+					// if we've got liquid in the tank
+					if (tank.getFluidAmount() > 0) {
+						// drain a bit
+						FluidStack drainedFluid = tank.drain(Math.min(tank.getFluidAmount(), oneLevel), true);
+						if (drainedFluid != null) {
+							// copy what we drained
+							FluidStack clonedFluid = drainedFluid.copy();
+							// try to insert it into a tank or pipe
+							if (fluidHandler != null) {
+								clonedFluid.amount -= fluidHandler.fill(directionToOutputXP.getOpposite(), drainedFluid, true);
+							} else if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
+								clonedFluid.amount -= ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, drainedFluid, directionToOutputXP);
+							}
+							// fill any remainder
+							if (clonedFluid.amount > 0) {
+								tank.fill(clonedFluid, true);
+							}
 						}
 					}
 				}
-				int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
-				if (slotId > -1) {
-					ItemStack nextStack = getStackInSlot(slotId);
-					int previousSize = nextStack.stackSize;
-					nextStack = nextStack.copy();
-					if (inventory != null) {
-						InventoryUtils.insertItemIntoInventory(inventory, nextStack, getSurface().getOpposite());
-					} else {
-						if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
-							int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, getSurface());
-							nextStack.stackSize -= inserted;
-						}
-					}
-					if (nextStack != null) {
-						if (nextStack.stackSize > 0) {
-							setInventorySlotContents(slotId, nextStack);
+				
+				ForgeDirection directionToOutputItem = CollectionUtils.getRandom(itemOutputs.getValue());
+				
+				if (directionToOutputItem != null) {
+					
+					tileOnSurface = getTileInDirection(directionToOutputItem);
+					
+					IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, directionToOutputItem);
+					
+					int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
+					if (slotId > -1) {
+						ItemStack nextStack = getStackInSlot(slotId);
+						int previousSize = nextStack.stackSize;
+						nextStack = nextStack.copy();
+						if (inventory != null) {
+							InventoryUtils.insertItemIntoInventory(inventory, nextStack, directionToOutputItem.getOpposite());
 						} else {
-							setInventorySlotContents(slotId, null);
+							if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
+								int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, directionToOutputItem);
+								nextStack.stackSize -= inserted;
+							}
 						}
-						if (nextStack.stackSize < previousSize) {
-							worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+						if (nextStack != null) {
+							if (nextStack.stackSize > 0) {
+								setInventorySlotContents(slotId, nextStack);
+							} else {
+								setInventorySlotContents(slotId, null);
+							}
+							if (nextStack.stackSize < previousSize) {
+								worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+							}
 						}
 					}
 				}
 			}
-		}
-	}
-
-	public ForgeDirection getSurface() {
-		if (getFlag1()) {
-			return ForgeDirection.DOWN;
-		} else if (getFlag2()) {
-			return ForgeDirection.UP;
-		} else {
-			return getRotation();
 		}
 	}
 
@@ -233,11 +246,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		ForgeDirection surface = side.getOpposite();
-		setRotation(side.getOpposite());
-		setFlag1(surface == ForgeDirection.DOWN);
-		setFlag2(surface == ForgeDirection.UP);
-		sync();
+		
 	}
 
 	@Override

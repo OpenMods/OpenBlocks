@@ -1,40 +1,86 @@
 package openblocks.client.model;
 
+import java.util.Set;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class ModelVacuumHopper extends ModelBase {
-
-	// fields
-	ModelRenderer connector;
-	ModelRenderer collector;
+	
+	ModelRenderer middle;
+	ModelRenderer output2;
+	ModelRenderer output;
 
 	public ModelVacuumHopper() {
 		textureWidth = 64;
 		textureHeight = 32;
 
-		connector = new ModelRenderer(this, 0, 12);
-		connector.addBox(-1F, 0F, 3F, 2, 2, 5);
-		connector.setRotationPoint(0F, 8F, 0F);
-		connector.setTextureSize(64, 32);
-		connector.mirror = true;
-		setRotation(connector, 0F, 0F, 0F);
-		collector = new ModelRenderer(this, 0, 0);
-		collector.addBox(-3F, 0F, -3F, 6, 6, 6);
-		collector.setRotationPoint(0F, 6F, 0F);
-		collector.setTextureSize(64, 32);
-		collector.mirror = true;
-		setRotation(collector, 0F, 0F, 0F);
+		middle = new ModelRenderer(this, 0, 0);
+		middle.addBox(-4F, -4F, -4F, 8, 8, 8);
+		middle.setRotationPoint(0F, 8F, 0F);
+		middle.setTextureSize(64, 32);
+		middle.mirror = true;
+		setRotation(middle, 0F, 0F, 0F);
+		output2 = new ModelRenderer(this, 0, 22);
+		output2.addBox(-2.5F, -5F, -2.5F, 5, 1, 5);
+		output2.setRotationPoint(0F, 8F, 0F);
+		output2.setTextureSize(64, 32);
+		output2.mirror = true;
+		setRotation(output2, 0F, 0F, 0F);
+		output = new ModelRenderer(this, 0, 16);
+		output.addBox(-1.5F, -8F, -1.5F, 3, 3, 3);
+		output.setRotationPoint(0F, 8F, 0F);
+		output.setTextureSize(64, 32);
+		output.mirror = true;
+		setRotation(output, 0F, 0F, 0F);
 	}
 
 	public void render(TileEntityVacuumHopper hopper, float f) {
 
 		float f5 = 0.0625F;
-		setRotationAngles(hopper, f);
-		collector.render(f5);
-		connector.render(f5);
+		middle.render(f5);
+		Set<ForgeDirection> outputs = hopper.getXPOutputs().getValue();
+		outputs.addAll(hopper.getItemOutputs().getValue());
+		if (outputs.contains(ForgeDirection.UP)) {
+			output.rotateAngleX = output2.rotateAngleX = 0;
+			output.rotateAngleZ = output2.rotateAngleZ = 0;
+			output.render(f5);
+			output2.render(f5);
+		}
+		if (outputs.contains(ForgeDirection.DOWN)) {
+			output.rotateAngleX = output2.rotateAngleX = (float)Math.toRadians(180);
+			output.rotateAngleZ = output2.rotateAngleZ = 0;
+			output.render(f5);
+			output2.render(f5);
+		}
+		if (outputs.contains(ForgeDirection.EAST)) {
+			output.rotateAngleX = output2.rotateAngleX = 0;
+			output.rotateAngleZ = output2.rotateAngleZ = (float)Math.toRadians(90);
+			output.render(f5);
+			output2.render(f5);
+		}
+		if (outputs.contains(ForgeDirection.WEST)) {
+			output.rotateAngleX = output2.rotateAngleX = 0;
+			output.rotateAngleZ = output2.rotateAngleZ = (float)Math.toRadians(-90);
+			output.render(f5);
+			output2.render(f5);
+		}
+		if (outputs.contains(ForgeDirection.NORTH)) {
+			output.rotateAngleX = output2.rotateAngleX = (float)Math.toRadians(-90);
+			output.rotateAngleZ = output2.rotateAngleZ = 0;
+			output.render(f5);
+			output2.render(f5);
+		}
+		if (outputs.contains(ForgeDirection.SOUTH)) {
+			output.rotateAngleX = output2.rotateAngleX = (float)Math.toRadians(90);
+			output.rotateAngleZ = output2.rotateAngleZ = 0;
+			output.render(f5);
+			output2.render(f5);
+		}
+		
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -43,6 +89,5 @@ public class ModelVacuumHopper extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(TileEntity te, float f) {}
 
 }

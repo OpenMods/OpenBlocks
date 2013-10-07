@@ -29,8 +29,10 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 
 	@Override
 	public void onClientButtonClicked(int buttonId) {
-		if (buttonId >= 0 && buttonId <= 6) {
+		if (buttonId >= 0 && buttonId <= 7) {
 			getTileEntity().getXPOutputs().toggleDirection(ForgeDirection.getOrientation(buttonId));
+		}else {
+			getTileEntity().getItemOutputs().toggleDirection(ForgeDirection.getOrientation(buttonId - 7));	
 		}
 	}
 

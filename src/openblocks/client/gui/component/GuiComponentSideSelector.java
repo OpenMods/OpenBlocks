@@ -1,7 +1,6 @@
 package openblocks.client.gui.component;
 
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -32,7 +31,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 	
 	private ForgeDirection lastSideHovered;
 	
-	private boolean hasMoved = false;
+	private int movedTicks = 0;
 	
 	private SyncableDirectionSet enabledDirections;
 	
@@ -46,6 +45,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		System.out.println(enabledDirections);
 		GL11.glPushMatrix();
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
@@ -142,13 +142,13 @@ public class GuiComponentSideSelector extends BaseComponent {
 		rotX -= dy / 4;
 		rotY += dx / 4;
 		rotX = Math.min(20, Math.max(-20, rotX));
-		hasMoved = true;
+		movedTicks++;
 	}
 	
 	@Override
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
-		if (!hasMoved && callback != null) {
+		if (movedTicks < 5 && lastSideHovered != null && callback != null) {
 			callback.onSideSelected(lastSideHovered);
 		}
 	}
@@ -158,6 +158,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		super.mouseClicked(mouseX, mouseY, button);
 		startClickX = mouseX;
 		startClickY = mouseY;
-		hasMoved = false;
+		movedTicks = 0;
+		lastSideHovered = null;
 	}
 }
