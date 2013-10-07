@@ -12,6 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.sync.SyncableDirectionSet;
 import openblocks.utils.SidePicker;
 import openblocks.utils.SidePicker.HitCoord;
+import openblocks.utils.Trackball.TrackballWrapper;
 
 import org.lwjgl.opengl.GL11;
 
@@ -19,12 +20,9 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	RenderBlocks blockRender = new RenderBlocks();
 
-	public double scale;
-	private int rotX = -10;
-	private int rotY = 10;
+	private TrackballWrapper trackball = new TrackballWrapper(1, 40);
 
-	private int startClickX = 0;
-	private int startClickY = 0;
+	public double scale;
 
 	private ISideSelectionCallback callback;
 
@@ -48,8 +46,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
 		GL11.glScaled(scale, scale, scale);
-		GL11.glRotated(rotX, 1, 0, 0);
-		GL11.glRotated(rotY, 0, 1, 0);
+		trackball.update(mouseX - 50, mouseY - 50); // TODO: replace with proper
+													// width,height
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
@@ -109,7 +107,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		}
 
 		HitCoord coord = picker.getNearestHit();
-		if (coord != null) lastSideHovered = coord.side.toForgeDirection();
+		lastSideHovered = coord == null? ForgeDirection.UNKNOWN : coord.side.toForgeDirection();
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
 
@@ -124,18 +122,9 @@ public class GuiComponentSideSelector extends BaseComponent {
 		}
 	}
 
-	protected boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= x && mouseX < x + scale && mouseY >= y && mouseY < y + scale;
-	}
-
 	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
 		super.mouseClickMove(mouseX, mouseY, button, time);
-		int dx = mouseX - startClickX;
-		int dy = mouseY - startClickY;
-		rotX -= dy / 4;
-		rotY += dx / 4;
-		rotX = Math.min(20, Math.max(-20, rotX));
 		movedTicks++;
 	}
 
@@ -150,8 +139,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
-		startClickX = mouseX;
-		startClickY = mouseY;
 		movedTicks = 0;
 		lastSideHovered = null;
 	}
