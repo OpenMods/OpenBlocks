@@ -5,11 +5,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraftforge.common.ForgeDirection;
+
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiComponentSideSelector extends BaseComponent {
-
+	
 	RenderBlocks blockRender = new RenderBlocks();
 
 	public double scale;
@@ -19,10 +21,14 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private int startClickX = 0;
 	private int startClickY = 0;
 	
-	public GuiComponentSideSelector(int x, int y, double scale) {
+	private ISideSelectionCallback callback;
+	
+	public GuiComponentSideSelector(int x, int y, double scale, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
+		this.callback = iSideSelectionCallback;
 	}
+
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
@@ -69,5 +75,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 		super.mouseClicked(mouseX, mouseY, button);
 		startClickX = mouseX;
 		startClickY = mouseY;
+		if (callback != null) {
+			callback.onSideSelected(ForgeDirection.UNKNOWN);
+		}
 	}
 }

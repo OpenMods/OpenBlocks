@@ -2,6 +2,7 @@ package openblocks.client.gui;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.*;
@@ -27,7 +28,13 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
 		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
 
-		sideSelector = new GuiComponentSideSelector(30, 30, 40.0);
+		sideSelector = new GuiComponentSideSelector(30, 30, 40.0, new ISideSelectionCallback() {
+			@Override
+			public void onSideSelected(ForgeDirection direction) {
+				getContainer().sendButtonClick(direction.ordinal());
+			}
+		});
+		
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 		xpTab = new GuiComponentTab(0xf6c3ae, Item.expBottle.getIconFromDamage(0), 100, 100);
 		xpTab.addComponent(sideSelector);
@@ -55,7 +62,6 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		fontRenderer.drawString(machineName, x, 6, 4210752);
 		String translatedName = StatCollector.translateToLocal("container.inventory");
 		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
-		fontRenderer.drawString(Integer.toString(getContainer().test.getValue()), 20, 20, 4210752);
 	}
 
 	@Override

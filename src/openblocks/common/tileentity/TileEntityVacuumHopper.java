@@ -19,17 +19,33 @@ import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableDirectionSet;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory, IFluidHandler, IAwareTile {
+public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInventory, IFluidHandler, IAwareTile {
 
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 
 	private FluidTank tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5)));
 	
 	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
+
+	public enum Keys {
+		xpOutputs
+	}
+
+	public SyncableDirectionSet xpOutputs = new SyncableDirectionSet();
+	
+	public TileEntityVacuumHopper() {
+		addSyncedObject(Keys.xpOutputs, xpOutputs);
+	}
+	
+	public SyncableDirectionSet getXPOutputs() {
+		return xpOutputs;
+	}
 	
 	@Override
 	public void updateEntity() {
@@ -38,7 +54,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
-
+		
 		@SuppressWarnings("unchecked")
 		List<Entity> surroundingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3));
 
@@ -311,6 +327,12 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[] { tank.getInfo() };
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

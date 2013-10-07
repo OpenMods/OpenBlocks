@@ -50,14 +50,14 @@ public class SyncableDirection implements ISyncableObject {
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		if (tag.hasKey(name)) {
-			value = ForgeDirection.getOrientation(tag.getByte(name));
-		}
+		tag.setByte(name, (byte)value.ordinal());
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		tag.setByte(name, (byte)value.ordinal());
+		if (tag.hasKey(name)) {
+			value = ForgeDirection.getOrientation(tag.getByte(name));
+		}
 	}
 
 }
