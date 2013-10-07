@@ -1,13 +1,12 @@
 package openblocks.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiLightbox extends GuiContainer {
+public class GuiLightbox extends BaseGuiContainer<ContainerLightbox> {
 
 	public GuiLightbox(ContainerLightbox container) {
 		super(container);

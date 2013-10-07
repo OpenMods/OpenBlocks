@@ -1,13 +1,12 @@
 package openblocks.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerSprinkler;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiSprinkler extends GuiContainer {
+public class GuiSprinkler extends BaseGuiContainer<ContainerSprinkler> {
 
 	public GuiSprinkler(ContainerSprinkler container) {
 		super(container);

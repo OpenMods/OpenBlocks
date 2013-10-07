@@ -445,14 +445,12 @@ public class Config {
 			if (Block.blocksList[blockId] != null) {
 				if (!failIdsQuietly) {
 					throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now.");
-				} else {
-					Log.info("Block ID " + blockId + " in use. This block will *NOT* be loaded.");
-					return false;
 				}
+				Log.info("Block ID " + blockId + " in use. This block will *NOT* be loaded.");
+				return false;
 			}
 			return true;
-		} else {
-			return false; // Block disabled, fail silently
 		}
+		return false; // Block disabled, fail silently
 	}
 }

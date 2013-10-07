@@ -34,7 +34,7 @@ public class TileEntityVacuumHopper extends OpenTileEntity implements IInventory
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-
+		
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}

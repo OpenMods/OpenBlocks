@@ -1,13 +1,12 @@
 package openblocks.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerBigButton;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiBigButton extends GuiContainer {
+public class GuiBigButton extends BaseGuiContainer<ContainerBigButton> {
 
 	public GuiBigButton(ContainerBigButton container) {
 		super(container);

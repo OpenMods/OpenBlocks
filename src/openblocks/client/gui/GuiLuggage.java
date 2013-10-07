@@ -1,6 +1,5 @@
 package openblocks.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
@@ -8,7 +7,7 @@ import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiLuggage extends GuiContainer {
+public class GuiLuggage extends BaseGuiContainer<ContainerLuggage> {
 
 	private EntityLuggage luggage;
 

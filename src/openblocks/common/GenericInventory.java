@@ -102,9 +102,8 @@ public class GenericInventory implements ISidedInventory {
 			ItemStack itemstack = this.inventoryContents[i];
 			this.inventoryContents[i] = null;
 			return itemstack;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override

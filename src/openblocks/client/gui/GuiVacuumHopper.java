@@ -1,6 +1,5 @@
 package openblocks.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
@@ -10,7 +9,7 @@ import openblocks.common.container.ContainerVacuumHopper;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiVacuumHopper extends GuiContainer {
+public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 
 	private GuiComponentTankLevel xpLevel;
 	private GuiComponentTabs tabs;
@@ -18,7 +17,7 @@ public class GuiVacuumHopper extends GuiContainer {
 	private GuiComponentSideSelector sideSelector;
 	private GuiComponentTab xpTab;
 	private GuiComponentLabel xpOutputsLabel;
-
+	
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container);
 		xSize = 176;
@@ -56,6 +55,7 @@ public class GuiVacuumHopper extends GuiContainer {
 		fontRenderer.drawString(machineName, x, 6, 4210752);
 		String translatedName = StatCollector.translateToLocal("container.inventory");
 		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
+		fontRenderer.drawString(Integer.toString(getContainer().test.getValue()), 20, 20, 4210752);
 	}
 
 	@Override
@@ -70,8 +70,4 @@ public class GuiVacuumHopper extends GuiContainer {
 		main.mouseClickMove(mouseX - this.guiLeft, mouseY - this.guiTop, button, time);
 	}
 
-	@Override
-	protected void mouseMovedOrUp(int par1, int par2, int par3) {
-		super.mouseMovedOrUp(par1, par2, par3);
-	}
 }

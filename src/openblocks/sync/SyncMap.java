@@ -5,7 +5,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,7 +30,7 @@ public abstract class SyncMap {
 		this.trackingRange = trackingRange;
 	}
 
-	public List<Integer> usersInRange = new ArrayList<Integer>();
+	public Set<Integer> usersInRange = new HashSet<Integer>();
 
 	private ISyncableObject[] objects = new ISyncableObject[16];
 
@@ -38,6 +40,14 @@ public abstract class SyncMap {
 
 	public void put(int id, ISyncableObject value) {
 		objects[id] = value;
+	}
+	
+	public ISyncableObject get(Enum<?> id) {
+		return get(id.ordinal());
+	}
+	
+	public ISyncableObject get(int id) {
+		return objects[id];
 	}
 
 	public List<ISyncableObject> readFromStream(DataInputStream dis) throws IOException {
@@ -83,6 +93,10 @@ public abstract class SyncMap {
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		sync(worldObj, handler, x, y, z, 20);
 	}
+	
+	public Set<EntityPlayer> getListeningPlayers(World worldObj, double x, double z, int trackingRange) {
+		return PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
+	}
 
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z, int tickUpdatePeriod) {
 		if (!worldObj.isRemote) {
@@ -91,7 +105,8 @@ public abstract class SyncMap {
 			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
 			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
 			totalTrackingTime = worldTotalTime; // Out with the old
-			List<EntityPlayer> players = PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
+			Set<EntityPlayer> players = getListeningPlayers(worldObj, x, z, trackingRange);
+
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;
@@ -104,9 +119,8 @@ public abstract class SyncMap {
 						break;
 					}
 				}
-
 				try {
-					List<Integer> newUsersInRange = new ArrayList<Integer>();
+					Set<Integer> newUsersInRange = new HashSet<Integer>();
 					for (EntityPlayer player : players) {
 						newUsersInRange.add(player.entityId);
 						if (player != null) {

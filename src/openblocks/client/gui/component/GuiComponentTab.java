@@ -50,6 +50,7 @@ public class GuiComponentTab extends GuiComponentBox {
         RenderHelper.enableGUIStandardItemLighting();
 		minecraft.renderEngine.bindTexture(TextureMap.locationItemsTexture);
 		drawTexturedModelRectFromIcon(offsetX+x+3, offsetY+y+3, icon, 16, 16);
+        RenderHelper.disableStandardItemLighting();
 	}
 
 	@Override
