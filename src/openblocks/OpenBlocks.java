@@ -60,6 +60,7 @@ public class OpenBlocks {
 		public static BlockBigButton bigButton;
 		public static BlockImaginary imaginary;
 		public static BlockFan fan;
+		public static BlockXPBottler xpBottler;
 	}
 
 	public static class Items {
@@ -81,11 +82,12 @@ public class OpenBlocks {
 	}
 
 	public static enum Gui {
-		Lightbox,
-		Luggage,
-		Sprinkler,
-		VacuumHopper,
-		BigButton
+		lightbox,
+		luggage,
+		sprinkler,
+		vacuumHopper,
+		bigButton,
+		XPBottler
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

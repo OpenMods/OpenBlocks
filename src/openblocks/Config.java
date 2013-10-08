@@ -106,6 +106,9 @@ public class Config {
 	@BlockId(description = "The id of the fan block")
 	public static int blockFanId = 2556;
 
+	@BlockId(description = "The id of the xp bottler block")
+	public static int blockXPBottlerId = 2557;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -368,6 +371,11 @@ public class Config {
 			OpenBlocks.Blocks.fan = new BlockFan();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.fan), new Object[] { "f", "i", "s", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab) }));
 
+		}
+		
+		if (Config.canRegisterBlock(blockXPBottlerId)) {
+			OpenBlocks.Blocks.xpBottler = new BlockXPBottler();
+			// TODO: recipe
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

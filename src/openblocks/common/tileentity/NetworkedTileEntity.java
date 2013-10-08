@@ -50,7 +50,7 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements ISyn
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		syncMap.handleTileDataPacket(this, pkt);
+		syncMap.handleTileDataPacket(pkt);
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 }

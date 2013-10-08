@@ -53,7 +53,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
-				openGui(player, Gui.BigButton);
+				openGui(player, Gui.bigButton);
 			} else {
 				setFlag1(true);
 				tickCounter = getTickTime();

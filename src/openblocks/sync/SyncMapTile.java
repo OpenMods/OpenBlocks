@@ -39,7 +39,7 @@ public class SyncMapTile extends SyncMap {
 		}
 	}
 
-	public void handleTileDataPacket(ISyncHandler handler, Packet132TileEntityData packet) {
+	public void handleTileDataPacket(Packet132TileEntityData packet) {
 		if (packet.actionType == 0) {
 			NBTTagCompound compound = packet.data;
 			if (compound != null && compound.hasKey("payload")) {

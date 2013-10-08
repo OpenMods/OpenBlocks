@@ -10,14 +10,12 @@ public class ItemUtils {
 		if (stack.stackSize == 1) {
 			if (stack.getItem().hasContainerItem()) {
 				return stack.getItem().getContainerItemStack(stack);
-			} else {
-				return null;
 			}
-		} else {
-			stack.splitStack(1);
-
-			return stack;
+			return null;
 		}
+		stack.splitStack(1);
+
+		return stack;
 	}
 
 	public static NBTTagCompound getItemTag(ItemStack stack) {

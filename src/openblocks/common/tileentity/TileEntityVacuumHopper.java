@@ -248,7 +248,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player, OpenBlocks.Gui.VacuumHopper);
+			openGui(player, OpenBlocks.Gui.vacuumHopper);
 		}
 		return true;
 	}

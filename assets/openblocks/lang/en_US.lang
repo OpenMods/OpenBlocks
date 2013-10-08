@@ -3,6 +3,7 @@ openblocks.gui.luggage=Luggage
 openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
 openblocks.gui.bigbutton=Big Button
+openblocks.gui.xpbottler.name=XP Bottler
 
 openblocks.misc.uses=Uses: %.2f
 openblocks.misc.color=Color: %06X
@@ -29,6 +30,7 @@ tile.openblocks.sponge.name=Sponge
 tile.openblocks.cannon.name=Item Cannon
 tile.openblocks.bigbutton.name=Big Button
 tile.openblocks.fan.name=Fan
+tile.openblocks.xpbottler.name=XP Bottler
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing

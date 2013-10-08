@@ -417,31 +417,28 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 				}
 
 				return true;
-			} else {
-				// Fix for #15
-				if (worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true;
-				// End of fix
-				FluidStack available = tank.getFluid();
-				if (available != null) {
-					ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
+			}
+			// Fix for #15
+			if (worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true;
+			// End of fix
+			FluidStack available = tank.getFluid();
+			if (available != null) {
+				ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
 
-					liquid = FluidContainerRegistry.getFluidForFilledItem(filled);
+				liquid = FluidContainerRegistry.getFluidForFilledItem(filled);
 
-					if (liquid != null) {
-						if (!player.capabilities.isCreativeMode) {
-							if (current.stackSize > 1) {
-								if (!player.inventory.addItemStackToInventory(filled)) return false;
-								else {
-									player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
-								}
-							} else {
-								player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
-								player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
-							}
+				if (liquid != null) {
+					if (!player.capabilities.isCreativeMode) {
+						if (current.stackSize > 1) {
+							if (!player.inventory.addItemStackToInventory(filled)) return false;
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
+						} else {
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
 						}
-						drain(ForgeDirection.UNKNOWN, liquid.amount, true);
-						return true;
 					}
+					drain(ForgeDirection.UNKNOWN, liquid.amount, true);
+					return true;
 				}
 			}
 		}
@@ -459,12 +456,10 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 		if (containsValidLiquid()) {
 			if (worldObj == null || worldObj.isRemote) {
 				return interpolatedRenderAmount / (double)Short.MAX_VALUE;
-			} else {
-				return liquidRenderAmount.getValue() / (double)Short.MAX_VALUE;
 			}
-		} else {
-			return 0D; /* No D for you ;) */
+			return liquidRenderAmount.getValue() / (double)Short.MAX_VALUE;
 		}
+		return 0D; /* No D for you ;) */
 	}
 
 	public double getFlowOffset() {
@@ -485,9 +480,8 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 				}
 			}
 			return Math.max(0, Math.min(1, fullness / count));
-		} else {
-			return 0D; /* No D for you ;) */
 		}
+		return 0D; /* No D for you ;) */
 	}
 
 	public void setClientLiquidId(int itemID) {

@@ -10,6 +10,7 @@ public class SyncableInt implements ISyncableObject {
 
 	private int value = 0;
 	private boolean hasChanged = false;
+	private int ticksSinceChange = 0;
 
 	public SyncableInt(int value) {
 		this.value = value;
@@ -22,6 +23,10 @@ public class SyncableInt implements ISyncableObject {
 	@Override
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readInt();
+	}
+	
+	public int getTicksSinceChange() {
+		return ticksSinceChange;
 	}
 
 	public void modify(int by) {
@@ -64,10 +69,12 @@ public class SyncableInt implements ISyncableObject {
 	@Override
 	public void resetChangeStatus() {
 		hasChanged = false;
+		ticksSinceChange++;
 	}
 
 	@Override
 	public void setHasChanged() {
 		hasChanged = true;
+		ticksSinceChange = 0;
 	}
 }

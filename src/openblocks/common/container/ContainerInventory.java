@@ -29,7 +29,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 
 	public SyncMapContainer syncMap;
 
-	private static class RestrictedSlot extends Slot {
+	protected static class RestrictedSlot extends Slot {
 
 		public RestrictedSlot(IInventory inventory, int slot, int x, int y) {
 			super(inventory, slot, x, y);

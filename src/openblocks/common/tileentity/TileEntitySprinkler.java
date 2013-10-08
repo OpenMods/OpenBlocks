@@ -203,7 +203,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile, I
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player, OpenBlocks.Gui.Sprinkler);
+			openGui(player, OpenBlocks.Gui.sprinkler);
 		}
 		return true;
 	}

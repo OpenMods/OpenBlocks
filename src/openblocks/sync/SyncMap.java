@@ -15,7 +15,6 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import openblocks.Log;
-import openblocks.OpenBlocks;
 import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
 
@@ -90,7 +89,6 @@ public abstract class SyncMap {
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (!worldObj.isRemote) {
 			Set<EntityPlayer> players = getListeningPlayers(worldObj, x, z, trackingRange);
-
 			if (players.size() > 0) {
 				Packet changePacket = null;
 				Packet fullPacket = null;

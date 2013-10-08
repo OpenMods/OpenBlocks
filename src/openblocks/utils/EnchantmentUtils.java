@@ -24,16 +24,13 @@ public class EnchantmentUtils {
 		{
 			return 0;
 		}
-		else
+		if (power > 15)
 		{
-			if (power > 15)
-			{
-				power = 15;
-			}
-
-			int l = (max? 7 : 0) + 1 + (power >> 1) + (max? power : 0);
-			return max? Math.max(l, power * 2) : Math.max(l / 3, 1);
+			power = 15;
 		}
+
+		int l = (max? 7 : 0) + 1 + (power >> 1) + (max? power : 0);
+		return max? Math.max(l, power * 2) : Math.max(l / 3, 1);
 	}
 
 	public static boolean enchantItem(ItemStack itemstack, int level, Random rand) {
@@ -67,9 +64,8 @@ public class EnchantmentUtils {
 			}
 
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	public static int getExperienceForLevel(int level) {

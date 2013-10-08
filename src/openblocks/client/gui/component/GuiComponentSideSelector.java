@@ -1,8 +1,6 @@
 package openblocks.client.gui.component;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -34,11 +32,14 @@ public class GuiComponentSideSelector extends BaseComponent {
 	
 	public SyncableFlags enabledDirections;
 
-	public GuiComponentSideSelector(int x, int y, double scale, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
+	private Block block;
+	
+	public GuiComponentSideSelector(int x, int y, double scale, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
 		this.callback = iSideSelectionCallback;
 		this.enabledDirections = directions;
+		this.block = block;
 	}
 	
 	@Override
@@ -57,22 +58,22 @@ public class GuiComponentSideSelector extends BaseComponent {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 
 		setFaceColor(ForgeDirection.WEST);
-		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, Block.blockIron.getIcon(0, 0));
+		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 
 		setFaceColor(ForgeDirection.EAST);
-		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, Block.blockIron.getIcon(0, 0));
+		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 
 		setFaceColor(ForgeDirection.UP);
-		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, Block.blockIron.getIcon(0, 0));
+		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 
 		setFaceColor(ForgeDirection.DOWN);
-		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, Block.blockIron.getIcon(0, 0));
+		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 
 		setFaceColor(ForgeDirection.NORTH);
-		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, Block.blockIron.getIcon(0, 0));
+		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 
 		setFaceColor(ForgeDirection.SOUTH);
-		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, Block.blockIron.getIcon(0, 0));
+		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 		t.draw();
 
 		GL11.glPointSize(10);
@@ -135,6 +136,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
 		if (movedTicks < 5 && lastSideHovered != null && lastSideHovered != ForgeDirection.UNKNOWN && callback != null) {
 			callback.onSideSelected(lastSideHovered);
+			movedTicks = 5;
 		}
 	}
 

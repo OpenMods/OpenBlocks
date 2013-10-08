@@ -104,10 +104,9 @@ public class TileEntityElevator extends OpenTileEntity {
 		int blockId = worldObj.getBlockId(x, y, z);
 		if (canStandHere) {
 			return worldObj.isAirBlock(x, y, z) || Block.blocksList[blockId] == null || (Config.irregularBlocksArePassable && Block.blocksList[blockId].getCollisionBoundingBoxFromPool(worldObj, x, y, z) == null);
-		} else {
-			/* Ugly logic makes NC sad :( */
-			return !(blockId == 0 || Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId));
 		}
+		/* Ugly logic makes NC sad :( */
+		return !(blockId == 0 || Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId));
 	}
 
 	private int findLevel(ForgeDirection direction) {
