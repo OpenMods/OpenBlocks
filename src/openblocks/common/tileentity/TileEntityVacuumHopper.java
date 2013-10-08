@@ -26,7 +26,8 @@ import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInventory, IFluidHandler, IAwareTile {
+public class TileEntityVacuumHopper extends NetworkedTileEntity implements
+		IInventory, IFluidHandler, IAwareTile {
 
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 
@@ -35,10 +36,9 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
 
 	public enum Keys {
-		xpOutputs,
-		itemOutputs
+		xpOutputs, itemOutputs
 	}
-	
+
 	public SyncableFlags xpOutputs = new SyncableFlags();
 	public SyncableFlags itemOutputs = new SyncableFlags();
 
@@ -55,6 +55,10 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		return itemOutputs;
 	}
 
+	public FluidTank getTank() {
+		return tank;
+	}
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -68,7 +72,8 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 
 		for (Entity entity : surroundingItems) {
 
-			if (!entity.isDead && (entity instanceof EntityItem || entity instanceof EntityXPOrb)) {
+			if (!entity.isDead
+					&& (entity instanceof EntityItem || entity instanceof EntityXPOrb)) {
 
 				boolean shouldPull = true;
 
@@ -141,7 +146,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 				if (slotDirection != null) {
 					directionToOutputItem = ForgeDirection.getOrientation(slotDirection);
 				}
-				
+
 				if (directionToOutputItem != null) {
 
 					tileOnSurface = getTileInDirection(directionToOutputItem);
@@ -303,6 +308,8 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 		tank.writeToNBT(tag);
+		xpOutputs.writeToNBT(tag, "xpoutputs");
+		itemOutputs.writeToNBT(tag, "itemoutputs");
 	}
 
 	@Override
@@ -310,7 +317,8 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 		tank.readFromNBT(tag);
-
+		xpOutputs.readFromNBT(tag, "xpoutputs");
+		itemOutputs.readFromNBT(tag, "itemoutputs");
 	}
 
 	@Override
@@ -346,7 +354,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 }

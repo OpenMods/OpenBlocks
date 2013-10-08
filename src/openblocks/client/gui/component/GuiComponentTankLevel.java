@@ -30,6 +30,7 @@ public class GuiComponentTankLevel extends GuiComponentBox {
 			minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
+			tessellator.setColorOpaque_F(1, 1, 1);
 			Icon icon = stack.getFluid().getIcon();
 			if (icon != null) {
 				double fluidHeight = (height - 3) * percentFull;
