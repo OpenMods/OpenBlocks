@@ -119,7 +119,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 	}
 
 	public void sync() {
-		syncMap.sync(((TileEntity)this.getTileEntity()).worldObj, this, 0, 0, 0, 0);
+		//syncMap.sync(((TileEntity)this.getTileEntity()).worldObj, this, 0, 0, 0, 0);
 	}
 
 	@Override

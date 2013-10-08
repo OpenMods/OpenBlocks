@@ -1,6 +1,8 @@
 package openblocks.client.gui.component;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -9,7 +11,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.sync.SyncableDirectionSet;
+import openblocks.sync.SyncableFlags;
 import openblocks.utils.SidePicker;
 import openblocks.utils.SidePicker.HitCoord;
 import openblocks.utils.Trackball.TrackballWrapper;
@@ -29,16 +31,16 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private ForgeDirection lastSideHovered;
 
 	private int movedTicks = 0;
+	
+	public SyncableFlags enabledDirections;
 
-	private SyncableDirectionSet enabledDirections;
-
-	public GuiComponentSideSelector(int x, int y, double scale, SyncableDirectionSet directions, ISideSelectionCallback iSideSelectionCallback) {
+	public GuiComponentSideSelector(int x, int y, double scale, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
 		this.callback = iSideSelectionCallback;
 		this.enabledDirections = directions;
 	}
-
+	
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
@@ -47,6 +49,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		GL11.glScaled(scale, scale, scale);
 		trackball.update(mouseX - 50, mouseY - 50); // TODO: replace with proper
 													// width,height
+		
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
@@ -114,7 +117,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 	}
 
 	private void setFaceColor(ForgeDirection dir) {
-		if (enabledDirections.getValue().contains(dir)) {
+		if (enabledDirections.get(dir)) {
 			Tessellator.instance.setColorOpaque_F(1, 0, 0);
 		} else {
 			Tessellator.instance.setColorOpaque_F(1, 1, 1);
@@ -130,7 +133,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 	@Override
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
-		if (movedTicks < 5 && lastSideHovered != null && callback != null) {
+		if (movedTicks < 5 && lastSideHovered != null && lastSideHovered != ForgeDirection.UNKNOWN && callback != null) {
 			callback.onSideSelected(lastSideHovered);
 		}
 	}

@@ -20,7 +20,7 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
 import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableDirectionSet;
+import openblocks.sync.SyncableFlags;
 import openblocks.utils.CollectionUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
@@ -38,20 +38,20 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		xpOutputs,
 		itemOutputs
 	}
-
-	public SyncableDirectionSet xpOutputs = new SyncableDirectionSet();
-	public SyncableDirectionSet itemOutputs = new SyncableDirectionSet();
+	
+	public SyncableFlags xpOutputs = new SyncableFlags();
+	public SyncableFlags itemOutputs = new SyncableFlags();
 
 	public TileEntityVacuumHopper() {
 		addSyncedObject(Keys.xpOutputs, xpOutputs);
 		addSyncedObject(Keys.itemOutputs, itemOutputs);
 	}
 
-	public SyncableDirectionSet getXPOutputs() {
+	public SyncableFlags getXPOutputs() {
 		return xpOutputs;
 	}
 
-	public SyncableDirectionSet getItemOutputs() {
+	public SyncableFlags getItemOutputs() {
 		return itemOutputs;
 	}
 
@@ -99,8 +99,11 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 		if (!worldObj.isRemote) {
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
 
-				ForgeDirection directionToOutputXP = CollectionUtils.getRandom(xpOutputs.getValue());
-
+				Integer slotDirection = CollectionUtils.getRandom(xpOutputs.getActiveSlots());
+				ForgeDirection directionToOutputXP = null;
+				if (slotDirection != null) {
+					directionToOutputXP = ForgeDirection.getOrientation(slotDirection);
+				}
 				TileEntity tileOnSurface = null;
 
 				if (directionToOutputXP != null) {
@@ -133,8 +136,12 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 					}
 				}
 
-				ForgeDirection directionToOutputItem = CollectionUtils.getRandom(itemOutputs.getValue());
-
+				slotDirection = CollectionUtils.getRandom(itemOutputs.getActiveSlots());
+				ForgeDirection directionToOutputItem = null;
+				if (slotDirection != null) {
+					directionToOutputItem = ForgeDirection.getOrientation(slotDirection);
+				}
+				
 				if (directionToOutputItem != null) {
 
 					tileOnSurface = getTileInDirection(directionToOutputItem);
@@ -260,7 +267,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 				EntityItem item = (EntityItem)entity;
 				ItemStack stack = item.getEntityItem().copy();
 				InventoryUtils.insertItemIntoInventory(inventory, stack);
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				if (stack.stackSize == 0) {
 					item.setDead();
 				} else {
@@ -340,6 +346,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements IInve
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(List<ISyncableObject> changes) {
+	}
 
 }

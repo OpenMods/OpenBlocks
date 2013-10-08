@@ -6,6 +6,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openblocks.sync.SyncableFlags;
 
 public class ModelVacuumHopper extends ModelBase {
 
@@ -41,39 +42,39 @@ public class ModelVacuumHopper extends ModelBase {
 
 		float f5 = 0.0625F;
 		middle.render(f5);
-		Set<ForgeDirection> outputs = hopper.getXPOutputs().getValue();
-		outputs.addAll(hopper.getItemOutputs().getValue());
-		if (outputs.contains(ForgeDirection.UP)) {
+		SyncableFlags itemOutputs = hopper.getItemOutputs();
+		SyncableFlags xpOutputs = hopper.getXPOutputs();
+		if (itemOutputs.get(ForgeDirection.UP) || xpOutputs.get(ForgeDirection.UP)) {
 			output.rotateAngleX = output2.rotateAngleX = 0;
 			output.rotateAngleZ = output2.rotateAngleZ = 0;
 			output.render(f5);
 			output2.render(f5);
 		}
-		if (outputs.contains(ForgeDirection.DOWN)) {
+		if (itemOutputs.get(ForgeDirection.DOWN) || xpOutputs.get(ForgeDirection.DOWN)) {
 			output.rotateAngleX = output2.rotateAngleX = (float)Math.toRadians(180);
 			output.rotateAngleZ = output2.rotateAngleZ = 0;
 			output.render(f5);
 			output2.render(f5);
 		}
-		if (outputs.contains(ForgeDirection.EAST)) {
+		if (itemOutputs.get(ForgeDirection.EAST) || xpOutputs.get(ForgeDirection.EAST)) {
 			output.rotateAngleX = output2.rotateAngleX = 0;
 			output.rotateAngleZ = output2.rotateAngleZ = (float)Math.toRadians(90);
 			output.render(f5);
 			output2.render(f5);
 		}
-		if (outputs.contains(ForgeDirection.WEST)) {
+		if (itemOutputs.get(ForgeDirection.WEST) || xpOutputs.get(ForgeDirection.WEST)) {
 			output.rotateAngleX = output2.rotateAngleX = 0;
 			output.rotateAngleZ = output2.rotateAngleZ = (float)Math.toRadians(-90);
 			output.render(f5);
 			output2.render(f5);
 		}
-		if (outputs.contains(ForgeDirection.NORTH)) {
+		if (itemOutputs.get(ForgeDirection.NORTH) || xpOutputs.get(ForgeDirection.NORTH)) {
 			output.rotateAngleX = output2.rotateAngleX = (float)Math.toRadians(-90);
 			output.rotateAngleZ = output2.rotateAngleZ = 0;
 			output.render(f5);
 			output2.render(f5);
 		}
-		if (outputs.contains(ForgeDirection.SOUTH)) {
+		if (itemOutputs.get(ForgeDirection.SOUTH) || xpOutputs.get(ForgeDirection.SOUTH)) {
 			output.rotateAngleX = output2.rotateAngleX = (float)Math.toRadians(90);
 			output.rotateAngleZ = output2.rotateAngleZ = 0;
 			output.render(f5);

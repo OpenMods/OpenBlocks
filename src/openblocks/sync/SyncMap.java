@@ -22,7 +22,6 @@ import openblocks.utils.ByteUtils;
 public abstract class SyncMap {
 
 	private int trackingRange = 64;
-	private long totalTrackingTime = 0;
 
 	public SyncMap() {}
 
@@ -84,27 +83,12 @@ public abstract class SyncMap {
 		}
 	}
 
-	/*
-	 * By registering each sync map statically with a primary sync manager, and
-	 * then running that at the end of each tick. We could spare a lot of
-	 * processing time and resources Just saying -NeverCast :)
-	 */
-
-	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
-		sync(worldObj, handler, x, y, z, 20);
-	}
-
 	public Set<EntityPlayer> getListeningPlayers(World worldObj, double x, double z, int trackingRange) {
 		return PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
 	}
 
-	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z, int tickUpdatePeriod) {
+	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (!worldObj.isRemote) {
-			// TODO: Test the shit out of this.
-			long worldTotalTime = OpenBlocks.proxy.getTicks(worldObj);
-			if (totalTrackingTime == 0) totalTrackingTime = worldTotalTime;
-			if (worldTotalTime - totalTrackingTime < tickUpdatePeriod) return;
-			totalTrackingTime = worldTotalTime; // Out with the old
 			Set<EntityPlayer> players = getListeningPlayers(worldObj, x, z, trackingRange);
 
 			if (players.size() > 0) {
@@ -128,14 +112,12 @@ public abstract class SyncMap {
 							if (usersInRange.contains(player.entityId)) {
 								if (hasChanges) {
 									if (changePacket == null) {
-										// System.out.println("Creating change packet");
 										changePacket = createPacket(handler, false);
 									}
 									packetToSend = changePacket;
 								}
 							} else {
 								if (fullPacket == null) {
-									// System.out.println("Creating full packet");
 									fullPacket = createPacket(handler, true);
 								}
 								packetToSend = fullPacket;

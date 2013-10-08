@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncableObject;
@@ -61,8 +62,10 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements IAwareTil
 				trappedEntity.motionZ = 0;
 			}
 		}
-
-		sync(2, false);
+		
+		if (OpenBlocks.proxy.getTicks(worldObj) % 4 == 0) {
+			sync(false);
+		}
 	}
 
 	public void onEntityCollided(Entity entity) {

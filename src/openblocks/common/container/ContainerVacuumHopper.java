@@ -14,6 +14,7 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 		super(playerInventory, hopper);
 		addInventoryGrid(44, 20, 5);
 		addPlayerInventorySlots(69);
+		hopper.sync();
 	}
 
 	@Override
@@ -22,17 +23,16 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 
 	@Override
 	public void onServerButtonClicked(EntityPlayer player, int buttonId) {
-		onClientButtonClicked(buttonId);
+		if (buttonId < 7) {
+			getTileEntity().getXPOutputs().toggle(ForgeDirection.getOrientation(buttonId));
+		} else {
+			getTileEntity().getItemOutputs().toggle(ForgeDirection.getOrientation(buttonId - 7));
+		}
 		getTileEntity().sync(false);
 	}
 
 	@Override
 	public void onClientButtonClicked(int buttonId) {
-		if (buttonId >= 0 && buttonId <= 7) {
-			getTileEntity().getXPOutputs().toggleDirection(ForgeDirection.getOrientation(buttonId));
-		} else {
-			getTileEntity().getItemOutputs().toggleDirection(ForgeDirection.getOrientation(buttonId - 7));
-		}
 	}
 
 }
