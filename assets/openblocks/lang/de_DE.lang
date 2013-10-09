@@ -3,6 +3,7 @@ openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
 openblocks.gui.vacuumhopper=Vakuumtrichter
 openblocks.gui.bigbutton=Großer Knopf
+openblocks.gui.xpbottler.name=XP-Abfüllgerät
 
 openblocks.misc.uses=Nutzt: %.2f
 openblocks.misc.color=Farbe: %06X
@@ -29,6 +30,7 @@ tile.openblocks.sponge.name=Schwamm
 tile.openblocks.cannon.name=Item-Kanone
 tile.openblocks.bigbutton.name=Großer Knopf
 tile.openblocks.fan.name=Ventilator
+tile.openblocks.xpbottler.name=XP-Abfüllgerät
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
