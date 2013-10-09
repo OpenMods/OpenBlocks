@@ -12,6 +12,7 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
+import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 
 public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
@@ -128,8 +129,8 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		
+		setRotation(BlockUtils.get2dOrientation(player));
+		sync();
 	}
 
 	@Override

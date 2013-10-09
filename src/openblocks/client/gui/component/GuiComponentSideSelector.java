@@ -58,22 +58,22 @@ public class GuiComponentSideSelector extends BaseComponent {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 
 		setFaceColor(ForgeDirection.WEST);
-		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
+		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, 0));
 
 		setFaceColor(ForgeDirection.EAST);
-		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
+		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, 0));
 
 		setFaceColor(ForgeDirection.UP);
-		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
+		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, 0));
 
 		setFaceColor(ForgeDirection.DOWN);
 		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 
 		setFaceColor(ForgeDirection.NORTH);
-		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
+		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, 0));
 
 		setFaceColor(ForgeDirection.SOUTH);
-		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
+		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, 0));
 		t.draw();
 
 		GL11.glPointSize(10);
