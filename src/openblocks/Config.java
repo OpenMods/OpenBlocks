@@ -370,12 +370,11 @@ public class Config {
 		if (Config.canRegisterBlock(blockFanId)) {
 			OpenBlocks.Blocks.fan = new BlockFan();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.fan), new Object[] { "f", "i", "s", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab) }));
-
 		}
 		
 		if (Config.canRegisterBlock(blockXPBottlerId)) {
 			OpenBlocks.Blocks.xpBottler = new BlockXPBottler();
-			// TODO: recipe
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.xpBottler), new Object[] { "iii", "ibi", "iii", 'i', new ItemStack(Item.ingotIron), 'b', new ItemStack(Item.glassBottle) }));
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
