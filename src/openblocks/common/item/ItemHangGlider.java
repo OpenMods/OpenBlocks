@@ -1,6 +1,9 @@
 package openblocks.common.item;
 
+import java.util.Map;
+
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,8 +31,14 @@ public class ItemHangGlider extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		EntityHangGlider glider = EntityHangGlider.getMapForSide(world.isRemote).get(player);
-		if (glider != null) {
+		Map<EntityPlayer, Integer> map = EntityHangGlider.getMapForSide(world.isRemote);
+		if (map.containsKey(player)) {
+			int entityId = map.get(player);
+			Entity entity = world.getEntityByID(entityId);
+			if (!(entity instanceof EntityHangGlider)) {
+				return itemStack;
+			}
+			EntityHangGlider glider = (EntityHangGlider) entity;
 			glider.despawnGlider();
 		} else {
 			spawnGlider(world, player);
