@@ -16,6 +16,7 @@ import openblocks.common.block.*;
 import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
+import openblocks.integration.ModuleComputerCraft;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 
@@ -141,6 +142,8 @@ public class OpenBlocks {
 		OpenBlocks.Items.generic.initRecipes();
 
 		MagnetWhitelists.instance.initTesters();
+
+		if (Loader.isModLoaded(openblocks.Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
 
 		proxy.init();
 

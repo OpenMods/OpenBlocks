@@ -15,7 +15,7 @@ public class Trackball {
 		private final Trackball target = new Trackball();
 		private final float radius;
 		private final int mouseButton;
-		private boolean isDraging;
+		private boolean isDragging;
 
 		public TrackballWrapper(int mouseButton, int radiusPx) {
 			this.mouseButton = mouseButton;
@@ -27,15 +27,15 @@ public class Trackball {
 			float my = mouseY / radius;
 
 			boolean buttonState = Mouse.isButtonDown(mouseButton);
-			if (!isDraging && buttonState) {
-				isDraging = true;
+			if (!isDragging && buttonState) {
+				isDragging = true;
 				target.startDrag(mx, my);
-			} else if (isDraging && !buttonState) {
-				isDraging = false;
+			} else if (isDragging && !buttonState) {
+				isDragging = false;
 				target.endDrag(mx, my);
 			}
 
-			target.applyTransform(mx, my, isDraging);
+			target.applyTransform(mx, my, isDragging);
 		}
 	}
 
@@ -77,12 +77,9 @@ public class Trackball {
 
 	}
 
-	public void applyTransform(float mouseX, float mouseY, boolean isDraging) {
-		Matrix4f transform;
-		if (isDraging) transform = getTransform(mouseX, mouseY);
-		else transform = lastTransform;
+	public void applyTransform(float mouseX, float mouseY, boolean isDragging) {
+		Matrix4f transform = isDragging? getTransform(mouseX, mouseY) : lastTransform;
 
-		matrixBuffer.clear();
 		transform.store(matrixBuffer);
 		matrixBuffer.flip();
 

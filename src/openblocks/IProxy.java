@@ -15,19 +15,9 @@ public interface IProxy {
 
 	public void registerRenderInformation();
 
-	/**
-	 * Is this the server
-	 * 
-	 * @return true if this is the server
-	 */
-	public boolean isServer();
+	public boolean isServerOnly();
 
-	/**
-	 * Is this the client
-	 * 
-	 * @return true if this is the client
-	 */
-	public boolean isClient();
+	public boolean isServerThread();
 
 	public File getWorldDir(World world);
 

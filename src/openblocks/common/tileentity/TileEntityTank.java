@@ -454,9 +454,7 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 
 	public double getPercentFull() {
 		if (containsValidLiquid()) {
-			if (worldObj == null || worldObj.isRemote) {
-				return interpolatedRenderAmount / (double)Short.MAX_VALUE;
-			}
+			if (worldObj == null || worldObj.isRemote) { return interpolatedRenderAmount / (double)Short.MAX_VALUE; }
 			return liquidRenderAmount.getValue() / (double)Short.MAX_VALUE;
 		}
 		return 0D; /* No D for you ;) */

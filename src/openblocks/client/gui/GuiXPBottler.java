@@ -45,7 +45,7 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 				getContainer().sendButtonClick(direction.ordinal() + 7);
 			}
 		});
-		
+
 		glassInputTab = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.glassBottle, 1), 100, 100);
 		glassInputTab.addComponent(glassSideSelector);
 		glassInputTab.addComponent(glassSideSelector);

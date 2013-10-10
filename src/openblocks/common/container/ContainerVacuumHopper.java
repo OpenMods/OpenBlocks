@@ -13,12 +13,12 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 
 	private SyncableInt xpBufferAmount = new SyncableInt();
 	private SyncableInt xpBufferCapacity = new SyncableInt();
-	
+
 	public enum Keys {
 		xpBufferAmount,
 		xpBufferCapacity
 	}
-	
+
 	public ContainerVacuumHopper(IInventory playerInventory, TileEntityVacuumHopper hopper) {
 		super(playerInventory, hopper);
 		addInventoryGrid(44, 20, 5);
@@ -29,9 +29,9 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 	}
 
 	public double getXPBufferRatio() {
-		return (double) xpBufferAmount.getValue() / (double) xpBufferCapacity.getValue();
+		return (double)xpBufferAmount.getValue() / (double)xpBufferCapacity.getValue();
 	}
-	
+
 	@Override
 	public void detectAndSendChanges() {
 		// sync the fluid amount and capacity via the container
@@ -40,10 +40,9 @@ public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHo
 		xpBufferCapacity.setValue(getTileEntity().getTank().getCapacity());
 		super.detectAndSendChanges();
 	}
-	
+
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
 	public void onServerButtonClicked(EntityPlayer player, int buttonId) {

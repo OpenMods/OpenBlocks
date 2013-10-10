@@ -24,7 +24,7 @@ public class SyncableInt implements ISyncableObject {
 	public void readFromStream(DataInputStream stream) throws IOException {
 		value = stream.readInt();
 	}
-	
+
 	public int getTicksSinceChange() {
 		return ticksSinceChange;
 	}

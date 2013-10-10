@@ -1,13 +1,13 @@
 package openblocks.common.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import openblocks.Config;
-import openblocks.common.tileentity.TileEntityXPBottler;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
+import openblocks.common.tileentity.TileEntityXPBottler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockXPBottler extends OpenBlock {
 
@@ -18,7 +18,7 @@ public class BlockXPBottler extends OpenBlock {
 		public static Icon front;
 		public static Icon bottom;
 	}
-	
+
 	public BlockXPBottler() {
 		super(Config.blockXPBottlerId, Material.ground);
 		setupBlock(this, "xpbottler", TileEntityXPBottler.class);
@@ -32,23 +32,21 @@ public class BlockXPBottler extends OpenBlock {
 		icons.sides = registry.registerIcon(String.format("%s:%s", modKey, "xpbottler_sides"));
 		icons.front = registry.registerIcon(String.format("%s:%s", modKey, "xpbottler_front"));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-    @Override
-    public Icon getIcon(int side, int meta) {
+	@Override
+	public Icon getIcon(int side, int meta) {
 		ForgeDirection sidedir = ForgeDirection.getOrientation(side);
 		ForgeDirection dir = ForgeDirection.getOrientation((meta & 0x3) + 2);
-    	if (sidedir == ForgeDirection.UP) {
-    		return icons.top;
-    	}else if (sidedir == ForgeDirection.DOWN){
-    		return icons.bottom;
-    	}else {
-    		if (sidedir == dir) {
-    			return icons.back;
-    		}else if (sidedir == dir.getOpposite()) {
-    			return icons.front;
-    		}
-    	}
+		if (sidedir == ForgeDirection.UP) {
+			return icons.top;
+		} else if (sidedir == ForgeDirection.DOWN) {
+			return icons.bottom;
+		} else {
+			if (sidedir == dir) {
+				return icons.back;
+			} else if (sidedir == dir.getOpposite()) { return icons.front; }
+		}
 		return icons.sides;
-    }
+	}
 }
