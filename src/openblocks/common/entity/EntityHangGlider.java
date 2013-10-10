@@ -36,11 +36,13 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	public static boolean isPlayerOnGround(Entity player) {
 		Integer gliderId = gliderClientMap.get(player);
-		Entity glider = player.worldObj.getEntityByID(gliderId);
-		if (!(glider instanceof EntityHangGlider)) {
-			return false;
+		if (gliderId != null) {
+			Entity glider = player.worldObj.getEntityByID(gliderId);
+			if (glider instanceof EntityHangGlider) 
+				return ((EntityHangGlider)glider).isPlayerOnGround();
 		}
-		return glider == null || ((EntityHangGlider)glider).isPlayerOnGround();
+		
+		return true;
 	}
 
 	@SideOnly(Side.CLIENT)
