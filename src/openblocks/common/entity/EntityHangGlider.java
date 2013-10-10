@@ -38,10 +38,9 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		Integer gliderId = gliderClientMap.get(player);
 		if (gliderId != null) {
 			Entity glider = player.worldObj.getEntityByID(gliderId);
-			if (glider instanceof EntityHangGlider) 
-				return ((EntityHangGlider)glider).isPlayerOnGround();
+			if (glider instanceof EntityHangGlider) return ((EntityHangGlider)glider).isPlayerOnGround();
 		}
-		
+
 		return true;
 	}
 
@@ -55,7 +54,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			if (!(entity instanceof EntityHangGlider)) {
 				continue;
 			}
-			EntityHangGlider glider = (EntityHangGlider) entity;
+			EntityHangGlider glider = (EntityHangGlider)entity;
 			if (player == null || player.isDead || glider == null || glider.isDead || player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemHangGlider)
 					|| player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
 				glider.setDead();

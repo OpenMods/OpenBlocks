@@ -35,10 +35,8 @@ public class ItemHangGlider extends Item {
 		if (map.containsKey(player)) {
 			int entityId = map.get(player);
 			Entity entity = world.getEntityByID(entityId);
-			if (!(entity instanceof EntityHangGlider)) {
-				return itemStack;
-			}
-			EntityHangGlider glider = (EntityHangGlider) entity;
+			if (!(entity instanceof EntityHangGlider)) { return itemStack; }
+			EntityHangGlider glider = (EntityHangGlider)entity;
 			glider.despawnGlider();
 		} else {
 			spawnGlider(world, player);

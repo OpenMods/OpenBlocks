@@ -117,7 +117,10 @@
 		
 		<!-- Copy resources -->
 		<copy todir="${classes.dir}">
-			<fileset dir="." includes="mcmod.info" />
+			<fileset dir=".">
+				<include name="mcmod.info" />
+				<include name="pack.mcmeta" />
+			</fileset>
 			<filterset>
 				<filter token="VERSION" value="${mod.version}"/>
 			</filterset>

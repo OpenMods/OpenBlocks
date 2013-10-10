@@ -45,7 +45,7 @@ public class SyncableFlags implements ISyncableObject {
 	public void toggle(Enum<?> slot) {
 		set(slot, !get(slot));
 	}
-	
+
 	public Set<Integer> getActiveSlots() {
 		Set<Integer> set = new HashSet<Integer>();
 		for (int i = 0; i < 16; i++) {
@@ -55,7 +55,7 @@ public class SyncableFlags implements ISyncableObject {
 		}
 		return set;
 	}
-	
+
 	public void set(int slot, boolean bool) {
 		short newVal = ByteUtils.set(value, slot, bool);
 		if (newVal != value) {

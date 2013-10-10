@@ -44,18 +44,18 @@ public class CraneRegistry {
 		EntityMagnet result = magnetData.get(player);
 
 		if (result == null || result.isDead) {
-			result = createMagnet(player);
+			result = createMagnetForPlayer(player);
 		} else if (!result.isValid()) {
 			result.setDead();
-			result = createMagnet(player);
+			result = createMagnetForPlayer(player);
 		}
 
 		return result;
 	}
 
-	private static EntityMagnet createMagnet(EntityPlayer player) {
+	private static EntityMagnet createMagnetForPlayer(EntityPlayer player) {
 		IOwner provider = new EntityPlayerTarget(player);
-		EntityMagnet result = new EntityMagnet(player.worldObj, provider);
+		EntityMagnet result = new EntityMagnet(player.worldObj, provider, false);
 		player.worldObj.spawnEntityInWorld(result);
 		return result;
 	}

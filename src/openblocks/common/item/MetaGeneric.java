@@ -63,12 +63,11 @@ public class MetaGeneric implements IMetaItem {
 	}
 
 	@Override
-	public boolean displayInCreative() {
-		return true;
+	public void registerIcons(IconRegister register) {
+		registerIcon(register, name);
 	}
 
-	@Override
-	public void registerIcons(IconRegister register) {
+	protected void registerIcon(IconRegister register, String name) {
 		icon = register.registerIcon(String.format("openblocks:%s", name));
 	}
 
@@ -87,6 +86,16 @@ public class MetaGeneric implements IMetaItem {
 				craftingRecipes.add((IRecipe)tmp);
 			} else throw new IllegalArgumentException("Invalid recipe object: " + tmp);
 		}
+	}
+
+	@Override
+	public void addToCreativeList(int itemId, int meta, List<ItemStack> result) {
+		result.add(new ItemStack(itemId, 1, meta));
+	}
+
+	@Override
+	public boolean hasEffect(int renderPass) {
+		return false;
 	}
 
 }

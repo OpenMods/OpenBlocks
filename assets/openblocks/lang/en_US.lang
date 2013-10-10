@@ -13,6 +13,8 @@ openblocks.misc.mode.panel=Panel
 openblocks.misc.mode.half_panel=Half-height panel
 openblocks.misc.mode.stairs=Stairs
 
+openblocks.turtle.magnet=Magnet
+
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
 tile.openblocks.guide.name=Building Guide
@@ -48,5 +50,6 @@ item.openblocks.crane_engine.name=Crane Engine
 item.openblocks.crane_magnet.name=Crane Magnet
 item.openblocks.beam.name=Beam
 item.openblocks.line.name=Line
+item.openblocks.miracle_magnet.name=§5Miracle Magnet§r
 
 itemGroup.tabOpenBlocks=OpenBlocks

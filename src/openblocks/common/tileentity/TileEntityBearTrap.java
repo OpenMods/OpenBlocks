@@ -62,7 +62,7 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements IAwareTil
 				trappedEntity.motionZ = 0;
 			}
 		}
-		
+
 		if (OpenBlocks.proxy.getTicks(worldObj) % 4 == 0) {
 			sync(false);
 		}

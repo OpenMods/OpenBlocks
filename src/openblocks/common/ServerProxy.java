@@ -28,25 +28,14 @@ public class ServerProxy implements IProxy {
 		return new File(OpenBlocks.getBaseDir(), DimensionManager.getWorld(0).getSaveHandler().getWorldDirectoryName());
 	}
 
-	/**
-	 * Is this the server
-	 * 
-	 * @return true if this is the server
-	 */
 	@Override
-	public boolean isServer() {
-		return true; // Why have this method? If the checking method changes in
-						// the future we fix it in one place.
+	public boolean isServerOnly() {
+		return true;
 	}
 
-	/**
-	 * Is this the client
-	 * 
-	 * @return true if this is the client
-	 */
 	@Override
-	public boolean isClient() {
-		return false;
+	public boolean isServerThread() {
+		return true;
 	}
 
 	/**

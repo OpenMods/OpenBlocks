@@ -29,11 +29,11 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private ForgeDirection lastSideHovered;
 
 	private int movedTicks = 0;
-	
+
 	public SyncableFlags enabledDirections;
 
 	private Block block;
-	
+
 	public GuiComponentSideSelector(int x, int y, double scale, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
@@ -41,7 +41,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		this.enabledDirections = directions;
 		this.block = block;
 	}
-	
+
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
@@ -50,7 +50,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		GL11.glScaled(scale, scale, scale);
 		trackball.update(mouseX - 50, mouseY - 50); // TODO: replace with proper
 													// width,height
-		
+
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
