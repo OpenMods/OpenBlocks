@@ -160,6 +160,8 @@ public class Config {
 	public static List<String> disableMobNames = Lists.newArrayList();
 	public static boolean doCraneCollisionCheck = false;
 	public static boolean craneShiftControl = true;
+	public static double turtleMagnetRange = 4;
+	public static boolean addCraneTurtles = true;
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -278,6 +280,12 @@ public class Config {
 
 		prop = configFile.get("crane", "boringMode", craneShiftControl, "Use shift to control crane direction (otherwise, toggle every time)");
 		craneShiftControl = prop.getBoolean(craneShiftControl);
+
+		prop = configFile.get("crane", "turtleMagnetRange", turtleMagnetRange, "Range of magnet CC peripheral");
+		turtleMagnetRange = prop.getDouble(turtleMagnetRange);
+
+		prop = configFile.get("crane", "addTurtles", addCraneTurtles, "Enable magnet turtles in creative list");
+		addCraneTurtles = prop.getBoolean(addCraneTurtles);
 	}
 
 	public static void register() {

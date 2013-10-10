@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -62,6 +63,22 @@ public class ItemGeneric extends Item {
 				);
 			}
 		},
+		miracleMagnet {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				ItemStack magnet = craneMagnet.newItemStack();
+				return new MetaMiracleMagnet("miracle_magnet",
+						new ShapedOreRecipe(result, "rer", "eme", "rer", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet),
+						new ShapedOreRecipe(result, "ere", "rmr", "ere", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet)
+				);
+			}
+
+			@Override
+			public boolean isEnabled() {
+				return Loader.isModLoaded(openblocks.Mods.COMPUTERCRAFT);
+			}
+		},
 		line {
 			@Override
 			public IMetaItem createMetaItem() {
@@ -81,6 +98,10 @@ public class ItemGeneric extends Item {
 		}
 
 		public abstract IMetaItem createMetaItem();
+
+		public boolean isEnabled() {
+			return true;
+		}
 	}
 
 	public ItemGeneric() {
@@ -93,7 +114,7 @@ public class ItemGeneric extends Item {
 
 	public void registerItems() {
 		for (Metas m : Metas.values())
-			metaitems.put(m.ordinal(), m.createMetaItem());
+			if (m.isEnabled()) metaitems.put(m.ordinal(), m.createMetaItem());
 	}
 
 	public void initRecipes() {
@@ -144,15 +165,19 @@ public class ItemGeneric extends Item {
 		return true;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack itemStack, int pass) {
+		IMetaItem meta = getMeta(itemStack.getItemDamage());
+		return meta != null? meta.hasEffect(pass) : false;
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs tab, List subItems) {
-		for (Entry<Integer, IMetaItem> entry : metaitems.entrySet()) {
-			if (entry.getValue().displayInCreative()) {
-				subItems.add(new ItemStack(id, 1, entry.getKey()));
-			}
-		}
+		for (Entry<Integer, IMetaItem> entry : metaitems.entrySet())
+			entry.getValue().addToCreativeList(id, entry.getKey(), subItems);
 	}
 
 	public IMetaItem getMeta(int id) {

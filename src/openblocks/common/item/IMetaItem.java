@@ -1,5 +1,7 @@
 package openblocks.common.item;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +21,11 @@ public interface IMetaItem {
 
 	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world);
 
-	public boolean displayInCreative();
-
 	public void registerIcons(IconRegister register);
 
 	public void addRecipe();
+
+	public void addToCreativeList(int itemId, int meta, List<ItemStack> result);
+
+	public boolean hasEffect(int renderPass);
 }

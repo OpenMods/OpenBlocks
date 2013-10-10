@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.ServerListenThread;
+import net.minecraft.server.ThreadMinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -130,24 +132,15 @@ public class ClientProxy implements IProxy {
 		return new File(OpenBlocks.getBaseDir(), "saves/" + world.getSaveHandler().getWorldDirectoryName());
 	}
 
-	/**
-	 * Is this the server
-	 * 
-	 * @return true if this is the server
-	 */
 	@Override
-	public boolean isServer() {
+	public boolean isServerOnly() {
 		return false;
 	}
 
-	/**
-	 * Is this the client
-	 * 
-	 * @return true if this is the client
-	 */
 	@Override
-	public boolean isClient() {
-		return true;
+	public boolean isServerThread() {
+		Thread thr = Thread.currentThread();
+		return thr instanceof ThreadMinecraftServer || thr instanceof ServerListenThread;
 	}
 
 	@Override
