@@ -8,9 +8,7 @@ import net.minecraft.nbt.NBTTagInt;
 public class ItemUtils {
 	public static ItemStack consumeItem(ItemStack stack) {
 		if (stack.stackSize == 1) {
-			if (stack.getItem().hasContainerItem()) {
-				return stack.getItem().getContainerItemStack(stack);
-			}
+			if (stack.getItem().hasContainerItem()) { return stack.getItem().getContainerItemStack(stack); }
 			return null;
 		}
 		stack.splitStack(1);

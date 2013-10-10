@@ -18,45 +18,45 @@ import openblocks.utils.EnchantmentUtils;
 public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
 
 	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
-	
+
 	private FluidTank tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE));
-	
+
 	private FluidStack xpFluid = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
-	
+
 	private ItemStack glassBottle = new ItemStack(Item.glassBottle, 1);
 	private ItemStack xpBottle = new ItemStack(Item.expBottle, 1);
-	
+
 	private SyncableInt progress = new SyncableInt();
 	private SyncableFlags glassSides = new SyncableFlags();
 	private SyncableFlags xpSides = new SyncableFlags();
-	
+
 	public static final int PROGRESS_TICKS = 40;
-	
+
 	public TileEntityXPBottler() {
-		
+
 	}
-	
+
 	public SyncableFlags getGlassSides() {
 		return glassSides;
 	}
-	
+
 	public SyncableFlags getXPSides() {
 		return xpSides;
 	}
-	
+
 	public SyncableInt getProgress() {
 		return progress;
 	}
-	
+
 	public double getProgressRatio() {
 		int p = progress.getValue();
 		if (p > 0) {
 			p += progress.getTicksSinceChange();
 		}
 		p = Math.max(0, Math.min(p, PROGRESS_TICKS));
-		return (double) p / (double) PROGRESS_TICKS;
+		return (double)p / (double)PROGRESS_TICKS;
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -67,12 +67,12 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 			}
 			if (progress.getValue() < PROGRESS_TICKS) {
 				progress.modify(1);
-			}else {
+			} else {
 				inventory.decrStackSize(0, 1);
 				tank.drain(tank.getFluidAmount(), true);
 				if (inventory.getStackInSlot(1) == null) {
 					inventory.setInventorySlotContents(1, xpBottle.copy());
-				}else {
+				} else {
 					ItemStack outputStack = inventory.getStackInSlot(1).copy();
 					outputStack.stackSize++;
 					inventory.setInventorySlotContents(1, outputStack);
@@ -81,35 +81,35 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 			}
 		}
 	}
-	
+
 	public boolean hasGlassInInput() {
 		ItemStack inputStack = inventory.getStackInSlot(0);
 		return inputStack != null && inputStack.isItemEqual(glassBottle);
 	}
-	
+
 	public boolean hasSpaceInOutput() {
 		ItemStack outputStack = inventory.getStackInSlot(1);
 		return outputStack == null || (outputStack.isItemEqual(xpBottle) && outputStack.stackSize < outputStack.getMaxStackSize());
 	}
-	
+
 	public boolean isTankFull() {
 		return tank.getFluidAmount() == tank.getCapacity();
 	}
-	
+
 	public FluidTank getTank() {
 		return tank;
 	}
-	
+
 	@Override
 	public void onBlockBroken() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onBlockAdded() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 	@Override
 	public void onNeighbourChanged(int blockId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -187,15 +187,15 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 	@Override
 	public void openChest() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void closeChest() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
@@ -203,7 +203,7 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 		tank.writeToNBT(tag);
 		progress.writeToNBT(tag, "progress");
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
@@ -219,17 +219,13 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource != null && resource.isFluidEqual(xpFluid)) {
-			return tank.fill(resource, doFill);
-		}
+		if (resource != null && resource.isFluidEqual(xpFluid)) { return tank.fill(resource, doFill); }
 		return 0;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (resource == null) {
-			return null;
-		}
+		if (resource == null) { return null; }
 		return tank.drain(resource.amount, doDrain);
 	}
 
@@ -249,7 +245,7 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) { 
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[] { tank.getInfo() };
 	}
 

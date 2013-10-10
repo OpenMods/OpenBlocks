@@ -1,18 +1,18 @@
 package openblocks.client.gui.component;
 
-import org.lwjgl.opengl.GL11;
-
-import openblocks.utils.CompatibilityUtils;
 import net.minecraft.client.Minecraft;
+import openblocks.utils.CompatibilityUtils;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiComponentProgress extends BaseComponent {
 
 	private double progress;
-	
+
 	public GuiComponentProgress(int x, int y) {
 		super(x, y);
 	}
-	
+
 	public void setProgress(double progress) {
 		this.progress = progress;
 	}

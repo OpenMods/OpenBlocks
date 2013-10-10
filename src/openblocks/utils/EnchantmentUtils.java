@@ -20,10 +20,7 @@ public class EnchantmentUtils {
 	{
 		Item item = itemStack.getItem();
 		int k = item.getItemEnchantability();
-		if (k <= 0)
-		{
-			return 0;
-		}
+		if (k <= 0) { return 0; }
 		if (power > 15)
 		{
 			power = 15;
