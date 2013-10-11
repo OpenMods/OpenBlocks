@@ -13,6 +13,8 @@ openblocks.misc.mode.panel=Platte
 openblocks.misc.mode.half_panel=Halbhohe Platte
 openblocks.misc.mode.stairs=Treppe
 
+openblocks.turtle.magnet=Magnetische
+
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.heal.name=Heiler
 tile.openblocks.guide.name=Bau-Hilfe
@@ -46,7 +48,8 @@ item.openblocks.crane_backpack.name=Kranrucksack
 item.openblocks.crane_control.name=Krankontrolle
 item.openblocks.crane_engine.name=Kranmotor
 item.openblocks.crane_magnet.name=Kranmagnet
-item.openblocks.beam.name=Beam
-item.openblocks.line.name=Line
+item.openblocks.beam.name=Strahl
+item.openblocks.line.name=Linie
+item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
 
 itemGroup.tabOpenBlocks=OpenBlocks
