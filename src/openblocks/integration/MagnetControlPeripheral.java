@@ -32,7 +32,7 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 
 	public static class Owner implements EntityMagnet.IOwner {
 
-		public final Vec3 target;
+		private final Vec3 target;
 		private WeakReference<ITurtleAccess> turtle;
 		private WeakReference<World> world;
 
@@ -50,8 +50,14 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 			this.target = Vec3.createVectorHelper(0, 0, 0);
 		}
 
+		public synchronized void setTarget(double x, double y, double z) {
+			target.xCoord = x;
+			target.yCoord = y;
+			target.zCoord = z;
+		}
+		
 		@Override
-		public Vec3 getTarget() {
+		public synchronized Vec3 getTarget() {
 			ITurtleAccess turtle = this.turtle.get();
 			if (turtle == null) return null;
 
@@ -116,10 +122,6 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 			target.xCoord = input.readDouble();
 			target.xCoord = input.readDouble();
 			target.xCoord = input.readDouble();
-		}
-
-		public void setTarget(Vec3 vector) {
-
 		}
 
 		@Override
@@ -199,9 +201,7 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 				double z = toDouble(arguments[2]);
 				if (!checkTargetRange(x, y, z)) return wrap(false, "Target out of range");
 
-				magnetOwner.target.xCoord = x;
-				magnetOwner.target.yCoord = y;
-				magnetOwner.target.zCoord = z;
+				magnetOwner.setTarget(x, y, z);
 				return TRUE;
 			}
 			case 3: {// getPosition
@@ -292,7 +292,7 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 
 	private Object[] spawnMagnet() {
 		EntityMagnet magnet = this.magnet.get();
-		if (magnet != null && !magnet.isDead) wrap(false, "Magnet already active");
+		if (magnet != null && !magnet.isDead) return wrap(false, "Magnet already active");
 		World world = turtle.getWorld();
 		if (world == null) {
 			Log.warn("Trying to spawn magnet, but turtle is unloaded");
