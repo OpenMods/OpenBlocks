@@ -98,9 +98,7 @@ public class GenericInventory implements ISidedInventory {
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		if (i >= this.inventoryContents.length) {
-			return null;
-		}
+		if (i >= this.inventoryContents.length) { return null; }
 		if (this.inventoryContents[i] != null) {
 			ItemStack itemstack = this.inventoryContents[i];
 			this.inventoryContents[i] = null;

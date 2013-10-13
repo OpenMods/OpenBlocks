@@ -37,7 +37,9 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
 
 	public enum Keys {
-		xpOutputs, itemOutputs, tankLevel
+		xpOutputs,
+		itemOutputs,
+		tankLevel
 	}
 
 	public SyncableFlags xpOutputs = new SyncableFlags();

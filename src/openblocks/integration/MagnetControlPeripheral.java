@@ -55,7 +55,7 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 			target.yCoord = y;
 			target.zCoord = z;
 		}
-		
+
 		@Override
 		public synchronized Vec3 getTarget() {
 			ITurtleAccess turtle = this.turtle.get();

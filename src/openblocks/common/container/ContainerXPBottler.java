@@ -21,6 +21,7 @@ public class ContainerXPBottler extends ContainerInventory<TileEntityXPBottler> 
 		onClientButtonClicked(buttonId);
 	}
 
+	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		TileEntityXPBottler xpBottler = getTileEntity();

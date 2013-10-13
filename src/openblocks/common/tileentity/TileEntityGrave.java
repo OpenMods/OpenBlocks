@@ -19,8 +19,7 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IInventoryContainer;
 import openblocks.common.api.ISurfaceAttachment;
 
-public class TileEntityGrave extends TileEntity implements IInventoryContainer,
-		ISurfaceAttachment {
+public class TileEntityGrave extends TileEntity implements IInventoryContainer, ISurfaceAttachment {
 
 	private ForgeDirection rotation = ForgeDirection.SOUTH;
 	private String perishedUsername;

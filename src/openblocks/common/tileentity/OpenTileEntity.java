@@ -58,8 +58,9 @@ public abstract class OpenTileEntity extends TileEntity {
 	 * @param rot
 	 */
 	public void setRotation(ForgeDirection rot) {
-		if (rot == ForgeDirection.UP || rot == ForgeDirection.DOWN
-				|| rot == ForgeDirection.UNKNOWN) {
+		if (rot == ForgeDirection.UP ||
+				rot == ForgeDirection.DOWN ||
+				rot == ForgeDirection.UNKNOWN) {
 			rot = ForgeDirection.EAST;
 		}
 		rotation = rot;

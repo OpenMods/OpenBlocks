@@ -13,8 +13,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public abstract class ContainerInventory<T extends IInventory> extends
-		Container {
+public abstract class ContainerInventory<T extends IInventory> extends Container {
 
 	protected final int inventorySize;
 	protected final IInventory playerInventory;
