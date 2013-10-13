@@ -21,6 +21,7 @@ import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
+import openblocks.sync.SyncableInt;
 import openblocks.utils.CollectionUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
@@ -36,16 +37,17 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
 
 	public enum Keys {
-		xpOutputs,
-		itemOutputs
+		xpOutputs, itemOutputs, tankLevel
 	}
 
 	public SyncableFlags xpOutputs = new SyncableFlags();
 	public SyncableFlags itemOutputs = new SyncableFlags();
+	public SyncableInt tankLevel = new SyncableInt();
 
 	public TileEntityVacuumHopper() {
 		addSyncedObject(Keys.xpOutputs, xpOutputs);
 		addSyncedObject(Keys.itemOutputs, itemOutputs);
+		addSyncedObject(Keys.tankLevel, tankLevel);
 	}
 
 	public SyncableFlags getXPOutputs() {
@@ -103,6 +105,9 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 		}
 
 		if (!worldObj.isRemote) {
+
+			tankLevel.setValue(tank.getFluidAmount());
+
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
 
 				Integer slotDirection = CollectionUtils.getRandom(xpOutputs.getActiveSlots());
@@ -113,7 +118,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 				TileEntity tileOnSurface = null;
 
 				if (directionToOutputXP != null) {
-
 					tileOnSurface = getTileInDirection(directionToOutputXP);
 
 					IFluidHandler fluidHandler = null;
@@ -352,6 +356,10 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[] { tank.getInfo() };
+	}
+
+	public double getXPBufferRatio() {
+		return (double)tankLevel.getValue() / (double)tank.getCapacity();
 	}
 
 	@Override

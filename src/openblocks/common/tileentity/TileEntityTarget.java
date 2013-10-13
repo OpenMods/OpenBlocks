@@ -11,7 +11,8 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.api.ISurfaceAttachment;
 
-public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachment {
+public class TileEntityTarget extends OpenTileEntity implements
+		ISurfaceAttachment {
 
 	private int strength = 0;
 	private int tickCounter = -1;

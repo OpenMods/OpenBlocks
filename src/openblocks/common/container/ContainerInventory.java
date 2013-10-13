@@ -1,7 +1,5 @@
 package openblocks.common.container;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,20 +12,13 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import openblocks.sync.ISyncHandler;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapContainer;
 
 public abstract class ContainerInventory<T extends IInventory> extends
-		Container implements ISyncHandler {
+		Container {
 
 	protected final int inventorySize;
 	protected final IInventory playerInventory;
 	private final T inventory;
-
-	public SyncMapContainer syncMap;
 
 	protected static class RestrictedSlot extends Slot {
 
@@ -45,7 +36,6 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		this.inventorySize = entity.getSizeInventory();
 		this.playerInventory = playerInventory;
 		this.inventory = entity;
-		this.syncMap = new SyncMapContainer(this);
 	}
 
 	protected void addInventoryGrid(int xOffset, int yOffset, int width) {
@@ -101,30 +91,6 @@ public abstract class ContainerInventory<T extends IInventory> extends
 
 	public int getInventorySize() {
 		return inventorySize;
-	}
-
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		sync();
-	}
-
-	@Override
-	public SyncMap getSyncMap() {
-		return syncMap;
-	}
-
-	public void addSyncedObject(Enum<?> id, ISyncableObject object) {
-		syncMap.put(id, object);
-	}
-
-	public void sync() {
-		syncMap.sync(((TileEntity)this.getTileEntity()).worldObj, this, 0, 0, 0);
-	}
-
-	@Override
-	public void writeIdentifier(DataOutputStream dos) throws IOException {
-		dos.writeInt(this.windowId);
 	}
 
 	@SuppressWarnings("unchecked")

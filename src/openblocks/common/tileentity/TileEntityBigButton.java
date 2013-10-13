@@ -17,7 +17,8 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, ISurfaceAttachment, IInventory {
+public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
+		ISurfaceAttachment, IInventory {
 
 	private int tickCounter = 0;
 
@@ -69,7 +70,8 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile, I
 		super.sync();
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton.blockID);
 		ForgeDirection rot = getRotation();
-		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
+		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord
+				+ rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
 
 	}
 

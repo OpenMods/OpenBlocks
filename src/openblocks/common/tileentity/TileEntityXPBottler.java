@@ -1,5 +1,8 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -10,12 +13,14 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
+import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 
-public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
+public class TileEntityXPBottler extends NetworkedTileEntity implements
+		IAwareTile, ISidedInventory, IFluidHandler {
 
 	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
 
@@ -26,14 +31,24 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 	private ItemStack glassBottle = new ItemStack(Item.glassBottle, 1);
 	private ItemStack xpBottle = new ItemStack(Item.expBottle, 1);
 
+	/** Ids of the data objects we'll sync **/
+	public enum Keys {
+		glassSides, xpSides, progress, tankLevel
+	}
+
+	/** synced data objects **/
 	private SyncableInt progress = new SyncableInt();
 	private SyncableFlags glassSides = new SyncableFlags();
 	private SyncableFlags xpSides = new SyncableFlags();
+	private SyncableInt tankLevel = new SyncableInt();
 
 	public static final int PROGRESS_TICKS = 40;
 
 	public TileEntityXPBottler() {
-
+		addSyncedObject(Keys.glassSides, glassSides);
+		addSyncedObject(Keys.xpSides, xpSides);
+		addSyncedObject(Keys.progress, progress);
+		addSyncedObject(Keys.tankLevel, tankLevel);
 	}
 
 	public SyncableFlags getGlassSides() {
@@ -61,6 +76,8 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
+			tankLevel.setValue(tank.getFluidAmount());
+
 			if (!hasSpaceInOutput() || !hasGlassInInput() || !isTankFull()) {
 				progress.setValue(0);
 				return;
@@ -89,7 +106,8 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 
 	public boolean hasSpaceInOutput() {
 		ItemStack outputStack = inventory.getStackInSlot(1);
-		return outputStack == null || (outputStack.isItemEqual(xpBottle) && outputStack.stackSize < outputStack.getMaxStackSize());
+		return outputStack == null
+				|| (outputStack.isItemEqual(xpBottle) && outputStack.stackSize < outputStack.getMaxStackSize());
 	}
 
 	public boolean isTankFull() {
@@ -251,18 +269,40 @@ public class TileEntityXPBottler extends OpenTileEntity implements IAwareTile, I
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return new int[0];
+		Set<Integer> activeArr = glassSides.getActiveSlots();
+		int[] active = new int[activeArr.size()];
+		int i = 0;
+		for (Integer a : activeArr) {
+			active[i++] = a;
+		}
+		return active;
 	}
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		// TODO Auto-generated method stub
-		return false;
+		Item item = itemstack.getItem();
+		if (item == null) { return false; }
+		// slot 0, glass bottle, side accessible
+		return i == 0 && item == Item.glassBottle && glassSides.get(j);
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		Item item = itemstack.getItem();
+		if (item == null) { return false; }
+		if (item == Item.glassBottle) { return i == 0 && glassSides.get(j); }
+		if (item == Item.expBottle) { return i == 1 && xpSides.get(j); }
 		return false;
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public double getXPBufferRatio() {
+		return (double)tank.getCapacity() / (double)tankLevel.getValue();
 	}
 
 }

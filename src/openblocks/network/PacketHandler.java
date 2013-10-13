@@ -59,12 +59,10 @@ public class PacketHandler implements IPacketHandler {
 				Iterator<Chunk> iterator = mpInstance.loadedChunks.iterator();
 				while (iterator.hasNext()) {
 					Chunk testChunk = iterator.next();
-					System.out.println("That's a TRUE for updating player");
 					if (testChunk == chunk) return true;
 				}
 			}
 		}
-		System.out.println("Thats a FALSE for updating player");
 		return false;
 	}
 

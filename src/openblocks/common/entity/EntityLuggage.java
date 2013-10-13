@@ -29,8 +29,6 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 
 	public EntityLuggage(World world) {
 		super(world);
-		// Handled in renderer
-		// this.texture = OpenBlocks.getTexturesPath("models/luggage.png");
 		setSize(0.5F, 0.5F);
 		setAIMoveSpeed(0.7F);
 		setMoveForward(0);

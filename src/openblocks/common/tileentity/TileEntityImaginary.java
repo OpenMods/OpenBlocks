@@ -25,9 +25,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 	public static final double PANEL_HEIGHT = 0.1;
 
 	public enum Property {
-		VISIBLE,
-		SELECTABLE,
-		SOLID
+		VISIBLE, SELECTABLE, SOLID
 	}
 
 	private enum CollisionType {
@@ -118,7 +116,8 @@ public class TileEntityImaginary extends OpenTileEntity {
 
 		@Override
 		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y + height - PANEL_HEIGHT, z, x + 1, y + height, z + 1);
+			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y
+					+ height - PANEL_HEIGHT, z, x + 1, y + height, z + 1);
 			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
 		}
 

@@ -19,7 +19,8 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.ISurfaceAttachment;
 
-public class TileEntityLightbox extends TileEntity implements IInventory, ISurfaceAttachment {
+public class TileEntityLightbox extends TileEntity implements IInventory,
+		ISurfaceAttachment {
 
 	private GenericInventory inventory = new GenericInventory("lightbox", false, 1);
 
