@@ -301,7 +301,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 	}
 
 	public double getXPBufferRatio() {
-		return (double)tank.getCapacity() / (double)tankLevel.getValue();
+		return Math.max(0, Math.min(1, (double)tankLevel.getValue() / (double)tank.getCapacity()));
 	}
 
 	public void updateGuiValues() {

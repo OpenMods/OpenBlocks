@@ -357,7 +357,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	}
 
 	public double getXPBufferRatio() {
-		return (double)tankLevel.getValue() / (double)tank.getCapacity();
+		return Math.max(0, Math.min(1, (double)tankLevel.getValue() / (double)tank.getCapacity()));
 	}
 
 	@Override
