@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -272,13 +273,25 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		Set<Integer> activeArr = glassSides.getActiveSlots();
-		int[] active = new int[activeArr.size()];
-		int i = 0;
-		for (Integer a : activeArr) {
-			active[i++] = a;
+		boolean sideAllowsGlass = false;
+		boolean sideAllowsXP = false;
+		if (glassSides.getActiveSlots().contains(side)) {
+			sideAllowsGlass = true;
 		}
-		return active;
+		if (xpSides.getActiveSlots().contains(side)) {
+			sideAllowsXP = true;
+		}
+		if (sideAllowsXP && sideAllowsGlass) {
+			return new int[] { 0, 1 };
+		}
+		if (sideAllowsXP) {
+			return new int[] { 1 };
+		}
+		if (sideAllowsGlass) {
+			return new int[] { 0 };
+		}
+		
+		return new int[0];
 	}
 
 	@Override
