@@ -1,5 +1,5 @@
 <!-- nallar's BuildCraft ant build script edited for OpenBlocks-->
-<project name="OpenCCSensors" default="main">
+<project name="OpenBlocks" default="main">
 	<property environment="env"/>
 	<!-- Properties -->
 
@@ -87,6 +87,12 @@
 		<delete dir="${classes.dir}"/>
 		<mkdir dir="${classes.dir}"/>
 		
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${mcpsrc.dir}/openblocks" />
+			<fileset dir="${mcpsrc.dir}/buildcraft" />
+			<fileset dir="${mcpsrc.dir}/dan200" />
+		</delete>
+
 		<copy todir="${mcpsrc.dir}">
 			<fileset dir="${src.dir}"/>
 			<filterset>
@@ -137,5 +143,4 @@
 
 	<!-- Default target to run -->
 	<target name="main" depends="package"/>
-
 </project>
