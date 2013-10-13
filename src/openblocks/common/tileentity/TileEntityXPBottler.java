@@ -219,6 +219,8 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		inventory.writeToNBT(tag);
 		tank.writeToNBT(tag);
 		progress.writeToNBT(tag, "progress");
+		glassSides.writeToNBT(tag, "glass_sides");
+		xpSides.writeToNBT(tag, "xp_sides");
 	}
 
 	@Override
@@ -227,6 +229,8 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		inventory.readFromNBT(tag);
 		tank.readFromNBT(tag);
 		progress.readFromNBT(tag, "progress");
+		glassSides.readFromNBT(tag, "glass_sides");
+		xpSides.readFromNBT(tag, "xp_sides");
 	}
 
 	@Override

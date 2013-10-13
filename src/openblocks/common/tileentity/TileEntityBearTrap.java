@@ -63,9 +63,7 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 			}
 		}
 
-		if (OpenBlocks.proxy.getTicks(worldObj) % 4 == 0) {
-			sync(false);
-		}
+		sync(false);
 	}
 
 	public void onEntityCollided(Entity entity) {
