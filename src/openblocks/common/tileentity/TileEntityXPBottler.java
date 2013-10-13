@@ -76,7 +76,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			tankLevel.setValue(tank.getFluidAmount());
 
 			if (!hasSpaceInOutput() || !hasGlassInInput() || !isTankFull()) {
 				progress.setValue(0);
@@ -303,6 +302,10 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 
 	public double getXPBufferRatio() {
 		return (double)tank.getCapacity() / (double)tankLevel.getValue();
+	}
+
+	public void updateGuiValues() {
+		tankLevel.setValue(tank.getFluidAmount());
 	}
 
 }

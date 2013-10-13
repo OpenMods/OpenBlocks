@@ -106,8 +106,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 
 		if (!worldObj.isRemote) {
 
-			tankLevel.setValue(tank.getFluidAmount());
-
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
 
 				Integer slotDirection = CollectionUtils.getRandom(xpOutputs.getActiveSlots());
@@ -364,5 +362,9 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {}
+
+	public void updateGuiValues() {
+		tankLevel.setValue(tank.getFluidAmount());
+	}
 
 }

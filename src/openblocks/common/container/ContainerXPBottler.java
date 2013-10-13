@@ -23,7 +23,9 @@ public class ContainerXPBottler extends ContainerInventory<TileEntityXPBottler> 
 
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		getTileEntity().sync(false);
+		TileEntityXPBottler xpBottler = getTileEntity();
+		xpBottler.updateGuiValues();
+		xpBottler.sync(false);
 	}
 
 	@Override

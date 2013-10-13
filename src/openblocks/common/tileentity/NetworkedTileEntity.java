@@ -54,4 +54,5 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 		syncMap.handleTileDataPacket(pkt);
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
+	
 }

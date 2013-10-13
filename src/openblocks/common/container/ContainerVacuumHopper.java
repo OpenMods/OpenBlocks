@@ -32,7 +32,9 @@ public class ContainerVacuumHopper extends
 
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		getTileEntity().sync(false);
+		TileEntityVacuumHopper hopper = getTileEntity();
+		hopper.updateGuiValues();
+		hopper.sync(false);
 	}
 
 }
