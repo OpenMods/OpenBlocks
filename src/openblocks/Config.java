@@ -320,7 +320,7 @@ public class Config {
 		}
 		if (Config.canRegisterBlock(blockFlagId)) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag), new Object[] { "sw ", "sww", "s  ", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag, 3), new Object[] { "sww", "sw ", "s  ", 'w', new ItemStack(Block.carpet, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (Config.canRegisterBlock(blockTankId)) {
 			OpenBlocks.Blocks.tank = new BlockTank();
