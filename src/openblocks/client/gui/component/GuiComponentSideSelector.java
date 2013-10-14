@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.client.ClientGuiHandler;
 import openblocks.sync.SyncableFlags;
 import openblocks.utils.SidePicker;
 import openblocks.utils.SidePicker.HitCoord;
@@ -44,18 +45,19 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		
+		
 		GL11.glPushMatrix();
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
-		GL11.glScaled(scale, scale, scale);
-		trackball.update(mouseX - 50, mouseY - 50); // TODO: replace with proper
-													// width,height
+		GL11.glScaled(scale, -scale, scale);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		trackball.update(mouseX - 50, -(mouseY - 50)); // TODO: replace with proper
 
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
 		t.startDrawingQuads();
-		GL11.glDisable(GL11.GL_CULL_FACE);
 
 		setFaceColor(ForgeDirection.WEST);
 		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, 0));
@@ -64,45 +66,23 @@ public class GuiComponentSideSelector extends BaseComponent {
 		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, 0));
 
 		setFaceColor(ForgeDirection.UP);
-		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, 0));
+		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, 0));
 
 		setFaceColor(ForgeDirection.DOWN);
-		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
+		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
 
 		setFaceColor(ForgeDirection.NORTH);
 		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, 0));
 
 		setFaceColor(ForgeDirection.SOUTH);
 		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, 0));
-		
+
+		setFaceColor(ForgeDirection.DOWN);
+		GL11.glEnable(GL11.GL_BLEND);
+		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.8, -0.5, ClientGuiHandler.Icons.compass);
+
 		t.draw();
 
-
-		GL11.glPushMatrix();
-
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		GL11.glColor4f(0, 0, 0, 1);
-		GL11.glVertex3d(-0.7, 0, 0);
-		GL11.glVertex3d(0.7, 0, 0);
-		GL11.glEnd();
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		GL11.glColor4f(0, 0, 0, 1);
-		GL11.glVertex3d(0, 0, -0.7);
-		GL11.glVertex3d(0, 0, 0.7);
-		GL11.glEnd();
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		GL11.glColor4f(0, 0, 0, 1);
-		GL11.glVertex3d(0, -0.7, 0);
-		GL11.glVertex3d(0, 0.7, 0);
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glPopMatrix();
 		
 		GL11.glPointSize(10);
 		SidePicker picker = new SidePicker(0.5);

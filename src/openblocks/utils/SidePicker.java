@@ -26,9 +26,9 @@ public class SidePicker {
 				case XPos:
 					return ForgeDirection.EAST;
 				case YNeg:
-					return ForgeDirection.UP;
-				case YPos:
 					return ForgeDirection.DOWN;
+				case YPos:
+					return ForgeDirection.UP;
 				case ZNeg:
 					return ForgeDirection.NORTH;
 				case ZPos:
