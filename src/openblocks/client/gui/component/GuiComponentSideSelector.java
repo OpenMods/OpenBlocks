@@ -15,6 +15,8 @@ import openblocks.utils.SidePicker.HitCoord;
 import openblocks.utils.Trackball.TrackballWrapper;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class GuiComponentSideSelector extends BaseComponent {
 
@@ -34,6 +36,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	private Block block;
 
+	private boolean isInitialized;
+	
 	public GuiComponentSideSelector(int x, int y, double scale, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
@@ -44,18 +48,29 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		if (isInitialized == false) {
+			double yaw = Math.toRadians(minecraft.renderViewEntity.rotationYaw - 180);
+			double pitch = Math.toRadians(minecraft.renderViewEntity.rotationPitch);
+			
+			Matrix4f initial = new Matrix4f();
+			initial.rotate((float)pitch, new Vector3f(1, 0, 0));
+			initial.rotate((float)yaw, new Vector3f(0, 1, 0));
+			trackball.setTransform(initial);
+			
+			isInitialized = true;
+		}
+		
 		GL11.glPushMatrix();
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
-		GL11.glScaled(scale, scale, scale);
-		trackball.update(mouseX - 50, mouseY - 50); // TODO: replace with proper
+		GL11.glScaled(scale, -scale, scale);
+		trackball.update(mouseX - 50, -(mouseY - 50)); // TODO: replace with proper
 													// width,height
 
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
 		t.startDrawingQuads();
-		GL11.glDisable(GL11.GL_CULL_FACE);
 
 		setFaceColor(ForgeDirection.WEST);
 		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, 0));
@@ -139,8 +154,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 		HitCoord coord = picker.getNearestHit();
 		lastSideHovered = coord == null? ForgeDirection.UNKNOWN : coord.side.toForgeDirection();
-
-		GL11.glEnable(GL11.GL_CULL_FACE);
 
 		GL11.glPopMatrix();
 	}
