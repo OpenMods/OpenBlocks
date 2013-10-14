@@ -74,8 +74,36 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 		setFaceColor(ForgeDirection.SOUTH);
 		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, 0));
+		
 		t.draw();
 
+
+		GL11.glPushMatrix();
+
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		GL11.glColor4f(0, 0, 0, 1);
+		GL11.glVertex3d(-0.7, 0, 0);
+		GL11.glVertex3d(0.7, 0, 0);
+		GL11.glEnd();
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		GL11.glColor4f(0, 0, 0, 1);
+		GL11.glVertex3d(0, 0, -0.7);
+		GL11.glVertex3d(0, 0, 0.7);
+		GL11.glEnd();
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		GL11.glColor4f(0, 0, 0, 1);
+		GL11.glVertex3d(0, -0.7, 0);
+		GL11.glVertex3d(0, 0.7, 0);
+		GL11.glEnd();
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glPopMatrix();
+		
 		GL11.glPointSize(10);
 		SidePicker picker = new SidePicker(0.5);
 		Map<SidePicker.Side, Vec3> hits = picker.calculateMouseHits();
