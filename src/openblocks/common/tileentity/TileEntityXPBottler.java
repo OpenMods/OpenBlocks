@@ -85,6 +85,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 			if (progress.getValue() < PROGRESS_TICKS) {
 				progress.modify(1);
 			} else {
+				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:fill", .5f, .8f);
 				inventory.decrStackSize(0, 1);
 				tank.drain(tank.getFluidAmount(), true);
 				if (inventory.getStackInSlot(1) == null) {
