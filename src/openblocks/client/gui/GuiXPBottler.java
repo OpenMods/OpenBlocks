@@ -37,13 +37,13 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 		
 		tabs = new GuiComponentTabs(xSize - 3, 4);
-		glassSideSelector = new GuiComponentSideSelector(30, 30, 40.0, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getGlassSides(), new ISideSelectionCallback() {
+		glassSideSelector = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getGlassSides(), new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal());
 			}
 		});
-		xpSideSelector = new GuiComponentSideSelector(30, 30, 40.0, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getXPSides(), new ISideSelectionCallback() {
+		xpSideSelector = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getXPSides(), new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal() + 7);

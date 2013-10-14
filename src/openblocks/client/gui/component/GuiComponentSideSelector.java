@@ -7,6 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.sync.SyncableFlags;
@@ -40,13 +42,16 @@ public class GuiComponentSideSelector extends BaseComponent {
 	
 	private int meta = 0;
 	
-	public GuiComponentSideSelector(int x, int y, double scale, int meta, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
+	private TileEntity te;
+	
+	public GuiComponentSideSelector(int x, int y, double scale, TileEntity te, int meta, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
 		this.callback = iSideSelectionCallback;
 		this.enabledDirections = directions;
 		this.block = block;
 		this.meta = meta;
+		this.te = te;
 	}
 
 	@Override
@@ -70,33 +75,35 @@ public class GuiComponentSideSelector extends BaseComponent {
 		GL11.glScaled(scale, -scale, scale);
 		trackball.update(mouseX - 50, -(mouseY - 50)); // TODO: replace with proper
 													// width,height
+		if (te != null) {
+			TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, -0.5, -0.5, 0.0F);
+		}else {
+			GL11.glColor4f(1, 1, 1, 1);
+			minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+			blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
+			t.startDrawingQuads();
+	
+			setFaceColor(ForgeDirection.WEST);
+			blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, meta));
+	
+			setFaceColor(ForgeDirection.EAST);
+			blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, meta));
+	
+			setFaceColor(ForgeDirection.UP);
+			blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, meta));
+	
+			setFaceColor(ForgeDirection.DOWN);
+			blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, meta));
+	
+			setFaceColor(ForgeDirection.NORTH);
+			blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, meta));
+	
+			setFaceColor(ForgeDirection.SOUTH);
+			blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, meta));
+			
+			t.draw();
 
-		GL11.glColor4f(1, 1, 1, 1);
-		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
-		t.startDrawingQuads();
-
-		setFaceColor(ForgeDirection.WEST);
-		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, meta));
-
-		setFaceColor(ForgeDirection.EAST);
-		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, meta));
-
-		setFaceColor(ForgeDirection.UP);
-		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, meta));
-
-		setFaceColor(ForgeDirection.DOWN);
-		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, meta));
-
-		setFaceColor(ForgeDirection.NORTH);
-		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, meta));
-
-		setFaceColor(ForgeDirection.SOUTH);
-		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, meta));
-		
-		t.draw();
-
-		
+		}
 		GL11.glPointSize(10);
 		SidePicker picker = new SidePicker(0.5);
 		Map<SidePicker.Side, Vec3> hits = picker.calculateMouseHits();
