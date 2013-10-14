@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncableObject;
@@ -15,11 +14,11 @@ import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 
-public class TileEntityBearTrap extends NetworkedTileEntity implements
-		IAwareTile, ISurfaceAttachment {
+public class TileEntityBearTrap extends NetworkedTileEntity implements IAwareTile, ISurfaceAttachment {
 
 	public enum Keys {
-		flags, trappedEntityId
+		flags,
+		trappedEntityId
 	}
 
 	public enum Flags {

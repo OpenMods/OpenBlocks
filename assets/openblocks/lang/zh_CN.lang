@@ -4,6 +4,17 @@ openblocks.gui.luggage=行李
 openblocks.gui.sprinkler=洒水器
 openblocks.gui.vacuumhopper=虚空漏斗
 openblocks.gui.bigbutton=大型按钮
+openblocks.gui.xpbottler=经验瓶
+
+openblocks.misc.uses=耗费: %.2f
+openblocks.misc.color=颜色: %06X
+openblocks.misc.mode=放置模式: %s
+openblocks.misc.mode.block=方块
+openblocks.misc.mode.panel=面板
+openblocks.misc.mode.half_panel=半高面板
+openblocks.misc.mode.stairs=楼梯
+
+openblocks.turtle.magnet=磁铁
 
 tile.openblocks.elevator.name=电梯
 tile.openblocks.heal.name=治愈器
@@ -21,10 +32,25 @@ tile.openblocks.vacuumhopper.name=虚空漏斗
 tile.openblocks.sponge.name=海绵
 tile.openblocks.cannon.name=传物加农炮
 tile.openblocks.bigbutton.name=大型按钮
+tile.openblocks.fan.name=风扇
+tile.openblocks.xpbottler.name=经验瓶
 
 item.openblocks.hangglider.name=悬挂式滑翔机
 item.openblocks.gliderwing.name=滑翔翼
 item.openblocks.luggage.name=行李
 item.openblocks.sonicglasses.name=音波眼镜
+item.openblocks.crayon.name=魔法蜡笔
+item.openblocks.pencil.name=魔法铅笔
+item.openblocks.glasses.pencil.name=铅笔眼镜
+item.openblocks.glasses.crayon.name=蜡笔眼镜
+item.openblocks.glasses.technicolor.name=惊艳科幻色调眼镜
+item.openblocks.glasses.admin.name=恶棍眼镜
+item.openblocks.crane_backpack.name=起重背包
+item.openblocks.crane_control.name=起重控制
+item.openblocks.crane_engine.name=起重引擎
+item.openblocks.crane_magnet.name=起重磁铁
+item.openblocks.beam.name=束
+item.openblocks.line.name=线
+item.openblocks.miracle_magnet.name=§5奇迹磁铁§r
 
 itemGroup.tabOpenBlocks=开放式方块

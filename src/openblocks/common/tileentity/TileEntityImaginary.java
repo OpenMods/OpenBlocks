@@ -25,7 +25,9 @@ public class TileEntityImaginary extends OpenTileEntity {
 	public static final double PANEL_HEIGHT = 0.1;
 
 	public enum Property {
-		VISIBLE, SELECTABLE, SOLID
+		VISIBLE,
+		SELECTABLE,
+		SOLID
 	}
 
 	private enum CollisionType {

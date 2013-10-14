@@ -10,23 +10,17 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import openblocks.Log;
 import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
 
+import com.google.common.collect.Sets;
+
 public abstract class SyncMap {
-
-	private int trackingRange = 64;
-
-	public SyncMap() {}
-
-	public SyncMap(int trackingRange) {
-		this.trackingRange = trackingRange;
-	}
 
 	public Set<Integer> usersInRange = new HashSet<Integer>();
 
@@ -82,47 +76,26 @@ public abstract class SyncMap {
 		}
 	}
 
-	public Set<EntityPlayer> getListeningPlayers(World worldObj, double x, double z, int trackingRange) {
-		return PacketHandler.getPlayersInRange(worldObj, (int)x, (int)z, trackingRange);
-	}
-
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
-		if (!worldObj.isRemote) {
-			Set<EntityPlayer> players = getListeningPlayers(worldObj, x, z, trackingRange);
-			if (players.size() > 0) {
+		if (worldObj instanceof WorldServer) {
+			Set<EntityPlayer> players = PacketHandler.getPlayersWatchingBlock((WorldServer)worldObj, (int)x, (int)z);
+			if (!players.isEmpty()) {
 				Packet changePacket = null;
 				Packet fullPacket = null;
 
-				boolean hasChanges = false;
-
-				for (ISyncableObject obj : objects) {
-					if (obj != null && obj.hasChanged()) {
-						hasChanges = true;
-						break;
-					}
-				}
+				boolean hasChanges = hasChanges();
 				try {
-					Set<Integer> newUsersInRange = new HashSet<Integer>();
+					Set<Integer> newUsersInRange = Sets.newHashSet();
 					for (EntityPlayer player : players) {
 						newUsersInRange.add(player.entityId);
-						if (player != null) {
-							Packet packetToSend = null;
-							if (usersInRange.contains(player.entityId)) {
-								if (hasChanges) {
-									if (changePacket == null) {
-										changePacket = createPacket(handler, false);
-									}
-									packetToSend = changePacket;
-								}
-							} else {
-								if (fullPacket == null) {
-									fullPacket = createPacket(handler, true);
-								}
-								packetToSend = fullPacket;
+						if (usersInRange.contains(player.entityId)) {
+							if (hasChanges) {
+								if (changePacket == null) changePacket = createPacket(handler, false);
+								PacketHandler.sendPacketToPlayer(player, changePacket);
 							}
-							if (packetToSend != null) {
-								((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
-							}
+						} else {
+							if (fullPacket == null) fullPacket = createPacket(handler, true);
+							PacketHandler.sendPacketToPlayer(player, fullPacket);
 						}
 					}
 					usersInRange = newUsersInRange;
@@ -134,6 +107,14 @@ public abstract class SyncMap {
 			}
 		}
 		resetChangeStatus();
+	}
+
+	private boolean hasChanges() {
+		for (ISyncableObject obj : objects) {
+			if (obj != null && obj.hasChanged()) return true;
+		}
+
+		return false;
 	}
 
 	protected Packet createPacket(ISyncHandler handler, boolean fullPacket) throws IOException {

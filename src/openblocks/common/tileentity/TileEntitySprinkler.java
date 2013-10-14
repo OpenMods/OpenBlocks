@@ -22,8 +22,7 @@ import openblocks.common.api.ISurfaceAttachment;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, IFluidHandler, IInventory {
+public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory {
 
 	// erpppppp
 	private FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
@@ -73,9 +72,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 		for (int i = 0; i < 6; i++) {
 			float offset = (i - 2.5f) / 5f;
 			ForgeDirection rotation = getRotation();
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5
-					+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
-					+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
+			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water,
+					xCoord + 0.5 + (offset * 0.6 * rotation.offsetX),
+					yCoord,
+					zCoord + 0.5 + (offset * 0.6 * rotation.offsetZ),
+					rotation, getSprayPitch(), 2 * offset);
 		}
 	}
 

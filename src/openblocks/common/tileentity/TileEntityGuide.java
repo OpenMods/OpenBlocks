@@ -20,8 +20,7 @@ import openblocks.utils.CompatibilityUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
-		IShapeProvider {
+public class TileEntityGuide extends NetworkedTileEntity implements IShapeable, IShapeProvider {
 
 	private boolean shape[][][];
 	private boolean previousShape[][][];
@@ -33,7 +32,10 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	protected SyncableInt mode = new SyncableInt(0);
 
 	public enum Keys {
-		width, height, depth, mode
+		width,
+		height,
+		depth,
+		mode
 	}
 
 	public TileEntityGuide() {
@@ -203,9 +205,10 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 				for (int x2 = 0; x2 < shape[y2].length; x2++) {
 					for (int z2 = 0; z2 < shape[y2][x2].length; z2++) {
 						if (shape[y2][x2][z2]) {
-							coords.add(new ChunkCoordinates(xCoord + x2
-									- getWidth(), yCoord + y2 - getHeight(), zCoord
-									+ z2 - getDepth()));
+							coords.add(new ChunkCoordinates(
+									xCoord + x2 - getWidth(),
+									yCoord + y2 - getHeight(),
+									zCoord + z2 - getDepth()));
 						}
 					}
 				}

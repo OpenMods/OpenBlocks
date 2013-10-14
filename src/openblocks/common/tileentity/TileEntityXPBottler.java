@@ -1,8 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -20,8 +18,7 @@ import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 
-public class TileEntityXPBottler extends NetworkedTileEntity implements
-		IAwareTile, ISidedInventory, IFluidHandler {
+public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
 
 	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
 
@@ -34,7 +31,10 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 
 	/** Ids of the data objects we'll sync **/
 	public enum Keys {
-		glassSides, xpSides, progress, tankLevel
+		glassSides,
+		xpSides,
+		progress,
+		tankLevel
 	}
 
 	/** synced data objects **/
@@ -281,16 +281,10 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		if (xpSides.getActiveSlots().contains(side)) {
 			sideAllowsXP = true;
 		}
-		if (sideAllowsXP && sideAllowsGlass) {
-			return new int[] { 0, 1 };
-		}
-		if (sideAllowsXP) {
-			return new int[] { 1 };
-		}
-		if (sideAllowsGlass) {
-			return new int[] { 0 };
-		}
-		
+		if (sideAllowsXP && sideAllowsGlass) { return new int[] { 0, 1 }; }
+		if (sideAllowsXP) { return new int[] { 1 }; }
+		if (sideAllowsGlass) { return new int[] { 0 }; }
+
 		return new int[0];
 	}
 
