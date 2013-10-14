@@ -37,7 +37,7 @@ public class Trackball {
 
 			target.applyTransform(mx, my, isDragging);
 		}
-		
+
 		public void setTransform(Matrix4f transform) {
 			target.lastTransform = transform;
 		}

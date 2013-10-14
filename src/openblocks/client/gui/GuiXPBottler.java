@@ -35,7 +35,7 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 
 		TileEntityXPBottler te = container.getTileEntity();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
-		
+
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 		glassSideSelector = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getGlassSides(), new ISideSelectionCallback() {
 			@Override

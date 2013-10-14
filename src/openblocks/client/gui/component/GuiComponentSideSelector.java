@@ -1,21 +1,20 @@
 package openblocks.client.gui.component;
 
-import java.util.Map;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.sync.SyncableFlags;
 import openblocks.utils.SidePicker;
 import openblocks.utils.SidePicker.HitCoord;
 import openblocks.utils.Trackball.TrackballWrapper;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
@@ -39,11 +38,11 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private Block block;
 
 	private boolean isInitialized;
-	
+
 	private int meta = 0;
-	
+
 	private TileEntity te;
-	
+
 	public GuiComponentSideSelector(int x, int y, double scale, TileEntity te, int meta, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
@@ -56,91 +55,114 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
-		if (isInitialized == false) {
+		if (isInitialized == false || Mouse.isButtonDown(2)) {
 			double yaw = Math.toRadians(minecraft.renderViewEntity.rotationYaw - 180);
 			double pitch = Math.toRadians(minecraft.renderViewEntity.rotationPitch);
-			
+
 			Matrix4f initial = new Matrix4f();
 			initial.rotate((float)pitch, new Vector3f(1, 0, 0));
 			initial.rotate((float)yaw, new Vector3f(0, 1, 0));
 			trackball.setTransform(initial);
-			
+
 			isInitialized = true;
 		}
-		
+
 		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_CULL_FACE);
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
 		GL11.glScaled(scale, -scale, scale);
-		trackball.update(mouseX - 50, -(mouseY - 50)); // TODO: replace with proper
-													// width,height
-		if (te != null) {
-			TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, -0.5, -0.5, 0.0F);
-		}else {
-			GL11.glColor4f(1, 1, 1, 1);
-			minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-			blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
-			t.startDrawingQuads();
-	
-			setFaceColor(ForgeDirection.WEST);
-			blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, meta));
-	
-			setFaceColor(ForgeDirection.EAST);
-			blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, meta));
-	
-			setFaceColor(ForgeDirection.UP);
-			blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, meta));
-	
-			setFaceColor(ForgeDirection.DOWN);
-			blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, meta));
-	
-			setFaceColor(ForgeDirection.NORTH);
-			blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, meta));
-	
-			setFaceColor(ForgeDirection.SOUTH);
-			blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, meta));
-			
-			t.draw();
+		trackball.update(mouseX - 50, -(mouseY - 50)); // TODO: replace with
+														// proper
+														// width,height
+		if (te != null) TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, -0.5, -0.5, 0.0F);
+		else drawBlock(minecraft.renderEngine, t);
 
-		}
-		GL11.glPointSize(10);
 		SidePicker picker = new SidePicker(0.5);
-		Map<SidePicker.Side, Vec3> hits = picker.calculateMouseHits();
-
-		if (!hits.isEmpty()) {
-			GL11.glBegin(GL11.GL_POINTS);
-			for (Map.Entry<SidePicker.Side, Vec3> e : hits.entrySet()) {
-				switch (e.getKey()) {
-					case XPos:
-						GL11.glColor3f(1, 0, 0);
-						break;
-					case YPos:
-						GL11.glColor3f(0, 1, 0);
-						break;
-					case ZPos:
-						GL11.glColor3f(0, 0, 1);
-						break;
-					case XNeg:
-						GL11.glColor3f(0, 1, 1);
-						break;
-					case YNeg:
-						GL11.glColor3f(1, 0, 1);
-						break;
-					case ZNeg:
-						GL11.glColor3f(1, 1, 0);
-						break;
-				}
-				Vec3 hit = e.getValue();
-				GL11.glVertex3d(hit.xCoord, hit.yCoord, hit.zCoord);
-			}
-			GL11.glEnd();
-		}
 
 		HitCoord coord = picker.getNearestHit();
+
+		if (coord != null) drawHighlight(t, coord);
+
 		lastSideHovered = coord == null? ForgeDirection.UNKNOWN : coord.side.toForgeDirection();
 
 		GL11.glPopMatrix();
+	}
+
+	private static void drawHighlight(Tessellator t, HitCoord coord) {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		t.startDrawingQuads();
+		t.setColorRGBA_I(0x444444, 64);
+		switch (coord.side) {
+			case XPos:
+				t.addVertex(0.5, -0.5, -0.5);
+				t.addVertex(0.5, 0.5, -0.5);
+				t.addVertex(0.5, 0.5, 0.5);
+				t.addVertex(0.5, -0.5, 0.5);
+				break;
+			case YPos:
+				t.addVertex(-0.5, 0.5, -0.5);
+				t.addVertex(-0.5, 0.5, 0.5);
+				t.addVertex(0.5, 0.5, 0.5);
+				t.addVertex(0.5, 0.5, -0.5);
+				break;
+			case ZPos:
+				t.addVertex(-0.5, -0.5, 0.5);
+				t.addVertex(0.5, -0.5, 0.5);
+				t.addVertex(0.5, 0.5, 0.5);
+				t.addVertex(-0.5, 0.5, 0.5);
+				break;
+			case XNeg:
+				t.addVertex(-0.5, -0.5, -0.5);
+				t.addVertex(-0.5, -0.5, 0.5);
+				t.addVertex(-0.5, 0.5, 0.5);
+				t.addVertex(-0.5, 0.5, -0.5);
+				break;
+			case YNeg:
+				t.addVertex(-0.5, -0.5, -0.5);
+				t.addVertex(0.5, -0.5, -0.5);
+				t.addVertex(0.5, -0.5, 0.5);
+				t.addVertex(-0.5, -0.5, 0.5);
+				break;
+			case ZNeg:
+				t.addVertex(-0.5, -0.5, -0.5);
+				t.addVertex(-0.5, 0.5, -0.5);
+				t.addVertex(0.5, 0.5, -0.5);
+				t.addVertex(0.5, -0.5, -0.5);
+				break;
+		}
+		t.draw();
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_BLEND);
+	}
+
+	private void drawBlock(TextureManager manager, Tessellator t) {
+		GL11.glColor4f(1, 1, 1, 1);
+		manager.bindTexture(TextureMap.locationBlocksTexture);
+		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
+		t.startDrawingQuads();
+
+		setFaceColor(ForgeDirection.WEST);
+		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, meta));
+
+		setFaceColor(ForgeDirection.EAST);
+		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, meta));
+
+		setFaceColor(ForgeDirection.UP);
+		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, meta));
+
+		setFaceColor(ForgeDirection.DOWN);
+		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, meta));
+
+		setFaceColor(ForgeDirection.NORTH);
+		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, meta));
+
+		setFaceColor(ForgeDirection.SOUTH);
+		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, meta));
+
+		t.draw();
 	}
 
 	private void setFaceColor(ForgeDirection dir) {
@@ -160,7 +182,11 @@ public class GuiComponentSideSelector extends BaseComponent {
 	@Override
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
-		if (movedTicks < 5 && lastSideHovered != null && lastSideHovered != ForgeDirection.UNKNOWN && callback != null) {
+		if (button == 0 &&
+				movedTicks < 5 &&
+				lastSideHovered != null &&
+				lastSideHovered != ForgeDirection.UNKNOWN &&
+				callback != null) {
 			callback.onSideSelected(lastSideHovered);
 			movedTicks = 5;
 		}

@@ -38,13 +38,13 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy implements IProxy {
-	
+
 	public ClientProxy() {
 		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-	
+
 	@ForgeSubscribe
 	public void textureHook(TextureStitchEvent.Post event) {
 		if (event.map.textureType == 0) {
