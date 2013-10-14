@@ -3,7 +3,6 @@ package openblocks.client;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks.Gui;
 import openblocks.client.gui.*;
@@ -13,10 +12,6 @@ import openblocks.common.entity.EntityLuggage;
 import openblocks.common.tileentity.*;
 
 public class ClientGuiHandler extends CommonGuiHandler {
-
-	public static class Icons {
-		public static Icon compass;
-	}
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

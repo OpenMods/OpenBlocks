@@ -44,11 +44,6 @@ public class ClientProxy implements IProxy {
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-
-	@ForgeSubscribe
-	public void textureHook(TextureStitchEvent.Pre event) {
-		ClientGuiHandler.Icons.compass = event.map.registerIcon("openblocks:compass");
-	}
 	
 	@ForgeSubscribe
 	public void textureHook(TextureStitchEvent.Post event) {

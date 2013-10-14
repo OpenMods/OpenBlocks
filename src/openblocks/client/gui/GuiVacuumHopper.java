@@ -35,13 +35,13 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
 		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
 
-		xpSideSelector = new GuiComponentSideSelector(30, 30, 40.0, Block.blockIron, container.getTileEntity().getXPOutputs(), new ISideSelectionCallback() {
+		xpSideSelector = new GuiComponentSideSelector(30, 30, 40.0, 0, Block.blockIron, container.getTileEntity().getXPOutputs(), new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal());
 			}
 		});
-		itemSideSelector = new GuiComponentSideSelector(30, 30, 40.0, Block.blockIron, container.getTileEntity().getItemOutputs(), new ISideSelectionCallback() {
+		itemSideSelector = new GuiComponentSideSelector(30, 30, 40.0, 0, Block.blockIron, container.getTileEntity().getItemOutputs(), new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal() + 7);

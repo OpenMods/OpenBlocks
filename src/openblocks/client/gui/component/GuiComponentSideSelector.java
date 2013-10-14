@@ -9,13 +9,14 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.client.ClientGuiHandler;
 import openblocks.sync.SyncableFlags;
 import openblocks.utils.SidePicker;
 import openblocks.utils.SidePicker.HitCoord;
 import openblocks.utils.Trackball.TrackballWrapper;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class GuiComponentSideSelector extends BaseComponent {
 
@@ -35,24 +36,40 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 	private Block block;
 
-	public GuiComponentSideSelector(int x, int y, double scale, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
+	private boolean isInitialized;
+	
+	private int meta = 0;
+	
+	public GuiComponentSideSelector(int x, int y, double scale, int meta, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
 		this.callback = iSideSelectionCallback;
 		this.enabledDirections = directions;
 		this.block = block;
+		this.meta = meta;
 	}
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
-		
+		if (isInitialized == false) {
+			double yaw = Math.toRadians(minecraft.renderViewEntity.rotationYaw - 180);
+			double pitch = Math.toRadians(minecraft.renderViewEntity.rotationPitch);
+			
+			Matrix4f initial = new Matrix4f();
+			initial.rotate((float)pitch, new Vector3f(1, 0, 0));
+			initial.rotate((float)yaw, new Vector3f(0, 1, 0));
+			trackball.setTransform(initial);
+			
+			isInitialized = true;
+		}
 		
 		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
 		GL11.glScaled(scale, -scale, scale);
-		GL11.glDisable(GL11.GL_CULL_FACE);
 		trackball.update(mouseX - 50, -(mouseY - 50)); // TODO: replace with proper
+													// width,height
 
 		GL11.glColor4f(1, 1, 1, 1);
 		minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
@@ -60,27 +77,23 @@ public class GuiComponentSideSelector extends BaseComponent {
 		t.startDrawingQuads();
 
 		setFaceColor(ForgeDirection.WEST);
-		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, 0));
+		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, meta));
 
 		setFaceColor(ForgeDirection.EAST);
-		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, 0));
+		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, meta));
 
 		setFaceColor(ForgeDirection.UP);
-		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, 0));
+		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, meta));
 
 		setFaceColor(ForgeDirection.DOWN);
-		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, 0));
+		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, meta));
 
 		setFaceColor(ForgeDirection.NORTH);
-		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, 0));
+		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, meta));
 
 		setFaceColor(ForgeDirection.SOUTH);
-		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, 0));
-
-		setFaceColor(ForgeDirection.DOWN);
-		GL11.glEnable(GL11.GL_BLEND);
-		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.8, -0.5, ClientGuiHandler.Icons.compass);
-
+		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, meta));
+		
 		t.draw();
 
 		
@@ -119,8 +132,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 		HitCoord coord = picker.getNearestHit();
 		lastSideHovered = coord == null? ForgeDirection.UNKNOWN : coord.side.toForgeDirection();
-
-		GL11.glEnable(GL11.GL_CULL_FACE);
 
 		GL11.glPopMatrix();
 	}

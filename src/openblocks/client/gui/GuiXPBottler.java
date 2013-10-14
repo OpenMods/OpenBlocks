@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerXPBottler;
+import openblocks.common.tileentity.TileEntityXPBottler;
 
 import org.lwjgl.opengl.GL11;
 
@@ -32,14 +33,17 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
 		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
 
+		TileEntityXPBottler te = container.getTileEntity();
+		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
+		
 		tabs = new GuiComponentTabs(xSize - 3, 4);
-		glassSideSelector = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getGlassSides(), new ISideSelectionCallback() {
+		glassSideSelector = new GuiComponentSideSelector(30, 30, 40.0, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getGlassSides(), new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal());
 			}
 		});
-		xpSideSelector = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getXPSides(), new ISideSelectionCallback() {
+		xpSideSelector = new GuiComponentSideSelector(30, 30, 40.0, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getXPSides(), new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal() + 7);
