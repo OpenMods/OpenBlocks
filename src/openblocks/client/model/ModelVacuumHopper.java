@@ -60,8 +60,8 @@ public class ModelVacuumHopper extends ModelBase {
 		
 		if (items || xp) {
 			ModelRenderer valve = items && xp ? outputBoth : items ? outputItems : outputXP;
-			outputBoth.rotateAngleX = valve.rotateAngleX = rotX;
-			outputBoth.rotateAngleZ = valve.rotateAngleZ = rotZ;
+			output2.rotateAngleX = valve.rotateAngleX = rotX;
+			output2.rotateAngleZ = valve.rotateAngleZ = rotZ;
 			output2.render(f5);
 			valve.render(f5);
 		}
