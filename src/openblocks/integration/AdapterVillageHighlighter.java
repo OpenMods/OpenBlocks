@@ -11,6 +11,7 @@ import dan200.computer.api.IComputerAccess;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openperipheral.api.IPeripheralAdapter;
 import openperipheral.api.LuaMethod;
+import openperipheral.api.LuaType;
 
 public class AdapterVillageHighlighter implements IPeripheralAdapter {
 
@@ -20,7 +21,7 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@LuaMethod
+	@LuaMethod(onTick=true, returnType=LuaType.TABLE, description="Get information about the villages this block is inside")
 	public Map getVillages(IComputerAccess computer, TileEntityVillageHighlighter vh) {
 		Map map = new HashMap();
 		int i = 1;
