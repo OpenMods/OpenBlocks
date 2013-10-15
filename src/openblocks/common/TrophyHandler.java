@@ -70,16 +70,22 @@ public class TrophyHandler {
 				Entity entity = super.createEntity();
 
 				try {
-					Method slimeSizeMethod = EntitySlime.class.getDeclaredMethod("setSlimeSize", int.class);
-					if (slimeSizeMethod == null) {
-						slimeSizeMethod = EntitySlime.class.getDeclaredMethod("func_70799_a", int.class);
+					Method slimeSizeMethod = null;
+					try {
+						slimeSizeMethod = EntitySlime.class.getDeclaredMethod("setSlimeSize", int.class);
+					} catch (NoSuchMethodException e) {
+						try {
+							slimeSizeMethod = EntitySlime.class.getDeclaredMethod("func_70799_a", int.class);
+						} catch (NoSuchMethodException f) {
+							Log.warn("setSlimeSize cannot be found");
+						}
 					}
 					if (slimeSizeMethod != null) {
 						slimeSizeMethod.setAccessible(true);
 						slimeSizeMethod.invoke(entity, 1);
 					}
 				} catch (Exception e) {
-					Log.warn(e, "Can't update slime size. Field not found?");
+					Log.warn(e, "Can't update slime size");
 				}
 
 				return entity;

@@ -34,7 +34,8 @@ public class EnchantmentUtils {
 
 		if (itemstack != null) {
 
-			List list = EnchantmentHelper.buildEnchantmentList(rand, itemstack, level);
+			@SuppressWarnings("unchecked")
+			List<EnchantmentData> list = EnchantmentHelper.buildEnchantmentList(rand, itemstack, level);
 			boolean flag = itemstack.itemID == Item.book.itemID;
 			if (list != null) {
 
@@ -45,7 +46,7 @@ public class EnchantmentUtils {
 				int j = flag? rand.nextInt(list.size()) : -1;
 
 				for (int k = 0; k < list.size(); ++k) {
-					EnchantmentData enchantmentdata = (EnchantmentData)list.get(k);
+					EnchantmentData enchantmentdata = list.get(k);
 
 					if (!flag || k == j) {
 						if (flag) {
