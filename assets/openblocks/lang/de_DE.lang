@@ -48,8 +48,8 @@ item.openblocks.crane_backpack.name=Kranrucksack
 item.openblocks.crane_control.name=Krankontrolle
 item.openblocks.crane_engine.name=Kranmotor
 item.openblocks.crane_magnet.name=Kranmagnet
-item.openblocks.beam.name=Strahl
-item.openblocks.line.name=Linie
+item.openblocks.beam.name=Balken
+item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
 
 itemGroup.tabOpenBlocks=OpenBlocks
