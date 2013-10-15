@@ -65,6 +65,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityFan teFan = new TileEntityFan();
 		inventoryTileEntities.put(OpenBlocks.Blocks.fan, teFan);
+		
+		TileEntityVillageHighlighter teVillageHighlighter = new TileEntityVillageHighlighter();
+		inventoryTileEntities.put(OpenBlocks.Blocks.villageHighlighter, teVillageHighlighter);
 	}
 
 	@Override
