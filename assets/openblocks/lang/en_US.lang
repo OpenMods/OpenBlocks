@@ -33,7 +33,7 @@ tile.openblocks.cannon.name=Item Cannon
 tile.openblocks.bigbutton.name=Big Button
 tile.openblocks.fan.name=Fan
 tile.openblocks.xpbottler.name=XP Bottler
-tile.openblocks.villager_highlighter.name=XP Bottler
+tile.openblocks.village_highlighter.name=Village Highlighter
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
