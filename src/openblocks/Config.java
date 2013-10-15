@@ -390,6 +390,7 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockVillageHighlighterId)) {
 			OpenBlocks.Blocks.villageHighlighter = new BlockVillageHighlighter();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.villageHighlighter), new Object[] { "www", "wew", "ccc", 'w', "plankWood", 'e', new ItemStack(Item.emerald), 'c', new ItemStack(Block.cobblestone) }));
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
