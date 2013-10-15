@@ -377,12 +377,14 @@ public class SoundIconRegistry {
 		random.add("fizz", simpleIcon("fizz", DEFAULT_COLOR));
 
 		IDrawableIcon apple = makeFramedItemIcon("apple", frameWhite);
+		IDrawableIcon write = makeFramedItemIcon("book_writable", frameWhite);
 
 		MappedCategory openblocks = root.add("openblocks", new MappedCategory());
 		openblocks.defaultIcon = genericIcon;
 		openblocks.add("teleport", unknownIcon);
 		openblocks.add("chump", apple);
 		openblocks.add("slowpokenom", eat);
+		openblocks.add("draw", write);
 
 		MappedCategory records = root.add(CATEGORY_STREAMING, new MappedCategory());
 		records.add("13", makeFramedItemIcon("record_13", frameBlue));

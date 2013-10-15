@@ -71,9 +71,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
 		GL11.glScaled(scale, -scale, scale);
-		trackball.update(mouseX - 50, -(mouseY - 50)); // TODO: replace with
-														// proper
-														// width,height
+		// TODO: replace with proper width,height
+		trackball.update(mouseX - 50, -(mouseY - 50));
 		if (te != null) TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, -0.5, -0.5, 0.0F);
 		else drawBlock(minecraft.renderEngine, t);
 

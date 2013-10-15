@@ -3,6 +3,7 @@ package openblocks.common.block;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -35,10 +36,18 @@ public class BlockImaginary extends OpenBlock {
 	public Icon texturePencilHalfPanel;
 	public Icon textureCrayonHalfPanel;
 
+	public static final StepSound drawingSounds = new StepSound("cloth", 0.5f, 1.0f) {
+		@Override
+		public String getPlaceSound() {
+			return "openblocks:draw";
+		}
+	};
+
 	public BlockImaginary() {
 		super(Config.blockImaginaryId, Material.glass);
 		setupBlock(this, "imaginary", TileEntityImaginary.class, ItemImaginary.class);
 		setHardness(0.3f);
+		stepSound = drawingSounds;
 	}
 
 	@Override
