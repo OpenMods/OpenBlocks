@@ -17,8 +17,7 @@ import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
-IAwareTile {
+public class TileEntityVillageHighlighter extends NetworkedTileEntity implements IAwareTile {
 
 	public enum Keys {
 		villageData
@@ -29,7 +28,7 @@ IAwareTile {
 	public SyncableIntArray villageData = new SyncableIntArray();
 
 	public TileEntityVillageHighlighter() {
-		this.addSyncedObject(Keys.villageData, villageData);
+		addSyncedObject(Keys.villageData, villageData);
 	}
 
 	public static int[] convertIntegers(List<Integer> integers) {

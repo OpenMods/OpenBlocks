@@ -93,19 +93,20 @@ public class ItemImaginationGlasses extends ItemArmor {
 		PENCIL("pencil") {
 			@Override
 			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
-				return te.isPencil();
+				return te.isPencil() ^ te.isInverted();
 			}
 		},
 		CRAYON("crayon") {
 			@Override
 			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
-				return !te.isPencil() && getGlassesColor(stack) == te.color;
+				return (!te.isPencil() && getGlassesColor(stack) == te.color) ^ te.isInverted();
 			}
 		},
 		TECHNICOLOR("technicolor") {
 			@Override
 			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
-				return property == Property.VISIBLE;
+				if (property == Property.VISIBLE) return true;
+				return te.isInverted();
 			}
 		},
 		BASTARD("admin") {
