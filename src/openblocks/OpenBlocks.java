@@ -17,6 +17,7 @@ import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.integration.ModuleComputerCraft;
+import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 
@@ -144,8 +145,9 @@ public class OpenBlocks {
 
 		MagnetWhitelists.instance.initTesters();
 
-		if (Loader.isModLoaded(openblocks.Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
-
+		if (Loader.isModLoaded(Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
+		if (Loader.isModLoaded(Mods.OPENPERIPHERAL)) ModuleOpenPeripheral.registerAdapters(); 
+		
 		proxy.init();
 
 		proxy.registerRenderInformation();
