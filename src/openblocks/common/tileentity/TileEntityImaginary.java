@@ -211,19 +211,22 @@ public class TileEntityImaginary extends OpenTileEntity {
 		collisionData = DUMMY;
 	}
 
-	public TileEntityImaginary(Integer color, ICollisionData collisionData) {
+	public TileEntityImaginary(Integer color, boolean isInverted, ICollisionData collisionData) {
 		Preconditions.checkNotNull(collisionData, "Bad idea! Rejected!");
 		this.color = color;
+		this.isInverted = isInverted;
 		this.collisionData = collisionData;
 	}
 
 	public Integer color;
+	public boolean isInverted;
 	public ICollisionData collisionData;
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		color = tag.hasKey("Color")? tag.getInteger("Color") : null;
+		isInverted = tag.getBoolean("IsInverted");
 		CollisionType type = CollisionType.VALUES[tag.getByte("Type")];
 		collisionData = type.createData();
 		collisionData.readFromNBT(tag);
@@ -234,7 +237,7 @@ public class TileEntityImaginary extends OpenTileEntity {
 		super.writeToNBT(tag);
 
 		if (color != null) tag.setInteger("Color", color);
-
+		tag.setBoolean("IsInverted", isInverted);
 		tag.setByte("Type", (byte)collisionData.getType().ordinal());
 		collisionData.writeToNBT(tag);
 	}
@@ -260,12 +263,16 @@ public class TileEntityImaginary extends OpenTileEntity {
 		return color == null;
 	}
 
+	public boolean isInverted() {
+		return isInverted;
+	}
+
 	public boolean is(Property what, EntityPlayer player) {
 		if (what == Property.SOLID && isPencil()) return true;
 
 		ItemStack helmet = player.inventory.armorItemInSlot(3);
 
-		if (helmet == null) return false;
+		if (helmet == null) return isInverted();
 
 		Item item = helmet.getItem();
 

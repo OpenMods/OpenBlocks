@@ -108,7 +108,7 @@ public class Config {
 
 	@BlockId(description = "The id of the xp bottler block")
 	public static int blockXPBottlerId = 2557;
-	
+
 	@BlockId(description = "The id of the village highlighter block")
 	public static int blockVillageHighlighterId = 2558;
 
@@ -387,11 +387,11 @@ public class Config {
 			OpenBlocks.Blocks.xpBottler = new BlockXPBottler();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.xpBottler), new Object[] { "iii", "ibi", "iii", 'i', new ItemStack(Item.ingotIron), 'b', new ItemStack(Item.glassBottle) }));
 		}
-		
+
 		if (Config.canRegisterBlock(blockVillageHighlighterId)) {
 			OpenBlocks.Blocks.villageHighlighter = new BlockVillageHighlighter();
 		}
-		
+
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		// There is no fail checking here because if the Generic item fails,

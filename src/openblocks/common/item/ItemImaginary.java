@@ -37,25 +37,51 @@ public class ItemImaginary extends ItemOpenBlock {
 	private static final int DAMAGE_CRAYON = 1;
 
 	private enum PlacementMode {
-		BLOCK(1.0f, "block", "overlay_block") {
+		BLOCK(1.0f, "block", "overlay_block", false) {
 			@Override
 			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
 				return TileEntityImaginary.DUMMY;
 			}
 		},
-		PANEL(0.5f, "panel", "overlay_panel") {
+		PANEL(0.5f, "panel", "overlay_panel", false) {
 			@Override
 			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
 				return new PanelData(1.0f);
 			}
 		},
-		HALF_PANEL(0.5f, "half_panel", "overlay_half") {
+		HALF_PANEL(0.5f, "half_panel", "overlay_half", false) {
 			@Override
 			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
 				return new PanelData(0.5f);
 			}
 		},
-		STAIRS(0.75f, "stairs", "overlay_stairs") {
+		STAIRS(0.75f, "stairs", "overlay_stairs", false) {
+			@Override
+			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+				ForgeDirection dir = BlockUtils.get2dOrientation(player);
+				return new StairsData(0.5f, 1.0f, dir);
+			}
+		},
+
+		INV_BLOCK(1.5f, "inverted_block", "overlay_inverted_block", true) {
+			@Override
+			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+				return TileEntityImaginary.DUMMY;
+			}
+		},
+		INV_PANEL(1.0f, "inverted_panel", "overlay_inverted_panel", true) {
+			@Override
+			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+				return new PanelData(1.0f);
+			}
+		},
+		INV_HALF_PANEL(1.0f, "inverted_half_panel", "overlay_inverted_half", true) {
+			@Override
+			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
+				return new PanelData(0.5f);
+			}
+		},
+		INV_STAIRS(1.25f, "inverted_stairs", "overlay_inverted_stairs", true) {
 			@Override
 			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
 				ForgeDirection dir = BlockUtils.get2dOrientation(player);
@@ -66,12 +92,14 @@ public class ItemImaginary extends ItemOpenBlock {
 		public final float cost;
 		public final String name;
 		public final String overlayName;
+		public final boolean isInverted;
 		public Icon overlay;
 
-		private PlacementMode(float cost, String name, String overlayName) {
+		private PlacementMode(float cost, String name, String overlayName, boolean isInverted) {
 			this.cost = cost;
 			this.name = "openblocks.misc.mode." + name;
 			this.overlayName = "openblocks:" + overlayName;
+			this.isInverted = isInverted;
 		}
 
 		public abstract ICollisionData createCollisionData(ItemStack stack, EntityPlayer player);
@@ -137,7 +165,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
 		PlacementMode mode = getMode(tag);
 		ICollisionData collisions = mode.createCollisionData(stack, player);
-		world.setBlockTileEntity(x, y, z, new TileEntityImaginary(color == null? null : color.data, collisions));
+		world.setBlockTileEntity(x, y, z, new TileEntityImaginary(color == null? null : color.data, mode.isInverted, collisions));
 
 		if (!player.capabilities.isCreativeMode) {
 			float uses = Math.max(getUses(tag) - mode.cost, 0);

@@ -12,6 +12,10 @@ openblocks.misc.mode.block=Block
 openblocks.misc.mode.panel=Panel
 openblocks.misc.mode.half_panel=Half-height panel
 openblocks.misc.mode.stairs=Stairs
+openblocks.misc.mode.inverted_block=Inverted Block
+openblocks.misc.mode.inverted_panel=Inverted Panel
+openblocks.misc.mode.inverted_half_panel=Inverted Half-height panel
+openblocks.misc.mode.inverted_stairs=Inverted Stairs
 
 openblocks.turtle.magnet=Magnet
 
