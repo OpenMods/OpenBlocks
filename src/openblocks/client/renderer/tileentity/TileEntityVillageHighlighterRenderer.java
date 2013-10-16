@@ -11,8 +11,6 @@ import openblocks.sync.SyncableIntArray;
 import openblocks.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
 
 public class TileEntityVillageHighlighterRenderer extends
 		TileEntitySpecialRenderer {
@@ -27,9 +25,13 @@ public class TileEntityVillageHighlighterRenderer extends
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		if (villagehighlighter.isPowered()) {
 			GL11.glPushMatrix();
+			Tessellator t = Tessellator.instance;
+
 			SyncableIntArray villages = villagehighlighter.getVillageData();
 			int[] data = villages.getValue();
 			for (int i = 0; i < data.length; i += TileEntityVillageHighlighter.VALUES_PER_VILLAGE) {
+
+				t.startDrawing(0);
 				int radius = data[i];
 				int vX = data[i + 1];
 				int vY = data[i + 2];
@@ -38,20 +40,29 @@ public class TileEntityVillageHighlighterRenderer extends
 				GL11.glPushMatrix();
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				GL11.glTranslated(vX, vY, vZ);
-				GL11.glLineWidth(0.1f);
 				int color = id % 0xFFFFFF;
 				float r = (color >> 16 & 255) / 255.0F;
 				float g = (color >> 8 & 255) / 255.0F;
 				float b = (color & 255) / 255.0F;
-				GL11.glColor4f(r, g, b, 0.5f);
-				// TODO: draw center point here
+				GL11.glColor4f(r, g, b, 1f);
+
 				GL11.glPushMatrix();
-				GL11.glRotatef(90, 1, 0, 0);
-				Sphere s = new Sphere();
-				s.setDrawStyle(GLU.GLU_LINE);
-				s.draw(radius, 100, 100);
+				GL11.glPointSize(4.0F);
+				GL11.glLineWidth(10F);
+				double N = 1500;
+				double ratio = Math.PI * (3 - Math.sqrt(5));
+				double off = 2 / N;
+				for (int j = 0; j < N; j++) {
+					double py = j * off - 1 + (off / 2);
+					double rad = Math.sqrt(1 - py * py);
+					double phi = j * ratio;
+					double px = Math.cos(phi) * rad;
+					double pz = Math.sin(phi) * rad;
+					t.addVertex(px * radius, py * radius, pz * radius);
+				}
+				t.draw();
 				GL11.glPopMatrix();
-				drawBox(AxisAlignedBB.getAABBPool().getAABB(-radius, 4, -radius, radius, -4, radius));
+				drawBox(AxisAlignedBB.getAABBPool().getAABB(-8, -3, -8, 8, 3, 8));
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				GL11.glPopMatrix();
 			}
