@@ -469,6 +469,8 @@ public class Config {
 
 		if (itemSlimalyzerId > 0) {
 			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
+			
 		}
 	}
 
