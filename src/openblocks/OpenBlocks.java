@@ -77,6 +77,7 @@ public class OpenBlocks {
 		public static ItemImaginationGlasses seriousGlasses;
 		public static ItemCraneControl craneControl;
 		public static ItemCraneBackpack craneBackpack;
+		public static ItemSlimalyzer slimalyzer;
 	}
 
 	public static class Fluids {

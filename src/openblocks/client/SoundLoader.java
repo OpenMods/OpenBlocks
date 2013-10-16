@@ -19,7 +19,8 @@ public class SoundLoader {
 			"chomp.ogg",
 			"mortar.ogg",
 			"fill.ogg",
-			"draw1.ogg", "draw2.ogg", "draw3.ogg", "draw4.ogg" };
+			"draw1.ogg", "draw2.ogg", "draw3.ogg", "draw4.ogg",
+			"beep.ogg"};
 
 	@SideOnly(Side.CLIENT)
 	@ForgeSubscribe

@@ -56,5 +56,6 @@ item.openblocks.crane_magnet.name=Crane Magnet
 item.openblocks.beam.name=Beam
 item.openblocks.line.name=Line
 item.openblocks.miracle_magnet.name=§5Miracle Magnet§r
+item.openblocks.slimalyzer.name=Slimalyzer
 
 itemGroup.tabOpenBlocks=OpenBlocks

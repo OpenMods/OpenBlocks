@@ -141,6 +141,9 @@ public class Config {
 
 	@ItemId(description = "The id of crane backpack item")
 	public static int itemCraneId = 14984;
+	
+	@ItemId(description = "The id of slimalyzer item")
+	public static int itemSlimalyzerId = 14985;
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -165,6 +168,7 @@ public class Config {
 	public static boolean craneShiftControl = true;
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
+
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -460,6 +464,11 @@ public class Config {
 					line, line, line,
 					Item.leather
 					));
+		}
+		
+
+		if (itemSlimalyzerId > 0) {
+			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
 		}
 	}
 
