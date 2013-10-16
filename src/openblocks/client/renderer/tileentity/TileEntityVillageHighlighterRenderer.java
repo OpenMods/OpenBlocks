@@ -30,7 +30,6 @@ public class TileEntityVillageHighlighterRenderer extends
 			SyncableIntArray villages = villagehighlighter.getVillageData();
 			int[] data = villages.getValue();
 			for (int i = 0; i < data.length; i += TileEntityVillageHighlighter.VALUES_PER_VILLAGE) {
-
 				t.startDrawing(0);
 				int radius = data[i];
 				int vX = data[i + 1];

@@ -69,7 +69,8 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(List<ISyncableObject> changes) {
+	}
 
 	@Override
 	public void onBlockBroken() {
@@ -116,5 +117,11 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	public boolean isPowered() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public double getMaxRenderDistanceSquared()
+    {
+        return 65536.0D;
+    }
 
 }
