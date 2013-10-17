@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
@@ -17,7 +18,8 @@ import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityVillageHighlighter extends NetworkedTileEntity implements IAwareTile {
+public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
+		IAwareTile {
 
 	public enum Keys {
 		villageData
@@ -26,6 +28,8 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	public static int VALUES_PER_VILLAGE = 7;
 
 	public SyncableIntArray villageData = new SyncableIntArray();
+	
+	private boolean previousBreedStatus = false;
 
 	public TileEntityVillageHighlighter() {
 		addSyncedObject(Keys.villageData, villageData);
@@ -60,6 +64,11 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 				}
 				villageData.setValue(convertIntegers(tmpDataList));
 				sync(false);
+				boolean canBreed = canVillagersBreed();
+				if (previousBreedStatus != canBreed) {
+					worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockVillageHighlighterId);
+					previousBreedStatus = canBreed;
+				}
 			}
 		}
 	}
@@ -69,8 +78,7 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
 	public void onBlockBroken() {
@@ -117,11 +125,27 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	public boolean isPowered() {
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-    public double getMaxRenderDistanceSquared()
-    {
-        return 65536.0D;
-    }
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public boolean canVillagersBreed() {
+		for (Village village : (List<Village>)worldObj.villageCollectionObj.getVillageList()) {
+			if (village.isInRange(xCoord, yCoord, zCoord)) {
+		        int i = (int)(village.getNumVillageDoors() * 0.35D);
+		        if (village.getNumVillagers() < i) {
+		        	return true;
+		        }
+			}
+		}
+		return false;
+	}
+
+	public int getSignalStrength() {
+		return canVillagersBreed() ? 15 : 0;
+	}
 
 }
