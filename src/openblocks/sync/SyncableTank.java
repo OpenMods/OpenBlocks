@@ -1,7 +1,7 @@
 package openblocks.sync;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,7 +38,7 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 	}
 
 	@Override
-	public void readFromStream(DataInputStream stream) throws IOException {
+	public void readFromStream(DataInput stream) throws IOException {
 		int fluidId = stream.readInt();
 		if (fluidId > -1) {
 			int fluidAmount = stream.readInt();
@@ -49,8 +49,7 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
 		if (fluid != null) {
 			stream.writeInt(fluid.fluidID);
 			stream.writeInt(fluid.amount);
@@ -59,12 +58,10 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 		}
 	}
 
-	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		this.writeToNBT(tag);
 	}
 
-	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		this.readFromNBT(tag);
 	}

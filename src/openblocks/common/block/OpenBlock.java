@@ -14,7 +14,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.OpenBlocks;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IPlaceAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.item.ItemOpenBlock;
 import openblocks.utils.BlockUtils;
@@ -52,13 +54,11 @@ public abstract class OpenBlock extends BlockContainer {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null) {
-			if (IInventory.class.isAssignableFrom(teClass)) {
-				BlockUtils.dropTileInventory(te);
-			}
-			if (IAwareTile.class.isAssignableFrom(teClass)) {
-				((IAwareTile)te).onBlockBroken();
-			}
+		if (te instanceof IInventory) {
+			BlockUtils.dropTileInventory(te);
+		}
+		if (te instanceof IAwareTile) {
+			((IAwareTile)te).onBlockBroken();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
@@ -104,7 +104,7 @@ public abstract class OpenBlock extends BlockContainer {
 		if (te instanceof IAwareTile) {
 			((IAwareTile)te).onNeighbourChanged(blockId);
 		}
-		if (te != null && te instanceof ISurfaceAttachment) {
+		if (te instanceof ISurfaceAttachment) {
 			ForgeDirection direction = ((ISurfaceAttachment)te).getSurfaceDirection();
 			if (!isNeighborBlockSolid(world, x, y, z, direction)) {
 				dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -115,7 +115,7 @@ public abstract class OpenBlock extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
+		IActivateAwareTile te = getTileEntity(world, x, y, z, IActivateAwareTile.class);
 		if (te != null) { return te.onBlockActivated(player, side, hitX, hitY, hitZ); }
 		return false;
 	}
@@ -187,7 +187,7 @@ public abstract class OpenBlock extends BlockContainer {
 	 * @param meta
 	 */
 	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
-		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
+		IPlaceAwareTile te = getTileEntity(world, x, y, z, IPlaceAwareTile.class);
 		if (te != null) {
 			te.onBlockPlacedBy(player, side, stack, hitX, hitY, hitZ);
 		}

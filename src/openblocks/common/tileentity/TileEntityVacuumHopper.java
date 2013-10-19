@@ -11,16 +11,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.sync.ISyncableObject;
@@ -31,7 +28,7 @@ import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntityVacuumHopper extends NetworkedTileEntity implements
-		IInventory, IFluidHandler, IAwareTile, IHasGui {
+		IInventory, IFluidHandler, IActivateAwareTile, IHasGui {
 
 	private static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
@@ -209,16 +206,10 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			if (player.inventory.getStackInSlot(player.inventory.currentItem) == null) {
-				vacuumDisabled.negate();
+				vacuumDisabled.toggle();
 				return true;
 			}
 			return false;
@@ -226,19 +217,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 			openGui(player);
 		}
 		return true;
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
 	}
 
 	public void onEntityCollidedWithBlock(Entity entity) {
@@ -260,24 +238,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 				}
 			}
 		}
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		packet.actionType = 0;
-		packet.xPosition = xCoord;
-		packet.yPosition = yCoord;
-		packet.zPosition = zCoord;
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
-		packet.data = nbt;
-		return packet;
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.data);
 	}
 
 	@Override

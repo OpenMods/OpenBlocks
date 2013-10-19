@@ -1,27 +1,24 @@
 package openblocks.sync;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableInt implements ISyncableObject {
+public class SyncableInt extends SyncableObjectBase {
 
 	protected int value = 0;
-	protected boolean dirty = false;
 	protected int ticksSinceChange = 0;
 
 	public SyncableInt(int value) {
 		this.value = value;
 	}
 
-	public SyncableInt() {
-		this(0);
-	}
+	public SyncableInt() {}
 
 	@Override
-	public void readFromStream(DataInputStream stream) throws IOException {
+	public void readFromStream(DataInput stream) throws IOException {
 		value = stream.readInt();
 	}
 
@@ -45,17 +42,14 @@ public class SyncableInt implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
 		stream.writeInt(value);
 	}
 
-	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setInteger(name, value);
 	}
 
-	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		if (tag.hasKey(name)) {
 			value = tag.getInteger(name);
@@ -63,19 +57,9 @@ public class SyncableInt implements ISyncableObject {
 	}
 
 	@Override
-	public boolean isDirty() {
-		return dirty;
-	}
-
-	@Override
 	public void markClean() {
-		dirty = false;
+		super.markClean();
 		ticksSinceChange++;
-	}
-
-	@Override
-	public void markDirty() {
-		dirty = true;
 	}
 
 	@Override

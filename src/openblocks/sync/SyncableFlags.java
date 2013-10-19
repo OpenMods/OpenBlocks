@@ -1,7 +1,7 @@
 package openblocks.sync;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,9 +18,7 @@ public class SyncableFlags implements ISyncableObject {
 	protected int[] ticksSinceUnset = new int[16];
 	protected int ticksSinceChanged = 0;
 
-	public SyncableFlags() {
-
-	}
+	public SyncableFlags() {}
 
 	public void on(Enum<?> slot) {
 		on(slot.ordinal());
@@ -131,26 +129,21 @@ public class SyncableFlags implements ISyncableObject {
 	}
 
 	@Override
-	public void readFromStream(DataInputStream stream) throws IOException {
+	public void readFromStream(DataInput stream) throws IOException {
 		value = stream.readShort();
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
 		stream.writeShort(value);
 	}
 
-	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setShort(name, value);
 	}
 
-	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		if (tag.hasKey(name)) {
-			value = tag.getShort(name);
-		}
+		value = tag.getShort(name);
 	}
 
 	@Override

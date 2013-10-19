@@ -1,11 +1,12 @@
 package openblocks.client;
 
-import java.io.File;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.server.ServerListenThread;
 import net.minecraft.server.ThreadMinecraftServer;
 import net.minecraft.world.World;
@@ -37,6 +38,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -118,6 +120,7 @@ public class ClientProxy implements IProxy {
 		}
 
 		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());
+		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -131,12 +134,6 @@ public class ClientProxy implements IProxy {
 				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
 			}
 		}
-	}
-
-	@Override
-	public File getWorldDir(World world) {
-		return new File(OpenBlocks.getBaseDir(), "saves/"
-				+ world.getSaveHandler().getWorldDirectoryName());
 	}
 
 	@Override
@@ -180,5 +177,17 @@ public class ClientProxy implements IProxy {
 	@Override
 	public World getServerWorld(int id) {
 		return DimensionManager.getWorld(id);
+	}
+
+	@Override
+	public void sendPacketToPlayer(Player player, Packet packet) {
+		if (player instanceof EntityPlayerMP) ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
+		else if (player instanceof EntityClientPlayerMP) ((EntityClientPlayerMP)player).sendQueue.addToSendQueue(packet);
+		else throw new UnsupportedOperationException("HOW DO I PACKET?");
+	}
+
+	@Override
+	public void sendPacketToServer(Packet packet) {
+		Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
 	}
 }

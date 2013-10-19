@@ -32,7 +32,7 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 	public GuiXPBottler(ContainerXPBottler container) {
 		super(container, 176, 151, "openblocks.gui.xpbottler");
 
-		TileEntityXPBottler te = container.getTileEntity();
+		TileEntityXPBottler te = container.getOwner();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 
 		// progress bar

@@ -50,7 +50,7 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 	}
 
 	private void syncChangesToServer() {
-		Object te = getContainer().getTileEntity();
+		Object te = getContainer().getOwner();
 		if (te instanceof NetworkedTileEntity) {
 			((NetworkedTileEntity)te).sync(false);
 		}

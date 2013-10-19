@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IAwareTileLite;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.block.BlockFlag;
 import openblocks.sync.ISyncableObject;
@@ -19,8 +19,7 @@ import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityFlag extends NetworkedTileEntity implements
-		ISurfaceAttachment, IAwareTile {
+public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttachment, IAwareTileLite {
 
 	private SyncableFloat angle = new SyncableFloat(0.0f);
 	private SyncableInt colorIndex = new SyncableInt(0);
@@ -91,12 +90,6 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player != null && player.isSneaking()) { return true; }
 		if (!worldObj.isRemote) {
@@ -108,9 +101,6 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 		}
 		return true;
 	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
@@ -126,11 +116,6 @@ public class TileEntityFlag extends NetworkedTileEntity implements
 		setRotation(side.getOpposite());
 		setOnGround(surface == ForgeDirection.DOWN);
 		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -15,7 +15,7 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntityBlockBreaker extends OpenTileEntity
-		implements IAwareTile, ISidedInventory {
+		implements IAwareTile, IInventory {
 
 	public enum Slots {
 		buffer
@@ -174,37 +174,14 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 	}
 
 	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return false;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int dir) {
-		ForgeDirection side = ForgeDirection.getOrientation(dir);
-		if (side.getOpposite().equals(get3dRotation())) { return new int[] { 0 }; }
-		return new int[0];
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return fakeInventory.canInsertItem(i, itemstack, j);
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return fakeInventory.canExtractItem(i, itemstack, j);
 	}
 
 }

@@ -44,7 +44,7 @@ public class GuiAutoEnchantmentTable extends
 	public GuiAutoEnchantmentTable(ContainerAutoEnchantmentTable container) {
 		super(container, 176, 175, "openblocks.gui.autoenchantmenttable");
 
-		TileEntityAutoEnchantmentTable te = container.getTileEntity();
+		TileEntityAutoEnchantmentTable te = container.getOwner();
 		int meta = te.worldObj.getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 
 		ItemStack enchantedAxe = new ItemStack(Item.pickaxeDiamond, 1);

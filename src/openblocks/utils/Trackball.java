@@ -1,10 +1,6 @@
 package openblocks.utils;
 
-import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -43,8 +39,6 @@ public class Trackball {
 		}
 	}
 
-	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
-
 	private Vector3f dragStart;
 	private Matrix4f lastTransform;
 
@@ -82,12 +76,7 @@ public class Trackball {
 	}
 
 	public void applyTransform(float mouseX, float mouseY, boolean isDragging) {
-		Matrix4f transform = isDragging? getTransform(mouseX, mouseY) : lastTransform;
-
-		transform.store(matrixBuffer);
-		matrixBuffer.flip();
-
-		GL11.glMultMatrix(matrixBuffer);
+		OpenGLUtils.loadMatrix(isDragging? getTransform(mouseX, mouseY) : lastTransform);
 	}
 
 	public void startDrag(float mouseX, float mouseY) {

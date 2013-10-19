@@ -71,6 +71,18 @@ public class ItemGeneric extends Item {
 				ItemStack result = newItemStack(2);
 				return new MetaGeneric("line", new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', Item.slimeBall));
 			}
+		},
+		mapController {
+			@Override
+			public IMetaItem createMetaItem() {
+				return new MetaGeneric("map_controller");
+			}
+		},
+		mapMemory {
+			@Override
+			public IMetaItem createMetaItem() {
+				return new MetaGeneric("map_memory");
+			}
 		};
 
 		public ItemStack newItemStack(int amount) {
@@ -160,9 +172,9 @@ public class ItemGeneric extends Item {
 		return meta != null? meta.hasEffect(pass) : false;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getSubItems(int id, CreativeTabs tab, List subItems) {
 		for (Entry<Integer, IMetaItem> entry : metaitems.entrySet())
 			entry.getValue().addToCreativeList(id, entry.getKey(), subItems);
@@ -199,8 +211,8 @@ public class ItemGeneric extends Item {
 		return new ItemStack(this, 1, metaenum.ordinal());
 	}
 
-	public boolean isA(ItemStack stack, Metas meta) {
-		return getMeta(stack) == metaitems.get(meta.ordinal());
+	public static boolean isA(ItemStack stack, Metas meta) {
+		return (stack.getItem() instanceof ItemGeneric) && (stack.getItemDamage() == meta.ordinal());
 	}
 
 }

@@ -95,7 +95,7 @@ public class EntityLuggage extends EntityTameable implements
 				BlockUtils.dropItemStackInWorld(worldObj, posX, posY, posZ, luggageItem);
 				setDead();
 			} else {
-				player.openGui(OpenBlocks.instance, OpenBlocks.Gui.luggage.ordinal(), player.worldObj, entityId, 0, 0);
+				player.openGui(OpenBlocks.instance, OpenBlocks.GuiId.luggage.ordinal(), player.worldObj, entityId, 0, 0);
 			}
 		}
 		return true;

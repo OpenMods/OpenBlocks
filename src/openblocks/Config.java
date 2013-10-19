@@ -160,7 +160,7 @@ public class Config {
 	@ItemId(description = "The id of the crane controller item")
 	public static int itemCraneControl = 14983;
 
-	@ItemId(description = "The id of crane backpack item")
+	@ItemId(description = "The id of the crane backpack item")
 	public static int itemCraneId = 14984;
 
 	@ItemId(description = "The id of slimalyzer item")
@@ -527,7 +527,6 @@ public class Config {
 		if (itemSleepingBagId > 0 && ClassTransformerEntityPlayer.IsInBedHookSuccess) {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
 		}
-
 	}
 
 	private static boolean canRegisterBlock(int blockId) {

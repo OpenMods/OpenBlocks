@@ -1,12 +1,12 @@
 package openblocks;
 
-import java.io.File;
-
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.Player;
 
 public interface IProxy {
 	public void init();
@@ -19,8 +19,6 @@ public interface IProxy {
 
 	public boolean isServerThread();
 
-	public File getWorldDir(World world);
-
 	public World getClientWorld();
 
 	public World getServerWorld(int id);
@@ -32,4 +30,8 @@ public interface IProxy {
 	public IGuiHandler createGuiHandler();
 
 	public long getTicks(World worldObj);
+
+	public void sendPacketToPlayer(Player player, Packet packet);
+
+	public void sendPacketToServer(Packet packet);
 }

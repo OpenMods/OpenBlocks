@@ -22,7 +22,7 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 	public GuiVacuumHopper(ContainerVacuumHopper container) {
 		super(container, 176, 151, "openblocks.gui.vacuumhopper");
 
-		TileEntityVacuumHopper te = container.getTileEntity();
+		TileEntityVacuumHopper te = container.getOwner();
 
 		xpOutputsLabel = new GuiComponentLabel(24, 10, "XP Outputs:");
 		itemOutputsLabel = new GuiComponentLabel(24, 10, "Item Outputs:");

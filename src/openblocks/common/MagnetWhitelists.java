@@ -73,14 +73,14 @@ public class MagnetWhitelists {
 		blockWhitelist.addTester(new ITester<Block>() {
 			@Override
 			public Result test(Block o) {
-				return (o.blockHardness < 0)? Result.REJECT : Result.CONTINUTE;
+				return (o.blockHardness < 0)? Result.REJECT : Result.CONTINUE;
 			}
 		});
 
 		blockWhitelist.addTester(new ITester<Block>() {
 			@Override
 			public openblocks.utils.ITester.Result test(Block o) {
-				return o.getRenderType() == 0? Result.ACCEPT : Result.CONTINUTE;
+				return o.getRenderType() == 0? Result.ACCEPT : Result.CONTINUE;
 			}
 		});
 

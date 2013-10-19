@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -128,11 +127,6 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	protected boolean isActive() {
 		return isActive;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
 	}
 
 	@Override

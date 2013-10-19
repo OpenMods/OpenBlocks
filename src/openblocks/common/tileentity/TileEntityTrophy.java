@@ -4,12 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IAwareTileLite;
 import openblocks.utils.BlockUtils;
 
 import com.google.common.base.Preconditions;
@@ -17,7 +14,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
+public class TileEntityTrophy extends Packet132TileEntity implements IAwareTileLite {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 
@@ -26,24 +23,6 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	private ForgeDirection rotation = ForgeDirection.EAST;
 
 	private int sinceLastActivate = 0;
-
-	@Override
-	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		packet.actionType = 0;
-		packet.xPosition = xCoord;
-		packet.yPosition = yCoord;
-		packet.zPosition = zCoord;
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
-		packet.data = nbt;
-		return packet;
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.data);
-	}
 
 	@Override
 	public void updateEntity() {
@@ -57,15 +36,6 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	protected void initialize() {}
-
-	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			trophyType.playSound(worldObj, xCoord, yCoord, zCoord);
@@ -73,9 +43,6 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 		}
 		return true;
 	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
 
 	public Trophy getTrophyType() {
 		return trophyType;
@@ -102,11 +69,6 @@ public class TileEntityTrophy extends OpenTileEntity implements IAwareTile {
 			rotation = BlockUtils.get2dOrientation(player);
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
 	}
 
 	@Override

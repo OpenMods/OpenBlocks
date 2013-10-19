@@ -23,7 +23,7 @@ public class ObjectTester<T> implements ITester<T> {
 
 		@Override
 		public Result test(T o) {
-			return cls.isAssignableFrom(o.getClass())? onMatch : Result.CONTINUTE;
+			return cls.isAssignableFrom(o.getClass())? onMatch : Result.CONTINUE;
 		}
 	}
 
@@ -57,7 +57,7 @@ public class ObjectTester<T> implements ITester<T> {
 
 		@Override
 		public Result test(T o) {
-			return names.contains(o.getClass().getName())? onMatch : Result.CONTINUTE;
+			return names.contains(o.getClass().getName())? onMatch : Result.CONTINUE;
 		}
 	}
 
@@ -76,10 +76,10 @@ public class ObjectTester<T> implements ITester<T> {
 	public Result test(T o) {
 		for (ITester<T> tester : testers) {
 			Result r = tester.test(o);
-			if (r != Result.CONTINUTE) return r;
+			if (r != Result.CONTINUE) return r;
 		}
 
-		return Result.CONTINUTE;
+		return Result.CONTINUE;
 	}
 
 	public boolean check(T o) {

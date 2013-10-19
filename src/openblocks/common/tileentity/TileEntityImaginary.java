@@ -7,9 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
@@ -20,7 +17,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityImaginary extends OpenTileEntity {
+public class TileEntityImaginary extends Packet132TileEntity {
 
 	public static final double PANEL_HEIGHT = 0.1;
 
@@ -243,20 +240,8 @@ public class TileEntityImaginary extends OpenTileEntity {
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound data = new NBTTagCompound();
-		writeToNBT(data);
-		return new Packet132TileEntityData(xCoord, yCoord, zCoord, 42, data);
-	}
-
-	@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		if (pkt.data != null) readFromNBT(pkt.data);
 	}
 
 	public boolean isPencil() {

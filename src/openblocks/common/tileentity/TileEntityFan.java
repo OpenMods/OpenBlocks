@@ -10,11 +10,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IPlaceAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFloat;
 
-public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
+public class TileEntityFan extends NetworkedTileEntity implements IPlaceAwareTile {
 
 	private SyncableFloat angle = new SyncableFloat(0.0f);
 
@@ -98,28 +98,9 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		angle.setValue(player.rotationYawHead);
 		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
 	}
 
 	@Override

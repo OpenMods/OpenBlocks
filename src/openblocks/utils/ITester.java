@@ -4,7 +4,7 @@ public interface ITester<T> {
 	public enum Result {
 		ACCEPT,
 		REJECT,
-		CONTINUTE;
+		CONTINUE;
 	}
 
 	Result test(T o);
