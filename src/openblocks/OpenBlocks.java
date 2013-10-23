@@ -64,6 +64,7 @@ public class OpenBlocks {
 		public static BlockFan fan;
 		public static BlockXPBottler xpBottler;
 		public static BlockVillageHighlighter villageHighlighter;
+		public static BlockPath path;
 	}
 
 	public static class Items {

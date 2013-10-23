@@ -25,9 +25,13 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	private final Map<Block, TileEntity> inventoryTileEntities;
+	private final Map<Block, IBlockRenderer> blockRenderers;
 
 	public BlockRenderingHandler() {
 		inventoryTileEntities = Maps.newIdentityHashMap();
+		blockRenderers = Maps.newIdentityHashMap();
+		
+		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
 
 		TileEntityLightbox teLightbox = new TileEntityLightbox();
 		inventoryTileEntities.put(OpenBlocks.Blocks.lightbox, teLightbox);
@@ -78,6 +82,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 
+		if (blockRenderers.containsKey(block)) {
+			blockRenderers.get(block).renderInventoryBlock(block, metadata, modelID, renderer);
+			return;
+		}
+		
 		TileEntity te = inventoryTileEntities.get(block);
 
 		if (te instanceof OpenTileEntity) {
@@ -104,6 +113,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		if (blockRenderers.containsKey(block)) {
+			return blockRenderers.get(block).renderWorldBlock(world, x, y, z, block, modelId, renderer);
+		}
 		return false;
 	}
 

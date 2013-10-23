@@ -111,6 +111,9 @@ public class Config {
 
 	@BlockId(description = "The id of the village highlighter block")
 	public static int blockVillageHighlighterId = 2558;
+	
+	@BlockId(description = "The id of the path block")
+	public static int blockPathId = 2559;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -395,6 +398,10 @@ public class Config {
 		if (Config.canRegisterBlock(blockVillageHighlighterId)) {
 			OpenBlocks.Blocks.villageHighlighter = new BlockVillageHighlighter();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.villageHighlighter), new Object[] { "www", "wew", "ccc", 'w', "plankWood", 'e', new ItemStack(Item.emerald), 'c', new ItemStack(Block.cobblestone) }));
+		}
+		
+		if (Config.canRegisterBlock(blockPathId)) {
+			OpenBlocks.Blocks.path = new BlockPath();
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
