@@ -402,6 +402,8 @@ public class Config {
 		
 		if (Config.canRegisterBlock(blockPathId)) {
 			OpenBlocks.Blocks.path = new BlockPath();
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.path, 2), "stone", "cobblestone"));
+			
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
