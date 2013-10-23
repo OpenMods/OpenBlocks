@@ -29,7 +29,7 @@ public class BlockPathRenderer implements IBlockRenderer {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		Set<AxisAlignedBB> boundingBoxes = new HashSet<AxisAlignedBB>();
 		for (int i = 0; i < 10; i++) {
-			rnd.setSeed(x + y + z + (i * 20));
+			rnd.setSeed((x + y + z + (int)Math.exp(i)) % 50);
 			double width = rnd.nextDouble() * 0.3 + 0.1;
 			double length = rnd.nextDouble() * 0.3 + 0.1;
 			double pX = rnd.nextDouble() * (1.0 - width);
