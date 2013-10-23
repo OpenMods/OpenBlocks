@@ -37,6 +37,7 @@ tile.openblocks.cannon.name=Item-Kanone
 tile.openblocks.bigbutton.name=Großer Knopf
 tile.openblocks.fan.name=Ventilator
 tile.openblocks.xpbottler.name=XP-Abfüllgerät
+tile.openblocks.village_highlighter.name=Dorf-Highlighter
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
@@ -55,5 +56,6 @@ item.openblocks.crane_magnet.name=Kranmagnet
 item.openblocks.beam.name=Balken
 item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
+item.openblocks.slimalyzer.name=Schleimalysierer
 
 itemGroup.tabOpenBlocks=OpenBlocks
