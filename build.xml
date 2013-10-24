@@ -24,7 +24,7 @@
 
 	<property name="mc.version"          value="1.6.4"/>
 	<property name="forge.version"       value="9.11.0.883"/>
-	<property name="mod.version"         value="1.1.0"/>
+	<property name="mod.version"         value="1.2.0"/>
 	<property name="mod.name"	     value="OpenBlocks"/>
 	
 	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
