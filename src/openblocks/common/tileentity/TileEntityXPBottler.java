@@ -13,7 +13,6 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
@@ -21,14 +20,9 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
+public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISidedInventory, IFluidHandler {
 
 	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
-
-	private FluidTank tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE));
-
-	private FluidStack xpFluid = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
-
 	private ItemStack glassBottle = new ItemStack(Item.glassBottle, 1);
 	private ItemStack xpBottle = new ItemStack(Item.expBottle, 1);
 	
@@ -37,6 +31,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 	/** Ids of the data objects we'll sync **/
 	public enum Keys {
 		glassSides,
+		xpBottleSides,
 		xpSides,
 		progress,
 		tankLevel,
@@ -45,12 +40,14 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 	
 	public static enum AutoSides {
 		input,
-		output
+		output,
+		xp
 	}
 
 	/** synced data objects **/
 	private SyncableInt progress = new SyncableInt();
 	private SyncableFlags glassSides = new SyncableFlags();
+	private SyncableFlags xpBottleSides = new SyncableFlags();
 	private SyncableFlags xpSides = new SyncableFlags();
 	private SyncableInt tankLevel = new SyncableInt();
 	private SyncableFlags autoFlags = new SyncableFlags();
@@ -59,16 +56,23 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 
 	public TileEntityXPBottler() {
 		addSyncedObject(Keys.glassSides, glassSides);
+		addSyncedObject(Keys.xpBottleSides, xpBottleSides);
 		addSyncedObject(Keys.xpSides, xpSides);
 		addSyncedObject(Keys.progress, progress);
 		addSyncedObject(Keys.tankLevel, tankLevel);
 		addSyncedObject(Keys.autoFlags, autoFlags);
+		tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE));
 	}
 
 	public SyncableFlags getGlassSides() {
 		return glassSides;
 	}
+	
+	public SyncableFlags getXPBottleSides() {
+		return xpBottleSides;	
+	}
 
+	@Override
 	public SyncableFlags getXPSides() {
 		return xpSides;
 	}
@@ -101,28 +105,13 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			if (!isTankFull() && surroundingTanks.size() > 0) {
-				Collections.shuffle(surroundingTanks);
-				for (ForgeDirection side : surroundingTanks) {
-					int space = tank.getCapacity() - tank.getFluidAmount();
-					TileEntity otherTank = this.getTileInDirection(side);
-					if (otherTank instanceof IFluidHandler) {
-						IFluidHandler handler = (IFluidHandler)otherTank;
-						if (handler.canDrain(side.getOpposite(), xpFluid.getFluid())) {
-							FluidStack drainStack = xpFluid.copy();
-							drainStack.amount = space;
-							FluidStack drained = handler.drain(side.getOpposite(), drainStack, true);
-							tank.fill(drained, true);
-							if (isTankFull()) {
-								break;
-							}
-						}						
-					}
-				}
+			
+			if (autoFlags.get(AutoSides.xp)) {
+				trySuckXP();
 			}
 
 			// randomly shuffle the glass sides and xp sides. So we pick a random side when inputting or outputting
-			List<Integer> shuffledXPSides = getShuffledSides(xpSides.getActiveSlots());
+			List<Integer> shuffledXPSides = getShuffledSides(xpBottleSides.getActiveSlots());
 			List<Integer> shuffledGlassSides = getShuffledSides(glassSides.getActiveSlots());
 
 			// if they've ticked auto output, and we have something to output
@@ -260,16 +249,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		return true;
 	}
 	
-	private void refreshSurroundingTanks() {
-		surroundingTanks = new ArrayList<ForgeDirection>();
-		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-			TileEntity tile = getTileInDirection(side);
-			if (tile instanceof IFluidHandler) {
-				surroundingTanks.add(side);
-			}
-		}
-	}
-
 	@Override
 	public void onNeighbourChanged(int blockId) {
 		if (!worldObj.isRemote) {
@@ -353,7 +332,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		tank.writeToNBT(tag);
 		progress.writeToNBT(tag, "progress");
 		glassSides.writeToNBT(tag, "glass_sides");
-		xpSides.writeToNBT(tag, "xp_sides");
+		xpBottleSides.writeToNBT(tag, "xp_sides");
 		autoFlags.writeToNBT(tag, "autoflags");
 	}
 
@@ -364,7 +343,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		tank.readFromNBT(tag);
 		progress.readFromNBT(tag, "progress");
 		glassSides.readFromNBT(tag, "glass_sides");
-		xpSides.readFromNBT(tag, "xp_sides");
+		xpBottleSides.readFromNBT(tag, "xp_sides");
 		autoFlags.readFromNBT(tag, "autoflags");
 	}
 
@@ -412,7 +391,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		if (glassSides.getActiveSlots().contains(side)) {
 			sideAllowsGlass = true;
 		}
-		if (xpSides.getActiveSlots().contains(side)) {
+		if (xpBottleSides.getActiveSlots().contains(side)) {
 			sideAllowsXP = true;
 		}
 		if (sideAllowsXP && sideAllowsGlass) { return new int[] { 0, 1 }; }
@@ -435,7 +414,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		Item item = itemstack.getItem();
 		if (item == null) { return false; }
 		if (item == Item.glassBottle) { return i == 0 && glassSides.get(j); }
-		if (item == Item.expBottle) { return i == 1 && xpSides.get(j); }
+		if (item == Item.expBottle) { return i == 1 && xpBottleSides.get(j); }
 		return false;
 	}
 

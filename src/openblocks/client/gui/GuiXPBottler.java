@@ -9,79 +9,115 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler;
+import openblocks.common.tileentity.TileEntityXPBottler.AutoSides;
+import openblocks.sync.SyncableFlags;
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 
-	private GuiComponentTankLevel xpLevel;
-	private GuiComponentTabs tabs;
 	private GuiComponentPanel main;
-	private GuiComponentTab glassInputTab;
-	private GuiComponentTab xpOutputTab;
+	private GuiComponentTankLevel xpLevel;
 	private GuiComponentProgress progress;
-	private GuiComponentSideSelector glassSideSelector;
-	private GuiComponentSideSelector xpSideSelector;
-	private GuiComponentCheckbox autoInsert;
-	private GuiComponentLabel autoInsertLabel;
-	private GuiComponentCheckbox autoEject;
-	private GuiComponentLabel autoEjectLabel;
+	private GuiComponentTabs tabs;
+	private GuiComponentTab tabGlassBottle;
+	private GuiComponentTab tabXPBottle;
+	private GuiComponentTab tabXPFluid;
+	private GuiComponentSideSelector sideSelectorGlassBottle;
+	private GuiComponentSideSelector sideSelectorXPBottle;
+	private GuiComponentSideSelector sideSelectorXPFluid;
+	private GuiComponentCheckbox checkboxInsertGlass;
+	private GuiComponentCheckbox checkboxEjectXP;
+	private GuiComponentCheckbox checkboxDrinkXP;
+	private GuiComponentLabel labelInsertGlass;
+	private GuiComponentLabel labelEjectXPBottle;
+	private GuiComponentLabel labelDrinkXP;
 
 	public GuiXPBottler(ContainerXPBottler container) {
 		super(container);
 
 		xSize = 176;
 		ySize = 151;
-		progress = new GuiComponentProgress(72, 33);
-		main = new GuiComponentPanel(0, 0, xSize, ySize, container);
-		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
-		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
-		
 
 		TileEntityXPBottler te = container.getTileEntity();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
+		
+		main = new GuiComponentPanel(0, 0, xSize, ySize, container);
+		
+		// progress bar
+		progress = new GuiComponentProgress(72, 33);
+		
+		// tank
+		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
+		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
 
+		// create tabs
 		tabs = new GuiComponentTabs(xSize - 3, 4);
-		glassSideSelector = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getGlassSides(), true, new ISideSelectionCallback() {
+
+		tabGlassBottle = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.glassBottle, 1), 100, 100);
+		tabXPBottle = new GuiComponentTab(0xd2e58f, new ItemStack(Item.expBottle), 100, 100);
+		tabXPFluid = new GuiComponentTab(0xd2e58f, new ItemStack(Item.bucketEmpty), 100, 100);
+		
+		// create side selectors
+		sideSelectorGlassBottle = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, te.getGlassSides(), true, new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal());
 			}
 		});
-		xpSideSelector = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, container.getTileEntity().getXPSides(), true, new ISideSelectionCallback() {
+		sideSelectorXPBottle = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, te.getXPBottleSides(), true, new ISideSelectionCallback() {
 			@Override
 			public void onSideSelected(ForgeDirection direction) {
 				getContainer().sendButtonClick(direction.ordinal() + 7);
 			}
 		});
-		autoInsert = new GuiComponentCheckbox(10, 82, container.getTileEntity().getAutoFlags(), TileEntityXPBottler.AutoSides.input.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
+		sideSelectorXPFluid = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, te.getXPSides(), true, new ISideSelectionCallback() {
 			@Override
-			public void onTick() {
-				getContainer().sendButtonClick(15);
+			public void onSideSelected(ForgeDirection direction) {
+				getContainer().sendButtonClick(direction.ordinal() + 14);
 			}
 		});
-		autoInsertLabel = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoinsert"));
 		
-		autoEject = new GuiComponentCheckbox(10, 82, container.getTileEntity().getAutoFlags(), TileEntityXPBottler.AutoSides.output.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
+		// create checkboxes
+		SyncableFlags autoFlags = te.getAutoFlags();
+		checkboxInsertGlass = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.input.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
 			@Override
 			public void onTick() {
-				getContainer().sendButtonClick(16);
+				getContainer().sendButtonClick(21);
 			}
 		});
-		autoEjectLabel = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
+		checkboxEjectXP = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.output.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
+			@Override
+			public void onTick() {
+				getContainer().sendButtonClick(22);
+			}
+		});
+		checkboxDrinkXP = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.xp.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
+			@Override
+			public void onTick() {
+				getContainer().sendButtonClick(23);
+			}
+		});
+		
+		labelInsertGlass = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoinsert"));
+		labelEjectXPBottle = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
+		labelDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
+		
+		tabGlassBottle.addComponent(sideSelectorGlassBottle);
+		tabGlassBottle.addComponent(checkboxInsertGlass);
+		tabGlassBottle.addComponent(labelInsertGlass);
+		
+		tabXPBottle.addComponent(sideSelectorXPBottle);
+		tabXPBottle.addComponent(checkboxEjectXP);
+		tabXPBottle.addComponent(labelEjectXPBottle);
+		
+		tabXPFluid.addComponent(sideSelectorXPFluid);
+		tabXPFluid.addComponent(checkboxDrinkXP);
+		tabXPFluid.addComponent(labelDrinkXP);
 
-		glassInputTab = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.glassBottle, 1), 100, 100);
-		glassInputTab.addComponent(glassSideSelector);
-		glassInputTab.addComponent(autoInsert);
-		glassInputTab.addComponent(autoInsertLabel);
-
-		xpOutputTab = new GuiComponentTab(0xd2e58f, new ItemStack(Item.expBottle), 100, 100);
-		xpOutputTab.addComponent(xpSideSelector);
-		xpOutputTab.addComponent(autoEject);
-		xpOutputTab.addComponent(autoEjectLabel);
-
-		tabs.addComponent(glassInputTab);
-		tabs.addComponent(xpOutputTab);
+		tabs.addComponent(tabGlassBottle);
+		tabs.addComponent(tabXPBottle);
+		tabs.addComponent(tabXPFluid);
 
 		main.addComponent(xpLevel);
 		main.addComponent(tabs);

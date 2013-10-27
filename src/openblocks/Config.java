@@ -411,6 +411,7 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockAutoAnvilId)) {
 			OpenBlocks.Blocks.autoAnvil = new BlockAutoAnvil();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoAnvil), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.anvil, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

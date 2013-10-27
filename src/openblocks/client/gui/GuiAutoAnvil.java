@@ -169,6 +169,7 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(this.guiLeft, this.guiTop, 0);
+		xpLevel.setPercentFull(getContainer().getTileEntity().getXPBufferRatio());
 		main.render(this.mc, 0, 0, mouseX - this.guiLeft, mouseY - this.guiTop);
 		GL11.glPopMatrix();
 	}

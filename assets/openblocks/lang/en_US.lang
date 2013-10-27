@@ -4,7 +4,10 @@ openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
 openblocks.gui.bigbutton=Big Button
 openblocks.gui.xpbottler=XP Bottler
+openblocks.gui.autoanvil=Auto Anvil
 openblocks.gui.autoeject=Auto eject
+openblocks.gui.autoextract=Auto extract
+openblocks.gui.autodrink=Auto drink
 
 openblocks.misc.uses=Uses: %.2f
 openblocks.misc.color=Color: %06X
@@ -40,6 +43,7 @@ tile.openblocks.fan.name=Fan
 tile.openblocks.xpbottler.name=XP Bottler
 tile.openblocks.village_highlighter.name=Village Highlighter
 tile.openblocks.path.name=Path
+tile.openblocks.autoanvil.name=Auto Anvil
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing

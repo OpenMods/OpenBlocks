@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityXPBottler;
+import openblocks.common.tileentity.TileEntityXPBottler.AutoSides;
 import openblocks.sync.SyncableFlags;
 
 public class ContainerXPBottler extends ContainerInventory<TileEntityXPBottler> {
@@ -38,14 +39,18 @@ public class ContainerXPBottler extends ContainerInventory<TileEntityXPBottler> 
 		// autoflags contains flags to say is a particular slot should autoeject/insert
 		SyncableFlags autoFlags = xpBottler.getAutoFlags();
 		
-		if (buttonId == 15) {
-			autoFlags.toggle(TileEntityXPBottler.AutoSides.input);
-		}else if (buttonId == 16) {
-			autoFlags.toggle(TileEntityXPBottler.AutoSides.output);
-		}else if (buttonId < 7) {
+		if (buttonId < 7) {
 			xpBottler.getGlassSides().toggle(ForgeDirection.getOrientation(buttonId));
-		} else {
-			xpBottler.getXPSides().toggle(ForgeDirection.getOrientation(buttonId - 7));
+		}else if (buttonId < 14) {
+			xpBottler.getXPBottleSides().toggle(ForgeDirection.getOrientation(buttonId - 7));
+		}else if (buttonId < 21) {
+			xpBottler.getXPSides().toggle(ForgeDirection.getOrientation(buttonId - 14));	
+		}else if (buttonId == 21) {
+			autoFlags.toggle(AutoSides.input);
+		}else if (buttonId == 22) {
+			autoFlags.toggle(AutoSides.output);
+		}else if (buttonId == 23) {
+			autoFlags.toggle(AutoSides.xp);
 		}
 		
 	}

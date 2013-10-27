@@ -457,7 +457,7 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 
 	public double getHeightForRender() {
 		double percent = getPercentFull();
-		if (worldObj == null || worldObj.isRemote) { return Math.max(percent > 0.001? 0.1 : 0, percent); }
+		if (worldObj == null || worldObj.isRemote) { return Math.max(percent > 0.001? 0.05 : 0, percent); }
 		return percent;
 	}
 

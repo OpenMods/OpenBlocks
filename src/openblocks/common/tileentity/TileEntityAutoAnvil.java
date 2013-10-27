@@ -5,35 +5,26 @@ import java.util.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
-import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 
-public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
+public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISidedInventory, IFluidHandler {
 
 	public static final int TOTAL_COOLDOWN = 40;
 
 	private int cooldown = 0;
 
 	private GenericInventory inventory = new GenericInventory("autoanvil", true, 3);
-
-	private FluidTank tank = new FluidTank(EnchantmentUtils.getLiquidForLevel(40));
-
-	private FluidStack xpFluid = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
-
-	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
 
 	public enum Keys {
 		toolSides,
@@ -65,13 +56,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 		addSyncedObject(Keys.xpSides, xpSides);
 		addSyncedObject(Keys.xpLevel, xpLevel);
 		addSyncedObject(Keys.autoFlags, autoFlags);
-	}
-	
-	@Override
-	public void initialize() {
-		if (!worldObj.isRemote) {
-			refreshSurroundingTanks();
-		}
+		tank = new FluidTank(EnchantmentUtils.getLiquidForLevel(45));
 	}
 	
 	public SyncableFlags getToolSides() {
@@ -98,6 +83,14 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) { 
+			
+			if (OpenBlocks.proxy.getTicks(worldObj) % 20 == 0) {
+				refreshSurroundingTanks();
+			}
+			
+			if (autoFlags.get(AutoSides.xp)) {
+				trySuckXP();
+			}
 			if (cooldown == 0) {
 				int liquidRequired = updateRepairOutput(false);
 				if (liquidRequired > 0 && tank.getFluidAmount() >= liquidRequired) {
@@ -106,16 +99,6 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 				}
 			} else if (cooldown > 0) {
 				cooldown--;
-			}
-		}
-	}
-
-	private void refreshSurroundingTanks() {
-		surroundingTanks = new ArrayList<ForgeDirection>();
-		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-			TileEntity tile = getTileInDirection(side);
-			if (tile instanceof IFluidHandler) {
-				surroundingTanks.add(side);
 			}
 		}
 	}
@@ -367,13 +350,6 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		if (!worldObj.isRemote) {
-			refreshSurroundingTanks();
-		}
-	}
-
-	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(BlockUtils.get2dOrientation(player));
 		sync();
@@ -516,15 +492,35 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 		return false;
 	}
 
-	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void updateGuiValues() {
 		xpLevel.setValue(tank.getFluidAmount());
 	}
 
+	public double getXPBufferRatio() {
+		return Math.max(0, Math.min(1, (double)xpLevel.getValue() / (double)tank.getCapacity()));
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+		tank.writeToNBT(tag);
+		toolSides.writeToNBT(tag, "toolsides");
+		modifierSides.writeToNBT(tag, "modifiersides");
+		outputSides.writeToNBT(tag, "outputsides");
+		xpSides.writeToNBT(tag, "xpsides");
+		autoFlags.writeToNBT(tag, "autoflags");
+	}
 
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
+		tank.readFromNBT(tag);
+		toolSides.readFromNBT(tag, "toolsides");
+		modifierSides.readFromNBT(tag, "modifiersides");
+		outputSides.readFromNBT(tag, "outputsides");
+		xpSides.readFromNBT(tag, "xpsides");
+		autoFlags.readFromNBT(tag, "autoflags");
+	}
 }
