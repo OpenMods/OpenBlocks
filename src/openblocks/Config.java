@@ -108,12 +108,16 @@ public class Config {
 
 	@BlockId(description = "The id of the xp bottler block")
 	public static int blockXPBottlerId = 2557;
-
+	
 	@BlockId(description = "The id of the village highlighter block")
 	public static int blockVillageHighlighterId = 2558;
 	
 	@BlockId(description = "The id of the path block")
 	public static int blockPathId = 2559;
+	
+	@BlockId(description = "The id of the auto anvil")
+	public static int blockAutoAnvilId = 2560;
+
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -403,7 +407,10 @@ public class Config {
 		if (Config.canRegisterBlock(blockPathId)) {
 			OpenBlocks.Blocks.path = new BlockPath();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.path, 2), "stone", "cobblestone"));
-			
+		}
+
+		if (Config.canRegisterBlock(blockAutoAnvilId)) {
+			OpenBlocks.Blocks.autoAnvil = new BlockAutoAnvil();
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

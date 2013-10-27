@@ -3,6 +3,7 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelGrave;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.utils.BlockUtils;
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityGraveRenderer extends TileEntitySpecialRenderer {
 
 	private ModelGrave model = new ModelGrave();
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/grave.png");
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
@@ -25,9 +27,8 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-BlockUtils.getRotationFromDirection(target.getRotation()), 0, 1, 0);
-		// this.bindTextureByName("/mods/openblocks/textures/models/grave.png");
+		bindTexture(texture);
 		model.render(tileentity, f);
-
 		String username = target.getUsername();
 
 		FontRenderer renderer = getFontRenderer();

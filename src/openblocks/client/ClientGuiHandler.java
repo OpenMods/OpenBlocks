@@ -23,6 +23,7 @@ public class ClientGuiHandler extends CommonGuiHandler {
 			if (ID == Gui.vacuumHopper.ordinal()) { return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile)); }
 			if (ID == Gui.bigButton.ordinal()) { return new GuiBigButton(new ContainerBigButton(player.inventory, (TileEntityBigButton)tile)); }
 			if (ID == Gui.XPBottler.ordinal()) { return new GuiXPBottler(new ContainerXPBottler(player.inventory, (TileEntityXPBottler)tile)); }
+			if (ID == Gui.autoAnvil.ordinal()) { return new GuiAutoAnvil(new ContainerAutoAnvil(player.inventory, (TileEntityAutoAnvil)tile)); }
 
 		}
 		return null;

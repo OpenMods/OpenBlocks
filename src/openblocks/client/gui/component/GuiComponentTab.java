@@ -16,12 +16,16 @@ public class GuiComponentTab extends GuiComponentBox {
 	protected int expandedHeight;
 	private boolean active = false;
 	private ItemStack iconStack;
+	private double dWidth;
+	private double dHeight;
 
 	public GuiComponentTab(int color, ItemStack iconStack, int expandedWidth, int expandedHeight) {
 		super(0, 0, 24, 24, 0, 5, color);
 		this.expandedWidth = expandedWidth;
 		this.expandedHeight = expandedHeight;
 		this.iconStack = iconStack;
+		this.dWidth = 24.0;
+		this.dHeight = 24.0;
 	}
 
 	@Override
@@ -35,18 +39,19 @@ public class GuiComponentTab extends GuiComponentBox {
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
-		int targetWidth = active? expandedWidth : 24;
-		int targetHeight = active? expandedHeight : 24;
+		double targetWidth = active? expandedWidth : 24;
+		double targetHeight = active? expandedHeight : 24;
 		if (width != targetWidth) {
-			width += Math.round((double)(targetWidth - width) / 2);
+			dWidth += (targetWidth - dWidth) / 4;
 		}
 		if (height != targetHeight) {
-			height += Math.round((double)(targetHeight - height) / 2);
+			dHeight += (targetHeight - dHeight) / 4;
 		}
+		width = (int)Math.round(dWidth);
+		height = (int)Math.round(dHeight);
 		renderChildren = active && width == targetWidth && height == targetHeight;
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		GL11.glColor4f(1, 1, 1, 1);
-
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

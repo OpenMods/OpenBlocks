@@ -97,6 +97,9 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void updateEntity() {
 		isActive = true;
 		if (!initialized) {
+			rotation = getRotation();
+			flag1 = getFlag1();
+			flag2 = getFlag2();
 			initialize();
 			initialized = true;
 		}

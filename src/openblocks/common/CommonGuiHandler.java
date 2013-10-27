@@ -21,6 +21,7 @@ public class CommonGuiHandler implements IGuiHandler {
 		if (ID == OpenBlocks.Gui.vacuumHopper.ordinal()) { return new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile); }
 		if (ID == OpenBlocks.Gui.bigButton.ordinal()) { return new ContainerBigButton(player.inventory, (TileEntityBigButton)tile); }
 		if (ID == OpenBlocks.Gui.XPBottler.ordinal()) { return new ContainerXPBottler(player.inventory, (TileEntityXPBottler)tile); }
+		if (ID == OpenBlocks.Gui.autoAnvil.ordinal()) { return new ContainerAutoAnvil(player.inventory, (TileEntityAutoAnvil)tile); }
 
 		return null;
 	}

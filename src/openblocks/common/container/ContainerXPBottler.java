@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityXPBottler;
+import openblocks.sync.SyncableFlags;
 
 public class ContainerXPBottler extends ContainerInventory<TileEntityXPBottler> {
 
@@ -31,11 +32,22 @@ public class ContainerXPBottler extends ContainerInventory<TileEntityXPBottler> 
 
 	@Override
 	public void onClientButtonClicked(int buttonId) {
-		if (buttonId < 7) {
-			getTileEntity().getGlassSides().toggle(ForgeDirection.getOrientation(buttonId));
+		
+		TileEntityXPBottler xpBottler = getTileEntity();
+		
+		// autoflags contains flags to say is a particular slot should autoeject/insert
+		SyncableFlags autoFlags = xpBottler.getAutoFlags();
+		
+		if (buttonId == 15) {
+			autoFlags.toggle(TileEntityXPBottler.AutoSides.input);
+		}else if (buttonId == 16) {
+			autoFlags.toggle(TileEntityXPBottler.AutoSides.output);
+		}else if (buttonId < 7) {
+			xpBottler.getGlassSides().toggle(ForgeDirection.getOrientation(buttonId));
 		} else {
-			getTileEntity().getXPSides().toggle(ForgeDirection.getOrientation(buttonId - 7));
+			xpBottler.getXPSides().toggle(ForgeDirection.getOrientation(buttonId - 7));
 		}
+		
 	}
 
 }

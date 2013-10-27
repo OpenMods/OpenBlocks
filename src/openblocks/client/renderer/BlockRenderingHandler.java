@@ -72,6 +72,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityVillageHighlighter teVillageHighlighter = new TileEntityVillageHighlighter();
 		inventoryTileEntities.put(OpenBlocks.Blocks.villageHighlighter, teVillageHighlighter);
+
+		TileEntityAutoAnvil teAutoAnvil = new TileEntityAutoAnvil();
+		inventoryTileEntities.put(OpenBlocks.Blocks.autoAnvil, teAutoAnvil);
 	}
 
 	@Override

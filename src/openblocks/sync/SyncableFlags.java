@@ -42,8 +42,12 @@ public class SyncableFlags implements ISyncableObject {
 		set(slot.ordinal(), bool);
 	}
 
-	public void toggle(Enum<?> slot) {
+	public void toggle(int slot) {
 		set(slot, !get(slot));
+	}
+	
+	public void toggle(Enum<?> slot) {
+		toggle(slot.ordinal());
 	}
 
 	public Set<Integer> getActiveSlots() {

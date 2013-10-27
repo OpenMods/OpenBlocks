@@ -12,6 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.sync.SyncableFlags;
 import openblocks.utils.SidePicker;
 import openblocks.utils.SidePicker.HitCoord;
+import openblocks.utils.SidePicker.Side;
 import openblocks.utils.Trackball.TrackballWrapper;
 
 import org.lwjgl.input.Mouse;
@@ -30,20 +31,15 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private ISideSelectionCallback callback;
 
 	private ForgeDirection lastSideHovered;
-
 	private int movedTicks = 0;
-
 	public SyncableFlags enabledDirections;
-
 	private Block block;
-
 	private boolean isInitialized;
-
 	private int meta = 0;
-
 	private TileEntity te;
+	private boolean highlightSelectedSides = false;
 
-	public GuiComponentSideSelector(int x, int y, double scale, TileEntity te, int meta, Block block, SyncableFlags directions, ISideSelectionCallback iSideSelectionCallback) {
+	public GuiComponentSideSelector(int x, int y, double scale, TileEntity te, int meta, Block block, SyncableFlags directions, boolean highlightSelectedSides, ISideSelectionCallback iSideSelectionCallback) {
 		super(x, y);
 		this.scale = scale;
 		this.callback = iSideSelectionCallback;
@@ -51,6 +47,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		this.block = block;
 		this.meta = meta;
 		this.te = te;
+		this.highlightSelectedSides = highlightSelectedSides;
 	}
 
 	@Override
@@ -80,20 +77,28 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 		HitCoord coord = picker.getNearestHit();
 
-		if (coord != null) drawHighlight(t, coord);
+		if (coord != null) drawHighlight(t, coord.side, 0x444444);
+		
+		if (highlightSelectedSides) {
+			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+				if (enabledDirections.get(dir.ordinal())) {
+					drawHighlight(t, Side.fromForgeDirection(dir), 0xCC0000);
+				}
+			}
+		}
 
 		lastSideHovered = coord == null? ForgeDirection.UNKNOWN : coord.side.toForgeDirection();
 
 		GL11.glPopMatrix();
 	}
 
-	private static void drawHighlight(Tessellator t, HitCoord coord) {
+	private static void drawHighlight(Tessellator t, SidePicker.Side side, int color) {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		t.startDrawingQuads();
-		t.setColorRGBA_I(0x444444, 64);
-		switch (coord.side) {
+		t.setColorRGBA_I(color, 64);
+		switch (side) {
 			case XPos:
 				t.addVertex(0.5, -0.5, -0.5);
 				t.addVertex(0.5, 0.5, -0.5);
@@ -143,22 +148,16 @@ public class GuiComponentSideSelector extends BaseComponent {
 		blockRender.setRenderBounds(0, 0, 0, 1, 1, 1);
 		t.startDrawingQuads();
 
-		setFaceColor(ForgeDirection.WEST);
 		blockRender.renderFaceXNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(4, meta));
 
-		setFaceColor(ForgeDirection.EAST);
 		blockRender.renderFaceXPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(5, meta));
 
-		setFaceColor(ForgeDirection.UP);
 		blockRender.renderFaceYPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(1, meta));
 
-		setFaceColor(ForgeDirection.DOWN);
 		blockRender.renderFaceYNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(0, meta));
 
-		setFaceColor(ForgeDirection.NORTH);
 		blockRender.renderFaceZNeg(Block.stone, -0.5, -0.5, -0.5, block.getIcon(2, meta));
 
-		setFaceColor(ForgeDirection.SOUTH);
 		blockRender.renderFaceZPos(Block.stone, -0.5, -0.5, -0.5, block.getIcon(3, meta));
 
 		t.draw();

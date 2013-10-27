@@ -4,6 +4,7 @@ openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
 openblocks.gui.bigbutton=Big Button
 openblocks.gui.xpbottler=XP Bottler
+openblocks.gui.autoeject=Auto eject
 
 openblocks.misc.uses=Uses: %.2f
 openblocks.misc.color=Color: %06X

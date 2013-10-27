@@ -1,12 +1,14 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
+import java.util.*;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
@@ -17,6 +19,7 @@ import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
+import openblocks.utils.InventoryUtils;
 
 public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
 
@@ -28,13 +31,21 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 
 	private ItemStack glassBottle = new ItemStack(Item.glassBottle, 1);
 	private ItemStack xpBottle = new ItemStack(Item.expBottle, 1);
+	
+	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
 
 	/** Ids of the data objects we'll sync **/
 	public enum Keys {
 		glassSides,
 		xpSides,
 		progress,
-		tankLevel
+		tankLevel,
+		autoFlags
+	}
+	
+	public static enum AutoSides {
+		input,
+		output
 	}
 
 	/** synced data objects **/
@@ -42,6 +53,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 	private SyncableFlags glassSides = new SyncableFlags();
 	private SyncableFlags xpSides = new SyncableFlags();
 	private SyncableInt tankLevel = new SyncableInt();
+	private SyncableFlags autoFlags = new SyncableFlags();
 
 	public static final int PROGRESS_TICKS = 40;
 
@@ -50,6 +62,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		addSyncedObject(Keys.xpSides, xpSides);
 		addSyncedObject(Keys.progress, progress);
 		addSyncedObject(Keys.tankLevel, tankLevel);
+		addSyncedObject(Keys.autoFlags, autoFlags);
 	}
 
 	public SyncableFlags getGlassSides() {
@@ -58,6 +71,10 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 
 	public SyncableFlags getXPSides() {
 		return xpSides;
+	}
+	
+	public SyncableFlags getAutoFlags() {
+		return autoFlags;
 	}
 
 	public SyncableInt getProgress() {
@@ -74,20 +91,101 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 	}
 
 	@Override
+	public void initialize() {
+		if (!worldObj.isRemote) {
+			refreshSurroundingTanks();
+		}
+	}
+	
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
+			if (!isTankFull() && surroundingTanks.size() > 0) {
+				Collections.shuffle(surroundingTanks);
+				for (ForgeDirection side : surroundingTanks) {
+					int space = tank.getCapacity() - tank.getFluidAmount();
+					TileEntity otherTank = this.getTileInDirection(side);
+					if (otherTank instanceof IFluidHandler) {
+						IFluidHandler handler = (IFluidHandler)otherTank;
+						if (handler.canDrain(side.getOpposite(), xpFluid.getFluid())) {
+							FluidStack drainStack = xpFluid.copy();
+							drainStack.amount = space;
+							FluidStack drained = handler.drain(side.getOpposite(), drainStack, true);
+							tank.fill(drained, true);
+							if (isTankFull()) {
+								break;
+							}
+						}						
+					}
+				}
+			}
 
+			// randomly shuffle the glass sides and xp sides. So we pick a random side when inputting or outputting
+			List<Integer> shuffledXPSides = getShuffledSides(xpSides.getActiveSlots());
+			List<Integer> shuffledGlassSides = getShuffledSides(glassSides.getActiveSlots());
+
+			// if they've ticked auto output, and we have something to output
+			if (shouldAutoOutput() && hasOutputStack()) {
+				
+				// loop through the shuffled available sides
+				for (Integer dir : shuffledXPSides) {
+					ForgeDirection directionToOutputItem = ForgeDirection.getOrientation(dir);
+					// get the tile
+					TileEntity tileOnSurface = getTileInDirection(directionToOutputItem);
+					// check how many have moved
+					int itemsMoved = InventoryUtils.moveItemInto(this, 1, tileOnSurface, 1, directionToOutputItem, true);
+					if (itemsMoved > 0) {
+						// if we've got more than 1, mark for update (cant remember why)
+						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+						break;
+					}
+				}
+			}
+			
+			// if we should auto input and we dont have any glass in the slot
+			if (shouldAutoInput() && !hasGlassInInput()) {
+				boolean movedGlass = false;
+				// loop through the shuffled sides
+				for (Integer dir : shuffledGlassSides) {
+					ForgeDirection directionToExtractItem = ForgeDirection.getOrientation(dir);
+					TileEntity tileOnSurface = getTileInDirection(directionToExtractItem);
+					// if it's an inventory
+					if (tileOnSurface instanceof IInventory) {
+						// get the slots that contain the stack we want
+						Set<Integer> slots = InventoryUtils.getSlotsWithStack((IInventory) tileOnSurface, glassBottle);
+						// for each of the slots
+						for (Integer slot : slots) {
+							// if we can move it into our machine
+							if (InventoryUtils.moveItemInto((IInventory)tileOnSurface, slot, this, 1, directionToExtractItem.getOpposite(), true) > 0) {
+								// mark block for update and jump out of the loop
+								worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+								movedGlass = true;
+								break;
+							}
+						}
+					}
+					// we've moved one, so jump out again
+					if (movedGlass) {
+						break;
+					}
+				}
+			}
+			// if there's no space in the output, we've got no input bottles or the tank isnt full, reset progress
 			if (!hasSpaceInOutput() || !hasGlassInInput() || !isTankFull()) {
 				progress.setValue(0);
 				return;
 			}
+			// while progress is moving, modify by 1
 			if (progress.getValue() < PROGRESS_TICKS) {
 				progress.modify(1);
 			} else {
+				// this happens when the progress has completed
 				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:fill", .5f, .8f);
 				inventory.decrStackSize(0, 1);
+				// drain the entire tank (it stores enough for 1 bottle)
 				tank.drain(tank.getFluidAmount(), true);
+				// increase the stacksize of the output slot
 				if (inventory.getStackInSlot(1) == null) {
 					inventory.setInventorySlotContents(1, xpBottle.copy());
 				} else {
@@ -95,9 +193,31 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 					outputStack.stackSize++;
 					inventory.setInventorySlotContents(1, outputStack);
 				}
+				// reset progress
 				progress.setValue(0);
 			}
+			
 		}
+	}
+	
+	public boolean hasOutputStack() {
+		ItemStack outputStack = inventory.getStackInSlot(1);
+		return outputStack != null && outputStack.stackSize > 0;
+	}
+	
+	public boolean shouldAutoInput() {
+		return autoFlags.get(AutoSides.input);
+	}
+	
+	public boolean shouldAutoOutput() {
+		return autoFlags.get(AutoSides.output);
+	}
+	
+	public List<Integer> getShuffledSides(Set<Integer> sides) {
+		List<Integer> shuffledSides = new ArrayList<Integer>();
+		shuffledSides.addAll(sides);
+		Collections.shuffle(shuffledSides);
+		return shuffledSides;
 	}
 
 	public boolean hasGlassInInput() {
@@ -139,11 +259,22 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		}
 		return true;
 	}
+	
+	private void refreshSurroundingTanks() {
+		surroundingTanks = new ArrayList<ForgeDirection>();
+		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+			TileEntity tile = getTileInDirection(side);
+			if (tile instanceof IFluidHandler) {
+				surroundingTanks.add(side);
+			}
+		}
+	}
 
 	@Override
 	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
+		if (!worldObj.isRemote) {
+			refreshSurroundingTanks();
+		}
 	}
 
 	@Override
@@ -223,6 +354,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		progress.writeToNBT(tag, "progress");
 		glassSides.writeToNBT(tag, "glass_sides");
 		xpSides.writeToNBT(tag, "xp_sides");
+		autoFlags.writeToNBT(tag, "autoflags");
 	}
 
 	@Override
@@ -233,6 +365,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 		progress.readFromNBT(tag, "progress");
 		glassSides.readFromNBT(tag, "glass_sides");
 		xpSides.readFromNBT(tag, "xp_sides");
+		autoFlags.readFromNBT(tag, "autoflags");
 	}
 
 	@Override

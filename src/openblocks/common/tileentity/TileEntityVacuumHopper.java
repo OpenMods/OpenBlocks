@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -86,6 +88,9 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 					ItemStack stack = ((EntityItem)entity).getEntityItem();
 					shouldPull = InventoryUtils.testInventoryInsertion(this, stack) > 0;
 				}
+				if (entity instanceof EntityXPOrb) {
+					shouldPull = this.getXPOutputs().getActiveSlots().size() > 0;
+				}
 
 				if (shouldPull) {
 
@@ -146,45 +151,32 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 					}
 				}
 
-				slotDirection = CollectionUtils.getRandom(itemOutputs.getActiveSlots());
-				ForgeDirection directionToOutputItem = null;
-				if (slotDirection != null) {
-					directionToOutputItem = ForgeDirection.getOrientation(slotDirection);
+				int firstUsedSlot = -1;
+				for (int i = 0; i < inventory.getSizeInventory(); i++) {
+					if (inventory.getStackInSlot(i) != null) {
+						firstUsedSlot = i;
+					}
 				}
-
-				if (directionToOutputItem != null) {
-
-					tileOnSurface = getTileInDirection(directionToOutputItem);
-
-					IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, directionToOutputItem);
-
-					int slotId = InventoryUtils.getSlotIndexOfNextStack(this);
-					if (slotId > -1) {
-						ItemStack nextStack = getStackInSlot(slotId);
-						int previousSize = nextStack.stackSize;
-						nextStack = nextStack.copy();
-						if (inventory != null) {
-							InventoryUtils.insertItemIntoInventory(inventory, nextStack, directionToOutputItem.getOpposite());
-						} else {
-							if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
-								int inserted = ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, nextStack, directionToOutputItem);
-								nextStack.stackSize -= inserted;
-							}
-						}
-						if (nextStack != null) {
-							if (nextStack.stackSize > 0) {
-								setInventorySlotContents(slotId, nextStack);
-							} else {
-								setInventorySlotContents(slotId, null);
-							}
-							if (nextStack.stackSize < previousSize) {
-								worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-							}
+				
+				if (firstUsedSlot > -1) {
+					for (Integer dir : getShuffledItemSlots()) {
+						ForgeDirection directionToOutputItem = ForgeDirection.getOrientation(dir);
+						tileOnSurface = getTileInDirection(directionToOutputItem);
+						if (InventoryUtils.moveItemInto(this, firstUsedSlot, tileOnSurface, 64, directionToOutputItem, true) > 0) {
+							worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+							break;
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	public List<Integer> getShuffledItemSlots() {
+		List<Integer> slots = new ArrayList<Integer>();
+		slots.addAll(getItemOutputs().getActiveSlots());
+		Collections.shuffle(slots);
+		return slots;
 	}
 
 	@Override
@@ -283,9 +275,11 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 					item.setEntityItemStack(stack);
 				}
 			} else if (entity instanceof EntityXPOrb) {
-				FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.XPJuice, EnchantmentUtils.XPToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
-				tank.fill(newFluid, true);
-				entity.setDead();
+				if (getXPOutputs().getActiveSlots().size() > 0) {
+					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.XPJuice, EnchantmentUtils.XPToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
+					tank.fill(newFluid, true);
+					entity.setDead();
+				}
 			}
 		}
 	}

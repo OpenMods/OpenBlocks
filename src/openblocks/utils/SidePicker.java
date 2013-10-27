@@ -18,6 +18,26 @@ public class SidePicker {
 		YPos,
 		ZNeg,
 		ZPos;
+		
+		public static Side fromForgeDirection(ForgeDirection dir) {
+			switch(dir) {
+				case WEST:
+					return XNeg;
+				case EAST:
+					return XPos;
+				case DOWN:
+					return YNeg;
+				case UP:
+					return YPos;
+				case NORTH:
+					return ZNeg;
+				case SOUTH:
+					return ZPos;
+				default:
+					break;
+			}
+			return null;
+		}
 
 		public ForgeDirection toForgeDirection() {
 			switch (this) {

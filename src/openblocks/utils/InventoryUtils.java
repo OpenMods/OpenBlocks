@@ -1,5 +1,12 @@
 package openblocks.utils;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import openblocks.Mods;
+import openblocks.common.GenericInventory;
+import openblocks.integration.ModuleBuildCraft;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.inventory.IInventory;
@@ -20,9 +27,13 @@ public class InventoryUtils {
 				stack.stackSize = 0;
 			} else {
 				boolean valid = targetInventory.isItemValidForSlot(slot, stack);
-				if (valid && stack.itemID == targetStack.itemID && (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, targetStack)
+				if (valid
+						&& stack.itemID == targetStack.itemID
+						&& (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage())
+						&& ItemStack.areItemStackTagsEqual(stack, targetStack)
 						&& targetStack.stackSize < targetStack.getMaxStackSize()) {
-					int space = targetStack.getMaxStackSize() - targetStack.stackSize;
+					int space = targetStack.getMaxStackSize()
+							- targetStack.stackSize;
 					int mergeAmount = Math.min(space, stack.stackSize);
 					ItemStack copy = targetStack.copy();
 					copy.stackSize += mergeAmount;
@@ -37,6 +48,11 @@ public class InventoryUtils {
 		insertItemIntoInventory(inventory, stack, ForgeDirection.UNKNOWN);
 	}
 
+
+	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack, ForgeDirection side) {
+		insertItemIntoInventory(inventory, stack, side, true);
+	}
+	
 	/***
 	 * 
 	 * @param inventory
@@ -44,32 +60,90 @@ public class InventoryUtils {
 	 * @param side
 	 *            The side of the block you're inserting into
 	 */
-	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack, ForgeDirection side) {
+	public static void insertItemIntoInventory(IInventory inventory, ItemStack stack, ForgeDirection side, boolean doMove) {
+		
+		IInventory targetInventory = inventory;
+		
+		// if we're not meant to move, make a clone of the inventory
+		if (!doMove) {
+			targetInventory = new GenericInventory("temporary.inventory", false, targetInventory.getSizeInventory());
+			((GenericInventory)targetInventory).copyFrom(inventory);
+		}
+		
 		int i = 0;
-		while (stack.stackSize > 0 && i < inventory.getSizeInventory()) {
-			if (side != ForgeDirection.UNKNOWN && inventory instanceof ISidedInventory) {
-				if (!((ISidedInventory)inventory).canInsertItem(i, stack, side.ordinal())) {
+		int[] attemptSlots;
+		if (inventory instanceof ISidedInventory && side != ForgeDirection.UNKNOWN) {
+			attemptSlots = ((ISidedInventory)inventory).getAccessibleSlotsFromSide(side.ordinal());
+		}else {
+			attemptSlots = new int[inventory.getSizeInventory()];
+			for (int a = 0; a < inventory.getSizeInventory(); a++) {
+				attemptSlots[a] = a;
+			}
+		}
+		if (stack == null) {
+			return;
+		}
+		if (attemptSlots == null) {
+			return;
+		}
+		while (stack.stackSize > 0 && i < attemptSlots.length) {
+			if (side != ForgeDirection.UNKNOWN
+					&& inventory instanceof ISidedInventory) {
+				if (!((ISidedInventory)inventory).canInsertItem(attemptSlots[i], stack, side.ordinal())) {
 					i++;
 					continue;
 				}
 			}
-			tryMergeStacks(inventory, i, stack);
+			tryMergeStacks(targetInventory, attemptSlots[i], stack);
 			i++;
 		}
 	}
 
-	public static int moveItemInto(IInventory fromInventory, int slot, IInventory targetInventory, int intoSlot, int maxAmount, ForgeDirection direction) {
-		if (!InventoryUtils.canMoveItem(fromInventory, targetInventory, slot, intoSlot, direction)) { return 0; }
-		int merged = 0;
-		ItemStack stack = fromInventory.getStackInSlot(slot);
-		if (stack == null) { return merged; }
-		ItemStack clonedStack = stack.copy();
-		clonedStack.stackSize = Math.min(clonedStack.stackSize, maxAmount);
-		int amountToMerge = clonedStack.stackSize;
-		InventoryUtils.tryMergeStacks(targetInventory, intoSlot, clonedStack);
-		merged = (amountToMerge - clonedStack.stackSize);
-		fromInventory.decrStackSize(slot, merged);
-		return merged;
+	public static int moveItemInto(IInventory fromInventory, int fromSlot, Object target, int maxAmount, ForgeDirection direction, boolean doMove) {
+
+		fromInventory = InventoryUtils.getInventory(fromInventory);
+		
+		// if we dont have a stack in the source location, return 0
+		ItemStack sourceStack = fromInventory.getStackInSlot(fromSlot);
+		if (sourceStack == null) { return 0; }
+
+		if (fromInventory instanceof ISidedInventory
+				&& !((ISidedInventory)fromInventory).canExtractItem(fromSlot, sourceStack, direction.ordinal())) { return 0; }
+		
+		// create a clone of our source stack and set the size to either
+		// maxAmount or the stackSize
+		ItemStack clonedSourceStack = sourceStack.copy();
+		clonedSourceStack.stackSize = Math.min(clonedSourceStack.stackSize, maxAmount);
+		int amountToMove = clonedSourceStack.stackSize;
+		int inserted = 0;
+		
+		// if it's a pipe, try accept it
+		if (target instanceof TileEntity && Loader.isModLoaded(Mods.BUILDCRAFT)
+				&& ModuleBuildCraft.isPipe((TileEntity)target)) {
+			inserted = ModuleBuildCraft.tryAcceptIntoPipe((TileEntity)target, clonedSourceStack, doMove, direction);
+			clonedSourceStack.stackSize -= inserted;
+			
+		// if it's an inventory
+		} else if (target instanceof IInventory) {
+			
+			IInventory targetInventory = (IInventory)target;
+			// try insert the item into the target inventory. this'll reduce the stackSize of our stack
+			InventoryUtils.insertItemIntoInventory(targetInventory, clonedSourceStack, direction.getOpposite(), doMove);
+			inserted = amountToMove - clonedSourceStack.stackSize;
+		}
+
+		// if we've done the move, reduce/remove the stack from our source inventory
+		if (doMove) {
+			ItemStack newSourcestack = sourceStack.copy();
+			newSourcestack.stackSize -= inserted;
+			if (newSourcestack.stackSize == 0) {
+				fromInventory.setInventorySlotContents(fromSlot, null);
+			} else {
+				fromInventory.setInventorySlotContents(fromSlot, newSourcestack);
+			}
+		}
+
+		return inserted;
 	}
 
 	public static int moveItem(IInventory fromInventory, int slot, IInventory targetInventory, int maxAmount, ForgeDirection side) {
@@ -133,28 +207,66 @@ public class InventoryUtils {
 		return getInventory(world, x, y, z);
 
 	}
+	
+	public static IInventory getInventory(IInventory inventory) {
+		if (inventory instanceof TileEntity) {
+			TileEntity te = (TileEntity) inventory;
+			return getInventory(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+		}
+		return inventory;
+	}
 
-	public static boolean canMoveItem(Object fromTile, Object toTile, int fromSlot, int intoSlot, ForgeDirection direction) {
-		ItemStack stack = ((IInventory)fromTile).getStackInSlot(fromSlot);
-		if (stack != null && fromTile instanceof ISidedInventory) {
-			if (!((ISidedInventory)fromTile).canExtractItem(fromSlot, stack, direction.ordinal())) { return false; }
-		}
-		if (stack != null && toTile instanceof ISidedInventory) {
-			if (!((ISidedInventory)toTile).canInsertItem(intoSlot, stack, direction.getOpposite().ordinal())) { return false; }
-		}
+	public static boolean isValidItemMove(IInventory fromTile, Object toObject, int fromSlot, int intoSlot, ForgeDirection direction) {
+		// check that we're moving FROM an inventory
+		if (fromTile == null) { return false; }
+		// check we've got a stack in that slot
+		ItemStack stack = fromTile.getStackInSlot(fromSlot);
+		if (stack == null) { return false; }
+		if (fromTile instanceof ISidedInventory
+				&& !((ISidedInventory)fromTile).canExtractItem(fromSlot, stack, direction.ordinal())) { return false; }
+		if (toObject instanceof ISidedInventory
+				&& !((ISidedInventory)toObject).canInsertItem(intoSlot, stack, direction.getOpposite().ordinal())) { return false; }
 		return true;
 	}
 
-	public static boolean consumeInventoryItem(IInventory inventory, ItemStack stack) {
+	public static boolean isValidOutputTile(TileEntity tile) {
+		return tile instanceof IInventory
+				|| (Loader.isModLoaded(Mods.BUILDCRAFT) && ModuleBuildCraft.isPipe(tile));
+	}
+	
+	
+	public static Set<Integer> getSlotsWithStack(IInventory inventory, ItemStack stack) {
+		inventory = getInventory(inventory);
+		Set<Integer> slots = new HashSet<Integer>();
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(i);
 			if (stackInSlot != null && stackInSlot.isItemEqual(stack)) {
-				stackInSlot.stackSize--;
-				if (stackInSlot.stackSize == 0) {
-					inventory.setInventorySlotContents(i, null);
-				}
-				return true;
+				slots.add(i);
 			}
+		}
+		return slots;
+	}
+	
+	public static int getFirstSlotWithStack(IInventory inventory, ItemStack stack) {
+		inventory = getInventory(inventory);
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stackInSlot = inventory.getStackInSlot(i);
+			if (stackInSlot != null && stackInSlot.isItemEqual(stack)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static boolean consumeInventoryItem(IInventory inventory, ItemStack stack) {
+		int slotWithStack = getFirstSlotWithStack(inventory, stack);
+		if (slotWithStack > -1) {
+			ItemStack stackInSlot = inventory.getStackInSlot(slotWithStack);
+			stackInSlot.stackSize--;
+			if (stackInSlot.stackSize == 0) {
+				inventory.setInventorySlotContents(slotWithStack, null);
+			}
+			return true;
 		}
 		return false;
 	}
@@ -208,11 +320,14 @@ public class InventoryUtils {
 				itemSizeCounter -= Math.min(Math.min(itemSizeCounter, inventory.getInventoryStackLimit()), item.getMaxStackSize());
 			}
 			/* If the slot is not empty, check that these items stack */
-			else if (item.itemID == inventorySlot.itemID && (!item.getHasSubtypes() || item.getItemDamage() == inventorySlot.getItemDamage()) && ItemStack.areItemStackTagsEqual(item, inventorySlot)
+			else if (item.itemID == inventorySlot.itemID
+					&& (!item.getHasSubtypes() || item.getItemDamage() == inventorySlot.getItemDamage())
+					&& ItemStack.areItemStackTagsEqual(item, inventorySlot)
 					&& inventorySlot.stackSize < inventorySlot.getMaxStackSize()) {
 				/* If they stack, decrement by the amount of space that remains */
 
-				int space = inventorySlot.getMaxStackSize() - inventorySlot.stackSize;
+				int space = inventorySlot.getMaxStackSize()
+						- inventorySlot.stackSize;
 				itemSizeCounter -= Math.min(itemSizeCounter, space);
 			}
 		}
