@@ -101,10 +101,8 @@ public abstract class OpenBlock extends BlockContainer {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null) {
-			if (IAwareTile.class.isAssignableFrom(teClass)) {
-				((IAwareTile)te).onNeighbourChanged(blockId);
-			}
+		if (te instanceof IAwareTile) {
+			((IAwareTile)te).onNeighbourChanged(blockId);
 		}
 		if (te != null && te instanceof ISurfaceAttachment) {
 			ForgeDirection direction = ((ISurfaceAttachment)te).getSurfaceDirection();

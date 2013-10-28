@@ -67,15 +67,13 @@ public abstract class BaseTileEntityXPMachine extends NetworkedTileEntity implem
 				TileEntity otherTank = getTileInDirection(side);
 				if (otherTank instanceof IFluidHandler) {
 					IFluidHandler handler = (IFluidHandler)otherTank;
-					if (handler.canDrain(side.getOpposite(), xpFluid.getFluid())) {
-						FluidStack drainStack = xpFluid.copy();
-						drainStack.amount = Math.min(80, space);
-						FluidStack drained = handler.drain(side.getOpposite(), drainStack, true);
-						tank.fill(drained, true);
-						if (tank.getCapacity() == tank.getFluidAmount()) {
-							break;
-						}
-					}						
+					FluidStack drainStack = xpFluid.copy();
+					drainStack.amount = Math.min(80, space);
+					FluidStack drained = handler.drain(side.getOpposite(), drainStack, true);
+					tank.fill(drained, true);
+					if (tank.getCapacity() == tank.getFluidAmount()) {
+						break;
+					}					
 				}
 			}
 		}
