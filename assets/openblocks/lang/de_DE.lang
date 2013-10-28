@@ -38,6 +38,7 @@ tile.openblocks.bigbutton.name=Großer Knopf
 tile.openblocks.fan.name=Ventilator
 tile.openblocks.xpbottler.name=XP-Abfüllgerät
 tile.openblocks.village_highlighter.name=Dorf-Highlighter
+tile.openblocks.path.name=Pfad
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
