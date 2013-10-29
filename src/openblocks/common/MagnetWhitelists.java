@@ -43,19 +43,22 @@ public class MagnetWhitelists {
 		}
 	}
 
-	public static class EntityRegisterEvent extends WhitelistRegisterEvent<Entity> {
+	public static class EntityRegisterEvent extends
+			WhitelistRegisterEvent<Entity> {
 		protected EntityRegisterEvent(ObjectTester<Entity> tester) {
 			super(tester);
 		}
 	}
 
-	public static class BlockRegisterEvent extends WhitelistRegisterEvent<Block> {
+	public static class BlockRegisterEvent extends
+			WhitelistRegisterEvent<Block> {
 		protected BlockRegisterEvent(ObjectTester<Block> tester) {
 			super(tester);
 		}
 	}
 
-	public static class TileEntityRegisterEvent extends WhitelistRegisterEvent<TileEntity> {
+	public static class TileEntityRegisterEvent extends
+			WhitelistRegisterEvent<TileEntity> {
 		protected TileEntityRegisterEvent(ObjectTester<TileEntity> tester) {
 			super(tester);
 		}
@@ -88,23 +91,15 @@ public class MagnetWhitelists {
 		blockWhitelist.addTester(new ClassTester<Block>(BlockCactus.class));
 		MinecraftForge.EVENT_BUS.post(new BlockRegisterEvent(blockWhitelist));
 
-		tileEntityWhitelist.addTester(new ClassTester<TileEntity>(TileEntityBeacon.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityBrewingStand.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityChest.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityCommandBlock.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityDispenser.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityEnchantmentTable.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityEnderChest.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityFurnace.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityHopper.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityNote.class))
-				.addTester(new ClassTester<TileEntity>(TileEntityRecordPlayer.class));
+		tileEntityWhitelist.addTester(new ClassTester<TileEntity>(TileEntityBeacon.class)).addTester(new ClassTester<TileEntity>(TileEntityBrewingStand.class)).addTester(new ClassTester<TileEntity>(TileEntityChest.class)).addTester(new ClassTester<TileEntity>(TileEntityCommandBlock.class)).addTester(new ClassTester<TileEntity>(TileEntityDispenser.class)).addTester(new ClassTester<TileEntity>(TileEntityEnchantmentTable.class)).addTester(new ClassTester<TileEntity>(TileEntityEnderChest.class)).addTester(new ClassTester<TileEntity>(TileEntityFurnace.class)).addTester(new ClassTester<TileEntity>(TileEntityHopper.class)).addTester(new ClassTester<TileEntity>(TileEntityNote.class)).addTester(new ClassTester<TileEntity>(TileEntityRecordPlayer.class));
 	}
 
 	public boolean testBlock(World world, int x, int y, int z) {
 		int blockId = world.getBlockId(x, y, z);
-		Block /* block? */block /* block! */=
-				Block/* blocky */.blocksList[blockId/* blockety block */];
+		Block /* block? */block /* block! */= Block/* blocky */.blocksList[blockId/*
+																				 * blockety
+																				 * block
+																				 */];
 		// semantic satiation FTW!
 
 		if (block == null) return false;

@@ -27,7 +27,7 @@ public class BlockVillageHighlighter extends OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
-	
+
 	@Override
 	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int m) {
 		TileEntityVillageHighlighter tile = getTileEntity(world, x, y, z, TileEntityVillageHighlighter.class);

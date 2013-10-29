@@ -39,8 +39,8 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	/**
-	 * @param mc 
-	 * @param renderTick  
+	 * @param mc
+	 * @param renderTick
 	 */
 	public void preRenderTick(Minecraft mc, World world, float renderTick) {
 		EntityHangGlider.updateGliders(world);

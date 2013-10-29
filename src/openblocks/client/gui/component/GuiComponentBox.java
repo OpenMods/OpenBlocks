@@ -56,12 +56,14 @@ public class GuiComponentBox extends BaseComponent {
 	}
 
 	public void renderBottomRightCorner(int offsetX, int offsetY) {
-		drawTexturedModalRect(offsetX + x + getWidth() - 4, offsetY + y + getHeight() - 4, u + 15, v, 4, 4);
+		drawTexturedModalRect(offsetX + x + getWidth() - 4, offsetY + y
+				+ getHeight() - 4, u + 15, v, 4, 4);
 	}
 
 	public void renderBottomEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated((double)offsetX + x + 3, (double)offsetY + y + getHeight() - 3, 0);
+		GL11.glTranslated((double)offsetX + x + 3, (double)offsetY + y
+				+ getHeight() - 3, 0);
 		GL11.glScaled((double)getWidth() - 6, 1, 0);
 		drawTexturedModalRect(0, 0, u + 14, v, 1, 3);
 		GL11.glPopMatrix();
@@ -122,6 +124,7 @@ public class GuiComponentBox extends BaseComponent {
 	}
 
 	protected boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
+		return mouseX >= x && mouseX < x + width && mouseY >= y
+				&& mouseY < y + height;
 	}
 }

@@ -90,17 +90,11 @@ public class OpenBlocks {
 		public static Fluid XPJuice;
 		public static Fluid openBlocksXPJuice;
 	}
-	
+
 	public static FluidStack XP_FLUID = null;
 
 	public static enum Gui {
-		lightbox,
-		luggage,
-		sprinkler,
-		vacuumHopper,
-		bigButton,
-		XPBottler,
-		autoAnvil
+		lightbox, luggage, sprinkler, vacuumHopper, bigButton, XPBottler, autoAnvil
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
@@ -126,7 +120,7 @@ public class OpenBlocks {
 	}
 
 	/**
-	 * @param evt  
+	 * @param evt
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
@@ -153,21 +147,21 @@ public class OpenBlocks {
 		XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
 
 		FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, ItemFilledBucket.BucketMetas.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
-		
+
 		OpenBlocks.Items.generic.initRecipes();
 
 		MagnetWhitelists.instance.initTesters();
 
 		if (Loader.isModLoaded(Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
-		if (Loader.isModLoaded(Mods.OPENPERIPHERAL)) ModuleOpenPeripheral.registerAdapters(); 
-		
+		if (Loader.isModLoaded(Mods.OPENPERIPHERAL)) ModuleOpenPeripheral.registerAdapters();
+
 		proxy.init();
 
 		proxy.registerRenderInformation();
 	}
 
 	/**
-	 * @param evt  
+	 * @param evt
 	 */
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {

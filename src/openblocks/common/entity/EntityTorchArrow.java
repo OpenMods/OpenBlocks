@@ -43,7 +43,8 @@ public class EntityTorchArrow extends EntityArrow {
 			int closestY = (int)Math.round(posY);
 			int closestZ = (int)Math.round(posZ);
 			if (worldObj.isAirBlock(closestX, closestY, closestZ)) {
-				if (shootingEntity != null && shootingEntity instanceof EntityPlayer) {
+				if (shootingEntity != null
+						&& shootingEntity instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer)shootingEntity;
 					if (player.inventory.hasItem(Block.torchWood.blockID)) {
 						player.inventory.consumeInventoryItem(Block.torchWood.blockID);

@@ -68,7 +68,7 @@ public class ModelVacuumHopper extends ModelBase {
 	}
 
 	/**
-	 * @param f  
+	 * @param f
 	 */
 	public void render(TileEntityVacuumHopper hopper, float f) {
 

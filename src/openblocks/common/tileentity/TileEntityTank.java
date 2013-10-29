@@ -19,7 +19,8 @@ import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableShort;
 import openblocks.utils.ItemUtils;
 
-public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler, IAwareTile {
+public class TileEntityTank extends NetworkedTileEntity implements
+		IFluidHandler, IAwareTile {
 
 	public static int getTankCapacity() {
 		return FluidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank;
@@ -57,8 +58,7 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 	 * Keys of things what get synced
 	 */
 	public enum Keys {
-		liquidId,
-		renderLevel
+		liquidId, renderLevel
 	}
 
 	public TileEntityTank() {
@@ -107,13 +107,9 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 			if (neighbour != null && neighbour instanceof TileEntityTank) {
 				neighbours.put(direction, new WeakReference<TileEntityTank>((TileEntityTank)neighbour));
 			}
-			surroundingBlocks.put(direction,
-					!worldObj.isAirBlock(
-							xCoord + direction.offsetX,
-							yCoord + direction.offsetY,
-							zCoord + direction.offsetZ
-							)
-					);
+			surroundingBlocks.put(direction, !worldObj.isAirBlock(xCoord
+					+ direction.offsetX, yCoord + direction.offsetY, zCoord
+					+ direction.offsetZ));
 		}
 		if (!worldObj.isRemote) {
 			sendBlockEvent(0, 0);
@@ -231,8 +227,10 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 					ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
 					for (TileEntityTank horizontal : horizontals) {
 						FluidStack liquid = tank.getFluid();
-						if (horizontal.canReceiveLiquid(liquid) && liquid != null) {
-							int difference = getAmount() - horizontal.getAmount();
+						if (horizontal.canReceiveLiquid(liquid)
+								&& liquid != null) {
+							int difference = getAmount()
+									- horizontal.getAmount();
 							if (difference <= 0) continue;
 							int halfDifference = Math.max(difference / 2, 1);
 							FluidStack liquidCopy = liquid.copy();
@@ -475,8 +473,10 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 			int count = 1;
 			for (ForgeDirection side : sides) {
 				TileEntityTank sideTank = getTankInDirection(side);
-				if (sideTank != null && sideTank.canReceiveLiquid(tank.getFluid())) {
-					fullness += sideTank.getHeightForRender() + sideTank.getFlowOffset();
+				if (sideTank != null
+						&& sideTank.canReceiveLiquid(tank.getFluid())) {
+					fullness += sideTank.getHeightForRender()
+							+ sideTank.getFlowOffset();
 					count++;
 				}
 			}

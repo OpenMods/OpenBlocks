@@ -33,26 +33,27 @@ public class ContainerXPBottler extends ContainerInventory<TileEntityXPBottler> 
 
 	@Override
 	public void onClientButtonClicked(int buttonId) {
-		
+
 		TileEntityXPBottler xpBottler = getTileEntity();
-		
-		// autoflags contains flags to say is a particular slot should autoeject/insert
+
+		// autoflags contains flags to say is a particular slot should
+		// autoeject/insert
 		SyncableFlags autoFlags = xpBottler.getAutoFlags();
-		
+
 		if (buttonId < 7) {
 			xpBottler.getGlassSides().toggle(ForgeDirection.getOrientation(buttonId));
-		}else if (buttonId < 14) {
+		} else if (buttonId < 14) {
 			xpBottler.getXPBottleSides().toggle(ForgeDirection.getOrientation(buttonId - 7));
-		}else if (buttonId < 21) {
-			xpBottler.getXPSides().toggle(ForgeDirection.getOrientation(buttonId - 14));	
-		}else if (buttonId == 21) {
+		} else if (buttonId < 21) {
+			xpBottler.getXPSides().toggle(ForgeDirection.getOrientation(buttonId - 14));
+		} else if (buttonId == 21) {
 			autoFlags.toggle(AutoSides.input);
-		}else if (buttonId == 22) {
+		} else if (buttonId == 22) {
 			autoFlags.toggle(AutoSides.output);
-		}else if (buttonId == 23) {
+		} else if (buttonId == 23) {
 			autoFlags.toggle(AutoSides.xp);
 		}
-		
+
 	}
 
 }

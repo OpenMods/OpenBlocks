@@ -18,8 +18,8 @@ import org.lwjgl.opengl.GL11;
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 
 	private GuiComponentPanel main;
-	
-	//tank
+
+	// tank
 	private GuiComponentTankLevel xpLevel;
 
 	// side selectors
@@ -27,7 +27,7 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 	private GuiComponentSideSelector sideSelectorModifier;
 	private GuiComponentSideSelector sideSelectorOutput;
 	private GuiComponentSideSelector sideSelectorXP;
-	
+
 	private GuiComponentTabs tabs;
 
 	// tabs
@@ -41,44 +41,44 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 	private GuiComponentCheckbox checkboxAutoExtractModifier;
 	private GuiComponentCheckbox checkboxAutoEjectOutput;
 	private GuiComponentCheckbox checkboxAutoDrinkXP;
-	
+
 	// labels
 	private GuiComponentLabel labelAutoExtractTool;
 	private GuiComponentLabel labelAutoExtractModifier;
 	private GuiComponentLabel labelAutoEjectOutput;
 	private GuiComponentLabel labelAutoDrinkXP;
-	
+
 	// sprites
 	private GuiComponentSprite spriteHammer;
 	private GuiComponentSprite spritePlus;
-	
+
 	public GuiAutoAnvil(ContainerAutoAnvil container) {
 		super(container);
 		xSize = 176;
 		ySize = 175;
-		
+
 		ItemStack enchantedAxe = new ItemStack(Item.pickaxeDiamond, 1);
 		enchantedAxe.addEnchantment(Enchantment.fortune, 1);
-		
+
 		// create main panel
 		main = new GuiComponentPanel(0, 0, xSize, ySize, container);
-		
+
 		// create tank level
 		xpLevel = new GuiComponentTankLevel(140, 30, 17, 37);
 		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
-		
+
 		TileEntityAutoAnvil te = container.getTileEntity();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
-		
+
 		// create tabs container
 		tabs = new GuiComponentTabs(xSize - 3, 4);
-		
+
 		// create tabs
 		tabTool = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.pickaxeDiamond, 1), 100, 100);
 		tabModifier = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.enchantedBook, 1), 100, 100);
 		tabOutput = new GuiComponentTab(0xe4b9b0, enchantedAxe, 100, 100);
 		tabXP = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.bucketEmpty, 1), 100, 100);
-		
+
 		// create side selectors
 		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getToolSides(), true, new ISideSelectionCallback() {
 			@Override
@@ -106,14 +106,14 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		});
 
 		SyncableFlags autoFlags = te.getAutoFlags();
-		
+
 		checkboxAutoExtractTool = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.tool.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
 			@Override
 			public void onTick() {
 				getContainer().sendButtonClick(28);
 			}
 		});
-		
+
 		checkboxAutoExtractModifier = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.modifier.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
 			@Override
 			public void onTick() {
@@ -134,49 +134,48 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 				getContainer().sendButtonClick(31);
 			}
 		});
-		
+
 		// create labels
 		labelAutoExtractTool = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
 		labelAutoExtractModifier = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
 		labelAutoEjectOutput = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
 		labelAutoDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
-		
+
 		// create sprites
 		spriteHammer = new GuiComponentSprite(80, 34, GuiComponentSprite.Sprite.hammer);
 		spritePlus = new GuiComponentSprite(36, 41, GuiComponentSprite.Sprite.plus);
-		
+
 		// add checkboxes
 		tabTool.addComponent(checkboxAutoExtractTool);
 		tabModifier.addComponent(checkboxAutoExtractModifier);
 		tabOutput.addComponent(checkboxAutoEjectOutput);
 		tabXP.addComponent(checkboxAutoDrinkXP);
-		
+
 		// add side selectors
 		tabTool.addComponent(sideSelectorTool);
 		tabModifier.addComponent(sideSelectorModifier);
 		tabOutput.addComponent(sideSelectorOutput);
 		tabXP.addComponent(sideSelectorXP);
-		
+
 		// add labels
 		tabTool.addComponent(labelAutoExtractTool);
 		tabModifier.addComponent(labelAutoExtractModifier);
 		tabOutput.addComponent(labelAutoEjectOutput);
 		tabXP.addComponent(labelAutoDrinkXP);
-		
+
 		// add tabs
 		tabs.addComponent(tabTool);
 		tabs.addComponent(tabModifier);
 		tabs.addComponent(tabOutput);
 		tabs.addComponent(tabXP);
-		
+
 		// append to main
 		main.addComponent(spriteHammer);
 		main.addComponent(spritePlus);
 		main.addComponent(tabs);
 		main.addComponent(xpLevel);
-		
-	}
 
+	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
@@ -195,7 +194,6 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		String translatedName = StatCollector.translateToLocal("container.inventory");
 		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
 	}
-	
 
 	@Override
 	protected void mouseClicked(int x, int y, int button) {

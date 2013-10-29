@@ -30,7 +30,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public BlockRenderingHandler() {
 		inventoryTileEntities = Maps.newIdentityHashMap();
 		blockRenderers = Maps.newIdentityHashMap();
-		
+
 		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
 
 		TileEntityLightbox teLightbox = new TileEntityLightbox();
@@ -89,7 +89,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			blockRenderers.get(block).renderInventoryBlock(block, metadata, modelID, renderer);
 			return;
 		}
-		
+
 		TileEntity te = inventoryTileEntities.get(block);
 
 		if (te instanceof OpenTileEntity) {
@@ -116,9 +116,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		if (blockRenderers.containsKey(block)) {
-			return blockRenderers.get(block).renderWorldBlock(world, x, y, z, block, modelId, renderer);
-		}
+		if (blockRenderers.containsKey(block)) { return blockRenderers.get(block).renderWorldBlock(world, x, y, z, block, modelId, renderer); }
 		return false;
 	}
 

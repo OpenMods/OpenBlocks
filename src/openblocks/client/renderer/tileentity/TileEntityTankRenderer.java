@@ -217,7 +217,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	}
 
 	/**
-	 * @param liquid  
+	 * @param liquid
 	 */
 	public static ResourceLocation getFluidSheet(Fluid liquid) {
 		return TextureMap.locationBlocksTexture;

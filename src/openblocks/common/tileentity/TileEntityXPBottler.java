@@ -27,9 +27,9 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Item.expBottle, 1);
-	
+
 	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
-	
+
 	private GenericTank tank = new GenericTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();

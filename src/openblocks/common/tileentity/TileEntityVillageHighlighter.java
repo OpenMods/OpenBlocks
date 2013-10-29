@@ -28,7 +28,7 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	public static int VALUES_PER_VILLAGE = 7;
 
 	public SyncableIntArray villageData = new SyncableIntArray();
-	
+
 	private boolean previousBreedStatus = false;
 
 	public TileEntityVillageHighlighter() {
@@ -130,22 +130,20 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public boolean canVillagersBreed() {
 		for (Village village : (List<Village>)worldObj.villageCollectionObj.getVillageList()) {
 			if (village.isInRange(xCoord, yCoord, zCoord)) {
-		        int i = (int)(village.getNumVillageDoors() * 0.35D);
-		        if (village.getNumVillagers() < i) {
-		        	return true;
-		        }
+				int i = (int)(village.getNumVillageDoors() * 0.35D);
+				if (village.getNumVillagers() < i) { return true; }
 			}
 		}
 		return false;
 	}
 
 	public int getSignalStrength() {
-		return canVillagersBreed() ? 15 : 0;
+		return canVillagersBreed()? 15 : 0;
 	}
 
 }

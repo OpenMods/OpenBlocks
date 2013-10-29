@@ -39,9 +39,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
 
 	public enum Keys {
-		xpOutputs,
-		itemOutputs,
-		tankLevel
+		xpOutputs, itemOutputs, tankLevel
 	}
 
 	public SyncableFlags xpOutputs = new SyncableFlags();
@@ -157,7 +155,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 						firstUsedSlot = i;
 					}
 				}
-				
+
 				if (firstUsedSlot > -1) {
 					for (Integer dir : getShuffledItemSlots()) {
 						ForgeDirection directionToOutputItem = ForgeDirection.getOrientation(dir);
@@ -171,7 +169,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 			}
 		}
 	}
-	
+
 	public List<Integer> getShuffledItemSlots() {
 		List<Integer> slots = new ArrayList<Integer>();
 		slots.addAll(getItemOutputs().getActiveSlots());
@@ -353,7 +351,8 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	}
 
 	public double getXPBufferRatio() {
-		return Math.max(0, Math.min(1, (double)tankLevel.getValue() / (double)tank.getCapacity()));
+		return Math.max(0, Math.min(1, (double)tankLevel.getValue()
+				/ (double)tank.getCapacity()));
 	}
 
 	@Override

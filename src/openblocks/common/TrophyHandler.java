@@ -36,17 +36,12 @@ public class TrophyHandler {
 	}
 
 	public enum Trophy {
-		Wolf(),
-		Chicken(new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")),
-		Cow(new ItemDropBehavior(20000, Item.leather.itemID)),
-		Creeper(new CreeperBehavior()),
-		Skeleton(new SkeletonBehavior()),
-		PigZombie(new ItemDropBehavior(20000, Item.goldNugget.itemID)),
-		Bat(1.0, -0.3),
-		Zombie(),
-		Witch(0.35),
-		Villager(),
-		Ozelot() {
+		Wolf(), Chicken(
+				new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")), Cow(
+				new ItemDropBehavior(20000, Item.leather.itemID)), Creeper(
+				new CreeperBehavior()), Skeleton(new SkeletonBehavior()), PigZombie(
+				new ItemDropBehavior(20000, Item.goldNugget.itemID)), Bat(1.0,
+				-0.3), Zombie(), Witch(0.35), Villager(), Ozelot() {
 			@Override
 			protected Entity createEntity() {
 				Entity entity = super.createEntity();
@@ -59,12 +54,8 @@ public class TrophyHandler {
 				return entity;
 			}
 		},
-		Sheep(),
-		Blaze(new BlazeBehavior()),
-		Silverfish(),
-		Spider(),
-		CaveSpider(new CaveSpiderBehavior()),
-		Slime(0.4) {
+		Sheep(), Blaze(new BlazeBehavior()), Silverfish(), Spider(), CaveSpider(
+				new CaveSpiderBehavior()), Slime(0.4) {
 			@Override
 			protected Entity createEntity() {
 				Entity entity = super.createEntity();
@@ -91,14 +82,11 @@ public class TrophyHandler {
 				return entity;
 			}
 		},
-		Ghast(0.1, 0.2),
-		Enderman(0.3, new EndermanBehavior()),
-		LavaSlime(0.8),
-		Squid(0.3, 0.5, new SquidBehavior()),
-		MushroomCow(new MooshroomBehavior()),
-		VillagerGolem(0.3),
-		SnowMan(new SnowmanBehavior()),
-		Pig(new ItemDropBehavior(20000, Item.porkRaw.itemID));
+		Ghast(0.1, 0.2), Enderman(0.3, new EndermanBehavior()), LavaSlime(0.8), Squid(
+				0.3, 0.5, new SquidBehavior()), MushroomCow(
+				new MooshroomBehavior()), VillagerGolem(0.3), SnowMan(
+				new SnowmanBehavior()), Pig(
+				new ItemDropBehavior(20000, Item.porkRaw.itemID));
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;

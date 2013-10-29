@@ -137,7 +137,8 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
-		setupDimensions(x - width, y, z - depth, x + width, y + height, z + depth);
+		setupDimensions(x - width, y, z - depth, x + width, y + height, z
+				+ depth);
 	}
 
 	protected void setupDimensions(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
@@ -169,8 +170,10 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	/***
-	 * An extended block placement function which includes ALL the details you'll ever need.
+	 * An extended block placement function which includes ALL the details
+	 * you'll ever need.
 	 * This is called if your ItemBlock extends ItemOpenBlock
+	 * 
 	 * @param world
 	 * @param player
 	 * @param stack
@@ -209,6 +212,7 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 
 	protected boolean canPlaceOnlyOnGround(World world, int x, int y, int z, ForgeDirection side) {
-		return side == ForgeDirection.DOWN && isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
+		return side == ForgeDirection.DOWN
+				&& isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
 	}
 }

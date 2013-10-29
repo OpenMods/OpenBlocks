@@ -11,7 +11,7 @@ public class BlockAutoAnvil extends OpenBlock {
 
 	public BlockAutoAnvil() {
 		super(Config.blockAutoAnvilId, Material.anvil);
-        setStepSound(soundAnvilFootstep);
+		setStepSound(soundAnvilFootstep);
 		setupBlock(this, "autoanvil", TileEntityAutoAnvil.class);
 	}
 

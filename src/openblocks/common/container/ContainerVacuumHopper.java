@@ -5,7 +5,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 
-public class ContainerVacuumHopper extends ContainerInventory<TileEntityVacuumHopper> {
+public class ContainerVacuumHopper extends
+		ContainerInventory<TileEntityVacuumHopper> {
 
 	public ContainerVacuumHopper(IInventory playerInventory, TileEntityVacuumHopper hopper) {
 		super(playerInventory, hopper);

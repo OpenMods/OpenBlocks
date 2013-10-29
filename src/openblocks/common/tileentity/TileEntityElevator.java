@@ -110,7 +110,8 @@ public class TileEntityElevator extends OpenTileEntity {
 				|| Block.blocksList[blockId] == null
 				|| (Config.irregularBlocksArePassable && Block.blocksList[blockId].getCollisionBoundingBoxFromPool(worldObj, x, y, z) == null); }
 		/* Ugly logic makes NC sad :( */
-		return !(worldObj.isAirBlock(x, y, z) || Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks
+		return !(worldObj.isAirBlock(x, y, z)
+				|| Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks
 				&& !Block.isNormalCube(blockId));
 	}
 

@@ -66,7 +66,8 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+		if (!world.isRemote
+				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
 			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
 			if (tank != null && tank.getAmount() > 10) {

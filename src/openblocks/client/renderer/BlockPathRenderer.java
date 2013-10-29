@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
 public class BlockPathRenderer implements IBlockRenderer {
 
 	private Random rnd = new Random();
-	
+
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 
@@ -33,7 +33,8 @@ public class BlockPathRenderer implements IBlockRenderer {
 			double length = rnd.nextDouble() * 0.3 + 0.1;
 			double pX = rnd.nextDouble() * (1.0 - width);
 			double pZ = rnd.nextDouble() * (1.0 - length);
-			AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(pX, 0, pZ, pX + width, 1, pZ + length);
+			AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(pX, 0, pZ, pX
+					+ width, 1, pZ + length);
 			boolean hit = false;
 			for (AxisAlignedBB box : boundingBoxes) {
 				if (box.intersectsWith(bb)) {
@@ -42,16 +43,11 @@ public class BlockPathRenderer implements IBlockRenderer {
 				}
 			}
 			if (!hit) {
-				renderer.setRenderBounds(pX, 0, pZ, pX + width, 0.05 * rnd.nextDouble() + 0.02, pZ + length);
+				renderer.setRenderBounds(pX, 0, pZ, pX + width, 0.05 * rnd.nextDouble() + 0.02, pZ
+						+ length);
 				if (modelId == -1) {
-					OpenRenderHelper.renderCube(
-							renderer.renderMinX,
-							renderer.renderMinY,
-							renderer.renderMinZ,
-							renderer.renderMaxX,
-							renderer.renderMaxY,
-							renderer.renderMaxZ, block, null);
-				}else {
+					OpenRenderHelper.renderCube(renderer.renderMinX, renderer.renderMinY, renderer.renderMinZ, renderer.renderMaxX, renderer.renderMaxY, renderer.renderMaxZ, block, null);
+				} else {
 					renderer.renderStandardBlock(block, x, y, z);
 				}
 				boundingBoxes.add(bb);

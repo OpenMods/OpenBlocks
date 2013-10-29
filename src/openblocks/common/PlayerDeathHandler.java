@@ -21,12 +21,14 @@ public class PlayerDeathHandler {
 	 */
 	@ForgeSubscribe
 	public void onPlayerDeath(LivingDeathEvent event) {
-		if (event.entityLiving != null && event.entityLiving instanceof EntityPlayer) {
+		if (event.entityLiving != null
+				&& event.entityLiving instanceof EntityPlayer) {
 
 			EntityPlayer player = (EntityPlayer)event.entityLiving;
 			World world = player.worldObj;
 
-			if (!world.isRemote && !world.getGameRules().getGameRuleBooleanValue("keepInventory")) {
+			if (!world.isRemote
+					&& !world.getGameRules().getGameRuleBooleanValue("keepInventory")) {
 				int x = (int)player.posX;
 				int y = (int)player.posY;
 				int z = (int)player.posZ;

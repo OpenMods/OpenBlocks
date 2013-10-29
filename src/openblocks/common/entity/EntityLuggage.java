@@ -20,7 +20,8 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityLuggage extends EntityTameable implements IEntityAdditionalSpawnData {
+public class EntityLuggage extends EntityTameable implements
+		IEntityAdditionalSpawnData {
 
 	protected GenericInventory inventory = new GenericInventory("luggage", false, 27);
 	public boolean special;

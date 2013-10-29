@@ -49,13 +49,17 @@ public class GuiComponentTab extends GuiComponentBox {
 		}
 		width = (int)Math.round(dWidth);
 		height = (int)Math.round(dHeight);
-		renderChildren = active && width == targetWidth && height == targetHeight;
+		renderChildren = active && width == targetWidth
+				&& height == targetHeight;
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		GL11.glColor3f(1, 1, 1);
-		RenderHelper.enableGUIStandardItemLighting(); // <- optional, looks brighter without that. You decide
+		RenderHelper.enableGUIStandardItemLighting(); // <- optional, looks
+														// brighter without
+														// that. You decide
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		itemRenderer.zLevel = zLevel + 50; // <- critical! Must be >= 50
-		itemRenderer.renderItemIntoGUI(minecraft.fontRenderer, minecraft.getTextureManager(), iconStack, offsetX + x + 4, offsetY + y + 4);
+		itemRenderer.renderItemIntoGUI(minecraft.fontRenderer, minecraft.getTextureManager(), iconStack, offsetX
+				+ x + 4, offsetY + y + 4);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_LIGHTING);
 

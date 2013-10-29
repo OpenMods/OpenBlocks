@@ -11,14 +11,15 @@ import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
 import openblocks.sync.SyncMapTile;
 
-public abstract class NetworkedTileEntity extends OpenTileEntity implements ISyncHandler {
+public abstract class NetworkedTileEntity extends OpenTileEntity implements
+		ISyncHandler {
 
 	protected SyncMapTile syncMap = new SyncMapTile();
 
 	public void addSyncedObject(Enum<?> key, ISyncableObject obj) {
 		syncMap.put(key, obj);
 	}
-	
+
 	public void sync(boolean syncMeta) {
 		if (syncMeta) {
 			super.sync();

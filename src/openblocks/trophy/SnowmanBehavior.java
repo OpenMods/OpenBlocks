@@ -14,7 +14,8 @@ public class SnowmanBehavior implements ITrophyBehavior {
 				int pX = x + tile.xCoord;
 				int pY = tile.yCoord;
 				int pZ = z + tile.zCoord;
-				if (tile.worldObj.isAirBlock(pX, pY, pZ) && Block.snow.canPlaceBlockAt(tile.worldObj, pX, pY, pZ)) {
+				if (tile.worldObj.isAirBlock(pX, pY, pZ)
+						&& Block.snow.canPlaceBlockAt(tile.worldObj, pX, pY, pZ)) {
 					tile.worldObj.setBlock(pX, pY, pZ, Block.snow.blockID);
 				}
 			}

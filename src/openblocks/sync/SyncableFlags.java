@@ -45,7 +45,7 @@ public class SyncableFlags implements ISyncableObject {
 	public void toggle(int slot) {
 		set(slot, !get(slot));
 	}
-	
+
 	public void toggle(Enum<?> slot) {
 		toggle(slot.ordinal());
 	}
@@ -137,7 +137,8 @@ public class SyncableFlags implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
 		stream.writeShort(value);
 	}
 

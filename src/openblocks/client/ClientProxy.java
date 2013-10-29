@@ -130,7 +130,8 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public File getWorldDir(World world) {
-		return new File(OpenBlocks.getBaseDir(), "saves/" + world.getSaveHandler().getWorldDirectoryName());
+		return new File(OpenBlocks.getBaseDir(), "saves/"
+				+ world.getSaveHandler().getWorldDirectoryName());
 	}
 
 	@Override
@@ -141,7 +142,8 @@ public class ClientProxy implements IProxy {
 	@Override
 	public boolean isServerThread() {
 		Thread thr = Thread.currentThread();
-		return thr instanceof ThreadMinecraftServer || thr instanceof ServerListenThread;
+		return thr instanceof ThreadMinecraftServer
+				|| thr instanceof ServerListenThread;
 	}
 
 	@Override

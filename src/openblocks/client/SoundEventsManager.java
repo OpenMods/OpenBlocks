@@ -74,7 +74,8 @@ public class SoundEventsManager {
 	public static boolean isEntityWearingGlasses(Entity e) {
 		if (e instanceof EntityPlayer) {
 			ItemStack helmet = ((EntityPlayer)e).inventory.armorItemInSlot(3);
-			return helmet != null && helmet.getItem() instanceof ItemSonicGlasses;
+			return helmet != null
+					&& helmet.getItem() instanceof ItemSonicGlasses;
 		}
 
 		return false;
@@ -98,7 +99,8 @@ public class SoundEventsManager {
 	@ForgeSubscribe
 	public void onSoundEvent(PlayStreamingEvent evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
-			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "." + evt.name;
+			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "."
+					+ evt.name;
 			addEvent(evt.x, evt.y, evt.z, soundName, 1, 10);
 		}
 	}
@@ -212,9 +214,12 @@ public class SoundEventsManager {
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		dimWorld(tex, mc);
 
-		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX) * evt.partialTicks;
-		final double interpY = rve.prevPosY + (rve.posY - rve.prevPosY) * evt.partialTicks;
-		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ) * evt.partialTicks;
+		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX)
+				* evt.partialTicks;
+		final double interpY = rve.prevPosY + (rve.posY - rve.prevPosY)
+				* evt.partialTicks;
+		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ)
+				* evt.partialTicks;
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);

@@ -36,10 +36,12 @@ public class GuiComponentTankLevel extends GuiComponentBox {
 				double fluidHeight = (height - 3) * percentFull;
 				tessellator.addVertexWithUV(offsetX + x + 3, offsetY + y
 						+ height - 3, this.zLevel, icon.getMinU(), icon.getMaxV());
-				tessellator.addVertexWithUV(offsetX + x + width - 3, offsetY + y
-						+ height - 3, this.zLevel, icon.getMaxU(), icon.getMaxV());
-				tessellator.addVertexWithUV(offsetX + x + width - 3, offsetY + y + (height - fluidHeight), this.zLevel, icon.getMaxU(), icon.getMinV());
-				tessellator.addVertexWithUV(offsetX + x + 3, offsetY + y + (height - fluidHeight), this.zLevel, icon.getMinU(), icon.getMinV());
+				tessellator.addVertexWithUV(offsetX + x + width - 3, offsetY
+						+ y + height - 3, this.zLevel, icon.getMaxU(), icon.getMaxV());
+				tessellator.addVertexWithUV(offsetX + x + width - 3, offsetY
+						+ y + (height - fluidHeight), this.zLevel, icon.getMaxU(), icon.getMinV());
+				tessellator.addVertexWithUV(offsetX + x + 3, offsetY + y
+						+ (height - fluidHeight), this.zLevel, icon.getMinU(), icon.getMinV());
 				tessellator.draw();
 			}
 		}

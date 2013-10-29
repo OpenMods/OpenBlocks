@@ -107,19 +107,19 @@ public class Config {
 
 	@BlockId(description = "The id of the xp bottler block")
 	public static int blockXPBottlerId = 2557;
-	
+
 	@BlockId(description = "The id of the village highlighter block")
 	public static int blockVillageHighlighterId = 2558;
-	
+
 	@BlockId(description = "The id of the path block")
 	public static int blockPathId = 2559;
-	
+
 	@BlockId(description = "The id of the auto anvil")
 	public static int blockAutoAnvilId = 2560;
-	
+
 	@BlockId(description = "The id of the auto enchantment table")
 	public static int blockAutoEnchantmentTableId = 2561;
-	
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -149,10 +149,10 @@ public class Config {
 
 	@ItemId(description = "The id of crane backpack item")
 	public static int itemCraneId = 14984;
-	
+
 	@ItemId(description = "The id of slimalyzer item")
 	public static int itemSlimalyzerId = 14985;
-	
+
 	@ItemId(description = "The id of the filled bucket")
 	public static int itemFilledBucketId = 14986;
 
@@ -178,7 +178,6 @@ public class Config {
 	public static boolean craneShiftControl = true;
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
-
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -292,13 +291,13 @@ public class Config {
 
 		prop = configFile.get("crane", "addTurtles", addCraneTurtles, "Enable magnet turtles in creative list");
 		addCraneTurtles = prop.getBoolean(addCraneTurtles);
-		
+
 	}
 
 	public static void register() {
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
-		
+
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
@@ -399,7 +398,7 @@ public class Config {
 			OpenBlocks.Blocks.villageHighlighter = new BlockVillageHighlighter();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.villageHighlighter), new Object[] { "www", "wew", "ccc", 'w', "plankWood", 'e', new ItemStack(Item.emerald), 'c', new ItemStack(Block.cobblestone) }));
 		}
-		
+
 		if (Config.canRegisterBlock(blockPathId)) {
 			OpenBlocks.Blocks.path = new BlockPath();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.path, 2), "stone", "cobblestone"));
@@ -409,7 +408,7 @@ public class Config {
 			OpenBlocks.Blocks.autoAnvil = new BlockAutoAnvil();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoAnvil), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.anvil, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
-		
+
 		if (Config.canRegisterBlock(blockAutoEnchantmentTableId)) {
 			OpenBlocks.Blocks.autoEnchantmentTable = new BlockAutoEnchantmentTable();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoEnchantmentTable), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.enchantmentTable, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
@@ -477,29 +476,25 @@ public class Config {
 			OpenBlocks.Items.craneBackpack = new ItemCraneBackpack();
 			ItemStack line = ItemGeneric.Metas.line.newItemStack();
 			ItemStack beam = ItemGeneric.Metas.beam.newItemStack();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack,
-					ItemGeneric.Metas.craneEngine.newItemStack(),
-					ItemGeneric.Metas.craneMagnet.newItemStack(),
-					beam, beam,
-					line, line, line,
-					Item.leather
-					));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack, ItemGeneric.Metas.craneEngine.newItemStack(), ItemGeneric.Metas.craneMagnet.newItemStack(), beam, beam, line, line, line, Item.leather));
 		}
-		
 
 		if (itemSlimalyzerId > 0) {
 			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
-			
+
 		}
-		
+
 	}
 
 	private static boolean canRegisterBlock(int blockId) {
 		if (blockId > 0) {
 			if (Block.blocksList[blockId] != null) {
-				if (!failIdsQuietly) { throw new RuntimeException("OpenBlocks tried to register a block for ID: " + blockId + " but it was in use. failIdsQuietly is false so I'm yelling at you now."); }
-				Log.info("Block ID " + blockId + " in use. This block will *NOT* be loaded.");
+				if (!failIdsQuietly) { throw new RuntimeException("OpenBlocks tried to register a block for ID: "
+						+ blockId
+						+ " but it was in use. failIdsQuietly is false so I'm yelling at you now."); }
+				Log.info("Block ID " + blockId
+						+ " in use. This block will *NOT* be loaded.");
 				return false;
 			}
 			return true;

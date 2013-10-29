@@ -48,8 +48,8 @@ public class ModelGrave extends ModelBase {
 	}
 
 	/**
-	 * @param te  
-	 * @param f 
+	 * @param te
+	 * @param f
 	 */
 	public void setRotationAngles(TileEntity te, float f) {}
 

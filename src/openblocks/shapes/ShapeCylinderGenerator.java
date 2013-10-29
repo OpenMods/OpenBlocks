@@ -28,7 +28,8 @@ public class ShapeCylinderGenerator implements IShapeGenerator {
 					break forZ;
 				}
 
-				if (MathUtils.lengthSq(nextXn, zn) <= 1 && MathUtils.lengthSq(xn, nextZn) <= 1) {
+				if (MathUtils.lengthSq(nextXn, zn) <= 1
+						&& MathUtils.lengthSq(xn, nextZn) <= 1) {
 					continue;
 				}
 

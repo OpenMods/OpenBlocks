@@ -119,10 +119,17 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 			EntityPlayer player = getOwner();
 			if (player == null) return null;
 
-			double posX = player.posX + CraneRegistry.ARM_RADIUS * MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
-			double posZ = player.posZ + CraneRegistry.ARM_RADIUS * MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
+			double posX = player.posX
+					+ CraneRegistry.ARM_RADIUS
+					* MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI
+							/ 180);
+			double posZ = player.posZ
+					+ CraneRegistry.ARM_RADIUS
+					* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI
+							/ 180);
 
-			double posY = player.posY + player.height - CraneRegistry.instance.getCraneMagnetDistance(player);
+			double posY = player.posY + player.height
+					- CraneRegistry.instance.getCraneMagnetDistance(player);
 
 			return Vec3.createVectorHelper(posX, posY, posZ);
 		}
@@ -160,8 +167,8 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 			EntityPlayer player = getOwner();
 			if (player == null) return false;
 
-			return (entity instanceof EntityLivingBase && entity != player) ||
-					MagnetWhitelists.instance.entityWhitelist.check(entity);
+			return (entity instanceof EntityLivingBase && entity != player)
+					|| MagnetWhitelists.instance.entityWhitelist.check(entity);
 		}
 	}
 
@@ -201,15 +208,15 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 			if (lenSq > panicLengthSq || lenSq < minimalLengthSq) {
 				setPosition(targetX, targetY, targetZ);
 				motionX = motionY = motionZ = 0;
-			}
-			else {
+			} else {
 				if (lenSq > cutoff * cutoff) {
 					double scale = cutoff / Math.sqrt(lenSq);
 					dx *= scale;
 					dy *= scale;
 					dz *= scale;
 				}
-				moveEntity(motionX + dx * damp, motionY + dy * damp, motionZ + dz * damp);
+				moveEntity(motionX + dx * damp, motionY + dy * damp, motionZ
+						+ dz * damp);
 			}
 		}
 	}
@@ -291,9 +298,9 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 
 		isAboveTarget = !detectEntityTargets().isEmpty();
 
-		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle("portal",
-				posX + RANDOM.nextDouble() * 0.1, posY - RANDOM.nextDouble() * 0.2, posZ + RANDOM.nextDouble() * 0.1,
-				RANDOM.nextGaussian(), -Math.abs(RANDOM.nextGaussian()), RANDOM.nextGaussian());
+		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle("portal", posX
+				+ RANDOM.nextDouble() * 0.1, posY - RANDOM.nextDouble() * 0.2, posZ
+				+ RANDOM.nextDouble() * 0.1, RANDOM.nextGaussian(), -Math.abs(RANDOM.nextGaussian()), RANDOM.nextGaussian());
 	}
 
 	@Override
@@ -334,7 +341,8 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 		if (riddenByEntity != null) {
 			final Entity tmp = riddenByEntity;
 
-			if (tmp instanceof IMagnetAware && !((IMagnetAware)tmp).canRelease()) return false;
+			if (tmp instanceof IMagnetAware
+					&& !((IMagnetAware)tmp).canRelease()) return false;
 			// default unmount position is above entity and it
 			// looks strange, so we hack around that
 			double tmpPosY = tmp.posY;

@@ -48,8 +48,8 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	/**
-	 * @param block  
-	 * @param metadata 
+	 * @param block
+	 * @param metadata
 	 */
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
@@ -62,9 +62,8 @@ public abstract class OpenTileEntity extends TileEntity {
 	 * @param rot
 	 */
 	public void setRotation(ForgeDirection rot) {
-		if (rot == ForgeDirection.UP ||
-				rot == ForgeDirection.DOWN ||
-				rot == ForgeDirection.UNKNOWN) {
+		if (rot == ForgeDirection.UP || rot == ForgeDirection.DOWN
+				|| rot == ForgeDirection.UNKNOWN) {
 			rot = ForgeDirection.EAST;
 		}
 		rotation = rot;
@@ -201,5 +200,5 @@ public abstract class OpenTileEntity extends TileEntity {
 	public boolean isRenderedInInventory() {
 		return isUsedForClientInventoryRendering;
 	}
-	
+
 }

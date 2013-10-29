@@ -14,11 +14,11 @@ import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 
-public class TileEntityBearTrap extends NetworkedTileEntity implements IAwareTile, ISurfaceAttachment {
+public class TileEntityBearTrap extends NetworkedTileEntity implements
+		IAwareTile, ISurfaceAttachment {
 
 	public enum Keys {
-		flags,
-		trappedEntityId
+		flags, trappedEntityId
 	}
 
 	public enum Flags {

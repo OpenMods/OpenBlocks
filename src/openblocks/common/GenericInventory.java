@@ -113,7 +113,8 @@ public class GenericInventory implements ISidedInventory {
 	}
 
 	public boolean isItem(int slot, Item item) {
-		return inventoryContents[slot] != null && inventoryContents[slot].getItem() == item;
+		return inventoryContents[slot] != null
+				&& inventoryContents[slot].getItem() == item;
 	}
 
 	@Override

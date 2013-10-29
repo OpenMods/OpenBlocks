@@ -186,7 +186,8 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 	}
 
 	@Override
-	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception {
+	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
+			throws Exception {
 		switch (method) {
 			case 0: // activate
 				return spawnMagnet();
@@ -252,9 +253,9 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 	}
 
 	private static boolean checkTargetRange(double x, double y, double z) {
-		return Math.abs(x) <= Config.turtleMagnetRange &&
-				Math.abs(y) <= Config.turtleMagnetRange &&
-				Math.abs(z) <= Config.turtleMagnetRange;
+		return Math.abs(x) <= Config.turtleMagnetRange
+				&& Math.abs(y) <= Config.turtleMagnetRange
+				&& Math.abs(z) <= Config.turtleMagnetRange;
 	}
 
 	private static Vec3 getRelativeDistance(ITurtleAccess turtle, EntityMagnet magnet) {

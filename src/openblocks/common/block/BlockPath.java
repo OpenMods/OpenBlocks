@@ -46,18 +46,17 @@ public class BlockPath extends Block {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return isValidLocation(world, x, y, z) && super.canPlaceBlockAt(world, x, y, z);
+		return isValidLocation(world, x, y, z)
+				&& super.canPlaceBlockAt(world, x, y, z);
 	}
-	
+
 	protected boolean isValidLocation(World world, int x, int y, int z) {
 		int bId = world.getBlockId(x, y - 1, z);
 		Block below = Block.blocksList[bId];
-		if (below != null) {
-			return below.isBlockSolidOnSide(world, x, y - 1, z, ForgeDirection.UP);
-		}
+		if (below != null) { return below.isBlockSolidOnSide(world, x, y - 1, z, ForgeDirection.UP); }
 		return false;
 	}
-	
+
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {
 		if (!world.isRemote && !isValidLocation(world, x, y, z)) {
@@ -66,5 +65,4 @@ public class BlockPath extends Block {
 		}
 	}
 
-	
 }

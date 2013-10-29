@@ -73,7 +73,8 @@ public class EntityLuggageRenderer extends RenderLiving {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		if (entity instanceof EntityLuggage && ((EntityLuggage)entity).isSpecial()) { return textureSpecial; }
+		if (entity instanceof EntityLuggage
+				&& ((EntityLuggage)entity).isSpecial()) { return textureSpecial; }
 		return texture;
 	}
 

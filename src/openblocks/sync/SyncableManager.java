@@ -50,7 +50,8 @@ public class SyncableManager {
 		} else if (type == TYPE_CONTAINER) {
 			int windowId = dis.readInt();
 			EntityClientPlayerMP player = mc.thePlayer;
-			if (player.openContainer.windowId == windowId && player.openContainer instanceof ISyncHandler) {
+			if (player.openContainer.windowId == windowId
+					&& player.openContainer instanceof ISyncHandler) {
 				handler = (ISyncHandler)player.openContainer;
 			}
 		}

@@ -17,7 +17,7 @@ public class ModuleBuildCraft {
 		if (possiblePipe instanceof IPipeTile) { return ((IPipeTile)possiblePipe).fill(direction.getOpposite(), nextStack, true); }
 		return 0;
 	}
-	
+
 	public static boolean isPipe(TileEntity tile) {
 		return tile instanceof IPipeTile;
 	}

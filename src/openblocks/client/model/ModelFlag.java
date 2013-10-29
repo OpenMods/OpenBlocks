@@ -21,8 +21,8 @@ public class ModelFlag extends ModelBase {
 	}
 
 	/**
-	 * @param te  
-	 * @param f 
+	 * @param te
+	 * @param f
 	 */
 	public void render(TileEntity te, float f) {
 		float f5 = 0.0625F;

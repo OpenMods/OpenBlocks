@@ -23,7 +23,8 @@ public class BlockLadder extends BlockTrapDoor {
 		setHardness(3.0F);
 		setStepSound(soundWoodFootstep);
 		String modKey = OpenBlocks.getModId().toLowerCase();
-		GameRegistry.registerBlock(this, ItemOpenBlock.class, modKey + "_ladder");
+		GameRegistry.registerBlock(this, ItemOpenBlock.class, modKey
+				+ "_ladder");
 		setUnlocalizedName(modKey + ".ladder");
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);

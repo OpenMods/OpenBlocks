@@ -114,8 +114,9 @@ public class ModelFan extends ModelBase {
 	}
 
 	/**
-	 * @param te 
-	 * @param f I don't know what f is 
+	 * @param te
+	 * @param f
+	 *            I don't know what f is
 	 */
 	public void setRotationAngles(TileEntity te, float f) {
 		fan.rotateAngleZ = (float)Math.toRadians(Minecraft.getSystemTime() % 360);

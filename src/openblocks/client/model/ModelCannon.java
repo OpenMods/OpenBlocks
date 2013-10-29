@@ -106,7 +106,8 @@ public class ModelCannon extends ModelBase {
 	}
 
 	/**
-	 * @param f I don't know what f is 
+	 * @param f
+	 *            I don't know what f is
 	 */
 	public void setRotationAngles(TileEntity te, float f) {
 		TileEntityCannon cannon = (TileEntityCannon)te;

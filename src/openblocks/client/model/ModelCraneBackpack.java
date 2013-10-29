@@ -94,9 +94,12 @@ public class ModelCraneBackpack extends ModelBiped {
 
 		if (magnet == null) return;
 
-		double playerX = interpolatePos(player.posX, player.lastTickPosX, evt.partialRenderTick) - RenderManager.renderPosX;
-		double playerY = interpolatePos(player.posY, player.lastTickPosY, evt.partialRenderTick) - RenderManager.renderPosY;
-		double playerZ = interpolatePos(player.posZ, player.lastTickPosZ, evt.partialRenderTick) - RenderManager.renderPosZ;
+		double playerX = interpolatePos(player.posX, player.lastTickPosX, evt.partialRenderTick)
+				- RenderManager.renderPosX;
+		double playerY = interpolatePos(player.posY, player.lastTickPosY, evt.partialRenderTick)
+				- RenderManager.renderPosY;
+		double playerZ = interpolatePos(player.posZ, player.lastTickPosZ, evt.partialRenderTick)
+				- RenderManager.renderPosZ;
 
 		if (player instanceof EntityOtherPlayerMP) playerY += 1.62;
 
@@ -122,9 +125,12 @@ public class ModelCraneBackpack extends ModelBiped {
 		armX += armLength * MathHelper.cos(head);
 		armZ += armLength * MathHelper.sin(head);
 
-		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick) - RenderManager.renderPosX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick) - RenderManager.renderPosY + 0.35;
-		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick) - RenderManager.renderPosZ;
+		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick)
+				- RenderManager.renderPosX;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick)
+				- RenderManager.renderPosY + 0.35;
+		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick)
+				- RenderManager.renderPosZ;
 
 		GL11.glLineWidth(2);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -149,9 +155,12 @@ public class ModelCraneBackpack extends ModelBiped {
 		final double posX = 1.9 * MathHelper.cos(yaw);
 		final double posZ = 1.9 * MathHelper.sin(yaw);
 
-		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, partialTickTime) - RenderManager.renderPosX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialTickTime) - RenderManager.renderPosY + 0.35;
-		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialTickTime) - RenderManager.renderPosZ;
+		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, partialTickTime)
+				- RenderManager.renderPosX;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialTickTime)
+				- RenderManager.renderPosY + 0.35;
+		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialTickTime)
+				- RenderManager.renderPosZ;
 
 		GL11.glLineWidth(2);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);

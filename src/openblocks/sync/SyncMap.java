@@ -42,7 +42,8 @@ public abstract class SyncMap {
 		return objects[id];
 	}
 
-	public List<ISyncableObject> readFromStream(DataInputStream dis) throws IOException {
+	public List<ISyncableObject> readFromStream(DataInputStream dis)
+			throws IOException {
 		short mask = dis.readShort();
 		List<ISyncableObject> changes = new ArrayList<ISyncableObject>();
 		for (int i = 0; i < 16; i++) {
@@ -55,10 +56,12 @@ public abstract class SyncMap {
 		return changes;
 	}
 
-	public void writeToStream(DataOutputStream dos, boolean regardless) throws IOException {
+	public void writeToStream(DataOutputStream dos, boolean regardless)
+			throws IOException {
 		short mask = 0;
 		for (int i = 0; i < 16; i++) {
-			mask = ByteUtils.set(mask, i, objects[i] != null && (regardless || objects[i].hasChanged()));
+			mask = ByteUtils.set(mask, i, objects[i] != null
+					&& (regardless || objects[i].hasChanged()));
 		}
 		dos.writeShort(mask);
 		for (int i = 0; i < 16; i++) {
@@ -78,6 +81,7 @@ public abstract class SyncMap {
 
 	/***
 	 * Sync the changed values
+	 * 
 	 * @param worldObj
 	 * @param handler
 	 * @param x
@@ -125,7 +129,8 @@ public abstract class SyncMap {
 		return false;
 	}
 
-	protected Packet createPacket(ISyncHandler handler, boolean fullPacket) throws IOException {
+	protected Packet createPacket(ISyncHandler handler, boolean fullPacket)
+			throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
 		DataOutputStream outputStream = new DataOutputStream(bos);
 		writeMapType(outputStream);
@@ -138,5 +143,6 @@ public abstract class SyncMap {
 		return packet;
 	}
 
-	protected abstract void writeMapType(DataOutputStream dos) throws IOException;
+	protected abstract void writeMapType(DataOutputStream dos)
+			throws IOException;
 }

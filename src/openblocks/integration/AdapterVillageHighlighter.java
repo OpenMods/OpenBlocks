@@ -18,15 +18,17 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 	public Class getTargetClass() {
 		return TileEntityVillageHighlighter.class;
 	}
-	
+
 	/***
 	 * 
-	 * @param computer the computer
-	 * @param vh the tile
+	 * @param computer
+	 *            the computer
+	 * @param vh
+	 *            the tile
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@LuaMethod(onTick=true, returnType=LuaType.TABLE, description="Get information about the villages this block is inside")
+	@LuaMethod(onTick = true, returnType = LuaType.TABLE, description = "Get information about the villages this block is inside")
 	public Map getVillages(IComputerAccess computer, TileEntityVillageHighlighter vh) {
 		Map map = new HashMap();
 		int i = 1;

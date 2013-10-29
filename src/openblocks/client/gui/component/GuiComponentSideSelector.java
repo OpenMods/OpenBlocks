@@ -78,7 +78,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		HitCoord coord = picker.getNearestHit();
 
 		if (coord != null) drawHighlight(t, coord.side, 0x444444);
-		
+
 		if (highlightSelectedSides) {
 			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 				if (enabledDirections.get(dir.ordinal())) {
@@ -173,11 +173,9 @@ public class GuiComponentSideSelector extends BaseComponent {
 	@Override
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
-		if (button == 0 &&
-				movedTicks < 5 &&
-				lastSideHovered != null &&
-				lastSideHovered != ForgeDirection.UNKNOWN &&
-				callback != null) {
+		if (button == 0 && movedTicks < 5 && lastSideHovered != null
+				&& lastSideHovered != ForgeDirection.UNKNOWN
+				&& callback != null) {
 			callback.onSideSelected(lastSideHovered);
 			movedTicks = 5;
 		}

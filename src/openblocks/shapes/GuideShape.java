@@ -1,14 +1,13 @@
 package openblocks.shapes;
 
 public enum GuideShape {
-	Sphere(false, new ShapeSphereGenerator()),
-	Cylinder(false, new ShapeCylinderGenerator()),
-	Cuboid(false, new ShapeCuboidGenerator()),
-	Dome(false, new ShapeDomeGenerator()),
-	Triangle(true, new ShapeEquilateral2dGenerator(3)),
-	Pentagon(true, new ShapeEquilateral2dGenerator(5)),
-	Hexagon(true, new ShapeEquilateral2dGenerator(6)),
-	Octagon(true, new ShapeEquilateral2dGenerator(8));
+	Sphere(false, new ShapeSphereGenerator()), Cylinder(false,
+			new ShapeCylinderGenerator()), Cuboid(false,
+			new ShapeCuboidGenerator()), Dome(false, new ShapeDomeGenerator()), Triangle(
+			true, new ShapeEquilateral2dGenerator(3)), Pentagon(true,
+			new ShapeEquilateral2dGenerator(5)), Hexagon(true,
+			new ShapeEquilateral2dGenerator(6)), Octagon(true,
+			new ShapeEquilateral2dGenerator(8));
 
 	private final String displayName;
 	public final boolean fixedRatio;

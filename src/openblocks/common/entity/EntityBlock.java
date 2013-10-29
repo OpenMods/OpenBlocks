@@ -19,15 +19,7 @@ public class EntityBlock extends Entity implements IMagnetAware {
 	private static final int OBJECT_BLOCK_ID = 11;
 	private static final int OBJECT_BLOCK_META = 12;
 
-	public static final ForgeDirection[] PLACE_DIRECTIONS = {
-			ForgeDirection.UNKNOWN,
-			ForgeDirection.UP,
-			ForgeDirection.NORTH,
-			ForgeDirection.SOUTH,
-			ForgeDirection.WEST,
-			ForgeDirection.EAST,
-			ForgeDirection.DOWN
-	};
+	public static final ForgeDirection[] PLACE_DIRECTIONS = { ForgeDirection.UNKNOWN, ForgeDirection.UP, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.DOWN };
 
 	public EntityBlock(World world) {
 		super(world);

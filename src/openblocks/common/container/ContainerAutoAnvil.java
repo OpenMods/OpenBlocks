@@ -23,7 +23,7 @@ public class ContainerAutoAnvil extends ContainerInventory<TileEntityAutoAnvil> 
 		anvil.updateGuiValues();
 		anvil.sync(false);
 	}
-	
+
 	@Override
 	public void onServerButtonClicked(EntityPlayer player, int buttonId) {
 		onClientButtonClicked(buttonId);
@@ -32,26 +32,27 @@ public class ContainerAutoAnvil extends ContainerInventory<TileEntityAutoAnvil> 
 	@Override
 	public void onClientButtonClicked(int buttonId) {
 		TileEntityAutoAnvil anvil = getTileEntity();
-		
-		// autoFlags is a set of flags to say if different sides should auto inject/eject
+
+		// autoFlags is a set of flags to say if different sides should auto
+		// inject/eject
 		SyncableFlags autoFlags = anvil.getAutoFlags();
-		
+
 		if (buttonId < 7) {
 			anvil.getToolSides().toggle(buttonId);
-		}else if (buttonId < 14) {
+		} else if (buttonId < 14) {
 			anvil.getModifierSides().toggle(buttonId - 7);
-		}else if (buttonId < 21) {
+		} else if (buttonId < 21) {
 			anvil.getOutputSides().toggle(buttonId - 14);
-		}else if (buttonId < 28) {
+		} else if (buttonId < 28) {
 			anvil.getXPSides().toggle(buttonId - 21);
-		
-		}else if (buttonId == 28) {
+
+		} else if (buttonId == 28) {
 			autoFlags.toggle(TileEntityAutoAnvil.AutoSides.tool);
-		}else if (buttonId == 29) {
+		} else if (buttonId == 29) {
 			autoFlags.toggle(TileEntityAutoAnvil.AutoSides.modifier);
-		}else if (buttonId == 30) {
+		} else if (buttonId == 30) {
 			autoFlags.toggle(TileEntityAutoAnvil.AutoSides.output);
-		}else if (buttonId == 31) {
+		} else if (buttonId == 31) {
 			autoFlags.toggle(TileEntityAutoAnvil.AutoSides.xp);
 		}
 	}

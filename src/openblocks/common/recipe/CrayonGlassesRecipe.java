@@ -39,7 +39,8 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack != null) {
 				if (stack.getItem() instanceof ItemImaginary) {
-					if (gotCrayon || ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
+					if (gotCrayon
+							|| ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
 
 					gotCrayon = true;
 				} else if (stack.getItem() == Item.paper) {

@@ -19,11 +19,11 @@ import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttachment, IAwareTile {
+public class TileEntityFlag extends NetworkedTileEntity implements
+		ISurfaceAttachment, IAwareTile {
 
 	public enum Keys {
-		angle,
-		colorIndex
+		angle, colorIndex
 	}
 
 	private SyncableFloat angle = new SyncableFloat(0.0f);

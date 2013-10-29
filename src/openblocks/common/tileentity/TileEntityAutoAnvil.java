@@ -25,7 +25,8 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
+public class TileEntityAutoAnvil extends NetworkedTileEntity implements
+		IAwareTile, ISidedInventory, IFluidHandler {
 
 	public static final int TOTAL_COOLDOWN = 40;
 	protected static final FluidStack XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
@@ -34,38 +35,28 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 
 	private GenericInventory inventory = new GenericInventory("autoanvil", true, 3);
 	private GenericTank tank = new GenericTank(TANK_CAPACITY, XP_FLUID);
-	
+
 	/**
 	 * The keys of the objects that are synced over the network
 	 */
 	public enum Keys {
-		toolSides,
-		modifierSides,
-		outputSides,
-		xpSides,
-		xpLevel,
-		autoFlags
+		toolSides, modifierSides, outputSides, xpSides, xpLevel, autoFlags
 	}
-	
+
 	/**
 	 * The 3 slots in the inventory
 	 */
 	public enum Slots {
-		tool,
-		modifier,
-		output
+		tool, modifier, output
 	}
-	
+
 	/**
 	 * The keys of the things that can be auto injected/extracted
 	 */
 	public enum AutoSides {
-		tool,
-		modifier,
-		output,
-		xp
+		tool, modifier, output, xp
 	}
-	
+
 	/**
 	 * The shared/syncable objects
 	 */
@@ -75,8 +66,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 	private SyncableFlags xpSides = new SyncableFlags();
 	private SyncableInt xpLevel = new SyncableInt();
 	private SyncableFlags autoFlags = new SyncableFlags();
-	
-	
+
 	public TileEntityAutoAnvil() {
 		// add our syncable objects to the tile
 		addSyncedObject(Keys.toolSides, toolSides);
@@ -89,33 +79,34 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 
 	@Override
 	public void updateEntity() {
-		
+
 		super.updateEntity();
-		
-		if (!worldObj.isRemote) { 
-			
+
+		if (!worldObj.isRemote) {
+
 			// if we should auto-drink liquid, do it!
 			if (autoFlags.get(AutoSides.xp)) {
 				tank.autoFillFromSides(100, this, xpSides);
 			}
-			
+
 			if (shouldAutoOutput() && hasOutput()) {
 				InventoryUtils.moveItemsToOneOfSides(this, 2, 1, outputSides);
 			}
-			
+
 			// if we should auto input the tool and we don't currently have one
 			if (shouldAutoInputTool() && !hasTool()) {
 				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, 0, toolSides);
 			}
-			
+
 			// if we should auto input the modifier
 			if (shouldAutoInputModifier()) {
 				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, 1, modifierSides);
 			}
-			
+
 			if (cooldown == 0) {
 				int liquidRequired = updateRepairOutput(false);
-				if (liquidRequired > 0 && tank.getFluidAmount() >= liquidRequired) {
+				if (liquidRequired > 0
+						&& tank.getFluidAmount() >= liquidRequired) {
 					liquidRequired = updateRepairOutput(true);
 					worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.anvil_use", 0.3f, 1f);
 					cooldown = TOTAL_COOLDOWN;
@@ -125,31 +116,34 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the sides that tools and be inserted from
+	 * 
 	 * @return
 	 */
 	public SyncableFlags getToolSides() {
 		return toolSides;
 	}
-	
+
 	/**
 	 * Get the sides that modifiers can be inserted from
+	 * 
 	 * @return
 	 */
 	public SyncableFlags getModifierSides() {
 		return modifierSides;
 	}
-	
+
 	/**
 	 * Get the sides that the final product can be extracted from
+	 * 
 	 * @return
 	 */
 	public SyncableFlags getOutputSides() {
 		return outputSides;
 	}
-	
+
 	/**
 	 * Get the sides that the XP can be injected from
 	 */
@@ -160,14 +154,16 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 	/**
 	 * Get the sides that can be auto extracted/injected/inserted.
 	 * This is a syncableFlag and it uses AutoSides as the enum key
+	 * 
 	 * @return
 	 */
 	public SyncableFlags getAutoFlags() {
 		return autoFlags;
 	}
-	
+
 	/**
 	 * Returns true if we should auto-pull the modifier
+	 * 
 	 * @return
 	 */
 	private boolean shouldAutoInputModifier() {
@@ -176,14 +172,16 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 
 	/**
 	 * Should the anvil auto output the resulting item?
+	 * 
 	 * @return
 	 */
 	public boolean shouldAutoOutput() {
 		return autoFlags.get(AutoSides.output);
 	}
-	
+
 	/**
 	 * Checks if there is a stack in the input slot
+	 * 
 	 * @return
 	 */
 	private boolean hasTool() {
@@ -192,14 +190,16 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 
 	/**
 	 * Should the anvil auto input the tool into slot 0?
+	 * 
 	 * @return
 	 */
 	private boolean shouldAutoInputTool() {
 		return autoFlags.get(AutoSides.tool);
 	}
-	
+
 	/**
 	 * Does the anvil have something in slot [2]?
+	 * 
 	 * @return
 	 */
 	private boolean hasOutput() {
@@ -516,9 +516,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if (i == 2) {
-			return false;
-		}
+		if (i == 2) { return false; }
 		return inventory.isItemValidForSlot(i, itemstack);
 	}
 
@@ -566,27 +564,21 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 		}
 		int[] ret = new int[slots.size()];
 		int i = 0;
-		for(int k : slots)
+		for (int k : slots)
 			ret[i++] = k;
 		return ret;
 	}
 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
-		if (slot == 0)  {
-			return toolSides.get(side);
-		}
-		if (slot == 1) {
-			return modifierSides.get(side);
-		}
+		if (slot == 0) { return toolSides.get(side); }
+		if (slot == 1) { return modifierSides.get(side); }
 		return false;
 	}
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
-		if (slot == 2) {
-			return outputSides.get(side);
-		}
+		if (slot == 2) { return outputSides.get(side); }
 		return false;
 	}
 
@@ -595,9 +587,10 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 	}
 
 	public double getXPBufferRatio() {
-		return Math.max(0, Math.min(1, (double)xpLevel.getValue() / (double)tank.getCapacity()));
+		return Math.max(0, Math.min(1, (double)xpLevel.getValue()
+				/ (double)tank.getCapacity()));
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
@@ -623,10 +616,8 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTi
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-	}
+	public void onNeighbourChanged(int blockId) {}
 }

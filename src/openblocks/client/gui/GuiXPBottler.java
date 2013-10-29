@@ -41,12 +41,12 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 
 		TileEntityXPBottler te = container.getTileEntity();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
-		
+
 		main = new GuiComponentPanel(0, 0, xSize, ySize, container);
-		
+
 		// progress bar
 		progress = new GuiComponentProgress(72, 33);
-		
+
 		// tank
 		xpLevel = new GuiComponentTankLevel(140, 18, 17, 37);
 		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
@@ -57,7 +57,7 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 		tabGlassBottle = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.glassBottle, 1), 100, 100);
 		tabXPBottle = new GuiComponentTab(0xd2e58f, new ItemStack(Item.expBottle), 100, 100);
 		tabXPFluid = new GuiComponentTab(0xd2e58f, new ItemStack(Item.bucketEmpty), 100, 100);
-		
+
 		// create side selectors
 		sideSelectorGlassBottle = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, te.getGlassSides(), true, new ISideSelectionCallback() {
 			@Override
@@ -77,7 +77,7 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 				getContainer().sendButtonClick(direction.ordinal() + 14);
 			}
 		});
-		
+
 		// create checkboxes
 		SyncableFlags autoFlags = te.getAutoFlags();
 		checkboxInsertGlass = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.input.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
@@ -98,19 +98,19 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 				getContainer().sendButtonClick(23);
 			}
 		});
-		
+
 		labelInsertGlass = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoinsert"));
 		labelEjectXPBottle = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
 		labelDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
-		
+
 		tabGlassBottle.addComponent(sideSelectorGlassBottle);
 		tabGlassBottle.addComponent(checkboxInsertGlass);
 		tabGlassBottle.addComponent(labelInsertGlass);
-		
+
 		tabXPBottle.addComponent(sideSelectorXPBottle);
 		tabXPBottle.addComponent(checkboxEjectXP);
 		tabXPBottle.addComponent(labelEjectXPBottle);
-		
+
 		tabXPFluid.addComponent(sideSelectorXPFluid);
 		tabXPFluid.addComponent(checkboxDrinkXP);
 		tabXPFluid.addComponent(labelDrinkXP);

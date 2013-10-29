@@ -253,7 +253,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 	}
 
 	/**
-	 * @param evt  
+	 * @param evt
 	 */
 	@ForgeSubscribe
 	public void onTextureReload(TextureStitchEvent.Pre evt) {

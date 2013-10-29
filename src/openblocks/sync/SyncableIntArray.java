@@ -50,7 +50,8 @@ public class SyncableIntArray implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData) throws IOException {
+	public void writeToStream(DataOutputStream stream, boolean fullData)
+			throws IOException {
 		stream.writeInt(size());
 		for (int i = 0; i < size(); i++) {
 			stream.writeInt(value[i]);

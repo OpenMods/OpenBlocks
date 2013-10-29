@@ -9,12 +9,12 @@ import org.lwjgl.opengl.GL11;
 public class GuiComponentCheckbox extends BaseComponent {
 
 	protected int color;
-	
+
 	protected boolean isMouseOver = false;
 	protected SyncableFlags flags;
 	protected int flagSlot;
 	protected ICheckboxCallback callback;
-	
+
 	public GuiComponentCheckbox(int x, int y, SyncableFlags flags, int flagSlot, int color, ICheckboxCallback checkCallback) {
 		super(x, y);
 		this.color = color;
@@ -28,7 +28,7 @@ public class GuiComponentCheckbox extends BaseComponent {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		GL11.glColor4f(1, 1, 1, 1);
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
-		drawTexturedModalRect(offsetX + x, offsetY + y, flags.get(flagSlot) ? 16 : 0, 62, 8, 8);
+		drawTexturedModalRect(offsetX + x, offsetY + y, flags.get(flagSlot)? 16 : 0, 62, 8, 8);
 	}
 
 	@Override
@@ -38,14 +38,13 @@ public class GuiComponentCheckbox extends BaseComponent {
 			callback.onTick();
 		}
 	}
-	
 
 	@Override
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
 		isMouseOver = isMouseOver(x, y);
 	}
-	
+
 	protected boolean isMouseOver(int mouseX, int mouseY) {
 		return mouseX >= x && mouseX < x + 8 && mouseY >= y && mouseY < y + 8;
 	}

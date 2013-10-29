@@ -97,9 +97,11 @@ public class BlockTarget extends OpenBlock {
 			double entityY = entity.posY;
 			double entityZ = entity.posZ;
 
-			if (opposite == ForgeDirection.NORTH || opposite == ForgeDirection.SOUTH) {
+			if (opposite == ForgeDirection.NORTH
+					|| opposite == ForgeDirection.SOUTH) {
 				entityZ = centerZ;
-			} else if (opposite == ForgeDirection.EAST || opposite == ForgeDirection.WEST) {
+			} else if (opposite == ForgeDirection.EAST
+					|| opposite == ForgeDirection.WEST) {
 				entityX = centerX;
 			}
 

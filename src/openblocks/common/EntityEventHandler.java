@@ -10,7 +10,8 @@ public class EntityEventHandler {
 	@ForgeSubscribe
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
 
-		if (event.entityLiving != null && EntityList.classToStringMapping.containsKey(event.entityLiving.getClass())) {
+		if (event.entityLiving != null
+				&& EntityList.classToStringMapping.containsKey(event.entityLiving.getClass())) {
 			String livingName = (String)EntityList.classToStringMapping.get(event.entityLiving.getClass());
 
 			if (Config.disableMobNames.contains(livingName)) {
