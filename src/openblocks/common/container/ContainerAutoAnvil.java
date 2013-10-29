@@ -9,9 +9,9 @@ public class ContainerAutoAnvil extends ContainerInventory<TileEntityAutoAnvil> 
 
 	public ContainerAutoAnvil(IInventory playerInventory, TileEntityAutoAnvil tile) {
 		super(playerInventory, tile);
-		addSlotToContainer(new RestrictedSlot(tile, 0, 18, 40));
-		addSlotToContainer(new RestrictedSlot(tile, 1, 60, 40));
-		addSlotToContainer(new RestrictedSlot(tile, 2, 100, 40));
+		addSlotToContainer(new RestrictedSlot(tile, 0, 14, 40));
+		addSlotToContainer(new RestrictedSlot(tile, 1, 56, 40));
+		addSlotToContainer(new RestrictedSlot(tile, 2, 110, 40));
 		addPlayerInventorySlots(93);
 		tile.sync();
 	}

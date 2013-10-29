@@ -38,6 +38,10 @@ public class ClientTickHandler implements ITickHandler {
 		return "OpenBlocksClientTick";
 	}
 
+	/**
+	 * @param mc 
+	 * @param renderTick  
+	 */
 	public void preRenderTick(Minecraft mc, World world, float renderTick) {
 		EntityHangGlider.updateGliders(world);
 	}

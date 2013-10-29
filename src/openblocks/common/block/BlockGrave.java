@@ -14,7 +14,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.entity.EntityGhost;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.utils.BlockUtils;
 
@@ -51,7 +50,7 @@ public class BlockGrave extends OpenBlock {
 		if (!world.isRemote) {
 			TileEntityGrave tile = getTileEntity(world, x, y, z, TileEntityGrave.class);
 			if (tile != null) {
-				handleGhostSpawn(tile, world, x, y, z);
+				BlockUtils.dropInventory(tile.getLoot(), world, x, y, z);
 			}
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
@@ -83,21 +82,6 @@ public class BlockGrave extends OpenBlock {
 
 	}
 
-	private static boolean shouldSpawnGhost(World world) {
-		if (world.difficultySetting == 0) return false;
-		return Config.ghostSpawnProbability > world.rand.nextInt(100);
-	}
-
-	private static void handleGhostSpawn(TileEntityGrave grave, World world, int x, int y, int z) {
-		if (shouldSpawnGhost(world)) {
-			EntityGhost ghost = new EntityGhost(world, grave.getUsername(), grave.getLoot());
-			ghost.setPositionAndRotation(x, y, z, 0, 0);
-			world.spawnEntityInWorld(ghost);
-		} else {
-			BlockUtils.dropInventory(grave.getLoot(), world, x, y, z);
-		}
-	}
-
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		setBlockBoundsBasedOnState(world, x, y, z);
@@ -112,7 +96,7 @@ public class BlockGrave extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		setBlockBounds(0, 0, 0, 1f, 0.3f, 1f);
+		setBlockBounds(0, 0, 0, 1f, 0.5f, 1f);
 	}
 
 	@Override

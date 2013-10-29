@@ -11,8 +11,7 @@ public class CollectionUtils {
 		if (collection.size() == 0) { return null; }
 		int randomIndex = rnd.nextInt(collection.size());
 		int i = 0;
-		for (T obj : collection)
-		{
+		for (T obj : collection) {
 			if (i == randomIndex) return obj;
 			i = i + 1;
 		}

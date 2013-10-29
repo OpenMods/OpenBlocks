@@ -164,14 +164,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 		t.draw();
 	}
 
-	private void setFaceColor(ForgeDirection dir) {
-		if (enabledDirections.get(dir)) {
-			Tessellator.instance.setColorOpaque_F(1, 0, 0);
-		} else {
-			Tessellator.instance.setColorOpaque_F(1, 1, 1);
-		}
-	}
-
 	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
 		super.mouseClickMove(mouseX, mouseY, button, time);

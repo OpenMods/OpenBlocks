@@ -75,7 +75,8 @@ public class ItemImaginary extends ItemOpenBlock {
 				return new PanelData(1.0f);
 			}
 		},
-		INV_HALF_PANEL(1.0f, "inverted_half_panel", "overlay_inverted_half", true) {
+		INV_HALF_PANEL(1.0f, "inverted_half_panel", "overlay_inverted_half",
+				true) {
 			@Override
 			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
 				return new PanelData(0.5f);

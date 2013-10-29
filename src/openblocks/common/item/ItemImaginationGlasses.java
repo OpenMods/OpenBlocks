@@ -99,7 +99,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 		CRAYON("crayon") {
 			@Override
 			protected boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te) {
-				return (!te.isPencil() && getGlassesColor(stack) == te.color) ^ te.isInverted();
+				return (!te.isPencil() && getGlassesColor(stack) == te.color)
+						^ te.isInverted();
 			}
 		},
 		TECHNICOLOR("technicolor") {
@@ -123,7 +124,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 		private Type(String name) {
 			this.name = "item.openblocks.glasses." + name;
 			this.iconName = "openblocks:glasses_" + name;
-			this.textureName = "openblocks:textures/models/glasses_" + name + ".png";
+			this.textureName = "openblocks:textures/models/glasses_" + name
+					+ ".png";
 		}
 
 		protected abstract boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te);

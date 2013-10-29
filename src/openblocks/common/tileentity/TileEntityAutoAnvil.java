@@ -10,22 +10,34 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
+import openblocks.common.GenericTank;
+import openblocks.common.api.IAwareTile;
+import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
+import openblocks.utils.InventoryUtils;
 
-public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISidedInventory, IFluidHandler {
+public class TileEntityAutoAnvil extends NetworkedTileEntity implements IAwareTile, ISidedInventory, IFluidHandler {
 
 	public static final int TOTAL_COOLDOWN = 40;
-
+	protected static final FluidStack XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
+	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
 	private int cooldown = 0;
 
 	private GenericInventory inventory = new GenericInventory("autoanvil", true, 3);
-
+	private GenericTank tank = new GenericTank(TANK_CAPACITY, XP_FLUID);
+	
+	/**
+	 * The keys of the objects that are synced over the network
+	 */
 	public enum Keys {
 		toolSides,
 		modifierSides,
@@ -35,13 +47,18 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 		autoFlags
 	}
 	
-	private SyncableFlags toolSides = new SyncableFlags();
-	private SyncableFlags modifierSides = new SyncableFlags();
-	private SyncableFlags outputSides = new SyncableFlags();
-	private SyncableFlags xpSides = new SyncableFlags();
-	private SyncableInt xpLevel = new SyncableInt();
-	private SyncableFlags autoFlags = new SyncableFlags();
+	/**
+	 * The 3 slots in the inventory
+	 */
+	public enum Slots {
+		tool,
+		modifier,
+		output
+	}
 	
+	/**
+	 * The keys of the things that can be auto injected/extracted
+	 */
 	public enum AutoSides {
 		tool,
 		modifier,
@@ -49,52 +66,58 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 		xp
 	}
 	
+	/**
+	 * The shared/syncable objects
+	 */
+	private SyncableFlags toolSides = new SyncableFlags();
+	private SyncableFlags modifierSides = new SyncableFlags();
+	private SyncableFlags outputSides = new SyncableFlags();
+	private SyncableFlags xpSides = new SyncableFlags();
+	private SyncableInt xpLevel = new SyncableInt();
+	private SyncableFlags autoFlags = new SyncableFlags();
+	
+	
 	public TileEntityAutoAnvil() {
+		// add our syncable objects to the tile
 		addSyncedObject(Keys.toolSides, toolSides);
 		addSyncedObject(Keys.modifierSides, modifierSides);
 		addSyncedObject(Keys.outputSides, outputSides);
 		addSyncedObject(Keys.xpSides, xpSides);
 		addSyncedObject(Keys.xpLevel, xpLevel);
 		addSyncedObject(Keys.autoFlags, autoFlags);
-		tank = new FluidTank(EnchantmentUtils.getLiquidForLevel(45));
-	}
-	
-	public SyncableFlags getToolSides() {
-		return toolSides;
-	}
-	
-	public SyncableFlags getModifierSides() {
-		return modifierSides;
-	}
-	
-	public SyncableFlags getOutputSides() {
-		return outputSides;
-	}
-	
-	public SyncableFlags getXPSides() {
-		return xpSides;
-	}
-
-	public SyncableFlags getAutoFlags() {
-		return autoFlags;
 	}
 
 	@Override
 	public void updateEntity() {
+		
 		super.updateEntity();
+		
 		if (!worldObj.isRemote) { 
 			
-			if (OpenBlocks.proxy.getTicks(worldObj) % 20 == 0) {
-				refreshSurroundingTanks();
+			// if we should auto-drink liquid, do it!
+			if (autoFlags.get(AutoSides.xp)) {
+				tank.autoFillFromSides(100, this, xpSides);
 			}
 			
-			if (autoFlags.get(AutoSides.xp)) {
-				trySuckXP();
+			if (shouldAutoOutput() && hasOutput()) {
+				InventoryUtils.moveItemsToOneOfSides(this, 2, 1, outputSides);
 			}
+			
+			// if we should auto input the tool and we don't currently have one
+			if (shouldAutoInputTool() && !hasTool()) {
+				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, 0, toolSides);
+			}
+			
+			// if we should auto input the modifier
+			if (shouldAutoInputModifier()) {
+				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, 1, modifierSides);
+			}
+			
 			if (cooldown == 0) {
 				int liquidRequired = updateRepairOutput(false);
 				if (liquidRequired > 0 && tank.getFluidAmount() >= liquidRequired) {
 					liquidRequired = updateRepairOutput(true);
+					worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.anvil_use", 0.3f, 1f);
 					cooldown = TOTAL_COOLDOWN;
 				}
 			} else if (cooldown > 0) {
@@ -103,6 +126,86 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 		}
 	}
 	
+	/**
+	 * Get the sides that tools and be inserted from
+	 * @return
+	 */
+	public SyncableFlags getToolSides() {
+		return toolSides;
+	}
+	
+	/**
+	 * Get the sides that modifiers can be inserted from
+	 * @return
+	 */
+	public SyncableFlags getModifierSides() {
+		return modifierSides;
+	}
+	
+	/**
+	 * Get the sides that the final product can be extracted from
+	 * @return
+	 */
+	public SyncableFlags getOutputSides() {
+		return outputSides;
+	}
+	
+	/**
+	 * Get the sides that the XP can be injected from
+	 */
+	public SyncableFlags getXPSides() {
+		return xpSides;
+	}
+
+	/**
+	 * Get the sides that can be auto extracted/injected/inserted.
+	 * This is a syncableFlag and it uses AutoSides as the enum key
+	 * @return
+	 */
+	public SyncableFlags getAutoFlags() {
+		return autoFlags;
+	}
+	
+	/**
+	 * Returns true if we should auto-pull the modifier
+	 * @return
+	 */
+	private boolean shouldAutoInputModifier() {
+		return autoFlags.get(AutoSides.modifier);
+	}
+
+	/**
+	 * Should the anvil auto output the resulting item?
+	 * @return
+	 */
+	public boolean shouldAutoOutput() {
+		return autoFlags.get(AutoSides.output);
+	}
+	
+	/**
+	 * Checks if there is a stack in the input slot
+	 * @return
+	 */
+	private boolean hasTool() {
+		return inventory.getStackInSlot(0) != null;
+	}
+
+	/**
+	 * Should the anvil auto input the tool into slot 0?
+	 * @return
+	 */
+	private boolean shouldAutoInputTool() {
+		return autoFlags.get(AutoSides.tool);
+	}
+	
+	/**
+	 * Does the anvil have something in slot [2]?
+	 * @return
+	 */
+	private boolean hasOutput() {
+		return inventory.getStackInSlot(2) != null;
+	}
+
 	public int updateRepairOutput(boolean doIt) {
 		ItemStack inputStack = inventory.getStackInSlot(0);
 		int maximumCost = 0;
@@ -113,7 +216,8 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 
 		ItemStack inputStackCopy = inputStack.copy();
 		ItemStack modifierStack = inventory.getStackInSlot(1);
-		Map inputStackEnchantments = EnchantmentHelper.getEnchantments(inputStackCopy);
+		@SuppressWarnings("unchecked")
+		Map<Integer, Integer> inputStackEnchantments = EnchantmentHelper.getEnchantments(inputStackCopy);
 		boolean flag = false;
 		int k = b0 + inputStack.getRepairCost()
 				+ (modifierStack == null? 0 : modifierStack.getRepairCost());
@@ -123,7 +227,7 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 		int j1;
 		int k1;
 		int l1;
-		Iterator iterator;
+		Iterator<Integer> iterator;
 		Enchantment enchantment;
 
 		if (modifierStack != null) {
@@ -167,14 +271,15 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 					}
 				}
 
-				Map map1 = EnchantmentHelper.getEnchantments(modifierStack);
+				@SuppressWarnings("unchecked")
+				Map<Integer, Integer> map1 = EnchantmentHelper.getEnchantments(modifierStack);
 				iterator = map1.keySet().iterator();
 
 				while (iterator.hasNext()) {
-					j1 = ((Integer)iterator.next()).intValue();
+					j1 = iterator.next().intValue();
 					enchantment = Enchantment.enchantmentsList[j1];
-					k1 = inputStackEnchantments.containsKey(Integer.valueOf(j1))? ((Integer)inputStackEnchantments.get(Integer.valueOf(j1))).intValue() : 0;
-					l1 = ((Integer)map1.get(Integer.valueOf(j1))).intValue();
+					k1 = inputStackEnchantments.containsKey(Integer.valueOf(j1))? inputStackEnchantments.get(Integer.valueOf(j1)).intValue() : 0;
+					l1 = map1.get(Integer.valueOf(j1)).intValue();
 					int j2;
 
 					if (k1 == l1) {
@@ -188,10 +293,10 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 					int k2 = l1 - k1;
 					boolean flag1 = enchantment.canApply(inputStack);
 
-					Iterator iterator1 = inputStackEnchantments.keySet().iterator();
+					Iterator<Integer> iterator1 = inputStackEnchantments.keySet().iterator();
 
 					while (iterator1.hasNext()) {
-						int l2 = ((Integer)iterator1.next()).intValue();
+						int l2 = iterator1.next().intValue();
 
 						if (l2 != j1
 								&& !enchantment.canApplyTogether(Enchantment.enchantmentsList[l2])) {
@@ -242,9 +347,9 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 
 			for (iterator = inputStackEnchantments.keySet().iterator(); iterator.hasNext(); k += l
 					+ k1 * l1) {
-				j1 = ((Integer)iterator.next()).intValue();
+				j1 = iterator.next().intValue();
 				enchantment = Enchantment.enchantmentsList[j1];
-				k1 = ((Integer)inputStackEnchantments.get(Integer.valueOf(j1))).intValue();
+				k1 = inputStackEnchantments.get(Integer.valueOf(j1)).intValue();
 				l1 = 0;
 				++l;
 
@@ -329,16 +434,10 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 	}
 
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -357,7 +456,6 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -418,15 +516,15 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		if (i == 2) {
+			return false;
+		}
 		return inventory.isItemValidForSlot(i, itemstack);
 	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource.containsFluid(xpFluid)) {
-			return tank.fill(resource, doFill);
-		}
-		return 0;
+		return tank.fill(resource, doFill);
 	}
 
 	@Override
@@ -522,5 +620,13 @@ public class TileEntityAutoAnvil extends BaseTileEntityXPMachine implements ISid
 		outputSides.readFromNBT(tag, "outputsides");
 		xpSides.readFromNBT(tag, "xpsides");
 		autoFlags.readFromNBT(tag, "autoflags");
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+	}
+
+	@Override
+	public void onNeighbourChanged(int blockId) {
 	}
 }

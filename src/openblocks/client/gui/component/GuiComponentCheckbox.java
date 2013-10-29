@@ -1,9 +1,10 @@
 package openblocks.client.gui.component;
 
+import net.minecraft.client.Minecraft;
 import openblocks.sync.SyncableFlags;
 import openblocks.utils.CompatibilityUtils;
 
-import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.GL11;
 
 public class GuiComponentCheckbox extends BaseComponent {
 
@@ -25,6 +26,7 @@ public class GuiComponentCheckbox extends BaseComponent {
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
+		GL11.glColor4f(1, 1, 1, 1);
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
 		drawTexturedModalRect(offsetX + x, offsetY + y, flags.get(flagSlot) ? 16 : 0, 62, 8, 8);
 	}

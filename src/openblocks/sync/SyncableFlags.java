@@ -95,11 +95,7 @@ public class SyncableFlags implements ISyncableObject {
 		return ticksSinceUnset[slot];
 	}
 
-	public int ticksSinceChange(Enum<?> slot) {
-		return ticksSinceChange(slot.ordinal());
-	}
-
-	public int ticksSinceChange(int slot) {
+	public int ticksSinceChange() {
 		return ticksSinceChanged;
 	}
 

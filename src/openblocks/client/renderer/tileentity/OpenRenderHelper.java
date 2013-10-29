@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.Icon;
 
-
 import org.lwjgl.opengl.GL11;
 
 public class OpenRenderHelper {
@@ -16,9 +15,9 @@ public class OpenRenderHelper {
 		GL11.glPushMatrix();
 		GL11.glDisable(2896);
 		Tessellator t = Tessellator.instance;
-		
+
 		renderBlocks.setRenderBounds(x1, y1, z1, x2, y2, z2);
-		
+
 		t.startDrawingQuads();
 
 		Icon useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(0);
@@ -45,9 +44,9 @@ public class OpenRenderHelper {
 	}
 
 	public static void renderWorldCube(RenderBlocks renderer, double x1, double y1, double z1, double x2, double y2, double z2, Block block, Icon overrideTexture) {
-		
+
 		renderer.setRenderBounds(x1, y1, z1, x2, y2, z2);
-	
+
 		Icon useTexture = overrideTexture != null? overrideTexture : block.getBlockTextureFromSide(0);
 		renderer.renderFaceYNeg(block, 0, 0, 0, useTexture);
 

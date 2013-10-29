@@ -1,14 +1,14 @@
 package openblocks.common.block;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import openblocks.Config;
-import openblocks.OpenBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BlockPath extends Block {
 

@@ -6,7 +6,8 @@ import java.io.IOException;
 
 public class FileLineReader {
 
-	public static void readLineByLine(BufferedReader reader, ILineReadMethod callback) throws IOException {
+	public static void readLineByLine(BufferedReader reader, ILineReadMethod callback)
+			throws IOException {
 		String line;
 		while ((line = reader.readLine()) != null) {
 			callback.read(line);
@@ -14,7 +15,8 @@ public class FileLineReader {
 		reader.close();
 	}
 
-	public static void readLineByLine(String filename, ILineReadMethod callback) throws IOException {
+	public static void readLineByLine(String filename, ILineReadMethod callback)
+			throws IOException {
 		readLineByLine(new BufferedReader(new FileReader(filename)), callback);
 	}
 }

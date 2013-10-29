@@ -420,22 +420,16 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 			// Handle filled containers
 			if (liquid != null) {
 				int qty = fill(direction, liquid, true);
-
 				if (qty != 0 && !player.capabilities.isCreativeMode) {
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
 				}
 
 				return true;
 			}
-			// Fix for #15
-			if (worldObj.isRemote && liquidRenderAmount.getValue() > 0) return true;
-			// End of fix
 			FluidStack available = tank.getFluid();
 			if (available != null) {
 				ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
-
 				liquid = FluidContainerRegistry.getFluidForFilledItem(filled);
-
 				if (liquid != null) {
 					if (!player.capabilities.isCreativeMode) {
 						if (current.stackSize > 1) {
@@ -447,12 +441,11 @@ public class TileEntityTank extends NetworkedTileEntity implements IFluidHandler
 						}
 					}
 					drain(ForgeDirection.UNKNOWN, liquid.amount, true);
-					return true;
 				}
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	public double getHeightForRender() {

@@ -21,46 +21,35 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemGeneric extends Item {
 
-	private HashMap<Integer, IMetaItem> metaitems = new HashMap<Integer, IMetaItem>();
+	protected HashMap<Integer, IMetaItem> metaitems = new HashMap<Integer, IMetaItem>();
 
 	public enum Metas {
 		gliderWing {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
-				return new MetaGeneric("gliderwing",
-						new ShapedOreRecipe(result, " sl", "sll", "lll", 's', "stickWood", 'l', Item.leather),
-						new ShapedOreRecipe(result, "ls ", "lls", "lll", 's', "stickWood", 'l', Item.leather)
-				);
+				return new MetaGeneric("gliderwing", new ShapedOreRecipe(result, " sl", "sll", "lll", 's', "stickWood", 'l', Item.leather), new ShapedOreRecipe(result, "ls ", "lls", "lll", 's', "stickWood", 'l', Item.leather));
 			}
 		},
 		beam {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack(2);
-				return new MetaGeneric("beam",
-						new ShapedOreRecipe(result, "iii", "b y", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow"),
-						new ShapedOreRecipe(result, "iii", "y b", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow")
-				);
+				return new MetaGeneric("beam", new ShapedOreRecipe(result, "iii", "b y", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow"), new ShapedOreRecipe(result, "iii", "y b", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow"));
 			}
 		},
 		craneEngine {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
-				return new MetaGeneric("crane_engine",
-						new ShapedOreRecipe(result, "iii", "isi", "iri", 'i', Item.ingotIron, 's', "stickWood", 'r', Item.redstone)
-				);
+				return new MetaGeneric("crane_engine", new ShapedOreRecipe(result, "iii", "isi", "iri", 'i', Item.ingotIron, 's', "stickWood", 'r', Item.redstone));
 			}
 		},
 		craneMagnet {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
-				return new MetaGeneric("crane_magnet",
-						new ShapedOreRecipe(result, "biy", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow"),
-						new ShapedOreRecipe(result, "yib", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow")
-				);
+				return new MetaGeneric("crane_magnet", new ShapedOreRecipe(result, "biy", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow"), new ShapedOreRecipe(result, "yib", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow"));
 			}
 		},
 		miracleMagnet {
@@ -68,10 +57,7 @@ public class ItemGeneric extends Item {
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
 				ItemStack magnet = craneMagnet.newItemStack();
-				return new MetaMiracleMagnet("miracle_magnet",
-						new ShapedOreRecipe(result, "rer", "eme", "rer", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet),
-						new ShapedOreRecipe(result, "ere", "rmr", "ere", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet)
-				);
+				return new MetaMiracleMagnet("miracle_magnet", new ShapedOreRecipe(result, "rer", "eme", "rer", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet), new ShapedOreRecipe(result, "ere", "rmr", "ere", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet));
 			}
 
 			@Override
@@ -83,9 +69,7 @@ public class ItemGeneric extends Item {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack(2);
-				return new MetaGeneric("line",
-						new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', Item.slimeBall)
-				);
+				return new MetaGeneric("line", new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', Item.slimeBall));
 			}
 		};
 
@@ -105,7 +89,11 @@ public class ItemGeneric extends Item {
 	}
 
 	public ItemGeneric() {
-		super(Config.itemGenericId);
+		this(Config.itemGenericId);
+	}
+
+	public ItemGeneric(int id) {
+		super(id);
 		setHasSubtypes(true);
 		setMaxDamage(0);
 		setMaxStackSize(64);
@@ -120,6 +108,13 @@ public class ItemGeneric extends Item {
 	public void initRecipes() {
 		for (IMetaItem item : metaitems.values()) {
 			item.addRecipe();
+		}
+	}
+
+	@Override
+	public void registerIcons(IconRegister register) {
+		for (IMetaItem item : metaitems.values()) {
+			item.registerIcons(register);
 		}
 	}
 
@@ -149,13 +144,6 @@ public class ItemGeneric extends Item {
 		IMetaItem meta = getMeta(itemStack.getItemDamage());
 		if (meta != null) { return meta.onItemRightClick(itemStack, player, world); }
 		return itemStack;
-	}
-
-	@Override
-	public void registerIcons(IconRegister register) {
-		for (IMetaItem item : metaitems.values()) {
-			item.registerIcons(register);
-		}
 	}
 
 	@Override

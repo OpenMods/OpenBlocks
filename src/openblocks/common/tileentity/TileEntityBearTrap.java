@@ -87,7 +87,7 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements IAwareTil
 	public void onBlockAdded() {}
 
 	public int tickSinceOpened() {
-		return flags.ticksSinceChange(Flags.isShut);
+		return flags.ticksSinceChange();
 	}
 
 	@Override

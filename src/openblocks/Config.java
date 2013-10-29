@@ -5,7 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -117,8 +116,10 @@ public class Config {
 	
 	@BlockId(description = "The id of the auto anvil")
 	public static int blockAutoAnvilId = 2560;
-
-
+	
+	@BlockId(description = "The id of the auto enchantment table")
+	public static int blockAutoEnchantmentTableId = 2561;
+	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -151,6 +152,9 @@ public class Config {
 	
 	@ItemId(description = "The id of slimalyzer item")
 	public static int itemSlimalyzerId = 14985;
+	
+	@ItemId(description = "The id of the filled bucket")
+	public static int itemFilledBucketId = 14986;
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -158,7 +162,6 @@ public class Config {
 	public static int elevatorMaxBlockPassCount = 4;
 	public static int bucketsPerTank = 16;
 	public static boolean enableGraves = false;
-	public static int ghostSpawnProbability = 0;
 	public static boolean tryHookPlayerRenderer = true;
 	public static double trophyDropChance = 0.001;
 	public static boolean irregularBlocksArePassable = false;
@@ -242,17 +245,6 @@ public class Config {
 		prop = configFile.get("dropblock", "irregularBlocksArePassable", irregularBlocksArePassable, "The elevator will try to pass through blocks that have custom collision boxes");
 		irregularBlocksArePassable = prop.getBoolean(irregularBlocksArePassable);
 
-		prop = configFile.get("grave", "ghostProbability", ghostSpawnProbability, "Probabily that a ghost will spawn from breaking a grave, from 0 to 100.");
-		ghostSpawnProbability = prop.getInt();
-
-		prop = configFile.get("additional", "disableMobNames", new String[0], "List any mob names you want disabled on the server");
-		disableMobNames = Arrays.asList(prop.getStringList());
-
-		if (ghostSpawnProbability > 100) ghostSpawnProbability = 100;
-		else if (ghostSpawnProbability < 0) ghostSpawnProbability = 0;
-
-		prop.set(ghostSpawnProbability);
-
 		prop = configFile.get("grave", "enableGraves", enableGraves, "Enable graves on player death");
 		enableGraves = prop.getBoolean(enableGraves);
 
@@ -300,9 +292,13 @@ public class Config {
 
 		prop = configFile.get("crane", "addTurtles", addCraneTurtles, "Enable magnet turtles in creative list");
 		addCraneTurtles = prop.getBoolean(addCraneTurtles);
+		
 	}
 
 	public static void register() {
+
+		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
+		
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
@@ -413,14 +409,21 @@ public class Config {
 			OpenBlocks.Blocks.autoAnvil = new BlockAutoAnvil();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoAnvil), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.anvil, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
-
-		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
+		
+		if (Config.canRegisterBlock(blockAutoEnchantmentTableId)) {
+			OpenBlocks.Blocks.autoEnchantmentTable = new BlockAutoEnchantmentTable();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoEnchantmentTable), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.enchantmentTable, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
+		}
 
 		// There is no fail checking here because if the Generic item fails,
 		// then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemGeneric();
 		OpenBlocks.Items.generic.registerItems();
+		if (itemFilledBucketId > 0) {
+			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
+			OpenBlocks.Items.filledBucket.registerItems();
+		}
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
@@ -489,6 +492,7 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
 			
 		}
+		
 	}
 
 	private static boolean canRegisterBlock(int blockId) {

@@ -18,10 +18,25 @@ public class ItemOpenBlock extends ItemBlock {
 		return block != null && block.isBlockReplaceable(world, x, y, z);
 	}
 
+	/**
+	 * 
+	 * @param stack
+	 * @param player
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player, World world, int x, int y, int z) {
 		stack.stackSize--;
 	}
 
+	/**
+	 * 
+	 * @param stack
+	 * @param player
+	 * @return
+	 */
 	protected boolean isStackValid(ItemStack stack, EntityPlayer player) {
 		return stack.stackSize >= 0;
 	}
@@ -36,7 +51,8 @@ public class ItemOpenBlock extends ItemBlock {
 		int blockId = world.getBlockId(x, y, z);
 		Block block = Block.blocksList[blockId];
 
-		if (blockId == Block.snow.blockID && (world.getBlockMetadata(x, y, z) & 7) < 1) side = 1;
+		if (blockId == Block.snow.blockID
+				&& (world.getBlockMetadata(x, y, z) & 7) < 1) side = 1;
 
 		ForgeDirection sideDir = ForgeDirection.getOrientation(side);
 

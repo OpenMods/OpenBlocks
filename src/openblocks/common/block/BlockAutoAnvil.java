@@ -1,11 +1,11 @@
 package openblocks.common.block;
 
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityAutoAnvil;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityAutoAnvil;
 
 public class BlockAutoAnvil extends OpenBlock {
 

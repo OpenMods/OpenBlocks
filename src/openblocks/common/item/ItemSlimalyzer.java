@@ -1,9 +1,5 @@
 package openblocks.common.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import openblocks.Config;
-import openblocks.OpenBlocks;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -12,6 +8,10 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSlimalyzer extends Item {
 
@@ -46,7 +46,8 @@ public class ItemSlimalyzer extends Item {
 				Chunk chunk = world.getChunkFromBlockCoords(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posZ));
 				int previousDamage = stack.getItemDamage();
 				stack.setItemDamage(chunk.getRandomWithSeed(987234911L).nextInt(10) == 0? 1 : 0);
-				if (previousDamage != stack.getItemDamage() && previousDamage == 0) {
+				if (previousDamage != stack.getItemDamage()
+						&& previousDamage == 0) {
 					world.playSoundAtEntity(entity, "openblocks:beep", 1F, 1F);
 				}
 			} else {

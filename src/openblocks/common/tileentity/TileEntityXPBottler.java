@@ -1,18 +1,19 @@
 package openblocks.common.tileentity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
+import openblocks.common.GenericTank;
+import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
@@ -20,28 +21,26 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISidedInventory, IFluidHandler {
+public class TileEntityXPBottler extends NetworkedTileEntity implements
+		IAwareTile, ISidedInventory, IFluidHandler {
 
-	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
-	private ItemStack glassBottle = new ItemStack(Item.glassBottle, 1);
-	private ItemStack xpBottle = new ItemStack(Item.expBottle, 1);
+	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
+	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
+	protected static final ItemStack XP_BOTTLE = new ItemStack(Item.expBottle, 1);
 	
+	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
+	
+	private GenericTank tank = new GenericTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
 
 	/** Ids of the data objects we'll sync **/
 	public enum Keys {
-		glassSides,
-		xpBottleSides,
-		xpSides,
-		progress,
-		tankLevel,
-		autoFlags
+		glassSides, xpBottleSides, xpSides, progress, tankLevel, autoFlags
 	}
-	
+
 	public static enum AutoSides {
-		input,
-		output,
-		xp
+		input, output, xp
 	}
 
 	/** synced data objects **/
@@ -61,22 +60,70 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 		addSyncedObject(Keys.progress, progress);
 		addSyncedObject(Keys.tankLevel, tankLevel);
 		addSyncedObject(Keys.autoFlags, autoFlags);
-		tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE));
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		if (!worldObj.isRemote) {
+
+			// if we should, we'll autofill the tank
+			if (autoFlags.get(AutoSides.xp)) {
+				tank.autoFillFromSides(10, this, xpSides);
+			}
+
+			// if they've ticked auto output, and we have something to output
+			if (shouldAutoOutput() && hasOutputStack()) {
+				InventoryUtils.moveItemsToOneOfSides(this, 1, 1, xpBottleSides);
+			}
+
+			// if we should auto input and we don't have any glass in the slot
+			if (shouldAutoInput() && !hasGlassInInput()) {
+				InventoryUtils.moveItemsFromOneOfSides(this, GLASS_BOTTLE, 1, 0, glassSides);
+			}
+
+			// if there's no space in the output, we've got no input bottles or
+			// the tank isnt full, reset progress
+			if (!hasSpaceInOutput() || !hasGlassInInput() || !isTankFull()) {
+				progress.setValue(0);
+				return;
+			}
+			// while progress is moving, modify by 1
+			if (progress.getValue() < PROGRESS_TICKS) {
+				progress.modify(1);
+			} else {
+				// this happens when the progress has completed
+				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:fill", .5f, .8f);
+				inventory.decrStackSize(0, 1);
+				// drain the entire tank (it stores enough for 1 bottle)
+				tank.drain(tank.getFluidAmount(), true);
+				// increase the stacksize of the output slot
+				if (inventory.getStackInSlot(1) == null) {
+					inventory.setInventorySlotContents(1, XP_BOTTLE.copy());
+				} else {
+					ItemStack outputStack = inventory.getStackInSlot(1).copy();
+					outputStack.stackSize++;
+					inventory.setInventorySlotContents(1, outputStack);
+				}
+				// reset progress
+				progress.setValue(0);
+			}
+
+		}
 	}
 
 	public SyncableFlags getGlassSides() {
 		return glassSides;
 	}
-	
+
 	public SyncableFlags getXPBottleSides() {
-		return xpBottleSides;	
+		return xpBottleSides;
 	}
 
-	@Override
 	public SyncableFlags getXPSides() {
 		return xpSides;
 	}
-	
+
 	public SyncableFlags getAutoFlags() {
 		return autoFlags;
 	}
@@ -94,130 +141,28 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 		return (double)p / (double)PROGRESS_TICKS;
 	}
 
-	@Override
-	public void initialize() {
-		if (!worldObj.isRemote) {
-			refreshSurroundingTanks();
-		}
-	}
-	
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if (!worldObj.isRemote) {
-			
-			if (autoFlags.get(AutoSides.xp)) {
-				trySuckXP();
-			}
-
-			// randomly shuffle the glass sides and xp sides. So we pick a random side when inputting or outputting
-			List<Integer> shuffledXPSides = getShuffledSides(xpBottleSides.getActiveSlots());
-			List<Integer> shuffledGlassSides = getShuffledSides(glassSides.getActiveSlots());
-
-			// if they've ticked auto output, and we have something to output
-			if (shouldAutoOutput() && hasOutputStack()) {
-				
-				// loop through the shuffled available sides
-				for (Integer dir : shuffledXPSides) {
-					ForgeDirection directionToOutputItem = ForgeDirection.getOrientation(dir);
-					// get the tile
-					TileEntity tileOnSurface = getTileInDirection(directionToOutputItem);
-					// check how many have moved
-					int itemsMoved = InventoryUtils.moveItemInto(this, 1, tileOnSurface, 1, directionToOutputItem, true);
-					if (itemsMoved > 0) {
-						// if we've got more than 1, mark for update (cant remember why)
-						worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-						break;
-					}
-				}
-			}
-			
-			// if we should auto input and we dont have any glass in the slot
-			if (shouldAutoInput() && !hasGlassInInput()) {
-				boolean movedGlass = false;
-				// loop through the shuffled sides
-				for (Integer dir : shuffledGlassSides) {
-					ForgeDirection directionToExtractItem = ForgeDirection.getOrientation(dir);
-					TileEntity tileOnSurface = getTileInDirection(directionToExtractItem);
-					// if it's an inventory
-					if (tileOnSurface instanceof IInventory) {
-						// get the slots that contain the stack we want
-						Set<Integer> slots = InventoryUtils.getSlotsWithStack((IInventory) tileOnSurface, glassBottle);
-						// for each of the slots
-						for (Integer slot : slots) {
-							// if we can move it into our machine
-							if (InventoryUtils.moveItemInto((IInventory)tileOnSurface, slot, this, 1, directionToExtractItem.getOpposite(), true) > 0) {
-								// mark block for update and jump out of the loop
-								worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-								movedGlass = true;
-								break;
-							}
-						}
-					}
-					// we've moved one, so jump out again
-					if (movedGlass) {
-						break;
-					}
-				}
-			}
-			// if there's no space in the output, we've got no input bottles or the tank isnt full, reset progress
-			if (!hasSpaceInOutput() || !hasGlassInInput() || !isTankFull()) {
-				progress.setValue(0);
-				return;
-			}
-			// while progress is moving, modify by 1
-			if (progress.getValue() < PROGRESS_TICKS) {
-				progress.modify(1);
-			} else {
-				// this happens when the progress has completed
-				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:fill", .5f, .8f);
-				inventory.decrStackSize(0, 1);
-				// drain the entire tank (it stores enough for 1 bottle)
-				tank.drain(tank.getFluidAmount(), true);
-				// increase the stacksize of the output slot
-				if (inventory.getStackInSlot(1) == null) {
-					inventory.setInventorySlotContents(1, xpBottle.copy());
-				} else {
-					ItemStack outputStack = inventory.getStackInSlot(1).copy();
-					outputStack.stackSize++;
-					inventory.setInventorySlotContents(1, outputStack);
-				}
-				// reset progress
-				progress.setValue(0);
-			}
-			
-		}
-	}
-	
 	public boolean hasOutputStack() {
 		ItemStack outputStack = inventory.getStackInSlot(1);
 		return outputStack != null && outputStack.stackSize > 0;
 	}
-	
+
 	public boolean shouldAutoInput() {
 		return autoFlags.get(AutoSides.input);
 	}
-	
+
 	public boolean shouldAutoOutput() {
 		return autoFlags.get(AutoSides.output);
-	}
-	
-	public List<Integer> getShuffledSides(Set<Integer> sides) {
-		List<Integer> shuffledSides = new ArrayList<Integer>();
-		shuffledSides.addAll(sides);
-		Collections.shuffle(shuffledSides);
-		return shuffledSides;
 	}
 
 	public boolean hasGlassInInput() {
 		ItemStack inputStack = inventory.getStackInSlot(0);
-		return inputStack != null && inputStack.isItemEqual(glassBottle);
+		return inputStack != null && inputStack.isItemEqual(GLASS_BOTTLE);
 	}
 
 	public boolean hasSpaceInOutput() {
 		ItemStack outputStack = inventory.getStackInSlot(1);
 		return outputStack == null
-				|| (outputStack.isItemEqual(xpBottle) && outputStack.stackSize < outputStack.getMaxStackSize());
+				|| (outputStack.isItemEqual(XP_BOTTLE) && outputStack.stackSize < outputStack.getMaxStackSize());
 	}
 
 	public boolean isTankFull() {
@@ -248,13 +193,9 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 		}
 		return true;
 	}
-	
+
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		if (!worldObj.isRemote) {
-			refreshSurroundingTanks();
-		}
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
@@ -331,8 +272,9 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 		inventory.writeToNBT(tag);
 		tank.writeToNBT(tag);
 		progress.writeToNBT(tag, "progress");
-		glassSides.writeToNBT(tag, "glass_sides");
-		xpBottleSides.writeToNBT(tag, "xp_sides");
+		glassSides.writeToNBT(tag, "glasssides");
+		xpBottleSides.writeToNBT(tag, "xpbottlesides");
+		xpSides.writeToNBT(tag, "xpsides");
 		autoFlags.writeToNBT(tag, "autoflags");
 	}
 
@@ -342,8 +284,9 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 		inventory.readFromNBT(tag);
 		tank.readFromNBT(tag);
 		progress.readFromNBT(tag, "progress");
-		glassSides.readFromNBT(tag, "glass_sides");
-		xpBottleSides.readFromNBT(tag, "xp_sides");
+		glassSides.readFromNBT(tag, "glasssides");
+		xpBottleSides.readFromNBT(tag, "xpbottlesides");
+		xpSides.readFromNBT(tag, "xpsides");
 		autoFlags.readFromNBT(tag, "autoflags");
 	}
 
@@ -354,19 +297,17 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource != null && resource.isFluidEqual(xpFluid)) { return tank.fill(resource, doFill); }
-		return 0;
+		return tank.fill(resource, doFill);
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (resource == null) { return null; }
-		return tank.drain(resource.amount, doDrain);
+		return null;
 	}
 
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
+		return null;
 	}
 
 	@Override
@@ -376,7 +317,7 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -425,7 +366,8 @@ public class TileEntityXPBottler extends BaseTileEntityXPMachine implements ISid
 	}
 
 	public double getXPBufferRatio() {
-		return Math.max(0, Math.min(1, (double)tankLevel.getValue() / (double)tank.getCapacity()));
+		return Math.max(0, Math.min(1, (double)tankLevel.getValue()
+				/ (double)tank.getCapacity()));
 	}
 
 	public void updateGuiValues() {

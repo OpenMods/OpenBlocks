@@ -49,6 +49,10 @@ public class ModelVillage extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
+	/**
+	 * @param te  
+	 * @param f 
+	 */
 	public void setRotationAngles(TileEntity te, float f) {}
 
 }

@@ -44,7 +44,8 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 					if (shape[y2][x2][z2]) {
 						GL11.glEnable(GL11.GL_BLEND);
 						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						renderAt(x + x2 - width, y + y2 - height, z + z2 - depth, scale);
+						renderAt(x + x2 - width, y + y2 - height, z + z2
+								- depth, scale);
 						GL11.glDisable(GL11.GL_BLEND);
 					}
 				}

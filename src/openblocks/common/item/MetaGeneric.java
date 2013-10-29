@@ -84,7 +84,8 @@ public class MetaGeneric implements IMetaItem {
 				furnaceRecipes.addSmelting(recipe.itemId, recipe.itemMeta, recipe.result, recipe.experience);
 			} else if (tmp instanceof IRecipe) {
 				craftingRecipes.add((IRecipe)tmp);
-			} else throw new IllegalArgumentException("Invalid recipe object: " + tmp);
+			} else throw new IllegalArgumentException("Invalid recipe object: "
+					+ tmp);
 		}
 	}
 

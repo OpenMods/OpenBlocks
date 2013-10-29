@@ -36,10 +36,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer, 
 		super.updateEntity();
 
 		if (worldObj.isRemote) {
-			// System.out.println(ticksSinceLastSound);
 			if (ticksSinceLastSound++ > 100) {
-				// worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord +
-				// 0.5, "openblocks.grave_ambient", 1.0f, 1.0f);
 				ticksSinceLastSound = 0;
 			}
 		}

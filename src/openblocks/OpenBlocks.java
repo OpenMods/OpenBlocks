@@ -9,7 +9,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.block.*;
@@ -66,6 +68,7 @@ public class OpenBlocks {
 		public static BlockVillageHighlighter villageHighlighter;
 		public static BlockPath path;
 		public static BlockAutoAnvil autoAnvil;
+		public static BlockAutoEnchantmentTable autoEnchantmentTable;
 	}
 
 	public static class Items {
@@ -80,12 +83,15 @@ public class OpenBlocks {
 		public static ItemCraneControl craneControl;
 		public static ItemCraneBackpack craneBackpack;
 		public static ItemSlimalyzer slimalyzer;
+		public static ItemFilledBucket filledBucket;
 	}
 
 	public static class Fluids {
 		public static Fluid XPJuice;
 		public static Fluid openBlocksXPJuice;
 	}
+	
+	public static FluidStack XP_FLUID = null;
 
 	public static enum Gui {
 		lightbox,
@@ -119,6 +125,9 @@ public class OpenBlocks {
 		configFile.save();
 	}
 
+	/**
+	 * @param evt  
+	 */
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		Config.register();
@@ -128,9 +137,6 @@ public class OpenBlocks {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
 
-		if (Config.enableGraves) {
-			EntityRegistry.registerModEntity(EntityGhost.class, "Ghost", 700, OpenBlocks.instance, 64, 1, true);
-		}
 		if (Config.itemLuggageId > 0) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
 		}
@@ -144,7 +150,10 @@ public class OpenBlocks {
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500);
 		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
 		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
+		XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
 
+		FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, ItemFilledBucket.BucketMetas.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
+		
 		OpenBlocks.Items.generic.initRecipes();
 
 		MagnetWhitelists.instance.initTesters();
@@ -157,15 +166,13 @@ public class OpenBlocks {
 		proxy.registerRenderInformation();
 	}
 
+	/**
+	 * @param evt  
+	 */
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
 	}
-
-	/*
-	 * TODO: These either need amending or depreciating, maybe move it from
-	 * CompatibilityUtils to here - NC
-	 */
 
 	public static String getResourcesPath() {
 		return "/mods/openblocks";

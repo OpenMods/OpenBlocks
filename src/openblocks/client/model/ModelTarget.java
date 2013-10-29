@@ -50,6 +50,9 @@ public class ModelTarget extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
+	/**
+	 * @param f  
+	 */
 	public void setRotationAngles(TileEntity te, float f) {
 		TileEntityTarget targetTe = (TileEntityTarget)te;
 		target.rotateAngleX = targetTe.getTargetRotation();

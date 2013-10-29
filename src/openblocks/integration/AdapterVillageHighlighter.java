@@ -5,22 +5,27 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.village.Village;
-
-import dan200.computer.api.IComputerAccess;
-
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openperipheral.api.IPeripheralAdapter;
 import openperipheral.api.LuaMethod;
 import openperipheral.api.LuaType;
+import dan200.computer.api.IComputerAccess;
 
 public class AdapterVillageHighlighter implements IPeripheralAdapter {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Class getTargetClass() {
 		return TileEntityVillageHighlighter.class;
 	}
 	
-	@SuppressWarnings("unchecked")
+	/***
+	 * 
+	 * @param computer the computer
+	 * @param vh the tile
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@LuaMethod(onTick=true, returnType=LuaType.TABLE, description="Get information about the villages this block is inside")
 	public Map getVillages(IComputerAccess computer, TileEntityVillageHighlighter vh) {
 		Map map = new HashMap();

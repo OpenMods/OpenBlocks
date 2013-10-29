@@ -12,15 +12,10 @@ import com.google.common.collect.Maps;
 public class SidePicker {
 
 	public enum Side {
-		XNeg,
-		XPos,
-		YNeg,
-		YPos,
-		ZNeg,
-		ZPos;
-		
+		XNeg, XPos, YNeg, YPos, ZNeg, ZPos;
+
 		public static Side fromForgeDirection(ForgeDirection dir) {
-			switch(dir) {
+			switch (dir) {
 				case WEST:
 					return XNeg;
 				case EAST:

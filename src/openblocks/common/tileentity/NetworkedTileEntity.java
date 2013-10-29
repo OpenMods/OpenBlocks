@@ -18,7 +18,7 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements ISyn
 	public void addSyncedObject(Enum<?> key, ISyncableObject obj) {
 		syncMap.put(key, obj);
 	}
-
+	
 	public void sync(boolean syncMeta) {
 		if (syncMeta) {
 			super.sync();

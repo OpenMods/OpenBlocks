@@ -1,18 +1,17 @@
 package openblocks.client.renderer;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.lwjgl.opengl.GL11;
-
-import openblocks.OpenBlocks;
-import openblocks.client.renderer.tileentity.OpenRenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
+import openblocks.OpenBlocks;
+import openblocks.client.renderer.tileentity.OpenRenderHelper;
+
+import org.lwjgl.opengl.GL11;
 
 public class BlockPathRenderer implements IBlockRenderer {
 

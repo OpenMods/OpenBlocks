@@ -105,6 +105,9 @@ public class ModelCannon extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
+	/**
+	 * @param f I don't know what f is 
+	 */
 	public void setRotationAngles(TileEntity te, float f) {
 		TileEntityCannon cannon = (TileEntityCannon)te;
 		main.rotateAngleX = (float)Math.toRadians(-cannon.pitch.getValue());

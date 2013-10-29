@@ -120,7 +120,7 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 	private Vec3 getPositionDistanceAway(double distance, double pitch, double yaw) {
 		double p = Math.toRadians(pitch);
 		double y = Math.toRadians(yaw);
-		double k = -0.7;
+		double k = distance;
 		double xzLength = Math.cos(p) * k;
 		double dx = xzLength * Math.cos(y);
 		double dz = xzLength * Math.sin(y);

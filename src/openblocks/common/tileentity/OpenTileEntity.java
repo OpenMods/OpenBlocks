@@ -47,6 +47,10 @@ public abstract class OpenTileEntity extends TileEntity {
 		return direction;
 	}
 
+	/**
+	 * @param block  
+	 * @param metadata 
+	 */
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
 		isUsedForClientInventoryRendering = true;
@@ -197,4 +201,5 @@ public abstract class OpenTileEntity extends TileEntity {
 	public boolean isRenderedInInventory() {
 		return isUsedForClientInventoryRendering;
 	}
+	
 }

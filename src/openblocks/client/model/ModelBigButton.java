@@ -20,6 +20,9 @@ public class ModelBigButton extends ModelBase {
 		setRotation(button, 0F, 0F, 0F);
 	}
 
+	/**
+	 * @param f I don't know what f is 
+	 */
 	public void render(TileEntityBigButton te, float f) {
 		float f5 = 0.0625F;
 		if (te.getFlag1()) {

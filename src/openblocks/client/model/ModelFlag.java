@@ -20,10 +20,12 @@ public class ModelFlag extends ModelBase {
 		setRotation(pole, 0F, 0F, 0F);
 	}
 
+	/**
+	 * @param te  
+	 * @param f 
+	 */
 	public void render(TileEntity te, float f) {
-
 		float f5 = 0.0625F;
-		setRotationAngles(te, f);
 		pole.render(f5);
 	}
 
@@ -32,7 +34,5 @@ public class ModelFlag extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	public void setRotationAngles(TileEntity te, float f) {}
 
 }

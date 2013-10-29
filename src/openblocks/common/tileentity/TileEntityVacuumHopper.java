@@ -162,7 +162,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 					for (Integer dir : getShuffledItemSlots()) {
 						ForgeDirection directionToOutputItem = ForgeDirection.getOrientation(dir);
 						tileOnSurface = getTileInDirection(directionToOutputItem);
-						if (InventoryUtils.moveItemInto(this, firstUsedSlot, tileOnSurface, 64, directionToOutputItem, true) > 0) {
+						if (InventoryUtils.moveItemInto(this, firstUsedSlot, tileOnSurface, -1, 64, directionToOutputItem, true) > 0) {
 							worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 							break;
 						}

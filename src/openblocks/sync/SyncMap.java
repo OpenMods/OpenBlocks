@@ -76,6 +76,14 @@ public abstract class SyncMap {
 		}
 	}
 
+	/***
+	 * Sync the changed values
+	 * @param worldObj
+	 * @param handler
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void sync(World worldObj, ISyncHandler handler, double x, double y, double z) {
 		if (worldObj instanceof WorldServer) {
 			Set<EntityPlayer> players = PacketHandler.getPlayersWatchingBlock((WorldServer)worldObj, (int)x, (int)z);

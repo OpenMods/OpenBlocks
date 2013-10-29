@@ -168,6 +168,21 @@ public abstract class OpenBlock extends BlockContainer {
 		return null;
 	}
 
+	/***
+	 * An extended block placement function which includes ALL the details you'll ever need.
+	 * This is called if your ItemBlock extends ItemOpenBlock
+	 * @param world
+	 * @param player
+	 * @param stack
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param side
+	 * @param hitX
+	 * @param hitY
+	 * @param hitZ
+	 * @param meta
+	 */
 	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
 		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
 		if (te != null) {
@@ -180,6 +195,15 @@ public abstract class OpenBlock extends BlockContainer {
 		return canPlaceBlockOnSide(world, x, y, z, ForgeDirection.getOrientation(side).getOpposite());
 	}
 
+	/***
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param side
+	 * @return
+	 */
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return canPlaceBlockAt(world, x, y, z); // default to vanilla rules
 	}
