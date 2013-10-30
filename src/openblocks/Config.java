@@ -120,13 +120,13 @@ public class Config {
 
 
     @BlockId(description = "The id of the block-breaker block")
-    public static int blockBlockBreakerId = 2557;
+    public static int blockBlockBreakerId = 2561;
 
     @BlockId(description = "The id of the block-placer block")
-    public static int blockBlockPlacerId = 2558;
+    public static int blockBlockPlacerId = 2562;
 
     @BlockId(description = "The id of the item-dropper block")
-    public static int blockItemDropperId = 2559;
+    public static int blockItemDropperId = 2563;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
