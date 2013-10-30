@@ -1,12 +1,31 @@
 openblocks.gui.lightbox=Световая коробка
 openblocks.gui.luggage=Багаж
-openblocks.gui.sprinkler=Поливалка
-openblocks.gui.vacuumhopper=Хоппер-сос
+openblocks.gui.sprinkler=Разбрызгиватель
+openblocks.gui.vacuumhopper=Вакуумная загрузочная воронка
 openblocks.gui.bigbutton=Большая кнопка
+openblocks.gui.xpbottler=Разливочная машина опыта
+openblocks.gui.autoanvil=Автоматическая наковальня
+openblocks.gui.autoeject=Auto eject
+openblocks.gui.autoextract=Auto extract
+openblocks.gui.autodrink=Auto drink
+
+openblocks.misc.uses=Использований: %.2f
+openblocks.misc.color=Цвет: %06X
+openblocks.misc.mode=Режим размещения: %s
+openblocks.misc.mode.block=Блок
+openblocks.misc.mode.panel=Панель
+openblocks.misc.mode.half_panel=Панель половинной высоты
+openblocks.misc.mode.stairs=Ступеньки
+openblocks.misc.mode.inverted_block=Инвертированный блок
+openblocks.misc.mode.inverted_panel=Инвертированный панель
+openblocks.misc.mode.inverted_half_panel=Инвертированная панель половинной высоты
+openblocks.misc.mode.inverted_stairs=Инвертированные ступеньки
+
+openblocks.turtle.magnet=Магнит
 
 tile.openblocks.elevator.name=Лифт
-tile.openblocks.heal.name=Целитель
-tile.openblocks.guide.name=Строительный гид
+tile.openblocks.heal.name=Исцелитель
+tile.openblocks.guide.name=Руководитель по строительству
 tile.openblocks.ladder.name=Лестница Джейдед
 tile.openblocks.lightbox.name=Световая коробка
 tile.openblocks.tank.name=Бак
@@ -14,16 +33,27 @@ tile.openblocks.target.name=Мишень
 tile.openblocks.grave.name=Кладбище
 tile.openblocks.flag.name=Флаг
 tile.openblocks.trophy.name=Кубок
-tile.openblocks.beartrap.name=Капкан
-tile.openblocks.sprinkler.name=Поливалка
-tile.openblocks.vacuumhopper.name=Хоппер-сос
+tile.openblocks.beartrap.name=Медвежий капкан
+tile.openblocks.sprinkler.name=Разбрызгиватель
+tile.openblocks.vacuumhopper.name=Вакуумная загрузочная воронка
 tile.openblocks.sponge.name=Мочалка
-tile.openblocks.cannon.name=Пушка объектов
+tile.openblocks.cannon.name=Предметная пушка
 tile.openblocks.bigbutton.name=Большая кнопка
+tile.openblocks.fan.name=Вентилятор
+tile.openblocks.xpbottler.name=Разливочная машина опыта
+tile.openblocks.village_highlighter.name=Выделитель деревни
+tile.openblocks.path.name=Путь
+tile.openblocks.autoanvil.name=Автоматическая наковальня
 
 item.openblocks.hangglider.name=Дельтаплан
 item.openblocks.gliderwing.name=Крыло дельтаплана
 item.openblocks.luggage.name=Багаж
 item.openblocks.sonicglasses.name=Звуковые очки
+item.openblocks.crayon.name=Магический цветной карандаш
+item.openblocks.pencil.name=Магический карандаш
+item.openblocks.crane_backpack.name=Крановое хранилище
+item.openblocks.crane_control.name=Крановое управление
+item.openblocks.crane_engine.name=Крановый двигатель
+item.openblocks.crane_magnet.name=Крановый магнит
 
 itemGroup.tabOpenBlocks=OpenBlocks
