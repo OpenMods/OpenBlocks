@@ -29,7 +29,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
     private final GenericInventory inventory = new GenericInventory("blockPlacer", false, BUFFER_SIZE);
 
     public void setRedstoneSignal(boolean redstoneSignal) {
-        System.out.println("block-placer-redstone-signal: " + redstoneSignal);
         if(redstoneSignal != _redstoneSignal) {
             _redstoneSignal = redstoneSignal;
             if(_redstoneSignal && !InventoryUtils.inventoryIsEmpty(inventory)) {
@@ -41,7 +40,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
     private void placeBlock() {
         if(worldObj.isRemote) return;
 
-        System.out.println("placeBlock");
 
         ForgeDirection direction = ForgeDirection.getOrientation(getMetadata());
         int x = xCoord + direction.offsetX,
@@ -62,8 +60,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
             setInventorySlotContents(i, newStack.stackSize > 0 ? newStack : null);
             return;
         }
-
-        System.out.println("Inventory empty");
     }
 
     /**

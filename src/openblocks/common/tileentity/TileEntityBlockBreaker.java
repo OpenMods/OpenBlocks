@@ -41,7 +41,6 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 
     private void breakBlock() {
         if(worldObj.isRemote) return;
-        //System.out.println("Breaking block");
 
         ForgeDirection direction = ForgeDirection.getOrientation(getMetadata());
         int x = xCoord + direction.offsetX,

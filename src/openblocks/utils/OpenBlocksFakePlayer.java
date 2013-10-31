@@ -31,8 +31,6 @@ public class OpenBlocksFakePlayer extends FakePlayer {
     }
 
     public ItemStack equipWithAndRightClick(ItemStack itemStack, Vec3 currentPos, Vec3 hitVector, ForgeDirection side, boolean blockExists) {
-        System.out.println("Place block at " + hitVector.xCoord + "," + hitVector.yCoord + "," + hitVector.zCoord + ". Block exist: " + blockExists);
-
         setPosition(currentPos.xCoord, currentPos.yCoord, currentPos.zCoord);
 
         if(blockExists) {
