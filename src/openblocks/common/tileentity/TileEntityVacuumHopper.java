@@ -22,6 +22,7 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.integration.ModuleBuildCraft;
 import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableBoolean;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.CollectionUtils;
@@ -41,19 +42,20 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public enum Keys {
 		xpOutputs,
 		itemOutputs,
-		tankLevel
+		tankLevel,
+		vacuumDisabled
 	}
 
 	public SyncableFlags xpOutputs = new SyncableFlags();
 	public SyncableFlags itemOutputs = new SyncableFlags();
 	public SyncableInt tankLevel = new SyncableInt();
+	public SyncableBoolean vacuumDisabled = new SyncableBoolean();
 	
-	private boolean disableSucking = false;
-
 	public TileEntityVacuumHopper() {
 		addSyncedObject(Keys.xpOutputs, xpOutputs);
 		addSyncedObject(Keys.itemOutputs, itemOutputs);
 		addSyncedObject(Keys.tankLevel, tankLevel);
+		addSyncedObject(Keys.vacuumDisabled, vacuumDisabled);
 	}
 
 	public SyncableFlags getXPOutputs() {
@@ -72,7 +74,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public void updateEntity() {
 		super.updateEntity();
 
-		if(!disableSucking) {
+		if(!vacuumDisabled.getValue()) {
 			if (worldObj.isRemote) {
 				worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 			}
@@ -249,7 +251,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			if(player.inventory.getStackInSlot(player.inventory.currentItem) == null) {
-				disableSucking = !disableSucking;
+				vacuumDisabled.negate();
 				return true;
 			}
 			return false;
@@ -318,6 +320,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 		tank.writeToNBT(tag);
 		xpOutputs.writeToNBT(tag, "xpoutputs");
 		itemOutputs.writeToNBT(tag, "itemoutputs");
+		vacuumDisabled.writeToNBT(tag, "vacuumDisabled");
 	}
 
 	@Override
@@ -327,6 +330,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 		tank.readFromNBT(tag);
 		xpOutputs.readFromNBT(tag, "xpoutputs");
 		itemOutputs.readFromNBT(tag, "itemoutputs");
+		vacuumDisabled.readFromNBT(tag, "vacuumDisabled");
 	}
 
 	@Override
