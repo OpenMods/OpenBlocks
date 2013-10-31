@@ -47,6 +47,8 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public SyncableFlags xpOutputs = new SyncableFlags();
 	public SyncableFlags itemOutputs = new SyncableFlags();
 	public SyncableInt tankLevel = new SyncableInt();
+	
+	private boolean disableSucking = false;
 
 	public TileEntityVacuumHopper() {
 		addSyncedObject(Keys.xpOutputs, xpOutputs);
@@ -70,42 +72,44 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (worldObj.isRemote) {
-			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
-		}
-
-		@SuppressWarnings("unchecked")
-		List<Entity> surroundingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3));
-
-		for (Entity entity : surroundingItems) {
-
-			if (!entity.isDead
-					&& (entity instanceof EntityItem || entity instanceof EntityXPOrb)) {
-
-				boolean shouldPull = true;
-
-				if (entity instanceof EntityItem) {
-					ItemStack stack = ((EntityItem)entity).getEntityItem();
-					shouldPull = InventoryUtils.testInventoryInsertion(this, stack) > 0;
-				}
-				if (entity instanceof EntityXPOrb) {
-					shouldPull = this.getXPOutputs().getActiveSlots().size() > 0;
-				}
-
-				if (shouldPull) {
-
-					double x = (xCoord + 0.5D - entity.posX) / 15.0D;
-					double y = (yCoord + 0.5D - entity.posY) / 15.0D;
-					double z = (zCoord + 0.5D - entity.posZ) / 15.0D;
-
-					double distance = Math.sqrt(x * x + y * y + z * z);
-					double var11 = 1.0D - distance;
-
-					if (var11 > 0.0D) {
-						var11 *= var11;
-						entity.motionX += x / distance * var11 * 0.05;
-						entity.motionY += y / distance * var11 * 0.2;
-						entity.motionZ += z / distance * var11 * 0.05;
+		if(!disableSucking) {
+			if (worldObj.isRemote) {
+				worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
+			}
+			
+			@SuppressWarnings("unchecked")
+			List<Entity> surroundingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3));
+	
+			for (Entity entity : surroundingItems) {
+	
+				if (!entity.isDead
+						&& (entity instanceof EntityItem || entity instanceof EntityXPOrb)) {
+	
+					boolean shouldPull = true;
+	
+					if (entity instanceof EntityItem) {
+						ItemStack stack = ((EntityItem)entity).getEntityItem();
+						shouldPull = InventoryUtils.testInventoryInsertion(this, stack) > 0;
+					}
+					if (entity instanceof EntityXPOrb) {
+						shouldPull = this.getXPOutputs().getActiveSlots().size() > 0;
+					}
+	
+					if (shouldPull) {
+	
+						double x = (xCoord + 0.5D - entity.posX) / 15.0D;
+						double y = (yCoord + 0.5D - entity.posY) / 15.0D;
+						double z = (zCoord + 0.5D - entity.posZ) / 15.0D;
+	
+						double distance = Math.sqrt(x * x + y * y + z * z);
+						double var11 = 1.0D - distance;
+	
+						if (var11 > 0.0D) {
+							var11 *= var11;
+							entity.motionX += x / distance * var11 * 0.05;
+							entity.motionY += y / distance * var11 * 0.2;
+							entity.motionZ += z / distance * var11 * 0.05;
+						}
 					}
 				}
 			}
@@ -243,8 +247,13 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
+		if (player.isSneaking()) {
+			if(player.inventory.getStackInSlot(player.inventory.currentItem) == null) {
+				disableSucking = !disableSucking;
+				return true;
+			}
+			return false;
+		} else if (!worldObj.isRemote) {
 			openGui(player, OpenBlocks.Gui.vacuumHopper);
 		}
 		return true;
