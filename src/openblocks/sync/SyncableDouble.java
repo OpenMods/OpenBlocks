@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class SyncableDouble implements ISyncableObject {
 
 	private double value;
-	private boolean hasChanged = false;
+	private boolean dirty = false;
 
 	public SyncableDouble(double value) {
 		this.value = value;
@@ -22,7 +22,7 @@ public class SyncableDouble implements ISyncableObject {
 	public void setValue(double newValue) {
 		if (newValue != value) {
 			value = newValue;
-			setHasChanged();
+			markDirty();
 		}
 	}
 
@@ -58,17 +58,23 @@ public class SyncableDouble implements ISyncableObject {
 	}
 
 	@Override
-	public boolean hasChanged() {
-		return hasChanged;
+	public boolean isDirty() {
+		return dirty;
 	}
 
 	@Override
-	public void resetChangeStatus() {
-		hasChanged = false;
+	public void markClean() {
+		dirty = false;
 	}
 
 	@Override
-	public void setHasChanged() {
-		hasChanged = true;
+	public void markDirty() {
+		dirty = true;
+	}
+
+	@Override
+	public void resetChangeTimer() {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class SyncableShort implements ISyncableObject {
 
 	private short value = 0;
-	private boolean hasChanged = false;
+	private boolean dirty = false;
 
 	public SyncableShort(short value) {
 		this.value = value;
@@ -31,7 +31,7 @@ public class SyncableShort implements ISyncableObject {
 	public void setValue(short val) {
 		if (val != value) {
 			value = val;
-			setHasChanged();
+			markDirty();
 		}
 	}
 
@@ -58,17 +58,23 @@ public class SyncableShort implements ISyncableObject {
 	}
 
 	@Override
-	public boolean hasChanged() {
-		return hasChanged;
+	public boolean isDirty() {
+		return dirty;
 	}
 
 	@Override
-	public void resetChangeStatus() {
-		hasChanged = false;
+	public void markClean() {
+		dirty = false;
 	}
 
 	@Override
-	public void setHasChanged() {
-		hasChanged = true;
+	public void markDirty() {
+		dirty = true;
+	}
+
+	@Override
+	public void resetChangeTimer() {
+		// TODO Auto-generated method stub
+
 	}
 }

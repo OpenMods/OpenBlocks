@@ -22,16 +22,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityFlag extends NetworkedTileEntity implements
 		ISurfaceAttachment, IAwareTile {
 
-	public enum Keys {
-		angle, colorIndex
-	}
-
 	private SyncableFloat angle = new SyncableFloat(0.0f);
 	private SyncableInt colorIndex = new SyncableInt(0);
 
 	public TileEntityFlag() {
-		addSyncedObject(Keys.angle, angle);
-		addSyncedObject(Keys.colorIndex, colorIndex);
+		addSyncedObject(angle);
+		addSyncedObject(colorIndex);
 	}
 
 	@Override

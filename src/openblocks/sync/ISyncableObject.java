@@ -7,11 +7,11 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface ISyncableObject {
-	public boolean hasChanged();
+	public boolean isDirty();
 
-	public void resetChangeStatus();
+	public void markClean();
 
-	public void setHasChanged();
+	public void markDirty();
 
 	public void readFromStream(DataInputStream stream) throws IOException;
 
@@ -22,4 +22,5 @@ public interface ISyncableObject {
 
 	public void readFromNBT(NBTTagCompound tag, String name);
 
+	public void resetChangeTimer();
 }

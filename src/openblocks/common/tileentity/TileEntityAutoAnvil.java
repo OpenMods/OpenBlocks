@@ -10,38 +10,27 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
+import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.GenericInventory;
-import openblocks.common.GenericTank;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IHasGui;
+import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
-import openblocks.sync.SyncableInt;
+import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntityAutoAnvil extends NetworkedTileEntity implements
-		IAwareTile, ISidedInventory, IFluidHandler {
+		IAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 
-	public static final int TOTAL_COOLDOWN = 40;
-	protected static final FluidStack XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
+	protected static final int TOTAL_COOLDOWN = 40;
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
-	private int cooldown = 0;
 
-	private GenericInventory inventory = new GenericInventory("autoanvil", true, 3);
-	private GenericTank tank = new GenericTank(TANK_CAPACITY, XP_FLUID);
-
-	/**
-	 * The keys of the objects that are synced over the network
-	 */
-	public enum Keys {
-		toolSides, modifierSides, outputSides, xpSides, xpLevel, autoFlags
-	}
+	protected int cooldown = 0;
 
 	/**
 	 * The 3 slots in the inventory
@@ -53,39 +42,38 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	/**
 	 * The keys of the things that can be auto injected/extracted
 	 */
-	public enum AutoSides {
+	public enum AutoSlots {
 		tool, modifier, output, xp
 	}
+
+	protected GenericInventory inventory = new GenericInventory("autoanvil", true, 3);
 
 	/**
 	 * The shared/syncable objects
 	 */
-	private SyncableFlags toolSides = new SyncableFlags();
-	private SyncableFlags modifierSides = new SyncableFlags();
-	private SyncableFlags outputSides = new SyncableFlags();
-	private SyncableFlags xpSides = new SyncableFlags();
-	private SyncableInt xpLevel = new SyncableInt();
-	private SyncableFlags autoFlags = new SyncableFlags();
+	private SyncableFlags toolSides;
+	private SyncableFlags modifierSides;
+	private SyncableFlags outputSides;
+	private SyncableFlags xpSides;
+	private SyncableTank tank;
+	private SyncableFlags automaticSlots;
 
 	public TileEntityAutoAnvil() {
-		// add our syncable objects to the tile
-		addSyncedObject(Keys.toolSides, toolSides);
-		addSyncedObject(Keys.modifierSides, modifierSides);
-		addSyncedObject(Keys.outputSides, outputSides);
-		addSyncedObject(Keys.xpSides, xpSides);
-		addSyncedObject(Keys.xpLevel, xpLevel);
-		addSyncedObject(Keys.autoFlags, autoFlags);
+		addSyncedObject(toolSides = new SyncableFlags());
+		addSyncedObject(modifierSides = new SyncableFlags());
+		addSyncedObject(outputSides = new SyncableFlags());
+		addSyncedObject(xpSides = new SyncableFlags());
+		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
+		addSyncedObject(automaticSlots = new SyncableFlags());
 	}
 
 	@Override
 	public void updateEntity() {
-
 		super.updateEntity();
 
 		if (!worldObj.isRemote) {
-
 			// if we should auto-drink liquid, do it!
-			if (autoFlags.get(AutoSides.xp)) {
+			if (automaticSlots.get(AutoSlots.xp)) {
 				tank.autoFillFromSides(100, this, xpSides);
 			}
 
@@ -115,6 +103,16 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 				cooldown--;
 			}
 		}
+	}
+
+	@Override
+	public Object getServerGui(EntityPlayer player) {
+		return new ContainerAutoAnvil(player.inventory, this);
+	}
+
+	@Override
+	public Object getClientGui(EntityPlayer player) {
+		return new GuiAutoAnvil(new ContainerAutoAnvil(player.inventory, this));
 	}
 
 	/**
@@ -157,8 +155,8 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	 * 
 	 * @return
 	 */
-	public SyncableFlags getAutoFlags() {
-		return autoFlags;
+	public SyncableFlags getAutomaticSlots() {
+		return automaticSlots;
 	}
 
 	/**
@@ -167,7 +165,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	 * @return
 	 */
 	private boolean shouldAutoInputModifier() {
-		return autoFlags.get(AutoSides.modifier);
+		return automaticSlots.get(AutoSlots.modifier);
 	}
 
 	/**
@@ -176,7 +174,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	 * @return
 	 */
 	public boolean shouldAutoOutput() {
-		return autoFlags.get(AutoSides.output);
+		return automaticSlots.get(AutoSlots.output);
 	}
 
 	/**
@@ -194,7 +192,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	 * @return
 	 */
 	private boolean shouldAutoInputTool() {
-		return autoFlags.get(AutoSides.tool);
+		return automaticSlots.get(AutoSlots.tool);
 	}
 
 	/**
@@ -443,7 +441,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player, OpenBlocks.Gui.autoAnvil);
+			openGui(player);
 		}
 		return true;
 	}
@@ -516,6 +514,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		if (i == 0 && !itemstack.isItemEnchantable()) { return false; }
 		if (i == 2) { return false; }
 		return inventory.isItemValidForSlot(i, itemstack);
 	}
@@ -571,7 +570,8 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
-		if (slot == 0) { return toolSides.get(side); }
+		if (slot == 0) { return toolSides.get(side)
+				&& isItemValidForSlot(slot, itemstack); }
 		if (slot == 1) { return modifierSides.get(side); }
 		return false;
 	}
@@ -580,15 +580,6 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
 		if (slot == 2) { return outputSides.get(side); }
 		return false;
-	}
-
-	public void updateGuiValues() {
-		xpLevel.setValue(tank.getFluidAmount());
-	}
-
-	public double getXPBufferRatio() {
-		return Math.max(0, Math.min(1, (double)xpLevel.getValue()
-				/ (double)tank.getCapacity()));
 	}
 
 	@Override
@@ -600,7 +591,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 		modifierSides.writeToNBT(tag, "modifiersides");
 		outputSides.writeToNBT(tag, "outputsides");
 		xpSides.writeToNBT(tag, "xpsides");
-		autoFlags.writeToNBT(tag, "autoflags");
+		automaticSlots.writeToNBT(tag, "autoflags");
 	}
 
 	@Override
@@ -612,7 +603,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 		modifierSides.readFromNBT(tag, "modifiersides");
 		outputSides.readFromNBT(tag, "outputsides");
 		xpSides.readFromNBT(tag, "xpsides");
-		autoFlags.readFromNBT(tag, "autoflags");
+		automaticSlots.readFromNBT(tag, "autoflags");
 	}
 
 	@Override
@@ -620,4 +611,9 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 
 	@Override
 	public void onNeighbourChanged(int blockId) {}
+
+	public IFluidTank getTank() {
+		return tank;
+	}
+
 }

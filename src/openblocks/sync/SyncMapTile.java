@@ -27,7 +27,7 @@ public class SyncMapTile extends SyncMap {
 			// Tile Entities only
 			if (!(handler instanceof TileEntity)) return null;
 			TileEntity ent = (TileEntity)handler;
-			Packet250CustomPayload packet250 = (Packet250CustomPayload)createPacket(handler, true);
+			Packet250CustomPayload packet250 = (Packet250CustomPayload)createPacket(handler, true, false);
 			/* We now turn it in to a TileEntityUpdate packet */
 			NBTTagCompound extraData = new NBTTagCompound();
 			extraData.setByteArray("payload", packet250.data);

@@ -17,10 +17,6 @@ import openblocks.utils.BlockUtils;
 public class TileEntityBearTrap extends NetworkedTileEntity implements
 		IAwareTile, ISurfaceAttachment {
 
-	public enum Keys {
-		flags, trappedEntityId
-	}
-
 	public enum Flags {
 		isShut
 	}
@@ -29,8 +25,8 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	private SyncableInt trappedEntityId = new SyncableInt();
 
 	public TileEntityBearTrap() {
-		addSyncedObject(Keys.flags, flags);
-		addSyncedObject(Keys.trappedEntityId, trappedEntityId);
+		addSyncedObject(flags);
+		addSyncedObject(trappedEntityId);
 		flags.on(Flags.isShut);
 	}
 
@@ -61,8 +57,9 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 				trappedEntity.motionZ = 0;
 			}
 		}
-
-		sync(false);
+		if (!worldObj.isRemote) {
+			sync(false);
+		}
 	}
 
 	public void onEntityCollided(Entity entity) {

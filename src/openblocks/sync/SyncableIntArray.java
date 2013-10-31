@@ -23,7 +23,7 @@ public class SyncableIntArray implements ISyncableObject {
 	public void setValue(int[] newValue) {
 		if (!Arrays.equals(value, newValue)) {
 			value = newValue;
-			setHasChanged();
+			markDirty();
 		}
 	}
 
@@ -76,17 +76,23 @@ public class SyncableIntArray implements ISyncableObject {
 	}
 
 	@Override
-	public boolean hasChanged() {
+	public boolean isDirty() {
 		return hasChanged;
 	}
 
 	@Override
-	public void resetChangeStatus() {
+	public void markClean() {
 		hasChanged = false;
 	}
 
 	@Override
-	public void setHasChanged() {
+	public void markDirty() {
 		hasChanged = true;
+	}
+
+	@Override
+	public void resetChangeTimer() {
+		// TODO Auto-generated method stub
+
 	}
 }

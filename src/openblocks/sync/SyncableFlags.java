@@ -13,7 +13,7 @@ public class SyncableFlags implements ISyncableObject {
 
 	private short value;
 	private short previousValue;
-	private boolean hasChanged = false;
+	private boolean dirty = false;
 	protected int[] ticksSinceSet = new int[16];
 	protected int[] ticksSinceUnset = new int[16];
 	protected int ticksSinceChanged = 0;
@@ -68,15 +68,14 @@ public class SyncableFlags implements ISyncableObject {
 			} else {
 				ticksSinceUnset[slot] = 0;
 			}
-			setHasChanged();
+			markDirty();
 		}
 		value = newVal;
 	}
 
 	@Override
-	public void setHasChanged() {
-		hasChanged = true;
-		ticksSinceChanged = 0;
+	public void markDirty() {
+		dirty = true;
 	}
 
 	public int ticksSinceSet(Enum<?> slot) {
@@ -108,8 +107,8 @@ public class SyncableFlags implements ISyncableObject {
 	}
 
 	@Override
-	public boolean hasChanged() {
-		return hasChanged;
+	public boolean isDirty() {
+		return dirty;
 	}
 
 	public boolean hasSlotChanged(Enum<?> slot) {
@@ -121,9 +120,9 @@ public class SyncableFlags implements ISyncableObject {
 	}
 
 	@Override
-	public void resetChangeStatus() {
+	public void markClean() {
 		previousValue = value;
-		hasChanged = false;
+		dirty = false;
 		for (int i = 0; i < ticksSinceSet.length; i++) {
 			ticksSinceSet[i]++;
 			ticksSinceUnset[i]++;
@@ -152,5 +151,10 @@ public class SyncableFlags implements ISyncableObject {
 		if (tag.hasKey(name)) {
 			value = tag.getShort(name);
 		}
+	}
+
+	@Override
+	public void resetChangeTimer() {
+		ticksSinceChanged = 0;
 	}
 }

@@ -3,9 +3,8 @@ package openblocks.client.renderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.tileentity.TileEntityTank;
+import openblocks.sync.SyncableTank;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -31,14 +30,14 @@ public class ItemRendererTank implements IItemRenderer {
 		if (type != ItemRenderType.INVENTORY) {
 			GL11.glTranslated(0, 0.5, 0);
 		}
-		teTank.getInternalTank().setFluid(null);
+
 		if (item.hasTagCompound() && item.getTagCompound().hasKey("tank")) {
-			teTank.readFromNBT(item.getTagCompound().getCompoundTag("tank"));
-			FluidStack lstack = teTank.getInternalTank().getFluid();
-			if (lstack != null && FluidRegistry.getFluidName(lstack) != null) {
-				teTank.setClientLiquidId(lstack.fluidID);
-			}
+			((SyncableTank)teTank.getTank()).readFromNBT(item.getTagCompound().getCompoundTag("tank"));
+			teTank.forceRenderLevel();
+		} else {
+			((SyncableTank)teTank.getTank()).setFluid(null);
 		}
+
 		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, 0.0D, 0.0D, 0.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}

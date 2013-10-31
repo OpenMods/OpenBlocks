@@ -23,7 +23,7 @@ public class TileEntityFan extends NetworkedTileEntity implements IAwareTile {
 	}
 
 	public TileEntityFan() {
-		addSyncedObject(Keys.angle, angle);
+		addSyncedObject(angle);
 	}
 
 	@Override

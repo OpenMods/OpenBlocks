@@ -37,10 +37,10 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	}
 
 	public TileEntityGuide() {
-		addSyncedObject(Keys.width, width);
-		addSyncedObject(Keys.height, height);
-		addSyncedObject(Keys.depth, depth);
-		addSyncedObject(Keys.mode, mode);
+		addSyncedObject(width);
+		addSyncedObject(height);
+		addSyncedObject(depth);
+		addSyncedObject(mode);
 	}
 
 	public int getWidth() {
@@ -189,7 +189,9 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 			}
 		}
 		recreateShape();
-		sync();
+		if (!worldObj.isRemote) {
+			sync();
+		}
 	}
 
 	@Override

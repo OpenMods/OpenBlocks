@@ -11,55 +11,54 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
+import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.GenericInventory;
-import openblocks.common.GenericTank;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IHasGui;
+import openblocks.common.container.ContainerXPBottler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
-import openblocks.sync.SyncableInt;
+import openblocks.sync.SyncableProgress;
+import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntityXPBottler extends NetworkedTileEntity implements
-		IAwareTile, ISidedInventory, IFluidHandler {
+		IAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Item.expBottle, 1);
+	public static final int PROGRESS_TICKS = 40;
 
 	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
-
-	private GenericTank tank = new GenericTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+	private SyncableTank tank;
 
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
 
-	/** Ids of the data objects we'll sync **/
-	public enum Keys {
-		glassSides, xpBottleSides, xpSides, progress, tankLevel, autoFlags
+	public static enum Slots {
+		input, output
 	}
 
-	public static enum AutoSides {
+	public static enum AutoSlots {
 		input, output, xp
 	}
 
 	/** synced data objects **/
-	private SyncableInt progress = new SyncableInt();
-	private SyncableFlags glassSides = new SyncableFlags();
-	private SyncableFlags xpBottleSides = new SyncableFlags();
-	private SyncableFlags xpSides = new SyncableFlags();
-	private SyncableInt tankLevel = new SyncableInt();
-	private SyncableFlags autoFlags = new SyncableFlags();
-
-	public static final int PROGRESS_TICKS = 40;
+	private SyncableProgress progress;
+	private SyncableFlags glassSides;
+	private SyncableFlags xpBottleSides;
+	private SyncableFlags xpSides;
+	private SyncableFlags automaticSlots;
 
 	public TileEntityXPBottler() {
-		addSyncedObject(Keys.glassSides, glassSides);
-		addSyncedObject(Keys.xpBottleSides, xpBottleSides);
-		addSyncedObject(Keys.xpSides, xpSides);
-		addSyncedObject(Keys.progress, progress);
-		addSyncedObject(Keys.tankLevel, tankLevel);
-		addSyncedObject(Keys.autoFlags, autoFlags);
+		addSyncedObject(progress = new SyncableProgress(PROGRESS_TICKS));
+		addSyncedObject(glassSides = new SyncableFlags());
+		addSyncedObject(xpBottleSides = new SyncableFlags());
+		addSyncedObject(xpSides = new SyncableFlags());
+		addSyncedObject(automaticSlots = new SyncableFlags());
+		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
 	}
 
 	@Override
@@ -68,48 +67,58 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		if (!worldObj.isRemote) {
 
 			// if we should, we'll autofill the tank
-			if (autoFlags.get(AutoSides.xp)) {
+			if (automaticSlots.get(AutoSlots.xp)) {
 				tank.autoFillFromSides(10, this, xpSides);
 			}
 
 			// if they've ticked auto output, and we have something to output
 			if (shouldAutoOutput() && hasOutputStack()) {
-				InventoryUtils.moveItemsToOneOfSides(this, 1, 1, xpBottleSides);
+				InventoryUtils.moveItemsToOneOfSides(this, Slots.output, 1, xpBottleSides);
 			}
 
 			// if we should auto input and we don't have any glass in the slot
 			if (shouldAutoInput() && !hasGlassInInput()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, GLASS_BOTTLE, 1, 0, glassSides);
+				InventoryUtils.moveItemsFromOneOfSides(this, GLASS_BOTTLE, 1, Slots.input, glassSides);
 			}
 
 			// if there's no space in the output, we've got no input bottles or
 			// the tank isnt full, reset progress
 			if (!hasSpaceInOutput() || !hasGlassInInput() || !isTankFull()) {
-				progress.setValue(0);
+				progress.reset();
 				return;
 			}
 			// while progress is moving, modify by 1
-			if (progress.getValue() < PROGRESS_TICKS) {
-				progress.modify(1);
+			if (!progress.isComplete()) {
+				progress.increase();
 			} else {
 				// this happens when the progress has completed
 				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:fill", .5f, .8f);
-				inventory.decrStackSize(0, 1);
+				inventory.decrStackSize(Slots.input.ordinal(), 1);
 				// drain the entire tank (it stores enough for 1 bottle)
 				tank.drain(tank.getFluidAmount(), true);
 				// increase the stacksize of the output slot
-				if (inventory.getStackInSlot(1) == null) {
-					inventory.setInventorySlotContents(1, XP_BOTTLE.copy());
+				if (inventory.getStackInSlot(Slots.output.ordinal()) == null) {
+					inventory.setInventorySlotContents(Slots.output.ordinal(), XP_BOTTLE.copy());
 				} else {
-					ItemStack outputStack = inventory.getStackInSlot(1).copy();
+					ItemStack outputStack = inventory.getStackInSlot(Slots.output.ordinal()).copy();
 					outputStack.stackSize++;
-					inventory.setInventorySlotContents(1, outputStack);
+					inventory.setInventorySlotContents(Slots.output.ordinal(), outputStack);
 				}
 				// reset progress
-				progress.setValue(0);
+				progress.reset();
 			}
 
 		}
+	}
+
+	@Override
+	public Object getServerGui(EntityPlayer player) {
+		return new ContainerXPBottler(player.inventory, this);
+	}
+
+	@Override
+	public Object getClientGui(EntityPlayer player) {
+		return new GuiXPBottler(new ContainerXPBottler(player.inventory, this));
 	}
 
 	public SyncableFlags getGlassSides() {
@@ -124,21 +133,12 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		return xpSides;
 	}
 
-	public SyncableFlags getAutoFlags() {
-		return autoFlags;
+	public SyncableFlags getAutomaticSlots() {
+		return automaticSlots;
 	}
 
-	public SyncableInt getProgress() {
+	public SyncableProgress getProgress() {
 		return progress;
-	}
-
-	public double getProgressRatio() {
-		int p = progress.getValue();
-		if (p > 0) {
-			p += progress.getTicksSinceChange();
-		}
-		p = Math.max(0, Math.min(p, PROGRESS_TICKS));
-		return (double)p / (double)PROGRESS_TICKS;
 	}
 
 	public boolean hasOutputStack() {
@@ -147,20 +147,20 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 	}
 
 	public boolean shouldAutoInput() {
-		return autoFlags.get(AutoSides.input);
+		return automaticSlots.get(AutoSlots.input);
 	}
 
 	public boolean shouldAutoOutput() {
-		return autoFlags.get(AutoSides.output);
+		return automaticSlots.get(AutoSlots.output);
 	}
 
 	public boolean hasGlassInInput() {
-		ItemStack inputStack = inventory.getStackInSlot(0);
+		ItemStack inputStack = inventory.getStackInSlot(Slots.input.ordinal());
 		return inputStack != null && inputStack.isItemEqual(GLASS_BOTTLE);
 	}
 
 	public boolean hasSpaceInOutput() {
-		ItemStack outputStack = inventory.getStackInSlot(1);
+		ItemStack outputStack = inventory.getStackInSlot(Slots.output.ordinal());
 		return outputStack == null
 				|| (outputStack.isItemEqual(XP_BOTTLE) && outputStack.stackSize < outputStack.getMaxStackSize());
 	}
@@ -169,27 +169,21 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		return tank.getFluidAmount() == tank.getCapacity();
 	}
 
-	public FluidTank getTank() {
+	public IFluidTank getTank() {
 		return tank;
 	}
 
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockBroken() {}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockAdded() {}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player, OpenBlocks.Gui.XPBottler);
+			openGui(player);
 		}
 		return true;
 	}
@@ -205,7 +199,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 
 	@Override
 	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -255,16 +248,10 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void closeChest() {}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
@@ -275,7 +262,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		glassSides.writeToNBT(tag, "glasssides");
 		xpBottleSides.writeToNBT(tag, "xpbottlesides");
 		xpSides.writeToNBT(tag, "xpsides");
-		autoFlags.writeToNBT(tag, "autoflags");
+		automaticSlots.writeToNBT(tag, "autoflags");
 	}
 
 	@Override
@@ -287,7 +274,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 		glassSides.readFromNBT(tag, "glasssides");
 		xpBottleSides.readFromNBT(tag, "xpbottlesides");
 		xpSides.readFromNBT(tag, "xpsides");
-		autoFlags.readFromNBT(tag, "autoflags");
+		automaticSlots.readFromNBT(tag, "autoflags");
 	}
 
 	@Override
@@ -360,18 +347,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public double getXPBufferRatio() {
-		return Math.max(0, Math.min(1, (double)tankLevel.getValue()
-				/ (double)tank.getCapacity()));
-	}
-
-	public void updateGuiValues() {
-		tankLevel.setValue(tank.getFluidAmount());
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 }

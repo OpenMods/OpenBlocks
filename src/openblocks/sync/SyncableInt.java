@@ -8,9 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class SyncableInt implements ISyncableObject {
 
-	private int value = 0;
-	private boolean hasChanged = false;
-	private int ticksSinceChange = 0;
+	protected int value = 0;
+	protected boolean dirty = false;
+	protected int ticksSinceChange = 0;
 
 	public SyncableInt(int value) {
 		this.value = value;
@@ -36,7 +36,7 @@ public class SyncableInt implements ISyncableObject {
 	public void setValue(int val) {
 		if (val != value) {
 			value = val;
-			setHasChanged();
+			markDirty();
 		}
 	}
 
@@ -63,19 +63,23 @@ public class SyncableInt implements ISyncableObject {
 	}
 
 	@Override
-	public boolean hasChanged() {
-		return hasChanged;
+	public boolean isDirty() {
+		return dirty;
 	}
 
 	@Override
-	public void resetChangeStatus() {
-		hasChanged = false;
+	public void markClean() {
+		dirty = false;
 		ticksSinceChange++;
 	}
 
 	@Override
-	public void setHasChanged() {
-		hasChanged = true;
+	public void markDirty() {
+		dirty = true;
+	}
+
+	@Override
+	public void resetChangeTimer() {
 		ticksSinceChange = 0;
 	}
 }

@@ -12,15 +12,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.client.gui.GuiLightbox;
 import openblocks.common.GenericInventory;
+import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IHasGui;
 import openblocks.common.api.ISurfaceAttachment;
+import openblocks.common.container.ContainerLightbox;
 
-public class TileEntityLightbox extends TileEntity implements IInventory,
-		ISurfaceAttachment {
+public class TileEntityLightbox extends OpenTileEntity implements IInventory,
+		ISurfaceAttachment, IAwareTile, IHasGui {
 
 	private GenericInventory inventory = new GenericInventory("lightbox", false, 1);
 
@@ -82,6 +85,16 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 		}
 
 		tickCounter++;
+	}
+
+	@Override
+	public Object getServerGui(EntityPlayer player) {
+		return new ContainerLightbox(player.inventory, this);
+	}
+
+	@Override
+	public Object getClientGui(EntityPlayer player) {
+		return new GuiLightbox(new ContainerLightbox(player.inventory, this));
 	}
 
 	public void setSurfaceAndRotation(ForgeDirection surface, ForgeDirection rotation) {
@@ -208,4 +221,44 @@ public class TileEntityLightbox extends TileEntity implements IInventory,
 	public ForgeDirection getSurfaceDirection() {
 		return surface;
 	}
+
+	@Override
+	public void onBlockBroken() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onBlockAdded() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (!worldObj.isRemote) {
+			openGui(player);
+		}
+		if (player.isSneaking()) { return false; }
+		return true;
+	}
+
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onBlockEventReceived(int eventId, int eventParam) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

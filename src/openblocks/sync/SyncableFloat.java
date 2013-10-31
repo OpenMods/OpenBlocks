@@ -10,7 +10,7 @@ public class SyncableFloat implements ISyncableObject {
 
 	public static final float EPSILON = 0.0001f;
 	private float value;
-	private boolean hasChanged = false;
+	private boolean dirty = false;
 
 	public SyncableFloat(float value) {
 		this.value = value;
@@ -23,7 +23,7 @@ public class SyncableFloat implements ISyncableObject {
 	public void setValue(float newValue) {
 		if (!equals(newValue)) {
 			value = newValue;
-			setHasChanged();
+			markDirty();
 		}
 	}
 
@@ -63,17 +63,23 @@ public class SyncableFloat implements ISyncableObject {
 	}
 
 	@Override
-	public boolean hasChanged() {
-		return hasChanged;
+	public boolean isDirty() {
+		return dirty;
 	}
 
 	@Override
-	public void resetChangeStatus() {
-		hasChanged = false;
+	public void markClean() {
+		dirty = false;
 	}
 
 	@Override
-	public void setHasChanged() {
-		hasChanged = true;
+	public void markDirty() {
+		dirty = true;
+	}
+
+	@Override
+	public void resetChangeTimer() {
+		// TODO Auto-generated method stub
+
 	}
 }

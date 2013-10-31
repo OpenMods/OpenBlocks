@@ -15,7 +15,10 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.block.*;
-import openblocks.common.entity.*;
+import openblocks.common.entity.EntityBlock;
+import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.entity.EntityLuggage;
+import openblocks.common.entity.EntityMagnet;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.integration.ModuleComputerCraft;
@@ -36,8 +39,10 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@")
-@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { "OpenBlocks" }, packetHandler = PacketHandler.class)
+@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { OpenBlocks.CHANNEL }, packetHandler = PacketHandler.class)
 public class OpenBlocks {
+
+	public static final String CHANNEL = "OpenBlocks";
 
 	@Instance(value = "OpenBlocks")
 	public static OpenBlocks instance;
@@ -94,7 +99,7 @@ public class OpenBlocks {
 	public static FluidStack XP_FLUID = null;
 
 	public static enum Gui {
-		lightbox, luggage, sprinkler, vacuumHopper, bigButton, XPBottler, autoAnvil
+		luggage, bigButton
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

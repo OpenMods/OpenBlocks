@@ -16,14 +16,17 @@ import net.minecraftforge.fluids.*;
 import openblocks.Config;
 import openblocks.Log;
 import openblocks.OpenBlocks;
+import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IHasGui;
 import openblocks.common.api.ISurfaceAttachment;
+import openblocks.common.container.ContainerSprinkler;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, IFluidHandler, IInventory {
+		ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
 
 	// erpppppp
 	private FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
@@ -66,6 +69,16 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 				}
 			}
 		}
+	}
+
+	@Override
+	public Object getServerGui(EntityPlayer player) {
+		return new ContainerSprinkler(player.inventory, this);
+	}
+
+	@Override
+	public Object getClientGui(EntityPlayer player) {
+		return new GuiSprinkler(new ContainerSprinkler(player.inventory, this));
 	}
 
 	private void sprayParticles() {
@@ -208,7 +221,7 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player, OpenBlocks.Gui.sprinkler);
+			openGui(player);
 		}
 		return true;
 	}

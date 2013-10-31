@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.IFluidTank;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
@@ -100,7 +100,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		GL11.glEnable(2896);
 
-		FluidTank internalTank = tankTile.getInternalTank();
+		IFluidTank internalTank = tankTile.getTank();
 
 		FluidStack fluidStack = internalTank.getFluid();
 

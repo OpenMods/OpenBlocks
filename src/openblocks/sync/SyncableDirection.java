@@ -10,21 +10,21 @@ import net.minecraftforge.common.ForgeDirection;
 public class SyncableDirection implements ISyncableObject {
 
 	private ForgeDirection value = ForgeDirection.UNKNOWN;
-	private boolean hasChanged = false;
+	private boolean dirty = false;
 
 	@Override
-	public boolean hasChanged() {
-		return hasChanged;
+	public boolean isDirty() {
+		return dirty;
 	}
 
 	@Override
-	public void resetChangeStatus() {
-		hasChanged = false;
+	public void markClean() {
+		dirty = false;
 	}
 
 	@Override
-	public void setHasChanged() {
-		hasChanged = true;
+	public void markDirty() {
+		dirty = true;
 	}
 
 	public ForgeDirection getValue() {
@@ -33,7 +33,7 @@ public class SyncableDirection implements ISyncableObject {
 
 	public void setValue(ForgeDirection direction) {
 		if (direction != value) {
-			setHasChanged();
+			markDirty();
 			value = direction;
 		}
 	}
@@ -59,6 +59,11 @@ public class SyncableDirection implements ISyncableObject {
 		if (tag.hasKey(name)) {
 			value = ForgeDirection.getOrientation(tag.getByte(name));
 		}
+	}
+
+	@Override
+	public void resetChangeTimer() {
+
 	}
 
 }

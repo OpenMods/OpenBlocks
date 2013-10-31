@@ -16,8 +16,8 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 
 	protected SyncMapTile syncMap = new SyncMapTile();
 
-	public void addSyncedObject(Enum<?> key, ISyncableObject obj) {
-		syncMap.put(key, obj);
+	public void addSyncedObject(ISyncableObject obj) {
+		syncMap.put(obj);
 	}
 
 	public void sync(boolean syncMeta) {
@@ -34,6 +34,7 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 
 	@Override
 	public void writeIdentifier(DataOutputStream dos) throws IOException {
+		dos.writeInt(worldObj.provider.dimensionId);
 		dos.writeInt(xCoord);
 		dos.writeInt(yCoord);
 		dos.writeInt(zCoord);

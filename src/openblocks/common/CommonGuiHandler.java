@@ -4,9 +4,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
-import openblocks.common.container.*;
+import openblocks.common.api.IHasGui;
+import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
-import openblocks.common.tileentity.*;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonGuiHandler implements IGuiHandler {
@@ -16,13 +16,7 @@ public class CommonGuiHandler implements IGuiHandler {
 		if (ID == OpenBlocks.Gui.luggage.ordinal()) { return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)); }
 
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if (ID == OpenBlocks.Gui.lightbox.ordinal()) { return new ContainerLightbox(player.inventory, (TileEntityLightbox)tile); }
-		if (ID == OpenBlocks.Gui.sprinkler.ordinal()) { return new ContainerSprinkler(player.inventory, (TileEntitySprinkler)tile); }
-		if (ID == OpenBlocks.Gui.vacuumHopper.ordinal()) { return new ContainerVacuumHopper(player.inventory, (TileEntityVacuumHopper)tile); }
-		if (ID == OpenBlocks.Gui.bigButton.ordinal()) { return new ContainerBigButton(player.inventory, (TileEntityBigButton)tile); }
-		if (ID == OpenBlocks.Gui.XPBottler.ordinal()) { return new ContainerXPBottler(player.inventory, (TileEntityXPBottler)tile); }
-		if (ID == OpenBlocks.Gui.autoAnvil.ordinal()) { return new ContainerAutoAnvil(player.inventory, (TileEntityAutoAnvil)tile); }
-
+		if (tile instanceof IHasGui) { return ((IHasGui)tile).getServerGui(player); }
 		return null;
 	}
 

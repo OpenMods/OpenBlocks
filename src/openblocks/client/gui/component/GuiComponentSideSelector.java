@@ -27,9 +27,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private TrackballWrapper trackball = new TrackballWrapper(1, 40);
 
 	public double scale;
-
-	private ISideSelectionCallback callback;
-
 	private ForgeDirection lastSideHovered;
 	private int movedTicks = 0;
 	public SyncableFlags enabledDirections;
@@ -39,10 +36,9 @@ public class GuiComponentSideSelector extends BaseComponent {
 	private TileEntity te;
 	private boolean highlightSelectedSides = false;
 
-	public GuiComponentSideSelector(int x, int y, double scale, TileEntity te, int meta, Block block, SyncableFlags directions, boolean highlightSelectedSides, ISideSelectionCallback iSideSelectionCallback) {
+	public GuiComponentSideSelector(int x, int y, double scale, TileEntity te, int meta, Block block, SyncableFlags directions, boolean highlightSelectedSides) {
 		super(x, y);
 		this.scale = scale;
-		this.callback = iSideSelectionCallback;
 		this.enabledDirections = directions;
 		this.block = block;
 		this.meta = meta;
@@ -174,9 +170,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
 		if (button == 0 && movedTicks < 5 && lastSideHovered != null
-				&& lastSideHovered != ForgeDirection.UNKNOWN
-				&& callback != null) {
-			callback.onSideSelected(lastSideHovered);
+				&& lastSideHovered != ForgeDirection.UNKNOWN) {
+			this.enabledDirections.toggle(lastSideHovered.ordinal());
 			movedTicks = 5;
 		}
 	}

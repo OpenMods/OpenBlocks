@@ -189,8 +189,8 @@ public abstract class OpenTileEntity extends TileEntity {
 		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
-	public void openGui(EntityPlayer player, Enum<?> gui) {
-		player.openGui(OpenBlocks.instance, gui.ordinal(), worldObj, xCoord, yCoord, zCoord);
+	public void openGui(EntityPlayer player) {
+		player.openGui(OpenBlocks.instance, -1, worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public AxisAlignedBB getBB() {

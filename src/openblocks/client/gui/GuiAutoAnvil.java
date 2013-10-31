@@ -4,20 +4,14 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
-import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSides;
+import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
 import openblocks.sync.SyncableFlags;
 
-import org.lwjgl.opengl.GL11;
-
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
-
-	private GuiComponentPanel main;
 
 	// tank
 	private GuiComponentTankLevel xpLevel;
@@ -53,22 +47,16 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 	private GuiComponentSprite spritePlus;
 
 	public GuiAutoAnvil(ContainerAutoAnvil container) {
-		super(container);
-		xSize = 176;
-		ySize = 175;
+		super(container, 176, 175, "openblocks.gui.autoanvil");
+
+		TileEntityAutoAnvil te = container.getTileEntity();
+		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 
 		ItemStack enchantedAxe = new ItemStack(Item.pickaxeDiamond, 1);
 		enchantedAxe.addEnchantment(Enchantment.fortune, 1);
 
-		// create main panel
-		main = new GuiComponentPanel(0, 0, xSize, ySize, container);
-
 		// create tank level
-		xpLevel = new GuiComponentTankLevel(140, 30, 17, 37);
-		xpLevel.setFluidStack(new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1));
-
-		TileEntityAutoAnvil te = container.getTileEntity();
-		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
+		xpLevel = new GuiComponentTankLevel(140, 30, 17, 37, te.getTank());
 
 		// create tabs container
 		tabs = new GuiComponentTabs(xSize - 3, 4);
@@ -80,60 +68,16 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		tabXP = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.bucketEmpty, 1), 100, 100);
 
 		// create side selectors
-		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getToolSides(), true, new ISideSelectionCallback() {
-			@Override
-			public void onSideSelected(ForgeDirection direction) {
-				getContainer().sendButtonClick(direction.ordinal());
-			}
-		});
-		sideSelectorModifier = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getModifierSides(), true, new ISideSelectionCallback() {
-			@Override
-			public void onSideSelected(ForgeDirection direction) {
-				getContainer().sendButtonClick(direction.ordinal() + 7);
-			}
-		});
-		sideSelectorOutput = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getOutputSides(), true, new ISideSelectionCallback() {
-			@Override
-			public void onSideSelected(ForgeDirection direction) {
-				getContainer().sendButtonClick(direction.ordinal() + 14);
-			}
-		});
-		sideSelectorXP = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getXPSides(), true, new ISideSelectionCallback() {
-			@Override
-			public void onSideSelected(ForgeDirection direction) {
-				getContainer().sendButtonClick(direction.ordinal() + 21);
-			}
-		});
+		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getToolSides(), true);
+		sideSelectorModifier = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getModifierSides(), true);
+		sideSelectorOutput = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getOutputSides(), true);
 
-		SyncableFlags autoFlags = te.getAutoFlags();
+		SyncableFlags autoFlags = te.getAutomaticSlots();
 
-		checkboxAutoExtractTool = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.tool.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
-			@Override
-			public void onTick() {
-				getContainer().sendButtonClick(28);
-			}
-		});
-
-		checkboxAutoExtractModifier = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.modifier.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
-			@Override
-			public void onTick() {
-				getContainer().sendButtonClick(29);
-			}
-		});
-
-		checkboxAutoEjectOutput = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.output.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
-			@Override
-			public void onTick() {
-				getContainer().sendButtonClick(30);
-			}
-		});
-
-		checkboxAutoDrinkXP = new GuiComponentCheckbox(10, 82, autoFlags, AutoSides.xp.ordinal(), 0xFFFFFF, new ICheckboxCallback() {
-			@Override
-			public void onTick() {
-				getContainer().sendButtonClick(31);
-			}
-		});
+		checkboxAutoExtractTool = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.tool.ordinal(), 0xFFFFFF);
+		checkboxAutoExtractModifier = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.modifier.ordinal(), 0xFFFFFF);
+		checkboxAutoEjectOutput = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.output.ordinal(), 0xFFFFFF);
+		checkboxAutoDrinkXP = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.xp.ordinal(), 0xFFFFFF);
 
 		// create labels
 		labelAutoExtractTool = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
@@ -170,47 +114,11 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		tabs.addComponent(tabXP);
 
 		// append to main
-		main.addComponent(spriteHammer);
-		main.addComponent(spritePlus);
-		main.addComponent(tabs);
-		main.addComponent(xpLevel);
+		panel.addComponent(spriteHammer);
+		panel.addComponent(spritePlus);
+		panel.addComponent(tabs);
+		panel.addComponent(xpLevel);
 
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		GL11.glPushMatrix();
-		GL11.glTranslated(this.guiLeft, this.guiTop, 0);
-		xpLevel.setPercentFull(getContainer().getTileEntity().getXPBufferRatio());
-		main.render(this.mc, 0, 0, mouseX - this.guiLeft, mouseY - this.guiTop);
-		GL11.glPopMatrix();
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String machineName = StatCollector.translateToLocal("openblocks.gui.autoanvil");
-		int x = this.xSize / 2 - (fontRenderer.getStringWidth(machineName) / 2);
-		fontRenderer.drawString(machineName, x, 6, 4210752);
-		String translatedName = StatCollector.translateToLocal("container.inventory");
-		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
-	}
-
-	@Override
-	protected void mouseClicked(int x, int y, int button) {
-		super.mouseClicked(x, y, button);
-		main.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
-	}
-
-	@Override
-	protected void mouseMovedOrUp(int x, int y, int button) {
-		super.mouseMovedOrUp(x, y, button);
-		main.mouseMovedOrUp(x - this.guiLeft, y - this.guiTop, button);
-	}
-
-	@Override
-	protected void mouseClickMove(int mouseX, int mouseY, int button, long time) {
-		super.mouseClickMove(mouseX, mouseY, button, time);
-		main.mouseClickMove(mouseX - this.guiLeft, mouseY - this.guiTop, button, time);
 	}
 
 }

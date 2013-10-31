@@ -341,6 +341,10 @@ public class InventoryUtils {
 		return moveItemsFromOneOfSides(currentTile, null, maxAmount, intoSlot, sideFlags);
 	}
 
+	public static int moveItemsFromOneOfSides(TileEntity intoInventory, ItemStack stack, int maxAmount, Enum<?> intoSlot, SyncableFlags sideFlags) {
+		return moveItemsFromOneOfSides(intoInventory, stack, maxAmount, intoSlot.ordinal(), sideFlags);
+	}
+
 	/***
 	 * 
 	 * @param intoInventory
@@ -442,9 +446,13 @@ public class InventoryUtils {
 		return slots;
 	}
 
+	public static int moveItemsToOneOfSides(TileEntity currentTile, Enum<?> fromSlot, int maxAmount, SyncableFlags sideFlags) {
+		return moveItemsToOneOfSides(currentTile, fromSlot.ordinal(), maxAmount, sideFlags);
+	}
+
 	public static int moveItemsToOneOfSides(TileEntity currentTile, int fromSlot, int maxAmount, SyncableFlags sideFlags) {
 
-		// if the current tile isnt an inventory, do nothing
+		// if the current tile isn't an inventory, do nothing
 		if (!(currentTile instanceof IInventory)) { return 0; }
 
 		// wrap it. Sure, we dont need to really as this'll never be a double

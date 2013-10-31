@@ -2,6 +2,7 @@ package openblocks.network;
 
 import java.util.Set;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
@@ -23,7 +24,7 @@ public class PacketHandler implements IPacketHandler {
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 
-		if (packet.channel.equals("OpenBlocks")) {
+		if (packet.channel.equals(OpenBlocks.CHANNEL)) {
 			try {
 				OpenBlocks.syncableManager.handlePacket(packet);
 			} catch (Exception e) {
@@ -35,6 +36,10 @@ public class PacketHandler implements IPacketHandler {
 	public static void sendPacketToPlayer(EntityPlayer player, Packet packetToSend) {
 		Preconditions.checkArgument(player instanceof EntityPlayerMP, "This method can be only used on server side");
 		((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packetToSend);
+	}
+
+	public static void sendPacketToServer(Packet packetToSend) {
+		Minecraft.getMinecraft().getNetHandler().addToSendQueue(packetToSend);
 	}
 
 	public static Set<EntityPlayer> getPlayersWatchingChunk(WorldServer world, int chunkX, int chunkZ) {

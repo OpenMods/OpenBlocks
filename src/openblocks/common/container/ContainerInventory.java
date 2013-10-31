@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -12,13 +11,14 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import openblocks.common.tileentity.NetworkedTileEntity;
 
 public abstract class ContainerInventory<T extends IInventory> extends
 		Container {
 
 	protected final int inventorySize;
 	protected final IInventory playerInventory;
-	private final T inventory;
+	protected final T inventory;
 
 	protected static class RestrictedSlot extends Slot {
 
@@ -104,18 +104,12 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		return players;
 	}
 
-	public abstract void onServerButtonClicked(EntityPlayer player, int buttonId);
-
-	public abstract void onClientButtonClicked(int buttonId);
-
-	public void sendButtonClick(int buttonId) {
-		onClientButtonClicked(buttonId);
-		Minecraft.getMinecraft().playerController.sendEnchantPacket(this.windowId, buttonId);
-	}
-
 	@Override
-	public boolean enchantItem(EntityPlayer player, int button) {
-		onServerButtonClicked(player, button);
-		return false;
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		T te = getTileEntity();
+		if (te instanceof NetworkedTileEntity) {
+			((NetworkedTileEntity)te).sync(false);
+		}
 	}
 }

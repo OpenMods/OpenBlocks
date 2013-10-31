@@ -70,7 +70,7 @@ public class BlockTank extends OpenBlock {
 				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
 			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
-			if (tank != null && tank.getAmount() > 10) {
+			if (tank != null && tank.getTank().getFluidAmount() > 10) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				NBTTagCompound tankTag = tank.getItemNBT();
 				nbt.setCompoundTag("tank", tankTag);

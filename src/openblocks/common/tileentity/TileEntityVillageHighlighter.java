@@ -21,10 +21,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 		IAwareTile {
 
-	public enum Keys {
-		villageData
-	}
-
 	public static int VALUES_PER_VILLAGE = 7;
 
 	public SyncableIntArray villageData = new SyncableIntArray();
@@ -32,7 +28,7 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	private boolean previousBreedStatus = false;
 
 	public TileEntityVillageHighlighter() {
-		addSyncedObject(Keys.villageData, villageData);
+		addSyncedObject(villageData);
 	}
 
 	public static int[] convertIntegers(List<Integer> integers) {

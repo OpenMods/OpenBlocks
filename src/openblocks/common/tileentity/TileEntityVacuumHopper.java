@@ -18,38 +18,31 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
+import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
-import openblocks.integration.ModuleBuildCraft;
+import openblocks.common.api.IHasGui;
+import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
-import openblocks.sync.SyncableInt;
-import openblocks.utils.CollectionUtils;
+import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
-import cpw.mods.fml.common.Loader;
 
 public class TileEntityVacuumHopper extends NetworkedTileEntity implements
-		IInventory, IFluidHandler, IAwareTile {
+		IInventory, IFluidHandler, IAwareTile, IHasGui {
+
+	private static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
 	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
-
-	private FluidTank tank = new FluidTank(EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5)));
-
-	private int oneLevel = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(1));
-
-	public enum Keys {
-		xpOutputs, itemOutputs, tankLevel
-	}
-
-	public SyncableFlags xpOutputs = new SyncableFlags();
-	public SyncableFlags itemOutputs = new SyncableFlags();
-	public SyncableInt tankLevel = new SyncableInt();
+	private SyncableTank tank;
+	public SyncableFlags xpOutputs;
+	public SyncableFlags itemOutputs;
 
 	public TileEntityVacuumHopper() {
-		addSyncedObject(Keys.xpOutputs, xpOutputs);
-		addSyncedObject(Keys.itemOutputs, itemOutputs);
-		addSyncedObject(Keys.tankLevel, tankLevel);
+		addSyncedObject(xpOutputs = new SyncableFlags());
+		addSyncedObject(itemOutputs = new SyncableFlags());
+		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
 	}
 
 	public SyncableFlags getXPOutputs() {
@@ -60,7 +53,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 		return itemOutputs;
 	}
 
-	public FluidTank getTank() {
+	public IFluidTank getTank() {
 		return tank;
 	}
 
@@ -111,43 +104,9 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 
 		if (!worldObj.isRemote) {
 
+			tank.autoOutputToSides(50, this, xpOutputs);
+
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
-
-				Integer slotDirection = CollectionUtils.getRandom(xpOutputs.getActiveSlots());
-				ForgeDirection directionToOutputXP = null;
-				if (slotDirection != null) {
-					directionToOutputXP = ForgeDirection.getOrientation(slotDirection);
-				}
-				TileEntity tileOnSurface = null;
-
-				if (directionToOutputXP != null) {
-					tileOnSurface = getTileInDirection(directionToOutputXP);
-
-					IFluidHandler fluidHandler = null;
-					if (tileOnSurface instanceof IFluidHandler) {
-						fluidHandler = (IFluidHandler)tileOnSurface;
-					}
-
-					// if we've got liquid in the tank
-					if (tank.getFluidAmount() > 0) {
-						// drain a bit
-						FluidStack drainedFluid = tank.drain(Math.min(tank.getFluidAmount(), oneLevel), true);
-						if (drainedFluid != null) {
-							// copy what we drained
-							FluidStack clonedFluid = drainedFluid.copy();
-							// try to insert it into a tank or pipe
-							if (fluidHandler != null) {
-								clonedFluid.amount -= fluidHandler.fill(directionToOutputXP.getOpposite(), drainedFluid, true);
-							} else if (Loader.isModLoaded(openblocks.Mods.BUILDCRAFT)) {
-								clonedFluid.amount -= ModuleBuildCraft.tryAcceptIntoPipe(tileOnSurface, drainedFluid, directionToOutputXP);
-							}
-							// fill any remainder
-							if (clonedFluid.amount > 0) {
-								tank.fill(clonedFluid, true);
-							}
-						}
-					}
-				}
 
 				int firstUsedSlot = -1;
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -157,6 +116,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 				}
 
 				if (firstUsedSlot > -1) {
+					TileEntity tileOnSurface;
 					for (Integer dir : getShuffledItemSlots()) {
 						ForgeDirection directionToOutputItem = ForgeDirection.getOrientation(dir);
 						tileOnSurface = getTileInDirection(directionToOutputItem);
@@ -167,7 +127,17 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 					}
 				}
 			}
-		}
+		} else {}
+	}
+
+	@Override
+	public Object getServerGui(EntityPlayer player) {
+		return new ContainerVacuumHopper(player.inventory, this);
+	}
+
+	@Override
+	public Object getClientGui(EntityPlayer player) {
+		return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, this));
 	}
 
 	public List<Integer> getShuffledItemSlots() {
@@ -243,7 +213,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player, OpenBlocks.Gui.vacuumHopper);
+			openGui(player);
 		}
 		return true;
 	}
@@ -350,16 +320,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 		return new FluidTankInfo[] { tank.getInfo() };
 	}
 
-	public double getXPBufferRatio() {
-		return Math.max(0, Math.min(1, (double)tankLevel.getValue()
-				/ (double)tank.getCapacity()));
-	}
-
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {}
-
-	public void updateGuiValues() {
-		tankLevel.setValue(tank.getFluidAmount());
-	}
 
 }

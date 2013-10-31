@@ -13,14 +13,12 @@ public class GuiComponentCheckbox extends BaseComponent {
 	protected boolean isMouseOver = false;
 	protected SyncableFlags flags;
 	protected int flagSlot;
-	protected ICheckboxCallback callback;
 
-	public GuiComponentCheckbox(int x, int y, SyncableFlags flags, int flagSlot, int color, ICheckboxCallback checkCallback) {
+	public GuiComponentCheckbox(int x, int y, SyncableFlags flags, int flagSlot, int color) {
 		super(x, y);
 		this.color = color;
 		this.flags = flags;
 		this.flagSlot = flagSlot;
-		this.callback = checkCallback;
 	}
 
 	@Override
@@ -35,7 +33,7 @@ public class GuiComponentCheckbox extends BaseComponent {
 	public void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
 		if (isMouseOver(x, y)) {
-			callback.onTick();
+			flags.toggle(flagSlot);
 		}
 	}
 

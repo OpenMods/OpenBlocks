@@ -7,10 +7,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Gui;
+import openblocks.client.gui.GuiBigButton;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IHasGui;
 import openblocks.common.api.ISurfaceAttachment;
+import openblocks.common.container.ContainerBigButton;
 
 import org.lwjgl.opengl.GL11;
 
@@ -18,7 +20,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, IInventory {
+		ISurfaceAttachment, IInventory, IHasGui {
 
 	private int tickCounter = 0;
 
@@ -39,6 +41,16 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 		}
 	}
 
+	@Override
+	public Object getServerGui(EntityPlayer player) {
+		return new ContainerBigButton(player.inventory, this);
+	}
+
+	@Override
+	public Object getClientGui(EntityPlayer player) {
+		return new GuiBigButton(new ContainerBigButton(player.inventory, this));
+	}
+
 	public int getTickTime() {
 		ItemStack stack = inventory.getStackInSlot(0);
 		return stack == null? 1 : stack.stackSize;
@@ -54,7 +66,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
-				openGui(player, Gui.bigButton);
+				openGui(player);
 			} else {
 				setFlag1(true);
 				tickCounter = getTickTime();
@@ -168,5 +180,4 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 		super.prepareForInventoryRender(block, metadata);
 		GL11.glTranslated(-0.5, 0, 0);
 	}
-
 }

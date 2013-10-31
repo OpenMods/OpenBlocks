@@ -35,15 +35,11 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 
 	public boolean renderLine = true;
 
-	public enum Keys {
-		pitch, yaw, cannonId, ridingEntity
-	}
-
 	public TileEntityCannon() {
-		addSyncedObject(Keys.pitch, pitch);
-		addSyncedObject(Keys.yaw, yaw);
-		addSyncedObject(Keys.cannonId, cannonId);
-		addSyncedObject(Keys.ridingEntity, ridingEntity);
+		addSyncedObject(pitch);
+		addSyncedObject(yaw);
+		addSyncedObject(cannonId);
+		addSyncedObject(ridingEntity);
 	}
 
 	@Override
