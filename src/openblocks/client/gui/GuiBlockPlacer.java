@@ -6,13 +6,6 @@ import openblocks.common.container.ContainerBlockPlacer;
 import openblocks.utils.CompatibilityUtils;
 import org.lwjgl.opengl.GL11;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Aleksander
- * Date: 28.09.13
- * Time: 23:28
- * To change this template use File | Settings | File Templates.
- */
 public class GuiBlockPlacer extends GuiContainer {
     public GuiBlockPlacer(ContainerBlockPlacer container) {
         super(container);

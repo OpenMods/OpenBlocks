@@ -9,13 +9,6 @@ import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBlockPlacer;
 import openblocks.common.tileentity.TileEntityItemDropper;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Aleksander
- * Date: 28.09.13
- * Time: 22:16
- * To change this template use File | Settings | File Templates.
- */
 public class BlockItemDropper extends OpenBlock {
     @SideOnly(Side.CLIENT)
     private Icon downIcon;

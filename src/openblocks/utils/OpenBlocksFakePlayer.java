@@ -14,13 +14,6 @@ import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
 import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Aleksander
- * Date: 29.09.13
- * Time: 00:34
- * To change this template use File | Settings | File Templates.
- */
 public class OpenBlocksFakePlayer extends FakePlayer {
     static final HashMap<Integer, OpenBlocksFakePlayer> _players = new HashMap<Integer, OpenBlocksFakePlayer>();
 

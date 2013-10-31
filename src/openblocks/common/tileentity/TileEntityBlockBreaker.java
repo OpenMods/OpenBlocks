@@ -23,15 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Aleksander
- * Date: 25.09.13
- * Time: 18:09
- * To change this template use File | Settings | File Templates.
- */
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeTile.PipeType;
+
 public class TileEntityBlockBreaker extends OpenTileEntity
-    implements IAwareTile {
+    implements IAwareTile, IPipeConnection {
     private boolean _redstoneSignal;
 
     public void setRedstoneSignal(boolean redstoneSignal) {
@@ -86,7 +82,7 @@ public class TileEntityBlockBreaker extends OpenTileEntity
             ArrayList<ItemStack> restItems = new ArrayList<ItemStack>();
             for(int i = 0, l = itemStacks.size(); i < l; i++) {
                 ItemStack stack = itemStacks.get(i);
-                int submittedItems = ModuleBuildCraft.tryAcceptIntoPipe(tileEntity, stack, direction);
+                int submittedItems = ModuleBuildCraft.tryAcceptIntoPipe(tileEntity, stack, true, direction);
                 if(submittedItems == 0) {
                     restItems.add(stack);
                 } else if(submittedItems < stack.stackSize) {
@@ -140,7 +136,7 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 
     @Override
     public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
@@ -157,6 +153,13 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 
     @Override
     public boolean onBlockEventReceived(int eventId, int eventParam) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
+
+	@Override
+	public ConnectOverride overridePipeConnection(PipeType type, ForgeDirection with) {
+		if(type == PipeType.ITEM && with.ordinal() == ForgeDirection.getOrientation(getMetadata()).getOpposite().ordinal())
+			return ConnectOverride.CONNECT;
+		return ConnectOverride.DISCONNECT;
+	}
 }

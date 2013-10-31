@@ -1,5 +1,8 @@
 package openblocks.common.tileentity;
 
+import buildcraft.api.transport.IPipeConnection;
+import buildcraft.api.transport.IPipeConnection.ConnectOverride;
+import buildcraft.api.transport.IPipeTile.PipeType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -14,15 +17,8 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Aleksander
- * Date: 29.09.13
- * Time: 14:39
- * To change this template use File | Settings | File Templates.
- */
 public class TileEntityItemDropper extends OpenTileEntity
-    implements IAwareTile, IInventory {
+    implements IAwareTile, IInventory, IPipeConnection {
     static final int BUFFER_SIZE = 9;
 
     private boolean _redstoneSignal;
@@ -178,7 +174,7 @@ public class TileEntityItemDropper extends OpenTileEntity
     public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking()) { return false; }
         if (!worldObj.isRemote) {
-            openGui(player, OpenBlocks.Gui.ItemDropper);
+            openGui(player, OpenBlocks.Gui.itemDropper);
         }
         return true;
     }
@@ -211,4 +207,12 @@ public class TileEntityItemDropper extends OpenTileEntity
         super.readFromNBT(tag);
         inventory.readFromNBT(tag);
     }
+    
+    @Override
+	public ConnectOverride overridePipeConnection(PipeType type,
+			ForgeDirection with) {
+		if(type == PipeType.ITEM && with.ordinal() == ForgeDirection.getOrientation(getMetadata()).getOpposite().ordinal())
+			return ConnectOverride.CONNECT;
+		return ConnectOverride.DISCONNECT;
+	}
 }
