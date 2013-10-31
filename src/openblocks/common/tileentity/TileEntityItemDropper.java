@@ -44,13 +44,12 @@ public class TileEntityItemDropper extends OpenTileEntity
             ItemStack stack = getStackInSlot(i);
             if(stack == null || stack.stackSize == 0) continue;
 
-            ItemStack dropped = ItemStack.copyItemStack(stack);
-            stack.stackSize--;
+            ItemStack dropped = stack.splitStack(1);
             if(stack.stackSize <= 0) {
                 setInventorySlotContents(i, null);
             }
 
-            OpenBlocksFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, 1, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+            OpenBlocksFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
 
 //            ItemStack newStack = OpenBlocksFakePlayer.getPlayerForWorld(worldObj)
 //                    .equipWithAndRightClick(stack,

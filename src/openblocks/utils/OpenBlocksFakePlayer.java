@@ -9,6 +9,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
@@ -63,7 +64,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
         return ItemStack.copyItemStack(inventory.getCurrentItem());
     }
 
-    public void dropItemAt(ItemStack itemStack, int count, int x, int y, int z, ForgeDirection direction) {
+    public void dropItemAt(ItemStack itemStack, int x, int y, int z, ForgeDirection direction) {
         setPosition(x + 0.5F, y, z + 0.5F);
         if(direction == ForgeDirection.DOWN) {
             setRotation(0, -90);
@@ -72,7 +73,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
             throw new IllegalStateException();
         }
 
-        EntityItem entityItem = dropItemWithOffset(itemStack.itemID, count, -0.5F);
+        EntityItem entityItem = dropPlayerItem(itemStack);
         entityItem.motionX = 0;
         entityItem.motionY = 0;
         entityItem.motionZ = 0;
