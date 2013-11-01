@@ -6,7 +6,7 @@
     "language":{
       "de_DE":{
          "name":"Deutsch",
-         "region":"Deutchland",
+         "region":"Deutschland",
          "bidirectional":false }
       "en_US":{
          "name":"English",
@@ -14,11 +14,11 @@
          "bidirectional":false }
       "nl_NL":{
          "name":"Dutch",
-         "region":"Nederlands,
+         "region":"Nederlands",
          "bidirectional":false }
       "ru_RU" : {
          "name":"Russian",
-         "region":"Russia"
+         "region":"Russia",
          "bidirectional":false }
       "zh_CN" : {
          "name":"Chinese",
