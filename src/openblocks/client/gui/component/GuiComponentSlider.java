@@ -35,7 +35,6 @@ public class GuiComponentSlider extends BaseComponent {
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		int level = value.getValue();
-		
 		GL11.glColor4f(1, 1, 1, 1);
 		int left = offsetX + x;
 		int top = offsetY + y;

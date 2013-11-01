@@ -52,7 +52,7 @@ public class GuiComponentTab extends GuiComponentBox {
 		renderChildren = active && width == targetWidth
 				&& height == targetHeight;
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
-		GL11.glColor3f(1, 1, 1);
+		GL11.glColor4f(1, 1, 1, 1);
 		RenderHelper.enableGUIStandardItemLighting(); // <- optional, looks
 														// brighter without
 														// that. You decide
@@ -62,7 +62,6 @@ public class GuiComponentTab extends GuiComponentBox {
 				+ x + 4, offsetY + y + 4);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_LIGHTING);
-
 	}
 
 	@Override

@@ -119,6 +119,9 @@ public class Config {
 
 	@BlockId(description = "The id of the auto enchantment table")
 	public static int blockAutoEnchantmentTableId = 2561;
+	
+	@BlockId(description = "The id of the xp drain block")
+	public static int blockXPDrainId = 2562;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -412,6 +415,10 @@ public class Config {
 		if (Config.canRegisterBlock(blockAutoEnchantmentTableId)) {
 			OpenBlocks.Blocks.autoEnchantmentTable = new BlockAutoEnchantmentTable();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoEnchantmentTable), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.enchantmentTable, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
+		}
+		
+		if (Config.canRegisterBlock(blockXPDrainId)) {
+			OpenBlocks.Blocks.xpDrain = new BlockXPDrain();
 		}
 
 		// There is no fail checking here because if the Generic item fails,

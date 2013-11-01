@@ -2,11 +2,8 @@ package openblocks.client.renderer.tileentity;
 
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
-
 import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBook;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;

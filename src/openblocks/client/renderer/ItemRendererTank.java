@@ -33,7 +33,6 @@ public class ItemRendererTank implements IItemRenderer {
 
 		if (item.hasTagCompound() && item.getTagCompound().hasKey("tank")) {
 			((SyncableTank)teTank.getTank()).readFromNBT(item.getTagCompound().getCompoundTag("tank"));
-			teTank.forceRenderLevel();
 		} else {
 			((SyncableTank)teTank.getTank()).setFluid(null);
 		}

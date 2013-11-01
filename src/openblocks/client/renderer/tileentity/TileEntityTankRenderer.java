@@ -104,7 +104,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		FluidStack fluidStack = internalTank.getFluid();
 
-		if (fluidStack != null && tankTile.getHeightForRender() > 0.02) {
+		if (fluidStack != null && tankTile.getHeightForRender() > 0.05) {
 			GL11.glPushMatrix();
 			GL11.glDisable(2896);
 			try {

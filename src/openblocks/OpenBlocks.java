@@ -74,6 +74,7 @@ public class OpenBlocks {
 		public static BlockPath path;
 		public static BlockAutoAnvil autoAnvil;
 		public static BlockAutoEnchantmentTable autoEnchantmentTable;
+		public static BlockXPDrain xpDrain;
 	}
 
 	public static class Items {

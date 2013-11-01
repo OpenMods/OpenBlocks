@@ -46,6 +46,7 @@ tile.openblocks.village_highlighter.name=Village Highlighter
 tile.openblocks.path.name=Path
 tile.openblocks.autoanvil.name=Auto Anvil
 tile.openblocks.autoenchantmenttable.name=Auto Enchantment Table
+tile.openblocks.xpdrain.name=XP Drain
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing

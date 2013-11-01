@@ -59,7 +59,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 
 			isInitialized = true;
 		}
-
 		GL11.glPushMatrix();
 		Tessellator t = Tessellator.instance;
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
@@ -68,7 +67,6 @@ public class GuiComponentSideSelector extends BaseComponent {
 		trackball.update(mouseX - 50, -(mouseY - 50));
 		if (te != null) TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, -0.5, -0.5, 0.0F);
 		else drawBlock(minecraft.renderEngine, t);
-
 		SidePicker picker = new SidePicker(0.5);
 
 		HitCoord coord = picker.getNearestHit();

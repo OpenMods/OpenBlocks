@@ -29,17 +29,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	 */
 	private SyncableTank tank = new SyncableTank(getTankCapacity());
 
-	/**
-	 * The amount that will be rendered by the client, interpolated towards
-	 * liquidRenderAmount each tick
-	 */
-	private int interpolatedRenderAmount = 0;
-
-	/**
-	 * How quickly the interpolatedRenderAmount approaches liquidRenderAmount
-	 */
-	private static final short adjustRate = 1000;
-
 	private double flowTimer = Math.random() * 100;
 
 	private int previousFluidId = 0;
@@ -159,23 +148,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		return tank.getFluid() != null;
 	}
 
-	public void forceRenderLevel() {
-		interpolatedRenderAmount = tank.getFluidAmount();
-	}
-
-	private void interpolateLiquidLevel() {
-		/* Client interpolates render amount */
-
-		if (!worldObj.isRemote) return;
-		if (interpolatedRenderAmount + adjustRate < tank.getFluidAmount()) {
-			interpolatedRenderAmount += adjustRate;
-		} else if (interpolatedRenderAmount - adjustRate > tank.getFluidAmount()) {
-			interpolatedRenderAmount -= adjustRate;
-		} else {
-			interpolatedRenderAmount = tank.getFluidAmount();
-		}
-	}
-
 	@Override
 	protected void initialize() {
 		findNeighbours();
@@ -230,7 +202,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			sync(false);
 
 		} else {
-			interpolateLiquidLevel();
 			flowTimer += 0.1f;
 		}
 	}
@@ -329,7 +300,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")) {
 			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag("tank");
 			this.tank.readFromNBT(tankTag);
-			interpolatedRenderAmount = tank.getFluidAmount();
 		}
 	}
 
@@ -343,7 +313,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		tank.readFromNBT(tag);
-		interpolatedRenderAmount = tank.getFluidAmount();
 	}
 
 	public int countDownwardsTanks() {
@@ -358,7 +327,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		super.onDataPacket(net, pkt);
-		interpolatedRenderAmount = tank.getFluidAmount();
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
@@ -404,7 +372,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	public double getHeightForRender() {
-		return (double)interpolatedRenderAmount / (double)tank.getCapacity();
+		return (double)tank.getFluidAmount() / (double)tank.getCapacity();
 	}
 
 	public double getPercentFull() {
