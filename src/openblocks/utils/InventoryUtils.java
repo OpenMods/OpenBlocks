@@ -83,12 +83,15 @@ public class InventoryUtils {
 			((GenericInventory)targetInventory).copyFrom(inventory);
 		}
 		int i = 0;
-		int[] attemptSlots;
+		int[] attemptSlots = new int[0];
 
 		// if it's a sided inventory, get all the accessible slots
 		if (inventory instanceof ISidedInventory
 				&& side != ForgeDirection.UNKNOWN) {
 			attemptSlots = ((ISidedInventory)inventory).getAccessibleSlotsFromSide(side.ordinal());
+			if (attemptSlots == null) {
+				attemptSlots = new int[0];
+			}
 		} else {
 			// if it's just a standard inventory, get all slots
 			attemptSlots = new int[inventory.getSizeInventory()];
@@ -108,7 +111,6 @@ public class InventoryUtils {
 				attemptSlots = new int[0];
 			}
 		}
-		if (attemptSlots == null) { return; }
 		while (stack.stackSize > 0 && i < attemptSlots.length) {
 			if (side != ForgeDirection.UNKNOWN
 					&& inventory instanceof ISidedInventory) {

@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.*;
+import openblocks.client.gui.component.BaseComponent.TabColor;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
@@ -43,9 +44,9 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 		// create tabs
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 
-		tabGlassBottle = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.glassBottle, 1), 100, 100);
-		tabXPBottle = new GuiComponentTab(0xd2e58f, new ItemStack(Item.expBottle), 100, 100);
-		tabXPFluid = new GuiComponentTab(0xd2e58f, new ItemStack(Item.bucketEmpty), 100, 100);
+		tabGlassBottle = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Item.glassBottle, 1), 100, 100);
+		tabXPBottle = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Item.expBottle), 100, 100);
+		tabXPFluid = new GuiComponentTab(TabColor.green.getColor(), new ItemStack(Item.bucketEmpty), 100, 100);
 
 		// create side selectors
 		sideSelectorGlassBottle = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, te.getGlassSides(), true);
@@ -58,7 +59,7 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 		checkboxEjectXP = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.output.ordinal(), 0xFFFFFF);
 		checkboxDrinkXP = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.xp.ordinal(), 0xFFFFFF);
 
-		labelInsertGlass = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoinsert"));
+		labelInsertGlass = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
 		labelEjectXPBottle = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
 		labelDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 

@@ -11,6 +11,7 @@ import net.minecraft.server.ThreadMinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -32,7 +33,6 @@ import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.tileentity.*;
-import openblocks.sync.SyncableManager;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -43,7 +43,6 @@ import cpw.mods.fml.relauncher.Side;
 public class ClientProxy implements IProxy {
 
 	public ClientProxy() {
-		OpenBlocks.syncableManager = new SyncableManager();
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 		MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -89,6 +88,7 @@ public class ClientProxy implements IProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoAnvil.class, new TileEntityAutoAnvilRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
 
 		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 
@@ -168,5 +168,15 @@ public class ClientProxy implements IProxy {
 	@Override
 	public long getTicks(World worldObj) {
 		return ClientTickHandler.getTicks();
+	}
+
+	@Override
+	public World getClientWorld() {
+		return Minecraft.getMinecraft().theWorld;
+	}
+
+	@Override
+	public World getServerWorld(int id) {
+		return DimensionManager.getWorld(id);
 	}
 }

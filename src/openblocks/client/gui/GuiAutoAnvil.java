@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.*;
+import openblocks.client.gui.component.BaseComponent.TabColor;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
@@ -62,15 +63,16 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 
 		// create tabs
-		tabTool = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.pickaxeDiamond, 1), 100, 100);
-		tabModifier = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.enchantedBook, 1), 100, 100);
-		tabOutput = new GuiComponentTab(0xe4b9b0, enchantedAxe, 100, 100);
-		tabXP = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.bucketEmpty, 1), 100, 100);
+		tabTool = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Item.pickaxeDiamond, 1), 100, 100);
+		tabModifier = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Item.enchantedBook, 1), 100, 100);
+		tabOutput = new GuiComponentTab(TabColor.green.getColor(), enchantedAxe, 100, 100);
+		tabXP = new GuiComponentTab(TabColor.yellow.getColor(), new ItemStack(Item.bucketEmpty, 1), 100, 100);
 
 		// create side selectors
 		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getToolSides(), true);
 		sideSelectorModifier = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getModifierSides(), true);
 		sideSelectorOutput = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getOutputSides(), true);
+		sideSelectorXP = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getXPSides(), true);
 
 		SyncableFlags autoFlags = te.getAutomaticSlots();
 

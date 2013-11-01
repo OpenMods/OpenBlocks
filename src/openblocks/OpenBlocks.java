@@ -129,6 +129,9 @@ public class OpenBlocks {
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
+		
+		OpenBlocks.syncableManager = new SyncableManager();
+		
 		Config.register();
 
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());

@@ -46,7 +46,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 
 	public TileEntityTank() {
 		addSyncedObject(tank);
-		System.out.println(System.identityHashCode(tank));
 	}
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
@@ -448,7 +447,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
+		return this.fill(resource, doFill, null);
 	}
 
 	@Override

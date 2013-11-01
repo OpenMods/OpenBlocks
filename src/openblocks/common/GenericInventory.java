@@ -34,12 +34,12 @@ public class GenericInventory implements ISidedInventory {
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class GenericInventory implements ISidedInventory {
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return null;
+		return new int[0];
 	}
 
 	@Override
@@ -94,6 +94,10 @@ public class GenericInventory implements ISidedInventory {
 	@Override
 	public ItemStack getStackInSlot(int i) {
 		return this.inventoryContents[i];
+	}
+	
+	public ItemStack getStackInSlot(Enum<?> i) {
+		return getStackInSlot(i.ordinal());
 	}
 
 	@Override

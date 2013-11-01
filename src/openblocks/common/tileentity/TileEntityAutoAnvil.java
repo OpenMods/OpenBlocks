@@ -23,6 +23,7 @@ import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
+import openblocks.utils.SlotSideHelper;
 
 public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 		IAwareTile, ISidedInventory, IFluidHandler, IHasGui {
@@ -58,6 +59,8 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	private SyncableTank tank;
 	private SyncableFlags automaticSlots;
 
+	private SlotSideHelper slotSides = new SlotSideHelper();
+
 	public TileEntityAutoAnvil() {
 		addSyncedObject(toolSides = new SyncableFlags());
 		addSyncedObject(modifierSides = new SyncableFlags());
@@ -65,6 +68,10 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 		addSyncedObject(xpSides = new SyncableFlags());
 		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
 		addSyncedObject(automaticSlots = new SyncableFlags());
+		
+		slotSides.addMapping(Slots.tool, toolSides);
+		slotSides.addMapping(Slots.modifier, modifierSides);
+		slotSides.addMapping(Slots.output, outputSides);
 	}
 
 	@Override
@@ -78,17 +85,17 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 			}
 
 			if (shouldAutoOutput() && hasOutput()) {
-				InventoryUtils.moveItemsToOneOfSides(this, 2, 1, outputSides);
+				InventoryUtils.moveItemsToOneOfSides(this, Slots.output, 1, outputSides);
 			}
 
 			// if we should auto input the tool and we don't currently have one
 			if (shouldAutoInputTool() && !hasTool()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, 0, toolSides);
+				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, Slots.tool, toolSides);
 			}
 
 			// if we should auto input the modifier
 			if (shouldAutoInputModifier()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, 1, modifierSides);
+				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, Slots.modifier, modifierSides);
 			}
 
 			if (cooldown == 0) {
@@ -551,35 +558,17 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		Set<Integer> slots = new HashSet<Integer>();
-		if (toolSides.get(side)) {
-			slots.add(0);
-		}
-		if (modifierSides.get(side)) {
-			slots.add(1);
-		}
-		if (outputSides.get(side)) {
-			slots.add(2);
-		}
-		int[] ret = new int[slots.size()];
-		int i = 0;
-		for (int k : slots)
-			ret[i++] = k;
-		return ret;
+		return slotSides.getSlotsForSide(side);
 	}
 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
-		if (slot == 0) { return toolSides.get(side)
-				&& isItemValidForSlot(slot, itemstack); }
-		if (slot == 1) { return modifierSides.get(side); }
-		return false;
+		return slotSides.canInsertItem(slot, side) && isItemValidForSlot(slot, itemstack);
 	}
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
-		if (slot == 2) { return outputSides.get(side); }
-		return false;
+		return slotSides.canExtractItem(slot, side);
 	}
 
 	@Override

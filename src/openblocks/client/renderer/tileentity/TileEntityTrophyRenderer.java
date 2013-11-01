@@ -53,6 +53,9 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 			}
 		}
 		GL11.glPopMatrix();
+
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+
 	}
 
 }

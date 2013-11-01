@@ -67,4 +67,14 @@ public class ServerProxy implements IProxy {
 	public long getTicks(World worldObj) {
 		return worldObj.getTotalWorldTime();
 	}
+
+	@Override
+	public World getClientWorld() {
+		return null;
+	}
+	
+	@Override
+	public World getServerWorld(int id) {
+		return DimensionManager.getWorld(id);
+	}
 }

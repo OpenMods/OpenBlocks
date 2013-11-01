@@ -5,7 +5,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
+import openblocks.OpenBlocks;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
@@ -29,11 +30,9 @@ public class SyncableManager {
 		int dimension = dis.readInt();
 		World world = null;
 		if (toServer) {
-			world = DimensionManager.getWorld(dimension);
+			world = OpenBlocks.proxy.getServerWorld(dimension);
 		} else {
-			if (Minecraft.getMinecraft().theWorld.provider.dimensionId == dimension) {
-				world = Minecraft.getMinecraft().theWorld;
-			}
+			world = OpenBlocks.proxy.getClientWorld();
 		}
 		if (world == null) {
 			dis.close();

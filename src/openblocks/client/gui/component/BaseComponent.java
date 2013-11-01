@@ -7,6 +7,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 public abstract class BaseComponent extends Gui {
+	
+	
+	public enum TabColor {
+		blue(0x8784c8),
+		lightblue(0x84c7c8),
+		green(0x84c892),
+		yellow(0xc7c884),
+		red(0xc88a84),
+		purple(0xc884bf);
+		
+		private int color;
+		
+		TabColor(int col) {
+			this.color = col;
+		}
+		
+		public int getColor() {
+			return color;
+		}
+	}
 
 	protected int x;
 	protected int y;
@@ -42,8 +62,10 @@ public abstract class BaseComponent extends Gui {
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				component.render(minecraft, offsetX + this.x, offsetY + this.y, mouseX
+				if (component != null) {
+					component.render(minecraft, offsetX + this.x, offsetY + this.y, mouseX
 						- this.x, mouseY - this.y);
+				}
 			}
 		}
 	}
@@ -51,7 +73,9 @@ public abstract class BaseComponent extends Gui {
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				component.mouseClicked(mouseX - x, mouseY - y, button);
+				if (component != null) {
+					component.mouseClicked(mouseX - x, mouseY - y, button);
+				}
 			}
 		}
 	}
@@ -59,7 +83,9 @@ public abstract class BaseComponent extends Gui {
 	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				component.mouseClickMove(mouseX - x, mouseY - y, button, time);
+				if (component != null) {
+					component.mouseClickMove(mouseX - x, mouseY - y, button, time);
+				}
 			}
 		}
 	}
@@ -67,7 +93,9 @@ public abstract class BaseComponent extends Gui {
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				component.mouseMovedOrUp(mouseX - x, mouseY - y, button);
+				if (component != null) {
+					component.mouseMovedOrUp(mouseX - x, mouseY - y, button);
+				}
 			}
 		}
 	}

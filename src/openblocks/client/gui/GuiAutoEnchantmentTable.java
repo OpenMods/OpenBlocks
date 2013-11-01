@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.*;
+import openblocks.client.gui.component.BaseComponent.TabColor;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
@@ -37,6 +38,8 @@ public class GuiAutoEnchantmentTable extends
 	private GuiComponentLabel labelAutoExtractInput;
 	private GuiComponentLabel labelAutoEjectOutput;
 	private GuiComponentLabel labelAutoDrinkXP;
+	
+	private GuiComponentSlider sliderLevel;
 
 	public GuiAutoEnchantmentTable(ContainerAutoEnchantmentTable container) {
 		super(container, 176, 175, "openblocks.gui.autoenchantmenttable");
@@ -54,9 +57,9 @@ public class GuiAutoEnchantmentTable extends
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 
 		// create tabs
-		tabInput = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.pickaxeDiamond, 1), 100, 100);
-		tabOutput = new GuiComponentTab(0xe4b9b0, enchantedAxe, 100, 100);
-		tabXP = new GuiComponentTab(0xe4b9b0, new ItemStack(Item.bucketEmpty, 1), 100, 100);
+		tabInput = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Item.pickaxeDiamond, 1), 100, 100);
+		tabOutput = new GuiComponentTab(TabColor.lightblue.getColor(), enchantedAxe, 100, 100);
+		tabXP = new GuiComponentTab(TabColor.green.getColor(), new ItemStack(Item.bucketEmpty, 1), 100, 100);
 
 		// create side selectors
 		sideSelectorInput = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getInputSides(), true);
@@ -74,6 +77,8 @@ public class GuiAutoEnchantmentTable extends
 		labelAutoEjectOutput = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
 		labelAutoDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 
+		sliderLevel = new GuiComponentSlider(44, 39, 45, 1, 30, te.getTargetLevel());
+		
 		tabInput.addComponent(labelAutoExtractInput);
 		tabInput.addComponent(checkboxAutoExtractInput);
 		tabInput.addComponent(sideSelectorInput);
@@ -92,6 +97,7 @@ public class GuiAutoEnchantmentTable extends
 
 		panel.addComponent(tabs);
 		panel.addComponent(xpLevel);
+		panel.addComponent(sliderLevel);
 	}
 
 }
