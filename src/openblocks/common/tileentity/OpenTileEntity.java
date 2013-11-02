@@ -68,6 +68,18 @@ public abstract class OpenTileEntity extends TileEntity {
 		}
 		rotation = rot;
 	}
+	
+	public void set3dRotation(ForgeDirection rot) {
+		setRotation(rot);
+		setFlag1(rot == ForgeDirection.UP);
+		setFlag2(rot == ForgeDirection.DOWN);
+	}
+	
+	public ForgeDirection get3dRotation() {
+		if (getFlag1()) return ForgeDirection.UP;
+		if (getFlag2()) return ForgeDirection.DOWN;
+		return getRotation();
+	}
 
 	private boolean getFlag(int index) {
 		if (index > 1) return false;

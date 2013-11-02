@@ -3,143 +3,209 @@ package openblocks.common.tileentity;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
-import openblocks.integration.ModuleBuildCraft;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntityBlockBreaker extends OpenTileEntity
-    implements IAwareTile {
-    private boolean _redstoneSignal;
+		implements IAwareTile, ISidedInventory {
+	
+	public enum Slots {
+		buffer
+	}
+	
+	private boolean _redstoneSignal;
 
-    public void setRedstoneSignal(boolean redstoneSignal) {
-        if(redstoneSignal != _redstoneSignal) {
-            _redstoneSignal = redstoneSignal;
-            if(_redstoneSignal) {
-                breakBlock();
-            }
-        }
-    }
+	private GenericInventory fakeInventory = new GenericInventory("blockbreaker", true, 1);
 
-    private void breakBlock() {
-        if(worldObj.isRemote) return;
+	public void setRedstoneSignal(boolean redstoneSignal) {
+		if (redstoneSignal != _redstoneSignal) {
+			_redstoneSignal = redstoneSignal;
+			if (_redstoneSignal) {
+				breakBlock();
+			}
+		}
+	}
 
-        ForgeDirection direction = ForgeDirection.getOrientation(getMetadata());
-        int x = xCoord + direction.offsetX,
-            y = yCoord + direction.offsetY,
-            z = zCoord + direction.offsetZ;
-        
-        if(worldObj.blockExists(x, y, z)) {
-        	int blockId = worldObj.getBlockId(x, y, z);
-        	if(blockId > 0) {
-        		Block block = Block.blocksList[blockId];
-        		
-        		int metadata = worldObj.getBlockMetadata(x, y, z);
-        		worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
-        		
-        		ArrayList<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
-        		
-        		worldObj.setBlock(x, y, z, 0, 0, 3);
-        		
-        		ForgeDirection back = direction.getOpposite();
-        		ejectAt(worldObj,
-    				xCoord + back.offsetX,
-    				yCoord + back.offsetY,
-    				zCoord + back.offsetZ,
-    				back, items);
-        	}
-        }
-    }
+	private void breakBlock() {
+		if (worldObj.isRemote) return;
 
-    static void ejectAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
-        IInventory inventory = InventoryUtils.getInventory(world, x, y, z); //getInventoryAt(world, x, y, z);
-        if(inventory != null) {
-            insertInto(world, x, y, z, inventory, direction, itemStacks);
-            return;
-        }
+		ForgeDirection direction = get3dRotation();
+		int x = xCoord + direction.offsetX, y = yCoord + direction.offsetY, z = zCoord
+				+ direction.offsetZ;
 
-        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-        if(tileEntity != null) {
-            ArrayList<ItemStack> restItems = new ArrayList<ItemStack>();
-            for(int i = 0, l = itemStacks.size(); i < l; i++) {
-                ItemStack stack = itemStacks.get(i);
-                int submittedItems = ModuleBuildCraft.tryAcceptIntoPipe(tileEntity, stack, true, direction);
-                if(submittedItems == 0) {
-                    restItems.add(stack);
-                } else if(submittedItems < stack.stackSize) {
-                    ItemStack rest = new ItemStack(stack.getItem(), stack.stackSize - submittedItems, stack.getItemDamage());
-                    restItems.add(rest);
-                }
-            }
-            itemStacks = restItems;
-        }
+		if (worldObj.blockExists(x, y, z)) {
+			int blockId = worldObj.getBlockId(x, y, z);
+			if (blockId > 0) {
+				Block block = Block.blocksList[blockId];
 
-        if(itemStacks.size() > 0) {
-            ejectItemsAt(world, x, y, z, direction, itemStacks);
-        }
-    }
+				int metadata = worldObj.getBlockMetadata(x, y, z);
+				worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
 
-    static void insertInto(World world, int x, int y, int z, IInventory inventory, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
-        ArrayList<ItemStack> rest = new ArrayList<ItemStack>();
+				ArrayList<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
 
-        for(int i = 0, l = itemStacks.size(); i < l; i++) {
-            ItemStack stack = itemStacks.get(i);
-            InventoryUtils.insertItemIntoInventory(inventory, stack, direction, -1);
-            if(stack.stackSize > 0)
-                rest.add(stack);
-        }
+				worldObj.setBlock(x, y, z, 0, 0, 3);
 
-        if(rest.size() > 0)
-        	ejectItemsAt(world, x, y, z, direction, rest);
-    }
+				ForgeDirection back = direction.getOpposite();
+				ejectAt(worldObj,
+						xCoord + back.offsetX,
+						yCoord + back.offsetY,
+						zCoord + back.offsetZ,
+						back, items);
+			}
+		}
+	}
 
-    static void ejectItemsAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
-        if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
-        {
-            for(int i = 0, l = itemStacks.size(); i < l; i++) {
-                EntityItem item = BlockUtils.dropItemStackInWorld(world, x, y, z, itemStacks.get(i));
-                item.motionX = direction.offsetX / 5F;
-                item.motionY = direction.offsetY / 5F;
-                item.motionZ = direction.offsetZ / 5F;
-            }
-        }
-    }
+	public void ejectAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
+		
+		TileEntity targetInventory = getTileInDirection(direction);
+		for (ItemStack stack : itemStacks) {
+			// if there's any stack in our buffer slot, eject it. Why is it there?
+			ItemStack currentStack = fakeInventory.getStackInSlot(Slots.buffer);
+			if (currentStack != null) {
+				BlockUtils.ejectItemInDirection(world, x, y, z, direction, currentStack);
+			}
+			
+			// clear the buffer slot
+			fakeInventory.setInventorySlotContents(Slots.buffer.ordinal(), stack);
+			
+			// push the item out into a pipe or inventory
+			InventoryUtils.moveItemInto(this, Slots.buffer.ordinal(), targetInventory, -1, 64, direction, true);
+			
+			// if there's anything left for whatever reason (maybe no inventory)
+			ItemStack buffer = fakeInventory.getStackInSlot(Slots.buffer);
+			if (buffer != null) {
+				// eject it
+				BlockUtils.ejectItemInDirection(world, x, y, z, direction, buffer);	
+			}
+		}
+	}
 
-    @Override
-    public void onBlockBroken() {
-    }
+	
+	
+	static void ejectItemsAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
+		if (!world.isRemote
+				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+		{
+			for (int i = 0, l = itemStacks.size(); i < l; i++) {
+				BlockUtils.ejectItemInDirection(world, x, y, z, direction, itemStacks.get(i));
+			}
+		}
+	}
 
-    @Override
-    public void onBlockAdded() {
-    }
+	@Override
+	public void onBlockBroken() {}
 
-    @Override
-    public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        return false;
-    }
+	@Override
+	public void onBlockAdded() {}
 
-    @Override
-    public void onNeighbourChanged(int blockId) {
-        if(!worldObj.isRemote) {
-            setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
-        }
-    }
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		return false;
+	}
 
-    @Override
-    public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockUtils.get3dOrientation(player).ordinal(), 2);
-    }
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		if (!worldObj.isRemote) {
+			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
+		}
+	}
 
-    @Override
-    public boolean onBlockEventReceived(int eventId, int eventParam) {
-        return false;
-    }
+	@Override
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+		set3dRotation(BlockUtils.get3dOrientation(player));
+		sync();
+	}
+
+	@Override
+	public boolean onBlockEventReceived(int eventId, int eventParam) {
+		return false;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return fakeInventory.getSizeInventory();
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		return fakeInventory.getStackInSlot(i);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+		return fakeInventory.decrStackSize(i, j);
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int i) {
+		return fakeInventory.getStackInSlotOnClosing(i);
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		fakeInventory.setInventorySlotContents(i, itemstack);
+	}
+
+	@Override
+	public String getInvName() {
+		return fakeInventory.getInvName();
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return fakeInventory.isInvNameLocalized();
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return fakeInventory.getInventoryStackLimit();
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		return fakeInventory.isUseableByPlayer(entityplayer);
+	}
+
+	@Override
+	public void openChest() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void closeChest() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		return false;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int dir) {
+		ForgeDirection side = ForgeDirection.getOrientation(dir);
+		if (side.getOpposite().equals(get3dRotation())) { return new int[] { 0 }; }
+		return new int[0];
+	}
+
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+		return fakeInventory.canInsertItem(i, itemstack, j);
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return fakeInventory.canExtractItem(i, itemstack, j);
+	}
 
 }

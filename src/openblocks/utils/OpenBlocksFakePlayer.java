@@ -1,7 +1,8 @@
 package openblocks.utils;
 
+import java.util.HashMap;
+
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -9,11 +10,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-
-import java.util.HashMap;
 
 public class OpenBlocksFakePlayer extends FakePlayer {
     static final HashMap<Integer, OpenBlocksFakePlayer> _players = new HashMap<Integer, OpenBlocksFakePlayer>();

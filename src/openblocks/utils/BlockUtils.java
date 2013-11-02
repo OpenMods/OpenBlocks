@@ -57,7 +57,7 @@ public class BlockUtils {
 	public static EntityItem dropItemStackInWorld(World worldObj, int x, int y, int z, ItemStack stack) {
 		return dropItemStackInWorld(worldObj, (double)x, (double)y, (double)z, stack);
 	}
-
+	
 	public static EntityItem dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
 		float f = 0.7F;
 		float d0 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
@@ -72,6 +72,15 @@ public class BlockUtils {
 		return entityitem;
 	}
 
+	
+	public static EntityItem ejectItemInDirection(World world, double x, double y, double z, ForgeDirection direction, ItemStack stack) {
+		EntityItem item = BlockUtils.dropItemStackInWorld(world, x, y, z, stack);
+		item.motionX = direction.offsetX / 5F;
+		item.motionY = direction.offsetY / 5F;
+		item.motionZ = direction.offsetZ / 5F;
+		return item;
+	}
+	
 	public static void dropTileInventory(TileEntity tileEntity) {
 
 		if (tileEntity != null && tileEntity instanceof IInventory) {

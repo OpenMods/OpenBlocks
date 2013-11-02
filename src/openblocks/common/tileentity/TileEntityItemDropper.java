@@ -5,17 +5,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
-import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
-import buildcraft.api.transport.IPipeConnection;
-import buildcraft.api.transport.IPipeTile.PipeType;
 
 public class TileEntityItemDropper extends OpenTileEntity
-    implements IAwareTile, IInventory, IPipeConnection {
+    implements IAwareTile, IInventory {
     static final int BUFFER_SIZE = 9;
 
     private boolean _redstoneSignal;
@@ -197,11 +193,4 @@ public class TileEntityItemDropper extends OpenTileEntity
         inventory.readFromNBT(tag);
     }
     
-    @Override
-	public ConnectOverride overridePipeConnection(PipeType type,
-			ForgeDirection with) {
-		if(type == PipeType.ITEM && with.ordinal() == ForgeDirection.getOrientation(getMetadata()).getOpposite().ordinal())
-			return ConnectOverride.CONNECT;
-		return ConnectOverride.DISCONNECT;
-	}
 }

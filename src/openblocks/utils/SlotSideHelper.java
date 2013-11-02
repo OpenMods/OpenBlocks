@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-
 import openblocks.sync.SyncableFlags;
 
 public class SlotSideHelper {
