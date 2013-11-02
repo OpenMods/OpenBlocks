@@ -133,6 +133,9 @@ public class Config {
 	@BlockId(description = "The id of the item-dropper block")
 	public static int blockItemDropperId = 2565;
 
+	@BlockId(description = "The id of the rope ladder block")
+	public static int blockRopeLadderId = 2566;
+	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -171,6 +174,7 @@ public class Config {
 
 	@ItemId(description = "The id of the sleeping bag")
 	public static int itemSleepingBagId = 14987;
+	
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -194,6 +198,7 @@ public class Config {
 	public static boolean craneShiftControl = true;
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
+
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -447,6 +452,10 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockItemDropperId)) {
 			OpenBlocks.Blocks.itemDropper = new BlockItemDropper();
+		}
+		
+		if (Config.canRegisterBlock(blockRopeLadderId)) {
+			OpenBlocks.Blocks.ropeLadder = new BlockRopeLadder();
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

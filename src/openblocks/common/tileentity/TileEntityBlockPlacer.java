@@ -38,17 +38,15 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 
 		ForgeDirection direction = get3dRotation();
 		int x = xCoord + direction.offsetX, y = yCoord + direction.offsetY, z = zCoord + direction.offsetZ;
-
 		for (int i = 0, l = getSizeInventory(); i < l; i++) {
 			ItemStack stack = getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
-
 			ItemStack newStack = OpenBlocksFakePlayer.getPlayerForWorld(worldObj)
 					.equipWithAndRightClick(stack,
 							Vec3.createVectorHelper(xCoord, yCoord, zCoord),
 							Vec3.createVectorHelper(x, y - 1, z),
-							ForgeDirection.UP,
-							worldObj.blockExists(x, y, z) && worldObj.getBlockId(x, y, z) != 0 && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
+							direction.getOpposite(),
+							worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
 
 			setInventorySlotContents(i, newStack.stackSize > 0? newStack : null);
 			return;

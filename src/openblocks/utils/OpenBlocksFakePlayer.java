@@ -32,6 +32,8 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 		if (blockExists) {
 			hitVector.yCoord++;
 		}
+		
+		ForgeDirection opposite = side.getOpposite();
 
 		// find rotations
 		float deltaX = (float)(currentPos.xCoord - hitVector.xCoord);
@@ -46,13 +48,12 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 
 		inventory.clearInventory(-1, -1);
 		inventory.addItemStackToInventory(itemStack);
-
 		rightClick(
 				inventory.getCurrentItem(),
-				(int)Math.floor(hitVector.xCoord),
-				(int)Math.floor(hitVector.yCoord),
-				(int)Math.floor(hitVector.zCoord),
-				side.ordinal(),
+				(int)currentPos.xCoord + opposite.offsetX,
+				(int)currentPos.yCoord + opposite.offsetY,
+				(int)currentPos.zCoord + opposite.offsetZ,
+				opposite.ordinal(),
 				deltaX, deltaY, deltaZ,
 				blockExists);
 
@@ -77,7 +78,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 	private boolean rightClick(ItemStack itemStack, int x, int y, int z, int side, float deltaX, float deltaY, float deltaZ, boolean blockExists) {
 		boolean flag = false;
 		int blockId;
-
+		
 		if (itemStack != null && itemStack.getItem() != null
 				&& itemStack.getItem().onItemUseFirst(itemStack, this, worldObj, x, y, z, side, deltaX, deltaY, deltaZ)) { return true; }
 
@@ -93,7 +94,6 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 			if (blockExists) { return false; }
 
 			ItemBlock itemblock = (ItemBlock)itemStack.getItem();
-
 			if (!canPlaceItemBlockOnSide(itemblock, worldObj, x, y, z, side, itemStack)) { return false; }
 		}
 
@@ -102,7 +102,8 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 		} else if (itemStack == null) {
 			return false;
 		} else {
-			if (!itemStack.tryPlaceItemIntoWorld(this, worldObj, x, y, z, side, deltaX, deltaY, deltaZ)) { return false; }
+			ForgeDirection s = ForgeDirection.getOrientation(side);
+			if (!itemStack.tryPlaceItemIntoWorld(this, worldObj, x + s.offsetX, y+s.offsetY, z+s.offsetZ, s.getOpposite().ordinal(), deltaX, deltaY, deltaZ)) { return false; }
 			// if (itemStack.stackSize <= 0)
 			// {
 			// MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(this,
@@ -120,28 +121,9 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 				blockId != Block.tallGrass.blockID &&
 				blockId != Block.deadBush.blockID &&
 				(Block.blocksList[blockId] == null || !Block.blocksList[blockId].isBlockReplaceable(world, x, y, z))) {
-			switch (side) {
-				case 0:
-					--y;
-					break;
-				case 1:
-					++y;
-					break;
-				case 2:
-					--z;
-					break;
-				case 3:
-					++z;
-					break;
-				case 4:
-					--x;
-					break;
-				case 5:
-					++x;
-					break;
-			}
+			
 		}
-
-		return world.canPlaceEntityOnSide(itemBlock.getBlockID(), x, y, z, false, side, this, itemStack);
+		int oppositeSide = ForgeDirection.getOrientation(side).getOpposite().ordinal();
+		return world.canPlaceEntityOnSide(itemBlock.getBlockID(), x, y, z, false, oppositeSide, this, itemStack);
 	}
 }
