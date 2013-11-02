@@ -73,11 +73,15 @@ public class SyncableBoolean implements ISyncableObject {
 	@Override
 	public void markClean() {
 		dirty = false;
-		ticksSinceChange++;
 	}
 
 	@Override
 	public void resetChangeTimer() {
 		ticksSinceChange = 0;
+	}
+
+	@Override
+	public void tick() {
+		ticksSinceChange++;
 	}
 }

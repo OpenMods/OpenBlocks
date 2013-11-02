@@ -77,4 +77,10 @@ public class SyncableShort implements ISyncableObject {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+		
+	}
 }

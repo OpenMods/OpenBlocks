@@ -1,6 +1,7 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -40,7 +41,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 					renderer.doRender(entity, 0, 0, 0, f, 0.5f);
 				}
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-
+				
 				GL11.glPopMatrix();
 				GL11.glPushMatrix();
 				GL11.glTranslated(d0, d1, d2);
@@ -49,7 +50,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				bindTexture(TextureMap.locationBlocksTexture);
 				OpenRenderHelper.renderCube(0.2, 0, 0.2, 0.8, 0.2, 0.8, OpenBlocks.Blocks.trophy, null);
 				GL11.glPopMatrix();
-
+				
 			}
 		}
 		GL11.glPopMatrix();

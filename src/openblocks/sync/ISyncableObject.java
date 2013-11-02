@@ -23,4 +23,6 @@ public interface ISyncableObject {
 	public void readFromNBT(NBTTagCompound tag, String name);
 
 	public void resetChangeTimer();
+	
+	public void tick();
 }

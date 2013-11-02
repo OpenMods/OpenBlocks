@@ -46,10 +46,14 @@ public abstract class SyncMap {
 		short mask = dis.readShort();
 		List<ISyncableObject> changes = new ArrayList<ISyncableObject>();
 		for (int i = 0; i < 16; i++) {
-			if (ByteUtils.get(mask, i) && objects[i] != null) {
-				objects[i].readFromStream(dis);
-				changes.add(objects[i]);
-				objects[i].resetChangeTimer();
+			if (objects[i] != null) {
+				if (ByteUtils.get(mask, i)) {
+					objects[i].readFromStream(dis);
+					changes.add(objects[i]);
+					objects[i].resetChangeTimer();
+				}else {
+					objects[i].tick();
+				}
 			}
 		}
 		return changes;
@@ -70,9 +74,10 @@ public abstract class SyncMap {
 		}
 	}
 
-	public void resetChangeStatus() {
+	public void markAllAsClean() {
 		for (int i = 0; i < 16; i++) {
 			if (objects[i] != null) {
+				objects[i].tick();
 				objects[i].markClean();
 			}
 		}
@@ -123,7 +128,7 @@ public abstract class SyncMap {
 				e.printStackTrace();
 			}
 		}
-		resetChangeStatus();
+		markAllAsClean();
 	}
 
 	private boolean hasChanges() {

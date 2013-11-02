@@ -66,4 +66,10 @@ public class SyncableDirection implements ISyncableObject {
 
 	}
 
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

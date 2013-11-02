@@ -123,11 +123,6 @@ public class SyncableFlags implements ISyncableObject {
 	public void markClean() {
 		previousValue = value;
 		dirty = false;
-		for (int i = 0; i < ticksSinceSet.length; i++) {
-			ticksSinceSet[i]++;
-			ticksSinceUnset[i]++;
-		}
-		ticksSinceChanged++;
 	}
 
 	@Override
@@ -156,5 +151,15 @@ public class SyncableFlags implements ISyncableObject {
 	@Override
 	public void resetChangeTimer() {
 		ticksSinceChanged = 0;
+	}
+	
+	@Override
+	public void tick() {
+		System.out.println(ticksSinceChanged);
+		for (int i = 0; i < ticksSinceSet.length; i++) {
+			ticksSinceSet[i]++;
+			ticksSinceUnset[i]++;
+		}
+		ticksSinceChanged++;
 	}
 }

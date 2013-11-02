@@ -118,7 +118,8 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(List<ISyncableObject> changes) {
+	}
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {

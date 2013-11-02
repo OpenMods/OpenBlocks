@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class SyncableIntArray implements ISyncableObject {
 
 	private int[] value;
-	private boolean hasChanged = false;
+	private boolean dirty = false;
 
 	public SyncableIntArray(int[] value) {
 		this.value = value;
@@ -72,27 +72,32 @@ public class SyncableIntArray implements ISyncableObject {
 
 	public void clear() {
 		value = new int[0];
-		hasChanged = true;
+		dirty = true;
 	}
 
 	@Override
 	public boolean isDirty() {
-		return hasChanged;
+		return dirty;
 	}
-
-	@Override
-	public void markClean() {
-		hasChanged = false;
-	}
-
+	
 	@Override
 	public void markDirty() {
-		hasChanged = true;
+		dirty = true;
 	}
 
 	@Override
 	public void resetChangeTimer() {
-		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void markClean() {
+		dirty = false;
 	}
 }
