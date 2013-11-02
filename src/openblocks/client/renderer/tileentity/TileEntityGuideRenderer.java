@@ -26,7 +26,9 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_LIGHTING);
 		OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, OpenBlocks.Blocks.guide, null);
+		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 		float scaleDelta = guide.getTimeSinceChange();

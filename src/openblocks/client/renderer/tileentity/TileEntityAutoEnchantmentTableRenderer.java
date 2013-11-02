@@ -24,7 +24,9 @@ public class TileEntityAutoEnchantmentTableRenderer extends
 		GL11.glPushMatrix();
 		bindTexture(TextureMap.locationBlocksTexture);
 		GL11.glTranslatef((float)x, (float)y, (float)z);
+		GL11.glDisable(GL11.GL_LIGHTING);
 		OpenRenderHelper.renderCube(0, 0, 0, 1, 0.75, 1, OpenBlocks.Blocks.autoEnchantmentTable, null);
+		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 0.75F, (float)z + 0.5F);

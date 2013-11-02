@@ -42,8 +42,9 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 		}
 
 		// render a cube
+		GL11.glDisable(GL11.GL_LIGHTING);
 		OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5, OpenBlocks.Blocks.lightbox, null);
-
+		GL11.glEnable(GL11.GL_LIGHTING);
 		// render the map
 		ItemStack mapStack = lightbox.getStackInSlot(0);
 		if (mapStack != null && mapStack.getItem().isMap()) {

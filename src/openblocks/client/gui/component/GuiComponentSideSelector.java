@@ -67,6 +67,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 		trackball.update(mouseX - 50, -(mouseY - 50));
 		if (te != null) TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, -0.5, -0.5, 0.0F);
 		else drawBlock(minecraft.renderEngine, t);
+
 		SidePicker picker = new SidePicker(0.5);
 
 		HitCoord coord = picker.getNearestHit();
@@ -87,6 +88,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 	}
 
 	private static void drawHighlight(Tessellator t, SidePicker.Side side, int color) {
+
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);

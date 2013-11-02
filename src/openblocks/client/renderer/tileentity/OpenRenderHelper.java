@@ -13,7 +13,6 @@ public class OpenRenderHelper {
 
 	public static void renderCube(double x1, double y1, double z1, double x2, double y2, double z2, Block block, Icon overrideTexture) {
 		GL11.glPushMatrix();
-		GL11.glDisable(2896);
 		Tessellator t = Tessellator.instance;
 
 		GL11.glColor4f(1, 1, 1, 1);
@@ -40,7 +39,6 @@ public class OpenRenderHelper {
 		renderBlocks.renderFaceXPos(block, 0, 0, 0, useTexture);
 		t.draw();
 
-		//GL11.glEnable(2896);
 		GL11.glPopMatrix();
 	}
 

@@ -5,13 +5,16 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IHasGui;
+import openblocks.common.container.ContainerItemDropper;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 
 public class TileEntityItemDropper extends OpenTileEntity
-    implements IAwareTile, IInventory {
+    implements IAwareTile, IInventory, IHasGui {
     static final int BUFFER_SIZE = 9;
 
     private boolean _redstoneSignal;
@@ -40,14 +43,6 @@ public class TileEntityItemDropper extends OpenTileEntity
 
             OpenBlocksFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
 
-//            ItemStack newStack = OpenBlocksFakePlayer.getPlayerForWorld(worldObj)
-//                    .equipWithAndRightClick(stack,
-//                            Vec3.createVectorHelper(xCoord, yCoord, zCoord),
-//                            Vec3.createVectorHelper(x, y - 1, z),
-//                            ForgeDirection.UP,
-//                            worldObj.blockExists(x, y, z) && worldObj.getBlockId(x, y, z) != 0 && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
-//
-//            setInventorySlotContents(i, newStack.stackSize > 0 ? newStack : null);
             return;
         }
     }
@@ -192,5 +187,15 @@ public class TileEntityItemDropper extends OpenTileEntity
         super.readFromNBT(tag);
         inventory.readFromNBT(tag);
     }
+
+	@Override
+	public Object getServerGui(EntityPlayer player) {
+		return new ContainerItemDropper(player.inventory, this);
+	}
+
+	@Override
+	public Object getClientGui(EntityPlayer player) {
+		return new GuiItemDropper(new ContainerItemDropper(player.inventory, this));
+	}
     
 }
