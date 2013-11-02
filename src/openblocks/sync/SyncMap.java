@@ -117,7 +117,7 @@ public abstract class SyncMap<H extends ISyncHandler> {
 		return objects[id];
 	}
 
-	public List<ISyncableObject> readFromStream(World world, DataInput dis) throws IOException {
+	public List<ISyncableObject> readFromStream(DataInput dis) throws IOException {
 		short mask = dis.readShort();
 		List<ISyncableObject> changes = new ArrayList<ISyncableObject>();
 		for (int i = 0; i < 16; i++) {
@@ -125,7 +125,7 @@ public abstract class SyncMap<H extends ISyncHandler> {
 				if (ByteUtils.get(mask, i)) {
 					objects[i].readFromStream(dis);
 					changes.add(objects[i]);
-					objects[i].resetChangeTimer(world);
+					objects[i].resetChangeTimer(getWorld());
 				}
 			}
 		}
