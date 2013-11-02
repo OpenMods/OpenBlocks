@@ -43,7 +43,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	 */
 	public ForgeDirection getRotation() {
 		if (isUsedForClientInventoryRendering) { return rotation; }
-		return BlockUtils.get3dBlockRotationFromMetadata(getMetadata());
+		return BlockUtils.getRotationFromMetadata(getMetadata());
 	}
 
 	/**

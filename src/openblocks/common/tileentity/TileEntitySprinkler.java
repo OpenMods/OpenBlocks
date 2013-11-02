@@ -232,7 +232,9 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(BlockUtils.get2dOrientation(player));
-		sync();
+		if (!worldObj.isRemote) {
+			sync();
+		}
 	}
 
 	@Override
