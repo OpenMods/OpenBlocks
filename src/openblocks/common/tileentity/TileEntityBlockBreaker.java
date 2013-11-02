@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -15,12 +15,12 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntityBlockBreaker extends OpenTileEntity
-		implements IAwareTile, ISidedInventory {
-	
+		implements IAwareTile, IInventory {
+
 	public enum Slots {
 		buffer
 	}
-	
+
 	private boolean _redstoneSignal;
 
 	private GenericInventory fakeInventory = new GenericInventory("blockbreaker", true, 1);
@@ -64,32 +64,31 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 	}
 
 	public void ejectAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
-		
+
 		TileEntity targetInventory = getTileInDirection(direction);
 		for (ItemStack stack : itemStacks) {
-			// if there's any stack in our buffer slot, eject it. Why is it there?
+			// if there's any stack in our buffer slot, eject it. Why is it
+			// there?
 			ItemStack currentStack = fakeInventory.getStackInSlot(Slots.buffer);
 			if (currentStack != null) {
 				BlockUtils.ejectItemInDirection(world, x, y, z, direction, currentStack);
 			}
-			
+
 			// clear the buffer slot
 			fakeInventory.setInventorySlotContents(Slots.buffer.ordinal(), stack);
-			
+
 			// push the item out into a pipe or inventory
 			InventoryUtils.moveItemInto(this, Slots.buffer.ordinal(), targetInventory, -1, 64, direction, true);
-			
+
 			// if there's anything left for whatever reason (maybe no inventory)
 			ItemStack buffer = fakeInventory.getStackInSlot(Slots.buffer);
 			if (buffer != null) {
 				// eject it
-				BlockUtils.ejectItemInDirection(world, x, y, z, direction, buffer);	
+				BlockUtils.ejectItemInDirection(world, x, y, z, direction, buffer);
 			}
 		}
 	}
 
-	
-	
 	static void ejectItemsAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
 		if (!world.isRemote
 				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
@@ -175,37 +174,14 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 	}
 
 	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return false;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int dir) {
-		ForgeDirection side = ForgeDirection.getOrientation(dir);
-		if (side.getOpposite().equals(get3dRotation())) { return new int[] { 0 }; }
-		return new int[0];
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return fakeInventory.canInsertItem(i, itemstack, j);
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return fakeInventory.canExtractItem(i, itemstack, j);
 	}
 
 }

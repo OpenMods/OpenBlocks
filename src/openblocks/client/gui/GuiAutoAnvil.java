@@ -5,8 +5,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.component.*;
 import openblocks.client.gui.component.BaseComponent.TabColor;
+import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
@@ -50,7 +50,7 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 	public GuiAutoAnvil(ContainerAutoAnvil container) {
 		super(container, 176, 175, "openblocks.gui.autoanvil");
 
-		TileEntityAutoAnvil te = container.getTileEntity();
+		TileEntityAutoAnvil te = container.getOwner();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 
 		ItemStack enchantedAxe = new ItemStack(Item.pickaxeDiamond, 1);

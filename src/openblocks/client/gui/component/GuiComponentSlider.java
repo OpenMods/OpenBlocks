@@ -1,17 +1,16 @@
 package openblocks.client.gui.component;
 
+import net.minecraft.client.Minecraft;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.CompatibilityUtils;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-
 public class GuiComponentSlider extends BaseComponent {
 
 	private static final int HANDLE_SIZE = 8;
-	
+
 	private int width;
 	private int min;
 	private int max;
@@ -20,7 +19,7 @@ public class GuiComponentSlider extends BaseComponent {
 	private int steps;
 	private boolean isDragging = false;
 	private int startDragX;
-	
+
 	public GuiComponentSlider(int x, int y, int width, int min, int max, SyncableInt val) {
 		super(x, y);
 		this.width = width;
@@ -30,7 +29,7 @@ public class GuiComponentSlider extends BaseComponent {
 		this.value = val;
 		this.stepSize = (double)(width - HANDLE_SIZE - 2) / (double)steps;
 	}
-	
+
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
@@ -40,12 +39,12 @@ public class GuiComponentSlider extends BaseComponent {
 		int top = offsetY + y;
 		int barStartX = left + 1;
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
-		
+
 		drawTexturedModalRect(left, top, 0, 70, 1, 12);
 		GL11.glPushMatrix();
-			GL11.glTranslated(left + 1, top, 0);
-			GL11.glScaled(width - 2, 1, 1);
-			drawTexturedModalRect(0, 0, 1, 70, 1, 12);
+		GL11.glTranslated(left + 1, top, 0);
+		GL11.glScaled(width - 2, 1, 1);
+		drawTexturedModalRect(0, 0, 1, 70, 1, 12);
 		GL11.glPopMatrix();
 		drawTexturedModalRect(left + width - 1, top, 2, 70, 1, 12);
 		int handleX = (int)Math.floor(barStartX + stepSize * (level - min));
@@ -54,7 +53,7 @@ public class GuiComponentSlider extends BaseComponent {
 				isDragging = true;
 				startDragX = mouseX - handleX;
 			}
-		}else {
+		} else {
 			if (isDragging) {
 				isDragging = false;
 			}
@@ -68,9 +67,9 @@ public class GuiComponentSlider extends BaseComponent {
 
 		String label = Integer.toString(level);
 		int strWidth = minecraft.fontRenderer.getStringWidth(label);
-		minecraft.fontRenderer.drawString(label, handleX + 4 - (strWidth/2), top + 15, 4210752);
-		
+		minecraft.fontRenderer.drawString(label, handleX + 4 - (strWidth / 2), top + 15, 4210752);
+
 		value.setValue(level);
-		
+
 	}
 }

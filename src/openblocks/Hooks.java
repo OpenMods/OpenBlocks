@@ -1,7 +1,7 @@
 package openblocks;
 
-import openblocks.common.item.ItemSleepingBag;
 import net.minecraft.entity.player.EntityPlayer;
+import openblocks.common.item.ItemSleepingBag;
 
 public class Hooks {
 	public static boolean isInBed(EntityPlayer player) {

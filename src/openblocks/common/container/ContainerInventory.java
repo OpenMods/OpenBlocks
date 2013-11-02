@@ -42,23 +42,27 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		int height = (int)Math.ceil((double)inventorySize / width);
 		for (int y = 0, slotId = 0; y < height; y++) {
 			for (int x = 0; x < width; x++, slotId++) {
-				addSlotToContainer(new RestrictedSlot(inventory, slotId, xOffset
-						+ x * 18, yOffset + y * 18));
+				addSlotToContainer(new RestrictedSlot(inventory, slotId,
+						xOffset + x * 18,
+						yOffset + y * 18));
 			}
 		}
 	}
 
 	protected void addPlayerInventorySlots(int offsetY) {
-		for (int l = 0; l < 3; l++) {
-			for (int k1 = 0; k1 < 9; k1++) {
-				addSlotToContainer(new Slot(playerInventory, k1 + l * 9 + 9, 8 + k1 * 18, offsetY
-						+ l * 18));
-			}
-		}
+		addPlayerInventorySlots(8, offsetY);
+	}
 
-		for (int i1 = 0; i1 < 9; i1++) {
-			addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, offsetY + 58));
-		}
+	protected void addPlayerInventorySlots(int offsetX, int offsetY) {
+		for (int row = 0; row < 3; row++)
+			for (int column = 0; column < 9; column++)
+				addSlotToContainer(new Slot(playerInventory,
+						column + row * 9 + 9,
+						offsetX + column * 18,
+						offsetY + row * 18));
+
+		for (int slot = 0; slot < 9; slot++)
+			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58));
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		return inventory.isUseableByPlayer(entityplayer);
 	}
 
-	public T getTileEntity() {
+	public T getOwner() {
 		return inventory;
 	}
 
@@ -107,7 +111,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		T te = getTileEntity();
+		T te = getOwner();
 		if (te instanceof NetworkedTileEntity) {
 			((NetworkedTileEntity)te).sync(false);
 		}

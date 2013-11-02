@@ -1,11 +1,9 @@
 package openblocks.common.tileentity;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
+import openblocks.Log;
 import openblocks.sync.ISyncHandler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncMap;
@@ -14,17 +12,15 @@ import openblocks.sync.SyncMapTile;
 public abstract class NetworkedTileEntity extends OpenTileEntity implements
 		ISyncHandler {
 
-	protected SyncMapTile syncMap = new SyncMapTile();
+	protected SyncMapTile<NetworkedTileEntity> syncMap = new SyncMapTile<NetworkedTileEntity>(this);
 
 	public void addSyncedObject(ISyncableObject obj) {
 		syncMap.put(obj);
 	}
 
 	public void sync(boolean syncMeta) {
-		if (syncMeta) {
-			super.sync();
-		}
-		syncMap.sync(worldObj, this, xCoord, yCoord, zCoord);
+		if (syncMeta) super.sync();
+		syncMap.sync();
 	}
 
 	@Override
@@ -33,27 +29,17 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 	}
 
 	@Override
-	public void writeIdentifier(DataOutputStream dos) throws IOException {
-		dos.writeInt(worldObj.provider.dimensionId);
-		dos.writeInt(xCoord);
-		dos.writeInt(yCoord);
-		dos.writeInt(zCoord);
-	}
-
-	@Override
-	public SyncMap getSyncMap() {
+	public SyncMap<NetworkedTileEntity> getSyncMap() {
 		return syncMap;
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return syncMap.getDescriptionPacket(this);
+		try {
+			return syncMap.createPacket(true, false);
+		} catch (IOException e) {
+			Log.severe(e, "Error during description packet creation");
+			return null;
+		}
 	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		syncMap.handleTileDataPacket(pkt);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
-	}
-
 }

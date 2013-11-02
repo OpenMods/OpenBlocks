@@ -1,11 +1,8 @@
 package openblocks;
 
-import java.io.File;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
@@ -39,7 +36,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@")
-@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { OpenBlocks.CHANNEL }, packetHandler = PacketHandler.class)
+@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { PacketHandler.CHANNEL_SYNC, PacketHandler.CHANNEL_EVENTS }, packetHandler = PacketHandler.class)
 public class OpenBlocks {
 
 	public static final String CHANNEL = "OpenBlocks";
@@ -75,9 +72,9 @@ public class OpenBlocks {
 		public static BlockAutoAnvil autoAnvil;
 		public static BlockAutoEnchantmentTable autoEnchantmentTable;
 		public static BlockXPDrain xpDrain;
-        public static BlockBlockBreaker blockBreaker;
-        public static BlockBlockPlacer blockPlacer;
-        public static BlockItemDropper itemDropper;
+		public static BlockBlockBreaker blockBreaker;
+		public static BlockBlockPlacer blockPlacer;
+		public static BlockItemDropper itemDropper;
 	}
 
 	public static class Items {
@@ -103,9 +100,11 @@ public class OpenBlocks {
 
 	public static FluidStack XP_FLUID = null;
 
-	public static enum Gui {
+	public static enum GuiId {
 		luggage
 	}
+
+	public static final GuiId[] GUIS = GuiId.values();
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
@@ -134,9 +133,9 @@ public class OpenBlocks {
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		
+
 		OpenBlocks.syncableManager = new SyncableManager();
-		
+
 		Config.register();
 
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());
@@ -179,30 +178,6 @@ public class OpenBlocks {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
-	}
-
-	public static String getResourcesPath() {
-		return "/mods/openblocks";
-	}
-
-	public static String getLanguagePath() {
-		return String.format("%s/languages", getResourcesPath());
-	}
-
-	public static String getTexturesPath() {
-		return String.format("%s/textures", getResourcesPath());
-	}
-
-	public static String getTexturesPath(String path) {
-		return String.format("%s/%s", getTexturesPath(), path);
-	}
-
-	public static File getBaseDir() {
-		return FMLCommonHandler.instance().getMinecraftServerInstance().getFile(".");
-	}
-
-	public static File getWorldDir(World world) {
-		return proxy.getWorldDir(world);
 	}
 
 	public static String getModId() {

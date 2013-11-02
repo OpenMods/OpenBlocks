@@ -1,26 +1,24 @@
 package openblocks.sync;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.utils.ByteUtils;
 
-public class SyncableFlags implements ISyncableObject {
+public class SyncableFlags extends SyncableObjectBase {
 
 	private short value;
 	private short previousValue;
-	private boolean dirty = false;
-	protected int[] ticksSinceSet = new int[16];
-	protected int[] ticksSinceUnset = new int[16];
-	protected int ticksSinceChanged = 0;
+	protected long[] timeLastSet = new long[16];
+	protected long[] timeLastUnset = new long[16];
 
-	public SyncableFlags() {
-
-	}
+	public SyncableFlags() {}
 
 	public void on(Enum<?> slot) {
 		on(slot.ordinal());
@@ -64,38 +62,29 @@ public class SyncableFlags implements ISyncableObject {
 		short newVal = ByteUtils.set(value, slot, bool);
 		if (newVal != value) {
 			if (bool) {
-				ticksSinceSet[slot] = 0;
+				timeLastSet[slot] = 0;
 			} else {
-				ticksSinceUnset[slot] = 0;
+				timeLastUnset[slot] = 0;
 			}
 			markDirty();
 		}
 		value = newVal;
 	}
 
-	@Override
-	public void markDirty() {
-		dirty = true;
+	public int ticksSinceSet(World world, Enum<?> slot) {
+		return ticksSinceSet(world, slot.ordinal());
 	}
 
-	public int ticksSinceSet(Enum<?> slot) {
-		return ticksSinceSet(slot.ordinal());
+	public int ticksSinceSet(World world, int slot) {
+		return (int)(OpenBlocks.proxy.getTicks(world) - timeLastSet[slot]);
 	}
 
-	public int ticksSinceSet(int slot) {
-		return ticksSinceSet[slot];
+	public int ticksSinceUnset(World world, Enum<?> slot) {
+		return ticksSinceUnset(world, slot.ordinal());
 	}
 
-	public int ticksSinceUnset(Enum<?> slot) {
-		return ticksSinceUnset(slot.ordinal());
-	}
-
-	public int ticksSinceUnset(int slot) {
-		return ticksSinceUnset[slot];
-	}
-
-	public int ticksSinceChange() {
-		return ticksSinceChanged;
+	public int ticksSinceUnset(World world, int slot) {
+		return (int)(OpenBlocks.proxy.getTicks(world) - timeLastUnset[slot]);
 	}
 
 	public boolean get(Enum<?> slot) {
@@ -104,11 +93,6 @@ public class SyncableFlags implements ISyncableObject {
 
 	public boolean get(int slot) {
 		return ByteUtils.get(value, slot);
-	}
-
-	@Override
-	public boolean isDirty() {
-		return dirty;
 	}
 
 	public boolean hasSlotChanged(Enum<?> slot) {
@@ -126,40 +110,35 @@ public class SyncableFlags implements ISyncableObject {
 	}
 
 	@Override
-	public void readFromStream(DataInputStream stream) throws IOException {
+	public void readFromStream(DataInput stream) throws IOException {
 		value = stream.readShort();
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
 		stream.writeShort(value);
 	}
 
-	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setShort(name, value);
 	}
 
-	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		if (tag.hasKey(name)) {
-			value = tag.getShort(name);
-		}
+		value = tag.getShort(name);
 	}
 
 	@Override
-	public void resetChangeTimer() {
-		ticksSinceChanged = 0;
-	}
-	
-	@Override
-	public void tick() {
-		System.out.println(ticksSinceChanged);
-		for (int i = 0; i < ticksSinceSet.length; i++) {
-			ticksSinceSet[i]++;
-			ticksSinceUnset[i]++;
+	public void resetChangeTimer(World world) {
+		super.resetChangeTimer(world);
+		long time = OpenBlocks.proxy.getTicks(world);
+		for (int i = 0; i < timeLastSet.length; i++) {
+			if (hasSlotChanged(i)) {
+				if (get(i)) {
+					timeLastSet[i] = time;
+				}else {
+					timeLastUnset[i] = time;
+				}
+			}
 		}
-		ticksSinceChanged++;
 	}
 }

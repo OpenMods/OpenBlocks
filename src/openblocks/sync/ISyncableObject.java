@@ -1,10 +1,10 @@
 package openblocks.sync;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public interface ISyncableObject {
 	public boolean isDirty();
@@ -13,16 +13,11 @@ public interface ISyncableObject {
 
 	public void markDirty();
 
-	public void readFromStream(DataInputStream stream) throws IOException;
+	public void readFromStream(DataInput stream) throws IOException;
 
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException;
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException;
 
-	public void writeToNBT(NBTTagCompound tag, String name);
-
-	public void readFromNBT(NBTTagCompound tag, String name);
-
-	public void resetChangeTimer();
+	public void resetChangeTimer(World world);
 	
-	public void tick();
+	public int getTicksSinceChange(World world);
 }

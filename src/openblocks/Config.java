@@ -120,18 +120,18 @@ public class Config {
 
 	@BlockId(description = "The id of the auto enchantment table")
 	public static int blockAutoEnchantmentTableId = 2561;
-	
+
 	@BlockId(description = "The id of the xp drain block")
 	public static int blockXPDrainId = 2562;
 
-    @BlockId(description = "The id of the block-breaker block")
-    public static int blockBlockBreakerId = 2563;
+	@BlockId(description = "The id of the block-breaker block")
+	public static int blockBlockBreakerId = 2563;
 
-    @BlockId(description = "The id of the block-placer block")
-    public static int blockBlockPlacerId = 2564;
+	@BlockId(description = "The id of the block-placer block")
+	public static int blockBlockPlacerId = 2564;
 
-    @BlockId(description = "The id of the item-dropper block")
-    public static int blockItemDropperId = 2565;
+	@BlockId(description = "The id of the item-dropper block")
+	public static int blockItemDropperId = 2565;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -160,7 +160,7 @@ public class Config {
 	@ItemId(description = "The id of the crane controller item")
 	public static int itemCraneControl = 14983;
 
-	@ItemId(description = "The id of crane backpack item")
+	@ItemId(description = "The id of the crane backpack item")
 	public static int itemCraneId = 14984;
 
 	@ItemId(description = "The id of slimalyzer item")
@@ -429,30 +429,33 @@ public class Config {
 			OpenBlocks.Blocks.autoEnchantmentTable = new BlockAutoEnchantmentTable();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoEnchantmentTable), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.enchantmentTable, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
-		
+
 		if (Config.canRegisterBlock(blockXPDrainId)) {
 			OpenBlocks.Blocks.xpDrain = new BlockXPDrain();
 		}
-        if (Config.canRegisterBlock(blockBlockBreakerId)) {
-            OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
-            //recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockBreaker)))
-        }
+		if (Config.canRegisterBlock(blockBlockBreakerId)) {
+			OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
+			// recipeList.add(new ShapedOreRecipe(new
+			// ItemStack(OpenBlocks.Blocks.blockBreaker)))
+		}
 
-        if(Config.canRegisterBlock(blockBlockPlacerId)) {
-            OpenBlocks.Blocks.blockPlacer = new BlockBlockPlacer();
-            //recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockPlacer)))
-        }
+		if (Config.canRegisterBlock(blockBlockPlacerId)) {
+			OpenBlocks.Blocks.blockPlacer = new BlockBlockPlacer();
+			// recipeList.add(new ShapedOreRecipe(new
+			// ItemStack(OpenBlocks.Blocks.blockPlacer)))
+		}
 
-        if(Config.canRegisterBlock(blockItemDropperId)) {
-            OpenBlocks.Blocks.itemDropper = new BlockItemDropper();
-        }
+		if (Config.canRegisterBlock(blockItemDropperId)) {
+			OpenBlocks.Blocks.itemDropper = new BlockItemDropper();
+		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		// There is no fail checking here because if the Generic item fails,
 		// then I doubt anyone wants this to be silent.
-	
-		// There is no fail checking here because if the Generic item fails, then I doubt anyone wants this to be silent.
+
+		// There is no fail checking here because if the Generic item fails,
+		// then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemGeneric();
 		OpenBlocks.Items.generic.registerItems();
@@ -520,11 +523,10 @@ public class Config {
 			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
 		}
-		
+
 		if (itemSleepingBagId > 0 && ClassTransformerEntityPlayer.IsInBedHookSuccess) {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
 		}
-
 	}
 
 	private static boolean canRegisterBlock(int blockId) {

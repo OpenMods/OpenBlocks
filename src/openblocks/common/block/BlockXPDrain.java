@@ -11,23 +11,23 @@ import openblocks.utils.BlockUtils;
 public class BlockXPDrain extends OpenBlock {
 
 	private Icon sideIcon;
-	
+
 	public BlockXPDrain() {
 		super(Config.blockXPDrainId, Material.glass);
 		setupBlock(this, "xpdrain", TileEntityXPDrain.class);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
 	}
-	
+
 	@Override
 	public void registerIcons(IconRegister registry) {
 		super.registerIcons(registry);
 		sideIcon = registry.registerIcon("openblocks:xpdrain_side");
 	}
-	
+
 	@Override
 	public Icon getIcon(int side, int meta) {
 		ForgeDirection dir = BlockUtils.getRotationFromMetadata(meta);
-		return dir == ForgeDirection.WEST || dir == ForgeDirection.EAST ? sideIcon : blockIcon;
+		return dir == ForgeDirection.WEST || dir == ForgeDirection.EAST? sideIcon : blockIcon;
 	}
 
 	@Override

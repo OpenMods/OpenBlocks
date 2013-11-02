@@ -1,24 +1,27 @@
 package openblocks.sync;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import openblocks.OpenBlocks;
 import openblocks.common.GenericTank;
 
 public class SyncableTank extends GenericTank implements ISyncableObject {
 
 	private boolean dirty = false;
-	private int ticksSinceChange = 0;
+	private long ticksSinceChange = 0;
 
 	public SyncableTank(int capacity, FluidStack... acceptableFluids) {
 		super(capacity, acceptableFluids);
 	}
 
-	public int getTicksSinceChange() {
-		return ticksSinceChange;
+	@Override
+	public int getTicksSinceChange(World world) {
+		return (int)(OpenBlocks.proxy.getTicks(world) - ticksSinceChange);
 	}
 
 	@Override
@@ -37,7 +40,7 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 	}
 
 	@Override
-	public void readFromStream(DataInputStream stream) throws IOException {
+	public void readFromStream(DataInput stream) throws IOException {
 		int fluidId = stream.readInt();
 		if (fluidId > -1) {
 			int fluidAmount = stream.readInt();
@@ -48,8 +51,7 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
 		if (fluid != null) {
 			stream.writeInt(fluid.fluidID);
 			stream.writeInt(fluid.amount);
@@ -58,12 +60,12 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 		}
 	}
 
-	@Override
+	@SuppressWarnings("unused")
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		this.writeToNBT(tag);
 	}
 
-	@Override
+	@SuppressWarnings("unused")
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		this.readFromNBT(tag);
 	}
@@ -96,12 +98,8 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 	}
 
 	@Override
-	public void resetChangeTimer() {
-		ticksSinceChange = 0;
+	public void resetChangeTimer(World world) {
+		ticksSinceChange = OpenBlocks.proxy.getTicks(world);
 	}
 
-	@Override
-	public void tick() {
-		ticksSinceChange++;
-	}
 }

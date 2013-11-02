@@ -10,15 +10,13 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.sync.SyncableFlags;
-import openblocks.utils.SidePicker;
+import openblocks.utils.*;
 import openblocks.utils.SidePicker.HitCoord;
 import openblocks.utils.SidePicker.Side;
 import openblocks.utils.Trackball.TrackballWrapper;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
 
 public class GuiComponentSideSelector extends BaseComponent {
 
@@ -49,14 +47,7 @@ public class GuiComponentSideSelector extends BaseComponent {
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		if (isInitialized == false || Mouse.isButtonDown(2)) {
-			double yaw = Math.toRadians(minecraft.renderViewEntity.rotationYaw - 180);
-			double pitch = Math.toRadians(minecraft.renderViewEntity.rotationPitch);
-
-			Matrix4f initial = new Matrix4f();
-			initial.rotate((float)pitch, new Vector3f(1, 0, 0));
-			initial.rotate((float)yaw, new Vector3f(0, 1, 0));
-			trackball.setTransform(initial);
-
+			trackball.setTransform(MathUtils.createEntityRotateMatrix(minecraft.renderViewEntity));
 			isInitialized = true;
 		}
 		GL11.glPushMatrix();

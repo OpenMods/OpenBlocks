@@ -9,7 +9,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IAwareTileLite;
 import openblocks.common.api.IHasGui;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerBigButton;
@@ -19,8 +19,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, IInventory, IHasGui {
+public class TileEntityBigButton extends OpenTileEntity implements IAwareTileLite, ISurfaceAttachment, IInventory, IHasGui {
 
 	private int tickCounter = 0;
 
@@ -57,12 +56,6 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
@@ -88,17 +81,9 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(side.getOpposite());
 		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
 	}
 
 	@Override

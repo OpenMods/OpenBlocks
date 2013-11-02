@@ -101,15 +101,7 @@ public class TileEntityGrave extends TileEntity implements IInventoryContainer,
 
 	@Override
 	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		packet.actionType = 0;
-		packet.xPosition = xCoord;
-		packet.yPosition = yCoord;
-		packet.zPosition = zCoord;
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
-		packet.data = nbt;
-		return packet;
+		return Packet132TileEntity.writeToPacket(this);
 	}
 
 	@Override

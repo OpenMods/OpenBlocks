@@ -18,6 +18,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.client.Icons.IDrawableIcon;
 import openblocks.common.item.ItemSonicGlasses;
+import openblocks.utils.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -195,12 +196,6 @@ public class SoundEventsManager {
 		if (renderNotPumpkin != null) GL11.glDeleteLists(renderNotPumpkin, 1);
 	}
 
-	public static void setupBillboard(Entity rve, double x, double y, double z) {
-		GL11.glTranslated(x, y, z);
-		GL11.glRotatef(-rve.rotationYaw, 0, 1, 0);
-		GL11.glRotatef(rve.rotationPitch, 1, 0, 0);
-	}
-
 	@ForgeSubscribe
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Minecraft mc = evt.context.mc;
@@ -230,7 +225,8 @@ public class SoundEventsManager {
 			final double pz = snd.z - interpZ;
 
 			GL11.glPushMatrix();
-			setupBillboard(rve, px, py, pz);
+			GL11.glTranslated(px, py, pz);
+			RenderUtils.setupBillboard(rve);
 			snd.icon.draw(tex, snd.getTime(evt.partialTicks), snd.size);
 			GL11.glPopMatrix();
 		}

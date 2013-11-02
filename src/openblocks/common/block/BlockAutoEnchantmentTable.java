@@ -18,13 +18,14 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 
 	private Icon iconTop;
 	private Icon iconBottom;
-	
+
 	public BlockAutoEnchantmentTable() {
 		super(Config.blockAutoEnchantmentTableId, Material.ground);
 		setupBlock(this, "autoenchantmenttable", TileEntityAutoEnchantmentTable.class);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		super.randomDisplayTick(world, x, y, z, rand);
@@ -78,8 +79,9 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 		iconTop = registry.registerIcon("openblocks:autoenchantmenttable_top");
 		iconBottom = registry.registerIcon("openblocks:autoenchantmenttable_bottom");
 	}
-	
-    public Icon getIcon(int side, int meta) {
-        return side == 0 ? iconBottom : side == 1 ? iconTop : this.blockIcon;
-    }
+
+	@Override
+	public Icon getIcon(int side, int meta) {
+		return side == 0? iconBottom : side == 1? iconTop : this.blockIcon;
+	}
 }

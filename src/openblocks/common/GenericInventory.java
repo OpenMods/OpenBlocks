@@ -1,18 +1,18 @@
 package openblocks.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import openblocks.common.api.IInventoryCallback;
 
-public class GenericInventory implements ISidedInventory {
+public class GenericInventory implements IInventory {
 
 	protected List<IInventoryCallback> callbacks;
 	protected String inventoryTitle;
@@ -33,47 +33,19 @@ public class GenericInventory implements ISidedInventory {
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return true;
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return true;
-	}
-
-	@Override
 	public void closeChest() {}
 
 	@Override
 	public ItemStack decrStackSize(int stackIndex, int byAmount) {
-		if (this.inventoryContents[stackIndex] != null) {
-			ItemStack itemstack;
+		ItemStack current = inventoryContents[stackIndex];
+		if (current == null) return null;
 
-			if (this.inventoryContents[stackIndex].stackSize <= byAmount) {
-				itemstack = this.inventoryContents[stackIndex];
-				this.inventoryContents[stackIndex] = null;
-				this.onInventoryChanged(stackIndex);
-				return itemstack;
-			}
-
-			itemstack = this.inventoryContents[stackIndex].splitStack(byAmount);
-
-			if (this.inventoryContents[stackIndex].stackSize == 0) {
-				this.inventoryContents[stackIndex] = null;
-			}
-
-			this.onInventoryChanged(stackIndex);
-			return itemstack;
-
+		if (current.stackSize <= byAmount) {
+			inventoryContents[stackIndex] = null;
+			return current;
 		}
 
 		return null;
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return new int[0];
 	}
 
 	@Override
@@ -95,7 +67,7 @@ public class GenericInventory implements ISidedInventory {
 	public ItemStack getStackInSlot(int i) {
 		return this.inventoryContents[i];
 	}
-	
+
 	public ItemStack getStackInSlot(Enum<?> i) {
 		return getStackInSlot(i.ordinal());
 	}
@@ -132,9 +104,8 @@ public class GenericInventory implements ISidedInventory {
 	}
 
 	public void onInventoryChanged(int slotNumber) {
-		for (int i = 0; i < callbacks.size(); ++i) {
-			callbacks.get(i).onInventoryChanged(this, slotNumber);
-		}
+		for (IInventoryCallback callback : callbacks)
+			callback.onInventoryChanged(this, slotNumber);
 	}
 
 	@Override
@@ -151,10 +122,10 @@ public class GenericInventory implements ISidedInventory {
 			this.slotsCount = tag.getInteger("size");
 		}
 		NBTTagList nbttaglist = tag.getTagList("Items");
-		inventoryContents = new ItemStack[getSizeInventory()];
+		inventoryContents = new ItemStack[slotsCount];
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound stacktag = (NBTTagCompound)nbttaglist.tagAt(i);
-			int j = stacktag.getByte("Slot") & 0xff;
+			int j = stacktag.getByte("Slot");
 			if (j >= 0 && j < inventoryContents.length) {
 				inventoryContents[j] = ItemStack.loadItemStackFromNBT(stacktag);
 			}
@@ -203,5 +174,9 @@ public class GenericInventory implements ISidedInventory {
 				}
 			}
 		}
+	}
+
+	public List<ItemStack> contents() {
+		return Arrays.asList(inventoryContents);
 	}
 }

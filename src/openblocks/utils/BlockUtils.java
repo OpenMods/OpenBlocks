@@ -57,7 +57,7 @@ public class BlockUtils {
 	public static EntityItem dropItemStackInWorld(World worldObj, int x, int y, int z, ItemStack stack) {
 		return dropItemStackInWorld(worldObj, (double)x, (double)y, (double)z, stack);
 	}
-	
+
 	public static EntityItem dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
 		float f = 0.7F;
 		float d0 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
@@ -72,7 +72,6 @@ public class BlockUtils {
 		return entityitem;
 	}
 
-	
 	public static EntityItem ejectItemInDirection(World world, double x, double y, double z, ForgeDirection direction, ItemStack stack) {
 		EntityItem item = BlockUtils.dropItemStackInWorld(world, x, y, z, stack);
 		item.motionX = direction.offsetX / 5F;
@@ -80,7 +79,7 @@ public class BlockUtils {
 		item.motionZ = direction.offsetZ / 5F;
 		return item;
 	}
-	
+
 	public static void dropTileInventory(TileEntity tileEntity) {
 
 		if (tileEntity != null && tileEntity instanceof IInventory) {
@@ -109,19 +108,19 @@ public class BlockUtils {
 		int targetZ = tile.zCoord + direction.offsetZ;
 		return tile.worldObj.getBlockTileEntity(targetX, targetY, targetZ);
 	}
-	
+
 	public static ForgeDirection get3dBlockRotationFromMetadata(int meta) {
 		if (getBlockFlagFromMetadata(meta, 0)) return ForgeDirection.UP;
 		if (getBlockFlagFromMetadata(meta, 1)) return ForgeDirection.DOWN;
 		return getRotationFromMetadata(meta);
 	}
-	
+
 	public static ForgeDirection getRotationFromMetadata(int meta) {
 		int ordinal = (meta & 0x3) + 2;
 		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
 		return direction;
 	}
-	
+
 	public static boolean getBlockFlagFromMetadata(int meta, int index) {
 		if (index > 1) return false;
 		if (index < 0) return false;

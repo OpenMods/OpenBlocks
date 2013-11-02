@@ -30,7 +30,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
+public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData {
 
 	private static final Random RANDOM = new Random();
 
@@ -172,66 +172,13 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 		}
 	}
 
-	public class MoveSmoother {
-		private final double damp;
-		private final double cutoff;
-		private final double panicLengthSq;
-		private final double minimalLengthSq;
-
-		private double targetX;
-		private double targetY;
-		private double targetZ;
-
-		public MoveSmoother(double damp, double cutoff, double panicLength, double minimalLength) {
-			this.damp = damp;
-			this.cutoff = cutoff;
-			this.panicLengthSq = panicLength * panicLength;
-			this.minimalLengthSq = minimalLength * minimalLength;
-		}
-
-		public void setTarget(Vec3 position) {
-			setTarget(position.xCoord, position.yCoord, position.zCoord);
-		}
-
-		public void setTarget(double targetX, double targetY, double targetZ) {
-			this.targetX = targetX;
-			this.targetY = targetY;
-			this.targetZ = targetZ;
-		}
-
-		public void update() {
-			double dx = targetX - posX;
-			double dy = targetY - posY;
-			double dz = targetZ - posZ;
-
-			double lenSq = dx * dx + dy * dy + dz * dz;
-			if (lenSq > panicLengthSq || lenSq < minimalLengthSq) {
-				setPosition(targetX, targetY, targetZ);
-				motionX = motionY = motionZ = 0;
-			} else {
-				if (lenSq > cutoff * cutoff) {
-					double scale = cutoff / Math.sqrt(lenSq);
-					dx *= scale;
-					dy *= scale;
-					dz *= scale;
-				}
-				moveEntity(motionX + dx * damp, motionY + dy * damp, motionZ
-						+ dz * damp);
-			}
-		}
-	}
-
 	private IOwner owner;
-	private final MoveSmoother smoother;
 	private boolean isAboveTarget;
 	private boolean isMagic;
 
 	public EntityMagnet(World world) {
 		super(world);
 		setSize(0.5f, 0.5f);
-
-		if (world.isRemote) smoother = new MoveSmoother(0.25, 1.0, 4.0, 0.01);
-		else smoother = new MoveSmoother(0.5, 5.0, 128.0, 0.01);
 	}
 
 	public EntityMagnet(World world, IOwner owner, boolean isMagic) {
@@ -285,14 +232,9 @@ public class EntityMagnet extends Entity implements IEntityAdditionalSpawnData {
 
 		owner.update(this);
 
-		prevDistanceWalkedModified = distanceWalkedModified;
-		prevPosX = posX;
-		prevPosY = posY;
-		prevPosZ = posZ;
-		prevRotationPitch = this.rotationPitch;
-		prevRotationYaw = this.rotationYaw;
-
 		if (!worldObj.isRemote) smoother.setTarget(owner.getTarget());
+
+		updatePrevPosition();
 
 		smoother.update();
 

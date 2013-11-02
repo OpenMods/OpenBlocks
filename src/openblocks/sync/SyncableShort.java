@@ -1,26 +1,23 @@
 package openblocks.sync;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableShort implements ISyncableObject {
+public class SyncableShort extends SyncableObjectBase {
 
 	private short value = 0;
-	private boolean dirty = false;
 
 	public SyncableShort(short value) {
 		this.value = value;
 	}
 
-	public SyncableShort() {
-		this((short)0);
-	}
+	public SyncableShort() {}
 
 	@Override
-	public void readFromStream(DataInputStream stream) throws IOException {
+	public void readFromStream(DataInput stream) throws IOException {
 		value = stream.readShort();
 	}
 
@@ -40,47 +37,15 @@ public class SyncableShort implements ISyncableObject {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
-			throws IOException {
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
 		stream.writeShort(value);
 	}
 
-	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setShort(name, value);
 	}
 
-	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		if (tag.hasKey(name)) {
-			value = tag.getShort(name);
-		}
-	}
-
-	@Override
-	public boolean isDirty() {
-		return dirty;
-	}
-
-	@Override
-	public void markClean() {
-		dirty = false;
-	}
-
-	@Override
-	public void markDirty() {
-		dirty = true;
-	}
-
-	@Override
-	public void resetChangeTimer() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void tick() {
-		// TODO Auto-generated method stub
-		
+		value = tag.getShort(name);
 	}
 }

@@ -103,6 +103,7 @@ public class TileEntityLightbox extends OpenTileEntity implements IInventory,
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
+	@Override
 	public ForgeDirection getRotation() {
 		return rotation;
 	}
@@ -173,28 +174,12 @@ public class TileEntityLightbox extends OpenTileEntity implements IInventory,
 
 	@Override
 	public Packet getDescriptionPacket() {
-		Packet132TileEntityData packet = new Packet132TileEntityData();
-		packet.actionType = 0;
-		packet.xPosition = xCoord;
-		packet.yPosition = yCoord;
-		packet.zPosition = zCoord;
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNetwork(nbt);
-		packet.data = nbt;
-		return packet;
+		return Packet132TileEntity.writeToPacket(this);
 	}
 
 	@Override
 	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNetwork(pkt.data);
-	}
-
-	public void writeToNetwork(NBTTagCompound tag) {
-		writeToNBT(tag);
-	}
-
-	public void readFromNetwork(NBTTagCompound tag) {
-		readFromNBT(tag);
+		readFromNBT(pkt.data);
 	}
 
 	@Override

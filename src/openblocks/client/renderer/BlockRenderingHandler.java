@@ -75,7 +75,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityAutoAnvil teAutoAnvil = new TileEntityAutoAnvil();
 		inventoryTileEntities.put(OpenBlocks.Blocks.autoAnvil, teAutoAnvil);
-		
+
 		TileEntityAutoEnchantmentTable teAutoTable = new TileEntityAutoEnchantmentTable();
 		inventoryTileEntities.put(OpenBlocks.Blocks.autoEnchantmentTable, teAutoTable);
 	}

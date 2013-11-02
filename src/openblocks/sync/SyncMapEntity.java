@@ -1,13 +1,36 @@
 package openblocks.sync;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.util.Set;
 
-public class SyncMapEntity extends SyncMap {
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import openblocks.network.PacketHandler;
 
-	@Override
-	protected void writeMapType(DataOutputStream dos) throws IOException {
-		dos.writeByte(SyncableManager.TYPE_ENTITY);
+import com.google.common.collect.ImmutableSet;
+
+public class SyncMapEntity<H extends Entity & ISyncHandler> extends SyncMap<H> {
+
+	public SyncMapEntity(H handler) {
+		super(handler);
 	}
 
+	@Override
+	protected SyncMap.HandlerType getHandlerType() {
+		return HandlerType.ENTITY;
+	}
+
+	@Override
+	protected Set<EntityPlayer> getPlayersWatching() {
+		if (handler.worldObj instanceof WorldServer) {
+			return PacketHandler.getPlayersWatchingEntity((WorldServer)handler.worldObj, handler.entityId);
+		}
+		return ImmutableSet.of();
+	}
+
+	@Override
+	protected World getWorld() {
+		return handler.worldObj;
+	}
 }

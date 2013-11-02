@@ -11,15 +11,14 @@ import net.minecraft.village.Village;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IPlaceAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableIntArray;
 import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
-		IAwareTile {
+public class TileEntityVillageHighlighter extends NetworkedTileEntity implements IPlaceAwareTile {
 
 	public static int VALUES_PER_VILLAGE = 7;
 
@@ -77,36 +76,6 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		setRotation(BlockUtils.get2dOrientation(player));
 		sync();
@@ -122,6 +91,7 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;

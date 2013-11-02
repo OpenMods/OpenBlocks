@@ -4,8 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.component.*;
 import openblocks.client.gui.component.BaseComponent.TabColor;
+import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
@@ -32,7 +32,7 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 	public GuiXPBottler(ContainerXPBottler container) {
 		super(container, 176, 151, "openblocks.gui.xpbottler");
 
-		TileEntityXPBottler te = container.getTileEntity();
+		TileEntityXPBottler te = container.getOwner();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 
 		// progress bar

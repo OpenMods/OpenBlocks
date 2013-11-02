@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.entity.EntityMount;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
@@ -20,7 +20,7 @@ import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile {
+public class TileEntityCannon extends NetworkedTileEntity implements IActivateAwareTile {
 
 	private EntityMount cannon = null;
 
@@ -104,12 +104,6 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 		return box.expand(32.0, 32.0, 32.0);
 	}
 
-	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
 	private Vec3 getPositionDistanceAway(double distance, double pitch, double yaw) {
 		double p = Math.toRadians(pitch);
 		double y = Math.toRadians(yaw);
@@ -134,17 +128,6 @@ public class TileEntityCannon extends NetworkedTileEntity implements IAwareTile 
 			sync();
 		}
 		return true;
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
 	}
 
 	@Override

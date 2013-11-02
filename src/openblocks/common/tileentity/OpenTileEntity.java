@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -67,13 +66,13 @@ public abstract class OpenTileEntity extends TileEntity {
 		}
 		rotation = rot;
 	}
-	
+
 	public void set3dRotation(ForgeDirection rot) {
 		setRotation(rot);
 		setFlag1(rot == ForgeDirection.UP);
 		setFlag2(rot == ForgeDirection.DOWN);
 	}
-	
+
 	public ForgeDirection get3dRotation() {
 		return BlockUtils.get3dBlockRotationFromMetadata(getMetadata());
 	}
@@ -128,11 +127,6 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	protected boolean isActive() {
 		return isActive;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
 	}
 
 	@Override

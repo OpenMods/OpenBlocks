@@ -7,8 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 public abstract class BaseComponent extends Gui {
-	
-	
+
 	public enum TabColor {
 		blue(0x8784c8),
 		lightblue(0x84c7c8),
@@ -16,13 +15,13 @@ public abstract class BaseComponent extends Gui {
 		yellow(0xc7c884),
 		red(0xc88a84),
 		purple(0xc884bf);
-		
+
 		private int color;
-		
+
 		TabColor(int col) {
 			this.color = col;
 		}
-		
+
 		public int getColor() {
 			return color;
 		}
@@ -64,7 +63,7 @@ public abstract class BaseComponent extends Gui {
 			for (BaseComponent component : components) {
 				if (component != null) {
 					component.render(minecraft, offsetX + this.x, offsetY + this.y, mouseX
-						- this.x, mouseY - this.y);
+							- this.x, mouseY - this.y);
 				}
 			}
 		}
