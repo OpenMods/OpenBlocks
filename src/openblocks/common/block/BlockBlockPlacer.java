@@ -3,8 +3,10 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBlockPlacer;
+import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -27,6 +29,7 @@ public class BlockBlockPlacer extends OpenBlock {
     @Override
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int side, int metadata) {
-        return side == metadata ? faceIcon : blockIcon;
+    	ForgeDirection rot = BlockUtils.get3dBlockRotationFromMetadata(metadata);
+        return side == rot.ordinal() ? faceIcon : blockIcon;
     }
 }

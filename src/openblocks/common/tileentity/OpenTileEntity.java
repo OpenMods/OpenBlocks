@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.OpenBlock;
+import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -42,9 +43,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	 */
 	public ForgeDirection getRotation() {
 		if (isUsedForClientInventoryRendering) { return rotation; }
-		int ordinal = (getMetadata() & 0x3) + 2;
-		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
-		return direction;
+		return BlockUtils.get3dBlockRotationFromMetadata(getMetadata());
 	}
 
 	/**
@@ -76,18 +75,11 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 	
 	public ForgeDirection get3dRotation() {
-		if (getFlag1()) return ForgeDirection.UP;
-		if (getFlag2()) return ForgeDirection.DOWN;
-		return getRotation();
+		return BlockUtils.get3dBlockRotationFromMetadata(getMetadata());
 	}
 
 	private boolean getFlag(int index) {
-		if (index > 1) return false;
-		if (index < 0) return false;
-		index = 4 + 4 * index;
-		int currentMeta = getMetadata();
-		boolean result = (currentMeta & index) == index;
-		return result;
+		return BlockUtils.getBlockFlagFromMetadata(getMetadata(), index);
 	}
 
 	public boolean getFlag1() {

@@ -18,6 +18,7 @@ import openblocks.utils.OpenBlocksFakePlayer;
 
 public class TileEntityBlockPlacer extends OpenTileEntity
     implements IAwareTile, IInventory, IHasGui {
+	
     static final int BUFFER_SIZE = 9;
 
     private boolean _redstoneSignal;
@@ -35,8 +36,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
     private void placeBlock() {
         if(worldObj.isRemote) return;
 
-
-        ForgeDirection direction = ForgeDirection.getOrientation(getMetadata());
+        ForgeDirection direction = get3dRotation();
         int x = xCoord + direction.offsetX,
             y = yCoord + direction.offsetY,
             z = zCoord + direction.offsetZ;
@@ -135,7 +135,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 
     @Override
     public void openChest() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -178,12 +177,13 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 
     @Override
     public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, BlockUtils.get3dOrientation(player).ordinal(), 2);
+        set3dRotation(BlockUtils.get3dOrientation(player));
+        sync();
     }
 
     @Override
     public boolean onBlockEventReceived(int eventId, int eventParam) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override

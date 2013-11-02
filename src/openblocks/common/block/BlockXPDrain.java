@@ -3,8 +3,10 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityXPDrain;
+import openblocks.utils.BlockUtils;
 
 public class BlockXPDrain extends OpenBlock {
 
@@ -24,11 +26,8 @@ public class BlockXPDrain extends OpenBlock {
 	
 	@Override
 	public Icon getIcon(int side, int meta) {
-		int dir = (meta & 0x3) + 2;
-		if (dir == 4 || dir == 5) {
-			return sideIcon;
-		}
-		return blockIcon;
+		ForgeDirection dir = BlockUtils.getRotationFromMetadata(meta);
+		return dir == ForgeDirection.WEST || dir == ForgeDirection.EAST ? sideIcon : blockIcon;
 	}
 
 	@Override

@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 
 public class SyncableManager {
 
