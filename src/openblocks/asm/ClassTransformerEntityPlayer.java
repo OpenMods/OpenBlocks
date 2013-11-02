@@ -52,7 +52,7 @@ public class ClassTransformerEntityPlayer implements IClassTransformer {
 		if (!transformedName.equals("net.minecraft.entity.player.EntityPlayer")) { return bytes; }
 
 		ClassReader cr = new ClassReader(bytes);
-		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+		ClassWriter cw = new ClassWriter(0);
 		HookClassVistor mod = new HookClassVistor(cw);
 		cr.accept(mod, 0);
 		return cw.toByteArray();
