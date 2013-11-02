@@ -48,6 +48,7 @@ tile.openblocks.path.name=Caminho
 tile.openblocks.autoanvil.name=Bigorna automática
 tile.openblocks.autoenchantmenttable.name=Mesa de encantamentos automática
 tile.openblocks.xpdrain.name=Dreno de experiência
+tile.openblocks.ropeladder.name=Corda
 
 item.openblocks.hangglider.name=Planador
 item.openblocks.gliderwing.name=Asa do planador
