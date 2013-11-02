@@ -1,0 +1,32 @@
+OpenBlocks development guide
+----------------------------
+
+There are a lot of non-standard concepts within OpenBlocks to try to speed up the development of new blocks and standardize things as much as possible.
+
+Blocks & TileEntities
+---------------------
+
+Ideally all blocks will use OpenBlock and OpenTileEntity (or derivatives). They have a load of functionality that work together to make things quicker and easier to set up. It also means we can keep blocks and tiles standardized across the whole project.
+
+Block rotation
+--------------
+Tile entities have 3 methods that use the block metadata. setRotation(), setFlag1() setFlag2(). setRotation() can be north, west, south or west. If you need to use vertical directions too (up/down), you can store them inside setFlag1 and setFlag2.
+Changes to metadata arent instantly pushed downstream. You need to call sync() to push the changes to these properties and it'll get sent down to the client.
+
+Block events
+------------
+Block events can be automatically proxied to the tile entity if your tile entity implements IAwareTile. This'll forward onBlockBroken, onBlockAdded, onBlockActivated, onNeighbourChanged, onBlockPlacedBy and onBlockEventReceived. This helps to keep all logic in a single place to make things cleaner.
+
+Networking
+----------
+OpenBlocks has a networking system that allows you to share objects between server and clients. Change your tile entity to extend NetworkedTileEntity and then addSyncedObject()'s.
+Whenever you want to push changes either upstream or downstream, call sync() and it'll push all data to any new players in the area, or push any changes to any existing players in the area. If there's nothing to push, it wont, so don't be too scared of calling sync() a lot.
+Any ISyncableObjects also have methods for reading and writing to NBT.
+
+Gui Components
+--------------
+Make your GUI extend BaseGuiContainer and then add new components to the 'panel' object. Pretty self explanatory, just see how other GUIs are done in openblocks. Components should be reusable.
+Some components automatically send changes upstream to sharedobjects (side selectors & checkboxes)
+
+
+
