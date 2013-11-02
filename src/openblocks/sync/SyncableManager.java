@@ -27,7 +27,7 @@ public class SyncableManager {
 
 		ISyncHandler handler = SyncMap.findSyncMap(world, input);
 		if (handler != null) {
-			List<ISyncableObject> changes = handler.getSyncMap().readFromStream(world, input);
+			List<ISyncableObject> changes = handler.getSyncMap().readFromStream(input);
 			handler.onSynced(changes);
 		}
 	}
