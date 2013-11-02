@@ -125,13 +125,13 @@ public class Config {
 	public static int blockXPDrainId = 2562;
 
     @BlockId(description = "The id of the block-breaker block")
-    public static int blockBlockBreakerId = 2561;
+    public static int blockBlockBreakerId = 2563;
 
     @BlockId(description = "The id of the block-placer block")
-    public static int blockBlockPlacerId = 2562;
+    public static int blockBlockPlacerId = 2564;
 
     @BlockId(description = "The id of the item-dropper block")
-    public static int blockItemDropperId = 2563;
+    public static int blockItemDropperId = 2565;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
