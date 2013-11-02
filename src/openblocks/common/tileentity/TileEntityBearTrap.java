@@ -59,9 +59,6 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 		}
 		if (!worldObj.isRemote) {
 			sync(false);
-			System.out.println(flags.getTicksSinceChange(worldObj));
-		}else {
-			//System.out.println(flags.getTicksSinceChange());
 		}
 	}
 
