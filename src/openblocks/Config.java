@@ -440,18 +440,20 @@ public class Config {
 		}
 		if (Config.canRegisterBlock(blockBlockBreakerId)) {
 			OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
-			// recipeList.add(new ShapedOreRecipe(new
-			// ItemStack(OpenBlocks.Blocks.blockBreaker)))
+			ItemStack specialItem = new ItemStack(Item.pickaxeDiamond);
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockBreaker), new Object[] { "icc", "src", "icc", 'i', new ItemStack(Item.ingotIron), 'c', new ItemStack(Block.cobblestone), 'r', new ItemStack(Item.redstone), 's', specialItem }));
 		}
 
 		if (Config.canRegisterBlock(blockBlockPlacerId)) {
 			OpenBlocks.Blocks.blockPlacer = new BlockBlockPlacer();
-			// recipeList.add(new ShapedOreRecipe(new
-			// ItemStack(OpenBlocks.Blocks.blockPlacer)))
+			ItemStack specialItem = new ItemStack(Block.pistonBase);
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockPlacer), new Object[] { "icc", "src", "icc", 'i', new ItemStack(Item.ingotIron), 'c', new ItemStack(Block.cobblestone), 'r', new ItemStack(Item.redstone), 's', specialItem }));
 		}
 
 		if (Config.canRegisterBlock(blockItemDropperId)) {
 			OpenBlocks.Blocks.itemDropper = new BlockItemDropper();
+			ItemStack specialItem = new ItemStack(Block.hopperBlock);
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.itemDropper), new Object[] { "icc", "src", "icc", 'i', new ItemStack(Item.ingotIron), 'c', new ItemStack(Block.cobblestone), 'r', new ItemStack(Item.redstone), 's', specialItem }));
 		}
 		
 		if (Config.canRegisterBlock(blockRopeLadderId)) {
@@ -535,6 +537,7 @@ public class Config {
 
 		if (itemSleepingBagId > 0 && ClassTransformerEntityPlayer.IsInBedHookSuccess) {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Block.carpet, 'w', Block.cloth));
 		}
 	}
 
