@@ -22,7 +22,9 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	private String owner;
 	private WeakReference<EntityPlayer> cachedOwner;
-	private int countdownToOwnerCheck;
+	protected double ownerOffsetX;
+	protected double ownerOffsetY;
+	protected double ownerOffsetZ;
 
 	public EntityAssistant(World world, EntityPlayer owner) {
 		super(world);
@@ -53,17 +55,20 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	public void onUpdate() {
-		EntityPlayer owner = cachedOwner.get();
+		if (!worldObj.isRemote) {
+			EntityPlayer owner = cachedOwner.get();
 
-		if (owner == null) {
-			if (countdownToOwnerCheck-- > 0) return;
-			owner = findOwner();
+			if (owner == null) owner = findOwner();
+
+			if (owner != null) smoother.setTarget(
+					owner.posX + ownerOffsetX,
+					owner.posY + owner.getEyeHeight() + ownerOffsetY,
+					owner.posZ + ownerOffsetZ
+					);
+
 		}
 
-		if (owner != null) smoother.setTarget(owner.posX + 1, owner.posY + owner.getEyeHeight(), owner.posZ);
-
 		updatePrevPosition();
-
 		smoother.update();
 	}
 

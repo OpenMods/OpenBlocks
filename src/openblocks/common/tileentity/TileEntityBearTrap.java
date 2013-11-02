@@ -1,6 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -97,7 +97,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {

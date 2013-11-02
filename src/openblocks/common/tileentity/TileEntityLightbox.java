@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -175,9 +176,6 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 }

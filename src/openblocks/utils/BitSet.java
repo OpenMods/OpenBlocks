@@ -18,8 +18,12 @@ public class BitSet {
 		resize(bitCount);
 	}
 
+	private static int byteCount(int bitCount) {
+		return (bitCount + 7) >> 3;
+	}
+
 	public void resize(int bitCount) {
-		int count = (bitCount + 7) >> 3;
+		int count = byteCount(bitCount);
 		bits = new byte[count];
 	}
 
@@ -42,10 +46,13 @@ public class BitSet {
 	}
 
 	public void writeToStream(DataOutput output) throws IOException {
+		ByteUtils.writeVLI(output, bits.length);
 		output.write(bits);
 	}
 
 	public void readFromStream(DataInput input) throws IOException {
+		int size = ByteUtils.readVLI(input);
+		bits = new byte[size];
 		input.readFully(bits);
 	}
 
@@ -55,5 +62,9 @@ public class BitSet {
 
 	public void readFromNBT(NBTTagCompound tag) {
 		bits = tag.getByteArray("Bits").clone();
+	}
+
+	public boolean checkSize(int bitSize) {
+		return byteCount(bitSize) <= bits.length;
 	}
 }

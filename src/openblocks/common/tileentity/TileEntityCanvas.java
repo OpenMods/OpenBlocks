@@ -1,6 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,7 +64,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
+	public void onSynced(Set<ISyncableObject> changes) {
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 

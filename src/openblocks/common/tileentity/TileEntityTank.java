@@ -281,7 +281,7 @@ public class TileEntityTank extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
+	public void onSynced(Set<ISyncableObject> changes) {
 		int newFluidId = tank.getFluid() == null? 0 : tank.getFluid().fluidID;
 		if (newFluidId != previousFluidId) {
 			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);

@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -106,8 +107,5 @@ public class TileEntityTarget extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onSynced(Set<ISyncableObject> changes) {}
 }

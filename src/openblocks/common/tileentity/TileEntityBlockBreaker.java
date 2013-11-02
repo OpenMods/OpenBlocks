@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -149,7 +149,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
+	public void onSynced(Set<ISyncableObject> changes) {
 		if (changes.contains(activated)) {
 			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 		}

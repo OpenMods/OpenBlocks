@@ -86,10 +86,12 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 			if (te != null) {
+				GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
 				GL11.glPushMatrix();
 				GL11.glTranslated(-0.5, -0.5, -0.5);
 				TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
 				GL11.glPopMatrix();
+				GL11.glPopAttrib();
 			}
 			if (openBlock == null || openBlock.shouldRenderBlock()) {
 				ForgeDirection rotation = ForgeDirection.EAST;

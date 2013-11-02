@@ -1,6 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,9 +19,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 	private SyncableInt amount;
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-
-	}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	protected void createSyncedFields() {

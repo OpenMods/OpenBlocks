@@ -9,15 +9,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import openblocks.common.DonationUrlManager;
-import openblocks.common.MagnetWhitelists;
-import openblocks.common.PlayerDeathHandler;
-import openblocks.common.TileEntityEventHandler;
+import openblocks.Config.RegisterItem;
+import openblocks.common.*;
 import openblocks.common.block.*;
-import openblocks.common.entity.EntityBlock;
-import openblocks.common.entity.EntityHangGlider;
-import openblocks.common.entity.EntityLuggage;
-import openblocks.common.entity.EntityMagnet;
+import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.integration.ModuleComputerCraft;
@@ -37,6 +32,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "after:ComputerCraft;after:OpenPeripheral")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { PacketHandler.CHANNEL_SYNC, PacketHandler.CHANNEL_EVENTS }, packetHandler = PacketHandler.class)
@@ -85,25 +82,66 @@ public class OpenBlocks {
 		public static BlockMachineOreCrusher machineOreCrusher;
 		public static BlockPaintCan paintCan;
 		public static BlockCanvasGlass canvasGlass;
+		public static BlockProjector projector;
 	}
 
 	public static class Items {
+		@RegisterItem(name = "hangglider")
 		public static ItemHangGlider hangGlider;
+
+		@RegisterItem(name = "generic")
 		public static ItemGeneric generic;
+
+		@RegisterItem(name = "luggage")
 		public static ItemLuggage luggage;
+
+		@RegisterItem(name = "sonicglasses")
 		public static ItemSonicGlasses sonicGlasses;
+
+		@RegisterItem(name = "pencilGlasses")
 		public static ItemImaginationGlasses pencilGlasses;
+
+		@RegisterItem(name = "crayonGlasses")
 		public static ItemCrayonGlasses crayonGlasses;
+
+		@RegisterItem(name = "technicolorGlasses")
 		public static ItemImaginationGlasses technicolorGlasses;
+
+		@RegisterItem(name = "seriousGlasses")
 		public static ItemImaginationGlasses seriousGlasses;
+
+		@RegisterItem(name = "craneControl")
 		public static ItemCraneControl craneControl;
+
+		@RegisterItem(name = "craneBackpack")
 		public static ItemCraneBackpack craneBackpack;
+
+		@RegisterItem(name = "slimalyzer")
 		public static ItemSlimalyzer slimalyzer;
+
+		@RegisterItem(name = "filledbucket")
 		public static ItemFilledBucket filledBucket;
+
+		@RegisterItem(name = "sleepingBag")
 		public static ItemSleepingBag sleepingBag;
+
+		@RegisterItem(name = "paintBrush")
 		public static ItemPaintBrush paintBrush;
+
+		@RegisterItem(name = "stencil")
 		public static ItemStencil stencil;
+
+		@RegisterItem(name = "squeegee")
 		public static ItemSqueegee squeegee;
+
+		@RegisterItem(name = "heightMap")
+		public static ItemHeightMap heightMap;
+
+		@RegisterItem(name = "emptyMap")
+		public static ItemEmptyMap emptyMap;
+
+		@RegisterItem(name = "cartographer")
+		public static ItemCartographer cartographer;
 	}
 
 	public static class Fluids {
@@ -161,6 +199,10 @@ public class OpenBlocks {
 			EntityRegistry.registerModEntity(EntityBlock.class, "Block", 704, OpenBlocks.instance, 64, 1, true);
 		}
 
+		if (Config.itemCartographerId > 0) {
+			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", 705, OpenBlocks.instance, 64, 8, true);
+		}
+
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500);
 		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
 		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
@@ -172,9 +214,10 @@ public class OpenBlocks {
 
 		MagnetWhitelists.instance.initTesters();
 
+		MinecraftForge.EVENT_BUS.register(MapDataManager.instance);
+
 		if (Loader.isModLoaded(Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
 		if (Loader.isModLoaded(Mods.OPENPERIPHERAL)) ModuleOpenPeripheral.registerAdapters();
-
 	}
 
 	/**
@@ -182,9 +225,8 @@ public class OpenBlocks {
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-
+		TickRegistry.registerTickHandler(new ServerTickHandler(), Side.SERVER);
 		proxy.init();
-
 		proxy.registerRenderInformation();
 	}
 

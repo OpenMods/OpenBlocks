@@ -2,6 +2,7 @@ package openblocks.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
+import openblocks.client.gui.component.BaseComponent;
 import openblocks.client.gui.component.GuiComponentPanel;
 import openblocks.common.container.ContainerInventory;
 import openblocks.common.tileentity.SyncedTileEntity;
@@ -11,42 +12,44 @@ import org.lwjgl.opengl.GL11;
 public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		GuiContainer {
 
-	private T container;
-
-	protected GuiComponentPanel panel;
+	protected BaseComponent root;
 	protected String name;
 
 	public BaseGuiContainer(T container, int width, int height, String name) {
 		super(container);
-		this.container = container;
 		xSize = width;
 		ySize = height;
-		panel = new GuiComponentPanel(0, 0, xSize, ySize, container);
+		root = createRoot();
 		this.name = name;
 	}
 
+	protected BaseComponent createRoot() {
+		return new GuiComponentPanel(0, 0, xSize, ySize, getContainer());
+	}
+
+	@SuppressWarnings("unchecked")
 	public T getContainer() {
-		return container;
+		return (T)inventorySlots;
 	}
 
 	@Override
 	protected void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
-		panel.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
+		root.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
 		syncChangesToServer();
 	}
 
 	@Override
 	protected void mouseMovedOrUp(int x, int y, int button) {
 		super.mouseMovedOrUp(x, y, button);
-		panel.mouseMovedOrUp(x - this.guiLeft, y - this.guiTop, button);
+		root.mouseMovedOrUp(x - this.guiLeft, y - this.guiTop, button);
 		syncChangesToServer();
 	}
 
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int button, long time) {
 		super.mouseClickMove(mouseX, mouseY, button, time);
-		panel.mouseClickMove(mouseX - this.guiLeft, mouseY - this.guiTop, button, time);
+		root.mouseClickMove(mouseX - this.guiLeft, mouseY - this.guiTop, button, time);
 	}
 
 	private void syncChangesToServer() {
@@ -57,14 +60,13 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 	}
 
 	public void preRender(float mouseX, float mouseY) {
-		panel.mouseMovedOrUp((int)mouseX - this.guiLeft, (int)mouseY
-				- this.guiTop, -1);
+		root.mouseMovedOrUp((int)mouseX - this.guiLeft, (int)mouseY - this.guiTop, -1);
 	}
 
 	@Override
 	protected void keyTyped(char par1, int par2) {
 		super.keyTyped(par1, par2);
-		panel.keyTyped(par1, par2);
+		root.keyTyped(par1, par2);
 	}
 
 	public void postRender(int mouseX, int mouseY) {}
@@ -74,7 +76,7 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		this.preRender(mouseX, mouseY);
 		GL11.glPushMatrix();
 		GL11.glTranslated(this.guiLeft, this.guiTop, 0);
-		panel.render(this.mc, 0, 0, mouseX - this.guiLeft, mouseY - this.guiTop);
+		root.render(this.mc, 0, 0, mouseX - this.guiLeft, mouseY - this.guiTop);
 		GL11.glPopMatrix();
 	}
 
@@ -89,7 +91,7 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 	}
 
 	public void sendButtonClick(int buttonId) {
-		this.mc.playerController.sendEnchantPacket(this.container.windowId, buttonId);
+		this.mc.playerController.sendEnchantPacket(getContainer().windowId, buttonId);
 	}
 
 }

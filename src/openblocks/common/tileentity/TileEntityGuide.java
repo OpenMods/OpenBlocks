@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -197,7 +197,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable,
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
+	public void onSynced(Set<ISyncableObject> changes) {
 		recreateShape();
 	}
 

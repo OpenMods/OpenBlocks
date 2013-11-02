@@ -8,10 +8,7 @@ import openblocks.common.block.BlockPaintCan;
 public class BlockPaintCanRenderer implements IBlockRenderer {
 
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		// TODO Auto-generated method stub
-
-	}
+	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {

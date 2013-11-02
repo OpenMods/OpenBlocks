@@ -3,10 +3,13 @@ package openblocks.sync;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +20,8 @@ import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -117,9 +122,9 @@ public abstract class SyncMap<H extends ISyncHandler> {
 		return index;
 	}
 
-	public List<ISyncableObject> readFromStream(DataInput dis) throws IOException {
+	public Set<ISyncableObject> readFromStream(DataInput dis) throws IOException {
 		short mask = dis.readShort();
-		List<ISyncableObject> changes = new ArrayList<ISyncableObject>();
+		Set<ISyncableObject> changes = Sets.newIdentityHashSet();
 		for (int i = 0; i < 16; i++) {
 			if (objects[i] != null) {
 				if (ByteUtils.get(mask, i)) {
@@ -238,5 +243,64 @@ public abstract class SyncMap<H extends ISyncHandler> {
 
 		ISyncHandler handler = handlerType.findHandler(world, input);
 		return handler;
+	}
+
+	private static final Map<Class<? extends ISyncHandler>, List<Field>> syncedFields = Maps.newIdentityHashMap();
+
+	private static final Comparator<Field> FIELD_NAME_COMPARATOR = new Comparator<Field>() {
+		@Override
+		public int compare(Field o1, Field o2) {
+			// No need to worry about nulls
+			return o1.getName().compareTo(o2.getName());
+		}
+	};
+
+	public void writeToNBT(NBTTagCompound tag) {
+		for (Entry<String, Integer> entry : nameMap.entrySet()) {
+			int index = entry.getValue();
+			String name = entry.getKey();
+			if (objects[index] != null) {
+				objects[index].writeToNBT(tag, name);
+			}
+		}
+	}
+
+	public void readFromNBT(NBTTagCompound tag) {
+		for (Entry<String, Integer> entry : nameMap.entrySet()) {
+			int index = entry.getValue();
+			String name = entry.getKey();
+			if (objects[index] != null) {
+				objects[index].readFromNBT(tag, name);
+			}
+		}
+	}
+
+	private static List<Field> getSyncedFields(ISyncHandler handler) {
+		Class<? extends ISyncHandler> handlerCls = handler.getClass();
+		List<Field> result = syncedFields.get(handlerCls);
+
+		if (result == null) {
+			Set<Field> fields = Sets.newTreeSet(FIELD_NAME_COMPARATOR);
+			for (Field field : handlerCls.getDeclaredFields()) {
+				if (ISyncableObject.class.isAssignableFrom(field.getType())) {
+					fields.add(field);
+					field.setAccessible(true);
+				}
+			}
+			result = ImmutableList.copyOf(fields);
+			syncedFields.put(handlerCls, result);
+		}
+
+		return result;
+	}
+
+	public void autoregister() {
+		for (Field field : getSyncedFields(handler)) {
+			try {
+				put(field.getName(), (ISyncableObject)field.get(handler));
+			} catch (Exception e) {
+				Log.severe(e, "Exception while registering synce field '%s'", field);
+			}
+		}
 	}
 }

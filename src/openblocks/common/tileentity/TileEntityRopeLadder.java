@@ -41,7 +41,6 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -60,15 +59,9 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
+	public void onBlockAdded() {}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 }

@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
@@ -71,7 +72,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	@SideOnly(Side.CLIENT)

@@ -9,8 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
 import openblocks.client.gui.component.BaseComponent;
 import openblocks.client.gui.component.BaseComponent.IComponentListener;
-import openblocks.client.gui.component.GuiComponentButton;
 import openblocks.client.gui.component.GuiComponentLabel;
+import openblocks.client.gui.component.GuiComponentTextButton;
 import openblocks.common.container.ContainerDonationStation;
 import openblocks.common.tileentity.TileEntityDonationStation;
 
@@ -20,18 +20,18 @@ public class GuiDonationStation extends
 
 	private final int PROMPT_REPLY_ACTION = 0;
 	private URI displayedURI = null;
-	GuiComponentButton buttonDonate;
+	GuiComponentTextButton buttonDonate;
 	GuiComponentLabel lblAuthors;
 
 	public GuiDonationStation(ContainerDonationStation container) {
 		super(container, 176, 172, "openblocks.gui.donationstation");
 
 		final TileEntityDonationStation station = container.getOwner();
-		panel.addComponent(new GuiComponentLabel(55, 31, 100, 10, station.getModName())
+		root.addComponent(new GuiComponentLabel(55, 31, 100, 10, station.getModName())
 				.setName("lblModName"));
-		panel.addComponent((lblAuthors = new GuiComponentLabel(55, 42, 200, 18, station.getAuthors()).setScale(0.5f))
+		root.addComponent((lblAuthors = new GuiComponentLabel(55, 42, 200, 18, station.getAuthors()).setScale(0.5f))
 				.setName("lblAuthors"));
-		panel.addComponent((buttonDonate = new GuiComponentButton(31, 60, 115, 13, 0xFFFFFF))
+		root.addComponent((buttonDonate = new GuiComponentTextButton(31, 60, 115, 13, 0xFFFFFF))
 				.setText("Donate to the author")
 				.setName("btnDonate")
 				.addListener(this));
@@ -58,7 +58,7 @@ public class GuiDonationStation extends
 	@Override
 	public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
 		if (component.getName().equals("btnDonate")) {
-			if (((GuiComponentButton)component).isButtonEnabled()) {
+			if (((GuiComponentTextButton)component).isButtonEnabled()) {
 				URI uri = URI.create(getContainer().getOwner().getDonateUrl());
 				if (uri != null) {
 					// Rude not to ask
@@ -99,9 +99,6 @@ public class GuiDonationStation extends
 	public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {}
 
 	@Override
-	public void componentKeyTyped(BaseComponent component, char par1, int par2) {
-		// TODO Auto-generated method stub
-
-	}
+	public void componentKeyTyped(BaseComponent component, char par1, int par2) {}
 
 }

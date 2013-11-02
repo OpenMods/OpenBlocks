@@ -9,7 +9,7 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		implements IComponentListener {
 
 	private static final int INVALIDATE_COLOR = 1;
-	private GuiComponentButton buttonMix;
+	private GuiComponentTextButton buttonMix;
 	private GuiComponentTextbox textbox;
 	private GuiComponentColorPicker colorPicker;
 
@@ -17,28 +17,28 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		super(container, 176, 200, "openblocks.gui.paintmixer");
 		TileEntityPaintMixer mixer = container.getOwner();
 
-		panel.addComponent(new GuiComponentRect(121, 74, 20, 20, 0xFF4b9fc1));
-		panel.addComponent(new GuiComponentRect(141, 74, 20, 20, 0xFFdb7ad5));
-		panel.addComponent(new GuiComponentRect(121, 94, 20, 20, 0xFFe7e72a));
-		panel.addComponent(new GuiComponentRect(141, 94, 20, 20, 0xFF000000));
+		root.addComponent(new GuiComponentRect(121, 74, 20, 20, 0xFF4b9fc1));
+		root.addComponent(new GuiComponentRect(141, 74, 20, 20, 0xFFdb7ad5));
+		root.addComponent(new GuiComponentRect(121, 94, 20, 20, 0xFFe7e72a));
+		root.addComponent(new GuiComponentRect(141, 94, 20, 20, 0xFF000000));
 
-		panel.addComponent(new GuiComponentLevel(118, 74 + 6, 2, 14, 0xFF4b9fc1, 0xFF888888, 0f, 2f, mixer.lvlCyan));
-		panel.addComponent(new GuiComponentLevel(141 + 21, 74 + 6, 2, 14, 0xFFdb7ad5, 0xFF888888, 0f, 2f, mixer.lvlMagenta));
-		panel.addComponent(new GuiComponentLevel(118, 94 + 6, 2, 14, 0xFFe7e72a, 0xFF888888, 0f, 2f, mixer.lvlYellow));
-		panel.addComponent(new GuiComponentLevel(141 + 21, 94 + 6, 2, 14, 0xFF000000, 0xFF888888, 0f, 2f, mixer.lvlBlack));
+		root.addComponent(new GuiComponentLevel(118, 74 + 6, 2, 14, 0xFF4b9fc1, 0xFF888888, 0f, 2f, mixer.lvlCyan));
+		root.addComponent(new GuiComponentLevel(141 + 21, 74 + 6, 2, 14, 0xFFdb7ad5, 0xFF888888, 0f, 2f, mixer.lvlMagenta));
+		root.addComponent(new GuiComponentLevel(118, 94 + 6, 2, 14, 0xFFe7e72a, 0xFF888888, 0f, 2f, mixer.lvlYellow));
+		root.addComponent(new GuiComponentLevel(141 + 21, 94 + 6, 2, 14, 0xFF000000, 0xFF888888, 0f, 2f, mixer.lvlBlack));
 
-		panel.addComponent(new GuiComponentLabel(57, 91, "#"));
-		panel.addComponent(textbox = new GuiComponentTextbox(65, 90, 44, 10)
+		root.addComponent(new GuiComponentLabel(57, 91, "#"));
+		root.addComponent(textbox = new GuiComponentTextbox(65, 90, 44, 10)
 				.setText(Integer.toHexString(mixer.getColor().getValue())));
 
-		panel.addComponent((buttonMix = new GuiComponentButton(125, 57, 30, 13, 0xFFFFFF))
+		root.addComponent((buttonMix = new GuiComponentTextButton(125, 57, 30, 13, 0xFFFFFF))
 				.setText("Mix")
 				.setName("btnMix")
 				.addListener(this));
 
-		panel.addComponent((colorPicker = new GuiComponentColorPicker(10, 20, mixer.getColor())).addListener(this));
-		panel.addComponent(new GuiComponentProgress(125, 43, mixer.getProgress()));
-		panel.addComponent(new GuiComponentColorBox(10, 90, 45, 10, mixer.getColor()));
+		root.addComponent((colorPicker = new GuiComponentColorPicker(10, 20, mixer.getColor())).addListener(this));
+		root.addComponent(new GuiComponentProgress(125, 43, mixer.getProgress()));
+		root.addComponent(new GuiComponentColorBox(10, 90, 45, 10, mixer.getColor()));
 	}
 
 	@Override

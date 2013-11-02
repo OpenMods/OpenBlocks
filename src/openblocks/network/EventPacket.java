@@ -4,10 +4,13 @@ import java.io.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.event.Event;
+import openblocks.Log;
 import openblocks.OpenBlocks;
+import openblocks.common.MapDataManager;
 import openblocks.utils.ByteUtils;
 
 import com.google.common.base.Throwables;
@@ -15,12 +18,65 @@ import com.google.common.base.Throwables;
 import cpw.mods.fml.common.network.Player;
 
 public abstract class EventPacket extends Event {
+	public enum PacketDirection {
+		TO_CLIENT(false, true),
+		FROM_CLIENT(true, false),
+		ANY(true, true);
+
+		public final boolean toServer;
+		public final boolean toClient;
+
+		private PacketDirection(boolean toServer, boolean toClient) {
+			this.toServer = toServer;
+			this.toClient = toClient;
+		}
+
+		public boolean validateSend(boolean isRemote) {
+			return (isRemote && toServer) || (!isRemote && toClient);
+		}
+
+		public boolean validateReceive(boolean isRemote) {
+			return (isRemote && toClient) || (!isRemote && toServer);
+		}
+	}
+
 	public enum EventType {
-		DUMMY {
+		MAP_DATA_REQUEST {
 			@Override
 			public EventPacket createPacket() {
-				// just to make it compile, will be used for maps
-				return null;
+				return new MapDataManager.MapDataRequestEvent();
+			}
+
+			@Override
+			public PacketDirection getDirection() {
+				return PacketDirection.FROM_CLIENT;
+			}
+		},
+		MAP_DATA_RESPONSE {
+			@Override
+			public EventPacket createPacket() {
+				return new MapDataManager.MapDataResponseEvent();
+			}
+
+			@Override
+			public PacketDirection getDirection() {
+				return PacketDirection.TO_CLIENT;
+			}
+
+			@Override
+			public boolean isCompressed() {
+				return true;
+			}
+		},
+		MAP_UPDATES {
+			@Override
+			public EventPacket createPacket() {
+				return new MapDataManager.MapUpdatesEvent();
+			}
+
+			@Override
+			public PacketDirection getDirection() {
+				return PacketDirection.TO_CLIENT;
 			}
 		},
 		TILE_MESSAGE {
@@ -28,25 +84,37 @@ public abstract class EventPacket extends Event {
 			public EventPacket createPacket() {
 				return new TileEntityMessageEventPacket();
 			}
+
+			@Override
+			public PacketDirection getDirection() {
+				return PacketDirection.ANY;
+			}
 		};
 
 		public static final EventType[] VALUES = values();
 
 		public abstract EventPacket createPacket();
+
+		public abstract PacketDirection getDirection();
+
+		public boolean isCompressed() {
+			return false;
+		}
 	}
 
 	public static EventPacket deserializeEvent(Packet250CustomPayload packet) throws IOException {
 		ByteArrayInputStream bytes = new ByteArrayInputStream(packet.data);
 
 		EventPacket event;
+		EventType type;
 		{
 			DataInput input = new DataInputStream(bytes);
 			int id = ByteUtils.readVLI(input);
-			EventType type = EventType.VALUES[id];
+			type = EventType.VALUES[id];
 			event = type.createPacket();
 		}
 
-		InputStream stream = event.isCompressed()? new GZIPInputStream(bytes) : bytes;
+		InputStream stream = type.isCompressed()? new GZIPInputStream(bytes) : bytes;
 
 		{
 			DataInput input = new DataInputStream(stream);
@@ -61,13 +129,13 @@ public abstract class EventPacket extends Event {
 		try {
 			ByteArrayOutputStream payload = new ByteArrayOutputStream();
 
+			EventType type = event.getType();
 			{
 				DataOutput output = new DataOutputStream(payload);
-				EventType type = event.getType();
 				ByteUtils.writeVLI(output, type.ordinal());
 			}
 
-			OutputStream stream = event.isCompressed()? new GZIPOutputStream(payload) : payload;
+			OutputStream stream = type.isCompressed()? new GZIPOutputStream(payload) : payload;
 
 			{
 				DataOutput output = new DataOutputStream(stream);
@@ -88,23 +156,23 @@ public abstract class EventPacket extends Event {
 
 	public abstract EventType getType();
 
-	public boolean isCompressed() {
-		return false;
-	}
+	protected abstract void readFromStream(DataInput input) throws IOException;
 
-	public abstract void readFromStream(DataInput input) throws IOException;
-
-	public abstract void writeToStream(DataOutput output) throws IOException;
+	protected abstract void writeToStream(DataOutput output) throws IOException;
 
 	public void reply(EventPacket reply) {
-		manager.addToSendQueue(serializeEvent(reply));
+		boolean isRemote = !(player instanceof EntityPlayerMP);
+		if (!getType().getDirection().validateSend(isRemote)) manager.addToSendQueue(serializeEvent(reply));
+		else Log.warn("Invalid sent direction for packet '%s'", this);
 	}
 
 	public void sendToPlayer(Player player) {
-		OpenBlocks.proxy.sendPacketToPlayer(player, serializeEvent(this));
+		if (getType().getDirection().toClient) OpenBlocks.proxy.sendPacketToPlayer(player, serializeEvent(this));
+		else Log.warn("Trying to sent message '%s' to client", this);
 	}
 
 	public void sendToServer() {
-		OpenBlocks.proxy.sendPacketToServer(serializeEvent(this));
+		if (getType().getDirection().toServer) OpenBlocks.proxy.sendPacketToServer(serializeEvent(this));
+		else Log.warn("Trying to sent message '%s' to server", this);
 	}
 }

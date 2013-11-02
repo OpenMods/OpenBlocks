@@ -1,11 +1,11 @@
 package openblocks.sync;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ISyncHandler {
 
 	public SyncMap<?> getSyncMap();
 
-	public void onSynced(List<ISyncableObject> changes);
+	public void onSynced(Set<ISyncableObject> changes);
 
 }

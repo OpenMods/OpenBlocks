@@ -10,7 +10,7 @@ import dan200.computer.api.IComputerAccess;
 public class AdapterCannon implements IPeripheralAdapter {
 
 	@Override
-	public Class getTargetClass() {
+	public Class<?> getTargetClass() {
 		return TileEntityCannon.class;
 	}
 

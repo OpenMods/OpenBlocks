@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,8 @@ import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.recipe.CrayonGlassesRecipe;
 import openblocks.common.recipe.CrayonMixingRecipe;
+import openblocks.common.recipe.MapCloneRecipe;
+import openblocks.common.recipe.MapResizeRecipe;
 import openblocks.utils.ColorUtils;
 
 import com.google.common.base.Throwables;
@@ -52,6 +55,12 @@ public class Config {
 	@Target(ElementType.FIELD)
 	public @interface ItemId {
 		String description();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	public @interface RegisterItem {
+		public String name();
 	}
 
 	@BlockId(description = "The id of the ladder")
@@ -156,6 +165,9 @@ public class Config {
 	@BlockId(description = "The id of the glass canvas block")
 	public static int blockCanvasGlassId = 2572;
 
+	@BlockId(description = "The id of the map projector block")
+	public static int blockProjectorId = 2573;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -203,6 +215,15 @@ public class Config {
 
 	@ItemId(description = "The id of the Squeegee")
 	public static int itemSqueegeeId = 14990;
+
+	@ItemId(description = "The id of the height map item")
+	public static int itemHeightMap = 14991;
+
+	@ItemId(description = "The id of the empty height map item")
+	public static int itemEmptyMap = 14992;
+
+	@ItemId(description = "The id of the cartographer spawner item")
+	public static int itemCartographerId = 14993;
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -523,6 +544,10 @@ public class Config {
 			OpenBlocks.Blocks.canvasGlass = new BlockCanvasGlass();
 		}
 
+		if (Config.canRegisterBlock(blockProjectorId)) {
+			OpenBlocks.Blocks.projector = new BlockProjector();
+		}
+
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		// There is no fail checking here because if the Generic item fails,
@@ -536,24 +561,20 @@ public class Config {
 		if (itemFilledBucketId > 0) {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			OpenBlocks.Items.filledBucket.registerItems();
-			GameRegistry.registerItem(OpenBlocks.Items.filledBucket, "openblocks.filledbucket");
 		}
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
-			GameRegistry.registerItem(OpenBlocks.Items.hangGlider, "openblocks.hangglider");
 		}
 
 		if (itemLuggageId > 0) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
-			GameRegistry.registerItem(OpenBlocks.Items.luggage, "openblocks.luggage");
 		}
 
 		if (itemSonicGlassesId > 0) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i', new ItemStack(Item.ingotIron) }));
-			GameRegistry.registerItem(OpenBlocks.Items.luggage, "openblocks.sonicglasses");
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
@@ -562,13 +583,11 @@ public class Config {
 				ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0);
 				ItemImaginary.setupValues(null, block);
 				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.pencilGlasses, block, Item.paper));
-				GameRegistry.registerItem(OpenBlocks.Items.pencilGlasses, "openblocks.pencilGlasses");
 			}
 
 			if (itemGlassesCrayon > 0) {
 				OpenBlocks.Items.crayonGlasses = new ItemCrayonGlasses(itemGlassesCrayon);
 				recipeList.add(new CrayonGlassesRecipe());
-				GameRegistry.registerItem(OpenBlocks.Items.crayonGlasses, "openblocks.crayonGlasses");
 			}
 
 			if (itemGlassesTechnicolor > 0) {
@@ -576,12 +595,10 @@ public class Config {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.technicolorGlasses), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
-				GameRegistry.registerItem(OpenBlocks.Items.technicolorGlasses, "openblocks.technicolorGlasses");
 			}
 
 			if (itemGlassesSerious > 0) {
 				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(itemGlassesSerious, ItemImaginationGlasses.Type.BASTARD);
-				GameRegistry.registerItem(OpenBlocks.Items.seriousGlasses, "openblocks.seriousGlasses");
 			}
 		}
 
@@ -592,7 +609,6 @@ public class Config {
 		if (itemCraneControl > 0) {
 			OpenBlocks.Items.craneControl = new ItemCraneControl();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', Item.ingotIron, 'g', Item.goldNugget, 'l', Item.glowstone, 'r', Item.redstone));
-			GameRegistry.registerItem(OpenBlocks.Items.craneControl, "openblocks.craneControl");
 		}
 
 		if (itemCraneId > 0) {
@@ -600,30 +616,25 @@ public class Config {
 			ItemStack line = ItemGeneric.Metas.line.newItemStack();
 			ItemStack beam = ItemGeneric.Metas.beam.newItemStack();
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack, ItemGeneric.Metas.craneEngine.newItemStack(), ItemGeneric.Metas.craneMagnet.newItemStack(), beam, beam, line, line, line, Item.leather));
-			GameRegistry.registerItem(OpenBlocks.Items.craneBackpack, "openblocks.craneBackpack");
 		}
 
 		if (itemSlimalyzerId > 0) {
 			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
-			GameRegistry.registerItem(OpenBlocks.Items.slimalyzer, "openblocks.slimalyzer");
 		}
 
 		if (itemSleepingBagId > 0 && ClassTransformerEntityPlayer.IsInBedHookSuccess) {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Block.carpet, 'w', Block.cloth));
-			GameRegistry.registerItem(OpenBlocks.Items.sleepingBag, "openblocks.sleepingBag");
 		}
 
 		if (itemPaintBrushId > 0) {
 			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
 			recipeList.add(new ShapedOreRecipe(ItemPaintBrush.createStackWithColor(0xFFFFFF), "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
-			GameRegistry.registerItem(OpenBlocks.Items.paintBrush, "openblocks.paintBrush");
 		}
 
 		if (itemStencilId > 0) {
 			OpenBlocks.Items.stencil = new ItemStencil();
-			GameRegistry.registerItem(OpenBlocks.Items.stencil, "openblocks.stencil");
 			for (Stencil stencil : Stencil.values()) {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
@@ -634,8 +645,32 @@ public class Config {
 		if (itemSqueegeeId > 0) {
 			OpenBlocks.Items.squeegee = new ItemSqueegee();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', Item.stick));
-			GameRegistry.registerItem(OpenBlocks.Items.squeegee, "openblocks.squeegee");
 		}
+
+		if (itemHeightMap > 0) {
+			OpenBlocks.Items.heightMap = new ItemHeightMap();
+			if (itemEmptyMap > 0) recipeList.add(new MapCloneRecipe());
+		}
+
+		if (itemEmptyMap > 0) {
+			OpenBlocks.Items.emptyMap = new ItemEmptyMap();
+			recipeList.add(new MapResizeRecipe());
+
+			ItemStack memory = ItemGeneric.Metas.mapMemory.newItemStack(2);
+			ItemStack cpu = ItemGeneric.Metas.mapController.newItemStack(1);
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.emptyMap.createMap(0),
+					" m ", "mcm", " m ",
+					'm', memory,
+					'c', cpu
+					));
+		}
+
+		if (itemCartographerId > 0) {
+			OpenBlocks.Items.cartographer = new ItemCartographer();
+		}
+
+		// move it and cpw will shout at you
+		registerItems();
 	}
 
 	private static boolean canRegisterBlock(int blockId) {
@@ -651,5 +686,24 @@ public class Config {
 			return true;
 		}
 		return false; // Block disabled, fail silently
+	}
+
+	private static void registerItems() {
+		for (Field f : OpenBlocks.Items.class.getFields()) {
+			if (Modifier.isStatic(f.getModifiers()) && Item.class.isAssignableFrom(f.getType())) {
+				RegisterItem annotation = f.getAnnotation(RegisterItem.class);
+				if (annotation != null) {
+					try {
+						Item item = (Item)f.get(null);
+						String name = "openblocks." + annotation.name();
+						GameRegistry.registerItem(item, name);
+					} catch (Exception e) {
+						throw Throwables.propagate(e);
+					}
+				} else {
+					Log.warn("Field %s has valid type for registration, but no annotation", f);
+				}
+			}
+		}
 	}
 }
