@@ -7,7 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
-import openblocks.common.api.ISurfaceAttachment;
 
 public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 
@@ -65,10 +64,4 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 		return false;
 	}
 
-	/*
-	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return getRotation();
-	}
-*/
 }

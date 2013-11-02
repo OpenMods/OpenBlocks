@@ -78,6 +78,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityAutoEnchantmentTable teAutoTable = new TileEntityAutoEnchantmentTable();
 		inventoryTileEntities.put(OpenBlocks.Blocks.autoEnchantmentTable, teAutoTable);
+
+		TileEntityRopeLadder teRopeLadder = new TileEntityRopeLadder();
+		inventoryTileEntities.put(OpenBlocks.Blocks.ropeLadder, teRopeLadder);
 	}
 
 	@Override

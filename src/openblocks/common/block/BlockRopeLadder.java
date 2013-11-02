@@ -1,14 +1,22 @@
 package openblocks.common.block;
 
+import java.util.List;
 import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.api.IPlaceAwareTile;
 import openblocks.common.tileentity.TileEntityRopeLadder;
+import openblocks.utils.BlockUtils;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -43,7 +51,7 @@ public class BlockRopeLadder extends OpenBlock {
 
 	@Override
 	public int getRenderType() {
-		return 0;
+		return OpenBlocks.renderId;
 	}
 
 	@Override
@@ -51,6 +59,19 @@ public class BlockRopeLadder extends OpenBlock {
 		return false;
 	}
 
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List list, Entity entity){
+		if (entity instanceof EntityLivingBase) {
+			int meta = world.getBlockMetadata(x, y, z);
+	        ForgeDirection rotation = BlockUtils.getRotationFromMetadata(meta);
+	        ForgeDirection playerRotation = BlockUtils.get2dOrientation((EntityLivingBase)entity);
+			if (rotation == playerRotation) {
+	        	super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
+			}
+        }else {
+        	super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
+        }
+    }
+	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		setBlockBoundsBasedOnState(par1World, par2, par3, par4);
@@ -91,4 +112,5 @@ public class BlockRopeLadder extends OpenBlock {
 		}
 		
 	}
+	
 }
