@@ -28,9 +28,10 @@ public class ClassTransformerEntityPlayer implements IClassTransformer {
 			mv.visitMethodInsn(Opcodes.INVOKESTATIC, bedHookCls, "isInBed", "(Lnet/minecraft/entity/player/EntityPlayer;)Z");
 			Label skipReturn = new Label();
 			mv.visitJumpInsn(Opcodes.IFEQ, skipReturn);
-			mv.visitInsn(Opcodes.ICONST_0);
+			mv.visitInsn(Opcodes.ICONST_1);
 			mv.visitInsn(Opcodes.IRETURN);
 			mv.visitLabel(skipReturn);
+			IsInBedHookSuccess = true;
 		}
 	}
 
