@@ -152,14 +152,11 @@ public class TileEntityItemDropper extends OpenTileEntity
 
     @Override
     public void onBlockBroken() {
-        if (!worldObj.isRemote) {
-            BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, new ItemStack(OpenBlocks.Blocks.sprinkler));
-        }
+
     }
 
     @Override
     public void onBlockAdded() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

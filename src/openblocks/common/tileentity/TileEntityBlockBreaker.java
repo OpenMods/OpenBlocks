@@ -114,12 +114,10 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 
     @Override
     public void onBlockBroken() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void onBlockAdded() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
