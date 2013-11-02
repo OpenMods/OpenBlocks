@@ -184,7 +184,7 @@ public abstract class OpenBlock extends BlockContainer {
 		return canPlaceBlockAt(world, x, y, z); // default to vanilla rules
 	}
 
-	protected boolean canPlaceOnlyOnGround(World world, int x, int y, int z, ForgeDirection side) {
+	protected boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
 		return side == ForgeDirection.DOWN && isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
 	}
 }

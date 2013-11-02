@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.common.GenericInventory;
 
 public class InventoryUtils {
 
@@ -340,4 +341,10 @@ public class InventoryUtils {
 		return 0;
 	}
 
+    public static boolean inventoryIsEmpty(IInventory inventory) {
+        for(int i = 0, l = inventory.getSizeInventory(); i < l; i++)
+            if(inventory.getStackInSlot(i) != null)
+                return false;
+        return true;
+    }
 }

@@ -54,11 +54,11 @@ public class BlockUtils {
 		return get2dOrientation(entity);
 	}
 
-	public static void dropItemStackInWorld(World worldObj, int x, int y, int z, ItemStack stack) {
-		dropItemStackInWorld(worldObj, (double)x, (double)y, (double)z, stack);
+	public static EntityItem dropItemStackInWorld(World worldObj, int x, int y, int z, ItemStack stack) {
+		return dropItemStackInWorld(worldObj, (double)x, (double)y, (double)z, stack);
 	}
 
-	public static void dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
+	public static EntityItem dropItemStackInWorld(World worldObj, double x, double y, double z, ItemStack stack) {
 		float f = 0.7F;
 		float d0 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 		float d1 = worldObj.rand.nextFloat() * f + (1.0F - f) * 0.5F;
@@ -69,6 +69,7 @@ public class BlockUtils {
 			entityitem.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 		}
 		worldObj.spawnEntityInWorld(entityitem);
+		return entityitem;
 	}
 
 	public static void dropTileInventory(TileEntity tileEntity) {

@@ -66,6 +66,9 @@ public class OpenBlocks {
 		public static BlockVillageHighlighter villageHighlighter;
 		public static BlockPath path;
 		public static BlockAutoAnvil autoAnvil;
+        public static BlockBlockBreaker blockBreaker;
+        public static BlockBlockPlacer blockPlacer;
+        public static BlockItemDropper itemDropper;
 	}
 
 	public static class Items {
@@ -94,7 +97,9 @@ public class OpenBlocks {
 		vacuumHopper,
 		bigButton,
 		XPBottler,
-		autoAnvil
+		autoAnvil,
+		blockPlacer,
+		itemDropper
 	}
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {

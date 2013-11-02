@@ -37,6 +37,6 @@ public class BlockCannon extends OpenBlock {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return canPlaceOnlyOnGround(world, x, y, z, side);
+		return isOnTopOfSolidBlock(world, x, y, z, side);
 	}
 }
