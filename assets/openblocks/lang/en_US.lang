@@ -67,5 +67,6 @@ item.openblocks.line.name=Line
 item.openblocks.miracle_magnet.name=§5Miracle Magnet§r
 item.openblocks.slimalyzer.name=Slimalyzer
 item.openblocks.xpbucket.name=XP Bucket
+item.openblocks.sleepingbag.name=Sleeping Bag
 
 itemGroup.tabOpenBlocks=OpenBlocks

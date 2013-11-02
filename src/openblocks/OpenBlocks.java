@@ -90,6 +90,7 @@ public class OpenBlocks {
 		public static ItemCraneBackpack craneBackpack;
 		public static ItemSlimalyzer slimalyzer;
 		public static ItemFilledBucket filledBucket;
+		public static ItemSleepingBag sleepingBag;
 	}
 
 	public static class Fluids {

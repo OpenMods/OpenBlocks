@@ -21,6 +21,7 @@ import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Blocks;
+import openblocks.asm.ClassTransformerEntityPlayer;
 import openblocks.common.EntityEventHandler;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
@@ -158,6 +159,9 @@ public class Config {
 
 	@ItemId(description = "The id of the filled bucket")
 	public static int itemFilledBucketId = 14986;
+
+	@ItemId(description = "The id of the sleeping bag")
+	public static int itemSleepingBagId = 14987;
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -489,7 +493,10 @@ public class Config {
 		if (itemSlimalyzerId > 0) {
 			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
-
+		}
+		
+		if (itemSleepingBagId > 0 && ClassTransformerEntityPlayer.IsInBedHookSuccess) {
+			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
 		}
 
 	}
