@@ -3,29 +3,26 @@ package openblocks.common.block;
 import java.util.List;
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.api.IPlaceAwareTile;
-import openblocks.common.tileentity.TileEntityRopeLadder;
-import openblocks.utils.BlockUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityRopeLadder;
+import openblocks.utils.BlockUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockRopeLadder extends OpenBlock {
 
 	public BlockRopeLadder() {
-		super(Config.blockRopeLadderId, Material.wood);
+		super(Config.blockRopeLadderId, Material.circuits);
+		setHardness(0.4F);
+		setStepSound(soundLadderFootstep);
 		setupBlock(this, "ropeladder", TileEntityRopeLadder.class);
 	}
 
