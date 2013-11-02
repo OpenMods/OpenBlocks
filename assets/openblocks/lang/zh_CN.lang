@@ -1,10 +1,15 @@
 #zh_CN
+
 openblocks.gui.lightbox=灯盒
 openblocks.gui.luggage=行李
 openblocks.gui.sprinkler=洒水器
 openblocks.gui.vacuumhopper=虚空漏斗
 openblocks.gui.bigbutton=大型按钮
 openblocks.gui.xpbottler=经验装瓶器
+openblocks.gui.autoanvil=自动铁砧
+openblocks.gui.autoeject=自动弹射
+openblocks.gui.autoextract=自动提取
+openblocks.gui.autodrink=自动饮用
 
 openblocks.misc.uses=耗费: %.2f
 openblocks.misc.color=颜色: %06X
@@ -40,6 +45,7 @@ tile.openblocks.fan.name=风扇
 tile.openblocks.xpbottler.name=经验装瓶器
 tile.openblocks.village_highlighter.name=村庄醒目设备
 tile.openblocks.path.name=铺路石
+tile.openblocks.autoanvil.name=自动铁砧
 
 item.openblocks.hangglider.name=悬挂式滑翔机
 item.openblocks.gliderwing.name=滑翔翼
