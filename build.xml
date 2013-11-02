@@ -81,11 +81,19 @@
 		</exec>
 
 	</target>
-
+	
+	<target name="create_manifest">
+		<manifest file="${classes.dir}/META-INF/MANIFEST.MF">
+			<attribute name="Manifest-Version" value="1.0" />
+			<attribute name="FMLCorePlugin" value="openblocks.CorePlugin" />
+       		</manifest>
+	</target>
+	
 	<target name="compile" depends="initialize-version,setup">
 
 		<delete dir="${classes.dir}"/>
 		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${classes.dir}/META-INF"/>
 		
 		<delete includeEmptyDirs="true" failonerror="false">
 			<fileset dir="${mcpsrc.dir}/openblocks" />
@@ -135,10 +143,10 @@
 	</target>
 
 	<!-- Package the compiled files -->
-	<target name="package" depends="compile">
+	<target name="package" depends="compile,create_manifest">
 		<delete dir="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
-		<jar destfile="${jar.dir}/${mod.name}-${mod.version}-forge${forge.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}"/>
+		<jar destfile="${jar.dir}/${mod.name}-${mod.version}-forge${forge.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}" manifest="${classes.dir}/META-INF/MANIFEST.MF"/>
 	</target>
 
 	<!-- Default target to run -->
