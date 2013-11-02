@@ -458,6 +458,7 @@ public class Config {
 		
 		if (Config.canRegisterBlock(blockRopeLadderId)) {
 			OpenBlocks.Blocks.ropeLadder = new BlockRopeLadder();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.ropeLadder), new Object[] { "sts", "sts", "sts", 't', "stickWood", 's', new ItemStack(Item.silk) }));
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
