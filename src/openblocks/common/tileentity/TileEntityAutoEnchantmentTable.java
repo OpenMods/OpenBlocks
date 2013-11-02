@@ -38,11 +38,14 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 	private SlotSideHelper slotSides = new SlotSideHelper();
 
 	public static enum Slots {
-		input, output
+		input,
+		output
 	}
 
 	public static enum AutoSlots {
-		input, output, xp
+		input,
+		output,
+		xp
 	}
 
 	/**
@@ -72,6 +75,7 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 		slotSides.addMapping(Slots.output, outputSides);
 	}
 
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		handleBookRotation();
@@ -90,7 +94,7 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, Slots.input, inputSides);
 			}
 
-			if (hasStack(Slots.input) && this.isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input)) && !hasStack(Slots.output)) {
+			if (hasStack(Slots.input) && isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input)) && !hasStack(Slots.output)) {
 				int xpRequired = EnchantmentUtils.getLiquidForLevel(targetLevel.getValue());
 				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
 					double power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);

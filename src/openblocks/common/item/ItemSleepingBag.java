@@ -1,12 +1,5 @@
 package openblocks.common.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.client.model.ModelSleepingBag;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.InventoryUtils;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -20,6 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.client.model.ModelSleepingBag;
+import openblocks.utils.BlockUtils;
+import openblocks.utils.InventoryUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSleepingBag extends ItemArmor {
 
@@ -48,7 +48,8 @@ public class ItemSleepingBag extends ItemArmor {
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
 		return armorSlot == ARMOR_CHESTPIECE? ModelSleepingBag.instance : null;
 	}
-	
+
+	@Override
 	public ItemStack onItemRightClick(ItemStack sleepingBagStack, World world, EntityPlayer player) {
 		if (world.isRemote) { return sleepingBagStack; }
 		ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
@@ -70,9 +71,7 @@ public class ItemSleepingBag extends ItemArmor {
 				sleepingBagStack.setTagCompound(tag);
 			}
 			player.setCurrentItemOrArmor(i + 1, sleepingBagStack.copy());
-			if (currentArmor != null) {
-				return currentArmor;
-			}
+			if (currentArmor != null) { return currentArmor; }
 			sleepingBagStack.stackSize--;
 			return sleepingBagStack;
 		}

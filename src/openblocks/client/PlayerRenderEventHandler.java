@@ -1,9 +1,9 @@
 package openblocks.client;
 
-import openblocks.OpenBlocks;
-import openblocks.common.item.ItemSleepingBag;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+import openblocks.OpenBlocks;
+import openblocks.common.item.ItemSleepingBag;
 
 public class PlayerRenderEventHandler {
 

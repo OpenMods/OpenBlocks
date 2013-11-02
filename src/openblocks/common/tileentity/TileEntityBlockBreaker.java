@@ -16,11 +16,11 @@ import openblocks.utils.InventoryUtils;
 
 public class TileEntityBlockBreaker extends OpenTileEntity
 		implements IAwareTile, ISidedInventory {
-	
+
 	public enum Slots {
 		buffer
 	}
-	
+
 	private boolean _redstoneSignal;
 
 	private GenericInventory fakeInventory = new GenericInventory("blockbreaker", true, 1);
@@ -64,32 +64,31 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 	}
 
 	public void ejectAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
-		
+
 		TileEntity targetInventory = getTileInDirection(direction);
 		for (ItemStack stack : itemStacks) {
-			// if there's any stack in our buffer slot, eject it. Why is it there?
+			// if there's any stack in our buffer slot, eject it. Why is it
+			// there?
 			ItemStack currentStack = fakeInventory.getStackInSlot(Slots.buffer);
 			if (currentStack != null) {
 				BlockUtils.ejectItemInDirection(world, x, y, z, direction, currentStack);
 			}
-			
+
 			// clear the buffer slot
 			fakeInventory.setInventorySlotContents(Slots.buffer.ordinal(), stack);
-			
+
 			// push the item out into a pipe or inventory
 			InventoryUtils.moveItemInto(this, Slots.buffer.ordinal(), targetInventory, -1, 64, direction, true);
-			
+
 			// if there's anything left for whatever reason (maybe no inventory)
 			ItemStack buffer = fakeInventory.getStackInSlot(Slots.buffer);
 			if (buffer != null) {
 				// eject it
-				BlockUtils.ejectItemInDirection(world, x, y, z, direction, buffer);	
+				BlockUtils.ejectItemInDirection(world, x, y, z, direction, buffer);
 			}
 		}
 	}
 
-	
-	
 	static void ejectItemsAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
 		if (!world.isRemote
 				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops"))

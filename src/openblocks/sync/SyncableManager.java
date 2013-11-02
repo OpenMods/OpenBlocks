@@ -5,12 +5,11 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import openblocks.OpenBlocks;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 
 public class SyncableManager {
 

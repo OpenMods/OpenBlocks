@@ -5,8 +5,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.component.*;
 import openblocks.client.gui.component.BaseComponent.TabColor;
+import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
@@ -38,7 +38,7 @@ public class GuiAutoEnchantmentTable extends
 	private GuiComponentLabel labelAutoExtractInput;
 	private GuiComponentLabel labelAutoEjectOutput;
 	private GuiComponentLabel labelAutoDrinkXP;
-	
+
 	private GuiComponentSlider sliderLevel;
 
 	public GuiAutoEnchantmentTable(ContainerAutoEnchantmentTable container) {
@@ -78,7 +78,7 @@ public class GuiAutoEnchantmentTable extends
 		labelAutoDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 
 		sliderLevel = new GuiComponentSlider(44, 39, 45, 1, 30, te.getTargetLevel());
-		
+
 		tabInput.addComponent(labelAutoExtractInput);
 		tabInput.addComponent(checkboxAutoExtractInput);
 		tabInput.addComponent(sideSelectorInput);

@@ -116,7 +116,7 @@ public class ClientProxy implements IProxy {
 			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new EntityMagnetRenderer());
 			RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, new EntityBlockRenderer());
 		}
-		
+
 		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());
 	}
 

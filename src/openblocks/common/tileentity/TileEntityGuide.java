@@ -33,7 +33,10 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	protected SyncableInt mode = new SyncableInt(0);
 
 	public enum Keys {
-		width, height, depth, mode
+		width,
+		height,
+		depth,
+		mode
 	}
 
 	public TileEntityGuide() {

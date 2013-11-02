@@ -20,6 +20,7 @@ public class BlockPath extends Block {
 		setUnlocalizedName("openblocks.path");
 	}
 
+	@Override
 	public void registerIcons(IconRegister register) {
 		blockIcon = register.registerIcon("openblocks:path");
 	}

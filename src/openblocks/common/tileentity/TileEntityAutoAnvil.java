@@ -1,6 +1,8 @@
 package openblocks.common.tileentity;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -37,14 +39,19 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	 * The 3 slots in the inventory
 	 */
 	public enum Slots {
-		tool, modifier, output
+		tool,
+		modifier,
+		output
 	}
 
 	/**
 	 * The keys of the things that can be auto injected/extracted
 	 */
 	public enum AutoSlots {
-		tool, modifier, output, xp
+		tool,
+		modifier,
+		output,
+		xp
 	}
 
 	protected GenericInventory inventory = new GenericInventory("autoanvil", true, 3);
@@ -68,7 +75,7 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 		addSyncedObject(xpSides = new SyncableFlags());
 		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
 		addSyncedObject(automaticSlots = new SyncableFlags());
-		
+
 		slotSides.addMapping(Slots.tool, toolSides);
 		slotSides.addMapping(Slots.modifier, modifierSides);
 		slotSides.addMapping(Slots.output, outputSides);

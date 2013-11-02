@@ -9,7 +9,9 @@ public class GuiComponentSprite extends BaseComponent {
 
 	public static enum Sprite {
 
-		hammer(0, 233, 23, 23), plus(23, 242, 13, 13), result(36, 241, 22, 15);
+		hammer(0, 233, 23, 23),
+		plus(23, 242, 13, 13),
+		result(36, 241, 22, 15);
 
 		private int u;
 		private int v;

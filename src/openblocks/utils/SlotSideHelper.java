@@ -8,20 +8,21 @@ import java.util.Set;
 import openblocks.sync.SyncableFlags;
 
 public class SlotSideHelper {
-	
+
 	public HashMap<Integer, SyncableFlags> slotsForSides = new HashMap<Integer, SyncableFlags>();
-	
+
 	public SlotSideHelper() {
-		
+
 	}
+
 	public void addMapping(Enum<?> slot, SyncableFlags side) {
 		slotsForSides.put(slot.ordinal(), side);
 	}
-	
+
 	public void addMapping(int slot, SyncableFlags side) {
 		slotsForSides.put(slot, side);
 	}
-	
+
 	public int[] getSlotsForSide(int side) {
 		Set<Integer> slots = new HashSet<Integer>();
 		for (Entry<Integer, SyncableFlags> entry : slotsForSides.entrySet()) {
@@ -35,11 +36,9 @@ public class SlotSideHelper {
 			ret[i++] = k;
 		return ret;
 	}
-	
+
 	public boolean canInsertItem(int slot, int side) {
-		if (!slotsForSides.containsKey(slot)) {
-			return false;
-		}
+		if (!slotsForSides.containsKey(slot)) { return false; }
 		return slotsForSides.get(slot).get(side);
 	}
 

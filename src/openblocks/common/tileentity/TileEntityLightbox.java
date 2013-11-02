@@ -103,6 +103,7 @@ public class TileEntityLightbox extends OpenTileEntity implements IInventory,
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
+	@Override
 	public ForgeDirection getRotation() {
 		return rotation;
 	}

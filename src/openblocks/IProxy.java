@@ -20,9 +20,9 @@ public interface IProxy {
 	public boolean isServerThread();
 
 	public File getWorldDir(World world);
-	
+
 	public World getClientWorld();
-	
+
 	public World getServerWorld(int id);
 
 	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection sprayDirection, float angleRadians, float spread);

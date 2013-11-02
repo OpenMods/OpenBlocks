@@ -38,11 +38,14 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
 
 	public static enum Slots {
-		input, output
+		input,
+		output
 	}
 
 	public static enum AutoSlots {
-		input, output, xp
+		input,
+		output,
+		xp
 	}
 
 	/** synced data objects **/

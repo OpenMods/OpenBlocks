@@ -12,7 +12,7 @@ public class ClassTransformerEntityPlayer implements IClassTransformer {
 	private static final String isInBedNameMcp = "isInBed";
 	private static final String isInBedNameSrg = "func_71065_l";
 	private static final String bedHook = "openblocks/Hooks";
-	
+
 	public static boolean IsInBedHookSuccess = false;
 
 	@Override

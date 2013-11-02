@@ -122,6 +122,7 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;

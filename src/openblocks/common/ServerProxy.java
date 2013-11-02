@@ -72,7 +72,7 @@ public class ServerProxy implements IProxy {
 	public World getClientWorld() {
 		return null;
 	}
-	
+
 	@Override
 	public World getServerWorld(int id) {
 		return DimensionManager.getWorld(id);

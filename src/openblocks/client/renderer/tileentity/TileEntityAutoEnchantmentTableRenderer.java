@@ -1,8 +1,5 @@
 package openblocks.client.renderer.tileentity;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
-import org.lwjgl.opengl.GL11;
 import net.minecraft.client.model.ModelBook;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -10,6 +7,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityAutoEnchantmentTableRenderer extends
 		TileEntitySpecialRenderer {
@@ -19,7 +20,7 @@ public class TileEntityAutoEnchantmentTableRenderer extends
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		
+
 		TileEntityAutoEnchantmentTable table = (TileEntityAutoEnchantmentTable)tileentity;
 		GL11.glPushMatrix();
 		bindTexture(TextureMap.locationBlocksTexture);
@@ -45,7 +46,7 @@ public class TileEntityAutoEnchantmentTableRenderer extends
 		float f3 = table.bookRotationPrev + f2 * f;
 		GL11.glRotatef(-f3 * 180.0F / (float)Math.PI, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(80.0F, 0.0F, 0.0F, 1.0F);
-		this.bindTexture(enchantingTableBookTextures);
+		bindTexture(enchantingTableBookTextures);
 		float f4 = table.pageFlipPrev + (table.pageFlip - table.pageFlipPrev)
 				* f + 0.25F;
 		float f5 = table.pageFlipPrev + (table.pageFlip - table.pageFlipPrev)

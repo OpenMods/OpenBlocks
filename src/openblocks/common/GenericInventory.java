@@ -95,7 +95,7 @@ public class GenericInventory implements ISidedInventory {
 	public ItemStack getStackInSlot(int i) {
 		return this.inventoryContents[i];
 	}
-	
+
 	public ItemStack getStackInSlot(Enum<?> i) {
 		return getStackInSlot(i.ordinal());
 	}

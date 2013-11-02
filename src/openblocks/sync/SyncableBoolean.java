@@ -38,7 +38,7 @@ public class SyncableBoolean implements ISyncableObject {
 	public boolean getValue() {
 		return value;
 	}
-	
+
 	public void negate() {
 		setValue(!value);
 	}

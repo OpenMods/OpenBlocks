@@ -10,12 +10,19 @@ import openblocks.shapes.IShapeable;
 public class GeometryUtils {
 
 	public enum Octant {
-		TopSouthWest(-1, 1, 1, "Top South West"), TopNorthEast(1, 1, -1,
-				"Top North East"), TopNorthWest(1, 1, 1, "Top North West"), TopSouthEast(
-				-1, 1, -1, "Top South East"), BottomSouthWest(-1, -1, 1,
-				"Bottom South West"), BottomNorthEast(1, -1, -1,
-				"Bottom North East"), BottomNorthWest(1, -1, 1,
-				"Bottom North West"), BottomSouthEast(-1, -1, -1,
+		TopSouthWest(-1, 1, 1, "Top South West"),
+		TopNorthEast(1, 1, -1,
+				"Top North East"),
+		TopNorthWest(1, 1, 1, "Top North West"),
+		TopSouthEast(
+				-1, 1, -1, "Top South East"),
+		BottomSouthWest(-1, -1, 1,
+				"Bottom South West"),
+		BottomNorthEast(1, -1, -1,
+				"Bottom North East"),
+		BottomNorthWest(1, -1, 1,
+				"Bottom North West"),
+		BottomSouthEast(-1, -1, -1,
 				"Bottom South East");
 
 		public static final EnumSet<Octant> ALL = EnumSet.allOf(Octant.class);

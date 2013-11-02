@@ -9,27 +9,29 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockItemDropper extends OpenBlock {
-    @SideOnly(Side.CLIENT)
-    private Icon downIcon;
+	@SideOnly(Side.CLIENT)
+	private Icon downIcon;
 
-    public BlockItemDropper() {
-        super(Config.blockItemDropperId, Material.rock);
-        setupBlock(this, "itemDropper", TileEntityItemDropper.class);
-    }
+	public BlockItemDropper() {
+		super(Config.blockItemDropperId, Material.rock);
+		setupBlock(this, "itemDropper", TileEntityItemDropper.class);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister registry) {
-        super.registerIcons(registry);
-        this.downIcon = registry.registerIcon(String.format("%s:%s", modKey, "itemDropper_down"));
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister registry) {
+		super.registerIcons(registry);
+		this.downIcon = registry.registerIcon(String.format("%s:%s", modKey, "itemDropper_down"));
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public Icon getIcon(int side, int metadata) {
-        switch(side) {
-            case 0: return downIcon;
-            default: return blockIcon;
-        }
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIcon(int side, int metadata) {
+		switch (side) {
+			case 0:
+				return downIcon;
+			default:
+				return blockIcon;
+		}
+	}
 }

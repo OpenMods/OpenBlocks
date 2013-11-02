@@ -75,9 +75,9 @@ public class OpenBlocks {
 		public static BlockAutoAnvil autoAnvil;
 		public static BlockAutoEnchantmentTable autoEnchantmentTable;
 		public static BlockXPDrain xpDrain;
-        public static BlockBlockBreaker blockBreaker;
-        public static BlockBlockPlacer blockPlacer;
-        public static BlockItemDropper itemDropper;
+		public static BlockBlockBreaker blockBreaker;
+		public static BlockBlockPlacer blockPlacer;
+		public static BlockItemDropper itemDropper;
 	}
 
 	public static class Items {
@@ -134,9 +134,9 @@ public class OpenBlocks {
 	 */
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		
+
 		OpenBlocks.syncableManager = new SyncableManager();
-		
+
 		Config.register();
 
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());

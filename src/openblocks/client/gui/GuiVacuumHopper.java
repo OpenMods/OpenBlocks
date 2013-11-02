@@ -3,8 +3,8 @@ package openblocks.client.gui;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import openblocks.client.gui.component.*;
 import openblocks.client.gui.component.BaseComponent.TabColor;
+import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 
