@@ -132,7 +132,7 @@ public abstract class SyncMap<H extends ISyncHandler> {
 		return changes;
 	}
 
-	public void writeToStream(World world, DataOutput dos, boolean regardless) throws IOException {
+	public void writeToStream(DataOutput dos, boolean regardless) throws IOException {
 		short mask = 0;
 		for (int i = 0; i < 16; i++) {
 			mask = ByteUtils.set(mask, i, objects[i] != null
@@ -142,7 +142,7 @@ public abstract class SyncMap<H extends ISyncHandler> {
 		for (int i = 0; i < 16; i++) {
 			if (objects[i] != null && (regardless || objects[i].isDirty())) {
 				objects[i].writeToStream(dos, regardless);
-				objects[i].resetChangeTimer(world);
+				objects[i].resetChangeTimer(getWorld());
 			}
 		}
 	}
@@ -215,7 +215,7 @@ public abstract class SyncMap<H extends ISyncHandler> {
 		HandlerType type = getHandlerType();
 		ByteUtils.writeVLI(bos, type.ordinal());
 		type.writeHandlerInfo(handler, bos);
-		writeToStream(getWorld(), bos, fullPacket);
+		writeToStream(bos, fullPacket);
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = PacketHandler.CHANNEL_SYNC;
 		packet.data = bos.toByteArray();
