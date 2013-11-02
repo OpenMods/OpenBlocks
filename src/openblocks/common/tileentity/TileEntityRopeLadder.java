@@ -3,12 +3,13 @@ package openblocks.common.tileentity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 
-public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile, ISurfaceAttachment {
+public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
@@ -34,8 +35,16 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile, 
 
 	@Override
 	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-		
+		if (worldObj.isRemote) return;
+		int y = yCoord;
+		while (y-- > 0) {
+			TileEntity te = worldObj.getBlockTileEntity(xCoord, y, zCoord);
+			if (te instanceof TileEntityRopeLadder) {
+				worldObj.setBlockToAir(xCoord, y, zCoord);
+			}else {
+				 return;
+			}
+		}
 	}
 
 	@Override
@@ -56,9 +65,10 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile, 
 		return false;
 	}
 
+	/*
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return getRotation();
 	}
-
+*/
 }
