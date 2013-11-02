@@ -10,6 +10,7 @@ openblocks.gui.autoextract=Extrair automaticamente
 openblocks.gui.autodrink=Beber automaticamente
 openblocks.gui.autoenchantmenttable=Mesa de encantamentos automática
 
+openblocks.misc.type=Tipo: %s
 openblocks.misc.uses=Usa: %.2f
 openblocks.misc.color=Cor: %06X
 openblocks.misc.mode=Modo de colocação: %s
