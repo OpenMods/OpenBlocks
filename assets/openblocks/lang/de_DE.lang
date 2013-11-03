@@ -8,7 +8,9 @@ openblocks.gui.autoanvil=Auto-Amboss
 openblocks.gui.autoeject=Auto-Auswerfen
 openblocks.gui.autoextract=Auto-Extrahieren
 openblocks.gui.autodrink=Auto-Trinken
+openblocks.gui.autoenchantmenttable=Auto-Zaubertisch
 
+openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
 openblocks.misc.color=Farbe: %06X
 openblocks.misc.mode=Platzierungs-Modus: %s
@@ -44,6 +46,9 @@ tile.openblocks.xpbottler.name=XP-Abfüllgerät
 tile.openblocks.village_highlighter.name=Dorf-Highlighter
 tile.openblocks.path.name=Pfad
 tile.openblocks.autoanvil.name=Auto-Amboss
+tile.openblocks.autoenchantmenttable.name==Auto-Zaubertisch
+tile.openblocks.xpdrain.name=XP-Sauger
+tile.openblocks.ropeladder.name=Strickleiter
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
@@ -63,5 +68,7 @@ item.openblocks.beam.name=Balken
 item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
 item.openblocks.slimalyzer.name=Schleimalysierer
+item.openblocks.xpbucket.name=XP-Eimer
+item.openblocks.sleepingbag.name=Schlafsack
 
 itemGroup.tabOpenBlocks=OpenBlocks
