@@ -47,7 +47,8 @@ Compiling
 We will try keep the building instructions as up-to-date as possible, but things may change without notice.
 
 ### Windows
-You will require mysysgit or git installed with cygwin. Alternatively I would suggest installing GitHub for Windows and checking out the repo with that.
+You will require [msysgit](http://code.google.com/p/msysgit/downloads/list) or git installed with cygwin. Alternatively I would suggest installing [GitHub for Windows](http://windows.github.com/) and checking out the repo with that.
+You will also require [Apache Ant](http://ant.apache.org/bindownload.cgi). In Windows you will want to download the ant zip and extract the contents to somewhere like C:\Ant. Then add the bin folder inside ant to your environment path.
 
 #### Check out the repo
 Use Github for Windows or use a command prompt/powershell with git binaries in the Environment path.
@@ -62,7 +63,20 @@ The resulting file should be in the bin folder
 ### Linux or OSX
 Much the same as Windows, open a terminal window where you wish to checkout the repo and type
 ```git clone https://github.com/OpenMods/OpenBlocks.git && cd OpenBlocks```
+
+In **OSX**, git is typically supplied. Otherwise it can be installed through the apps thingy that OSX has (Obviously I know very little about OSX but you want the dev tools stuff). 
+
+The linux git can be fetched from any package manager. If you're on a Debian based machine (This includes **Ubuntu**) you likely have aptitude, so the command would be ```sudo apt-get install git```. 
+
+If you're running a RedHat based system, such as **CentOS** or **Fedora** (or some other Distro I've never heard of), then you might have the yum package manager ```sudo yum install git-core```. In the case that this does not work through yum, you might have not have the packages added to yum to be able to find git. I wont go in to these here, but if you have issues feel free to contact NeverCast in #OpenMods on irc.esper.net.
 #### Then run ant
+
+Ant can be downloaded from the same place as the Windows Ant, as it's just a Java application. I assume that if you're using Linux, you're proficient enough to work out how to get that working, and if you're developing under OSX I assume you can work it out as you're brave enough to be developing in OSX :P
+
+Again feel free to come in to IRC for assistance.
+
+Once you have ant, just run.
+
 ```ant ```
 
 The mod jar will be in the bin folder after the completion of the build process.
