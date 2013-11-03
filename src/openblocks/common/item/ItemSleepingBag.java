@@ -60,16 +60,7 @@ public class ItemSleepingBag extends ItemArmor {
 			if (currentArmor != null) {
 				currentArmor = currentArmor.copy();
 			}
-			if (spawn != null) {
-				NBTTagCompound tag = sleepingBagStack.getTagCompound();
-				if (tag == null) {
-					tag = new NBTTagCompound();
-				}
-				tag.setInteger("spawnx", spawn.posX);
-				tag.setInteger("spawny", spawn.posY);
-				tag.setInteger("spawnz", spawn.posZ);
-				sleepingBagStack.setTagCompound(tag);
-			}
+			saveOriginalSpawn(spawn, sleepingBagStack);
 			player.setCurrentItemOrArmor(i + 1, sleepingBagStack.copy());
 			if (currentArmor != null) { return currentArmor; }
 			sleepingBagStack.stackSize--;
@@ -87,20 +78,43 @@ public class ItemSleepingBag extends ItemArmor {
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack) {
 		if (!world.isRemote) {
 			if (!player.isPlayerSleeping()) {
-				player.setCurrentItemOrArmor(3, null);
-				NBTTagCompound tag = itemStack.getTagCompound();
-				if (tag != null) {
-					if (tag.hasKey("spawnx") && tag.hasKey("spawny")
-							&& tag.hasKey("spawnz")) {
-						ChunkCoordinates coords = new ChunkCoordinates(tag.getInteger("spawnx"), tag.getInteger("spawny"), tag.getInteger("spawnz"));
-						player.setSpawnChunk(coords, false, world.provider.dimensionId);
+				ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
+				EnumStatus status = player.sleepInBedAt((int)player.posX, (int)player.posY, (int)player.posZ);
+				if (status == EnumStatus.OK) {
+					saveOriginalSpawn(spawn, itemStack);
+				} else {
+					player.setCurrentItemOrArmor(3, null);
+					revertSpawnFromItem(player, itemStack);
+					InventoryUtils.insertItemIntoInventory(player.inventory, itemStack);
+					if (itemStack.stackSize > 0) {
+						BlockUtils.dropItemStackInWorld(world, player.posX, player.posY, player.posZ, itemStack);
 					}
 				}
-				InventoryUtils.insertItemIntoInventory(player.inventory, itemStack);
-				if (itemStack.stackSize > 0) {
-					BlockUtils.dropItemStackInWorld(world, player.posX, player.posY, player.posZ, itemStack);
-				}
 			}
+		}
+	}
+
+	private static void revertSpawnFromItem(EntityPlayer player, ItemStack itemStack) {
+		NBTTagCompound tag = itemStack.getTagCompound();
+		if (tag != null) {
+			if (tag.hasKey("spawnx") && tag.hasKey("spawny")
+					&& tag.hasKey("spawnz")) {
+				ChunkCoordinates coords = new ChunkCoordinates(tag.getInteger("spawnx"), tag.getInteger("spawny"), tag.getInteger("spawnz"));
+				player.setSpawnChunk(coords, false, player.worldObj.provider.dimensionId);
+			}
+		}
+	}
+	
+	private static void saveOriginalSpawn(ChunkCoordinates spawn, ItemStack stack) {
+		if (spawn != null) {
+			NBTTagCompound tag = stack.getTagCompound();
+			if (tag == null) {
+				tag = new NBTTagCompound();
+			}
+			tag.setInteger("spawnx", spawn.posX);
+			tag.setInteger("spawny", spawn.posY);
+			tag.setInteger("spawnz", spawn.posZ);
+			stack.setTagCompound(tag);
 		}
 	}
 
