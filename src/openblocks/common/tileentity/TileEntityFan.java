@@ -61,13 +61,14 @@ public class TileEntityFan extends NetworkedTileEntity implements IPlaceAwareTil
 
 	public Vec3 getConeBaseCenter() {
 		double angle = Math.toRadians(getAngle() - 90);
-		return worldObj.getWorldVec3Pool().getVecFromPool(xCoord + 0.5
-				+ (Math.cos(angle) * 10), yCoord + 0.5, zCoord + 0.5
+		return worldObj.getWorldVec3Pool().getVecFromPool(xCoord
+				+ (Math.cos(angle) * 10), yCoord + 0.5, zCoord
 				+ (Math.sin(angle) * 10));
 	}
 
 	public Vec3 getBlockPosition() {
-		return worldObj.getWorldVec3Pool().getVecFromPool(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+		double angle = Math.toRadians(getAngle() - 90);
+		return worldObj.getWorldVec3Pool().getVecFromPool(xCoord + 0.5 - Math.cos(angle) * 1.1, yCoord + 0.5, zCoord + 0.5 - Math.sin(angle) * 1.1);
 	}
 
 	public AxisAlignedBB getEntitySearchBoundingBox() {
