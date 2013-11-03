@@ -198,6 +198,7 @@ public class Config {
 	public static boolean craneShiftControl = true;
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
+	public static boolean experimentalFeatures = false;
 
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
@@ -312,6 +313,9 @@ public class Config {
 
 		prop = configFile.get("crane", "addTurtles", addCraneTurtles, "Enable magnet turtles in creative list");
 		addCraneTurtles = prop.getBoolean(addCraneTurtles);
+		
+		prop = configFile.get("hacks", "enableExperimentalFeatures", experimentalFeatures, "Enable experimental features that may be buggy or broken entirely");
+		experimentalFeatures = prop.getBoolean(experimentalFeatures);		
 
 	}
 
