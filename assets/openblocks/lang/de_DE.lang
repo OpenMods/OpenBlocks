@@ -48,6 +48,7 @@ tile.openblocks.path.name=Pfad
 tile.openblocks.autoanvil.name=Auto-Amboss
 tile.openblocks.autoenchantmenttable.name==Auto-Zaubertisch
 tile.openblocks.xpdrain.name=XP-Sauger
+tile.openblocks.ropeladder.name=Strickleiter
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
