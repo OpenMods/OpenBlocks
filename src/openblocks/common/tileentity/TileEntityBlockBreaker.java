@@ -1,7 +1,10 @@
 package openblocks.common.tileentity;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -11,17 +14,37 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableBoolean;
+import openblocks.sync.SyncableFloat;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntityBlockBreaker extends OpenTileEntity
+public class TileEntityBlockBreaker extends NetworkedTileEntity
 		implements IAwareTile, IInventory {
 
+	private SyncableBoolean activated = new SyncableBoolean(false);
+
+	public enum Keys {
+		activated
+	}
+	
+	public TileEntityBlockBreaker() {
+		addSyncedObject(activated);
+	}
+
+		
 	public enum Slots {
 		buffer
 	}
 
 	private boolean _redstoneSignal;
+	private int _redstoneAnimTimer;
+	
+	@SideOnly(Side.CLIENT)
+	public boolean isActivated() {
+		return activated.getValue();
+	}
 
 	private GenericInventory fakeInventory = new GenericInventory("blockbreaker", true, 1);
 
@@ -29,10 +52,31 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 		if (redstoneSignal != _redstoneSignal) {
 			_redstoneSignal = redstoneSignal;
 			if (_redstoneSignal) {
+				if(!worldObj.isRemote) {
+					System.out.println("Countdown started");
+					_redstoneAnimTimer = 5;
+					activated.setValue(true);
+					sync();
+				}
 				breakBlock();
 			}
 		}
 	}
+	
+	public void updateEntity() {
+		super.updateEntity();
+		if(!worldObj.isRemote) {
+			if(activated.getValue() && _redstoneAnimTimer > 0) 
+				_redstoneAnimTimer--;
+			if(activated.getValue() && _redstoneAnimTimer <= 0) {
+				activated.setValue(false);
+				System.out.println("Countdown ended");
+			}
+
+			sync();
+		}
+	}
+	
 
 	private void breakBlock() {
 		if (worldObj.isRemote) return;
@@ -182,6 +226,13 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return false;
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		if(changes.contains(activated)) {
+			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		}
 	}
 
 }

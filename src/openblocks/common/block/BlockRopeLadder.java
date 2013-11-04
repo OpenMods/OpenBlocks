@@ -24,6 +24,7 @@ public class BlockRopeLadder extends OpenBlock {
 		setHardness(0.4F);
 		setStepSound(soundLadderFootstep);
 		setupBlock(this, "ropeladder", TileEntityRopeLadder.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

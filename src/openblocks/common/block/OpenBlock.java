@@ -114,7 +114,7 @@ public abstract class OpenBlock extends BlockContainer {
 	 * @param z Z coord
 	 * @return OpenBlock instance of the block, or null if invalid
 	 */
-	public static OpenBlock getOpenBlock(World world, int x, int y, int z) {
+	public static OpenBlock getOpenBlock(IBlockAccess world, int x, int y, int z) {
 		if(world == null) return null;
 		int id = world.getBlockId(x, y, z);
 		if(id < 0 || id >= Block.blocksList.length) return null;
@@ -123,12 +123,12 @@ public abstract class OpenBlock extends BlockContainer {
 		return null;
 	}
 	
-	private static boolean _getFlagUnsafe(World world, int x, int y, int z, int index) {
+	private static boolean _getFlagUnsafe(IBlockAccess world, int x, int y, int z, int index) {
 		int metadata = world.getBlockMetadata(x, y, z);
 		return BlockUtils.getBlockFlagFromMetadata(metadata, index);
 	}
 	
-	public static boolean getFlag(World world, int x, int y, int z, int index) {
+	public static boolean getFlag(IBlockAccess world, int x, int y, int z, int index) {
 		OpenBlock block = getOpenBlock(world, x, y, z);
 		if(block != null) {
 			if(block.getRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
@@ -164,7 +164,7 @@ public abstract class OpenBlock extends BlockContainer {
 		}
 	}
 
-	public static ForgeDirection getRotation(World world, int x, int y, int z) {
+	public static ForgeDirection getRotation(IBlockAccess world, int x, int y, int z) {
 		/* I'm trying not to think about how ugly 1.7 is going to be */
 		OpenBlock block = getOpenBlock(world, x, y, z);
 		if(block != null) {

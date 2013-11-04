@@ -172,7 +172,7 @@ public abstract class OpenTileEntity extends TileEntity {
 			}
 		}
 		/* TODO: I don't think this is required. We should look in to that */
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		// worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // This is bad, Don't do this :P
 	}
 
 	@Override
