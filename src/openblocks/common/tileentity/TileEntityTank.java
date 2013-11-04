@@ -197,7 +197,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 					}
 				}
 			}
-			sync(false);
+			sync();
 
 		} else {
 			flowTimer += 0.1f;
@@ -299,18 +299,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag("tank");
 			this.tank.readFromNBT(tankTag);
 		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		tank.writeToNBT(tag);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		tank.readFromNBT(tag);
 	}
 
 	public int countDownwardsTanks() {

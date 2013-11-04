@@ -113,7 +113,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		super.detectAndSendChanges();
 		T te = getOwner();
 		if (te instanceof NetworkedTileEntity) {
-			((NetworkedTileEntity)te).sync(false);
+			((NetworkedTileEntity)te).sync();
 		}
 	}
 }

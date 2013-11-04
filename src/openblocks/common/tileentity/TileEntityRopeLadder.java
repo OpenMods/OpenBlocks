@@ -11,8 +11,6 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(side.getOpposite());
-		sync();
 		if (!worldObj.isRemote) {
 			int y = yCoord;
 			while (y-- > 0) {

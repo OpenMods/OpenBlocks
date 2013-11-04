@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -9,22 +11,34 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTileLite;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerBigButton;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableFlags;
 
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends OpenTileEntity implements IAwareTileLite, ISurfaceAttachment, IInventory, IHasGui {
+public class TileEntityBigButton extends NetworkedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IInventory, IHasGui {
 
 	private int tickCounter = 0;
 
 	private GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
 
+	public enum Flags {
+		active
+	}
+	
+	private SyncableFlags flags;
+	
+	public TileEntityBigButton() {
+		addSyncedObject(flags = new SyncableFlags());
+	}
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -33,7 +47,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTileLit
 				tickCounter--;
 				if (tickCounter <= 0) {
 					worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.5F);
-					setFlag1(false);
+					flags.off(Flags.active);
 					sync();
 				}
 			}
@@ -61,7 +75,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTileLit
 			if (player.isSneaking()) {
 				openGui(player);
 			} else {
-				setFlag1(true);
+				flags.on(Flags.active);
 				tickCounter = getTickTime();
 				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);
 				sync();
@@ -79,13 +93,7 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTileLit
 				+ rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
 
 	}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(side.getOpposite());
-		sync();
-	}
-
+	
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return getRotation();
@@ -164,5 +172,15 @@ public class TileEntityBigButton extends OpenTileEntity implements IAwareTileLit
 	public void prepareForInventoryRender(Block block, int metadata) {
 		super.prepareForInventoryRender(block, metadata);
 		GL11.glTranslated(-0.5, 0, 0);
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isButtonActive() {
+		return flags.get(Flags.active);
 	}
 }

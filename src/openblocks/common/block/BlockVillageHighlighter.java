@@ -11,6 +11,7 @@ public class BlockVillageHighlighter extends OpenBlock {
 	public BlockVillageHighlighter() {
 		super(Config.blockVillageHighlighterId, Material.ground);
 		setupBlock(this, "village_highlighter", TileEntityVillageHighlighter.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

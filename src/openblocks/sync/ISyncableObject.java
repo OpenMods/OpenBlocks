@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public interface ISyncableObject {
@@ -20,4 +21,8 @@ public interface ISyncableObject {
 	public void resetChangeTimer(World world);
 	
 	public int getTicksSinceChange(World world);
+	
+	public void writeToNBT(NBTTagCompound nbt, String name);
+	
+	public void readFromNBT(NBTTagCompound nbt, String name);
 }

@@ -10,14 +10,20 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.api.ISurfaceAttachment;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableBoolean;
 
-public class TileEntityTarget extends OpenTileEntity implements
+public class TileEntityTarget extends NetworkedTileEntity implements
 		ISurfaceAttachment {
 
 	private int strength = 0;
 	private int tickCounter = -1;
-
-	public TileEntityTarget() {}
+	
+	private SyncableBoolean active;
+	
+	public TileEntityTarget() {
+		addSyncedObject(active = new SyncableBoolean());
+	}
 
 	@Override
 	public void updateEntity() {
@@ -31,11 +37,11 @@ public class TileEntityTarget extends OpenTileEntity implements
 	}
 
 	public void setEnabled(boolean en) {
-		setFlag1(en);
+		active.setValue(en);
 	}
 
 	public boolean isEnabled() {
-		return getFlag1();
+		return active.getValue();
 	}
 
 	public float getTargetRotation() {
@@ -84,5 +90,11 @@ public class TileEntityTarget extends OpenTileEntity implements
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return ForgeDirection.DOWN;
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		// TODO Auto-generated method stub
+		
 	}
 }

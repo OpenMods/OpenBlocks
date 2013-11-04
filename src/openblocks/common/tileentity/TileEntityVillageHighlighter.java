@@ -4,21 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
-import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IPlaceAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableIntArray;
-import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityVillageHighlighter extends NetworkedTileEntity implements IPlaceAwareTile {
+public class TileEntityVillageHighlighter extends NetworkedTileEntity {
 
 	public static int VALUES_PER_VILLAGE = 7;
 
@@ -58,7 +53,7 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 					}
 				}
 				villageData.setValue(convertIntegers(tmpDataList));
-				sync(false);
+				sync();
 				boolean canBreed = canVillagersBreed();
 				if (previousBreedStatus != canBreed) {
 					worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockVillageHighlighterId);
@@ -74,12 +69,6 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get2dOrientation(player));
-		sync();
-	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

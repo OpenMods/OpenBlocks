@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.INeighbourAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableBoolean;
 import openblocks.utils.BlockUtils;
@@ -23,7 +23,7 @@ import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 
 public class TileEntityBlockBreaker extends NetworkedTileEntity
-		implements IAwareTile, IInventory {
+		implements INeighbourAwareTile, IInventory {
 
 	public enum Slots {
 		buffer
@@ -132,33 +132,12 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 	}
 
 	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
 	public void onNeighbourChanged(int blockId) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}
 	}
 
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get3dOrientation(player));
-		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
-	}
 
 	@Override
 	public int getSizeInventory() {

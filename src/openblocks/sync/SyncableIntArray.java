@@ -56,10 +56,12 @@ public class SyncableIntArray extends SyncableObjectBase {
 		}
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setIntArray(name, value);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		value = tag.getIntArray(name);
 	}

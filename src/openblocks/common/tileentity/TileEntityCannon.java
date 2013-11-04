@@ -7,7 +7,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
@@ -168,18 +167,5 @@ public class TileEntityCannon extends NetworkedTileEntity implements IActivateAw
 		renderLine = false;
 	}
 
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		pitch.writeToNBT(tag, "pitch");
-		yaw.writeToNBT(tag, "yaw");
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		pitch.readFromNBT(tag, "pitch");
-		yaw.readFromNBT(tag, "yaw");
-	}
 
 }

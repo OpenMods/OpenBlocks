@@ -2,9 +2,7 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
@@ -15,7 +13,6 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTarget;
-import openblocks.utils.BlockUtils;
 
 public class BlockTarget extends OpenBlock {
 
@@ -26,25 +23,6 @@ public class BlockTarget extends OpenBlock {
 		setupBlock(this, "target", TileEntityTarget.class);
 		setLightValue(0.3f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
-	}
-
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemstack) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if (tile != null && tile instanceof TileEntityTarget) {
-			TileEntityTarget target = (TileEntityTarget)tile;
-			target.setRotation(BlockUtils.get2dOrientation(entity));
-			target.sync();
-		}
-	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
-		super.onNeighborBlockChange(world, x, y, z, blockId);
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null && te instanceof TileEntityTarget) {
-			((TileEntityTarget)te).neighbourBlockChanged();
-		}
 	}
 
 	@Override

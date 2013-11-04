@@ -2,9 +2,6 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -12,7 +9,6 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityLightbox;
-import openblocks.utils.BlockUtils;
 
 public class BlockLightbox extends OpenBlock {
 
@@ -22,40 +18,16 @@ public class BlockLightbox extends OpenBlock {
 		super(Config.blockLightboxId, Material.glass);
 		setupBlock(this, "lightbox", TileEntityLightbox.class);
 		setLightValue(1.0f);
-		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
-		// TODO: Get this working with our rotation code
+		setRotationMode(BlockRotationMode.TWENTYFOUR_DIRECTIONS);
+		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z) * 15;
-	}
-
-	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
-		boolean powered = world.isBlockIndirectlyGettingPowered(x, y, z);
-		world.setBlockMetadataWithNotify(x, y, z, powered? 1 : 0, 3);
-	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
-		boolean powered = world.isBlockIndirectlyGettingPowered(x, y, z);
-		world.setBlockMetadataWithNotify(x, y, z, powered? 1 : 0, 3);
-		super.onNeighborBlockChange(world, x, y, z, blockId);
-	}
-
-	@Override
-	public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
-		return meta;
-	}
-
-	@Override
-	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		if (tile != null && tile instanceof TileEntityLightbox) {
-			TileEntityLightbox lightbox = (TileEntityLightbox)tile;
-			lightbox.setSurfaceAndRotation(side.getOpposite(), BlockUtils.get2dOrientation(player));
+		if (world instanceof World) {
+			return ((World)world).isBlockIndirectlyGettingPowered(x, y, z) ? 15 : 0;
 		}
+		return 0;
 	}
 
 	@Override
@@ -81,15 +53,11 @@ public class BlockLightbox extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-		if (tile == null || !(tile instanceof TileEntityLightbox)) { return; }
-
-		TileEntityLightbox lightbox = (TileEntityLightbox)tile;
-
-		ForgeDirection direction = lightbox.getSurface();
-
+		
+		int metadata = world.getBlockMetadata(x, y, z);
+		
+		ForgeDirection direction = ForgeDirection.getOrientation(metadata);
+		
 		switch (direction) {
 			case EAST:
 				setBlockBounds(0.8f, 0, 0, 1f, 1f, 1f);

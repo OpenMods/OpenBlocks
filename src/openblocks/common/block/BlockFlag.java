@@ -49,7 +49,8 @@ public class BlockFlag extends OpenBlock {
 		super(Config.blockFlagId, Material.ground);
 		setupBlock(this, "flag", TileEntityFlag.class, ItemFlagBlock.class);
 		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
-		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
+		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
 	@Override
@@ -105,6 +106,8 @@ public class BlockFlag extends OpenBlock {
 					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) { return true; }
 				}
 			}
+		}else if (side == ForgeDirection.UP) {
+			return false;
 		}
 		return isNeighborBlockSolid(world, x, y, z, side);
 	}

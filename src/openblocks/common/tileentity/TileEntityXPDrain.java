@@ -5,18 +5,15 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IAwareTile;
-import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 
-public class TileEntityXPDrain extends OpenTileEntity implements IAwareTile {
+public class TileEntityXPDrain extends OpenTileEntity {
 
 	private WeakReference<TileEntity> targetTank;
 
@@ -81,39 +78,4 @@ public class TileEntityXPDrain extends OpenTileEntity implements IAwareTile {
 		return worldObj.getEntitiesWithinAABB(EntityPlayer.class, bb);
 	}
 
-	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get2dOrientation(player));
-		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

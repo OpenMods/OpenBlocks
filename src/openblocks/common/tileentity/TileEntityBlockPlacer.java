@@ -9,15 +9,15 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.INeighbourAwareTile;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerBlockPlacer;
-import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 
 public class TileEntityBlockPlacer extends OpenTileEntity
-		implements IAwareTile, IInventory, IHasGui {
+		implements INeighbourAwareTile, IActivateAwareTile, IInventory, IHasGui {
 
 	static final int BUFFER_SIZE = 9;
 
@@ -153,14 +153,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 	}
 
 	@Override
-	public void onBlockBroken() {
-
-	}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
@@ -174,17 +166,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}
-	}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get3dOrientation(player));
-		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
 	}
 
 	@Override

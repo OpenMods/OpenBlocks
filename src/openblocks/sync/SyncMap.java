@@ -97,7 +97,7 @@ public abstract class SyncMap<H extends ISyncHandler> {
 
 	private Set<Integer> knownUsers = new HashSet<Integer>();
 
-	private ISyncableObject[] objects = new ISyncableObject[16];
+	protected ISyncableObject[] objects = new ISyncableObject[16];
 
 	private int index = 0;
 
@@ -115,6 +115,10 @@ public abstract class SyncMap<H extends ISyncHandler> {
 
 	public ISyncableObject get(int id) {
 		return objects[id];
+	}
+	
+	public int size() {
+		return index;
 	}
 
 	public List<ISyncableObject> readFromStream(DataInput dis) throws IOException {

@@ -8,7 +8,6 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBlockBreaker;
 import openblocks.utils.SimpleBlockTextureHelper;
-import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,6 +23,7 @@ public class BlockBlockBreaker extends OpenBlock {
 		super(Config.blockBlockBreakerId, Material.rock);
 		setupBlock(this, "blockbreaker", TileEntityBlockBreaker.class);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
+		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 	}
 
 	@Override
@@ -38,25 +38,16 @@ public class BlockBlockBreaker extends OpenBlock {
 		textureHelper.setTop(blockIcon);
 		textureHelper.setBottom(registry.registerIcon("openblocks:blockBreaker_bottom"));
 	}
-
-	
 	
 	@Override
-	public Icon getBlockTexture(IBlockAccess blockAccess, int x,int y, int z, int side) {
-		int metadata = blockAccess.getBlockMetadata(x, y, z);
-		ForgeDirection rotation = OpenBlock.getRotation(blockAccess, x, y, z);
-		ForgeDirection ori = ForgeDirection.getOrientation(side);
-		TileEntityBlockBreaker te = getTileEntity(blockAccess, x, y, z, TileEntityBlockBreaker.class);		
-		if(te.isActivated() && rotation.equals(ori)) {
-			return closedIcon;
-		}
-		return getIcon(side, metadata);
+	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
+		return getIcon(side, blockAccess.getBlockMetadata(x, y, z));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int metadata) {
-		ForgeDirection rot = BlockUtils.get3dBlockRotationFromMetadata(metadata);
+		ForgeDirection rot = ForgeDirection.getOrientation(metadata);
 		return textureHelper.getIconForDirection(rot, ForgeDirection.getOrientation(side));
 	}
 

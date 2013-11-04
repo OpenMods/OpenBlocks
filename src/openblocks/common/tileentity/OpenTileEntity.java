@@ -8,8 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.OpenBlock;
-import openblocks.common.block.OpenBlock.BlockRotationMode;
-import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -20,23 +18,6 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	private boolean isUsedForClientInventoryRendering = false;
 
-	
-	/**
-	 * The block rotation stored in metadata. This can be used for
-	 * NORTH/EAST/SOUTH/WEST
-	 */
-	private ForgeDirection rotation = ForgeDirection.UNKNOWN;
-
-	/**
-	 * A random flag that can be stored in metadata
-	 */
-	private boolean flag1 = false;
-
-	/**
-	 * A random flag that can be stored in metadata
-	 */
-	private boolean flag2 = false;
-
 	/**
 	 * Get the current block rotation
 	 * 
@@ -44,7 +25,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	 */
 	public ForgeDirection getRotation() {
 		if (isUsedForClientInventoryRendering) { return getBlock().getRenderDirection(); }
-		return OpenBlock.getRotation(worldObj, xCoord, yCoord, zCoord);
+		return ForgeDirection.getOrientation(getMetadata());
 	}
 
 	/**
@@ -61,54 +42,10 @@ public abstract class OpenTileEntity extends TileEntity {
 		this.blockMetadata = metadata;
 	}
 
-	/**
-	 * Set the block rotation. To sync to the client call sync()
-	 * This supports all 6 directions provided the Block rotation mode is set as so.
-	 * 
-	 * @param rot
-	 */
-	public void setRotation(ForgeDirection rot) {
-		if (rot == ForgeDirection.UNKNOWN) {
-			rot = BlockUtils.DEFAULT_BLOCK_DIRECTION;
-		}
-		rotation = rot;
-	}
-
-	private boolean getFlag(int index) {
-		return OpenBlock.getFlag(worldObj, xCoord, yCoord, zCoord, index);
-	}
-
-	public boolean getFlag1() {
-		if (isUsedForClientInventoryRendering) { return getBlock().getRenderFlag1(); }
-		return getFlag(0);
-	}
-
-	public boolean getFlag2() {
-		if (isUsedForClientInventoryRendering) { return getBlock().getRenderFlag2(); }
-		return getFlag(1);
-	}
-
-	public void setFlag1(boolean on) {
-		flag1 = on;
-	}
-
-	public void setFlag2(boolean on) {
-		flag2 = on;
-	}
-
 	@Override
 	public void updateEntity() {
 		isActive = true;
 		if (!initialized) {
-			OpenBlock block = getBlock();
-			BlockRotationMode mode = block.getRotationMode();
-			if (mode == BlockRotationMode.NONE || mode == BlockRotationMode.FOUR_DIRECTIONS) {
-				flag1 = getFlag1();
-				flag2 = getFlag2();
-			}
-			if (mode == BlockRotationMode.FOUR_DIRECTIONS || mode == BlockRotationMode.SIX_DIRECTIONS) {
-				rotation = getRotation();
-			}
 			initialize();
 			initialized = true;
 		}
@@ -157,27 +94,6 @@ public abstract class OpenTileEntity extends TileEntity {
 		worldObj.addBlockEvent(xCoord, yCoord, zCoord, worldObj.getBlockId(xCoord, yCoord, zCoord), key, value);
 	}
 
-	public void sync() {
-		OpenBlock block = getBlock();
-		if (block != null) {
-			switch(block.getRotationMode()) {
-				case NONE: 
-					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 0, flag1, false);
-					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 1, flag2, true);
-					break;
-				case FOUR_DIRECTIONS: 
-					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 0, flag1, false);
-					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 1, flag2, false);
-					OpenBlock.setRotation(worldObj, xCoord, yCoord, zCoord, rotation);
-					break;
-				case SIX_DIRECTIONS:
-					OpenBlock.setRotation(worldObj, xCoord, yCoord, zCoord, rotation);
-			}
-		}
-		/* TODO: I don't think this is required. We should look in to that */
-		// worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // This is bad, Don't do this :P
-	}
-
 	@Override
 	public boolean shouldRefresh(int oldID, int newID, int oldMeta, int newMeta, World world, int x, int y, int z) {
 		return oldID != newID;
@@ -187,9 +103,8 @@ public abstract class OpenTileEntity extends TileEntity {
 		/* Hey look what I found */
 		if(this.blockType instanceof OpenBlock) { /* This has broken other mods in the past, not this one! */ 
 			return (OpenBlock)this.blockType;
-		}else {
-			return OpenBlock.getOpenBlock(worldObj, xCoord, yCoord, zCoord);
 		}
+		return OpenBlock.getOpenBlock(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public int getMetadata() {

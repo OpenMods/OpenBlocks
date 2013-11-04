@@ -60,12 +60,12 @@ public class SyncableTank extends GenericTank implements ISyncableObject {
 		}
 	}
 
-	@SuppressWarnings("unused")
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		this.writeToNBT(tag);
 	}
 
-	@SuppressWarnings("unused")
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		this.readFromNBT(tag);
 	}

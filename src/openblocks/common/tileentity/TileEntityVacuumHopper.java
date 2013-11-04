@@ -244,20 +244,12 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
-		tank.writeToNBT(tag);
-		xpOutputs.writeToNBT(tag, "xpoutputs");
-		itemOutputs.writeToNBT(tag, "itemoutputs");
-		vacuumDisabled.writeToNBT(tag, "vacuumDisabled");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
-		tank.readFromNBT(tag);
-		xpOutputs.readFromNBT(tag, "xpoutputs");
-		itemOutputs.readFromNBT(tag, "itemoutputs");
-		vacuumDisabled.readFromNBT(tag, "vacuumDisabled");
 	}
 
 	@Override

@@ -5,17 +5,15 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
-import openblocks.utils.BlockUtils;
 
 public class TileEntityBearTrap extends NetworkedTileEntity implements
-		IAwareTile, ISurfaceAttachment {
+		IActivateAwareTile, ISurfaceAttachment {
 
 	public enum Flags {
 		isShut
@@ -58,7 +56,7 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 			}
 		}
 		if (!worldObj.isRemote) {
-			sync(false);
+			sync();
 		}
 	}
 
@@ -77,12 +75,6 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 		return flags.get(Flags.isShut);
 	}
 
-	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
 	public int tickSinceOpened() {
 		return flags.getTicksSinceChange(worldObj);
 	}
@@ -99,27 +91,12 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 		return true;
 	}
 
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get2dOrientation(player));
-		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
-	}
-
 	public void setOpen() {
 		flags.set(Flags.isShut, false);
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {

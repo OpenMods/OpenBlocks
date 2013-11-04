@@ -16,19 +16,18 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableTank;
-import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
 
 public class TileEntityAutoAnvil extends NetworkedTileEntity implements
-		IAwareTile, ISidedInventory, IFluidHandler, IHasGui {
+		IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
@@ -446,12 +445,6 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
@@ -460,16 +453,6 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 		return true;
 	}
 
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get2dOrientation(player));
-		sync();
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
-	}
 
 	@Override
 	public int getSizeInventory() {
@@ -582,31 +565,16 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
-		tank.writeToNBT(tag);
-		toolSides.writeToNBT(tag, "toolsides");
-		modifierSides.writeToNBT(tag, "modifiersides");
-		outputSides.writeToNBT(tag, "outputsides");
-		xpSides.writeToNBT(tag, "xpsides");
-		automaticSlots.writeToNBT(tag, "autoflags");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
-		tank.readFromNBT(tag);
-		toolSides.readFromNBT(tag, "toolsides");
-		modifierSides.readFromNBT(tag, "modifiersides");
-		outputSides.readFromNBT(tag, "outputsides");
-		xpSides.readFromNBT(tag, "xpsides");
-		automaticSlots.readFromNBT(tag, "autoflags");
 	}
-
+	
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
 
 	public IFluidTank getTank() {
 		return tank;

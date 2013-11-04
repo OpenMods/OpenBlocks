@@ -38,7 +38,7 @@ public class BlockXPBottler extends OpenBlock {
 	@Override
 	public Icon getIcon(int side, int meta) {
 		ForgeDirection sidedir = ForgeDirection.getOrientation(side);
-		ForgeDirection dir = ForgeDirection.getOrientation((meta & 0x3) + 2);
+		ForgeDirection dir = ForgeDirection.getOrientation(meta);
 		if (sidedir == ForgeDirection.UP) {
 			return icons.top;
 		} else if (sidedir == ForgeDirection.DOWN) {

@@ -2,30 +2,43 @@ package openblocks.common.tileentity;
 
 import java.io.IOException;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
-import openblocks.sync.ISyncHandler;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncMap;
-import openblocks.sync.SyncMapTile;
+import openblocks.sync.*;
 
 public abstract class NetworkedTileEntity extends OpenTileEntity implements
 		ISyncHandler {
 
 	protected SyncMapTile<NetworkedTileEntity> syncMap = new SyncMapTile<NetworkedTileEntity>(this);
 
+	private int specialObjectIndex = -1;
+	
 	public void addSyncedObject(ISyncableObject obj) {
 		syncMap.put(obj);
 	}
-
-	public void sync(boolean syncMeta) {
-		if (syncMeta) super.sync();
-		syncMap.sync();
+	
+	/**
+	 * Used by OpenBlocks for tiles that have 24 rotations. Don't use this! thx
+	 * @param obj
+	 */
+	public void addSpecialObject(ISyncableObject obj) {
+		if (specialObjectIndex == -1) {
+			specialObjectIndex = syncMap.size();
+			syncMap.put(obj);	
+		}
+	}
+	
+	public ISyncableObject getSpecialObject() {
+		if (specialObjectIndex == -1) {
+			return null;
+		}
+		return syncMap.get(specialObjectIndex);
 	}
 
-	@Override
 	public void sync() {
-		sync(true);
+		syncMap.sync();
 	}
 
 	@Override
@@ -41,5 +54,26 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 			Log.severe(e, "Error during description packet creation");
 			return null;
 		}
+	}
+
+
+	public ForgeDirection getSecondaryRotation() {
+		ISyncableObject obj = getSpecialObject();
+		if (obj instanceof SyncableDirection) {
+			return ((SyncableDirection)obj).getValue();
+		}
+		return null;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		syncMap.writeToNBT(tag);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		syncMap.readFromNBT(tag);
 	}
 }

@@ -5,12 +5,10 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.OpenRenderHelper;
@@ -39,14 +37,12 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 		TileEntityTarget teTarget = new TileEntityTarget();
 		teTarget.setEnabled(true);
-		teTarget.setRotation(ForgeDirection.WEST);
 		inventoryTileEntities.put(OpenBlocks.Blocks.target, teTarget);
 
 		TileEntityGrave teGrave = new TileEntityGrave();
 		inventoryTileEntities.put(OpenBlocks.Blocks.grave, teGrave);
 
 		TileEntityFlag teFlag = new TileEntityFlag();
-		teFlag.setFlag1(true);
 		inventoryTileEntities.put(OpenBlocks.Blocks.flag, teFlag);
 
 		TileEntityTrophy teTrophy = new TileEntityTrophy();

@@ -20,7 +20,7 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 		return TileEntityVillageHighlighter.class;
 	}
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings({ "unchecked", "unused" })
 	@LuaMethod(onTick = true, returnType = LuaType.TABLE, description = "Get information about the villages this block is inside")
 	public Map<?, ?> getVillages(IComputerAccess computer, TileEntityVillageHighlighter vh) {
 		Map<Integer, Object> map = Maps.newHashMap();

@@ -10,6 +10,11 @@ import net.minecraftforge.common.ForgeDirection;
 public class SyncableDirection extends SyncableObjectBase {
 
 	private ForgeDirection value = ForgeDirection.UNKNOWN;
+	
+	public SyncableDirection(ForgeDirection dir) {
+		super();
+		setValue(dir);
+	}
 
 	public ForgeDirection getValue() {
 		return value;
@@ -32,10 +37,12 @@ public class SyncableDirection extends SyncableObjectBase {
 		stream.writeByte(value.ordinal());
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setByte(name, (byte)value.ordinal());
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		value = ForgeDirection.getOrientation(tag.getByte(name));
 	}

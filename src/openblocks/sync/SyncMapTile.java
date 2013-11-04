@@ -3,6 +3,7 @@ package openblocks.sync;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -32,5 +33,21 @@ public class SyncMapTile<H extends TileEntity & ISyncHandler> extends SyncMap<H>
 	@Override
 	protected World getWorld() {
 		return handler.worldObj;
+	}
+	
+	public void writeToNBT(NBTTagCompound tag) {
+		for (int i = 0; i < objects.length; i++) {
+			if (objects[i] != null) {
+				objects[i].writeToNBT(tag, "save_" + i);
+			}
+		}
+	}
+
+	public void readFromNBT(NBTTagCompound tag) {
+		for (int i = 0; i < objects.length; i++) {
+			if (objects[i] != null) {
+				objects[i].readFromNBT(tag, "save_" + i);
+			}
+		}
 	}
 }

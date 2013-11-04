@@ -41,10 +41,12 @@ public class SyncableShort extends SyncableObjectBase {
 		stream.writeShort(value);
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setShort(name, value);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		value = tag.getShort(name);
 	}

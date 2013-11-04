@@ -37,10 +37,12 @@ public class SyncableDouble extends SyncableObjectBase {
 		stream.writeDouble(value);
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setDouble(name, value);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		value = tag.getDouble(name);
 	}

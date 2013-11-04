@@ -8,7 +8,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
@@ -17,25 +16,16 @@ import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerLightbox;
+import openblocks.sync.ISyncableObject;
 
-public class TileEntityLightbox extends OpenTileEntity implements IInventory,
-		ISurfaceAttachment, IAwareTile, IHasGui {
+public class TileEntityLightbox extends NetworkedTileEntity implements IInventory,
+		ISurfaceAttachment, IActivateAwareTile, IHasGui {
 
 	private GenericInventory inventory = new GenericInventory("lightbox", false, 1);
-
-	/**
-	 * The surface it's attached to. Could be any of the 6 main directions
-	 */
-	private ForgeDirection surface = ForgeDirection.DOWN;
-
-	/**
-	 * If surface is UP or DOWN, rotation can be EAST/NORTH/SOUTH/WEST
-	 */
-	private ForgeDirection rotation = ForgeDirection.EAST;
 
 	/**
 	 * just a tick counter used for sending updates
@@ -95,21 +85,6 @@ public class TileEntityLightbox extends OpenTileEntity implements IInventory,
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiLightbox(new ContainerLightbox(player.inventory, this));
-	}
-
-	public void setSurfaceAndRotation(ForgeDirection surface, ForgeDirection rotation) {
-		this.surface = surface;
-		this.rotation = rotation;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public ForgeDirection getRotation() {
-		return rotation;
-	}
-
-	public ForgeDirection getSurface() {
-		return surface;
 	}
 
 	@Override
@@ -182,42 +157,6 @@ public class TileEntityLightbox extends OpenTileEntity implements IInventory,
 		readFromNBT(pkt.data);
 	}
 
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		inventory.readFromNBT(tag);
-		if (tag.hasKey("rotation")) {
-			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
-		}
-		if (tag.hasKey("surface")) {
-			surface = ForgeDirection.getOrientation(tag.getInteger("surface"));
-		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		inventory.writeToNBT(tag);
-		tag.setInteger("rotation", rotation.ordinal());
-		tag.setInteger("surface", surface.ordinal());
-	}
-
-	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return surface;
-	}
-
-	@Override
-	public void onBlockBroken() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -229,21 +168,14 @@ public class TileEntityLightbox extends OpenTileEntity implements IInventory,
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-
+	public ForgeDirection getSurfaceDirection() {
+		return getRotation();
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onSynced(List<ISyncableObject> changes) {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
 }

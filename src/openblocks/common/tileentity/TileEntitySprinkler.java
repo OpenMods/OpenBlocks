@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,11 +23,12 @@ import openblocks.common.api.IAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerSprinkler;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableFlags;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
-		ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
+public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
 
 	// erpppppp
 	private FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
@@ -38,6 +40,16 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	private GenericInventory inventory = new GenericInventory("sprinkler", true, 9);
 
 	private boolean hasBonemeal = false;
+	
+	public enum Flags {
+		enabled
+	}
+	
+	private SyncableFlags flags;
+	
+	public TileEntitySprinkler() {
+		addSyncedObject(flags = new SyncableFlags());
+	}
 
 	private void attemptFertilize() {
 		if (worldObj == null || worldObj.isRemote) return;
@@ -133,11 +145,11 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	private void setEnabled(boolean b) {
-		setFlag1(b);
+		flags.set(Flags.enabled, b);
 	}
 
 	private boolean isEnabled() {
-		return getFlag1();
+		return flags.get(Flags.enabled);
 	}
 
 	@Override
@@ -215,30 +227,12 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onBlockAdded() {}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) openGui(player);
 		return true;
 	}
 
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get2dOrientation(player));
-		if (!worldObj.isRemote) {
-			sync();
-		}
-	}
-
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
-	}
 
 	public float getSprayPitch() {
 		return (float)(getSprayAngle() * Math.PI);
@@ -260,11 +254,6 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
-		if (tag.hasKey("rotation")) {
-			byte ordinal = tag.getByte("rotation");
-			setRotation(ForgeDirection.getOrientation(ordinal));
-			sync();
-		}
 	}
 
 	@Override
@@ -290,6 +279,27 @@ public class TileEntitySprinkler extends OpenTileEntity implements IAwareTile,
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 		return null;
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+	}
+
+	@Override
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+	}
+
+	@Override
+	public void onBlockAdded() {
+	}
+
+	@Override
+	public void onNeighbourChanged(int blockId) {
+	}
+
+	@Override
+	public boolean onBlockEventReceived(int eventId, int eventParam) {
+		return false;
 	}
 
 }

@@ -32,11 +32,13 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 
 		// rotate to the correct rotation
 		TileEntityLightbox lightbox = (TileEntityLightbox)tileentity;
-		ForgeDirection surface = lightbox.getSurface();
-		ForgeDirection rotation = lightbox.getRotation();
+		ForgeDirection surface = lightbox.getRotation();
+		ForgeDirection rotation = lightbox.getSecondaryRotation();
 		if (surface == ForgeDirection.UP || surface == ForgeDirection.DOWN) {
 			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 1, 0, 0);
-			GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation.getOpposite()), 0, 0, 1);
+			if (rotation != null) {
+				GL11.glRotatef(-BlockUtils.getRotationFromDirection(rotation.getOpposite()), 0, 0, 1);
+			}
 		} else {
 			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 0, 1, 0);
 		}

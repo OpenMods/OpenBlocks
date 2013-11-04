@@ -11,7 +11,7 @@ public class ContainerVacuumHopper extends
 		addInventoryGrid(44, 20, 5);
 		addPlayerInventorySlots(69);
 		if (!hopper.worldObj.isRemote) {
-			hopper.sync(false);
+			hopper.sync();
 		}
 	}
 

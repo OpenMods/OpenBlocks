@@ -41,10 +41,12 @@ public class SyncableInt extends SyncableObjectBase {
 		stream.writeInt(value);
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setInteger(name, value);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		if (tag.hasKey(name)) {
 			value = tag.getInteger(name);

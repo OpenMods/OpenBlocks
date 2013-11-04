@@ -37,10 +37,12 @@ public class SyncableBoolean extends SyncableObjectBase {
 		stream.writeBoolean(value);
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setBoolean(name, value);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		value = tag.getBoolean(name);
 	}

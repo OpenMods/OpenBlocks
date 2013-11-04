@@ -42,10 +42,12 @@ public class SyncableFloat extends SyncableObjectBase {
 		stream.writeFloat(value);
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
 		tag.setFloat(name, value);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
 		value = tag.getFloat(name);
 	}

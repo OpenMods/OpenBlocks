@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
@@ -21,12 +20,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttachment, IAwareTileLite {
 
-	private SyncableFloat angle = new SyncableFloat(0.0f);
-	private SyncableInt colorIndex = new SyncableInt(0);
+	private SyncableFloat angle;
+	private SyncableInt colorIndex;
 
+	public enum Flags {
+		onGround
+	}
+	
 	public TileEntityFlag() {
-		addSyncedObject(angle);
-		addSyncedObject(colorIndex);
+		addSyncedObject(angle = new SyncableFloat(0.0f));
+		addSyncedObject(colorIndex = new SyncableInt(0));
 	}
 
 	@Override
@@ -34,20 +37,6 @@ public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttac
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		colorIndex.readFromNBT(tag, "color");
-		angle.readFromNBT(tag, "angle");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		colorIndex.writeToNBT(tag, "color");
-		angle.writeToNBT(tag, "angle");
-	}
 
 	public Icon getIcon() {
 		return OpenBlocks.Blocks.flag.getIcon(0, 0);
@@ -61,14 +50,6 @@ public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttac
 		angle.setValue(ang);
 	}
 
-	public void setOnGround(boolean onGround) {
-		setFlag1(onGround);
-	}
-
-	public boolean isOnGround() {
-		return getFlag1();
-	}
-
 	public int getColor() {
 		if (colorIndex.getValue() >= BlockFlag.COLORS.length) colorIndex.setValue(0);
 		return BlockFlag.COLORS[colorIndex.getValue()];
@@ -76,13 +57,7 @@ public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttac
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {
-		ForgeDirection rotation;
-		if (getFlag1()) {
-			rotation = ForgeDirection.DOWN;
-		} else {
-			rotation = getRotation();
-		}
-		return rotation;
+		return getRotation();
 	}
 
 	public float getAngle() {
@@ -105,16 +80,12 @@ public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttac
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		float ang = player.rotationYawHead;
-		ForgeDirection surface = side.getOpposite();
-
-		if (surface != ForgeDirection.DOWN) {
+		ForgeDirection rotation = getRotation();
+		if (rotation != ForgeDirection.DOWN) {
 			ang = -BlockUtils.getRotationFromDirection(side.getOpposite());
 		}
-
 		setAngle(ang);
 		setColorIndex(stack.getItemDamage());
-		setRotation(side.getOpposite());
-		setOnGround(surface == ForgeDirection.DOWN);
 		sync();
 	}
 

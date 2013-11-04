@@ -15,11 +15,10 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.ItemRenderState;
-import openblocks.common.api.IActivateAwareTile;
-import openblocks.common.api.IAwareTile;
-import openblocks.common.api.IPlaceAwareTile;
-import openblocks.common.api.ISurfaceAttachment;
+import openblocks.common.api.*;
 import openblocks.common.item.ItemOpenBlock;
+import openblocks.common.tileentity.NetworkedTileEntity;
+import openblocks.sync.SyncableDirection;
 import openblocks.utils.BlockUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -31,6 +30,7 @@ public abstract class OpenBlock extends BlockContainer {
 	private Class<? extends TileEntity> teClass = null;
 	protected String modKey = "";
 	protected BlockRotationMode blockRotationMode;
+	protected BlockPlacementMode blockPlacementMode;
 	
 	@SideOnly(Side.CLIENT)
 	private ItemRenderState itemRenderState;
@@ -40,17 +40,24 @@ public abstract class OpenBlock extends BlockContainer {
 		super(id, material);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHardness(1.0F);
-		/* Defaults to NONE. This will alert us when something tries to rotate that shouldn't */
-		/* We will also be alerted if a flag is set on something that has Six points of rotation */
 		setRotationMode(BlockRotationMode.NONE);
+		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 	}
 	
+	protected void setPlacementMode(BlockPlacementMode mode) {
+		this.blockPlacementMode = mode;
+	}
+
 	protected void setRotationMode(BlockRotationMode mode) {
 		this.blockRotationMode = mode;
 	}
 	
-	public BlockRotationMode getRotationMode() {
+	protected BlockRotationMode getRotationMode() {
 		return this.blockRotationMode;
+	}
+	
+	protected BlockPlacementMode getPlacementMode() {
+		return this.blockPlacementMode;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -70,42 +77,6 @@ public abstract class OpenBlock extends BlockContainer {
 		return this.itemRenderState.rotation;
 	}
 	
-	@SideOnly(Side.CLIENT)
-	protected void setRenderMetadata(int metadata) {
-		ensureRenderState();
-		this.itemRenderState.metadata = metadata;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public int getRenderMetadata() {
-		if(this.itemRenderState == null) return 0;
-		return this.itemRenderState.metadata;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	protected void setRenderFlag1(boolean flag) {
-		ensureRenderState();
-		this.itemRenderState.flag1 = flag;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public boolean getRenderFlag1() {
-		if(this.itemRenderState == null) return false;
-		return this.itemRenderState.flag1;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	protected void setRenderFlag2(boolean flag) {
-		ensureRenderState();
-		this.itemRenderState.flag2 = flag;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public boolean getRenderFlag2() { 
-		if(this.itemRenderState == null) return false;
-		return this.itemRenderState.flag2;
-	}
-	
 	/**
 	 * Helper function to get the OpenBlock class for a block in the world
 	 * @param world world to get the block from 
@@ -121,91 +92,6 @@ public abstract class OpenBlock extends BlockContainer {
 		Block block = Block.blocksList[id];
 		if(block instanceof OpenBlock) return (OpenBlock)block;
 		return null;
-	}
-	
-	private static boolean _getFlagUnsafe(IBlockAccess world, int x, int y, int z, int index) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		return BlockUtils.getBlockFlagFromMetadata(metadata, index);
-	}
-	
-	public static boolean getFlag(IBlockAccess world, int x, int y, int z, int index) {
-		OpenBlock block = getOpenBlock(world, x, y, z);
-		if(block != null) {
-			if(block.getRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
-				System.out.println("ERROR: getFlag called on Six Direction Block " + block.getClass().getName());
-			}
-			return _getFlagUnsafe(world, x, y, z, index);
-		}
-		return false;
-	}
-	
-	private static int _setFlagUnsafe(World world, int x, int y, int z, int index, boolean b, boolean makeChange, boolean notify) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		int newMetadata = metadata;
-		if(index == 0) {
-			newMetadata = (b ? 4 : 0) | newMetadata & 0x3;
-		}else if(index == 1) {
-			newMetadata = (b ? 8 : 0) | newMetadata & 0x7;
-		}
-		if(newMetadata != metadata && makeChange) {
-			world.setBlockMetadataWithNotify(x, y, z, newMetadata, notify ? 3 : 0);
-		}
-		return newMetadata; /* Make change is just an optimization thing for rotation */
-	}
-	
-	public static void setFlag(World world, int x, int y, int z, int index, boolean b, boolean notify) {
-		OpenBlock block = getOpenBlock(world, x, y, z);
-		if(block != null) {
-			if(block.getRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
-				System.out.println("ERROR: setFlag called on Six Direction Block " + block.getClass().getName());
-			}
-			// We set it anyway because it's still an OpenBlock and one of the OB devs has fucked up
-			_setFlagUnsafe(world, x, y, z, index, b, true, notify);
-		}
-	}
-
-	public static ForgeDirection getRotation(IBlockAccess world, int x, int y, int z) {
-		/* I'm trying not to think about how ugly 1.7 is going to be */
-		OpenBlock block = getOpenBlock(world, x, y, z);
-		if(block != null) {
-			BlockRotationMode rotationMode = block.getRotationMode();
-			if(rotationMode == BlockRotationMode.NONE) {
-				/* No need for the metadata call, decided to return default. It'll make other code nicer */
-				return BlockUtils.DEFAULT_BLOCK_DIRECTION;
-			}
-			int metadata = world.getBlockMetadata(x, y, z);
-			switch(rotationMode) {
-				case SIX_DIRECTIONS: return BlockUtils.get3dBlockRotationFromMetadata(metadata);
-				default: return BlockUtils.getRotationFromMetadata(metadata);
-			}
-		}
-		return BlockUtils.DEFAULT_BLOCK_DIRECTION;
-	}
-	
-	public static boolean setRotation(World world, int x, int y, int z, ForgeDirection direction) {
-		if(direction == ForgeDirection.UNKNOWN) direction = BlockUtils.DEFAULT_BLOCK_DIRECTION;
-		OpenBlock block = getOpenBlock(world, x, y, z);
-		if(block != null) {
-			BlockRotationMode rotationMode = block.getRotationMode();
-			if(rotationMode == BlockRotationMode.NONE) return false;
-			int metadata = direction.ordinal() - 2;
-			if(rotationMode == BlockRotationMode.FOUR_DIRECTIONS) {
-				if(direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) {
-					/* No change will be made. This makes wrenches easy later ;) */
-					return false;
-				}
-				world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
-				return true;
-			}else if(rotationMode == BlockRotationMode.SIX_DIRECTIONS) {
-				int flagMeta = 
-						_setFlagUnsafe(world, x, y, z, 0, direction == ForgeDirection.UP, false, false) |
-						_setFlagUnsafe(world, x, y, z, 1, direction == ForgeDirection.DOWN, false, false);
-				metadata |= flagMeta & 0xC;
-				world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	@Override
@@ -275,8 +161,8 @@ public abstract class OpenBlock extends BlockContainer {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof IAwareTile) {
-			((IAwareTile)te).onNeighbourChanged(blockId);
+		if (te instanceof INeighbourAwareTile) {
+			((INeighbourAwareTile)te).onNeighbourChanged(blockId);
 		}
 		if (te instanceof ISurfaceAttachment) {
 			ForgeDirection direction = ((ISurfaceAttachment)te).getSurfaceDirection();
@@ -342,7 +228,7 @@ public abstract class OpenBlock extends BlockContainer {
 		if (te != null && T.isAssignableFrom(te.getClass())) { return (U)te; }
 		return null;
 	}
-
+	
 	/***
 	 * An extended block placement function which includes ALL the details
 	 * you'll ever need.
@@ -361,7 +247,45 @@ public abstract class OpenBlock extends BlockContainer {
 	 * @param meta
 	 */
 	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
-		IPlaceAwareTile te = getTileEntity(world, x, y, z, IPlaceAwareTile.class);
+		ForgeDirection additionalRotation = null;
+		
+		// We use both for 24's, so force to angle
+		if (getRotationMode() == BlockRotationMode.TWENTYFOUR_DIRECTIONS) {
+			setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
+		}
+		
+		switch(getPlacementMode()) {
+			case SURFACE:
+				meta = side.getOpposite().ordinal();
+				break;
+			default:
+				switch(getRotationMode()) {
+					case FOUR_DIRECTIONS:
+						meta = BlockUtils.get2dOrientation(player).ordinal();
+						break;
+					case SIX_DIRECTIONS:
+						meta = BlockUtils.get3dOrientation(player).ordinal();
+						break;
+					case TWENTYFOUR_DIRECTIONS:
+						meta = side.getOpposite().ordinal();
+						additionalRotation = BlockUtils.get2dOrientation(player);
+						break;
+					default:
+						break;
+				}
+		}
+		world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+		IPlaceAwareTile te = null;
+		if (additionalRotation != null) {
+			NetworkedTileEntity nTe = getTileEntity(world, x, y, z, NetworkedTileEntity.class);
+			if (nTe != null) {
+				nTe.addSpecialObject(new SyncableDirection(additionalRotation));
+				nTe.sync();
+			}else {
+				new Exception("For 6+ levels of rotation you need to use a NetworkedTileEntity").printStackTrace();
+			}
+		}
+		te = getTileEntity(world, x, y, z, IPlaceAwareTile.class);
 		if (te != null) {
 			te.onBlockPlacedBy(player, side, stack, hitX, hitY, hitZ);
 		}
@@ -393,6 +317,12 @@ public abstract class OpenBlock extends BlockContainer {
 	public enum BlockRotationMode {
 		NONE,
 		FOUR_DIRECTIONS,
-		SIX_DIRECTIONS
+		SIX_DIRECTIONS,
+		TWENTYFOUR_DIRECTIONS
+	}
+	
+	public enum BlockPlacementMode {
+		ENTITY_ANGLE,
+		SURFACE
 	}
 }

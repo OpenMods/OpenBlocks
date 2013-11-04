@@ -13,18 +13,17 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTileLite;
+import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableProgress;
 import openblocks.sync.SyncableTank;
-import openblocks.utils.BlockUtils;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTileLite, ISidedInventory, IFluidHandler, IHasGui {
+public class TileEntityXPBottler extends NetworkedTileEntity implements IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
@@ -185,12 +184,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		setRotation(BlockUtils.get2dOrientation(player));
-		sync();
-	}
-
-	@Override
 	public int getSizeInventory() {
 		return inventory.getSizeInventory();
 	}
@@ -245,24 +238,12 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IAwareTi
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
-		tank.writeToNBT(tag);
-		progress.writeToNBT(tag, "progress");
-		glassSides.writeToNBT(tag, "glasssides");
-		xpBottleSides.writeToNBT(tag, "xpbottlesides");
-		xpSides.writeToNBT(tag, "xpsides");
-		automaticSlots.writeToNBT(tag, "autoflags");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
-		tank.readFromNBT(tag);
-		progress.readFromNBT(tag, "progress");
-		glassSides.readFromNBT(tag, "glasssides");
-		xpBottleSides.readFromNBT(tag, "xpbottlesides");
-		xpSides.readFromNBT(tag, "xpsides");
-		automaticSlots.readFromNBT(tag, "autoflags");
 	}
 
 	@Override

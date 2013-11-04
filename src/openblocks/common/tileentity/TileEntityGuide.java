@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
@@ -109,24 +108,6 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 
 	public boolean[][][] getPreviousShape() {
 		return previousShape;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		width.readFromNBT(tag, "width");
-		height.readFromNBT(tag, "height");
-		depth.readFromNBT(tag, "depth");
-		mode.readFromNBT(tag, "mode");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		width.writeToNBT(tag, "width");
-		height.writeToNBT(tag, "height");
-		depth.writeToNBT(tag, "depth");
-		mode.writeToNBT(tag, "mode");
 	}
 
 	@Override
