@@ -10,6 +10,7 @@ openblocks.gui.autoextract=Auto extract
 openblocks.gui.autodrink=Auto drink
 openblocks.gui.autoenchantmenttable=Автоматический стол зачаровывания
 
+openblocks.misc.type=Тип: %s
 openblocks.misc.uses=Использований: %.2f
 openblocks.misc.color=Цвет: %06X
 openblocks.misc.mode=Режим размещения: %s
@@ -42,11 +43,12 @@ tile.openblocks.cannon.name=Предметная пушка
 tile.openblocks.bigbutton.name=Большая кнопка
 tile.openblocks.fan.name=Вентилятор
 tile.openblocks.xpbottler.name=Разливочная машина опыта
-tile.openblocks.village_highlighter.name=Выделитель деревни
+tile.openblocks.village_highlighter.name=Подсвечиватель деревни
 tile.openblocks.path.name=Путь
 tile.openblocks.autoanvil.name=Автоматическая наковальня
 tile.openblocks.autoenchantmenttable.name=Автоматический стол зачаровывания
 tile.openblocks.xpdrain.name=Отток опыта
+tile.openblocks.ropeladder.name=Верёвочная лестница
 
 item.openblocks.hangglider.name=Дельтаплан
 item.openblocks.gliderwing.name=Крыло дельтаплана
@@ -65,7 +67,7 @@ item.openblocks.crane_magnet.name=Крановый магнит
 item.openblocks.beam.name=Beam
 item.openblocks.line.name=Line
 item.openblocks.miracle_magnet.name=§5Чудо магнит§r
-item.openblocks.slimalyzer.name=Slimalyzer
+item.openblocks.slimalyzer.name=Слаймлизёр
 item.openblocks.xpbucket.name=Ведро опыта
 item.openblocks.sleepingbag.name=Спальный мешок
 
