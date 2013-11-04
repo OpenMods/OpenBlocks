@@ -1,8 +1,6 @@
 package openblocks.common;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -27,9 +25,16 @@ public class GenericTank extends FluidTank {
 	}
 
 	public void refreshSurroundingTanks(TileEntity currentTile, SyncableFlags sides) {
+		HashSet<ForgeDirection> checkSides = new HashSet<ForgeDirection>();
+		if (sides == null) {
+			checkSides.addAll(Arrays.asList(ForgeDirection.VALID_DIRECTIONS));
+		}else {
+			for (Integer s : sides.getActiveSlots()) {
+				checkSides.add(ForgeDirection.getOrientation(s));
+			}
+		}
 		surroundingTanks = new ArrayList<ForgeDirection>();
-		for (Integer sideOrd : sides.getActiveSlots()) {
-			ForgeDirection side = ForgeDirection.getOrientation(sideOrd);
+		for (ForgeDirection side : checkSides) {
 			TileEntity tile = BlockUtils.getTileInDirection(currentTile, side);
 			if (tile instanceof IFluidHandler) {
 				surroundingTanks.add(side);
@@ -92,6 +97,10 @@ public class GenericTank extends FluidTank {
 			}
 		}
 
+	}
+	
+	public void autoFillFromSides(int amountPerTick, TileEntity currentTile) {
+		autoFillFromSides(amountPerTick, currentTile);
 	}
 
 	public void autoFillFromSides(int amountPerTick, TileEntity currentTile, SyncableFlags sides) {

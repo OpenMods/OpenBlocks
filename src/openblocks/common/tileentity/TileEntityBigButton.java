@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
@@ -27,8 +26,6 @@ public class TileEntityBigButton extends NetworkedTileEntity implements IActivat
 
 	private int tickCounter = 0;
 
-	private GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
-
 	public enum Flags {
 		active
 	}
@@ -37,6 +34,7 @@ public class TileEntityBigButton extends NetworkedTileEntity implements IActivat
 	
 	public TileEntityBigButton() {
 		addSyncedObject(flags = new SyncableFlags());
+		setInventory(new GenericInventory("bigbutton", true, 1));
 	}
 	
 	@Override
@@ -97,74 +95,6 @@ public class TileEntityBigButton extends NetworkedTileEntity implements IActivat
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return getRotation();
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return inventory.isItemValidForSlot(i, itemstack);
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		inventory.writeToNBT(tag);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		inventory.readFromNBT(tag);
 	}
 
 	@Override

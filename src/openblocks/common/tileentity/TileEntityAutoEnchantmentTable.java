@@ -6,7 +6,6 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
@@ -28,7 +27,6 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
 
-	private GenericInventory inventory = new GenericInventory("autoenchant", true, 2);
 	private SyncableTank tank;
 	private SyncableFlags inputSides;
 	private SyncableFlags outputSides;
@@ -71,7 +69,7 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 		addSyncedObject(automaticSlots = new SyncableFlags());
 		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
 		addSyncedObject(targetLevel = new SyncableInt(1));
-
+		setInventory(new GenericInventory("autoenchant", true, 2));
 		slotSides.addMapping(Slots.input, inputSides);
 		slotSides.addMapping(Slots.output, outputSides);
 	}
@@ -229,61 +227,6 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int stackIndex, int byAmount) {
-		return inventory.decrStackSize(stackIndex, byAmount);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {
-		inventory.openChest();
-	}
-
-	@Override
-	public void closeChest() {
-		inventory.closeChest();
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (i == Slots.input.ordinal()) { return !itemstack.isItemEnchanted(); }
 		return i == Slots.input.ordinal();
@@ -380,17 +323,4 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 	public SyncableFlags getAutomaticSlots() {
 		return automaticSlots;
 	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		inventory.writeToNBT(tag);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		inventory.readFromNBT(tag);
-	}
-
 }

@@ -10,7 +10,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
@@ -32,7 +31,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 
 	private static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
-	private GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
 	private SyncableTank tank;
 	public SyncableFlags xpOutputs;
 	public SyncableFlags itemOutputs;
@@ -43,6 +41,7 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 		addSyncedObject(itemOutputs = new SyncableFlags());
 		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
 		addSyncedObject(vacuumDisabled = new SyncableBoolean());
+		setInventory(new GenericInventory("vacuumhopper", true, 10));
 	}
 
 	public SyncableFlags getXPOutputs() {
@@ -150,62 +149,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return inventory.isItemValidForSlot(i, itemstack);
-	}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			if (player.inventory.getStackInSlot(player.inventory.currentItem) == null) {
@@ -238,18 +181,6 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 				}
 			}
 		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		inventory.writeToNBT(tag);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		inventory.readFromNBT(tag);
 	}
 
 	@Override

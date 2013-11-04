@@ -8,8 +8,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
@@ -25,20 +23,15 @@ import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerSprinkler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
+import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
 public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
 
-	// erpppppp
-	private FluidStack water = new FluidStack(FluidRegistry.WATER, 1);
-
-	private ItemStack bonemeal = new ItemStack(Item.dyePowder, 1, 15);
-
-	private FluidTank tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME);
-
-	private GenericInventory inventory = new GenericInventory("sprinkler", true, 9);
-
+	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
+	private static final ItemStack BONEMEAL = new ItemStack(Item.dyePowder, 1, 15);
+	
 	private boolean hasBonemeal = false;
 	
 	public enum Flags {
@@ -46,9 +39,12 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 	}
 	
 	private SyncableFlags flags;
+	private SyncableTank tank;
 	
 	public TileEntitySprinkler() {
 		addSyncedObject(flags = new SyncableFlags());
+		addSyncedObject(tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID));
+		setInventory(new GenericInventory("sprinkler", true, 9));
 	}
 
 	private void attemptFertilize() {
@@ -72,7 +68,7 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 					for (int a = 0; a < 10; a++) {
 						// Mikee, why do we try to apply it 10 times? Is it
 						// likely to fail? -NC
-						if (ItemDye.applyBonemeal(bonemeal.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
+						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
 							break;
 						}
 					}
@@ -95,12 +91,14 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 
 	private void sprayParticles() {
 		if (worldObj == null || !worldObj.isRemote) return;
-		for (int i = 0; i < 6; i++) {
-			float offset = (i - 2.5f) / 5f;
-			ForgeDirection rotation = getRotation();
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, water, xCoord + 0.5
-					+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
-					+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
+		if (tank.getFluidAmount() > 0) {
+			for (int i = 0; i < 6; i++) {
+				float offset = (i - 2.5f) / 5f;
+				ForgeDirection rotation = getRotation();
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(), xCoord + 0.5
+						+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
+						+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
+			}
 		}
 	}
 
@@ -108,25 +106,13 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			if (tank.getFluid() == null || tank.getFluid().amount == 0) {
-				TileEntity below = worldObj.getBlockTileEntity(xCoord, yCoord - 1, zCoord);
-				if (below instanceof IFluidHandler) {
 
-					IFluidHandler belowTank = (IFluidHandler)below;
-					FluidStack drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), false);
-					if (drained != null && drained.isFluidEqual(water)) {
-						drained = belowTank.drain(ForgeDirection.UP, tank.getCapacity(), true);
-						if (drained != null) {
-							tank.fill(drained, true);
-						}
-					}
-				}
-			}
+			tank.autoFillFromSides(3, this);
 
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
 			if (OpenBlocks.proxy.getTicks(worldObj) % 1200 == 0) {
-				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, bonemeal);
+				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, BONEMEAL);
 			}
 			if (OpenBlocks.proxy.getTicks(worldObj) % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
@@ -152,66 +138,15 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 		return flags.get(Flags.enabled);
 	}
 
-	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return itemstack != null && itemstack.isItemEqual(bonemeal);
+		return itemstack != null && itemstack.isItemEqual(BONEMEAL);
 	}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		if (resource != null && resource.isFluidEqual(water)) { return tank.fill(resource, doFill); }
-		return 0;
+		return tank.fill(resource, doFill);
 	}
 
 	@Override
@@ -244,17 +179,6 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 		return 0;
 	}
 
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		inventory.writeToNBT(tag);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		inventory.readFromNBT(tag);
-	}
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {

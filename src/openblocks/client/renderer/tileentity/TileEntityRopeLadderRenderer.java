@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityRopeLadderRenderer extends TileEntitySpecialRenderer {
 
@@ -22,8 +23,10 @@ public class TileEntityRopeLadderRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		bindTexture(TextureMap.locationBlocksTexture);
 		long ticks = OpenBlocks.proxy.getTicks(rope.worldObj);
-		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5 + (MathHelper.sin((float)(rope.yCoord + ((double)ticks  / 5)))/50));
-		GL11.glRotatef(BlockUtils.getRotationFromDirection(rope.getRotation()), 0, 1, 0);
+		double offset = (MathHelper.sin((float)(rope.yCoord + ((double)ticks  / 5)))/50);
+		ForgeDirection rot = rope.getRotation();
+		GL11.glTranslated(x + 0.5 + (offset * rot.offsetX), y + 0.5, z + 0.5 + (offset * rot.offsetZ));
+		GL11.glRotatef(BlockUtils.getRotationFromDirection(rot), 0, 1, 0);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		
 		Block b = OpenBlocks.Blocks.ropeLadder;

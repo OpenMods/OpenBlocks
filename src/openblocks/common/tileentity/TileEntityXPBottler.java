@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
@@ -30,7 +29,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Item.expBottle, 1);
 	public static final int PROGRESS_TICKS = 40;
 
-	private GenericInventory inventory = new GenericInventory("xpbottler", true, 2);
 	private SyncableTank tank;
 
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
@@ -60,6 +58,7 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 		addSyncedObject(xpSides = new SyncableFlags());
 		addSyncedObject(automaticSlots = new SyncableFlags());
 		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
+		setInventory(new GenericInventory("xpbottler", true, 2));
 	}
 
 	@Override
@@ -184,74 +183,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int stackIndex, int byAmount) {
-		return inventory.decrStackSize(stackIndex, byAmount);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		inventory.writeToNBT(tag);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		inventory.readFromNBT(tag);
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return inventory.isItemValidForSlot(i, itemstack);
-	}
-
-	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return tank.fill(resource, doFill);
 	}
@@ -317,4 +248,5 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {}
+
 }

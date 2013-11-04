@@ -29,13 +29,13 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 		buffer
 	}
 
-	private GenericInventory fakeInventory = new GenericInventory("blockbreaker", true, 1);
 	private boolean _redstoneSignal;
 	private int _redstoneAnimTimer;
 	private SyncableBoolean activated;
 	
 	public TileEntityBlockBreaker() {
 		addSyncedObject(activated = new SyncableBoolean(false));
+		setInventory(new GenericInventory("blockbreaker", true, 1));
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -111,22 +111,22 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 		TileEntity targetInventory = getTileInDirection(direction);
 		for (ItemStack stack : itemStacks) {
 			// if there's any stack in our buffer slot, eject it. Why is it there?
-			ItemStack currentStack = fakeInventory.getStackInSlot(Slots.buffer);
+			ItemStack currentStack = inventory.getStackInSlot(Slots.buffer);
 			if (currentStack != null) {
 				BlockUtils.ejectItemInDirection(world, x, y, z, direction, currentStack);
 			}
 
 			// clear the buffer slot
-			fakeInventory.setInventorySlotContents(Slots.buffer.ordinal(), stack);
+			inventory.setInventorySlotContents(Slots.buffer.ordinal(), stack);
 
 			// push the item out into a pipe or inventory
 			InventoryUtils.moveItemInto(this, Slots.buffer.ordinal(), targetInventory, -1, 64, direction, true);
 			// if there's anything left for whatever reason (maybe no inventory)
-			ItemStack buffer = fakeInventory.getStackInSlot(Slots.buffer);
+			ItemStack buffer = inventory.getStackInSlot(Slots.buffer);
 			if (buffer != null) {
 				// eject it
 				BlockUtils.ejectItemInDirection(world, x, y, z, direction, buffer);
-				fakeInventory.setInventorySlotContents(Slots.buffer.ordinal(), null);
+				inventory.setInventorySlotContents(Slots.buffer.ordinal(), null);
 			}
 		}
 	}
@@ -137,58 +137,6 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}
 	}
-
-
-	@Override
-	public int getSizeInventory() {
-		return fakeInventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return fakeInventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return fakeInventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return fakeInventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		fakeInventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return fakeInventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return fakeInventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return fakeInventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return fakeInventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
