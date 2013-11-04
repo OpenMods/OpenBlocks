@@ -28,6 +28,7 @@ public abstract class OpenBlock extends BlockContainer {
 	private Class<? extends TileEntity> teClass = null;
 	protected String modKey = "";
 	protected BlockRotationMode blockRotationMode;
+	protected ForgeDirection blockInventoryRenderDirection = ForgeDirection.NORTH;
 	
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
@@ -39,10 +40,37 @@ public abstract class OpenBlock extends BlockContainer {
 		this.blockRotationMode = mode;
 	}
 	
+	protected void setBlockInvRenderDirection(ForgeDirection inventoryRenderDirection) {
+		this.blockInventoryRenderDirection = inventoryRenderDirection;
+	}
+	
 	public BlockRotationMode getBlockRotationMode() {
 		return this.blockRotationMode;
 	}
+	
+	public ForgeDirection getBlockInvRenderDirection() {
+		return this.blockInventoryRenderDirection;
+	}
 
+	public ForgeDirection getRotation(World world, int x, int y, int z) {
+		/* I'm trying not to think about how ugly 1.7 is going to be */
+		int id = world.getBlockId(x, y, z);
+		Block block = Block.blocksList[id];
+		if(block != null && block instanceof OpenBlock) {
+			BlockRotationMode rotationMode = ((OpenBlock)block).getBlockRotationMode();
+			if(rotationMode == BlockRotationMode.NONE) {
+				/* No need for the metadata call */
+				return ForgeDirection.UNKNOWN;
+			}
+			int metadata = world.getBlockMetadata(x, y, z);
+			switch(rotationMode) {
+				case SIX_DIRECTIONS: return BlockUtils.get3dBlockRotationFromMetadata(metadata);
+				default: return BlockUtils.getRotationFromMetadata(metadata);
+			}
+		}
+		return ForgeDirection.UNKNOWN;
+	}
+	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		try {
@@ -226,8 +254,8 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 	
 	public enum BlockRotationMode {
-		None,
-		FourDirections,
-		SixDirections
+		NONE,
+		FOUR_DIRECTIONS,
+		SIX_DIRECTIONS
 	}
 }
