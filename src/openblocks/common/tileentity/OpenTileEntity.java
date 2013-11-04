@@ -42,7 +42,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	 * @return the block rotation
 	 */
 	public ForgeDirection getRotation() {
-		if (isUsedForClientInventoryRendering) { return rotation; }
+		if (isUsedForClientInventoryRendering) { return getBlock().getRenderDirection(); }
 		return OpenBlock.getRotation(worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -52,7 +52,12 @@ public abstract class OpenTileEntity extends TileEntity {
 	 */
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
+		if(this.worldObj != null) {
+			System.out.println("SEVERE PROGRAMMER ERROR! Inventory Render on World TileEntity. Expect hell!");
+		} // But of course, we continue, because YOLO.
 		isUsedForClientInventoryRendering = true;
+		this.blockType = block;
+		this.blockMetadata = metadata;
 	}
 
 	/**
@@ -73,12 +78,12 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public boolean getFlag1() {
-		if (isUsedForClientInventoryRendering) { return flag1; }
+		if (isUsedForClientInventoryRendering) { return getBlock().getRenderFlag1(); }
 		return getFlag(0);
 	}
 
 	public boolean getFlag2() {
-		if (isUsedForClientInventoryRendering) { return flag2; }
+		if (isUsedForClientInventoryRendering) { return getBlock().getRenderFlag2(); }
 		return getFlag(1);
 	}
 

@@ -115,6 +115,7 @@ public abstract class OpenBlock extends BlockContainer {
 	 * @return OpenBlock instance of the block, or null if invalid
 	 */
 	public static OpenBlock getOpenBlock(World world, int x, int y, int z) {
+		if(world == null) return null;
 		int id = world.getBlockId(x, y, z);
 		if(id < 0 || id >= Block.blocksList.length) return null;
 		Block block = Block.blocksList[id];
