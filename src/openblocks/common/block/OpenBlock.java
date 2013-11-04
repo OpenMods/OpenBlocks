@@ -193,9 +193,8 @@ public abstract class OpenBlock extends BlockContainer {
 				if(direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) {
 					/* No change will be made. This makes wrenches easy later ;) */
 					return false;
-				}else{
-					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
 				}
+				world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
 				return true;
 			}else if(rotationMode == BlockRotationMode.SIX_DIRECTIONS) {
 				int flagMeta = 

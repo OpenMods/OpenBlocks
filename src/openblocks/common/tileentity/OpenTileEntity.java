@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.OpenBlock;
+import openblocks.common.block.OpenBlock.BlockRotationMode;
 import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -99,13 +100,21 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void updateEntity() {
 		isActive = true;
 		if (!initialized) {
-			rotation = getRotation();
-			flag1 = getFlag1();
-			flag2 = getFlag2();
+			OpenBlock block = getBlock();
+			BlockRotationMode mode = block.getRotationMode();
+			if (mode == BlockRotationMode.NONE || mode == BlockRotationMode.FOUR_DIRECTIONS) {
+				flag1 = getFlag1();
+				flag2 = getFlag2();
+			}
+			if (mode == BlockRotationMode.FOUR_DIRECTIONS || mode == BlockRotationMode.SIX_DIRECTIONS) {
+				rotation = getRotation();
+			}
 			initialize();
 			initialized = true;
 		}
 	}
+	
+	protected void initialize(){}
 
 	public boolean isLoaded() {
 		return initialized;
@@ -113,12 +122,6 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	public boolean isAddedToWorld() {
 		return worldObj != null;
-	}
-
-	protected void initialize() {
-		flag1 = getFlag1();
-		flag2 = getFlag2();
-		rotation = getRotation();
 	}
 
 	protected boolean isActive() {

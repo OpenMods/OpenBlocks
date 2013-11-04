@@ -18,7 +18,6 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableBoolean;
-import openblocks.sync.SyncableFloat;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
@@ -26,44 +25,22 @@ import openblocks.utils.OpenBlocksFakePlayer;
 public class TileEntityBlockBreaker extends NetworkedTileEntity
 		implements IAwareTile, IInventory {
 
-	private SyncableBoolean activated = new SyncableBoolean(false);
-
-	public enum Keys {
-		activated
-	}
-	
-	public TileEntityBlockBreaker() {
-		addSyncedObject(activated);
-	}
-
-		
 	public enum Slots {
 		buffer
 	}
 
+	private GenericInventory fakeInventory = new GenericInventory("blockbreaker", true, 1);
 	private boolean _redstoneSignal;
 	private int _redstoneAnimTimer;
+	private SyncableBoolean activated;
+	
+	public TileEntityBlockBreaker() {
+		addSyncedObject(activated = new SyncableBoolean(false));
+	}
 	
 	@SideOnly(Side.CLIENT)
 	public boolean isActivated() {
 		return activated.getValue();
-	}
-
-	private GenericInventory fakeInventory = new GenericInventory("blockbreaker", true, 1);
-
-	public void setRedstoneSignal(boolean redstoneSignal) {
-		if (redstoneSignal != _redstoneSignal) {
-			_redstoneSignal = redstoneSignal;
-			if (_redstoneSignal) {
-				if(!worldObj.isRemote) {
-					System.out.println("Countdown started");
-					_redstoneAnimTimer = 5;
-					activated.setValue(true);
-					sync();
-				}
-				breakBlock();
-			}
-		}
 	}
 	
 	public void updateEntity() {
@@ -73,10 +50,23 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 				_redstoneAnimTimer--;
 			if(activated.getValue() && _redstoneAnimTimer <= 0) {
 				activated.setValue(false);
-				System.out.println("Countdown ended");
 			}
 
 			sync();
+		}
+	}
+
+	public void setRedstoneSignal(boolean redstoneSignal) {
+		if (redstoneSignal != _redstoneSignal) {
+			_redstoneSignal = redstoneSignal;
+			if (_redstoneSignal) {
+				if(!worldObj.isRemote) {
+					_redstoneAnimTimer = 5;
+					activated.setValue(true);
+					sync();
+				}
+				breakBlock();
+			}
 		}
 	}
 	
@@ -120,8 +110,7 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 
 		TileEntity targetInventory = getTileInDirection(direction);
 		for (ItemStack stack : itemStacks) {
-			// if there's any stack in our buffer slot, eject it. Why is it
-			// there?
+			// if there's any stack in our buffer slot, eject it. Why is it there?
 			ItemStack currentStack = fakeInventory.getStackInSlot(Slots.buffer);
 			if (currentStack != null) {
 				BlockUtils.ejectItemInDirection(world, x, y, z, direction, currentStack);
@@ -132,22 +121,12 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 
 			// push the item out into a pipe or inventory
 			InventoryUtils.moveItemInto(this, Slots.buffer.ordinal(), targetInventory, -1, 64, direction, true);
-
 			// if there's anything left for whatever reason (maybe no inventory)
 			ItemStack buffer = fakeInventory.getStackInSlot(Slots.buffer);
 			if (buffer != null) {
 				// eject it
 				BlockUtils.ejectItemInDirection(world, x, y, z, direction, buffer);
-			}
-		}
-	}
-
-	static void ejectItemsAt(World world, int x, int y, int z, ForgeDirection direction, ArrayList<ItemStack> itemStacks) {
-		if (!world.isRemote
-				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
-		{
-			for (int i = 0, l = itemStacks.size(); i < l; i++) {
-				BlockUtils.ejectItemInDirection(world, x, y, z, direction, itemStacks.get(i));
+				fakeInventory.setInventorySlotContents(Slots.buffer.ordinal(), null);
 			}
 		}
 	}
