@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.common.block.OpenBlock.BlockRotationMode;
 import openblocks.common.tileentity.TileEntityBlockPlacer;
 import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -17,6 +18,7 @@ public class BlockBlockPlacer extends OpenBlock {
 	public BlockBlockPlacer() {
 		super(Config.blockBlockPlacerId, Material.rock);
 		setupBlock(this, "blockPlacer", TileEntityBlockPlacer.class);
+		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 	}
 
 	@Override

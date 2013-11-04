@@ -21,6 +21,7 @@ public class BlockBlockBreaker extends OpenBlock {
 	public BlockBlockBreaker() {
 		super(Config.blockBlockBreakerId, Material.rock);
 		setupBlock(this, "blockbreaker", TileEntityBlockBreaker.class);
+		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 	}
 
 	@Override

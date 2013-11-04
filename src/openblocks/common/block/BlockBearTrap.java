@@ -15,6 +15,7 @@ public class BlockBearTrap extends OpenBlock {
 	public BlockBearTrap() {
 		super(Config.blockBearTrapId, Material.ground);
 		setupBlock(this, "beartrap", TileEntityBearTrap.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

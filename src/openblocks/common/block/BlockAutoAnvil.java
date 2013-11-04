@@ -13,6 +13,7 @@ public class BlockAutoAnvil extends OpenBlock {
 		super(Config.blockAutoAnvilId, Material.anvil);
 		setStepSound(soundAnvilFootstep);
 		setupBlock(this, "autoanvil", TileEntityAutoAnvil.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.OpenBlocks;
+import openblocks.client.renderer.ItemRenderState;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.api.IPlaceAwareTile;
@@ -21,6 +22,8 @@ import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.item.ItemOpenBlock;
 import openblocks.utils.BlockUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class OpenBlock extends BlockContainer {
 
@@ -28,28 +31,79 @@ public abstract class OpenBlock extends BlockContainer {
 	private Class<? extends TileEntity> teClass = null;
 	protected String modKey = "";
 	protected BlockRotationMode blockRotationMode;
-	protected ForgeDirection blockInventoryRenderDirection = BlockUtils.DEFAULT_BLOCK_DIRECTION;
+	
+	@SideOnly(Side.CLIENT)
+	private ItemRenderState itemRenderState;
+	
 	
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHardness(1.0F);
+		/* Defaults to NONE. This will alert us when something tries to rotate that shouldn't */
+		/* We will also be alerted if a flag is set on something that has Six points of rotation */
+		setRotationMode(BlockRotationMode.NONE);
 	}
 	
-	protected void setBlockRotationMode(BlockRotationMode mode) {
+	protected void setRotationMode(BlockRotationMode mode) {
 		this.blockRotationMode = mode;
 	}
 	
-	protected void setBlockInvRenderDirection(ForgeDirection inventoryRenderDirection) {
-		this.blockInventoryRenderDirection = inventoryRenderDirection;
-	}
-	
-	public BlockRotationMode getBlockRotationMode() {
+	public BlockRotationMode getRotationMode() {
 		return this.blockRotationMode;
 	}
 	
-	public ForgeDirection getBlockInvRenderDirection() {
-		return this.blockInventoryRenderDirection;
+	@SideOnly(Side.CLIENT)
+	private void ensureRenderState() {
+		if(itemRenderState == null) itemRenderState = new ItemRenderState();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected void setRenderDirection(ForgeDirection inventoryRenderDirection) {
+		ensureRenderState();
+		this.itemRenderState.rotation = inventoryRenderDirection;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public ForgeDirection getRenderDirection() {
+		if(this.itemRenderState == null) return BlockUtils.DEFAULT_BLOCK_DIRECTION;
+		return this.itemRenderState.rotation;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected void setRenderMetadata(int metadata) {
+		ensureRenderState();
+		this.itemRenderState.metadata = metadata;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public int getRenderMetadata() {
+		if(this.itemRenderState == null) return 0;
+		return this.itemRenderState.metadata;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected void setRenderFlag1(boolean flag) {
+		ensureRenderState();
+		this.itemRenderState.flag1 = flag;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public boolean getRenderFlag1() {
+		if(this.itemRenderState == null) return false;
+		return this.itemRenderState.flag1;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected void setRenderFlag2(boolean flag) {
+		ensureRenderState();
+		this.itemRenderState.flag2 = flag;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public boolean getRenderFlag2() { 
+		if(this.itemRenderState == null) return false;
+		return this.itemRenderState.flag2;
 	}
 	
 	/**
@@ -76,7 +130,7 @@ public abstract class OpenBlock extends BlockContainer {
 	public static boolean getFlag(World world, int x, int y, int z, int index) {
 		OpenBlock block = getOpenBlock(world, x, y, z);
 		if(block != null) {
-			if(block.getBlockRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
+			if(block.getRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
 				System.out.println("ERROR: getFlag called on Six Direction Block " + block.getClass().getName());
 			}
 			return _getFlagUnsafe(world, x, y, z, index);
@@ -101,7 +155,7 @@ public abstract class OpenBlock extends BlockContainer {
 	public static void setFlag(World world, int x, int y, int z, int index, boolean b, boolean notify) {
 		OpenBlock block = getOpenBlock(world, x, y, z);
 		if(block != null) {
-			if(block.getBlockRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
+			if(block.getRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
 				System.out.println("ERROR: setFlag called on Six Direction Block " + block.getClass().getName());
 			}
 			// We set it anyway because it's still an OpenBlock and one of the OB devs has fucked up
@@ -113,7 +167,7 @@ public abstract class OpenBlock extends BlockContainer {
 		/* I'm trying not to think about how ugly 1.7 is going to be */
 		OpenBlock block = getOpenBlock(world, x, y, z);
 		if(block != null) {
-			BlockRotationMode rotationMode = block.getBlockRotationMode();
+			BlockRotationMode rotationMode = block.getRotationMode();
 			if(rotationMode == BlockRotationMode.NONE) {
 				/* No need for the metadata call, decided to return default. It'll make other code nicer */
 				return BlockUtils.DEFAULT_BLOCK_DIRECTION;
@@ -131,7 +185,7 @@ public abstract class OpenBlock extends BlockContainer {
 		if(direction == ForgeDirection.UNKNOWN) direction = BlockUtils.DEFAULT_BLOCK_DIRECTION;
 		OpenBlock block = getOpenBlock(world, x, y, z);
 		if(block != null) {
-			BlockRotationMode rotationMode = block.getBlockRotationMode();
+			BlockRotationMode rotationMode = block.getRotationMode();
 			if(rotationMode == BlockRotationMode.NONE) return false;
 			int metadata = direction.ordinal() - 2;
 			if(rotationMode == BlockRotationMode.FOUR_DIRECTIONS) {

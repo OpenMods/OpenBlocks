@@ -152,7 +152,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void sync() {
 		OpenBlock block = getBlock();
 		if (block != null) {
-			switch(block.getBlockRotationMode()) {
+			switch(block.getRotationMode()) {
 				case NONE: 
 					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 0, flag1, false);
 					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 1, flag2, true);
@@ -176,11 +176,17 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public OpenBlock getBlock() {
-		return OpenBlock.getOpenBlock(worldObj, xCoord, yCoord, zCoord);
+		/* Hey look what I found */
+		if(this.blockType instanceof OpenBlock) { /* This has broken other mods in the past, not this one! */ 
+			return (OpenBlock)this.blockType;
+		}else {
+			return OpenBlock.getOpenBlock(worldObj, xCoord, yCoord, zCoord);
+		}
 	}
 
 	public int getMetadata() {
-		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		return this.blockMetadata;
+		// return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
 	public void openGui(EntityPlayer player) {
