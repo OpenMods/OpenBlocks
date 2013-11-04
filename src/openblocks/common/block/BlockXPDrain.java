@@ -16,6 +16,7 @@ public class BlockXPDrain extends OpenBlock {
 		super(Config.blockXPDrainId, Material.glass);
 		setupBlock(this, "xpdrain", TileEntityXPDrain.class);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

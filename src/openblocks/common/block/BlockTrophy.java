@@ -16,6 +16,7 @@ public class BlockTrophy extends OpenBlock {
 		super(Config.blockTrophyId, Material.ground);
 		setupBlock(this, "trophy", TileEntityTrophy.class, ItemTrophyBlock.class);
 		setBlockBounds(0.3f, 0f, 0.3f, 0.7f, 0.8f, 0.7f);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

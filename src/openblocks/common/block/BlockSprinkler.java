@@ -14,6 +14,7 @@ public class BlockSprinkler extends OpenBlock {
 	public BlockSprinkler() {
 		super(Config.blockSprinklerId, Material.water);
 		setupBlock(this, "sprinkler", TileEntitySprinkler.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override
