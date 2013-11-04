@@ -13,6 +13,7 @@ public class BlockFan extends OpenBlock {
 		super(Config.blockFanId, Material.ground);
 		setupBlock(this, "fan", TileEntityFan.class);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 1.0f, 0.8f);
+		/* No rotation, handled by TE */
 	}
 
 	@Override

@@ -22,6 +22,8 @@ public class BlockLightbox extends OpenBlock {
 		super(Config.blockLightboxId, Material.glass);
 		setupBlock(this, "lightbox", TileEntityLightbox.class);
 		setLightValue(1.0f);
+		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
+		// TODO: Get this working with our rotation code
 	}
 
 	@Override

@@ -13,6 +13,7 @@ public class BlockBigButton extends OpenBlock {
 	public BlockBigButton() {
 		super(Config.blockBigButton, Material.circuits);
 		setupBlock(this, "bigbutton", TileEntityBigButton.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

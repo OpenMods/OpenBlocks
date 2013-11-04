@@ -36,7 +36,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 	private void placeBlock() {
 		if (worldObj.isRemote) return;
 
-		ForgeDirection direction = get3dRotation();
+		ForgeDirection direction = getRotation();
 		int x = xCoord + direction.offsetX, y = yCoord + direction.offsetY, z = zCoord + direction.offsetZ;
 		for (int i = 0, l = getSizeInventory(); i < l; i++) {
 			ItemStack stack = getStackInSlot(i);
@@ -178,7 +178,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		set3dRotation(BlockUtils.get3dOrientation(player));
+		setRotation(BlockUtils.get3dOrientation(player));
 		sync();
 	}
 

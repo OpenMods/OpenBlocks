@@ -25,6 +25,7 @@ public class BlockTarget extends OpenBlock {
 		super(Config.blockTargetId, Material.ground);
 		setupBlock(this, "target", TileEntityTarget.class);
 		setLightValue(0.3f);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

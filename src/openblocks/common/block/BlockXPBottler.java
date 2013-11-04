@@ -22,6 +22,7 @@ public class BlockXPBottler extends OpenBlock {
 	public BlockXPBottler() {
 		super(Config.blockXPBottlerId, Material.ground);
 		setupBlock(this, "xpbottler", TileEntityXPBottler.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override

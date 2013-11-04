@@ -13,6 +13,7 @@ public class BlockCannon extends OpenBlock {
 	public BlockCannon() {
 		super(Config.blockCannonId, Material.ground);
 		setupBlock(this, "cannon", TileEntityCannon.class);
+		/* I don't think this should rotate */
 	}
 
 	@Override

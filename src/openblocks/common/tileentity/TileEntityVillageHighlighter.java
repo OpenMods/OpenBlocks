@@ -88,6 +88,7 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity implements
 	}
 
 	public boolean isPowered() {
+		if(worldObj == null) return false;
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 
