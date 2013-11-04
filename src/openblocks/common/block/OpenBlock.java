@@ -28,7 +28,7 @@ public abstract class OpenBlock extends BlockContainer {
 	private Class<? extends TileEntity> teClass = null;
 	protected String modKey = "";
 	protected BlockRotationMode blockRotationMode;
-	protected ForgeDirection blockInventoryRenderDirection = ForgeDirection.NORTH;
+	protected ForgeDirection blockInventoryRenderDirection = BlockUtils.DEFAULT_BLOCK_DIRECTION;
 	
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
@@ -51,16 +51,72 @@ public abstract class OpenBlock extends BlockContainer {
 	public ForgeDirection getBlockInvRenderDirection() {
 		return this.blockInventoryRenderDirection;
 	}
-
-	public ForgeDirection getRotation(World world, int x, int y, int z) {
-		/* I'm trying not to think about how ugly 1.7 is going to be */
+	
+	/**
+	 * Helper function to get the OpenBlock class for a block in the world
+	 * @param world world to get the block from 
+	 * @param x X coord
+	 * @param y Y coord
+	 * @param z Z coord
+	 * @return OpenBlock instance of the block, or null if invalid
+	 */
+	private static OpenBlock getOpenBlock(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
+		if(id < 0 || id >= Block.blocksList.length) return null;
 		Block block = Block.blocksList[id];
-		if(block != null && block instanceof OpenBlock) {
-			BlockRotationMode rotationMode = ((OpenBlock)block).getBlockRotationMode();
+		if(block instanceof OpenBlock) return (OpenBlock)block;
+		return null;
+	}
+	
+	private static boolean _getFlagUnsafe(World world, int x, int y, int z, int index) {
+		int metadata = world.getBlockMetadata(x, y, z);
+		return BlockUtils.getBlockFlagFromMetadata(metadata, index);
+	}
+	
+	public static boolean getFlag(World world, int x, int y, int z, int index) {
+		OpenBlock block = getOpenBlock(world, x, y, z);
+		if(block != null) {
+			if(block.getBlockRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
+				System.out.println("ERROR: getFlag called on Six Direction Block " + block.getClass().getName());
+			}
+			return _getFlagUnsafe(world, x, y, z, index);
+		}
+		return false;
+	}
+	
+	private static int _setFlagUnsafe(World world, int x, int y, int z, int index, boolean b, boolean makeChange) {
+		int metadata = world.getBlockMetadata(x, y, z);
+		int newMetadata = metadata;
+		if(index == 0) {
+			newMetadata = (b ? 4 : 0) | newMetadata & 0x3;
+		}else if(index == 1) {
+			newMetadata = (b ? 8 : 0) | newMetadata & 0x7;
+		}
+		if(newMetadata != metadata && makeChange) {
+			world.setBlockMetadataWithNotify(x, y, z, newMetadata, 3);
+		}
+		return newMetadata; /* Make change is just an optimization thing for rotation */
+	}
+	
+	public static void setFlag(World world, int x, int y, int z, int index, boolean b) {
+		OpenBlock block = getOpenBlock(world, x, y, z);
+		if(block != null) {
+			if(block.getBlockRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
+				System.out.println("ERROR: setFlag called on Six Direction Block " + block.getClass().getName());
+			}
+			// We set it anyway because it's still an OpenBlock and one of the OB devs has fucked up
+			_setFlagUnsafe(world, x, y, z, index, b, true);
+		}
+	}
+
+	public static ForgeDirection getRotation(World world, int x, int y, int z) {
+		/* I'm trying not to think about how ugly 1.7 is going to be */
+		OpenBlock block = getOpenBlock(world, x, y, z);
+		if(block != null) {
+			BlockRotationMode rotationMode = block.getBlockRotationMode();
 			if(rotationMode == BlockRotationMode.NONE) {
-				/* No need for the metadata call */
-				return ForgeDirection.UNKNOWN;
+				/* No need for the metadata call, decided to return default. It'll make other code nicer */
+				return BlockUtils.DEFAULT_BLOCK_DIRECTION;
 			}
 			int metadata = world.getBlockMetadata(x, y, z);
 			switch(rotationMode) {
@@ -68,7 +124,34 @@ public abstract class OpenBlock extends BlockContainer {
 				default: return BlockUtils.getRotationFromMetadata(metadata);
 			}
 		}
-		return ForgeDirection.UNKNOWN;
+		return BlockUtils.DEFAULT_BLOCK_DIRECTION;
+	}
+	
+	public static boolean setRotation(World world, int x, int y, int z, ForgeDirection direction) {
+		if(direction == ForgeDirection.UNKNOWN) direction = BlockUtils.DEFAULT_BLOCK_DIRECTION;
+		OpenBlock block = getOpenBlock(world, x, y, z);
+		if(block != null) {
+			BlockRotationMode rotationMode = block.getBlockRotationMode();
+			if(rotationMode == BlockRotationMode.NONE) return false;
+			int metadata = direction.ordinal() - 2;
+			if(rotationMode == BlockRotationMode.FOUR_DIRECTIONS) {
+				if(direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) {
+					/* No change will be made. This makes wrenches easy later ;) */
+					return false;
+				}else{
+					world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
+				}
+				return true;
+			}else if(rotationMode == BlockRotationMode.SIX_DIRECTIONS) {
+				int flagMeta = 
+						_setFlagUnsafe(world, x, y, z, 0, direction == ForgeDirection.UP, false) |
+						_setFlagUnsafe(world, x, y, z, 1, direction == ForgeDirection.DOWN, false);
+				metadata |= flagMeta & 0xC;
+				world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override
