@@ -27,11 +27,20 @@ public abstract class OpenBlock extends BlockContainer {
 	private String uniqueBlockId;
 	private Class<? extends TileEntity> teClass = null;
 	protected String modKey = "";
-
+	protected BlockRotationMode blockRotationMode;
+	
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHardness(1.0F);
+	}
+	
+	protected void setBlockRotationMode(BlockRotationMode mode) {
+		this.blockRotationMode = mode;
+	}
+	
+	public BlockRotationMode getBlockRotationMode() {
+		return this.blockRotationMode;
 	}
 
 	@Override
@@ -214,5 +223,11 @@ public abstract class OpenBlock extends BlockContainer {
 	protected boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
 		return side == ForgeDirection.DOWN
 				&& isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
+	}
+	
+	public enum BlockRotationMode {
+		None,
+		FourDirections,
+		SixDirections
 	}
 }
