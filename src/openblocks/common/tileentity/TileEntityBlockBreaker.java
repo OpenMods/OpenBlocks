@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ForgeHooks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IAwareTile;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
+import openblocks.utils.OpenBlocksFakePlayer;
 
 public class TileEntityBlockBreaker extends OpenTileEntity
 		implements IAwareTile, IInventory {
@@ -43,22 +46,28 @@ public class TileEntityBlockBreaker extends OpenTileEntity
 
 		if (worldObj.blockExists(x, y, z)) {
 			int blockId = worldObj.getBlockId(x, y, z);
-			if (blockId > 0) {
-				Block block = Block.blocksList[blockId];
-
+			Block block = Block.blocksList[blockId];
+			if (block != null) {
 				int metadata = worldObj.getBlockMetadata(x, y, z);
-				worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
-
-				ArrayList<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
-
-				worldObj.setBlock(x, y, z, 0, 0, 3);
-
-				ForgeDirection back = direction.getOpposite();
-				ejectAt(worldObj,
-						xCoord + back.offsetX,
-						yCoord + back.offsetY,
-						zCoord + back.offsetZ,
-						back, items);
+				if (block != Block.bedrock
+						&& block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
+					EntityPlayer fakePlayer = OpenBlocksFakePlayer.getPlayerForWorld(worldObj);
+					fakePlayer.inventory.currentItem = 0;
+					fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Item.pickaxeDiamond));
+					if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
+						ArrayList<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
+						if (items != null) {
+							ForgeDirection back = direction.getOpposite();
+							ejectAt(worldObj,
+									xCoord + back.offsetX,
+									yCoord + back.offsetY,
+									zCoord + back.offsetZ,
+									back, items);
+						}
+					}
+                    worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
+					worldObj.setBlockToAir(x, y, z);
+				}
 			}
 		}
 	}
