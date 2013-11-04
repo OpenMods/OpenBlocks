@@ -100,7 +100,7 @@ public class GenericTank extends FluidTank {
 	}
 	
 	public void autoFillFromSides(int amountPerTick, TileEntity currentTile) {
-		autoFillFromSides(amountPerTick, currentTile);
+		autoFillFromSides(amountPerTick, currentTile, null);
 	}
 
 	public void autoFillFromSides(int amountPerTick, TileEntity currentTile, SyncableFlags sides) {
