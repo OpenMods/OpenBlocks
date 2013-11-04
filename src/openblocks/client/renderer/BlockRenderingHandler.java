@@ -109,7 +109,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
 				if (te != null) {
-					te.worldObj = world;
+					// te.worldObj = world;
 					GL11.glTranslated(-0.5, -0.5, -0.5);
 					TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
 				} else {

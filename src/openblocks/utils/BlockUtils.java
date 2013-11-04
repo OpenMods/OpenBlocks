@@ -12,7 +12,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class BlockUtils {
 
-	public static final ForgeDirection DEFAULT_BLOCK_DIRECTION = ForgeDirection.EAST;
+	public static final ForgeDirection DEFAULT_BLOCK_DIRECTION = ForgeDirection.WEST;
 	
 	public static ForgeDirection get2dOrientation(EntityLivingBase entity) {
 		int l = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;

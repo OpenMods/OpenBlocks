@@ -103,6 +103,7 @@ public class TileEntityTrophy extends Packet132TileEntity implements IAwareTileL
 
 	@Override
 	public ForgeDirection getRotation() {
+		if(isRenderedInInventory()) return super.getRotation();
 		return rotation;
 	}
 
