@@ -5,6 +5,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -30,7 +31,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public BlockRenderingHandler() {
 		inventoryTileEntities = Maps.newIdentityHashMap();
 		blockRenderers = Maps.newIdentityHashMap();
-
+		
 		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
 
 		TileEntityLightbox teLightbox = new TileEntityLightbox();
@@ -101,7 +102,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		if (te instanceof OpenTileEntity) {
 			((OpenTileEntity)te).prepareForInventoryRender(block, metadata);
 		}
-
+		
 		try {
 			final World world = Minecraft.getMinecraft().theWorld;
 			if (world != null) {
@@ -112,7 +113,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 					GL11.glTranslated(-0.5, -0.5, -0.5);
 					TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
 				} else {
-					OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, block, null);
+					OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, block, null);	
 				}
 			}
 		} catch (Exception e) {
