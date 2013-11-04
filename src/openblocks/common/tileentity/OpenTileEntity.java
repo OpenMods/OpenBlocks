@@ -19,6 +19,7 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	private boolean isUsedForClientInventoryRendering = false;
 
+	
 	/**
 	 * The block rotation stored in metadata. This can be used for
 	 * NORTH/EAST/SOUTH/WEST
@@ -42,7 +43,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	 */
 	public ForgeDirection getRotation() {
 		if (isUsedForClientInventoryRendering) { return rotation; }
-		return BlockUtils.getRotationFromMetadata(getMetadata());
+		return OpenBlock.getRotation(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	/**
@@ -56,29 +57,19 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	/**
 	 * Set the block rotation. To sync to the client call sync()
+	 * This supports all 6 directions provided the Block rotation mode is set as so.
 	 * 
 	 * @param rot
 	 */
 	public void setRotation(ForgeDirection rot) {
-		if (rot == ForgeDirection.UP || rot == ForgeDirection.DOWN
-				|| rot == ForgeDirection.UNKNOWN) {
+		if (rot == ForgeDirection.UNKNOWN) {
 			rot = BlockUtils.DEFAULT_BLOCK_DIRECTION;
 		}
 		rotation = rot;
 	}
 
-	public void set3dRotation(ForgeDirection rot) {
-		setRotation(rot);
-		setFlag1(rot == ForgeDirection.UP);
-		setFlag2(rot == ForgeDirection.DOWN);
-	}
-
-	public ForgeDirection get3dRotation() {
-		return BlockUtils.get3dBlockRotationFromMetadata(getMetadata());
-	}
-
 	private boolean getFlag(int index) {
-		return BlockUtils.getBlockFlagFromMetadata(getMetadata(), index);
+		return OpenBlock.getFlag(worldObj, xCoord, yCoord, zCoord, index);
 	}
 
 	public boolean getFlag1() {
@@ -138,6 +129,7 @@ public abstract class OpenTileEntity extends TileEntity {
 		int x = xCoord + direction.offsetX;
 		int y = yCoord + direction.offsetY;
 		int z = zCoord + direction.offsetZ;
+		/* TODO: Mikee, getBlockTileEntity returns null anyway, why the extra block check ? */
 		if (worldObj != null && worldObj.blockExists(x, y, z)) { return worldObj.getBlockTileEntity(x, y, z); }
 		return null;
 	}
@@ -160,15 +152,21 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void sync() {
 		OpenBlock block = getBlock();
 		if (block != null) {
-			int ordinal = rotation.ordinal() - 2;
-			int currentMeta = getMetadata();
-			int newMeta = ordinal;
-			newMeta = (flag1? 4 : 0) | (newMeta & 3);
-			newMeta = (flag2? 8 : 0) | (newMeta & 7);
-			if (currentMeta != newMeta) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, 3);
+			switch(block.getBlockRotationMode()) {
+				case NONE: 
+					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 0, flag1, false);
+					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 1, flag2, true);
+					break;
+				case FOUR_DIRECTIONS: 
+					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 0, flag1, false);
+					OpenBlock.setFlag(worldObj, xCoord, yCoord, zCoord, 1, flag2, false);
+					OpenBlock.setRotation(worldObj, xCoord, yCoord, zCoord, rotation);
+					break;
+				case SIX_DIRECTIONS:
+					OpenBlock.setRotation(worldObj, xCoord, yCoord, zCoord, rotation);
 			}
 		}
+		/* TODO: I don't think this is required. We should look in to that */
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
@@ -178,9 +176,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public OpenBlock getBlock() {
-		Block block = Block.blocksList[worldObj.getBlockId(xCoord, yCoord, zCoord)];
-		if (block instanceof OpenBlock) { return (OpenBlock)block; }
-		return null;
+		return OpenBlock.getOpenBlock(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public int getMetadata() {

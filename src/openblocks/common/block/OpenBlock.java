@@ -60,7 +60,7 @@ public abstract class OpenBlock extends BlockContainer {
 	 * @param z Z coord
 	 * @return OpenBlock instance of the block, or null if invalid
 	 */
-	private static OpenBlock getOpenBlock(World world, int x, int y, int z) {
+	public static OpenBlock getOpenBlock(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		if(id < 0 || id >= Block.blocksList.length) return null;
 		Block block = Block.blocksList[id];
@@ -84,7 +84,7 @@ public abstract class OpenBlock extends BlockContainer {
 		return false;
 	}
 	
-	private static int _setFlagUnsafe(World world, int x, int y, int z, int index, boolean b, boolean makeChange) {
+	private static int _setFlagUnsafe(World world, int x, int y, int z, int index, boolean b, boolean makeChange, boolean notify) {
 		int metadata = world.getBlockMetadata(x, y, z);
 		int newMetadata = metadata;
 		if(index == 0) {
@@ -93,19 +93,19 @@ public abstract class OpenBlock extends BlockContainer {
 			newMetadata = (b ? 8 : 0) | newMetadata & 0x7;
 		}
 		if(newMetadata != metadata && makeChange) {
-			world.setBlockMetadataWithNotify(x, y, z, newMetadata, 3);
+			world.setBlockMetadataWithNotify(x, y, z, newMetadata, notify ? 3 : 0);
 		}
 		return newMetadata; /* Make change is just an optimization thing for rotation */
 	}
 	
-	public static void setFlag(World world, int x, int y, int z, int index, boolean b) {
+	public static void setFlag(World world, int x, int y, int z, int index, boolean b, boolean notify) {
 		OpenBlock block = getOpenBlock(world, x, y, z);
 		if(block != null) {
 			if(block.getBlockRotationMode() == BlockRotationMode.SIX_DIRECTIONS) {
 				System.out.println("ERROR: setFlag called on Six Direction Block " + block.getClass().getName());
 			}
 			// We set it anyway because it's still an OpenBlock and one of the OB devs has fucked up
-			_setFlagUnsafe(world, x, y, z, index, b, true);
+			_setFlagUnsafe(world, x, y, z, index, b, true, notify);
 		}
 	}
 
@@ -144,8 +144,8 @@ public abstract class OpenBlock extends BlockContainer {
 				return true;
 			}else if(rotationMode == BlockRotationMode.SIX_DIRECTIONS) {
 				int flagMeta = 
-						_setFlagUnsafe(world, x, y, z, 0, direction == ForgeDirection.UP, false) |
-						_setFlagUnsafe(world, x, y, z, 1, direction == ForgeDirection.DOWN, false);
+						_setFlagUnsafe(world, x, y, z, 0, direction == ForgeDirection.UP, false, false) |
+						_setFlagUnsafe(world, x, y, z, 1, direction == ForgeDirection.DOWN, false, false);
 				metadata |= flagMeta & 0xC;
 				world.setBlockMetadataWithNotify(x, y, z, metadata, 3);
 				return true;
