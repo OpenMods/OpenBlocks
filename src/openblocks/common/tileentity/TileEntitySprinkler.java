@@ -38,12 +38,10 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 		enabled
 	}
 	
-	private SyncableFlags flags;
-	private SyncableTank tank;
+	private SyncableFlags flags = new SyncableFlags();
+	private SyncableTank tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID);
 	
 	public TileEntitySprinkler() {
-		addSyncedObject(flags = new SyncableFlags());
-		addSyncedObject(tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID));
 		setInventory(new GenericInventory("sprinkler", true, 9));
 	}
 

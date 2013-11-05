@@ -31,10 +31,9 @@ public class TileEntityBlockBreaker extends NetworkedTileEntity
 
 	private boolean _redstoneSignal;
 	private int _redstoneAnimTimer;
-	private SyncableBoolean activated;
+	private SyncableBoolean activated = new SyncableBoolean(false);
 	
 	public TileEntityBlockBreaker() {
-		addSyncedObject(activated = new SyncableBoolean(false));
 		setInventory(new GenericInventory("blockbreaker", true, 1));
 	}
 	

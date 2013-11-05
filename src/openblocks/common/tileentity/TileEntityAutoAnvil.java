@@ -55,22 +55,16 @@ public class TileEntityAutoAnvil extends NetworkedTileEntity implements
 	/**
 	 * The shared/syncable objects
 	 */
-	private SyncableFlags toolSides;
-	private SyncableFlags modifierSides;
-	private SyncableFlags outputSides;
-	private SyncableFlags xpSides;
-	private SyncableTank tank;
-	private SyncableFlags automaticSlots;
+	private SyncableFlags toolSides = new SyncableFlags();
+	private SyncableFlags modifierSides = new SyncableFlags();
+	private SyncableFlags outputSides = new SyncableFlags();
+	private SyncableFlags xpSides = new SyncableFlags();
+	private SyncableTank tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+	private SyncableFlags automaticSlots = new SyncableFlags();
 
 	private SlotSideHelper slotSides = new SlotSideHelper();
 
 	public TileEntityAutoAnvil() {
-		addSyncedObject(toolSides = new SyncableFlags());
-		addSyncedObject(modifierSides = new SyncableFlags());
-		addSyncedObject(outputSides = new SyncableFlags());
-		addSyncedObject(xpSides = new SyncableFlags());
-		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
-		addSyncedObject(automaticSlots = new SyncableFlags());
 		setInventory(new GenericInventory("autoanvil", true, 3));
 
 		slotSides.addMapping(Slots.tool, toolSides);

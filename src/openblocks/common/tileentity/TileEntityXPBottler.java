@@ -29,8 +29,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Item.expBottle, 1);
 	public static final int PROGRESS_TICKS = 40;
 
-	private SyncableTank tank;
-
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
 
 	public static enum Slots {
@@ -45,19 +43,14 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 	}
 
 	/** synced data objects **/
-	private SyncableProgress progress;
-	private SyncableFlags glassSides;
-	private SyncableFlags xpBottleSides;
-	private SyncableFlags xpSides;
-	private SyncableFlags automaticSlots;
+	private SyncableProgress progress = new SyncableProgress(PROGRESS_TICKS);
+	private SyncableFlags glassSides = new SyncableFlags();
+	private SyncableFlags xpBottleSides = new SyncableFlags();
+	private SyncableFlags xpSides = new SyncableFlags();
+	private SyncableFlags automaticSlots = new SyncableFlags();
+	private SyncableTank tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 
 	public TileEntityXPBottler() {
-		addSyncedObject(progress = new SyncableProgress(PROGRESS_TICKS));
-		addSyncedObject(glassSides = new SyncableFlags());
-		addSyncedObject(xpBottleSides = new SyncableFlags());
-		addSyncedObject(xpSides = new SyncableFlags());
-		addSyncedObject(automaticSlots = new SyncableFlags());
-		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
 		setInventory(new GenericInventory("xpbottler", true, 2));
 	}
 

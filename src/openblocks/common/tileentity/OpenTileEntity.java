@@ -25,6 +25,10 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void setInventory(GenericInventory inventory) {
 		this.inventory = inventory;
 	}
+	
+	public void setup() {
+		
+	}
 
 	/**
 	 * Get the current block rotation

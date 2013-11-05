@@ -3,10 +3,7 @@ package openblocks.sync;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -98,6 +95,7 @@ public abstract class SyncMap<H extends ISyncHandler> {
 	private Set<Integer> knownUsers = new HashSet<Integer>();
 
 	protected ISyncableObject[] objects = new ISyncableObject[16];
+	protected HashMap<String, Integer> nameMap = new HashMap<String, Integer>();
 
 	private int index = 0;
 
@@ -105,16 +103,16 @@ public abstract class SyncMap<H extends ISyncHandler> {
 		this.handler = handler;
 	}
 
-	public void put(ISyncableObject value) {
+	public void put(String name, ISyncableObject value) {
+		nameMap.put(name, index);
 		objects[index++] = value;
 	}
 
-	public ISyncableObject get(Enum<?> id) {
-		return get(id.ordinal());
-	}
-
-	public ISyncableObject get(int id) {
-		return objects[id];
+	public ISyncableObject get(String name) {
+		if (nameMap.containsKey(name)) {
+			return objects[nameMap.get(name)];
+		}
+		return null;
 	}
 	
 	public int size() {

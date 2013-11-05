@@ -26,21 +26,27 @@ public class OpenRenderHelper {
 		t.startDrawingQuads();
 
 		Icon useTexture = overrideTexture != null? overrideTexture : block.getIcon(0, meta);
+		t.setNormal(0.0F, -1.0F, 0.0F);
 		renderBlocks.renderFaceYNeg(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getIcon(1, meta);
+		t.setNormal(0.0F, 1.0F, 0.0F);
 		renderBlocks.renderFaceYPos(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getIcon(2, meta);
+		t.setNormal(0.0F, 0.0F, -1.0F);
 		renderBlocks.renderFaceZNeg(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getIcon(3, meta);
+		t.setNormal(0.0F, 0.0F, 1.0F);
 		renderBlocks.renderFaceZPos(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getIcon(4, meta);
+		t.setNormal(-1.0F, 0.0F, 0.0F);
 		renderBlocks.renderFaceXNeg(block, 0, 0, 0, useTexture);
 
 		useTexture = overrideTexture != null? overrideTexture : block.getIcon(5, meta);
+		t.setNormal(1.0F, 0.0F, 0.0F);
 		renderBlocks.renderFaceXPos(block, 0, 0, 0, useTexture);
 		t.draw();
 

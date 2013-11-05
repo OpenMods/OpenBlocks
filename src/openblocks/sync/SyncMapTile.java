@@ -1,5 +1,6 @@
 package openblocks.sync;
 
+import java.util.Map.Entry;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +12,8 @@ import openblocks.network.PacketHandler;
 
 import com.google.common.collect.ImmutableSet;
 
-public class SyncMapTile<H extends TileEntity & ISyncHandler> extends SyncMap<H> {
+public class SyncMapTile<H extends TileEntity & ISyncHandler> extends
+		SyncMap<H> {
 
 	public SyncMapTile(H handler) {
 		super(handler);
@@ -24,9 +26,7 @@ public class SyncMapTile<H extends TileEntity & ISyncHandler> extends SyncMap<H>
 
 	@Override
 	protected Set<EntityPlayer> getPlayersWatching() {
-		if (handler.worldObj instanceof WorldServer) {
-			return PacketHandler.getPlayersWatchingBlock((WorldServer)handler.worldObj, handler.xCoord, handler.zCoord);
-		}
+		if (handler.worldObj instanceof WorldServer) { return PacketHandler.getPlayersWatchingBlock((WorldServer)handler.worldObj, handler.xCoord, handler.zCoord); }
 		return ImmutableSet.of();
 	}
 
@@ -34,19 +34,23 @@ public class SyncMapTile<H extends TileEntity & ISyncHandler> extends SyncMap<H>
 	protected World getWorld() {
 		return handler.worldObj;
 	}
-	
+
 	public void writeToNBT(NBTTagCompound tag) {
-		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] != null) {
-				objects[i].writeToNBT(tag, "save_" + i);
+		for (Entry<String, Integer> entry : nameMap.entrySet()) {
+			int index = entry.getValue();
+			String name = entry.getKey();
+			if (objects[index] != null) {
+				objects[index].writeToNBT(tag, name);
 			}
 		}
 	}
 
 	public void readFromNBT(NBTTagCompound tag) {
-		for (int i = 0; i < objects.length; i++) {
-			if (objects[i] != null) {
-				objects[i].readFromNBT(tag, "save_" + i);
+		for (Entry<String, Integer> entry : nameMap.entrySet()) {
+			int index = entry.getValue();
+			String name = entry.getKey();
+			if (objects[index] != null) {
+				objects[index].readFromNBT(tag, name);
 			}
 		}
 	}

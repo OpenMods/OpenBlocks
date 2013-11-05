@@ -22,7 +22,6 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity {
 	private boolean previousBreedStatus = false;
 
 	public TileEntityVillageHighlighter() {
-		addSyncedObject(villageData);
 	}
 
 	public static int[] convertIntegers(List<Integer> integers) {

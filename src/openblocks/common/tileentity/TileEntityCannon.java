@@ -35,10 +35,6 @@ public class TileEntityCannon extends NetworkedTileEntity implements IActivateAw
 	public boolean renderLine = true;
 
 	public TileEntityCannon() {
-		addSyncedObject(pitch);
-		addSyncedObject(yaw);
-		addSyncedObject(cannonId);
-		addSyncedObject(ridingEntity);
 	}
 
 	@Override

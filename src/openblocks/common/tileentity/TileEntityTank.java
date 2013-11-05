@@ -31,9 +31,6 @@ public class TileEntityTank extends NetworkedTileEntity implements
 
 	private int previousFluidId = 0;
 
-	public TileEntityTank() {
-		addSyncedObject(tank);
-	}
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
 	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();

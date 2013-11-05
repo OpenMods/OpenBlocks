@@ -1,5 +1,9 @@
 package openblocks.common.block;
 
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -16,6 +20,8 @@ import openblocks.OpenBlocks;
 import openblocks.common.api.*;
 import openblocks.common.item.ItemOpenBlock;
 import openblocks.common.tileentity.NetworkedTileEntity;
+import openblocks.common.tileentity.OpenTileEntity;
+import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDirection;
 import openblocks.utils.BlockUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -25,11 +31,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public abstract class OpenBlock extends Block {
 
 	private String uniqueBlockId;
-	private Class<? extends TileEntity> teClass = null;
+	private Class<? extends OpenTileEntity> teClass = null;
 	protected String modKey = "";
 	protected BlockRotationMode blockRotationMode;
 	protected BlockPlacementMode blockPlacementMode;
 	protected ForgeDirection inventortyRenderDirection = ForgeDirection.WEST;
+	private Set<Field> syncedFields;
 	
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
@@ -87,14 +94,19 @@ public abstract class OpenBlock extends Block {
 	
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
+		OpenTileEntity te = null;
 		try {
-			if (teClass != null) { return teClass.getConstructor(new Class[0]).newInstance(); }
+			if (teClass != null) { te = teClass.getConstructor(new Class[0]).newInstance(); }
 		} catch (NoSuchMethodException nsm) {
 			Log.warn(nsm, "Notice: Cannot create TE automatically due to constructor requirements");
 		} catch (Exception ex) {
 			Log.warn(ex, "Notice: Error creating tile entity");
 		}
-		return null;
+		if (te != null) {
+			te.blockType = this;
+			te.setup();
+		}
+		return te;
 	}
 
 	@Override
@@ -119,11 +131,11 @@ public abstract class OpenBlock extends Block {
 		setupBlock(instance, uniqueName, null);
 	}
 
-	public void setupBlock(Block instance, String uniqueName, Class<? extends TileEntity> tileEntity) {
+	public void setupBlock(Block instance, String uniqueName, Class<? extends OpenTileEntity> tileEntity) {
 		setupBlock(instance, uniqueName, tileEntity, ItemOpenBlock.class);
 	}
 
-	public void setupBlock(Block instance, String uniqueName, Class<? extends TileEntity> tileEntity, Class<? extends ItemOpenBlock> itemClass) {
+	public void setupBlock(Block instance, String uniqueName, Class<? extends OpenTileEntity> tileEntity, Class<? extends ItemOpenBlock> itemClass) {
 		uniqueBlockId = uniqueName;
 		modKey = OpenBlocks.getModId().toLowerCase();
 
@@ -134,6 +146,7 @@ public abstract class OpenBlock extends Block {
 			GameRegistry.registerTileEntity(tileEntity, String.format("%s_%s", modKey, uniqueName));
 			this.teClass = tileEntity;
 			isBlockContainer = true;
+			findSyncedFields();
 		}
 	}
 	
@@ -280,7 +293,7 @@ public abstract class OpenBlock extends Block {
 		if (additionalRotation != null) {
 			NetworkedTileEntity nTe = getTileEntity(world, x, y, z, NetworkedTileEntity.class);
 			if (nTe != null) {
-				nTe.addSpecialObject(new SyncableDirection(additionalRotation));
+				nTe.addSyncedObject("_rotation2", new SyncableDirection(additionalRotation));
 				nTe.sync();
 			}else {
 				new Exception("For 6+ levels of rotation you need to use a NetworkedTileEntity").printStackTrace();
@@ -314,7 +327,22 @@ public abstract class OpenBlock extends Block {
 		return side == ForgeDirection.DOWN
 				&& isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
 	}
-
+	
+	protected void findSyncedFields() {
+		if (teClass != null && NetworkedTileEntity.class.isAssignableFrom(teClass)) {
+			syncedFields = new HashSet<Field>();
+			for (Field field : teClass.getDeclaredFields()) {
+				if (ISyncableObject.class.isAssignableFrom(field.getDeclaringClass())) {
+					syncedFields.add(field);
+				}
+			}
+		}
+	}
+	
+	public Set<Field> getSyncedFields() {
+		return syncedFields;
+	}
+	
 	@Override
 	public int getRenderType() {
 		return OpenBlocks.renderId;

@@ -21,10 +21,9 @@ public class TileEntityTrophy extends NetworkedTileEntity implements IAwareTileL
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 	private int sinceLastActivate = 0;
-	private SyncableInt trophyIndex;
+	private SyncableInt trophyIndex = new SyncableInt();
 	
 	public TileEntityTrophy() {
-		addSyncedObject(trophyIndex = new SyncableInt());
 	}
 
 	public Trophy getTrophy() {

@@ -39,10 +39,6 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	}
 
 	public TileEntityGuide() {
-		addSyncedObject(width);
-		addSyncedObject(height);
-		addSyncedObject(depth);
-		addSyncedObject(mode);
 	}
 
 	public int getWidth() {

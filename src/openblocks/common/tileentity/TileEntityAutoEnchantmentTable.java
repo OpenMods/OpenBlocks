@@ -27,15 +27,6 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
 
-	private SyncableTank tank;
-	private SyncableFlags inputSides;
-	private SyncableFlags outputSides;
-	private SyncableFlags xpSides;
-	private SyncableInt targetLevel;
-	private SyncableFlags automaticSlots;
-
-	private SlotSideHelper slotSides = new SlotSideHelper();
-
 	public static enum Slots {
 		input,
 		output
@@ -47,6 +38,16 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 		xp
 	}
 
+
+	private SyncableTank tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+	private SyncableFlags inputSides = new SyncableFlags();
+	private SyncableFlags outputSides = new SyncableFlags();
+	private SyncableFlags xpSides = new SyncableFlags();
+	private SyncableInt targetLevel = new SyncableInt(1);
+	private SyncableFlags automaticSlots = new SyncableFlags();
+
+	private SlotSideHelper slotSides = new SlotSideHelper();
+	
 	/**
 	 * grotesque book turning stuff taken from the main enchantment table
 	 */
@@ -63,12 +64,6 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 	private static Random rand = new Random();
 
 	public TileEntityAutoEnchantmentTable() {
-		addSyncedObject(inputSides = new SyncableFlags());
-		addSyncedObject(outputSides = new SyncableFlags());
-		addSyncedObject(xpSides = new SyncableFlags());
-		addSyncedObject(automaticSlots = new SyncableFlags());
-		addSyncedObject(tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID));
-		addSyncedObject(targetLevel = new SyncableInt(1));
 		setInventory(new GenericInventory("autoenchant", true, 2));
 		slotSides.addMapping(Slots.input, inputSides);
 		slotSides.addMapping(Slots.output, outputSides);

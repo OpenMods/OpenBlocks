@@ -22,7 +22,6 @@ public class TileEntityFan extends NetworkedTileEntity implements IPlaceAwareTil
 	}
 
 	public TileEntityFan() {
-		addSyncedObject(angle);
 	}
 
 	@Override

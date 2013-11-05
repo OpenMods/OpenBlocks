@@ -1,40 +1,39 @@
 package openblocks.common.tileentity;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
+import openblocks.common.block.OpenBlock;
 import openblocks.sync.*;
 
 public abstract class NetworkedTileEntity extends OpenTileEntity implements
 		ISyncHandler {
 
-	protected SyncMapTile<NetworkedTileEntity> syncMap = new SyncMapTile<NetworkedTileEntity>(this);
+	
+	protected SyncMapTile<NetworkedTileEntity> syncMap;
 
-	private int specialObjectIndex = -1;
-	
-	public void addSyncedObject(ISyncableObject obj) {
-		syncMap.put(obj);
+	public NetworkedTileEntity() {
+		syncMap = new SyncMapTile<NetworkedTileEntity>(this);
 	}
 	
-	/**
-	 * Used by OpenBlocks for tiles that have 24 rotations. Don't use this! thx
-	 * @param obj
-	 */
-	public void addSpecialObject(ISyncableObject obj) {
-		if (specialObjectIndex == -1) {
-			specialObjectIndex = syncMap.size();
-			syncMap.put(obj);	
+	@Override
+	public void setup() {
+		OpenBlock block = getBlock();
+		for (Field field : block.getSyncedFields()) {
+			try {
+				addSyncedObject(field.getName(), (ISyncableObject)field.get(this));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
-	public ISyncableObject getSpecialObject() {
-		if (specialObjectIndex == -1) {
-			return null;
-		}
-		return syncMap.get(specialObjectIndex);
+	public void addSyncedObject(String name, ISyncableObject obj) {
+		syncMap.put(name, obj);
 	}
 
 	public void sync() {
@@ -56,15 +55,14 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 		}
 	}
 
-
 	public ForgeDirection getSecondaryRotation() {
-		ISyncableObject obj = getSpecialObject();
-		if (obj instanceof SyncableDirection) {
-			return ((SyncableDirection)obj).getValue();
+		ISyncableObject rot = syncMap.get("_rotation2");
+		if (rot != null) {
+			return ((SyncableDirection) rot).getValue();
 		}
 		return null;
 	}
-
+	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);

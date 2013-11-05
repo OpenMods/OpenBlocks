@@ -23,8 +23,6 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 	private SyncableInt trappedEntityId = new SyncableInt();
 
 	public TileEntityBearTrap() {
-		addSyncedObject(flags);
-		addSyncedObject(trappedEntityId);
 		flags.on(Flags.isShut);
 	}
 

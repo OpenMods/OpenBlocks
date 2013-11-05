@@ -30,10 +30,9 @@ public class TileEntityBigButton extends NetworkedTileEntity implements IActivat
 		active
 	}
 	
-	private SyncableFlags flags;
+	private SyncableFlags flags = new SyncableFlags();
 	
 	public TileEntityBigButton() {
-		addSyncedObject(flags = new SyncableFlags());
 		setInventory(new GenericInventory("bigbutton", true, 1));
 	}
 	
