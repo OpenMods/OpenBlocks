@@ -31,23 +31,28 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 
 	private boolean _redstoneSignal;
 	private int _redstoneAnimTimer;
-	private SyncableBoolean activated = new SyncableBoolean(false);
-	
+	private SyncableBoolean activated;
+
 	public TileEntityBlockBreaker() {
 		setInventory(new GenericInventory("blockbreaker", true, 1));
 	}
-	
+
+	@Override
+	protected void createSyncedFields() {
+		activated = new SyncableBoolean(false);
+	}
+
 	@SideOnly(Side.CLIENT)
 	public boolean isActivated() {
 		return activated.getValue();
 	}
-	
+
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if(!worldObj.isRemote) {
-			if(activated.getValue() && _redstoneAnimTimer > 0) 
-				_redstoneAnimTimer--;
-			if(activated.getValue() && _redstoneAnimTimer <= 0) {
+		if (!worldObj.isRemote) {
+			if (activated.getValue() && _redstoneAnimTimer > 0) _redstoneAnimTimer--;
+			if (activated.getValue() && _redstoneAnimTimer <= 0) {
 				activated.setValue(false);
 			}
 
@@ -59,7 +64,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 		if (redstoneSignal != _redstoneSignal) {
 			_redstoneSignal = redstoneSignal;
 			if (_redstoneSignal) {
-				if(!worldObj.isRemote) {
+				if (!worldObj.isRemote) {
 					_redstoneAnimTimer = 5;
 					activated.setValue(true);
 					sync();
@@ -68,7 +73,6 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 			}
 		}
 	}
-	
 
 	private void breakBlock() {
 		if (worldObj.isRemote) return;
@@ -98,7 +102,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 									back, items);
 						}
 					}
-                    worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
+					worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
 					worldObj.setBlockToAir(x, y, z);
 				}
 			}
@@ -109,7 +113,8 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 
 		TileEntity targetInventory = getTileInDirection(direction);
 		for (ItemStack stack : itemStacks) {
-			// if there's any stack in our buffer slot, eject it. Why is it there?
+			// if there's any stack in our buffer slot, eject it. Why is it
+			// there?
 			ItemStack currentStack = inventory.getStackInSlot(Slots.buffer);
 			if (currentStack != null) {
 				BlockUtils.ejectItemInDirection(world, x, y, z, direction, currentStack);
@@ -144,7 +149,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		if(changes.contains(activated)) {
+		if (changes.contains(activated)) {
 			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 		}
 	}

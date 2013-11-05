@@ -23,8 +23,15 @@ public class TileEntityTarget extends SyncedTileEntity implements
 	private int strength = 0;
 	private int tickCounter = -1;
 	
-	private SyncableBoolean active = new SyncableBoolean();
+	private SyncableBoolean active;
 	
+	public TileEntityTarget() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		active = new SyncableBoolean();
+	}
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();

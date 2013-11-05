@@ -25,11 +25,16 @@ public class TileEntityTank extends SyncedTileEntity implements
 	/**
 	 * The tank holding the liquid
 	 */
-	private SyncableTank tank = new SyncableTank(getTankCapacity());
+	private SyncableTank tank;
 
 	private double flowTimer = Math.random() * 100;
 
 	private int previousFluidId = 0;
+	
+	@Override
+	protected void createSyncedFields() {
+		tank = new SyncableTank(getTankCapacity());
+	}
 
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();

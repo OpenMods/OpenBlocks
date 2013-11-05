@@ -38,11 +38,17 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 		enabled
 	}
 	
-	private SyncableFlags flags = new SyncableFlags();
-	private SyncableTank tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID);
+	private SyncableFlags flags;
+	private SyncableTank tank;
 	
 	public TileEntitySprinkler() {
 		setInventory(new GenericInventory("sprinkler", true, 9));
+	}
+	
+	@Override
+	protected void createSyncedFields() {
+		flags = new SyncableFlags();
+		tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID);
 	}
 
 	private void attemptFertilize() {

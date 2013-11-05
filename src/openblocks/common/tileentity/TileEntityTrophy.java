@@ -21,9 +21,13 @@ public class TileEntityTrophy extends SyncedTileEntity implements IAwareTileLite
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 	private int sinceLastActivate = 0;
-	private SyncableInt trophyIndex = new SyncableInt();
+	private SyncableInt trophyIndex;
 	
-	public TileEntityTrophy() {
+	public TileEntityTrophy() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		trophyIndex = new SyncableInt();
 	}
 
 	public Trophy getTrophy() {

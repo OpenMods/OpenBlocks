@@ -24,10 +24,10 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 
 	private EntityMount cannon = null;
 
-	public SyncableDouble pitch = new SyncableDouble();
-	public SyncableDouble yaw = new SyncableDouble();
-	public SyncableInt cannonId = new SyncableInt(0);
-	public SyncableInt ridingEntity = new SyncableInt(0);
+	public SyncableDouble pitch;
+	public SyncableDouble yaw;
+	public SyncableInt cannonId;
+	public SyncableInt ridingEntity;
 
 	public double motionX = 0;
 	public double motionY = 0;
@@ -35,13 +35,23 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 
 	public boolean renderLine = true;
 
+	public TileEntityCannon() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		pitch = new SyncableDouble();
+		yaw = new SyncableDouble();
+		cannonId = new SyncableInt(0);
+		ridingEntity = new SyncableInt(0);
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
 		super.prepareForInventoryRender(block, metadata);
 		renderLine = false;
 	}
-
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();

@@ -1,8 +1,4 @@
 package openblocks.common.block;
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -21,9 +17,9 @@ import openblocks.common.api.*;
 import openblocks.common.item.ItemOpenBlock;
 import openblocks.common.tileentity.SyncedTileEntity;
 import openblocks.common.tileentity.OpenTileEntity;
-import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDirection;
 import openblocks.utils.BlockUtils;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -62,7 +58,6 @@ public abstract class OpenBlock extends Block {
 	protected BlockRotationMode blockRotationMode;
 	protected BlockPlacementMode blockPlacementMode;
 	protected ForgeDirection inventortyRenderDirection = ForgeDirection.WEST;
-	private Set<Field> syncedFields;
 
 	public Icon[] textures = new Icon[6];
 
@@ -184,7 +179,6 @@ public abstract class OpenBlock extends Block {
 			GameRegistry.registerTileEntity(tileEntity, String.format("%s_%s", "openblocks", uniqueName));
 			this.teClass = tileEntity;
 			isBlockContainer = true;
-			findSyncedFields();
 		}
 	}
 
@@ -369,22 +363,6 @@ public abstract class OpenBlock extends Block {
 	protected boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
 		return side == ForgeDirection.DOWN
 				&& isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
-	}
-
-	protected void findSyncedFields() {
-		if (teClass != null && SyncedTileEntity.class.isAssignableFrom(teClass)) {
-			syncedFields = new HashSet<Field>();
-			for (Field field : teClass.getDeclaredFields()) {
-				if (ISyncableObject.class.isAssignableFrom(field.getType())) {
-					field.setAccessible(true);
-					syncedFields.add(field);
-				}
-			}
-		}
-	}
-
-	public Set<Field> getSyncedFields() {
-		return syncedFields;
 	}
 
 	@Override

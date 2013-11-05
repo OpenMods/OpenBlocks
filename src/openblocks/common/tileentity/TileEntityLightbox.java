@@ -34,6 +34,9 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 
 	public TileEntityLightbox() {}
 
+	@Override
+	protected void createSyncedFields() {}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void updateEntity() {
