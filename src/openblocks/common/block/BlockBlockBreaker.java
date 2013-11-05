@@ -51,4 +51,5 @@ public class BlockBlockBreaker extends OpenBlock {
 		return textureHelper.getIconForDirection(rot, ForgeDirection.getOrientation(side));
 	}
 
+
 }

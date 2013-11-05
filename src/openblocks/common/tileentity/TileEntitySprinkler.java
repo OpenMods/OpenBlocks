@@ -221,9 +221,5 @@ public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTi
 	public void onNeighbourChanged(int blockId) {
 	}
 
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
-	}
 
 }

@@ -135,7 +135,7 @@ public class TileEntityTank extends NetworkedTileEntity implements
 	}
 
 	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
+	public boolean receiveClientEvent(int eventId, int eventParam) {
 		if (worldObj.isRemote) {
 			findNeighbours();
 		}

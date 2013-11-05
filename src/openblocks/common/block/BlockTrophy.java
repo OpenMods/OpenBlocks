@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.tileentity.TileEntityTrophy;
 
@@ -27,11 +26,6 @@ public class BlockTrophy extends OpenBlock {
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	@Override

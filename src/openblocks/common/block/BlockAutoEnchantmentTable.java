@@ -9,7 +9,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -66,11 +65,6 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	@Override

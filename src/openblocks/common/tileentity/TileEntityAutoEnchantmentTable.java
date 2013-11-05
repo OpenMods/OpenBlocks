@@ -299,11 +299,6 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
 
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		return false;
-	}
-
 	public IFluidTank getTank() {
 		return tank;
 	}

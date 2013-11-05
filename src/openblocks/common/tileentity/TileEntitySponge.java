@@ -54,7 +54,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
+	public boolean receiveClientEvent(int eventId, int eventParam) {
 		if (worldObj.isRemote) {
 			for (int i = 0; i < 20; i++) {
 				double f = xCoord + worldObj.rand.nextDouble() * 0.1;

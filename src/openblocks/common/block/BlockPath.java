@@ -2,27 +2,17 @@ package openblocks.common.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.OpenBlocks;
-import cpw.mods.fml.common.registry.GameRegistry;
 
-public class BlockPath extends Block {
+public class BlockPath extends OpenBlock {
 
 	public BlockPath() {
 		super(Config.blockPathId, Material.ground);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		GameRegistry.registerBlock(this, "openmods.path");
+		setupBlock(this, "path");
 		setBlockBounds(0, 0, 0, 1f, 0.1f, 1f);
-		setUnlocalizedName("openblocks.path");
-	}
-
-	@Override
-	public void registerIcons(IconRegister register) {
-		blockIcon = register.registerIcon("openblocks:path");
 	}
 
 	@Override
@@ -33,11 +23,6 @@ public class BlockPath extends Block {
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	@Override

@@ -15,7 +15,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
@@ -118,11 +117,6 @@ public class BlockImaginary extends OpenBlock {
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	@Override

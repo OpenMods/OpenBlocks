@@ -11,7 +11,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityRopeLadder;
 import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -46,11 +45,6 @@ public class BlockRopeLadder extends OpenBlock {
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	@Override

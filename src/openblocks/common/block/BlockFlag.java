@@ -11,7 +11,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.item.ItemFlagBlock;
 import openblocks.common.tileentity.TileEntityFlag;
 import cpw.mods.fml.relauncher.Side;
@@ -66,11 +65,6 @@ public class BlockFlag extends OpenBlock {
 	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	@Override

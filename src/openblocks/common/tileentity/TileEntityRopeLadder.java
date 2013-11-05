@@ -55,10 +55,4 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 		
 	}
 
-	@Override
-	public boolean onBlockEventReceived(int eventId, int eventParam) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

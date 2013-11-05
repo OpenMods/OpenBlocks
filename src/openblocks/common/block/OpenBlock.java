@@ -1,7 +1,6 @@
 package openblocks.common.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +23,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class OpenBlock extends BlockContainer {
+public abstract class OpenBlock extends Block {
 
 	private String uniqueBlockId;
 	private Class<? extends TileEntity> teClass = null;
@@ -35,13 +34,15 @@ public abstract class OpenBlock extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	private ItemRenderState itemRenderState;
 	
-	
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHardness(1.0F);
 		setRotationMode(BlockRotationMode.NONE);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
+		
+		// I dont think vanilla actually uses this..
+		isBlockContainer = false;
 	}
 	
 	protected void setPlacementMode(BlockPlacementMode mode) {
@@ -52,7 +53,7 @@ public abstract class OpenBlock extends BlockContainer {
 		this.blockRotationMode = mode;
 	}
 	
-	protected BlockRotationMode getRotationMode() {
+	public BlockRotationMode getRotationMode() {
 		return this.blockRotationMode;
 	}
 	
@@ -95,7 +96,7 @@ public abstract class OpenBlock extends BlockContainer {
 	}
 	
 	@Override
-	public TileEntity createNewTileEntity(World world) {
+	public TileEntity createTileEntity(World world, int metadata) {
 		try {
 			if (teClass != null) { return teClass.getConstructor(new Class[0]).newInstance(); }
 		} catch (NoSuchMethodException nsm) {
@@ -120,6 +121,7 @@ public abstract class OpenBlock extends BlockContainer {
 		if (te instanceof IAwareTile) {
 			((IAwareTile)te).onBlockBroken();
 		}
+        world.removeBlockTileEntity(x, y, z);
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
@@ -141,8 +143,13 @@ public abstract class OpenBlock extends BlockContainer {
 		if (tileEntity != null) {
 			GameRegistry.registerTileEntity(tileEntity, String.format("%s_%s", modKey, uniqueName));
 			this.teClass = tileEntity;
+			isBlockContainer = true;
 		}
 	}
+	
+    public boolean hasTileEntity(int metadata) {
+        return teClass != null;
+    }
 
 	public final static boolean isNeighborBlockSolid(World world, int x, int y, int z, ForgeDirection side) {
 		x += side.offsetX;
@@ -191,9 +198,13 @@ public abstract class OpenBlock extends BlockContainer {
 
 	@Override
 	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
+		super.onBlockEventReceived(world, x, y, z, eventId, eventParam);
 		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
-		if (te != null) { return te.onBlockEventReceived(eventId, eventParam); }
-		return super.onBlockEventReceived(world, x, y, z, eventId, eventParam);
+		if (te != null) {
+			TileEntity tile = (TileEntity) te;
+			return tile.receiveClientEvent(eventId, eventParam);
+		}
+		return false;
 	}
 
 	protected void setupDimensionsFromCenter(float x, float y, float z, float width, float height, float depth) {
@@ -312,6 +323,11 @@ public abstract class OpenBlock extends BlockContainer {
 	protected boolean isOnTopOfSolidBlock(World world, int x, int y, int z, ForgeDirection side) {
 		return side == ForgeDirection.DOWN
 				&& isNeighborBlockSolid(world, x, y, z, ForgeDirection.DOWN);
+	}
+
+	@Override
+	public int getRenderType() {
+		return OpenBlocks.renderId;
 	}
 	
 	public enum BlockRotationMode {

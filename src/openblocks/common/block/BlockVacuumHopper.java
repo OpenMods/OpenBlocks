@@ -6,7 +6,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 
 public class BlockVacuumHopper extends OpenBlock {
@@ -47,10 +46,5 @@ public class BlockVacuumHopper extends OpenBlock {
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 }

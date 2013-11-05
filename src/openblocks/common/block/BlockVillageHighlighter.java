@@ -3,7 +3,6 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 
 public class BlockVillageHighlighter extends OpenBlock {
@@ -22,11 +21,6 @@ public class BlockVillageHighlighter extends OpenBlock {
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	@Override

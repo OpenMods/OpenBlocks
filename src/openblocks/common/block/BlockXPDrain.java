@@ -41,8 +41,4 @@ public class BlockXPDrain extends OpenBlock {
 		return false;
 	}
 
-	@Override
-	public int getRenderType() {
-		return 0;
-	}
 }

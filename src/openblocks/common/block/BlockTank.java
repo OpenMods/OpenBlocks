@@ -55,11 +55,6 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
-	}
-
-	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}

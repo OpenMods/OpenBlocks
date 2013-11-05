@@ -13,7 +13,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.utils.BlockUtils;
 
@@ -55,11 +54,6 @@ public class BlockGrave extends OpenBlock {
 			}
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
-	}
-
-	@Override
-	public int getRenderType() {
-		return OpenBlocks.renderId;
 	}
 
 	private static void updateOnSoilStatus(World worldObj, int x, int y, int z) {
