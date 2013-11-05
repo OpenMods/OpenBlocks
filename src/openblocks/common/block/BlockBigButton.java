@@ -18,7 +18,7 @@ public class BlockBigButton extends OpenBlock {
 
 	@Override
 	public boolean shouldRenderBlock() {
-		return false;
+		return true;
 	}
 	
 	@Override
