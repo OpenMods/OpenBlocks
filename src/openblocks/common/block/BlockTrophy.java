@@ -39,8 +39,8 @@ public class BlockTrophy extends OpenBlock {
 		if (!world.isRemote
 				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 			TileEntityTrophy trophy = getTileEntity(world, x, y, z, TileEntityTrophy.class);
-			if (trophy.trophyType != null) {
-				ItemStack itemStack = trophy.trophyType.getItemStack();
+			if (trophy.getTrophy() != null) {
+				ItemStack itemStack = trophy.getTrophy().getItemStack();
 				float f = 0.7F;
 				float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
 				float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;

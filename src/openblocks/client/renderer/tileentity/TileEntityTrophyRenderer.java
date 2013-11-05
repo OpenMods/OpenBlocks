@@ -25,7 +25,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 		TileEntityTrophy trophy = (TileEntityTrophy)tileentity;
 		GL11.glPushMatrix();
 
-		Trophy type = trophy.getTrophyType();
+		Trophy type = trophy.getTrophy();
 		if (type != null) {
 			Entity entity = type.getEntity();
 			if (entity != null) {

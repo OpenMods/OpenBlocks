@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -7,28 +9,40 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.api.IAwareTileLite;
-import openblocks.utils.BlockUtils;
+import openblocks.sync.ISyncableObject;
+import openblocks.sync.SyncableInt;
 
 import com.google.common.base.Preconditions;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTrophy extends Packet132TileEntity implements IAwareTileLite {
+public class TileEntityTrophy extends NetworkedTileEntity implements IAwareTileLite {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
-
-	public Trophy trophyType;
-
-	private ForgeDirection rotation = ForgeDirection.EAST;
-
 	private int sinceLastActivate = 0;
+	private SyncableInt trophyIndex;
+	
+	public TileEntityTrophy() {
+		addSyncedObject(trophyIndex = new SyncableInt());
+	}
 
+	public Trophy getTrophy() {
+		Trophy t = Trophy.values()[trophyIndex.getValue()];
+		if (t != null) {
+			return t;
+		}
+		return t;
+	}
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			trophyType.executeTickBehavior(this);
+			Trophy trophy = getTrophy();
+			if (trophy != null) {
+				trophy.executeTickBehavior(this);
+			}
 			if (sinceLastActivate < Integer.MAX_VALUE) {
 				sinceLastActivate++;
 			}
@@ -38,14 +52,13 @@ public class TileEntityTrophy extends Packet132TileEntity implements IAwareTileL
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
-			trophyType.playSound(worldObj, xCoord, yCoord, zCoord);
-			trophyType.executeActivateBehavior(this, player);
+			Trophy trophyType = getTrophy();
+			if (trophyType != null) {
+				trophyType.playSound(worldObj, xCoord, yCoord, zCoord);
+				trophyType.executeActivateBehavior(this, player);
+			}
 		}
 		return true;
-	}
-
-	public Trophy getTrophyType() {
-		return trophyType;
 	}
 
 	@Override
@@ -54,32 +67,27 @@ public class TileEntityTrophy extends Packet132TileEntity implements IAwareTileL
 		 * Debug only. These will be dropped randomly with mobs!
 		 */
 		if (!worldObj.isRemote) {
+			boolean set = false;
 			if (stack.hasTagCompound()) {
 				NBTTagCompound tag = stack.getTagCompound();
 				if (tag.hasKey("entity")) {
 					String entityKey = tag.getString("entity");
-					trophyType = Trophy.valueOf(entityKey);
+					trophyIndex.setValue(Trophy.valueOf(entityKey).ordinal());
+					set = true;
 				}
 			}
-			if (trophyType == null) {
+			if (!set) {
 				int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
 				debugTrophy = Trophy.values()[next];
-				trophyType = debugTrophy;
+				trophyIndex.setValue(debugTrophy.ordinal());
 			}
-			rotation = BlockUtils.get2dOrientation(player);
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			sync();
 		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		if (tag.hasKey("trophytype")) {
-			trophyType = Trophy.valueOf(tag.getString("trophytype"));
-		}
-		if (tag.hasKey("rotation")) {
-			rotation = ForgeDirection.getOrientation(tag.getInteger("rotation"));
-		}
 		if (tag.hasKey("sinceLastActivate")) {
 			sinceLastActivate = tag.getInteger("sinceLastActivate");
 		}
@@ -96,15 +104,7 @@ public class TileEntityTrophy extends Packet132TileEntity implements IAwareTileL
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setString("trophytype", trophyType.toString());
-		tag.setInteger("rotation", rotation.ordinal());
 		tag.setInteger("sinceLastActivate", sinceLastActivate);
-	}
-
-	@Override
-	public ForgeDirection getRotation() {
-		if(isRenderedInInventory()) return super.getRotation();
-		return rotation;
 	}
 
 	@Override
@@ -112,7 +112,12 @@ public class TileEntityTrophy extends Packet132TileEntity implements IAwareTileL
 	public void prepareForInventoryRender(Block block, int metadata) {
 		Preconditions.checkElementIndex(metadata, Trophy.VALUES.length);
 		super.prepareForInventoryRender(block, metadata);
-		trophyType = Trophy.VALUES[metadata];
+		trophyIndex.setValue(metadata);
+	}
+
+	@Override
+	public void onSynced(List<ISyncableObject> changes) {
+		
 	}
 
 }
