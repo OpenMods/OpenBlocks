@@ -34,12 +34,12 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public BlockRenderingHandler() {
 		inventoryTileEntities = Maps.newIdentityHashMap();
 		blockRenderers = Maps.newIdentityHashMap();
-		
+
 		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
 
 		TileEntityLightbox teLightbox = new TileEntityLightbox();
 		inventoryTileEntities.put(OpenBlocks.Blocks.lightbox, teLightbox);
-		
+
 		TileEntityLightbox teTank = new TileEntityLightbox();
 		inventoryTileEntities.put(OpenBlocks.Blocks.tank, teTank);
 
@@ -95,7 +95,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		
+
 		/**
 		 * Deal with special block rendering handlers
 		 */
@@ -109,7 +109,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		if (te instanceof OpenTileEntity) {
 			((OpenTileEntity)te).prepareForInventoryRender(block, metadata);
 		}
-		
+
 		try {
 			final World world = Minecraft.getMinecraft().theWorld;
 			if (world != null) {
@@ -140,11 +140,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		/* deal with custom block renderers */
-		if (blockRenderers.containsKey(block)) { 
+		if (blockRenderers.containsKey(block)) {
 			return blockRenderers.get(block).renderWorldBlock(world, x, y, z, block, modelId, renderer);
-			
-		/* deal with standard openblock rendering */
-		}else if (!inventoryTileEntities.containsKey(block)) {
+
+			/* deal with standard openblock rendering */
+		} else if (!inventoryTileEntities.containsKey(block)) {
 			if (block instanceof OpenBlock) {
 				int metadata = world.getBlockMetadata(x, y, z);
 				ForgeDirection rotation = ForgeDirection.getOrientation(metadata);
@@ -164,14 +164,17 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	private void rotateFacesOnRenderer(OpenBlock block, ForgeDirection rotation, RenderBlocks renderer) {
 		BlockRotationMode mode = block.getRotationMode();
-		//TODO: clever rotation stuff here
-		// I guess we'll need to make some kind of texture manager that we can retrieve from OpenBlock
-		// for when we've got something that switches the texture for a side based on a value in the tile entity
-		// I dunno, needs thinking about. Is this what you were thinking of, nevercast?
+		// TODO: clever rotation stuff here
+		// I guess we'll need to make some kind of texture manager that we can
+		// retrieve from OpenBlock
+		// for when we've got something that switches the texture for a side
+		// based on a value in the tile entity
+		// I dunno, needs thinking about. Is this what you were thinking of,
+		// nevercast?
 		// renderer.uvRotateTop = 1;
-		
+
 	}
-	
+
 	private void resetFacesOnRenderer(RenderBlocks renderer) {
 		renderer.uvRotateTop = 0;
 		renderer.uvRotateBottom = 0;
@@ -181,62 +184,60 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		renderer.uvRotateTop = 0;
 		renderer.uvRotateWest = 0;
 	}
-	
-
 
 	private void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation) {
 		Tessellator tessellator = Tessellator.instance;
-        block.setBlockBoundsForItemRender();
-        renderer.setRenderBoundsFromBlock(block);
-        GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, -1.0F, 0.0F);
-        int metadata = rotation.ordinal();
-        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
-        tessellator.draw();
-        boolean flag = false;
-        boolean useInventoryTint = true;
-        int renderColor;
-        float r;
-        float g;
-        float par3 = 1.0f;
-        
-        if (flag && useInventoryTint)
-        {
-            renderColor = block.getRenderColor(metadata);
-            r = (renderColor >> 16 & 255) / 255.0F;
-            g = (renderColor >> 8 & 255) / 255.0F;
-            float b = (renderColor & 255) / 255.0F;
-            GL11.glColor4f(r * par3, g * par3, b * par3, 1.0F);
-        }
+		block.setBlockBoundsForItemRender();
+		renderer.setRenderBoundsFromBlock(block);
+		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		tessellator.startDrawingQuads();
+		tessellator.setNormal(0.0F, -1.0F, 0.0F);
+		int metadata = rotation.ordinal();
+		renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
+		tessellator.draw();
+		boolean flag = false;
+		boolean useInventoryTint = true;
+		int renderColor;
+		float r;
+		float g;
+		float par3 = 1.0f;
 
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, 1.0F, 0.0F);
-        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
-        tessellator.draw();
+		if (flag && useInventoryTint)
+		{
+			renderColor = block.getRenderColor(metadata);
+			r = (renderColor >> 16 & 255) / 255.0F;
+			g = (renderColor >> 8 & 255) / 255.0F;
+			float b = (renderColor & 255) / 255.0F;
+			GL11.glColor4f(r * par3, g * par3, b * par3, 1.0F);
+		}
 
-        if (flag && useInventoryTint)
-        {
-            GL11.glColor4f(par3, par3, par3, 1.0F);
-        }
+		tessellator.startDrawingQuads();
+		tessellator.setNormal(0.0F, 1.0F, 0.0F);
+		renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
+		tessellator.draw();
 
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, 0.0F, -1.0F);
-        renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
-        tessellator.draw();
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(0.0F, 0.0F, 1.0F);
-        renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
-        tessellator.draw();
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-        renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
-        tessellator.draw();
-        tessellator.startDrawingQuads();
-        tessellator.setNormal(1.0F, 0.0F, 0.0F);
-        renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
-        tessellator.draw();
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+		if (flag && useInventoryTint)
+		{
+			GL11.glColor4f(par3, par3, par3, 1.0F);
+		}
+
+		tessellator.startDrawingQuads();
+		tessellator.setNormal(0.0F, 0.0F, -1.0F);
+		renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
+		tessellator.draw();
+		tessellator.startDrawingQuads();
+		tessellator.setNormal(0.0F, 0.0F, 1.0F);
+		renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
+		tessellator.draw();
+		tessellator.startDrawingQuads();
+		tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+		renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
+		tessellator.draw();
+		tessellator.startDrawingQuads();
+		tessellator.setNormal(1.0F, 0.0F, 0.0F);
+		renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
+		tessellator.draw();
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 }
