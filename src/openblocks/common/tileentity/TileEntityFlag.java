@@ -20,14 +20,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttachment, IAwareTileLite {
 
-	private SyncableFloat angle = new SyncableFloat(0.0f);
-	private SyncableInt colorIndex = new SyncableInt(0);
+	private SyncableFloat angle;
+	private SyncableInt colorIndex;
 
-	public enum Flags {
-		onGround
-	}
+	public TileEntityFlag() {}
 	
-	public TileEntityFlag() {
+	@Override
+	protected void createSyncedFields() {
+		angle = new SyncableFloat(0.0f);
+		colorIndex = new SyncableInt(0);
 	}
 
 	@Override

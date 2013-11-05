@@ -17,11 +17,15 @@ public class TileEntityVillageHighlighter extends NetworkedTileEntity {
 
 	public static int VALUES_PER_VILLAGE = 7;
 
-	public SyncableIntArray villageData = new SyncableIntArray();
+	public SyncableIntArray villageData;
 
 	private boolean previousBreedStatus = false;
 
-	public TileEntityVillageHighlighter() {
+	public TileEntityVillageHighlighter() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		villageData = new SyncableIntArray();
 	}
 
 	public static int[] convertIntegers(List<Integer> integers) {

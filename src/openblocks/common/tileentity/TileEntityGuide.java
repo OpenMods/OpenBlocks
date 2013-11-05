@@ -26,19 +26,19 @@ public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
 	private boolean previousShape[][][];
 	private float timeSinceChange = 0;
 
-	protected SyncableInt width = new SyncableInt(8);
-	protected SyncableInt height = new SyncableInt(8);
-	protected SyncableInt depth = new SyncableInt(8);
-	protected SyncableInt mode = new SyncableInt(0);
+	protected SyncableInt width;
+	protected SyncableInt height;
+	protected SyncableInt depth;
+	protected SyncableInt mode;
 
-	public enum Keys {
-		width,
-		height,
-		depth,
-		mode
-	}
-
-	public TileEntityGuide() {
+	public TileEntityGuide() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		width = new SyncableInt(8);
+		height = new SyncableInt(8);
+		depth = new SyncableInt(8);
+		mode = new SyncableInt(0);
 	}
 
 	public int getWidth() {

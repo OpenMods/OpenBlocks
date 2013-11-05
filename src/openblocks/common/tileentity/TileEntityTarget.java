@@ -19,9 +19,13 @@ public class TileEntityTarget extends NetworkedTileEntity implements
 	private int strength = 0;
 	private int tickCounter = -1;
 	
-	private SyncableBoolean active = new SyncableBoolean();
+	private SyncableBoolean active;
 	
-	public TileEntityTarget() {
+	public TileEntityTarget() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		active = new SyncableBoolean();
 	}
 
 	@Override

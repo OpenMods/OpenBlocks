@@ -39,12 +39,12 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 	}
 
 
-	private SyncableTank tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
-	private SyncableFlags inputSides = new SyncableFlags();
-	private SyncableFlags outputSides = new SyncableFlags();
-	private SyncableFlags xpSides = new SyncableFlags();
-	private SyncableInt targetLevel = new SyncableInt(1);
-	private SyncableFlags automaticSlots = new SyncableFlags();
+	private SyncableTank tank;
+	private SyncableFlags inputSides;
+	private SyncableFlags outputSides;
+	private SyncableFlags xpSides;
+	private SyncableInt targetLevel;
+	private SyncableFlags automaticSlots;
 
 	private SlotSideHelper slotSides = new SlotSideHelper();
 	
@@ -67,6 +67,16 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 		setInventory(new GenericInventory("autoenchant", true, 2));
 		slotSides.addMapping(Slots.input, inputSides);
 		slotSides.addMapping(Slots.output, outputSides);
+	}
+	
+	@Override
+	protected void createSyncedFields() {
+		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+		inputSides = new SyncableFlags();
+		outputSides = new SyncableFlags();
+		xpSides = new SyncableFlags();
+		targetLevel = new SyncableInt(1);
+		automaticSlots = new SyncableFlags();
 	}
 
 	@Override
@@ -145,11 +155,10 @@ public class TileEntityAutoEnchantmentTable extends NetworkedTileEntity
 			this.bookRotation += ((float)Math.PI * 2F);
 		}
 
-		float f1;
+		float f1 = this.bookRotation - this.bookRotation2;
 
-		for (f1 = this.bookRotation - this.bookRotation2; f1 >= (float)Math.PI; f1 -= ((float)Math.PI * 2F)) {
-			;
-		}
+		while (f1 >= (float)Math.PI)
+			f1 -= ((float)Math.PI * 2F);
 
 		while (f1 < -(float)Math.PI) {
 			f1 += ((float)Math.PI * 2F);

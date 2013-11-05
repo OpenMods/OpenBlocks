@@ -23,10 +23,10 @@ public class TileEntityCannon extends NetworkedTileEntity implements IActivateAw
 
 	private EntityMount cannon = null;
 
-	public SyncableDouble pitch = new SyncableDouble();
-	public SyncableDouble yaw = new SyncableDouble();
-	public SyncableInt cannonId = new SyncableInt(0);
-	public SyncableInt ridingEntity = new SyncableInt(0);
+	public SyncableDouble pitch;
+	public SyncableDouble yaw;
+	public SyncableInt cannonId;
+	public SyncableInt ridingEntity;
 
 	public double motionX = 0;
 	public double motionY = 0;
@@ -34,7 +34,14 @@ public class TileEntityCannon extends NetworkedTileEntity implements IActivateAw
 
 	public boolean renderLine = true;
 
-	public TileEntityCannon() {
+	public TileEntityCannon() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		pitch = new SyncableDouble();
+		yaw = new SyncableDouble();
+		cannonId = new SyncableInt(0);
+		ridingEntity = new SyncableInt(0);
 	}
 
 	@Override

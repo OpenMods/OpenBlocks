@@ -19,17 +19,20 @@ public class TileEntityBearTrap extends NetworkedTileEntity implements
 		isShut
 	}
 
-	private SyncableFlags flags = new SyncableFlags();
-	private SyncableInt trappedEntityId = new SyncableInt();
+	private SyncableFlags flags;
+	private SyncableInt trappedEntityId;
 
-	public TileEntityBearTrap() {
+	public TileEntityBearTrap() {}
+	
+	@Override
+	protected void createSyncedFields() {
+		flags = new SyncableFlags();
+		trappedEntityId = new SyncableInt();
 		flags.on(Flags.isShut);
 	}
 
 	@Override
-	protected void initialize() {
-
-	}
+	protected void initialize() {}
 
 	@Override
 	public void updateEntity() {

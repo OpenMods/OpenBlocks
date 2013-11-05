@@ -34,6 +34,9 @@ public class TileEntityLightbox extends NetworkedTileEntity implements IInventor
 
 	public TileEntityLightbox() {}
 
+	@Override
+	protected void createSyncedFields() {}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void updateEntity() {

@@ -43,15 +43,25 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 	}
 
 	/** synced data objects **/
-	private SyncableProgress progress = new SyncableProgress(PROGRESS_TICKS);
-	private SyncableFlags glassSides = new SyncableFlags();
-	private SyncableFlags xpBottleSides = new SyncableFlags();
-	private SyncableFlags xpSides = new SyncableFlags();
-	private SyncableFlags automaticSlots = new SyncableFlags();
-	private SyncableTank tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+	private SyncableProgress progress;
+	private SyncableFlags glassSides;
+	private SyncableFlags xpBottleSides;
+	private SyncableFlags xpSides;
+	private SyncableFlags automaticSlots;
+	private SyncableTank tank;
 
 	public TileEntityXPBottler() {
 		setInventory(new GenericInventory("xpbottler", true, 2));
+	}
+	
+	@Override
+	protected void createSyncedFields() {
+		progress = new SyncableProgress(PROGRESS_TICKS);
+		glassSides = new SyncableFlags();
+		xpBottleSides = new SyncableFlags();
+		xpSides = new SyncableFlags();
+		automaticSlots = new SyncableFlags();
+		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 	}
 
 	@Override

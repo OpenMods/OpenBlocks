@@ -15,13 +15,14 @@ import openblocks.sync.SyncableFloat;
 
 public class TileEntityFan extends NetworkedTileEntity implements IPlaceAwareTile {
 
-	private SyncableFloat angle = new SyncableFloat(0.0f);
-
-	public enum Keys {
-		angle
-	}
+	private SyncableFloat angle;
 
 	public TileEntityFan() {
+	}
+	
+	@Override
+	protected void createSyncedFields() {
+		angle = new SyncableFloat(0.0f);
 	}
 
 	@Override

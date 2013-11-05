@@ -30,10 +30,15 @@ public class TileEntityBigButton extends NetworkedTileEntity implements IActivat
 		active
 	}
 	
-	private SyncableFlags flags = new SyncableFlags();
+	private SyncableFlags flags;
 	
 	public TileEntityBigButton() {
 		setInventory(new GenericInventory("bigbutton", true, 1));
+	}
+	
+	@Override
+	protected void createSyncedFields() {
+		flags = new SyncableFlags();
 	}
 	
 	@Override
@@ -104,10 +109,7 @@ public class TileEntityBigButton extends NetworkedTileEntity implements IActivat
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onSynced(List<ISyncableObject> changes) {}
 
 	public boolean isButtonActive() {
 		return flags.get(Flags.active);

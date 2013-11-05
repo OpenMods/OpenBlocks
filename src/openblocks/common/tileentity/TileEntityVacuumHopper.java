@@ -31,13 +31,21 @@ public class TileEntityVacuumHopper extends NetworkedTileEntity implements
 
 	private static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
-	private SyncableTank tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
-	public SyncableFlags xpOutputs = new SyncableFlags();
-	public SyncableFlags itemOutputs = new SyncableFlags();
-	public SyncableBoolean vacuumDisabled = new SyncableBoolean();
+	private SyncableTank tank;
+	public SyncableFlags xpOutputs;
+	public SyncableFlags itemOutputs;
+	public SyncableBoolean vacuumDisabled;
 
 	public TileEntityVacuumHopper() {
 		setInventory(new GenericInventory("vacuumhopper", true, 10));
+	}
+	
+	@Override
+	protected void createSyncedFields() {
+		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+		xpOutputs = new SyncableFlags();
+		itemOutputs = new SyncableFlags();
+		vacuumDisabled = new SyncableBoolean();
 	}
 
 	public SyncableFlags getXPOutputs() {
