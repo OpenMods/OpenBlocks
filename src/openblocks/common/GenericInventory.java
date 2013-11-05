@@ -35,18 +35,30 @@ public class GenericInventory implements IInventory {
 	@Override
 	public void closeChest() {}
 
-	@Override
-	public ItemStack decrStackSize(int stackIndex, int byAmount) {
-		ItemStack current = inventoryContents[stackIndex];
-		if (current == null) return null;
+    public ItemStack decrStackSize(int par1, int par2)
+    {
+        if (this.inventoryContents[par1] != null)
+        {
+            ItemStack itemstack;
 
-		if (current.stackSize <= byAmount) {
-			inventoryContents[stackIndex] = null;
-			return current;
-		}
+            if (this.inventoryContents[par1].stackSize <= par2)
+            {
+                itemstack = this.inventoryContents[par1];
+                this.inventoryContents[par1] = null;
+                this.onInventoryChanged();
+                return itemstack;
+            }
+			itemstack = this.inventoryContents[par1].splitStack(par2);
+			if (this.inventoryContents[par1].stackSize == 0)
+			{
+			    this.inventoryContents[par1] = null;
+			}
 
+			this.onInventoryChanged();
+			return itemstack;
+        }
 		return null;
-	}
+    }
 
 	@Override
 	public int getInventoryStackLimit() {
