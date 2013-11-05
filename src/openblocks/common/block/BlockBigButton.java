@@ -13,6 +13,7 @@ public class BlockBigButton extends OpenBlock {
 		super(Config.blockBigButton, Material.circuits);
 		setupBlock(this, "bigbutton", TileEntityBigButton.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class BlockBigButton extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-
+		
 		TileEntityBigButton tile = getTileEntity(world, x, y, z, TileEntityBigButton.class);
 
 		if (tile == null) { return; }

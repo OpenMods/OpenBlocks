@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IActivateAwareTile;
@@ -17,7 +16,6 @@ import openblocks.common.container.ContainerBigButton;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 
-import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -85,16 +83,6 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 		}
 		return true;
 	}
-
-	@Override
-	public void sync() {
-		super.sync();
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton.blockID);
-		ForgeDirection rot = getRotation();
-		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord
-				+ rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
-
-	}
 	
 	@Override
 	public ForgeDirection getSurfaceDirection() {
@@ -105,11 +93,12 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
 		super.prepareForInventoryRender(block, metadata);
-		GL11.glTranslated(-0.5, 0, 0);
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(List<ISyncableObject> changes) {
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+	}
 
 	public boolean isButtonActive() {
 		return flags.get(Flags.active);

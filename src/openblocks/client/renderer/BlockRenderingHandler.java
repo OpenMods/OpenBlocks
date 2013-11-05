@@ -103,11 +103,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+
 		OpenBlock openBlock = null;
 		if (block instanceof OpenBlock) {
 			openBlock = (OpenBlock) block;
 		}
-		
 		/* deal with custom block renderers */
 		if (blockRenderers.containsKey(block)) {
 			return blockRenderers.get(block).renderWorldBlock(world, x, y, z, block, modelId, renderer);
@@ -119,7 +119,6 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			}
 			renderer.renderStandardBlock(block, x, y, z);
 			resetFacesOnRenderer(renderer);
-			return true;
 		}
 		return false;
 	}
