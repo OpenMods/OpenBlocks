@@ -116,8 +116,10 @@ public abstract class OpenTileEntity extends TileEntity {
 	}
 
 	public int getMetadata() {
-		return this.blockMetadata;
-		// return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		if (blockMetadata > -1) {
+			return blockMetadata;
+		}
+		return this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
 	public void openGui(EntityPlayer player) {
