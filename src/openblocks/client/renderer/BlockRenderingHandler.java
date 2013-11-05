@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -122,19 +123,12 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				} else {
 					/** render standard openblockblock renderers */
 					// TODO: Fix lighting on these
+					ForgeDirection direction = ForgeDirection.EAST;
 					if (block instanceof OpenBlock) {
-						ForgeDirection direction = ((OpenBlock)block).getRenderDirection();
+						direction = ((OpenBlock)block).getInventoryRenderDirection();
 						rotateFacesOnRenderer((OpenBlock)block, direction, renderer);
 					}
-					GL11.glEnable(GL11.GL_LIGHTING);
-					RenderHelper.enableGUIStandardItemLighting();
-					OpenRenderHelper.renderCube(
-							block.getBlockBoundsMinX()-0.5,
-							block.getBlockBoundsMinY()-0.5,
-							block.getBlockBoundsMinZ()-0.5,
-							block.getBlockBoundsMaxX()-0.5,
-							block.getBlockBoundsMaxY()-0.5,
-							block.getBlockBoundsMaxZ()-0.5, block, null);
+					renderInventoryBlock(renderer, block, direction);
 					resetFacesOnRenderer(renderer);
 				}
 			}
@@ -188,4 +182,61 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		renderer.uvRotateWest = 0;
 	}
 	
+
+
+	private void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation) {
+		Tessellator tessellator = Tessellator.instance;
+        block.setBlockBoundsForItemRender();
+        renderer.setRenderBoundsFromBlock(block);
+        GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, -1.0F, 0.0F);
+        int metadata = rotation.ordinal();
+        renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
+        tessellator.draw();
+        boolean flag = false;
+        boolean useInventoryTint = true;
+        int renderColor;
+        float r;
+        float g;
+        float par3 = 1.0f;
+        
+        if (flag && useInventoryTint)
+        {
+            renderColor = block.getRenderColor(metadata);
+            r = (renderColor >> 16 & 255) / 255.0F;
+            g = (renderColor >> 8 & 255) / 255.0F;
+            float b = (renderColor & 255) / 255.0F;
+            GL11.glColor4f(r * par3, g * par3, b * par3, 1.0F);
+        }
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 1.0F, 0.0F);
+        renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
+        tessellator.draw();
+
+        if (flag && useInventoryTint)
+        {
+            GL11.glColor4f(par3, par3, par3, 1.0F);
+        }
+
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, -1.0F);
+        renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, 1.0F);
+        renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+        renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(1.0F, 0.0F, 0.0F);
+        renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
+        tessellator.draw();
+        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+	}
 }

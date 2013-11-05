@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.OpenBlocks;
-import openblocks.client.renderer.ItemRenderState;
 import openblocks.common.api.*;
 import openblocks.common.item.ItemOpenBlock;
 import openblocks.common.tileentity.NetworkedTileEntity;
@@ -30,9 +29,7 @@ public abstract class OpenBlock extends Block {
 	protected String modKey = "";
 	protected BlockRotationMode blockRotationMode;
 	protected BlockPlacementMode blockPlacementMode;
-	
-	@SideOnly(Side.CLIENT)
-	private ItemRenderState itemRenderState;
+	protected ForgeDirection inventortyRenderDirection = ForgeDirection.WEST;
 	
 	protected OpenBlock(int id, Material material) {
 		super(id, material);
@@ -62,20 +59,13 @@ public abstract class OpenBlock extends Block {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private void ensureRenderState() {
-		if(itemRenderState == null) itemRenderState = new ItemRenderState();
+	protected void setInventoryRenderDirection(ForgeDirection inventoryRenderDirection) {
+		inventortyRenderDirection = inventoryRenderDirection;
 	}
 	
 	@SideOnly(Side.CLIENT)
-	protected void setRenderDirection(ForgeDirection inventoryRenderDirection) {
-		ensureRenderState();
-		this.itemRenderState.rotation = inventoryRenderDirection;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public ForgeDirection getRenderDirection() {
-		if(this.itemRenderState == null) return BlockUtils.DEFAULT_BLOCK_DIRECTION;
-		return this.itemRenderState.rotation;
+	public ForgeDirection getInventoryRenderDirection() {
+		return inventortyRenderDirection;
 	}
 	
 	/**
