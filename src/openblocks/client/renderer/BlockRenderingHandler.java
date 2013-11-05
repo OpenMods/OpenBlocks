@@ -87,12 +87,13 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				GL11.glPopMatrix();
 			}
 			if (openBlock == null || openBlock.shouldRenderBlock()) {
-				ForgeDirection direction = ForgeDirection.EAST;
+				ForgeDirection rotation = ForgeDirection.EAST;
 				if (block instanceof OpenBlock) {
-					direction = ((OpenBlock)block).getInventoryRenderDirection();
-					rotateFacesOnRenderer((OpenBlock)block, direction, renderer);
+					rotation = openBlock.getInventoryRenderRotation();
+					openBlock.setBoundsBasedOnRotation(rotation);
+					rotateFacesOnRenderer(openBlock, rotation, renderer);
 				}
-				renderInventoryBlock(renderer, block, direction);
+				renderInventoryBlock(renderer, block, rotation);
 				resetFacesOnRenderer(renderer);
 			}
 		} catch (Exception e) {

@@ -11,7 +11,10 @@ import openblocks.common.tileentity.TileEntityLightbox;
 
 public class BlockLightbox extends OpenBlock {
 
-	public Icon sideIcon;
+	public static class Icons {
+		public static Icon front;
+		public static Icon backSides;
+	}
 
 	public BlockLightbox() {
 		super(Config.blockLightboxId, Material.glass);
@@ -19,8 +22,8 @@ public class BlockLightbox extends OpenBlock {
 		setLightValue(1.0f);
 		setRotationMode(BlockRotationMode.TWENTYFOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
+		setInventoryRenderDirection(ForgeDirection.DOWN);
 	}
-
 
 	@Override
 	public boolean shouldRenderBlock() {
@@ -42,17 +45,27 @@ public class BlockLightbox extends OpenBlock {
 
 	@Override
 	public void registerIcons(IconRegister registry) {
-		super.registerIcons(registry);
-		this.sideIcon = registry.registerIcon("openblocks:lightbox_side");
+		Icons.front = registry.registerIcon("openblocks:lightbox");
+		Icons.backSides = registry.registerIcon("openblocks:lightbox_back");
+		
+		setTexture(ForgeDirection.UP, Icons.backSides);
+		setTexture(ForgeDirection.EAST, Icons.backSides);
+		setTexture(ForgeDirection.WEST, Icons.backSides);
+		setTexture(ForgeDirection.NORTH, Icons.backSides);
+		setTexture(ForgeDirection.SOUTH, Icons.backSides);
+		setTexture(ForgeDirection.DOWN, Icons.front);
+		setDefaultTexture(Icons.front);
 	}
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		
 		int metadata = world.getBlockMetadata(x, y, z);
-		
-		ForgeDirection direction = ForgeDirection.getOrientation(metadata);
-		
+		ForgeDirection rotation = ForgeDirection.getOrientation(metadata);
+		setBoundsBasedOnRotation(rotation);
+	}
+
+	@Override
+	public void setBoundsBasedOnRotation(ForgeDirection direction) {
 		switch (direction) {
 			case EAST:
 				setBlockBounds(0.8f, 0, 0, 1f, 1f, 1f);
@@ -76,13 +89,7 @@ public class BlockLightbox extends OpenBlock {
 				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
-
-	@Override
-	public Icon getIcon(int side, int meta) {
-		if (side == 2 || side == 3) { return super.getIcon(side, meta); }
-		return sideIcon;
-	}
-
+	
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return isNeighborBlockSolid(world, x, y, z, side);

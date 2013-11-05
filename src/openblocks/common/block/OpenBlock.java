@@ -94,8 +94,13 @@ public abstract class OpenBlock extends Block {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public ForgeDirection getInventoryRenderDirection() {
+	public ForgeDirection getInventoryRenderRotation() {
 		return inventortyRenderDirection;
+	}
+	
+	@SuppressWarnings("unused")
+	public void setBoundsBasedOnRotation(ForgeDirection direction) {
+		
 	}
 
 	/**
@@ -417,6 +422,7 @@ public abstract class OpenBlock extends Block {
 		ForgeDirection dir = ForgeDirection.getOrientation(side);
 		switch(getRotationMode()) {
 			case FOUR_DIRECTIONS:
+			case NONE:
 				switch(rotation) {
 					case EAST:
 						dir = dir.getRotation(ForgeDirection.DOWN);
