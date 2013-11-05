@@ -43,10 +43,6 @@ public class TileEntityLightboxRenderer extends TileEntitySpecialRenderer {
 			GL11.glRotatef(BlockUtils.getRotationFromDirection(surface.getOpposite()), 0, 1, 0);
 		}
 
-		// render a cube
-		GL11.glDisable(GL11.GL_LIGHTING);
-		OpenRenderHelper.renderCube(-0.5, -0.5, 0.3, 0.5, 0.5, 0.5, OpenBlocks.Blocks.lightbox, null);
-		GL11.glEnable(GL11.GL_LIGHTING);
 		// render the map
 		ItemStack mapStack = lightbox.getStackInSlot(0);
 		if (mapStack != null && mapStack.getItem().isMap()) {

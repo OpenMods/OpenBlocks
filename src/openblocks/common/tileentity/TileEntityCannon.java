@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +20,7 @@ import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCannon extends NetworkedTileEntity implements IActivateAwareTile {
+public class TileEntityCannon extends SyncedTileEntity implements IActivateAwareTile {
 
 	private EntityMount cannon = null;
 
@@ -34,7 +35,11 @@ public class TileEntityCannon extends NetworkedTileEntity implements IActivateAw
 
 	public boolean renderLine = true;
 
-	public TileEntityCannon() {
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void prepareForInventoryRender(Block block, int metadata) {
+		super.prepareForInventoryRender(block, metadata);
+		renderLine = false;
 	}
 
 	@Override

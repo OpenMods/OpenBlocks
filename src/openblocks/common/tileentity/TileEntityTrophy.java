@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTrophy extends NetworkedTileEntity implements IAwareTileLite {
+public class TileEntityTrophy extends SyncedTileEntity implements IAwareTileLite {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 	private int sinceLastActivate = 0;

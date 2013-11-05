@@ -27,7 +27,7 @@ import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntitySprinkler extends NetworkedTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
+public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Item.dyePowder, 1, 15);

@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.OpenBlocks;
@@ -32,58 +31,16 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public BlockRenderingHandler() {
 		inventoryTileEntities = Maps.newIdentityHashMap();
 		blockRenderers = Maps.newIdentityHashMap();
-
 		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
-
-		TileEntityLightbox teLightbox = new TileEntityLightbox();
-		inventoryTileEntities.put(OpenBlocks.Blocks.lightbox, teLightbox);
-
-		TileEntityLightbox teTank = new TileEntityLightbox();
-		inventoryTileEntities.put(OpenBlocks.Blocks.tank, teTank);
-
-		TileEntityTarget teTarget = new TileEntityTarget();
-		teTarget.setEnabled(true);
-		inventoryTileEntities.put(OpenBlocks.Blocks.target, teTarget);
-
-		TileEntityGrave teGrave = new TileEntityGrave();
-		inventoryTileEntities.put(OpenBlocks.Blocks.grave, teGrave);
-
-		TileEntityFlag teFlag = new TileEntityFlag();
-		inventoryTileEntities.put(OpenBlocks.Blocks.flag, teFlag);
-
-		TileEntityTrophy teTrophy = new TileEntityTrophy();
-		inventoryTileEntities.put(OpenBlocks.Blocks.trophy, teTrophy);
-
-		TileEntityBearTrap teBearTrap = new TileEntityBearTrap();
-		inventoryTileEntities.put(OpenBlocks.Blocks.bearTrap, teBearTrap);
-
-		TileEntitySprinkler teSprinkler = new TileEntitySprinkler();
-		inventoryTileEntities.put(OpenBlocks.Blocks.sprinkler, teSprinkler);
-
-		TileEntityVacuumHopper teHopper = new TileEntityVacuumHopper();
-		inventoryTileEntities.put(OpenBlocks.Blocks.vacuumHopper, teHopper);
-
-		TileEntityCannon teCannon = new TileEntityCannon();
-		teCannon.disableLineRender();
-		inventoryTileEntities.put(OpenBlocks.Blocks.cannon, teCannon);
-
-		TileEntityBigButton teButton = new TileEntityBigButton();
-		inventoryTileEntities.put(OpenBlocks.Blocks.bigButton, teButton);
-
-		TileEntityFan teFan = new TileEntityFan();
-		inventoryTileEntities.put(OpenBlocks.Blocks.fan, teFan);
-
-		TileEntityVillageHighlighter teVillageHighlighter = new TileEntityVillageHighlighter();
-		inventoryTileEntities.put(OpenBlocks.Blocks.villageHighlighter, teVillageHighlighter);
-
-		TileEntityAutoAnvil teAutoAnvil = new TileEntityAutoAnvil();
-		inventoryTileEntities.put(OpenBlocks.Blocks.autoAnvil, teAutoAnvil);
-
-		TileEntityAutoEnchantmentTable teAutoTable = new TileEntityAutoEnchantmentTable();
-		inventoryTileEntities.put(OpenBlocks.Blocks.autoEnchantmentTable, teAutoTable);
-
-		TileEntityRopeLadder teRopeLadder = new TileEntityRopeLadder();
-		inventoryTileEntities.put(OpenBlocks.Blocks.ropeLadder, teRopeLadder);
+	}
+	
+	public TileEntity getTileEntityForBlock(Block block) {
+		TileEntity te = inventoryTileEntities.get(block);
+		if (te == null) {
+			te = block.createTileEntity(Minecraft.getMinecraft().theWorld, 0);
+			inventoryTileEntities.put(block, te);
+		}
+		return te;
 	}
 
 	@Override
@@ -93,7 +50,10 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-
+		OpenBlock openBlock = null;
+		if (block instanceof OpenBlock) {
+			openBlock = (OpenBlock) block;
+		}
 		/**
 		 * Deal with special block rendering handlers
 		 */
@@ -101,34 +61,39 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 			blockRenderers.get(block).renderInventoryBlock(block, metadata, modelID, renderer);
 			return;
 		}
-
-		/** get special TE renderers */
-		TileEntity te = inventoryTileEntities.get(block);
-		if (te instanceof OpenTileEntity) {
-			((OpenTileEntity)te).prepareForInventoryRender(block, metadata);
+		TileEntity te = null;
+		// if it's an openblock
+		if (openBlock != null && openBlock.useTESRForInventory()) {
+			// get the TE class for this block
+			Class<? extends TileEntity> teClass = openBlock.getTileClass();
+			// if we've got a special renderer for it
+			if (teClass != null && TileEntityRenderer.instance.specialRendererMap.containsKey(teClass)) {
+				// get the cached copy
+				te = getTileEntityForBlock(block);
+				// if it's an opentileentity, prepare it for inventory rendering
+				if (te instanceof OpenTileEntity) {
+					((OpenTileEntity)te).prepareForInventoryRender(block, metadata);
+				}
+			}
 		}
 
 		try {
-			final World world = Minecraft.getMinecraft().theWorld;
-			if (world != null) {
-				GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-				if (te != null) {
-					/** render special TE renderers */
-					// te.worldObj = world;
-					GL11.glTranslated(-0.5, -0.5, -0.5);
-					TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
-				} else {
-					/** render standard openblockblock renderers */
-					// TODO: Fix lighting on these
-					ForgeDirection direction = ForgeDirection.EAST;
-					if (block instanceof OpenBlock) {
-						direction = ((OpenBlock)block).getInventoryRenderDirection();
-						rotateFacesOnRenderer((OpenBlock)block, direction, renderer);
-					}
-					renderInventoryBlock(renderer, block, direction);
-					resetFacesOnRenderer(renderer);
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+			if (te != null) {
+				GL11.glPushMatrix();
+				GL11.glTranslated(-0.5, -0.5, -0.5);
+				TileEntityRenderer.instance.renderTileEntityAt(te, 0.0D, 0.0D, 0.0D, 0.0F);
+				GL11.glPopMatrix();
+			}
+			if (openBlock == null || openBlock.shouldRenderBlock()) {
+				ForgeDirection direction = ForgeDirection.EAST;
+				if (block instanceof OpenBlock) {
+					direction = ((OpenBlock)block).getInventoryRenderDirection();
+					rotateFacesOnRenderer((OpenBlock)block, direction, renderer);
 				}
+				renderInventoryBlock(renderer, block, direction);
+				resetFacesOnRenderer(renderer);
 			}
 		} catch (Exception e) {
 			Log.severe(e, "Error during block '%s' rendering", block.getUnlocalizedName());
@@ -137,13 +102,16 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		OpenBlock openBlock = null;
+		if (block instanceof OpenBlock) {
+			openBlock = (OpenBlock) block;
+		}
+		
 		/* deal with custom block renderers */
 		if (blockRenderers.containsKey(block)) {
 			return blockRenderers.get(block).renderWorldBlock(world, x, y, z, block, modelId, renderer);
-
-			/* deal with standard openblock rendering */
-		} else if (!inventoryTileEntities.containsKey(block)) {
-			if (block instanceof OpenBlock) {
+		} else if (openBlock == null || openBlock.shouldRenderBlock()) {
+			if (openBlock != null) {
 				int metadata = world.getBlockMetadata(x, y, z);
 				ForgeDirection rotation = ForgeDirection.getOrientation(metadata);
 				rotateFacesOnRenderer((OpenBlock)block, rotation, renderer);
@@ -162,14 +130,50 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	private void rotateFacesOnRenderer(OpenBlock block, ForgeDirection rotation, RenderBlocks renderer) {
 		BlockRotationMode mode = block.getRotationMode();
-		// TODO: clever rotation stuff here
-		// I guess we'll need to make some kind of texture manager that we can
-		// retrieve from OpenBlock
-		// for when we've got something that switches the texture for a side
-		// based on a value in the tile entity
-		// I dunno, needs thinking about. Is this what you were thinking of,
-		// nevercast?
-		// renderer.uvRotateTop = 1;
+		switch(mode) {
+			case SIX_DIRECTIONS:
+				switch (rotation) {
+					case DOWN:
+						renderer.uvRotateSouth = 3;
+						renderer.uvRotateNorth = 3;
+						renderer.uvRotateEast = 3;
+						renderer.uvRotateWest = 3;
+						break;
+					case EAST:
+						renderer.uvRotateTop = 1;
+						renderer.uvRotateBottom = 2;
+						renderer.uvRotateWest = 1;
+						renderer.uvRotateEast = 2;
+						break;
+					case NORTH:
+						renderer.uvRotateNorth = 2;
+						renderer.uvRotateSouth = 1;
+						break;
+					case SOUTH:
+						renderer.uvRotateTop = 3;
+						renderer.uvRotateBottom = 3;
+						renderer.uvRotateNorth = 1;
+						renderer.uvRotateSouth = 2;
+						break;
+					case UNKNOWN:
+						break;
+					case UP:
+						break;
+					case WEST:
+						renderer.uvRotateTop = 2;
+						renderer.uvRotateBottom = 1;
+						renderer.uvRotateWest = 2;
+						renderer.uvRotateEast = 1;
+						break;
+					default:
+						break;
+					
+				}
+				break;
+			default:
+				break;
+			
+		}
 
 	}
 

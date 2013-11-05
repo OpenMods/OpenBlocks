@@ -22,7 +22,7 @@ import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntityXPBottler extends NetworkedTileEntity implements IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
+public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
@@ -100,7 +100,6 @@ public class TileEntityXPBottler extends NetworkedTileEntity implements IActivat
 				// reset progress
 				progress.reset();
 			}
-
 		}
 	}
 

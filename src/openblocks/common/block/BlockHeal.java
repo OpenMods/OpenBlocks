@@ -13,6 +13,11 @@ public class BlockHeal extends OpenBlock {
 		super(Config.blockHealId, Material.ground);
 		setupBlock(this, "heal", TileEntityHealBlock.class);
 	}
+	
+	@Override
+	public boolean shouldRenderBlock() {
+		return true;
+	}
 
 	@Override
 	public boolean canBeReplacedByLeaves(World world, int x, int y, int z) {

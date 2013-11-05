@@ -30,7 +30,7 @@ public class BlockGrave extends OpenBlock {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean shouldRenderBlock() {
 		return false;
 	}
 

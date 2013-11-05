@@ -11,4 +11,8 @@ public class BlockSponge extends OpenBlock {
 		setupBlock(this, "sponge", TileEntitySponge.class);
 	}
 
+	@Override
+	public boolean shouldRenderBlock() {
+		return true;
+	}
 }

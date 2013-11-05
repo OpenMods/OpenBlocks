@@ -21,10 +21,15 @@ public class BlockBlockPlacer extends OpenBlock {
 	}
 
 	@Override
+	public boolean shouldRenderBlock() {
+		return true;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
 		super.registerIcons(registry);
-		this.faceIcon = registry.registerIcon(String.format("%s:%s", modKey, "blockPlacer_face"));
+		this.faceIcon = registry.registerIcon("openblocks:blockPlacer_face");
 	}
 
 	@Override

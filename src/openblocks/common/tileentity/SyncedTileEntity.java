@@ -10,14 +10,14 @@ import openblocks.Log;
 import openblocks.common.block.OpenBlock;
 import openblocks.sync.*;
 
-public abstract class NetworkedTileEntity extends OpenTileEntity implements
+public abstract class SyncedTileEntity extends OpenTileEntity implements
 		ISyncHandler {
 
 	
-	protected SyncMapTile<NetworkedTileEntity> syncMap;
+	protected SyncMapTile<SyncedTileEntity> syncMap;
 
-	public NetworkedTileEntity() {
-		syncMap = new SyncMapTile<NetworkedTileEntity>(this);
+	public SyncedTileEntity() {
+		syncMap = new SyncMapTile<SyncedTileEntity>(this);
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public abstract class NetworkedTileEntity extends OpenTileEntity implements
 	}
 
 	@Override
-	public SyncMap<NetworkedTileEntity> getSyncMap() {
+	public SyncMap<SyncedTileEntity> getSyncMap() {
 		return syncMap;
 	}
 

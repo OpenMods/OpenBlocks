@@ -30,8 +30,8 @@ public class BlockTank extends OpenBlock {
 	@Override
 	public void registerIcons(IconRegister registry) {
 		super.registerIcons(registry);
-		Icons.xpJuiceFlowing = registry.registerIcon(String.format("%s:%s", modKey, "xpjuiceflowing"));
-		Icons.xpJuiceStill = registry.registerIcon(String.format("%s:%s", modKey, "xpjuicestill"));
+		Icons.xpJuiceFlowing = registry.registerIcon("openblocks:xpjuiceflowing");
+		Icons.xpJuiceStill = registry.registerIcon("openblocks:xpjuicestill");
 	}
 
 	@Override
@@ -50,10 +50,10 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean shouldRenderBlock() {
 		return false;
 	}
-
+	
 	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;

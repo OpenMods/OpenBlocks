@@ -19,10 +19,15 @@ public class BlockItemDropper extends OpenBlock {
 	}
 
 	@Override
+	public boolean shouldRenderBlock() {
+		return false;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
 		super.registerIcons(registry);
-		this.downIcon = registry.registerIcon(String.format("%s:%s", modKey, "itemDropper_down"));
+		this.downIcon = registry.registerIcon("openblocks:itemDropper_down");
 	}
 
 	@Override

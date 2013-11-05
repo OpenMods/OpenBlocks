@@ -34,6 +34,11 @@ public class BlockElevator extends OpenBlock {
 	}
 
 	@Override
+	public boolean shouldRenderBlock() {
+		return true;
+	}
+	
+	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 		return colors[world.getBlockMetadata(x, y, z)];
 	}

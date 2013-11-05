@@ -16,12 +16,12 @@ public class BlockFan extends OpenBlock {
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean shouldRenderBlock() {
 		return false;
 	}
-
+	
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean isOpaqueCube() {
 		return false;
 	}
 

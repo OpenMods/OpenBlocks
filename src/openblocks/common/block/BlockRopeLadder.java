@@ -36,6 +36,11 @@ public class BlockRopeLadder extends OpenBlock {
 	public boolean isLadder(World world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}
+
+	@Override
+	public boolean shouldRenderBlock() {
+		return false;
+	}
 	
 	@Override
     public int idDropped(int par1, Random par2Random, int par3) {
@@ -44,11 +49,6 @@ public class BlockRopeLadder extends OpenBlock {
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
 		return false;
 	}
 

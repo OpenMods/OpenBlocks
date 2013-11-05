@@ -39,12 +39,13 @@ public class BlockVacuumHopper extends OpenBlock {
 	}
 
 	@Override
+	public boolean shouldRenderBlock() {
+		return false;
+	}
+	
+	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int x, int y, int z) {
 		return AxisAlignedBB.getAABBPool().getAABB(x + 0.3, y + 0.3, z + 0.3, x + 0.7, y + 0.7, z + 0.7);
 	}
 
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
 }

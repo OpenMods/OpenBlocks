@@ -7,18 +7,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBlockBreaker;
-import openblocks.utils.SimpleBlockTextureHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockBlockBreaker extends OpenBlock {
 
 	@SideOnly(Side.CLIENT)
-	private Icon faceIcon;
-	Icon closedIcon;
+	private static class Icons {
+		public static Icon top;
+		public static Icon top_active;
+		public static Icon bottom;
+		public static Icon side;
+	}
 	
-	private SimpleBlockTextureHelper textureHelper = new SimpleBlockTextureHelper();
-
 	public BlockBlockBreaker() {
 		super(Config.blockBlockBreakerId, Material.rock);
 		setupBlock(this, "blockbreaker", TileEntityBlockBreaker.class);
@@ -27,29 +28,34 @@ public class BlockBlockBreaker extends OpenBlock {
 	}
 
 	@Override
+	public boolean shouldRenderBlock() {
+		return true;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
-		blockIcon = registry.registerIcon("openblocks:blockBreaker");
-		closedIcon = registry.registerIcon("openblocks:blockBreaker_active");
-		textureHelper.setSideUp(registry.registerIcon("openblocks:blockBreaker_sideup"));
-		textureHelper.setSideRight(registry.registerIcon("openblocks:blockBreaker_sideright"));
-		textureHelper.setSideDown(registry.registerIcon("openblocks:blockBreaker_sidedown"));
-		textureHelper.setSideLeft(registry.registerIcon("openblocks:blockBreaker_sideleft"));
-		textureHelper.setTop(blockIcon);
-		textureHelper.setBottom(registry.registerIcon("openblocks:blockBreaker_bottom"));
-	}
-	
-	@Override
-	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		return getIcon(side, blockAccess.getBlockMetadata(x, y, z));
+
+		Icons.top = registry.registerIcon("openblocks:blockBreaker");
+		Icons.top_active = registry.registerIcon("openblocks:blockBreaker_active");
+		Icons.bottom = registry.registerIcon("openblocks:blockBreaker_bottom");
+		Icons.side = registry.registerIcon("openblocks:blockBreaker_side");
+
+		setTexture(ForgeDirection.UP, Icons.top);
+		setTexture(ForgeDirection.DOWN, Icons.bottom);
+		setTexture(ForgeDirection.EAST, Icons.side);
+		setTexture(ForgeDirection.WEST, Icons.side);
+		setTexture(ForgeDirection.NORTH, Icons.side);
+		setTexture(ForgeDirection.SOUTH, Icons.side);
+		setDefaultTexture(Icons.side);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int metadata) {
-		ForgeDirection rot = ForgeDirection.getOrientation(metadata);
-		return textureHelper.getIconForDirection(rot, ForgeDirection.getOrientation(side));
+	public Icon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
+		if (direction.equals(ForgeDirection.UP)) {
+			TileEntityBlockBreaker tile = getTileEntity(world, x, y, z, TileEntityBlockBreaker.class);
+			if (tile != null && tile.isActivated()) { return Icons.top_active; }
+		}
+		return super.getUnrotatedTexture(direction, world, x, y, z);
 	}
-
 
 }

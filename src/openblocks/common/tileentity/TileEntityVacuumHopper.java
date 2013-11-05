@@ -26,7 +26,7 @@ import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 
-public class TileEntityVacuumHopper extends NetworkedTileEntity implements
+public class TileEntityVacuumHopper extends SyncedTileEntity implements
 		IInventory, IFluidHandler, IActivateAwareTile, IHasGui {
 
 	private static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));

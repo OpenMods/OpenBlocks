@@ -22,7 +22,7 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 
-public class TileEntityBlockBreaker extends NetworkedTileEntity
+public class TileEntityBlockBreaker extends SyncedTileEntity
 		implements INeighbourAwareTile, IInventory {
 
 	public enum Slots {

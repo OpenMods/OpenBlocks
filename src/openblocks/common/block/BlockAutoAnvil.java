@@ -21,12 +21,12 @@ public class BlockAutoAnvil extends OpenBlock {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return false;
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean shouldRenderBlock() {
 		return false;
 	}
 }

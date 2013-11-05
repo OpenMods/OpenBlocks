@@ -25,6 +25,16 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	}
 
 	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+	
+	@Override
+	public boolean shouldRenderBlock() {
+		return false;
+	}
+	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		super.randomDisplayTick(world, x, y, z, rand);
@@ -53,16 +63,6 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return false;
 	}
@@ -78,4 +78,5 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	public Icon getIcon(int side, int meta) {
 		return side == 0? iconBottom : side == 1? iconTop : this.blockIcon;
 	}
+
 }

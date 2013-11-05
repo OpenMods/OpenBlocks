@@ -15,7 +15,7 @@ import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableTank;
 import openblocks.utils.ItemUtils;
 
-public class TileEntityTank extends NetworkedTileEntity implements
+public class TileEntityTank extends SyncedTileEntity implements
 		IFluidHandler, IAwareTile {
 
 	public static int getTankCapacity() {

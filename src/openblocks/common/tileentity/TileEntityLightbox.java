@@ -22,7 +22,7 @@ import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.sync.ISyncableObject;
 
-public class TileEntityLightbox extends NetworkedTileEntity implements IInventory,
+public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 		ISurfaceAttachment, IActivateAwareTile, IHasGui {
 
 	private GenericInventory inventory = new GenericInventory("lightbox", false, 1);

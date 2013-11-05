@@ -13,7 +13,7 @@ import openblocks.sync.SyncableIntArray;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityVillageHighlighter extends NetworkedTileEntity {
+public class TileEntityVillageHighlighter extends SyncedTileEntity {
 
 	public static int VALUES_PER_VILLAGE = 7;
 

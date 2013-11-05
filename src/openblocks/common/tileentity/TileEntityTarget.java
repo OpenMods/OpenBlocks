@@ -2,6 +2,10 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
@@ -13,7 +17,7 @@ import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableBoolean;
 
-public class TileEntityTarget extends NetworkedTileEntity implements
+public class TileEntityTarget extends SyncedTileEntity implements
 		ISurfaceAttachment {
 
 	private int strength = 0;
@@ -21,9 +25,6 @@ public class TileEntityTarget extends NetworkedTileEntity implements
 	
 	private SyncableBoolean active = new SyncableBoolean();
 	
-	public TileEntityTarget() {
-	}
-
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -89,6 +90,13 @@ public class TileEntityTarget extends NetworkedTileEntity implements
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return ForgeDirection.DOWN;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void prepareForInventoryRender(Block block, int metadata) {
+		super.prepareForInventoryRender(block, metadata);
+		setEnabled(true);
 	}
 
 	@Override

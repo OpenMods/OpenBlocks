@@ -21,6 +21,12 @@ public class BlockLightbox extends OpenBlock {
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
+
+	@Override
+	public boolean shouldRenderBlock() {
+		return true;
+	}
+	
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
 		if (world instanceof World) {
@@ -35,14 +41,9 @@ public class BlockLightbox extends OpenBlock {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
 	public void registerIcons(IconRegister registry) {
 		super.registerIcons(registry);
-		this.sideIcon = registry.registerIcon(String.format("%s:%s", modKey, "lightbox_side"));
+		this.sideIcon = registry.registerIcon("openblocks:lightbox_side");
 	}
 
 	@Override

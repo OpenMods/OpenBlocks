@@ -25,7 +25,7 @@ import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
 
-public class TileEntityAutoAnvil extends NetworkedTileEntity implements
+public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 
 	protected static final int TOTAL_COOLDOWN = 40;

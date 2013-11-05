@@ -19,7 +19,7 @@ import openblocks.utils.CompatibilityUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends NetworkedTileEntity implements IShapeable,
+public class TileEntityGuide extends SyncedTileEntity implements IShapeable,
 		IShapeProvider {
 
 	private boolean shape[][][];

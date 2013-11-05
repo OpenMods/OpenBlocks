@@ -12,7 +12,7 @@ import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 
-public class TileEntityBearTrap extends NetworkedTileEntity implements
+public class TileEntityBearTrap extends SyncedTileEntity implements
 		IActivateAwareTile, ISurfaceAttachment {
 
 	public enum Flags {

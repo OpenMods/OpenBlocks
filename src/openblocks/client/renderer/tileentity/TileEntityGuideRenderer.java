@@ -23,14 +23,6 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 		bindTexture(TextureMap.locationBlocksTexture);
 
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-		GL11.glPushMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
-		OpenRenderHelper.renderCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, OpenBlocks.Blocks.guide, null);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glPopMatrix();
-		GL11.glPopMatrix();
 		float scaleDelta = guide.getTimeSinceChange();
 		renderShape(guide.getShape(), guide.getHeight(), guide.getWidth(), guide.getDepth(), x, y, z, scaleDelta);
 		if (scaleDelta < 1.0) {

@@ -11,7 +11,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import openblocks.common.tileentity.NetworkedTileEntity;
+import openblocks.common.tileentity.SyncedTileEntity;
 
 public abstract class ContainerInventory<T extends IInventory> extends
 		Container {
@@ -112,8 +112,8 @@ public abstract class ContainerInventory<T extends IInventory> extends
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		T te = getOwner();
-		if (te instanceof NetworkedTileEntity) {
-			((NetworkedTileEntity)te).sync();
+		if (te instanceof SyncedTileEntity) {
+			((SyncedTileEntity)te).sync();
 		}
 	}
 }

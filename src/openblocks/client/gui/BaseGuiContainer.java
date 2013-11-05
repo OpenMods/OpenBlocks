@@ -4,7 +4,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.StatCollector;
 import openblocks.client.gui.component.GuiComponentPanel;
 import openblocks.common.container.ContainerInventory;
-import openblocks.common.tileentity.NetworkedTileEntity;
+import openblocks.common.tileentity.SyncedTileEntity;
 
 import org.lwjgl.opengl.GL11;
 
@@ -51,8 +51,8 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 
 	private void syncChangesToServer() {
 		Object te = getContainer().getOwner();
-		if (te instanceof NetworkedTileEntity) {
-			((NetworkedTileEntity)te).sync();
+		if (te instanceof SyncedTileEntity) {
+			((SyncedTileEntity)te).sync();
 		}
 	}
 

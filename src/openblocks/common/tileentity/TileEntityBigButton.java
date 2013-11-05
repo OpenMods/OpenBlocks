@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends NetworkedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IInventory, IHasGui {
+public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IInventory, IHasGui {
 
 	private int tickCounter = 0;
 

@@ -15,6 +15,7 @@ import openblocks.common.tileentity.TileEntityGuide;
 public class BlockGuide extends OpenBlock {
 
 	public static class Icons {
+		public static Icon ends;
 		public static Icon side;
 	}
 
@@ -25,23 +26,31 @@ public class BlockGuide extends OpenBlock {
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
 	@Override
+	public boolean shouldRenderBlock() {
+		return true;
+	}
+	
+	@Override
+	public boolean useTESRForInventory() {
+		return false;
+	}
+
+	@Override
 	public void registerIcons(IconRegister registry) {
-		blockIcon = registry.registerIcon("openblocks:guide");
+		Icons.ends = registry.registerIcon("openblocks:guide");
 		Icons.side = registry.registerIcon("openblocks:guide_side");
+		
+		setTexture(ForgeDirection.UP, Icons.ends);
+		setTexture(ForgeDirection.DOWN, Icons.ends);
+		setTexture(ForgeDirection.EAST, Icons.side);
+		setTexture(ForgeDirection.WEST, Icons.side);
+		setTexture(ForgeDirection.NORTH, Icons.side);
+		setTexture(ForgeDirection.SOUTH, Icons.side);
+		setDefaultTexture(Icons.ends);
 	}
 
 	@Override
@@ -72,13 +81,6 @@ public class BlockGuide extends OpenBlock {
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public Icon getIcon(int side, int metadata) {
-		ForgeDirection direction = ForgeDirection.getOrientation(side);
-		if (direction == ForgeDirection.UP || direction == ForgeDirection.DOWN) { return blockIcon; }
-		return Icons.side;
 	}
 
 }

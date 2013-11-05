@@ -18,7 +18,7 @@ import openblocks.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityFlag extends NetworkedTileEntity implements ISurfaceAttachment, IAwareTileLite {
+public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachment, IAwareTileLite {
 
 	private SyncableFloat angle = new SyncableFloat(0.0f);
 	private SyncableInt colorIndex = new SyncableInt(0);
