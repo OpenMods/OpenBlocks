@@ -25,8 +25,9 @@ public class BlockBlockBreaker extends OpenBlock {
 		setupBlock(this, "blockbreaker", TileEntityBlockBreaker.class);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
+		setInventoryRenderRotation(ForgeDirection.EAST);
 	}
-
+	
 	@Override
 	public boolean shouldRenderBlock() {
 		return true;

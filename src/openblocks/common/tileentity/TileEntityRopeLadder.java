@@ -1,5 +1,8 @@
 package openblocks.common.tileentity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -9,6 +12,19 @@ import openblocks.common.api.IAwareTile;
 
 public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 
+	private boolean shouldAnimate = true;
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void prepareForInventoryRender(Block block, int metadata) {
+		super.prepareForInventoryRender(block, metadata);
+		shouldAnimate = false;
+	}
+	
+	public boolean shouldAnimate() {
+		return shouldAnimate;
+	}
+	
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {

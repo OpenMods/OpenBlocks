@@ -23,7 +23,10 @@ public class TileEntityRopeLadderRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		bindTexture(TextureMap.locationBlocksTexture);
 		long ticks = OpenBlocks.proxy.getTicks(rope.worldObj);
-		double offset = (MathHelper.sin((float)(rope.yCoord + ((double)ticks  / 5)))/50);
+		double offset = 0.0;
+		if (rope.shouldAnimate()) {
+			offset = (MathHelper.sin((float)(rope.yCoord + ((double)ticks  / 5)))/50);
+		}
 		ForgeDirection rot = rope.getRotation();
 		GL11.glTranslated(x + 0.5 + (offset * rot.offsetX), y + 0.5, z + 0.5 + (offset * rot.offsetZ));
 		GL11.glRotatef(BlockUtils.getRotationFromDirection(rot), 0, 1, 0);

@@ -22,7 +22,7 @@ public class BlockLightbox extends OpenBlock {
 		setLightValue(1.0f);
 		setRotationMode(BlockRotationMode.TWENTYFOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
-		setInventoryRenderDirection(ForgeDirection.DOWN);
+		setInventoryRenderRotation(ForgeDirection.DOWN);
 	}
 
 	@Override

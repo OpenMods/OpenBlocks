@@ -20,7 +20,7 @@ public class BlockItemDropper extends OpenBlock {
 
 	@Override
 	public boolean shouldRenderBlock() {
-		return false;
+		return true;
 	}
 
 	@Override

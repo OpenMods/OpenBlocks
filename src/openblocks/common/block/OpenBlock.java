@@ -57,7 +57,7 @@ public abstract class OpenBlock extends Block {
 	private Class<? extends OpenTileEntity> teClass = null;
 	protected BlockRotationMode blockRotationMode;
 	protected BlockPlacementMode blockPlacementMode;
-	protected ForgeDirection inventortyRenderDirection = ForgeDirection.WEST;
+	protected ForgeDirection inventoryRenderRotation = ForgeDirection.WEST;
 
 	public Icon[] textures = new Icon[6];
 
@@ -88,14 +88,13 @@ public abstract class OpenBlock extends Block {
 		return this.blockPlacementMode;
 	}
 
-	@SideOnly(Side.CLIENT)
-	protected void setInventoryRenderDirection(ForgeDirection inventoryRenderDirection) {
-		inventortyRenderDirection = inventoryRenderDirection;
+	protected void setInventoryRenderRotation(ForgeDirection rotation) {
+		inventoryRenderRotation = rotation;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public ForgeDirection getInventoryRenderRotation() {
-		return inventortyRenderDirection;
+		return inventoryRenderRotation;
 	}
 	
 	@SuppressWarnings("unused")
