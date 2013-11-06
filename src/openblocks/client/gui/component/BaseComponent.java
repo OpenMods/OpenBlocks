@@ -38,6 +38,7 @@ public abstract class BaseComponent extends Gui {
 	protected int x;
 	protected int y;
 	protected boolean renderChildren = true;
+	protected boolean enabled = true;
 
 	public BaseComponent(int x, int y) {
 		this.x = x;
@@ -71,6 +72,14 @@ public abstract class BaseComponent extends Gui {
 		this.name = name;
 		return this;
 	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
 
 	/**
 	 * If the mouse position is inside this component
@@ -99,14 +108,14 @@ public abstract class BaseComponent extends Gui {
 		listeners.remove(listener);
 	}
 	
-	public void clearListeners(IComponentListener listener) {
+	public void clearListeners() {
 		listeners.clear();
 	}
 
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				if (component != null) {
+				if (component != null && component.isEnabled()) {
 					component.render(minecraft, offsetX + this.x, offsetY + this.y, mouseX
 							- this.x, mouseY - this.y);
 				}
@@ -118,7 +127,7 @@ public abstract class BaseComponent extends Gui {
 		invokeListenersMouseDown(mouseX, mouseY, button);
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				if (component != null && component.isMouseOver(mouseX, mouseY)) {
+				if (component != null && component.isEnabled() && component.isMouseOver(mouseX, mouseY)) {
 					component.mouseClicked(mouseX - component.x, mouseY - component.y, button);
 				}
 			}
@@ -129,7 +138,7 @@ public abstract class BaseComponent extends Gui {
 		invokeListenersMouseDrag(mouseX, mouseY, button, time);
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				if (component != null && component.isMouseOver(mouseX, mouseY)) {
+				if (component != null && component.isEnabled() && component.isMouseOver(mouseX, mouseY)) {
 					component.mouseClickMove(mouseX - component.x, mouseY - component.y, button, time);
 				}
 			}
@@ -144,7 +153,7 @@ public abstract class BaseComponent extends Gui {
 		}
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				if (component != null) {
+				if (component != null && component.isEnabled()) {
 					// Changed from mouseX - x, mouseY - y.
 					// This could break some logic but I feel that is how it's meant to be
 					// Let me know if I've messed up - NC

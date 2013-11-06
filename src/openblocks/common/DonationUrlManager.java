@@ -17,6 +17,7 @@ public class DonationUrlManager {
 	public DonationUrlManager() {
 		addUrl("OpenBlocks", "http://www.google.com");
 		addUrl("OpenPeripheral", "http://www.google.com");
+		addUrl("ComputerCraft", "http://www.google.com");
 	}
 
 	public void addUrl(String modId, String url) {

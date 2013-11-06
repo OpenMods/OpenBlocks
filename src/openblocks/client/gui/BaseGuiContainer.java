@@ -55,9 +55,14 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 			((SyncedTileEntity)te).sync();
 		}
 	}
+	
+	@SuppressWarnings("unused")
+	public void preRender(float mouseX, float mouseY) {
+	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+		this.preRender(mouseX, mouseY);
 		GL11.glPushMatrix();
 		GL11.glTranslated(this.guiLeft, this.guiTop, 0);
 		panel.render(this.mc, 0, 0, mouseX - this.guiLeft, mouseY - this.guiTop);

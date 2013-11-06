@@ -1,65 +1,48 @@
 package openblocks.client.gui;
 
-import openblocks.client.gui.component.BaseComponent;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+
+import openblocks.client.gui.component.GuiComponentButton;
 import openblocks.client.gui.component.GuiComponentLabel;
-import openblocks.client.gui.component.BaseComponent.IComponentListener;
-import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
 import openblocks.common.tileentity.TileEntityDonationStation;
 
-public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStation> 
-	implements IComponentListener {
+public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStation> {
 
-	private GuiComponentLabel label;
+	private GuiComponentLabel labelModName;
+	private GuiComponentLabel labelAuthors;
+	private GuiComponentButton buttonDonate;
 	
 	public GuiDonationStation(ContainerDonationStation container){
-		super(container, 176, 152, "openblocks.gui.donationstation");
+		super(container, 176, 172, "openblocks.gui.donationstation");
 		
 		final TileEntityDonationStation station = container.getOwner();
-		
-		// We could do this for our handlers
-		// Note: Please always pass the event to the super.
-		// But this creates UGLY Anonymous classes which are a nightmare to
-		// Debug. (This one is GuiDonationStation$1 for example) -NC
-		label = new GuiComponentLabel(68, 32, station.getModName()) {
+		labelModName = new GuiComponentLabel(55, 31, station.getModName());
+		labelAuthors = new GuiComponentLabel(55, 42, station.getAuthors());
+		labelAuthors.setScale(0.5f);
+		buttonDonate = new GuiComponentButton(31, 56, 115, 13, 0xFFFFFF, "Donate to the author") {
 			@Override
-			public void mouseClicked(int mouseX, int mouseY, int button) {
-				super.mouseClicked(mouseX, mouseY, button);
-				System.out.println(DonationUrlManager.instance().getUrl(station.getModName().getValue()));
+			public void mouseClicked(int x, int y, int button) {
+				super.mouseClicked(x, y, button);
+				if (isButtonEnabled()) {
+					try {
+						Desktop.getDesktop().browse(URI.create(getContainer().getOwner().getDonateUrl()));
+					} catch (IOException e) {
+					}
+				}
 			}
 		};
-		// So I created a mini AWT in OpenBlocks :D
-		// Hope you likey. -NC
-		label.addListener(this);
 		
-		panel.addComponent(label);
+		panel.addComponent(labelModName);
+		panel.addComponent(labelAuthors);
+		panel.addComponent(buttonDonate);
 	}
 
-	// All coords passed around everywhere are relative to the component in question
-	// So if there is a component argument involved, the coords are internal.
-	// I fixed up all the components to behave like this.
-	@Override
-	public void componentMouseDown(BaseComponent component, int offsetX,
-			int offsetY, int button) {
-		System.out.println("Click on " + component.toString() + " at " + offsetX + "," + offsetY);
+	public void preRender(float mouseX, float mouseY) {
+		String donateUrl = getContainer().getOwner().getDonateUrl();
+		buttonDonate.setButtonEnabled(donateUrl != null && !donateUrl.isEmpty());
 	}
-
-	@Override
-	public void componentMouseDrag(BaseComponent component, int offsetX,
-			int offsetY, int button, long time) {
-		
-	}
-
-	@Override
-	public void componentMouseMove(BaseComponent component, int offsetX,
-			int offsetY) {
-		
-	}
-
-	@Override
-	public void componentMouseUp(BaseComponent component, int offsetX,
-			int offsetY, int button) {
-		
-	}	
-
+	
 }

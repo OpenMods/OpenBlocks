@@ -43,23 +43,28 @@ public class GuiComponentBox extends BaseComponent {
 		this.height = height;
 	}
 
+	// 4x4 pixels starting at 0,0
 	public void renderTopLeftCorner(int offsetX, int offsetY) {
-		drawTexturedModalRect(offsetX + x, offsetY + y, u, v, 4, 4);
+		drawTexturedModalRect(offsetX + x, offsetY + y, u, v, 4, 4); 
 	}
-
+	
+	// 3x3 pixels starting at 5,0
 	public void renderTopRightCorner(int offsetX, int offsetY) {
-		drawTexturedModalRect(offsetX + x + getWidth() - 3, offsetY + y, u + 5, v, 3, 3);
+		drawTexturedModalRect(offsetX + x + getWidth() - 3, offsetY + y, u + 5, v, 3, 3); 
 	}
-
+	
+	// 3x3 pixels starting at 11,0
 	public void renderBottomLeftCorner(int offsetX, int offsetY) {
-		drawTexturedModalRect(offsetX + x, offsetY + y + getHeight() - 3, u + 11, v, 3, 3);
+		drawTexturedModalRect(offsetX + x, offsetY + y + getHeight() - 3, u + 11, v, 3, 3); 
 	}
-
+	
+	// 4x4 pixels starting at 15,0
 	public void renderBottomRightCorner(int offsetX, int offsetY) {
 		drawTexturedModalRect(offsetX + x + getWidth() - 4, offsetY + y
 				+ getHeight() - 4, u + 15, v, 4, 4);
 	}
 
+	// 1x3 pixels starting at 14,0
 	public void renderBottomEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
 		GL11.glTranslated((double)offsetX + x + 3, (double)offsetY + y
@@ -69,6 +74,7 @@ public class GuiComponentBox extends BaseComponent {
 		GL11.glPopMatrix();
 	}
 
+	// 1x3 pixels starting at 4,0
 	public void renderTopEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
 		GL11.glTranslated((double)offsetX + x + 3, (double)offsetY + y, 0);
@@ -77,6 +83,7 @@ public class GuiComponentBox extends BaseComponent {
 		GL11.glPopMatrix();
 	}
 
+	// 3x1 pixels starting at 0,4
 	public void renderLeftEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
 		GL11.glTranslated((double)offsetX + x, (double)offsetY + y + 3, 0);
@@ -85,6 +92,7 @@ public class GuiComponentBox extends BaseComponent {
 		GL11.glPopMatrix();
 	}
 
+	// 3x1 pixels starting at 8,0
 	public void renderRightEdge(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(offsetX + x + getWidth() - 3, (double)offsetY + y + 3, 0);
@@ -93,10 +101,11 @@ public class GuiComponentBox extends BaseComponent {
 		GL11.glPopMatrix();
 	}
 
+	// 1x1 pixels starting at 19,0
 	public void renderBackground(int offsetX, int offsetY) {
 		GL11.glPushMatrix();
-		GL11.glTranslated(offsetX + x + 3, (double)offsetY + y + 3, 0);
-		GL11.glScaled(getWidth() - 6, getHeight() - 6, 0);
+		GL11.glTranslated(offsetX + x + 2, (double)offsetY + y + 2, 0);
+		GL11.glScaled(getWidth() - 4, getHeight() - 4, 0);
 		drawTexturedModalRect(0, 0, u + 19, v, 1, 1);
 		GL11.glPopMatrix();
 	}

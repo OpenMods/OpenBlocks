@@ -1,5 +1,6 @@
 package openblocks.client.gui.component;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -11,11 +12,11 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiComponentPanel extends GuiComponentBox {
 
-	private Container container;
+	private WeakReference<Container> container;
 
 	public GuiComponentPanel(int x, int y, int width, int height, Container container) {
 		super(x, y, width, height, 0, 5, 0xFFFFFF);
-		this.container = container;
+		this.container = new WeakReference<Container>(container);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -24,8 +25,8 @@ public class GuiComponentPanel extends GuiComponentBox {
 		super.render(minecraft, x, y, mouseX, mouseY);
 		GL11.glColor4f(1, 1, 1, 1);
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
-		if (container != null) {
-			for (Slot slot : (List<Slot>)container.inventorySlots) {
+		if (container != null && container.get() != null) {
+			for (Slot slot : (List<Slot>)container.get().inventorySlots) {
 				drawTexturedModalRect(slot.xDisplayPosition - 1, slot.yDisplayPosition - 1, 0, 20, 18, 18);
 			}
 		}

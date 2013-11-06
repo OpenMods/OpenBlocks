@@ -9,11 +9,17 @@ public class BlockDonationStation extends OpenBlock {
 	public BlockDonationStation() {
 		super(Config.blockDonationStationId, Material.ground);
 		setupBlock(this, "donationStation", TileEntityDonationStation.class);
+		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
 	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+	
+	@Override
 	public boolean shouldRenderBlock() {
-		return true;
+		return false;
 	}
 
 }

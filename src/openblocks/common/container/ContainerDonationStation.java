@@ -7,8 +7,8 @@ public class ContainerDonationStation extends ContainerInventory<TileEntityDonat
 
 	public ContainerDonationStation(IInventory playerInventory, TileEntityDonationStation station) {
 		super(playerInventory, station);
-		addInventoryGrid(44, 27, 1);
-		addPlayerInventorySlots(70);
+		addInventoryGrid(30, 30, 1);
+		addPlayerInventorySlots(90);
 	}
 
 }

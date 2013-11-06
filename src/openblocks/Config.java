@@ -203,8 +203,6 @@ public class Config {
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
 
-
-
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
 			int defaultValue = field.getInt(null);

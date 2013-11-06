@@ -1,5 +1,7 @@
 package openblocks.client.gui.component;
 
+import org.lwjgl.opengl.GL11;
+
 import openblocks.sync.SyncableString;
 import net.minecraft.client.Minecraft;
 
@@ -7,12 +9,13 @@ public class GuiComponentLabel extends BaseComponent {
 
 	private String text;
 	private SyncableString textObj;
+	private float scale = 1f;
 
 	public GuiComponentLabel(int x, int y, SyncableString txt) {
 		this(x, y, txt.getValue());
 		textObj = txt;
 	}
-	
+
 	public GuiComponentLabel(int x, int y, String text) {
 		super(x, y);
 		this.text = text == null ? "" : text;
@@ -21,7 +24,15 @@ public class GuiComponentLabel extends BaseComponent {
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
-		minecraft.fontRenderer.drawString(textObj != null ? textObj.getValue() : text, offsetX + x, offsetY + y, 4210752);
+		GL11.glPushMatrix();
+		GL11.glTranslated(offsetX + x, offsetY + y, 1);
+		GL11.glScalef(scale, scale, scale);
+		minecraft.fontRenderer.drawString(textObj != null ? textObj.getValue() : text, 0, 0, 4210752);
+		GL11.glPopMatrix();
+	}
+	
+	public void setScale(float scale) {
+		this.scale = scale;
 	}
 
 	@Override
@@ -31,6 +42,6 @@ public class GuiComponentLabel extends BaseComponent {
 	
 	@Override
 	public int getWidth() {
-		return Minecraft.getMinecraft().fontRenderer.getStringWidth(textObj != null ? textObj.getValue() : text);
+		return (int)(Minecraft.getMinecraft().fontRenderer.getStringWidth(textObj != null ? textObj.getValue() : text) * scale);
 	}
 }
