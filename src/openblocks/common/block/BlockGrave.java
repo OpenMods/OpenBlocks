@@ -13,6 +13,7 @@ public class BlockGrave extends OpenBlock {
 		setupBlock(this, "grave", TileEntityGrave.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0, 0, 0, 1f, 0.2f, 1f);
+		setCreativeTab(null);
 	}
 
 	@Override

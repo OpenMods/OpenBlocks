@@ -31,10 +31,16 @@ public class MetaGeneric implements IMetaItem {
 	private String name;
 	private Icon icon;
 	private Object[] recipes;
+	private boolean visibleInCreative = true;
 
 	public MetaGeneric(String name, Object... recipes) {
 		this.name = name;
 		this.recipes = recipes;
+	}
+	
+	public MetaGeneric hideFromCreative() {
+		visibleInCreative = false;
+		return this;
 	}
 
 	@Override
@@ -91,7 +97,9 @@ public class MetaGeneric implements IMetaItem {
 
 	@Override
 	public void addToCreativeList(int itemId, int meta, List<ItemStack> result) {
-		result.add(new ItemStack(itemId, 1, meta));
+		if(visibleInCreative) {
+			result.add(new ItemStack(itemId, 1, meta));
+		}
 	}
 
 	@Override
