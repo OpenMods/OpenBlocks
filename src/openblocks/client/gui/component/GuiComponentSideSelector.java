@@ -55,7 +55,8 @@ public class GuiComponentSideSelector extends BaseComponent {
 		GL11.glTranslated(offsetX + x + (scale / 2), offsetY + y + (scale / 2), scale);
 		GL11.glScaled(scale, -scale, scale);
 		// TODO: replace with proper width,height
-		trackball.update(mouseX - 50, -(mouseY - 50));
+		// TODO: Get Mikee to check that I did this right -- NeverCast
+		trackball.update(mouseX - getWidth(), -(mouseY - getHeight()));
 		if (te != null) TileEntityRenderer.instance.renderTileEntityAt(te, -0.5, -0.5, -0.5, 0.0F);
 		else drawBlock(minecraft.renderEngine, t);
 
@@ -173,5 +174,15 @@ public class GuiComponentSideSelector extends BaseComponent {
 		super.mouseClicked(mouseX, mouseY, button);
 		movedTicks = 0;
 		lastSideHovered = null;
+	}
+
+	@Override
+	public int getWidth() {
+		return 50;
+	}
+
+	@Override
+	public int getHeight() {
+		return 50;
 	}
 }

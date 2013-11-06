@@ -66,9 +66,12 @@ public class GuiComponentTab extends GuiComponentBox {
 	@Override
 	public void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
-		if (isMouseOver(x, y)) {
-			container.onTabClicked(this);
-		}
+		// This method is only ever called if it's hovered.
+		// New logic FTW! -NC
+		
+		// We do however wish to stop expansion and contraction outside the 24x24 button area
+		if(x > 24 || y > 24) return;
+		container.onTabClicked(this);
 	}
 
 	public void setContainer(GuiComponentTabs container) {
@@ -78,5 +81,5 @@ public class GuiComponentTab extends GuiComponentBox {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-
+	
 }

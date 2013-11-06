@@ -40,13 +40,13 @@ public class GuiComponentSlider extends BaseComponent {
 		int barStartX = left + 1;
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
 
-		drawTexturedModalRect(left, top, 0, 70, 1, 12);
+		drawTexturedModalRect(left, top, 0, 70, 1, getHeight());
 		GL11.glPushMatrix();
 		GL11.glTranslated(left + 1, top, 0);
-		GL11.glScaled(width - 2, 1, 1);
-		drawTexturedModalRect(0, 0, 1, 70, 1, 12);
+		GL11.glScaled(getWidth() - 2, 1, 1);
+		drawTexturedModalRect(0, 0, 1, 70, 1, getHeight());
 		GL11.glPopMatrix();
-		drawTexturedModalRect(left + width - 1, top, 2, 70, 1, 12);
+		drawTexturedModalRect(left + getWidth() - 1, top, 2, 70, 1, getHeight());
 		int handleX = (int)Math.floor(barStartX + stepSize * (level - min));
 		if (Mouse.isButtonDown(0)) {
 			if (!isDragging && mouseX > handleX && mouseX < handleX + 8) {
@@ -71,5 +71,15 @@ public class GuiComponentSlider extends BaseComponent {
 
 		value.setValue(level);
 
+	}
+
+	@Override
+	public int getWidth() {
+		return width;
+	}
+
+	@Override
+	public int getHeight() {
+		return 12;
 	}
 }

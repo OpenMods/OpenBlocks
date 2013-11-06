@@ -56,4 +56,14 @@ public class GuiComponentSprite extends BaseComponent {
 		GL11.glColor3f(1, 1, 1);
 		drawTexturedModalRect(offsetX + x, offsetY + y, sprite.u, sprite.v, sprite.width, sprite.height);
 	}
+
+	@Override
+	public int getWidth() {
+		return sprite.getWidth();
+	}
+
+	@Override
+	public int getHeight() {
+		return sprite.getHeight();
+	}
 }

@@ -123,8 +123,4 @@ public class GuiComponentBox extends BaseComponent {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 	}
 
-	protected boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= x && mouseX < x + width && mouseY >= y
-				&& mouseY < y + height;
-	}
 }

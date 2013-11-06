@@ -32,18 +32,26 @@ public class GuiComponentCheckbox extends BaseComponent {
 	@Override
 	public void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
-		if (isMouseOver(x, y)) {
-			flags.toggle(flagSlot);
-		}
+		flags.toggle(flagSlot);
 	}
 
 	@Override
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
 		super.mouseMovedOrUp(mouseX, mouseY, button);
-		isMouseOver = isMouseOver(x, y);
+		// The button in a MoveOrUp event is -1 on a move
+		// Because these methods are ONLY called if the component
+		// Is under the cursor. This actually makes logical sense ;)
+		// -NC
+		isMouseOver = button == -1;
 	}
-
-	protected boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= x && mouseX < x + 8 && mouseY >= y && mouseY < y + 8;
+	
+	@Override
+	public int getHeight() {
+		return 8;
+	}
+	
+	@Override
+	public int getWidth() {
+		return 8;
 	}
 }
