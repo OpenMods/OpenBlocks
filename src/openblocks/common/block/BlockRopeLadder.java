@@ -56,7 +56,7 @@ public class BlockRopeLadder extends OpenBlock {
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List list, Entity entity){
 		if (entity instanceof EntityLivingBase) {
 			int meta = world.getBlockMetadata(x, y, z);
-	        ForgeDirection rotation = BlockUtils.getRotationFromMetadata(meta);
+	        ForgeDirection rotation = ForgeDirection.getOrientation(meta);
 	        ForgeDirection playerRotation = BlockUtils.get2dOrientation((EntityLivingBase)entity);
 			if (rotation == playerRotation) {
 	        	super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);

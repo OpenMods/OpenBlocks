@@ -111,24 +111,4 @@ public class BlockUtils {
 		return tile.worldObj.getBlockTileEntity(targetX, targetY, targetZ);
 	}
 
-	public static ForgeDirection get3dBlockRotationFromMetadata(int meta) {
-		if (getBlockFlagFromMetadata(meta, 0)) return ForgeDirection.UP;
-		if (getBlockFlagFromMetadata(meta, 1)) return ForgeDirection.DOWN;
-		return getRotationFromMetadata(meta);
-	}
-
-	public static ForgeDirection getRotationFromMetadata(int meta) {
-		int ordinal = (meta & 0x3) + 2;
-		ForgeDirection direction = ForgeDirection.getOrientation(ordinal);
-		return direction;
-	}
-
-	public static boolean getBlockFlagFromMetadata(int meta, int index) {
-		if (index > 1) return false;
-		if (index < 0) return false;
-		index = 4 + 4 * index;
-		boolean result = (meta & index) == index;
-		return result;
-	}
-
 }
