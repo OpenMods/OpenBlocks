@@ -126,17 +126,11 @@ public class OpenBlocks {
 		Log.logger = evt.getModLog();
 
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
-
-		Config.readConfig(configFile);
-
+		if (configFile.hasChanged()) {
+			Config.readConfig(configFile);
+		}
 		configFile.save();
-	}
-
-	/**
-	 * @param evt
-	 */
-	@EventHandler
-	public void init(FMLInitializationEvent evt) {
+		
 
 		OpenBlocks.syncableManager = new SyncableManager();
 
@@ -170,6 +164,14 @@ public class OpenBlocks {
 
 		if (Loader.isModLoaded(Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
 		if (Loader.isModLoaded(Mods.OPENPERIPHERAL)) ModuleOpenPeripheral.registerAdapters();
+
+	}
+
+	/**
+	 * @param evt
+	 */
+	@EventHandler
+	public void init(FMLInitializationEvent evt) {
 
 		proxy.init();
 
