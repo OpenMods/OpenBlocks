@@ -135,6 +135,9 @@ public class Config {
 
 	@BlockId(description = "The id of the rope ladder block")
 	public static int blockRopeLadderId = 2566;
+
+	@BlockId(description = "The id of the donation station")
+	public static int blockDonationStationId = 2567;
 	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -199,6 +202,7 @@ public class Config {
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
+
 
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
@@ -463,6 +467,10 @@ public class Config {
 		if (Config.canRegisterBlock(blockRopeLadderId)) {
 			OpenBlocks.Blocks.ropeLadder = new BlockRopeLadder();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.ropeLadder), new Object[] { "sts", "sts", "sts", 't', "stickWood", 's', new ItemStack(Item.silk) }));
+		}
+		
+		if (Config.canRegisterBlock(blockDonationStationId)) {
+			OpenBlocks.Blocks.donationStation = new BlockDonationStation();
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

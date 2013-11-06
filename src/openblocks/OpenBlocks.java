@@ -76,6 +76,7 @@ public class OpenBlocks {
 		public static BlockBlockPlacer blockPlacer;
 		public static BlockItemDropper itemDropper;
 		public static BlockRopeLadder ropeLadder;
+		public static BlockDonationStation donationStation;
 	}
 
 	public static class Items {

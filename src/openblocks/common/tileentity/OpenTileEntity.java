@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
+import openblocks.common.api.IInventoryCallback;
 import openblocks.common.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,6 +25,12 @@ public abstract class OpenTileEntity extends TileEntity {
 	
 	public void setInventory(GenericInventory inventory) {
 		this.inventory = inventory;
+	}
+	
+	public void addInventoryCallback(IInventoryCallback callback) {
+		if (inventory != null) {
+			inventory.addCallback(callback);
+		}
 	}
 	
 	public void setup() {
