@@ -70,6 +70,11 @@ public class BlockBigButton extends OpenBlock {
 				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
+	
+	@Override
+	public void setBlockBoundsForItemRender() {
+		setBlockBounds(0.0625f, 0.0625f, 0.4f, 0.9375f, 0.9375f, 0.525f);
+	}
 
 	@Override
 	public boolean canProvidePower() {

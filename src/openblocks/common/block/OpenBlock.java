@@ -97,7 +97,10 @@ public abstract class OpenBlock extends Block {
 		return inventoryRenderRotation;
 	}
 	
-	@SuppressWarnings("unused")
+	/**
+	 * Set block bounds based on rotation
+	 * @param direction direction to apply bounds to
+	 */
 	public void setBoundsBasedOnRotation(ForgeDirection direction) {
 		
 	}
