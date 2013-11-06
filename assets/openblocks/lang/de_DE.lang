@@ -9,6 +9,7 @@ openblocks.gui.autoeject=Auto-Auswerfen
 openblocks.gui.autoextract=Auto-Extrahieren
 openblocks.gui.autodrink=Auto-Trinken
 openblocks.gui.autoenchantmenttable=Auto-Zaubertisch
+openblocks.gui.donationstation=Spendenstation
 
 openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
