@@ -1,8 +1,13 @@
 package openblocks.common.tileentity;
 
+import java.util.Map;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
 import openblocks.client.gui.GuiDonationStation;
+import openblocks.common.DonationUrlManager;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
@@ -13,14 +18,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class TileEntityDonationStation extends OpenTileEntity implements IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
-	
+public class TileEntityDonationStation extends OpenTileEntity implements
+		IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
+
 	private SyncableString modName = new SyncableString();
-	
+	private String donateUrl;
+
 	public enum Slots {
 		input
 	}
-	
+
 	public TileEntityDonationStation() {
 		setInventory(new GenericInventory("donationstation", true, 1));
 		addInventoryCallback(this);
@@ -30,23 +37,32 @@ public class TileEntityDonationStation extends OpenTileEntity implements IInvent
 	public void initialize() {
 		findModNameForInventoryItem();
 	}
-	
+
 	@Override
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {
 		findModNameForInventoryItem();
 	}
-	
+
 	private void findModNameForInventoryItem() {
-		ItemStack stack = inventory.getStackInSlot(Slots.input);
-		modName.clear();
-		if (stack != null) {
-			UniqueIdentifier ident = GameRegistry.findUniqueIdentifierFor(stack.getItem());
-			if (ident != null) {
-				modName.setValue(ident.modId);
+		// client only!
+		if (worldObj.isRemote) {
+			ItemStack stack = inventory.getStackInSlot(Slots.input);
+			modName.clear();
+			donateUrl = null;
+			if (stack != null) {
+				UniqueIdentifier ident = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+				if (ident != null) {
+					Map<String, ModContainer> modList = Loader.instance().getIndexedModList();
+					ModContainer container = modList.get(ident.modId);
+					if (container != null) {
+						donateUrl = DonationUrlManager.instance().getUrl(ident.modId);
+						modName.setValue(container.getName());
+					}
+				}
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
@@ -116,12 +132,10 @@ public class TileEntityDonationStation extends OpenTileEntity implements IInvent
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

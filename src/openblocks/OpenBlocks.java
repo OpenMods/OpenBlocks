@@ -9,6 +9,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import openblocks.common.DonationUrlManager;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.block.*;
@@ -29,6 +30,7 @@ import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
@@ -180,6 +182,15 @@ public class OpenBlocks {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
+	}
+
+	@Mod.EventHandler
+	public void processMessage(FMLInterModComms.IMCEvent event) {
+		for (FMLInterModComms.IMCMessage m : event.getMessages()) {
+			if (m.isStringMessage() && m.key.equals("donateUrl")) {
+				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
+			}
+		}
 	}
 
 	public static String getModId() {
