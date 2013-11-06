@@ -36,6 +36,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Config {
 	public static boolean failIdsQuietly = true;
@@ -484,20 +485,24 @@ public class Config {
 		if (itemFilledBucketId > 0) {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			OpenBlocks.Items.filledBucket.registerItems();
+			GameRegistry.registerItem(OpenBlocks.Items.filledBucket, "openblocks.filledbucket");
 		}
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
+			GameRegistry.registerItem(OpenBlocks.Items.hangGlider, "openblocks.hangglider");
 		}
 
 		if (itemLuggageId > 0) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.luggage), new Object[] { "sds", "scs", "sss", 's', "stickWood", 'd', new ItemStack(Item.diamond), 'c', new ItemStack(Block.chest) }));
+			GameRegistry.registerItem(OpenBlocks.Items.luggage, "openblocks.luggage");
 		}
 
 		if (itemSonicGlassesId > 0) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.sonicGlasses), new Object[] { "ihi", "oso", "   ", 's', "stickWood", 'h', new ItemStack(Item.helmetIron), 'o', new ItemStack(Block.obsidian), 'i', new ItemStack(Item.ingotIron) }));
+			GameRegistry.registerItem(OpenBlocks.Items.luggage, "openblocks.sonicglasses");
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
@@ -506,11 +511,13 @@ public class Config {
 				ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0);
 				ItemImaginary.setupValues(null, block);
 				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.pencilGlasses, block, Item.paper));
+				GameRegistry.registerItem(OpenBlocks.Items.pencilGlasses, "openblocks.pencilGlasses");
 			}
 
 			if (itemGlassesCrayon > 0) {
 				OpenBlocks.Items.crayonGlasses = new ItemCrayonGlasses(itemGlassesCrayon);
 				recipeList.add(new CrayonGlassesRecipe());
+				GameRegistry.registerItem(OpenBlocks.Items.crayonGlasses, "openblocks.crayonGlasses");
 			}
 
 			if (itemGlassesTechnicolor > 0) {
@@ -518,10 +525,12 @@ public class Config {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.technicolorGlasses), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+				GameRegistry.registerItem(OpenBlocks.Items.technicolorGlasses, "openblocks.technicolorGlasses");
 			}
 
 			if (itemGlassesSerious > 0) {
 				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(itemGlassesSerious, ItemImaginationGlasses.Type.BASTARD);
+				GameRegistry.registerItem(OpenBlocks.Items.seriousGlasses, "openblocks.seriousGlasses");
 			}
 		}
 
@@ -532,6 +541,7 @@ public class Config {
 		if (itemCraneControl > 0) {
 			OpenBlocks.Items.craneControl = new ItemCraneControl();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', Item.ingotIron, 'g', Item.goldNugget, 'l', Item.glowstone, 'r', Item.redstone));
+			GameRegistry.registerItem(OpenBlocks.Items.craneControl, "openblocks.craneControl");
 		}
 
 		if (itemCraneId > 0) {
@@ -539,16 +549,19 @@ public class Config {
 			ItemStack line = ItemGeneric.Metas.line.newItemStack();
 			ItemStack beam = ItemGeneric.Metas.beam.newItemStack();
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack, ItemGeneric.Metas.craneEngine.newItemStack(), ItemGeneric.Metas.craneMagnet.newItemStack(), beam, beam, line, line, line, Item.leather));
+			GameRegistry.registerItem(OpenBlocks.Items.craneBackpack, "openblocks.craneBackpack");
 		}
 
 		if (itemSlimalyzerId > 0) {
 			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
+			GameRegistry.registerItem(OpenBlocks.Items.slimalyzer, "openblocks.slimalyzer");
 		}
 
 		if (itemSleepingBagId > 0 && ClassTransformerEntityPlayer.IsInBedHookSuccess) {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Block.carpet, 'w', Block.cloth));
+			GameRegistry.registerItem(OpenBlocks.Items.sleepingBag, "openblocks.sleepingBag");
 		}
 	}
 
