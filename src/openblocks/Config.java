@@ -470,6 +470,10 @@ public class Config {
 		
 		if (Config.canRegisterBlock(blockDonationStationId)) {
 			OpenBlocks.Blocks.donationStation = new BlockDonationStation();
+			WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Blocks.donationStation), 1, 1, 2);
+			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+			ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);	
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.donationStation), new Object[] { "ppp", "pcp", "ppp", 'p', new ItemStack(Item.porkRaw), 'c', new ItemStack(Block.chest) }));
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

@@ -38,7 +38,6 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 		xp
 	}
 
-
 	private SyncableTank tank;
 	private SyncableFlags inputSides;
 	private SyncableFlags outputSides;
@@ -47,7 +46,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	private SyncableFlags automaticSlots;
 
 	private SlotSideHelper slotSides = new SlotSideHelper();
-	
+
 	/**
 	 * grotesque book turning stuff taken from the main enchantment table
 	 */
@@ -68,7 +67,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 		slotSides.addMapping(Slots.input, inputSides);
 		slotSides.addMapping(Slots.output, outputSides);
 	}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
@@ -98,7 +97,9 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, Slots.input, inputSides);
 			}
 
-			if (hasStack(Slots.input) && isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input)) && !hasStack(Slots.output)) {
+			if (hasStack(Slots.input)
+					&& isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input))
+					&& !hasStack(Slots.output)) {
 				int xpRequired = EnchantmentUtils.getLiquidForLevel(targetLevel.getValue());
 				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
 					double power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
@@ -325,67 +326,57 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 
 	@Override
 	public int getSizeInventory() {
-		// TODO Auto-generated method stub
-		return 0;
+		return inventory.getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getStackInSlot(i);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
+	public ItemStack decrStackSize(int stackIndex, int byAmount) {
+		return inventory.decrStackSize(stackIndex, byAmount);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getStackInSlotOnClosing(i);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		
+		inventory.setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public String getInvName() {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getInvName();
 	}
 
 	@Override
 	public boolean isInvNameLocalized() {
-		// TODO Auto-generated method stub
-		return false;
+		return inventory.isInvNameLocalized();
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
-		return 0;
+		return inventory.getInventoryStackLimit();
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		// TODO Auto-generated method stub
-		return false;
+		return inventory.isUseableByPlayer(entityplayer);
 	}
 
 	@Override
 	public void openChest() {
-		// TODO Auto-generated method stub
-		
+		inventory.openChest();
 	}
 
 	@Override
 	public void closeChest() {
-		// TODO Auto-generated method stub
-		
+		inventory.closeChest();
 	}
+
 }

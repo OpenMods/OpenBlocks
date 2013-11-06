@@ -131,7 +131,6 @@ public class OpenBlocks {
 		}
 		configFile.save();
 		
-
 		OpenBlocks.syncableManager = new SyncableManager();
 
 		Config.register();

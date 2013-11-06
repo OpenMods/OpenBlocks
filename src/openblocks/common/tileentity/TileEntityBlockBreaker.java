@@ -106,7 +106,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 					worldObj.setBlockToAir(x, y, z);
 				}
 			}
-			worldObj.playSoundEffect((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
+			worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 		}
 	}
 
