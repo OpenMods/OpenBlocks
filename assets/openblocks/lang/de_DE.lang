@@ -9,7 +9,7 @@ openblocks.gui.autoeject=Auto-Auswerfen
 openblocks.gui.autoextract=Auto-Extrahieren
 openblocks.gui.autodrink=Auto-Trinken
 openblocks.gui.autoenchantmenttable=Auto-Zaubertisch
-openblocks.gui.donationStation=Spendenstation
+openblocks.gui.donationstation=Spendenstation
 
 openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
@@ -50,6 +50,7 @@ tile.openblocks.autoanvil.name=Auto-Amboss
 tile.openblocks.autoenchantmenttable.name==Auto-Zaubertisch
 tile.openblocks.xpdrain.name=XP-Sauger
 tile.openblocks.ropeladder.name=Strickleiter
+tile.openblocks.donationStation.name=Spendenstation
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel

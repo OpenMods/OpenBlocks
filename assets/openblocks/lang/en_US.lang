@@ -9,7 +9,7 @@ openblocks.gui.autoeject=Auto eject
 openblocks.gui.autoextract=Auto extract
 openblocks.gui.autodrink=Auto drink
 openblocks.gui.autoenchantmenttable=Auto Enchantment Table
-openblocks.gui.donationStation=Donation Station
+openblocks.gui.donationstation=Donation Station
 
 openblocks.misc.type=Type: %s
 openblocks.misc.uses=Uses: %.2f
@@ -50,6 +50,7 @@ tile.openblocks.autoanvil.name=Auto Anvil
 tile.openblocks.autoenchantmenttable.name=Auto Enchantment Table
 tile.openblocks.xpdrain.name=XP Drain
 tile.openblocks.ropeladder.name=Rope Ladder
+tile.openblocks.donationStation.name=Donation Station
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
