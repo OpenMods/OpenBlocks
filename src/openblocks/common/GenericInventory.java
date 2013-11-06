@@ -45,7 +45,7 @@ public class GenericInventory implements IInventory {
             {
                 itemstack = this.inventoryContents[par1];
                 this.inventoryContents[par1] = null;
-                this.onInventoryChanged();
+                this.onInventoryChanged(par1);
                 return itemstack;
             }
 			itemstack = this.inventoryContents[par1].splitStack(par2);
@@ -54,7 +54,7 @@ public class GenericInventory implements IInventory {
 			    this.inventoryContents[par1] = null;
 			}
 
-			this.onInventoryChanged();
+			this.onInventoryChanged(par1);
 			return itemstack;
         }
 		return null;
@@ -126,10 +126,10 @@ public class GenericInventory implements IInventory {
 	public void clearAndSetSlotCount(int amount) {
 		this.slotsCount = amount;
 		inventoryContents = new ItemStack[amount];
+		onInventoryChanged(0);
 	}
 
 	public void readFromNBT(NBTTagCompound tag) {
-
 		if (tag.hasKey("size")) {
 			this.slotsCount = tag.getInteger("size");
 		}

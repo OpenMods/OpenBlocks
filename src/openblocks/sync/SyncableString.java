@@ -42,4 +42,8 @@ public class SyncableString extends SyncableObjectBase {
 		value = nbt.getString(name);
 	}
 
+	public void clear() {
+		setValue("");
+	}
+
 }
