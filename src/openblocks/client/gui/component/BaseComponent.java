@@ -39,6 +39,7 @@ public abstract class BaseComponent extends Gui {
 	protected int y;
 	protected boolean renderChildren = true;
 	protected boolean enabled = true;
+	private boolean hasMouse = false;
 
 	public BaseComponent(int x, int y) {
 		this.x = x;
@@ -68,7 +69,7 @@ public abstract class BaseComponent extends Gui {
 		return name;
 	}
 	
-	protected BaseComponent setName(String name) {
+	public BaseComponent setName(String name) {
 		this.name = name;
 		return this;
 	}
@@ -80,6 +81,14 @@ public abstract class BaseComponent extends Gui {
 	public boolean isEnabled() {
 		return enabled;
 	}
+	
+	/**
+	 * Is this component currently capturing (seeing) the mouse.
+	 * @return true if the last isMouseOver call was true
+	 */
+	public boolean capturingMouse() {
+		return hasMouse;
+	}
 
 	/**
 	 * If the mouse position is inside this component
@@ -88,19 +97,31 @@ public abstract class BaseComponent extends Gui {
 	 * @return true if the X and Y are inside this components area
 	 */
 	protected boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= x && mouseX < x + getWidth() && mouseY >= y && mouseY < y + getHeight();
+		return (hasMouse = mouseX >= x && mouseX < x + getWidth() && mouseY >= y && mouseY < y + getHeight());
 	}
 
 	private List<IComponentListener> listeners = new ArrayList<IComponentListener>();
 	public List<BaseComponent> components = new ArrayList<BaseComponent>();
 
-	public void addComponent(BaseComponent component) {
+	public BaseComponent addComponent(BaseComponent component) {
 		components.add(component);
+		return this;
 	}
 	
-	public void addListener(IComponentListener listener) {
-		if(listeners.contains(listener)) return;
+	public BaseComponent childByName(String componentName) {
+		if(componentName == null) return null;
+		for(BaseComponent component : components) {
+			if(componentName.equals(component.getName())) {
+				return component;
+			}
+		}
+		return null;
+	}
+	
+	public BaseComponent addListener(IComponentListener listener) {
+		if(listeners.contains(listener)) return this;
 		listeners.add(listener);
+		return this;
 	}
 	
 	public void removeListener(IComponentListener listener) {
@@ -146,14 +167,14 @@ public abstract class BaseComponent extends Gui {
 	}
 
 	public void mouseMovedOrUp(int mouseX, int mouseY, int button) {
-		if(button == -1) {
-			invokeListenersMouseMove(mouseX, mouseY);
-		}else{
+		if(button >= 0) {
 			invokeListenersMouseUp(mouseX, mouseY, button);
+		}else{
+			invokeListenersMouseMove(mouseX, mouseY);
 		}
 		if (renderChildren) {
 			for (BaseComponent component : components) {
-				if (component != null && component.isEnabled()) {
+				if (component != null && component.isEnabled() && component.isMouseOver(mouseX, mouseY)) {
 					// Changed from mouseX - x, mouseY - y.
 					// This could break some logic but I feel that is how it's meant to be
 					// Let me know if I've messed up - NC

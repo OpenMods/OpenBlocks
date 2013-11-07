@@ -11,11 +11,12 @@ public class GuiComponentTabs extends BaseComponent {
 	}
 
 	@Override
-	public void addComponent(BaseComponent component) {
+	public BaseComponent addComponent(BaseComponent component) {
 		super.addComponent(component);
 		if (component instanceof GuiComponentTab) {
 			((GuiComponentTab)component).setContainer(this);
 		}
+		return this;
 	}
 
 	@Override
