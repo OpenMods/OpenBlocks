@@ -56,11 +56,11 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	public void preRender(float mouseX, float mouseY) {
 		panel.mouseMovedOrUp((int)mouseX - this.guiLeft, (int)mouseY - this.guiTop, -1);
 	}
 	
+	@SuppressWarnings("unused")
 	public void postRender(int mouseX, int mouseY) {		
 	}
 

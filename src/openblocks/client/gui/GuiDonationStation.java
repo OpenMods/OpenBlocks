@@ -11,7 +11,6 @@ import openblocks.client.gui.component.BaseComponent;
 import openblocks.client.gui.component.GuiComponentButton;
 import openblocks.client.gui.component.GuiComponentLabel;
 import openblocks.client.gui.component.BaseComponent.IComponentListener;
-import openblocks.client.gui.component.GuiComponentTLabel;
 import openblocks.common.container.ContainerDonationStation;
 import openblocks.common.tileentity.TileEntityDonationStation;
 
@@ -21,15 +20,15 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 	private final int PROMPT_REPLY_ACTION = 0;
 	private URI displayedURI = null;
 	GuiComponentButton buttonDonate;
-	GuiComponentTLabel lblAuthors;
+	GuiComponentLabel lblAuthors;
 	
 	public GuiDonationStation(ContainerDonationStation container){
 		super(container, 176, 172, "openblocks.gui.donationstation");
 		
 		final TileEntityDonationStation station = container.getOwner();
-		panel.addComponent(new GuiComponentLabel(55, 31, station.getModName())
+		panel.addComponent(new GuiComponentLabel(55, 31, 100, 18, station.getModName())
 			.setName("lblModName"));
-		panel.addComponent((lblAuthors = new GuiComponentTLabel(55, 42, 100, 18, station.getAuthors()).setScale(0.5f))
+		panel.addComponent((lblAuthors = new GuiComponentLabel(55, 42, 200, 18, station.getAuthors()).setScale(0.5f))
 			.setName("lblAuthors"));
 		panel.addComponent((buttonDonate = new GuiComponentButton(31, 60, 115, 13, 0xFFFFFF))
 			.setText("Donate to the author")
@@ -44,13 +43,14 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 		buttonDonate.setButtonEnabled(donateUrl != null && !donateUrl.isEmpty());
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void postRender(int mouseX, int mouseY) {
 		super.postRender(mouseX, mouseY);
 		if(lblAuthors.capturingMouse()) {
 			List lines = fontRenderer.listFormattedStringToWidth(lblAuthors.getText(), 150);
 			if(lines.size() < lblAuthors.getMaxLines()) return;
-			drawHoveringText(lines, (int)mouseX - this.guiLeft, (int)mouseY - this.guiTop, fontRenderer);
+			drawHoveringText(lines, mouseX - this.guiLeft, mouseY - this.guiTop, fontRenderer);
 		}
 	}
 
