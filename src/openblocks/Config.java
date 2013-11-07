@@ -444,6 +444,7 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockXPDrainId)) {
 			OpenBlocks.Blocks.xpDrain = new BlockXPDrain();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.xpDrain), new Object[] { "iii", "iii", "iii", 'i', new ItemStack(Block.fenceIron)}));
 		}
 		if (Config.canRegisterBlock(blockBlockBreakerId)) {
 			OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
