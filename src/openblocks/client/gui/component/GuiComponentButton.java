@@ -14,12 +14,21 @@ public class GuiComponentButton extends GuiComponentBox {
 		this.text = text;
 	}
 	
+	public GuiComponentButton(int x, int y, int width, int height, int color) {
+		this(x, y, width, height, color, "");
+	}
+	
 	public void setButtonEnabled(boolean enabled) {
 		this.buttonEnabled = enabled;
 	}
 	
 	public boolean isButtonEnabled() {
 		return buttonEnabled;
+	}
+	
+	public GuiComponentButton setText(String buttonText) {
+		this.text = buttonText;
+		return this;
 	}
 	
 	@Override

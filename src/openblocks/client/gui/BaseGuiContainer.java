@@ -58,6 +58,10 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 	
 	@SuppressWarnings("unused")
 	public void preRender(float mouseX, float mouseY) {
+		panel.mouseMovedOrUp((int)mouseX - this.guiLeft, (int)mouseY - this.guiTop, -1);
+	}
+	
+	public void postRender(int mouseX, int mouseY) {		
 	}
 
 	@Override
@@ -71,6 +75,7 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		this.postRender(mouseX, mouseY);
 		String machineName = StatCollector.translateToLocal(name);
 		int x = this.xSize / 2 - (fontRenderer.getStringWidth(machineName) / 2);
 		fontRenderer.drawString(machineName, x, 6, 4210752);

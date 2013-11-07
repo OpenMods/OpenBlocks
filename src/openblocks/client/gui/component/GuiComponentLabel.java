@@ -37,7 +37,7 @@ public class GuiComponentLabel extends BaseComponent {
 
 	@Override
 	public int getHeight() {
-		return Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
+		return (int)(Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT * scale);
 	}
 	
 	@Override
