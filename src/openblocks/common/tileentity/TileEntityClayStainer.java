@@ -2,8 +2,10 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import openblocks.OpenBlocks;
@@ -18,7 +20,9 @@ import openblocks.sync.SyncableInt;
 
 public class TileEntityClayStainer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile {
 
-	public static final ItemStack SPECIAL_CLAY_STACK = new ItemStack(OpenBlocks.Blocks.specialStainedClay);
+	public static final ItemStack HARDENED_CLAY = new ItemStack(Block.hardenedClay);
+	public static final ItemStack STAINED_CLAY = new ItemStack(Block.stainedClay);
+	public static final ItemStack SPECIAL_STAINED_CLAY = new ItemStack(OpenBlocks.Blocks.specialStainedClay);
 	
 	public static enum Slots {
 		input,
@@ -61,7 +65,7 @@ public class TileEntityClayStainer extends SyncedTileEntity implements IInventor
 	
 	public void setColorOnItemStack() {
 		ItemStack inputStack = inventory.getStackInSlot(Slots.input);
-		if (inputStack != null && inputStack.isItemEqual(SPECIAL_CLAY_STACK)) {
+		if (inputStack != null && inputStack.isItemEqual(SPECIAL_STAINED_CLAY)) {
 			BlockSpecialStainedClay.writeColorToNBT(inputStack, color.getValue());
 		}
 	}
@@ -93,6 +97,16 @@ public class TileEntityClayStainer extends SyncedTileEntity implements IInventor
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		setColorOnItemStack();
+		if (itemstack != null) {
+
+			Item item = itemstack.getItem();
+			if (item != null && item.equals(HARDENED_CLAY.getItem()) || item.equals(STAINED_CLAY.getItem())) {
+				int size = itemstack.stackSize;
+				itemstack = SPECIAL_STAINED_CLAY.copy();
+				itemstack.stackSize = size;
+			}
+		}
 		inventory.setInventorySlotContents(i, itemstack);
 	}
 
