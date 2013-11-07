@@ -37,7 +37,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 
-@Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@")
+@Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "after:ComputerCraft;after:OpenPeripheral")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { PacketHandler.CHANNEL_SYNC, PacketHandler.CHANNEL_EVENTS }, packetHandler = PacketHandler.class)
 public class OpenBlocks {
 

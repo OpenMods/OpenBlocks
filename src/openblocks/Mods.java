@@ -1,5 +1,17 @@
 package openblocks;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry.UniqueIdentifier;
+
 public class Mods {
 	public static final String IC2 = "IC2";
 	public static final String BUILDCRAFT = "BuildCraft|Core";
@@ -36,4 +48,54 @@ public class Mods {
 	public static final String STEVESCARTS = "StevesCarts";
 	public static final String TRANSLOCATOR = "Translocator";
 	public static final String WIRELESSREDSTONECBE = "WR-CBE|Core";
+
+	@SuppressWarnings("rawtypes")
+	public static ModContainer getModForItemStack(ItemStack stack) {
+		Item item = stack.getItem();
+		Class klazz = null;
+		if (item == null) { return null; }
+		UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(item);
+		klazz = item.getClass();
+		if (identifier == null) {
+			if (item instanceof ItemBlock) {
+				int blockId = ((ItemBlock)item).getBlockID();
+				Block block = Block.blocksList[blockId];
+				if (block != null) {
+					identifier = GameRegistry.findUniqueIdentifierFor(block);
+					klazz = block.getClass();
+				}
+			}
+		}
+		Map<String, ModContainer> modList = Loader.instance().getIndexedModList();
+		if (identifier != null) {
+			ModContainer container = modList.get(identifier.modId);
+			if (container != null) { return container; }
+		}
+
+		String[] itemClassParts = klazz.getName().split("\\.");
+		ModContainer closestMatch = null;
+		int mostMatchingPackages = 0;
+		for (Entry<String, ModContainer> entry : modList.entrySet()) {
+			Object mod = entry.getValue().getMod();
+			if (mod == null) {
+				continue;
+			}
+			String[] modClassParts = mod.getClass().getName().split("\\.");
+			int packageMatches = 0;
+			for (int i = 0; i < modClassParts.length; i++) {
+				if (i < itemClassParts.length && itemClassParts[i] != null
+						&& itemClassParts[i].equals(modClassParts[i])) {
+					packageMatches++;
+				} else {
+					break;
+				}
+			}
+			if (packageMatches > mostMatchingPackages) {
+				mostMatchingPackages = packageMatches;
+				closestMatch = entry.getValue();
+			}
+		}
+
+		return closestMatch;
+	}
 }
