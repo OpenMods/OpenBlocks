@@ -147,4 +147,8 @@ public class TileEntityDonationStation extends OpenTileEntity implements
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+
+	public void showSomeLove() {
+		// TODO: Impl.	
+	}
 }

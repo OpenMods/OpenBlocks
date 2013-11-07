@@ -22,6 +22,11 @@ public abstract class EventPacket extends Event {
 				// just to make it compile, will be used for maps
 				return null;
 			}
+		},		
+		TILE_MESSAGE {
+			public EventPacket createPacket() {
+				return new TileEntityMessageEventPacket();
+			}
 		};
 
 		public static final EventType[] VALUES = values();
