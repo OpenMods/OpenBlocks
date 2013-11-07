@@ -79,14 +79,14 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 			Desktop.getDesktop().browse(uri);
 		} catch (IOException e) {
 		}
-		for (int i = 0; i < 15; ++i)
-        {
-			World rWorld = getContainer().getOwner().worldObj;
-            double d0 = rWorld.rand.nextGaussian() * 0.02D;
-            double d1 = rWorld.rand.nextGaussian() * 0.02D;
-            double d2 = rWorld.rand.nextGaussian() * 0.02D;
-            rWorld.spawnParticle("heart", getContainer().getOwner().xCoord + (double)(rWorld.rand.nextFloat() * this.width * 2.0F) - (double)this.width, getContainer().getOwner().yCoord + 0.5D + (double)(rWorld.rand.nextFloat() * this.height), getContainer().getOwner().zCoord + (double)(rWorld.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
-        }
+	//	for (int i = 0; i < 15; ++i)
+      //  {
+	//		World rWorld = getContainer().getOwner().worldObj;
+        //    double d0 = rWorld.rand.nextGaussian() * 0.02D;
+        //    double d1 = rWorld.rand.nextGaussian() * 0.02D;
+        //    double d2 = rWorld.rand.nextGaussian() * 0.02D;
+       //     rWorld.spawnParticle("heart", getContainer().getOwner().xCoord + (double)(rWorld.rand.nextFloat() * this.width * 2.0F) - (double)this.width, getContainer().getOwner().yCoord + 0.5D + (double)(rWorld.rand.nextFloat() * this.height), getContainer().getOwner().zCoord + (double)(rWorld.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+    //    }
 	}
 	
 	@Override
