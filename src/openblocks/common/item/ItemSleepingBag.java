@@ -77,21 +77,43 @@ public class ItemSleepingBag extends ItemArmor {
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack) {
 		if (!world.isRemote) {
+			NBTTagCompound tag = getOrCreateTag(itemStack);
 			if (!player.isPlayerSleeping()) {
-				ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
-				EnumStatus status = player.sleepInBedAt((int)player.posX, (int)player.posY, (int)player.posZ);
-				if (status == EnumStatus.OK) {
-					saveOriginalSpawn(spawn, itemStack);
-				} else {
-					player.setCurrentItemOrArmor(3, null);
-					revertSpawnFromItem(player, itemStack);
-					InventoryUtils.insertItemIntoInventory(player.inventory, itemStack);
-					if (itemStack.stackSize > 0) {
-						BlockUtils.dropItemStackInWorld(world, player.posX, player.posY, player.posZ, itemStack);
+				if (tag != null && tag.hasKey("sleeping") && tag.getBoolean("sleeping")) {
+					ejectSleepingBagFromPlayer(player, itemStack);
+				}else {
+					ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
+					EnumStatus status = player.sleepInBedAt((int)player.posX, (int)player.posY, (int)player.posZ);
+					if (status == EnumStatus.OK) {
+						saveOriginalSpawn(spawn, itemStack);
+					}else {
+						ejectSleepingBagFromPlayer(player, itemStack);
 					}
 				}
+			} else {
+				tag.setBoolean("sleeping", true);
 			}
 		}
+	}
+	
+	private void ejectSleepingBagFromPlayer(EntityPlayer player, ItemStack itemStack) {
+		NBTTagCompound tag = getOrCreateTag(itemStack);
+		player.setCurrentItemOrArmor(3, null);
+		revertSpawnFromItem(player, itemStack);
+		tag.setBoolean("sleeping", false);
+		InventoryUtils.insertItemIntoInventory(player.inventory, itemStack);
+		if (itemStack.stackSize > 0) {
+			BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, itemStack);
+		}
+	}
+	
+	private static NBTTagCompound getOrCreateTag(ItemStack itemStack) {
+		NBTTagCompound tag = itemStack.getTagCompound();
+		if (tag == null) {
+			tag = new NBTTagCompound();
+			itemStack.setTagCompound(tag);
+		}
+		return tag;
 	}
 
 	private static void revertSpawnFromItem(EntityPlayer player, ItemStack itemStack) {
@@ -107,14 +129,10 @@ public class ItemSleepingBag extends ItemArmor {
 	
 	private static void saveOriginalSpawn(ChunkCoordinates spawn, ItemStack stack) {
 		if (spawn != null) {
-			NBTTagCompound tag = stack.getTagCompound();
-			if (tag == null) {
-				tag = new NBTTagCompound();
-			}
+			NBTTagCompound tag = getOrCreateTag(stack);
 			tag.setInteger("spawnx", spawn.posX);
 			tag.setInteger("spawny", spawn.posY);
 			tag.setInteger("spawnz", spawn.posZ);
-			stack.setTagCompound(tag);
 		}
 	}
 
