@@ -51,6 +51,9 @@ tile.openblocks.autoenchantmenttable.name=Auto Enchantment Table
 tile.openblocks.xpdrain.name=XP Drain
 tile.openblocks.ropeladder.name=Rope Ladder
 tile.openblocks.donationStation.name=Donation Station
+tile.openblocks.blockbreaker.name=Block Breaker
+tile.openblocks.blockPlacer.name=Block Placer
+tile.openblocks.itemDropper.name=Item Dropper
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
