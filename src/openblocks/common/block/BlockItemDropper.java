@@ -15,7 +15,7 @@ public class BlockItemDropper extends OpenBlock {
 	public BlockItemDropper() {
 		super(Config.blockItemDropperId, Material.rock);
 		setupBlock(this, "itemDropper", TileEntityItemDropper.class);
-		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
+		setRotationMode(BlockRotationMode.NONE);
 	}
 
 	@Override
