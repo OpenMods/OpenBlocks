@@ -163,8 +163,9 @@ public abstract class SyncMap<H extends ISyncHandler> {
 
 	protected abstract World getWorld();
 
-	public void sync() {
+	public boolean sync() {
 		Set<EntityPlayer> players = getPlayersWatching();
+		boolean sent = false;
 		if (!getWorld().isRemote) {
 			Packet changePacket = null;
 			Packet fullPacket = null;
@@ -178,10 +179,12 @@ public abstract class SyncMap<H extends ISyncHandler> {
 						if (hasChanges) {
 							if (changePacket == null) changePacket = createPacket(false, false);
 							OpenBlocks.proxy.sendPacketToPlayer((Player)player, changePacket);
+							sent = true;
 						}
 					} else {
 						if (fullPacket == null) fullPacket = createPacket(true, false);
 						OpenBlocks.proxy.sendPacketToPlayer((Player)player, fullPacket);
+						sent = true;
 					}
 				}
 				knownUsers = newUsersInRange;
@@ -191,12 +194,14 @@ public abstract class SyncMap<H extends ISyncHandler> {
 		} else {
 			try {
 				OpenBlocks.proxy.sendPacketToServer(createPacket(false, true));
+				sent = true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			knownUsers.clear();
 		}
 		markAllAsClean();
+		return sent;
 	}
 
 	private boolean hasChanges() {

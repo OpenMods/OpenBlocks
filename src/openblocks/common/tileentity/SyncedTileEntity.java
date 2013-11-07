@@ -74,7 +74,13 @@ public abstract class SyncedTileEntity extends OpenTileEntity implements
 	}
 
 	public void sync() {
-		syncMap.sync();
+		if (syncMap.sync()) {
+			onSync();
+		}
+	}
+	
+	public void onSync() {
+		
 	}
 
 	@Override

@@ -66,24 +66,21 @@ public class TileEntityTrophy extends SyncedTileEntity implements IAwareTileLite
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		/**
-		 * Debug only. These will be dropped randomly with mobs!
-		 */
+		boolean set = false;
+		if (stack.hasTagCompound()) {
+			NBTTagCompound tag = stack.getTagCompound();
+			if (tag.hasKey("entity")) {
+				String entityKey = tag.getString("entity");
+				trophyIndex.setValue(Trophy.valueOf(entityKey).ordinal());
+				set = true;
+			}
+		}
+		if (!set) {
+			int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
+			debugTrophy = Trophy.values()[next];
+			trophyIndex.setValue(debugTrophy.ordinal());
+		}
 		if (!worldObj.isRemote) {
-			boolean set = false;
-			if (stack.hasTagCompound()) {
-				NBTTagCompound tag = stack.getTagCompound();
-				if (tag.hasKey("entity")) {
-					String entityKey = tag.getString("entity");
-					trophyIndex.setValue(Trophy.valueOf(entityKey).ordinal());
-					set = true;
-				}
-			}
-			if (!set) {
-				int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
-				debugTrophy = Trophy.values()[next];
-				trophyIndex.setValue(debugTrophy.ordinal());
-			}
 			sync();
 		}
 	}

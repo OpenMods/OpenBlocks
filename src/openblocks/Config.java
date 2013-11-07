@@ -137,8 +137,14 @@ public class Config {
 	@BlockId(description = "The id of the rope ladder block")
 	public static int blockRopeLadderId = 2566;
 
-	@BlockId(description = "The id of the donation station")
+	@BlockId(description = "The id of the donation station block")
 	public static int blockDonationStationId = 2567;
+	
+	@BlockId(description = "The id of the clay stainer block")
+	public static int blockClayStainerId = 2568;
+
+	@BlockId(description = "The id of the special stained clay block")
+	public static int blockSpecialStainedClayId = 2569;
 	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -203,6 +209,8 @@ public class Config {
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
+
+
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -477,6 +485,14 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.donationStation), new Object[] { "ppp", "pcp", "ppp", 'p', new ItemStack(Item.porkRaw), 'c', new ItemStack(Block.chest) }));
 		}
 
+		if (Config.canRegisterBlock(blockClayStainerId)) {
+			OpenBlocks.Blocks.clayStainer = new BlockClayStainer();
+		}
+		
+		if (Config.canRegisterBlock(blockSpecialStainedClayId)) {
+			OpenBlocks.Blocks.specialStainedClay = new BlockSpecialStainedClay();
+		}
+		
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		// There is no fail checking here because if the Generic item fails,

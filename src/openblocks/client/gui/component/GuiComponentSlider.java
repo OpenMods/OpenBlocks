@@ -19,7 +19,13 @@ public class GuiComponentSlider extends BaseComponent {
 	private int steps;
 	private boolean isDragging = false;
 	private int startDragX;
-
+	private boolean showValue = true;
+	
+	public GuiComponentSlider(int x, int y, int width, int min, int max, SyncableInt val, boolean showValue) {
+		this(x, y, width, min, max, val);
+		this.showValue = showValue;
+	}
+	
 	public GuiComponentSlider(int x, int y, int width, int min, int max, SyncableInt val) {
 		super(x, y);
 		this.width = width;
@@ -39,7 +45,6 @@ public class GuiComponentSlider extends BaseComponent {
 		int top = offsetY + y;
 		int barStartX = left + 1;
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
-
 		drawTexturedModalRect(left, top, 0, 70, 1, getHeight());
 		GL11.glPushMatrix();
 		GL11.glTranslated(left + 1, top, 0);
@@ -49,13 +54,14 @@ public class GuiComponentSlider extends BaseComponent {
 		drawTexturedModalRect(left + getWidth() - 1, top, 2, 70, 1, getHeight());
 		int handleX = (int)Math.floor(barStartX + stepSize * (level - min));
 		if (Mouse.isButtonDown(0)) {
-			if (!isDragging && mouseX > handleX && mouseX < handleX + 8) {
+			if (!isDragging && mouseX + offsetX > handleX && mouseX + offsetX < handleX + 8 && mouseY > y && mouseY < y + getHeight()) {
 				isDragging = true;
 				startDragX = mouseX - handleX;
 			}
 		} else {
 			if (isDragging) {
 				isDragging = false;
+				onMouseUp();
 			}
 		}
 		if (isDragging) {
@@ -64,11 +70,11 @@ public class GuiComponentSlider extends BaseComponent {
 		}
 		level = Math.max(min, Math.min(max, level));
 		drawTexturedModalRect(handleX, top + 1, 3, 70, 9, 10);
-
-		String label = Integer.toString(level);
-		int strWidth = minecraft.fontRenderer.getStringWidth(label);
-		minecraft.fontRenderer.drawString(label, handleX + 4 - (strWidth / 2), top + 15, 4210752);
-
+		if (showValue) {
+			String label = Integer.toString(level);
+			int strWidth = minecraft.fontRenderer.getStringWidth(label);
+			minecraft.fontRenderer.drawString(label, handleX + 4 - (strWidth / 2), top + 15, 4210752);
+		}
 		value.setValue(level);
 
 	}
@@ -81,5 +87,9 @@ public class GuiComponentSlider extends BaseComponent {
 	@Override
 	public int getHeight() {
 		return 12;
+	}
+	
+	public void onMouseUp() {
+		
 	}
 }

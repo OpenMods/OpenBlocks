@@ -7,14 +7,12 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
-import net.minecraft.world.World;
 import openblocks.client.gui.component.BaseComponent;
 import openblocks.client.gui.component.GuiComponentButton;
 import openblocks.client.gui.component.GuiComponentLabel;
 import openblocks.client.gui.component.BaseComponent.IComponentListener;
 import openblocks.common.container.ContainerDonationStation;
 import openblocks.common.tileentity.TileEntityDonationStation;
-import openblocks.utils.RenderUtils;
 
 public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStation> 
 	implements IComponentListener {

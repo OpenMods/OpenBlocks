@@ -79,6 +79,8 @@ public class OpenBlocks {
 		public static BlockItemDropper itemDropper;
 		public static BlockRopeLadder ropeLadder;
 		public static BlockDonationStation donationStation;
+		public static BlockClayStainer clayStainer;
+		public static BlockSpecialStainedClay specialStainedClay;
 	}
 
 	public static class Items {

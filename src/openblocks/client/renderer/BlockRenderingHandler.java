@@ -199,10 +199,26 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		renderer.uvRotateWest = 0;
 	}
 
-	private void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation) {
+
+	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation) {
+		renderInventoryBlock(renderer, block, rotation, -1);
+	}
+	
+	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation, int colorMultiplier) {
 		Tessellator tessellator = Tessellator.instance;
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
+
+		float r;
+		float g;
+		float b;
+		if (colorMultiplier > -1)
+		{
+			r = (colorMultiplier >> 16 & 255) / 255.0F;
+			g = (colorMultiplier >> 8 & 255) / 255.0F;
+			b = (colorMultiplier & 255) / 255.0F;
+			GL11.glColor4f(r, g, b, 1.0F);
+		}
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		tessellator.startDrawingQuads();
@@ -210,32 +226,10 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		int metadata = rotation.ordinal();
 		renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
 		tessellator.draw();
-		boolean flag = false;
-		boolean useInventoryTint = true;
-		int renderColor;
-		float r;
-		float g;
-		float par3 = 1.0f;
-
-		if (flag && useInventoryTint)
-		{
-			renderColor = block.getRenderColor(metadata);
-			r = (renderColor >> 16 & 255) / 255.0F;
-			g = (renderColor >> 8 & 255) / 255.0F;
-			float b = (renderColor & 255) / 255.0F;
-			GL11.glColor4f(r * par3, g * par3, b * par3, 1.0F);
-		}
-
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 1.0F, 0.0F);
 		renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
 		tessellator.draw();
-
-		if (flag && useInventoryTint)
-		{
-			GL11.glColor4f(par3, par3, par3, 1.0F);
-		}
-
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0.0F, 0.0F, -1.0F);
 		renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));

@@ -22,10 +22,7 @@ import openblocks.IProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
-import openblocks.client.renderer.BlockRenderingHandler;
-import openblocks.client.renderer.ItemRendererHangGlider;
-import openblocks.client.renderer.ItemRendererLuggage;
-import openblocks.client.renderer.ItemRendererTank;
+import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.block.BlockTank;
@@ -94,6 +91,8 @@ public class ClientProxy implements IProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, new TileEntityDonationStationRenderer());
 
 		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
+
+		if (OpenBlocks.Blocks.specialStainedClay != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.specialStainedClay.blockID, new ItemRendererSpecialStainedClay());
 
 		if (OpenBlocks.Items.luggage != null) {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
