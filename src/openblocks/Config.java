@@ -142,9 +142,12 @@ public class Config {
 	
 	@BlockId(description = "The id of the clay stainer block")
 	public static int blockClayStainerId = 2568;
-
+	
 	@BlockId(description = "The id of the special stained clay block")
 	public static int blockSpecialStainedClayId = 2569;
+	
+	@BlockId(description = "The id of the Ore Crusher")
+	public static int blockMachineOreCrusher = 2570;
 	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -491,6 +494,10 @@ public class Config {
 		
 		if (Config.canRegisterBlock(blockSpecialStainedClayId)) {
 			OpenBlocks.Blocks.specialStainedClay = new BlockSpecialStainedClay();
+		}
+		
+		if(Config.canRegisterBlock(blockMachineOreCrusher)) {
+			OpenBlocks.Blocks.machineOreCrusher = new BlockMachineOreCrusher();
 		}
 		
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

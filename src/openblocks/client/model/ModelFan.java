@@ -117,6 +117,9 @@ public class ModelFan extends ModelBase {
 	 * @param te
 	 * @param f
 	 *            I don't know what f is
+	 *            ---
+	 *            It's partial tick, Mikee for sub-tick timing :)
+	 *            More than 1 frame per ms ;)
 	 */
 	public void setRotationAngles(TileEntity te, float f) {
 		fan.rotateAngleZ = (float)Math.toRadians(Minecraft.getSystemTime() % 360);

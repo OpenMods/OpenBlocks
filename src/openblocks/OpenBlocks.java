@@ -81,6 +81,7 @@ public class OpenBlocks {
 		public static BlockDonationStation donationStation;
 		public static BlockClayStainer clayStainer;
 		public static BlockSpecialStainedClay specialStainedClay;
+		public static BlockMachineOreCrusher machineOreCrusher;
 	}
 
 	public static class Items {
@@ -190,7 +191,7 @@ public class OpenBlocks {
 	@Mod.EventHandler
 	public void processMessage(FMLInterModComms.IMCEvent event) {
 		for (FMLInterModComms.IMCMessage m : event.getMessages()) {
-			if (m.isStringMessage() && m.key.equals("donateUrl")) {
+			if (m.isStringMessage() && m.key.equalsIgnoreCase("donateUrl")) {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
 			}
 		}
