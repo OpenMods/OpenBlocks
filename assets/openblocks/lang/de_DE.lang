@@ -12,6 +12,7 @@ openblocks.gui.autoenchantmenttable=Auto-Zaubertisch
 openblocks.gui.donationstation=Spendenstation
 openblocks.gui.itemdropper=Itemspender
 openblocks.gui.blockplacer=Blockplatzierer
+openblocks.gui.claystainer=Lehmfärber
 
 openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
@@ -56,6 +57,8 @@ tile.openblocks.donationStation.name=Spendenstation
 tile.openblocks.blockbreaker.name=Blockbrecher
 tile.openblocks.blockPlacer.name=Blockplatzierer
 tile.openblocks.itemDropper.name=Itemspender
+tile.openblocks.specialStainedClay.name=Spezieller gefärbter Lehm
+tile.openblocks.clayStainer.name=Lehmfärber
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
