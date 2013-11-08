@@ -51,9 +51,8 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 			}
 			int secondPass = mixer.getCanColor();
 			if (mixer.isEnabled()) secondPass = calculateColorFade(0xFFFFFF, secondPass, mixer.getProgress().getPercent());
-			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES); // Render
-																																	// first
-																																	// pass
+			// Render first pass
+			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES);
 			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, secondPass, TOP_FACE);
 			GL11.glPopMatrix();
 		}
@@ -62,8 +61,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 	}
 
-	/* Interpolate colors */
-	private int calculateColorFade(int a, int b, double magnitude) {
+	private static int calculateColorFade(int a, int b, double magnitude) {
 		start.setColor(a);
 		end.setColor(b);
 		return start.interpolate(end, magnitude).getColor();

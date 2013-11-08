@@ -2,7 +2,6 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntityDonationStation;
 
 public class ModelPiggy extends ModelBase {
@@ -87,7 +86,6 @@ public class ModelPiggy extends ModelBase {
 
 	public void render(TileEntityDonationStation station, float f) {
 		float f5 = 0.0625F;
-		setRotationAngles(station, f);
 		body.render(f5);
 		head.render(f5);
 		snout.render(f5);
@@ -105,7 +103,4 @@ public class ModelPiggy extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	@SuppressWarnings("unused")
-	public void setRotationAngles(TileEntity te, float f) {}
 }

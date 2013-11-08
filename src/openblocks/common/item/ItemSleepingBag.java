@@ -95,7 +95,7 @@ public class ItemSleepingBag extends ItemArmor {
 		}
 	}
 
-	private void ejectSleepingBagFromPlayer(EntityPlayer player, ItemStack itemStack) {
+	private static void ejectSleepingBagFromPlayer(EntityPlayer player, ItemStack itemStack) {
 		NBTTagCompound tag = getOrCreateTag(itemStack);
 		player.setCurrentItemOrArmor(3, null);
 		revertSpawnFromItem(player, itemStack);

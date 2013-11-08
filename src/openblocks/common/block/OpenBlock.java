@@ -406,10 +406,8 @@ public abstract class OpenBlock extends Block {
 
 	/**
 	 * This method should be overriden if needed. We're getting the texture for
-	 * the UNROTATED block
-	 * for a particular side (direction). Feel free to look up data in the
-	 * TileEntity to grab
-	 * additional information here
+	 * the UNROTATED block for a particular side (direction). Feel free to look
+	 * up data in the TileEntity to grab additional information here
 	 * 
 	 * @param direction
 	 * @param world
@@ -435,11 +433,10 @@ public abstract class OpenBlock extends Block {
 		return getUnrotatedTexture(direction, world, x, y, z);
 	}
 
-	@SideOnly(Side.CLIENT)
 	/***
-	 * I'm sure there's a better way of doing this, but the idea is that we rotate the
-	 * block based on the metadata (rotation), so when we try to get a texture we're
-	 * referencing the side when 'unrotated'
+	 * I'm sure there's a better way of doing this, but the idea is that we
+	 * rotate the block based on the metadata (rotation), so when we try to get
+	 * a texture we're referencing the side when 'unrotated'
 	 */
 	public ForgeDirection rotateSideByMetadata(int side, int metadata) {
 		ForgeDirection rotation = ForgeDirection.getOrientation(metadata);
@@ -484,7 +481,7 @@ public abstract class OpenBlock extends Block {
 						break;
 
 				}
-		};
+		}
 		return dir;
 	}
 
@@ -514,8 +511,5 @@ public abstract class OpenBlock extends Block {
 		return true;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-
-	}
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<ItemStack> list, boolean par4) {}
 }

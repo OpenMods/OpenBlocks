@@ -14,7 +14,6 @@ public class AdapterDonationStation implements IPeripheralAdapter {
 		return TileEntityDonationStation.class;
 	}
 
-	@SuppressWarnings({ "unused" })
 	@LuaMethod(onTick = true, returnType = LuaType.STRING, description = "Find the mod name and mod authors")
 	public IMultiReturn getItemAuthor(IComputerAccess computer, final TileEntityDonationStation station) {
 		if (station.getStackInSlot(0) != null) { return new IMultiReturn() {

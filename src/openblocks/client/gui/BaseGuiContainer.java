@@ -67,7 +67,6 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		panel.keyTyped(par1, par2);
 	}
 
-	@SuppressWarnings("unused")
 	public void postRender(int mouseX, int mouseY) {}
 
 	@Override
