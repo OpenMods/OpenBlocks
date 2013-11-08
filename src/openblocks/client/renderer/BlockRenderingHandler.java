@@ -32,6 +32,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		inventoryTileEntities = Maps.newIdentityHashMap();
 		blockRenderers = Maps.newIdentityHashMap();
 		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
+		blockRenderers.put(OpenBlocks.Blocks.specialStainedClay, new BlockSpecialClayRenderer());
 	}
 	
 	public TileEntity getTileEntityForBlock(Block block) {
@@ -128,7 +129,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		return true;
 	}
 
-	private void rotateFacesOnRenderer(OpenBlock block, ForgeDirection rotation, RenderBlocks renderer) {
+	public static void rotateFacesOnRenderer(OpenBlock block, ForgeDirection rotation, RenderBlocks renderer) {
 		BlockRotationMode mode = block.getRotationMode();
 		switch(mode) {
 			case SIX_DIRECTIONS:
@@ -189,7 +190,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	}
 
-	private void resetFacesOnRenderer(RenderBlocks renderer) {
+	public static void resetFacesOnRenderer(RenderBlocks renderer) {
 		renderer.uvRotateTop = 0;
 		renderer.uvRotateBottom = 0;
 		renderer.uvRotateEast = 0;
