@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.ForgeDirection;
 

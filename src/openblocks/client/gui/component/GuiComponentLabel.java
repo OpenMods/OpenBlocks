@@ -62,7 +62,7 @@ public class GuiComponentLabel extends BaseComponent {
 		int lineCount = 0;
 		for(String s : formattedText) {
 			if(s == null) break;
-			minecraft.fontRenderer.drawString(s, offsetX, offsetY + offset, 4210752);
+			minecraft.fontRenderer.drawString(s, 0, offset, 4210752);
 			offset += minecraft.fontRenderer.FONT_HEIGHT;
 			if(++lineCount >= getMaxLines()) break;
 		}

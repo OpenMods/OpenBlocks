@@ -1,8 +1,9 @@
 package openblocks.common.block;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
@@ -13,7 +14,6 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
-import openblocks.utils.BlockUtils;
 
 public class BlockTank extends OpenBlock {
 
@@ -60,27 +60,20 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (!world.isRemote
-				&& world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
-			ItemStack itemStack = new ItemStack(OpenBlocks.Blocks.tank);
-			TileEntityTank tank = getTileEntity(world, x, y, z, TileEntityTank.class);
-			if (tank != null && tank.getTank().getFluidAmount() > 10) {
-				NBTTagCompound nbt = new NBTTagCompound();
-				NBTTagCompound tankTag = tank.getItemNBT();
-				nbt.setCompoundTag("tank", tankTag);
-				itemStack.setTagCompound(nbt);
-			}
-			BlockUtils.dropItemStackInWorld(world, x, y, z, itemStack);
+    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
+        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+        ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
+        TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+    	if (tile != null && tile.getTank().getFluidAmount() > 10) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTTagCompound tankTag = tile.getItemNBT();
+			nbt.setCompoundTag("tank", tankTag);
+			stack.setTagCompound(nbt);
 		}
-		return world.setBlockToAir(x, y, z);
-	}
-
-	@Override
-	protected void dropBlockAsItem_do(World world, int x, int y, int z, ItemStack itemStack) {
-
-	}
-
+        ret.add(stack);
+        return ret;
+    }
+	
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
 		if (!Config.tanksEmitLight) return 0;

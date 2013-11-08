@@ -21,12 +21,8 @@ public class GuiComponentColorPicker extends BaseComponent {
 	public GuiComponentColorPicker(int x, int y, SyncableInt color, SyncableInt tone) {
 		super(x, y);
 		this.color =  color;
-		float[] hsb = new float[3];
-		int col = color.getValue();
-		Color.RGBtoHSB((col & 0xFF0000) >> 16, (col & 0x00FF00) >> 8, col & 0x0000FF, hsb);
-		pointX = (int)(hsb[0] * 100);
-		pointY = (int)((1.0f - hsb[2]) * 50);
 		this.tone = tone;
+		this.setFromColor(color.getValue());
 		slider = new GuiComponentSlider(0, 55, 100, 0, 255, tone, false) {
 			@Override
 			public void onMouseUp() {
@@ -36,6 +32,14 @@ public class GuiComponentColorPicker extends BaseComponent {
 		addComponent(slider);
 	}
 
+	public void setFromColor(int col) {
+		float[] hsb = new float[3];
+		Color.RGBtoHSB((col & 0xFF0000) >> 16, (col & 0x00FF00) >> 8, col & 0x0000FF, hsb);
+		pointX = (int)(hsb[0] * 100);
+		pointY = (int)((1.0f - hsb[2]) * 50);
+		tone.setValue(255 - (int)(hsb[1] * 255));
+	}
+	
 	@Override
 	public int getWidth() {
 		return 100;

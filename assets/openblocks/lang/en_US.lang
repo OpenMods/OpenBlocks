@@ -12,6 +12,7 @@ openblocks.gui.autoenchantmenttable=Auto Enchantment Table
 openblocks.gui.donationstation=Donation Station
 openblocks.gui.itemdropper=Item Dropper
 openblocks.gui.blockplacer=Block Placer
+openblocks.gui.claystainer=Clay Stainer
 
 openblocks.misc.type=Type: %s
 openblocks.misc.uses=Uses: %.2f
@@ -56,6 +57,8 @@ tile.openblocks.donationStation.name=Donation Station
 tile.openblocks.blockbreaker.name=Block Breaker
 tile.openblocks.blockPlacer.name=Block Placer
 tile.openblocks.itemDropper.name=Item Dropper
+tile.openblocks.specialStainedClay.name=Special Stained Clay
+tile.openblocks.clayStainer.name=Clay Stainer
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing

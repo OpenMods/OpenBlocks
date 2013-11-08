@@ -1,4 +1,8 @@
 package openblocks.common.block;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -39,18 +43,18 @@ public abstract class OpenBlock extends Block {
 
 	/***
 	 * The block placement mode. Does it rotate based on the surface
-	 * it's placed on, or the 
+	 * it's placed on, or the
 	 */
 	public enum BlockPlacementMode {
 		ENTITY_ANGLE,
 		SURFACE
 	}
-	
+
 	/**
 	 * The unique ID of this block
 	 */
 	private String uniqueBlockId;
-	
+
 	/**
 	 * The tile entity class associated with this block
 	 */
@@ -92,17 +96,39 @@ public abstract class OpenBlock extends Block {
 		inventoryRenderRotation = rotation;
 	}
 
+	@Override
+	public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {
+    }
+	
+	@Override
+	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
+		if (world.isRemote) return false;
+
+		if ((!player.capabilities.isCreativeMode)) {
+			int metadata = world.getBlockMetadata(x, y, z);
+			ArrayList<ItemStack> items = getBlockDropped(world, x, y, z, metadata, 0);
+			Iterator<ItemStack> it = items.iterator();
+			while (it.hasNext()) {
+				ItemStack item = it.next();
+				dropBlockAsItem_do(world, x, y, z, item);
+			}
+		}
+		return super.removeBlockByPlayer(world, player, x, y, z);
+	}
+
 	@SideOnly(Side.CLIENT)
 	public ForgeDirection getInventoryRenderRotation() {
 		return inventoryRenderRotation;
 	}
-	
+
 	/**
 	 * Set block bounds based on rotation
-	 * @param direction direction to apply bounds to
+	 * 
+	 * @param direction
+	 *            direction to apply bounds to
 	 */
 	public void setBoundsBasedOnRotation(ForgeDirection direction) {
-		
+
 	}
 
 	/**
@@ -145,7 +171,7 @@ public abstract class OpenBlock extends Block {
 		}
 		return te;
 	}
-	
+
 	public Class<? extends TileEntity> getTileClass() {
 		return teClass;
 	}
@@ -242,7 +268,7 @@ public abstract class OpenBlock extends Block {
 	public boolean renderAsNormalBlock() {
 		return isOpaqueCube();
 	}
-	
+
 	@Override
 	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
 		super.onBlockEventReceived(world, x, y, z, eventId, eventParam);
@@ -395,15 +421,12 @@ public abstract class OpenBlock extends Block {
 	 */
 	public Icon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
 		if (direction != ForgeDirection.UNKNOWN) {
-			if (textures[direction.ordinal()] != null) {
-				return textures[direction.ordinal()];
-			}
+			if (textures[direction.ordinal()] != null) { return textures[direction.ordinal()]; }
 		}
 		return blockIcon;
 	}
 
-
-    @SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	@Override
 	/**
 	 * Get the texture, but rotate the block around the metadata rotation first
@@ -412,8 +435,8 @@ public abstract class OpenBlock extends Block {
 		ForgeDirection direction = rotateSideByMetadata(side, world.getBlockMetadata(x, y, z));
 		return getUnrotatedTexture(direction, world, x, y, z);
 	}
-	
-    @SideOnly(Side.CLIENT)
+
+	@SideOnly(Side.CLIENT)
 	/***
 	 * I'm sure there's a better way of doing this, but the idea is that we rotate the
 	 * block based on the metadata (rotation), so when we try to get a texture we're
@@ -422,10 +445,10 @@ public abstract class OpenBlock extends Block {
 	public ForgeDirection rotateSideByMetadata(int side, int metadata) {
 		ForgeDirection rotation = ForgeDirection.getOrientation(metadata);
 		ForgeDirection dir = ForgeDirection.getOrientation(side);
-		switch(getRotationMode()) {
+		switch (getRotationMode()) {
 			case FOUR_DIRECTIONS:
 			case NONE:
-				switch(rotation) {
+				switch (rotation) {
 					case EAST:
 						dir = dir.getRotation(ForgeDirection.DOWN);
 						break;
@@ -441,7 +464,7 @@ public abstract class OpenBlock extends Block {
 				}
 				return dir;
 			default:
-				switch(rotation) {
+				switch (rotation) {
 					case DOWN:
 						dir = dir.getRotation(ForgeDirection.SOUTH);
 						dir = dir.getRotation(ForgeDirection.SOUTH);
@@ -460,14 +483,14 @@ public abstract class OpenBlock extends Block {
 						break;
 					default:
 						break;
-					
+
 				}
 		};
 		return dir;
 	}
 
 	@Override
-    @SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	/***
 	 * This is called by the blockrenderer when rendering an item into the inventory.
 	 * We'll return the block, rotated as we wish, but without any additional texture
@@ -477,9 +500,7 @@ public abstract class OpenBlock extends Block {
 		ForgeDirection newRotation = rotateSideByMetadata(side, metadata);
 		if (newRotation != ForgeDirection.UNKNOWN) {
 			int index = newRotation.ordinal();
-			if (textures[index] != null) {
-				return textures[index];
-			}
+			if (textures[index] != null) { return textures[index]; }
 		}
 		return blockIcon;
 	}
@@ -487,9 +508,9 @@ public abstract class OpenBlock extends Block {
 	public void setDefaultTexture(Icon icon) {
 		this.blockIcon = icon;
 	}
-	
+
 	public abstract boolean shouldRenderBlock();
-	
+
 	public boolean useTESRForInventory() {
 		return true;
 	}
