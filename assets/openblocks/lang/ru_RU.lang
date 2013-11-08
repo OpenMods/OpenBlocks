@@ -12,6 +12,7 @@ openblocks.gui.autoenchantmenttable=Автоматический стол зач
 openblocks.gui.donationstation=Станция пожертвований
 openblocks.gui.itemdropper=Выбрасыватель предметов
 openblocks.gui.blockplacer=Разместитель блоков
+openblocks.gui.claystainer=Окрашиватель глины
 
 openblocks.misc.type=Тип: %s
 openblocks.misc.uses=Использований: %.2f
@@ -56,6 +57,8 @@ tile.openblocks.donationStation.name=Станция пожертвований
 tile.openblocks.blockbreaker.name=Разрушитель блоков
 tile.openblocks.blockPlacer.name=Разместитель блоков
 tile.openblocks.itemDropper.name=Выбрасыватель предметов
+tile.openblocks.specialStainedClay.name=Специальная окрашенная глина
+tile.openblocks.clayStainer.name=Окрашиватель глины
 
 item.openblocks.hangglider.name=Дельтаплан
 item.openblocks.gliderwing.name=Крыло дельтаплана
