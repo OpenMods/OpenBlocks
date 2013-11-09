@@ -129,10 +129,10 @@ public class OpenBlocks {
 		Log.logger = evt.getModLog();
 
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
+		Config.readConfig(configFile);
 		if (configFile.hasChanged()) {
-			Config.readConfig(configFile);
+			configFile.save();
 		}
-		configFile.save();
 		
 		OpenBlocks.syncableManager = new SyncableManager();
 
