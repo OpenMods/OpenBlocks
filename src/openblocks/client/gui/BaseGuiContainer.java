@@ -55,14 +55,14 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 			((SyncedTileEntity)te).sync();
 		}
 	}
-	
+
 	public void preRender(float mouseX, float mouseY) {
-		panel.mouseMovedOrUp((int)mouseX - this.guiLeft, (int)mouseY - this.guiTop, -1);
+		panel.mouseMovedOrUp((int)mouseX - this.guiLeft, (int)mouseY
+				- this.guiTop, -1);
 	}
-	
+
 	@SuppressWarnings("unused")
-	public void postRender(int mouseX, int mouseY) {		
-	}
+	public void postRender(int mouseX, int mouseY) {}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
@@ -81,6 +81,10 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		fontRenderer.drawString(machineName, x, 6, 4210752);
 		String translatedName = StatCollector.translateToLocal("container.inventory");
 		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
+	}
+
+	public void sendButtonClick(int buttonId) {
+		this.mc.playerController.sendEnchantPacket(this.container.windowId, buttonId);
 	}
 
 }

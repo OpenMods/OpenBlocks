@@ -16,14 +16,14 @@ public class BlockBlockPlacer extends OpenBlock {
 		public static Icon bottom;
 		public static Icon sides;
 	}
-	
+
 	public BlockBlockPlacer() {
 		super(Config.blockBlockPlacerId, Material.rock);
 		setupBlock(this, "blockPlacer", TileEntityBlockPlacer.class);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setInventoryRenderRotation(ForgeDirection.EAST);
 	}
-	
+
 	@Override
 	public boolean shouldRenderBlock() {
 		return true;

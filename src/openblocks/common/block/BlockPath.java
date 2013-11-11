@@ -24,7 +24,7 @@ public class BlockPath extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return true;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;

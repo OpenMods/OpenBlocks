@@ -29,12 +29,10 @@ public class BlockLightbox extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return true;
 	}
-	
+
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		if (world instanceof World) {
-			return ((World)world).isBlockIndirectlyGettingPowered(x, y, z) ? 15 : 0;
-		}
+		if (world instanceof World) { return ((World)world).isBlockIndirectlyGettingPowered(x, y, z)? 15 : 0; }
 		return 0;
 	}
 
@@ -47,7 +45,7 @@ public class BlockLightbox extends OpenBlock {
 	public void registerIcons(IconRegister registry) {
 		Icons.front = registry.registerIcon("openblocks:lightbox");
 		Icons.backSides = registry.registerIcon("openblocks:lightbox_back");
-		
+
 		setTexture(ForgeDirection.UP, Icons.backSides);
 		setTexture(ForgeDirection.EAST, Icons.backSides);
 		setTexture(ForgeDirection.WEST, Icons.backSides);
@@ -89,7 +87,7 @@ public class BlockLightbox extends OpenBlock {
 				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return isNeighborBlockSolid(world, x, y, z, side);

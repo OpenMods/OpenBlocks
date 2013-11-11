@@ -22,7 +22,7 @@ public class BlockXPBottler extends OpenBlock {
 		setupBlock(this, "xpbottler", TileEntityXPBottler.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
-	
+
 	@Override
 	public boolean shouldRenderBlock() {
 		return true;
@@ -35,7 +35,7 @@ public class BlockXPBottler extends OpenBlock {
 		Icons.side = registry.registerIcon("openblocks:xpbottler_sides");
 		Icons.bottom = registry.registerIcon("openblocks:xpbottler_bottom");
 		Icons.back = registry.registerIcon("openblocks:xpbottler_back");
-		
+
 		setTexture(ForgeDirection.EAST, Icons.side);
 		setTexture(ForgeDirection.WEST, Icons.side);
 		setTexture(ForgeDirection.SOUTH, Icons.front);

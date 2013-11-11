@@ -20,12 +20,12 @@ public class GuiComponentSlider extends BaseComponent {
 	private boolean isDragging = false;
 	private int startDragX;
 	private boolean showValue = true;
-	
+
 	public GuiComponentSlider(int x, int y, int width, int min, int max, SyncableInt val, boolean showValue) {
 		this(x, y, width, min, max, val);
 		this.showValue = showValue;
 	}
-	
+
 	public GuiComponentSlider(int x, int y, int width, int min, int max, SyncableInt val) {
 		super(x, y);
 		this.width = width;
@@ -54,7 +54,9 @@ public class GuiComponentSlider extends BaseComponent {
 		drawTexturedModalRect(left + getWidth() - 1, top, 2, 70, 1, getHeight());
 		int handleX = (int)Math.floor(barStartX + stepSize * (level - min));
 		if (Mouse.isButtonDown(0)) {
-			if (!isDragging && mouseX + offsetX > handleX && mouseX + offsetX < handleX + 8 && mouseY > y && mouseY < y + getHeight()) {
+			if (!isDragging && mouseX + offsetX > handleX
+					&& mouseX + offsetX < handleX + 8 && mouseY > y
+					&& mouseY < y + getHeight()) {
 				isDragging = true;
 				startDragX = mouseX - handleX;
 			}
@@ -73,7 +75,8 @@ public class GuiComponentSlider extends BaseComponent {
 		if (showValue) {
 			String label = Integer.toString(level);
 			int strWidth = minecraft.fontRenderer.getStringWidth(label);
-			minecraft.fontRenderer.drawString(label, handleX + 4 - (strWidth / 2), top + 15, 4210752);
+			minecraft.fontRenderer.drawString(label, handleX + 4
+					- (strWidth / 2), top + 15, 4210752);
 		}
 		value.setValue(level);
 
@@ -88,8 +91,8 @@ public class GuiComponentSlider extends BaseComponent {
 	public int getHeight() {
 		return 12;
 	}
-	
+
 	public void onMouseUp() {
-		
+
 	}
 }

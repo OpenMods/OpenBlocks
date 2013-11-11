@@ -29,7 +29,11 @@ public class BlockRopeLadder extends OpenBlock {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return side != ForgeDirection.UP && side != ForgeDirection.DOWN;// && isNeighborBlockSolid(world, x, y, z, side);
+		return side != ForgeDirection.UP && side != ForgeDirection.DOWN;// &&
+																		// isNeighborBlockSolid(world,
+																		// x, y,
+																		// z,
+																		// side);
 	}
 
 	@Override
@@ -41,11 +45,11 @@ public class BlockRopeLadder extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return false;
 	}
-	
+
 	@Override
-    public int idDropped(int par1, Random par2Random, int par3) {
-        return -1;
-    }
+	public int idDropped(int par1, Random par2Random, int par3) {
+		return -1;
+	}
 
 	@Override
 	public boolean isOpaqueCube() {
@@ -53,19 +57,19 @@ public class BlockRopeLadder extends OpenBlock {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List list, Entity entity){
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List list, Entity entity) {
 		if (entity instanceof EntityLivingBase) {
 			int meta = world.getBlockMetadata(x, y, z);
-	        ForgeDirection rotation = ForgeDirection.getOrientation(meta);
-	        ForgeDirection playerRotation = BlockUtils.get2dOrientation((EntityLivingBase)entity);
+			ForgeDirection rotation = ForgeDirection.getOrientation(meta);
+			ForgeDirection playerRotation = BlockUtils.get2dOrientation((EntityLivingBase)entity);
 			if (rotation == playerRotation) {
-	        	super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
+				super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
 			}
-        }else {
-        	super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
-        }
-    }
-	
+		} else {
+			super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
+		}
+	}
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		setBlockBoundsBasedOnState(par1World, par2, par3, par4);
@@ -78,7 +82,7 @@ public class BlockRopeLadder extends OpenBlock {
 		setBlockBoundsBasedOnState(par1World, par2, par3, par4);
 		return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
-	
+
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 
@@ -104,7 +108,7 @@ public class BlockRopeLadder extends OpenBlock {
 					break;
 			}
 		}
-		
+
 	}
-	
+
 }

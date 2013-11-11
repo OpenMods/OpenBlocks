@@ -25,7 +25,7 @@ public class BlockSprinkler extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return false;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		setBlockBoundsBasedOnState(world, x, y, z);

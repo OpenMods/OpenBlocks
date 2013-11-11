@@ -45,19 +45,19 @@ public class GuiComponentBox extends BaseComponent {
 
 	// 4x4 pixels starting at 0,0
 	public void renderTopLeftCorner(int offsetX, int offsetY) {
-		drawTexturedModalRect(offsetX + x, offsetY + y, u, v, 4, 4); 
+		drawTexturedModalRect(offsetX + x, offsetY + y, u, v, 4, 4);
 	}
-	
+
 	// 3x3 pixels starting at 5,0
 	public void renderTopRightCorner(int offsetX, int offsetY) {
-		drawTexturedModalRect(offsetX + x + getWidth() - 3, offsetY + y, u + 5, v, 3, 3); 
+		drawTexturedModalRect(offsetX + x + getWidth() - 3, offsetY + y, u + 5, v, 3, 3);
 	}
-	
+
 	// 3x3 pixels starting at 11,0
 	public void renderBottomLeftCorner(int offsetX, int offsetY) {
-		drawTexturedModalRect(offsetX + x, offsetY + y + getHeight() - 3, u + 11, v, 3, 3); 
+		drawTexturedModalRect(offsetX + x, offsetY + y + getHeight() - 3, u + 11, v, 3, 3);
 	}
-	
+
 	// 4x4 pixels starting at 15,0
 	public void renderBottomRightCorner(int offsetX, int offsetY) {
 		drawTexturedModalRect(offsetX + x + getWidth() - 4, offsetY + y

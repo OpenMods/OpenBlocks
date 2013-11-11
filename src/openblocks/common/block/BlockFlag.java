@@ -100,9 +100,7 @@ public class BlockFlag extends OpenBlock {
 					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) { return true; }
 				}
 			}
-		}else if (side == ForgeDirection.UP) {
-			return false;
-		}
+		} else if (side == ForgeDirection.UP) { return false; }
 		return isNeighborBlockSolid(world, x, y, z, side);
 	}
 

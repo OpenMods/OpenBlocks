@@ -18,12 +18,12 @@ public class BlockDonationStation extends OpenBlock {
 	public void registerIcons(IconRegister registry) {
 		blockIcon = registry.registerIcon("openblocks:donationstation");
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean shouldRenderBlock() {
 		return false;

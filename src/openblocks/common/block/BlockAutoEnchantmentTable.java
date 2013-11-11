@@ -28,12 +28,12 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean shouldRenderBlock() {
 		return false;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
@@ -53,8 +53,10 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 								break;
 							}
 
-							world.spawnParticle("enchantmenttable", x + 0.5D, y + 2.0D, z + 0.5D, l - x + rand.nextFloat() - 0.5D, j1 - y
-									- rand.nextFloat() - 1.0F, i1 - z + rand.nextFloat() - 0.5D);
+							world.spawnParticle("enchantmenttable", x + 0.5D, y + 2.0D, z + 0.5D, l
+									- x + rand.nextFloat() - 0.5D, j1 - y
+									- rand.nextFloat() - 1.0F, i1 - z
+									+ rand.nextFloat() - 0.5D);
 						}
 					}
 				}

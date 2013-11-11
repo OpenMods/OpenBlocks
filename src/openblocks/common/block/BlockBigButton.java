@@ -20,7 +20,7 @@ public class BlockBigButton extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return (side != ForgeDirection.UP && side != ForgeDirection.DOWN)
@@ -44,7 +44,7 @@ public class BlockBigButton extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		
+
 		TileEntityBigButton tile = getTileEntity(world, x, y, z, TileEntityBigButton.class);
 
 		if (tile == null) { return; }
@@ -70,7 +70,7 @@ public class BlockBigButton extends OpenBlock {
 				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
-	
+
 	@Override
 	public void setBlockBoundsForItemRender() {
 		setBlockBounds(0.0625f, 0.0625f, 0.4f, 0.9375f, 0.9375f, 0.525f);

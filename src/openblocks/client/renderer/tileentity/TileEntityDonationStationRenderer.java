@@ -14,6 +14,7 @@ public class TileEntityDonationStationRenderer extends
 
 	private ModelPiggy model = new ModelPiggy();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/piggy.png");
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityDonationStation station = (TileEntityDonationStation)tileentity;

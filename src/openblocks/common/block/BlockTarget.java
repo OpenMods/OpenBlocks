@@ -33,7 +33,7 @@ public class BlockTarget extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return false;
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
 

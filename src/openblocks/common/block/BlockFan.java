@@ -19,7 +19,7 @@ public class BlockFan extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;

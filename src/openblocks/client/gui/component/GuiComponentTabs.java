@@ -38,7 +38,7 @@ public class GuiComponentTabs extends BaseComponent {
 			}
 			tab.setActive(true);
 			activeTab = tab;
-		}else{
+		} else {
 			tab.setActive(false);
 			activeTab = null;
 		}
@@ -47,9 +47,9 @@ public class GuiComponentTabs extends BaseComponent {
 	@Override
 	public int getWidth() {
 		int maxWidth = 0;
-		for(BaseComponent component : components) {
-			if(component.getX() + component.getWidth() > maxWidth)
-				maxWidth = component.getX() + component.getWidth();
+		for (BaseComponent component : components) {
+			if (component.getX() + component.getWidth() > maxWidth) maxWidth = component.getX()
+					+ component.getWidth();
 		}
 		return maxWidth;
 	}
@@ -57,13 +57,11 @@ public class GuiComponentTabs extends BaseComponent {
 	@Override
 	public int getHeight() {
 		int maxHeight = 0;
-		for(BaseComponent component : components) {
-			if(component.getY() + component.getHeight() > maxHeight)
-				maxHeight = component.getY() + component.getHeight();
+		for (BaseComponent component : components) {
+			if (component.getY() + component.getHeight() > maxHeight) maxHeight = component.getY()
+					+ component.getHeight();
 		}
 		return maxHeight;
 	}
-	
-	
 
 }

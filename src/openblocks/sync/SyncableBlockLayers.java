@@ -156,7 +156,6 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 				stream.writeByte(-1);
 			}
 			stream.writeBoolean(layer.hasStencilCover());
-			System.out.println(layer.hasStencilCover());
 		}
 	}
 

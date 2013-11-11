@@ -68,7 +68,8 @@ public class TileEntityAutoEnchantmentTableRenderer extends
 			f5 = 1.0F;
 		}
 
-		float f6 = table.bookSpreadPrev + (table.bookSpread - table.bookSpreadPrev) * f;
+		float f6 = table.bookSpreadPrev
+				+ (table.bookSpread - table.bookSpreadPrev) * f;
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		this.enchantmentBook.render((Entity)null, f1, f4, f5, f6, 0.0F, 0.0625F);
 		GL11.glPopMatrix();

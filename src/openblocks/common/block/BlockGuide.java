@@ -33,7 +33,7 @@ public class BlockGuide extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean useTESRForInventory() {
 		return false;
@@ -43,7 +43,7 @@ public class BlockGuide extends OpenBlock {
 	public void registerIcons(IconRegister registry) {
 		Icons.ends = registry.registerIcon("openblocks:guide");
 		Icons.side = registry.registerIcon("openblocks:guide_side");
-		
+
 		setTexture(ForgeDirection.UP, Icons.ends);
 		setTexture(ForgeDirection.DOWN, Icons.ends);
 		setTexture(ForgeDirection.EAST, Icons.side);

@@ -19,7 +19,7 @@ public class BlockBlockBreaker extends OpenBlock {
 		public static Icon bottom;
 		public static Icon side;
 	}
-	
+
 	public BlockBlockBreaker() {
 		super(Config.blockBlockBreakerId, Material.rock);
 		setupBlock(this, "blockbreaker", TileEntityBlockBreaker.class);
@@ -27,7 +27,7 @@ public class BlockBlockBreaker extends OpenBlock {
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 		setInventoryRenderRotation(ForgeDirection.EAST);
 	}
-	
+
 	@Override
 	public boolean shouldRenderBlock() {
 		return true;

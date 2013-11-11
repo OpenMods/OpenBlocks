@@ -8,33 +8,33 @@ public class GuiComponentButton extends GuiComponentBox {
 
 	private String text;
 	protected boolean buttonEnabled = true;
-	
+
 	public GuiComponentButton(int x, int y, int width, int height, int color, String text) {
 		super(x, y, width, height, 0, 10, color);
 		this.text = text;
 	}
-	
+
 	public GuiComponentButton(int x, int y, int width, int height, int color) {
 		this(x, y, width, height, color, "");
 	}
-	
+
 	public void setButtonEnabled(boolean enabled) {
 		this.buttonEnabled = enabled;
 	}
-	
+
 	public boolean isButtonEnabled() {
 		return buttonEnabled;
 	}
-	
+
 	public GuiComponentButton setText(String buttonText) {
 		this.text = buttonText;
 		return this;
 	}
-	
+
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		boolean pressed = isMouseOver(mouseX, mouseY) && Mouse.isButtonDown(0);
-		this.u = buttonEnabled ? (pressed ? 20 : 0) : 40;
+		this.u = buttonEnabled? (pressed? 20 : 0) : 40;
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		int textWidth = minecraft.fontRenderer.getStringWidth(text);
 		int offX = ((width - textWidth) / 2) + 1;
@@ -43,7 +43,8 @@ public class GuiComponentButton extends GuiComponentBox {
 			offY++;
 			offX++;
 		}
-		minecraft.fontRenderer.drawString(text, offsetX + x + offX, offsetY + y + offY, 4210752);
+		minecraft.fontRenderer.drawString(text, offsetX + x + offX, offsetY + y
+				+ offY, 4210752);
 	}
 
 }

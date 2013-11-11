@@ -34,6 +34,5 @@ public class GuiComponentProgress extends BaseComponent {
 	public int getHeight() {
 		return 12;
 	}
-	
-	
+
 }

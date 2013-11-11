@@ -23,7 +23,8 @@ public class TileEntityVillageHighlighterRenderer extends
 		TileEntityVillageHighlighter villagehighlighter = (TileEntityVillageHighlighter)tileentity;
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
-		if (!villagehighlighter.isRenderedInInventory() && villagehighlighter.isPowered()) {
+		if (!villagehighlighter.isRenderedInInventory()
+				&& villagehighlighter.isPowered()) {
 			GL11.glPushMatrix();
 			Tessellator t = Tessellator.instance;
 

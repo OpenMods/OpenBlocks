@@ -44,12 +44,12 @@ public class GuiComponentCheckbox extends BaseComponent {
 		// -NC
 		isMouseOver = button == -1;
 	}
-	
+
 	@Override
 	public int getHeight() {
 		return 8;
 	}
-	
+
 	@Override
 	public int getWidth() {
 		return 8;

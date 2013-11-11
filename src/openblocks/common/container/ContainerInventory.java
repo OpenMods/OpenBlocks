@@ -62,7 +62,8 @@ public abstract class ContainerInventory<T extends IInventory> extends
 						offsetY + row * 18));
 
 		for (int slot = 0; slot < 9; slot++)
-			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58));
+			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot
+					* 18, offsetY + 58));
 	}
 
 	@Override
@@ -116,4 +117,13 @@ public abstract class ContainerInventory<T extends IInventory> extends
 			((SyncedTileEntity)te).sync();
 		}
 	}
+
+	@SuppressWarnings("unused")
+	public void onButtonClicked(EntityPlayer player, int buttonId) {}
+
+	public boolean enchantItem(EntityPlayer player, int buttonId) {
+		onButtonClicked(player, buttonId);
+		return false;
+	}
+
 }

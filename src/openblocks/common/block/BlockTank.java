@@ -53,27 +53,27 @@ public class BlockTank extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
 	@Override
-    public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-        ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
-        TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
-    	if (tile != null && tile.getTank().getFluidAmount() > 10) {
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
+		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+		if (tile != null && tile.getTank().getFluidAmount() > 10) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			NBTTagCompound tankTag = tile.getItemNBT();
 			nbt.setCompoundTag("tank", tankTag);
 			stack.setTagCompound(nbt);
 		}
-        ret.add(stack);
-        return ret;
-    }
-	
+		ret.add(stack);
+		return ret;
+	}
+
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
 		if (!Config.tanksEmitLight) return 0;

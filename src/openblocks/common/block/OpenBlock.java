@@ -97,9 +97,8 @@ public abstract class OpenBlock extends Block {
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {
-    }
-	
+	public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {}
+
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		if (world.isRemote) return false;

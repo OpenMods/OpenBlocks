@@ -14,6 +14,7 @@ public class TileEntityOreCrusherRenderer extends
 
 	private ModelOreCrusher model = new ModelOreCrusher();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/ore_crusher.png");
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityOreCrusher crusher = (TileEntityOreCrusher)tileentity;

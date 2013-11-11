@@ -13,7 +13,7 @@ public class BlockHeal extends OpenBlock {
 		super(Config.blockHealId, Material.ground);
 		setupBlock(this, "heal", TileEntityHealBlock.class);
 	}
-	
+
 	@Override
 	public boolean shouldRenderBlock() {
 		return true;
