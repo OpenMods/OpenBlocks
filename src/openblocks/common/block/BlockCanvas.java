@@ -17,12 +17,12 @@ public class BlockCanvas extends OpenBlock {
 
 	public BlockCanvas() {
 		super(Config.blockCanvasId, Material.ground);
-		setupBlock(this, "specialStainedClay", TileEntityCanvas.class);
+		setupBlock(this, "canvas", TileEntityCanvas.class);
 	}
 
 	@Override
 	public void registerIcons(IconRegister registry) {
-		baseIcon = registry.registerIcon("openblocks:specialStainedClay");
+		baseIcon = registry.registerIcon("openblocks:canvas");
 		for (Stencil stencil : Stencil.values()) {
 			stencil.registerBlockIcons(registry);
 		}

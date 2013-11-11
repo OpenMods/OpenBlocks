@@ -12,7 +12,7 @@ openblocks.gui.autoenchantmenttable=Auto Enchantment Table
 openblocks.gui.donationstation=Donation Station
 openblocks.gui.itemdropper=Item Dropper
 openblocks.gui.blockplacer=Block Placer
-openblocks.gui.claystainer=Clay Stainer
+openblocks.gui.paintmixer=Paint Mixer
 
 openblocks.misc.type=Type: %s
 openblocks.misc.uses=Uses: %.2f
@@ -57,8 +57,9 @@ tile.openblocks.donationStation.name=Donation Station
 tile.openblocks.blockbreaker.name=Block Breaker
 tile.openblocks.blockPlacer.name=Block Placer
 tile.openblocks.itemDropper.name=Item Dropper
-tile.openblocks.specialStainedClay.name=Special Stained Clay
-tile.openblocks.clayStainer.name=Clay Stainer
+tile.openblocks.canvas.name=Canvas
+tile.openblocks.paintmixer.name=Paint Mixer
+tile.openblocks.paintcan.name=Paint Can
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
@@ -80,5 +81,7 @@ item.openblocks.miracle_magnet.name=§5Miracle Magnet§r
 item.openblocks.slimalyzer.name=Slimalyzer
 item.openblocks.xpbucket.name=XP Bucket
 item.openblocks.sleepingbag.name=Sleeping Bag
+item.openblocks.paintbrush.name=Paint Brush
+item.openblocks.stencil.name=Stencil
 
 itemGroup.tabOpenBlocks=OpenBlocks
