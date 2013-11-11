@@ -353,7 +353,7 @@ public class InventoryUtils {
 	 * @param stack
 	 * @param maxAmount
 	 * @param intoSlot
-	 * @param side
+	 * @param back
 	 * @return
 	 */
 	public static int moveItemsFromOneOfSides(TileEntity intoInventory, ItemStack stack, int maxAmount, int intoSlot, SyncableFlags sideFlags) {

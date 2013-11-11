@@ -25,6 +25,17 @@ public class SyncableIntArray extends SyncableObjectBase {
 			markDirty();
 		}
 	}
+	
+	public void setValue(int offset, int newValue) {
+		if (value[offset] != newValue) {
+			value[offset] = newValue;
+			markDirty();
+		}
+	}
+	
+	public int getValue(int offset) {
+		return value[offset];
+	}
 
 	public int[] getValue() {
 		return value;

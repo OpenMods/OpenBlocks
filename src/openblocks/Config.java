@@ -141,13 +141,16 @@ public class Config {
 	public static int blockDonationStationId = 2567;
 	
 	@BlockId(description = "The id of the clay stainer block")
-	public static int blockClayStainerId = 2568;
+	public static int blockPaintMixer = 2568;
 	
 	@BlockId(description = "The id of the special stained clay block")
-	public static int blockSpecialStainedClayId = 2569;
+	public static int blockCanvasId = 2569;
 	
 	@BlockId(description = "The id of the Ore Crusher")
-	public static int blockMachineOreCrusher = 2570;
+	public static int blockMachineOreCrusherId = 2570;
+
+	@BlockId(description = "The id of the paint tin")
+	public static int blockPaintCanId = 2571;
 	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -187,7 +190,12 @@ public class Config {
 
 	@ItemId(description = "The id of the sleeping bag")
 	public static int itemSleepingBagId = 14987;
-	
+
+	@ItemId(description = "The id of the paint brush")
+	public static int itemPaintBrushId = 14988;
+
+	@ItemId(description = "The id of the stencil")
+	public static int itemStencilId = 14989;
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -212,8 +220,6 @@ public class Config {
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
-
-
 
 	private static void getBlock(Configuration configFile, Field field, String description) {
 		try {
@@ -488,16 +494,20 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.donationStation), new Object[] { "ppp", "pcp", "ppp", 'p', new ItemStack(Item.porkRaw), 'c', new ItemStack(Block.chest) }));
 		}
 
-		if (Config.canRegisterBlock(blockClayStainerId)) {
-			OpenBlocks.Blocks.clayStainer = new BlockClayStainer();
+		if (Config.canRegisterBlock(blockPaintMixer)) {
+			OpenBlocks.Blocks.paintMixer = new BlockPaintMixer();
 		}
 		
-		if (Config.canRegisterBlock(blockSpecialStainedClayId)) {
-			OpenBlocks.Blocks.specialStainedClay = new BlockSpecialStainedClay();
+		if (Config.canRegisterBlock(blockCanvasId)) {
+			OpenBlocks.Blocks.canvas = new BlockCanvas();
 		}
 		
-		if(Config.canRegisterBlock(blockMachineOreCrusher)) {
+		if(Config.canRegisterBlock(blockMachineOreCrusherId)) {
 			OpenBlocks.Blocks.machineOreCrusher = new BlockMachineOreCrusher();
+		}
+
+		if (Config.canRegisterBlock(blockPaintCanId)) {
+			OpenBlocks.Blocks.paintCan = new BlockPaintCan();
 		}
 		
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
@@ -590,6 +600,14 @@ public class Config {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Block.carpet, 'w', Block.cloth));
 			GameRegistry.registerItem(OpenBlocks.Items.sleepingBag, "openblocks.sleepingBag");
+		}
+		
+		if (itemPaintBrushId > 0) {
+			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
+		}
+		
+		if (itemStencilId > 0) {
+			OpenBlocks.Items.stencil = new ItemStencil();
 		}
 	}
 

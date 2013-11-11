@@ -79,9 +79,10 @@ public class OpenBlocks {
 		public static BlockItemDropper itemDropper;
 		public static BlockRopeLadder ropeLadder;
 		public static BlockDonationStation donationStation;
-		public static BlockClayStainer clayStainer;
-		public static BlockSpecialStainedClay specialStainedClay;
+		public static BlockPaintMixer paintMixer;
+		public static BlockCanvas canvas;
 		public static BlockMachineOreCrusher machineOreCrusher;
+		public static BlockPaintCan paintCan;
 	}
 
 	public static class Items {
@@ -98,6 +99,8 @@ public class OpenBlocks {
 		public static ItemSlimalyzer slimalyzer;
 		public static ItemFilledBucket filledBucket;
 		public static ItemSleepingBag sleepingBag;
+		public static ItemPaintBrush paintBrush;
+		public static ItemStencil stencil;
 	}
 
 	public static class Fluids {
@@ -142,7 +145,7 @@ public class OpenBlocks {
 		if (Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
-
+		
 		if (Config.itemLuggageId > 0) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
 		}

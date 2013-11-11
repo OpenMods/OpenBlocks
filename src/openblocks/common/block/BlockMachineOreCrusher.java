@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 public class BlockMachineOreCrusher extends OpenBlock {
 
 	public BlockMachineOreCrusher() {
-		super(Config.blockMachineOreCrusher, Material.ground);
+		super(Config.blockMachineOreCrusherId, Material.ground);
 		setupBlock(this, "oreCrusher", TileEntityOreCrusher.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
@@ -20,6 +20,11 @@ public class BlockMachineOreCrusher extends OpenBlock {
 				
 	}
 
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+	
 	@Override
 	public boolean shouldRenderBlock() {
 		return false;

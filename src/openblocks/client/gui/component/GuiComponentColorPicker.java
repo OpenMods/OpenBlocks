@@ -14,15 +14,14 @@ public class GuiComponentColorPicker extends BaseComponent {
 
 	private GuiComponentSlider slider;
 	private SyncableInt color;
-	private SyncableInt tone;
 	private int pointX = 0;
 	private int pointY = 0;
+	private SyncableInt tone = new SyncableInt();
 	
-	public GuiComponentColorPicker(int x, int y, SyncableInt color, SyncableInt tone) {
+	public GuiComponentColorPicker(int x, int y, SyncableInt color) {
 		super(x, y);
 		this.color =  color;
-		this.tone = tone;
-		this.setFromColor(color.getValue());
+		setFromColor(color.getValue());
 		slider = new GuiComponentSlider(0, 55, 100, 0, 255, tone, false) {
 			@Override
 			public void onMouseUp() {

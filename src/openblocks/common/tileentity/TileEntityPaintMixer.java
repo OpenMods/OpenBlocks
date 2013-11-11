@@ -2,52 +2,40 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.GuiClayStainer;
+import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
-import openblocks.common.block.BlockSpecialStainedClay;
-import openblocks.common.container.ContainerClayStainer;
+import openblocks.common.container.ContainerPaintMixer;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 
-public class TileEntityClayStainer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile {
-
-	public static final ItemStack HARDENED_CLAY = new ItemStack(Block.hardenedClay);
-	public static final ItemStack STAINED_CLAY = new ItemStack(Block.stainedClay);
-	public static final ItemStack SPECIAL_STAINED_CLAY = new ItemStack(OpenBlocks.Blocks.specialStainedClay);
+public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile {
+	
+	public static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	
 	public static enum Slots {
 		input,
-		dyeRed,
-		dyeGreen,
-		dyeBlue
+		dyeCyan,
+		dyeMagenta,
+		dyeYellow
 	}
 	
-	private GenericInventory inventory = new GenericInventory("claystainer", true, 4);
-	
+	private GenericInventory inventory = new GenericInventory("paintmixer", true, 4);
 	private SyncableInt color;
-	private SyncableInt tone;
 	
 	@Override
 	protected void createSyncedFields() {
-		color = new SyncableInt();
-		tone = new SyncableInt();
+		color = new SyncableInt(0xFF0000);
 	}
 	
 	public SyncableInt getColor() {
 		return color;
-	}
-
-	public SyncableInt getTone() {
-		return tone;
 	}
 	
 	@Override
@@ -59,20 +47,22 @@ public class TileEntityClayStainer extends SyncedTileEntity implements IInventor
 		return true;
 	}
 
-	public void onSync() {
-		setColorOnItemStack();
-	}
+    public void onSync() {
+    	setPaintCanColor();
+    }
 	
-	public void setColorOnItemStack() {
+	private void setPaintCanColor() {
 		ItemStack inputStack = inventory.getStackInSlot(Slots.input);
-		if (inputStack != null && inputStack.isItemEqual(SPECIAL_STAINED_CLAY)) {
-			BlockSpecialStainedClay.writeColorToNBT(inputStack, color.getValue());
+		if (inputStack != null && inputStack.isItemEqual(PAINT_CAN)) {
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setInteger("color", color.getValue());
+			inputStack.setTagCompound(tag);
 		}
 	}
-	
+
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
-		setColorOnItemStack();
+    	setPaintCanColor();
 	}
 
 	@Override
@@ -97,16 +87,6 @@ public class TileEntityClayStainer extends SyncedTileEntity implements IInventor
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		setColorOnItemStack();
-		if (itemstack != null) {
-
-			Item item = itemstack.getItem();
-			if (item != null && item.equals(HARDENED_CLAY.getItem()) || item.equals(STAINED_CLAY.getItem())) {
-				int size = itemstack.stackSize;
-				itemstack = SPECIAL_STAINED_CLAY.copy();
-				itemstack.stackSize = size;
-			}
-		}
 		inventory.setInventorySlotContents(i, itemstack);
 	}
 
@@ -145,12 +125,12 @@ public class TileEntityClayStainer extends SyncedTileEntity implements IInventor
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {
-		return new ContainerClayStainer(player.inventory, this);
+		return new ContainerPaintMixer(player.inventory, this);
 	}
 
 	@Override
 	public Object getClientGui(EntityPlayer player) {
-		return new GuiClayStainer(new ContainerClayStainer(player.inventory, this));
+		return new GuiPaintMixer(new ContainerPaintMixer(player.inventory, this));
 	}
 
 

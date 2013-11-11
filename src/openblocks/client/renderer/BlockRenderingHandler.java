@@ -1,6 +1,7 @@
 package openblocks.client.renderer;
 
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -32,7 +33,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		inventoryTileEntities = Maps.newIdentityHashMap();
 		blockRenderers = Maps.newIdentityHashMap();
 		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
-		blockRenderers.put(OpenBlocks.Blocks.specialStainedClay, new BlockSpecialClayRenderer());
+		blockRenderers.put(OpenBlocks.Blocks.canvas, new BlockCanvasRenderer());
+		blockRenderers.put(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 	}
 	
 	public TileEntity getTileEntityForBlock(Block block) {
@@ -104,7 +106,6 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-
 		OpenBlock openBlock = null;
 		if (block instanceof OpenBlock) {
 			openBlock = (OpenBlock) block;
@@ -204,8 +205,10 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation) {
 		renderInventoryBlock(renderer, block, rotation, -1);
 	}
-	
 	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation, int colorMultiplier) {
+		renderInventoryBlock(renderer, block, rotation, colorMultiplier, null);
+	}
+	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation, int colorMultiplier, Set<ForgeDirection> enabledSides) {
 		Tessellator tessellator = Tessellator.instance;
 		block.setBlockBoundsForItemRender();
 		renderer.setRenderBoundsFromBlock(block);
@@ -222,31 +225,43 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		}
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, -1.0F, 0.0F);
 		int metadata = rotation.ordinal();
-		renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, -1.0F);
-		renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
-		tessellator.draw();
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
-		tessellator.draw();
+		if (enabledSides == null || enabledSides.contains(ForgeDirection.DOWN)) {
+			tessellator.startDrawingQuads();
+			tessellator.setNormal(0.0F, -1.0F, 0.0F);
+			renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
+			tessellator.draw();
+		}
+		if (enabledSides == null || enabledSides.contains(ForgeDirection.UP)) {
+			tessellator.startDrawingQuads();
+			tessellator.setNormal(0.0F, 1.0F, 0.0F);
+			renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
+			tessellator.draw();
+		}
+		if (enabledSides == null || enabledSides.contains(ForgeDirection.SOUTH)) {
+			tessellator.startDrawingQuads();
+			tessellator.setNormal(0.0F, 0.0F, -1.0F);
+			renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
+			tessellator.draw();
+		}
+		if (enabledSides == null || enabledSides.contains(ForgeDirection.NORTH)) {
+			tessellator.startDrawingQuads();
+			tessellator.setNormal(0.0F, 0.0F, 1.0F);
+			renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
+			tessellator.draw();
+		}
+		if (enabledSides == null || enabledSides.contains(ForgeDirection.WEST)) {
+			tessellator.startDrawingQuads();
+			tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+			renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
+			tessellator.draw();
+		}
+		if (enabledSides == null || enabledSides.contains(ForgeDirection.EAST)) {
+			tessellator.startDrawingQuads();
+			tessellator.setNormal(1.0F, 0.0F, 0.0F);
+			renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
+			tessellator.draw();
+		}
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 }
