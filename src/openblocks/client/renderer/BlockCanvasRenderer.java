@@ -1,6 +1,7 @@
 package openblocks.client.renderer;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -30,9 +31,6 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 		if (tile instanceof TileEntityCanvas) {
 			BlockCanvas clayBlock = (BlockCanvas)block;
 			TileEntityCanvas clayTile = (TileEntityCanvas)tile;
-			int metadata = world.getBlockMetadata(x, y, z);
-			ForgeDirection rotation = ForgeDirection.getOrientation(metadata);
-			BlockRenderingHandler.rotateFacesOnRenderer(clayBlock, rotation, renderer);
 			for (int i = 0; i < 6; i++) {
 				clayBlock.setLayerForRender(-1);
 				clayBlock.setSideForRender(i);
