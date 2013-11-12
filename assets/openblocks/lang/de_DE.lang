@@ -12,7 +12,7 @@ openblocks.gui.autoenchantmenttable=Auto-Zaubertisch
 openblocks.gui.donationstation=Spendenstation
 openblocks.gui.itemdropper=Itemspender
 openblocks.gui.blockplacer=Blockplatzierer
-openblocks.gui.claystainer=Lehmfärber
+openblocks.gui.paintmixer=Farbmixer
 
 openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
@@ -57,8 +57,9 @@ tile.openblocks.donationStation.name=Spendenstation
 tile.openblocks.blockbreaker.name=Blockbrecher
 tile.openblocks.blockPlacer.name=Blockplatzierer
 tile.openblocks.itemDropper.name=Itemspender
-tile.openblocks.specialStainedClay.name=Spezieller gefärbter Lehm
-tile.openblocks.clayStainer.name=Lehmfärber
+tile.openblocks.canvas.name=Leinwand
+tile.openblocks.paintmixer.name=Farbmixer
+tile.openblocks.paintcan.name=Farbeimer
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
@@ -80,5 +81,7 @@ item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
 item.openblocks.slimalyzer.name=Schleimalysierer
 item.openblocks.xpbucket.name=XP-Eimer
 item.openblocks.sleepingbag.name=Schlafsack
+item.openblocks.paintbrush.name=Pinsel
+item.openblocks.stencil.name=Schablone
 
 itemGroup.tabOpenBlocks=OpenBlocks
