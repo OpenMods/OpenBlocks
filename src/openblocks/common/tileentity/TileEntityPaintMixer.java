@@ -16,8 +16,10 @@ import openblocks.common.api.IInventoryCallback;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
+import openblocks.sync.SyncableFloat;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableProgress;
+import openblocks.utils.ColorUtils;
 
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
 	
@@ -47,6 +49,11 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	private SyncableProgress progress;
 	private SyncableFlags flags;
 	private int chosenColor;
+	// These could be optimized with a byte array later
+	// Not important for release
+	// Levels should be 0-2, so that if there is 0.3 left, 1 can be consumed and not overflow ;)
+	
+	private SyncableFloat lvlCyan, lvlMagenta, lvlYellow, lvlBlack; /* Black is key ;) */
 	
 	public TileEntityPaintMixer() {
 		setInventory(new GenericInventory("paintmixer", true, 6));
@@ -79,10 +86,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 					progress.increase();
 				} else {
 					inventory.decrStackSize(Slots.input.ordinal(), 1);
-					inventory.decrStackSize(Slots.dyeCyan.ordinal(), 1);
-					inventory.decrStackSize(Slots.dyeMagenta.ordinal(), 1);
-					inventory.decrStackSize(Slots.dyeYellow.ordinal(), 1);
-					inventory.decrStackSize(Slots.dyeBlack.ordinal(), 1);
+					consumeInk();
 					ItemStack output = new ItemStack(OpenBlocks.Blocks.paintCan);
 					setPaintCanColor(output);
 					inventory.setInventorySlotContents(Slots.output.ordinal(), output);
@@ -94,15 +98,58 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		}
 	}
 	
+
 	public boolean hasOutputStack() {
 		return inventory.getStackInSlot(Slots.output) != null;
 	}
 	
 	public boolean hasCMYK() {
-		return hasStack(Slots.dyeCyan, DYE_CYAN) &&
-			hasStack(Slots.dyeMagenta, DYE_MAGENTA) &&
-			hasStack(Slots.dyeYellow, DYE_YELLOW) &&
-			hasStack(Slots.dyeBlack, DYE_BLACK);
+		return hasSufficientInk();
+	}
+	
+	private void consumeInk() {
+		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.getValue()).toCYMK();
+		lvlCyan.setValue(lvlCyan.getValue() - cymk.getCyan());
+		lvlBlack.setValue(lvlBlack.getValue() - cymk.getKey());
+		lvlYellow.setValue(lvlYellow.getValue() - cymk.getYellow());
+		lvlMagenta.setValue(lvlMagenta.getValue() - cymk.getMagenta());
+	}
+	
+	private boolean hasSufficientInk() {
+		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.getValue()).toCYMK();
+		if(cymk.getCyan() > lvlCyan.getValue()) {
+			if(tryUseInk(Slots.dyeCyan, 1)) {
+				lvlCyan.setValue(lvlCyan.getValue() + 1f);
+			}else {
+				return false;
+			}
+		}
+		if(cymk.getYellow() > lvlYellow.getValue()) {
+			if(tryUseInk(Slots.dyeYellow, 1)) {
+				lvlYellow.setValue(lvlYellow.getValue() + 1f);
+			}else {
+				return false;
+			}
+		}
+		if(cymk.getMagenta() > lvlMagenta.getValue()) {
+			if(tryUseInk(Slots.dyeMagenta, 1)) {
+				lvlMagenta.setValue(lvlMagenta.getValue() + 1f);
+			}else {
+				return false;
+			}
+		}
+		if(cymk.getKey() > lvlBlack.getValue()) {
+			if(tryUseInk(Slots.dyeBlack, 1)) {
+				lvlBlack.setValue(lvlBlack.getValue() + 1f);
+			}else {
+				return false;
+			}
+		}
+		return true;		
+	}
+	
+	public boolean tryUseInk(Slots slot, int consume) {
+		return inventory.decrStackSize(slot.ordinal(), consume) != null;
 	}
 	
 	public boolean hasStack(Slots slot, ItemStack stack) {
@@ -118,6 +165,10 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		color = new SyncableInt(0xFF0000);
 		flags = new SyncableFlags();
 		progress = new SyncableProgress(PROGRESS_TICKS);
+		lvlBlack = new SyncableFloat();
+		lvlCyan = new SyncableFloat();
+		lvlMagenta = new SyncableFloat();
+		lvlYellow = new SyncableFloat();		
 	}
 	
 	public SyncableInt getColor() {
