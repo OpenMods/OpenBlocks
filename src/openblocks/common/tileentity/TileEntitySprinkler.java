@@ -56,9 +56,9 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance)) {
 			// http://goo.gl/RpQuk9
 			Random random = worldObj.rand;
-			int x = (random.nextInt(Config.sprinklerEffectiveRange) + 1)
+			int x = (random.nextInt(Config.sprinklerEffectiveRange + 1))
 					* (random.nextBoolean()? 1 : -1) + xCoord;
-			int z = (random.nextInt(Config.sprinklerEffectiveRange) + 1)
+			int z = (random.nextInt(Config.sprinklerEffectiveRange + 1))
 					* (random.nextBoolean()? 1 : -1) + zCoord;
 			/*
 			 * What? Okay think about this. i = -1 y = yCoord - 1 i = 0 y =
