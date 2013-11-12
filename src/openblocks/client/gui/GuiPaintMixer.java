@@ -17,7 +17,13 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		panel.addComponent(new GuiComponentRect(121, 74, 20, 20, 0xFF4b9fc1));
 		panel.addComponent(new GuiComponentRect(141, 74, 20, 20, 0xFFdb7ad5));
 		panel.addComponent(new GuiComponentRect(121, 94, 20, 20, 0xFFe7e72a));
-		panel.addComponent(new GuiComponentRect(141, 94, 20, 20, 0xFF000000));
+		panel.addComponent(new GuiComponentRect(141, 94, 20, 20, 0xFF000000));		
+
+		panel.addComponent(new GuiComponentLevel(118, 74+6, 2, 14, 0xFF4b9fc1, 0xFF888888, 0f, 2f, mixer.lvlCyan));
+		panel.addComponent(new GuiComponentLevel(141+21, 74+6, 2, 14, 0xFFdb7ad5, 0xFF888888, 0f, 2f, mixer.lvlMagenta));
+		panel.addComponent(new GuiComponentLevel(118, 94+6, 2, 14, 0xFFe7e72a, 0xFF888888, 0f, 2f, mixer.lvlYellow));
+		panel.addComponent(new GuiComponentLevel(141+21, 94+6, 2, 14, 0xFF000000, 0xFF888888, 0f, 2f, mixer.lvlBlack));
+		
 		panel.addComponent((buttonMix = new GuiComponentButton(125, 57, 30, 13, 0xFFFFFF))
 				.setText("Mix")
 				.setName("btnMix")

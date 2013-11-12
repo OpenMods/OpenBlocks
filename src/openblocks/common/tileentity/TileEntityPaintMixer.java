@@ -53,7 +53,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	// Not important for release
 	// Levels should be 0-2, so that if there is 0.3 left, 1 can be consumed and not overflow ;)
 	
-	private SyncableFloat lvlCyan, lvlMagenta, lvlYellow, lvlBlack; /* Black is key ;) */
+	public SyncableFloat lvlCyan, lvlMagenta, lvlYellow, lvlBlack; /* Black is key ;) */
 	
 	public TileEntityPaintMixer() {
 		setInventory(new GenericInventory("paintmixer", true, 6));
