@@ -91,7 +91,7 @@ public class ColorUtils {
 	            magenta = (magenta - K) / (1f - K);
 	            yellow = (yellow - K) / (1f - K);
 	        }
-	        return new CYMK(cyan, magenta, yellow, K);
+	        return new CYMK(cyan,yellow, magenta, K);
 		}
 	}	
 	

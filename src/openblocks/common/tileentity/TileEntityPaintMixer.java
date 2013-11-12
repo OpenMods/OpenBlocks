@@ -95,9 +95,34 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 					sync();
 				}
 			}
+			checkAutoConsumption();
 		}
 	}
 	
+
+	private void checkAutoConsumption() {
+		if(lvlCyan.getValue() <= 1f) { /* We can store 2.0, so <= */
+			if(tryUseInk(Slots.dyeCyan, 1)) {
+				lvlCyan.setValue(lvlCyan.getValue() + 1f);
+			}
+		}		
+		if(lvlMagenta.getValue() <= 1f) {
+			if(tryUseInk(Slots.dyeMagenta, 1)) {
+				lvlMagenta.setValue(lvlMagenta.getValue() + 1f);
+			}
+		}		
+		if(lvlYellow.getValue() <= 1f) {
+			if(tryUseInk(Slots.dyeYellow, 1)) {
+				lvlYellow.setValue(lvlYellow.getValue() + 1f);
+			}
+		}		
+		if(lvlBlack.getValue() <= 1f) {
+			if(tryUseInk(Slots.dyeBlack, 1)) {
+				lvlBlack.setValue(lvlBlack.getValue() + 1f);
+			}
+		}
+		
+	}
 
 	public boolean hasOutputStack() {
 		return inventory.getStackInSlot(Slots.output) != null;
@@ -149,6 +174,14 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 	
 	public boolean tryUseInk(Slots slot, int consume) {
+		switch(slot) {
+			case dyeBlack: if(!hasStack(slot, DYE_BLACK)) return false; break;
+			case dyeMagenta: if(!hasStack(slot, DYE_MAGENTA)) return false; break;
+			case dyeYellow: if(!hasStack(slot, DYE_YELLOW)) return false; break;
+			case dyeCyan: if(!hasStack(slot, DYE_CYAN)) return false; break;
+			default:
+				return false;
+		}
 		return inventory.decrStackSize(slot.ordinal(), consume) != null;
 	}
 	
