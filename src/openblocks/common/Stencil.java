@@ -7,7 +7,13 @@ public enum Stencil {
 	
 	CREEPER_FACE("creeperface"),
 	BORDER("border"),
-	STRIPES("stripes");
+	STRIPES("stripes"),
+	CORNER("corner"),
+	CORNER2("corner2"),
+	CORNER3("corner3"),
+	HOLE("hole"),
+	SPIRAL("spiral"),
+	THICKSTRIPES("spiral");
 	
 	private Icon itemIcon;
 	private Icon blockIcon;
