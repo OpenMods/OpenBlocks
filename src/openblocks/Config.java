@@ -206,7 +206,7 @@ public class Config {
 	public static boolean enableGraves = false;
 	public static boolean tryHookPlayerRenderer = true;
 	public static double trophyDropChance = 0.001;
-	public static boolean irregularBlocksArePassable = false;
+	public static boolean irregularBlocksArePassable = true;
 	public static boolean tanksEmitLight = true;
 	public static int sprinklerFertilizeChance = 500;
 	public static int sprinklerBonemealFertizizeChance = 200;
