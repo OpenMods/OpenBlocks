@@ -28,6 +28,9 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 				.setText("Mix")
 				.setName("btnMix")
 				.addListener(this));
+		
+		// TODO: Make GuiComponentTextBox and add Hex input
+		// panel.addComponent(new GuiComponentLabel(10, 92, "#"));
 
 		panel.addComponent(new GuiComponentColorPicker(10, 20, mixer.getColor()));
 		panel.addComponent(new GuiComponentProgress(125, 43, mixer.getProgress()));
