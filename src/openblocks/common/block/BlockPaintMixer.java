@@ -10,6 +10,7 @@ public class BlockPaintMixer extends OpenBlock {
 		super(Config.blockPaintMixer, Material.ground);
 		setupBlock(this, "paintmixer", TileEntityPaintMixer.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setBlockBounds(0.125f, 0f, 0.125f, 0.875f, 1f, 0.875f);
 	}
 
 	@Override

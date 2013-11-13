@@ -199,6 +199,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		renderer.uvRotateSouth = 0;
 		renderer.uvRotateTop = 0;
 		renderer.uvRotateWest = 0;
+		renderer.flipTexture = false;
 	}
 
 

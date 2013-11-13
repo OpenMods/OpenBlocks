@@ -25,7 +25,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack WATER_BUCKET = new ItemStack(Item.bucketMilk);
-	private static final int PROGRESS_TICKS = 500;
+	private static final int PROGRESS_TICKS = 300;
 	private static final ItemStack DYE_BLACK = new ItemStack(Item.dyePowder, 1, 0);
 	private static final ItemStack DYE_CYAN = new ItemStack(Item.dyePowder, 1, 6);
 	private static final ItemStack DYE_MAGENTA = new ItemStack(Item.dyePowder, 1, 13);

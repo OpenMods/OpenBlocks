@@ -1,7 +1,6 @@
 package openblocks.client.renderer;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -18,6 +17,8 @@ import org.lwjgl.opengl.GL12;
 
 public class BlockCanvasRenderer implements IBlockRenderer {
 
+	public FixedRenderBlocks renderBlocks = new FixedRenderBlocks();
+	
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -27,6 +28,8 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		renderBlocks.setWorld(world);
+		renderBlocks.setRenderBoundsFromBlock(block);
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityCanvas) {
 			BlockCanvas clayBlock = (BlockCanvas)block;
@@ -34,7 +37,7 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 			for (int i = 0; i < 6; i++) {
 				clayBlock.setLayerForRender(-1);
 				clayBlock.setSideForRender(i);
-				renderer.renderStandardBlock(block, x, y, z);
+				renderBlocks.renderStandardBlock(block, x, y, z);
 				SyncableBlockLayers sideLayersContainer = clayTile.getLayersForSide(i);
 				ArrayList<Layer> layers = sideLayersContainer.getAllLayers();
 				for (int l = 0; l < layers.size(); l++) {
@@ -45,17 +48,17 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 					} else if (rot == 3) {
 						rot = 2;
 					}
-					renderer.uvRotateTop = rot;
-					renderer.uvRotateBottom = rot;
-					renderer.uvRotateNorth = rot;
-					renderer.uvRotateSouth = rot;
-					renderer.uvRotateEast = rot;
-					renderer.uvRotateWest = rot;
-					renderer.renderStandardBlock(block, x, y, z);
-					BlockRenderingHandler.resetFacesOnRenderer(renderer);
+					renderBlocks.uvRotateTop = rot;
+					renderBlocks.uvRotateBottom = rot;
+					renderBlocks.uvRotateNorth = rot;
+					renderBlocks.uvRotateSouth = rot;
+					renderBlocks.uvRotateEast = rot;
+					renderBlocks.uvRotateWest = rot;
+					renderBlocks.renderStandardBlock(block, x, y, z);
+					BlockRenderingHandler.resetFacesOnRenderer(renderBlocks);
 				}
 			}
-			BlockRenderingHandler.resetFacesOnRenderer(renderer);
+			BlockRenderingHandler.resetFacesOnRenderer(renderBlocks);
 		}
 		return false;
 	}
