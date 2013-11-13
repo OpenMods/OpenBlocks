@@ -496,10 +496,12 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockPaintMixer)) {
 			OpenBlocks.Blocks.paintMixer = new BlockPaintMixer();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.paintMixer), "ooo", "i i", "iii", 'o', Block.obsidian, 'i', Item.ingotIron));
 		}
 		
 		if (Config.canRegisterBlock(blockCanvasId)) {
 			OpenBlocks.Blocks.canvas = new BlockCanvas();
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Item.paper, 'f', Block.fence));
 		}
 		
 		if(Config.canRegisterBlock(blockMachineOreCrusherId)) {
@@ -604,6 +606,7 @@ public class Config {
 		
 		if (itemPaintBrushId > 0) {
 			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
+			recipeList.add(new ShapedOreRecipe(ItemPaintBrush.createStackWithColor(0xFFFFFF), "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
 		}
 		
 		if (itemStencilId > 0) {
