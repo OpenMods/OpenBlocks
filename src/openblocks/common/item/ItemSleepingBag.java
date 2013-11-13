@@ -101,10 +101,7 @@ public class ItemSleepingBag extends ItemArmor {
 		player.setCurrentItemOrArmor(3, null);
 		revertSpawnFromItem(player, itemStack);
 		tag.setBoolean("sleeping", false);
-		InventoryUtils.insertItemIntoInventory(player.inventory, itemStack);
-		if (itemStack.stackSize > 0) {
-			BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, itemStack);
-		}
+		BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, itemStack);
 	}
 	
 	private static NBTTagCompound getOrCreateTag(ItemStack itemStack) {
