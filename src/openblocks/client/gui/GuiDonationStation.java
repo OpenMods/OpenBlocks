@@ -27,7 +27,7 @@ public class GuiDonationStation extends
 		super(container, 176, 172, "openblocks.gui.donationstation");
 
 		final TileEntityDonationStation station = container.getOwner();
-		panel.addComponent(new GuiComponentLabel(55, 31, 100, 18, station.getModName())
+		panel.addComponent(new GuiComponentLabel(55, 31, 100, 10, station.getModName())
 				.setName("lblModName"));
 		panel.addComponent((lblAuthors = new GuiComponentLabel(55, 42, 200, 18, station.getAuthors()).setScale(0.5f))
 				.setName("lblAuthors"));

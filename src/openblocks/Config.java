@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.asm.ClassTransformerEntityPlayer;
 import openblocks.common.EntityEventHandler;
+import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.EntityMount;
@@ -607,10 +608,19 @@ public class Config {
 		if (itemPaintBrushId > 0) {
 			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
 			recipeList.add(new ShapedOreRecipe(ItemPaintBrush.createStackWithColor(0xFFFFFF), "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
+			GameRegistry.registerItem(OpenBlocks.Items.paintBrush, "openblocks.paintBrush");
+			
 		}
 		
 		if (itemStencilId > 0) {
 			OpenBlocks.Items.stencil = new ItemStencil();
+			GameRegistry.registerItem(OpenBlocks.Items.stencil, "openblocks.stencil");
+			for (Stencil stencil : Stencil.values()) {
+				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			}
+			
 		}
 	}
 

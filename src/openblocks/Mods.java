@@ -56,6 +56,9 @@ public class Mods {
 		if (item == null) { return null; }
 		UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(item);
 		klazz = item.getClass();
+		if (klazz.getName().startsWith("net.minecraft")) {
+			return null;
+		}
 		if (identifier == null) {
 			if (item instanceof ItemBlock) {
 				int blockId = ((ItemBlock)item).getBlockID();
