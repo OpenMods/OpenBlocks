@@ -5,9 +5,9 @@ import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.utils.ColorUtils;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,8 +44,8 @@ public class ItemPaintBrush extends Item {
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(int id, CreativeTabs par2CreativeTabs, List list) {
     	Random rnd = new Random();
-    	for (int i = 0; i < 1000; i++) {
-    		list.add(createStackWithColor(rnd.nextInt(0xFFFFFF)));
+    	for(int color : ColorUtils.COLORS.values()) {
+    		list.add(createStackWithColor(color));
     	}
     }
     
