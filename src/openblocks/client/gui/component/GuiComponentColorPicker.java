@@ -30,6 +30,10 @@ public class GuiComponentColorPicker extends BaseComponent {
 		};
 		addComponent(slider);
 	}
+	
+	public SyncableInt getColor() {
+		return color;
+	}
 
 	public void setFromColor(int col) {
 		float[] hsb = new float[3];

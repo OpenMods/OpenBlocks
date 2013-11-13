@@ -9,6 +9,8 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		implements IComponentListener {
 
 	private GuiComponentButton buttonMix;
+	private GuiComponentTextbox textbox;
+	private GuiComponentColorPicker colorPicker;
 
 	public GuiPaintMixer(ContainerPaintMixer container) {
 		super(container, 176, 200, "openblocks.gui.paintmixer");
@@ -23,17 +25,25 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		panel.addComponent(new GuiComponentLevel(141+21, 74+6, 2, 14, 0xFFdb7ad5, 0xFF888888, 0f, 2f, mixer.lvlMagenta));
 		panel.addComponent(new GuiComponentLevel(118, 94+6, 2, 14, 0xFFe7e72a, 0xFF888888, 0f, 2f, mixer.lvlYellow));
 		panel.addComponent(new GuiComponentLevel(141+21, 94+6, 2, 14, 0xFF000000, 0xFF888888, 0f, 2f, mixer.lvlBlack));
+
+		panel.addComponent(new GuiComponentLabel(57, 91, "#"));
+		panel.addComponent(textbox = new GuiComponentTextbox(65, 90, 44, 10));
+		textbox.setText(Integer.toHexString(mixer.getColor().getValue()));
 		
 		panel.addComponent((buttonMix = new GuiComponentButton(125, 57, 30, 13, 0xFFFFFF))
 				.setText("Mix")
 				.setName("btnMix")
 				.addListener(this));
-		
-		// TODO: Make GuiComponentTextBox and add Hex input
-		// panel.addComponent(new GuiComponentLabel(10, 92, "#"));
 
-		panel.addComponent(new GuiComponentColorPicker(10, 20, mixer.getColor()));
+		panel.addComponent(colorPicker = new GuiComponentColorPicker(10, 20, mixer.getColor()) {
+			@Override
+			public void mouseClicked(int mouseX, int mouseY, int button) {
+				super.mouseClicked(mouseX, mouseY, button);
+				textbox.setText(Integer.toHexString(getColor().getValue()));
+			}
+		});
 		panel.addComponent(new GuiComponentProgress(125, 43, mixer.getProgress()));
+		panel.addComponent(new GuiComponentColorBox(10, 90, 45, 10, mixer.getColor()));
 	}
 
 	@Override
@@ -51,5 +61,15 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 
 	@Override
 	public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {}
+
+	@Override
+	public void componentKeyTyped(BaseComponent component, char par1, int par2) {
+		try {
+			int col = Integer.parseInt(textbox.getText(), 16);
+			this.getContainer().getOwner().getColor().setValue(col);
+			colorPicker.setFromColor(col);
+		}catch (Exception e) {
+		}
+	}
 
 }

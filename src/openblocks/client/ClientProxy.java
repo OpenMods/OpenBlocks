@@ -112,7 +112,7 @@ public class ClientProxy implements IProxy {
 
 			attachPlayerRenderer();
 		}
-
+		
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 		}

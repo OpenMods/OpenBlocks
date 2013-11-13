@@ -13,23 +13,16 @@ public enum Stencil {
 	CORNER3("corner3"),
 	HOLE("hole"),
 	SPIRAL("spiral"),
-	THICKSTRIPES("spiral");
+	THICKSTRIPES("thickstripes"),
+	SPLAT("splat"),
+	STORAGE("storage");
 	
-	private Icon itemIcon;
 	private Icon blockIcon;
 	private Icon coverBlockIcon;
 	private String iconName;
 	
 	Stencil(String iconName) {
 		this.iconName = iconName;
-	}
-	
-	public Icon getItemIcon() {
-		return itemIcon;
-	}
-
-	public void registerItemIcon(IconRegister register) {
-		itemIcon = register.registerIcon("openblocks:stencil_"+iconName);
 	}
 
 	public void registerBlockIcons(IconRegister register) {

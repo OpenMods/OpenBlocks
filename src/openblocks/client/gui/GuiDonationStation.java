@@ -97,4 +97,10 @@ public class GuiDonationStation extends
 	@Override
 	public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {}
 
+	@Override
+	public void componentKeyTyped(BaseComponent component, char par1, int par2) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

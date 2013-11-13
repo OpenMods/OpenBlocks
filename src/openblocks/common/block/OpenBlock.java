@@ -2,6 +2,7 @@ package openblocks.common.block;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -512,5 +513,10 @@ public abstract class OpenBlock extends Block {
 
 	public boolean useTESRForInventory() {
 		return true;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unused" })
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+		
 	}
 }

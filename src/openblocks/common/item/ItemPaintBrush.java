@@ -1,7 +1,6 @@
 package openblocks.common.item;
 
 import java.util.List;
-import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,6 +27,13 @@ public class ItemPaintBrush extends Item {
 		setUnlocalizedName("openblocks.paintbrush");
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+		int color = getColorFromStack(itemStack);
+		if (color < 0) color = 0;
+		list.add("#" + Integer.toHexString(color).toUpperCase());
+	}
+	
 	@SideOnly(Side.CLIENT)
     @Override
     public boolean requiresMultipleRenderPasses() {
@@ -43,7 +49,6 @@ public class ItemPaintBrush extends Item {
 	
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(int id, CreativeTabs par2CreativeTabs, List list) {
-    	Random rnd = new Random();
     	for(int color : ColorUtils.COLORS.values()) {
     		list.add(createStackWithColor(color));
     	}

@@ -24,13 +24,17 @@ public class GuiComponentRect extends BaseComponent {
 	public int getHeight() {
 		return height;
 	}
+	
+	public int getColorForRender() {
+		return color;
+	}
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		int oX = x + offsetX;
 		int oY = y + offsetY;
-		drawRect(oX, oY, oX + width, oY + height, color);
+		drawRect(oX, oY, oX + width, oY + height, getColorForRender());
 	}
 
 }

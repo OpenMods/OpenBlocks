@@ -1,13 +1,19 @@
 package openblocks.common.block;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityPaintCan;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 public class BlockPaintCan extends OpenBlock {
@@ -29,6 +35,27 @@ public class BlockPaintCan extends OpenBlock {
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 		setBlockBounds(0.25f, 0f, 0.25f, 0.7f, 0.6875f, 0.75f);
+	}
+
+
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ItemStack stack = new ItemStack(OpenBlocks.Blocks.paintCan);
+		TileEntityPaintCan tile = getTileEntity(world, x, y, z, TileEntityPaintCan.class);
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger("color", tile.getColor());
+		stack.setTagCompound(tag);
+		ret.add(stack);
+		return ret;
+	}
+	
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+		int color = getColorFromNBT(itemStack);
+		if (color < 0) color = 0;
+		list.add("#" + Integer.toHexString(color).toUpperCase());
 	}
 
 	@Override

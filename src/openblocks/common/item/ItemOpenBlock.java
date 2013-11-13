@@ -1,5 +1,7 @@
 package openblocks.common.item;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -87,4 +89,14 @@ public class ItemOpenBlock extends ItemBlock {
 
 		return true;
 	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+		Block block = Block.blocksList[getBlockID()];
+		if (block != null && block instanceof OpenBlock) {
+			((OpenBlock)block).addInformation(stack, player, list, par4);
+		}
+	}
+
 }

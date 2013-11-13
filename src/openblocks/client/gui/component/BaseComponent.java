@@ -35,6 +35,8 @@ public abstract class BaseComponent extends Gui {
 		void componentMouseMove(BaseComponent component, int offsetX, int offsetY);
 
 		void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button);
+		
+		void componentKeyTyped(BaseComponent component, char par1, int par2);
 	}
 
 	protected String name = null;
@@ -152,6 +154,17 @@ public abstract class BaseComponent extends Gui {
 		}
 	}
 
+	public void keyTyped(char par1, int par2) {
+		invokeListenersKeyTyped(par1, par2);
+		if (renderChildren) {
+			for (BaseComponent component : components) {
+				if (component != null && component.isEnabled()) {
+					component.keyTyped(par1, par2);
+				}
+			}
+		}
+	}
+
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		invokeListenersMouseDown(mouseX, mouseY, button);
 		if (renderChildren) {
@@ -231,6 +244,12 @@ public abstract class BaseComponent extends Gui {
 			for (IComponentListener listener : listeners) {
 				listener.componentMouseMove(this, offsetX, offsetY);
 			}
+		}
+	}
+
+	private void invokeListenersKeyTyped(char par1, int par2) {
+		for (IComponentListener listener : listeners) {
+			listener.componentKeyTyped(this, par1, par2);
 		}
 	}
 

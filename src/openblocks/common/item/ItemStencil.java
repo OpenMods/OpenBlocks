@@ -8,7 +8,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,14 +24,12 @@ public class ItemStencil extends Item {
 	}
 	
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister register) {
-    	for (Stencil stencil : Stencil.values()) {
-    		stencil.registerItemIcon(register);
-    	}
+    public int getSpriteNumber() {
+        return 0;
     }
     
     public Icon getIconFromDamage(int dmg) {
-        return Stencil.values()[dmg].getItemIcon();
+        return Stencil.values()[dmg].getCoverBlockIcon();
     }
 	
     @SuppressWarnings({ "unchecked", "rawtypes" })
