@@ -27,7 +27,7 @@ public abstract class BaseComponent extends Gui {
 		}
 	}
 
-	public interface IComponentListener {
+	public static interface IComponentListener {
 		void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button);
 
 		void componentMouseDrag(BaseComponent component, int offsetX, int offsetY, int button, long time);

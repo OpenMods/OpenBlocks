@@ -7,10 +7,10 @@ import net.minecraft.client.renderer.Tessellator;
 
 import openblocks.sync.SyncableInt;
 import openblocks.utils.CompatibilityUtils;
-
+import openblocks.client.gui.component.BaseComponent.IComponentListener;
 import org.lwjgl.opengl.GL11;
 
-public class GuiComponentColorPicker extends BaseComponent {
+public class GuiComponentColorPicker extends BaseComponent implements IComponentListener {
 
 	private GuiComponentSlider slider;
 	private SyncableInt color;
@@ -22,12 +22,7 @@ public class GuiComponentColorPicker extends BaseComponent {
 		super(x, y);
 		this.color = color;
 		setFromColor(color.getValue());
-		slider = new GuiComponentSlider(0, 55, 100, 0, 255, tone, false) {
-			@Override
-			public void onMouseUp() {
-				calculateColor();
-			}
-		};
+		(slider = new GuiComponentSlider(0, 55, 100, 0, 255, tone, false)).addListener(this);
 		addComponent(slider);
 	}
 	
@@ -64,12 +59,23 @@ public class GuiComponentColorPicker extends BaseComponent {
 		pointY = mouseY;
 		calculateColor();
 	}
+	
+	// Drag support
+	@Override
+	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
+		super.mouseClickMove(mouseX, mouseY, button, time);
+		if (mouseY > getColorsHeight()) { return; }
+		pointX = mouseX;
+		pointY = mouseY;
+		calculateColor();
+	}
 
 	public void calculateColor() {
 		float h = pointX * 0.01f;
 		float b = 1.0f - (pointY * 0.02f);
 		float s = 1.0f - (tone.getValue() / 255f);
 		int col = Color.HSBtoRGB(h, s, b) & 0xFFFFFF;
+		// Wish we could NOT send this upstream until the client clicks Mix. Saving bandwidth while keeping functionality.
 		color.setValue(col);
 	}
 
@@ -107,5 +113,27 @@ public class GuiComponentColorPicker extends BaseComponent {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		this.drawRect(renderX + pointX - 1, renderY + pointY - 1, renderX
 				+ pointX + 1, renderY + pointY + 1, 0xCCCC0000);
+	}
+
+	@Override
+	public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
+	}
+
+	@Override
+	public void componentMouseDrag(BaseComponent component, int offsetX, int offsetY, int button, long time) {
+		calculateColor();
+	}
+
+	@Override
+	public void componentMouseMove(BaseComponent component, int offsetX, int offsetY) {
+	}
+
+	@Override
+	public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {
+		calculateColor();
+	}
+
+	@Override
+	public void componentKeyTyped(BaseComponent component, char par1, int par2) {		
 	}
 }

@@ -19,8 +19,9 @@ public class GuiComponentTextbox extends BaseComponent {
 		//commandTextField.mouseClicked(par1, par2, par3);
 	}
 	
-	public void setText(String text) {
+	public GuiComponentTextbox setText(String text) {
 		textfield.setText(text);
+		return this;
 	}
 
 	@Override
