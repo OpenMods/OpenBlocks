@@ -112,7 +112,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 		if (heldItem != null) {
 			Item item = heldItem.getItem();
 			// and it's a paintbrush
-			if (item.equals(OpenBlocks.Items.paintBrush)) {
+			if (item.equals(OpenBlocks.Items.paintBrush) && heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) {
 				int color = ItemPaintBrush.getColorFromStack(heldItem);
 
 				// if we cant set the color on the current stencil (because

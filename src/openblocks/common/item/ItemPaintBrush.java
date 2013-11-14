@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
@@ -20,12 +21,14 @@ public class ItemPaintBrush extends Item {
 
 	public Icon paintIcon;
 	
+	public static final int MAX_USES = 24;
+	
 	public ItemPaintBrush() {
 		super(Config.itemPaintBrushId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 		setUnlocalizedName("openblocks.paintbrush");
-		setMaxDamage(24); // Damage dealt in Canvas block
+		setMaxDamage(MAX_USES + 1); // Damage dealt in Canvas block
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -59,10 +62,45 @@ public class ItemPaintBrush extends Item {
     	ItemStack stack = new ItemStack(OpenBlocks.Items.paintBrush);
     	NBTTagCompound tag = new NBTTagCompound();
     	tag.setInteger("color", color);
+    	tag.setInteger("damage", MAX_USES);
     	stack.setTagCompound(tag);
     	return stack;
     }
     
+        
+    @Override
+    public boolean isDamaged(ItemStack stack) {
+    	return getDamage(stack) < MAX_USES;
+    }
+    
+    @Override
+    public int getDisplayDamage(ItemStack stack) {
+    	return getMaxDamage(stack) == 0 ? 0 : getDamage(stack);
+    }
+    
+    @Override
+    public int getDamage(ItemStack stack) {
+    	NBTTagCompound tag = stack.getTagCompound();
+    	return tag.hasKey("damage") ? tag.getInteger("damage") : 0;
+    }
+    
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+    	NBTTagCompound tag = stack.getTagCompound();
+    	if(damage > MAX_USES) {
+    		damage = MAX_USES;
+    	}
+    	tag.setInteger("damage", damage);
+    }
+    
+    @Override
+    public int getMaxDamage(ItemStack stack) {
+    	NBTTagCompound tag = stack.getTagCompound();
+    	int damage = tag.getInteger("damage");
+    	if(damage == super.getMaxDamage()) return 0;
+    	return super.getMaxDamage();
+    }
+        
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		return true;

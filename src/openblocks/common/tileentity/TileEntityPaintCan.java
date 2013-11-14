@@ -47,7 +47,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 					heldStack.setTagCompound(tag);
 				}
 				tag.setInteger("color", color.getValue());
-				tag.setInteger("amount", 10);
+				tag.setInteger("damage", 0);
 			}
 		}
 		return false;
