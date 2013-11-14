@@ -123,6 +123,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 					// paint the whole block
 					baseColors.setValue(side, color);
 				}
+				// damage paint brush
+				heldItem.damageItem(1, player);
 				if (!worldObj.isRemote) {
 					sync();
 				}

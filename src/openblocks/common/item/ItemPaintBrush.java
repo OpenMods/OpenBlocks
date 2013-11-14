@@ -25,6 +25,7 @@ public class ItemPaintBrush extends Item {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 		setUnlocalizedName("openblocks.paintbrush");
+		setMaxDamage(24); // Damage dealt in Canvas block
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
