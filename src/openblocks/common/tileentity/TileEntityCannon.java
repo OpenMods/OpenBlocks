@@ -252,8 +252,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 
 			double dp = (getTargetError(pitch.getValue() + h, yaw.getValue()) - getTargetError(pitch.getValue() - h, yaw.getValue())) / (2 * h);
 
-			System.out.println(d + " " + dp);
-
 			double dy = 10 * Math.sin(Math.atan2(targetX - xCoord - 0.5 + 0.0001, -targetZ + zCoord + 0.5 - 0.0001) - Math.toRadians(yaw.getValue()));
 
 			pitchSpeed = -dp * alpha;

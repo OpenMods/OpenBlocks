@@ -19,9 +19,9 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glPushMatrix();
-		GL11.glTranslated(0.5, 1.0, 0.5);
+		GL11.glTranslatef(0.5f, 1.0f, 0.5f);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glRotated(cannon.yaw.getValue(), 0, 1, 0);
 		bindTexture(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
