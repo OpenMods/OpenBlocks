@@ -4,8 +4,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
 
@@ -60,5 +62,14 @@ public class BlockCanvas extends OpenBlock {
 		if (tile != null) { return tile.getTextureForRender(renderSide, layer); }
 		return super.getUnrotatedTexture(direction, world, x, y, z);
 
+	}
+
+	public static void replaceBlock(World world, int x, int y, int z) {
+		int id = world.getBlockId(x, y,z);
+		int meta = world.getBlockMetadata(x, y, z);
+		world.setBlock(x, y, z, OpenBlocks.Blocks.canvas.blockID);
+		TileEntityCanvas tile = (TileEntityCanvas)world.getBlockTileEntity(x, y, z);
+		tile.paintedBlockId.setValue(id);
+		tile.paintedBlockMeta.setValue(meta);
 	}
 }

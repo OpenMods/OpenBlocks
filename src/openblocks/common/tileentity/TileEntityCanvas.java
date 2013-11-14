@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,11 +15,15 @@ import openblocks.common.item.ItemPaintBrush;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableBlockLayers;
 import openblocks.sync.SyncableBlockLayers.Layer;
+import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableIntArray;
 import openblocks.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 
+	/* Used for painting other blocks */
+	public SyncableInt paintedBlockId, paintedBlockMeta;
+	
 	private SyncableIntArray baseColors;
 
 	public SyncableBlockLayers stencilsUp;
@@ -53,6 +58,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 				stencilsDown, stencilsUp, stencilsNorth, stencilsSouth, stencilsWest, stencilsEast
 		};
 		baseColors = new SyncableIntArray(new int[] { 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF });
+		paintedBlockId = new SyncableInt(0);
+		paintedBlockMeta = new SyncableInt(0);
 	}
 
 	public SyncableBlockLayers getLayersForSide(int side) {
@@ -93,7 +100,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 				}
 			}
 		}
-		return OpenBlocks.Blocks.canvas.baseIcon;
+		return getBaseTexture(renderSide);
+	}
+
+	private Icon getBaseTexture(int side) {
+		if(paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.baseIcon;
+		Block block = Block.blocksList[paintedBlockId.getValue()];
+		if(block == null) return OpenBlocks.Blocks.canvas.baseIcon;
+		return block.getIcon(side, paintedBlockMeta.getValue());
 	}
 
 	@Override

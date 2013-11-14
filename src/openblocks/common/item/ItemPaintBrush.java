@@ -6,7 +6,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Blocks;
+import openblocks.common.block.BlockCanvas;
 import openblocks.utils.ColorUtils;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -103,6 +106,17 @@ public class ItemPaintBrush extends Item {
         
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		/* Check that we can paint this */
+		if(stack.getItemDamage() >= MAX_USES) return true;
+		/* Do some logic to make sure it's okay to paint */
+		int id = world.getBlockId(x, y, z);
+		if(id == 0 || id == OpenBlocks.Blocks.canvas.blockID) return true; /* Ignore */
+		Block b = Block.blocksList[id];
+		if(b == null) return true;
+		if(Block.isNormalCube(id) && !b.isAirBlock(world, x, y, z)) {
+			BlockCanvas.replaceBlock(world, x, y, z);
+			OpenBlocks.Blocks.canvas.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+		}
 		return true;
 	}
 	
