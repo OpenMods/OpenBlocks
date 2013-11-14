@@ -31,8 +31,9 @@ public class ItemPaintBrush extends Item {
 		super(Config.itemPaintBrushId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
+		setMaxStackSize(1);
 		setUnlocalizedName("openblocks.paintbrush");
-		setMaxDamage(MAX_USES + 1); // Damage dealt in Canvas block
+		setMaxDamage(MAX_USES); // Damage dealt in Canvas block
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -63,46 +64,11 @@ public class ItemPaintBrush extends Item {
     }
     
     public static ItemStack createStackWithColor(int color) {
-    	ItemStack stack = new ItemStack(OpenBlocks.Items.paintBrush);
+    	ItemStack stack = new ItemStack(OpenBlocks.Items.paintBrush, 1);
     	NBTTagCompound tag = new NBTTagCompound();
     	tag.setInteger("color", color);
-    	tag.setInteger("damage", MAX_USES);
     	stack.setTagCompound(tag);
     	return stack;
-    }
-    
-        
-    @Override
-    public boolean isDamaged(ItemStack stack) {
-    	return getDamage(stack) < MAX_USES;
-    }
-    
-    @Override
-    public int getDisplayDamage(ItemStack stack) {
-    	return getMaxDamage(stack) == 0 ? 0 : getDamage(stack);
-    }
-    
-    @Override
-    public int getDamage(ItemStack stack) {
-    	NBTTagCompound tag = stack.getTagCompound();
-    	return tag.hasKey("damage") ? tag.getInteger("damage") : 0;
-    }
-    
-    @Override
-    public void setDamage(ItemStack stack, int damage) {
-    	NBTTagCompound tag = stack.getTagCompound();
-    	if(damage > MAX_USES) {
-    		damage = MAX_USES;
-    	}
-    	tag.setInteger("damage", damage);
-    }
-    
-    @Override
-    public int getMaxDamage(ItemStack stack) {
-    	NBTTagCompound tag = stack.getTagCompound();
-    	int damage = tag.getInteger("damage");
-    	if(damage == super.getMaxDamage()) return 0;
-    	return super.getMaxDamage();
     }
         
 	@Override
@@ -110,7 +76,7 @@ public class ItemPaintBrush extends Item {
 		/* Check that we can paint this */
 		if(stack.getItemDamage() >= MAX_USES) return true;
 		/* Check with our manager upstairs about white lists */
-		if(!PaintUtils.isAllowedToPaint(world, x, y, z)) return true;
+		if(!PaintUtils.instance().isAllowedToPaint(world, x, y, z)) return true;
 		/* Do some logic to make sure it's okay to paint */
 		int id = world.getBlockId(x, y, z);
 		if(id == 0 || id == OpenBlocks.Blocks.canvas.blockID) return true; /* Ignore */

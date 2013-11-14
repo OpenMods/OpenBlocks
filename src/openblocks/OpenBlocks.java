@@ -83,6 +83,7 @@ public class OpenBlocks {
 		public static BlockCanvas canvas;
 		public static BlockMachineOreCrusher machineOreCrusher;
 		public static BlockPaintCan paintCan;
+		public static BlockCanvasGlass canvasGlass;
 	}
 
 	public static class Items {

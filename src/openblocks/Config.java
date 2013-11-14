@@ -144,7 +144,7 @@ public class Config {
 	@BlockId(description = "The id of the clay stainer block")
 	public static int blockPaintMixer = 2568;
 	
-	@BlockId(description = "The id of the special stained clay block")
+	@BlockId(description = "The id of the canvas block")
 	public static int blockCanvasId = 2569;
 	
 	@BlockId(description = "The id of the Ore Crusher")
@@ -152,6 +152,10 @@ public class Config {
 
 	@BlockId(description = "The id of the paint tin")
 	public static int blockPaintCanId = 2571;
+
+	@BlockId(description = "The id of the glass canvas block")
+	public static int blockCanvasGlassId = 2572;
+	
 	
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -511,6 +515,11 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockPaintCanId)) {
 			OpenBlocks.Blocks.paintCan = new BlockPaintCan();
+		}
+		
+
+		if (Config.canRegisterBlock(blockCanvasGlassId)) {
+			OpenBlocks.Blocks.canvasGlass = new BlockCanvasGlass();
 		}
 		
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

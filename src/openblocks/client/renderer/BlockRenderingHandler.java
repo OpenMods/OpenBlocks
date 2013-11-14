@@ -33,7 +33,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		inventoryTileEntities = Maps.newIdentityHashMap();
 		blockRenderers = Maps.newIdentityHashMap();
 		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
-		blockRenderers.put(OpenBlocks.Blocks.canvas, new BlockCanvasRenderer());
+		BlockCanvasRenderer canvasRenderer = new BlockCanvasRenderer();
+		blockRenderers.put(OpenBlocks.Blocks.canvas, canvasRenderer);
+		blockRenderers.put(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
 		blockRenderers.put(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 	}
 	

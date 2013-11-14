@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -82,6 +83,13 @@ public class ItemGeneric extends Item {
 			@Override
 			public IMetaItem createMetaItem() {
 				return new MetaGeneric("map_memory").hideFromCreative();
+			}
+		},
+		cursor {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				return new MetaCursor("cursor", new ShapedOreRecipe(result, "w  ", "www", "www", 'w', Block.cloth));
 			}
 		};
 
