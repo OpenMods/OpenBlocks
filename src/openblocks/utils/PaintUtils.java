@@ -8,6 +8,6 @@ public class PaintUtils {
 		int id = world.getBlockId(x, y, z);
 		return id == Block.stone.blockID || id == Block.cobblestone.blockID || id == Block.cobblestoneMossy.blockID || 
 				id == Block.sandStone.blockID || id == Block.blockIron.blockID || id == Block.stoneBrick.blockID || 
-				id == Block.glass.blockID || id == Block.wood.blockID;
+				id == Block.glass.blockID || id == Block.planks.blockID;
 	}
 }

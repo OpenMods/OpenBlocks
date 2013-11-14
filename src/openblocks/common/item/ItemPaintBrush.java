@@ -125,7 +125,7 @@ public class ItemPaintBrush extends Item {
 	
 	@Override
     public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player) {
-        return true;
+        return false;
     }
 	
     @SideOnly(Side.CLIENT)
