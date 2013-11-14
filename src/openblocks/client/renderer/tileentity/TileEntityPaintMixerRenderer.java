@@ -1,10 +1,15 @@
 package openblocks.client.renderer.tileentity;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelPaintMixer;
 import openblocks.client.renderer.BlockRenderingHandler;
+import openblocks.common.block.BlockPaintCan;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openblocks.utils.BlockUtils;
+import openblocks.utils.ColorUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -20,7 +25,10 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 	RenderBlocks renderer = new RenderBlocks();
 	private ModelPaintMixer model = new ModelPaintMixer();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/paintmixer.png");
-
+	private static final ColorUtils.RGB start = new ColorUtils.RGB(), end = new ColorUtils.RGB();
+	private static final EnumSet<ForgeDirection> TOP_FACE = EnumSet.of(ForgeDirection.UP);
+	private static final EnumSet<ForgeDirection> SIDES = EnumSet.complementOf(TOP_FACE);
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityPaintMixer mixer = (TileEntityPaintMixer)tileentity;
@@ -32,7 +40,9 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 		bindTexture(texture);
 		model.render(mixer, f);
 		GL11.glPushMatrix();
-		GL11.glTranslated(0.1, 0.5, 0);
+		// The top of the paint can is rendering longer than the can. WHYY :(
+		// Fixed this, rotating the matrix and not using the stack :)
+		GL11.glTranslated(0.05, 0.5, 0);
 		GL11.glRotated(150, 0, 0, -1);
 		GL11.glRotated(90, 0, 1, 0);
 		GL11.glScaled(0.8, 0.8, 0.8);
@@ -42,12 +52,22 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 			if (mixer.isEnabled()) {
 				GL11.glTranslated(0, Math.random() * 0.2, 0);
 			}
-			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF);
+			int secondPass = mixer.getCanColor();
+			if(mixer.isEnabled()) secondPass = calculateColorFade(0xFFFFFF, secondPass, mixer.getProgress().getPercent());
+			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES); // Render first pass
+			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, secondPass, TOP_FACE);
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
+	}
+
+	/* Interpolate colors */
+	private int calculateColorFade(int a, int b, double magnitude) {
+		start.setColor(a);
+		end.setColor(b);
+		return start.interpolate(end, magnitude).getColor();	
 	}
 
 }

@@ -24,7 +24,7 @@ import openblocks.utils.ColorUtils;
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
 	
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
-	private static final ItemStack WATER_BUCKET = new ItemStack(Item.bucketMilk);
+	private static final ItemStack MILK_BUCKET = new ItemStack(Item.bucketMilk);
 	private static final int PROGRESS_TICKS = 300;
 	private static final ItemStack DYE_BLACK = new ItemStack(Item.dyePowder, 1, 0);
 	private static final ItemStack DYE_CYAN = new ItemStack(Item.dyePowder, 1, 6);
@@ -44,6 +44,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		hasPaint
 	}
 	
+	private SyncableInt canColor;
 	private SyncableInt color;
 	private boolean enabled;
 	private SyncableProgress progress;
@@ -92,10 +93,11 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 					inventory.setInventorySlotContents(Slots.output.ordinal(), output);
 					progress.reset();
 					enabled = false;
-					sync();
 				}
 			}
+			calculateCanColor();
 			checkAutoConsumption();
+			sync();
 		}
 	}
 	
@@ -202,6 +204,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		lvlCyan = new SyncableFloat();
 		lvlMagenta = new SyncableFloat();
 		lvlYellow = new SyncableFloat();		
+		canColor = new SyncableInt(0xFFFFFF);
 	}
 	
 	public SyncableInt getColor() {
@@ -315,19 +318,45 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		return progress;
 	}
 	
+	public int getCanColor() {
+		return canColor.getValue();
+	}
+	
 	public boolean isEnabled() {
 		return progress.getValue() > 0;
 	}
 	
 	public boolean hasValidInput() {
-		return hasStack(Slots.input, PAINT_CAN) || hasStack(Slots.input, WATER_BUCKET);
+		return hasStack(Slots.input, PAINT_CAN) || hasStack(Slots.input, MILK_BUCKET);
 	}
 
 	@Override
 	public void onInventoryChanged(IInventory invent, int slotNumber) {
 		if (worldObj.isRemote) {
 			flags.set(Flags.hasPaint, hasValidInput() || hasOutputStack());
+			calculateCanColor();
 			sync();
+		}
+	}
+	
+	private int getColorFromPaintCanSlot(Slots slot) {
+		ItemStack stack = inventory.getStackInSlot(slot);
+		if(stack != null && stack.isItemEqual(PAINT_CAN)) {
+			NBTTagCompound tag = stack.getTagCompound();
+			if(tag != null && tag.hasKey("color")) {
+				return tag.getInteger("color");
+			}
+		}
+		return 0xFFFFFF;
+	}
+
+	public void calculateCanColor() {
+		if(hasStack(Slots.output, PAINT_CAN)) {
+			canColor.setValue(getColorFromPaintCanSlot(Slots.output));
+		}else if(enabled){
+			canColor.setValue(color.getValue());
+		}else {
+			canColor.setValue(0xFFFFFF);
 		}
 	}
 

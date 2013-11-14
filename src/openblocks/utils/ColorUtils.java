@@ -39,6 +39,10 @@ public class ColorUtils {
 		public RGB(int color) {
 			this(((color & 0xFF0000) >> 16), ((color & 0x00FF00) >> 8), (color & 0x0000FF));
 		}
+		
+		public RGB() {
+			this(0);
+		}
 
 		public int getR() {
 			return r;
@@ -64,8 +68,25 @@ public class ColorUtils {
 			this.b = b;
 		}		
 		
-		public int toMC() {
+		public void setColor(int r, int g, int b) {
+			setR(r);
+			setG(g);
+			setB(b);
+		}
+		
+		public void setColor(int color) {
+			setColor(((color & 0xFF0000) >> 16), ((color & 0x00FF00) >> 8), (color & 0x0000FF));
+		}
+		
+		public int getColor() {
 			return r << 16 | g << 8 | b;
+		}
+		
+		public RGB interpolate(RGB other, double amount) {
+			int iPolR = (int) (r * (1D - amount) + other.r * amount);
+			int iPolG = (int) (g * (1D - amount) + other.g * amount);
+			int iPolB = (int) (b * (1D - amount) + other.b * amount);
+			return new RGB(iPolR, iPolG, iPolB);
 		}
 		
 		public CYMK toCYMK() {

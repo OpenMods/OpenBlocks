@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeDirection;
 public class BlockPaintCan extends OpenBlock {
 
 	public int renderPass = 0;
-
+	
 	public static class Icons {
 		public static Icon top;
 		public static Icon back;
@@ -36,7 +36,6 @@ public class BlockPaintCan extends OpenBlock {
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 		setBlockBounds(0.25f, 0f, 0.25f, 0.7f, 0.6875f, 0.75f);
 	}
-
 
 	@Override
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
