@@ -24,37 +24,6 @@ import cpw.mods.fml.common.network.Player;
 
 public class TileEntityElevator extends OpenTileEntity {
 
-	/**
-	 * How far a player must be looking in a direction to be teleported
-	 */
-	private static final float DIRECTION_MAGNITUDE = 0.95f;
-
-	private HashMap<String, Integer> cooldown = new HashMap<String, Integer>();
-
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if (!worldObj.isRemote) {
-
-		}
-
-	}
-
-	private void addPlayerCooldownToTargetAndNeighbours(EntityPlayer player, int xCoord, int level, int zCoord) {
-		for (int x = xCoord - 1; x <= xCoord + 1; x++) {
-			for (int z = zCoord - 1; z <= zCoord + 1; z++) {
-				TileEntity targetTile = worldObj.getBlockTileEntity(x, level, z);
-				if (targetTile instanceof TileEntityElevator) {
-					((TileEntityElevator)targetTile).addPlayerCooldown(player);
-				}
-			}
-		}
-	}
-
-	private void addPlayerCooldown(EntityPlayer player) {
-		cooldown.put(player.username, 6);
-	}
-
 	private boolean isPassable(int x, int y, int z, boolean canStandHere) {
 		int blockId = worldObj.getBlockId(x, y, z);
 		Block block = Block.blocksList[blockId];
@@ -111,8 +80,7 @@ public class TileEntityElevator extends OpenTileEntity {
 				return true;
 			}
 		}
-		return false; // Don't update the block and don't block placement if
-						// it's not dye we're using
+		return false;
 	}
 
 	@Override
@@ -121,7 +89,7 @@ public class TileEntityElevator extends OpenTileEntity {
 	public void onClientJump() {
 		sendEventToServer(new NBTTagByte("type", (byte)1));
 	}
-	
+
 	public void onServerJump(EntityPlayer player) {
 		int level = findLevel(ForgeDirection.UP);
 		if (level != 0) {
@@ -129,7 +97,7 @@ public class TileEntityElevator extends OpenTileEntity {
 			worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
 		}
 	}
-	
+
 	public void onServerSneak(EntityPlayer player) {
 		int level = findLevel(ForgeDirection.DOWN);
 		if (level != 0) {
@@ -137,7 +105,7 @@ public class TileEntityElevator extends OpenTileEntity {
 			worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
 		}
 	}
-	
+
 	public void onClientSneak() {
 		sendEventToServer(new NBTTagByte("type", (byte)0));
 	}
@@ -146,7 +114,7 @@ public class TileEntityElevator extends OpenTileEntity {
 		NBTTagByte typeData = (NBTTagByte)event.data;
 		if (typeData.data == 1) {
 			onServerJump((EntityPlayer)event.player);
-		}else {
+		} else {
 			onServerSneak((EntityPlayer)event.player);
 		}
 	}

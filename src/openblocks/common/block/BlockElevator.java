@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityElevator;
 
 public class BlockElevator extends OpenBlock {
@@ -49,4 +50,5 @@ public class BlockElevator extends OpenBlock {
 		TileEntityElevator drop = (TileEntityElevator)te;
 		return drop.onActivated(player);
 	}
+	
 }

@@ -35,8 +35,7 @@ public class ElevatorEventHandler {
 		if (world != null && player != null) {
 			int x = (int)player.posX;
 			int y = (int)(player.posY - player.yOffset - 0.7);
-			int z = (int)player.posZ;
-			System.out.println(x);
+			int z = (int)player.posZ - 1;
 			return world.getBlockTileEntity(x, y, z);
 		}
 		return null;
