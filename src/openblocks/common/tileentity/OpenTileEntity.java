@@ -2,15 +2,20 @@ package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IInventoryCallback;
 import openblocks.common.block.OpenBlock;
+import openblocks.network.PacketHandler;
+import openblocks.network.TileEntityMessageEventPacket;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -159,5 +164,37 @@ public abstract class OpenTileEntity extends TileEntity {
 		if (inventory != null) {
 			inventory.readFromNBT(tag);
 		}
+	}
+
+	public void sendEventToPlayers() {
+		sendEventToPlayers(null);
+	}
+	
+	public void sendEventToPlayers(NBTBase data) {
+		if (worldObj.isRemote || !(worldObj instanceof WorldServer)) {
+			return;
+		}
+		TileEntityMessageEventPacket event = new TileEntityMessageEventPacket(this);
+		event.setData(data);
+		for (EntityPlayer player : PacketHandler.getPlayersWatchingBlock((WorldServer)worldObj, xCoord, zCoord)) {
+			event.sendToPlayer((Player)player);
+		}
+	}
+	
+	public void sendEventToServer() {
+		sendEventToServer(null);
+	}
+	
+	public void sendEventToServer(NBTBase data) {
+		if (!worldObj.isRemote) {
+			return;
+		}
+		TileEntityMessageEventPacket event = new TileEntityMessageEventPacket(this);
+		event.setData(data);
+		event.sendToServer();
+	}
+	
+	public void onEvent(TileEntityMessageEventPacket event) {
+		
 	}
 }

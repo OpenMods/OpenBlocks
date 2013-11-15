@@ -118,7 +118,6 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		}
 	}
 
-	@SuppressWarnings("unused")
 	public void onButtonClicked(EntityPlayer player, int buttonId) {}
 
 	public boolean enchantItem(EntityPlayer player, int buttonId) {

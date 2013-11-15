@@ -272,10 +272,9 @@ public abstract class OpenBlock extends Block {
 	@Override
 	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
 		super.onBlockEventReceived(world, x, y, z, eventId, eventParam);
-		IAwareTile te = getTileEntity(world, x, y, z, IAwareTile.class);
+		TileEntity te = getTileEntity(world, x, y, z, TileEntity.class);
 		if (te != null) {
-			TileEntity tile = (TileEntity)te;
-			return tile.receiveClientEvent(eventId, eventParam);
+			return te.receiveClientEvent(eventId, eventParam);
 		}
 		return false;
 	}
@@ -407,7 +406,6 @@ public abstract class OpenBlock extends Block {
 		textures[direction.ordinal()] = icon;
 	}
 
-	@SuppressWarnings("unused")
 	/**
 	 * This method should be overriden if needed. We're getting the texture for the UNROTATED block
 	 * for a particular side (direction). Feel free to look up data in the TileEntity to grab
@@ -515,7 +513,7 @@ public abstract class OpenBlock extends Block {
 		return true;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unused" })
+	@SuppressWarnings({ "rawtypes" })
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 		
 	}

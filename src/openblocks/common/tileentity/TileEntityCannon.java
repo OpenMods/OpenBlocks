@@ -2,12 +2,15 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatMessageComponent;
@@ -16,6 +19,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.entity.EntityMount;
+import openblocks.network.TileEntityMessageEventPacket;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
 import openblocks.sync.SyncableInt;
@@ -25,28 +29,29 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCannon extends SyncedTileEntity implements IActivateAwareTile, IPointable {
 
-	private EntityMount cannon = null;
-
-	public SyncableDouble pitch;
-	public SyncableDouble yaw;
-	public SyncableInt cannonId;
-	public SyncableInt ridingEntity;
+	public SyncableDouble targetPitch;
+	public SyncableDouble targetYaw;
+	public SyncableDouble targetSpeed;
+	
+	public double currentPitch = 45;
+	public double currentYaw = 0;
+	public double currentSpeed = 1.4;
 
 	public double motionX = 0;
 	public double motionY = 0;
 	public double motionZ = 0;
-
+	
 	public boolean renderLine = true;
 
-	public TileEntityCannon() {
-	}
+	private int ticksSinceLastFire = Integer.MAX_VALUE;
+	
+	public TileEntityCannon() {}
 
 	@Override
 	protected void createSyncedFields() {
-		pitch = new SyncableDouble();
-		yaw = new SyncableDouble();
-		cannonId = new SyncableInt(0);
-		ridingEntity = new SyncableInt(0);
+		targetPitch = new SyncableDouble();
+		targetYaw = new SyncableDouble();
+		targetSpeed = new SyncableDouble(1.4);
 	}
 
 	@Override
@@ -59,35 +64,18 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (cannon == null) {
-			ridingEntity.setValue(0);
-		}
-		if (cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
-			double p = player.rotationPitch;
-			double y = player.rotationYawHead;
-			pitch.setValue(p);
-			yaw.setValue(y);
-			sync();
-		}
 
-		if (cannon != null && cannon.riddenByEntity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) cannon.riddenByEntity;
-			Vec3 pos = getPositionDistanceAway(-0.7, player.rotationPitch, player.rotationYawHead + 90);
-			if (worldObj.isRemote) {
-				cannon.posX = pos.xCoord + 0.5 + xCoord;
-				cannon.posY = yCoord;
-				cannon.posZ = pos.zCoord + 0.5 + zCoord;
-				cannon.setPosition(cannon.posX, cannon.posY, cannon.posZ);
-				if (player != null) {
-					player.setPosition(cannon.posX, cannon.posY + 1.0, cannon.posZ);
-				}
-			}
-		}
-
+		// ugly, need to clean
+		currentPitch = currentPitch - ((currentPitch - targetPitch.getValue()) / 20);
+		currentYaw = currentYaw - ((currentYaw - targetYaw.getValue()) / 20);
+		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.getValue()) / 20);
+		//currentPitch = targetPitch.getValue();
+		//currentYaw = targetYaw.getValue();
+		//currentSpeed = targetSpeed.getValue();
+		getMotionFromAngles();
+		
 		if (!worldObj.isRemote) {
-			seek();
-
+			
 			if (worldObj.getWorldTime() % 20 == 0) {
 				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
 					for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
@@ -96,11 +84,12 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
 							if (stack != null) {
 								getMotionFromAngles();
+								sendEventToPlayers();
 								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
-								item.motionX = motionX * 1.4;
-								item.motionY = motionY * 1.4;
-								item.motionZ = motionZ * 1.4;
+								item.motionX = motionX * currentSpeed;
+								item.motionY = motionY * currentSpeed;
+								item.motionZ = motionZ * currentSpeed;
 								worldObj.spawnEntityInWorld(item);
 								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:mortar", 0.2f, 1.0f);
 								break;
@@ -110,7 +99,19 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 
 				}
 			}
+		} else {
+			if (ticksSinceLastFire < 100) {
+				ticksSinceLastFire++;
+			}			
 		}
+	}
+
+	public void onEvent(TileEntityMessageEventPacket event) {
+		ticksSinceLastFire = 0;
+	}
+
+	public int getTicksSinceLastFire() {
+		return ticksSinceLastFire;
 	}
 
 	@Override
@@ -119,160 +120,90 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		AxisAlignedBB box = super.getRenderBoundingBox();
 		return box.expand(32.0, 32.0, 32.0);
 	}
-
-	private Vec3 getPositionDistanceAway(double distance, double pitch, double yaw) {
-		double p = Math.toRadians(pitch);
-		double y = Math.toRadians(yaw);
-		double k = distance;
-		double xzLength = Math.cos(p) * k;
-		double dx = xzLength * Math.cos(y);
-		double dz = xzLength * Math.sin(y);
-		double dy = k * Math.sin(p);
-		return worldObj.getWorldVec3Pool().getVecFromPool(dx, dy, dz);
-	}
-
+	
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		return false;
-/*		if (!worldObj.isRemote) {
-			setTarget(1504, 5, -1013);
-		}
-		return true;*/
 	}
 
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 		getMotionFromAngles();
-		int cId = cannonId.getValue();
-		cannon = null;
-		if (cId > 0) {
-			Entity tmpCannon = worldObj.getEntityByID(cannonId.getValue());
-			if (tmpCannon != null && tmpCannon instanceof EntityMount && !tmpCannon.isDead) {
-				cannon = (EntityMount) tmpCannon;
-			}
-		}
-		int playerId = ridingEntity.getValue();
-		if (playerId > 0) {
-			Entity player = worldObj.getEntityByID(ridingEntity.getValue());
-			if (player != null && player instanceof EntityMount && !player.isDead) {
-				if (cannon != null) {
-					player.ridingEntity = cannon;
-					cannon.riddenByEntity = player;
-				}
-			}
-		}
-
 	}
 
 	private void getMotionFromAngles() {
-		double p = Math.toRadians(pitch.getValue() - 180);
-		double y = Math.toRadians(yaw.getValue());
-		motionX = Math.sin(y) * Math.cos(p);
-		motionY = Math.sin(p);
-		motionZ = -Math.cos(y) * Math.cos(p);
+		double p = Math.toRadians(currentPitch);
+		double y = Math.toRadians(180 - currentYaw);
+		double sinPitch = Math.sin(p);
+		double cosPitch = Math.cos(p);
+		double sinYaw = Math.sin(y);
+		double cosYaw = Math.cos(y);
+		
+		motionX = -cosPitch * sinYaw;
+		motionY = sinPitch;
+		motionZ = -cosPitch * cosYaw;
 	}
-
-	public double targetX = -1;
-	public double targetY = -1;
-	public double targetZ = -1;
-	public boolean seeking = false;
 
 	public void setTarget(int x, int y, int z) {
-		this.targetX = x + 0.5;
-		this.targetY = y;
-		this.targetZ = z + 0.5;
-		this.seeking = true;
-	}
+		
+		// right, first we get the distance
+		double dX = ((double)xCoord + 0.5) - ((double)x + 0.5);
+		double dY = ((double)yCoord + 0.5) - ((double)y + 0.5);
+		double dZ = ((double)zCoord + 0.5) - ((double)z + 0.5);
 
-	public double getTargetError(double d, double e) {
-		boolean rising = false;
-		double x = xCoord + 0.5F;
-		double y = yCoord + 0.5F;
-		double z = zCoord + 0.5F;
-
-		double pc = Math.toRadians(d - 180);
-		double yw = Math.toRadians(e);
-
-		double mX = Math.sin(yw) * Math.cos(pc) * 1.4;
-		double mY = Math.sin(pc) * 1.4;
-		double mZ = -Math.cos(yw) * Math.cos(pc) * 1.4;
-
-		// continue until the trajectory is just about to become falling below
-		// the target y-level
-
-		for (int i = 0; i < 200 && !(mY < 0.03999999910593033D && y < targetY - mY + 0.03999999910593033D); i++) {
-			mY -= 0.03999999910593033D;
-			x += mX;
-			y += mY;
-			z += mZ;
-			mX *= 0.98;
-			mY *= 0.9800000190734863D;
-			mZ *= 0.98;
+		double dist = dX*dX + dY*dY + dZ*dZ;
+		
+		// find the yaw, and give it a fixed pitch
+		targetYaw.setValue(Math.toDegrees(Math.atan2(dZ, dX)) + 90);
+		targetPitch.setValue(30);
+		currentYaw = targetYaw.getValue();
+		currentPitch = targetPitch.getValue();
+		
+		// so, starting with tiny amount of speed (0.01), we keep increasing
+		// the speed and checking the distance that it falls below the target Y point
+		// if the distance is further than the distance to the target, we've found the
+		// speed we want
+		double speed = 0.01;
+		double d;
+		while ((d = getDistance(speed, (double)y + 0.5)) < dist) {
+			speed += 0.01;
 		}
-
-		// too low to reach the target
-		if (y < targetY)
-			return Math.sin(pc);
-		// return ((x - targetX) * (x - targetX) + (y - targetY) * (y - targetY)
-		// + (z - targetZ) * (z - targetZ));
-
-		mY -= 0.03999999910593033D;
-
-		double dt = (y - targetY) / mY; // calculate the micro-step time needed
-										// to reach the target
-
-		x += dt * mX;
-		// y += dt * mY; (== targetY) by definition
-		z += dt * mZ;
-
-		return Math.sqrt((x - targetX) * (x - targetX) + (z - targetZ) * (z - targetZ));
+		
+		System.out.println("Distance = " + dist);
+		System.out.println("Distance = " + d);
+		setSpeed(speed);
+		sync();
 	}
-
-	double tol = 0.1;
-
-	double maxSpeed = 3;
-	double pitchSpeed = 0;
-	double yawSpeed = 0;
-	double alpha = 0.3;
-
-	public void seek() {
-		if (seeking && targetY > 0) {
-			double d;
-			if ((d = getTargetError(pitch.getValue(), yaw.getValue())) < 0.25) {
-				seeking = false;
-				return;
+	
+	private double getDistance(double speed, double y) {
+		getMotionFromAngles();
+		double posX = (double)xCoord + 0.5;
+		double posY = (double)yCoord + 0.5;
+		double posZ = (double)zCoord + 0.5;
+		double prevPosY = posY;
+		double prevPosX = posX;
+		double prevPosZ = posZ;
+		for (int i = 0; i < 100; i++) {
+			motionY -= 0.03999999910593033D;
+			posX += motionX * speed;
+			posY += motionY * speed;
+			posZ += motionZ * speed;
+			motionX *= 0.98;
+			motionY *= 0.9800000190734863D;
+			motionZ *= 0.98;
+			if (posY < y) {
+				double dX = ((double)xCoord + 0.5) - posX + 0.5;
+				double dY = ((double)yCoord + 0.5) - posY;
+				double dZ = ((double)zCoord + 0.5) - posZ + 0.5;
+				return dX*dX + dY*dY + dZ*dZ;
 			}
-
-			double h = 0.01 * pitchSpeed;
-			if (h == 0)
-				h = 0.01;
-
-			if (Math.sin(Math.toRadians(pitch.getValue() - 180)) < 0)
-				pitch.setValue(270);
-
-			double dp = (getTargetError(pitch.getValue() + h, yaw.getValue()) - getTargetError(pitch.getValue() - h, yaw.getValue())) / (2 * h);
-
-			double dy = 10 * Math.sin(Math.atan2(targetX - xCoord - 0.5 + 0.0001, -targetZ + zCoord + 0.5 - 0.0001) - Math.toRadians(yaw.getValue()));
-
-			pitchSpeed = -dp * alpha;
-			yawSpeed = -dy * alpha;
-
-			if (pitchSpeed > maxSpeed)
-				pitchSpeed = maxSpeed;
-			else if (pitchSpeed < -maxSpeed)
-				pitchSpeed = -maxSpeed;
-
-			if (yawSpeed > maxSpeed)
-				yawSpeed = maxSpeed;
-			else if (yawSpeed < -maxSpeed)
-				yawSpeed = -maxSpeed;
-
-			pitch.setValue(pitch.getValue() + pitchSpeed);
-			yaw.setValue(yaw.getValue() + yawSpeed);
-			sync();
+			prevPosY = posY;
+			prevPosX = posX;
+			prevPosZ = posZ;
 		}
+		return Integer.MIN_VALUE;
 	}
-
+	
 	public void disableLineRender() {
 		renderLine = false;
 	}
@@ -282,5 +213,19 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		player.sendChatToPlayer(ChatMessageComponent.createFromText(String.format("Pointed cannon at %s, %s, %s", x, y, z)));
 		setTarget(x, y, z);
 	}
+	
+	public void setSpeed(double speed) {
+		targetSpeed.setValue(speed);
+		sync();
+	}
 
+	public void setPitch(double pitch2) {
+		targetPitch.setValue(pitch2);
+		sync();
+	}
+
+	public void setYaw(double yaw2) {
+		targetYaw.setValue(yaw2);
+		sync();
+	}
 }

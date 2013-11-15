@@ -8,5 +8,6 @@ public class ModuleOpenPeripheral {
 		IntegrationRegistry registry = new IntegrationRegistry();
 		registry.registerAdapter(new AdapterVillageHighlighter());
 		registry.registerAdapter(new AdapterDonationStation());
+		registry.registerAdapter(new AdapterCannon());
 	}
 }

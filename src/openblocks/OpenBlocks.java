@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.PlayerDeathHandler;
+import openblocks.common.TileEntityEventHandler;
 import openblocks.common.block.*;
 import openblocks.common.entity.EntityBlock;
 import openblocks.common.entity.EntityHangGlider;
@@ -146,6 +147,8 @@ public class OpenBlocks {
 		if (Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
+		
+		MinecraftForge.EVENT_BUS.register(new TileEntityEventHandler());
 		
 		if (Config.itemLuggageId > 0) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
