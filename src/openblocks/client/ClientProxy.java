@@ -42,8 +42,6 @@ import cpw.mods.fml.relauncher.Side;
 public class ClientProxy implements IProxy {
 
 	public ClientProxy() {
-		MinecraftForge.EVENT_BUS.register(new SoundLoader());
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@ForgeSubscribe
@@ -58,6 +56,9 @@ public class ClientProxy implements IProxy {
 	@Override
 	public void init() {
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
+		MinecraftForge.EVENT_BUS.register(new SoundLoader());
+		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new ElevatorEventHandler());
 	}
 
 	@Override

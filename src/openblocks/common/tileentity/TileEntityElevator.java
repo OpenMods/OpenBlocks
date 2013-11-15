@@ -10,12 +10,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.network.TileEntityMessageEventPacket;
 
 import com.google.common.base.Preconditions;
+
+import cpw.mods.fml.common.network.Player;
 
 public class TileEntityElevator extends OpenTileEntity {
 
@@ -29,57 +34,8 @@ public class TileEntityElevator extends OpenTileEntity {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-
 		if (!worldObj.isRemote) {
 
-			Iterator<Entry<String, Integer>> cooldownIter = cooldown.entrySet().iterator();
-			while (cooldownIter.hasNext()) {
-				Entry<String, Integer> entry = cooldownIter.next();
-				int less = entry.getValue() - 1;
-				entry.setValue(less);
-				if (less == 0) {
-					cooldownIter.remove();
-				}
-			}
-
-			@SuppressWarnings("unchecked")
-			List<EntityPlayer> playersInRange = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 3, zCoord + 1));
-
-			if (playersInRange.size() > 0) {
-				for (EntityPlayer player : playersInRange) {
-					if (cooldown.containsKey(player.username)) {
-						continue;
-					}
-
-					ForgeDirection teleportDirection = ForgeDirection.UNKNOWN;
-
-					if (player.capabilities.isCreativeMode
-							&& player.capabilities.isFlying) continue;
-					if (player.isSneaking()
-							&& player.ridingEntity == null
-							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord < -DIRECTION_MAGNITUDE)) {
-						teleportDirection = ForgeDirection.DOWN;
-						/* player.isJumping doesn't seem to work server side ? */
-					} else if (player.posY > yCoord + 1.2
-							/*
-							 * && player.posY < yCoord + 1.5 &&
-							 * player.fallDistance == 0.0
-							 */
-							&& player.ridingEntity == null
-							&& (!Config.elevatorBlockMustFaceDirection || player.getLookVec().yCoord > DIRECTION_MAGNITUDE)) {
-						teleportDirection = ForgeDirection.UP;
-					}
-					if (teleportDirection != ForgeDirection.UNKNOWN) {
-						int level = findLevel(teleportDirection);
-						if (level != 0) {
-							player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
-							worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
-							addPlayerCooldownToTargetAndNeighbours(player, xCoord, level, zCoord);
-						}
-					}
-
-				}
-			}
 		}
 
 	}
@@ -162,4 +118,36 @@ public class TileEntityElevator extends OpenTileEntity {
 	@Override
 	protected void initialize() {}
 
+	public void onClientJump() {
+		sendEventToServer(new NBTTagByte("type", (byte)1));
+	}
+	
+	public void onServerJump(EntityPlayer player) {
+		int level = findLevel(ForgeDirection.UP);
+		if (level != 0) {
+			player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
+			worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
+		}
+	}
+	
+	public void onServerSneak(EntityPlayer player) {
+		int level = findLevel(ForgeDirection.DOWN);
+		if (level != 0) {
+			player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
+			worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
+		}
+	}
+	
+	public void onClientSneak() {
+		sendEventToServer(new NBTTagByte("type", (byte)0));
+	}
+
+	public void onEvent(TileEntityMessageEventPacket event) {
+		NBTTagByte typeData = (NBTTagByte)event.data;
+		if (typeData.data == 1) {
+			onServerJump((EntityPlayer)event.player);
+		}else {
+			onServerSneak((EntityPlayer)event.player);
+		}
+	}
 }

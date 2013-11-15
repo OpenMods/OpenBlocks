@@ -19,7 +19,6 @@ import openblocks.sync.SyncableBlockLayers.Layer;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableIntArray;
 import openblocks.utils.BlockUtils;
-import scala.collection.immutable.ListSet;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 
