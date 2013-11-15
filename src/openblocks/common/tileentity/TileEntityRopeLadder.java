@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,22 +7,24 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IAwareTile;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 
 	private boolean shouldAnimate = true;
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void prepareForInventoryRender(Block block, int metadata) {
 		super.prepareForInventoryRender(block, metadata);
 		shouldAnimate = false;
 	}
-	
+
 	public boolean shouldAnimate() {
 		return shouldAnimate;
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
@@ -32,7 +32,7 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 			while (y-- > 0) {
 				if (worldObj.isAirBlock(xCoord, y, zCoord) && OpenBlocks.Blocks.ropeLadder.canPlaceBlockOnSide(worldObj, xCoord, y, zCoord, getRotation())) {
 					worldObj.setBlock(xCoord, y, zCoord, getBlockType().blockID, getMetadata(), 3);
-				}else {
+				} else {
 					return;
 				}
 			}
@@ -41,7 +41,6 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -53,22 +52,16 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 			TileEntity te = worldObj.getBlockTileEntity(xCoord, y, zCoord);
 			if (te instanceof TileEntityRopeLadder) {
 				worldObj.setBlockToAir(xCoord, y, zCoord);
-			}else {
-				 return;
+			} else {
+				return;
 			}
 		}
 	}
 
 	@Override
-	public void onBlockAdded() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onBlockAdded() {}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 }

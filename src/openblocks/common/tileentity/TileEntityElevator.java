@@ -70,7 +70,7 @@ public class TileEntityElevator extends OpenTileEntity {
 	private int findLevel(ForgeDirection direction) {
 		Preconditions.checkArgument(direction == ForgeDirection.UP
 				|| direction == ForgeDirection.DOWN, "Must be either up or down... for now");
-		
+
 		int blocksInTheWay = 0;
 		for (int y = 2; y <= Config.elevatorTravelDistance; y++) {
 			int yPos = yCoord + (y * direction.offsetY);

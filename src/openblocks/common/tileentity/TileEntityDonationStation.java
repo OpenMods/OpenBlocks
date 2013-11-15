@@ -12,7 +12,9 @@ import openblocks.common.api.IHasGui;
 import openblocks.common.api.IInventoryCallback;
 import openblocks.common.container.ContainerDonationStation;
 import openblocks.sync.SyncableString;
-import openblocks.utils.StringUtils;
+
+import com.google.common.base.Joiner;
+
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 
@@ -61,7 +63,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements
 			if (container != null) {
 				ModMetadata meta = container.getMetadata();
 				if (meta != null && meta.authorList != null) {
-					authors.setValue(StringUtils.concatStrings(meta.authorList, ", "));
+					authors.setValue(Joiner.on(", ").join(meta.authorList));
 				}
 				donateUrl = DonationUrlManager.instance().getUrl(container.getModId());
 				modName.setValue(container.getName());
@@ -149,6 +151,6 @@ public class TileEntityDonationStation extends OpenTileEntity implements
 	}
 
 	public void showSomeLove() {
-		// TODO: Impl.	
+		// TODO: Impl.
 	}
 }

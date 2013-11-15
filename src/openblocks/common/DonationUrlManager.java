@@ -7,6 +7,7 @@ import openblocks.Mods;
 public class DonationUrlManager {
 
 	protected static DonationUrlManager instance;
+
 	public static DonationUrlManager instance() {
 		if (instance == null) {
 			instance = new DonationUrlManager();

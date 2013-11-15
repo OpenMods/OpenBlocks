@@ -26,10 +26,7 @@ import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.block.BlockTank;
-import openblocks.common.entity.EntityBlock;
-import openblocks.common.entity.EntityHangGlider;
-import openblocks.common.entity.EntityLuggage;
-import openblocks.common.entity.EntityMagnet;
+import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -92,14 +89,15 @@ public class ClientProxy implements IProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, new TileEntityDonationStationRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOreCrusher.class, new TileEntityOreCrusherRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
-		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());
+
 		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 
 		if (OpenBlocks.Items.luggage != null) {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
 			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
 		}
-		
+
 		if (OpenBlocks.Blocks.paintCan != null) {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.paintCan.blockID, new ItemRendererPaintCan());
 		}
@@ -113,7 +111,7 @@ public class ClientProxy implements IProxy {
 
 			attachPlayerRenderer();
 		}
-		
+
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 		}
@@ -126,6 +124,11 @@ public class ClientProxy implements IProxy {
 
 		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
+
+		if (OpenBlocks.Items.cartographer != null) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new EntityCartographerRenderer());
+			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
+		}
 	}
 
 	@SuppressWarnings("unchecked")

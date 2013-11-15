@@ -1,11 +1,5 @@
 package openblocks.client.renderer.tileentity;
 
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityRopeLadder;
-import openblocks.utils.BlockUtils;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -13,6 +7,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityRopeLadder;
+import openblocks.utils.BlockUtils;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityRopeLadderRenderer extends TileEntitySpecialRenderer {
 

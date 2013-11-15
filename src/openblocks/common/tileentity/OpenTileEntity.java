@@ -26,19 +26,19 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	private boolean isUsedForClientInventoryRendering = false;
 	protected GenericInventory inventory;
-	
+
 	public void setInventory(GenericInventory inventory) {
 		this.inventory = inventory;
 	}
-	
+
 	public void addInventoryCallback(IInventoryCallback callback) {
 		if (inventory != null) {
 			inventory.addCallback(callback);
 		}
 	}
-	
+
 	public void setup() {
-		
+
 	}
 
 	/**
@@ -57,7 +57,7 @@ public abstract class OpenTileEntity extends TileEntity {
 	 */
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
-		if(this.worldObj != null) {
+		if (this.worldObj != null) {
 			System.out.println("SEVERE PROGRAMMER ERROR! Inventory Render on World TileEntity. Expect hell!");
 		} // But of course, we continue, because YOLO.
 		isUsedForClientInventoryRendering = true;
@@ -73,8 +73,8 @@ public abstract class OpenTileEntity extends TileEntity {
 			initialized = true;
 		}
 	}
-	
-	protected void initialize(){}
+
+	protected void initialize() {}
 
 	public boolean isLoaded() {
 		return initialized;
@@ -97,7 +97,10 @@ public abstract class OpenTileEntity extends TileEntity {
 		int x = xCoord + direction.offsetX;
 		int y = yCoord + direction.offsetY;
 		int z = zCoord + direction.offsetZ;
-		/* TODO: Mikee, getBlockTileEntity returns null anyway, why the extra block check ? */
+		/*
+		 * TODO: Mikee, getBlockTileEntity returns null anyway, why the extra
+		 * block check ?
+		 */
 		if (worldObj != null && worldObj.blockExists(x, y, z)) { return worldObj.getBlockTileEntity(x, y, z); }
 		return null;
 	}
@@ -124,16 +127,18 @@ public abstract class OpenTileEntity extends TileEntity {
 
 	public OpenBlock getBlock() {
 		/* Hey look what I found */
-		if(this.blockType instanceof OpenBlock) { /* This has broken other mods in the past, not this one! */ 
+		if (this.blockType instanceof OpenBlock) { /*
+													 * This has broken other
+													 * mods in the past, not
+													 * this one!
+													 */
 			return (OpenBlock)this.blockType;
 		}
 		return OpenBlock.getOpenBlock(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	public int getMetadata() {
-		if (blockMetadata > -1) {
-			return blockMetadata;
-		}
+		if (blockMetadata > -1) { return blockMetadata; }
 		return this.blockMetadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
@@ -149,7 +154,6 @@ public abstract class OpenTileEntity extends TileEntity {
 		return isUsedForClientInventoryRendering;
 	}
 
-	
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
@@ -169,32 +173,28 @@ public abstract class OpenTileEntity extends TileEntity {
 	public void sendEventToPlayers() {
 		sendEventToPlayers(null);
 	}
-	
+
 	public void sendEventToPlayers(NBTBase data) {
-		if (worldObj.isRemote || !(worldObj instanceof WorldServer)) {
-			return;
-		}
+		if (worldObj.isRemote || !(worldObj instanceof WorldServer)) { return; }
 		TileEntityMessageEventPacket event = new TileEntityMessageEventPacket(this);
 		event.setData(data);
 		for (EntityPlayer player : PacketHandler.getPlayersWatchingBlock((WorldServer)worldObj, xCoord, zCoord)) {
 			event.sendToPlayer((Player)player);
 		}
 	}
-	
+
 	public void sendEventToServer() {
 		sendEventToServer(null);
 	}
-	
+
 	public void sendEventToServer(NBTBase data) {
-		if (!worldObj.isRemote) {
-			return;
-		}
+		if (!worldObj.isRemote) { return; }
 		TileEntityMessageEventPacket event = new TileEntityMessageEventPacket(this);
 		event.setData(data);
 		event.sendToServer();
 	}
-	
+
 	public void onEvent(TileEntityMessageEventPacket event) {
-		
+
 	}
 }

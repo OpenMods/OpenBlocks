@@ -20,11 +20,10 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.api.*;
 import openblocks.common.item.ItemOpenBlock;
-import openblocks.common.tileentity.SyncedTileEntity;
 import openblocks.common.tileentity.OpenTileEntity;
+import openblocks.common.tileentity.SyncedTileEntity;
 import openblocks.sync.SyncableDirection;
 import openblocks.utils.BlockUtils;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -215,6 +214,7 @@ public abstract class OpenBlock extends Block {
 		}
 	}
 
+	@Override
 	public boolean hasTileEntity(int metadata) {
 		return teClass != null;
 	}
@@ -273,9 +273,7 @@ public abstract class OpenBlock extends Block {
 	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
 		super.onBlockEventReceived(world, x, y, z, eventId, eventParam);
 		TileEntity te = getTileEntity(world, x, y, z, TileEntity.class);
-		if (te != null) {
-			return te.receiveClientEvent(eventId, eventParam);
-		}
+		if (te != null) { return te.receiveClientEvent(eventId, eventParam); }
 		return false;
 	}
 
@@ -407,9 +405,10 @@ public abstract class OpenBlock extends Block {
 	}
 
 	/**
-	 * This method should be overriden if needed. We're getting the texture for the UNROTATED block
-	 * for a particular side (direction). Feel free to look up data in the TileEntity to grab
-	 * additional information here
+	 * This method should be overriden if needed. We're getting the texture for
+	 * the UNROTATED block for a particular side (direction). Feel free to look
+	 * up data in the TileEntity to grab additional information here
+	 * 
 	 * @param direction
 	 * @param world
 	 * @param x
@@ -434,11 +433,10 @@ public abstract class OpenBlock extends Block {
 		return getUnrotatedTexture(direction, world, x, y, z);
 	}
 
-	@SideOnly(Side.CLIENT)
 	/***
-	 * I'm sure there's a better way of doing this, but the idea is that we rotate the
-	 * block based on the metadata (rotation), so when we try to get a texture we're
-	 * referencing the side when 'unrotated'
+	 * I'm sure there's a better way of doing this, but the idea is that we
+	 * rotate the block based on the metadata (rotation), so when we try to get
+	 * a texture we're referencing the side when 'unrotated'
 	 */
 	public ForgeDirection rotateSideByMetadata(int side, int metadata) {
 		ForgeDirection rotation = ForgeDirection.getOrientation(metadata);
@@ -483,7 +481,7 @@ public abstract class OpenBlock extends Block {
 						break;
 
 				}
-		};
+		}
 		return dir;
 	}
 
@@ -513,8 +511,5 @@ public abstract class OpenBlock extends Block {
 		return true;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		
-	}
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<ItemStack> list, boolean par4) {}
 }

@@ -21,11 +21,10 @@ public class BlockCanvas extends OpenBlock {
 		super(Config.blockCanvasId, Material.ground);
 		setupBlock(this, "canvas", TileEntityCanvas.class);
 	}
-	
+
 	public BlockCanvas(int id, Material material) {
 		super(id, material);
-    }
-	
+	}
 
 	@Override
 	public void registerIcons(IconRegister registry) {
@@ -54,6 +53,7 @@ public class BlockCanvas extends OpenBlock {
 		return side == renderSide && super.shouldSideBeRendered(world, x, y, z, side);
 	}
 
+	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 		TileEntityCanvas tile = this.getTileEntity(world, x, y, z, TileEntityCanvas.class);
 		if (tile != null) { return tile.getColorForRender(renderSide, layer); }
@@ -69,12 +69,12 @@ public class BlockCanvas extends OpenBlock {
 	}
 
 	public static void replaceBlock(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y,z);
+		int id = world.getBlockId(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		Material material = world.getBlockMaterial(x, y, z);
-		if  (material == Material.glass) {
+		if (material == Material.glass) {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.canvasGlass.blockID);
-		}else {
+		} else {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.canvas.blockID);
 		}
 		TileEntityCanvas tile = (TileEntityCanvas)world.getBlockTileEntity(x, y, z);

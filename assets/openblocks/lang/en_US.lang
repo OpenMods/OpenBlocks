@@ -60,6 +60,7 @@ tile.openblocks.itemDropper.name=Item Dropper
 tile.openblocks.canvas.name=Canvas
 tile.openblocks.paintmixer.name=Paint Mixer
 tile.openblocks.paintcan.name=Paint Can
+tile.openblocks.projector.name=Height Map Projector
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
@@ -83,5 +84,10 @@ item.openblocks.xpbucket.name=XP Bucket
 item.openblocks.sleepingbag.name=Sleeping Bag
 item.openblocks.paintbrush.name=Paint Brush
 item.openblocks.stencil.name=Stencil
+item.openblocks.height_map.name=Height Map
+item.openblocks.empty_map.name=Empty Map
+item.openblocks.map_controller.name=Map Controller Module
+item.openblocks.map_memory.name=Map Memory Module
+item.openblocks.cartographer.name=Cartographer
 
 itemGroup.tabOpenBlocks=OpenBlocks

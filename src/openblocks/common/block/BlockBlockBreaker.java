@@ -51,6 +51,7 @@ public class BlockBlockBreaker extends OpenBlock {
 		setDefaultTexture(Icons.side);
 	}
 
+	@Override
 	public Icon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
 		if (direction.equals(ForgeDirection.UP)) {
 			TileEntityBlockBreaker tile = getTileEntity(world, x, y, z, TileEntityBlockBreaker.class);

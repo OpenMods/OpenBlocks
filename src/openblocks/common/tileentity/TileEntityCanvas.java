@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -13,18 +12,15 @@ import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.api.IAwareTile;
 import openblocks.common.item.ItemPaintBrush;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableBlockLayers;
+import openblocks.sync.*;
 import openblocks.sync.SyncableBlockLayers.Layer;
-import openblocks.sync.SyncableInt;
-import openblocks.sync.SyncableIntArray;
 import openblocks.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 
 	/* Used for painting other blocks */
 	public SyncableInt paintedBlockId, paintedBlockMeta;
-	
+
 	private SyncableIntArray baseColors;
 
 	public SyncableBlockLayers stencilsUp;
@@ -38,7 +34,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 
 	@Override
 	public void initialize() {}
-	
+
 	public void setupForItemRenderer() {
 		createSyncedFields();
 	}
@@ -46,7 +42,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 	public SyncableIntArray getBaseColors() {
 		return baseColors;
 	}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		stencilsUp = new SyncableBlockLayers();
@@ -68,26 +64,20 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
+	public void onSynced(Set<ISyncableObject> changes) {
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public Layer getLayerForSide(int renderSide, int layerId) {
 		SyncableBlockLayers layers = getLayersForSide(renderSide);
-		if (layers != null) {
-			return layers.getLayer(layerId);
-		}
+		if (layers != null) { return layers.getLayer(layerId); }
 		return null;
 	}
-	
+
 	public int getColorForRender(int renderSide, int layerId) {
-		if (layerId == -1) {
-			return baseColors.getValue(renderSide);
-		}
+		if (layerId == -1) { return baseColors.getValue(renderSide); }
 		Layer layer = getLayerForSide(renderSide, layerId);
-		if (layer != null) {
-			return layer.getColorForRender();
-		}
+		if (layer != null) { return layer.getColorForRender(); }
 		return 0xCCCCCC;
 	}
 
@@ -96,36 +86,34 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 			Layer layer = getLayerForSide(renderSide, layerId);
 			if (layer != null) {
 				Stencil stencil = layer.getStencil();
-				if (stencil != null) {
-					return layer.hasStencilCover() ? stencil.getCoverBlockIcon() : stencil.getBlockIcon();
-				}
+				if (stencil != null) { return layer.hasStencilCover()? stencil.getCoverBlockIcon() : stencil.getBlockIcon(); }
 			}
 		}
 		return getBaseTexture(renderSide);
 	}
 
 	private Icon getBaseTexture(int side) {
-		if(paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.baseIcon;
+		if (paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.baseIcon;
 		Block block = Block.blocksList[paintedBlockId.getValue()];
-		if(block == null) return OpenBlocks.Blocks.canvas.baseIcon;
+		if (block == null) return OpenBlocks.Blocks.canvas.baseIcon;
 		return block.getIcon(side, paintedBlockMeta.getValue());
 	}
-	
+
 	private boolean isBlockUnpainted() {
-		for(int i = 0; i < allSides.length; i++) {
-			if(!allSides[i].isEmpty() || baseColors.getValue(i) != 0xFFFFFF) return false;
+		for (int i = 0; i < allSides.length; i++) {
+			if (!allSides[i].isEmpty() || baseColors.getValue(i) != 0xFFFFFF) return false;
 		}
 		return true;
 	}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-	
+
 		ForgeDirection dropSide = ForgeDirection.getOrientation(side);
 		double dropX = xCoord + dropSide.offsetX;
 		double dropY = yCoord + dropSide.offsetY;
 		double dropZ = zCoord + dropSide.offsetZ;
-		
+
 		// get the layers on the side activated
 		SyncableBlockLayers layers = getLayersForSide(side);
 		ItemStack heldItem = player.getHeldItem();
@@ -147,29 +135,30 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 				}
 				// Nope.jpg
 				// worldObj.playSoundAtEntity(player, "mob.slime.big", 1F, 1F);
-				
+
 				worldObj.playSoundAtEntity(player, "mob.slime.small", 0.1F, 0.8F);
-				
+
 				// damage paint brush
 				heldItem.damageItem(1, player);
 				if (!worldObj.isRemote) {
 					sync();
 				}
 				return false;
-			} else if(item.equals(OpenBlocks.Items.squeegee)) {
+			} else if (item.equals(OpenBlocks.Items.squeegee)) {
 				// Remove layers and then base color.
-				// Upon the removal of ALL layers, reset the block to not a canvas to spare
+				// Upon the removal of ALL layers, reset the block to not a
+				// canvas to spare
 				// The TE ticks and custom rendering
-				
+
 				// Select the layers we are going to clean.
 				if (!worldObj.isRemote && !isBlockUnpainted()) {
-					SyncableBlockLayers[] cleanLayers = player.isSneaking() ? allSides
+					SyncableBlockLayers[] cleanLayers = player.isSneaking()? allSides
 							: new SyncableBlockLayers[] { layers };
 					for (SyncableBlockLayers cleaningLayer : cleanLayers) {
 						// If there is a stencil on top, pop it off.
 						if (cleaningLayer.hasStencilCover()) {
 							ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, cleaningLayer.getTopStencil().ordinal());
-							BlockUtils.dropItemStackInWorld(worldObj, dropX,dropY, dropZ, dropStack);
+							BlockUtils.dropItemStackInWorld(worldObj, dropX, dropY, dropZ, dropStack);
 						}
 						cleaningLayer.clear();
 					}
@@ -243,12 +232,10 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-	}
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-	}
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public void onBlockBroken() {
@@ -264,6 +251,5 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onBlockAdded() {
-	}
+	public void onBlockAdded() {}
 }

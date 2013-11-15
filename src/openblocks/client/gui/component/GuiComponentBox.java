@@ -23,10 +23,12 @@ public class GuiComponentBox extends BaseComponent {
 		this.color = color;
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
 
+	@Override
 	public int getHeight() {
 		return height;
 	}

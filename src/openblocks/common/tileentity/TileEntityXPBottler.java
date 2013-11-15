@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -53,7 +54,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 	public TileEntityXPBottler() {
 		setInventory(new GenericInventory("xpbottler", true, 2));
 	}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		progress = new SyncableProgress(PROGRESS_TICKS);
@@ -249,7 +250,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public int getSizeInventory() {
@@ -297,12 +298,10 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

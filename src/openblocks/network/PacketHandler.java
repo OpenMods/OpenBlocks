@@ -39,7 +39,6 @@ public class PacketHandler implements IPacketHandler {
 				EventPacket event = EventPacket.deserializeEvent(packet);
 				event.manager = manager;
 				event.player = player;
-				Log.info("Packet: %s, player: %s", event.getClass(), player);
 				MinecraftForge.EVENT_BUS.post(event);
 			}
 		} catch (Exception e) {

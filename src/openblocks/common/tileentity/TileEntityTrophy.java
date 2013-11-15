@@ -1,6 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,9 +22,9 @@ public class TileEntityTrophy extends SyncedTileEntity implements IAwareTileLite
 	public static Trophy debugTrophy = Trophy.Wolf;
 	private int sinceLastActivate = 0;
 	private SyncableInt trophyIndex;
-	
+
 	public TileEntityTrophy() {}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		trophyIndex = new SyncableInt();
@@ -32,12 +32,10 @@ public class TileEntityTrophy extends SyncedTileEntity implements IAwareTileLite
 
 	public Trophy getTrophy() {
 		Trophy t = Trophy.values()[trophyIndex.getValue()];
-		if (t != null) {
-			return t;
-		}
+		if (t != null) { return t; }
 		return t;
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -116,8 +114,6 @@ public class TileEntityTrophy extends SyncedTileEntity implements IAwareTileLite
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-		
-	}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 }

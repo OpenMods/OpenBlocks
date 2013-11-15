@@ -90,7 +90,7 @@ public class ItemOpenBlock extends ItemBlock {
 		return true;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		Block block = Block.blocksList[getBlockID()];

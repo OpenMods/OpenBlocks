@@ -24,7 +24,7 @@ public class GuiComponentRect extends BaseComponent {
 	public int getHeight() {
 		return height;
 	}
-	
+
 	public int getColorForRender() {
 		return color;
 	}

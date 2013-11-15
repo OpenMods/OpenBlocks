@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
@@ -22,7 +23,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	private boolean previousBreedStatus = false;
 
 	public TileEntityVillageHighlighter() {}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		villageData = new SyncableIntArray();
@@ -71,7 +72,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -80,7 +81,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	}
 
 	public boolean isPowered() {
-		if(worldObj == null) return false;
+		if (worldObj == null) return false;
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 

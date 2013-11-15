@@ -1,12 +1,11 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-
 import openblocks.OpenBlocks;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IPlaceAwareTile;
@@ -18,11 +17,9 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 
 	private SyncableInt color;
 	private SyncableInt amount;
-	
-	@Override
-	public void onSynced(List<ISyncableObject> changes) {
 
-	}
+	@Override
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	protected void createSyncedFields() {

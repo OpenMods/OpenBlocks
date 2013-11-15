@@ -30,12 +30,11 @@ public class TileEntityTank extends SyncedTileEntity implements
 	private double flowTimer = Math.random() * 100;
 
 	private int previousFluidId = 0;
-	
+
 	@Override
 	protected void createSyncedFields() {
 		tank = new SyncableTank(getTankCapacity());
 	}
-
 
 	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
 	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
@@ -282,7 +281,7 @@ public class TileEntityTank extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
+	public void onSynced(Set<ISyncableObject> changes) {
 		int newFluidId = tank.getFluid() == null? 0 : tank.getFluid().fluidID;
 		if (newFluidId != previousFluidId) {
 			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);

@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,9 +18,8 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 	private SyncableFloat angle;
 
-	public TileEntityFan() {
-	}
-	
+	public TileEntityFan() {}
+
 	@Override
 	protected void createSyncedFields() {
 		angle = new SyncableFloat(0.0f);
@@ -104,7 +104,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	public float getAngle() {
 		return angle.getValue();

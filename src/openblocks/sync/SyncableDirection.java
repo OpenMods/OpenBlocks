@@ -10,7 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
 public class SyncableDirection extends SyncableObjectBase {
 
 	private ForgeDirection value = ForgeDirection.UNKNOWN;
-	
+
 	public SyncableDirection(ForgeDirection dir) {
 		super();
 		setValue(dir);

@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -103,7 +104,7 @@ public class TileEntityGrave extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {

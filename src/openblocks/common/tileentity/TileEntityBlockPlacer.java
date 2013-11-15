@@ -8,9 +8,9 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.INeighbourAwareTile;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
+import openblocks.common.api.INeighbourAwareTile;
 import openblocks.common.container.ContainerBlockPlacer;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
@@ -25,7 +25,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 	public TileEntityBlockPlacer() {
 		setInventory(new GenericInventory("blockPlacer", false, BUFFER_SIZE));
 	}
-	
+
 	public void setRedstoneSignal(boolean redstoneSignal) {
 		if (redstoneSignal != _redstoneSignal) {
 			_redstoneSignal = redstoneSignal;
@@ -55,7 +55,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 		}
 	}
 
-
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
@@ -71,7 +70,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}
 	}
-	
+
 	@Override
 	public Object getServerGui(EntityPlayer player) {
 		return new ContainerBlockPlacer(player.inventory, this);
@@ -81,7 +80,6 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiBlockPlacer(new ContainerBlockPlacer(player.inventory, this));
 	}
-	
 
 	@Override
 	public int getSizeInventory() {
@@ -129,12 +127,10 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

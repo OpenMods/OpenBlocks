@@ -116,10 +116,10 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		tabs.addComponent(tabXP);
 
 		// append to main
-		panel.addComponent(spriteHammer);
-		panel.addComponent(spritePlus);
-		panel.addComponent(tabs);
-		panel.addComponent(xpLevel);
+		root.addComponent(spriteHammer);
+		root.addComponent(spritePlus);
+		root.addComponent(tabs);
+		root.addComponent(xpLevel);
 
 	}
 

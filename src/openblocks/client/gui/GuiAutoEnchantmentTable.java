@@ -95,9 +95,9 @@ public class GuiAutoEnchantmentTable extends
 		tabs.addComponent(tabOutput);
 		tabs.addComponent(tabXP);
 
-		panel.addComponent(tabs);
-		panel.addComponent(xpLevel);
-		panel.addComponent(sliderLevel);
+		root.addComponent(tabs);
+		root.addComponent(xpLevel);
+		root.addComponent(sliderLevel);
 	}
 
 }
