@@ -245,5 +245,9 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		layers.clear();
 		markDirty();
 	}
+	
+	public boolean isEmpty() {
+		return layers.size() == 0; 
+	}
 
 }

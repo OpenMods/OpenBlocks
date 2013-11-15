@@ -1,6 +1,7 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +19,7 @@ import openblocks.sync.SyncableBlockLayers.Layer;
 import openblocks.sync.SyncableInt;
 import openblocks.sync.SyncableIntArray;
 import openblocks.utils.BlockUtils;
+import scala.collection.immutable.ListSet;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 
@@ -109,6 +111,13 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 		if(block == null) return OpenBlocks.Blocks.canvas.baseIcon;
 		return block.getIcon(side, paintedBlockMeta.getValue());
 	}
+	
+	private boolean isBlockUnpainted() {
+		for(int i = 0; i < allSides.length; i++) {
+			if(!allSides[i].isEmpty() || baseColors.getValue(i) != 0xFFFFFF) return false;
+		}
+		return true;
+	}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -143,7 +152,42 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 					sync();
 				}
 				return false;
-				// if it's a stencil that we're holding
+			} else if(item.equals(OpenBlocks.Items.squeegee)) {
+				// Remove layers and then base color.
+				// Upon the removal of ALL layers, reset the block to not a canvas to spare
+				// The TE ticks and custom rendering
+				
+				// Select the layers we are going to clean.
+				if (!worldObj.isRemote) {
+					SyncableBlockLayers[] cleanLayers = player.isSneaking() ? allSides
+							: new SyncableBlockLayers[] { layers };
+					for (SyncableBlockLayers cleaningLayer : cleanLayers) {
+						// If there is a stencil on top, pop it off.
+						if (cleaningLayer.hasStencilCover()) {
+							ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, cleaningLayer.getTopStencil().ordinal());
+							BlockUtils.dropItemStackInWorld(worldObj, dropX,dropY, dropZ, dropStack);
+						}
+						cleaningLayer.clear();
+					}
+					if (player.isSneaking()) {
+						for (int i = 0; i < baseColors.size(); i++) {
+							baseColors.setValue(i, 0xFFFFFF);
+						}
+					} else {
+						baseColors.setValue(side, 0xFFFFFF);
+					}
+					if (isBlockUnpainted() && paintedBlockId.getValue() != 0) {
+						/*
+						 * Dispatch chunk update, but not block update. Since
+						 * the change should be almost invisible
+						 */
+						worldObj.setBlock(xCoord, yCoord, zCoord,
+								paintedBlockId.getValue(),
+								paintedBlockMeta.getValue(), 2);
+					}
+					sync();
+				}
+				return true;
 			} else if (item.equals(OpenBlocks.Items.stencil)) {
 				boolean currentStencilMatchesItem = false;
 				// get the stencil
