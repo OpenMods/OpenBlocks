@@ -5,18 +5,18 @@ import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import openblocks.client.events.PlayerJumpEvent;
-import openblocks.client.events.PlayerSneakEvent;
 import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.events.PlayerMovementEvent;
+import openblocks.common.tileentity.OpenTileEntity;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class ClientTickHandler implements ITickHandler {
 
 	private static int ticks = 0;
-	
+
 	private boolean wasJumping = false;
 	private boolean wasSneaking = false;
 
@@ -54,17 +54,31 @@ public class ClientTickHandler implements ITickHandler {
 		EntityHangGlider.updateGliders(world);
 	}
 
+	private static OpenTileEntity getTileUnderPlayer(EntityPlayer player) {
+		World world = Minecraft.getMinecraft().theWorld;
+		if (world != null && player != null) {
+			int x = (int)player.posX;
+			int y = (int)(player.boundingBox.minY) - 1;
+			int z = (int)player.posZ;
+
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if (te instanceof OpenTileEntity) return (OpenTileEntity)te;
+		}
+		return null;
+
+	}
+
 	public void clientTick() {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
 			SoundEventsManager.instance.tickUpdate();
 		}
 		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 		if (player != null) {
-			if (player.movementInput.jump && !wasJumping) {
-				MinecraftForge.EVENT_BUS.post(new PlayerJumpEvent());
-			}
-			if (player.movementInput.sneak && !wasSneaking) {
-				MinecraftForge.EVENT_BUS.post(new PlayerSneakEvent());
+			OpenTileEntity target = getTileUnderPlayer(player);
+			if (target != null) {
+				if (player.movementInput.jump && !wasJumping) new PlayerMovementEvent(target, PlayerMovementEvent.Type.JUMP).sendToServer();
+
+				if (player.movementInput.sneak && !wasSneaking) new PlayerMovementEvent(target, PlayerMovementEvent.Type.SNEAK).sendToServer();
 			}
 			wasJumping = player.movementInput.jump;
 			wasSneaking = player.movementInput.sneak;

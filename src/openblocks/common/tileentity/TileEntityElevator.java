@@ -1,26 +1,17 @@
 package openblocks.common.tileentity;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.network.TileEntityMessageEventPacket;
+import openblocks.common.events.PlayerMovementEvent;
+import openblocks.common.events.TileEntityMessageEventPacket;
 
 import com.google.common.base.Preconditions;
-
-import cpw.mods.fml.common.network.Player;
 
 public class TileEntityElevator extends OpenTileEntity {
 
@@ -86,11 +77,7 @@ public class TileEntityElevator extends OpenTileEntity {
 	@Override
 	protected void initialize() {}
 
-	public void onClientJump() {
-		sendEventToServer(new NBTTagByte("type", (byte)1));
-	}
-
-	public void onServerJump(EntityPlayer player) {
+	public void onJump(EntityPlayer player) {
 		int level = findLevel(ForgeDirection.UP);
 		if (level != 0) {
 			player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
@@ -98,7 +85,7 @@ public class TileEntityElevator extends OpenTileEntity {
 		}
 	}
 
-	public void onServerSneak(EntityPlayer player) {
+	public void onSneak(EntityPlayer player) {
 		int level = findLevel(ForgeDirection.DOWN);
 		if (level != 0) {
 			player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
@@ -106,16 +93,17 @@ public class TileEntityElevator extends OpenTileEntity {
 		}
 	}
 
-	public void onClientSneak() {
-		sendEventToServer(new NBTTagByte("type", (byte)0));
-	}
-
+	@Override
 	public void onEvent(TileEntityMessageEventPacket event) {
-		NBTTagByte typeData = (NBTTagByte)event.data;
-		if (typeData.data == 1) {
-			onServerJump((EntityPlayer)event.player);
-		} else {
-			onServerSneak((EntityPlayer)event.player);
+		if (event instanceof PlayerMovementEvent) {
+			switch (((PlayerMovementEvent)event).type) {
+				case JUMP:
+					onJump((EntityPlayer)event.player);
+					break;
+				case SNEAK:
+					onSneak((EntityPlayer)event.player);
+					break;
+			}
 		}
 	}
 }

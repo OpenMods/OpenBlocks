@@ -38,8 +38,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy implements IProxy {
 
-	public ClientProxy() {
-	}
+	public ClientProxy() {}
 
 	@ForgeSubscribe
 	public void textureHook(TextureStitchEvent.Post event) {
@@ -55,7 +54,6 @@ public class ClientProxy implements IProxy {
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new ElevatorEventHandler());
 	}
 
 	@Override
