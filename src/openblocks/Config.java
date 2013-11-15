@@ -695,8 +695,10 @@ public class Config {
 				if (annotation != null) {
 					try {
 						Item item = (Item)f.get(null);
-						String name = "openblocks." + annotation.name();
-						GameRegistry.registerItem(item, name);
+						if (item != null) {
+							String name = "openblocks." + annotation.name();
+							GameRegistry.registerItem(item, name);
+						}
 					} catch (Exception e) {
 						throw Throwables.propagate(e);
 					}
