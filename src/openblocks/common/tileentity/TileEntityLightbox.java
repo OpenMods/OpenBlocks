@@ -36,7 +36,7 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 
 	@Override
 	protected void createSyncedFields() {}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void updateEntity() {
@@ -160,7 +160,6 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 		readFromNBT(pkt.data);
 	}
 
-
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
@@ -178,7 +177,7 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -15,7 +15,7 @@ public class SimpleBlockTextureHelper {
 	private Icon bottom;
 
 	private HashMap<ForgeDirection, Icon[]> orientations;
-	
+
 	public Icon setTop(Icon icon) {
 		return top = icon;
 	}
@@ -49,10 +49,10 @@ public class SimpleBlockTextureHelper {
 		orientations.put(ForgeDirection.SOUTH, new Icon[] { side_down, side_down, bottom, top, side_right, side_left });
 		orientations.put(ForgeDirection.NORTH, new Icon[] { side_up, side_up, top, bottom, side_left, side_right });
 	}
-	
+
 	public Icon getIconForDirection(ForgeDirection direction, ForgeDirection side) {
 		if (orientations == null) {
-			setup();			
+			setup();
 		}
 		return orientations.get(direction)[side.ordinal()];
 	}

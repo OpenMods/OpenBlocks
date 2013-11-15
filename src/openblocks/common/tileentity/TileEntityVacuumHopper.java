@@ -39,7 +39,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 	public TileEntityVacuumHopper() {
 		setInventory(new GenericInventory("vacuumhopper", true, 10));
 	}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
@@ -268,12 +268,10 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

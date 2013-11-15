@@ -20,11 +20,10 @@ import com.google.common.collect.Sets;
 public abstract class SyncedTileEntity extends OpenTileEntity implements
 		ISyncHandler {
 
-	
 	protected SyncMapTile<SyncedTileEntity> syncMap;
-	
+
 	private static final Map<Class<? extends SyncedTileEntity>, List<Field>> syncedFields = Maps.newIdentityHashMap();
-	
+
 	private static final Comparator<Field> FIELD_NAME_COMPARATOR = new Comparator<Field>() {
 		@Override
 		public int compare(Field o1, Field o2) {
@@ -32,18 +31,18 @@ public abstract class SyncedTileEntity extends OpenTileEntity implements
 			return o1.getName().compareTo(o2.getName());
 		}
 	};
-	
+
 	public SyncedTileEntity() {
 		syncMap = new SyncMapTile<SyncedTileEntity>(this);
 		createSyncedFields();
 		registerFields();
 	}
-	
+
 	protected abstract void createSyncedFields();
-	
+
 	private List<Field> getSyncedFields() {
 		List<Field> result = syncedFields.get(getClass());
-		
+
 		if (result == null) {
 			Set<Field> fields = Sets.newTreeSet(FIELD_NAME_COMPARATOR);
 			for (Field field : getClass().getDeclaredFields()) {
@@ -55,10 +54,10 @@ public abstract class SyncedTileEntity extends OpenTileEntity implements
 			result = ImmutableList.copyOf(fields);
 			syncedFields.put(getClass(), result);
 		}
-		
+
 		return result;
 	}
-	
+
 	private void registerFields() {
 		for (Field field : getSyncedFields()) {
 			try {
@@ -68,7 +67,7 @@ public abstract class SyncedTileEntity extends OpenTileEntity implements
 			}
 		}
 	}
-	
+
 	public void addSyncedObject(String name, ISyncableObject obj) {
 		syncMap.put(name, obj);
 	}
@@ -78,9 +77,9 @@ public abstract class SyncedTileEntity extends OpenTileEntity implements
 			onSync();
 		}
 	}
-	
+
 	public void onSync() {
-		
+
 	}
 
 	@Override
@@ -100,18 +99,16 @@ public abstract class SyncedTileEntity extends OpenTileEntity implements
 
 	public ForgeDirection getSecondaryRotation() {
 		ISyncableObject rot = syncMap.get("_rotation2");
-		if (rot != null) {
-			return ((SyncableDirection) rot).getValue();
-		}
+		if (rot != null) { return ((SyncableDirection)rot).getValue(); }
 		return null;
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		syncMap.writeToNBT(tag);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);

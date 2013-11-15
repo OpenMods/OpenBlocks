@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-
 import openblocks.OpenBlocks;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IPlaceAwareTile;
@@ -18,7 +17,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 
 	private SyncableInt color;
 	private SyncableInt amount;
-	
+
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 

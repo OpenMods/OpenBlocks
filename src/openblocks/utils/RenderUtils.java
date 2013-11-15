@@ -13,15 +13,16 @@ public class RenderUtils {
 		GL11.glRotatef(-rve.rotationYaw, 0, 1, 0);
 		GL11.glRotatef(rve.rotationPitch, 1, 0, 0);
 	}
-	
+
 	/**
 	 * Please! For the love of sanity. Do not store this instance ANYWHERE!
 	 * If you set it to a TE or Entity, Please remove it after you're done!
 	 * THANK YOU!
+	 * 
 	 * @return Returns a world for rendering with
 	 */
 	public static World getRenderWorld() {
-		if(Minecraft.getMinecraft() != null) return Minecraft.getMinecraft().theWorld;
+		if (Minecraft.getMinecraft() != null) return Minecraft.getMinecraft().theWorld;
 		return null;
 	}
 

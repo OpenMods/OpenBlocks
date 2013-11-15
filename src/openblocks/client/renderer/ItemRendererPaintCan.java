@@ -3,26 +3,25 @@ package openblocks.client.renderer;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockPaintCan;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.common.ForgeDirection;
-
 public class ItemRendererPaintCan implements IItemRenderer {
 
 	private Set<ForgeDirection> secondPassEnabledSides;
-	
+
 	public ItemRendererPaintCan() {
 		secondPassEnabledSides = new HashSet<ForgeDirection>();
 		secondPassEnabledSides.add(ForgeDirection.UP);
 	}
-	
+
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 		return true;

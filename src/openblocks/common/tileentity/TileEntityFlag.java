@@ -24,7 +24,7 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 	private SyncableInt colorIndex;
 
 	public TileEntityFlag() {}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		angle = new SyncableFloat(0.0f);

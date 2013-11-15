@@ -1,17 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
 import java.util.EnumSet;
-import java.util.Set;
-
-import openblocks.OpenBlocks;
-import openblocks.client.model.ModelPaintMixer;
-import openblocks.client.renderer.BlockRenderingHandler;
-import openblocks.common.block.BlockPaintCan;
-import openblocks.common.tileentity.TileEntityPaintMixer;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.ColorUtils;
-
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -19,6 +8,14 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
+import openblocks.client.model.ModelPaintMixer;
+import openblocks.client.renderer.BlockRenderingHandler;
+import openblocks.common.tileentity.TileEntityPaintMixer;
+import openblocks.utils.BlockUtils;
+import openblocks.utils.ColorUtils;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 
@@ -28,7 +25,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 	private static final ColorUtils.RGB start = new ColorUtils.RGB(), end = new ColorUtils.RGB();
 	private static final EnumSet<ForgeDirection> TOP_FACE = EnumSet.of(ForgeDirection.UP);
 	private static final EnumSet<ForgeDirection> SIDES = EnumSet.complementOf(TOP_FACE);
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityPaintMixer mixer = (TileEntityPaintMixer)tileentity;
@@ -53,8 +50,10 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 				GL11.glTranslated(0, Math.random() * 0.2, 0);
 			}
 			int secondPass = mixer.getCanColor();
-			if(mixer.isEnabled()) secondPass = calculateColorFade(0xFFFFFF, secondPass, mixer.getProgress().getPercent());
-			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES); // Render first pass
+			if (mixer.isEnabled()) secondPass = calculateColorFade(0xFFFFFF, secondPass, mixer.getProgress().getPercent());
+			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES); // Render
+																																	// first
+																																	// pass
 			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, secondPass, TOP_FACE);
 			GL11.glPopMatrix();
 		}
@@ -67,7 +66,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 	private int calculateColorFade(int a, int b, double magnitude) {
 		start.setColor(a);
 		end.setColor(b);
-		return start.interpolate(end, magnitude).getColor();	
+		return start.interpolate(end, magnitude).getColor();
 	}
 
 }

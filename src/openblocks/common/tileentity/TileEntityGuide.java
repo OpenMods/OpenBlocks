@@ -32,7 +32,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable,
 	protected SyncableInt mode;
 
 	public TileEntityGuide() {}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		width = new SyncableInt(8);

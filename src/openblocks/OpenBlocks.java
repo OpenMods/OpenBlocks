@@ -139,7 +139,7 @@ public class OpenBlocks {
 		if (configFile.hasChanged()) {
 			configFile.save();
 		}
-		
+
 		OpenBlocks.syncableManager = new SyncableManager();
 
 		Config.register();
@@ -148,9 +148,9 @@ public class OpenBlocks {
 		if (Config.enableGraves) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
-		
+
 		MinecraftForge.EVENT_BUS.register(new TileEntityEventHandler());
-		
+
 		if (Config.itemLuggageId > 0) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
 		}

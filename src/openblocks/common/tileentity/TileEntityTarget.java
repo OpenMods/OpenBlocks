@@ -2,9 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -16,17 +13,19 @@ import openblocks.Config;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableBoolean;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityTarget extends SyncedTileEntity implements
 		ISurfaceAttachment {
 
 	private int strength = 0;
 	private int tickCounter = -1;
-	
+
 	private SyncableBoolean active;
-	
+
 	public TileEntityTarget() {}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		active = new SyncableBoolean();
@@ -109,6 +108,6 @@ public class TileEntityTarget extends SyncedTileEntity implements
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

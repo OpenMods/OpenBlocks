@@ -71,8 +71,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		slotSides.addMapping(Slots.modifier, modifierSides);
 		slotSides.addMapping(Slots.output, outputSides);
 	}
-	
-	
 
 	@Override
 	protected void createSyncedFields() {
@@ -83,8 +81,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 		automaticSlots = new SyncableFlags();
 	}
-
-
 
 	@Override
 	public void updateEntity() {
@@ -510,7 +506,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
 		return slotSides.canExtractItem(slot, side);
 	}
-	
+
 	@Override
 	public void onSynced(List<ISyncableObject> changes) {}
 
@@ -564,11 +560,9 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 }

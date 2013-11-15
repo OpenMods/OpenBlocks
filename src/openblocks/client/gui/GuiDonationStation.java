@@ -37,6 +37,7 @@ public class GuiDonationStation extends
 				.addListener(this));
 	}
 
+	@Override
 	public void preRender(float mouseX, float mouseY) {
 		super.preRender(mouseX, mouseY);
 		String donateUrl = getContainer().getOwner().getDonateUrl();
@@ -100,7 +101,7 @@ public class GuiDonationStation extends
 	@Override
 	public void componentKeyTyped(BaseComponent component, char par1, int par2) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

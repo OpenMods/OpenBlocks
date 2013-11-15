@@ -91,14 +91,14 @@ public class ClientProxy implements IProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, new TileEntityDonationStationRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOreCrusher.class, new TileEntityOreCrusherRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
-		
+
 		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 
 		if (OpenBlocks.Items.luggage != null) {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
 			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
 		}
-		
+
 		if (OpenBlocks.Blocks.paintCan != null) {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.paintCan.blockID, new ItemRendererPaintCan());
 		}
@@ -112,7 +112,7 @@ public class ClientProxy implements IProxy {
 
 			attachPlayerRenderer();
 		}
-		
+
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 		}

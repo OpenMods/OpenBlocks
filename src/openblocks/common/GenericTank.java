@@ -28,7 +28,7 @@ public class GenericTank extends FluidTank {
 		HashSet<ForgeDirection> checkSides = new HashSet<ForgeDirection>();
 		if (sides == null) {
 			checkSides.addAll(Arrays.asList(ForgeDirection.VALID_DIRECTIONS));
-		}else {
+		} else {
 			for (Integer s : sides.getActiveSlots()) {
 				checkSides.add(ForgeDirection.getOrientation(s));
 			}
@@ -98,7 +98,7 @@ public class GenericTank extends FluidTank {
 		}
 
 	}
-	
+
 	public void autoFillFromSides(int amountPerTick, TileEntity currentTile) {
 		autoFillFromSides(amountPerTick, currentTile, null);
 	}

@@ -137,7 +137,7 @@ public class SyncableFlags extends SyncableObjectBase {
 			if (hasSlotChanged(i)) {
 				if (get(i)) {
 					timeLastSet[i] = time;
-				}else {
+				} else {
 					timeLastUnset[i] = time;
 				}
 			}

@@ -12,7 +12,7 @@ public class FixedRenderBlocks extends RenderBlocks {
 	public void renderFaceZNeg(Block par1Block, double par2, double par4, double par6, Icon par8Icon) {
 		Tessellator tessellator = Tessellator.instance;
 
-		if (this.hasOverrideBlockTexture()) {
+		if (hasOverrideBlockTexture()) {
 			par8Icon = this.overrideBlockTexture;
 		}
 
@@ -103,10 +103,11 @@ public class FixedRenderBlocks extends RenderBlocks {
 		}
 	}
 
+	@Override
 	public void renderFaceXPos(Block par1Block, double par2, double par4, double par6, Icon par8Icon) {
 		Tessellator tessellator = Tessellator.instance;
 
-		if (this.hasOverrideBlockTexture()) {
+		if (hasOverrideBlockTexture()) {
 			par8Icon = this.overrideBlockTexture;
 		}
 

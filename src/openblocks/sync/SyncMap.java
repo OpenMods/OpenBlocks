@@ -109,12 +109,10 @@ public abstract class SyncMap<H extends ISyncHandler> {
 	}
 
 	public ISyncableObject get(String name) {
-		if (nameMap.containsKey(name)) {
-			return objects[nameMap.get(name)];
-		}
+		if (nameMap.containsKey(name)) { return objects[nameMap.get(name)]; }
 		return null;
 	}
-	
+
 	public int size() {
 		return index;
 	}

@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL12;
 public class BlockCanvasRenderer implements IBlockRenderer {
 
 	public FixedRenderBlocks renderBlocks = new FixedRenderBlocks();
-	
+
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

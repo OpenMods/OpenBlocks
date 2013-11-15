@@ -1,8 +1,8 @@
 package openblocks.client.gui.component;
 
-import org.lwjgl.input.Mouse;
-
 import net.minecraft.client.Minecraft;
+
+import org.lwjgl.input.Mouse;
 
 public class GuiComponentButton extends GuiComponentBox {
 

@@ -20,11 +20,10 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.api.*;
 import openblocks.common.item.ItemOpenBlock;
-import openblocks.common.tileentity.SyncedTileEntity;
 import openblocks.common.tileentity.OpenTileEntity;
+import openblocks.common.tileentity.SyncedTileEntity;
 import openblocks.sync.SyncableDirection;
 import openblocks.utils.BlockUtils;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -215,6 +214,7 @@ public abstract class OpenBlock extends Block {
 		}
 	}
 
+	@Override
 	public boolean hasTileEntity(int metadata) {
 		return teClass != null;
 	}
@@ -273,9 +273,7 @@ public abstract class OpenBlock extends Block {
 	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
 		super.onBlockEventReceived(world, x, y, z, eventId, eventParam);
 		TileEntity te = getTileEntity(world, x, y, z, TileEntity.class);
-		if (te != null) {
-			return te.receiveClientEvent(eventId, eventParam);
-		}
+		if (te != null) { return te.receiveClientEvent(eventId, eventParam); }
 		return false;
 	}
 
@@ -407,9 +405,12 @@ public abstract class OpenBlock extends Block {
 	}
 
 	/**
-	 * This method should be overriden if needed. We're getting the texture for the UNROTATED block
-	 * for a particular side (direction). Feel free to look up data in the TileEntity to grab
+	 * This method should be overriden if needed. We're getting the texture for
+	 * the UNROTATED block
+	 * for a particular side (direction). Feel free to look up data in the
+	 * TileEntity to grab
 	 * additional information here
+	 * 
 	 * @param direction
 	 * @param world
 	 * @param x
@@ -515,6 +516,6 @@ public abstract class OpenBlock extends Block {
 
 	@SuppressWarnings({ "rawtypes" })
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		
+
 	}
 }

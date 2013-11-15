@@ -23,7 +23,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 	private SyncableInt trappedEntityId;
 
 	public TileEntityBearTrap() {}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		flags = new SyncableFlags();

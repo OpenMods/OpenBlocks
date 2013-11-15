@@ -3,20 +3,18 @@ package openblocks.utils;
 import java.util.HashSet;
 import java.util.Set;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.registry.GameRegistry;
-
-import openblocks.Mods;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import openblocks.Mods;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class PaintUtils {
-	
+
 	private Set<Integer> allowed;
-	
+
 	private static PaintUtils _instance;
-	
+
 	protected PaintUtils() {
 		allowed = new HashSet<Integer>();
 		allowed.add(Block.stone.blockID);
@@ -41,7 +39,7 @@ public class PaintUtils {
 			});
 		}
 	}
-	
+
 	protected void addBlocksForMod(String modId, String[] blocks) {
 		for (String blockName : blocks) {
 			Block block = GameRegistry.findBlock(modId, blockName);
@@ -50,14 +48,14 @@ public class PaintUtils {
 			}
 		}
 	}
-	
+
 	public static PaintUtils instance() {
 		if (_instance == null) {
 			_instance = new PaintUtils();
 		}
 		return _instance;
 	}
-	
+
 	public boolean isAllowedToPaint(World world, int x, int y, int z) {
 		int id = world.getBlockId(x, y, z);
 		return allowed.contains(id);

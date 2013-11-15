@@ -120,6 +120,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 
 	public void onButtonClicked(EntityPlayer player, int buttonId) {}
 
+	@Override
 	public boolean enchantItem(EntityPlayer player, int buttonId) {
 		onButtonClicked(player, buttonId);
 		return false;

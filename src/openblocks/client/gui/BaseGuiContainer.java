@@ -60,12 +60,12 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		panel.mouseMovedOrUp((int)mouseX - this.guiLeft, (int)mouseY
 				- this.guiTop, -1);
 	}
-	
+
 	@Override
 	protected void keyTyped(char par1, int par2) {
 		super.keyTyped(par1, par2);
 		panel.keyTyped(par1, par2);
-    }
+	}
 
 	@SuppressWarnings("unused")
 	public void postRender(int mouseX, int mouseY) {}

@@ -35,7 +35,7 @@ public abstract class BaseComponent extends Gui {
 		void componentMouseMove(BaseComponent component, int offsetX, int offsetY);
 
 		void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button);
-		
+
 		void componentKeyTyped(BaseComponent component, char par1, int par2);
 	}
 

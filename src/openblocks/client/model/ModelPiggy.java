@@ -1,9 +1,9 @@
 package openblocks.client.model;
 
-import openblocks.common.tileentity.TileEntityDonationStation;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityDonationStation;
 
 public class ModelPiggy extends ModelBase {
 	// fields

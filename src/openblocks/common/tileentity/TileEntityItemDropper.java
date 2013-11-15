@@ -18,7 +18,7 @@ public class TileEntityItemDropper extends OpenTileEntity
 	static final int BUFFER_SIZE = 9;
 
 	private boolean _redstoneSignal;
-	
+
 	public TileEntityItemDropper() {
 		setInventory(new GenericInventory("itemDropper", false, 9));
 	}
@@ -122,12 +122,10 @@ public class TileEntityItemDropper extends OpenTileEntity
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

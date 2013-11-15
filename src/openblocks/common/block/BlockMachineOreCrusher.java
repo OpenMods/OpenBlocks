@@ -1,9 +1,9 @@
 package openblocks.common.block;
 
-import openblocks.Config;
-import openblocks.common.tileentity.TileEntityOreCrusher;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
+import openblocks.Config;
+import openblocks.common.tileentity.TileEntityOreCrusher;
 
 public class BlockMachineOreCrusher extends OpenBlock {
 

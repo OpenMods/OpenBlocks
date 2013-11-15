@@ -22,7 +22,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	private boolean previousBreedStatus = false;
 
 	public TileEntityVillageHighlighter() {}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		villageData = new SyncableIntArray();
@@ -80,7 +80,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	}
 
 	public boolean isPowered() {
-		if(worldObj == null) return false;
+		if (worldObj == null) return false;
 		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 

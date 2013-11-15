@@ -37,7 +37,7 @@ public class MetaGeneric implements IMetaItem {
 		this.name = name;
 		this.recipes = recipes;
 	}
-	
+
 	public MetaGeneric hideFromCreative() {
 		visibleInCreative = false;
 		return this;
@@ -97,7 +97,7 @@ public class MetaGeneric implements IMetaItem {
 
 	@Override
 	public void addToCreativeList(int itemId, int meta, List<ItemStack> result) {
-		if(visibleInCreative) {
+		if (visibleInCreative) {
 			result.add(new ItemStack(itemId, 1, meta));
 		}
 	}

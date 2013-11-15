@@ -17,9 +17,8 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 	private SyncableFloat angle;
 
-	public TileEntityFan() {
-	}
-	
+	public TileEntityFan() {}
+
 	@Override
 	protected void createSyncedFields() {
 		angle = new SyncableFloat(0.0f);

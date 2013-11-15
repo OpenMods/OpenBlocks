@@ -3,9 +3,6 @@ package openblocks.common.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityPaintCan;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,11 +12,14 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityPaintCan;
 
 public class BlockPaintCan extends OpenBlock {
 
 	public int renderPass = 0;
-	
+
 	public static class Icons {
 		public static Icon top;
 		public static Icon back;
@@ -48,7 +48,7 @@ public class BlockPaintCan extends OpenBlock {
 		ret.add(stack);
 		return ret;
 	}
-	
+
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
@@ -88,10 +88,12 @@ public class BlockPaintCan extends OpenBlock {
 		return super.shouldSideBeRendered(world, x, y, z, side);
 	}
 
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
 
+	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 		if (renderPass == 0) { return 0xFFFFFF; }
 		TileEntityPaintCan tile = this.getTileEntity(world, x, y, z, TileEntityPaintCan.class);

@@ -140,13 +140,13 @@ public class Config {
 
 	@BlockId(description = "The id of the donation station block")
 	public static int blockDonationStationId = 2567;
-	
+
 	@BlockId(description = "The id of the clay stainer block")
 	public static int blockPaintMixer = 2568;
-	
+
 	@BlockId(description = "The id of the canvas block")
 	public static int blockCanvasId = 2569;
-	
+
 	@BlockId(description = "The id of the Ore Crusher")
 	public static int blockMachineOreCrusherId = 2570;
 
@@ -155,8 +155,7 @@ public class Config {
 
 	@BlockId(description = "The id of the glass canvas block")
 	public static int blockCanvasGlassId = 2572;
-	
-	
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -201,7 +200,7 @@ public class Config {
 
 	@ItemId(description = "The id of the stencil")
 	public static int itemStencilId = 14989;
-	
+
 	@ItemId(description = "The id of the Squeegee")
 	public static int itemSqueegeeId = 14990;
 
@@ -341,9 +340,9 @@ public class Config {
 
 		prop = configFile.get("crane", "addTurtles", addCraneTurtles, "Enable magnet turtles in creative list");
 		addCraneTurtles = prop.getBoolean(addCraneTurtles);
-		
+
 		prop = configFile.get("hacks", "enableExperimentalFeatures", experimentalFeatures, "Enable experimental features that may be buggy or broken entirely");
-		experimentalFeatures = prop.getBoolean(experimentalFeatures);		
+		experimentalFeatures = prop.getBoolean(experimentalFeatures);
 
 	}
 
@@ -469,7 +468,7 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockXPDrainId)) {
 			OpenBlocks.Blocks.xpDrain = new BlockXPDrain();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.xpDrain), new Object[] { "iii", "iii", "iii", 'i', new ItemStack(Block.fenceIron)}));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.xpDrain), new Object[] { "iii", "iii", "iii", 'i', new ItemStack(Block.fenceIron) }));
 		}
 		if (Config.canRegisterBlock(blockBlockBreakerId)) {
 			OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
@@ -488,17 +487,17 @@ public class Config {
 			ItemStack specialItem = new ItemStack(Block.hopperBlock);
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.itemDropper), new Object[] { "icc", "src", "icc", 'i', new ItemStack(Item.ingotIron), 'c', new ItemStack(Block.cobblestone), 'r', new ItemStack(Item.redstone), 's', specialItem }));
 		}
-		
+
 		if (Config.canRegisterBlock(blockRopeLadderId)) {
 			OpenBlocks.Blocks.ropeLadder = new BlockRopeLadder();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.ropeLadder), new Object[] { "sts", "sts", "sts", 't', "stickWood", 's', new ItemStack(Item.silk) }));
 		}
-		
+
 		if (Config.canRegisterBlock(blockDonationStationId)) {
 			OpenBlocks.Blocks.donationStation = new BlockDonationStation();
 			WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Blocks.donationStation), 1, 1, 2);
 			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-			ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);	
+			ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.donationStation), new Object[] { "ppp", "pcp", "ppp", 'p', new ItemStack(Item.porkRaw), 'c', new ItemStack(Block.chest) }));
 		}
 
@@ -506,25 +505,24 @@ public class Config {
 			OpenBlocks.Blocks.paintMixer = new BlockPaintMixer();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.paintMixer), "ooo", "i i", "iii", 'o', Block.obsidian, 'i', Item.ingotIron));
 		}
-		
+
 		if (Config.canRegisterBlock(blockCanvasId)) {
 			OpenBlocks.Blocks.canvas = new BlockCanvas();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Item.paper, 'f', Block.fence));
 		}
-		
-		if(Config.canRegisterBlock(blockMachineOreCrusherId)) {
+
+		if (Config.canRegisterBlock(blockMachineOreCrusherId)) {
 			OpenBlocks.Blocks.machineOreCrusher = new BlockMachineOreCrusher();
 		}
 
 		if (Config.canRegisterBlock(blockPaintCanId)) {
 			OpenBlocks.Blocks.paintCan = new BlockPaintCan();
 		}
-		
 
 		if (Config.canRegisterBlock(blockCanvasGlassId)) {
 			OpenBlocks.Blocks.canvasGlass = new BlockCanvasGlass();
 		}
-		
+
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		// There is no fail checking here because if the Generic item fails,
@@ -616,13 +614,13 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Block.carpet, 'w', Block.cloth));
 			GameRegistry.registerItem(OpenBlocks.Items.sleepingBag, "openblocks.sleepingBag");
 		}
-		
+
 		if (itemPaintBrushId > 0) {
 			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
 			recipeList.add(new ShapedOreRecipe(ItemPaintBrush.createStackWithColor(0xFFFFFF), "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
-			GameRegistry.registerItem(OpenBlocks.Items.paintBrush, "openblocks.paintBrush");			
+			GameRegistry.registerItem(OpenBlocks.Items.paintBrush, "openblocks.paintBrush");
 		}
-		
+
 		if (itemStencilId > 0) {
 			OpenBlocks.Items.stencil = new ItemStencil();
 			GameRegistry.registerItem(OpenBlocks.Items.stencil, "openblocks.stencil");
@@ -630,10 +628,10 @@ public class Config {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
-			}			
+			}
 		}
-		
-		if(itemSqueegeeId > 0) {
+
+		if (itemSqueegeeId > 0) {
 			OpenBlocks.Items.squeegee = new ItemSqueegee();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', Item.stick));
 			GameRegistry.registerItem(OpenBlocks.Items.squeegee, "openblocks.squeegee");

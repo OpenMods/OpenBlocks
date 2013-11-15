@@ -149,6 +149,6 @@ public class TileEntityDonationStation extends OpenTileEntity implements
 	}
 
 	public void showSomeLove() {
-		// TODO: Impl.	
+		// TODO: Impl.
 	}
 }

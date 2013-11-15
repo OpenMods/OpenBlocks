@@ -17,7 +17,6 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
 import openblocks.utils.BlockUtils;
-import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,12 +80,12 @@ public class ItemSleepingBag extends ItemArmor {
 			if (!player.isPlayerSleeping()) {
 				if (tag != null && tag.hasKey("sleeping") && tag.getBoolean("sleeping")) {
 					ejectSleepingBagFromPlayer(player, itemStack);
-				}else {
+				} else {
 					ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
 					EnumStatus status = player.sleepInBedAt((int)player.posX, (int)player.posY, (int)player.posZ);
 					if (status == EnumStatus.OK) {
 						saveOriginalSpawn(spawn, itemStack);
-					}else {
+					} else {
 						ejectSleepingBagFromPlayer(player, itemStack);
 					}
 				}
@@ -95,7 +94,7 @@ public class ItemSleepingBag extends ItemArmor {
 			}
 		}
 	}
-	
+
 	private void ejectSleepingBagFromPlayer(EntityPlayer player, ItemStack itemStack) {
 		NBTTagCompound tag = getOrCreateTag(itemStack);
 		player.setCurrentItemOrArmor(3, null);
@@ -103,7 +102,7 @@ public class ItemSleepingBag extends ItemArmor {
 		tag.setBoolean("sleeping", false);
 		BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, itemStack);
 	}
-	
+
 	private static NBTTagCompound getOrCreateTag(ItemStack itemStack) {
 		NBTTagCompound tag = itemStack.getTagCompound();
 		if (tag == null) {
@@ -123,7 +122,7 @@ public class ItemSleepingBag extends ItemArmor {
 			}
 		}
 	}
-	
+
 	private static void saveOriginalSpawn(ChunkCoordinates spawn, ItemStack stack) {
 		if (spawn != null) {
 			NBTTagCompound tag = getOrCreateTag(stack);

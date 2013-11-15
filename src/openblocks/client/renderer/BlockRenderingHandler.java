@@ -15,7 +15,7 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.block.OpenBlock;
 import openblocks.common.block.OpenBlock.BlockRotationMode;
-import openblocks.common.tileentity.*;
+import openblocks.common.tileentity.OpenTileEntity;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -38,7 +38,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		blockRenderers.put(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
 		blockRenderers.put(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 	}
-	
+
 	public TileEntity getTileEntityForBlock(Block block) {
 		TileEntity te = inventoryTileEntities.get(block);
 		if (te == null) {
@@ -57,7 +57,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		OpenBlock openBlock = null;
 		if (block instanceof OpenBlock) {
-			openBlock = (OpenBlock) block;
+			openBlock = (OpenBlock)block;
 		}
 		/**
 		 * Deal with special block rendering handlers
@@ -110,7 +110,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		OpenBlock openBlock = null;
 		if (block instanceof OpenBlock) {
-			openBlock = (OpenBlock) block;
+			openBlock = (OpenBlock)block;
 		}
 		/* deal with custom block renderers */
 		if (blockRenderers.containsKey(block)) {
@@ -134,7 +134,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 
 	public static void rotateFacesOnRenderer(OpenBlock block, ForgeDirection rotation, RenderBlocks renderer) {
 		BlockRotationMode mode = block.getRotationMode();
-		switch(mode) {
+		switch (mode) {
 			case SIX_DIRECTIONS:
 				switch (rotation) {
 					case DOWN:
@@ -171,11 +171,11 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 						break;
 					default:
 						break;
-					
+
 				}
 				break;
 			case FOUR_DIRECTIONS:
-				switch(rotation) {
+				switch (rotation) {
 					case EAST:
 						renderer.uvRotateTop = 1;
 						break;
@@ -188,7 +188,7 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 				break;
 			default:
 				break;
-			
+
 		}
 
 	}
@@ -204,13 +204,14 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 		renderer.flipTexture = false;
 	}
 
-
 	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation) {
 		renderInventoryBlock(renderer, block, rotation, -1);
 	}
+
 	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation, int colorMultiplier) {
 		renderInventoryBlock(renderer, block, rotation, colorMultiplier, null);
 	}
+
 	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation, int colorMultiplier, Set<ForgeDirection> enabledSides) {
 		Tessellator tessellator = Tessellator.instance;
 		block.setBlockBoundsForItemRender();
