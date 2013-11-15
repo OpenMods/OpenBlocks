@@ -11,6 +11,8 @@ import net.minecraftforge.event.Event;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.MapDataManager;
+import openblocks.common.events.PlayerMovementEvent;
+import openblocks.common.events.TileEntityMessageEventPacket;
 import openblocks.utils.ByteUtils;
 
 import com.google.common.base.Throwables;
@@ -79,7 +81,8 @@ public abstract class EventPacket extends Event {
 				return PacketDirection.TO_CLIENT;
 			}
 		},
-		TILE_MESSAGE {
+		TILE_ENTITY_NOTIFY {
+
 			@Override
 			public EventPacket createPacket() {
 				return new TileEntityMessageEventPacket();
@@ -88,6 +91,18 @@ public abstract class EventPacket extends Event {
 			@Override
 			public PacketDirection getDirection() {
 				return PacketDirection.ANY;
+			}
+
+		},
+		PLAYER_MOVEMENT {
+			@Override
+			public EventPacket createPacket() {
+				return new PlayerMovementEvent();
+			}
+
+			@Override
+			public PacketDirection getDirection() {
+				return PacketDirection.FROM_CLIENT;
 			}
 		};
 
@@ -166,13 +181,27 @@ public abstract class EventPacket extends Event {
 		else Log.warn("Invalid sent direction for packet '%s'", this);
 	}
 
+	protected boolean checkSendToClient() {
+		if (!getType().getDirection().toClient) {
+			Log.warn("Trying to sent message '%s' to client", this);
+			return false;
+		}
+		return true;
+	}
+
+	protected boolean checkSendToServer() {
+		if (!getType().getDirection().toServer) {
+			Log.warn("Trying to sent message '%s' to server", this);
+			return false;
+		}
+		return true;
+	}
+
 	public void sendToPlayer(Player player) {
-		if (getType().getDirection().toClient) OpenBlocks.proxy.sendPacketToPlayer(player, serializeEvent(this));
-		else Log.warn("Trying to sent message '%s' to client", this);
+		if (checkSendToClient()) OpenBlocks.proxy.sendPacketToPlayer(player, serializeEvent(this));
 	}
 
 	public void sendToServer() {
-		if (getType().getDirection().toServer) OpenBlocks.proxy.sendPacketToServer(serializeEvent(this));
-		else Log.warn("Trying to sent message '%s' to server", this);
+		if (checkSendToServer()) OpenBlocks.proxy.sendPacketToServer(serializeEvent(this));
 	}
 }

@@ -9,10 +9,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.api.IActivateAwareTile;
-import openblocks.network.TileEntityMessageEventPacket;
+import openblocks.common.events.TileEntityMessageEventPacket;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
 import openblocks.utils.InventoryUtils;
@@ -76,7 +77,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
 							if (stack != null) {
 								getMotionFromAngles();
-								sendEventToPlayers();
+								new TileEntityMessageEventPacket(this).sendToWatchers((WorldServer)worldObj);
 								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
 								item.motionX = motionX * currentSpeed;
