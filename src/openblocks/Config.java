@@ -201,6 +201,9 @@ public class Config {
 
 	@ItemId(description = "The id of the stencil")
 	public static int itemStencilId = 14989;
+	
+	@ItemId(description = "The id of the Squeegee")
+	public static int itemSqueegeeId = 14990;
 
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
@@ -617,8 +620,7 @@ public class Config {
 		if (itemPaintBrushId > 0) {
 			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
 			recipeList.add(new ShapedOreRecipe(ItemPaintBrush.createStackWithColor(0xFFFFFF), "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
-			GameRegistry.registerItem(OpenBlocks.Items.paintBrush, "openblocks.paintBrush");
-			
+			GameRegistry.registerItem(OpenBlocks.Items.paintBrush, "openblocks.paintBrush");			
 		}
 		
 		if (itemStencilId > 0) {
@@ -628,8 +630,13 @@ public class Config {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
-			}
-			
+			}			
+		}
+		
+		if(itemSqueegeeId > 0) {
+			OpenBlocks.Items.squeegee = new ItemSqueegee();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', Item.stick));
+			GameRegistry.registerItem(OpenBlocks.Items.squeegee, "openblocks.squeegee");
 		}
 	}
 

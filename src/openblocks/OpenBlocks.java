@@ -103,6 +103,7 @@ public class OpenBlocks {
 		public static ItemSleepingBag sleepingBag;
 		public static ItemPaintBrush paintBrush;
 		public static ItemStencil stencil;
+		public static ItemSqueegee squeegee;
 	}
 
 	public static class Fluids {
