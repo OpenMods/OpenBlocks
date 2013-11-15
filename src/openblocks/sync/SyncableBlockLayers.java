@@ -4,66 +4,67 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
-import openblocks.common.Stencil;
+
 import net.minecraft.nbt.NBTTagCompound;
+import openblocks.common.Stencil;
 
 public class SyncableBlockLayers extends SyncableObjectBase {
 
 	public static class Layer {
-		
+
 		private int color;
 		private Stencil stencil;
 		private byte rotation;
 		private boolean hasStencilCover = false;
 
-		public Layer() {
-		}
-		
+		public Layer() {}
+
 		public Layer(int col) {
 			this.color = col;
 		}
-		
+
 		public int getColor() {
 			return color;
 		}
-		
+
 		/***
 		 * If the layer has a cover on it, return white.
 		 * Otherwise we render on the stored color
+		 * 
 		 * @return
 		 */
 		public int getColorForRender() {
-			return hasStencilCover() ? 0xFFFFFF : getColor();
+			return hasStencilCover()? 0xFFFFFF : getColor();
 		}
-		
+
 		public Stencil getStencil() {
 			return stencil;
 		}
-		
+
 		public byte getRotation() {
 			return rotation;
 		}
-		
+
 		public boolean hasStencilCover() {
 			return hasStencilCover;
 		}
-		
+
 		public void setHasStencilCover(boolean cover) {
 			this.hasStencilCover = cover;
 		}
-		
+
 		public void setRotation(byte rotation) {
 			this.rotation = rotation;
 		}
-		
+
 		public void setStencil(Stencil st) {
 			this.stencil = st;
 		}
-		
+
 		public void setColor(int color) {
 			this.color = color;
 		}
-		
+
 		public static Layer createFromStream(DataInput stream) {
 			Layer layer = new Layer();
 			try {
@@ -75,7 +76,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 				}
 				layer.setHasStencilCover(stream.readBoolean());
 			} catch (Exception e) {
-				
+
 			}
 			return layer;
 		}
@@ -86,7 +87,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 				rotation = 0;
 			}
 		}
-		
+
 		public NBTTagCompound getNBT() {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setByte("rotation", rotation);
@@ -107,11 +108,11 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	public ArrayList<Layer> layers;
-	
+
 	public ArrayList<Layer> getAllLayers() {
 		return layers;
 	}
-	
+
 	public boolean setColor(int color) {
 		if (layers.size() > 0) {
 			Layer layer = layers.get(layers.size() - 1);
@@ -129,11 +130,11 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		}
 		return false;
 	}
-	
+
 	public SyncableBlockLayers() {
 		layers = new ArrayList<Layer>();
 	}
-	
+
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {
 		int size = stream.readByte();
@@ -152,7 +153,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			stream.writeByte(layer.getRotation());
 			if (layer.getStencil() != null) {
 				stream.writeByte(layer.getStencil().ordinal());
-			}else {
+			} else {
 				stream.writeByte(-1);
 			}
 			stream.writeBoolean(layer.hasStencilCover());
@@ -165,7 +166,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		subTag.setInteger("size", layers.size());
 		int i = 0;
 		for (Layer layer : layers) {
-			subTag.setCompoundTag("layer_"+i, layer.getNBT());
+			subTag.setCompoundTag("layer_" + i, layer.getNBT());
 			i++;
 		}
 		nbt.setCompoundTag(name, subTag);
@@ -177,23 +178,19 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		int size = subTag.getInteger("size");
 		layers.clear();
 		for (int i = 0; i < size; i++) {
-			layers.add(Layer.createFromNBT(subTag.getCompoundTag("layer_"+i)));
+			layers.add(Layer.createFromNBT(subTag.getCompoundTag("layer_" + i)));
 		}
 	}
 
 	public Layer getLayer(int i) {
-		if (i < layers.size()) {
-			return layers.get(i);
-		}
+		if (i < layers.size()) { return layers.get(i); }
 		return null;
 	}
 
 	public boolean hasStencilCover() {
 		if (layers.size() > 0) {
 			Layer layer = layers.get(layers.size() - 1);
-			if (layer.hasStencilCover()) {
-				return true;
-			}
+			if (layer.hasStencilCover()) { return true; }
 		}
 		return false;
 	}
@@ -221,7 +218,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			}
 		}
 	}
-	
+
 	public Stencil getTopStencil() {
 		if (layers.size() > 0) {
 			int lastIndex = layers.size() - 1;
@@ -245,9 +242,9 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		layers.clear();
 		markDirty();
 	}
-	
+
 	public boolean isEmpty() {
-		return layers.size() == 0; 
+		return layers.size() == 0;
 	}
 
 }

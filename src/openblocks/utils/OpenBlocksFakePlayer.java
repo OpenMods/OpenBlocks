@@ -32,7 +32,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 		if (blockExists) {
 			hitVector.yCoord++;
 		}
-		
+
 		ForgeDirection opposite = side.getOpposite();
 
 		// find rotations
@@ -78,7 +78,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 	private boolean rightClick(ItemStack itemStack, int x, int y, int z, int side, float deltaX, float deltaY, float deltaZ, boolean blockExists) {
 		boolean flag = false;
 		int blockId;
-		
+
 		if (itemStack != null && itemStack.getItem() != null
 				&& itemStack.getItem().onItemUseFirst(itemStack, this, worldObj, x, y, z, side, deltaX, deltaY, deltaZ)) { return true; }
 
@@ -103,7 +103,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 			return false;
 		} else {
 			ForgeDirection s = ForgeDirection.getOrientation(side);
-			if (!itemStack.tryPlaceItemIntoWorld(this, worldObj, x + s.offsetX, y+s.offsetY, z+s.offsetZ, s.getOpposite().ordinal(), deltaX, deltaY, deltaZ)) { return false; }
+			if (!itemStack.tryPlaceItemIntoWorld(this, worldObj, x + s.offsetX, y + s.offsetY, z + s.offsetZ, s.getOpposite().ordinal(), deltaX, deltaY, deltaZ)) { return false; }
 			// if (itemStack.stackSize <= 0)
 			// {
 			// MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(this,
@@ -121,7 +121,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 				blockId != Block.tallGrass.blockID &&
 				blockId != Block.deadBush.blockID &&
 				(Block.blocksList[blockId] == null || !Block.blocksList[blockId].isBlockReplaceable(world, x, y, z))) {
-			
+
 		}
 		int oppositeSide = ForgeDirection.getOrientation(side).getOpposite().ordinal();
 		return world.canPlaceEntityOnSide(itemBlock.getBlockID(), x, y, z, false, oppositeSide, this, itemStack);

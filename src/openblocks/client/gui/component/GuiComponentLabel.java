@@ -1,10 +1,10 @@
 package openblocks.client.gui.component;
 
-import org.lwjgl.opengl.GL11;
-
-import openblocks.sync.SyncableString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import openblocks.sync.SyncableString;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiComponentLabel extends BaseComponent {
 

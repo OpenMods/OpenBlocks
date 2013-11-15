@@ -4,10 +4,10 @@ import java.awt.Color;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-
+import openblocks.client.gui.component.BaseComponent.IComponentListener;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.CompatibilityUtils;
-import openblocks.client.gui.component.BaseComponent.IComponentListener;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiComponentColorPicker extends BaseComponent implements IComponentListener {
@@ -25,7 +25,7 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 		(slider = new GuiComponentSlider(0, 55, 100, 0, 255, tone, false)).addListener(this);
 		addComponent(slider);
 	}
-	
+
 	public SyncableInt getColor() {
 		return color;
 	}
@@ -52,6 +52,7 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 		return getHeight() - 20;
 	}
 
+	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
 		if (mouseY > getColorsHeight()) { return; }
@@ -59,7 +60,7 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 		pointY = mouseY;
 		calculateColor();
 	}
-	
+
 	// Drag support
 	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int button, long time) {
@@ -75,7 +76,8 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 		float b = 1.0f - (pointY * 0.02f);
 		float s = 1.0f - (tone.getValue() / 255f);
 		int col = Color.HSBtoRGB(h, s, b) & 0xFFFFFF;
-		// Wish we could NOT send this upstream until the client clicks Mix. Saving bandwidth while keeping functionality.
+		// Wish we could NOT send this upstream until the client clicks Mix.
+		// Saving bandwidth while keeping functionality.
 		color.setValue(col);
 	}
 
@@ -88,8 +90,8 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 		int renderY = offsetY + y;
 
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
-		this.drawTexturedModalRect(renderX, renderY, 156, 206, getWidth(), getColorsHeight());
-		this.drawRect(renderX, renderY, renderX + getWidth(), renderY
+		drawTexturedModalRect(renderX, renderY, 156, 206, getWidth(), getColorsHeight());
+		drawRect(renderX, renderY, renderX + getWidth(), renderY
 				+ getColorsHeight(), (tone.getValue() << 24) | 0xFFFFFF);
 
 		Tessellator tessellator = Tessellator.instance;
@@ -111,13 +113,12 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		this.drawRect(renderX + pointX - 1, renderY + pointY - 1, renderX
+		drawRect(renderX + pointX - 1, renderY + pointY - 1, renderX
 				+ pointX + 1, renderY + pointY + 1, 0xCCCC0000);
 	}
 
 	@Override
-	public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
-	}
+	public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {}
 
 	@Override
 	public void componentMouseDrag(BaseComponent component, int offsetX, int offsetY, int button, long time) {
@@ -125,8 +126,7 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 	}
 
 	@Override
-	public void componentMouseMove(BaseComponent component, int offsetX, int offsetY) {
-	}
+	public void componentMouseMove(BaseComponent component, int offsetX, int offsetY) {}
 
 	@Override
 	public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {
@@ -134,6 +134,5 @@ public class GuiComponentColorPicker extends BaseComponent implements IComponent
 	}
 
 	@Override
-	public void componentKeyTyped(BaseComponent component, char par1, int par2) {		
-	}
+	public void componentKeyTyped(BaseComponent component, char par1, int par2) {}
 }

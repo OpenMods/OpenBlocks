@@ -56,6 +56,7 @@ public class BlockRopeLadder extends OpenBlock {
 		return false;
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List list, Entity entity) {
 		if (entity instanceof EntityLivingBase) {

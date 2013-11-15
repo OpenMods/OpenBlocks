@@ -3,32 +3,31 @@ package openblocks.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import openblocks.common.tileentity.TileEntityCannon;
 
 public class ModelCannon extends ModelBase {
 
 	private double[] keyframes = new double[] {
-		0,
-		0.5,
-		1,
-		0.9,
-		0.8,
-		0.7,
-		0.6,
-		0.5,
-		0.4,
-		0.3,
-		0.2,
-		0.1,
-		0	
+			0,
+			0.5,
+			1,
+			0.9,
+			0.8,
+			0.7,
+			0.6,
+			0.5,
+			0.4,
+			0.3,
+			0.2,
+			0.1,
+			0
 	};
-	
+
 	ModelRenderer body;
 	ModelRenderer shooter;
 	ModelRenderer base;
 	ModelRenderer wheel;
-	
+
 	private float deg30 = (float)Math.toRadians(30);
 	private float deg180 = (float)Math.toRadians(180);
 
@@ -64,36 +63,35 @@ public class ModelCannon extends ModelBase {
 
 	public void render(TileEntity te, float f) {
 
-		TileEntityCannon cannon = (TileEntityCannon) te;
-		
-		
+		TileEntityCannon cannon = (TileEntityCannon)te;
+
 		float f5 = 0.0625F;
 		setRotationAngles(te, f);
-		
+
 		int elapsed = Math.min(12, cannon.getTicksSinceLastFire());
 		double ease = keyframes[elapsed];
 		float shooterAnim = -(float)(3.0f * ease);
 		shooter.rotateAngleX = (float)Math.toRadians(cannon.targetPitch.getValue());
 		float z = (float)(3 + shooterAnim * Math.cos(shooter.rotateAngleX));
-        float y = (float)(11 - shooterAnim * Math.sin(shooter.rotateAngleX));
-        shooter.rotationPointY = y;
-        shooter.rotationPointZ = z;
-        float cannonOffset = (float)ease * 4;
-        body.rotationPointZ = 3f-cannonOffset;
-        shooter.rotationPointZ -= cannonOffset;
-        
-        wheel.rotationPointZ = -cannonOffset;
-        
-        shooter.rotateAngleX += ease / 2;
-        body.rotateAngleX = shooter.rotateAngleX;
-        
+		float y = (float)(11 - shooterAnim * Math.sin(shooter.rotateAngleX));
+		shooter.rotationPointY = y;
+		shooter.rotationPointZ = z;
+		float cannonOffset = (float)ease * 4;
+		body.rotationPointZ = 3f - cannonOffset;
+		shooter.rotationPointZ -= cannonOffset;
+
+		wheel.rotationPointZ = -cannonOffset;
+
+		shooter.rotateAngleX += ease / 2;
+		body.rotateAngleX = shooter.rotateAngleX;
+
 		body.rotateAngleX = shooter.rotateAngleX;
 		body.render(f5);
 		shooter.render(f5);
 		base.render(f5);
-		
+
 		float startAngleX = (float)ease;
-		
+
 		wheel.rotateAngleZ = 0;
 		wheel.rotateAngleX = startAngleX;
 		wheel.rotationPointX = 0;
@@ -104,7 +102,7 @@ public class ModelCannon extends ModelBase {
 		wheel.rotateAngleX += deg30;
 		wheel.rotationPointX -= 0.01;
 		wheel.render(f5);
-		
+
 		wheel.rotateAngleZ = deg180;
 		wheel.rotateAngleX = startAngleX;
 		wheel.rotationPointX = 0;
@@ -123,8 +121,6 @@ public class ModelCannon extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(TileEntity te, float f) {
-		TileEntityCannon cannon = (TileEntityCannon)te;
-	}
+	public void setRotationAngles(TileEntity te, float f) {}
 
 }

@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -31,20 +31,20 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Item.dyePowder, 1, 15);
-	
+
 	private boolean hasBonemeal = false;
-	
+
 	public enum Flags {
 		enabled
 	}
-	
+
 	private SyncableFlags flags;
 	private SyncableTank tank;
-	
+
 	public TileEntitySprinkler() {
 		setInventory(new GenericInventory("sprinkler", true, 9));
 	}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		flags = new SyncableFlags();
@@ -142,7 +142,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 		return flags.get(Flags.enabled);
 	}
 
-
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return itemstack != null && itemstack.isItemEqual(BONEMEAL);
@@ -172,7 +171,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 		return true;
 	}
 
-
 	public float getSprayPitch() {
 		return (float)(getSprayAngle() * Math.PI);
 	}
@@ -182,7 +180,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 				* (float)Math.PI * 0.035f; }
 		return 0;
 	}
-
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
@@ -210,21 +207,16 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
-	}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-	}
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
 
 	@Override
-	public void onBlockAdded() {
-	}
+	public void onBlockAdded() {}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
-	}
-
+	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public int getSizeInventory() {
@@ -272,10 +264,8 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 }

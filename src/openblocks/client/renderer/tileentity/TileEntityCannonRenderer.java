@@ -17,14 +17,14 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityCannon cannon = (TileEntityCannon)tileentity;
 		GL11.glPushMatrix();
-			GL11.glTranslated(x, y, z);
-			GL11.glTranslatef(0.5f, 1.0f, 0.5f);
-			GL11.glPushMatrix();
-				GL11.glRotated(180 - cannon.currentYaw, 0, 1, 0);
-				GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-				bindTexture(texture);
-				model.render(tileentity, f);
-			GL11.glPopMatrix();
+		GL11.glTranslated(x, y, z);
+		GL11.glTranslatef(0.5f, 1.0f, 0.5f);
+		GL11.glPushMatrix();
+		GL11.glRotated(180 - cannon.currentYaw, 0, 1, 0);
+		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+		bindTexture(texture);
+		model.render(tileentity, f);
+		GL11.glPopMatrix();
 		if (cannon.renderLine) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, -0.5F, 0);

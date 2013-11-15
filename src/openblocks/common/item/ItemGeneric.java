@@ -76,13 +76,13 @@ public class ItemGeneric extends Item {
 		mapController {
 			@Override
 			public IMetaItem createMetaItem() {
-				return new MetaGeneric("map_controller").hideFromCreative();
+				return new MetaGeneric("map_controller");
 			}
 		},
 		mapMemory {
 			@Override
 			public IMetaItem createMetaItem() {
-				return new MetaGeneric("map_memory").hideFromCreative();
+				return new MetaGeneric("map_memory");
 			}
 		},
 		cursor {

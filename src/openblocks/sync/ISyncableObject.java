@@ -19,10 +19,10 @@ public interface ISyncableObject {
 	public void writeToStream(DataOutput stream, boolean fullData) throws IOException;
 
 	public void resetChangeTimer(World world);
-	
+
 	public int getTicksSinceChange(World world);
-	
+
 	public void writeToNBT(NBTTagCompound nbt, String name);
-	
+
 	public void readFromNBT(NBTTagCompound nbt, String name);
 }

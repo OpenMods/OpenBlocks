@@ -1,6 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +15,6 @@ import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerBigButton;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
-
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -27,18 +25,18 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	public enum Flags {
 		active
 	}
-	
+
 	private SyncableFlags flags;
-	
+
 	public TileEntityBigButton() {
 		setInventory(new GenericInventory("bigbutton", true, 1));
 	}
-	
+
 	@Override
 	protected void createSyncedFields() {
 		flags = new SyncableFlags();
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -83,7 +81,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 		}
 		return true;
 	}
-	
+
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return getRotation();
@@ -96,14 +94,13 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public void onSynced(List<ISyncableObject> changes) {
+	public void onSynced(Set<ISyncableObject> changes) {
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public boolean isButtonActive() {
 		return flags.get(Flags.active);
 	}
-	
 
 	@Override
 	public int getSizeInventory() {
@@ -151,12 +148,10 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

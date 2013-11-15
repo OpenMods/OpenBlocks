@@ -1,7 +1,7 @@
 package openblocks.client.gui.component;
 
-import openblocks.sync.SyncableFloat;
 import net.minecraft.client.Minecraft;
+import openblocks.sync.SyncableFloat;
 
 public class GuiComponentLevel extends BaseComponent {
 	private int width;
@@ -22,7 +22,7 @@ public class GuiComponentLevel extends BaseComponent {
 		this.max = max;
 		this.value = value;
 	}
-	
+
 	public GuiComponentLevel(int x, int y, int width, int height, int levelColor, int backgroundColor, float min, float max, SyncableFloat value) {
 		super(x, y);
 		this.width = width;
@@ -44,20 +44,20 @@ public class GuiComponentLevel extends BaseComponent {
 	public int getHeight() {
 		return height;
 	}
-	
+
 	public void setValue(float v) {
 		this.value = v;
 	}
-	
+
 	public float getValue() {
-		if(valueObj != null) return valueObj.getValue();
+		if (valueObj != null) return valueObj.getValue();
 		return value;
 	}
-	
+
 	private float getFillHeight() {
 		float value = getValue();
-		if(value > max) value = max;
-		if(value < min) value = min;
+		if (value > max) value = max;
+		if (value < min) value = min;
 		float percent = value / max;
 		return percent * getHeight();
 	}

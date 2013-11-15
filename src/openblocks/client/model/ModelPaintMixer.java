@@ -70,7 +70,6 @@ public class ModelPaintMixer extends ModelBase
 		model.rotateAngleZ = z;
 	}
 
-	@SuppressWarnings("unused")
 	public void render(TileEntity te, float f) {
 		float f5 = 0.0625F;
 		controls.render(f5);

@@ -1,9 +1,9 @@
 package openblocks.common.block;
 
-import openblocks.Config;
-import openblocks.common.tileentity.TileEntityDonationStation;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import openblocks.Config;
+import openblocks.common.tileentity.TileEntityDonationStation;
 
 public class BlockDonationStation extends OpenBlock {
 

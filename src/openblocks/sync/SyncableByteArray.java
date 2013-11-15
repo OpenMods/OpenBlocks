@@ -9,14 +9,13 @@ import net.minecraft.nbt.NBTTagCompound;
 public class SyncableByteArray extends SyncableObjectBase {
 
 	private byte[] value = new byte[0];
-	
-	public SyncableByteArray() {
-	}
-	
+
+	public SyncableByteArray() {}
+
 	public SyncableByteArray(byte[] val) {
 		this.value = val;
 	}
-	
+
 	public void setValue(byte[] newValue) {
 		if (newValue != value) {
 			value = newValue;
@@ -27,7 +26,7 @@ public class SyncableByteArray extends SyncableObjectBase {
 	public byte[] getValue() {
 		return value;
 	}
-	
+
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {
 		int length = stream.readInt();
@@ -42,10 +41,10 @@ public class SyncableByteArray extends SyncableObjectBase {
 			throws IOException {
 		if (value == null) {
 			stream.writeInt(0);
-		}else {
+		} else {
 			stream.writeInt(value.length);
-			for (int i = 0; i < value.length; i++) {
-				stream.writeByte(value[i]);
+			for (byte element : value) {
+				stream.writeByte(element);
 			}
 		}
 	}

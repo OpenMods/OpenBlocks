@@ -35,7 +35,7 @@ public abstract class BaseComponent extends Gui {
 		void componentMouseMove(BaseComponent component, int offsetX, int offsetY);
 
 		void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button);
-		
+
 		void componentKeyTyped(BaseComponent component, char par1, int par2);
 	}
 
@@ -214,16 +214,13 @@ public abstract class BaseComponent extends Gui {
 
 	/*
 	 * The math on these methods is different because it takes the adjusted
-	 * values
-	 * from the handlers and passes it to listeners. No subtraction should be
-	 * done here
+	 * values from the handlers and passes it to listeners. No subtraction
+	 * should be done here
 	 */
 	private void invokeListenersMouseDown(int offsetX, int offsetY, int button) {
 		// If a handler was called from something that was a) not another
-		// component
-		// Or b) some external mod. The offsets might be derpy. So we still
-		// check them
-		// Even though 99% of the time they will be valid.
+		// component Or b) some external mod. The offsets might be derpy. So we
+		// still check them. Even though 99% of the time they will be valid.
 		if (isMouseOver(offsetX + x, offsetY + y)) {
 			for (IComponentListener listener : listeners) {
 				listener.componentMouseDown(this, offsetX, offsetY, button);
@@ -256,7 +253,7 @@ public abstract class BaseComponent extends Gui {
 	private void invokeListenersMouseUp(int offsetX, int offsetY, int button) {
 		if (isMouseOver(offsetX + x, offsetY + y)) {
 			for (IComponentListener listener : listeners) {
-				listener.componentMouseDown(this, offsetX, offsetY, button);
+				listener.componentMouseUp(this, offsetX, offsetY, button);
 			}
 		}
 	}

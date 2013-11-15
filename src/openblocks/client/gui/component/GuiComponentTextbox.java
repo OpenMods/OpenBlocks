@@ -7,18 +7,18 @@ public class GuiComponentTextbox extends BaseComponent {
 
 	private int width;
 	private int height;
-	
+
 	private GuiTextField textfield;
-	
+
 	public GuiComponentTextbox(int x, int y, int width, int height) {
 		super(x, y);
 		this.width = width;
 		this.height = height;
 		textfield = new GuiTextField(Minecraft.getMinecraft().fontRenderer, x, y, width, height);
-		//textfield.setEnableBackgroundDrawing(false);
-		//commandTextField.mouseClicked(par1, par2, par3);
+		// textfield.setEnableBackgroundDrawing(false);
+		// commandTextField.mouseClicked(par1, par2, par3);
 	}
-	
+
 	public GuiComponentTextbox setText(String text) {
 		textfield.setText(text);
 		return this;
@@ -39,12 +39,12 @@ public class GuiComponentTextbox extends BaseComponent {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		textfield.drawTextBox();
 	}
-	
+
 	@Override
 	public void keyTyped(char par1, int par2) {
 		textfield.textboxKeyTyped(par1, par2);
-    }
-	
+	}
+
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);

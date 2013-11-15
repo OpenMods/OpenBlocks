@@ -44,7 +44,7 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 		tabs.addComponent(xpTab);
 		tabs.addComponent(itemsTab);
 
-		panel.addComponent(xpLevel);
-		panel.addComponent(tabs);
+		root.addComponent(xpLevel);
+		root.addComponent(tabs);
 	}
 }

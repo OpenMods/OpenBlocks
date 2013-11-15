@@ -1,10 +1,10 @@
 package openblocks.sync;
 
-import openblocks.OpenBlocks;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 
 public abstract class SyncableObjectBase implements ISyncableObject {
-	
+
 	protected long lastChangeTime = 0;
 	protected boolean dirty = false;
 
@@ -27,7 +27,7 @@ public abstract class SyncableObjectBase implements ISyncableObject {
 	public void resetChangeTimer(World world) {
 		lastChangeTime = OpenBlocks.proxy.getTicks(world);
 	}
-	
+
 	@Override
 	public int getTicksSinceChange(World world) {
 		return (int)(OpenBlocks.proxy.getTicks(world) - lastChangeTime);

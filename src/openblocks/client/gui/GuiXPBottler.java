@@ -79,9 +79,9 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 		tabs.addComponent(tabXPBottle);
 		tabs.addComponent(tabXPFluid);
 
-		panel.addComponent(xpLevel);
-		panel.addComponent(tabs);
-		panel.addComponent(progress);
+		root.addComponent(xpLevel);
+		root.addComponent(tabs);
+		root.addComponent(progress);
 	}
 
 }

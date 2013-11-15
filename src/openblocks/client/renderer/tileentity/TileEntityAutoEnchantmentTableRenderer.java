@@ -31,14 +31,13 @@ public class TileEntityAutoEnchantmentTableRenderer extends
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 0.75F, (float)z + 0.5F);
 		float f1 = table.tickCount + f;
 		GL11.glTranslatef(0.0F, 0.1F + MathHelper.sin(f1 * 0.1F) * 0.01F, 0.0F);
-		float f2;
+		float f2 = table.bookRotation2 - table.bookRotationPrev;
 
-		for (f2 = table.bookRotation2 - table.bookRotationPrev; f2 >= (float)Math.PI; f2 -= ((float)Math.PI * 2F)) {
-			;
-		}
+		while (f2 >= (float)Math.PI)
+			f2 -= 2 * (float)Math.PI;
 
 		while (f2 < -(float)Math.PI) {
-			f2 += ((float)Math.PI * 2F);
+			f2 += 2 * (float)Math.PI;
 		}
 
 		float f3 = table.bookRotationPrev + f2 * f;

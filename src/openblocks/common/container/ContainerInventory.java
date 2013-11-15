@@ -18,7 +18,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 
 	protected final int inventorySize;
 	protected final IInventory playerInventory;
-	protected final T inventory;
+	protected final T owner;
 
 	protected static class RestrictedSlot extends Slot {
 
@@ -32,17 +32,17 @@ public abstract class ContainerInventory<T extends IInventory> extends
 		}
 	}
 
-	public ContainerInventory(IInventory playerInventory, T entity) {
-		this.inventorySize = entity.getSizeInventory();
+	public ContainerInventory(IInventory playerInventory, T owner) {
+		this.inventorySize = owner.getSizeInventory();
 		this.playerInventory = playerInventory;
-		this.inventory = entity;
+		this.owner = owner;
 	}
 
 	protected void addInventoryGrid(int xOffset, int yOffset, int width) {
 		int height = (int)Math.ceil((double)inventorySize / width);
 		for (int y = 0, slotId = 0; y < height; y++) {
 			for (int x = 0; x < width; x++, slotId++) {
-				addSlotToContainer(new RestrictedSlot(inventory, slotId,
+				addSlotToContainer(new RestrictedSlot(owner, slotId,
 						xOffset + x * 18,
 						yOffset + y * 18));
 			}
@@ -68,11 +68,11 @@ public abstract class ContainerInventory<T extends IInventory> extends
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
+		return owner.isUseableByPlayer(entityplayer);
 	}
 
 	public T getOwner() {
-		return inventory;
+		return owner;
 	}
 
 	@Override
@@ -120,6 +120,7 @@ public abstract class ContainerInventory<T extends IInventory> extends
 
 	public void onButtonClicked(EntityPlayer player, int buttonId) {}
 
+	@Override
 	public boolean enchantItem(EntityPlayer player, int buttonId) {
 		onButtonClicked(player, buttonId);
 		return false;
