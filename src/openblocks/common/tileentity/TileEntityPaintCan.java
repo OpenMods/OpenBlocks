@@ -48,6 +48,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 				}
 				tag.setInteger("color", color.getValue());
 				heldStack.setItemDamage(0);
+				worldObj.playSoundAtEntity(player, "liquid.swim", 0.1F, 1.2F);
 			}
 		}
 		return false;

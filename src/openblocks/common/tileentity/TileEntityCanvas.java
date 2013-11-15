@@ -146,6 +146,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 					// paint the whole block
 					baseColors.setValue(side, color);
 				}
+				// Nope.jpg
+				// worldObj.playSoundAtEntity(player, "mob.slime.big", 1F, 1F);
+				
+				worldObj.playSoundAtEntity(player, "mob.slime.small", 0.1F, 0.8F);
+				
 				// damage paint brush
 				heldItem.damageItem(1, player);
 				if (!worldObj.isRemote) {
@@ -158,7 +163,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 				// The TE ticks and custom rendering
 				
 				// Select the layers we are going to clean.
-				if (!worldObj.isRemote) {
+				if (!worldObj.isRemote && !isBlockUnpainted()) {
 					SyncableBlockLayers[] cleanLayers = player.isSneaking() ? allSides
 							: new SyncableBlockLayers[] { layers };
 					for (SyncableBlockLayers cleaningLayer : cleanLayers) {
@@ -185,6 +190,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 								paintedBlockId.getValue(),
 								paintedBlockMeta.getValue(), 2);
 					}
+					worldObj.playSoundAtEntity(player, "openblocks:wipe", 1F, 1F);
 					sync();
 				}
 				return true;
