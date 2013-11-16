@@ -599,10 +599,6 @@ public class Config {
 			}
 		}
 
-		if (Blocks.cannon != null) {
-			EntityRegistry.registerModEntity(EntityMount.class, "BlockEntity", 99, OpenBlocks.instance, Integer.MAX_VALUE, 8, false);
-		}
-
 		if (itemCraneControl > 0) {
 			OpenBlocks.Items.craneControl = new ItemCraneControl();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', Item.ingotIron, 'g', Item.goldNugget, 'l', Item.glowstone, 'r', Item.redstone));
