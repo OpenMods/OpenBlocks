@@ -90,5 +90,6 @@ item.openblocks.map_controller.name=Kartenkontrollmodul
 item.openblocks.map_memory.name=Kartenspeichermodul
 item.openblocks.cartographer.name=Kartograph
 item.openblocks.cursor.name=Cursor
+item.openblocks.squeegee.name=Scheibenwischer
 
 itemGroup.tabOpenBlocks=OpenBlocks
