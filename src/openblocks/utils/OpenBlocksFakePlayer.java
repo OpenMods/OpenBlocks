@@ -29,11 +29,32 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 	public ItemStack equipWithAndRightClick(ItemStack itemStack, Vec3 currentPos, Vec3 hitVector, ForgeDirection side, boolean blockExists) {
 		setPosition(currentPos.xCoord, currentPos.yCoord, currentPos.zCoord);
 
-		if (blockExists) {
-			hitVector.yCoord++;
-		}
 
 		ForgeDirection opposite = side.getOpposite();
+		
+		if (blockExists) {
+
+			// find rotations
+			float deltaX = (float)(currentPos.xCoord - hitVector.xCoord);
+			float deltaY = (float)(currentPos.yCoord - hitVector.yCoord);
+			float deltaZ = (float)(currentPos.zCoord - hitVector.zCoord);
+			float distanceInGroundPlain = (float)Math.sqrt((float)MathUtils.lengthSq(deltaX, deltaZ));
+			setSneaking(false);
+			if (rightClick(
+					inventory.getCurrentItem(),
+					(int)currentPos.xCoord + opposite.offsetX,
+					(int)currentPos.yCoord + opposite.offsetY,
+					(int)currentPos.zCoord + opposite.offsetZ,
+					opposite.ordinal(),
+					deltaX, deltaY, deltaZ,
+					blockExists)) {
+				setSneaking(true);
+					
+				return inventory.getCurrentItem();
+			}
+			hitVector.yCoord++;
+			setSneaking(true);
+		}
 
 		// find rotations
 		float deltaX = (float)(currentPos.xCoord - hitVector.xCoord);
@@ -78,7 +99,7 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 	private boolean rightClick(ItemStack itemStack, int x, int y, int z, int side, float deltaX, float deltaY, float deltaZ, boolean blockExists) {
 		boolean flag = false;
 		int blockId;
-
+		
 		if (itemStack != null && itemStack.getItem() != null
 				&& itemStack.getItem().onItemUseFirst(itemStack, this, worldObj, x, y, z, side, deltaX, deltaY, deltaZ)) { return true; }
 
