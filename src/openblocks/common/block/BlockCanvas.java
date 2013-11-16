@@ -53,7 +53,10 @@ public class BlockCanvas extends OpenBlock {
 				for (int i = 0; i < b.quantityDropped(world.rand); i++) {
 					ret.add(new ItemStack(b, 1, bMeta));
 				}
+			} else {
+				return super.getBlockDropped(world, x, y, z, metadata, fortune);
 			}
+			
 		}
 
 		return ret;
