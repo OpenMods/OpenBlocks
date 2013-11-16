@@ -643,7 +643,11 @@ public class Config {
 
 		if (itemSqueegeeId > 0) {
 			OpenBlocks.Items.squeegee = new ItemSqueegee();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
+			if (OpenBlocks.Blocks.sponge != null) {
+				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
+			} else {
+				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "ccc", " w ", " w ", 's', Block.carpet, 'w', "stickWood"));	
+			}
 		}
 
 		if (itemHeightMap > 0) {
