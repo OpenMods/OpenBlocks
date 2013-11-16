@@ -59,8 +59,7 @@ public class ClientTickHandler implements ITickHandler {
 		if (world != null && player != null) {
 			int x = (int)player.posX;
 			int y = (int)(player.boundingBox.minY) - 1;
-			int z = (int)player.posZ;
-
+			int z = (int)player.posZ - 1;
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if (te instanceof OpenTileEntity) return (OpenTileEntity)te;
 		}
@@ -77,7 +76,6 @@ public class ClientTickHandler implements ITickHandler {
 			OpenTileEntity target = getTileUnderPlayer(player);
 			if (target != null) {
 				if (player.movementInput.jump && !wasJumping) new PlayerMovementEvent(target, PlayerMovementEvent.Type.JUMP).sendToServer();
-
 				if (player.movementInput.sneak && !wasSneaking) new PlayerMovementEvent(target, PlayerMovementEvent.Type.SNEAK).sendToServer();
 			}
 			wasJumping = player.movementInput.jump;
