@@ -89,5 +89,6 @@ item.openblocks.empty_map.name=Empty Map
 item.openblocks.map_controller.name=Map Controller Module
 item.openblocks.map_memory.name=Map Memory Module
 item.openblocks.cartographer.name=Cartographer
+item.openblocks.cursor.name=Cursor
 
 itemGroup.tabOpenBlocks=OpenBlocks

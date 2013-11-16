@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -124,6 +125,14 @@ public class EntityItemProjectile extends EntityItem {
 
 		if (item != null && item.stackSize <= 0) {
 			this.setDead();
+		}
+		if (!worldObj.isRemote && this.onGround) {
+			EntityItem standardEntity = new EntityItem(worldObj);
+			NBTTagCompound transferTag = new NBTTagCompound();
+			writeToNBT(transferTag);
+			standardEntity.readFromNBT(transferTag);
+			this.setDead();
+			worldObj.spawnEntityInWorld(standardEntity);
 		}
 	}
 
