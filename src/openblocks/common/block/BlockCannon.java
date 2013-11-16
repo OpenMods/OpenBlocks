@@ -12,6 +12,7 @@ public class BlockCannon extends OpenBlock {
 	public BlockCannon() {
 		super(Config.blockCannonId, Material.ground);
 		setupBlock(this, "cannon", TileEntityCannon.class);
+		setBlockBounds(0.3f, 0, 0.3f, 0.6f, 0.7f, 0.7f);
 		/* I don't think this should rotate */
 	}
 

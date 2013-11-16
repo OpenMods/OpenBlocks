@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.common.api.INeighbourAwareTile;
 import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableBoolean;
@@ -18,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityTarget extends SyncedTileEntity implements
-		ISurfaceAttachment {
+		ISurfaceAttachment, INeighbourAwareTile {
 
 	private int strength = 0;
 	private int tickCounter = -1;
@@ -90,10 +91,6 @@ public class TileEntityTarget extends SyncedTileEntity implements
 		sync();
 	}
 
-	public void neighbourBlockChanged() {
-		onRedstoneChanged();
-	}
-
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return ForgeDirection.DOWN;
@@ -108,4 +105,9 @@ public class TileEntityTarget extends SyncedTileEntity implements
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {}
+
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		onRedstoneChanged();
+	}
 }
