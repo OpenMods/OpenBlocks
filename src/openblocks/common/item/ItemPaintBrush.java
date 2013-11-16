@@ -70,7 +70,7 @@ public class ItemPaintBrush extends Item {
 		stack.setTagCompound(tag);
 		return stack;
 	}
-	
+
 	@Override
 	public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6) {
 		return true;

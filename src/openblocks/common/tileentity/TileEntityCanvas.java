@@ -124,21 +124,21 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 			// and it's a paintbrush
 			if (item.equals(OpenBlocks.Items.paintBrush) && heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) {
 				int color = ItemPaintBrush.getColorFromStack(heldItem);
-				
-				if(player.isSneaking()) {
-					for(int i = 0; i < 6; i++) {
-						if(heldItem.getItemDamage() == ItemPaintBrush.MAX_USES) break;
+
+				if (player.isSneaking()) {
+					for (int i = 0; i < 6; i++) {
+						if (heldItem.getItemDamage() == ItemPaintBrush.MAX_USES) break;
 						SyncableBlockLayers layer = getLayersForSide(i);
 						if (!layer.setColor(color)) {
-							// 	clear the layers
+							// clear the layers
 							layer.clear();
 							baseColors.setValue(i, color);
 						}
 						heldItem.damageItem(1, player);
 					}
-				}else if(heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) { 
+				} else if (heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) {
 					if (!layers.setColor(color)) {
-						// 	clear the layers
+						// clear the layers
 						layers.clear();
 						baseColors.setValue(side, color);
 					}

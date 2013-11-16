@@ -124,6 +124,8 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	public final MapJobs jobs = new MapJobs();
 
 	private ItemStack mapItem;
+	private int mappingDimension;
+
 	private int countdownToAction = MAP_JOB_DELAY;
 	private int countdownToMove = MOVE_DELAY;
 	private float randomDelta;
@@ -172,7 +174,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		super.onUpdate();
 
 		if (!worldObj.isRemote) {
-			if (isMapping.getValue() && countdownToAction-- <= 0) {
+			if (worldObj.provider.dimensionId == mappingDimension && isMapping.getValue() && countdownToAction-- <= 0) {
 				jobs.runJob(worldObj, (int)posX, (int)posZ);
 				countdownToAction = MAP_JOB_DELAY;
 			}
@@ -198,6 +200,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 				int mapId = this.mapItem.getItemDamage();
 				jobs.resumeMapping(worldObj, mapId);
 			}
+			mappingDimension = tag.getInteger("Dimension");
 		}
 	}
 
@@ -214,6 +217,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			NBTTagCompound mapItem = new NBTTagCompound();
 			this.mapItem.writeToNBT(mapItem);
 			tag.setTag("MapItem", mapItem);
+			tag.setInteger("Dimension", mappingDimension);
 		}
 	}
 
@@ -242,6 +246,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 					if (holding.stackSize <= 0) player.setCurrentItemOrArmor(0, null);
 
 					mapItem = inserted;
+					mappingDimension = worldObj.provider.dimensionId;
 					isMapping.toggle();
 					mapItem = MapDataBuilder.upgradeToMap(worldObj, mapItem);
 					int mapId = mapItem.getItemDamage();

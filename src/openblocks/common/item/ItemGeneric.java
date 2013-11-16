@@ -76,13 +76,15 @@ public class ItemGeneric extends Item {
 		mapController {
 			@Override
 			public IMetaItem createMetaItem() {
-				return new MetaGeneric("map_controller");
+				ItemStack result = newItemStack(1);
+				return new MetaGeneric("map_controller", new ShapedOreRecipe(result, " r ", "rgr", " r ", 'r', Item.redstone, 'g', Item.ingotGold));
 			}
 		},
 		mapMemory {
 			@Override
 			public IMetaItem createMetaItem() {
-				return new MetaGeneric("map_memory");
+				ItemStack result = newItemStack(1);
+				return new MetaGeneric("map_memory", new ShapedOreRecipe(result, "rg", "rg", "rg", 'g', Item.goldNugget, 'r', Item.redstone));
 			}
 		},
 		cursor {
@@ -90,6 +92,13 @@ public class ItemGeneric extends Item {
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
 				return new MetaCursor("cursor", new ShapedOreRecipe(result, "w  ", "www", "www", 'w', Block.cloth));
+			}
+		},
+		assistantBase {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				return new MetaGeneric("assistant_base", new ShapedOreRecipe(result, "iei", "iri", 'i', Item.ingotIron, 'e', Item.enderPearl, 'r', Item.redstone));
 			}
 		};
 

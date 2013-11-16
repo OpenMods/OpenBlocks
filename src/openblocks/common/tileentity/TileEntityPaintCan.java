@@ -51,7 +51,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 				worldObj.playSoundAtEntity(player, "liquid.swim", 0.1F, 1.2F);
 			}
 		}
-		if(amount.getValue() == 0 && !worldObj.isRemote) {
+		if (amount.getValue() == 0 && !worldObj.isRemote) {
 			ItemStack item = new ItemStack(Item.bucketEmpty);
 			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, item);
 			worldObj.setBlock(xCoord, yCoord, zCoord, 0);
@@ -62,11 +62,11 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 	public int getColor() {
 		return color.getValue();
 	}
-	
+
 	public int getAmount() {
 		return amount.getValue();
 	}
-	
+
 	public void setAmount(int amt) {
 		amount.setValue(amt);
 	}

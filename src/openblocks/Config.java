@@ -21,13 +21,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openblocks.OpenBlocks.Blocks;
 import openblocks.asm.ClassTransformerEntityPlayer;
 import openblocks.common.EntityEventHandler;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
-import openblocks.common.entity.EntityMount;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.recipe.CrayonGlassesRecipe;
@@ -39,7 +37,6 @@ import openblocks.utils.ColorUtils;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Config {
@@ -546,6 +543,8 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockProjectorId)) {
 			OpenBlocks.Blocks.projector = new BlockProjector();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 		}
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
@@ -663,6 +662,7 @@ public class Config {
 
 		if (itemCartographerId > 0) {
 			OpenBlocks.Items.cartographer = new ItemCartographer();
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, ItemGeneric.Metas.assistantBase.newItemStack(), Item.eyeOfEnder));
 		}
 
 		// move it and cpw will shout at you

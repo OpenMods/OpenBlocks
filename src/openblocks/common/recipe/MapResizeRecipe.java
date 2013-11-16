@@ -14,7 +14,7 @@ import openblocks.utils.ItemUtils;
 public class MapResizeRecipe extends ShapedOreRecipe {
 
 	public MapResizeRecipe() {
-		super(Items.emptyMap.createMap(1), "eee", "eme", "eee",
+		super(Items.emptyMap.createMap(1), " e ", "eme", " e ",
 				'e', Items.generic.newItemStack(Metas.mapMemory),
 				'm', Items.emptyMap.createMap(0));
 	}
