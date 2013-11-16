@@ -158,7 +158,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		currentYaw = targetYaw.getValue();
 		
 		double[] theta = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
-		targetPitch.setValue(Math.toDegrees(theta[1]));
+		targetPitch.setValue(Math.toDegrees(Math.max(theta[0], theta[1])));
 		currentPitch = targetPitch.getValue();
 		
 		targetSpeed.setValue(theta[2]);
@@ -202,20 +202,34 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		 * that thinks they can make this work better. Regards -NC
 		 */
 		
-		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 8;
+		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 10;
 		
-		public static final double CANNON_VELOCITY = 8 * 0.05; // 5 meters/second
+		public static final double CANNON_VELOCITY = 8 * 0.05; // 8 meters/second
 		public static final double WORLD_GRAVITY = -0.8 * 0.05; // World Gravity in meters/second/second
+		
+		public static double[] getThetaByAngle(double deltaX, double deltaY, double deltaZ, double v) {
+			v += 0.5;
+			double r = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+			double e = Math.atan2(deltaY, r);
+			double g = WORLD_GRAVITY;
+			double c1 = Math.sqrt(Math.pow(v,4) - g * (g*r*r * Math.pow(Math.cos(e), 2) + 2*(v*v)*r*Math.sin(e)));
+			double c2 = g * r * Math.cos(e);
+			return new double[] {
+					Math.atan(v*v + c1 / c2),
+					Math.atan(v*v - c1 * c2)
+			};
+		}
 
 		public static double[] getVariableVelocityTheta(double deltaX, double deltaY, double deltaZ) {
 			double velocity = CANNON_VELOCITY;
 			double[] theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
-			int iterations = 30;
+			int iterations = 60;
 			while(Double.isNaN(theta[0]) && Double.isNaN(theta[1]) && --iterations > 0) {
-				velocity += 0.05;
+				velocity += 0.025;
 				theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
 			}
 			double[] result = new double[3];
+			System.out.println(theta[0]);
 			result[0] = theta[0];
 			result[1] = theta[1];
 			result[2] = velocity;
@@ -228,7 +242,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 			double v = velocity;
 			double g = WORLD_GRAVITY;
 			double[] theta = new double[2];
-			double mComponent = (v*v*v*v) - g * (g * (x * x) + 2 * (y * ( v * v)));
+			double mComponent = (v*v*v*v) - g * (g * (x * x) + 2 * (y  * ( v * v)));
+			if(mComponent < 0) return new double[] { Double.NaN, Double.NaN };
 			mComponent *= 100;
 			mComponent = Math.sqrt(mComponent);
 			mComponent /= 10;
