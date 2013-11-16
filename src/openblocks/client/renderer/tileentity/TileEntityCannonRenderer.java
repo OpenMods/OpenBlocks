@@ -45,9 +45,9 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 				posX += motionX;
 				posY += motionY;
 				posZ += motionZ;
-				motionX *= 0.98;
-				motionY *= 0.9800000190734863D;
-				motionZ *= 0.98;
+				//motionX *= 0.98;
+				//motionY *= 0.9800000190734863D;
+				//motionZ *= 0.98;
 			}
 			GL11.glEnd();
 			GL11.glEnable(GL11.GL_CULL_FACE);

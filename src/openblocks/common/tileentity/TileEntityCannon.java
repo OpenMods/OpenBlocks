@@ -13,6 +13,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.api.IActivateAwareTile;
+import openblocks.common.entity.EntityItemProjectile;
 import openblocks.common.events.TileEntityMessageEventPacket;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
@@ -78,7 +79,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 							if (stack != null) {
 								getMotionFromAngles();
 								new TileEntityMessageEventPacket(this).sendToWatchers((WorldServer)worldObj);
-								EntityItem item = new EntityItem(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
+								EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
 								item.motionX = motionX * currentSpeed;
 								item.motionY = motionY * currentSpeed;
@@ -151,55 +152,21 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		double dY = (yCoord + 0.5) - (y + 0.5);
 		double dZ = (zCoord + 0.5) - (z + 0.5);
 
-		double dist = dX * dX + dY * dY + dZ * dZ;
+		double dist = Math.sqrt(dX * dX + dZ * dZ);
 
-		// find the yaw, and give it a fixed pitch
-		targetYaw.setValue(Math.toDegrees(Math.atan2(dZ, dX)) + 90);
-		targetPitch.setValue(30);
+		targetYaw.setValue(Math.toDegrees(Math.atan2(dZ, dX)) + 90);		
 		currentYaw = targetYaw.getValue();
+		
+		double[] theta = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
+		targetPitch.setValue(Math.toDegrees(theta[1]));
 		currentPitch = targetPitch.getValue();
-
-		// so, starting with tiny amount of speed (0.01), we keep increasing
-		// the speed and checking the distance that it falls below the target Y
-		// point
-		// if the distance is further than the distance to the target, we've
-		// found the
-		// speed we want
-		double speed = 0.01;
-		double d;
-		while ((d = getDistance(speed, y + 0.5)) < dist) {
-			speed += 0.01;
-		}
+		
+		targetSpeed.setValue(theta[2]);
 
 		System.out.println("Distance = " + dist);
-		System.out.println("Distance = " + d);
-		setSpeed(speed);
 		sync();
 	}
-
-	private double getDistance(double speed, double y) {
-		getMotionFromAngles();
-		double posX = xCoord + 0.5;
-		double posY = yCoord + 0.5;
-		double posZ = zCoord + 0.5;
-		for (int i = 0; i < 100; i++) {
-			motionY -= 0.03999999910593033D;
-			posX += motionX * speed;
-			posY += motionY * speed;
-			posZ += motionZ * speed;
-			motionX *= 0.98;
-			motionY *= 0.9800000190734863D;
-			motionZ *= 0.98;
-			if (posY < y) {
-				double dX = (xCoord + 0.5) - posX + 0.5;
-				double dY = (yCoord + 0.5) - posY;
-				double dZ = (zCoord + 0.5) - posZ + 0.5;
-				return dX * dX + dY * dY + dZ * dZ;
-			}
-		}
-		return Integer.MIN_VALUE;
-	}
-
+	
 	public void disableLineRender() {
 		renderLine = false;
 	}
@@ -223,5 +190,43 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	public void setYaw(double yaw2) {
 		targetYaw.setValue(yaw2);
 		sync();
+	}
+	
+	
+	static class TileEntityCannonLogic {
+		
+		public static final double CANNON_VELOCITY = 8 * 0.05; // 5 meters/second
+		public static final double WORLD_GRAVITY = -0.8 * 0.05; // World Gravity in meters/second/second
+
+		public static double[] getVariableVelocityTheta(double deltaX, double deltaY, double deltaZ) {
+			double velocity = CANNON_VELOCITY;
+			double[] theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
+			int iterations = 30;
+			while(Double.isNaN(theta[0]) && Double.isNaN(theta[1]) && --iterations > 0) {
+				velocity += 0.05;
+				theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
+			}
+			double[] result = new double[3];
+			result[0] = theta[0];
+			result[1] = theta[1];
+			result[2] = velocity;
+			return result;
+		}
+		
+		public static double[] getThetaToPoint(double deltaX, double deltaY, double deltaZ, double velocity) {
+			double x = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+			double y = deltaY + 0.4;
+			double v = velocity;
+			double g = WORLD_GRAVITY;
+			double[] theta = new double[2];
+			double mComponent = (v*v*v*v) - g * (g * (x * x) + 2 * (y * ( v * v)));
+			mComponent *= 100;
+			mComponent = Math.sqrt(mComponent);
+			mComponent /= 10;
+			mComponent /=  (g * x );
+			theta[0] = Math.atan(v * v + mComponent);
+			theta[1] = Math.atan(v * v - mComponent);
+			return theta;
+		}
 	}
 }

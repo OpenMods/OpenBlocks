@@ -78,7 +78,7 @@ public class EntityItemProjectile extends EntityItem {
 		}
 
 		// Zero Air Friction
-		float f = 0F;
+		float f = 1F;
 
 		
 		// Keep ground friction
