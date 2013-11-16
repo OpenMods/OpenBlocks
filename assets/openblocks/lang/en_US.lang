@@ -90,5 +90,6 @@ item.openblocks.map_controller.name=Map Controller Module
 item.openblocks.map_memory.name=Map Memory Module
 item.openblocks.cartographer.name=Cartographer
 item.openblocks.cursor.name=Cursor
+item.openblocks.squeegee.name=Squeegee
 
 itemGroup.tabOpenBlocks=OpenBlocks

@@ -10,7 +10,7 @@ import openblocks.Config;
 public class BlockPath extends OpenBlock {
 
 	public BlockPath() {
-		super(Config.blockPathId, Material.ground);
+		super(Config.blockPathId, Material.plants);
 		setupBlock(this, "path");
 		setBlockBounds(0, 0, 0, 1f, 0.1f, 1f);
 	}
@@ -29,7 +29,7 @@ public class BlockPath extends OpenBlock {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;
 	}
-
+	
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 		return isValidLocation(world, x, y, z)
