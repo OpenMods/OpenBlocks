@@ -69,7 +69,8 @@ public class HeightMapRenderer {
 						byte color = layer.colorMap[index];
 						byte height = layer.heightMap[index];
 
-						if (color == 0) continue;
+						// No idea how height can get negative...
+						if (color == 0 || height < 0) continue; 
 
 						int fullColor = MapColor.mapColorArray[color].colorValue;
 						int[] plane = getPlane(levels, height);
