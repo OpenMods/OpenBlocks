@@ -148,9 +148,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	public void setTarget(int x, int y, int z) {
 
 		// right, first we get the distance
-		double dX = (xCoord + 0.5) - (x + 0.5);
-		double dY = (yCoord + 0.5) - (y + 0.5);
-		double dZ = (zCoord + 0.5) - (z + 0.5);
+		double dX = (xCoord) - (x);
+		double dY = (yCoord) - (y);
+		double dZ = (zCoord) - (z);
 
 		double dist = Math.sqrt(dX * dX + dZ * dZ);
 
@@ -194,6 +194,15 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	
 	
 	static class TileEntityCannonLogic {
+		
+		/*
+		 * Hello, If you think you can improve the code below to work better, 
+		 * all power to you! But please, if you give up and revert your changes. Please 
+		 * increment the counter below as an increasing warning to the next sorry soul
+		 * that thinks they can make this work better. Regards -NC
+		 */
+		
+		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 8;
 		
 		public static final double CANNON_VELOCITY = 8 * 0.05; // 5 meters/second
 		public static final double WORLD_GRAVITY = -0.8 * 0.05; // World Gravity in meters/second/second
