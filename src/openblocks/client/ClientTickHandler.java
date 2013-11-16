@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.events.PlayerMovementEvent;
@@ -57,9 +58,9 @@ public class ClientTickHandler implements ITickHandler {
 	private static OpenTileEntity getTileUnderPlayer(EntityPlayer player) {
 		World world = Minecraft.getMinecraft().theWorld;
 		if (world != null && player != null) {
-			int x = (int)player.posX;
-			int y = (int)(player.boundingBox.minY) - 1;
-			int z = (int)player.posZ - 1;
+			int x = MathHelper.floor_double(player.posX);
+			int y = MathHelper.floor_double(player.boundingBox.minY) - 1;
+			int z = MathHelper.floor_double(player.posZ);
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if (te instanceof OpenTileEntity) return (OpenTileEntity)te;
 		}
