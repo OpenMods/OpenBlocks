@@ -7,7 +7,6 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import openblocks.Log;
 import openblocks.client.renderer.DynamicTextureAtlas.AtlasCell;
 import openblocks.common.HeightMapData;
 
@@ -56,9 +55,7 @@ public class HeightMapRenderer {
 			List<PlaneData> planes = Lists.newArrayList();
 
 			createXZPlanes(map, planes);
-			Log.info("Layers: %d", planes.size());
-
-			atlas.compile();
+			if (!planes.isEmpty()) atlas.compile();
 			return planes;
 		}
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
-import openblocks.Log;
 import openblocks.utils.ByteUtils;
 
 import com.google.common.base.Preconditions;
@@ -62,8 +61,6 @@ public class DynamicTextureAtlas {
 		int width = ByteUtils.nextPowerOf2(side);
 		int area = width * width;
 		int height = (count <= area / 2)? width / 2 : width;
-
-		Log.info("count: %d, size: (%d,%d), area: %d, free space: %d", count, width, height, width * height, width * height - count);
 
 		textureWrapper.resize(width * cellSize, height * cellSize);
 		int[] buffer = textureWrapper.allocate();
