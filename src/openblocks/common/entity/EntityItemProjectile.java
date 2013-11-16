@@ -40,7 +40,7 @@ public class EntityItemProjectile extends EntityItem {
 			}
 		}
 
-		super.onUpdate();
+		super.onEntityUpdate();
 
 		if (this.delayBeforeCanPickup > 0) {
 			--this.delayBeforeCanPickup;
