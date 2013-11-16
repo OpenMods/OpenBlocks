@@ -16,11 +16,6 @@ public class BlockCanvasGlass extends BlockCanvas {
 	}
 
 	@Override
-	public int quantityDropped(Random par1Random) {
-		return 0;
-	}
-
-	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}

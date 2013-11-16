@@ -84,7 +84,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 								item.motionY = motionY * currentSpeed;
 								item.motionZ = motionZ * currentSpeed;
 								worldObj.spawnEntityInWorld(item);
-								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:mortar", 0.2f, 1.0f);
+								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:cannon", 0.2f, 1.0f);
 								break;
 							}
 						}
@@ -102,6 +102,12 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	@Override
 	public void onEvent(TileEntityMessageEventPacket event) {
 		ticksSinceLastFire = 0;
+		double pitchRad = Math.toRadians(currentYaw - 90);
+		double x = -0.5 * Math.cos(pitchRad);
+		double z = -0.5 * Math.sin(pitchRad);
+		for (int i = 0; i < 20; i++) {
+			worldObj.spawnParticle((i < 4 ? "large" : "") + "smoke", x + xCoord + 0.3 + (worldObj.rand.nextDouble() * 0.4), yCoord + 0.7, z + zCoord  + 0.3 + (worldObj.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+		}
 	}
 
 	public int getTicksSinceLastFire() {
