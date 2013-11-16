@@ -92,5 +92,6 @@ item.openblocks.cartographer.name=Cartographer
 item.openblocks.assistant_base.name=Assistant's base
 item.openblocks.cursor.name=Cursor
 item.openblocks.squeegee.name=Squeegee
+item.openblocks.unprepared_stencil.name=Unprepared Stencil
 
 itemGroup.tabOpenBlocks=OpenBlocks
