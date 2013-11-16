@@ -124,22 +124,29 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 			// and it's a paintbrush
 			if (item.equals(OpenBlocks.Items.paintBrush) && heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) {
 				int color = ItemPaintBrush.getColorFromStack(heldItem);
-
-				// if we cant set the color on the current stencil (because
-				// there isnt one?)
-				if (!layers.setColor(color)) {
-					// clear the layers
-					layers.clear();
-					// paint the whole block
-					baseColors.setValue(side, color);
+				
+				if(player.isSneaking()) {
+					for(int i = 0; i < 6; i++) {
+						if(heldItem.getItemDamage() == ItemPaintBrush.MAX_USES) break;
+						SyncableBlockLayers layer = getLayersForSide(i);
+						if (!layer.setColor(color)) {
+							// 	clear the layers
+							layer.clear();
+							baseColors.setValue(i, color);
+						}
+						heldItem.damageItem(1, player);
+					}
+				}else if(heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) { 
+					if (!layers.setColor(color)) {
+						// 	clear the layers
+						layers.clear();
+						baseColors.setValue(side, color);
+					}
+					heldItem.damageItem(1, player);
 				}
-				// Nope.jpg
-				// worldObj.playSoundAtEntity(player, "mob.slime.big", 1F, 1F);
 
 				worldObj.playSoundAtEntity(player, "mob.slime.small", 0.1F, 0.8F);
 
-				// damage paint brush
-				heldItem.damageItem(1, player);
 				if (!worldObj.isRemote) {
 					sync();
 				}
