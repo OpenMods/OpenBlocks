@@ -164,6 +164,9 @@ public class Config {
 
 	@BlockId(description = "The id of the map projector block")
 	public static int blockProjectorId = 2573;
+	
+	@BlockId(description = "The id of the drawing table")
+	public static int blockDrawingTable = 2574;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -546,6 +549,7 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 		}
+		
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
@@ -663,6 +667,11 @@ public class Config {
 		if (itemCartographerId > 0) {
 			OpenBlocks.Items.cartographer = new ItemCartographer();
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, ItemGeneric.Metas.assistantBase.newItemStack(), Item.eyeOfEnder));
+		}
+		
+		if (Config.canRegisterBlock(blockDrawingTable)) {
+			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', ItemGeneric.Metas.unpreparedStencil.newItemStack(), 'k', ItemGeneric.Metas.sketchingPencil.newItemStack()));
 		}
 
 		// move it and cpw will shout at you

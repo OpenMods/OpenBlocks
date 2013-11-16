@@ -61,6 +61,7 @@ tile.openblocks.canvas.name=Canvas
 tile.openblocks.paintmixer.name=Paint Mixer
 tile.openblocks.paintcan.name=Paint Can
 tile.openblocks.projector.name=Height Map Projector
+tile.openblocks.drawingtable.name=Drawing Table
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.gliderwing.name=Glider Wing
@@ -93,5 +94,6 @@ item.openblocks.assistant_base.name=Assistant's base
 item.openblocks.cursor.name=Cursor
 item.openblocks.squeegee.name=Squeegee
 item.openblocks.unprepared_stencil.name=Unprepared Stencil
+item.openblocks.sketching_pencil.name=Sketching Pencil
 
 itemGroup.tabOpenBlocks=OpenBlocks

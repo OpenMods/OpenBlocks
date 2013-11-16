@@ -112,7 +112,7 @@ public class ItemGeneric extends Item {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
-				return new MetaGeneric("sketchingPencil", new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', Item.coal, 's', Item.stick));
+				return new MetaGeneric("sketching_pencil", new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', Item.coal, 's', Item.stick));
 			}
 		};
 
