@@ -105,7 +105,15 @@ public class ItemGeneric extends Item {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
-				return new MetaGeneric("unprepared_stencil", new ShapedOreRecipe(result, "pip", "ipi", "pip", 'p', Item.paper));
+				return new MetaGeneric("unprepared_stencil", new ShapedOreRecipe(result, " p ", "pip", " p ", 'p', Item.paper, 'i', Item.ingotIron));
+			}
+		},
+		sketchingPencil {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				return new MetaGeneric("sketching_pencil", new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', Item.coal, 's', Item.stick),
+						new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Item.coal, 1, 1), 's', Item.stick));
 			}
 		};
 
