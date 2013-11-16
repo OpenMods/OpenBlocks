@@ -67,9 +67,10 @@ public class HeightMapRenderer {
 					for (int y = 0; y < 64; y++) {
 						int index = 64 * y + x;
 						byte color = layer.colorMap[index];
-						byte height = layer.heightMap[index];
 
-						if (color == 0) continue;
+						if (color == 0) continue; 
+						//stupid singed bytes
+						int height = layer.heightMap[index] & 0xFF;
 
 						int fullColor = MapColor.mapColorArray[color].colorValue;
 						int[] plane = getPlane(levels, height);
