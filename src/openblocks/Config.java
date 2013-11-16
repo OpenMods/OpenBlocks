@@ -532,7 +532,7 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Item.paper, 'f', Block.fence));
 		}
 
-		if (Config.canRegisterBlock(blockMachineOreCrusherId)) {
+		if (experimentalFeatures && Config.canRegisterBlock(blockMachineOreCrusherId)) {
 			OpenBlocks.Blocks.machineOreCrusher = new BlockMachineOreCrusher();
 		}
 
