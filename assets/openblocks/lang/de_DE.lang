@@ -60,6 +60,7 @@ tile.openblocks.itemDropper.name=Itemspender
 tile.openblocks.canvas.name=Leinwand
 tile.openblocks.paintmixer.name=Farbmixer
 tile.openblocks.paintcan.name=Farbeimer
+tile.openblocks.projector.name=Höhenkartenprojektor
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
@@ -83,5 +84,11 @@ item.openblocks.xpbucket.name=XP-Eimer
 item.openblocks.sleepingbag.name=Schlafsack
 item.openblocks.paintbrush.name=Pinsel
 item.openblocks.stencil.name=Schablone
+item.openblocks.height_map.name=Höhenkarte
+item.openblocks.empty_map.name=Leere Karte
+item.openblocks.map_controller.name=Kartenkontrollmodul
+item.openblocks.map_memory.name=Kartenspeichermodul
+item.openblocks.cartographer.name=Kartograph
+item.openblocks.cursor.name=Cursor
 
 itemGroup.tabOpenBlocks=OpenBlocks
