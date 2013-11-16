@@ -643,7 +643,7 @@ public class Config {
 
 		if (itemSqueegeeId > 0) {
 			OpenBlocks.Items.squeegee = new ItemSqueegee();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', Item.stick));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 		}
 
 		if (itemHeightMap > 0) {
