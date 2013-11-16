@@ -85,12 +85,12 @@ public class EntityMutant extends EntityTameable implements IEntityAdditionalSpa
 		tail = getEntityClassForId(data.readUTF());
 	}
 
-	private String getEntityIdForClass(Class<? extends EntityLivingBase> klazz) {
+	private static String getEntityIdForClass(Class<? extends EntityLivingBase> klazz) {
 		return Objects.firstNonNull((String)EntityList.classToStringMapping.get(klazz), "");
 	}
 
 	@SuppressWarnings("unchecked")
-	private Class<? extends EntityLivingBase> getEntityClassForId(String id) {
+	private static Class<? extends EntityLivingBase> getEntityClassForId(String id) {
 		return (Class<? extends EntityLivingBase>)EntityList.stringToClassMapping.get(id);
 	}
 

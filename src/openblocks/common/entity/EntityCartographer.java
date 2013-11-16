@@ -26,7 +26,6 @@ import openmods.utils.BitSet;
 import openmods.utils.ByteUtils;
 import openmods.utils.ItemUtils;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
 import cpw.mods.fml.relauncher.Side;

@@ -158,6 +158,9 @@ public class OpenBlocks implements IOpenMod {
 
 		@RegisterItem(name = "tastyClay")
 		public static ItemTastyClay tastyClay;
+
+		@RegisterItem(name = "goldenEye")
+		public static ItemGoldenEye goldenEye;
 	}
 
 	public static class Fluids {
@@ -227,6 +230,11 @@ public class OpenBlocks implements IOpenMod {
 
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 
+		if (Config.itemGoldenEyeId > 0) {
+			EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", 707, OpenBlocks.instance, 64, 8, true);
+			MinecraftForge.EVENT_BUS.register(StructureRegistry.instance);
+		}
+
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500);
 		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
 		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
@@ -246,7 +254,7 @@ public class OpenBlocks implements IOpenMod {
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
 		}
-		
+
 		proxy.preInit();
 	}
 

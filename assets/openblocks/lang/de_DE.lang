@@ -1,7 +1,8 @@
 achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Sorry, das ist einfach so passiert...
 stat.openblocks.bricksDropped=Fallen gelassene Ziegel
-openblocks.drop_brick=Sei albern
+
+openblocks.keybind.drop_brick=Sei albern
 
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger

@@ -144,6 +144,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityMutant.class, new EntityMutantRenderer(new ModelMutant(), 0.7F));
+		
+		if (OpenBlocks.Items.goldenEye != null) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());
+		}
 	}
 
 	@SuppressWarnings("unchecked")

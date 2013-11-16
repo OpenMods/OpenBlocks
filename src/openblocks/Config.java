@@ -15,17 +15,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openblocks.asm.ClassTransformerEntityPlayer;
+import openblocks.asm.EntityPlayerVisitor;
 import openblocks.common.EntityEventHandler;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
-import openblocks.common.recipe.CrayonGlassesRecipe;
-import openblocks.common.recipe.CrayonMixingRecipe;
-import openblocks.common.recipe.MapCloneRecipe;
-import openblocks.common.recipe.MapResizeRecipe;
+import openblocks.common.recipe.*;
 import openmods.config.BlockId;
 import openmods.config.ConfigProcessing;
 import openmods.config.ItemId;
@@ -203,6 +200,9 @@ public class Config {
 	@ItemId(description = "The id of the tasty clay item!")
 	public static int itemTastyClay = 14994;
 
+	@ItemId(description = "The id of the golden eye item")
+	public static int itemGoldenEyeId = 14995;
+
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
 	public static boolean elevatorIgnoreHalfBlocks = false;
@@ -227,9 +227,9 @@ public class Config {
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
 	public static boolean soSerious = true;
+	public static boolean eyeDebug = true;
 
 	static void readConfig(Configuration configFile) {
-
 		ConfigProcessing.processAnnotations(configFile, Config.class);
 
 		Property prop = configFile.get("dropblock", "searchDistance", elevatorTravelDistance, "The range of the drop block");
@@ -305,6 +305,9 @@ public class Config {
 
 		prop = configFile.get("tomfoolery", "weAreSeriousPeople", soSerious, "Are you serious too?");
 		soSerious = prop.getBoolean(soSerious);
+
+		prop = configFile.get("debug", "goldenEyeDebug", eyeDebug, "Show structures found by golden eye");
+		eyeDebug = prop.getBoolean(eyeDebug);
 	}
 
 	public static void register() {
@@ -563,7 +566,7 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
 		}
 
-		if (itemSleepingBagId > 0 && ClassTransformerEntityPlayer.IsInBedHookSuccess) {
+		if (itemSleepingBagId > 0 && EntityPlayerVisitor.IsInBedHookSuccess) {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Block.carpet, 'w', Block.cloth));
 		}
@@ -614,6 +617,12 @@ public class Config {
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, ItemGeneric.Metas.assistantBase.newItemStack(), Item.eyeOfEnder));
 		}
 
+		if (itemGoldenEyeId > 0) {
+			OpenBlocks.Items.goldenEye = new ItemGoldenEye();
+			recipeList.add(new GoldenEyeRechargeRecipe());
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', Item.goldNugget, 'e', Item.eyeOfEnder));
+		}
+
 		if (!soSerious && itemTastyClay > 0) {
 			OpenBlocks.Items.tastyClay = new ItemTastyClay();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Item.clay, Item.bucketMilk, new ItemStack(Item.dyePowder, 1, 3)));
@@ -621,5 +630,4 @@ public class Config {
 
 		ConfigProcessing.registerItems(OpenBlocks.Items.class, "openblocks");
 	}
-
 }

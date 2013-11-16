@@ -2,7 +2,8 @@
 achievement.openblocks.droppedBrick=Shaggy的口头禅:Zoinks!
 achievement.openblocks.droppedBrick.desc=抱歉,事情就那样发生了...
 stat.openblocks.bricksDropped=砖块已掉落
-openblocks.drop_brick=傻了
+
+openblocks.keybind.drop_brick=傻了
 
 openblocks.gui.luggage=行李
 openblocks.gui.sprinkler=洒水器

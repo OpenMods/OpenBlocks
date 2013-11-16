@@ -1,7 +1,8 @@
 achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Sorry, it just happened...
 stat.openblocks.bricksDropped=Bricks dropped
-openblocks.drop_brick=Be silly
+
+openblocks.keybind.drop_brick=Be silly
 
 openblocks.gui.luggage=Luggage
 openblocks.gui.sprinkler=Sprinkler
@@ -31,6 +32,8 @@ openblocks.misc.mode.inverted_block=Inverted Block
 openblocks.misc.mode.inverted_panel=Inverted Panel
 openblocks.misc.mode.inverted_half_panel=Inverted Half-height panel
 openblocks.misc.mode.inverted_stairs=Inverted Stairs
+openblocks.misc.structure_pos=Debug: found structure %s at (%d,%d,%d)
+openblocks.misc.locked=Locked
 
 openblocks.turtle.magnet=Magnet
 
@@ -101,5 +104,6 @@ item.openblocks.squeegee.name=Squeegee
 item.openblocks.unprepared_stencil.name=Unprepared Stencil
 item.openblocks.sketching_pencil.name=Sketching Pencil
 item.openblocks.tasty_clay.name=Tasty Clay
+item.openblocks.golden_eye.name=Golden eye
 
 itemGroup.tabOpenBlocks=OpenBlocks
