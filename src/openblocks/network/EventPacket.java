@@ -201,7 +201,7 @@ public abstract class EventPacket extends Event {
 		return true;
 	}
 
-	protected boolean checkSendToServer() {;
+	protected boolean checkSendToServer() {
 		if (!getType().getDirection().toServer) {
 			Log.warn("Trying to sent message '%s' to server", this);
 			return false;

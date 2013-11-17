@@ -38,7 +38,6 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 			float deltaX = (float)(currentPos.xCoord - hitVector.xCoord);
 			float deltaY = (float)(currentPos.yCoord - hitVector.yCoord);
 			float deltaZ = (float)(currentPos.zCoord - hitVector.zCoord);
-			float distanceInGroundPlain = (float)Math.sqrt((float)MathUtils.lengthSq(deltaX, deltaZ));
 			setSneaking(false);
 			if (rightClick(
 					inventory.getCurrentItem(),

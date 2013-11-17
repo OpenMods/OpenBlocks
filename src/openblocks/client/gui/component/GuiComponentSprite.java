@@ -3,7 +3,6 @@ package openblocks.client.gui.component;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
-import openblocks.utils.CompatibilityUtils;
 import openblocks.utils.FakeIcon;
 
 import org.lwjgl.opengl.GL11;

@@ -4,9 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 
 import openblocks.common.Stencil;
-import openblocks.common.events.PlayerMovementEvent.Type;
 import openblocks.common.tileentity.OpenTileEntity;
-import openblocks.network.EventPacket.EventType;
 import openblocks.utils.ByteUtils;
 
 public class StencilCraftEvent extends TileEntityMessageEventPacket {
