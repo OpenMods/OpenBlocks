@@ -124,14 +124,6 @@ public class EntityItemProjectile extends EntityItem {
 		if (item != null && item.stackSize <= 0) {
 			setDead();
 		}
-		if (!worldObj.isRemote && this.onGround) {
-			EntityItem standardEntity = new EntityItem(worldObj);
-			NBTTagCompound transferTag = new NBTTagCompound();
-			writeToNBT(transferTag);
-			standardEntity.readFromNBT(transferTag);
-			setDead();
-			worldObj.spawnEntityInWorld(standardEntity);
-		}
 	}
 
 	/**
