@@ -162,7 +162,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		double dist = Math.sqrt(dX * dX + dZ * dZ );
 		double yawDegrees = Math.toDegrees(Math.atan2(dZ, dX)) + 90;
 		targetYaw.setValue(yawDegrees);
-		System.out.println("Pointing at " + yawDegrees);
 		currentYaw = targetYaw.getValue();
 
 		double[] calc = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
@@ -176,8 +175,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		double d = Math.sqrt( dX * dX + dZ * dZ );
 		double v = Math.sqrt((d * -TileEntityCannonLogic.WORLD_GRAVITY) / Math.sin(2 * theta));
 		targetSpeed.setValue(v);
-
-		System.out.println("Distance = " + dist);
 		sync();
 	}
 
@@ -247,7 +244,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 				theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
 			}
 			double[] result = new double[3];
-			System.out.println(theta[0]);
 			result[0] = theta[0];
 			result[1] = theta[1];
 			result[2] = velocity;
