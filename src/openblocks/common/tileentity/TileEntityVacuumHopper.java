@@ -169,7 +169,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 
 	public void onEntityCollidedWithBlock(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (entity instanceof EntityItem) {
+			if (entity instanceof EntityItem && !entity.isDead) {
 				EntityItem item = (EntityItem)entity;
 				ItemStack stack = item.getEntityItem().copy();
 				InventoryUtils.insertItemIntoInventory(inventory, stack);
