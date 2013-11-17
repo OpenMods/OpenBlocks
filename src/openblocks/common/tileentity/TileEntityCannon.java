@@ -159,7 +159,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		double dY = -(yCoord - y);
 		double dZ = (zCoord + 0.5) - (z + 0.5);
 
-		double dist = Math.sqrt(dX * dX + dZ * dZ );
 		double yawDegrees = Math.toDegrees(Math.atan2(dZ, dX)) + 90;
 		targetYaw.setValue(yawDegrees);
 		currentYaw = targetYaw.getValue();
