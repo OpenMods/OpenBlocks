@@ -233,7 +233,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		public static double[] getVariableVelocityTheta(double deltaX, double deltaY, double deltaZ) {
 			double velocity = CANNON_VELOCITY;
 			double[] theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
-			int iterations = 60;
+			int iterations = 100;
 			while (Double.isNaN(theta[0]) && Double.isNaN(theta[1]) && --iterations > 0) {
 				velocity += 0.025;
 				theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
