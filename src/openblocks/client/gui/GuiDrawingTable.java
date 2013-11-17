@@ -34,10 +34,19 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 				.setText("Draw")
 				.setName("btnDraw")
 				.addListener(this));
-		iconDisplay = new GuiComponentSprite(40, 40, Stencil.values()[0].getCoverBlockIcon(), TextureMap.locationBlocksTexture);
+		(iconDisplay = new GuiComponentSprite(60, 55, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture)
+				.setColor(0f,0f,0f))
+				.setOverlayMode(true) // New Feature, draws very last, above items and all.	
+				.setEnabled(inventorySlots.getSlot(0).getStack() != null);
 		root.addComponent(iconDisplay);
 		root.addComponent(buttonLeft);
-		root.addComponent(buttonRight);
+		root.addComponent(buttonRight);				
+	}
+	
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+		iconDisplay.setEnabled(inventorySlots.getSlot(0).getStack() != null && inventorySlots.getSlot(0).isItemValid(inventorySlots.getSlot(0).getStack()));
 	}
 	
 	@Override
@@ -57,7 +66,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 				patternIndex++;
 				patternIndex = patternIndex % stencils.length;
 			}
-			iconDisplay.setIcon(stencils[patternIndex].getCoverBlockIcon());
+			iconDisplay.setIcon(stencils[patternIndex].getBlockIcon());
 		}
 	}
 

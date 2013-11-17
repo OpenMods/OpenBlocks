@@ -12,6 +12,8 @@ public class GuiComponentSprite extends BaseComponent {
 
 	private Icon icon;
 	private ResourceLocation texture;
+	private float r = 1, g = 1, b = 1;
+	
 	
 	public static class Sprites {
 		public static Icon hammer = FakeIcon.createSheetIcon(0, 233, 23, 23);
@@ -24,6 +26,13 @@ public class GuiComponentSprite extends BaseComponent {
 		this.texture = texture;
 		this.icon = icon;
 	}
+	
+	public GuiComponentSprite setColor(float r, float g, float b) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		return this;
+	}
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
@@ -32,7 +41,7 @@ public class GuiComponentSprite extends BaseComponent {
 			return;
 		}
 		if (texture != null) minecraft.renderEngine.bindTexture(texture);
-		GL11.glColor3f(1, 1, 1);
+		GL11.glColor3f(r,g,b);
 		this.drawTexturedModelRectFromIcon(offsetX + x, offsetY + y, icon, icon.getIconWidth(), icon.getIconHeight());
 	}
 

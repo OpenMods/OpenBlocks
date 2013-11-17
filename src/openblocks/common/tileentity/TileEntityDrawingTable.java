@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
+import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
 import openblocks.common.GenericInventory;
 import openblocks.common.Stencil;
@@ -13,6 +14,7 @@ import openblocks.common.api.IInventoryCallback;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.events.StencilCraftEvent;
 import openblocks.common.events.TileEntityMessageEventPacket;
+import openblocks.common.item.ItemGeneric;
 
 public class TileEntityDrawingTable extends OpenTileEntity implements
 IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
@@ -34,8 +36,10 @@ IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
 
 	public void onEvent(TileEntityMessageEventPacket event) {
 		if (event instanceof StencilCraftEvent) {
-			System.out.println("User tried to craft a stencil");
-			System.out.println(((StencilCraftEvent)event).getStencil());
+			if(inventory.getStackInSlot(0).isItemEqual(ItemGeneric.Metas.unpreparedStencil.newItemStack())) {
+				ItemStack stencil = new ItemStack(Items.stencil, 1, ((StencilCraftEvent)event).getStencil().ordinal());
+				inventory.setInventorySlotContents(0, stencil);
+			}
 		}
 	}
 
