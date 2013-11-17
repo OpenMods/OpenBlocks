@@ -3,6 +3,7 @@ package openblocks.common.block;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import openblocks.Config;
+import openblocks.common.tileentity.TileEntityDrawingTable;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
@@ -14,7 +15,7 @@ public class BlockDrawingTable extends OpenBlock {
 	
 	public BlockDrawingTable() {
 		super(Config.blockDrawingTable, Material.wood);
-		setupBlock(this, "drawingtable");
+		setupBlock(this, "drawingtable", TileEntityDrawingTable.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
