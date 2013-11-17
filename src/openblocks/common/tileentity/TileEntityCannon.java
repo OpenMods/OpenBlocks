@@ -148,20 +148,26 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	public void setTarget(int x, int y, int z) {
 
 		// right, first we get the distance
-		double dX = (xCoord) - (x);
-		double dY = (yCoord) - (y);
-		double dZ = (zCoord) - (z);
+		double dX = (xCoord + 0.5) - (x + 0.5);
+		double dY = -(yCoord - y);
+		double dZ = (zCoord + 0.5) - (z + 0.5);
 
-		double dist = Math.sqrt(dX * dX + dZ * dZ);
+		double dist = Math.sqrt(dX * dX + dZ * dZ );
 
 		targetYaw.setValue(Math.toDegrees(Math.atan2(dZ, dX)) + 90);
 		currentYaw = targetYaw.getValue();
 
-		double[] theta = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
-		targetPitch.setValue(Math.toDegrees(Math.max(theta[0], theta[1])));
+		double[] calc = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
+		double theta = Math.max(calc[0], calc[1]);
+		targetPitch.setValue(Math.toDegrees(theta));
 		currentPitch = targetPitch.getValue();
 
-		targetSpeed.setValue(theta[2]);
+		// We have selected what we feel to be the best angle
+		// But the velocity suggested doesn't scale on all 3 axis
+		// So we have to change that a bit
+		double d = Math.sqrt( dX * dX + dZ * dZ + dY * dY);
+		double v = Math.sqrt((d * -TileEntityCannonLogic.WORLD_GRAVITY) / Math.sin(2 * theta));
+		targetSpeed.setValue(v);
 
 		System.out.println("Distance = " + dist);
 		sync();
