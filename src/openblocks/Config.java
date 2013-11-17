@@ -646,7 +646,7 @@ public class Config {
 			if (OpenBlocks.Blocks.sponge != null) {
 				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 			} else {
-				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "ccc", " w ", " w ", 's', Block.carpet, 'w', "stickWood"));	
+				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', Item.slimeBall, 'w', "stickWood"));	
 			}
 		}
 
