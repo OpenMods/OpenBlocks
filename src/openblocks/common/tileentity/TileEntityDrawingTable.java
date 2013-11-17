@@ -3,18 +3,40 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.WorldServer;
 import openblocks.client.gui.GuiDrawingTable;
+import openblocks.common.GenericInventory;
+import openblocks.common.Stencil;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.api.IInventoryCallback;
 import openblocks.common.container.ContainerDrawingTable;
+import openblocks.common.events.StencilCraftEvent;
+import openblocks.common.events.TileEntityMessageEventPacket;
 
 public class TileEntityDrawingTable extends OpenTileEntity implements
-IInventory, IActivateAwareTile, IHasGui, IInventoryCallback{
+IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
 
+	
+	public TileEntityDrawingTable() {
+		setInventory(new GenericInventory("drawingtable", true, 1));
+		inventory.addCallback(this);
+	}
+	
 	@Override
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {
 		
+	}
+
+	public void onRequestStencilCreate(Stencil stencil) {
+		new StencilCraftEvent(this, stencil).sendToServer();
+	}
+
+	public void onEvent(TileEntityMessageEventPacket event) {
+		if (event instanceof StencilCraftEvent) {
+			System.out.println("User tried to craft a stencil");
+			System.out.println(((StencilCraftEvent)event).getStencil());
+		}
 	}
 
 	@Override
@@ -30,62 +52,56 @@ IInventory, IActivateAwareTile, IHasGui, IInventoryCallback{
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
 			float hitY, float hitZ) {
-		// TODO Auto-generated method stub
-		return false;
+		if (player.isSneaking()) { return false; }
+		if (!worldObj.isRemote) {
+			openGui(player);
+		}
+		return true;
 	}
 
 	@Override
 	public int getSizeInventory() {
-		// TODO Auto-generated method stub
-		return 0;
+		return inventory.getSizeInventory();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getStackInSlot(i);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.decrStackSize(i, j);
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getStackInSlotOnClosing(i);
 	}
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		
+		inventory.setInventorySlotContents(i, itemstack);
 	}
 
 	@Override
 	public String getInvName() {
-		// TODO Auto-generated method stub
-		return null;
+		return inventory.getInvName();
 	}
 
 	@Override
 	public boolean isInvNameLocalized() {
-		// TODO Auto-generated method stub
-		return false;
+		return inventory.isInvNameLocalized();
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
-		return 0;
+		return inventory.getInventoryStackLimit();
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		// TODO Auto-generated method stub
-		return false;
+		return inventory.isUseableByPlayer(entityplayer);
 	}
 
 	@Override
@@ -102,8 +118,7 @@ IInventory, IActivateAwareTile, IHasGui, IInventoryCallback{
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		return true;
+		return inventory.isItemValidForSlot(i, itemstack);
 	}
 
 }

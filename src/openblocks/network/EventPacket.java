@@ -12,6 +12,7 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.MapDataManager;
 import openblocks.common.events.PlayerMovementEvent;
+import openblocks.common.events.StencilCraftEvent;
 import openblocks.common.events.TileEntityMessageEventPacket;
 import openblocks.utils.ByteUtils;
 
@@ -104,6 +105,17 @@ public abstract class EventPacket extends Event {
 			public PacketDirection getDirection() {
 				return PacketDirection.FROM_CLIENT;
 			}
+		},
+		STENCIL_CRAFT {
+			@Override
+			public EventPacket createPacket() {
+				return new StencilCraftEvent();
+			}
+
+			@Override
+			public PacketDirection getDirection() {
+				return PacketDirection.FROM_CLIENT;
+			}
 		};
 
 		public static final EventType[] VALUES = values();
@@ -189,7 +201,7 @@ public abstract class EventPacket extends Event {
 		return true;
 	}
 
-	protected boolean checkSendToServer() {
+	protected boolean checkSendToServer() {;
 		if (!getType().getDirection().toServer) {
 			Log.warn("Trying to sent message '%s' to server", this);
 			return false;

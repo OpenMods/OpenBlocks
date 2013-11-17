@@ -1,48 +1,83 @@
 package openblocks.client.gui;
 
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
 import openblocks.client.gui.component.BaseComponent;
+import openblocks.client.gui.component.GuiComponentIconButton;
+import openblocks.client.gui.component.GuiComponentSprite;
+import openblocks.client.gui.component.GuiComponentTextButton;
 import openblocks.client.gui.component.BaseComponent.IComponentListener;
+import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
+import openblocks.utils.FakeIcon;
 
 public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 		implements IComponentListener {
+	
+	public static final int BUTTON_DRAW = 0;
+	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/components.png");
 
+	private GuiComponentIconButton buttonLeft;
+	private GuiComponentIconButton buttonRight;
+	private GuiComponentTextButton buttonDraw;
+	private GuiComponentSprite iconDisplay;
+	
+	private int patternIndex = 0;
+	
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
+		buttonLeft = new GuiComponentIconButton(7, 38, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), texture);
+		buttonLeft.addListener(this);
+		buttonRight = new GuiComponentIconButton(148, 38, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), texture);
+		buttonRight.addListener(this);
+		root.addComponent((buttonDraw = new GuiComponentTextButton(85, 57, 40, 13, 0xFFFFFF))
+				.setText("Draw")
+				.setName("btnDraw")
+				.addListener(this));
+		iconDisplay = new GuiComponentSprite(40, 40, Stencil.values()[0].getCoverBlockIcon(), TextureMap.locationBlocksTexture);
+		root.addComponent(iconDisplay);
+		root.addComponent(buttonLeft);
+		root.addComponent(buttonRight);
 	}
 	
 	@Override
 	public void componentMouseDown(BaseComponent component, int offsetX,
 			int offsetY, int button) {
-		// TODO Auto-generated method stub
-		
+
+		Stencil[] stencils = Stencil.values();
+		if (component.equals(buttonDraw)) {
+			getContainer().getOwner().onRequestStencilCreate(stencils[patternIndex]);
+		}else {
+			if (component.equals(buttonLeft)) {
+				patternIndex--;
+				if (patternIndex < 0) {
+					patternIndex = stencils.length - 1;
+				}
+			} else if (component.equals(buttonRight)) {
+				patternIndex++;
+				patternIndex = patternIndex % stencils.length;
+			}
+			iconDisplay.setIcon(stencils[patternIndex].getCoverBlockIcon());
+		}
 	}
 
 	@Override
 	public void componentMouseDrag(BaseComponent component, int offsetX,
 			int offsetY, int button, long time) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void componentMouseMove(BaseComponent component, int offsetX,
 			int offsetY) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void componentMouseUp(BaseComponent component, int offsetX,
 			int offsetY, int button) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void componentKeyTyped(BaseComponent component, char par1, int par2) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
