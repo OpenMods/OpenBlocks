@@ -54,7 +54,7 @@ public class BlockPaintCan extends OpenBlock {
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
 		int color = getColorFromNBT(itemStack);
 		if (color < 0) color = 0;
-		list.add("#" + Integer.toHexString(color).toUpperCase());
+		list.add(String.format("#%06X", color));
 	}
 
 	@Override
