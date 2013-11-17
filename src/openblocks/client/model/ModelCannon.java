@@ -71,7 +71,7 @@ public class ModelCannon extends ModelBase {
 		int elapsed = Math.min(12, cannon.getTicksSinceLastFire());
 		double ease = keyframes[elapsed];
 		float shooterAnim = -(float)(3.0f * ease);
-		shooter.rotateAngleX = (float)Math.toRadians(cannon.targetPitch.getValue());
+		shooter.rotateAngleX = (float)Math.toRadians(cannon.currentPitch);
 		float z = (float)(3 + shooterAnim * Math.cos(shooter.rotateAngleX));
 		float y = (float)(11 - shooterAnim * Math.sin(shooter.rotateAngleX));
 		shooter.rotationPointY = y;

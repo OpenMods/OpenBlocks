@@ -58,6 +58,7 @@ tile.openblocks.blockbreaker.name=Block Breaker
 tile.openblocks.blockPlacer.name=Block Placer
 tile.openblocks.itemDropper.name=Item Dropper
 tile.openblocks.canvas.name=Canvas
+tile.openblocks.canvas.name=Glass Canvas
 tile.openblocks.paintmixer.name=Paint Mixer
 tile.openblocks.paintcan.name=Paint Can
 tile.openblocks.projector.name=Height Map Projector

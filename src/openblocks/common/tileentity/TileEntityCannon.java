@@ -17,6 +17,7 @@ import openblocks.common.entity.EntityItemProjectile;
 import openblocks.common.events.TileEntityMessageEventPacket;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
+import openblocks.utils.GeometryUtils;
 import openblocks.utils.InventoryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -59,9 +60,15 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	public void updateEntity() {
 		super.updateEntity();
 
+		if(currentYaw < 0) currentYaw += 360;
+		currentYaw %= 360;
+		double rotationSpeed = 3;
 		// ugly, need to clean
 		currentPitch = currentPitch - ((currentPitch - targetPitch.getValue()) / 20);
-		currentYaw = currentYaw - ((currentYaw - targetYaw.getValue()) / 20);
+		if(Math.abs(currentYaw - targetYaw.getValue()) < rotationSpeed) 
+			currentYaw = targetYaw.getValue();
+		else
+			currentYaw += rotationSpeed * GeometryUtils.getDirectionForRotation(currentYaw, targetYaw.getValue());
 		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.getValue()) / 20);
 		// currentPitch = targetPitch.getValue();
 		// currentYaw = targetYaw.getValue();
@@ -153,8 +160,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		double dZ = (zCoord + 0.5) - (z + 0.5);
 
 		double dist = Math.sqrt(dX * dX + dZ * dZ );
-
-		targetYaw.setValue(Math.toDegrees(Math.atan2(dZ, dX)) + 90);
+		double yawDegrees = Math.toDegrees(Math.atan2(dZ, dX)) + 90;
+		targetYaw.setValue(yawDegrees);
+		System.out.println("Pointing at " + yawDegrees);
 		currentYaw = targetYaw.getValue();
 
 		double[] calc = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
@@ -165,7 +173,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		// We have selected what we feel to be the best angle
 		// But the velocity suggested doesn't scale on all 3 axis
 		// So we have to change that a bit
-		double d = Math.sqrt( dX * dX + dZ * dZ + dY * dY);
+		double d = Math.sqrt( dX * dX + dZ * dZ );
 		double v = Math.sqrt((d * -TileEntityCannonLogic.WORLD_GRAVITY) / Math.sin(2 * theta));
 		targetSpeed.setValue(v);
 
