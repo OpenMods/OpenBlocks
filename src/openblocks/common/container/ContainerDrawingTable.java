@@ -9,7 +9,7 @@ public class ContainerDrawingTable extends ContainerInventory<TileEntityDrawingT
 
 	public ContainerDrawingTable(IInventory playerInventory, TileEntityDrawingTable table) {
 		super(playerInventory, table);
-		addSlotToContainer(new RestrictedSlot(owner, 0, 60, 55) {
+		addSlotToContainer(new RestrictedSlot(owner, 0, 80, 34) {
 			@Override
 			public boolean isItemValid(ItemStack itemstack) {
 				return itemstack.isItemEqual(ItemGeneric.Metas.unpreparedStencil.newItemStack());

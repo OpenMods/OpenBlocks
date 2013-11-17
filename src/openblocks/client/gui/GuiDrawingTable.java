@@ -26,15 +26,15 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 	
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
-		buttonLeft = new GuiComponentIconButton(7, 38, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), texture);
+		buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), texture);
 		buttonLeft.addListener(this);
-		buttonRight = new GuiComponentIconButton(148, 38, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), texture);
+		buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), texture);
 		buttonRight.addListener(this);
-		root.addComponent((buttonDraw = new GuiComponentTextButton(85, 57, 40, 13, 0xFFFFFF))
+		root.addComponent((buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF))
 				.setText("Draw")
 				.setName("btnDraw")
 				.addListener(this));
-		(iconDisplay = new GuiComponentSprite(60, 55, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture)
+		(iconDisplay = new GuiComponentSprite(80, 34, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture)
 				.setColor(0f,0f,0f))
 				.setOverlayMode(true) // New Feature, draws very last, above items and all.	
 				.setEnabled(inventorySlots.getSlot(0).getStack() != null);
