@@ -58,9 +58,11 @@ tile.openblocks.blockbreaker.name=Blockbrecher
 tile.openblocks.blockPlacer.name=Blockplatzierer
 tile.openblocks.itemDropper.name=Itemspender
 tile.openblocks.canvas.name=Leinwand
+tile.openblocks.canvas.name=Glasleinwand
 tile.openblocks.paintmixer.name=Farbmixer
 tile.openblocks.paintcan.name=Farbeimer
 tile.openblocks.projector.name=Höhenkartenprojektor
+tile.openblocks.drawingtable.name=Zeichentisch
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.gliderwing.name=Gleiter-Flügel
@@ -89,7 +91,10 @@ item.openblocks.empty_map.name=Leere Karte
 item.openblocks.map_controller.name=Kartenkontrollmodul
 item.openblocks.map_memory.name=Kartenspeichermodul
 item.openblocks.cartographer.name=Kartograph
+item.openblocks.assistant_base.name=Assistenzbasis
 item.openblocks.cursor.name=Cursor
 item.openblocks.squeegee.name=Scheibenwischer
+item.openblocks.unprepared_stencil.name=Unvorbereitete Schablone
+item.openblocks.sketching_pencil.name=Skizzenstift
 
 itemGroup.tabOpenBlocks=OpenBlocks
