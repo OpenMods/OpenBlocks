@@ -49,8 +49,9 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 							Vec3.createVectorHelper(x, y - 1, z),
 							direction.getOpposite(),
 							worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
-
-			setInventorySlotContents(i, newStack.stackSize > 0? newStack : null);
+			if (newStack != null) {
+				setInventorySlotContents(i, newStack.stackSize > 0? newStack : null);
+			}
 			return;
 		}
 	}
