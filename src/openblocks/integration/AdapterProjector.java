@@ -166,6 +166,20 @@ public class AdapterProjector implements IPeripheralAdapter {
 		projector.markMapDirty();
 	}
 
+	@LuaMethod(returnType = LuaType.VOID, description = "Clear single layer", args = {
+			@Arg(name = "layer", description = "Map layer", type = LuaType.NUMBER)
+	})
+	public void clearLayer(IComputerAccess computer, final TileEntityProjector projector, int layer) {
+		HeightMapData data = projector.getMap();
+		Preconditions.checkState(data.isValid(), "Map not loaded");
+		Preconditions.checkElementIndex(layer, data.layers.length, "layer");
+
+		LayerData newLayer = new LayerData();
+		newLayer.alpha = (byte)255;
+		data.layers[layer] = newLayer;
+		projector.markMapDirty();
+	}
+
 	@LuaMethod(returnType = LuaType.VOID, description = "Append layer")
 	public void appendLayer(IComputerAccess computer, final TileEntityProjector projector) {
 		HeightMapData data = projector.getMap();
