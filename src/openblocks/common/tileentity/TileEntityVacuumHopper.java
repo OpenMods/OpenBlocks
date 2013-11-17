@@ -20,6 +20,7 @@ import openblocks.common.GenericInventory;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerVacuumHopper;
+import openblocks.common.entity.EntityItemProjectile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableBoolean;
 import openblocks.sync.SyncableFlags;
@@ -86,6 +87,9 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 					}
 					if (entity instanceof EntityXPOrb) {
 						shouldPull = getXPOutputs().getActiveSlots().size() > 0;
+					}
+					if(entity instanceof EntityItemProjectile) {
+						shouldPull = entity.motionY < 0.01;
 					}
 
 					if (shouldPull) {
