@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.common.entity.EntityMutant;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -114,6 +115,23 @@ public class ItemGeneric extends Item {
 				ItemStack result = newItemStack();
 				return new MetaGeneric("sketching_pencil", new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', Item.coal, 's', Item.stick),
 						new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Item.coal, 1, 1), 's', Item.stick));
+			}
+		},
+		temp {
+			@Override
+			public IMetaItem createMetaItem() {
+				ItemStack result = newItemStack();
+				return new MetaGeneric("temp") {
+					@Override
+					public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world) {
+						if (!world.isRemote) {
+							EntityMutant mutant = new EntityMutant(world);
+							mutant.setPositionAndRotation(player.posX, player.posY, player.posZ, 0, 0);
+							world.spawnEntityInWorld(mutant);
+						}
+						return itemStack;
+					}
+				};
 			}
 		};
 

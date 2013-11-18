@@ -22,6 +22,7 @@ import openblocks.IProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
+import openblocks.client.model.ModelMutant;
 import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
@@ -127,6 +128,8 @@ public class ClientProxy implements IProxy {
 			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new EntityCartographerRenderer());
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityMutant.class, new EntityMutantRenderer(new ModelMutant(), 0.7F));
 	}
 
 	@SuppressWarnings("unchecked")
