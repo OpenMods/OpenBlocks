@@ -15,4 +15,14 @@ public class PlayerRenderEventHandler {
 			}
 		}
 	}
+	
+	@ForgeSubscribe
+	public void onPrePlayerSpecialRender(RenderPlayerEvent.Specials.Pre event) {
+		
+	}
+	
+	@ForgeSubscribe
+	public void onPostPlayerSpecialRender(RenderPlayerEvent.Specials.Post event) {
+		
+	}
 }
