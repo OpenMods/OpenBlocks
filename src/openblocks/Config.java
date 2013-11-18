@@ -167,6 +167,9 @@ public class Config {
 	
 	@BlockId(description = "The id of the drawing table")
 	public static int blockDrawingTable = 2574;
+	
+	@BlockId(description = "The id of the cloth block")
+	public static int blockClothTest = 2575;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -548,6 +551,10 @@ public class Config {
 			OpenBlocks.Blocks.projector = new BlockProjector();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
+		}
+		
+		if(Config.canRegisterBlock(blockClothTest)) {
+			OpenBlocks.Blocks.clothTest = new BlockClothTest();			
 		}
 		
 

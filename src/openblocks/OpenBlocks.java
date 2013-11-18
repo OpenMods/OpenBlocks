@@ -84,6 +84,7 @@ public class OpenBlocks {
 		public static BlockCanvasGlass canvasGlass;
 		public static BlockProjector projector;
 		public static BlockDrawingTable drawingTable;
+		public static BlockClothTest clothTest;
 	}
 
 	public static class Items {
