@@ -81,14 +81,13 @@ public class OpenBlocksFakePlayer extends FakePlayer {
 	}
 
 	public void dropItemAt(ItemStack itemStack, int x, int y, int z, ForgeDirection direction) {
-		setPosition(x + 0.5F, y, z + 0.5F);
+		setPosition(x + 0.5F, y - 1.5, z + 0.5F);
 		if (direction == ForgeDirection.DOWN) {
-			setRotation(0, -90);
+			setRotation(0, 90);
 		} else {
 			// "Other directions than down is not implemented"
 			throw new IllegalStateException();
 		}
-
 		EntityItem entityItem = dropPlayerItem(itemStack);
 		entityItem.motionX = 0;
 		entityItem.motionY = 0;
