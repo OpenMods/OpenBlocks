@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.GenericInventory;
 import openblocks.common.api.IActivateAwareTile;
@@ -92,6 +93,14 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	public void prepareForInventoryRender(Block block, int metadata) {
 		super.prepareForInventoryRender(block, metadata);
 	}
+
+	public void onSync() {
+            worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton.blockID);
+            ForgeDirection rot = getRotation();
+            worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord
+                            + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
+	}
+	
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {

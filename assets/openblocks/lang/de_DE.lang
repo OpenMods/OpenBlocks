@@ -13,6 +13,7 @@ openblocks.gui.donationstation=Spendenstation
 openblocks.gui.itemdropper=Itemspender
 openblocks.gui.blockplacer=Blockplatzierer
 openblocks.gui.paintmixer=Farbmixer
+openblocks.gui.drawingtable=Zeichentisch
 
 openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
