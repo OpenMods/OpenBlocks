@@ -9,7 +9,7 @@ public class Cloth {
 	private double width, height, max_dim, min_dim, spacing;
 	private int num_x_points, num_y_points, n_constraints; 
 	
-	private static final int PHYSICS_ITERATIONS = 10;
+	private static final int PHYSICS_ITERATIONS = 2;
 	
 	public Cloth(int density, double width, double height) {
 		this.width = width;
