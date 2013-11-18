@@ -15,6 +15,7 @@ openblocks.gui.donationstation=捐献站
 openblocks.gui.itemdropper=物品投掷器
 openblocks.gui.blockplacer=方块放置机
 openblocks.gui.paintmixer=调色器
+openblocks.gui.drawingtable=绘图桌
 
 openblocks.misc.type=类型: %s
 openblocks.misc.uses=使用: %.2f
@@ -60,6 +61,7 @@ tile.openblocks.blockbreaker.name=方块采掘机
 tile.openblocks.blockPlacer.name=方块放置机
 tile.openblocks.itemDropper.name=物品投掷器
 tile.openblocks.canvas.name=画布
+tile.openblocks.canvasglass.name=透明画布
 tile.openblocks.paintmixer.name=调色器
 tile.openblocks.paintcan.name=颜料罐
 tile.openblocks.projector.name=高度图投影仪
