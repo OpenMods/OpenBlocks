@@ -144,7 +144,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	public void setPoint(IComputerAccess computer, final TileEntityProjector projector, int row, int column, int layer, int height, int color) {
 		Preconditions.checkElementIndex(row, 64, "row");
 		Preconditions.checkElementIndex(column, 64, "column");
-		Preconditions.checkElementIndex(height, 64, "height");
+		Preconditions.checkElementIndex(height, 256, "height");
 		Preconditions.checkElementIndex(color, MapColor.mapColorArray.length, "color");
 
 		HeightMapData data = projector.getMap();

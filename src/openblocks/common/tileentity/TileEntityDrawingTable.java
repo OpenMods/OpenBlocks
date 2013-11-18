@@ -37,7 +37,7 @@ IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
 	public void onEvent(TileEntityMessageEventPacket event) {
 		if (event instanceof StencilCraftEvent) {
 			ItemStack stack = inventory.getStackInSlot(0);
-			if(stack != null && stack.isItemEqual(ItemGeneric.Metas.unpreparedStencil.newItemStack())) {
+			if(stack != null && ItemGeneric.isA(stack, ItemGeneric.Metas.unpreparedStencil)) {
 				ItemStack stencil = new ItemStack(Items.stencil, 1, ((StencilCraftEvent)event).getStencil().ordinal());
 				stencil.stackSize = stack.stackSize;
 				inventory.setInventorySlotContents(0, stencil);
