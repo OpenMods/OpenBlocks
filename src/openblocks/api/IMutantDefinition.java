@@ -3,9 +3,9 @@ package openblocks.api;
 import net.minecraft.util.Vec3;
 
 public interface IMutantDefinition {
-	
+
 	public IMutantRenderer createRenderer();
-	
+
 	public Vec3[] getLegAttachmentPoints(int numLegs);
 
 	public Vec3 getHeadAttachmentPoint();

@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelBase;
 public interface IMutantRenderer {
 
 	public void initialize(ModelBase model);
-	
+
 	public void renderHead(IMutant mutant, float scale, float yaw, float pitch);
 
 	public void renderLegs(IMutant mutant, float scale, float legSwing, float prevLegSwing);

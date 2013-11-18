@@ -21,7 +21,7 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 
 	public EntityMutant(World world) {
 		super(world);
-        setSize(0.6F, 1.8F);
+		setSize(0.6F, 1.8F);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 	public void readSpawnData(ByteArrayDataInput data) {
 		data.readInt();
 	}
-	
+
 	@Override
 	public IMutantDefinition getBody() {
 		return MutantRegistry.getDefinition(EntityCreeper.class);
@@ -53,17 +53,17 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 	public IMutantDefinition getArms() {
 		return MutantRegistry.getDefinition(EntityZombie.class);
 	}
-	
+
 	@Override
 	public IMutantDefinition getWings() {
 		return MutantRegistry.getDefinition(EntityCreeper.class);
 	}
-	
+
 	@Override
 	public IMutantDefinition getLegs() {
 		return MutantRegistry.getDefinition(EntityCreeper.class);
 	}
-	
+
 	@Override
 	public IMutantDefinition getTail() {
 		return MutantRegistry.getDefinition(EntityCreeper.class);
