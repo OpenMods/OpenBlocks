@@ -12,7 +12,7 @@ public interface IMutantRenderer {
 
 	public void renderBody(IMutant mutant, float scale);
 
-	public void renderWings(IMutant mutant, float scale);
+	public void renderWings(IMutant mutant, float scale, float wingSwing);
 
 	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing);
 

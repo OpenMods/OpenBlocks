@@ -111,10 +111,11 @@ public class MutantRendererEnderman implements IMutantRenderer {
 	}
 
 	@Override
-	public void renderWings(IMutant mutant, float scale) {}
+	public void renderWings(IMutant mutant, float scale, float wingSwing) {}
 
 	@Override
 	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {
+		bindTexture();
 		
 		Vec3[] armAttachmentPoints = mutant.getBody().getArmAttachmentPoints();
 		

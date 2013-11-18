@@ -88,7 +88,7 @@ public class MutantRendererZombie implements IMutantRenderer {
 	}
 
 	@Override
-	public void renderWings(IMutant mutant, float scale) {
+	public void renderWings(IMutant mutant, float scale, float wingSwing) {
 
 	}
 

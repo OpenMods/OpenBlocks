@@ -4,8 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,9 +25,12 @@ import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
+import openblocks.mutant.DefinitionChicken;
 import openblocks.mutant.DefinitionCreeper;
 import openblocks.mutant.DefinitionEnderman;
 import openblocks.mutant.DefinitionPig;
+import openblocks.mutant.DefinitionSheep;
+import openblocks.mutant.DefinitionSpider;
 import openblocks.mutant.DefinitionZombie;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
@@ -219,6 +225,9 @@ public class OpenBlocks {
 		MutantRegistry.registerMutant(EntityZombie.class, new DefinitionZombie());
 		MutantRegistry.registerMutant(EntityPig.class, new DefinitionPig());
 		MutantRegistry.registerMutant(EntityEnderman.class, new DefinitionEnderman());
+		MutantRegistry.registerMutant(EntitySpider.class, new DefinitionSpider());
+		MutantRegistry.registerMutant(EntityChicken.class, new DefinitionChicken());
+		MutantRegistry.registerMutant(EntitySheep.class, new DefinitionSheep());
 		
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 

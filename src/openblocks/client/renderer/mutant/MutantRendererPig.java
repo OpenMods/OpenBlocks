@@ -83,7 +83,7 @@ public class MutantRendererPig implements IMutantRenderer {
 	}
 
 	@Override
-	public void renderWings(IMutant mutant, float scale) {}
+	public void renderWings(IMutant mutant, float scale, float wingSwing) {}
 
 	@Override
 	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}

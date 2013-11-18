@@ -63,7 +63,7 @@ public class ModelMutant extends ModelBase {
             }
             
             if (wings != null) {
-            	getRenderer(wings).renderWings(mutant, scale);
+            	getRenderer(wings).renderWings(mutant, scale, wingSwing);
             }
             
             if (tail != null) {
