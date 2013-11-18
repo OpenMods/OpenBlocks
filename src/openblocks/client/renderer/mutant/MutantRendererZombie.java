@@ -93,7 +93,7 @@ public class MutantRendererZombie implements IMutantRenderer {
 	}
 
 	@Override
-	public void renderArms(IMutant mutant, float scale, float legSwing) {
+	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {
 
 		bindTexture();
 		

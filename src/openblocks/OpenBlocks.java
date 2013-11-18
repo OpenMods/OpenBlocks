@@ -3,6 +3,7 @@ package openblocks;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.mutant.DefinitionCreeper;
+import openblocks.mutant.DefinitionEnderman;
 import openblocks.mutant.DefinitionPig;
 import openblocks.mutant.DefinitionZombie;
 import openblocks.network.PacketHandler;
@@ -216,6 +218,7 @@ public class OpenBlocks {
 		MutantRegistry.registerMutant(EntityCreeper.class, new DefinitionCreeper());
 		MutantRegistry.registerMutant(EntityZombie.class, new DefinitionZombie());
 		MutantRegistry.registerMutant(EntityPig.class, new DefinitionPig());
+		MutantRegistry.registerMutant(EntityEnderman.class, new DefinitionEnderman());
 		
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 

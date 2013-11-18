@@ -55,7 +55,7 @@ public class ModelMutant extends ModelBase {
             }
             
             if (arms != null) {
-            	getRenderer(arms).renderArms(mutant, scale, legSwing);
+            	getRenderer(arms).renderArms(mutant, scale, legSwing, prevLegSwing);
             }
             
             if (legs != null) {

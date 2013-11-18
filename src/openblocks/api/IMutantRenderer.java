@@ -14,7 +14,7 @@ public interface IMutantRenderer {
 
 	public void renderWings(IMutant mutant, float scale);
 
-	public void renderArms(IMutant mutant, float scale, float legSwing);
+	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing);
 
 	public void renderTail(IMutant mutant, float scale);
 }

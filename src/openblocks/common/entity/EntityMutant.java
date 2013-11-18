@@ -13,6 +13,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityPig;
@@ -42,7 +43,7 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 
 	@Override
 	public IMutantDefinition getBody() {
-		return MutantRegistry.getDefinition(EntityPig.class);
+		return MutantRegistry.getDefinition(EntityEnderman.class);
 	}
 
 	@Override
