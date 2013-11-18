@@ -62,11 +62,11 @@ public class FastVector {
 	}
 	
 	public double squaredLength() {
-		return (this.x*this.x)+(this.y*this.y);
+		return (this.x*this.x)+(this.y*this.y)+(this.z*this.z);
 	}
 	
 	public double sum() {
-		return this.x+this.y;
+		return this.x+this.y+this.z;
 	}
 	
 	public FastVector subtract(double n) {

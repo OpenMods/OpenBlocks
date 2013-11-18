@@ -9,7 +9,7 @@ public class Cloth {
 	private double width, height, max_dim, min_dim, spacing;
 	private int num_x_points, num_y_points, n_constraints; 
 	
-	private static final int PHYSICS_ITERATIONS = 2;
+	private static final int PHYSICS_ITERATIONS = 10;
 	
 	public Cloth(int density, double width, double height) {
 		this.width = width;
@@ -22,11 +22,12 @@ public class Cloth {
 		
 		int i,j;
 		double x,y;
+		this.constraints = new java.util.ArrayList<Constraint>();
 		points = new Point[num_y_points][];
-		for(i = 0, y = 0; i < num_y_points; i++, y += spacing) {
+		for(i = 0, y = height; i < num_y_points; i++, y -= spacing) {
 			points[i] = new Point[num_x_points];
 			for(j = 0, x = 0; j < num_x_points; j++, x += spacing) {
-				points[i][j] = new Point(x / width, y / height, 0);
+				points[i][j] = new Point(x / width, y / height, 0.5);
 				
 				if(i > 0) {
 					this.constraints.add(new Constraint(this.points[i-1][j], this.points[i][j], Double.NaN));
@@ -37,8 +38,9 @@ public class Cloth {
 			}
 		}
 		
-		this.points[0][0].inv_mass = 0;
-		this.points[0][((int)(num_x_points / 2))].inv_mass = 0;
+		for(i = 0; i < num_y_points; i+=3 ) {
+			this.points[0][i].inv_mass = 0;
+		}
 		this.points[0][num_x_points -1].inv_mass = 0;
 		this.n_constraints = this.constraints.size();
 	}
