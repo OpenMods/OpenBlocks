@@ -66,7 +66,7 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 
 	@Override
 	public IMutantDefinition getLegs() {
-		return MutantRegistry.getDefinition(EntityEnderman.class);
+		return MutantRegistry.getDefinition(EntityPig.class);
 	}
 
 	@Override
@@ -87,6 +87,11 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 	@Override
 	public float getArmSwingProgress(float scale) {
 		return getSwingProgress(scale);
+	}
+
+	@Override
+	public int getNumberOfLegs() {
+		return getLegs().getNumberOfLegs();
 	}
 
 }

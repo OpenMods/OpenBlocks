@@ -93,7 +93,7 @@ public class DefinitionPig implements IMutantDefinition {
 
 	@Override
 	public int getNumberOfLegs() {
-		return 2;
+		return 4;
 	}
 
 }

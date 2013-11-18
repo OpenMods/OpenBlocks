@@ -16,6 +16,8 @@ public interface IMutant {
 	public IMutantDefinition getWings();
 
 	public IMutantDefinition getTail();
+	
+	public int getNumberOfLegs();
 
 	public float getArmSwingProgress(float scale);
 }
