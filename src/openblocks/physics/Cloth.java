@@ -5,7 +5,7 @@ import java.util.List;
 public class Cloth {
 	
 	private List<Constraint> constraints;
-	private Point[][] points;
+	public Point[][] points;
 	private double width, height, max_dim, min_dim, spacing;
 	private int num_x_points, num_y_points, n_constraints; 
 	
