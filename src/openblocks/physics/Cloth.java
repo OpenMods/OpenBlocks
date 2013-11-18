@@ -20,14 +20,13 @@ public class Cloth {
 		this.num_x_points = (int)((density * (width / max_dim)) + 0.5);
 		this.num_y_points = (int)((density * (height / max_dim)) + 0.5);
 		
-		Constraint constraint;
 		int i,j;
 		double x,y;
 		points = new Point[num_y_points][];
 		for(i = 0, y = 0; i < num_y_points; i++, y += spacing) {
 			points[i] = new Point[num_x_points];
 			for(j = 0, x = 0; j < num_x_points; j++, x += spacing) {
-				points[i][j] = new Point(x / width, y / height);
+				points[i][j] = new Point(x / width, y / height, 0);
 				
 				if(i > 0) {
 					this.constraints.add(new Constraint(this.points[i-1][j], this.points[i][j], Double.NaN));

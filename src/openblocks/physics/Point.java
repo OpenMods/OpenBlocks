@@ -5,10 +5,10 @@ public class Point {
 	private FastVector current, previous, force;
 	double mass, inv_mass;
 	
-	public Point(double d, double e) {
-		this.current = this.previous = new FastVector(d,e);
+	public Point(double x, double y, double z) {
+		this.current = this.previous = new FastVector(x,y,z);
 		this.mass = this.inv_mass = 1;
-		this.force = new FastVector(0.0, 0.5).multiply(0.05 * 0.05);
+		this.force = new FastVector(0.0, -0.5, 0).multiply(0.05 * 0.05);
 	}
 	
 	public void setCurrent(FastVector v) {
@@ -32,6 +32,7 @@ public class Point {
 			FastVector new_pos = this.current.multiply(1.99).subtract(this.previous.multiply(0.99)).add(this.force);
 			new_pos.x = (new_pos.x < 0) ? 0 : ((new_pos.x > 1) ? 1 : new_pos.x);
 			new_pos.y = (new_pos.y < 0) ? 0 : ((new_pos.y > 1) ? 1 : new_pos.y);
+			new_pos.z = (new_pos.z < 0) ? 0 : ((new_pos.z > 1) ? 1 : new_pos.z);
 			this.previous = this.current;
 			this.current = new_pos;
 		}
