@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,8 +21,9 @@ import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
-import openblocks.mutant.CreeperDefinition;
-import openblocks.mutant.ZombieDefinition;
+import openblocks.mutant.DefinitionCreeper;
+import openblocks.mutant.DefinitionPig;
+import openblocks.mutant.DefinitionZombie;
 import openblocks.network.PacketHandler;
 import openblocks.sync.SyncableManager;
 
@@ -211,8 +213,9 @@ public class OpenBlocks {
 		}
 		
 		EntityRegistry.registerModEntity(EntityMutant.class, "Mutant", 708, OpenBlocks.instance, 64, 8, true);
-		MutantRegistry.registerMutant(EntityCreeper.class, new CreeperDefinition());
-		MutantRegistry.registerMutant(EntityZombie.class, new ZombieDefinition());
+		MutantRegistry.registerMutant(EntityCreeper.class, new DefinitionCreeper());
+		MutantRegistry.registerMutant(EntityZombie.class, new DefinitionZombie());
+		MutantRegistry.registerMutant(EntityPig.class, new DefinitionPig());
 		
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 

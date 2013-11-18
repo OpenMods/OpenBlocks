@@ -6,7 +6,7 @@ import openblocks.api.IMutantDefinition;
 import openblocks.api.IMutantRenderer;
 import openblocks.client.renderer.mutant.MutantRendererZombie;
 
-public class ZombieDefinition implements IMutantDefinition {
+public class DefinitionZombie implements IMutantDefinition {
 
 	private Vec3[] legAttachmentPoints2 = new Vec3[] {
 			Vec3.createVectorHelper(-2.0F, -12.0F, 0.0F),

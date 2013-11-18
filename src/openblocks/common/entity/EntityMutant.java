@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.world.World;
 
 public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawnData, IMutant {
@@ -41,12 +42,12 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 
 	@Override
 	public IMutantDefinition getBody() {
-		return MutantRegistry.getDefinition(EntityCreeper.class);
+		return MutantRegistry.getDefinition(EntityPig.class);
 	}
 
 	@Override
 	public IMutantDefinition getHead() {
-		return MutantRegistry.getDefinition(EntityZombie.class);
+		return MutantRegistry.getDefinition(EntityPig.class);
 	}
 
 	@Override

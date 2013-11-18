@@ -6,7 +6,7 @@ import openblocks.api.IMutantDefinition;
 import openblocks.api.IMutantRenderer;
 import openblocks.client.renderer.mutant.MutantRendererCreeper;
 
-public class CreeperDefinition implements IMutantDefinition {
+public class DefinitionCreeper implements IMutantDefinition {
 
 	private Vec3[] legAttachmentPoints2 = new Vec3[] {
 			Vec3.createVectorHelper(2.0F, -12.0F, 0.0F),
