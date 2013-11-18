@@ -1,6 +1,7 @@
 package openblocks.client.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.StatCollector;
 import openblocks.client.gui.component.BaseComponent;
 import openblocks.client.gui.component.GuiComponentPanel;
@@ -8,6 +9,7 @@ import openblocks.common.container.ContainerInventory;
 import openblocks.common.tileentity.SyncedTileEntity;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		GuiContainer {
@@ -76,6 +78,7 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		this.preRender(mouseX, mouseY);
 		GL11.glPushMatrix();
 		GL11.glTranslated(this.guiLeft, this.guiTop, 0);
+		BaseComponent.IS_OVERLAY_PASS = false;
 		root.render(this.mc, 0, 0, mouseX - this.guiLeft, mouseY - this.guiTop);
 		GL11.glPopMatrix();
 	}
@@ -88,6 +91,24 @@ public abstract class BaseGuiContainer<T extends ContainerInventory<?>> extends
 		fontRenderer.drawString(machineName, x, 6, 4210752);
 		String translatedName = StatCollector.translateToLocal("container.inventory");
 		fontRenderer.drawString(translatedName, 8, this.ySize - 96 + 2, 4210752);
+
+	}
+	
+	@Override
+	public void drawScreen(int par1, int par2, float par3) {
+		super.drawScreen(par1, par2, par3);        
+		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        RenderHelper.disableStandardItemLighting();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glPushMatrix();
+		BaseComponent.IS_OVERLAY_PASS = true;
+		root.render(this.mc, this.guiLeft, this.guiTop, par1 - this.guiLeft, par2 - this.guiTop);
+		GL11.glPopMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        RenderHelper.enableStandardItemLighting();
 	}
 
 	public void sendButtonClick(int buttonId) {

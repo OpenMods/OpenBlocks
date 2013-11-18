@@ -1,9 +1,11 @@
 package openblocks.common.block;
 
-import java.util.Random;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityCanvas;
@@ -31,4 +33,8 @@ public class BlockCanvasGlass extends BlockCanvas {
 		if (i1 == this.blockID || i1 == Block.glass.blockID) { return false; }
 		return super.shouldSideBeRendered(world, x, y, z, side);
 	}
+
+	@Override
+	@SuppressWarnings("rawtypes")
+	public void getSubBlocks(int par1, CreativeTabs creativeTabs, List list) {}
 }

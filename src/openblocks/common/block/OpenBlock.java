@@ -175,6 +175,7 @@ public abstract class OpenBlock extends Block {
 		return teClass;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IconRegister registry) {
 		this.blockIcon = registry.registerIcon(String.format("%s:%s", "openblocks", uniqueBlockId));

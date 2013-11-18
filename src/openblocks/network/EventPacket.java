@@ -12,6 +12,7 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.MapDataManager;
 import openblocks.common.events.PlayerMovementEvent;
+import openblocks.common.events.StencilCraftEvent;
 import openblocks.common.events.TileEntityMessageEventPacket;
 import openblocks.utils.ByteUtils;
 
@@ -98,6 +99,17 @@ public abstract class EventPacket extends Event {
 			@Override
 			public EventPacket createPacket() {
 				return new PlayerMovementEvent();
+			}
+
+			@Override
+			public PacketDirection getDirection() {
+				return PacketDirection.FROM_CLIENT;
+			}
+		},
+		STENCIL_CRAFT {
+			@Override
+			public EventPacket createPacket() {
+				return new StencilCraftEvent();
 			}
 
 			@Override

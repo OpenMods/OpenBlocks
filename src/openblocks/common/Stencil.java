@@ -18,7 +18,10 @@ public enum Stencil {
 	THICKSTRIPES("thickstripes"),
 	SPLAT("splat"),
 	STORAGE("storage"),
-	HEART("heart");
+	HEART("heart"),
+	HEART2("heart2"),
+	MUSIC("music"),
+	BALLOON("balloon");
 
 	private Icon blockIcon;
 	private Icon coverBlockIcon;

@@ -9,5 +9,6 @@ public class ModuleOpenPeripheral {
 		registry.registerAdapter(new AdapterVillageHighlighter());
 		registry.registerAdapter(new AdapterDonationStation());
 		registry.registerAdapter(new AdapterCannon());
+		registry.registerAdapter(new AdapterProjector());
 	}
 }

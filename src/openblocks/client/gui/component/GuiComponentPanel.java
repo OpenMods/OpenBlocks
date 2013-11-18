@@ -23,6 +23,7 @@ public class GuiComponentPanel extends GuiComponentBox {
 	@Override
 	public void render(Minecraft minecraft, int x, int y, int mouseX, int mouseY) {
 		super.render(minecraft, x, y, mouseX, mouseY);
+		if(BaseComponent.IS_OVERLAY_PASS != isOverlay()) return;
 		GL11.glColor4f(1, 1, 1, 1);
 		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
 		if (container != null && container.get() != null) {

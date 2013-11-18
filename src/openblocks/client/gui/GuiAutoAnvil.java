@@ -3,6 +3,7 @@ package openblocks.client.gui;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.component.BaseComponent.TabColor;
@@ -14,6 +15,8 @@ import openblocks.sync.SyncableFlags;
 
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 
+	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/components.png");
+	
 	// tank
 	private GuiComponentTankLevel xpLevel;
 
@@ -88,8 +91,8 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		labelAutoDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 
 		// create sprites
-		spriteHammer = new GuiComponentSprite(80, 34, GuiComponentSprite.Sprite.hammer);
-		spritePlus = new GuiComponentSprite(36, 41, GuiComponentSprite.Sprite.plus);
+		spriteHammer = new GuiComponentSprite(80, 34, GuiComponentSprite.Sprites.hammer, texture);
+		spritePlus = new GuiComponentSprite(36, 41, GuiComponentSprite.Sprites.plus, texture);
 
 		// add checkboxes
 		tabTool.addComponent(checkboxAutoExtractTool);

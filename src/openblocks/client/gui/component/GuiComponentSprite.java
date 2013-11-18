@@ -1,69 +1,66 @@
 package openblocks.client.gui.component;
 
 import net.minecraft.client.Minecraft;
-import openblocks.utils.CompatibilityUtils;
+import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
+import openblocks.utils.FakeIcon;
 
 import org.lwjgl.opengl.GL11;
 
 public class GuiComponentSprite extends BaseComponent {
 
-	public static enum Sprite {
-
-		hammer(0, 233, 23, 23),
-		plus(23, 242, 13, 13),
-		result(36, 241, 22, 15);
-
-		private int u;
-		private int v;
-		private int width;
-		private int height;
-
-		Sprite(int u, int v, int width, int height) {
-			this.u = u;
-			this.v = v;
-			this.width = width;
-			this.height = height;
-		}
-
-		public int getU() {
-			return u;
-		}
-
-		public int getV() {
-			return v;
-		}
-
-		public int getWidth() {
-			return width;
-		}
-
-		public int getHeight() {
-			return height;
-		}
+	private Icon icon;
+	private ResourceLocation texture;
+	private float r = 1, g = 1, b = 1;
+	
+	
+	public static class Sprites {
+		public static Icon hammer = FakeIcon.createSheetIcon(0, 233, 23, 23);
+		public static Icon plus = FakeIcon.createSheetIcon(23, 242, 13, 13);
+		public static Icon result = FakeIcon.createSheetIcon(36, 241, 22, 15);
 	}
 
-	private Sprite sprite;
-
-	public GuiComponentSprite(int x, int y, Sprite sprite) {
+	public GuiComponentSprite(int x, int y, Icon icon, ResourceLocation texture) {
 		super(x, y);
-		this.sprite = sprite;
+		this.texture = texture;
+		this.icon = icon;
+	}
+	
+	public GuiComponentSprite setColor(float r, float g, float b) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		return this;
 	}
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
-		CompatibilityUtils.bindTextureToClient("textures/gui/components.png");
-		GL11.glColor3f(1, 1, 1);
-		drawTexturedModalRect(offsetX + x, offsetY + y, sprite.u, sprite.v, sprite.width, sprite.height);
+		if (icon == null) {
+			return;
+		}
+		if (texture != null) minecraft.renderEngine.bindTexture(texture);
+		GL11.glColor3f(r,g,b);
+		this.drawTexturedModelRectFromIcon(offsetX + x, offsetY + y, icon, icon.getIconWidth(), icon.getIconHeight());
 	}
 
 	@Override
 	public int getWidth() {
-		return sprite.getWidth();
+		if (icon != null) {
+			return icon.getIconWidth();
+		}
+		return 0;
 	}
 
 	@Override
 	public int getHeight() {
-		return sprite.getHeight();
+		if (icon != null) {
+			return icon.getIconHeight();
+		}
+		return 0;
+	}
+
+	public void setIcon(Icon icon) {
+		this.icon = icon;
 	}
 }

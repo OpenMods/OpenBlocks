@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -15,7 +14,6 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
-import openblocks.common.tileentity.TileEntityTank;
 
 public class BlockCanvas extends OpenBlock {
 
@@ -44,25 +42,26 @@ public class BlockCanvas extends OpenBlock {
 	@Override
 	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		try {
-			TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-			if (tile != null) {
-				int bId = tile.paintedBlockId.getValue();
-				int bMeta = tile.paintedBlockMeta.getValue();
-				if (bId > 0) {
-					int droppedId = Block.blocksList[bId].idDropped(bMeta, world.rand, fortune);
-					Block b = Block.blocksList[droppedId];
-					for (int i = 0; i < b.quantityDropped(world.rand); i++) {
-						ret.add(new ItemStack(b, 1, bMeta));
-					}
+
+		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
+		if (tile != null) {
+			int bId = tile.paintedBlockId.getValue();
+			int bMeta = tile.paintedBlockMeta.getValue();
+			if (bId > 0) {
+				int droppedId = Block.blocksList[bId].idDropped(bMeta, world.rand, fortune);
+				Block b = Block.blocksList[droppedId];
+				for (int i = 0; i < b.quantityDropped(world.rand); i++) {
+					ret.add(new ItemStack(b, 1, bMeta));
 				}
+			} else {
+				return super.getBlockDropped(world, x, y, z, metadata, fortune);
 			}
-		}catch(Exception e) {
 			
 		}
+
 		return ret;
 	}
-	
+
 	@Override
 	public boolean shouldRenderBlock() {
 		return true;

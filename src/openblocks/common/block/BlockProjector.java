@@ -1,17 +1,23 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.tileentity.TileEntityProjector;
-import openblocks.utils.BlockUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockProjector extends OpenBlock {
+
+	@SideOnly(Side.CLIENT)
+	private Icon sideIcon;
 
 	public BlockProjector() {
 		super(Config.blockProjectorId, Material.iron);
@@ -25,13 +31,6 @@ public class BlockProjector extends OpenBlock {
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if (te instanceof IActivateAwareTile) return ((IActivateAwareTile)te).onBlockActivated(player, side, hitX, hitY, hitZ);
 		return false;
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, int blockId, int meta) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te instanceof IInventory) BlockUtils.dropTileInventory(te);
-		super.breakBlock(world, x, y, z, blockId, meta);
 	}
 
 	@Override
@@ -52,5 +51,18 @@ public class BlockProjector extends OpenBlock {
 	@Override
 	public boolean shouldRenderBlock() {
 		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister registry) {
+		sideIcon = registry.registerIcon("stone_slab_side");
+		blockIcon = registry.registerIcon("stone_slab_top");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
+		return (side < 2)? blockIcon : sideIcon;
 	}
 }

@@ -258,4 +258,16 @@ public class GeometryUtils {
 			}
 		}
 	}
+	
+	public static int getDirectionForRotation(double current, double target) {
+		if(current < 360) current += 360;
+		if(current > 360) current %= 360;
+		double diff = current - target;
+		int direction = 0;
+		if(diff < 0) direction = 1;
+		else direction = -1;
+		
+		if(Math.abs(diff) > 180) direction *= -1;
+		return direction;
+	}
 }

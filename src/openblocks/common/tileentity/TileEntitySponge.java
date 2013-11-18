@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -63,7 +64,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 				worldObj.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
 			}
 		} else {
-			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			worldObj.setBlock(xCoord, yCoord, zCoord, Block.fire.blockID, 0, 3);
 		}
 		return true;
 	}

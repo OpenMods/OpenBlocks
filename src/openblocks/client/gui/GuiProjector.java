@@ -98,6 +98,8 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 			trackball.setTransform(MathUtils.createEntityRotateMatrix(Minecraft.getMinecraft().renderViewEntity));
 			isInitialized = true;
 		}
+		
+		BaseComponent.IS_OVERLAY_PASS = false;
 
 		mapHeight += Mouse.getDWheel() / 1000.0;
 		if (mapHeight > 10) mapHeight = 10;

@@ -4,17 +4,20 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.GenericInventory;
+import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.api.IHasGui;
 import openblocks.common.api.IInventoryCallback;
 import openblocks.common.container.ContainerProjector;
+import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableByte;
@@ -41,10 +44,16 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 
 			if (!isInvalid()) {
 				if (!worldObj.isRemote) {
-					ItemStack item = inventory.getStackInSlot(slotNumber);
-					if (item != null && item.getItem() instanceof ItemHeightMap) {
-						int mapId = item.getItemDamage();
-						TileEntityProjector.this.mapId.setValue(mapId);
+					ItemStack stack = getStackInSlot(slotNumber);
+					if (stack != null && stack.stackSize == 1) {
+						Item item = stack.getItem();
+						if (item instanceof ItemHeightMap) {
+							int mapId = stack.getItemDamage();
+							TileEntityProjector.this.mapId.setValue(mapId);
+						} else if (item instanceof ItemEmptyMap && worldObj != null) {
+							ItemStack newStack = ItemEmptyMap.upgradeToMap(worldObj, stack);
+							setInventorySlotContents(slotNumber, newStack);
+						} else TileEntityProjector.this.mapId.setValue(-1);
 					} else
 					TileEntityProjector.this.mapId.setValue(-1);
 				}
@@ -84,7 +93,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1);
+		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 5, zCoord + 1);
 	}
 
 	@Override
@@ -202,5 +211,22 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 
 	public int mapId() {
 		return mapId.getValue();
+	}
+
+	public HeightMapData getMap() {
+		int mapId = this.mapId.getValue();
+		if (worldObj == null || mapId < 0) return null;
+
+		return MapDataManager.getMapData(worldObj, mapId);
+	}
+	
+	public void markMapDirty() {
+		int mapId = this.mapId.getValue();
+		if (worldObj != null || mapId < 0) MapDataManager.instance.markDataUpdated(worldObj, mapId);
+	}
+
+	public void fetchMap() {
+		int mapId = this.mapId.getValue();
+		if (worldObj != null && mapId >= 0) MapDataManager.getMapData(worldObj, mapId);
 	}
 }

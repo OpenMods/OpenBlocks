@@ -29,7 +29,7 @@ public class BlockPath extends OpenBlock {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 		return isValidLocation(world, x, y, z)

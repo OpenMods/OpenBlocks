@@ -83,6 +83,7 @@ public class OpenBlocks {
 		public static BlockPaintCan paintCan;
 		public static BlockCanvasGlass canvasGlass;
 		public static BlockProjector projector;
+		public static BlockDrawingTable drawingTable;
 	}
 
 	public static class Items {
@@ -192,7 +193,7 @@ public class OpenBlocks {
 		if (Config.itemLuggageId > 0) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
 		}
-		
+
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
 
 		if (Config.itemCraneId > 0) {
@@ -203,7 +204,7 @@ public class OpenBlocks {
 		if (Config.itemCartographerId > 0) {
 			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", 705, OpenBlocks.instance, 64, 8, true);
 		}
-				
+
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500);

@@ -104,6 +104,7 @@ public class MapDataManager {
 		int id = world.getUniqueDataId("height_map");
 		HeightMapData data = new HeightMapData(id, false);
 		data.scale = scale;
+		data.markDirty();
 		world.setItemData(data.mapName, data);
 		return id;
 	}

@@ -185,6 +185,9 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler {
 					case WEST:
 						renderer.uvRotateTop = 2;
 						break;
+					case SOUTH:
+						renderer.uvRotateTop = 3;
+						break;
 					default:
 						break;
 				}

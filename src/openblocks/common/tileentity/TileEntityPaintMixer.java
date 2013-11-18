@@ -19,6 +19,7 @@ import openblocks.utils.ColorUtils;
 
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
 
+	private static final int FULL_CAN_SIZE = 30;
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Item.bucketMilk);
 	private static final int PROGRESS_TICKS = 300;
@@ -234,6 +235,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		if (stack != null && stack.isItemEqual(PAINT_CAN)) {
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("color", color.getValue());
+			tag.setInteger("amount", FULL_CAN_SIZE);
 			stack.setTagCompound(tag);
 		}
 	}

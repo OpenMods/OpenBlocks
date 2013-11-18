@@ -55,7 +55,6 @@ public class TileEntityElevator extends OpenTileEntity {
 	}
 
 	public boolean onActivated(EntityPlayer player) {
-		System.out.println(this);
 		ItemStack stack = player.getHeldItem();
 		if (stack != null) {
 			Item item = stack.getItem();

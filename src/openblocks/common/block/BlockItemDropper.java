@@ -3,6 +3,7 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityItemDropper;
 import cpw.mods.fml.relauncher.Side;
@@ -28,16 +29,13 @@ public class BlockItemDropper extends OpenBlock {
 	public void registerIcons(IconRegister registry) {
 		super.registerIcons(registry);
 		this.downIcon = registry.registerIcon("openblocks:itemDropper_down");
+		setTexture(ForgeDirection.UP, blockIcon);
+		setTexture(ForgeDirection.DOWN, downIcon);
+		setTexture(ForgeDirection.EAST, blockIcon);
+		setTexture(ForgeDirection.WEST, blockIcon);
+		setTexture(ForgeDirection.NORTH, blockIcon);
+		setTexture(ForgeDirection.SOUTH, blockIcon);
+		setDefaultTexture(blockIcon);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int metadata) {
-		switch (side) {
-			case 0:
-				return downIcon;
-			default:
-				return blockIcon;
-		}
-	}
 }
