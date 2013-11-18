@@ -8,6 +8,8 @@ import openblocks.physics.Cloth;
 import openblocks.physics.FastVector;
 import openblocks.physics.Point;
 import openblocks.utils.CompatibilityUtils;
+import openblocks.utils.RenderUtils;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -20,6 +22,7 @@ public class TileEntityClothTestRenderer extends TileEntitySpecialRenderer {
 		TileEntityClothTest clothTE = (TileEntityClothTest) tileentity;
 		Cloth cloth = clothTE.cloth;
 		if(cloth != null) {
+			RenderHelper.disableStandardItemLighting();
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
 			Tessellator t = Tessellator.instance;
@@ -28,6 +31,7 @@ public class TileEntityClothTestRenderer extends TileEntitySpecialRenderer {
 				GL11.glDisable(GL11.GL_CULL_FACE);
 				GL11.glEnable(GL11.GL_BLEND);
 				CompatibilityUtils.bindTextureToClient("textures/models/hangglider.png");
+				
 				t.startDrawingQuads();
 				for(int i = 0; i < cloth.points.length-1; i++) {
 					for(int j = 0; j < cloth.points[i].length-1; j++) {
@@ -48,6 +52,7 @@ public class TileEntityClothTestRenderer extends TileEntitySpecialRenderer {
 				GL11.glDisable(GL11.GL_BLEND);
 				GL11.glColor4f(1, 1, 1, 1);
 				GL11.glPopMatrix();
+				RenderHelper.enableStandardItemLighting();
 			}
 			GL11.glPopMatrix();
 		}
