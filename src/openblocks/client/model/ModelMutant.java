@@ -67,9 +67,13 @@ public class ModelMutant extends ModelBase {
             }
             
             if (tail != null) {
-            	getRenderer(tail).renderTail(mutant, scale);
+            	getRenderer(tail).renderTail(mutant, scale, legSwing, prevLegSwing);
             }
 
     }
 
+    public void _setTextureOffset(String par1Str, int par2, int par3) {
+    	setTextureOffset(par1Str, par2, par3);
+    }
+    
 }

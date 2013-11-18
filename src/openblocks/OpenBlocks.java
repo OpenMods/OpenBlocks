@@ -7,6 +7,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,7 @@ import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.mutant.DefinitionChicken;
 import openblocks.mutant.DefinitionCreeper;
 import openblocks.mutant.DefinitionEnderman;
+import openblocks.mutant.DefinitionOcelot;
 import openblocks.mutant.DefinitionPig;
 import openblocks.mutant.DefinitionSheep;
 import openblocks.mutant.DefinitionSpider;
@@ -228,6 +230,7 @@ public class OpenBlocks {
 		MutantRegistry.registerMutant(EntitySpider.class, new DefinitionSpider());
 		MutantRegistry.registerMutant(EntityChicken.class, new DefinitionChicken());
 		MutantRegistry.registerMutant(EntitySheep.class, new DefinitionSheep());
+		MutantRegistry.registerMutant(EntityOcelot.class, new DefinitionOcelot());
 		
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 

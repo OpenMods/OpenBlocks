@@ -18,6 +18,7 @@ import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.world.World;
@@ -46,32 +47,32 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 
 	@Override
 	public IMutantDefinition getBody() {
-		return MutantRegistry.getDefinition(EntityChicken.class);
+		return MutantRegistry.getDefinition(EntityOcelot.class);
 	}
 
 	@Override
 	public IMutantDefinition getHead() {
-		return MutantRegistry.getDefinition(EntitySheep.class);
-	}
-
-	@Override
-	public IMutantDefinition getArms() {
 		return MutantRegistry.getDefinition(EntityEnderman.class);
 	}
 
 	@Override
+	public IMutantDefinition getArms() {
+		return MutantRegistry.getDefinition(EntityOcelot.class);
+	}
+
+	@Override
 	public IMutantDefinition getWings() {
-		return MutantRegistry.getDefinition(EntityPig.class);
+		return MutantRegistry.getDefinition(EntityOcelot.class);
 	}
 
 	@Override
 	public IMutantDefinition getLegs() {
-		return MutantRegistry.getDefinition(EntityPig.class);
+		return MutantRegistry.getDefinition(EntityEnderman.class);
 	}
 
 	@Override
 	public IMutantDefinition getTail() {
-		return MutantRegistry.getDefinition(EntityCreeper.class);
+		return MutantRegistry.getDefinition(EntityOcelot.class);
 	}
 
 	@Override

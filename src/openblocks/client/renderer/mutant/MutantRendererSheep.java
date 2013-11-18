@@ -147,7 +147,7 @@ public class MutantRendererSheep implements IMutantRenderer {
 	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}
 
 	@Override
-	public void renderTail(IMutant mutant, float scale) {}
+	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}
 
 	private void bindTexture(ResourceLocation loc) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(loc);

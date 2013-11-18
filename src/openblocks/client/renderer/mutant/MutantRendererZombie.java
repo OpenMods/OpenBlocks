@@ -123,10 +123,7 @@ public class MutantRendererZombie implements IMutantRenderer {
 	}
 
 	@Override
-	public void renderTail(IMutant mutant, float scale) {
-		// TODO Auto-generated method stub
-
-	}
+	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) { }
 
 	private void bindTexture() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
