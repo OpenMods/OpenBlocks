@@ -24,10 +24,10 @@ public class Cloth {
 		double x,y;
 		this.constraints = new java.util.ArrayList<Constraint>();
 		points = new Point[num_y_points][];
-		for(i = 0, y = height; i < num_y_points; i++, y -= spacing) {
+		for(i = 0, y = 0; i < num_y_points; i++, y += spacing) {
 			points[i] = new Point[num_x_points];
 			for(j = 0, x = 0; j < num_x_points; j++, x += spacing) {
-				points[i][j] = new Point(x / width, y / height, 0.5);
+				points[i][j] = new Point(x / width, y / height, 0);
 				
 				if(i > 0) {
 					this.constraints.add(new Constraint(this.points[i-1][j], this.points[i][j], Double.NaN));
@@ -38,7 +38,7 @@ public class Cloth {
 			}
 		}
 		
-		for(i = 0; i < num_y_points; i+=3 ) {
+		for(i = 0; i < num_x_points; i+=3 ) {
 			this.points[0][i].inv_mass = 0;
 		}
 		this.points[0][num_x_points -1].inv_mass = 0;

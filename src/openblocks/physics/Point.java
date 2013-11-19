@@ -9,7 +9,7 @@ public class Point {
 		this.current = this.previous = new FastVector(x,y,z);
 		this.mass = 5;
 		this.inv_mass = this.mass > 0 ? 1/this.mass : 0;
-		this.gravity = new FastVector(0.0, -0.5, 0).multiply(0.08 * 0.08);
+		this.gravity = new FastVector(0.0, 0.5, 0).multiply(0.08 * 0.08);
 		this.force = new FastVector(0, 0, 0);
 	}
 	

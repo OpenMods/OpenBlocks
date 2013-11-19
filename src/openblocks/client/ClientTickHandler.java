@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.events.PlayerMovementEvent;
 import openblocks.common.tileentity.OpenTileEntity;
+import openblocks.physics.Cloth;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -31,7 +32,16 @@ public class ClientTickHandler implements ITickHandler {
 
 		if (type.contains(TickType.CLIENT)) {
 			clientTick();
+			physicsTick();
 		}
+	}
+
+	private void physicsTick() {
+		if(!PlayerRenderEventHandler.CLOTH_CAPES_ENABLED) return;
+		// Update all the physics for the capes
+		for(Cloth c : PlayerRenderEventHandler.PLAYER_CAPE_PHYSICS.values()) {
+			c.update();
+		}		
 	}
 
 	@Override
