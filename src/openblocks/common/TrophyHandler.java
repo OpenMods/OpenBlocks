@@ -155,7 +155,7 @@ public class TrophyHandler {
 			e.posY = y;
 			e.posZ = z;
 			e.worldObj = world;
-			if (e instanceof EntityLiving) {
+			if (e instanceof EntityLiving && world != null) {
 				((EntityLiving)e).playLivingSound();
 			}
 		}

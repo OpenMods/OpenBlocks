@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -96,21 +97,30 @@ public abstract class OpenBlock extends Block {
 		inventoryRenderRotation = rotation;
 	}
 
+	private void dropBlockItem(World world, int x, int y, int z) {
+		if (world.isRemote) return;
+
+		int metadata = world.getBlockMetadata(x, y, z);
+		ArrayList<ItemStack> items = getBlockDropped(world, x, y, z, metadata, 0);
+		Iterator<ItemStack> it = items.iterator();
+		while (it.hasNext()) {
+			ItemStack item = it.next();
+			dropBlockAsItem_do(world, x, y, z, item);
+		}
+	}
+
 	@Override
 	public void dropBlockAsItemWithChance(World par1World, int par2, int par3, int par4, int par5, float par6, int par7) {}
 
+	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+		dropBlockItem(world, x, y, z);
+		super.onBlockExploded(world, x, y, z, explosion);
+	}
+
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
-		if (world.isRemote) return false;
-
 		if ((!player.capabilities.isCreativeMode)) {
-			int metadata = world.getBlockMetadata(x, y, z);
-			ArrayList<ItemStack> items = getBlockDropped(world, x, y, z, metadata, 0);
-			Iterator<ItemStack> it = items.iterator();
-			while (it.hasNext()) {
-				ItemStack item = it.next();
-				dropBlockAsItem_do(world, x, y, z, item);
-			}
+			dropBlockItem(world, x, y, z);
 		}
 		return super.removeBlockByPlayer(world, player, x, y, z);
 	}
