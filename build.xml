@@ -4,6 +4,7 @@
 	<!-- Properties -->
 
 	<property name="env.BUILD_NUMBER"    value="0"/>
+	<property name="env.JOB_NAME"        value="OpenBlocks"/>
 	
 	<property name="build.dir"           value="build"/>
 	<property name="src.dir"             value="src"/>
@@ -147,7 +148,7 @@
 	<target name="package" depends="compile,create_manifest">
 		<delete dir="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
-		<jar destfile="${jar.dir}/${mod.name}-${mod.version}-forge${forge.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}" manifest="${classes.dir}/META-INF/MANIFEST.MF"/>
+		<jar destfile="${jar.dir}/${env.JOB_NAME}-${mod.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}" manifest="${classes.dir}/META-INF/MANIFEST.MF"/>
 	</target>
 
 	<!-- Default target to run -->
