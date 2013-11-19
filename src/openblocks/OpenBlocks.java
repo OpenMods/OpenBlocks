@@ -1,7 +1,6 @@
 package openblocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockGoldenEgg;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
