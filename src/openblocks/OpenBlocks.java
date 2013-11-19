@@ -1,6 +1,7 @@
 package openblocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGoldenEgg;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -101,6 +102,7 @@ public class OpenBlocks {
 		public static BlockCanvasGlass canvasGlass;
 		public static BlockProjector projector;
 		public static BlockDrawingTable drawingTable;
+		public static BlockGoldenEgg goldenEgg;
 	}
 
 	public static class Items {

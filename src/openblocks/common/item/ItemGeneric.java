@@ -7,16 +7,22 @@ import java.util.Map.Entry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.api.IMutantDefinition;
+import openblocks.api.MutantRegistry;
 import openblocks.common.entity.EntityMutant;
+import openblocks.common.tileentity.TileEntityGoldenEgg;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -117,22 +123,49 @@ public class ItemGeneric extends Item {
 						new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Item.coal, 1, 1), 's', Item.stick));
 			}
 		},
-		temp {
+		syringe {
 			@Override
 			public IMetaItem createMetaItem() {
 				ItemStack result = newItemStack();
-				return new MetaGeneric("temp") {
+				return new MetaGeneric("syringe") {
 					@Override
-					public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world) {
-						if (!world.isRemote) {
-							EntityMutant mutant = new EntityMutant(world);
-							mutant.setPositionAndRotation(player.posX, player.posY, player.posZ, 0, 0);
-							world.spawnEntityInWorld(mutant);
+					public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player) {
+						if (!player.worldObj.isRemote) {
+							IMutantDefinition definition = MutantRegistry.getDefinition(target.getClass());
+							if (definition != null) {
+								NBTTagCompound tag = new NBTTagCompound();
+								tag.setString("entity", EntityList.getEntityString(target));
+								itemStack.setTagCompound(tag);
+								itemStack.setItemDamage(Metas.bloodSample.ordinal());
+							}
 						}
-						return itemStack;
+						return true;
 					}
 				};
 			}
+		},
+		bloodSample {
+			@Override
+			public IMetaItem createMetaItem() {
+				return new MetaGeneric("blood_sample") {
+					@Override
+					public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
+						int blockId = world.getBlockId(x, y, z);
+						Block block = Block.blocksList[blockId];
+						if (block != null && block == OpenBlocks.Blocks.goldenEgg) {
+							if (!world.isRemote) {
+								TileEntity te = world.getBlockTileEntity(x, y, z);
+								if (te instanceof TileEntityGoldenEgg) {
+									((TileEntityGoldenEgg)te).addDNAFromItemStack(itemStack);
+								}
+							}
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+						}
+						return false;
+					}
+				};
+			}
+			
 		};
 
 		public ItemStack newItemStack(int amount) {
