@@ -1,5 +1,6 @@
 package openblocks.common;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -35,7 +36,10 @@ public class PlayerDeathHandler {
 				boolean aboveIsAir = false;
 
 				for (int checkY = y; checkY > 1; checkY--) {
-					boolean thisIsAir = world.isAirBlock(x, checkY, z);
+					int bId = world.getBlockId(x, checkY, z);
+					Block block = Block.blocksList[bId];
+					boolean thisIsAir = world.isAirBlock(x, checkY, z) || (block != null && block.isBlockReplaceable(world, x, checkY, z));
+					
 					if (!thisIsAir && aboveIsAir) {
 						checkY++;
 						world.setBlock(x, checkY, z, Config.blockGraveId, 0, 2);
