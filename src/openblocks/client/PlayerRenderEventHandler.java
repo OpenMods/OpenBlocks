@@ -15,6 +15,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.item.ItemSleepingBag;
 import openblocks.physics.Cloth;
 import openblocks.physics.FastVector;
+import openblocks.physics.Point;
 import openblocks.utils.CompatibilityUtils;
 
 public class PlayerRenderEventHandler {
@@ -92,7 +93,8 @@ public class PlayerRenderEventHandler {
 				double motionZ = entityPlayer.motionZ * partialTick;
 				double horizontal = Math.sqrt(motionX * motionX + motionZ * motionZ);
 				double rotation = Math.toRadians(entityPlayer.rotationYaw);
-				cloth.getClosestPoint(new FastVector(0.5, 0.5, 0)).applyForce(new FastVector(Math.sin(rotation) * horizontal, motionY * 0.06, Math.cos(rotation) * horizontal));
+				Point closest = cloth.getClosestPoint(new FastVector(0.5, 0.9, 0));
+				if(closest != null) closest.applyForce(new FastVector(Math.sin(-rotation) * horizontal, motionY * 0.06, Math.cos(rotation) * horizontal));
 				t.draw();
 				//GL11.glEnable(GL11.GL_TEXTURE);
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
