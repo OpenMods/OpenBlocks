@@ -11,6 +11,7 @@ public class BlockGoldenEgg extends OpenBlock {
 		setupBlock(this, "goldenegg", TileEntityGoldenEgg.class);
 	}
 
+	
 	@Override
 	public boolean shouldRenderBlock() {
 		return false;
