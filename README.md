@@ -13,25 +13,28 @@ For snapshot versions, check the [Jenkins](http://www.openmods.info:8080/).
 
 What does it contain?
 -----------
+**In (mostly) chronological order:**
+
 * A combination ladder and trapdoor, also known as the **Jaded Ladder**
+* A creative-only **healer** block that slowly replenishes your health and food when you stand on it.
 * A **guide block** to assist in various constructions
 * Colorable **elevator blocks** to quickly travel between floors
 * **Light boxes** to display your maps on the wall, ceiling or floor
 * Archery **targets** for a shooting range
 * ~~**Torch arrows!**~~ *No longer implemented*
-* ~~**Player graves**, fight the ghost of the perished to obtain their inventory~~ *Bugged*
+* **Player graves**, safekeeping for your last death (assuming you’re capable of regeneration)
 * Colored **flags** for various purposes
 * Liquid **tanks**-- portable, practical, and pliable any-size liquid containment
 * Hang **gliders**!
 * Random **trophies** that may or may not do odd things when right-clicked
 * **Bear traps**-- like venus fly traps, but snappier
 * **Luggage**, the traveling sentient chest
-* **Sprinklers**, to accelerate the growth of crops and other growables
+* **Sprinklers**, to accelerate the growth of crops and other growables // m1.5.2, v1.0.3
 * **Item cannons** to shoot items around for transport
 * **Vaccum hoppers**-- like regular hoppers, but not limited to the top and sucks up XP. Compatible with BuildCraft!
 * **Sonic goggles**-- echolocation for Steves
 * **Sponges** for getting rid of liquids fast and effectively
-* The Redstone Configurable Capacitance Lightweight Mega Touch Sensor, also known as the **BIG BUTTON**
+* The Redstone Configurable Pulse Lightweight Mega Touch Sensor, also known as the **BIG BUTTON**
 * Blocks drawn by **pencils** and **crayons** that are only seen by the imaginative eye
 * **Fans**-- the power of an industrial fan in the size of a desk fan
 * A wearable **crane** for picking up blocks and entities
@@ -39,7 +42,18 @@ What does it contain?
 * **Magnet turtles**-- turtles don't have CRT screens, so we should be fine
 * **Village highlighter**-- shows the village borders and where their golem guardians spawn
 * The **Slimalizer**, which detects slime chunks
-* **Paths**, an alternative to gravel roads
+* **Paths**, an alternative to gravel roads // m1.6.x, v1.2.0
+* The **Block Breaker** and **Block Placer** are back! A perfect replacement for the now-dormant RedPower mod
+* **XP Drain**-- stand on one attached to a tank, and your XP will be drained and turned into a liquid state
+* The **Auto Anvil** and **Auto Enchantment Table**, imported fresh from OpenXP. Uses liquid XP to perform their function automatically.
+* The **Sleeping Bag**. Finally, a way to sleep on the go without resetting your spawn point!
+* The **Rope Ladder**—- a magic ladder that doesn’t need support to hold itself up and adjusts its own size to match the ground. Single use.
+* The **Donation Station**—- tells you which mod a block or item comes from, and lets you support the modder that created it
+* A painting/staining system for blocks, including: // m1.6.x, v.1.2.2
+  * A **Paint Mixer**-- makes paint using dyes and milk. Millions of colors possible. 
+  * A paint **brush** to paint white **canvas**es and other blocks.
+  * **Stencils** that are made using the **Drawing Table** to paint specific areas of blocks
+  * A **Squeegee** that liquefies paint to clean it off of blocks
 * Exciting graphics and much more to come.
 
 Compiling
@@ -84,7 +98,6 @@ The mod jar will be in the bin folder after the completion of the build process.
 Contact
 -
 Feel free to chat with us in #OpenMods on *irc.esper.net*
-
 
 License
 -
