@@ -387,7 +387,7 @@ public class Config {
 		}
 		if (Config.canRegisterBlock(blockElevatorId)) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wgw", "www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'g', new ItemStack(Item.enderPearl) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wew", "www", 'e', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'e', new ItemStack(Item.enderPearl) }));
 		}
 		if (Config.canRegisterBlock(blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
@@ -405,11 +405,11 @@ public class Config {
 		}
 		if (Config.canRegisterBlock(blockFlagId)) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag, 3), new Object[] { "sww", "sw ", "s  ", 'w', new ItemStack(Block.carpet, 1, Short.MAX_VALUE), 's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag, 3), new Object[] { "scc", "sc ", "s  ", 'c', new ItemStack(Block.carpet, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
 		if (Config.canRegisterBlock(blockTankId)) {
 			OpenBlocks.Blocks.tank = new BlockTank();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "sgs", "ggg", "sgs", 'g', new ItemStack(Block.thinGlass), 's', new ItemStack(Block.obsidian) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "ogo", "ggg", "ogo", 'g', new ItemStack(Block.thinGlass), 'o', new ItemStack(Block.obsidian) }));
 		}
 		if (Config.canRegisterBlock(blockTrophyId)) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
@@ -417,12 +417,12 @@ public class Config {
 		}
 		if (Config.canRegisterBlock(blockBearTrapId)) {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "bib", "bib", "bib", 'b', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "fif", "fif", "fif", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
 
 		if (Config.canRegisterBlock(blockSprinklerId)) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "igi", "iri", "igi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'g', new ItemStack(Block.fenceIron) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "ifi", "iri", "ifi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'f', new ItemStack(Block.fenceIron) }));
 		}
 
 		if (Config.canRegisterBlock(blockCannonId)) {
@@ -487,7 +487,7 @@ public class Config {
 
 		if (Config.canRegisterBlock(blockAutoEnchantmentTableId)) {
 			OpenBlocks.Blocks.autoEnchantmentTable = new BlockAutoEnchantmentTable();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoEnchantmentTable), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.enchantmentTable, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoEnchantmentTable), new Object[] { "iii", "iei", "rrr", 'i', new ItemStack(Item.ingotIron), 'e', new ItemStack(Block.enchantmentTable, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
 
 		if (Config.canRegisterBlock(blockXPDrainId)) {
@@ -559,9 +559,6 @@ public class Config {
 		
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
-
-		// There is no fail checking here because if the Generic item fails,
-		// then I doubt anyone wants this to be silent.
 
 		// There is no fail checking here because if the Generic item fails,
 		// then I doubt anyone wants this to be silent.
