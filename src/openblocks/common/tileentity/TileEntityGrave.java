@@ -14,12 +14,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
-import openblocks.common.api.IInventoryContainer;
-import openblocks.common.api.ISurfaceAttachment;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableString;
 import openblocks.utils.BlockUtils;
+import openmods.common.api.IAwareTile;
+import openmods.common.api.IInventoryContainer;
+import openmods.common.api.ISurfaceAttachment;
 
 public class TileEntityGrave extends SyncedTileEntity implements
 		IInventoryContainer,

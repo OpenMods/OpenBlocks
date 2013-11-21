@@ -6,9 +6,9 @@ import net.minecraft.world.World;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.GuiId;
-import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
+import openmods.common.api.IHasGui;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonGuiHandler implements IGuiHandler {

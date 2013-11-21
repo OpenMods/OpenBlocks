@@ -11,8 +11,6 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
-import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
@@ -21,6 +19,8 @@ import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
+import openmods.common.api.IAwareTile;
+import openmods.common.api.IHasGui;
 
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 		implements IAwareTile, IFluidHandler, ISidedInventory, IHasGui {

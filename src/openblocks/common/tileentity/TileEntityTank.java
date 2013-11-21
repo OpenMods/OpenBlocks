@@ -10,10 +10,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
-import openblocks.common.api.IAwareTile;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableTank;
 import openblocks.utils.ItemUtils;
+import openmods.common.api.IAwareTile;
 
 public class TileEntityTank extends SyncedTileEntity implements
 		IFluidHandler, IAwareTile {

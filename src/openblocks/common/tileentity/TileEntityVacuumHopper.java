@@ -17,8 +17,6 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IActivateAwareTile;
-import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityItemProjectile;
 import openblocks.sync.ISyncableObject;
@@ -27,6 +25,8 @@ import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
+import openmods.common.api.IActivateAwareTile;
+import openmods.common.api.IHasGui;
 
 public class TileEntityVacuumHopper extends SyncedTileEntity implements
 		IInventory, IFluidHandler, IActivateAwareTile, IHasGui {

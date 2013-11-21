@@ -1,4 +1,4 @@
-package openblocks.common.api;
+package openmods.common.api;
 
 public interface IAwareTile extends IAwareTileLite, INeighbourAwareTile {
 	public void onBlockBroken();

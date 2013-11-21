@@ -1,4 +1,4 @@
-package openblocks.common.api;
+package openmods.common.api;
 
 public interface INeighbourAwareTile {
 

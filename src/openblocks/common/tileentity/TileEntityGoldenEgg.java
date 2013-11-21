@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IActivateAwareTile;
+import openmods.common.api.IActivateAwareTile;
 
 public class TileEntityGoldenEgg extends OpenTileEntity {
 

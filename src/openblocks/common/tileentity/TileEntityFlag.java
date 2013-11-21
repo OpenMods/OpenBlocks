@@ -8,13 +8,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IAwareTileLite;
-import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.block.BlockFlag;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFloat;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
+import openmods.common.api.IAwareTileLite;
+import openmods.common.api.ISurfaceAttachment;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

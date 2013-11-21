@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import openblocks.common.api.IInventoryCallback;
+import openmods.common.api.IInventoryCallback;
 
 public class GenericInventory implements IInventory {
 

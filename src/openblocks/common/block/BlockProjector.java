@@ -9,8 +9,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.tileentity.TileEntityProjector;
+import openmods.common.api.IActivateAwareTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

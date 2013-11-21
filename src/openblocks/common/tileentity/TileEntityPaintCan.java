@@ -8,12 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.common.api.IActivateAwareTile;
-import openblocks.common.api.IPlaceAwareTile;
 import openblocks.common.block.BlockPaintCan;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
+import openmods.common.api.IActivateAwareTile;
+import openmods.common.api.IPlaceAwareTile;
 
 public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
 

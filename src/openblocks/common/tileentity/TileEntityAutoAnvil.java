@@ -15,8 +15,6 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IActivateAwareTile;
-import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
@@ -24,6 +22,8 @@ import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
+import openmods.common.api.IActivateAwareTile;
+import openmods.common.api.IHasGui;
 
 public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {

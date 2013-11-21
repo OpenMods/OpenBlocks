@@ -17,15 +17,15 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IAwareTile;
-import openblocks.common.api.IHasGui;
-import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerSprinkler;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableTank;
 import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
+import openmods.common.api.IAwareTile;
+import openmods.common.api.IHasGui;
+import openmods.common.api.ISurfaceAttachment;
 
 public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
 

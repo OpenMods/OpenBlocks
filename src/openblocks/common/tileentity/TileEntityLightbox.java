@@ -17,11 +17,11 @@ import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.common.GenericInventory;
-import openblocks.common.api.IActivateAwareTile;
-import openblocks.common.api.IHasGui;
-import openblocks.common.api.ISurfaceAttachment;
 import openblocks.common.container.ContainerLightbox;
 import openblocks.sync.ISyncableObject;
+import openmods.common.api.IActivateAwareTile;
+import openmods.common.api.IHasGui;
+import openmods.common.api.ISurfaceAttachment;
 
 public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 		ISurfaceAttachment, IActivateAwareTile, IHasGui {

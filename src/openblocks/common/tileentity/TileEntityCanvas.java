@@ -10,11 +10,11 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
-import openblocks.common.api.IAwareTile;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.sync.*;
 import openblocks.sync.SyncableBlockLayers.Layer;
 import openblocks.utils.BlockUtils;
+import openmods.common.api.IAwareTile;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 

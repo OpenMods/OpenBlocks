@@ -7,9 +7,9 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks.GuiId;
 import openblocks.client.gui.GuiLuggage;
 import openblocks.common.CommonGuiHandler;
-import openblocks.common.api.IHasGui;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
+import openmods.common.api.IHasGui;
 
 public class ClientGuiHandler extends CommonGuiHandler {
 

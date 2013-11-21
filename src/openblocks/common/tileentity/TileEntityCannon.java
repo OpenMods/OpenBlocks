@@ -12,13 +12,13 @@ import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IPointable;
-import openblocks.common.api.IActivateAwareTile;
 import openblocks.common.entity.EntityItemProjectile;
 import openblocks.common.events.TileEntityMessageEventPacket;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableDouble;
 import openblocks.utils.GeometryUtils;
 import openblocks.utils.InventoryUtils;
+import openmods.common.api.IActivateAwareTile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

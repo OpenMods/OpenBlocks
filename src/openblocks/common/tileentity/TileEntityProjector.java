@@ -13,15 +13,15 @@ import openblocks.client.gui.GuiProjector;
 import openblocks.common.GenericInventory;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
-import openblocks.common.api.IActivateAwareTile;
-import openblocks.common.api.IHasGui;
-import openblocks.common.api.IInventoryCallback;
 import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableByte;
 import openblocks.sync.SyncableInt;
+import openmods.common.api.IActivateAwareTile;
+import openmods.common.api.IHasGui;
+import openmods.common.api.IInventoryCallback;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
