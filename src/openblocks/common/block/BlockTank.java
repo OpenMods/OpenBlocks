@@ -14,6 +14,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
+import openmods.common.block.OpenBlock;
 
 public class BlockTank extends OpenBlock {
 

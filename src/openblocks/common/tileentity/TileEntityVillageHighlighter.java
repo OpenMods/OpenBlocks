@@ -11,6 +11,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableIntArray;
+import openmods.common.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

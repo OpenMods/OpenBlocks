@@ -6,6 +6,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openmods.common.block.OpenBlock;
 
 public class BlockPath extends OpenBlock {
 

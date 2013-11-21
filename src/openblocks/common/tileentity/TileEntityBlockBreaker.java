@@ -19,6 +19,7 @@ import openblocks.utils.BlockUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 import openmods.common.api.INeighbourAwareTile;
+import openmods.common.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBearTrap;
+import openmods.common.block.OpenBlock;
 
 public class BlockBearTrap extends OpenBlock {
 

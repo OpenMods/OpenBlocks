@@ -1,4 +1,4 @@
-package openblocks.common.tileentity;
+package openmods.common.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,9 +9,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
-import openblocks.common.block.OpenBlock;
 import openblocks.common.events.TileEntityMessageEventPacket;
 import openmods.common.api.IInventoryCallback;
+import openmods.common.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

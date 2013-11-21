@@ -14,6 +14,7 @@ import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IPlaceAwareTile;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
 

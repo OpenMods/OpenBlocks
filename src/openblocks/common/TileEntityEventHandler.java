@@ -3,7 +3,7 @@ package openblocks.common;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Log;
 import openblocks.common.events.TileEntityMessageEventPacket;
-import openblocks.common.tileentity.OpenTileEntity;
+import openmods.common.tileentity.OpenTileEntity;
 
 public class TileEntityEventHandler {
 

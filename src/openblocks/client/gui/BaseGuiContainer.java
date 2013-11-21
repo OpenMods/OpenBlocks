@@ -6,7 +6,7 @@ import net.minecraft.util.StatCollector;
 import openblocks.client.gui.component.BaseComponent;
 import openblocks.client.gui.component.GuiComponentPanel;
 import openblocks.common.container.ContainerInventory;
-import openblocks.common.tileentity.SyncedTileEntity;
+import openmods.common.tileentity.SyncedTileEntity;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

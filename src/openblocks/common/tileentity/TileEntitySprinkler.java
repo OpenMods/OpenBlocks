@@ -26,6 +26,7 @@ import openblocks.utils.InventoryUtils;
 import openmods.common.api.IAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.ISurfaceAttachment;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
 

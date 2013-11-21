@@ -11,6 +11,7 @@ import openblocks.sync.SyncableFlags;
 import openblocks.sync.SyncableInt;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.ISurfaceAttachment;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityBearTrap extends SyncedTileEntity implements
 		IActivateAwareTile, ISurfaceAttachment {

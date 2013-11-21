@@ -27,6 +27,7 @@ import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityVacuumHopper extends SyncedTileEntity implements
 		IInventory, IFluidHandler, IActivateAwareTile, IHasGui {

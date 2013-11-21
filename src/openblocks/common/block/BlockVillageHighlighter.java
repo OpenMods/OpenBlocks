@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
+import openmods.common.block.OpenBlock;
 
 public class BlockVillageHighlighter extends OpenBlock {
 

@@ -11,6 +11,7 @@ import openblocks.common.TrophyHandler.Trophy;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableInt;
 import openmods.common.api.IAwareTileLite;
+import openmods.common.tileentity.SyncedTileEntity;
 
 import com.google.common.base.Preconditions;
 

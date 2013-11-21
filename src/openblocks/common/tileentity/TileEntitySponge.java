@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import openmods.common.api.IAwareTile;
+import openmods.common.tileentity.OpenTileEntity;
 
 public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 

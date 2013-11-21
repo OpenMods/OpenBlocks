@@ -3,8 +3,8 @@ package openblocks.common.events;
 import java.io.DataInput;
 import java.io.DataOutput;
 
-import openblocks.common.tileentity.OpenTileEntity;
 import openblocks.utils.ByteUtils;
+import openmods.common.tileentity.OpenTileEntity;
 
 public class PlayerMovementEvent extends TileEntityMessageEventPacket {
 

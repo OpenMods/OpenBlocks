@@ -15,6 +15,7 @@ import openblocks.sync.*;
 import openblocks.sync.SyncableBlockLayers.Layer;
 import openblocks.utils.BlockUtils;
 import openmods.common.api.IAwareTile;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 

@@ -1,4 +1,4 @@
-package openblocks.common.tileentity;
+package openmods.common.tileentity;
 
 import java.io.IOException;
 

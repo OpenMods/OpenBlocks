@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.tileentity.TileEntityTrophy;
+import openmods.common.block.OpenBlock;
 
 public class BlockTrophy extends OpenBlock {
 

@@ -24,6 +24,7 @@ import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {

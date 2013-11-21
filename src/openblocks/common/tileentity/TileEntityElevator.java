@@ -10,6 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.events.PlayerMovementEvent;
 import openblocks.common.events.TileEntityMessageEventPacket;
+import openmods.common.tileentity.OpenTileEntity;
 
 import com.google.common.base.Preconditions;
 

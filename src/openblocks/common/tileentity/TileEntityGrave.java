@@ -20,6 +20,7 @@ import openblocks.utils.BlockUtils;
 import openmods.common.api.IAwareTile;
 import openmods.common.api.IInventoryContainer;
 import openmods.common.api.ISurfaceAttachment;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityGrave extends SyncedTileEntity implements
 		IInventoryContainer,

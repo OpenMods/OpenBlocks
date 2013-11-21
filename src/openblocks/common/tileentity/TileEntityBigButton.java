@@ -16,6 +16,7 @@ import openblocks.sync.SyncableFlags;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.ISurfaceAttachment;
+import openmods.common.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

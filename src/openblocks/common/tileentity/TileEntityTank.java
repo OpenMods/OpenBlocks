@@ -14,6 +14,7 @@ import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableTank;
 import openblocks.utils.ItemUtils;
 import openmods.common.api.IAwareTile;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityTank extends SyncedTileEntity implements
 		IFluidHandler, IAwareTile {

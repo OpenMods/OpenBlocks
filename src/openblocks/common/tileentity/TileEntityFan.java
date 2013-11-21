@@ -13,6 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.sync.ISyncableObject;
 import openblocks.sync.SyncableFloat;
 import openmods.common.api.IPlaceAwareTile;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 

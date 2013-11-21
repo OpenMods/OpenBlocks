@@ -16,6 +16,7 @@ import openblocks.utils.ColorUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
 

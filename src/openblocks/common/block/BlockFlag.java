@@ -13,6 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.item.ItemFlagBlock;
 import openblocks.common.tileentity.TileEntityFlag;
+import openmods.common.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -1,4 +1,4 @@
-package openblocks.common.block;
+package openmods.common.block;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,8 +21,6 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.api.*;
 import openblocks.common.item.ItemOpenBlock;
-import openblocks.common.tileentity.OpenTileEntity;
-import openblocks.common.tileentity.SyncedTileEntity;
 import openblocks.sync.SyncableDirection;
 import openblocks.utils.BlockUtils;
 import openmods.common.api.IActivateAwareTile;
@@ -30,6 +28,8 @@ import openmods.common.api.IAwareTile;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.api.IPlaceAwareTile;
 import openmods.common.api.ISurfaceAttachment;
+import openmods.common.tileentity.OpenTileEntity;
+import openmods.common.tileentity.SyncedTileEntity;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

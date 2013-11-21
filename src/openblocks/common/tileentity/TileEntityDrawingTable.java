@@ -14,6 +14,7 @@ import openblocks.common.item.ItemGeneric;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
+import openmods.common.tileentity.OpenTileEntity;
 
 public class TileEntityDrawingTable extends OpenTileEntity implements
 IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {

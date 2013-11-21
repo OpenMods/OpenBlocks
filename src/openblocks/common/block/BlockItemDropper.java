@@ -6,6 +6,7 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityItemDropper;
+import openmods.common.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

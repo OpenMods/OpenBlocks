@@ -11,7 +11,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import openblocks.common.tileentity.SyncedTileEntity;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public abstract class ContainerInventory<T extends IInventory> extends
 		Container {

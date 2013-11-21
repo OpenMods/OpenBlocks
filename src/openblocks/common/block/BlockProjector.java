@@ -11,6 +11,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityProjector;
 import openmods.common.api.IActivateAwareTile;
+import openmods.common.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

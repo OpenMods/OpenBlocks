@@ -21,6 +21,7 @@ import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
 import openmods.common.api.IAwareTile;
 import openmods.common.api.IHasGui;
+import openmods.common.tileentity.SyncedTileEntity;
 
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 		implements IAwareTile, IFluidHandler, ISidedInventory, IHasGui {

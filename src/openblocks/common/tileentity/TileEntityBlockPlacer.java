@@ -14,6 +14,7 @@ import openblocks.utils.OpenBlocksFakePlayer;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.INeighbourAwareTile;
+import openmods.common.tileentity.OpenTileEntity;
 
 public class TileEntityBlockPlacer extends OpenTileEntity
 		implements INeighbourAwareTile, IActivateAwareTile, IInventory, IHasGui {

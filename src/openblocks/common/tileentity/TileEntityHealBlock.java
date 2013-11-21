@@ -7,6 +7,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.OpenBlocks;
+import openmods.common.tileentity.OpenTileEntity;
 
 public class TileEntityHealBlock extends OpenTileEntity {
 

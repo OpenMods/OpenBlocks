@@ -12,6 +12,7 @@ import openblocks.sync.SyncableString;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
+import openmods.common.tileentity.OpenTileEntity;
 
 import com.google.common.base.Joiner;
 

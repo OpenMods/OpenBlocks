@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityFan;
+import openmods.common.block.OpenBlock;
 
 public class BlockFan extends OpenBlock {
 

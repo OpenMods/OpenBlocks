@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityGrave;
+import openmods.common.block.OpenBlock;
 
 public class BlockGrave extends OpenBlock {
 

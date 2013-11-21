@@ -3,6 +3,7 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityPaintMixer;
+import openmods.common.block.OpenBlock;
 
 public class BlockPaintMixer extends OpenBlock {
 

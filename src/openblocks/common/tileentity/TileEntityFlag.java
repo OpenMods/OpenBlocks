@@ -15,6 +15,7 @@ import openblocks.sync.SyncableInt;
 import openblocks.utils.BlockUtils;
 import openmods.common.api.IAwareTileLite;
 import openmods.common.api.ISurfaceAttachment;
+import openmods.common.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

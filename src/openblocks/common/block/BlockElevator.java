@@ -7,6 +7,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityElevator;
+import openmods.common.block.OpenBlock;
 
 public class BlockElevator extends OpenBlock {
 

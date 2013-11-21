@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import openmods.common.tileentity.OpenTileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;

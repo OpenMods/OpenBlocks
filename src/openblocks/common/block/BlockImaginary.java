@@ -18,6 +18,7 @@ import openblocks.Config;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
+import openmods.common.block.OpenBlock;
 
 import com.google.common.collect.Lists;
 

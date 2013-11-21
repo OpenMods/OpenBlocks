@@ -19,6 +19,7 @@ import openblocks.sync.SyncableDouble;
 import openblocks.utils.GeometryUtils;
 import openblocks.utils.InventoryUtils;
 import openmods.common.api.IActivateAwareTile;
+import openmods.common.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
