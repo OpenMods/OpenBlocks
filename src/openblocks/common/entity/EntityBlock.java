@@ -1,4 +1,6 @@
 package openblocks.common.entity;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -11,28 +13,33 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityBlock extends Entity implements IMagnetAware {
+public class EntityBlock extends Entity implements IEntityAdditionalSpawnData {
 
 	private static final int OBJECT_BLOCK_ID = 11;
 	private static final int OBJECT_BLOCK_META = 12;
+	private boolean hasGravity = false;
 
 	public static final ForgeDirection[] PLACE_DIRECTIONS = { ForgeDirection.UNKNOWN, ForgeDirection.UP, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.DOWN };
 
 	public EntityBlock(World world) {
 		super(world);
 		setSize(0.925F, 0.925F);
-
 	}
 
 	private void setHeight(float height) {
 		this.height = height;
 		yOffset = 0;
 	}
-
+	
 	public static EntityBlock create(World world, int x, int y, int z) {
+		return create(world, x, y, z, EntityBlock.class);
+	}
+	
+	public static EntityBlock create(World world, int x, int y, int z, Class<? extends EntityBlock> klazz) {
 		int blockId = world.getBlockId(x, y, z);
 		Block block = Block.blocksList[blockId];
 
@@ -40,7 +47,15 @@ public class EntityBlock extends Entity implements IMagnetAware {
 
 		int meta = world.getBlockMetadata(x, y, z);
 
-		EntityBlock entity = new EntityBlock(world);
+		EntityBlock entity = null;
+		try {
+			entity = klazz.getConstructor(World.class).newInstance(world);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (entity == null) return null;
+		
 		entity.setBlockIdAndMeta(blockId, meta);
 
 		if (block instanceof BlockContainer) {
@@ -73,7 +88,7 @@ public class EntityBlock extends Entity implements IMagnetAware {
 	public int getBlockId() {
 		return dataWatcher.getWatchableObjectInt(OBJECT_BLOCK_ID);
 	}
-
+	
 	public Block getBlock() {
 		int blockId = getBlockId();
 		return Block.blocksList[blockId];
@@ -120,6 +135,13 @@ public class EntityBlock extends Entity implements IMagnetAware {
 			setDead();
 			return;
 		}
+		
+		if (hasGravity) {
+	        motionY -= 0.03999999910593033D;
+			motionX *= 0.98;
+			motionY *= 0.98;
+			motionZ *= 0.98;
+		}
 
 		prevPosX = posX;
 		prevPosY = posY;
@@ -132,7 +154,7 @@ public class EntityBlock extends Entity implements IMagnetAware {
 		if (block == null) setDead();
 		else setHeight((float)block.getBlockBoundsMaxY());
 
-		if (ridingEntity == null && !worldObj.isRemote) {
+		if (shouldPlaceBlock()) {
 			int x = MathHelper.floor_double(posX);
 			int y = MathHelper.floor_double(posY);
 			int z = MathHelper.floor_double(posZ);
@@ -143,6 +165,10 @@ public class EntityBlock extends Entity implements IMagnetAware {
 
 			setDead();
 		}
+	}
+
+	protected boolean shouldPlaceBlock() {
+		return onGround;
 	}
 
 	private boolean tryPlaceBlock(int baseX, int baseY, int baseZ) {
@@ -179,6 +205,14 @@ public class EntityBlock extends Entity implements IMagnetAware {
 			}
 		}
 	}
+	
+	public void setHasGravity(boolean gravity) {
+		this.hasGravity = gravity;
+	}
+	
+	public boolean hasGravity() {
+		return hasGravity;
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -205,15 +239,13 @@ public class EntityBlock extends Entity implements IMagnetAware {
 	protected void dealFireDamage(int i) {}
 
 	@Override
-	public boolean canRelease() {
-		int x = MathHelper.floor_double(posX);
-		int y = MathHelper.floor_double(posY);
-		int z = MathHelper.floor_double(posZ);
-		return worldObj.isAirBlock(x, y, z);
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		data.writeBoolean(hasGravity);
 	}
 
 	@Override
-	public double getMountedYOffset() {
-		return height;
+	public void readSpawnData(ByteArrayDataInput data) {
+		hasGravity = data.readBoolean();
 	}
+
 }
