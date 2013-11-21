@@ -22,9 +22,9 @@ import openmods.common.api.IAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.ISurfaceAttachment;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableFlags;
-import openmods.network.sync.SyncableTank;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableTank;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 

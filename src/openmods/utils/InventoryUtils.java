@@ -14,7 +14,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Mods;
 import openblocks.common.GenericInventory;
 import openblocks.integration.ModuleBuildCraft;
-import openmods.network.sync.SyncableFlags;
+import openmods.sync.SyncableFlags;
 import cpw.mods.fml.common.Loader;
 
 public class InventoryUtils {

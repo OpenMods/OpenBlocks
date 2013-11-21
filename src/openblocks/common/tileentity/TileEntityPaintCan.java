@@ -12,8 +12,8 @@ import openblocks.common.block.BlockPaintCan;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IPlaceAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableInt;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableInt;
 import openmods.utils.BlockUtils;
 
 public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {

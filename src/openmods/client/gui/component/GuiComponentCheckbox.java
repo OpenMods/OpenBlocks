@@ -1,7 +1,7 @@
 package openmods.client.gui.component;
 
 import net.minecraft.client.Minecraft;
-import openmods.network.sync.SyncableFlags;
+import openmods.sync.SyncableFlags;
 import openmods.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;

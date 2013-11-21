@@ -10,8 +10,8 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
 import openmods.common.api.IAwareTileLite;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableInt;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableInt;
 
 import com.google.common.base.Preconditions;
 

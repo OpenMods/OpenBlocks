@@ -1,6 +1,5 @@
 package openblocks.client.gui;
 
-import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openmods.client.gui.BaseGuiContainer;

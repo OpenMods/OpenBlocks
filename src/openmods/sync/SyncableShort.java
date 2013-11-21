@@ -1,4 +1,4 @@
-package openmods.network.sync;
+package openmods.sync;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,51 +6,48 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableInt extends SyncableObjectBase {
+public class SyncableShort extends SyncableObjectBase {
 
-	protected int value = 0;
+	private short value = 0;
 
-	public SyncableInt(int value) {
+	public SyncableShort(short value) {
 		this.value = value;
 	}
 
-	public SyncableInt() {}
+	public SyncableShort() {}
 
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {
-		value = stream.readInt();
+		value = stream.readShort();
 	}
 
-	public void modify(int by) {
-		setValue(value + by);
+	public void modify(short by) {
+		setValue((short)(value + by));
 	}
 
-	public void setValue(int val) {
+	public void setValue(short val) {
 		if (val != value) {
 			value = val;
 			markDirty();
 		}
 	}
 
-	public int getValue() {
+	public short getValue() {
 		return value;
 	}
 
 	@Override
 	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
-		stream.writeInt(value);
+		stream.writeShort(value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setInteger(name, value);
+		tag.setShort(name, value);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		if (tag.hasKey(name)) {
-			value = tag.getInteger(name);
-		}
+		value = tag.getShort(name);
 	}
-
 }

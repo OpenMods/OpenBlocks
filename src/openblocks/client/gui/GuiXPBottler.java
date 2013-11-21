@@ -4,7 +4,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
@@ -17,7 +16,7 @@ import openmods.client.gui.component.GuiComponentTab;
 import openmods.client.gui.component.GuiComponentTabs;
 import openmods.client.gui.component.GuiComponentTankLevel;
 import openmods.client.gui.component.BaseComponent.TabColor;
-import openmods.network.sync.SyncableFlags;
+import openmods.sync.SyncableFlags;
 
 public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 

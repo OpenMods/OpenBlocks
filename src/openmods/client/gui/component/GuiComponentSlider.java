@@ -1,7 +1,7 @@
 package openmods.client.gui.component;
 
 import net.minecraft.client.Minecraft;
-import openmods.network.sync.SyncableInt;
+import openmods.sync.SyncableInt;
 import openmods.utils.CompatibilityUtils;
 
 import org.lwjgl.input.Mouse;

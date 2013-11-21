@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.tileentity.TileEntityTank;
-import openmods.network.sync.SyncableTank;
+import openmods.sync.SyncableTank;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

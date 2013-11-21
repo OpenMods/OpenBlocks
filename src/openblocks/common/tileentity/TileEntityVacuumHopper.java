@@ -22,10 +22,10 @@ import openblocks.common.entity.EntityItemProjectile;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableBoolean;
-import openmods.network.sync.SyncableFlags;
-import openmods.network.sync.SyncableTank;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableTank;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 

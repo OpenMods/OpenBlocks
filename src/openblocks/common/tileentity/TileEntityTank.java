@@ -12,8 +12,8 @@ import net.minecraftforge.fluids.*;
 import openblocks.Config;
 import openmods.common.api.IAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableTank;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableTank;
 import openmods.utils.ItemUtils;
 
 public class TileEntityTank extends SyncedTileEntity implements

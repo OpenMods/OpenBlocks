@@ -1,4 +1,4 @@
-package openmods.network.sync;
+package openmods.sync;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,48 +6,49 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableDouble extends SyncableObjectBase {
+public class SyncableBoolean extends SyncableObjectBase {
 
-	private double value;
+	private boolean value;
 
-	public SyncableDouble(double value) {
+	public SyncableBoolean(boolean value) {
 		this.value = value;
 	}
 
-	public SyncableDouble() {}
+	public SyncableBoolean() {}
 
-	public void setValue(double newValue) {
+	public void setValue(boolean newValue) {
 		if (newValue != value) {
 			value = newValue;
 			markDirty();
 		}
 	}
 
-	public double getValue() {
+	public boolean getValue() {
 		return value;
 	}
 
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {
-		value = stream.readDouble();
+		value = stream.readBoolean();
 	}
 
 	@Override
 	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
-		stream.writeDouble(value);
+		stream.writeBoolean(value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setDouble(name, value);
+		tag.setBoolean(name, value);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		value = tag.getDouble(name);
+		value = tag.getBoolean(name);
 	}
 
-	public void modify(float by) {
-		setValue(value + by);
+	public void toggle() {
+		value = !value;
+		markDirty();
 	}
 }

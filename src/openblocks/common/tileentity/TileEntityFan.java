@@ -12,8 +12,8 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openmods.common.api.IPlaceAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableFloat;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableFloat;
 
 public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 

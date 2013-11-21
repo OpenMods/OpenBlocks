@@ -20,9 +20,9 @@ import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableByte;
-import openmods.network.sync.SyncableInt;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableByte;
+import openmods.sync.SyncableInt;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

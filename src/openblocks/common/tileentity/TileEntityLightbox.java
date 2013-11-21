@@ -22,7 +22,7 @@ import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.ISurfaceAttachment;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
+import openmods.sync.ISyncableObject;
 
 public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 		ISurfaceAttachment, IActivateAwareTile, IHasGui {

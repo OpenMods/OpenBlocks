@@ -18,8 +18,8 @@ import openmods.common.api.IAwareTile;
 import openmods.common.api.IInventoryContainer;
 import openmods.common.api.ISurfaceAttachment;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableString;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableString;
 import openmods.utils.BlockUtils;
 
 public class TileEntityGrave extends SyncedTileEntity implements

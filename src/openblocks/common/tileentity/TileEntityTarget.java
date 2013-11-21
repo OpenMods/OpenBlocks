@@ -14,8 +14,8 @@ import openblocks.Config;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.api.ISurfaceAttachment;
 import openmods.common.tileentity.SyncedTileEntity;
-import openmods.network.sync.ISyncableObject;
-import openmods.network.sync.SyncableBoolean;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableBoolean;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

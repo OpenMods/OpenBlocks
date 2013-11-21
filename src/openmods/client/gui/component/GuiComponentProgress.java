@@ -1,7 +1,7 @@
 package openmods.client.gui.component;
 
 import net.minecraft.client.Minecraft;
-import openmods.network.sync.SyncableProgress;
+import openmods.sync.SyncableProgress;
 import openmods.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;

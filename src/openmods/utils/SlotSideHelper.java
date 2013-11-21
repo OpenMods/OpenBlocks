@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import openmods.network.sync.SyncableFlags;
+import openmods.sync.SyncableFlags;
 
 public class SlotSideHelper {
 

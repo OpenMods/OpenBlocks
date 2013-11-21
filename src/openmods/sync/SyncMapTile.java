@@ -1,4 +1,4 @@
-package openmods.network.sync;
+package openmods.sync;
 
 import java.util.Set;
 

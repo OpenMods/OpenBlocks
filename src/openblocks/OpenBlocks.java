@@ -35,7 +35,7 @@ import openblocks.mutant.DefinitionSheep;
 import openblocks.mutant.DefinitionSpider;
 import openblocks.mutant.DefinitionZombie;
 import openmods.network.PacketHandler;
-import openmods.network.sync.SyncableManager;
+import openmods.sync.SyncableManager;
 
 import org.apache.commons.lang3.ObjectUtils;
 
