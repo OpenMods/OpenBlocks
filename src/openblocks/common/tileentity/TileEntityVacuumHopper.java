@@ -19,8 +19,6 @@ import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityItemProjectile;
-import openblocks.utils.EnchantmentUtils;
-import openblocks.utils.InventoryUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.tileentity.SyncedTileEntity;
@@ -28,6 +26,8 @@ import openmods.network.sync.ISyncableObject;
 import openmods.network.sync.SyncableBoolean;
 import openmods.network.sync.SyncableFlags;
 import openmods.network.sync.SyncableTank;
+import openmods.utils.EnchantmentUtils;
+import openmods.utils.InventoryUtils;
 
 public class TileEntityVacuumHopper extends SyncedTileEntity implements
 		IInventory, IFluidHandler, IActivateAwareTile, IHasGui {

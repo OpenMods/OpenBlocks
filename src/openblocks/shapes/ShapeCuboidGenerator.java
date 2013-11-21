@@ -1,7 +1,7 @@
 package openblocks.shapes;
 
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.utils.GeometryUtils;
+import openmods.utils.GeometryUtils;
 
 public class ShapeCuboidGenerator implements IShapeGenerator {
 

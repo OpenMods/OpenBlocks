@@ -16,8 +16,8 @@ import openblocks.client.model.ModelCartographer;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectionRenderer;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityCartographer.MapJobs;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.RenderUtils;
+import openmods.utils.BlockUtils;
+import openmods.utils.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 

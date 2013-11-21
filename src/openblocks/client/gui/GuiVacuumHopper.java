@@ -3,10 +3,16 @@ package openblocks.client.gui;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import openblocks.client.gui.component.BaseComponent.TabColor;
 import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openmods.client.gui.BaseGuiContainer;
+import openmods.client.gui.component.GuiComponentLabel;
+import openmods.client.gui.component.GuiComponentSideSelector;
+import openmods.client.gui.component.GuiComponentTab;
+import openmods.client.gui.component.GuiComponentTabs;
+import openmods.client.gui.component.GuiComponentTankLevel;
+import openmods.client.gui.component.BaseComponent.TabColor;
 
 public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 

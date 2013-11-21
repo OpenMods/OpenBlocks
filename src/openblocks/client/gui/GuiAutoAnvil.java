@@ -6,11 +6,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.component.BaseComponent.TabColor;
 import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
+import openmods.client.gui.BaseGuiContainer;
+import openmods.client.gui.component.GuiComponentCheckbox;
+import openmods.client.gui.component.GuiComponentLabel;
+import openmods.client.gui.component.GuiComponentSideSelector;
+import openmods.client.gui.component.GuiComponentSprite;
+import openmods.client.gui.component.GuiComponentTab;
+import openmods.client.gui.component.GuiComponentTabs;
+import openmods.client.gui.component.GuiComponentTankLevel;
+import openmods.client.gui.component.BaseComponent.TabColor;
 import openmods.network.sync.SyncableFlags;
 
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {

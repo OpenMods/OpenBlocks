@@ -9,7 +9,7 @@ import java.util.Set;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
-import openblocks.utils.ByteUtils;
+import openmods.utils.ByteUtils;
 
 public class SyncableFlags extends SyncableObjectBase {
 

@@ -1,6 +1,7 @@
 package openblocks.client.gui;
 
 import openblocks.common.container.ContainerLightbox;
+import openmods.client.gui.BaseGuiContainer;
 
 public class GuiLightbox extends BaseGuiContainer<ContainerLightbox> {
 

@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelOreCrusher;
 import openblocks.common.tileentity.TileEntityOreCrusher;
-import openblocks.utils.BlockUtils;
+import openmods.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 

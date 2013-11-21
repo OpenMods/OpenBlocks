@@ -7,8 +7,9 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import openblocks.client.renderer.DynamicTextureAtlas.AtlasCell;
 import openblocks.common.HeightMapData;
+import openmods.client.renderer.DynamicTextureAtlas;
+import openmods.client.renderer.DynamicTextureAtlas.AtlasCell;
 
 import org.lwjgl.opengl.GL11;
 

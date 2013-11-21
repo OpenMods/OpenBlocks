@@ -16,8 +16,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openblocks.Log;
 import openblocks.OpenBlocks;
-import openblocks.utils.ByteUtils;
 import openmods.network.PacketHandler;
+import openmods.utils.ByteUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

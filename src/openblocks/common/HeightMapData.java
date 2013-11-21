@@ -7,7 +7,7 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSavedData;
-import openblocks.utils.ByteUtils;
+import openmods.utils.ByteUtils;
 
 public class HeightMapData extends WorldSavedData {
 

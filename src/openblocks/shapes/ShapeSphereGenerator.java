@@ -1,7 +1,7 @@
 package openblocks.shapes;
 
-import openblocks.utils.GeometryUtils;
-import openblocks.utils.GeometryUtils.Octant;
+import openmods.utils.GeometryUtils;
+import openmods.utils.GeometryUtils.Octant;
 
 public class ShapeSphereGenerator implements IShapeGenerator {
 

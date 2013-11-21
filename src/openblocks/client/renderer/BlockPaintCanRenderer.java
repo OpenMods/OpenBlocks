@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.block.BlockPaintCan;
+import openmods.client.renderer.IBlockRenderer;
 
 public class BlockPaintCanRenderer implements IBlockRenderer {
 

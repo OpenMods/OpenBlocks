@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.common.item.ItemImaginary;
-import openblocks.utils.ItemUtils;
+import openmods.utils.ItemUtils;
 
 import com.google.common.collect.Lists;
 

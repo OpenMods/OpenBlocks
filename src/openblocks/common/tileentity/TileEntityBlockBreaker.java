@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import openblocks.common.GenericInventory;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
 import openmods.network.sync.ISyncableObject;
 import openmods.network.sync.SyncableBoolean;
+import openmods.utils.BlockUtils;
+import openmods.utils.InventoryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

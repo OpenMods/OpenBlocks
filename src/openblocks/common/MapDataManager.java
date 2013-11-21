@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Log;
 import openblocks.OpenBlocks;
-import openblocks.utils.ByteUtils;
 import openmods.network.EventPacket;
+import openmods.utils.ByteUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

@@ -7,12 +7,12 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerItemDropper;
-import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.tileentity.OpenTileEntity;
+import openmods.utils.InventoryUtils;
 
 public class TileEntityItemDropper extends OpenTileEntity
 		implements IActivateAwareTile, INeighbourAwareTile, IInventory, IHasGui {

@@ -3,6 +3,7 @@ package openblocks.common.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import openblocks.common.entity.EntityLuggage;
+import openmods.common.container.ContainerInventory;
 
 public class ContainerLuggage extends ContainerInventory<IInventory> {
 

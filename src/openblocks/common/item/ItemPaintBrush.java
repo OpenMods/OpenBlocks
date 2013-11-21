@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockCanvas;
-import openblocks.utils.ColorUtils;
-import openblocks.utils.PaintUtils;
+import openmods.utils.ColorUtils;
+import openmods.utils.PaintUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

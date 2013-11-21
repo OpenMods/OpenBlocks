@@ -11,8 +11,8 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
-import openblocks.utils.EnchantmentUtils;
 import openmods.common.tileentity.OpenTileEntity;
+import openmods.utils.EnchantmentUtils;
 
 public class TileEntityXPDrain extends OpenTileEntity {
 

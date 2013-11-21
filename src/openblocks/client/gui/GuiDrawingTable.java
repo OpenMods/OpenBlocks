@@ -2,14 +2,15 @@ package openblocks.client.gui;
 
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
-import openblocks.client.gui.component.BaseComponent;
-import openblocks.client.gui.component.GuiComponentIconButton;
-import openblocks.client.gui.component.GuiComponentSprite;
-import openblocks.client.gui.component.GuiComponentTextButton;
-import openblocks.client.gui.component.BaseComponent.IComponentListener;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
-import openblocks.utils.FakeIcon;
+import openmods.client.gui.BaseGuiContainer;
+import openmods.client.gui.component.BaseComponent;
+import openmods.client.gui.component.GuiComponentIconButton;
+import openmods.client.gui.component.GuiComponentSprite;
+import openmods.client.gui.component.GuiComponentTextButton;
+import openmods.client.gui.component.BaseComponent.IComponentListener;
+import openmods.utils.FakeIcon;
 
 public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 		implements IComponentListener {

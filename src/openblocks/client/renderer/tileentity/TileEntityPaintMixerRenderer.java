@@ -12,8 +12,8 @@ import openblocks.OpenBlocks;
 import openblocks.client.model.ModelPaintMixer;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.common.tileentity.TileEntityPaintMixer;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.ColorUtils;
+import openmods.utils.BlockUtils;
+import openmods.utils.ColorUtils;
 
 import org.lwjgl.opengl.GL11;
 

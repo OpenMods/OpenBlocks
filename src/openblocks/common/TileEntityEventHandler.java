@@ -2,8 +2,8 @@ package openblocks.common;
 
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Log;
-import openblocks.common.events.TileEntityMessageEventPacket;
 import openmods.common.tileentity.OpenTileEntity;
+import openmods.network.events.TileEntityMessageEventPacket;
 
 public class TileEntityEventHandler {
 

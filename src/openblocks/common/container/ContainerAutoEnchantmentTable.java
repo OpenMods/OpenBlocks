@@ -2,6 +2,7 @@ package openblocks.common.container;
 
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
+import openmods.common.container.ContainerInventory;
 
 public class ContainerAutoEnchantmentTable extends
 		ContainerInventory<TileEntityAutoEnchantmentTable> {

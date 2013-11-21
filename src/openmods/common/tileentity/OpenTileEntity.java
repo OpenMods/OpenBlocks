@@ -9,9 +9,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.GenericInventory;
-import openblocks.common.events.TileEntityMessageEventPacket;
 import openmods.common.api.IInventoryCallback;
 import openmods.common.block.OpenBlock;
+import openmods.network.events.TileEntityMessageEventPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -1,6 +1,6 @@
 package openblocks.shapes;
 
-import openblocks.utils.GeometryUtils;
+import openmods.utils.GeometryUtils;
 
 public class ShapeEquilateral2dGenerator implements IShapeGenerator {
 

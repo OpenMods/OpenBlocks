@@ -9,12 +9,12 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerBlockPlacer;
-import openblocks.utils.InventoryUtils;
 import openblocks.utils.OpenBlocksFakePlayer;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.tileentity.OpenTileEntity;
+import openmods.utils.InventoryUtils;
 
 public class TileEntityBlockPlacer extends OpenTileEntity
 		implements INeighbourAwareTile, IActivateAwareTile, IInventory, IHasGui {

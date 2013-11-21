@@ -4,6 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.common.tileentity.TileEntityProjector;
+import openmods.common.container.ContainerInventory;
 
 public class ContainerProjector extends ContainerInventory<TileEntityProjector> {
 

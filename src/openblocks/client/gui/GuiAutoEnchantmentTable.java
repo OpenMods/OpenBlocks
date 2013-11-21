@@ -5,11 +5,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.client.gui.component.BaseComponent.TabColor;
 import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
+import openmods.client.gui.BaseGuiContainer;
+import openmods.client.gui.component.GuiComponentCheckbox;
+import openmods.client.gui.component.GuiComponentLabel;
+import openmods.client.gui.component.GuiComponentSideSelector;
+import openmods.client.gui.component.GuiComponentSlider;
+import openmods.client.gui.component.GuiComponentTab;
+import openmods.client.gui.component.GuiComponentTabs;
+import openmods.client.gui.component.GuiComponentTankLevel;
+import openmods.client.gui.component.BaseComponent.TabColor;
 import openmods.network.sync.SyncableFlags;
 
 public class GuiAutoEnchantmentTable extends

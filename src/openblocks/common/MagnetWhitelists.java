@@ -9,10 +9,10 @@ import net.minecraft.tileentity.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
-import openblocks.utils.ITester;
-import openblocks.utils.ObjectTester;
-import openblocks.utils.ObjectTester.ClassNameTester;
-import openblocks.utils.ObjectTester.ClassTester;
+import openmods.utils.ITester;
+import openmods.utils.ObjectTester;
+import openmods.utils.ObjectTester.ClassNameTester;
+import openmods.utils.ObjectTester.ClassTester;
 
 public class MagnetWhitelists {
 	public final static MagnetWhitelists instance = new MagnetWhitelists();
@@ -79,7 +79,7 @@ public class MagnetWhitelists {
 
 		blockWhitelist.addTester(new ITester<Block>() {
 			@Override
-			public openblocks.utils.ITester.Result test(Block o) {
+			public openmods.utils.ITester.Result test(Block o) {
 				return o.getRenderType() == 0? Result.ACCEPT : Result.CONTINUE;
 			}
 		});

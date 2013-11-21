@@ -13,7 +13,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.common.MapDataManager;
-import openblocks.utils.ItemUtils;
+import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

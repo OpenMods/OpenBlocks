@@ -9,7 +9,7 @@ import net.minecraft.util.Vec3;
 import openblocks.api.IMutant;
 import openblocks.api.IMutantRenderer;
 import openblocks.client.model.ModelMutant;
-import openblocks.utils.MutantUtils;
+import openmods.utils.MutantUtils;
 
 public class MutantRendererOcelot implements IMutantRenderer {
 

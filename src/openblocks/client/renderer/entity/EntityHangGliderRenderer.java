@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.common.entity.EntityHangGlider;
-import openblocks.utils.CompatibilityUtils;
+import openmods.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 

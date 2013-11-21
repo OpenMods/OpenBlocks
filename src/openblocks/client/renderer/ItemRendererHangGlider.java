@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityHangGlider;
-import openblocks.utils.CompatibilityUtils;
+import openmods.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

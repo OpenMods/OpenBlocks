@@ -1,6 +1,6 @@
 package openblocks.shapes;
 
-import openblocks.utils.MathUtils;
+import openmods.utils.MathUtils;
 
 public class ShapeCylinderGenerator implements IShapeGenerator {
 

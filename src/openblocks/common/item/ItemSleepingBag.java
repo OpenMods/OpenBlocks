@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
-import openblocks.utils.BlockUtils;
+import openmods.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -14,8 +14,6 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerXPBottler;
-import openblocks.utils.EnchantmentUtils;
-import openblocks.utils.InventoryUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.tileentity.SyncedTileEntity;
@@ -23,6 +21,8 @@ import openmods.network.sync.ISyncableObject;
 import openmods.network.sync.SyncableFlags;
 import openmods.network.sync.SyncableProgress;
 import openmods.network.sync.SyncableTank;
+import openmods.utils.EnchantmentUtils;
+import openmods.utils.InventoryUtils;
 
 public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 

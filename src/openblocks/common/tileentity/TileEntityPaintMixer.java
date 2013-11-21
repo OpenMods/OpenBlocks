@@ -12,7 +12,6 @@ import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.sync.*;
-import openblocks.utils.ColorUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
@@ -22,6 +21,7 @@ import openmods.network.sync.SyncableFlags;
 import openmods.network.sync.SyncableFloat;
 import openmods.network.sync.SyncableInt;
 import openmods.network.sync.SyncableProgress;
+import openmods.utils.ColorUtils;
 
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
 

@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.common.tileentity.TileEntitySprinkler;
-import openblocks.utils.BlockUtils;
+import openmods.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 

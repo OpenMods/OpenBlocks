@@ -13,10 +13,10 @@ import openblocks.Log;
 import openblocks.api.IShapeProvider;
 import openblocks.shapes.GuideShape;
 import openblocks.shapes.IShapeable;
-import openblocks.utils.CompatibilityUtils;
 import openmods.common.tileentity.SyncedTileEntity;
 import openmods.network.sync.ISyncableObject;
 import openmods.network.sync.SyncableInt;
+import openmods.utils.CompatibilityUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

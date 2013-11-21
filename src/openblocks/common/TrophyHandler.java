@@ -20,7 +20,7 @@ import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.*;
-import openblocks.utils.BlockUtils;
+import openmods.utils.BlockUtils;
 
 public class TrophyHandler {
 

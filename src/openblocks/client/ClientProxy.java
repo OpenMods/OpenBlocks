@@ -29,6 +29,7 @@ import openblocks.client.renderer.tileentity.*;
 import openblocks.common.block.BlockTank;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
+import openmods.client.renderer.entity.EntityBlockRenderer;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;

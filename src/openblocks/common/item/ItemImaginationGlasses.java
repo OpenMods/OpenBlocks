@@ -15,8 +15,8 @@ import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
-import openblocks.utils.ColorUtils;
-import openblocks.utils.ItemUtils;
+import openmods.utils.ColorUtils;
+import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

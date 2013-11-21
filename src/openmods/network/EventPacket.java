@@ -11,10 +11,10 @@ import net.minecraftforge.event.Event;
 import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.MapDataManager;
-import openblocks.common.events.PlayerMovementEvent;
-import openblocks.common.events.StencilCraftEvent;
-import openblocks.common.events.TileEntityMessageEventPacket;
-import openblocks.utils.ByteUtils;
+import openmods.network.events.PlayerMovementEvent;
+import openmods.network.events.StencilCraftEvent;
+import openmods.network.events.TileEntityMessageEventPacket;
+import openmods.utils.ByteUtils;
 
 import com.google.common.base.Throwables;
 

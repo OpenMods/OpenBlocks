@@ -18,7 +18,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.client.Icons.IDrawableIcon;
 import openblocks.common.item.ItemSonicGlasses;
-import openblocks.utils.RenderUtils;
+import openmods.utils.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 

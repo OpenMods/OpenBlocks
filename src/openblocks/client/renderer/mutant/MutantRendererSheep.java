@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import openblocks.api.IMutant;
 import openblocks.api.IMutantRenderer;
-import openblocks.utils.MutantUtils;
+import openmods.utils.MutantUtils;
 
 public class MutantRendererSheep implements IMutantRenderer {
 

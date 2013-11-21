@@ -7,8 +7,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelVillage;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
-import openblocks.utils.BlockUtils;
 import openmods.network.sync.SyncableIntArray;
+import openmods.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 

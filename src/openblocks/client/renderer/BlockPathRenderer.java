@@ -9,7 +9,8 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import openblocks.OpenBlocks;
-import openblocks.client.renderer.tileentity.OpenRenderHelper;
+import openmods.client.renderer.IBlockRenderer;
+import openmods.client.renderer.tileentity.OpenRenderHelper;
 
 import org.lwjgl.opengl.GL11;
 

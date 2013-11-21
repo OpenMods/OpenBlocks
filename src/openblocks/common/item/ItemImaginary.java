@@ -20,9 +20,9 @@ import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.ColorUtils;
-import openblocks.utils.ItemUtils;
+import openmods.utils.BlockUtils;
+import openmods.utils.ColorUtils;
+import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -4,6 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.tileentity.TileEntityDrawingTable;
+import openmods.common.container.ContainerInventory;
 
 public class ContainerDrawingTable extends ContainerInventory<TileEntityDrawingTable> {
 

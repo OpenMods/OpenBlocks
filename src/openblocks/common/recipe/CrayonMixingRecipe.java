@@ -6,7 +6,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.common.item.ItemImaginary;
-import openblocks.utils.ItemUtils;
+import openmods.utils.ItemUtils;
 
 public class CrayonMixingRecipe implements IRecipe {
 

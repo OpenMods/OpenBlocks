@@ -1,6 +1,7 @@
 package openblocks.client.gui;
 
 import openblocks.common.container.ContainerBigButton;
+import openmods.client.gui.BaseGuiContainer;
 
 public class GuiBigButton extends BaseGuiContainer<ContainerBigButton> {
 

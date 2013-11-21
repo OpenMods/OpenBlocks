@@ -9,13 +9,13 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockFlag;
-import openblocks.utils.BlockUtils;
 import openmods.common.api.IAwareTileLite;
 import openmods.common.api.ISurfaceAttachment;
 import openmods.common.tileentity.SyncedTileEntity;
 import openmods.network.sync.ISyncableObject;
 import openmods.network.sync.SyncableFloat;
 import openmods.network.sync.SyncableInt;
+import openmods.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

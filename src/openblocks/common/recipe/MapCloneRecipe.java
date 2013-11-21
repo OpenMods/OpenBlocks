@@ -10,7 +10,7 @@ import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
-import openblocks.utils.ItemUtils;
+import openmods.utils.ItemUtils;
 
 public class MapCloneRecipe implements IRecipe {
 

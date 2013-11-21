@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.common.entity.EntityLuggage;
-import openblocks.utils.InventoryUtils;
+import openmods.utils.InventoryUtils;
 
 public class EntityAICollectItem extends EntityAIBase {
 

@@ -10,8 +10,9 @@ import net.minecraft.tileentity.TileEntity;
 import openblocks.OpenBlocks;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.utils.BlockUtils;
-import openblocks.utils.RenderUtils;
+import openmods.client.renderer.tileentity.OpenRenderHelper;
+import openmods.utils.BlockUtils;
+import openmods.utils.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

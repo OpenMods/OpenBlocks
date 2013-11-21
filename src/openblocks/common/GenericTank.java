@@ -10,8 +10,8 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.integration.ModuleBuildCraft;
-import openblocks.utils.BlockUtils;
 import openmods.network.sync.SyncableFlags;
+import openmods.utils.BlockUtils;
 
 public class GenericTank extends FluidTank {
 

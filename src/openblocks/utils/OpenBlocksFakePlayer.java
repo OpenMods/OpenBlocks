@@ -2,6 +2,7 @@ package openblocks.utils;
 
 import java.util.HashMap;
 
+import openmods.utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;

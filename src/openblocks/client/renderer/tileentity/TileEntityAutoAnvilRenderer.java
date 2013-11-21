@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
-import openblocks.utils.BlockUtils;
+import openmods.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 

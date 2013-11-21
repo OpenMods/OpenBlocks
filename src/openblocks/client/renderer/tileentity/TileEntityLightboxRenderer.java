@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityLightbox;
-import openblocks.utils.BlockUtils;
+import openmods.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;
 

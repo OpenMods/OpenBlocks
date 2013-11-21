@@ -21,9 +21,6 @@ import openblocks.common.item.ItemCartographer;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.sync.*;
-import openblocks.utils.BitSet;
-import openblocks.utils.ByteUtils;
-import openblocks.utils.ItemUtils;
 import openmods.network.sync.ISyncHandler;
 import openmods.network.sync.ISyncableObject;
 import openmods.network.sync.SyncMap;
@@ -31,6 +28,9 @@ import openmods.network.sync.SyncMapEntity;
 import openmods.network.sync.SyncableBoolean;
 import openmods.network.sync.SyncableInt;
 import openmods.network.sync.SyncableObjectBase;
+import openmods.utils.BitSet;
+import openmods.utils.ByteUtils;
+import openmods.utils.ItemUtils;
 
 import com.google.common.base.Preconditions;
 

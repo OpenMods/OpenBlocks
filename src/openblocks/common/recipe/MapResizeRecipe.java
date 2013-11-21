@@ -9,7 +9,7 @@ import openblocks.OpenBlocks.Items;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemGeneric;
 import openblocks.common.item.ItemGeneric.Metas;
-import openblocks.utils.ItemUtils;
+import openmods.utils.ItemUtils;
 
 public class MapResizeRecipe extends ShapedOreRecipe {
 
