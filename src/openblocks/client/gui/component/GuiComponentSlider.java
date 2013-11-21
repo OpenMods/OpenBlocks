@@ -1,8 +1,8 @@
 package openblocks.client.gui.component;
 
 import net.minecraft.client.Minecraft;
-import openblocks.sync.SyncableInt;
 import openblocks.utils.CompatibilityUtils;
+import openmods.network.sync.SyncableInt;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;

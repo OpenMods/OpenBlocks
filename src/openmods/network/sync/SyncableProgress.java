@@ -1,4 +1,4 @@
-package openblocks.sync;
+package openmods.network.sync;
 
 public class SyncableProgress extends SyncableInt {
 

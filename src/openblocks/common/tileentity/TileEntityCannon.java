@@ -14,12 +14,12 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
 import openblocks.common.events.TileEntityMessageEventPacket;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableDouble;
 import openblocks.utils.GeometryUtils;
 import openblocks.utils.InventoryUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableDouble;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

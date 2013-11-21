@@ -16,13 +16,13 @@ import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableByte;
-import openblocks.sync.SyncableInt;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableByte;
+import openmods.network.sync.SyncableInt;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

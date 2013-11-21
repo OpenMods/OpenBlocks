@@ -1,4 +1,4 @@
-package openblocks.network;
+package openmods.network;
 
 import java.lang.reflect.Field;
 import java.util.Set;

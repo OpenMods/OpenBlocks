@@ -11,12 +11,12 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerBigButton;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableFlags;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.ISurfaceAttachment;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableFlags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

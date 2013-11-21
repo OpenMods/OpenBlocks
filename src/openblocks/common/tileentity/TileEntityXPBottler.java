@@ -14,15 +14,15 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerXPBottler;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableFlags;
-import openblocks.sync.SyncableProgress;
-import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableFlags;
+import openmods.network.sync.SyncableProgress;
+import openmods.network.sync.SyncableTank;
 
 public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
 

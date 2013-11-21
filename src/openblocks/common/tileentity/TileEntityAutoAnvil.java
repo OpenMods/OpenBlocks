@@ -16,15 +16,15 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerAutoAnvil;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableFlags;
-import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableFlags;
+import openmods.network.sync.SyncableTank;
 
 public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {

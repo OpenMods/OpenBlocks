@@ -7,6 +7,11 @@ import net.minecraft.network.packet.Packet;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Log;
 import openblocks.sync.*;
+import openmods.network.sync.ISyncHandler;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncMap;
+import openmods.network.sync.SyncMapTile;
+import openmods.network.sync.SyncableDirection;
 
 public abstract class SyncedTileEntity extends OpenTileEntity implements ISyncHandler {
 

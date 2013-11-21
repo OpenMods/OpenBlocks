@@ -1,7 +1,7 @@
 package openblocks.client.gui.component;
 
 import net.minecraft.client.Minecraft;
-import openblocks.sync.SyncableFloat;
+import openmods.network.sync.SyncableFloat;
 
 public class GuiComponentLevel extends BaseComponent {
 	private int width;

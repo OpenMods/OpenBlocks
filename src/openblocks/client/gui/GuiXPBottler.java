@@ -9,7 +9,7 @@ import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
-import openblocks.sync.SyncableFlags;
+import openmods.network.sync.SyncableFlags;
 
 public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 

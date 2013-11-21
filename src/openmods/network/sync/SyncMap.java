@@ -1,4 +1,4 @@
-package openblocks.sync;
+package openmods.network.sync;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -16,8 +16,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openblocks.Log;
 import openblocks.OpenBlocks;
-import openblocks.network.PacketHandler;
 import openblocks.utils.ByteUtils;
+import openmods.network.PacketHandler;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

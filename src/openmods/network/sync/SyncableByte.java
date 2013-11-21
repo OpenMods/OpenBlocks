@@ -1,4 +1,4 @@
-package openblocks.sync;
+package openmods.network.sync;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,48 +6,50 @@ import java.io.IOException;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class SyncableDouble extends SyncableObjectBase {
+import com.google.common.primitives.SignedBytes;
 
-	private double value;
+public class SyncableByte extends SyncableObjectBase {
 
-	public SyncableDouble(double value) {
+	private byte value;
+
+	public SyncableByte(byte value) {
 		this.value = value;
 	}
 
-	public SyncableDouble() {}
+	public SyncableByte() {}
 
-	public void setValue(double newValue) {
+	public void setValue(byte newValue) {
 		if (newValue != value) {
 			value = newValue;
 			markDirty();
 		}
 	}
 
-	public double getValue() {
+	public byte getValue() {
 		return value;
 	}
 
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {
-		value = stream.readDouble();
+		value = stream.readByte();
 	}
 
 	@Override
 	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
-		stream.writeDouble(value);
+		stream.writeByte(value);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag, String name) {
-		tag.setDouble(name, value);
+		tag.setByte(name, value);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag, String name) {
-		value = tag.getDouble(name);
+		value = tag.getByte(name);
 	}
 
-	public void modify(float by) {
-		setValue(value + by);
+	public void modify(int by) {
+		setValue(SignedBytes.checkedCast(value + by));
 	}
 }

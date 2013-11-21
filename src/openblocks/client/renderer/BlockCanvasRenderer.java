@@ -9,8 +9,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
-import openblocks.sync.SyncableBlockLayers;
-import openblocks.sync.SyncableBlockLayers.Layer;
+import openmods.network.sync.SyncableBlockLayers;
+import openmods.network.sync.SyncableBlockLayers.Layer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

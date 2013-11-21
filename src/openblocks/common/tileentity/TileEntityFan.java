@@ -10,10 +10,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableFloat;
 import openmods.common.api.IPlaceAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableFloat;
 
 public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 

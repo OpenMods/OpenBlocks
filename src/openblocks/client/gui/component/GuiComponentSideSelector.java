@@ -9,11 +9,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.sync.SyncableFlags;
 import openblocks.utils.*;
 import openblocks.utils.SidePicker.HitCoord;
 import openblocks.utils.SidePicker.Side;
 import openblocks.utils.Trackball.TrackballWrapper;
+import openmods.network.sync.SyncableFlags;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;

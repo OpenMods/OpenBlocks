@@ -1,4 +1,4 @@
-package openblocks.sync;
+package openmods.network.sync;
 
 import java.io.DataInput;
 import java.io.IOException;

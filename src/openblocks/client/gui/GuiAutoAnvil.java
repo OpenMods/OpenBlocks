@@ -11,7 +11,7 @@ import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
-import openblocks.sync.SyncableFlags;
+import openmods.network.sync.SyncableFlags;
 
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 

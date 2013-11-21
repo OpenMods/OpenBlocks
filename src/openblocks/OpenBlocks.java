@@ -34,8 +34,8 @@ import openblocks.mutant.DefinitionPig;
 import openblocks.mutant.DefinitionSheep;
 import openblocks.mutant.DefinitionSpider;
 import openblocks.mutant.DefinitionZombie;
-import openblocks.network.PacketHandler;
-import openblocks.sync.SyncableManager;
+import openmods.network.PacketHandler;
+import openmods.network.sync.SyncableManager;
 
 import org.apache.commons.lang3.ObjectUtils;
 

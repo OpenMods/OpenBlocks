@@ -17,6 +17,11 @@ import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableFlags;
+import openmods.network.sync.SyncableFloat;
+import openmods.network.sync.SyncableInt;
+import openmods.network.sync.SyncableProgress;
 
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
 

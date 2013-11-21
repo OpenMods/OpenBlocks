@@ -2,7 +2,7 @@ package openblocks.client.gui.component;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import openblocks.sync.SyncableString;
+import openmods.network.sync.SyncableString;
 
 import org.lwjgl.opengl.GL11;
 

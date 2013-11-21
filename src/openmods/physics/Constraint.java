@@ -1,4 +1,4 @@
-package openblocks.physics;
+package openmods.physics;
 
 public class Constraint {
 	private Point p1, p2;

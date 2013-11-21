@@ -10,7 +10,7 @@ import openblocks.client.gui.component.*;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
-import openblocks.sync.SyncableFlags;
+import openmods.network.sync.SyncableFlags;
 
 public class GuiAutoEnchantmentTable extends
 		BaseGuiContainer<ContainerAutoEnchantmentTable> {

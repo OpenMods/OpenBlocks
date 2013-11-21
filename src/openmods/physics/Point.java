@@ -1,4 +1,4 @@
-package openblocks.physics;
+package openmods.physics;
 
 public class Point {
 	

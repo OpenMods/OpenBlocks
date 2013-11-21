@@ -1,8 +1,8 @@
 package openblocks.client.gui.component;
 
 import net.minecraft.client.Minecraft;
-import openblocks.sync.SyncableFlags;
 import openblocks.utils.CompatibilityUtils;
+import openmods.network.sync.SyncableFlags;
 
 import org.lwjgl.opengl.GL11;
 

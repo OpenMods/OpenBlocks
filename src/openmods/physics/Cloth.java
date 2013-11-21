@@ -1,4 +1,4 @@
-package openblocks.physics;
+package openmods.physics;
 
 import java.util.List;
 

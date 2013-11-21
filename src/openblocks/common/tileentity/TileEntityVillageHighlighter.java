@@ -9,9 +9,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableIntArray;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableIntArray;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

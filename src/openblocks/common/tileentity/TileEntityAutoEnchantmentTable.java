@@ -12,16 +12,16 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
-import openblocks.sync.ISyncableObject;
-import openblocks.sync.SyncableFlags;
-import openblocks.sync.SyncableInt;
-import openblocks.sync.SyncableTank;
 import openblocks.utils.EnchantmentUtils;
 import openblocks.utils.InventoryUtils;
 import openblocks.utils.SlotSideHelper;
 import openmods.common.api.IAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.tileentity.SyncedTileEntity;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncableFlags;
+import openmods.network.sync.SyncableInt;
+import openmods.network.sync.SyncableTank;
 
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 		implements IAwareTile, IFluidHandler, ISidedInventory, IHasGui {

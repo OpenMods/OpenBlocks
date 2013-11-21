@@ -24,6 +24,13 @@ import openblocks.sync.*;
 import openblocks.utils.BitSet;
 import openblocks.utils.ByteUtils;
 import openblocks.utils.ItemUtils;
+import openmods.network.sync.ISyncHandler;
+import openmods.network.sync.ISyncableObject;
+import openmods.network.sync.SyncMap;
+import openmods.network.sync.SyncMapEntity;
+import openmods.network.sync.SyncableBoolean;
+import openmods.network.sync.SyncableInt;
+import openmods.network.sync.SyncableObjectBase;
 
 import com.google.common.base.Preconditions;
 

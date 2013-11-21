@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
-import openblocks.sync.SyncableFlags;
+import openmods.network.sync.SyncableFlags;
 
 public class ModelVacuumHopper extends ModelBase {
 

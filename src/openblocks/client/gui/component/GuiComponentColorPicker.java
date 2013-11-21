@@ -5,8 +5,8 @@ import java.awt.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import openblocks.client.gui.component.BaseComponent.IComponentListener;
-import openblocks.sync.SyncableInt;
 import openblocks.utils.CompatibilityUtils;
+import openmods.network.sync.SyncableInt;
 
 import org.lwjgl.opengl.GL11;
 

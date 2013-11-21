@@ -8,11 +8,11 @@ import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerDonationStation;
-import openblocks.sync.SyncableString;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.IInventoryCallback;
 import openmods.common.tileentity.OpenTileEntity;
+import openmods.network.sync.SyncableString;
 
 import com.google.common.base.Joiner;
 

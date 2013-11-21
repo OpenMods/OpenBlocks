@@ -1,6 +1,6 @@
 package openblocks.client.gui.component;
 
-import openblocks.sync.SyncableInt;
+import openmods.network.sync.SyncableInt;
 
 public class GuiComponentColorBox extends GuiComponentRect {
 
