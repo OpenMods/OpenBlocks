@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import openblocks.common.GenericInventory;
-import openblocks.utils.OpenBlocksFakePlayer;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
+import openmods.utils.OpenModsFakePlayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -89,7 +89,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 				int metadata = worldObj.getBlockMetadata(x, y, z);
 				if (block != Block.bedrock
 						&& block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
-					EntityPlayer fakePlayer = OpenBlocksFakePlayer.getPlayerForWorld(worldObj);
+					EntityPlayer fakePlayer = OpenModsFakePlayer.getPlayerForWorld(worldObj);
 					fakePlayer.inventory.currentItem = 0;
 					fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Item.pickaxeDiamond));
 					if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {

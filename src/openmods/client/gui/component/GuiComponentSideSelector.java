@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.utils.*;
 import openmods.sync.SyncableFlags;
 import openmods.utils.MathUtils;
 import openmods.utils.SidePicker;

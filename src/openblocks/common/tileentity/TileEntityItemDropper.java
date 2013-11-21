@@ -7,12 +7,12 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.GenericInventory;
 import openblocks.common.container.ContainerItemDropper;
-import openblocks.utils.OpenBlocksFakePlayer;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
+import openmods.utils.OpenModsFakePlayer;
 
 public class TileEntityItemDropper extends OpenTileEntity
 		implements IActivateAwareTile, INeighbourAwareTile, IInventory, IHasGui {
@@ -45,7 +45,7 @@ public class TileEntityItemDropper extends OpenTileEntity
 				setInventorySlotContents(i, null);
 			}
 
-			OpenBlocksFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+			OpenModsFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
 
 			return;
 		}

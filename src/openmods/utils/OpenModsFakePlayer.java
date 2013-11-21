@@ -1,8 +1,7 @@
-package openblocks.utils;
+package openmods.utils;
 
 import java.util.HashMap;
 
-import openmods.utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
@@ -12,19 +11,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
 
-public class OpenBlocksFakePlayer extends FakePlayer {
-	static final HashMap<Integer, OpenBlocksFakePlayer> _players = new HashMap<Integer, OpenBlocksFakePlayer>();
+//TODO: Discuss if we make seperate players for seperate mods
+public class OpenModsFakePlayer extends FakePlayer {
+	static final HashMap<Integer, OpenModsFakePlayer> _players = new HashMap<Integer, OpenModsFakePlayer>();
 
-	public static OpenBlocksFakePlayer getPlayerForWorld(World world) {
+	public static OpenModsFakePlayer getPlayerForWorld(World world) {
 		int id = world.provider.dimensionId;
 		if (!_players.containsKey(id)) {
-			_players.put(id, new OpenBlocksFakePlayer(world));
+			_players.put(id, new OpenModsFakePlayer(world));
 		}
 		return _players.get(id);
 	}
 
-	private OpenBlocksFakePlayer(World world) {
-		super(world, "Open Blocks Fake Player");
+	private OpenModsFakePlayer(World world) {
+		super(world, "Open Mods Fake Player");
 	}
 
 	public ItemStack equipWithAndRightClick(ItemStack itemStack, Vec3 currentPos, Vec3 hitVector, ForgeDirection side, boolean blockExists) {

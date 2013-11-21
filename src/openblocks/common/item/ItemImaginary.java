@@ -20,6 +20,7 @@ import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
+import openmods.common.item.ItemOpenBlock;
 import openmods.utils.BlockUtils;
 import openmods.utils.ColorUtils;
 import openmods.utils.ItemUtils;

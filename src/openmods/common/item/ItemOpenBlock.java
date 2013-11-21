@@ -1,4 +1,4 @@
-package openblocks.common.item;
+package openmods.common.item;
 
 import java.util.List;
 
