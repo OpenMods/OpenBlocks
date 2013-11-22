@@ -69,6 +69,8 @@ public class ModelEgg extends ModelBase {
 	}
 
 	public void setRotationAngles(TileEntity te, float f) {
+		TileEntityGoldenEgg egg = (TileEntityGoldenEgg) te;
+		
 	}
 	
 
