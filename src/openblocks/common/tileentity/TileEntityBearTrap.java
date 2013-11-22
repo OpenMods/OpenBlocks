@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.ISurfaceAttachment;
 import openmods.common.tileentity.SyncedTileEntity;
@@ -78,7 +79,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 	}
 
 	public int tickSinceOpened() {
-		return flags.getTicksSinceChange(worldObj);
+		return flags.getTicksSinceChange(OpenBlocks.instance.proxy, worldObj);
 	}
 
 	@Override

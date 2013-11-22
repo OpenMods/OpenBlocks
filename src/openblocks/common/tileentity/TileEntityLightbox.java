@@ -15,6 +15,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.common.container.ContainerLightbox;
 import openmods.common.GenericInventory;
@@ -165,7 +166,7 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
-			openGui(player);
+			openGui(OpenBlocks.instance, player);
 		}
 		if (player.isSneaking()) { return false; }
 		return true;

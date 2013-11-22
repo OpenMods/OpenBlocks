@@ -329,7 +329,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		Entity result = null;
 
-		if (MagnetWhitelists.instance.testBlock(worldObj, x, y, z)) result = EntityBlock.create(worldObj, x, y, z);
+		if (MagnetWhitelists.instance.testBlock(worldObj, x, y, z)) result = EntityBlock.create(worldObj, x, y, z, EntityMountedBlock.class);
 
 		if (result != null) {
 			result.setPosition(posX, posY + getMountedYOffset(result), posZ);

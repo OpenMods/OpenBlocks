@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
 import openblocks.common.Stencil;
@@ -61,7 +62,7 @@ IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
 			float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player);
+			openGui(OpenBlocks.instance, player);
 		}
 		return true;
 	}

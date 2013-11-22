@@ -3,41 +3,95 @@ package openblocks.common.tileentity;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Set;
 
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import openblocks.OpenBlocks;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.tileentity.OpenTileEntity;
+import openblocks.common.entity.EntityMutant;
+import openmods.common.entity.EntityBlock;
+import openmods.common.tileentity.SyncedTileEntity;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableInt;
 
-public class TileEntityGoldenEgg extends OpenTileEntity {
+public class TileEntityGoldenEgg extends SyncedTileEntity {
 
 	private static final String TALLY_NBT_KEY = "tally";
 	private static final String STAGE_NBT_KEY = "stage";
-	private static final int STAGE_CHANGE_TICK = 100;
+	private static final int STAGE_CHANGE_TICK = 500;
 	private static final double STAGE_CHANGE_CHANCE = 0.1;
-	
+
 	private HashMap<String, Integer> dnas = new HashMap<String, Integer>();
-	private int stage = 0;
-	
+	private SyncableInt stage;
+
+	@Override
+	protected void createSyncedFields() {
+		stage = new SyncableInt();
+	}
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (!worldObj.isRemote && OpenBlocks.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE) {
-			incrementStage();
+		if (!worldObj.isRemote) {
+			if (OpenBlocks.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE) {
+				incrementStage();
+			}
+			if (stage.getValue() >= 1) {
+				
+			}
+			if (stage.getValue() >= 2) {
+				
+			}
+			if (stage.getValue() >= 3) {
+				
+			}
+			if (stage.getValue() >= 4) {
+				// TODO: check whitelist
+				// maybe this should be more.. interesting. shapes or
+				// something?!
+				int posX = xCoord + worldObj.rand.nextInt(20) - 10;
+				int posY = yCoord + worldObj.rand.nextInt(2) - 1;
+				int posZ = zCoord + worldObj.rand.nextInt(20) - 10;
+				if (posX != xCoord && posY != yCoord && posZ != zCoord) {
+					EntityBlock block = EntityBlock.create(worldObj, posX, posY, posZ);
+					if (block != null) {
+						block.setHasGravity(true);
+						block.motionY = 0.9;
+						block.setPositionAndRotation(posX, posY, posZ, 0, 0);
+						worldObj.spawnEntityInWorld(block);
+					}
+				}
+				if (OpenBlocks.proxy.getTicks(worldObj) % 50 == 0) {
+					worldObj.addWeatherEffect(new EntityLightningBolt(worldObj, 0.5+xCoord, 0.5+yCoord, 0.5+zCoord));
+				}
+			}
+			if (stage.getValue() >= 5) {
+				worldObj.weatherEffects.clear();
+				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 7, true);
+				EntityMutant mutant = new EntityMutant(worldObj);
+				mutant.setTraitsFromMap(dnas);
+				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
+			    worldObj.spawnEntityInWorld(mutant);
+			}
 		}
 	}
-	
+	                
+	public int getStage() {
+		return stage.getValue();
+	}
+
 	private void incrementStage() {
-		stage++;
-		System.out.println(stage);
+		stage.modify(1);
+		sync();
 	}
 
 	public void addDNAFromItemStack(ItemStack itemStack) {
-		if (itemStack != null) {
+		if (itemStack != null && stage.getValue() == 1) {
 			NBTTagCompound tag = itemStack.getTagCompound();
 			if (tag != null && tag.hasKey("entity")) {
 				String entity = tag.getString("entity");
@@ -49,7 +103,7 @@ public class TileEntityGoldenEgg extends OpenTileEntity {
 			}
 		}
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -58,7 +112,6 @@ public class TileEntityGoldenEgg extends OpenTileEntity {
 			entitiesTag.setInteger(dnaTally.getKey(), dnaTally.getValue());
 		}
 		nbt.setCompoundTag(TALLY_NBT_KEY, entitiesTag);
-		nbt.setInteger(STAGE_NBT_KEY, stage);
 	}
 
 	@Override
@@ -71,8 +124,11 @@ public class TileEntityGoldenEgg extends OpenTileEntity {
 				dnas.put(tag.getName(), tallyTag.getInteger(tag.getName()));
 			}
 		}
-		if (nbt.hasKey(STAGE_NBT_KEY)) {
-			stage = nbt.getInteger(STAGE_NBT_KEY);
-		}
 	}
+
+	@Override
+	public void onSynced(Set<ISyncableObject> changes) {
+
+	}
+
 }

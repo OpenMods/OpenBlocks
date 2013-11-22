@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
@@ -178,7 +179,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) openGui(player);
+		if (!worldObj.isRemote) openGui(OpenBlocks.instance, player);
 		return true;
 	}
 

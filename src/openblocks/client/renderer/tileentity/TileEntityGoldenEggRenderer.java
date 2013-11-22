@@ -2,6 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelEgg;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
@@ -23,6 +24,9 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
+		if (egg.worldObj != null && egg.getStage() > 0) {
+			GL11.glRotatef(OpenBlocks.proxy.getTicks(tileentity.worldObj) % 360, 0, 1, 0);
+		}
 		bindTexture(texture);
 		model.render(egg, f);
 		GL11.glPopMatrix();

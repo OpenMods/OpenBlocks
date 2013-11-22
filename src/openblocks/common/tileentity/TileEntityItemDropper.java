@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
 import openmods.common.GenericInventory;
@@ -55,7 +56,7 @@ public class TileEntityItemDropper extends OpenTileEntity
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player);
+			openGui(OpenBlocks.instance, player);
 		}
 		return true;
 	}

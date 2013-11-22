@@ -22,9 +22,9 @@ public class DonationUrlManager {
 		addUrl(Mods.OPENPERIPHERAL, "https://flattr.com/profile/openblocks");
 		addUrl(Mods.COMPUTERCRAFT, "http://www.computercraft.info/donate/");
 		addUrl(Mods.COMPUTERCRAFT_TURTLE, "http://www.computercraft.info/donate/");
-		addUrl(Mods.TCONSTRUCT, "http://www.minecraftforum.net/topic/1659892-");
+		addUrl(Mods.TINKERSCONSTRUCT, "http://www.minecraftforum.net/topic/1659892-");
 		addUrl(Mods.ARSMAGICA2, "http://www.minecraftforum.net/topic/2028696-");
-		addUrl(Mods.APPLIED_ENERGISTICS, "http://ae-mod.info/");
+		addUrl(Mods.APPLIEDENERGISTICS, "http://ae-mod.info/");
 		addUrl(Mods.BIBLIOCRAFT, "http://www.bibliocraftmod.com/");
 		addUrl(Mods.BILLUND, "http://www.computercraft.info/donate/");
 		addUrl(Mods.EXTRABEES, "http://www.minecraftforum.net/topic/1324321-");

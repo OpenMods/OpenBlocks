@@ -73,7 +73,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
-				openGui(player);
+				openGui(OpenBlocks.instance, player);
 			} else {
 				flags.on(Flags.active);
 				tickCounter = getTickTime();

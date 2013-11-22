@@ -167,7 +167,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 			}
 			return false;
 		} else if (!worldObj.isRemote) {
-			openGui(player);
+			openGui(OpenBlocks.instance, player);
 		}
 		return true;
 	}

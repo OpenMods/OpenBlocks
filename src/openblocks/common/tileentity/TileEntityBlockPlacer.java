@@ -6,6 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
 import openmods.common.GenericInventory;
@@ -61,7 +62,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player);
+			openGui(OpenBlocks.instance, player);
 		}
 		return true;
 	}

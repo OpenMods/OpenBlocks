@@ -181,7 +181,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player);
+			openGui(OpenBlocks.instance, player);
 		}
 		return true;
 	}

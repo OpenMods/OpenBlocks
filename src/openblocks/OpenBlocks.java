@@ -36,6 +36,7 @@ import openblocks.mutant.DefinitionSpider;
 import openblocks.mutant.DefinitionZombie;
 import openmods.Mods;
 import openmods.common.entity.EntityBlock;
+import openmods.interfaces.IProxy;
 import openmods.network.PacketHandler;
 import openmods.sync.SyncableManager;
 

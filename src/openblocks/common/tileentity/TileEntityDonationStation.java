@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
@@ -76,7 +77,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
 		if (!worldObj.isRemote) {
-			openGui(player);
+			openGui(OpenBlocks.instance, player);
 		}
 		return true;
 	}

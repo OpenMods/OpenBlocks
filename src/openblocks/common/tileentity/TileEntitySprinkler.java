@@ -168,7 +168,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) openGui(player);
+		if (!worldObj.isRemote) openGui(OpenBlocks.instance, player);
 		return true;
 	}
 
