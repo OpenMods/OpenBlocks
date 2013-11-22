@@ -9,8 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginationGlasses;
+import openmods.OpenMods;
 
 import com.google.common.base.Preconditions;
 
@@ -275,7 +275,7 @@ public class TileEntityImaginary extends Packet132TileEntity {
 	}
 
 	public boolean is(Property what) {
-		EntityPlayer player = OpenBlocks.proxy.getThePlayer();
+		EntityPlayer player = OpenMods.proxy.getThePlayer();
 		return player != null && is(what, player);
 	}
 

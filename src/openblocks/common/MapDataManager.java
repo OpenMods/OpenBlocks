@@ -12,9 +12,11 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
-import openblocks.OpenBlocks;
+import openblocks.events.EventTypes;
 import openmods.Log;
+import openmods.OpenMods;
 import openmods.network.EventPacket;
+import openmods.network.IEventPacketType;
 import openmods.utils.ByteUtils;
 
 import com.google.common.collect.Lists;
@@ -47,15 +49,15 @@ public class MapDataManager {
 
 	public static class MapDataRequestEvent extends MapIdRequest {
 		@Override
-		public EventType getType() {
-			return EventType.MAP_DATA_REQUEST;
+		public IEventPacketType getType() {
+			return EventTypes.MAP_DATA_REQUEST;
 		}
 	}
 
 	public static class MapUpdatesEvent extends MapIdRequest {
 		@Override
-		public EventType getType() {
-			return EventType.MAP_UPDATES;
+		public IEventPacketType getType() {
+			return EventTypes.MAP_UPDATES;
 		}
 	}
 
@@ -64,8 +66,8 @@ public class MapDataManager {
 		public Map<Integer, HeightMapData> maps = Maps.newHashMap();
 
 		@Override
-		public EventType getType() {
-			return EventType.MAP_DATA_RESPONSE;
+		public IEventPacketType getType() {
+			return EventTypes.MAP_DATA_RESPONSE;
 		}
 
 		@Override
@@ -181,7 +183,7 @@ public class MapDataManager {
 		Packet toSend = EventPacket.serializeEvent(evt);
 		List<EntityPlayer> players = server.getConfigurationManager().playerEntityList;
 		for (EntityPlayer player : players)
-			OpenBlocks.proxy.sendPacketToPlayer((Player)player, toSend);
+			OpenMods.proxy.sendPacketToPlayer((Player)player, toSend);
 	}
 
 	public void markDataUpdated(World world, int mapId) {

@@ -13,6 +13,7 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.container.ContainerXPBottler;
+import openmods.OpenMods;
 import openmods.common.GenericInventory;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
@@ -73,7 +74,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 
 			// if we should, we'll autofill the tank
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(OpenBlocks.proxy, 10, this, xpSides);
+				tank.autoFillFromSides(OpenMods.proxy, 10, this, xpSides);
 			}
 
 			// if they've ticked auto output, and we have something to output

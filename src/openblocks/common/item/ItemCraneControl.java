@@ -16,6 +16,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
+import openmods.OpenMods;
 
 import com.google.common.collect.MapMaker;
 
@@ -39,7 +40,7 @@ public class ItemCraneControl extends Item {
 	private static final Map<EntityLivingBase, Long> debouncerTime = new MapMaker().weakKeys().makeMap();
 
 	private static boolean hasClicked(EntityLivingBase entity) {
-		long currentTime = OpenBlocks.proxy.getTicks(entity.worldObj);
+		long currentTime = OpenMods.proxy.getTicks(entity.worldObj);
 		Long lastClick = debouncerTime.get(entity);
 		if (lastClick == null || currentTime - lastClick > 5) {
 			debouncerTime.put(entity, currentTime);

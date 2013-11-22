@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.container.ContainerAutoAnvil;
+import openmods.OpenMods;
 import openmods.common.GenericInventory;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
@@ -90,7 +91,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		if (!worldObj.isRemote) {
 			// if we should auto-drink liquid, do it!
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(OpenBlocks.proxy, 100, this, xpSides);
+				tank.autoFillFromSides(OpenMods.proxy, 100, this, xpSides);
 			}
 
 			if (shouldAutoOutput() && hasOutput()) {

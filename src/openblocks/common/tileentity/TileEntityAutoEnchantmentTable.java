@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
+import openmods.OpenMods;
 import openmods.common.GenericInventory;
 import openmods.common.api.IAwareTile;
 import openmods.common.api.IHasGui;
@@ -86,7 +87,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 		if (!worldObj.isRemote) {
 
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(OpenBlocks.proxy, 80, this, xpSides);
+				tank.autoFillFromSides(OpenMods.proxy, 80, this, xpSides);
 			}
 
 			if (shouldAutoOutput() && hasStack(Slots.output)) {

@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.events.PlayerMovementEvent;
 import openmods.common.tileentity.OpenTileEntity;
-import openmods.network.events.PlayerMovementEvent;
 import openmods.network.events.TileEntityMessageEventPacket;
 
 import com.google.common.base.Preconditions;

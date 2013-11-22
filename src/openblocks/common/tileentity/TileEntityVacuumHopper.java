@@ -18,6 +18,7 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityItemProjectile;
+import openmods.OpenMods;
 import openmods.common.GenericInventory;
 import openmods.common.api.IActivateAwareTile;
 import openmods.common.api.IHasGui;
@@ -115,9 +116,9 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 
 		if (!worldObj.isRemote) {
 
-			tank.autoOutputToSides(OpenBlocks.proxy, 50, this, xpOutputs);
+			tank.autoOutputToSides(OpenMods.proxy, 50, this, xpOutputs);
 
-			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
+			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
 
 				int firstUsedSlot = -1;
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {

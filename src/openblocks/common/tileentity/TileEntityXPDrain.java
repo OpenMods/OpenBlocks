@@ -11,6 +11,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
+import openmods.OpenMods;
 import openmods.common.tileentity.OpenTileEntity;
 import openmods.utils.EnchantmentUtils;
 
@@ -22,7 +23,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (OpenBlocks.proxy.getTicks(worldObj) % 100 == 0) {
+		if (OpenMods.proxy.getTicks(worldObj) % 100 == 0) {
 			searchForTank();
 		}
 		if (targetTank != null) {
@@ -38,7 +39,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 						xpStack.amount = EnchantmentUtils.XPToLiquidRatio(xpToDrain);
 						int filled = tank.fill(ForgeDirection.UP, xpStack, true);
 						if (filled > 0) {
-							if (OpenBlocks.proxy.getTicks(worldObj) % 4 == 0) {
+							if (OpenMods.proxy.getTicks(worldObj) % 4 == 0) {
 								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
 							}
 							int xpDrained = EnchantmentUtils.liquidToXPRatio(filled);

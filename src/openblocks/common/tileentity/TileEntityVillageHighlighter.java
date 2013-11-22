@@ -8,7 +8,7 @@ import java.util.Set;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
 import openblocks.Config;
-import openblocks.OpenBlocks;
+import openmods.OpenMods;
 import openmods.common.tileentity.SyncedTileEntity;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableIntArray;
@@ -44,7 +44,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
+			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
 				ArrayList<Integer> tmpDataList = new ArrayList<Integer>();
 				for (Village village : (List<Village>)worldObj.villageCollectionObj.getVillageList()) {
 					if (village.isInRange(xCoord, yCoord, zCoord)) {

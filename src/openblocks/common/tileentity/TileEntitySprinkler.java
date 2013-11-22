@@ -17,6 +17,7 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
 import openmods.Log;
+import openmods.OpenMods;
 import openmods.common.GenericInventory;
 import openmods.common.api.IAwareTile;
 import openmods.common.api.IHasGui;
@@ -112,14 +113,16 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 
-			tank.autoFillFromSides(OpenBlocks.proxy, 3, this);
+			tank.autoFillFromSides(OpenMods.proxy, 3, this);
 
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
-			if (OpenBlocks.proxy.getTicks(worldObj) % 1200 == 0) {
+			final long ticks = OpenMods.proxy.getTicks(worldObj);
+
+			if (ticks % 1200 == 0) {
 				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, BONEMEAL);
 			}
-			if (OpenBlocks.proxy.getTicks(worldObj) % 60 == 0) {
+			if (ticks % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
 				sync();
 			}
@@ -177,8 +180,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 	}
 
 	public float getSprayAngle() {
-		if (isEnabled()) { return MathHelper.sin(OpenBlocks.proxy.getTicks(worldObj) * 0.02f)
-				* (float)Math.PI * 0.035f; }
+		if (isEnabled()) { return MathHelper.sin(OpenMods.proxy.getTicks(worldObj) * 0.02f) * (float)Math.PI * 0.035f; }
 		return 0;
 	}
 

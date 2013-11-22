@@ -9,6 +9,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityRopeLadder;
+import openmods.OpenMods;
 import openmods.client.renderer.tileentity.OpenRenderHelper;
 import openmods.utils.BlockUtils;
 
@@ -22,7 +23,7 @@ public class TileEntityRopeLadderRenderer extends TileEntitySpecialRenderer {
 		TileEntityRopeLadder rope = (TileEntityRopeLadder)tileentity;
 		GL11.glPushMatrix();
 		bindTexture(TextureMap.locationBlocksTexture);
-		long ticks = OpenBlocks.proxy.getTicks(rope.worldObj);
+		long ticks = OpenMods.proxy.getTicks(rope.worldObj);
 		double offset = 0.0;
 		if (rope.shouldAnimate()) {
 			offset = (MathHelper.sin((float)(rope.yCoord + ((double)ticks / 5))) / 50);

@@ -24,6 +24,7 @@ import openblocks.common.block.*;
 import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
+import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.mutant.*;
@@ -31,7 +32,6 @@ import openmods.Log;
 import openmods.Mods;
 import openmods.common.api.IOpenMod;
 import openmods.common.entity.EntityBlock;
-import openmods.interfaces.IProxy;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -56,7 +56,7 @@ public class OpenBlocks implements IOpenMod {
 	public static OpenBlocks instance;
 
 	@SidedProxy(clientSide = "openblocks.client.ClientProxy", serverSide = "openblocks.common.ServerProxy")
-	public static IProxy proxy;
+	public static IOpenBlocksProxy proxy;
 
 	public static class Blocks {
 		public static BlockLadder ladder;
@@ -181,8 +181,7 @@ public class OpenBlocks implements IOpenMod {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
-		Log.logger = evt.getModLog();
-
+		EventTypes.registerTypes();
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 		Config.readConfig(configFile);
 		if (configFile.hasChanged()) {
@@ -212,7 +211,7 @@ public class OpenBlocks implements IOpenMod {
 		if (Config.itemCartographerId > 0) {
 			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", 705, OpenBlocks.instance, 64, 8, true);
 		}
-		
+
 		EntityRegistry.registerModEntity(EntityMutant.class, "Mutant", 708, OpenBlocks.instance, 64, 8, true);
 		MutantRegistry.registerMutant(EntityCreeper.class, new DefinitionCreeper());
 		MutantRegistry.registerMutant(EntityZombie.class, new DefinitionZombie());
@@ -222,7 +221,7 @@ public class OpenBlocks implements IOpenMod {
 		MutantRegistry.registerMutant(EntityChicken.class, new DefinitionChicken());
 		MutantRegistry.registerMutant(EntitySheep.class, new DefinitionSheep());
 		MutantRegistry.registerMutant(EntityOcelot.class, new DefinitionOcelot());
-		
+
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500);
@@ -274,11 +273,6 @@ public class OpenBlocks implements IOpenMod {
 	}
 
 	@Override
-	public IProxy getProxy() {
-		return proxy;
-	}
-
-	@Override
 	public Log getLog() {
 		return null;
 	}
@@ -292,7 +286,7 @@ public class OpenBlocks implements IOpenMod {
 	public String getId() {
 		return "openblocks";
 	}
-	
+
 	@Override
 	public int getRenderId() {
 		return renderId;

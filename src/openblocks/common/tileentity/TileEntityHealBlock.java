@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
-import openblocks.OpenBlocks;
+import openmods.OpenMods;
 import openmods.common.tileentity.OpenTileEntity;
 
 public class TileEntityHealBlock extends OpenTileEntity {
@@ -19,7 +19,7 @@ public class TileEntityHealBlock extends OpenTileEntity {
 
 		@SuppressWarnings("unchecked")
 		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
-		if (OpenBlocks.proxy.getTicks(worldObj) % 20 == 0) {
+		if (OpenMods.proxy.getTicks(worldObj) % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
 					/*

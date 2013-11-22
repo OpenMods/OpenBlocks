@@ -20,8 +20,7 @@ import openmods.utils.CompatibilityUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends SyncedTileEntity implements IShapeable,
-		IShapeProvider {
+public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IShapeProvider {
 
 	private boolean shape[][][];
 	private boolean previousShape[][][];

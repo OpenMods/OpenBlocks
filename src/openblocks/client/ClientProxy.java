@@ -1,43 +1,40 @@
 package openblocks.client;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
+import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
+import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelMutant;
 import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
-import openblocks.common.block.BlockTank;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
-import openmods.client.OpenClientProxy;
 import openmods.client.renderer.entity.EntityBlockRenderer;
 import openmods.common.entity.EntityBlock;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class ClientProxy extends OpenClientProxy {
+public class ClientProxy implements IOpenBlocksProxy {
 
 	public ClientProxy() {}
 
-	@ForgeSubscribe
-	public void textureHook(TextureStitchEvent.Post event) {
-		if (event.map.textureType == 0) {
-			if (OpenBlocks.Fluids.openBlocksXPJuice != null) {
-				OpenBlocks.Fluids.openBlocksXPJuice.setIcons(BlockTank.Icons.xpJuiceStill, BlockTank.Icons.xpJuiceFlowing);
-			}
-		}
-	}
-
+	@Override
+	public void preInit() {}
+	
 	@Override
 	public void init() {
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
@@ -117,7 +114,7 @@ public class ClientProxy extends OpenClientProxy {
 			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new EntityCartographerRenderer());
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
-		
+
 		RenderingRegistry.registerEntityRenderingHandler(EntityMutant.class, new EntityMutantRenderer(new ModelMutant(), 0.7F));
 	}
 
@@ -134,4 +131,14 @@ public class ClientProxy extends OpenClientProxy {
 		}
 	}
 
+	@Override
+	public IGuiHandler createGuiHandler() {
+		return new ClientGuiHandler();
+	}
+	
+	@Override
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
+		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);
+		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
+	}
 }

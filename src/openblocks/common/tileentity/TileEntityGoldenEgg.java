@@ -9,8 +9,8 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityMutant;
+import openmods.OpenMods;
 import openmods.common.entity.EntityBlock;
 import openmods.common.tileentity.SyncedTileEntity;
 import openmods.sync.ISyncableObject;
@@ -35,7 +35,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			if (OpenBlocks.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE) {
+			if (OpenMods.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE) {
 				incrementStage();
 			}
 			if (stage.getValue() >= 1) {
@@ -63,7 +63,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 						worldObj.spawnEntityInWorld(block);
 					}
 				}
-				if (OpenBlocks.proxy.getTicks(worldObj) % 50 == 0) {
+				if (OpenMods.proxy.getTicks(worldObj) % 50 == 0) {
 					worldObj.addWeatherEffect(new EntityLightningBolt(worldObj, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord));
 				}
 			}
