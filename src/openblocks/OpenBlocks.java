@@ -48,7 +48,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "after:ComputerCraft;after:OpenPeripheral")
+@Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "required-after:OpenMods")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
 public class OpenBlocks implements IOpenMod {
 
