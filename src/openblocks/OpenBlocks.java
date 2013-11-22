@@ -26,20 +26,13 @@ import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
-import openblocks.mutant.DefinitionChicken;
-import openblocks.mutant.DefinitionCreeper;
-import openblocks.mutant.DefinitionEnderman;
-import openblocks.mutant.DefinitionOcelot;
-import openblocks.mutant.DefinitionPig;
-import openblocks.mutant.DefinitionSheep;
-import openblocks.mutant.DefinitionSpider;
-import openblocks.mutant.DefinitionZombie;
+import openblocks.mutant.*;
 import openmods.Log;
 import openmods.Mods;
 import openmods.common.api.IOpenMod;
 import openmods.common.entity.EntityBlock;
 import openmods.interfaces.IProxy;
-import openmods.network.PacketHandler;
+import openblocks.network.PacketHandler;
 import openmods.sync.SyncableManager;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -202,7 +195,7 @@ public class OpenBlocks implements IOpenMod {
 			configFile.save();
 		}
 
-		OpenBlocks.syncableManager = new SyncableManager();
+		OpenBlocks.syncableManager = new SyncableManager(this);
 
 		Config.register();
 
