@@ -1,0 +1,12 @@
+*.java  text
+*.xml   text
+*.info  text
+*.lang  text
+*.mcmeta text
+*.md    text
+*.txt   text
+
+*.png   -text
+*.ogg   -text
+*.zip   -text
+*.jar   -text
