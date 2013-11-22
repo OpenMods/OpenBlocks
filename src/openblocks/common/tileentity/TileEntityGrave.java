@@ -13,13 +13,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openmods.common.GenericInventory;
-import openmods.common.api.IAwareTile;
-import openmods.common.api.IInventoryContainer;
-import openmods.common.api.ISurfaceAttachment;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.GenericInventory;
+import openmods.api.IAwareTile;
+import openmods.api.IInventoryContainer;
+import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableString;
+import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
 public class TileEntityGrave extends SyncedTileEntity implements

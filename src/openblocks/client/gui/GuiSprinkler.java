@@ -1,7 +1,7 @@
 package openblocks.client.gui;
 
 import openblocks.common.container.ContainerSprinkler;
-import openmods.client.gui.BaseGuiContainer;
+import openmods.gui.BaseGuiContainer;
 
 public class GuiSprinkler extends BaseGuiContainer<ContainerSprinkler> {
 

@@ -3,7 +3,7 @@ package openblocks.common.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityPaintMixer;
-import openmods.common.container.ContainerInventory;
+import openmods.container.ContainerInventory;
 
 public class ContainerPaintMixer extends
 		ContainerInventory<TileEntityPaintMixer> {

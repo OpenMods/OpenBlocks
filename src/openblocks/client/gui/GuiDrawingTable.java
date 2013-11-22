@@ -4,9 +4,9 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
-import openmods.client.gui.BaseGuiContainer;
-import openmods.client.gui.component.*;
-import openmods.client.gui.component.BaseComponent.IComponentListener;
+import openmods.gui.BaseGuiContainer;
+import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent.IComponentListener;
 import openmods.utils.FakeIcon;
 
 public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>

@@ -11,8 +11,8 @@ import openblocks.common.block.BlockCanvas;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openblocks.common.tileentity.TileEntityCanvas;
-import openmods.client.renderer.FixedRenderBlocks;
-import openmods.client.renderer.IBlockRenderer;
+import openmods.renderer.FixedRenderBlocks;
+import openmods.renderer.IBlockRenderer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

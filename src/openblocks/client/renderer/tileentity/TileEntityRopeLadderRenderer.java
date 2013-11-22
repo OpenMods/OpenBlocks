@@ -10,7 +10,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityRopeLadder;
 import openmods.OpenMods;
-import openmods.client.renderer.tileentity.OpenRenderHelper;
+import openmods.tileentity.renderer.OpenRenderHelper;
 import openmods.utils.BlockUtils;
 
 import org.lwjgl.opengl.GL11;

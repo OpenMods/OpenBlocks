@@ -7,9 +7,9 @@ import openblocks.OpenBlocks;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
-import openmods.client.gui.BaseGuiContainer;
-import openmods.client.gui.component.BaseComponent.TabColor;
-import openmods.client.gui.component.*;
+import openmods.gui.BaseGuiContainer;
+import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent.TabColor;
 import openmods.sync.SyncableFlags;
 
 public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {

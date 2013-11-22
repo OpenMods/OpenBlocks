@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.ai.EntityAICollectItem;
-import openmods.common.GenericInventory;
+import openmods.GenericInventory;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 

@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityPaintCan;
-import openmods.common.block.OpenBlock;
+import openmods.block.OpenBlock;
 
 public class BlockPaintCan extends OpenBlock {
 

@@ -30,8 +30,8 @@ import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.mutant.*;
 import openmods.Log;
 import openmods.Mods;
-import openmods.common.api.IOpenMod;
-import openmods.common.entity.EntityBlock;
+import openmods.api.IOpenMod;
+import openmods.entity.EntityBlock;
 
 import org.apache.commons.lang3.ObjectUtils;
 

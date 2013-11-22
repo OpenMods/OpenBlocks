@@ -11,11 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openmods.common.api.INeighbourAwareTile;
-import openmods.common.api.ISurfaceAttachment;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
+import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

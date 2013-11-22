@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import openblocks.common.tileentity.TileEntityTank;
-import openmods.common.item.ItemOpenBlock;
+import openmods.item.ItemOpenBlock;
 
 public class ItemTankBlock extends ItemOpenBlock {
 	private FluidTank fakeTank = new FluidTank(TileEntityTank.getTankCapacity());

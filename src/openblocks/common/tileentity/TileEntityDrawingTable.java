@@ -10,12 +10,12 @@ import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.ItemGeneric;
 import openblocks.events.StencilCraftEvent;
-import openmods.common.GenericInventory;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.api.IHasGui;
-import openmods.common.api.IInventoryCallback;
-import openmods.common.tileentity.OpenTileEntity;
+import openmods.GenericInventory;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IHasGui;
+import openmods.api.IInventoryCallback;
 import openmods.network.events.TileEntityMessageEventPacket;
+import openmods.tileentity.OpenTileEntity;
 
 public class TileEntityDrawingTable extends OpenTileEntity implements
 IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {

@@ -10,7 +10,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.events.PlayerMovementEvent;
-import openmods.common.tileentity.OpenTileEntity;
+import openmods.tileentity.OpenTileEntity;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 

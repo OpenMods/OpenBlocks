@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import openblocks.common.HeightMapData;
-import openmods.client.renderer.DynamicTextureAtlas;
-import openmods.client.renderer.DynamicTextureAtlas.AtlasCell;
+import openmods.renderer.DynamicTextureAtlas;
+import openmods.renderer.DynamicTextureAtlas.AtlasCell;
 
 import org.lwjgl.opengl.GL11;
 

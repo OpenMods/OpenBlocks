@@ -1,6 +1,6 @@
 package openblocks.common.tileentity;
 
-import openmods.common.tileentity.OpenTileEntity;
+import openmods.tileentity.OpenTileEntity;
 
 public class TileEntityOreCrusher extends OpenTileEntity {
 

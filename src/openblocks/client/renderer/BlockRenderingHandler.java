@@ -13,10 +13,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openmods.Log;
-import openmods.client.renderer.IBlockRenderer;
-import openmods.common.block.OpenBlock;
-import openmods.common.block.OpenBlock.BlockRotationMode;
-import openmods.common.tileentity.OpenTileEntity;
+import openmods.block.OpenBlock;
+import openmods.block.OpenBlock.BlockRotationMode;
+import openmods.renderer.IBlockRenderer;
+import openmods.tileentity.OpenTileEntity;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

@@ -14,7 +14,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
-import openmods.common.block.OpenBlock;
+import openmods.block.OpenBlock;
 
 public class BlockCanvas extends OpenBlock {
 

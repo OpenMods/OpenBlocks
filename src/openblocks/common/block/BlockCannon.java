@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityCannon;
-import openmods.common.block.OpenBlock;
+import openmods.block.OpenBlock;
 
 public class BlockCannon extends OpenBlock {
 

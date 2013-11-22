@@ -5,9 +5,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
-import openmods.client.gui.BaseGuiContainer;
-import openmods.client.gui.component.BaseComponent.TabColor;
-import openmods.client.gui.component.*;
+import openmods.gui.BaseGuiContainer;
+import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent.TabColor;
 
 public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 

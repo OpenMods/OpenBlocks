@@ -7,13 +7,13 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
+import openmods.GenericInventory;
 import openmods.Mods;
-import openmods.common.GenericInventory;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.api.IHasGui;
-import openmods.common.api.IInventoryCallback;
-import openmods.common.tileentity.OpenTileEntity;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IHasGui;
+import openmods.api.IInventoryCallback;
 import openmods.sync.SyncableString;
+import openmods.tileentity.OpenTileEntity;
 
 import com.google.common.base.Joiner;
 

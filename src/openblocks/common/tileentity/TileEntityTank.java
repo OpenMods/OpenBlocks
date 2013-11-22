@@ -10,10 +10,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
-import openmods.common.api.IAwareTile;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.api.IAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
+import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ItemUtils;
 
 public class TileEntityTank extends SyncedTileEntity implements

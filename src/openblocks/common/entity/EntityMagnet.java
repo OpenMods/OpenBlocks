@@ -20,7 +20,7 @@ import openblocks.common.CraneRegistry;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.item.ItemCraneBackpack;
 import openblocks.integration.MagnetControlPeripheral;
-import openmods.common.entity.EntityBlock;
+import openmods.entity.EntityBlock;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;

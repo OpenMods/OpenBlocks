@@ -10,13 +10,13 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.container.ContainerBigButton;
-import openmods.common.GenericInventory;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.api.IHasGui;
-import openmods.common.api.ISurfaceAttachment;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.GenericInventory;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IHasGui;
+import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
+import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

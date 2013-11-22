@@ -10,12 +10,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.container.ContainerPaintMixer;
-import openmods.common.GenericInventory;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.api.IHasGui;
-import openmods.common.api.IInventoryCallback;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.GenericInventory;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IHasGui;
+import openmods.api.IInventoryCallback;
 import openmods.sync.*;
+import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ColorUtils;
 
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {

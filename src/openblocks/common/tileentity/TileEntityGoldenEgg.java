@@ -11,10 +11,10 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.common.entity.EntityMutant;
 import openmods.OpenMods;
-import openmods.common.entity.EntityBlock;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.entity.EntityBlock;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
+import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityGoldenEgg extends SyncedTileEntity {
 

@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import openblocks.OpenBlocks;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
-import openmods.client.renderer.tileentity.OpenRenderHelper;
+import openmods.tileentity.renderer.OpenRenderHelper;
 import openmods.utils.BlockUtils;
 import openmods.utils.RenderUtils;
 

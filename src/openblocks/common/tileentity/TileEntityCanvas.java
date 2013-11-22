@@ -13,11 +13,11 @@ import openblocks.common.Stencil;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
-import openmods.common.api.IAwareTile;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.api.IAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
+import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {

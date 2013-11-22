@@ -8,7 +8,7 @@ import openblocks.OpenBlocks.GuiId;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
 import openmods.Log;
-import openmods.common.api.IHasGui;
+import openmods.api.IHasGui;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonGuiHandler implements IGuiHandler {

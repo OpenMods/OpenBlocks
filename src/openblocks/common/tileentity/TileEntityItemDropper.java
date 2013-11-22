@@ -7,11 +7,11 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
-import openmods.common.GenericInventory;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.api.IHasGui;
-import openmods.common.api.INeighbourAwareTile;
-import openmods.common.tileentity.OpenTileEntity;
+import openmods.GenericInventory;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IHasGui;
+import openmods.api.INeighbourAwareTile;
+import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 import openmods.utils.OpenModsFakePlayer;
 

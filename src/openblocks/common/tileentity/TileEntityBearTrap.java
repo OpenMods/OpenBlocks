@@ -6,12 +6,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeDirection;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.api.ISurfaceAttachment;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.api.IActivateAwareTile;
+import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableInt;
+import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityBearTrap extends SyncedTileEntity implements
 		IActivateAwareTile, ISurfaceAttachment {

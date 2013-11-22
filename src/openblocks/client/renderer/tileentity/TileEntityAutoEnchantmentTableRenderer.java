@@ -9,7 +9,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
-import openmods.client.renderer.tileentity.OpenRenderHelper;
+import openmods.tileentity.renderer.OpenRenderHelper;
 
 import org.lwjgl.opengl.GL11;
 

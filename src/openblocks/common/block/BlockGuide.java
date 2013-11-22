@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityGuide;
-import openmods.common.block.OpenBlock;
+import openmods.block.OpenBlock;
 
 public class BlockGuide extends OpenBlock {
 

@@ -2,9 +2,9 @@ package openblocks.client.gui;
 
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
-import openmods.client.gui.BaseGuiContainer;
-import openmods.client.gui.component.*;
-import openmods.client.gui.component.BaseComponent.IComponentListener;
+import openmods.gui.BaseGuiContainer;
+import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent.IComponentListener;
 
 public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		implements IComponentListener {

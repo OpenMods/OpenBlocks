@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openmods.common.api.IAwareTile;
-import openmods.common.tileentity.OpenTileEntity;
+import openmods.api.IAwareTile;
+import openmods.tileentity.OpenTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

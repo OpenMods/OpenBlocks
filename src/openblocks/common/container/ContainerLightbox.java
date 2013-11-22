@@ -2,7 +2,7 @@ package openblocks.common.container;
 
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityLightbox;
-import openmods.common.container.ContainerInventory;
+import openmods.container.ContainerInventory;
 
 public class ContainerLightbox extends ContainerInventory<TileEntityLightbox> {
 

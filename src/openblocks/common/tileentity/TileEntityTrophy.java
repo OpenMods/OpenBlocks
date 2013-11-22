@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
-import openmods.common.api.IAwareTileLite;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.api.IAwareTileLite;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
+import openmods.tileentity.SyncedTileEntity;
 
 import com.google.common.base.Preconditions;
 

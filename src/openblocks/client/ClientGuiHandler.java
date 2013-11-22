@@ -9,7 +9,7 @@ import openblocks.client.gui.GuiLuggage;
 import openblocks.common.CommonGuiHandler;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
-import openmods.common.api.IHasGui;
+import openmods.api.IHasGui;
 
 //TODO: THis is specific to OB, if we can make it abstract/generic and use a registry we can move it
 public class ClientGuiHandler extends CommonGuiHandler {

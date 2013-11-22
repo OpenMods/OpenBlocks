@@ -2,7 +2,7 @@ package openblocks.common.container;
 
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
-import openmods.common.container.ContainerInventory;
+import openmods.container.ContainerInventory;
 
 public class ContainerAutoAnvil extends ContainerInventory<TileEntityAutoAnvil> {
 

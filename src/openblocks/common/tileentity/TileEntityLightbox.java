@@ -18,12 +18,12 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiLightbox;
 import openblocks.common.container.ContainerLightbox;
-import openmods.common.GenericInventory;
-import openmods.common.api.IActivateAwareTile;
-import openmods.common.api.IHasGui;
-import openmods.common.api.ISurfaceAttachment;
-import openmods.common.tileentity.SyncedTileEntity;
+import openmods.GenericInventory;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IHasGui;
+import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
+import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 		ISurfaceAttachment, IActivateAwareTile, IHasGui {

@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.common.TrophyHandler.Trophy;
-import openmods.common.item.ItemOpenBlock;
+import openmods.item.ItemOpenBlock;
 
 public class ItemTrophyBlock extends ItemOpenBlock {
 

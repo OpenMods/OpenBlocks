@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.common.block.BlockFlag;
-import openmods.common.item.ItemOpenBlock;
+import openmods.item.ItemOpenBlock;
 
 public class ItemFlagBlock extends ItemOpenBlock {
 

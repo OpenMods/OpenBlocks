@@ -3,9 +3,9 @@ package openblocks.events;
 import java.io.DataInput;
 import java.io.DataOutput;
 
-import openmods.common.tileentity.OpenTileEntity;
 import openmods.network.IEventPacketType;
 import openmods.network.events.TileEntityMessageEventPacket;
+import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 
 public class PlayerMovementEvent extends TileEntityMessageEventPacket {
