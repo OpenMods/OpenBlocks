@@ -73,7 +73,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 
 			// if we should, we'll autofill the tank
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(10, this, xpSides);
+				tank.autoFillFromSides(getProxy(), 10, this, xpSides);
 			}
 
 			// if they've ticked auto output, and we have something to output

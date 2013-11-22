@@ -36,6 +36,7 @@ import openblocks.mutant.DefinitionSpider;
 import openblocks.mutant.DefinitionZombie;
 import openmods.Log;
 import openmods.Mods;
+import openmods.common.api.IOpenMod;
 import openmods.common.entity.EntityBlock;
 import openmods.interfaces.IProxy;
 import openmods.network.PacketHandler;
@@ -58,7 +59,7 @@ import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "after:ComputerCraft;after:OpenPeripheral")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { PacketHandler.CHANNEL_SYNC, PacketHandler.CHANNEL_EVENTS }, packetHandler = PacketHandler.class)
-public class OpenBlocks {
+public class OpenBlocks implements IOpenMod {
 
 	public static final String CHANNEL = "OpenBlocks";
 
@@ -285,5 +286,30 @@ public class OpenBlocks {
 
 	public static String getModId() {
 		return OpenBlocks.class.getAnnotation(Mod.class).modid();
+	}
+
+	@Override
+	public IProxy getProxy() {
+		return proxy;
+	}
+
+	@Override
+	public Log getLog() {
+		return null;
+	}
+
+	@Override
+	public CreativeTabs getCreativeTab() {
+		return this.tabOpenBlocks;
+	}
+
+	@Override
+	public String getId() {
+		return "openblocks";
+	}
+	
+	@Override
+	public int getRenderId() {
+		return renderId;
 	}
 }

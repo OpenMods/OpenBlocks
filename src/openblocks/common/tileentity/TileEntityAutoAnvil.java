@@ -90,7 +90,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		if (!worldObj.isRemote) {
 			// if we should auto-drink liquid, do it!
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(100, this, xpSides);
+				tank.autoFillFromSides(getProxy(), 100, this, xpSides);
 			}
 
 			if (shouldAutoOutput() && hasOutput()) {

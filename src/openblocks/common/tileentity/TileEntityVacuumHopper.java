@@ -115,7 +115,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 
 		if (!worldObj.isRemote) {
 
-			tank.autoOutputToSides(50, this, xpOutputs);
+			tank.autoOutputToSides(getProxy(), 50, this, xpOutputs);
 
 			if (OpenBlocks.proxy.getTicks(worldObj) % 10 == 0) {
 

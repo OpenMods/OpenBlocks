@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectAware;
 import openblocks.common.MapDataBuilder;
@@ -20,6 +21,7 @@ import openblocks.common.MapDataBuilder.ChunkJob;
 import openblocks.common.item.ItemCartographer;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
+import openmods.interfaces.IProxy;
 import openmods.sync.ISyncHandler;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
@@ -305,5 +307,10 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			eyeYaw = eyeYaw - diffYaw / 50.0f; // HERP
 			eyePitch = eyePitch - diffPitch / 50.0f; // DERP
 		}
+	}
+
+	@Override
+	public IProxy getProxy() {
+		return OpenBlocks.proxy;
 	}
 }

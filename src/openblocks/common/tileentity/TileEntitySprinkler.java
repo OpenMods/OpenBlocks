@@ -112,7 +112,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 
-			tank.autoFillFromSides(3, this);
+			tank.autoFillFromSides(getProxy(), 3, this);
 
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
