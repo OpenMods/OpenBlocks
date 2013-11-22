@@ -308,9 +308,4 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			eyePitch = eyePitch - diffPitch / 50.0f; // DERP
 		}
 	}
-
-	@Override
-	public IProxy getProxy() {
-		return OpenBlocks.proxy;
-	}
 }

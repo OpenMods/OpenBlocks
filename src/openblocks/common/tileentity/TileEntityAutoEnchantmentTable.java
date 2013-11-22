@@ -86,7 +86,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 		if (!worldObj.isRemote) {
 
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(getProxy(), 80, this, xpSides);
+				tank.autoFillFromSides(OpenBlocks.proxy, 80, this, xpSides);
 			}
 
 			if (shouldAutoOutput() && hasStack(Slots.output)) {
