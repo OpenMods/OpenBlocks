@@ -12,9 +12,9 @@ import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-import openblocks.Log;
 import openblocks.client.Icons.ComposedIcon;
 import openblocks.client.Icons.IDrawableIcon;
+import openmods.Log;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;

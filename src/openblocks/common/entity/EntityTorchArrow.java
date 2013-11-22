@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.world.World;
-import openblocks.Log;
+import openmods.Log;
 
 public class EntityTorchArrow extends EntityArrow {
 

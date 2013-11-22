@@ -32,6 +32,7 @@ import openblocks.common.recipe.CrayonGlassesRecipe;
 import openblocks.common.recipe.CrayonMixingRecipe;
 import openblocks.common.recipe.MapCloneRecipe;
 import openblocks.common.recipe.MapResizeRecipe;
+import openmods.Log;
 import openmods.utils.ColorUtils;
 
 import com.google.common.base.Throwables;

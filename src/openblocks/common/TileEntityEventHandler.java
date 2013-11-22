@@ -1,7 +1,7 @@
 package openblocks.common;
 
 import net.minecraftforge.event.ForgeSubscribe;
-import openblocks.Log;
+import openmods.Log;
 import openmods.common.tileentity.OpenTileEntity;
 import openmods.network.events.TileEntityMessageEventPacket;
 

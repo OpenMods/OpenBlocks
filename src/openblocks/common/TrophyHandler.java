@@ -16,10 +16,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import openblocks.Config;
-import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.*;
+import openmods.Log;
 import openmods.utils.BlockUtils;
 
 public class TrophyHandler {

@@ -12,8 +12,8 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
-import openblocks.Log;
 import openblocks.OpenBlocks;
+import openmods.Log;
 import openmods.network.EventPacket;
 import openmods.utils.ByteUtils;
 

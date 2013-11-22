@@ -11,9 +11,9 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import openblocks.Log;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
+import openmods.Log;
 import openmods.client.renderer.tileentity.OpenRenderHelper;
 
 import org.lwjgl.opengl.GL11;

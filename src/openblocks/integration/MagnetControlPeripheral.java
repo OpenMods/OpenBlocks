@@ -14,9 +14,9 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.Log;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMagnet.OwnerType;
+import openmods.Log;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.ByteArrayDataInput;

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
-import openblocks.Log;
+import openmods.Log;
 
 import org.lwjgl.opengl.GL11;
 
