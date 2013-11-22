@@ -28,6 +28,7 @@ import openblocks.client.renderer.tileentity.*;
 import openblocks.common.block.BlockTank;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
+import openmods.client.OpenClientProxy;
 import openmods.client.renderer.entity.EntityBlockRenderer;
 import openmods.common.entity.EntityBlock;
 import openmods.interfaces.IProxy;
@@ -35,11 +36,12 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class ClientProxy implements IProxy {
+public class ClientProxy extends OpenClientProxy implements IProxy {
 
 	public ClientProxy() {}
 
@@ -148,58 +150,4 @@ public class ClientProxy implements IProxy {
 		}
 	}
 
-	@Override
-	public boolean isServerOnly() {
-		return false;
-	}
-
-	@Override
-	public boolean isServerThread() {
-		Thread thr = Thread.currentThread();
-		return thr instanceof ThreadMinecraftServer
-				|| thr instanceof ServerListenThread;
-	}
-
-	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
-		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);
-		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
-	}
-
-	@Override
-	public EntityPlayer getThePlayer() {
-		return FMLClientHandler.instance().getClient().thePlayer;
-	}
-
-	@Override
-	public IGuiHandler createGuiHandler() {
-		return new ClientGuiHandler();
-	}
-
-	@Override
-	public long getTicks(World worldObj) {
-		return ClientTickHandler.getTicks();
-	}
-
-	@Override
-	public World getClientWorld() {
-		return Minecraft.getMinecraft().theWorld;
-	}
-
-	@Override
-	public World getServerWorld(int id) {
-		return DimensionManager.getWorld(id);
-	}
-
-	@Override
-	public void sendPacketToPlayer(Player player, Packet packet) {
-		if (player instanceof EntityPlayerMP) ((EntityPlayerMP)player).playerNetServerHandler.sendPacketToPlayer(packet);
-		else if (player instanceof EntityClientPlayerMP) ((EntityClientPlayerMP)player).sendQueue.addToSendQueue(packet);
-		else throw new UnsupportedOperationException("HOW DO I PACKET?");
-	}
-
-	@Override
-	public void sendPacketToServer(Packet packet) {
-		Minecraft.getMinecraft().getNetHandler().addToSendQueue(packet);
-	}
 }

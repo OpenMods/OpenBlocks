@@ -32,8 +32,6 @@ import openmods.Mods;
 import openmods.common.api.IOpenMod;
 import openmods.common.entity.EntityBlock;
 import openmods.interfaces.IProxy;
-import openblocks.network.PacketHandler;
-import openmods.sync.SyncableManager;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -51,10 +49,8 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "after:ComputerCraft;after:OpenPeripheral")
-@NetworkMod(serverSideRequired = true, clientSideRequired = true, channels = { PacketHandler.CHANNEL_SYNC, PacketHandler.CHANNEL_EVENTS }, packetHandler = PacketHandler.class)
+@NetworkMod(serverSideRequired = true, clientSideRequired = true)
 public class OpenBlocks implements IOpenMod {
-
-	public static final String CHANNEL = "OpenBlocks";
 
 	@Instance(value = "OpenBlocks")
 	public static OpenBlocks instance;
@@ -183,8 +179,6 @@ public class OpenBlocks implements IOpenMod {
 
 	public static int renderId;
 
-	public static SyncableManager syncableManager;
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		Log.logger = evt.getModLog();
@@ -194,8 +188,6 @@ public class OpenBlocks implements IOpenMod {
 		if (configFile.hasChanged()) {
 			configFile.save();
 		}
-
-		OpenBlocks.syncableManager = new SyncableManager(this);
 
 		Config.register();
 
