@@ -163,7 +163,7 @@ public class ItemGeneric extends Item {
 					}
 				};
 			}
-			
+
 		};
 
 		public ItemStack newItemStack(int amount) {

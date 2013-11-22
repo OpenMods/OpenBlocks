@@ -10,7 +10,7 @@ import openmods.OpenMods;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
-	
+
 	ModelEgg model = new ModelEgg();
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/egg.png");

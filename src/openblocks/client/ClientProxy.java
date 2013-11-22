@@ -34,7 +34,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@Override
 	public void preInit() {}
-	
+
 	@Override
 	public void init() {
 		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
@@ -135,7 +135,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 	public IGuiHandler createGuiHandler() {
 		return new ClientGuiHandler();
 	}
-	
+
 	@Override
 	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
 		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);

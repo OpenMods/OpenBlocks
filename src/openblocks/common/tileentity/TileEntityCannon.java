@@ -61,15 +61,13 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	public void updateEntity() {
 		super.updateEntity();
 
-		if(currentYaw < 0) currentYaw += 360;
+		if (currentYaw < 0) currentYaw += 360;
 		currentYaw %= 360;
 		double rotationSpeed = 3;
 		// ugly, need to clean
 		currentPitch = currentPitch - ((currentPitch - targetPitch.getValue()) / 20);
-		if(Math.abs(currentYaw - targetYaw.getValue()) < rotationSpeed) 
-			currentYaw = targetYaw.getValue();
-		else
-			currentYaw += rotationSpeed * GeometryUtils.getDirectionForRotation(currentYaw, targetYaw.getValue());
+		if (Math.abs(currentYaw - targetYaw.getValue()) < rotationSpeed) currentYaw = targetYaw.getValue();
+		else currentYaw += rotationSpeed * GeometryUtils.getDirectionForRotation(currentYaw, targetYaw.getValue());
 		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.getValue()) / 20);
 		// currentPitch = targetPitch.getValue();
 		// currentYaw = targetYaw.getValue();
@@ -172,7 +170,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		// We have selected what we feel to be the best angle
 		// But the velocity suggested doesn't scale on all 3 axis
 		// So we have to change that a bit
-		double d = Math.sqrt( dX * dX + dZ * dZ );
+		double d = Math.sqrt(dX * dX + dZ * dZ);
 		double v = Math.sqrt((d * -TileEntityCannonLogic.WORLD_GRAVITY) / Math.sin(2 * theta));
 		targetSpeed.setValue(v);
 		sync();

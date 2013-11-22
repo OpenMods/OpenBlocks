@@ -90,7 +90,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 					if (entity instanceof EntityXPOrb) {
 						shouldPull = getXPOutputs().getActiveSlots().size() > 0;
 					}
-					if(entity instanceof EntityItemProjectile) {
+					if (entity instanceof EntityItemProjectile) {
 						shouldPull = entity.motionY < 0.01;
 					}
 

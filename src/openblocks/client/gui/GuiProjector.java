@@ -9,9 +9,9 @@ import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.BaseComponent;
+import openmods.gui.component.BaseComponent.IComponentListener;
 import openmods.gui.component.DummyComponent;
 import openmods.gui.component.GuiComponentIconButton;
-import openmods.gui.component.BaseComponent.IComponentListener;
 import openmods.utils.FakeIcon;
 import openmods.utils.MathUtils;
 import openmods.utils.Trackball.TrackballWrapper;
@@ -99,7 +99,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 			trackball.setTransform(MathUtils.createEntityRotateMatrix(Minecraft.getMinecraft().renderViewEntity));
 			isInitialized = true;
 		}
-		
+
 		BaseComponent.IS_OVERLAY_PASS = false;
 
 		mapHeight += Mouse.getDWheel() / 1000.0;

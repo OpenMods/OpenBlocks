@@ -92,11 +92,11 @@ public class MutantRendererChicken implements IMutantRenderer {
 	@Override
 	public void renderWings(IMutant mutant, float scale, float wingSwing) {
 		bindTexture();
-		
+
 		Vec3[] wingAttachmentPoints = mutant.getBody().getWingAttachmentPoints();
 		MutantUtils.bindToAttachmentPoint(mutant, leftWing, wingAttachmentPoints[0]);
 		MutantUtils.bindToAttachmentPoint(mutant, rightWing, wingAttachmentPoints[1]);
-		
+
 		rightWing.rotateAngleZ = -wingSwing;
 		leftWing.rotateAngleZ = wingSwing;
 		leftWing.render(scale);
@@ -104,10 +104,10 @@ public class MutantRendererChicken implements IMutantRenderer {
 	}
 
 	@Override
-	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) { }
+	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}
 
 	@Override
-	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) { }
+	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}
 
 	private void bindTexture() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);

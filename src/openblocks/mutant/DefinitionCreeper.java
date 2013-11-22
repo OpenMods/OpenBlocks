@@ -29,12 +29,12 @@ public class DefinitionCreeper implements IMutantDefinition {
 			Vec3.createVectorHelper(0.0, -9.0F, 0.0),
 			Vec3.createVectorHelper(0.0, -9.0F, 0.0),
 	};
-	
+
 	private Vec3 headAttachmentPoint = Vec3.createVectorHelper(0, 0, 0);
 
 	@Override
 	public Vec3[] getLegAttachmentPoints(int numLegs) {
-		switch(numLegs) {
+		switch (numLegs) {
 			case 2:
 				return legAttachmentPoints2;
 			case 4:
@@ -44,19 +44,19 @@ public class DefinitionCreeper implements IMutantDefinition {
 		}
 		return null;
 	}
-	
+
 	private Vec3 tailAttachmentPoint = Vec3.createVectorHelper(0, -9, 3);
-	
+
 	private Vec3[] wingAttachmentPoints = new Vec3[] {
-            Vec3.createVectorHelper(-4.0F, 0F, 0.0F),
-            Vec3.createVectorHelper(4.0F, 0F, 0.0F),
+			Vec3.createVectorHelper(-4.0F, 0F, 0.0F),
+			Vec3.createVectorHelper(4.0F, 0F, 0.0F),
 	};
 
 	private Vec3[] armAttachmentPoints = new Vec3[] {
-            Vec3.createVectorHelper(-6.0F, 0F, 0.0F),
-            Vec3.createVectorHelper(6.0F, 0F, 0.0F),
+			Vec3.createVectorHelper(-6.0F, 0F, 0.0F),
+			Vec3.createVectorHelper(6.0F, 0F, 0.0F),
 	};
-	
+
 	@Override
 	public Vec3 getHeadAttachmentPoint() {
 		return headAttachmentPoint;

@@ -83,7 +83,6 @@ public class MutantRendererEnderman implements IMutantRenderer {
 		rightLeg.rotateAngleX = rightLeg.rotateAngleX * 0.5f;
 		leftLeg.rotateAngleX = leftLeg.rotateAngleX * 0.5f;
 		float var9 = 0.4F;
-		float var8 = -14.0F;
 		if (rightLeg.rotateAngleX > var9) {
 			rightLeg.rotateAngleX = var9;
 		}
@@ -116,12 +115,11 @@ public class MutantRendererEnderman implements IMutantRenderer {
 	@Override
 	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {
 		bindTexture();
-		
+
 		Vec3[] armAttachmentPoints = mutant.getBody().getArmAttachmentPoints();
-		
+
 		MutantUtils.bindToAttachmentPoint(mutant, leftArm, armAttachmentPoints[0]);
 		MutantUtils.bindToAttachmentPoint(mutant, rightArm, armAttachmentPoints[1]);
-
 
 		rightArm.rotateAngleX = MathHelper.cos(legSwing * 0.6662F + (float)Math.PI) * 2.0F * prevLegSwing * 0.5F;
 		leftArm.rotateAngleX = MathHelper.cos(legSwing * 0.6662F) * 2.0F * prevLegSwing * 0.5F;

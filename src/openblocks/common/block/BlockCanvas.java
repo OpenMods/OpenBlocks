@@ -57,7 +57,7 @@ public class BlockCanvas extends OpenBlock {
 			} else {
 				return super.getBlockDropped(world, x, y, z, metadata, fortune);
 			}
-			
+
 		}
 
 		return ret;

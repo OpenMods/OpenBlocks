@@ -21,14 +21,13 @@ public class MutantRendererZombie implements IMutantRenderer {
 	private ModelRenderer bipedLeftArm;
 	private ModelRenderer bipedRightLeg;
 	private ModelRenderer bipedLeftLeg;
-	private ModelRenderer bipedEars;
 
 	@Override
 	public void initialize(ModelBase base) {
 
 		base.textureWidth = 64;
 		base.textureHeight = 64;
-		
+
 		bipedHead = new ModelRenderer(base, 0, 0);
 		bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8);
 
@@ -96,9 +95,9 @@ public class MutantRendererZombie implements IMutantRenderer {
 	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {
 
 		bindTexture();
-		
+
 		Vec3[] armAttachmentPoints = mutant.getBody().getArmAttachmentPoints();
-		
+
 		MutantUtils.bindToAttachmentPoint(mutant, bipedLeftArm, armAttachmentPoints[0]);
 		MutantUtils.bindToAttachmentPoint(mutant, bipedRightArm, armAttachmentPoints[1]);
 
@@ -123,7 +122,7 @@ public class MutantRendererZombie implements IMutantRenderer {
 	}
 
 	@Override
-	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) { }
+	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}
 
 	private void bindTexture() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);

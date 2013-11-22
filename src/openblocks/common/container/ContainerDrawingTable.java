@@ -19,5 +19,4 @@ public class ContainerDrawingTable extends ContainerInventory<TileEntityDrawingT
 		addPlayerInventorySlots(90);
 	}
 
-	
 }

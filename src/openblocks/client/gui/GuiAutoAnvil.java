@@ -10,14 +10,14 @@ import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.*;
 import openmods.gui.component.BaseComponent.TabColor;
+import openmods.gui.component.*;
 import openmods.sync.SyncableFlags;
 
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/components.png");
-	
+
 	// tank
 	private GuiComponentTankLevel xpLevel;
 

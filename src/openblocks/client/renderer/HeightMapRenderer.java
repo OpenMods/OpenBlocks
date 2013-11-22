@@ -69,8 +69,8 @@ public class HeightMapRenderer {
 						int index = 64 * y + x;
 						byte color = layer.colorMap[index];
 
-						if (color == 0) continue; 
-						//stupid singed bytes
+						if (color == 0) continue;
+						// stupid singed bytes
 						int height = layer.heightMap[index] & 0xFF;
 
 						int fullColor = MapColor.mapColorArray[color].colorValue;

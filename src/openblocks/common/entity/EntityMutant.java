@@ -25,7 +25,7 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 	public EntityMutant(World world) {
 		super(world);
 		setSize(0.6F, 1.8F);
-		this.getNavigator().setAvoidsWater(true);
+		getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIPanic(this, 1.25D));
 		this.tasks.addTask(2, new EntityAIWander(this, 1.0D));
@@ -41,8 +41,8 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(10.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.25D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.25D);
 	}
 
 	@Override

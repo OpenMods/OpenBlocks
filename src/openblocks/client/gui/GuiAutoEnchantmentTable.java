@@ -9,8 +9,8 @@ import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.*;
 import openmods.gui.component.BaseComponent.TabColor;
+import openmods.gui.component.*;
 import openmods.sync.SyncableFlags;
 
 public class GuiAutoEnchantmentTable extends

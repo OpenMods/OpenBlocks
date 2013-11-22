@@ -165,7 +165,7 @@ public class Config {
 
 	@BlockId(description = "The id of the map projector block")
 	public static int blockProjectorId = 2573;
-	
+
 	@BlockId(description = "The id of the drawing table")
 	public static int blockDrawingTable = 2574;
 
@@ -553,11 +553,10 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 		}
-		
+
 		if (Config.canRegisterBlock(blockGoldenEggId)) {
 			OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
 		}
-		
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
@@ -651,7 +650,7 @@ public class Config {
 			if (OpenBlocks.Blocks.sponge != null) {
 				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 			} else {
-				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', Item.slimeBall, 'w', "stickWood"));	
+				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', Item.slimeBall, 'w', "stickWood"));
 			}
 		}
 
@@ -677,7 +676,7 @@ public class Config {
 			OpenBlocks.Items.cartographer = new ItemCartographer();
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, ItemGeneric.Metas.assistantBase.newItemStack(), Item.eyeOfEnder));
 		}
-		
+
 		if (Config.canRegisterBlock(blockDrawingTable)) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', ItemGeneric.Metas.unpreparedStencil.newItemStack(), 'k', ItemGeneric.Metas.sketchingPencil.newItemStack()));

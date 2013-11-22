@@ -13,15 +13,14 @@ import com.google.common.collect.Maps;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-
 @SideOnly(Side.CLIENT)
 public class ModelMutant extends ModelBase {
 
 	public HashMap<IMutantDefinition, IMutantRenderer> rendererCache = Maps.newHashMap();
-	
+
 	public ModelMutant() {
 
-    }
+	}
 
 	private IMutantRenderer getRenderer(IMutantDefinition definition) {
 		IMutantRenderer renderer = rendererCache.get(definition);
@@ -32,48 +31,48 @@ public class ModelMutant extends ModelBase {
 		}
 		return renderer;
 	}
-	
-    @Override
+
+	@Override
 	public void render(Entity entity, float legSwing, float prevLegSwing,
-                    float wingSwing, float yaw, float pitch, float scale) {
+			float wingSwing, float yaw, float pitch, float scale) {
 
-            EntityMutant mutant = (EntityMutant) entity;
-            
-            IMutantDefinition head = mutant.getHead();
-            IMutantDefinition body = mutant.getBody();
-            IMutantDefinition arms = mutant.getArms();
-            IMutantDefinition legs = mutant.getLegs();
-            IMutantDefinition wings = mutant.getWings();
-            IMutantDefinition tail = mutant.getTail();
-            
-            if (head != null) {
-            	getRenderer(head).renderHead(mutant, scale, yaw, pitch);
-            }
+		EntityMutant mutant = (EntityMutant)entity;
 
-            if (body != null) {
-            	getRenderer(body).renderBody(mutant, scale);
-            }
-            
-            if (arms != null) {
-            	getRenderer(arms).renderArms(mutant, scale, legSwing, prevLegSwing);
-            }
-            
-            if (legs != null) {
-            	getRenderer(legs).renderLegs(mutant, scale, legSwing, prevLegSwing);
-            }
-            
-            if (wings != null) {
-            	getRenderer(wings).renderWings(mutant, scale, wingSwing);
-            }
-            
-            if (tail != null) {
-            	getRenderer(tail).renderTail(mutant, scale, legSwing, prevLegSwing);
-            }
+		IMutantDefinition head = mutant.getHead();
+		IMutantDefinition body = mutant.getBody();
+		IMutantDefinition arms = mutant.getArms();
+		IMutantDefinition legs = mutant.getLegs();
+		IMutantDefinition wings = mutant.getWings();
+		IMutantDefinition tail = mutant.getTail();
 
-    }
+		if (head != null) {
+			getRenderer(head).renderHead(mutant, scale, yaw, pitch);
+		}
 
-    public void _setTextureOffset(String par1Str, int par2, int par3) {
-    	setTextureOffset(par1Str, par2, par3);
-    }
-    
+		if (body != null) {
+			getRenderer(body).renderBody(mutant, scale);
+		}
+
+		if (arms != null) {
+			getRenderer(arms).renderArms(mutant, scale, legSwing, prevLegSwing);
+		}
+
+		if (legs != null) {
+			getRenderer(legs).renderLegs(mutant, scale, legSwing, prevLegSwing);
+		}
+
+		if (wings != null) {
+			getRenderer(wings).renderWings(mutant, scale, wingSwing);
+		}
+
+		if (tail != null) {
+			getRenderer(tail).renderTail(mutant, scale, legSwing, prevLegSwing);
+		}
+
+	}
+
+	public void _setTextureOffset(String par1Str, int par2, int par3) {
+		setTextureOffset(par1Str, par2, par3);
+	}
+
 }

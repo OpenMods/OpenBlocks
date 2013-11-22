@@ -221,7 +221,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 
 		return MapDataManager.getMapData(worldObj, mapId);
 	}
-	
+
 	public void markMapDirty() {
 		int mapId = this.mapId.getValue();
 		if (worldObj != null || mapId < 0) MapDataManager.instance.markDataUpdated(worldObj, mapId);

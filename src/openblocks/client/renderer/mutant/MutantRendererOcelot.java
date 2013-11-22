@@ -14,10 +14,10 @@ import openblocks.utils.MutantUtils;
 public class MutantRendererOcelot implements IMutantRenderer {
 
 	private static final ResourceLocation blackOcelotTextures = new ResourceLocation("textures/entity/cat/black.png");
-    private static final ResourceLocation ocelotTextures = new ResourceLocation("textures/entity/cat/ocelot.png");
-    private static final ResourceLocation redOcelotTextures = new ResourceLocation("textures/entity/cat/red.png");
-    private static final ResourceLocation siameseOcelotTextures = new ResourceLocation("textures/entity/cat/siamese.png");
-	
+	private static final ResourceLocation ocelotTextures = new ResourceLocation("textures/entity/cat/ocelot.png");
+	private static final ResourceLocation redOcelotTextures = new ResourceLocation("textures/entity/cat/red.png");
+	private static final ResourceLocation siameseOcelotTextures = new ResourceLocation("textures/entity/cat/siamese.png");
+
 	private ModelRenderer tail1;
 	private ModelRenderer tail2;
 	private ModelRenderer head;
@@ -67,54 +67,54 @@ public class MutantRendererOcelot implements IMutantRenderer {
 	public void renderHead(IMutant mutant, float scale, float yaw, float pitch) {
 		bindTexture(ocelotTextures);
 		MutantUtils.bindToAttachmentPoint(mutant, head, mutant.getBody().getHeadAttachmentPoint());
-		head.rotateAngleX = pitch / (180F / (float) Math.PI);
-        head.rotateAngleY = yaw / (180F / (float) Math.PI);
-        head.render(scale);
+		head.rotateAngleX = pitch / (180F / (float)Math.PI);
+		head.rotateAngleY = yaw / (180F / (float)Math.PI);
+		head.render(scale);
 	}
 
 	@Override
 	public void renderLegs(IMutant mutant, float scale, float legSwing, float prevLegSwing) {
 		bindTexture(ocelotTextures);
 		Vec3[] attachmentPoints = mutant.getBody().getLegAttachmentPoints(mutant.getNumberOfLegs());
-		
+
 		MutantUtils.bindToAttachmentPoint(mutant, leg1, attachmentPoints[0]);
 		MutantUtils.bindToAttachmentPoint(mutant, leg2, attachmentPoints[1]);
 		MutantUtils.bindToAttachmentPoint(mutant, leg3, attachmentPoints[2]);
 		MutantUtils.bindToAttachmentPoint(mutant, leg4, attachmentPoints[3]);
-		
-		leg1.rotateAngleX = MathHelper.cos(legSwing * 0.6662F) * 1.4F * prevLegSwing;
-        leg2.rotateAngleX = MathHelper.cos(legSwing * 0.6662F + (float) Math.PI) * 1.4F * prevLegSwing;
-        leg3.rotateAngleX = MathHelper.cos(legSwing * 0.6662F + (float) Math.PI) * 1.4F * prevLegSwing;
-        leg4.rotateAngleX = MathHelper.cos(legSwing * 0.6662F) * 1.4F * prevLegSwing;
 
-        leg1.render(scale);
-        leg2.render(scale);
-        leg3.render(scale);
-        leg4.render(scale);
+		leg1.rotateAngleX = MathHelper.cos(legSwing * 0.6662F) * 1.4F * prevLegSwing;
+		leg2.rotateAngleX = MathHelper.cos(legSwing * 0.6662F + (float)Math.PI) * 1.4F * prevLegSwing;
+		leg3.rotateAngleX = MathHelper.cos(legSwing * 0.6662F + (float)Math.PI) * 1.4F * prevLegSwing;
+		leg4.rotateAngleX = MathHelper.cos(legSwing * 0.6662F) * 1.4F * prevLegSwing;
+
+		leg1.render(scale);
+		leg2.render(scale);
+		leg3.render(scale);
+		leg4.render(scale);
 	}
 
 	@Override
 	public void renderBody(IMutant mutant, float scale) {
 		bindTexture(ocelotTextures);
-		body.setRotationPoint(0, (float) 24 - mutant.getLegHeight() - mutant.getBodyHeight(), 1.0F);
-        body.rotateAngleX = ((float) Math.PI / 2F);
-        body.render(scale);
+		body.setRotationPoint(0, (float)24 - mutant.getLegHeight() - mutant.getBodyHeight(), 1.0F);
+		body.rotateAngleX = ((float)Math.PI / 2F);
+		body.render(scale);
 	}
 
 	@Override
-	public void renderWings(IMutant mutant, float scale, float wingSwing) { }
+	public void renderWings(IMutant mutant, float scale, float wingSwing) {}
 
 	@Override
-	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) { }
+	public void renderArms(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}
 
 	@Override
 	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) {
 		bindTexture(ocelotTextures);
 		Vec3 attachmentPoint = mutant.getBody().getTailAttachmentPoint();
 		tail2.setRotationPoint(
-                 (float) attachmentPoint.xCoord,
-                 (float) (24 - mutant.getLegHeight() - mutant.getBodyHeight() - attachmentPoint.yCoord) + 5,
-                 (float) attachmentPoint.zCoord + 6
+				(float)attachmentPoint.xCoord,
+				(float)(24 - mutant.getLegHeight() - mutant.getBodyHeight() - attachmentPoint.yCoord) + 5,
+				(float)attachmentPoint.zCoord + 6
 				);
 		MutantUtils.bindToAttachmentPoint(mutant, tail1, attachmentPoint);
 
@@ -122,7 +122,7 @@ public class MutantRendererOcelot implements IMutantRenderer {
 		tail1.render(scale);
 		tail2.render(scale);
 	}
-	
+
 	private void bindTexture(ResourceLocation res) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(res);
 	}

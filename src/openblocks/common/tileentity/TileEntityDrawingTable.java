@@ -18,17 +18,16 @@ import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 
 public class TileEntityDrawingTable extends OpenTileEntity implements
-IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
+		IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
 
-	
 	public TileEntityDrawingTable() {
 		setInventory(new GenericInventory("drawingtable", true, 1));
 		inventory.addCallback(this);
 	}
-	
+
 	@Override
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {
-		
+
 	}
 
 	public void onRequestStencilCreate(Stencil stencil) {
@@ -39,7 +38,7 @@ IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
 	public void onEvent(TileEntityMessageEventPacket event) {
 		if (event instanceof StencilCraftEvent) {
 			ItemStack stack = inventory.getStackInSlot(0);
-			if(stack != null && ItemGeneric.isA(stack, ItemGeneric.Metas.unpreparedStencil)) {
+			if (stack != null && ItemGeneric.isA(stack, ItemGeneric.Metas.unpreparedStencil)) {
 				ItemStack stencil = new ItemStack(Items.stencil, 1, ((StencilCraftEvent)event).getStencil().ordinal());
 				stencil.stackSize = stack.stackSize;
 				inventory.setInventorySlotContents(0, stencil);

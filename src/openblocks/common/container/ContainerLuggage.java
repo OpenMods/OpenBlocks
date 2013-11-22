@@ -16,7 +16,6 @@ public class ContainerLuggage extends ContainerInventory<IInventory> {
 		addPlayerInventorySlots(luggage.isSpecial()? 139 : 85);
 	}
 
-
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return owner.isUseableByPlayer(entityplayer) && !luggage.isDead;

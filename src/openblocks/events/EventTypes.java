@@ -77,7 +77,7 @@ public enum EventTypes implements IEventPacketType {
 	public int getId() {
 		return EventIdRanges.OPEN_BLOCKS_ID_START + ordinal();
 	}
-	
+
 	public static void registerTypes() {
 		for (IEventPacketType type : values())
 			EventPacket.registerType(type);

@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockDrawingTable extends OpenBlock {
 
 	Icon topIcon, frontIcon;
-	
+
 	public BlockDrawingTable() {
 		super(Config.blockDrawingTable, Material.wood);
 		setupBlock(this, "drawingtable", TileEntityDrawingTable.class);
