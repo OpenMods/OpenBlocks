@@ -1,6 +1,5 @@
 package openblocks.mutant;
 
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.Vec3;
 import openblocks.api.IMutantDefinition;
 import openblocks.api.IMutantRenderer;

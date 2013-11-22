@@ -1,8 +1,8 @@
 package openblocks.utils;
 
-import openblocks.api.IMutant;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.Vec3;
+import openblocks.api.IMutant;
 
 public class MutantUtils {
 	public static void bindToAttachmentPoint(IMutant mutant, ModelRenderer renderer, Vec3 attachmentPoint) {

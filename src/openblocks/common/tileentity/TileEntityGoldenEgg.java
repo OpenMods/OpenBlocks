@@ -6,11 +6,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityMutant;
 import openmods.common.entity.EntityBlock;
@@ -21,7 +19,7 @@ import openmods.sync.SyncableInt;
 public class TileEntityGoldenEgg extends SyncedTileEntity {
 
 	private static final String TALLY_NBT_KEY = "tally";
-	private static final String STAGE_NBT_KEY = "stage";
+	// private static final String STAGE_NBT_KEY = "stage";
 	private static final int STAGE_CHANGE_TICK = 500;
 	private static final double STAGE_CHANGE_CHANCE = 0.1;
 
@@ -41,13 +39,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 				incrementStage();
 			}
 			if (stage.getValue() >= 1) {
-				
+
 			}
 			if (stage.getValue() >= 2) {
-				
+
 			}
 			if (stage.getValue() >= 3) {
-				
+
 			}
 			if (stage.getValue() >= 4) {
 				// TODO: check whitelist
@@ -66,7 +64,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 					}
 				}
 				if (OpenBlocks.proxy.getTicks(worldObj) % 50 == 0) {
-					worldObj.addWeatherEffect(new EntityLightningBolt(worldObj, 0.5+xCoord, 0.5+yCoord, 0.5+zCoord));
+					worldObj.addWeatherEffect(new EntityLightningBolt(worldObj, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord));
 				}
 			}
 			if (stage.getValue() >= 5) {
@@ -76,11 +74,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 				EntityMutant mutant = new EntityMutant(worldObj);
 				mutant.setTraitsFromMap(dnas);
 				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
-			    worldObj.spawnEntityInWorld(mutant);
+				worldObj.spawnEntityInWorld(mutant);
 			}
 		}
 	}
-	                
+
 	public int getStage() {
 		return stage.getValue();
 	}
@@ -115,6 +113,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		dnas.clear();

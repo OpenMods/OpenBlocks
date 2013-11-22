@@ -285,7 +285,7 @@ public class OpenBlocks implements IOpenMod {
 
 	@Override
 	public CreativeTabs getCreativeTab() {
-		return this.tabOpenBlocks;
+		return tabOpenBlocks;
 	}
 
 	@Override

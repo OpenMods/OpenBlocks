@@ -1,11 +1,6 @@
 package openblocks.shapes;
 
-import openmods.shapes.IShapeGenerator;
-import openmods.shapes.ShapeCuboidGenerator;
-import openmods.shapes.ShapeCylinderGenerator;
-import openmods.shapes.ShapeDomeGenerator;
-import openmods.shapes.ShapeEquilateral2dGenerator;
-import openmods.shapes.ShapeSphereGenerator;
+import openmods.shapes.*;
 
 public enum GuideShape {
 	Sphere(false, new ShapeSphereGenerator()),

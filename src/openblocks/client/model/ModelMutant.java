@@ -2,17 +2,16 @@ package openblocks.client.model;
 
 import java.util.HashMap;
 
-import com.google.common.collect.Maps;
-
-import openblocks.api.IMutantDefinition;
-import openblocks.api.IMutantRenderer;
-import openblocks.api.MutantRegistry;
-import openblocks.common.entity.EntityMutant;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
-import cpw.mods.fml.relauncher.SideOnly;
+import openblocks.api.IMutantDefinition;
+import openblocks.api.IMutantRenderer;
+import openblocks.common.entity.EntityMutant;
+
+import com.google.common.collect.Maps;
+
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 @SideOnly(Side.CLIENT)
@@ -34,7 +33,8 @@ public class ModelMutant extends ModelBase {
 		return renderer;
 	}
 	
-    public void render(Entity entity, float legSwing, float prevLegSwing,
+    @Override
+	public void render(Entity entity, float legSwing, float prevLegSwing,
                     float wingSwing, float yaw, float pitch, float scale) {
 
             EntityMutant mutant = (EntityMutant) entity;

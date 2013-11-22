@@ -2,7 +2,6 @@ package openblocks.integration;
 
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
-import openblocks.integration.MagnetTurtleUpgrade;
 import dan200.turtle.api.TurtleAPI;
 
 public class ModuleComputerCraft {

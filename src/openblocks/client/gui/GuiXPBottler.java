@@ -8,14 +8,8 @@ import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
 import openmods.client.gui.BaseGuiContainer;
-import openmods.client.gui.component.GuiComponentCheckbox;
-import openmods.client.gui.component.GuiComponentLabel;
-import openmods.client.gui.component.GuiComponentProgress;
-import openmods.client.gui.component.GuiComponentSideSelector;
-import openmods.client.gui.component.GuiComponentTab;
-import openmods.client.gui.component.GuiComponentTabs;
-import openmods.client.gui.component.GuiComponentTankLevel;
 import openmods.client.gui.component.BaseComponent.TabColor;
+import openmods.client.gui.component.*;
 import openmods.sync.SyncableFlags;
 
 public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {

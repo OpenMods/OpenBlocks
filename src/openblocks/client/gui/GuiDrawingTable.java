@@ -5,10 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openmods.client.gui.BaseGuiContainer;
-import openmods.client.gui.component.BaseComponent;
-import openmods.client.gui.component.GuiComponentIconButton;
-import openmods.client.gui.component.GuiComponentSprite;
-import openmods.client.gui.component.GuiComponentTextButton;
+import openmods.client.gui.component.*;
 import openmods.client.gui.component.BaseComponent.IComponentListener;
 import openmods.utils.FakeIcon;
 

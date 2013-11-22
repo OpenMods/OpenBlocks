@@ -21,7 +21,6 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.IMutantDefinition;
 import openblocks.api.MutantRegistry;
-import openblocks.common.entity.EntityMutant;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
@@ -126,7 +125,6 @@ public class ItemGeneric extends Item {
 		syringe {
 			@Override
 			public IMetaItem createMetaItem() {
-				ItemStack result = newItemStack();
 				return new MetaGeneric("syringe") {
 					@Override
 					public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player) {

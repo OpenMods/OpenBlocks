@@ -3,15 +3,7 @@ package openblocks.client.gui;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openmods.client.gui.BaseGuiContainer;
-import openmods.client.gui.component.BaseComponent;
-import openmods.client.gui.component.GuiComponentColorBox;
-import openmods.client.gui.component.GuiComponentColorPicker;
-import openmods.client.gui.component.GuiComponentLabel;
-import openmods.client.gui.component.GuiComponentLevel;
-import openmods.client.gui.component.GuiComponentProgress;
-import openmods.client.gui.component.GuiComponentRect;
-import openmods.client.gui.component.GuiComponentTextButton;
-import openmods.client.gui.component.GuiComponentTextbox;
+import openmods.client.gui.component.*;
 import openmods.client.gui.component.BaseComponent.IComponentListener;
 
 public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>

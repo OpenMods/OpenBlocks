@@ -1,9 +1,9 @@
 package openblocks.common.entity;
 
-import openblocks.api.IMagnetAware;
-import openmods.common.entity.EntityBlock;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import openblocks.api.IMagnetAware;
+import openmods.common.entity.EntityBlock;
 
 public class EntityMountedBlock extends EntityBlock implements IMagnetAware {
 

@@ -1,14 +1,11 @@
 package openblocks.client.renderer.entity;
 
-import openblocks.common.entity.EntityMutant;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import openblocks.common.entity.EntityMutant;
 
 public class EntityMutantRenderer extends RenderLiving {
 

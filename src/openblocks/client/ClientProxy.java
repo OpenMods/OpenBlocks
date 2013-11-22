@@ -1,25 +1,14 @@
 package openblocks.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.server.ServerListenThread;
-import net.minecraft.server.ThreadMinecraftServer;
-import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelMutant;
 import openblocks.client.renderer.*;
@@ -31,17 +20,12 @@ import openblocks.common.tileentity.*;
 import openmods.client.OpenClientProxy;
 import openmods.client.renderer.entity.EntityBlockRenderer;
 import openmods.common.entity.EntityBlock;
-import openmods.interfaces.IProxy;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class ClientProxy extends OpenClientProxy implements IProxy {
+public class ClientProxy extends OpenClientProxy {
 
 	public ClientProxy() {}
 

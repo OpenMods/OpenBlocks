@@ -1,15 +1,13 @@
 package openblocks.client.renderer.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import openblocks.OpenBlocks;
-import openblocks.client.model.ModelEgg;
-import openblocks.common.tileentity.TileEntityAutoAnvil;
-import openblocks.common.tileentity.TileEntityGoldenEgg;
-import openmods.utils.BlockUtils;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
+import openblocks.client.model.ModelEgg;
+import openblocks.common.tileentity.TileEntityGoldenEgg;
+
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 	

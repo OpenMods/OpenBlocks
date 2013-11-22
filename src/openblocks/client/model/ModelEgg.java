@@ -1,7 +1,5 @@
 package openblocks.client.model;
 
-import openblocks.common.tileentity.TileEntityGoldenEgg;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -68,10 +66,7 @@ public class ModelEgg extends ModelBase {
 		egg6.render(f5);
 	}
 
-	public void setRotationAngles(TileEntity te, float f) {
-		TileEntityGoldenEgg egg = (TileEntityGoldenEgg) te;
-		
-	}
+	public void setRotationAngles(TileEntity te, float f) {}
 	
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

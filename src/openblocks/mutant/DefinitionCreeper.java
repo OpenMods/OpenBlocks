@@ -1,7 +1,6 @@
 package openblocks.mutant;
 
 import net.minecraft.util.Vec3;
-import openblocks.api.IMutant;
 import openblocks.api.IMutantDefinition;
 import openblocks.api.IMutantRenderer;
 import openblocks.client.renderer.mutant.MutantRendererCreeper;
