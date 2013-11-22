@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.common.GenericInventory;
+import openmods.common.GenericInventory;
 import openmods.common.api.IAwareTile;
 import openmods.common.api.IInventoryContainer;
 import openmods.common.api.ISurfaceAttachment;

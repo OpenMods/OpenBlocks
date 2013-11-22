@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import openblocks.api.IMutant;
 import openblocks.api.IMutantRenderer;
-import openmods.utils.MutantUtils;
+import openblocks.utils.MutantUtils;
 
 public class MutantRendererCreeper implements IMutantRenderer {
 

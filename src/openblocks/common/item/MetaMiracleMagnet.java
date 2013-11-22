@@ -5,8 +5,8 @@ import java.util.List;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import openblocks.Config;
-import openblocks.integration.CCUtils;
 import openblocks.integration.ModuleComputerCraft;
+import openmods.integration.CCUtils;
 
 public class MetaMiracleMagnet extends MetaGeneric {
 

@@ -70,7 +70,7 @@ public class ItemGeneric extends Item {
 
 			@Override
 			public boolean isEnabled() {
-				return Loader.isModLoaded(openblocks.Mods.COMPUTERCRAFT);
+				return Loader.isModLoaded(openmods.Mods.COMPUTERCRAFT);
 			}
 		},
 		line {

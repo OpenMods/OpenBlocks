@@ -2,7 +2,7 @@ package openblocks.common;
 
 import java.util.HashMap;
 
-import openblocks.Mods;
+import openmods.Mods;
 
 public class DonationUrlManager {
 

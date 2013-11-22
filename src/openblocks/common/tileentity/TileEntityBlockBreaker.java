@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
-import openblocks.common.GenericInventory;
+import openmods.common.GenericInventory;
 import openmods.common.api.INeighbourAwareTile;
 import openmods.common.tileentity.SyncedTileEntity;
 import openmods.sync.ISyncableObject;

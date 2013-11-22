@@ -34,6 +34,8 @@ import openblocks.mutant.DefinitionPig;
 import openblocks.mutant.DefinitionSheep;
 import openblocks.mutant.DefinitionSpider;
 import openblocks.mutant.DefinitionZombie;
+import openmods.Mods;
+import openmods.common.entity.EntityBlock;
 import openmods.network.PacketHandler;
 import openmods.sync.SyncableManager;
 

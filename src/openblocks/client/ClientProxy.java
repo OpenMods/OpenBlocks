@@ -30,6 +30,7 @@ import openblocks.common.block.BlockTank;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openmods.client.renderer.entity.EntityBlockRenderer;
+import openmods.common.entity.EntityBlock;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;

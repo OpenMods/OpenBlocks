@@ -15,10 +15,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import openblocks.api.IMagnetAware;
 import openblocks.common.CraneRegistry;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.item.ItemCraneBackpack;
 import openblocks.integration.MagnetControlPeripheral;
+import openmods.common.entity.EntityBlock;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -44,7 +46,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		TURTLE {
 			@Override
 			public IOwner createProvider(World world) {
-				Preconditions.checkState(Loader.isModLoaded(openblocks.Mods.COMPUTERCRAFT), "ComputerCraft not present!");
+				Preconditions.checkState(Loader.isModLoaded(openmods.Mods.COMPUTERCRAFT), "ComputerCraft not present!");
 				return new MagnetControlPeripheral.Owner(world);
 			}
 		};

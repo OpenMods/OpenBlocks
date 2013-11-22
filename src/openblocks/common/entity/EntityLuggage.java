@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
-import openblocks.common.GenericInventory;
 import openblocks.common.entity.ai.EntityAICollectItem;
+import openmods.common.GenericInventory;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 
