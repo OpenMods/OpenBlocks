@@ -5,10 +5,9 @@ import openperipheral.api.IntegrationRegistry;
 public class ModuleOpenPeripheral {
 
 	public static void registerAdapters() {
-		IntegrationRegistry registry = new IntegrationRegistry();
-		registry.registerAdapter(new AdapterVillageHighlighter());
-		registry.registerAdapter(new AdapterDonationStation());
-		registry.registerAdapter(new AdapterCannon());
-		registry.registerAdapter(new AdapterProjector());
+		IntegrationRegistry.registerPeripheralAdapter(new AdapterVillageHighlighter());
+		IntegrationRegistry.registerPeripheralAdapter(new AdapterDonationStation());
+		IntegrationRegistry.registerPeripheralAdapter(new AdapterCannon());
+		IntegrationRegistry.registerPeripheralAdapter(new AdapterProjector());
 	}
 }

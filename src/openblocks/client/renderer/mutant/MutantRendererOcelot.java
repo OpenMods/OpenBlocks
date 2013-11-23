@@ -123,7 +123,7 @@ public class MutantRendererOcelot implements IMutantRenderer {
 		tail2.render(scale);
 	}
 
-	private void bindTexture(ResourceLocation res) {
+	private static void bindTexture(ResourceLocation res) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(res);
 	}
 }

@@ -109,7 +109,7 @@ public class MutantRendererChicken implements IMutantRenderer {
 	@Override
 	public void renderTail(IMutant mutant, float scale, float legSwing, float prevLegSwing) {}
 
-	private void bindTexture() {
+	private static void bindTexture() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
 }
