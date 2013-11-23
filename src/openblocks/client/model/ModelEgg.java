@@ -1,5 +1,7 @@
 package openblocks.client.model;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -55,15 +57,17 @@ public class ModelEgg extends ModelBase {
 		setRotation(egg6, 0F, 0F, 0F);
 	}
 
-	public void render(TileEntity te, float f) {
-		float f5 = 0.0625F;
-		setRotationAngles(te, f);
-		egg1.render(f5);
-		egg2.render(f5);
-		egg3.render(f5);
-		egg4.render(f5);
-		egg5.render(f5);
-		egg6.render(f5);
+	public void render(TileEntity te, float partialTicks, float scale) {
+		GL11.glPushMatrix();
+		GL11.glScalef(scale, scale, scale);
+		setRotationAngles(te, partialTicks);
+		egg1.render(0.0625f);
+		egg2.render(0.0625f);
+		egg3.render(0.0625f);
+		egg4.render(0.0625f);
+		egg5.render(0.0625f);
+		egg6.render(0.0625f);
+		GL11.glPopMatrix();
 	}
 
 	public void setRotationAngles(TileEntity te, float f) {}
