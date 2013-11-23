@@ -49,9 +49,6 @@ public class Config {
 	@BlockId(description = "The id of the heal block")
 	public static int blockHealId = 2543;
 
-	@BlockId(description = "The id of the lightbox block")
-	public static int blockLightboxId = 2544;
-
 	@BlockId(description = "The id of the target block")
 	public static int blockTargetId = 2545;
 
