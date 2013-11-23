@@ -1,11 +1,15 @@
 package openblocks.common.tileentity;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityAuraFX;
+import net.minecraft.client.particle.EntityHugeExplodeFX;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -21,7 +25,8 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 
 	private static final String TALLY_NBT_KEY = "tally";
 	// private static final String STAGE_NBT_KEY = "stage";
-	public static final int STAGE_CHANGE_TICK = 200;
+	private static final int STAGE_CHANGE_TICK = 200;
+	public static final int ANIMATION_TIME = 300;
 	private static final double STAGE_CHANGE_CHANCE = 1.0;
 	public int animationStageTicks = 0;
 	public float rotation;
@@ -34,11 +39,15 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 		stage = new SyncableInt(3);
 	}
 
+	private boolean stageElapsed() {
+		 return animationStageTicks > 0 ? animationStageTicks >= ANIMATION_TIME : OpenMods.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE;
+	}
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			if (OpenMods.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE) {
+			if (stageElapsed()) {
 				incrementStage();
 				System.out.println("Egg entering stage" + stage.getValue());
 			}
@@ -69,16 +78,15 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 				}
 			}
 			if (stage.getValue() >= 5) {
-				worldObj.weatherEffects.clear();
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-				//worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 7, true);
+				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
 				EntityMutant mutant = new EntityMutant(worldObj);
 				mutant.setTraitsFromMap(dnas);
 				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
 				worldObj.spawnEntityInWorld(mutant);
 			}
 		}
-		if(stage.getValue() >= 4) {
+		if(stage.getValue() >= 4 && animationStageTicks < ANIMATION_TIME) {
 			animationStageTicks++;
 		}
 	}
