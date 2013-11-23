@@ -107,11 +107,17 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 					double power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
 					int enchantability = EnchantmentUtils.calcEnchantability(getStack(Slots.input), (int)power, true);
 					if (enchantability >= targetLevel.getValue()) {
-						if (EnchantmentUtils.enchantItem(getStack(Slots.input), targetLevel.getValue(), worldObj.rand)) {
+						ItemStack inputStack = getStack(Slots.input);
+						if (inputStack == null) return;
+						ItemStack resultingStack = inputStack.copy();
+						resultingStack.stackSize = 1;
+						if (EnchantmentUtils.enchantItem(resultingStack, targetLevel.getValue(), worldObj.rand)) {
 							tank.drain(xpRequired, true);
-							ItemStack inputStack = getStack(Slots.input);
-							setStack(Slots.input, null);
-							setStack(Slots.output, inputStack.copy());
+							inputStack.stackSize--;
+							if (inputStack.stackSize < 1) {
+								setStack(Slots.input, null);
+							}
+							setStack(Slots.output, resultingStack);
 						}
 					}
 				}
