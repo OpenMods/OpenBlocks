@@ -1,8 +1,8 @@
 package openblocks.integration;
 
-import static openmods.integration.CCUtils.TRUE;
-import static openmods.integration.CCUtils.toDouble;
-import static openmods.integration.CCUtils.wrap;
+import static openblocks.integration.CCUtils.TRUE;
+import static openblocks.integration.CCUtils.toDouble;
+import static openblocks.integration.CCUtils.wrap;
 
 import java.lang.ref.WeakReference;
 
