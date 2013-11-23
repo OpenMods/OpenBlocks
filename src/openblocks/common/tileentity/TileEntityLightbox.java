@@ -162,16 +162,6 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		return Packet132TileEntity.writeToPacket(this);
-	}
-
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		readFromNBT(pkt.data);
-	}
-
-	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			openGui(OpenBlocks.instance, player);
