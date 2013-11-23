@@ -2,6 +2,8 @@ package openblocks.client.model;
 
 import java.util.HashMap;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import openblocks.api.IMutantDefinition;
@@ -44,11 +46,19 @@ public class ModelMutant extends ModelBase {
 		IMutantDefinition legs = mutant.getLegs();
 		IMutantDefinition wings = mutant.getWings();
 		IMutantDefinition tail = mutant.getTail();
-
+		
+		GL11.glPushMatrix();
+		if (mutant.isChild()) {
+			GL11.glTranslated(0, 0.5, 0);
+		}
 		if (head != null) {
 			getRenderer(head).renderHead(mutant, scale, yaw, pitch);
 		}
 
+		GL11.glPushMatrix();
+		if (mutant.isChild()) {
+			GL11.glScaled(0.6, 0.6, 0.6);
+		}
 		if (body != null) {
 			getRenderer(body).renderBody(mutant, scale);
 		}
@@ -69,6 +79,9 @@ public class ModelMutant extends ModelBase {
 			getRenderer(tail).renderTail(mutant, scale, legSwing, prevLegSwing);
 		}
 
+		GL11.glPopMatrix();
+		GL11.glPopMatrix();
+		
 	}
 
 	public void _setTextureOffset(String par1Str, int par2, int par3) {

@@ -5,8 +5,12 @@ import java.util.HashMap;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,17 +66,17 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 
 	@Override
 	public IMutantDefinition getBody() {
-		return MutantRegistry.getDefinition(EntityOcelot.class);
+		return MutantRegistry.getDefinition(EntityEnderman.class);
 	}
 
 	@Override
 	public IMutantDefinition getHead() {
-		return MutantRegistry.getDefinition(EntityPig.class);
+		return MutantRegistry.getDefinition(EntityCreeper.class);
 	}
 
 	@Override
 	public IMutantDefinition getArms() {
-		return MutantRegistry.getDefinition(EntityOcelot.class);
+		return MutantRegistry.getDefinition(EntityZombie.class);
 	}
 
 	@Override
@@ -82,7 +86,7 @@ public class EntityMutant extends EntityAnimal implements IEntityAdditionalSpawn
 
 	@Override
 	public IMutantDefinition getLegs() {
-		return MutantRegistry.getDefinition(EntityEnderman.class);
+		return MutantRegistry.getDefinition(EntitySpider.class);
 	}
 
 	@Override

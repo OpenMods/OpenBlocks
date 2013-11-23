@@ -9,6 +9,7 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockPaintCan;
+import openmods.utils.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -45,11 +46,11 @@ public class ItemRendererPaintCan implements IItemRenderer {
 			int color = BlockPaintCan.getColorFromNBT(itemstack);
 			OpenBlocks.Blocks.paintCan.renderPass = 0;
 			GL11.glPushMatrix();
-			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF);
 			GL11.glPopMatrix();
 			OpenBlocks.Blocks.paintCan.renderPass = 1;
 			GL11.glPushMatrix();
-			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, color, secondPassEnabledSides);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, color, secondPassEnabledSides);
 			GL11.glPopMatrix();
 		}
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

@@ -10,10 +10,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelPaintMixer;
-import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openmods.utils.BlockUtils;
 import openmods.utils.ColorUtils;
+import openmods.utils.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -52,8 +52,8 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 			int secondPass = mixer.getCanColor();
 			if (mixer.isEnabled()) secondPass = calculateColorFade(0xFFFFFF, secondPass, mixer.getProgress().getPercent());
 			// Render first pass
-			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES);
-			BlockRenderingHandler.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, secondPass, TOP_FACE);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, secondPass, TOP_FACE);
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();

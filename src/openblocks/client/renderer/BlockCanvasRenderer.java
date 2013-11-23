@@ -13,6 +13,7 @@ import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.renderer.FixedRenderBlocks;
 import openmods.renderer.IBlockRenderer;
+import openmods.utils.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -25,7 +26,7 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-		BlockRenderingHandler.renderInventoryBlock(renderer, block, ForgeDirection.EAST);
+		RenderUtils.renderInventoryBlock(renderer, block, ForgeDirection.EAST);
 	}
 
 	@Override
@@ -57,10 +58,10 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 					renderBlocks.uvRotateEast = rot;
 					renderBlocks.uvRotateWest = rot;
 					renderBlocks.renderStandardBlock(block, x, y, z);
-					BlockRenderingHandler.resetFacesOnRenderer(renderBlocks);
+					RenderUtils.resetFacesOnRenderer(renderBlocks);
 				}
 			}
-			BlockRenderingHandler.resetFacesOnRenderer(renderBlocks);
+			RenderUtils.resetFacesOnRenderer(renderBlocks);
 		}
 		return false;
 	}

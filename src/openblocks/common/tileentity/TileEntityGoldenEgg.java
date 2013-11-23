@@ -1,16 +1,10 @@
 package openblocks.common.tileentity;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityAuraFX;
-import net.minecraft.client.particle.EntityHugeExplodeFX;
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,9 +19,9 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 
 	private static final String TALLY_NBT_KEY = "tally";
 	// private static final String STAGE_NBT_KEY = "stage";
-	private static final int STAGE_CHANGE_TICK = 200;
-	public static final int ANIMATION_TIME = 300;
-	private static final double STAGE_CHANGE_CHANCE = 1.0;
+	private static final int STAGE_CHANGE_TICK = 600;
+	public static final int ANIMATION_TIME = 400;
+	private static final double STAGE_CHANGE_CHANCE = 0.8;
 	public int animationStageTicks = 0;
 	public float rotation;
 
@@ -81,6 +75,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
 				EntityMutant mutant = new EntityMutant(worldObj);
+	            mutant.setGrowingAge(-24000);
 				mutant.setTraitsFromMap(dnas);
 				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
 				worldObj.spawnEntityInWorld(mutant);
