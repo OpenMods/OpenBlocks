@@ -9,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
@@ -177,5 +178,26 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag)
+	{
+		NBTTagCompound item = tag.getCompoundTag("Item");
+		if(item != null && !item.hasNoTags())
+			inventory.setInventorySlotContents(0, ItemStack.loadItemStackFromNBT(item));
+		
+		super.readFromNBT(tag);
+		syncMap.readFromNBT(tag);
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound tag)
+    {
+		if(inventory.getStackInSlot(0) != null)
+			tag.setCompoundTag("Item", inventory.getStackInSlot(0).writeToNBT(new NBTTagCompound()));
+		
+		super.writeToNBT(tag);
+		syncMap.writeToNBT(tag);
+    }
 
 }
