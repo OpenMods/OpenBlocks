@@ -207,7 +207,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 			if (held.getItem() instanceof ItemBlock) {
 				ItemBlock itemblock = (ItemBlock)held.getItem();
 				for (ChunkCoordinates coord : getShapeCoordinates()) {
-					worldObj.setBlock(coord.posX, coord.posY, coord.posZ, itemblock.getBlockID());
+					worldObj.setBlock(coord.posX, coord.posY, coord.posZ, itemblock.getBlockID(), held.getItemDamage(), 3);
 				}
 			}
 		}
