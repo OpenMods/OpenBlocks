@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -25,6 +26,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 	public int animationStageTicks = 0;
 	public float rotation;
 
+	private ArrayList<EntityBlock> blocks = new ArrayList<EntityBlock>();
 	private HashMap<String, Integer> dnas = new HashMap<String, Integer>();
 	private SyncableInt stage;
 
@@ -61,14 +63,26 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 				int posX = xCoord + worldObj.rand.nextInt(20) - 10;
 				int posY = yCoord + worldObj.rand.nextInt(2) - 1;
 				int posZ = zCoord + worldObj.rand.nextInt(20) - 10;
-				if (posX != xCoord && posY != yCoord && posZ != zCoord) {
+				if (blocks != null && posX != xCoord && posY != yCoord && posZ != zCoord && worldObj.rand.nextInt(10) == 0) {
 					EntityBlock block = EntityBlock.create(worldObj, posX, posY, posZ);
 					if (block != null) {
-						block.setHasGravity(true);
-						block.motionY = 0.9;
+						block.setHasAirResistance(false);
+						block.setHasGravity(false);
+						block.setShouldDrop(false);
+						block.motionY = 0.1;
 						//block.setPositionAndRotation(posX, posY, posZ, 0, 0);
+						blocks.add(block);
 						worldObj.spawnEntityInWorld(block);
 					}
+				}
+				if(ANIMATION_TIME - animationStageTicks < 20 && blocks != null) {
+					for(EntityBlock block : blocks) {
+						block.setShouldDrop(true);
+						block.motionY = -0.9;
+						block.setHasGravity(true);
+					}
+					blocks.clear();
+					blocks = null;
 				}
 			}
 			if (stage.getValue() >= 5) {
