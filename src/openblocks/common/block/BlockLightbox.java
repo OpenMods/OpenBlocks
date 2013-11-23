@@ -33,7 +33,10 @@ public class BlockLightbox extends OpenBlock {
 
 	@Override
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		if (world instanceof World) { return ((World)world).isBlockIndirectlyGettingPowered(x, y, z)? 15 : 0; }
+		TileEntityLightbox lightbox = getTileEntity(world, x, y, z, TileEntityLightbox.class);
+		if (lightbox != null) {
+			return lightbox.isPowered() ? 15 : 0;
+		}
 		return 0;
 	}
 

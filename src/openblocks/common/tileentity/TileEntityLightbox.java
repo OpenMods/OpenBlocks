@@ -21,24 +21,32 @@ import openblocks.common.container.ContainerLightbox;
 import openmods.GenericInventory;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
+import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
-		ISurfaceAttachment, IActivateAwareTile, IHasGui {
+		ISurfaceAttachment, IActivateAwareTile, IHasGui, INeighbourAwareTile {
 
 	private GenericInventory inventory = new GenericInventory("lightbox", false, 1);
+
+	private SyncableBoolean powered;
 
 	/**
 	 * just a tick counter used for sending updates
 	 */
 	private int tickCounter = 0;
 
-	public TileEntityLightbox() {}
+	public TileEntityLightbox() {
+		setInventory(inventory);
+	}
 
 	@Override
-	protected void createSyncedFields() {}
+	protected void createSyncedFields() {
+		powered = new SyncableBoolean();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -178,6 +186,20 @@ public class TileEntityLightbox extends SyncedTileEntity implements IInventory,
 	}
 
 	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
+	public void onSynced(Set<ISyncableObject> changes) {
+		//TODO: fix lighting
+		//anyone know the easiest way to do this?
+		//it looks as though setting a new block id should do it, but.. we don't wanna 
+	}
+
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		powered.setValue(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
+		sync();
+	}
+
+	public boolean isPowered() {
+		return powered.getValue();
+	}
 
 }
