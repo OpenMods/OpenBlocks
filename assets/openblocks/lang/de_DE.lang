@@ -1,4 +1,3 @@
-openblocks.gui.lightbox=Lichtbox
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
 openblocks.gui.vacuumhopper=Vakuumtrichter
@@ -34,7 +33,6 @@ tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.heal.name=Heiler
 tile.openblocks.guide.name=Bau-Hilfe
 tile.openblocks.ladder.name=Jaded-Leiter
-tile.openblocks.lightbox.name=Lichtbox
 tile.openblocks.tank.name=Tank
 tile.openblocks.target.name=Zielscheibe
 tile.openblocks.grave.name=Grab

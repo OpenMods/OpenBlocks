@@ -1,4 +1,3 @@
-openblocks.gui.lightbox=Lightbox
 openblocks.gui.luggage=Luggage
 openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
@@ -34,7 +33,6 @@ tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
 tile.openblocks.guide.name=Building Guide
 tile.openblocks.ladder.name=Jaded Ladder
-tile.openblocks.lightbox.name=Lightbox
 tile.openblocks.tank.name=Tank
 tile.openblocks.target.name=Target
 tile.openblocks.grave.name=Grave

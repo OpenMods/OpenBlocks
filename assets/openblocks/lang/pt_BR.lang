@@ -1,4 +1,3 @@
-openblocks.gui.lightbox=Caixa de luz
 openblocks.gui.luggage=Bagagem
 openblocks.gui.sprinkler=Borrifador
 openblocks.gui.vacuumhopper=Funil a vácuo
@@ -29,7 +28,6 @@ tile.openblocks.elevator.name=Elevador
 tile.openblocks.heal.name=Curador
 tile.openblocks.guide.name=Guia de construção
 tile.openblocks.ladder.name=Escada cansada
-tile.openblocks.lightbox.name=Caixa de luz
 tile.openblocks.tank.name=Tanque
 tile.openblocks.target.name=Alvo
 tile.openblocks.grave.name=Túmulo
