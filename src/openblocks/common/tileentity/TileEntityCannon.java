@@ -18,8 +18,8 @@ import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.GeometryUtils;
 import openmods.utils.InventoryUtils;
+import openmods.utils.render.GeometryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

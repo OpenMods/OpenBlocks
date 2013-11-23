@@ -12,7 +12,7 @@ import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openmods.tileentity.renderer.OpenRenderHelper;
 import openmods.utils.BlockUtils;
-import openmods.utils.RenderUtils;
+import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

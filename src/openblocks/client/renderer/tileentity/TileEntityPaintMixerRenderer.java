@@ -13,7 +13,7 @@ import openblocks.client.model.ModelPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openmods.utils.BlockUtils;
 import openmods.utils.ColorUtils;
-import openmods.utils.RenderUtils;
+import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 

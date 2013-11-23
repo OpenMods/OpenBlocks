@@ -12,9 +12,9 @@ import openmods.gui.component.BaseComponent;
 import openmods.gui.component.BaseComponent.IComponentListener;
 import openmods.gui.component.DummyComponent;
 import openmods.gui.component.GuiComponentIconButton;
-import openmods.utils.FakeIcon;
 import openmods.utils.MathUtils;
 import openmods.utils.Trackball.TrackballWrapper;
+import openmods.utils.render.FakeIcon;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
