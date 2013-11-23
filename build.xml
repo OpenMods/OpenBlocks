@@ -1,156 +1,42 @@
-<!-- nallar's BuildCraft ant build script edited for OpenBlocks-->
-<project name="OpenBlocks" default="main">
-	<property environment="env"/>
-	<!-- Properties -->
+<project name="OpenBlocks" default="build">
+	<property environment="env" />
 
-	<property name="env.BUILD_NUMBER"    value="0"/>
-	<property name="env.JOB_NAME"        value="OpenBlocks"/>
-	
-	<property name="build.dir"           value="build"/>
-	<property name="src.dir"             value="src"/>
+	<import file="openmodslib/common.xml" />
 
-	<property name="download.dir"        value="download"/>
-
-	<property name="classes.dir"         value="${build.dir}/classes"/>
-	<property name="jar.dir"             value="${build.dir}/dist"/>
-
-	<property name="forge.dir"           value="${build.dir}/forge"/>
-	<property name="mcp.dir"             value="${forge.dir}/mcp"/>
-    
-	<condition property="python.exe" value="${mcp.dir}/runtime/bin/python/python_mcp" else="python">
-		<os family="Windows" />
-	</condition>
-
-	<property name="mcpsrc.dir"          value="${mcp.dir}/src/minecraft"/>
-
-	<property name="mc.version"          value="1.6.4"/>
-	<property name="forge.version"       value="9.11.0.883"/>
-	<property name="mod.version"         value="1.2.2"/>
-	<property name="mod.name"	     value="OpenBlocks"/>
-	
-	<property name="forge.name"          value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
-
-	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
-
-	<condition property="out-of-date">
-		<not>
-			<and>
-				<available file="${download.dir}/${forge.name}"/>
-				<available file="${mcpsrc.dir}"/>
-			</and>
-		</not>
-	</condition>
-
-	<mkdir dir="${download.dir}"/>
-
-	<!-- Targets -->
-
-	<!-- Clear build directory -->
-	<target name="clean">
-		<delete dir="${build.dir}"/>
+	<target name="set-env">
+		<property name="env.BUILD_NUMBER" value="0" />
+		<property name="env.JOB_NAME" value="OpenBlocks" />
+		<property name="mod.version" value="1.2.2" />
+		<property name="mod.name" value="OpenBlocks" />
+		<property name="mod.dir" value="openblocks" />
+		<echo message="Starting build for ${mod.name} v${mod.version}" />
 	</target>
 
-	<!-- Set full version -->
-	<target name="initialize-version">
-		<echo message="Starting build for ${mod.name} v${mod.version}"/>
+	<target name="copy-source" depends="set-env">
+		<copy todir="${mcpsrc.dir}">
+			<fileset dir="openmodslib/src" />
+			<fileset dir="openmodslib/integration" />
+			<fileset dir="src/" />
+			<filterset>
+				<filter token="VERSION" value="${mod.version}" />
+			</filterset>
+		</copy>
 	</target>
 
-	<!-- Download necessary files -->
-	<target name="download-files" depends="download-forge"/>
-	
-	<!-- Download forge (if it doesn't exist) -->
-	<target name="download-forge" unless="forge-exists" >
-		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+	<target name="copy-assets">
+		<copy todir="${classes.dir}/">
+			<fileset dir=".">
+				<include name="assets/**/*" />
+			</fileset>
+		</copy>
 	</target>
 
-	<!-- Setup mcp and forge -->
-	<target name="setup" depends="download-files" if="out-of-date">
-	
-		<delete dir="${mcp.dir}"/>
-		<delete dir="${forge.dir}"/>
-
-		<!-- Unzip them -->
-		<unzip dest="${build.dir}" src="${download.dir}/${forge.name}"/>
-
-		<!-- Install forge -->
-		<exec dir="${forge.dir}" executable="cmd" osfamily="windows">
-			<arg line="/c install.cmd"/>
-		</exec>
-
-		<exec dir="${forge.dir}" executable="sh" osfamily="unix">
-			<arg value="install.sh"/>
-		</exec>
-
-	</target>
-	
-	<target name="create_manifest">
+	<target name="create-manifest">
+		<mkdir dir="${classes.dir}/META-INF" />
 		<manifest file="${classes.dir}/META-INF/MANIFEST.MF">
 			<attribute name="Manifest-Version" value="1.0" />
 			<attribute name="FMLCorePlugin" value="openblocks.CorePlugin" />
 			<attribute name="FMLCorePluginContainsFMLMod" value="true" />
-       		</manifest>
+		</manifest>
 	</target>
-	
-	<target name="compile" depends="initialize-version,setup">
-
-		<delete dir="${classes.dir}"/>
-		<mkdir dir="${classes.dir}"/>
-		<mkdir dir="${classes.dir}/META-INF"/>
-		
-		<delete includeEmptyDirs="true" failonerror="false">
-			<fileset dir="${mcpsrc.dir}/openblocks" />
-			<fileset dir="${mcpsrc.dir}/buildcraft" />
-			<fileset dir="${mcpsrc.dir}/dan200" />
-		</delete>
-
-		<copy todir="${mcpsrc.dir}">
-			<fileset dir="${src.dir}"/>
-			<filterset>
-				<filter token="VERSION" value="${mod.version}"/>
-			</filterset>
-		</copy>
-
-		<!-- Recompile -->
-		<exec executable="${python.exe}" dir="${mcp.dir}" failonerror="true">
-			<arg value="runtime/recompile.py" />
-		</exec>
-
-		<!-- Reobfuscate -->
-		<exec executable="${python.exe}" dir="${mcp.dir}" failonerror="true">
-			<arg value="runtime/reobfuscate.py" />
-			<arg value="--srgnames" />
-		</exec>
-
-		<!-- Copy classes -->
-		<copy todir="${classes.dir}/openblocks">
-			<fileset dir="${mcp.dir}/reobf/minecraft/openblocks" />
-		</copy>
-
-		<!-- Copy resources -->
-		<copy todir="${classes.dir}/assets/openblocks">
-			<fileset dir="assets/openblocks" />
-		</copy>
-		
-		<!-- Copy resources -->
-		<copy todir="${classes.dir}">
-			<fileset dir=".">
-				<include name="mcmod.info" />
-				<include name="pack.mcmeta" />
-			</fileset>
-			<filterset>
-				<filter token="VERSION" value="${mod.version}"/>
-			</filterset>
-		</copy>
-
-	</target>
-
-	<!-- Package the compiled files -->
-	<target name="package" depends="compile,create_manifest">
-		<delete dir="${jar.dir}"/>
-		<mkdir dir="${jar.dir}"/>
-		<jar destfile="${jar.dir}/${env.JOB_NAME}-${mod.version}-snapshot-${env.BUILD_NUMBER}.jar" basedir="${classes.dir}" manifest="${classes.dir}/META-INF/MANIFEST.MF"/>
-	</target>
-
-	<!-- Default target to run -->
-	<target name="main" depends="package"/>
 </project>
