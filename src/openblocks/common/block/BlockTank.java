@@ -18,21 +18,10 @@ import openmods.block.OpenBlock;
 
 public class BlockTank extends OpenBlock {
 
-	public static class Icons {
-		public static Icon xpJuiceStill;
-		public static Icon xpJuiceFlowing;
-	}
 
 	public BlockTank() {
 		super(Config.blockTankId, Material.ground);
 		setupBlock(this, "tank", TileEntityTank.class, ItemTankBlock.class);
-	}
-
-	@Override
-	public void registerIcons(IconRegister registry) {
-		super.registerIcons(registry);
-		Icons.xpJuiceFlowing = registry.registerIcon("openblocks:xpjuiceflowing");
-		Icons.xpJuiceStill = registry.registerIcon("openblocks:xpjuicestill");
 	}
 
 	@Override

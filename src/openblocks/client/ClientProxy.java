@@ -4,10 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
@@ -31,6 +34,22 @@ import cpw.mods.fml.relauncher.Side;
 public class ClientProxy implements IOpenBlocksProxy {
 
 	public ClientProxy() {}
+
+	public static class Icons {
+		public static Icon xpJuiceStill;
+		public static Icon xpJuiceFlowing;
+	}
+
+	@ForgeSubscribe
+	public void textureHook(TextureStitchEvent.Pre event) {
+		if (event.map.textureType == 0) {
+			Icons.xpJuiceFlowing = event.map.registerIcon("openblocks:xpjuiceflowing");
+			Icons.xpJuiceStill = event.map.registerIcon("openblocks:xpjuicestill");
+			if (OpenBlocks.Fluids.openBlocksXPJuice != null) {
+				OpenBlocks.Fluids.openBlocksXPJuice.setIcons(Icons.xpJuiceStill, Icons.xpJuiceFlowing);
+			}
+		}
+	}
 
 	@Override
 	public void preInit() {}
