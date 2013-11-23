@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import openblocks.Config.RegisterItem;
 import openblocks.api.MutantRegistry;
 import openblocks.common.*;
 import openblocks.common.block.*;
@@ -32,6 +31,7 @@ import openmods.Log;
 import openmods.Mods;
 import openmods.api.IOpenMod;
 import openmods.entity.EntityBlock;
+import openmods.interfaces.RegisterItem;
 
 import org.apache.commons.lang3.ObjectUtils;
 
