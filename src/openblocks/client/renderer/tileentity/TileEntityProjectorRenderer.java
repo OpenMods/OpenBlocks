@@ -10,6 +10,7 @@ import openblocks.client.renderer.HeightMapRenderer;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.tileentity.TileEntityProjector;
+import openmods.OpenMods;
 
 import org.lwjgl.opengl.GL11;
 
@@ -50,18 +51,12 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer {
 		}
 	}
 
-	private float r1;
-	private float r2;
-	private float r3;
-
 	private void renderProjector(TileEntityProjector projector, float partialTickTime, boolean active) {
 		GL11.glTranslated(0.25, 0.5, 0.25);
 		bindTexture(texture);
 		if (active) {
-			model.render(r1, r2, 0.25f * MathHelper.sin(r3) + 0.25f);
-			r1 += 0.01f;
-			r2 -= 0.1f;
-			r3 += 0.005f;
+			long ticks = OpenMods.proxy.getTicks(projector.worldObj);
+			model.render(ticks * 0.01f, ticks * 0.3f, 0.25f * MathHelper.sin(ticks * 0.005f) + 0.25f);
 		} else {
 			model.render(0, 0, 0);
 		}
