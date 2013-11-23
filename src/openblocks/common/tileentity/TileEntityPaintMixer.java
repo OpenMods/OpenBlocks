@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.util.EnumMap;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,6 +8,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.container.ContainerPaintMixer;
@@ -18,16 +20,14 @@ import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ColorUtils;
 
+import com.google.common.collect.Maps;
+
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
 
 	private static final int FULL_CAN_SIZE = 30;
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Item.bucketMilk);
 	private static final int PROGRESS_TICKS = 300;
-	private static final ItemStack DYE_BLACK = new ItemStack(Item.dyePowder, 1, 0);
-	private static final ItemStack DYE_CYAN = new ItemStack(Item.dyePowder, 1, 6);
-	private static final ItemStack DYE_MAGENTA = new ItemStack(Item.dyePowder, 1, 13);
-	private static final ItemStack DYE_YELLOW = new ItemStack(Item.dyePowder, 1, 11);
 
 	public static enum Slots {
 		input,
@@ -36,6 +36,15 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		dyeMagenta,
 		dyeYellow,
 		dyeBlack
+	}
+
+	private static EnumMap<Slots, Integer> ALLOWED_COLORS = Maps.newEnumMap(Slots.class);
+
+	static {
+		ALLOWED_COLORS.put(Slots.dyeBlack, OreDictionary.getOreID("dyeBlack"));
+		ALLOWED_COLORS.put(Slots.dyeCyan, OreDictionary.getOreID("dyeCyan"));
+		ALLOWED_COLORS.put(Slots.dyeMagenta, OreDictionary.getOreID("dyeMagenta"));
+		ALLOWED_COLORS.put(Slots.dyeYellow, OreDictionary.getOreID("dyeYellow"));
 	}
 
 	public enum Flags {
@@ -178,29 +187,12 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	public boolean tryUseInk(Slots slot, int consume) {
-		switch (slot) {
-			case dyeBlack:
-				if (!hasStack(slot, DYE_BLACK)) return false;
-				break;
-			case dyeMagenta:
-				if (!hasStack(slot, DYE_MAGENTA)) return false;
-				break;
-			case dyeYellow:
-				if (!hasStack(slot, DYE_YELLOW)) return false;
-				break;
-			case dyeCyan:
-				if (!hasStack(slot, DYE_CYAN)) return false;
-				break;
-			default:
-				return false;
-		}
-		return inventory.decrStackSize(slot.ordinal(), consume) != null;
-	}
+		Integer allowedColor = ALLOWED_COLORS.get(slot);
+		if (allowedColor == null) return false;
 
-	public boolean hasStack(Slots slot, ItemStack stack) {
-		ItemStack gotStack = inventory.getStackInSlot(slot);
-		if (gotStack == null) { return false; }
-		return gotStack.isItemEqual(stack);
+		ItemStack stack = inventory.getStackInSlot(slot);
+		if (stack == null || OreDictionary.getOreID(stack) != allowedColor) return false;
+		return inventory.decrStackSize(slot.ordinal(), consume) != null;
 	}
 
 	@Override
@@ -352,6 +344,12 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 			if (tag != null && tag.hasKey("color")) { return tag.getInteger("color"); }
 		}
 		return 0xFFFFFF;
+	}
+
+	private boolean hasStack(Slots slot, ItemStack stack) {
+		ItemStack gotStack = inventory.getStackInSlot(slot);
+		if (gotStack == null) { return false; }
+		return gotStack.isItemEqual(stack);
 	}
 
 	public void calculateCanColor() {
