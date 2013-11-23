@@ -17,6 +17,7 @@
 			<fileset dir="openmodslib/src" />
 			<fileset dir="openmodslib/integration" />
 			<fileset dir="src/" />
+			<fileset dir="integration/" />
 			<filterset>
 				<filter token="VERSION" value="${mod.version}" />
 			</filterset>
