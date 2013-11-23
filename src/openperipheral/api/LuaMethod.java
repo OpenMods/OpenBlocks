@@ -9,8 +9,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LuaMethod {
 	boolean onTick() default true;
+
 	String name() default "[none set]";
+
 	String description() default "";
+
 	LuaType returnType() default LuaType.VOID;
+
 	Arg[] args() default {};
 }

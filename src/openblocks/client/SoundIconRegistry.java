@@ -63,6 +63,7 @@ public class SoundIconRegistry {
 			String id = path.next();
 			ISoundCategory result = subCategories.get(id);
 			if (result == null) return defaultIcon;
+
 			IDrawableIcon icon = result.getIcon(path);
 			return (icon != null)? icon : defaultIcon;
 		}
@@ -79,6 +80,7 @@ public class SoundIconRegistry {
 		@Override
 		public void registerIcons(int type, IconRegister registry) {
 			if (defaultIcon != null) defaultIcon.registerIcons(type, registry);
+
 			for (ISoundCategory cat : subCategories.values())
 				cat.registerIcons(type, registry);
 		}
@@ -256,6 +258,7 @@ public class SoundIconRegistry {
 		IDrawableIcon unknownIcon = simpleIcon("unknown", DEFAULT_COLOR);
 
 		root.defaultIcon = unknownIcon;
+
 		IDrawableIcon frameWhite = itemIcon(ICON_FRAME, 0xFFFFFF);
 		IDrawableIcon frameRed = itemIcon(ICON_FRAME, 0xFF0000);
 		IDrawableIcon frameGreen = itemIcon(ICON_FRAME, 0x00FF00);
