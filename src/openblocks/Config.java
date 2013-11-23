@@ -338,10 +338,6 @@ public class Config {
 		if (BlockUtils.canRegisterBlock(blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
 		}
-		if (BlockUtils.canRegisterBlock(blockLightboxId)) {
-			OpenBlocks.Blocks.lightbox = new BlockLightbox();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.lightbox), new Object[] { "igi", "iti", "iii", 'i', new ItemStack(Item.ingotIron), 'g', new ItemStack(Block.thinGlass), 't', new ItemStack(Block.torchWood) }));
-		}
 		if (BlockUtils.canRegisterBlock(blockTargetId)) {
 			OpenBlocks.Blocks.target = new BlockTarget();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));

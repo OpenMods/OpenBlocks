@@ -63,7 +63,6 @@ public class OpenBlocks implements IOpenMod {
 		public static BlockGuide guide;
 		public static BlockElevator elevator;
 		public static BlockHeal heal;
-		public static BlockLightbox lightbox;
 		public static BlockTarget target;
 		public static BlockGrave grave;
 		public static BlockFlag flag;
