@@ -66,7 +66,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 					if (block != null) {
 						block.setHasGravity(true);
 						block.motionY = 0.9;
-						block.setPositionAndRotation(posX, posY, posZ, 0, 0);
+						//block.setPositionAndRotation(posX, posY, posZ, 0, 0);
 						worldObj.spawnEntityInWorld(block);
 					}
 				}
