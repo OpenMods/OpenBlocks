@@ -6,17 +6,20 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.entity.EntityMutant;
 import openmods.OpenMods;
+import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityGoldenEgg extends SyncedTileEntity {
+public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile {
 
 	private static final String TALLY_NBT_KEY = "tally";
 	// private static final String STAGE_NBT_KEY = "stage";
@@ -29,6 +32,8 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 	private ArrayList<EntityBlock> blocks = new ArrayList<EntityBlock>();
 	private HashMap<String, Integer> dnas = new HashMap<String, Integer>();
 	private SyncableInt stage;
+	
+	private String owner;
 
 	@Override
 	protected void createSyncedFields() {
@@ -90,6 +95,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
 				EntityMutant mutant = new EntityMutant(worldObj);
 	            mutant.setGrowingAge(-24000);
+	            mutant.setOwner(owner);
 				mutant.setTraitsFromMap(dnas);
 				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
 				worldObj.spawnEntityInWorld(mutant);
@@ -131,6 +137,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 			entitiesTag.setInteger(dnaTally.getKey(), dnaTally.getValue());
 		}
 		nbt.setCompoundTag(TALLY_NBT_KEY, entitiesTag);
+		nbt.setString("owner", owner);
 	}
 
 	@Override
@@ -144,6 +151,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 				dnas.put(tag.getName(), tallyTag.getInteger(tag.getName()));
 			}
 		}
+		owner = nbt.getString("owner");
 	}
 
 	@Override
@@ -151,4 +159,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity {
 
 	}
 
+	@Override
+	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+		if (!worldObj.isRemote && player != null) {
+			owner = player.username;
+		}
+	}
+	
 }
