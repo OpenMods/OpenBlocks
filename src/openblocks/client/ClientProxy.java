@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
+import openblocks.client.bindings.BrickBindings;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelMutant;
@@ -23,9 +24,12 @@ import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
+import openmods.binding.KeyDispatcherBuilder;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -52,7 +56,13 @@ public class ClientProxy implements IOpenBlocksProxy {
 	}
 
 	@Override
-	public void preInit() {}
+	public void preInit() {
+		if (!Config.soSerious) {
+			KeyHandler handler = new KeyDispatcherBuilder().addBinding(new BrickBindings()).build();
+			KeyBindingRegistry.registerKeyBinding(handler);
+		}
+
+	}
 
 	@Override
 	public void init() {

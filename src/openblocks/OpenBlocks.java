@@ -27,6 +27,7 @@ import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.mutant.*;
+import openblocks.rubbish.BrickManager;
 import openmods.Log;
 import openmods.Mods;
 import openmods.api.IOpenMod;
@@ -154,6 +155,9 @@ public class OpenBlocks implements IOpenMod {
 
 		@RegisterItem(name = "cartographer")
 		public static ItemCartographer cartographer;
+
+		@RegisterItem(name = "tastyClay")
+		public static ItemTastyClay tastyClay;
 	}
 
 	public static class Fluids {
@@ -238,6 +242,12 @@ public class OpenBlocks implements IOpenMod {
 
 		if (Loader.isModLoaded(Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
 		if (Loader.isModLoaded(Mods.OPENPERIPHERAL)) ModuleOpenPeripheral.registerAdapters();
+
+		if (!Config.soSerious) {
+			MinecraftForge.EVENT_BUS.register(new BrickManager());
+		}
+		
+		proxy.preInit();
 	}
 
 	/**

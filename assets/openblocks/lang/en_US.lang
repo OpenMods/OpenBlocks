@@ -1,3 +1,7 @@
+achievement.openblocks.droppedBrick=Zoinks!
+achievement.openblocks.droppedBrick.desc=Sorry, it just happened...
+stat.openblocks.bricksDropped=Bricks dropped
+
 openblocks.gui.luggage=Luggage
 openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
@@ -95,5 +99,6 @@ item.openblocks.cursor.name=Cursor
 item.openblocks.squeegee.name=Squeegee
 item.openblocks.unprepared_stencil.name=Unprepared Stencil
 item.openblocks.sketching_pencil.name=Sketching Pencil
+item.openblocks.tasty_clay.name=Tasty Clay
 
 itemGroup.tabOpenBlocks=OpenBlocks

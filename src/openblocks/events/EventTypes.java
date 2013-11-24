@@ -66,6 +66,17 @@ public enum EventTypes implements IEventPacketType {
 		public PacketDirection getDirection() {
 			return PacketDirection.FROM_CLIENT;
 		}
+	},
+	PLAYER_ACTION {
+		@Override
+		public EventPacket createPacket() {
+			return new PlayerActionEvent();
+		}
+
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.FROM_CLIENT;
+		}
 	};
 
 	@Override

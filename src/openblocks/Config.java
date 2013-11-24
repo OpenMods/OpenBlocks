@@ -34,7 +34,7 @@ import openmods.utils.ColorUtils;
 import com.google.common.collect.Lists;
 
 public class Config {
-	
+
 	@BlockId(description = "The id of the ladder")
 	public static int blockLadderId = 2540;
 
@@ -200,6 +200,9 @@ public class Config {
 	@ItemId(description = "The id of the cartographer spawner item")
 	public static int itemCartographerId = 14993;
 
+	@ItemId(description = "The id of the tasty clay item!")
+	public static int itemTastyClay = 14994;
+
 	public static int elevatorTravelDistance = 20;
 	public static boolean elevatorBlockMustFaceDirection = false;
 	public static boolean elevatorIgnoreHalfBlocks = false;
@@ -223,9 +226,10 @@ public class Config {
 	public static double turtleMagnetRange = 4;
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
+	public static boolean soSerious = true;
 
 	static void readConfig(Configuration configFile) {
-		 
+
 		ConfigProcessing.processAnnotations(configFile, Config.class);
 
 		Property prop = configFile.get("dropblock", "searchDistance", elevatorTravelDistance, "The range of the drop block");
@@ -299,6 +303,8 @@ public class Config {
 		prop = configFile.get("hacks", "enableExperimentalFeatures", experimentalFeatures, "Enable experimental features that may be buggy or broken entirely");
 		experimentalFeatures = prop.getBoolean(experimentalFeatures);
 
+		prop = configFile.get("tomfoolery", "weAreSeriousPeople", soSerious, "Are you serious too?");
+		soSerious = prop.getBoolean(soSerious);
 	}
 
 	public static void register() {
@@ -317,7 +323,7 @@ public class Config {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			OpenBlocks.Items.filledBucket.registerItems();
 		}
-		
+
 		if (ConfigProcessing.canRegisterBlock(blockLadderId)) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
@@ -500,7 +506,6 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', ItemGeneric.Metas.unpreparedStencil.newItemStack(), 'k', ItemGeneric.Metas.sketchingPencil.newItemStack()));
 		}
 
-
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
@@ -607,6 +612,11 @@ public class Config {
 		if (itemCartographerId > 0) {
 			OpenBlocks.Items.cartographer = new ItemCartographer();
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, ItemGeneric.Metas.assistantBase.newItemStack(), Item.eyeOfEnder));
+		}
+
+		if (!soSerious && itemTastyClay > 0) {
+			OpenBlocks.Items.tastyClay = new ItemTastyClay();
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Item.clay, Item.bucketMilk, new ItemStack(Item.dyePowder, 1, 3)));
 		}
 
 		ConfigProcessing.registerItems(OpenBlocks.Items.class, "openblocks");
