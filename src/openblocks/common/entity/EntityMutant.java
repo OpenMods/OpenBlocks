@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +14,7 @@ import net.minecraft.world.World;
 import openblocks.api.IMutant;
 import openblocks.api.IMutantDefinition;
 import openblocks.api.MutantRegistry;
+import openmods.utils.CollectionUtils;
 
 import com.google.common.base.Objects;
 import com.google.common.io.ByteArrayDataInput;
@@ -145,12 +145,12 @@ public class EntityMutant extends EntityTameable implements IEntityAdditionalSpa
 	}
 
 	public void setTraitsFromMap(HashMap<String, Integer> dnas) {
-		head = EntityCreeper.class;
-		body = EntityCreeper.class;
-		arms = EntityCreeper.class;
-		legs = EntityCreeper.class;
-		wings = EntityCreeper.class;
-		tail = EntityCreeper.class;
+		head = getEntityClassForId(CollectionUtils.getWeightedRandom(dnas));
+		body = getEntityClassForId(CollectionUtils.getWeightedRandom(dnas));
+		arms = getEntityClassForId(CollectionUtils.getWeightedRandom(dnas));
+		legs = getEntityClassForId(CollectionUtils.getWeightedRandom(dnas));
+		wings = getEntityClassForId(CollectionUtils.getWeightedRandom(dnas));
+		tail = getEntityClassForId(CollectionUtils.getWeightedRandom(dnas));
 	}
 
 	@Override

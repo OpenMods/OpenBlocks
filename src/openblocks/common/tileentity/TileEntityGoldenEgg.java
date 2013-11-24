@@ -37,7 +37,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	protected void createSyncedFields() {
-		stage = new SyncableInt(3);
+		stage = new SyncableInt(0);
 	}
 
 	private boolean stageElapsed() {
@@ -94,7 +94,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
 				EntityMutant mutant = new EntityMutant(worldObj);
-	            mutant.setGrowingAge(-24000);
 	            mutant.setOwner(owner);
 				mutant.setTraitsFromMap(dnas);
 				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
@@ -111,12 +110,14 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	private void incrementStage() {
-		stage.modify(1);
-		sync();
+		if (dnas.size() > 0) {
+			stage.modify(1);
+			sync();
+		}
 	}
 
-	public void addDNAFromItemStack(ItemStack itemStack) {
-		if (itemStack != null && stage.getValue() == 1) {
+	public boolean addDNAFromItemStack(ItemStack itemStack) {
+		if (itemStack != null && stage.getValue() == 0) {
 			NBTTagCompound tag = itemStack.getTagCompound();
 			if (tag != null && tag.hasKey("entity")) {
 				String entity = tag.getString("entity");
@@ -125,8 +126,10 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 					count = dnas.get(entity);
 				}
 				dnas.put(entity, count + 1);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Override

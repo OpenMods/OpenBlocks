@@ -22,6 +22,7 @@ import openblocks.OpenBlocks;
 import openblocks.api.IMutantDefinition;
 import openblocks.api.MutantRegistry;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
+import openmods.utils.BlockUtils;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -133,8 +134,15 @@ public class ItemGeneric extends Item {
 							if (definition != null) {
 								NBTTagCompound tag = new NBTTagCompound();
 								tag.setString("entity", EntityList.getEntityString(target));
-								itemStack.setTagCompound(tag);
-								itemStack.setItemDamage(Metas.bloodSample.ordinal());
+								ItemStack newStack = Metas.bloodSample.newItemStack();
+								newStack.setTagCompound(tag);
+								itemStack.stackSize--;
+								if (!(player instanceof EntityPlayer) || !((EntityPlayer)player).inventory.addItemStackToInventory(newStack)) {
+									BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, newStack);
+								}
+								if (itemStack.stackSize <= 0 && player instanceof EntityPlayer) {
+									((EntityPlayer)player).inventory.setInventorySlotContents(((EntityPlayer)player).inventory.currentItem, null);
+								}
 							}
 						}
 						return true;
@@ -154,10 +162,11 @@ public class ItemGeneric extends Item {
 							if (!world.isRemote) {
 								TileEntity te = world.getBlockTileEntity(x, y, z);
 								if (te instanceof TileEntityGoldenEgg) {
-									((TileEntityGoldenEgg)te).addDNAFromItemStack(itemStack);
+									if (((TileEntityGoldenEgg)te).addDNAFromItemStack(itemStack)) {
+										player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+									}
 								}
 							}
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 						}
 						return false;
 					}

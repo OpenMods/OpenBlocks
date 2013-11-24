@@ -492,6 +492,7 @@ public class Config {
 
 		if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
 			OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg, "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
 		}
 
 		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
