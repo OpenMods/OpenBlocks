@@ -114,6 +114,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 				Icon texture = fluid.getStillIcon();
 				bindTexture(getFluidSheet(fluid));
+				int color = fluid.getColor(fluidStack);
 
 				Tessellator t = Tessellator.instance;
 
@@ -128,9 +129,15 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				double vMax = texture.getInterpolatedV(16.0);
 
 				double vHeight = vMax - vMin;
+				
+
+			    float r = (color >> 16 & 0xFF) / 255.0F;
+			    float g = (color >> 8 & 0xFF) / 255.0F;
+			    float b = (color & 0xFF) / 255.0F;
 
 				// north side
 				t.startDrawingQuads();
+				t.setColorOpaque_F(r, g, b);
 				t.addVertexWithUV(0.5, -0.5, -0.5, uMax, vMin); // bottom
 				t.addVertexWithUV(-0.5, -0.5, -0.5, uMin, vMin); // bottom
 				t.addVertexWithUV(-0.5, -0.5 + yNorthWest, -0.5, uMin, vMin
@@ -143,6 +150,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 				// south side
 				t.startDrawingQuads();
+				t.setColorOpaque_F(r, g, b);
 				t.addVertexWithUV(0.5, -0.5, 0.5, uMin, vMin);
 				t.addVertexWithUV(0.5, -0.5 + ySouthEast, 0.5, uMin, vMin
 						+ (vHeight * ySouthEast)); // top
@@ -157,6 +165,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 				// east side
 				t.startDrawingQuads();
+				t.setColorOpaque_F(r, g, b);
 				t.addVertexWithUV(0.5, -0.5, -0.5, uMin, vMin);
 				t.addVertexWithUV(0.5, -0.5 + yNorthEast, -0.5, uMin, vMin
 						+ (vHeight * yNorthEast)); // top
@@ -169,6 +178,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 				// west side
 				t.startDrawingQuads();
+				t.setColorOpaque_F(r, g, b);
 				t.addVertexWithUV(-0.5, -0.5, 0.5, uMin, vMin);
 				t.addVertexWithUV(-0.5, -0.5 + ySouthWest, 0.5, uMin, vMin
 						+ (vHeight * ySouthWest)); // top
@@ -181,6 +191,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 				// top
 				t.startDrawingQuads();
+				t.setColorOpaque_F(r, g, b);
 				t.addVertexWithUV(0.5, -0.5 + ySouthEast, 0.5, uMax, vMin); // south
 																			// east
 				t.addVertexWithUV(0.5, -0.5 + yNorthEast, -0.5, uMin, vMin); // north
@@ -193,6 +204,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 				// bottom
 				t.startDrawingQuads();
+				t.setColorOpaque_F(r, g, b);
 				t.addVertexWithUV(0.5, -0.5, -0.5, uMax, vMin);
 				t.addVertexWithUV(0.5, -0.5, 0.5, uMin, vMin);
 				t.addVertexWithUV(-0.5, -0.5, 0.5, uMin, vMax);
