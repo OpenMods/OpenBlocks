@@ -37,6 +37,8 @@ public class EntityMutant extends EntityTameable implements IEntityAdditionalSpa
 		this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(0, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtTarget(this));
+        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
+        setTamed(true);
 	}
 
 	@Override

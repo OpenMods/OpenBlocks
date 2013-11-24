@@ -161,7 +161,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && player != null) {
+		if (player != null) {
 			owner = player.username;
 		}
 	}
