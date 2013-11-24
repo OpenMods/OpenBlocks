@@ -88,12 +88,12 @@ public class BrickManager {
 	public void onPlayerScared(PlayerActionEvent evt) {
 		if (evt.type == Type.BOO) {
 			EntityPlayer player = (EntityPlayer)evt.player;
+			player.worldObj.playSoundAtEntity(player, "openblocks:fart", 1, 1);
 
 			if (canDropBrick(player)) {
 				EntityItem drop = createBrick(player);
 				drop.delayBeforeCanPickup = 20;
 				player.worldObj.spawnEntityInWorld(drop);
-
 				player.triggerAchievement(brickAchievement);
 				player.addStat(brickStat, 1);
 			}
