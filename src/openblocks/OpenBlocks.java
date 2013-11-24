@@ -30,8 +30,8 @@ import openblocks.mutant.*;
 import openmods.Log;
 import openmods.Mods;
 import openmods.api.IOpenMod;
+import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
-import openmods.interfaces.RegisterItem;
 
 import org.apache.commons.lang3.ObjectUtils;
 

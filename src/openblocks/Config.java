@@ -26,12 +26,10 @@ import openblocks.common.recipe.CrayonGlassesRecipe;
 import openblocks.common.recipe.CrayonMixingRecipe;
 import openblocks.common.recipe.MapCloneRecipe;
 import openblocks.common.recipe.MapResizeRecipe;
-import openmods.interfaces.BlockId;
-import openmods.interfaces.ItemId;
-import openmods.utils.BlockUtils;
+import openmods.config.BlockId;
+import openmods.config.ConfigProcessing;
+import openmods.config.ItemId;
 import openmods.utils.ColorUtils;
-import openmods.utils.ConfigUtils;
-import openmods.utils.ItemUtils;
 
 import com.google.common.collect.Lists;
 
@@ -228,7 +226,7 @@ public class Config {
 
 	static void readConfig(Configuration configFile) {
 		 
-		ConfigUtils.processAnnotations(configFile, Config.class);
+		ConfigProcessing.processAnnotations(configFile, Config.class);
 
 		Property prop = configFile.get("dropblock", "searchDistance", elevatorTravelDistance, "The range of the drop block");
 		elevatorTravelDistance = prop.getInt();
@@ -320,71 +318,71 @@ public class Config {
 			OpenBlocks.Items.filledBucket.registerItems();
 		}
 		
-		if (BlockUtils.canRegisterBlock(blockLadderId)) {
+		if (ConfigProcessing.canRegisterBlock(blockLadderId)) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.ladder), new ItemStack(Block.ladder), new ItemStack(Block.trapdoor)));
 		}
-		if (BlockUtils.canRegisterBlock(blockGuideId)) {
+		if (ConfigProcessing.canRegisterBlock(blockGuideId)) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.guide), new Object[] { "ggg", "gtg", "ggg", 'g', new ItemStack(Block.glass), 't', new ItemStack(Block.torchWood) }));
 		}
-		if (BlockUtils.canRegisterBlock(blockElevatorId)) {
+		if (ConfigProcessing.canRegisterBlock(blockElevatorId)) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wew", "www", 'e', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'e', new ItemStack(Item.enderPearl) }));
 		}
-		if (BlockUtils.canRegisterBlock(blockHealId)) {
+		if (ConfigProcessing.canRegisterBlock(blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
 		}
-		if (BlockUtils.canRegisterBlock(blockTargetId)) {
+		if (ConfigProcessing.canRegisterBlock(blockTargetId)) {
 			OpenBlocks.Blocks.target = new BlockTarget();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.target), new Object[] { "www", "www", "s s", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
-		if (BlockUtils.canRegisterBlock(blockGraveId)) {
+		if (ConfigProcessing.canRegisterBlock(blockGraveId)) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
-		if (BlockUtils.canRegisterBlock(blockFlagId)) {
+		if (ConfigProcessing.canRegisterBlock(blockFlagId)) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag, 3), new Object[] { "scc", "sc ", "s  ", 'c', new ItemStack(Block.carpet, 1, Short.MAX_VALUE), 's', "stickWood" }));
 		}
-		if (BlockUtils.canRegisterBlock(blockTankId)) {
+		if (ConfigProcessing.canRegisterBlock(blockTankId)) {
 			OpenBlocks.Blocks.tank = new BlockTank();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), new Object[] { "ogo", "ggg", "ogo", 'g', new ItemStack(Block.thinGlass), 'o', new ItemStack(Block.obsidian) }));
 		}
-		if (BlockUtils.canRegisterBlock(blockTrophyId)) {
+		if (ConfigProcessing.canRegisterBlock(blockTrophyId)) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
 		}
-		if (BlockUtils.canRegisterBlock(blockBearTrapId)) {
+		if (ConfigProcessing.canRegisterBlock(blockBearTrapId)) {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bearTrap), new Object[] { "fif", "fif", "fif", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockSprinklerId)) {
+		if (ConfigProcessing.canRegisterBlock(blockSprinklerId)) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.sprinkler, 1), new Object[] { "ifi", "iri", "ifi", 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.torchRedstoneActive), 'f', new ItemStack(Block.fenceIron) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockCannonId)) {
+		if (ConfigProcessing.canRegisterBlock(blockCannonId)) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.cannon), new Object[] { " d ", " f ", "iri", 'd', new ItemStack(Block.dispenser), 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 'r', new ItemStack(Block.blockRedstone) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockVacuumHopperId)) {
+		if (ConfigProcessing.canRegisterBlock(blockVacuumHopperId)) {
 			OpenBlocks.Blocks.vacuumHopper = new BlockVacuumHopper();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.vacuumHopper), new ItemStack(Block.hopperBlock), new ItemStack(Block.obsidian), new ItemStack(Item.enderPearl)));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockSpongeId)) {
+		if (ConfigProcessing.canRegisterBlock(blockSpongeId)) {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.sponge), new ItemStack(Block.cloth, 1, Short.MAX_VALUE), new ItemStack(Item.slimeBall)));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockBigButton)) {
+		if (ConfigProcessing.canRegisterBlock(blockBigButton)) {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.bigButton), new Object[] { "bb", "bb", 'b', new ItemStack(Block.stoneButton) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockImaginaryId)) {
+		if (ConfigProcessing.canRegisterBlock(blockImaginaryId)) {
 			OpenBlocks.Blocks.imaginary = new BlockImaginary();
 			{
 				ItemStack pencil = ItemImaginary.setupValues(null, new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
@@ -399,64 +397,64 @@ public class Config {
 			recipeList.add(new CrayonMixingRecipe());
 		}
 
-		if (BlockUtils.canRegisterBlock(blockFanId)) {
+		if (ConfigProcessing.canRegisterBlock(blockFanId)) {
 			OpenBlocks.Blocks.fan = new BlockFan();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.fan), new Object[] { "f", "i", "s", 'f', new ItemStack(Block.fenceIron), 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockXPBottlerId)) {
+		if (ConfigProcessing.canRegisterBlock(blockXPBottlerId)) {
 			OpenBlocks.Blocks.xpBottler = new BlockXPBottler();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.xpBottler), new Object[] { "iii", "ibi", "iii", 'i', new ItemStack(Item.ingotIron), 'b', new ItemStack(Item.glassBottle) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockVillageHighlighterId)) {
+		if (ConfigProcessing.canRegisterBlock(blockVillageHighlighterId)) {
 			OpenBlocks.Blocks.villageHighlighter = new BlockVillageHighlighter();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.villageHighlighter), new Object[] { "www", "wew", "ccc", 'w', "plankWood", 'e', new ItemStack(Item.emerald), 'c', new ItemStack(Block.cobblestone) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockPathId)) {
+		if (ConfigProcessing.canRegisterBlock(blockPathId)) {
 			OpenBlocks.Blocks.path = new BlockPath();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.path, 2), "stone", "cobblestone"));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockAutoAnvilId)) {
+		if (ConfigProcessing.canRegisterBlock(blockAutoAnvilId)) {
 			OpenBlocks.Blocks.autoAnvil = new BlockAutoAnvil();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoAnvil), new Object[] { "iii", "iai", "rrr", 'i', new ItemStack(Item.ingotIron), 'a', new ItemStack(Block.anvil, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockAutoEnchantmentTableId)) {
+		if (ConfigProcessing.canRegisterBlock(blockAutoEnchantmentTableId)) {
 			OpenBlocks.Blocks.autoEnchantmentTable = new BlockAutoEnchantmentTable();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.autoEnchantmentTable), new Object[] { "iii", "iei", "rrr", 'i', new ItemStack(Item.ingotIron), 'e', new ItemStack(Block.enchantmentTable, 1, Short.MAX_VALUE), 'r', new ItemStack(Item.redstone) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockXPDrainId)) {
+		if (ConfigProcessing.canRegisterBlock(blockXPDrainId)) {
 			OpenBlocks.Blocks.xpDrain = new BlockXPDrain();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.xpDrain), new Object[] { "iii", "iii", "iii", 'i', new ItemStack(Block.fenceIron) }));
 		}
-		if (BlockUtils.canRegisterBlock(blockBlockBreakerId)) {
+		if (ConfigProcessing.canRegisterBlock(blockBlockBreakerId)) {
 			OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
 			ItemStack specialItem = new ItemStack(Item.pickaxeDiamond);
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockBreaker), new Object[] { "icc", "src", "icc", 'i', new ItemStack(Item.ingotIron), 'c', new ItemStack(Block.cobblestone), 'r', new ItemStack(Item.redstone), 's', specialItem }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockBlockPlacerId)) {
+		if (ConfigProcessing.canRegisterBlock(blockBlockPlacerId)) {
 			OpenBlocks.Blocks.blockPlacer = new BlockBlockPlacer();
 			ItemStack specialItem = new ItemStack(Block.pistonBase);
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.blockPlacer), new Object[] { "icc", "src", "icc", 'i', new ItemStack(Item.ingotIron), 'c', new ItemStack(Block.cobblestone), 'r', new ItemStack(Item.redstone), 's', specialItem }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockItemDropperId)) {
+		if (ConfigProcessing.canRegisterBlock(blockItemDropperId)) {
 			OpenBlocks.Blocks.itemDropper = new BlockItemDropper();
 			ItemStack specialItem = new ItemStack(Block.hopperBlock);
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.itemDropper), new Object[] { "icc", "src", "icc", 'i', new ItemStack(Item.ingotIron), 'c', new ItemStack(Block.cobblestone), 'r', new ItemStack(Item.redstone), 's', specialItem }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockRopeLadderId)) {
+		if (ConfigProcessing.canRegisterBlock(blockRopeLadderId)) {
 			OpenBlocks.Blocks.ropeLadder = new BlockRopeLadder();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.ropeLadder), new Object[] { "sts", "sts", "sts", 't', "stickWood", 's', new ItemStack(Item.silk) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockDonationStationId)) {
+		if (ConfigProcessing.canRegisterBlock(blockDonationStationId)) {
 			OpenBlocks.Blocks.donationStation = new BlockDonationStation();
 			WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Blocks.donationStation), 1, 1, 2);
 			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
@@ -464,39 +462,39 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.donationStation), new Object[] { "ppp", "pcp", "ppp", 'p', new ItemStack(Item.porkRaw), 'c', new ItemStack(Block.chest) }));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockPaintMixer)) {
+		if (ConfigProcessing.canRegisterBlock(blockPaintMixer)) {
 			OpenBlocks.Blocks.paintMixer = new BlockPaintMixer();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.paintMixer), "ooo", "i i", "iii", 'o', Block.obsidian, 'i', Item.ingotIron));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockCanvasId)) {
+		if (ConfigProcessing.canRegisterBlock(blockCanvasId)) {
 			OpenBlocks.Blocks.canvas = new BlockCanvas();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Item.paper, 'f', Block.fence));
 		}
 
-		if (experimentalFeatures && BlockUtils.canRegisterBlock(blockMachineOreCrusherId)) {
+		if (experimentalFeatures && ConfigProcessing.canRegisterBlock(blockMachineOreCrusherId)) {
 			OpenBlocks.Blocks.machineOreCrusher = new BlockMachineOreCrusher();
 		}
 
-		if (BlockUtils.canRegisterBlock(blockPaintCanId)) {
+		if (ConfigProcessing.canRegisterBlock(blockPaintCanId)) {
 			OpenBlocks.Blocks.paintCan = new BlockPaintCan();
 		}
 
-		if (BlockUtils.canRegisterBlock(blockCanvasGlassId)) {
+		if (ConfigProcessing.canRegisterBlock(blockCanvasGlassId)) {
 			OpenBlocks.Blocks.canvasGlass = new BlockCanvasGlass();
 		}
 
-		if (BlockUtils.canRegisterBlock(blockProjectorId)) {
+		if (ConfigProcessing.canRegisterBlock(blockProjectorId)) {
 			OpenBlocks.Blocks.projector = new BlockProjector();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', new ItemStack(Item.dyePowder, 1, 4)));
 		}
 
-		if (BlockUtils.canRegisterBlock(blockGoldenEggId)) {
+		if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
 			OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
 		}
 
-		if (BlockUtils.canRegisterBlock(blockDrawingTable)) {
+		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', ItemGeneric.Metas.unpreparedStencil.newItemStack(), 'k', ItemGeneric.Metas.sketchingPencil.newItemStack()));
 		}
@@ -610,7 +608,7 @@ public class Config {
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, ItemGeneric.Metas.assistantBase.newItemStack(), Item.eyeOfEnder));
 		}
 
-		ItemUtils.registerItems(OpenBlocks.Items.class, "openblocks");
+		ConfigProcessing.registerItems(OpenBlocks.Items.class, "openblocks");
 	}
 
 }

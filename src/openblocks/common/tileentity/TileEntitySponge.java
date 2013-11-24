@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import openmods.api.IAwareTile;
 import openmods.tileentity.OpenTileEntity;
+import openmods.utils.BlockNotifyFlags;
 
 public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 
@@ -22,7 +23,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 						if (material == Material.lava) {
 							hitLava = true;
 						}
-						worldObj.setBlock(xCoord + x, yCoord + y, zCoord + z, 0, 0, 2);
+						worldObj.setBlock(xCoord + x, yCoord + y, zCoord + z, 0, 0, BlockNotifyFlags.SEND_TO_CLIENTS);
 					}
 				}
 			}
@@ -65,7 +66,7 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 				worldObj.spawnParticle("largesmoke", f, f1, f2, 0.0D, 0.0D, 0.0D);
 			}
 		} else {
-			worldObj.setBlock(xCoord, yCoord, zCoord, Block.fire.blockID, 0, 3);
+			worldObj.setBlock(xCoord, yCoord, zCoord, Block.fire.blockID, 0, BlockNotifyFlags.ALL);
 		}
 		return true;
 	}

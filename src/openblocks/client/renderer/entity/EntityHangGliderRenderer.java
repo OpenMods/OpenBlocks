@@ -15,6 +15,8 @@ public class EntityHangGliderRenderer extends Render {
 	private static final float QUAD_HALF_SIZE = 2.4f;
 	private static final float ONGROUND_ROTATION = 90f;
 
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/hangglider.png");
+
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float f, float f1) {
 
@@ -51,7 +53,7 @@ public class EntityHangGliderRenderer extends Render {
 
 		// Push matrix to hold it's location for rendering other stuff */
 		GL11.glPushMatrix();
-		CompatibilityUtils.bindTextureToClient("textures/models/hangglider.png");
+		CompatibilityUtils.bindOBTextureToClient("textures/models/hangglider.png");
 		renderGlider();
 		GL11.glPopMatrix();
 
@@ -88,6 +90,6 @@ public class EntityHangGliderRenderer extends Render {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return CompatibilityUtils.getResourceLocation("textures/models/hangglider.png");
+		return texture;
 	}
 }
