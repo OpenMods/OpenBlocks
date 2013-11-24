@@ -1,3 +1,7 @@
+achievement.openblocks.droppedBrick=Zoinks!
+achievement.openblocks.droppedBrick.desc=Sorry, das ist einfach so passiert...
+stat.openblocks.bricksDropped=Fallen gelassene Ziegel
+
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
 openblocks.gui.vacuumhopper=Vakuumtrichter
@@ -94,6 +98,7 @@ item.openblocks.assistant_base.name=Assistenzbasis
 item.openblocks.cursor.name=Cursor
 item.openblocks.squeegee.name=Scheibenwischer
 item.openblocks.unprepared_stencil.name=Unvorbereitete Schablone
-item.openblocks.sketching_pencil.name=Skizzenstift
+item.openblocks.sketching_pencil.name=Skizzierstift
+item.openblocks.tasty_clay.name=Leckerer Lehm
 
 itemGroup.tabOpenBlocks=OpenBlocks
