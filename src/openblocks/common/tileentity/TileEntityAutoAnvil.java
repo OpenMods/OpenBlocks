@@ -459,7 +459,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if (i == 0 && !itemstack.getItem().isItemTool(itemstack)) { return false; }
+		if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Item.enchantedBook)) { return false; }
 		if (i == 2) { return false; }
 		return inventory.isItemValidForSlot(i, itemstack);
 	}
