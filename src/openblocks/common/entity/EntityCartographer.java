@@ -20,12 +20,14 @@ import openblocks.common.MapDataBuilder.ChunkJob;
 import openblocks.common.item.ItemCartographer;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
+import openmods.Log;
 import openmods.sync.*;
 import openmods.utils.BitSet;
 import openmods.utils.ByteUtils;
 import openmods.utils.ItemUtils;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -75,7 +77,10 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		}
 
 		public void runJob(World world, int x, int z) {
-			Preconditions.checkNotNull(jobs, "Invalid usage of class");
+			if (jobs == null) {
+				Log.severe("STOP ABUSING CARTOGRAPHER RIGHT KNOW! YOU BROKE IT!");
+				jobs = ImmutableSet.of();
+			}
 			ChunkJob job = MapDataBuilder.doNextChunk(world, x, z, jobs);
 			if (job != null) {
 				jobs.remove(job);
