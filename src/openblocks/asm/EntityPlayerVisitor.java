@@ -1,6 +1,6 @@
 package openblocks.asm;
 
-import openmods.utils.AsmUtils;
+import openblocks.utils.AsmUtils;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;

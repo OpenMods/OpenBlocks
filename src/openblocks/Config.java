@@ -227,7 +227,7 @@ public class Config {
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
 	public static boolean soSerious = true;
-	public static boolean eyeDebug = true;
+	public static boolean eyeDebug = false;
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);

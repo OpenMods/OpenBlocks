@@ -13,8 +13,8 @@ public class OpenBlocksCorePlugin implements IFMLLoadingPlugin {
 		log = Logger.getLogger("OpenBlocksCore");
 		log.setParent(FMLLog.getLogger());
 	}
-	
-	public static boolean isRuntimeDeobfuscated;
+
+	public static boolean isRuntimeDeobfuscated = false;
 	
 	@Override
 	public String[] getASMTransformerClass() {
@@ -33,7 +33,7 @@ public class OpenBlocksCorePlugin implements IFMLLoadingPlugin {
 
 	@Override
 	public void injectData(Map<String, Object> data) {
-		isRuntimeDeobfuscated = (Boolean)data.get("runtimeDeobfuscationEnabled");
+		OpenBlocksCorePlugin.isRuntimeDeobfuscated = (Boolean)data.get("runtimeDeobfuscationEnabled");
 	}
 
 	@Override

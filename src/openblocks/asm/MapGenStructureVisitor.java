@@ -1,19 +1,19 @@
 package openblocks.asm;
 
 import openblocks.OpenBlocksCorePlugin;
+import openblocks.utils.AsmUtils.MethodMatcher;
 import openmods.Log;
-import openmods.utils.AsmUtils.MethodMatcher;
 
 import org.objectweb.asm.*;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 
 public class MapGenStructureVisitor extends ClassVisitor {
-	
+
 	{
 		if (Log.logger == null) Log.logger = OpenBlocksCorePlugin.log;
 	}
-	
+
 	private final MethodMatcher modifiedMethod;
 	private final MethodMatcher markerMethod;
 	private String structureStartCls;
@@ -100,13 +100,13 @@ public class MapGenStructureVisitor extends ClassVisitor {
 		structureStartCls = "net/minecraft/world/gen/structure/StructureStart";
 		String chunkPositionCls = "net/minecraft/world/ChunkPosition";
 		String worldCls = "net/minecraft/world/World";
-		
+
 		if (OpenBlocksCorePlugin.isRuntimeDeobfuscated) {
 			structureStartCls = FMLDeobfuscatingRemapper.INSTANCE.unmap(structureStartCls);
 			chunkPositionCls = FMLDeobfuscatingRemapper.INSTANCE.unmap(chunkPositionCls);
 			worldCls = FMLDeobfuscatingRemapper.INSTANCE.unmap(worldCls);
 		}
-		
+
 		String descriptor = Type.getMethodDescriptor(
 				Type.getObjectType(chunkPositionCls),
 				Type.getObjectType(worldCls),

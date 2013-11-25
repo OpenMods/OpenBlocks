@@ -1,7 +1,7 @@
 package openblocks.asm;
 
 import net.minecraft.launchwrapper.IClassTransformer;
-import openmods.utils.AsmUtils;
+import openblocks.utils.AsmUtils;
 
 import org.objectweb.asm.ClassVisitor;
 

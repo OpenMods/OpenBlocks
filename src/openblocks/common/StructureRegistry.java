@@ -12,8 +12,7 @@ import net.minecraft.world.gen.ChunkProviderFlat;
 import net.minecraft.world.gen.ChunkProviderGenerate;
 import net.minecraft.world.gen.ChunkProviderHell;
 import net.minecraft.world.gen.ChunkProviderServer;
-import net.minecraft.world.gen.feature.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.*;
+import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.api.IStructureGenProvider;
 import openblocks.api.IStructureNamer;
@@ -32,29 +31,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper.UnableToAccessFieldException;
 
 public class StructureRegistry {
 
-	public static class ClassEqualityTester implements IStructureNamer {
-		private final Class<? extends MapGenStructure> structureGenClass;
-		private final String name;
-
-		private ClassEqualityTester(String name, Class<? extends MapGenStructure> structureGenClass) {
-			this.name = name;
-			this.structureGenClass = structureGenClass;
-		}
-
-		@Override
-		public String identify(MapGenStructure structure) {
-			return (structureGenClass == structure.getClass())? name : "";
-		}
-	}
-
 	private List<IStructureNamer> names = Lists.newArrayList();
-	{
-		names.add(new ClassEqualityTester("mineshaft", MapGenMineshaft.class));
-		names.add(new ClassEqualityTester("nether_fortress", MapGenNetherBridge.class));
-		names.add(new ClassEqualityTester("stronghold", MapGenStronghold.class));
-		names.add(new ClassEqualityTester("village", MapGenVillage.class));
-		names.add(new ClassEqualityTester("scattered", MapGenScatteredFeature.class));
-	}
 
 	@ForgeSubscribe
 	public void registerIdentifier(RegisterStructureIdentifierEvent evt) {
@@ -66,7 +43,7 @@ public class StructureRegistry {
 			String name = n.identify(structure);
 			if (!Strings.isNullOrEmpty(name)) return name;
 		}
-		return "";
+		return structure.func_143025_a();
 	}
 
 	private static <T> void addMapGen(Collection<MapGenStructure> output, Class<T> klazz, T provider, String... names) {
