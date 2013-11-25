@@ -334,7 +334,7 @@ public class Config {
 		}
 		if (ConfigProcessing.canRegisterBlock(blockElevatorId)) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wew", "www", 'e', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'e', new ItemStack(Item.enderPearl) }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.elevator), new Object[] { "www", "wew", "www", 'w', new ItemStack(Block.cloth, 1, Short.MAX_VALUE), 'e', new ItemStack(Item.enderPearl) }));
 		}
 		if (ConfigProcessing.canRegisterBlock(blockHealId)) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
