@@ -1,6 +1,9 @@
 #zh_CN
+achievement.openblocks.droppedBrick=Shaggy的口头禅:Zoinks!
+achievement.openblocks.droppedBrick.desc=抱歉,事情就那样发生了...
+stat.openblocks.bricksDropped=砖块已掉落
+openblocks.drop_brick=傻了
 
-openblocks.gui.lightbox=灯盒
 openblocks.gui.luggage=行李
 openblocks.gui.sprinkler=洒水器
 openblocks.gui.vacuumhopper=虚空漏斗
@@ -36,7 +39,6 @@ tile.openblocks.elevator.name=电梯
 tile.openblocks.heal.name=治愈器
 tile.openblocks.guide.name=建筑指导机
 tile.openblocks.ladder.name=梯子活板门
-tile.openblocks.lightbox.name=灯盒
 tile.openblocks.tank.name=蓄水槽
 tile.openblocks.target.name=靶子
 tile.openblocks.grave.name=墓碑
@@ -99,5 +101,6 @@ item.openblocks.cursor.name=游标
 item.openblocks.squeegee.name=刮刀
 item.openblocks.unprepared_stencil.name=空白模子
 item.openblocks.sketching_pencil.name=绘图笔
+item.openblocks.tasty_clay.name=美味粘土
 
 itemGroup.tabOpenBlocks=开放式方块
