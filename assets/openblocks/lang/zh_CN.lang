@@ -33,6 +33,8 @@ openblocks.misc.mode.inverted_block=反相方块
 openblocks.misc.mode.inverted_panel=反相面板
 openblocks.misc.mode.inverted_half_panel=反相半高面板
 openblocks.misc.mode.inverted_stairs=反相楼梯
+openblocks.misc.structure_pos=调试: 发现建筑物 %s 位于 (%d,%d,%d)
+openblocks.misc.locked=已锁定
 
 openblocks.turtle.magnet=磁铁
 
@@ -103,5 +105,6 @@ item.openblocks.squeegee.name=刮刀
 item.openblocks.unprepared_stencil.name=空白模子
 item.openblocks.sketching_pencil.name=绘图笔
 item.openblocks.tasty_clay.name=美味粘土
+item.openblocks.golden_eye.name=黄金眼
 
 itemGroup.tabOpenBlocks=开放式方块
