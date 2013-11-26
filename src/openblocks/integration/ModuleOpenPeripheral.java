@@ -4,10 +4,12 @@ import openperipheral.api.IntegrationRegistry;
 
 public class ModuleOpenPeripheral {
 
+	private static final IntegrationRegistry reg = new IntegrationRegistry();
+	
 	public static void registerAdapters() {
-		IntegrationRegistry.register(new AdapterVillageHighlighter());
-		IntegrationRegistry.register(new AdapterDonationStation());
-		IntegrationRegistry.register(new AdapterCannon());
-		IntegrationRegistry.register(new AdapterProjector());
+		reg.registerAdapter(new AdapterVillageHighlighter());
+		reg.registerAdapter(new AdapterDonationStation());
+		reg.registerAdapter(new AdapterCannon());
+		reg.registerAdapter(new AdapterProjector());
 	}
 }
