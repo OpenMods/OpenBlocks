@@ -32,6 +32,8 @@ openblocks.misc.mode.inverted_block=Invertierter Block
 openblocks.misc.mode.inverted_panel=Invertierte Platte
 openblocks.misc.mode.inverted_half_panel=Invertierte Halbhohe Platte
 openblocks.misc.mode.inverted_stairs=Invertierte Treppe
+openblocks.misc.structure_pos=Debug: Struktur %s gefunden bei (%d,%d,%d)
+openblocks.misc.locked=Gesperrt
 
 openblocks.turtle.magnet=Magnetische
 
@@ -102,5 +104,6 @@ item.openblocks.squeegee.name=Scheibenwischer
 item.openblocks.unprepared_stencil.name=Unvorbereitete Schablone
 item.openblocks.sketching_pencil.name=Skizzierstift
 item.openblocks.tasty_clay.name=Leckerer Lehm
+item.openblocks.golden_eye.name=Goldenes Auge
 
 itemGroup.tabOpenBlocks=OpenBlocks
