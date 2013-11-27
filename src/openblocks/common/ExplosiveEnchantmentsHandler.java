@@ -34,9 +34,11 @@ public class ExplosiveEnchantmentsHandler {
 	public static final int ARMOR_PANTS = 1;
 	public static final int ARMOR_BOOTS = 0;
 
+	private final List<Integer> protectionParts = Lists.newArrayList(ARMOR_CHESTPIECE, ARMOR_HELMET, ARMOR_PANTS);
+
 	private static final double VERTICAL_FACTOR = 5;
 
-	private final List<Integer> protectionParts = Lists.newArrayList(ARMOR_CHESTPIECE, ARMOR_HELMET, ARMOR_PANTS);
+	private static final Set<String> ALLOWED_DAMAGE_SOURCE = ImmutableSet.of("arrow", "player", "mob");
 
 	private static class EnchantmentLevel {
 		public final double multiplier;
@@ -72,7 +74,7 @@ public class ExplosiveEnchantmentsHandler {
 		}
 	}
 
-	private static EnchantmentLevel LEVELS[] = new EnchantmentLevel[] {
+	private final static EnchantmentLevel LEVELS[] = new EnchantmentLevel[] {
 			null, // 1-based
 			new EnchantmentLevel(0.10, 5, 5, 1, false, 1),
 			new EnchantmentLevel(0.75, 7.5, 10, 2, false, 2),
@@ -195,8 +197,7 @@ public class ExplosiveEnchantmentsHandler {
 	}
 
 	private static boolean checkSource(DamageSource source) {
-		Set<String> allowed = ImmutableSet.of("arrow", "player", "mob");
-		return source instanceof EntityDamageSource && allowed.contains(source.damageType);
+		return source instanceof EntityDamageSource && ALLOWED_DAMAGE_SOURCE.contains(source.damageType);
 	}
 
 	@ForgeSubscribe
