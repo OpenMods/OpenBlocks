@@ -1,7 +1,10 @@
 package openblocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySpider;
@@ -10,7 +13,11 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.StatBase;
+import net.minecraft.stats.StatBasic;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
@@ -33,6 +40,7 @@ import openmods.Mods;
 import openmods.api.IOpenMod;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
+import openmods.utils.EnchantmentUtils;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -48,6 +56,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "required-after:OpenMods;after:OpenPeripheral")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
@@ -181,9 +190,24 @@ public class OpenBlocks implements IOpenMod {
 		public ItemStack getIconItemStack() {
 			return new ItemStack(ObjectUtils.firstNonNull(OpenBlocks.Blocks.flag, Block.sponge), 1, 0);
 		}
+
+		@Override
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@SideOnly(Side.CLIENT)
+		public void displayAllReleventItems(List result) {
+			super.displayAllReleventItems(result);
+			if (explosiveEnch != null) EnchantmentUtils.addAllBooks(explosiveEnch, result);
+		}
+
 	};
 
 	public static int renderId;
+
+	public static final Achievement brickAchievement = new Achievement(70997, "openblocks.droppedBrick", 13, 13, Item.brick, null).registerAchievement();
+
+	public static final StatBase brickStat = (new StatBasic(70998, "stat.openblocks.bricksDropped")).registerStat();
+
+	public static Enchantment explosiveEnch;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {

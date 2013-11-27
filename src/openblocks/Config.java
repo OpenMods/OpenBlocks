@@ -16,9 +16,7 @@ import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.asm.EntityPlayerVisitor;
-import openblocks.common.EntityEventHandler;
-import openblocks.common.Stencil;
-import openblocks.common.TrophyHandler;
+import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
@@ -227,7 +225,9 @@ public class Config {
 	public static boolean addCraneTurtles = true;
 	public static boolean experimentalFeatures = false;
 	public static boolean soSerious = true;
+	public static boolean fartTypying = false;
 	public static boolean eyeDebug = false;
+	public static int explosiveEnchantmentId = 153;
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);
@@ -306,8 +306,14 @@ public class Config {
 		prop = configFile.get("tomfoolery", "weAreSeriousPeople", soSerious, "Are you serious too?");
 		soSerious = prop.getBoolean(soSerious);
 
+		prop = configFile.get("tomfoolery", "doItWhileTyping", fartTypying, "You know, THAT thing! That you shouldn't do in public!");
+		fartTypying = prop.getBoolean(fartTypying);
+
 		prop = configFile.get("debug", "goldenEyeDebug", eyeDebug, "Show structures found by golden eye");
 		eyeDebug = prop.getBoolean(eyeDebug);
+
+		prop = configFile.get("features", "explosiveEnchantmentId", explosiveEnchantmentId, "Id of explosive enchantment");
+		explosiveEnchantmentId = prop.getInt(explosiveEnchantmentId);
 	}
 
 	public static void register() {
@@ -623,9 +629,14 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', Item.goldNugget, 'e', Item.eyeOfEnder));
 		}
 
-		if (!soSerious && itemTastyClay > 0) {
+		if (itemTastyClay > 0) {
 			OpenBlocks.Items.tastyClay = new ItemTastyClay();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Item.clay, Item.bucketMilk, new ItemStack(Item.dyePowder, 1, 3)));
+		}
+
+		if (explosiveEnchantmentId > 0) {
+			MinecraftForge.EVENT_BUS.register(new ExplosiveEnchantmentsHandler());
+			OpenBlocks.explosiveEnch = new EnchantmentExplosive(explosiveEnchantmentId);
 		}
 
 		ConfigProcessing.registerItems(OpenBlocks.Items.class, "openblocks");

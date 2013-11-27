@@ -77,7 +77,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 		public void runJob(World world, int x, int z) {
 			if (jobs == null) {
-				Log.severe("STOP ABUSING CARTOGRAPHER RIGHT KNOW! YOU BROKE IT!");
+				Log.severe("STOP ABUSING CARTOGRAPHER RIGHT NOW! YOU BROKE IT!");
 				jobs = ImmutableSet.of();
 			}
 			ChunkJob job = MapDataBuilder.doNextChunk(world, x, z, jobs);

@@ -4,6 +4,8 @@ stat.openblocks.bricksDropped=Bricks dropped
 
 openblocks.keybind.drop_brick=Be silly
 
+enchantment.openblocks.explosive=Unstable
+
 openblocks.gui.luggage=Luggage
 openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
