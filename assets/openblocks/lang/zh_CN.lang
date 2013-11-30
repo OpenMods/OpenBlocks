@@ -5,6 +5,8 @@ stat.openblocks.bricksDropped=砖块已掉落
 
 openblocks.keybind.drop_brick=傻了
 
+enchantment.openblocks.explosive=震荡不定
+
 openblocks.gui.luggage=行李
 openblocks.gui.sprinkler=洒水器
 openblocks.gui.vacuumhopper=虚空漏斗
