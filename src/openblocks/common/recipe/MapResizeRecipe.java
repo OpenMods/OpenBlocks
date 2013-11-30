@@ -7,15 +7,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.OpenBlocks.Items;
 import openblocks.common.item.ItemEmptyMap;
-import openblocks.common.item.ItemGeneric;
-import openblocks.common.item.ItemGeneric.Metas;
+import openblocks.common.item.MetasGeneric;
 import openmods.utils.ItemUtils;
 
 public class MapResizeRecipe extends ShapedOreRecipe {
 
 	public MapResizeRecipe() {
 		super(Items.emptyMap.createMap(1), " e ", "eme", " e ",
-				'e', Items.generic.newItemStack(Metas.mapMemory),
+				'e', MetasGeneric.mapMemory.newItemStack(),
 				'm', Items.emptyMap.createMap(0));
 	}
 
@@ -29,10 +28,10 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 		for (int i = 0; i < 3; i++) {
 			ItemStack left = inventory.getStackInRowAndColumn(0, i);
 
-			if (left == null || !ItemGeneric.isA(left, Metas.mapMemory)) continue;
+			if (left == null || !MetasGeneric.mapMemory.isA(left)) continue;
 
 			ItemStack right = inventory.getStackInRowAndColumn(2, i);
-			if (right == null || !ItemGeneric.isA(right, Metas.mapMemory)) continue;
+			if (right == null || !MetasGeneric.mapMemory.isA(right)) continue;
 
 			ItemStack middle = inventory.getStackInRowAndColumn(1, i);
 

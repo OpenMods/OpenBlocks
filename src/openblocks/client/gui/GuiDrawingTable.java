@@ -1,7 +1,6 @@
 package openblocks.client.gui;
 
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.ResourceLocation;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openmods.gui.BaseGuiContainer;
@@ -13,7 +12,6 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 		implements IComponentListener {
 
 	public static final int BUTTON_DRAW = 0;
-	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/components.png");
 
 	private GuiComponentIconButton buttonLeft;
 	private GuiComponentIconButton buttonRight;
@@ -24,9 +22,9 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
-		buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), texture);
+		buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), BaseComponent.TEXTURE_SHEET);
 		buttonLeft.addListener(this);
-		buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), texture);
+		buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), BaseComponent.TEXTURE_SHEET);
 		buttonRight.addListener(this);
 		root.addComponent((buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF))
 				.setText("Draw")

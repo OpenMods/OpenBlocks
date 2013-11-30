@@ -326,11 +326,11 @@ public class Config {
 		// There is no fail checking here because if the Generic item fails,
 		// then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
-		OpenBlocks.Items.generic = new ItemGeneric();
-		OpenBlocks.Items.generic.registerItems();
+		OpenBlocks.Items.generic = new ItemOBGeneric();
+		MetasGeneric.registerItems();
 		if (itemFilledBucketId > 0) {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
-			OpenBlocks.Items.filledBucket.registerItems();
+			MetasBucket.registerItems();
 		}
 
 		if (ConfigProcessing.canRegisterBlock(blockLadderId)) {
@@ -512,12 +512,12 @@ public class Config {
 
 		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', ItemGeneric.Metas.unpreparedStencil.newItemStack(), 'k', ItemGeneric.Metas.sketchingPencil.newItemStack()));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
 		}
 
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', ItemGeneric.Metas.gliderWing.newItemStack(), 's', "stickWood" }));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.hangGlider), new Object[] { "wsw", 'w', MetasGeneric.gliderWing.newItemStack(), 's', "stickWood" }));
 		}
 
 		if (itemLuggageId > 0) {
@@ -562,9 +562,9 @@ public class Config {
 
 		if (itemCraneId > 0) {
 			OpenBlocks.Items.craneBackpack = new ItemCraneBackpack();
-			ItemStack line = ItemGeneric.Metas.line.newItemStack();
-			ItemStack beam = ItemGeneric.Metas.beam.newItemStack();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack, ItemGeneric.Metas.craneEngine.newItemStack(), ItemGeneric.Metas.craneMagnet.newItemStack(), beam, beam, line, line, line, Item.leather));
+			ItemStack line = MetasGeneric.line.newItemStack();
+			ItemStack beam = MetasGeneric.beam.newItemStack();
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack, MetasGeneric.craneEngine.newItemStack(), MetasGeneric.craneMagnet.newItemStack(), beam, beam, line, line, line, Item.leather));
 		}
 
 		if (itemSlimalyzerId > 0) {
@@ -609,8 +609,8 @@ public class Config {
 			OpenBlocks.Items.emptyMap = new ItemEmptyMap();
 			recipeList.add(new MapResizeRecipe());
 
-			ItemStack memory = ItemGeneric.Metas.mapMemory.newItemStack(2);
-			ItemStack cpu = ItemGeneric.Metas.mapController.newItemStack(1);
+			ItemStack memory = MetasGeneric.mapMemory.newItemStack(2);
+			ItemStack cpu = MetasGeneric.mapController.newItemStack(1);
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.emptyMap.createMap(0),
 					" m ", "mcm", " m ",
 					'm', memory,
@@ -620,7 +620,7 @@ public class Config {
 
 		if (itemCartographerId > 0) {
 			OpenBlocks.Items.cartographer = new ItemCartographer();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, ItemGeneric.Metas.assistantBase.newItemStack(), Item.eyeOfEnder));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, MetasGeneric.assistantBase.newItemStack(), Item.eyeOfEnder));
 		}
 
 		if (itemGoldenEyeId > 0) {

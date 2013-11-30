@@ -8,7 +8,7 @@ import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
-import openblocks.common.item.ItemGeneric;
+import openblocks.common.item.MetasGeneric;
 import openblocks.events.StencilCraftEvent;
 import openmods.GenericInventory;
 import openmods.api.IActivateAwareTile;
@@ -38,7 +38,7 @@ public class TileEntityDrawingTable extends OpenTileEntity implements
 	public void onEvent(TileEntityMessageEventPacket event) {
 		if (event instanceof StencilCraftEvent) {
 			ItemStack stack = inventory.getStackInSlot(0);
-			if (stack != null && ItemGeneric.isA(stack, ItemGeneric.Metas.unpreparedStencil)) {
+			if (stack != null && MetasGeneric.unpreparedStencil.isA(stack)) {
 				ItemStack stencil = new ItemStack(Items.stencil, 1, ((StencilCraftEvent)event).getStencil().ordinal());
 				stencil.stackSize = stack.stackSize;
 				inventory.setInventorySlotContents(0, stencil);

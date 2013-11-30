@@ -5,9 +5,8 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-import openblocks.OpenBlocks.Items;
 import openblocks.client.Icons;
-import openblocks.common.item.ItemGeneric.Metas;
+import openblocks.common.item.MetasGeneric;
 import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.*;
 
@@ -33,7 +32,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
 	@Override
 	public ItemStack getCraftingItem() {
-		return Items.generic.newItemStack(Metas.miracleMagnet);
+		return MetasGeneric.miracleMagnet.newItemStack();
 	}
 
 	@Override

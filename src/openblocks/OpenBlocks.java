@@ -40,6 +40,7 @@ import openmods.Mods;
 import openmods.api.IOpenMod;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
+import openmods.item.ItemGeneric;
 import openmods.utils.EnchantmentUtils;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -264,7 +265,7 @@ public class OpenBlocks implements IOpenMod {
 		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
 		XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
 
-		FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, ItemFilledBucket.BucketMetas.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
+		FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, MetasBucket.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
 
 		OpenBlocks.Items.generic.initRecipes();
 
