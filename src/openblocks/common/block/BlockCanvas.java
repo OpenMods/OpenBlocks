@@ -14,7 +14,6 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
-import openmods.block.OpenBlock;
 
 public class BlockCanvas extends OpenBlock {
 
@@ -24,7 +23,6 @@ public class BlockCanvas extends OpenBlock {
 
 	public BlockCanvas() {
 		super(Config.blockCanvasId, Material.ground);
-		setupBlock(this, "canvas", TileEntityCanvas.class);
 	}
 
 	public BlockCanvas(int id, Material material) {

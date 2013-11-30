@@ -4,13 +4,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
-import openmods.block.OpenBlock;
 
 public class BlockVillageHighlighter extends OpenBlock {
 
 	public BlockVillageHighlighter() {
 		super(Config.blockVillageHighlighterId, Material.ground);
-		setupBlock(this, "village_highlighter", TileEntityVillageHighlighter.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

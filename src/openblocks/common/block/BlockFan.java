@@ -4,14 +4,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityFan;
-import openmods.block.OpenBlock;
 
 public class BlockFan extends OpenBlock {
 
 	public BlockFan() {
 		super(Config.blockFanId, Material.ground);
-		setupBlock(this, "fan", TileEntityFan.class);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 1.0f, 0.8f);
 		/* No rotation, handled by TE */
 	}

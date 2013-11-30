@@ -5,8 +5,6 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityXPBottler;
-import openmods.block.OpenBlock;
 
 public class BlockXPBottler extends OpenBlock {
 
@@ -20,7 +18,6 @@ public class BlockXPBottler extends OpenBlock {
 
 	public BlockXPBottler() {
 		super(Config.blockXPBottlerId, Material.ground);
-		setupBlock(this, "xpbottler", TileEntityXPBottler.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

@@ -4,15 +4,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityAutoAnvil;
-import openmods.block.OpenBlock;
 
 public class BlockAutoAnvil extends OpenBlock {
 
 	public BlockAutoAnvil() {
 		super(Config.blockAutoAnvilId, Material.anvil);
 		setStepSound(soundAnvilFootstep);
-		setupBlock(this, "autoanvil", TileEntityAutoAnvil.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

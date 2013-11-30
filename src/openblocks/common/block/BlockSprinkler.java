@@ -7,13 +7,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntitySprinkler;
-import openmods.block.OpenBlock;
 
 public class BlockSprinkler extends OpenBlock {
 
 	public BlockSprinkler() {
 		super(Config.blockSprinklerId, Material.water);
-		setupBlock(this, "sprinkler", TileEntitySprinkler.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

@@ -6,13 +6,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openmods.block.OpenBlock;
 
 public class BlockPath extends OpenBlock {
 
 	public BlockPath() {
 		super(Config.blockPathId, Material.plants);
-		setupBlock(this, "path");
 		setBlockBounds(0, 0, 0, 1f, 0.1f, 1f);
 	}
 

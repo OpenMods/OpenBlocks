@@ -7,7 +7,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBlockBreaker;
-import openmods.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -23,7 +22,6 @@ public class BlockBlockBreaker extends OpenBlock {
 
 	public BlockBlockBreaker() {
 		super(Config.blockBlockBreakerId, Material.rock);
-		setupBlock(this, "blockbreaker", TileEntityBlockBreaker.class);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 		setInventoryRenderRotation(ForgeDirection.EAST);

@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityGuide;
-import openmods.block.OpenBlock;
 
 public class BlockGuide extends OpenBlock {
 
@@ -22,7 +21,6 @@ public class BlockGuide extends OpenBlock {
 
 	public BlockGuide() {
 		super(Config.blockGuideId, Material.ground);
-		setupBlock(this, "guide", TileEntityGuide.class);
 	}
 
 	@Override

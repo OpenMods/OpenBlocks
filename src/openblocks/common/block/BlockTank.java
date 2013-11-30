@@ -10,16 +10,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
-import openmods.block.OpenBlock;
 
 public class BlockTank extends OpenBlock {
 
 
 	public BlockTank() {
 		super(Config.blockTankId, Material.ground);
-		setupBlock(this, "tank", TileEntityTank.class, ItemTankBlock.class);
 	}
 
 	@Override

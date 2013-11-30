@@ -8,10 +8,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityProjector;
 import openmods.api.IActivateAwareTile;
-import openmods.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -22,9 +19,7 @@ public class BlockProjector extends OpenBlock {
 
 	public BlockProjector() {
 		super(Config.blockProjectorId, Material.iron);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setBlockBounds(0, 0, 0, 1, 0.5f, 1);
-		setupBlock(this, "projector", TileEntityProjector.class);
 	}
 
 	@Override

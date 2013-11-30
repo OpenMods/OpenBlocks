@@ -9,8 +9,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
-import openmods.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,7 +19,6 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 
 	public BlockAutoEnchantmentTable() {
 		super(Config.blockAutoEnchantmentTableId, Material.ground);
-		setupBlock(this, "autoenchantmenttable", TileEntityAutoEnchantmentTable.class);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
 	}
 

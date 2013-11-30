@@ -4,14 +4,11 @@ import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityGrave;
-import openmods.block.OpenBlock;
 
 public class BlockGrave extends OpenBlock {
 
 	public BlockGrave() {
 		super(Config.blockGraveId, Material.anvil);
-		setupBlock(this, "grave", TileEntityGrave.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0, 0, 0, 1f, 0.2f, 1f);
 		setCreativeTab(null);

@@ -6,13 +6,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBigButton;
-import openmods.block.OpenBlock;
 
 public class BlockBigButton extends OpenBlock {
 
 	public BlockBigButton() {
 		super(Config.blockBigButton, Material.circuits);
-		setupBlock(this, "bigbutton", TileEntityBigButton.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}

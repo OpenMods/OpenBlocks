@@ -3,14 +3,11 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityOreCrusher;
-import openmods.block.OpenBlock;
 
 public class BlockMachineOreCrusher extends OpenBlock {
 
 	public BlockMachineOreCrusher() {
 		super(Config.blockMachineOreCrusherId, Material.ground);
-		setupBlock(this, "oreCrusher", TileEntityOreCrusher.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

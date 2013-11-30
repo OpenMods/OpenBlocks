@@ -8,13 +8,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityBearTrap;
-import openmods.block.OpenBlock;
 
 public class BlockBearTrap extends OpenBlock {
 
 	public BlockBearTrap() {
 		super(Config.blockBearTrapId, Material.ground);
-		setupBlock(this, "beartrap", TileEntityBearTrap.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

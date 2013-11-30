@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityRopeLadder;
-import openmods.block.OpenBlock;
 import openmods.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -23,7 +22,6 @@ public class BlockRopeLadder extends OpenBlock {
 		super(Config.blockRopeLadderId, Material.circuits);
 		setHardness(0.4F);
 		setStepSound(soundLadderFootstep);
-		setupBlock(this, "ropeladder", TileEntityRopeLadder.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}

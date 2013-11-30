@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityTarget;
-import openmods.block.OpenBlock;
 
 public class BlockTarget extends OpenBlock {
 
@@ -20,7 +19,6 @@ public class BlockTarget extends OpenBlock {
 
 	public BlockTarget() {
 		super(Config.blockTargetId, Material.ground);
-		setupBlock(this, "target", TileEntityTarget.class);
 		setLightValue(0.3f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}

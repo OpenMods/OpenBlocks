@@ -639,6 +639,8 @@ public class Config {
 			OpenBlocks.explosiveEnch = new EnchantmentExplosive(explosiveEnchantmentId);
 		}
 
-		ConfigProcessing.registerItems(OpenBlocks.Items.class, "openblocks");
+		final String modId = "openblocks";
+		ConfigProcessing.registerItems(OpenBlocks.Items.class, modId);
+		ConfigProcessing.registerBlocks(OpenBlocks.Blocks.class, modId);
 	}
 }

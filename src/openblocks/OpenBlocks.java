@@ -30,14 +30,14 @@ import openblocks.common.block.*;
 import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
+import openblocks.common.tileentity.*;
 import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.mutant.*;
 import openblocks.rubbish.BrickManager;
-import openmods.Log;
 import openmods.Mods;
-import openmods.api.IOpenMod;
+import openmods.config.RegisterBlock;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
 import openmods.item.ItemGeneric;
@@ -61,7 +61,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "required-after:OpenMods;after:OpenPeripheral")
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
-public class OpenBlocks implements IOpenMod {
+public class OpenBlocks {
 
 	@Instance(value = "OpenBlocks")
 	public static OpenBlocks instance;
@@ -70,41 +70,112 @@ public class OpenBlocks implements IOpenMod {
 	public static IOpenBlocksProxy proxy;
 
 	public static class Blocks {
+		@RegisterBlock(name = "ladder")
 		public static BlockLadder ladder;
+
+		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class)
 		public static BlockGuide guide;
+
+		@RegisterBlock(name = "elevator", tileEntity = TileEntityElevator.class)
 		public static BlockElevator elevator;
+
+		@RegisterBlock(name = "heal", tileEntity = TileEntityHealBlock.class)
 		public static BlockHeal heal;
+
+		@RegisterBlock(name = "target", tileEntity = TileEntityTarget.class)
 		public static BlockTarget target;
+
+		@RegisterBlock(name = "grave", tileEntity = TileEntityGrave.class)
 		public static BlockGrave grave;
+
+		@RegisterBlock(name = "flag", tileEntity = TileEntityFlag.class, itemBlock = ItemFlagBlock.class)
 		public static BlockFlag flag;
+
+		@RegisterBlock(name = "tank", tileEntity = TileEntityTank.class, itemBlock = ItemTankBlock.class)
 		public static BlockTank tank;
+
+		@RegisterBlock(name = "trophy", tileEntity = TileEntityTrophy.class, itemBlock = ItemTrophyBlock.class)
 		public static BlockTrophy trophy;
+
+		@RegisterBlock(name = "beartrap", tileEntity = TileEntityBearTrap.class)
 		public static BlockBearTrap bearTrap;
+
+		@RegisterBlock(name = "sprinkler", tileEntity = TileEntitySprinkler.class)
 		public static BlockSprinkler sprinkler;
+
+		@RegisterBlock(name = "cannon", tileEntity = TileEntityCannon.class)
 		public static BlockCannon cannon;
+
+		@RegisterBlock(name = "vacuumhopper", tileEntity = TileEntityVacuumHopper.class)
 		public static BlockVacuumHopper vacuumHopper;
+
+		@RegisterBlock(name = "sponge", tileEntity = TileEntitySponge.class)
 		public static BlockSponge sponge;
+
+		@RegisterBlock(name = "bigbutton", tileEntity = TileEntityBigButton.class)
 		public static BlockBigButton bigButton;
+
+		@RegisterBlock(name = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class)
 		public static BlockImaginary imaginary;
+
+		@RegisterBlock(name = "fan", tileEntity = TileEntityFan.class)
 		public static BlockFan fan;
+
+		@RegisterBlock(name = "xpbottler", tileEntity = TileEntityXPBottler.class)
 		public static BlockXPBottler xpBottler;
+
+		@RegisterBlock(name = "village_highlighter", tileEntity = TileEntityVillageHighlighter.class)
 		public static BlockVillageHighlighter villageHighlighter;
+
+		@RegisterBlock(name = "path")
 		public static BlockPath path;
+
+		@RegisterBlock(name = "autoanvil", tileEntity = TileEntityAutoAnvil.class)
 		public static BlockAutoAnvil autoAnvil;
+
+		@RegisterBlock(name = "autoenchantmenttable", tileEntity = TileEntityAutoEnchantmentTable.class)
 		public static BlockAutoEnchantmentTable autoEnchantmentTable;
+
+		@RegisterBlock(name = "xpdrain", tileEntity = TileEntityXPDrain.class)
 		public static BlockXPDrain xpDrain;
+
+		@RegisterBlock(name = "blockbreaker", tileEntity = TileEntityBlockBreaker.class)
 		public static BlockBlockBreaker blockBreaker;
+
+		@RegisterBlock(name = "blockPlacer", tileEntity = TileEntityBlockPlacer.class)
 		public static BlockBlockPlacer blockPlacer;
+
+		@RegisterBlock(name = "itemDropper", tileEntity = TileEntityItemDropper.class)
 		public static BlockItemDropper itemDropper;
+
+		@RegisterBlock(name = "ropeladder", tileEntity = TileEntityRopeLadder.class)
 		public static BlockRopeLadder ropeLadder;
+
+		@RegisterBlock(name = "donationStation", tileEntity = TileEntityDonationStation.class)
 		public static BlockDonationStation donationStation;
+
+		@RegisterBlock(name = "paintmixer", tileEntity = TileEntityPaintMixer.class)
 		public static BlockPaintMixer paintMixer;
+
+		@RegisterBlock(name = "canvas", tileEntity = TileEntityCanvas.class)
 		public static BlockCanvas canvas;
+
+		@RegisterBlock(name = "oreCrusher", tileEntity = TileEntityOreCrusher.class)
 		public static BlockMachineOreCrusher machineOreCrusher;
+
+		@RegisterBlock(name = "paintcan", tileEntity = TileEntityPaintCan.class)
 		public static BlockPaintCan paintCan;
+
+		@RegisterBlock(name = "canvasglass", tileEntity = TileEntityCanvas.class)
 		public static BlockCanvasGlass canvasGlass;
+
+		@RegisterBlock(name = "projector", tileEntity = TileEntityProjector.class)
 		public static BlockProjector projector;
+
+		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
+
+		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
 		public static BlockGoldenEgg goldenEgg;
 	}
 
@@ -312,25 +383,5 @@ public class OpenBlocks implements IOpenMod {
 
 	public static String getModId() {
 		return OpenBlocks.class.getAnnotation(Mod.class).modid();
-	}
-
-	@Override
-	public Log getLog() {
-		return null;
-	}
-
-	@Override
-	public CreativeTabs getCreativeTab() {
-		return tabOpenBlocks;
-	}
-
-	@Override
-	public String getId() {
-		return "openblocks";
-	}
-
-	@Override
-	public int getRenderId() {
-		return renderId;
 	}
 }

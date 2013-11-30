@@ -2,14 +2,11 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityGoldenEgg;
-import openmods.block.OpenBlock;
 
 public class BlockGoldenEgg extends OpenBlock {
 
 	public BlockGoldenEgg() {
 		super(Config.blockGoldenEggId, Material.ground);
-		setupBlock(this, "goldenegg", TileEntityGoldenEgg.class);
 	}
 
 	@Override

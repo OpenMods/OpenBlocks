@@ -6,15 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.tileentity.TileEntityTrophy;
-import openmods.block.OpenBlock;
 
 public class BlockTrophy extends OpenBlock {
 
 	public BlockTrophy() {
 		super(Config.blockTrophyId, Material.ground);
-		setupBlock(this, "trophy", TileEntityTrophy.class, ItemTrophyBlock.class);
 		setBlockBounds(0.3f, 0f, 0.3f, 0.7f, 0.8f, 0.7f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}

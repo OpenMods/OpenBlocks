@@ -5,8 +5,6 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityDrawingTable;
-import openmods.block.OpenBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -16,7 +14,6 @@ public class BlockDrawingTable extends OpenBlock {
 
 	public BlockDrawingTable() {
 		super(Config.blockDrawingTable, Material.wood);
-		setupBlock(this, "drawingtable", TileEntityDrawingTable.class);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

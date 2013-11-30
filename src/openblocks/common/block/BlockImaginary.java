@@ -18,7 +18,6 @@ import openblocks.Config;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
-import openmods.block.OpenBlock;
 
 import com.google.common.collect.Lists;
 
@@ -45,7 +44,6 @@ public class BlockImaginary extends OpenBlock {
 
 	public BlockImaginary() {
 		super(Config.blockImaginaryId, Material.glass);
-		setupBlock(this, "imaginary", TileEntityImaginary.class, ItemImaginary.class);
 		setHardness(0.3f);
 		stepSound = drawingSounds;
 	}
