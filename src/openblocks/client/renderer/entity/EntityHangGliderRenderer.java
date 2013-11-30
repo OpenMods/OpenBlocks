@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.common.entity.EntityHangGlider;
-import openmods.utils.CompatibilityUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -53,7 +52,7 @@ public class EntityHangGliderRenderer extends Render {
 
 		// Push matrix to hold it's location for rendering other stuff */
 		GL11.glPushMatrix();
-		CompatibilityUtils.bindOBTextureToClient("textures/models/hangglider.png");
+		bindTexture(texture);
 		renderGlider();
 		GL11.glPopMatrix();
 
