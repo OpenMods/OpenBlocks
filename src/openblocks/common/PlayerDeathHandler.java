@@ -1,27 +1,23 @@
 package openblocks.common;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityGrave;
+import openmods.GenericInventory;
+import openmods.utils.InventoryUtils;
 
 public class PlayerDeathHandler {
 
-	/**
-	 * Switched this to the player death event, because the inventory is cleared
-	 * out before the item drop event. Either would work, I guess, but this is a
-	 * bit neater
-	 * 
-	 * ... I say neater...
-	 * 
-	 * @param event
-	 */
-	@ForgeSubscribe
-	public void onPlayerDeath(LivingDeathEvent event) {
+	@ForgeSubscribe(priority = EventPriority.LOW)
+	public void onPlayerDrops(PlayerDropsEvent event) {
 		if (event.entityLiving != null
 				&& event.entityLiving instanceof EntityPlayer) {
 
@@ -47,8 +43,13 @@ public class PlayerDeathHandler {
 						if (tile != null && tile instanceof TileEntityGrave) {
 							TileEntityGrave grave = (TileEntityGrave)tile;
 							grave.setUsername(player.username);
-							grave.setLoot(player.inventory);
-							player.inventory.clearInventory(-1, -1);
+							GenericInventory invent = new GenericInventory("tmpplayer", false, 1000);
+							for (EntityItem entityItem : event.drops) {
+								ItemStack stack = entityItem.getEntityItem();
+								InventoryUtils.insertItemIntoInventory(invent, stack);
+							}
+							grave.setLoot(invent);
+							event.setCanceled(true);
 							break;
 						}
 					} else if (thisIsAir) {
