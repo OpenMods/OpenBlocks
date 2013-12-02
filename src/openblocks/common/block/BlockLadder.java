@@ -4,20 +4,15 @@ import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openmods.config.IRegisterableBlock;
-import openmods.item.ItemOpenBlock;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockLadder extends BlockTrapDoor implements IRegisterableBlock {
+public class BlockLadder extends BlockTrapDoor {
 
 	public static boolean disableValidation = false;
 
@@ -27,12 +22,6 @@ public class BlockLadder extends BlockTrapDoor implements IRegisterableBlock {
 		setStepSound(soundWoodFootstep);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);
-	}
-
-	@Override
-	public void setupBlock(String modId, String uniqueName, Class<? extends TileEntity> tileEntity, Class<? extends ItemBlock> itemClass) {
-		GameRegistry.registerBlock(this, ItemOpenBlock.class, modId + "_" + uniqueName);
-		setUnlocalizedName(modId + "." + uniqueName);
 	}
 
 	@Override

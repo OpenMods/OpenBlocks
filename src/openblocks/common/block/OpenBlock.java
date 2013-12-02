@@ -14,10 +14,4 @@ public abstract class OpenBlock extends openmods.block.OpenBlock {
 	public int getRenderType() {
 		return OpenBlocks.renderId;
 	}
-
-	@Override
-	protected String getModId() {
-		return "openblocks";
-	}
-
 }
