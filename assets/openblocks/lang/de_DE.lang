@@ -4,6 +4,8 @@ stat.openblocks.bricksDropped=Fallen gelassene Ziegel
 
 openblocks.keybind.drop_brick=Sei albern
 
+enchantment.openblocks.explosive=Instabil
+
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
 openblocks.gui.vacuumhopper=Vakuumtrichter
@@ -57,7 +59,7 @@ tile.openblocks.xpbottler.name=XP-Abfüllgerät
 tile.openblocks.village_highlighter.name=Dorf-Highlighter
 tile.openblocks.path.name=Pfad
 tile.openblocks.autoanvil.name=Auto-Amboss
-tile.openblocks.autoenchantmenttable.name==Auto-Zaubertisch
+tile.openblocks.autoenchantmenttable.name=Auto-Zaubertisch
 tile.openblocks.xpdrain.name=XP-Sauger
 tile.openblocks.ropeladder.name=Strickleiter
 tile.openblocks.donationStation.name=Spendenstation
