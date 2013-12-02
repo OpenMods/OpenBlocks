@@ -45,12 +45,14 @@ public class TileEntityBlockPlacer extends OpenTileEntity
 		for (int i = 0, l = getSizeInventory(); i < l; i++) {
 			ItemStack stack = getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
-			ItemStack newStack = OpenModsFakePlayer.getPlayerForWorld(worldObj)
+			OpenModsFakePlayer fakePlayer = OpenModsFakePlayer.getPlayerForWorld(worldObj);
+			ItemStack newStack = fakePlayer.getPlayerForWorld(worldObj)
 					.equipWithAndRightClick(stack,
 							Vec3.createVectorHelper(xCoord, yCoord, zCoord),
 							Vec3.createVectorHelper(x, y - 1, z),
 							direction.getOpposite(),
 							worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
+			fakePlayer.setDead();
 			if (newStack != null) {
 				setInventorySlotContents(i, newStack.stackSize > 0? newStack : null);
 			}

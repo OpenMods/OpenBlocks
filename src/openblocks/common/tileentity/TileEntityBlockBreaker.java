@@ -103,6 +103,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 									back, items);
 						}
 					}
+					fakePlayer.setDead();
 					worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
 					worldObj.setBlockToAir(x, y, z);
 				}
