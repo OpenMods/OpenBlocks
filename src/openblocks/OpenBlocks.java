@@ -286,10 +286,7 @@ public class OpenBlocks {
 		EventTypes.registerTypes();
 		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
 		Config.readConfig(configFile);
-		if (configFile.hasChanged()) {
-			configFile.save();
-		}
-
+		if (configFile.hasChanged()) configFile.save();
 		Config.register();
 
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());

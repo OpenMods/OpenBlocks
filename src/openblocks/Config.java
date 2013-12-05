@@ -12,7 +12,6 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.asm.EntityPlayerVisitor;
@@ -23,6 +22,7 @@ import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.recipe.*;
 import openmods.config.BlockId;
 import openmods.config.ConfigProcessing;
+import openmods.config.ConfigProperty;
 import openmods.config.ItemId;
 import openmods.utils.ColorUtils;
 
@@ -201,119 +201,88 @@ public class Config {
 	@ItemId(description = "The id of the golden eye item")
 	public static int itemGoldenEyeId = 14995;
 
+	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
+
+	@ConfigProperty(category = "dropblock", name = "mustFaceDirection", comment = "Must the user face the direction they want to travel?")
 	public static boolean elevatorBlockMustFaceDirection = false;
+
+	@ConfigProperty(category = "dropblock", name = "ignoreHalfBlocks", comment = "The elevator will ignore half blocks when counting the blocks it can pass through")
 	public static boolean elevatorIgnoreHalfBlocks = false;
+
+	@ConfigProperty(category = "dropblock", name = "maxPassThrough", comment = "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this")
 	public static int elevatorMaxBlockPassCount = 4;
+
+	@ConfigProperty(category = "tanks", name = "bucketsPerTank", comment = "The amount of buckets each tank can hold")
 	public static int bucketsPerTank = 16;
+
+	@ConfigProperty(category = "grave", name = "enableGraves", comment = "Enable graves on player death")
 	public static boolean enableGraves = false;
+
+	@ConfigProperty(category = "hacks", name = "tryHookPlayerRenderer", comment = "Allow OpenBlocks to hook the player renderer to apply special effects")
 	public static boolean tryHookPlayerRenderer = true;
+
+	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000")
 	public static double trophyDropChance = 0.001;
+
+	@ConfigProperty(category = "dropblock", name = "irregularBlocksArePassable", comment = "The elevator will try to pass through blocks that have custom collision boxes")
 	public static boolean irregularBlocksArePassable = true;
+
+	@ConfigProperty(category = "tanks", name = "emitLight", comment = "Tanks will emit light when they contain a liquid that glows (eg. lava)")
 	public static boolean tanksEmitLight = true;
+
+	@ConfigProperty(category = "sprinkler", name = "fertilizeChance", comment = "1/chance that crops will be fertilized without bonemeal")
 	public static int sprinklerFertilizeChance = 500;
+
+	@ConfigProperty(category = "sprinkler", name = "bonemealFertilizeChance", comment = "1/chance that crops will be fertilized with bonemeal")
 	public static int sprinklerBonemealFertizizeChance = 200;
+
+	@ConfigProperty(category = "sprinkler", name = "effectiveRange", comment = "The range in each cardinal direction that crops will be affected.")
 	public static int sprinklerEffectiveRange = 4;
+
+	@ConfigProperty(category = "glasses", name = "opacity", comment = "0.0 - no visible change to world, 1.0 - world fully obscured")
 	public static double sonicGlassesOpacity = 0.95;
+
+	@ConfigProperty(category = "glasses", name = "useTexture", comment = "Use texture for obscuring world")
 	public static boolean sonicGlassesUseTexture = true;
+
+	@ConfigProperty(category = "imaginary", name = "fadingSpeed", comment = "Speed of imaginary blocks fading/appearing")
 	public static float imaginaryFadingSpeed = 0.0075f;
+
+	@ConfigProperty(category = "imaginary", name = "numberOfUses", comment = "Number of newly created crayon/pencil uses")
 	public static float imaginaryItemUseCount = 10;
-	public static List<String> disableMobNames = Lists.newArrayList();
+
+	@ConfigProperty(category = "crane", name = "doCraneCollisionCheck", comment = "Enable collision checking of crane arm")
 	public static boolean doCraneCollisionCheck = false;
+
+	@ConfigProperty(category = "crane", name = "boringMode", comment = "Use shift to control crane direction (otherwise, toggle every time)")
 	public static boolean craneShiftControl = true;
+
+	@ConfigProperty(category = "crane", name = "turtleMagnetRange", comment = "Range of magnet CC peripheral")
 	public static double turtleMagnetRange = 4;
+
+	@ConfigProperty(category = "crane", name = "addTurtles", comment = "Enable magnet turtles in creative list")
 	public static boolean addCraneTurtles = true;
+
+	@ConfigProperty(category = "hacks", name = "enableExperimentalFeatures", comment = "Enable experimental features that may be buggy or broken entirely")
 	public static boolean experimentalFeatures = false;
+
+	@ConfigProperty(category = "tomfoolery", name = "weAreSeriousPeople", comment = "Are you serious too?")
 	public static boolean soSerious = true;
+
+	@ConfigProperty(category = "tomfoolery", name = "doItWhileTyping", comment = "You know, THAT thing! That you shouldn't do in public!")
 	public static boolean fartTypying = false;
+
+	@ConfigProperty(category = "debug", name = "goldenEyeDebug", comment = "Show structures found by golden eye")
 	public static boolean eyeDebug = false;
+
+	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 153;
+
+	public static List<String> disableMobNames = Lists.newArrayList();
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);
-
-		Property prop = configFile.get("dropblock", "searchDistance", elevatorTravelDistance, "The range of the drop block");
-		elevatorTravelDistance = prop.getInt();
-
-		prop = configFile.get("dropblock", "mustFaceDirection", elevatorBlockMustFaceDirection, "Must the user face the direction they want to travel?");
-		elevatorBlockMustFaceDirection = prop.getBoolean(elevatorBlockMustFaceDirection);
-
-		prop = configFile.get("dropblock", "maxPassThrough", elevatorMaxBlockPassCount, "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this");
-		elevatorMaxBlockPassCount = prop.getInt();
-
-		if (elevatorMaxBlockPassCount < -1) {
-			elevatorMaxBlockPassCount = -1;
-		}
-		prop.set(elevatorMaxBlockPassCount);
-
-		prop = configFile.get("dropblock", "ignoreHalfBlocks", elevatorIgnoreHalfBlocks, "The elevator will ignore half blocks when counting the blocks it can pass through");
-		elevatorIgnoreHalfBlocks = prop.getBoolean(elevatorIgnoreHalfBlocks);
-
-		prop = configFile.get("dropblock", "irregularBlocksArePassable", irregularBlocksArePassable, "The elevator will try to pass through blocks that have custom collision boxes");
-		irregularBlocksArePassable = prop.getBoolean(irregularBlocksArePassable);
-
-		prop = configFile.get("grave", "enableGraves", enableGraves, "Enable graves on player death");
-		enableGraves = prop.getBoolean(enableGraves);
-
-		prop = configFile.get("tanks", "bucketsPerTank", bucketsPerTank, "The amount of buckets each tank can hold");
-		bucketsPerTank = prop.getInt(bucketsPerTank);
-
-		prop = configFile.get("tanks", "emitLight", tanksEmitLight, "Tanks will emit light when they contain a liquid that glows (eg. lava)");
-		tanksEmitLight = prop.getBoolean(tanksEmitLight);
-
-		prop = configFile.get("trophy", "trophyDropChance", trophyDropChance, "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000");
-		trophyDropChance = prop.getDouble(trophyDropChance);
-
-		prop = configFile.get("sprinkler", "fertilizeChance", sprinklerFertilizeChance, "1/chance that crops will be fertilized without bonemeal");
-		sprinklerFertilizeChance = prop.getInt(sprinklerFertilizeChance);
-
-		prop = configFile.get("sprinkler", "bonemealFertilizeChance", sprinklerBonemealFertizizeChance, "1/chance that crops will be fertilized with bonemeal");
-		sprinklerBonemealFertizizeChance = prop.getInt(sprinklerBonemealFertizizeChance);
-
-		prop = configFile.get("sprinkler", "effectiveRange", sprinklerEffectiveRange, "The range in each cardinal direction that crops will be affected.");
-		sprinklerEffectiveRange = prop.getInt(sprinklerEffectiveRange);
-
-		prop = configFile.get("hacks", "tryHookPlayerRenderer", tryHookPlayerRenderer, "Allow OpenBlocks to hook the player renderer to apply special effects");
-		tryHookPlayerRenderer = prop.getBoolean(tryHookPlayerRenderer);
-
-		prop = configFile.get("glasses", "opacity", sonicGlassesOpacity, "0.0 - no visible change to world, 1.0 - world fully obscured");
-		sonicGlassesOpacity = prop.getDouble(sonicGlassesOpacity);
-
-		prop = configFile.get("glasses", "useTexture", sonicGlassesUseTexture, "Use texture for obscuring world");
-		sonicGlassesUseTexture = prop.getBoolean(sonicGlassesUseTexture);
-
-		prop = configFile.get("imaginary", "fadingSpeed", imaginaryFadingSpeed, "Speed of imaginary blocks fading/appearing");
-		imaginaryFadingSpeed = (float)prop.getDouble(imaginaryFadingSpeed);
-
-		prop = configFile.get("imaginary", "numberOfUses", imaginaryItemUseCount, "Number of newly created crayon/pencil uses");
-		imaginaryItemUseCount = (float)prop.getDouble(imaginaryItemUseCount);
-
-		prop = configFile.get("crane", "doCraneCollisionCheck", doCraneCollisionCheck, "Enable collision checking of crane arm");
-		doCraneCollisionCheck = prop.getBoolean(doCraneCollisionCheck);
-
-		prop = configFile.get("crane", "boringMode", craneShiftControl, "Use shift to control crane direction (otherwise, toggle every time)");
-		craneShiftControl = prop.getBoolean(craneShiftControl);
-
-		prop = configFile.get("crane", "turtleMagnetRange", turtleMagnetRange, "Range of magnet CC peripheral");
-		turtleMagnetRange = prop.getDouble(turtleMagnetRange);
-
-		prop = configFile.get("crane", "addTurtles", addCraneTurtles, "Enable magnet turtles in creative list");
-		addCraneTurtles = prop.getBoolean(addCraneTurtles);
-
-		prop = configFile.get("hacks", "enableExperimentalFeatures", experimentalFeatures, "Enable experimental features that may be buggy or broken entirely");
-		experimentalFeatures = prop.getBoolean(experimentalFeatures);
-
-		prop = configFile.get("tomfoolery", "weAreSeriousPeople", soSerious, "Are you serious too?");
-		soSerious = prop.getBoolean(soSerious);
-
-		prop = configFile.get("tomfoolery", "doItWhileTyping", fartTypying, "You know, THAT thing! That you shouldn't do in public!");
-		fartTypying = prop.getBoolean(fartTypying);
-
-		prop = configFile.get("debug", "goldenEyeDebug", eyeDebug, "Show structures found by golden eye");
-		eyeDebug = prop.getBoolean(eyeDebug);
-
-		prop = configFile.get("features", "explosiveEnchantmentId", explosiveEnchantmentId, "Id of explosive enchantment");
-		explosiveEnchantmentId = prop.getInt(explosiveEnchantmentId);
 	}
 
 	public static void register() {

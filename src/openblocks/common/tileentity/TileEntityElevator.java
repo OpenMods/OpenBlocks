@@ -24,7 +24,7 @@ public class TileEntityElevator extends OpenTileEntity {
 				|| (Config.irregularBlocksArePassable && block.getCollisionBoundingBoxFromPool(worldObj, x, y, z) == null || block.getCollisionBoundingBoxFromPool(worldObj, x, y, z).getAverageEdgeLength() < 0.7); }
 		/* Ugly logic makes NC sad :( */
 		return !(worldObj.isAirBlock(x, y, z)
-				|| Config.elevatorMaxBlockPassCount == -1 || Config.elevatorIgnoreHalfBlocks
+				|| Config.elevatorMaxBlockPassCount < 0 || Config.elevatorIgnoreHalfBlocks
 				&& !Block.isNormalCube(blockId));
 	}
 
