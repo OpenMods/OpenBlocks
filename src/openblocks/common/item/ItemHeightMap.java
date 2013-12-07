@@ -3,6 +3,7 @@ package openblocks.common.item;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,4 +43,10 @@ public class ItemHeightMap extends Item {
 	public void registerIcons(IconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:height_map");
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	@SuppressWarnings("rawtypes")
+	public void getSubItems(int id, CreativeTabs tab, List items) {}
+
 }
