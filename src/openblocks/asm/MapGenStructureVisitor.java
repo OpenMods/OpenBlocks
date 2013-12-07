@@ -2,17 +2,13 @@ package openblocks.asm;
 
 import openblocks.OpenBlocksCorePlugin;
 import openblocks.utils.AsmUtils.MethodMatcher;
-import openmods.Log;
 
 import org.objectweb.asm.*;
 
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
 public class MapGenStructureVisitor extends ClassVisitor {
-
-	{
-		if (Log.logger == null) Log.logger = OpenBlocksCorePlugin.log;
-	}
 
 	private final MethodMatcher modifiedMethod;
 	private final MethodMatcher markerMethod;
@@ -41,7 +37,7 @@ public class MapGenStructureVisitor extends ClassVisitor {
 			super.visitTypeInsn(opcode, type);
 			if (opcode == Opcodes.CHECKCAST && type.equals(structureStartCls)) {
 				checkcastFound = true;
-				Log.info("MapGenFix: Found checkcast to '%s'", type);
+				FMLRelaunchLog.info("[OpenBlocks] MapGenFix: Found checkcast to '%s'", type);
 			}
 		}
 
@@ -52,7 +48,7 @@ public class MapGenStructureVisitor extends ClassVisitor {
 			if (checkcastFound && opcode == Opcodes.ASTORE) {
 				localVarId = var;
 				checkcastFound = false;
-				Log.info("MapGenFix: Found var: %d", localVarId);
+				FMLRelaunchLog.info("[OpenBlocks] MapGenFix: Found var: %d", localVarId);
 			}
 		}
 
@@ -73,7 +69,7 @@ public class MapGenStructureVisitor extends ClassVisitor {
 			super.visitMethodInsn(opcode, owner, name, desc);
 			if (opcode == Opcodes.INVOKEVIRTUAL && owner.equals(structureStartCls) && markerMethod.match(name, desc)) {
 				markerMethodFound = true;
-				Log.info("MapGenFix: Found 'StructureStart.isSizeableStructure' (%s.%s) call", owner, name);
+				FMLRelaunchLog.info("[OpenBlocks] MapGenFix: Found 'StructureStart.isSizeableStructure' (%s.%s) call", owner, name);
 			}
 		}
 
@@ -82,7 +78,7 @@ public class MapGenStructureVisitor extends ClassVisitor {
 			super.visitJumpInsn(opcode, label);
 
 			if (markerMethodFound && localVarId != null && opcode == Opcodes.IFEQ) {
-				Log.info("MapGenFix: All conditions matched, inserting extra condition");
+				FMLRelaunchLog.info("[OpenBlocks] MapGenFix: All conditions matched, inserting extra condition");
 				super.visitVarInsn(Opcodes.ALOAD, localVarId); // hopefully
 																// 'structurestart'
 				String getComponentsMethodName = OpenBlocksCorePlugin.isRuntimeDeobfuscated? "func_75073_b" : "getComponents";
