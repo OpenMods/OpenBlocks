@@ -1,16 +1,13 @@
 package openblocks.integration;
 
-import openperipheral.api.IntegrationRegistry;
+import openperipheral.api.OpenPeripheralAPI;
 
 public class ModuleOpenPeripheral {
 
-	private static final IntegrationRegistry reg = new IntegrationRegistry();
-	
-	@SuppressWarnings("deprecation")
 	public static void registerAdapters() {
-		reg.registerAdapter(new AdapterVillageHighlighter());
-		reg.registerAdapter(new AdapterDonationStation());
-		reg.registerAdapter(new AdapterCannon());
-		reg.registerAdapter(new AdapterProjector());
+		OpenPeripheralAPI.register(new AdapterVillageHighlighter());
+		OpenPeripheralAPI.register(new AdapterDonationStation());
+		OpenPeripheralAPI.register(new AdapterCannon());
+		OpenPeripheralAPI.register(new AdapterProjector());
 	}
 }
