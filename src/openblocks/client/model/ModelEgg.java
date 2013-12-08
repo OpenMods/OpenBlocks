@@ -1,10 +1,10 @@
 package openblocks.client.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
+
+import org.lwjgl.opengl.GL11;
 
 public class ModelEgg extends ModelBase {
 	ModelRenderer egg;
@@ -14,7 +14,7 @@ public class ModelEgg extends ModelBase {
 		textureHeight = 64;
 
 		egg = new ModelRenderer(this);
-		
+
 		egg.setTextureOffset(0, 0);
 		egg.addBox(-2F, 0F, -2F, 4, 1, 4);
 

@@ -11,6 +11,6 @@ public class ItemFilledBucket extends ItemGeneric {
 		super(Config.itemFilledBucketId);
 		setContainerItem(Item.bucketEmpty);
 		setMaxStackSize(1);
-        setCreativeTab(OpenBlocks.tabOpenBlocks);
+		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 }

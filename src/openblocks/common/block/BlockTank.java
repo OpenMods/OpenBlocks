@@ -14,7 +14,6 @@ import openblocks.common.tileentity.TileEntityTank;
 
 public class BlockTank extends OpenBlock {
 
-
 	public BlockTank() {
 		super(Config.blockTankId, Material.ground);
 	}

@@ -8,7 +8,7 @@ public class ItemOBGeneric extends ItemGeneric {
 
 	public ItemOBGeneric() {
 		super(Config.itemGenericId);
-        setMaxStackSize(64);
-        setCreativeTab(OpenBlocks.tabOpenBlocks);
+		setMaxStackSize(64);
+		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 }

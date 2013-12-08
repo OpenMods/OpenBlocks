@@ -1,10 +1,7 @@
 package openblocks.common.tileentity;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -32,7 +29,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private ArrayList<EntityBlock> blocks = new ArrayList<EntityBlock>();
 	private HashMap<String, Integer> dnas = new HashMap<String, Integer>();
 	private SyncableInt stage;
-	
+
 	private String owner;
 
 	@Override
@@ -41,9 +38,9 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	private boolean stageElapsed() {
-		 return animationStageTicks > 0 ? animationStageTicks >= ANIMATION_TIME : OpenMods.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE;
+		return animationStageTicks > 0? animationStageTicks >= ANIMATION_TIME : OpenMods.proxy.getTicks(worldObj) % STAGE_CHANGE_TICK == 0 && worldObj.rand.nextDouble() < STAGE_CHANGE_CHANCE;
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
@@ -75,13 +72,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 						block.setHasGravity(false);
 						block.setShouldDrop(false);
 						block.motionY = 0.1;
-						//block.setPositionAndRotation(posX, posY, posZ, 0, 0);
+						// block.setPositionAndRotation(posX, posY, posZ, 0, 0);
 						blocks.add(block);
 						worldObj.spawnEntityInWorld(block);
 					}
 				}
-				if(ANIMATION_TIME - animationStageTicks < 20 && blocks != null) {
-					for(EntityBlock block : blocks) {
+				if (ANIMATION_TIME - animationStageTicks < 20 && blocks != null) {
+					for (EntityBlock block : blocks) {
 						block.setShouldDrop(true);
 						block.motionY = -0.9;
 						block.setHasGravity(true);
@@ -94,13 +91,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
 				EntityMutant mutant = new EntityMutant(worldObj);
-	            mutant.setOwner(owner);
+				mutant.setOwner(owner);
 				mutant.setTraitsFromMap(dnas);
 				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
 				worldObj.spawnEntityInWorld(mutant);
 			}
 		}
-		if(stage.getValue() >= 4 && animationStageTicks < ANIMATION_TIME) {
+		if (stage.getValue() >= 4 && animationStageTicks < ANIMATION_TIME) {
 			animationStageTicks++;
 		}
 	}
@@ -168,5 +165,5 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			owner = player.username;
 		}
 	}
-	
+
 }

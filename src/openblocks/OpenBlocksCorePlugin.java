@@ -8,14 +8,14 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 public class OpenBlocksCorePlugin implements IFMLLoadingPlugin {
 
-	public static Logger log; 
+	public static Logger log;
 	static {
 		log = Logger.getLogger("OpenBlocksCore");
 		log.setParent(FMLLog.getLogger());
 	}
 
 	public static boolean isRuntimeDeobfuscated = false;
-	
+
 	@Override
 	public String[] getASMTransformerClass() {
 		return new String[] { "openblocks.asm.OpenBlocksClassTransformer" };

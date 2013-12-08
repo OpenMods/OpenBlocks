@@ -129,11 +129,10 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 				double vMax = texture.getInterpolatedV(16.0);
 
 				double vHeight = vMax - vMin;
-				
 
-			    float r = (color >> 16 & 0xFF) / 255.0F;
-			    float g = (color >> 8 & 0xFF) / 255.0F;
-			    float b = (color & 0xFF) / 255.0F;
+				float r = (color >> 16 & 0xFF) / 255.0F;
+				float g = (color >> 8 & 0xFF) / 255.0F;
+				float b = (color & 0xFF) / 255.0F;
 
 				// north side
 				t.startDrawingQuads();

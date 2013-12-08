@@ -64,7 +64,7 @@ public abstract class EntitySmoothMove extends Entity {
 
 		smoother = createSmoother(world.isRemote);
 	}
-	
+
 	protected MoveSmoother createSmoother(boolean isRemote) {
 		return isRemote? new MoveSmoother(0.25, 1.0, 8.0, 0.01) :
 				new MoveSmoother(0.5, 5.0, 128.0, 0.01);

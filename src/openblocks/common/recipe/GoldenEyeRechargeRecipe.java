@@ -48,7 +48,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
 			if (item instanceof ItemGoldenEye) golden = stack;
 			else if (item instanceof ItemEnderPearl) enderCount++;
 		}
-		
+
 		ItemStack result = golden.copy();
 		result.setItemDamage(golden.getItemDamage() - enderCount * PEARL_RECHARGE);
 		return result;

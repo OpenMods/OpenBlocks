@@ -37,21 +37,30 @@ public class TileEntityXPDrain extends OpenTileEntity {
 						FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
 						int xpToDrain = Math.min(4, player.experienceTotal);
 						xpStack.amount = EnchantmentUtils.XPToLiquidRatio(xpToDrain);
-						/* We should simulate and then check the amount of XP to be drained, 
-						 * if one is zero and the other is not, we don't apply the draining. */
-						
+						/*
+						 * We should simulate and then check the amount of XP to
+						 * be drained,
+						 * if one is zero and the other is not, we don't apply
+						 * the draining.
+						 */
+
 						int filled = tank.fill(ForgeDirection.UP, xpStack, false);
 						int theoreticalDrain = EnchantmentUtils.liquidToXPRatio(filled);
-						if(theoreticalDrain <= 0 && filled > 0 || filled <= 0 && theoreticalDrain > 0) {
-							// Regardless of ratio, this will protect against infini-loops caused by
+						if (theoreticalDrain <= 0 && filled > 0 || filled <= 0 && theoreticalDrain > 0) {
+							// Regardless of ratio, this will protect against
+							// infini-loops caused by
 							// rounding.
-							// ALERT: There is a return here, if code is added under this for-loop
-							// In the future, it could have unexpected outcomes. Don't change the code
+							// ALERT: There is a return here, if code is added
+							// under this for-loop
+							// In the future, it could have unexpected outcomes.
+							// Don't change the code
 							// :P - NC
 							return;
 						}
-						// Limit the stack to what we got last time. Keeps things all sync'ed.
-						// I realize that the update loop is single threaded, but I'm paranoid. 
+						// Limit the stack to what we got last time. Keeps
+						// things all sync'ed.
+						// I realize that the update loop is single threaded,
+						// but I'm paranoid.
 						// What're you going to do.
 						xpStack.amount = filled;
 						filled = tank.fill(ForgeDirection.UP, xpStack, true);
