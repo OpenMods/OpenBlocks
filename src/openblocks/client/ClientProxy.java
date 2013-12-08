@@ -102,7 +102,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOreCrusher.class, new TileEntityOreCrusherRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
 
 		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 
@@ -143,7 +143,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityMutant.class, new EntityMutantRenderer(new ModelMutant(), 0.7F));
+		//RenderingRegistry.registerEntityRenderingHandler(EntityMutant.class, new EntityMutantRenderer(new ModelMutant(), 0.7F));
 		
 		if (OpenBlocks.Items.goldenEye != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());

@@ -5,14 +5,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -24,7 +16,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import openblocks.api.MutantRegistry;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
@@ -34,7 +25,6 @@ import openblocks.common.tileentity.*;
 import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
-import openblocks.mutant.*;
 import openblocks.rubbish.BrickManager;
 import openmods.Mods;
 import openmods.config.RegisterBlock;
@@ -175,8 +165,8 @@ public class OpenBlocks {
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
 
-		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
-		public static BlockGoldenEgg goldenEgg;
+		//@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
+		//public static BlockGoldenEgg goldenEgg;
 	}
 
 	public static class Items {
@@ -311,6 +301,7 @@ public class OpenBlocks {
 			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", 705, OpenBlocks.instance, 64, 8, true);
 		}
 
+		/*
 		EntityRegistry.registerModEntity(EntityMutant.class, "Mutant", 708, OpenBlocks.instance, 64, 8, true);
 		MutantRegistry.registerMutant(EntityCreeper.class, new DefinitionCreeper());
 		MutantRegistry.registerMutant(EntityZombie.class, new DefinitionZombie());
@@ -320,7 +311,8 @@ public class OpenBlocks {
 		MutantRegistry.registerMutant(EntityChicken.class, new DefinitionChicken());
 		MutantRegistry.registerMutant(EntitySheep.class, new DefinitionSheep());
 		MutantRegistry.registerMutant(EntityOcelot.class, new DefinitionOcelot());
-
+		*/
+		
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 
 		if (Config.itemGoldenEyeId > 0) {

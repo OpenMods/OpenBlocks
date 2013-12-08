@@ -1,23 +1,13 @@
 package openblocks.common.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
-import openblocks.api.IMutantDefinition;
-import openblocks.api.MutantRegistry;
-import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openmods.item.IMetaItem;
 import openmods.item.ItemGeneric;
-import openmods.utils.BlockUtils;
 import cpw.mods.fml.common.Loader;
 
 public enum MetasGeneric {
@@ -111,7 +101,8 @@ public enum MetasGeneric {
 			return new MetaGeneric("sketching_pencil", new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', Item.coal, 's', Item.stick),
 					new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Item.coal, 1, 1), 's', Item.stick));
 		}
-	},
+	}
+	/*,
 	syringe {
 		@Override
 		public IMetaItem createMetaItem() {
@@ -162,7 +153,7 @@ public enum MetasGeneric {
 			};
 		}
 
-	};
+	}*/;
 
 	public ItemStack newItemStack(int size) {
 		return new ItemStack(OpenBlocks.Items.generic, size, ordinal());
