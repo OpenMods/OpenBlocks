@@ -35,7 +35,6 @@ public class ItemGoldenEye extends Item {
 	public ItemGoldenEye() {
 		super(Config.itemGoldenEyeId);
 		setMaxDamage(MAX_DAMAGE);
-		setUnlocalizedName("openblocks.golden_eye");
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}

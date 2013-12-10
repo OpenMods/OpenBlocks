@@ -39,11 +39,6 @@ public class ItemSonicGlasses extends ItemArmor {
 		return itemIcon;
 	}
 
-	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
-		return "item.openblocks.sonicglasses";
-	}
-
 	@SideOnly(Side.CLIENT)
 	private ModelSonicGlasses model;
 

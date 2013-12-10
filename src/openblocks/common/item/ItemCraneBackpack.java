@@ -26,7 +26,6 @@ public class ItemCraneBackpack extends ItemArmor {
 	public ItemCraneBackpack() {
 		super(Config.itemCraneId, EnumArmorMaterial.IRON, 2, ARMOR_CHESTPIECE);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setUnlocalizedName("openblocks.crane_backpack");
 	}
 
 	@Override

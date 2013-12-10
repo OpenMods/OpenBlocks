@@ -164,12 +164,10 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
-
-		//@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
-		//public static BlockGoldenEgg goldenEgg;
 	}
 
 	public static class Items {
+		// uhh, unlocalized names are messy...
 		@RegisterItem(name = "hangglider")
 		public static ItemHangGlider hangGlider;
 
@@ -182,22 +180,22 @@ public class OpenBlocks {
 		@RegisterItem(name = "sonicglasses")
 		public static ItemSonicGlasses sonicGlasses;
 
-		@RegisterItem(name = "pencilGlasses")
+		@RegisterItem(name = "pencilGlasses", unlocalizedName = "glasses.pencil")
 		public static ItemImaginationGlasses pencilGlasses;
 
-		@RegisterItem(name = "crayonGlasses")
+		@RegisterItem(name = "crayonGlasses", unlocalizedName = "glasses.crayon")
 		public static ItemCrayonGlasses crayonGlasses;
 
-		@RegisterItem(name = "technicolorGlasses")
+		@RegisterItem(name = "technicolorGlasses", unlocalizedName = "glasses.technicolor")
 		public static ItemImaginationGlasses technicolorGlasses;
 
-		@RegisterItem(name = "seriousGlasses")
+		@RegisterItem(name = "seriousGlasses", unlocalizedName = "glasses.admin")
 		public static ItemImaginationGlasses seriousGlasses;
 
-		@RegisterItem(name = "craneControl")
+		@RegisterItem(name = "craneControl", unlocalizedName = "crane_control")
 		public static ItemCraneControl craneControl;
 
-		@RegisterItem(name = "craneBackpack")
+		@RegisterItem(name = "craneBackpack", unlocalizedName = "crane_backpack")
 		public static ItemCraneBackpack craneBackpack;
 
 		@RegisterItem(name = "slimalyzer")
@@ -206,10 +204,10 @@ public class OpenBlocks {
 		@RegisterItem(name = "filledbucket")
 		public static ItemFilledBucket filledBucket;
 
-		@RegisterItem(name = "sleepingBag")
+		@RegisterItem(name = "sleepingBag", unlocalizedName = "sleepingbag")
 		public static ItemSleepingBag sleepingBag;
 
-		@RegisterItem(name = "paintBrush")
+		@RegisterItem(name = "paintBrush", unlocalizedName = "paintbrush")
 		public static ItemPaintBrush paintBrush;
 
 		@RegisterItem(name = "stencil")
@@ -218,19 +216,19 @@ public class OpenBlocks {
 		@RegisterItem(name = "squeegee")
 		public static ItemSqueegee squeegee;
 
-		@RegisterItem(name = "heightMap")
+		@RegisterItem(name = "heightMap", unlocalizedName = "height_map")
 		public static ItemHeightMap heightMap;
 
-		@RegisterItem(name = "emptyMap")
+		@RegisterItem(name = "emptyMap", unlocalizedName = "empty_map")
 		public static ItemEmptyMap emptyMap;
 
 		@RegisterItem(name = "cartographer")
 		public static ItemCartographer cartographer;
 
-		@RegisterItem(name = "tastyClay")
+		@RegisterItem(name = "tastyClay", unlocalizedName = "tasty_clay")
 		public static ItemTastyClay tastyClay;
 
-		@RegisterItem(name = "goldenEye")
+		@RegisterItem(name = "goldenEye", unlocalizedName = "golden_eye")
 		public static ItemGoldenEye goldenEye;
 	}
 
@@ -301,18 +299,6 @@ public class OpenBlocks {
 			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", 705, OpenBlocks.instance, 64, 8, true);
 		}
 
-		/*
-		EntityRegistry.registerModEntity(EntityMutant.class, "Mutant", 708, OpenBlocks.instance, 64, 8, true);
-		MutantRegistry.registerMutant(EntityCreeper.class, new DefinitionCreeper());
-		MutantRegistry.registerMutant(EntityZombie.class, new DefinitionZombie());
-		MutantRegistry.registerMutant(EntityPig.class, new DefinitionPig());
-		MutantRegistry.registerMutant(EntityEnderman.class, new DefinitionEnderman());
-		MutantRegistry.registerMutant(EntitySpider.class, new DefinitionSpider());
-		MutantRegistry.registerMutant(EntityChicken.class, new DefinitionChicken());
-		MutantRegistry.registerMutant(EntitySheep.class, new DefinitionSheep());
-		MutantRegistry.registerMutant(EntityOcelot.class, new DefinitionOcelot());
-		*/
-		
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
 
 		if (Config.itemGoldenEyeId > 0) {
@@ -343,9 +329,6 @@ public class OpenBlocks {
 		proxy.preInit();
 	}
 
-	/**
-	 * @param evt
-	 */
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
 		TickRegistry.registerTickHandler(new ServerTickHandler(), Side.SERVER);
@@ -353,9 +336,6 @@ public class OpenBlocks {
 		proxy.registerRenderInformation();
 	}
 
-	/**
-	 * @param evt
-	 */
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();

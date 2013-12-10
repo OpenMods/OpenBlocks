@@ -24,7 +24,6 @@ public class ItemEmptyMap extends Item {
 
 	public ItemEmptyMap() {
 		super(Config.itemEmptyMap);
-		setUnlocalizedName("openblocks.empty_map");
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

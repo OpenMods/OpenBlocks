@@ -33,7 +33,6 @@ public class ItemCraneControl extends Item {
 	public ItemCraneControl() {
 		super(Config.itemCraneControl);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setUnlocalizedName("openblocks.crane_control");
 		setMaxStackSize(1);
 	}
 

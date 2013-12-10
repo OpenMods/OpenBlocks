@@ -20,11 +20,6 @@ public class ItemHangGlider extends Item {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
-		return "item.openblocks.hangglider";
-	}
-
-	@Override
 	public void registerIcons(IconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:hangglider");
 	}

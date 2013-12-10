@@ -30,7 +30,6 @@ public class ItemPaintBrush extends Item {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 		setMaxStackSize(1);
-		setUnlocalizedName("openblocks.paintbrush");
 		setMaxDamage(MAX_USES); // Damage dealt in Canvas block
 	}
 

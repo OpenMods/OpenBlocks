@@ -18,7 +18,6 @@ public class ItemTastyClay extends ItemFood {
 		super(Config.itemTastyClay, 1, 0.1f, false);
 		setAlwaysEdible();
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setUnlocalizedName("openblocks.tasty_clay");
 	}
 
 	@Override

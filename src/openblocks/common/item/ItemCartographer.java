@@ -45,7 +45,6 @@ public class ItemCartographer extends Item {
 		super(Config.itemCartographerId);
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		setUnlocalizedName("openblocks.cartographer");
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}

@@ -17,7 +17,6 @@ public class ItemSqueegee extends Item {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 		setMaxStackSize(1);
-		setUnlocalizedName("openblocks.squeegee");
 	}
 
 	@Override

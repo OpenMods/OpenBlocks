@@ -28,7 +28,6 @@ public class ItemSleepingBag extends ItemArmor {
 	public ItemSleepingBag() {
 		super(Config.itemSleepingBagId, EnumArmorMaterial.IRON, 2, ARMOR_CHESTPIECE);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setUnlocalizedName("openblocks.sleepingbag");
 	}
 
 	@Override

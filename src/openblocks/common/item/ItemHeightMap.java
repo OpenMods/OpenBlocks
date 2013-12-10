@@ -19,7 +19,6 @@ public class ItemHeightMap extends Item {
 		super(Config.itemHeightMap);
 		setHasSubtypes(true);
 		setMaxDamage(0);
-		setUnlocalizedName("openblocks.height_map");
 	}
 
 	@Override

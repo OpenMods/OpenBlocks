@@ -36,11 +36,6 @@ public class ItemSlimalyzer extends Item {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemStack) {
-		return "item.openblocks.slimalyzer";
-	}
-
-	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
 		if (!world.isRemote) {
 			if (entity != null) {

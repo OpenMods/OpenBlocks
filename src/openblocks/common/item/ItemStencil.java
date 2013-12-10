@@ -18,7 +18,6 @@ public class ItemStencil extends Item {
 	public ItemStencil() {
 		super(Config.itemStencilId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setUnlocalizedName("openblocks.stencil");
 		setHasSubtypes(true);
 	}
 

@@ -85,7 +85,6 @@ public class ItemImaginationGlasses extends ItemArmor {
 		super(itemId, EnumArmorMaterial.GOLD, 1, ARMOR_HELMET);
 		this.type = type;
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setUnlocalizedName("openblocks.imagination");
 		setHasSubtypes(true);
 	}
 
@@ -117,12 +116,10 @@ public class ItemImaginationGlasses extends ItemArmor {
 			}
 		};
 
-		public final String name;
 		public final String iconName;
 		public final String textureName;
 
 		private Type(String name) {
-			this.name = "item.openblocks.glasses." + name;
 			this.iconName = "openblocks:glasses_" + name;
 			this.textureName = "openblocks:textures/models/glasses_" + name
 					+ ".png";
@@ -157,11 +154,6 @@ public class ItemImaginationGlasses extends ItemArmor {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getSubItems(int itemId, CreativeTabs tab, List result) {
 		result.add(new ItemStack(this));
-	}
-
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return type.name;
 	}
 
 	@Override
