@@ -277,7 +277,7 @@ public class Config {
 	public static boolean eyeDebug = false;
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
-	public static int explosiveEnchantmentId = 153;
+	public static int explosiveEnchantmentId = 211;
 
 	public static List<String> disableMobNames = Lists.newArrayList();
 
