@@ -334,7 +334,7 @@ public class OpenBlocks {
 		MinecraftForge.EVENT_BUS.register(MapDataManager.instance);
 
 		if (Loader.isModLoaded(Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
-		if (Loader.isModLoaded(Mods.OPENPERIPHERAL)) ModuleOpenPeripheral.registerAdapters();
+		if (Loader.isModLoaded(Mods.OPENPERIPHERALCORE)) ModuleOpenPeripheral.registerAdapters();
 
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
