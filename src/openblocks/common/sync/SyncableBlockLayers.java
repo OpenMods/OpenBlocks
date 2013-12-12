@@ -3,11 +3,13 @@ package openblocks.common.sync;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.common.Stencil;
 import openmods.sync.SyncableObjectBase;
+
+import com.google.common.collect.Lists;
 
 public class SyncableBlockLayers extends SyncableObjectBase {
 
@@ -108,9 +110,9 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		}
 	}
 
-	public ArrayList<Layer> layers;
+	public final List<Layer> layers = Lists.newArrayList();
 
-	public ArrayList<Layer> getAllLayers() {
+	public List<Layer> getAllLayers() {
 		return layers;
 	}
 
@@ -132,9 +134,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		return false;
 	}
 
-	public SyncableBlockLayers() {
-		layers = new ArrayList<Layer>();
-	}
+	public SyncableBlockLayers() {}
 
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {

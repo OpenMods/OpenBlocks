@@ -12,6 +12,7 @@ public class BlockCanvasGlass extends BlockCanvas {
 
 	public BlockCanvasGlass() {
 		super(Config.blockCanvasGlassId, Material.glass);
+		setStepSound(soundGlassFootstep);
 	}
 
 	@Override

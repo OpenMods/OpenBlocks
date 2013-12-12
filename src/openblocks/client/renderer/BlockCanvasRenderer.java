@@ -1,6 +1,6 @@
 package openblocks.client.renderer;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -33,6 +33,7 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		renderBlocks.setWorld(world);
 		renderBlocks.setRenderBoundsFromBlock(block);
+		boolean visible = false;
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityCanvas) {
 			BlockCanvas clayBlock = (BlockCanvas)block;
@@ -40,29 +41,26 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 			for (int i = 0; i < 6; i++) {
 				clayBlock.setLayerForRender(-1);
 				clayBlock.setSideForRender(i);
-				renderBlocks.renderStandardBlock(block, x, y, z);
-				SyncableBlockLayers sideLayersContainer = clayTile.getLayersForSide(i);
-				ArrayList<Layer> layers = sideLayersContainer.getAllLayers();
-				for (int l = 0; l < layers.size(); l++) {
-					clayBlock.setLayerForRender(l);
-					byte rot = layers.get(l).getRotation();
-					if (rot == 2) {
-						rot = 3;
-					} else if (rot == 3) {
-						rot = 2;
+				if (renderBlocks.renderStandardBlock(block, x, y, z)) {
+					visible = true;
+					SyncableBlockLayers sideLayersContainer = clayTile.getLayersForSide(i);
+					List<Layer> layers = sideLayersContainer.getAllLayers();
+					for (int l = 0; l < layers.size(); l++) {
+						clayBlock.setLayerForRender(l);
+						byte rot = layers.get(l).getRotation();
+						if (rot == 2) {
+							rot = 3;
+						} else if (rot == 3) {
+							rot = 2;
+						}
+						renderBlocks.setAllFaces(rot);
+						renderBlocks.renderStandardBlock(block, x, y, z);
 					}
-					renderBlocks.uvRotateTop = rot;
-					renderBlocks.uvRotateBottom = rot;
-					renderBlocks.uvRotateNorth = rot;
-					renderBlocks.uvRotateSouth = rot;
-					renderBlocks.uvRotateEast = rot;
-					renderBlocks.uvRotateWest = rot;
-					renderBlocks.renderStandardBlock(block, x, y, z);
-					RenderUtils.resetFacesOnRenderer(renderBlocks);
 				}
 			}
 			RenderUtils.resetFacesOnRenderer(renderBlocks);
 		}
-		return false;
+
+		return visible;
 	}
 }

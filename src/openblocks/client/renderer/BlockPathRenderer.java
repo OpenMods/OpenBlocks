@@ -54,7 +54,7 @@ public class BlockPathRenderer implements IBlockRenderer {
 				boundingBoxes.add(bb);
 			}
 		}
-		return false;
+		return true;
 	}
 
 }
