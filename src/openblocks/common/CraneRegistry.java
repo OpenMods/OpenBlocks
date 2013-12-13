@@ -2,10 +2,9 @@ package openblocks.common;
 
 import java.util.Map;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import openblocks.common.entity.EntityMagnet;
-import openblocks.common.entity.EntityMagnet.EntityPlayerTarget;
-import openblocks.common.entity.EntityMagnet.IOwner;
 
 import com.google.common.collect.MapMaker;
 
@@ -38,26 +37,31 @@ public class CraneRegistry {
 	}
 
 	private Map<EntityPlayer, Data> itemData = new MapMaker().weakKeys().makeMap();
-	public Map<EntityPlayer, EntityMagnet> magnetData = new MapMaker().weakKeys().weakValues().makeMap();
+	private Map<EntityPlayer, EntityMagnet> playersMagnets = new MapMaker().weakKeys().weakValues().makeMap();
 
-	public EntityMagnet getOrCreateMagnet(EntityPlayer player) {
-		EntityMagnet result = magnetData.get(player);
+	public void ensureMagnetExists(EntityPlayer player) {
+		EntityMagnet magnet = playersMagnets.get(player);
 
-		if (result == null || result.isDead) {
-			result = createMagnetForPlayer(player);
-		} else if (!result.isValid()) {
-			result.setDead();
-			result = createMagnetForPlayer(player);
+		if (magnet == null || magnet.isDead) {
+			createMagnetForPlayer(player);
+		} else if (!magnet.isValid()) {
+			magnet.setDead();
+			createMagnetForPlayer(player);
 		}
-
-		return result;
 	}
 
 	private static EntityMagnet createMagnetForPlayer(EntityPlayer player) {
-		IOwner provider = new EntityPlayerTarget(player);
-		EntityMagnet result = new EntityMagnet(player.worldObj, provider, false);
+		EntityMagnet result = new EntityMagnet.PlayerBound(player.worldObj, player);
 		player.worldObj.spawnEntityInWorld(result);
 		return result;
+	}
+
+	public EntityMagnet getMagnetForPlayer(EntityPlayer player) {
+		return playersMagnets.get(player);
+	}
+
+	public void bindMagnetToPlayer(Entity owner, EntityMagnet magnet) {
+		if (owner instanceof EntityPlayer) playersMagnets.put((EntityPlayer)owner, magnet);
 	}
 
 	public static final double ARM_RADIUS = 2.0;

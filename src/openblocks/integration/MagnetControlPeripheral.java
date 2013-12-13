@@ -6,21 +6,16 @@ import static openblocks.integration.CCUtils.wrap;
 
 import java.lang.ref.WeakReference;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
-import openblocks.common.entity.EntityMagnet.OwnerType;
 import openmods.Log;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IHostedPeripheral;
@@ -34,18 +29,8 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 
 		private final Vec3 target;
 		private WeakReference<ITurtleAccess> turtle;
-		private WeakReference<World> world;
 
 		public Owner(ITurtleAccess turtle) {
-			this(turtle.getWorld(), turtle);
-		}
-
-		public Owner(World world) {
-			this(world, null);
-		}
-
-		private Owner(World world, ITurtleAccess turtle) {
-			this.world = new WeakReference<World>(world);
 			this.turtle = new WeakReference<ITurtleAccess>(turtle);
 			this.target = Vec3.createVectorHelper(0, 0, 0);
 		}
@@ -90,57 +75,9 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 		}
 
 		@Override
-		public OwnerType getType() {
-			return OwnerType.TURTLE;
-		}
-
-		@Override
-		public boolean isEntityApplicable(Entity entity) {
-			return true;
-		}
-
-		@Override
 		public boolean isValid(EntityMagnet magnet) {
 			ITurtleAccess turtle = this.turtle.get();
 			return turtle != null && turtle.getWorld() != null;
-		}
-
-		@Override
-		public void read(ByteArrayDataInput input) {
-			World world = this.world.get();
-			Preconditions.checkNotNull(world, "world == null. Generally not a nice thing.");
-
-			int x = input.readInt();
-			int y = input.readInt();
-			int z = input.readInt();
-
-			TileEntity te = world.getBlockTileEntity(x, y, z);
-
-			if (te instanceof ITurtleAccess) turtle = new WeakReference<ITurtleAccess>((ITurtleAccess)te);
-			else Log.warn("Trying to create crane owner for (%d,%d,%d), but TE is %s", x, y, z, te);
-
-			target.xCoord = input.readDouble();
-			target.xCoord = input.readDouble();
-			target.xCoord = input.readDouble();
-		}
-
-		@Override
-		public void update(EntityMagnet magnet) {}
-
-		@Override
-		public void write(ByteArrayDataOutput output) {
-			ITurtleAccess turtle = this.turtle.get();
-			Preconditions.checkNotNull(turtle, "turtle == null. Generally not a nice thing.");
-			Vec3 position = turtle.getPosition();
-			// Might break somewhere in deep farlands, I quess
-			output.writeInt(MathHelper.floor_double(position.xCoord));
-			output.writeInt(MathHelper.floor_double(position.yCoord));
-			output.writeInt(MathHelper.floor_double(position.zCoord));
-
-			// initial position
-			output.writeDouble(target.xCoord);
-			output.writeDouble(target.yCoord);
-			output.writeDouble(target.yCoord);
 		}
 	}
 

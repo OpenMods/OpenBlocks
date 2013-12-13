@@ -68,7 +68,7 @@ public class ItemCraneBackpack extends ItemArmor {
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack) {
 		CraneRegistry.Data data = CraneRegistry.instance.getData(player, true);
-		if (!world.isRemote) CraneRegistry.instance.getOrCreateMagnet(player);
+		if (!world.isRemote) CraneRegistry.instance.ensureMagnetExists(player);
 
 		if (Config.doCraneCollisionCheck) {
 			boolean isColliding = isPointInBlock(world, player, CraneRegistry.ARM_RADIUS)

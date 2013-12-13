@@ -53,6 +53,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
 public class OpenBlocks {
 
+	private static final int ENTITY_HANGGLIDER_ID = 701;
+	private static final int ENTITY_LUGGAGE_ID = 702;
+	private static final int ENTITY_MAGNET_ID = 703;
+	private static final int ENTITY_BLOCK_ID = 704;
+	private static final int ENTITY_CARTOGRAPHER_ID = 705;
+	private static final int ENTITY_CANON_ITEM_ID = 706;
+	private static final int ENTITY_GOLDEN_EYE_ID = 707;
+	private static final int ENTITY_MAGNET_PLAYER_ID = 708;
+
 	@Instance(value = "OpenBlocks")
 	public static OpenBlocks instance;
 
@@ -285,24 +294,25 @@ public class OpenBlocks {
 		MinecraftForge.EVENT_BUS.register(new TileEntityEventHandler());
 
 		if (Config.itemLuggageId > 0) {
-			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", 702, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
 		}
 
-		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", 701, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
 
 		if (Config.itemCraneId > 0) {
-			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", 703, OpenBlocks.instance, 64, 1, true);
-			EntityRegistry.registerModEntity(EntityBlock.class, "Block", 704, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityBlock.class, "Block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
+			EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "Player-Magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
 		}
 
 		if (Config.itemCartographerId > 0) {
-			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", 705, OpenBlocks.instance, 64, 8, true);
+			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
 		}
 
-		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", 706, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
 
 		if (Config.itemGoldenEyeId > 0) {
-			EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", 707, OpenBlocks.instance, 64, 8, true);
+			EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
 			MinecraftForge.EVENT_BUS.register(StructureRegistry.instance);
 		}
 

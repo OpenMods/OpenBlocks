@@ -53,7 +53,7 @@ public class ItemCraneControl extends Item {
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
 		if (entityLiving instanceof EntityPlayer && hasClicked(entityLiving)) {
 			final EntityPlayer player = (EntityPlayer)entityLiving;
-			final EntityMagnet magnet = CraneRegistry.instance.magnetData.get(player);
+			final EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(player);
 			if (magnet != null) magnet.toggleMagnet();
 
 		}
@@ -108,7 +108,7 @@ public class ItemCraneControl extends Item {
 			if (data != null) {
 				if (usingItem == stack) { return data.isExtending? iconDown : iconUp; }
 
-				EntityMagnet magnet = CraneRegistry.instance.magnetData.get(player);
+				EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(player);
 
 				if (magnet != null) {
 					if (magnet.isLocked()) return iconLocked;

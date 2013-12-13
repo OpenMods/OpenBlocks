@@ -19,98 +19,37 @@ import openblocks.api.IMagnetAware;
 import openblocks.common.CraneRegistry;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.item.ItemCraneBackpack;
-import openblocks.integration.MagnetControlPeripheral;
+import openmods.entity.DelayedEntityLoadManager;
 import openmods.entity.EntityBlock;
+import openmods.entity.IEntityLoadListener;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData {
+public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData, IEntitySelector {
 
 	private static final Random RANDOM = new Random();
 
-	public enum OwnerType {
-		PLAYER {
-			@Override
-			public IOwner createProvider(World world) {
-				return new EntityPlayerTarget(world);
-			}
-		},
-		TURTLE {
-			@Override
-			public IOwner createProvider(World world) {
-				Preconditions.checkState(Loader.isModLoaded(openmods.Mods.COMPUTERCRAFT), "ComputerCraft not present!");
-				return new MagnetControlPeripheral.Owner(world);
-			}
-		};
-
-		public abstract IOwner createProvider(World world);
-
-		public static final OwnerType[] VALUES = values();
-	}
-
-	public interface IOwner extends IEntitySelector {
+	public interface IOwner {
 		public boolean isValid(EntityMagnet magnet);
 
 		public Vec3 getTarget();
-
-		public OwnerType getType();
-
-		public void read(ByteArrayDataInput input);
-
-		public void write(ByteArrayDataOutput output);
-
-		public void update(EntityMagnet magnet);
 	}
 
-	public static class EntityPlayerTarget implements IOwner {
-
-		private int entityId;
-		private final WeakReference<World> world;
+	private static class EntityPlayerTarget implements IOwner {
 		private WeakReference<EntityPlayer> owner;
-		private boolean isRegistered;
-
-		private EntityPlayerTarget(World world, EntityPlayer owner) {
-			this.entityId = -1;
-			this.world = new WeakReference<World>(world);
-			this.owner = new WeakReference<EntityPlayer>(owner);
-		}
 
 		public EntityPlayerTarget(EntityPlayer owner) {
-			this(owner.worldObj, owner);
-		}
-
-		public EntityPlayerTarget(World world) {
-			this(world, null);
-		}
-
-		private EntityPlayer getOwner() {
-			EntityPlayer player = owner.get();
-
-			if (player == null && entityId >= 0) {
-				World w = world.get();
-				if (w != null) {
-					Entity tmp = w.getEntityByID(entityId);
-					if (tmp instanceof EntityPlayer) {
-						player = (EntityPlayer)tmp;
-						owner = new WeakReference<EntityPlayer>(player);
-					}
-				}
-			}
-
-			return player;
+			this.owner = new WeakReference<EntityPlayer>(owner);
 		}
 
 		@Override
 		public boolean isValid(EntityMagnet magnet) {
-			EntityPlayer player = getOwner();
+			EntityPlayer player = owner.get();
 			if (player == null || player.isDead) return false;
 			if (magnet.worldObj != player.worldObj) return false;
 			return ItemCraneBackpack.isWearingCrane(player);
@@ -118,7 +57,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		@Override
 		public Vec3 getTarget() {
-			EntityPlayer player = getOwner();
+			EntityPlayer player = owner.get();
 			if (player == null) return null;
 
 			double posX = player.posX
@@ -135,42 +74,47 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 			return Vec3.createVectorHelper(posX, posY, posZ);
 		}
+	}
 
-		@Override
-		public OwnerType getType() {
-			return OwnerType.PLAYER;
+	public static class PlayerBound extends EntityMagnet implements IEntityLoadListener {
+		private WeakReference<Entity> owner;
+
+		public PlayerBound(World world) {
+			super(world);
+			owner = new WeakReference<Entity>(null);
+		}
+
+		public PlayerBound(World world, EntityPlayer owner) {
+			super(world, new EntityPlayerTarget(owner), false);
+			this.owner = new WeakReference<Entity>(owner);
+			CraneRegistry.instance.bindMagnetToPlayer(owner, this);
 		}
 
 		@Override
-		public void read(ByteArrayDataInput input) {
-			entityId = input.readInt();
+		public void writeSpawnData(ByteArrayDataOutput data) {
+			super.writeSpawnData(data);
+			Entity owner = this.owner.get();
+			data.writeInt(owner != null? owner.entityId : -1);
 		}
 
 		@Override
-		public void write(ByteArrayDataOutput output) {
-			EntityPlayer player = owner.get();
-			output.writeInt(player != null? player.entityId : -1);
-		}
-
-		@Override
-		public void update(EntityMagnet magnet) {
-			if (!isRegistered) {
-				EntityPlayer player = getOwner();
-				if (player != null) {
-					CraneRegistry.instance.magnetData.put(player, magnet);
-				}
-
-				isRegistered = true;
-			}
+		public void readSpawnData(ByteArrayDataInput data) {
+			super.readSpawnData(data);
+			int entityId = data.readInt();
+			if (entityId >= 0) DelayedEntityLoadManager.instance.registerLoadListener(worldObj, this, entityId);
 		}
 
 		@Override
 		public boolean isEntityApplicable(Entity entity) {
-			EntityPlayer player = getOwner();
-			if (player == null) return false;
+			return entity != owner.get() && super.isEntityApplicable(entity);
+		}
 
-			return (entity instanceof EntityLivingBase && entity != player)
-					|| MagnetWhitelists.instance.entityWhitelist.check(entity);
+		@Override
+		public void onEntityLoaded(Entity entity) {
+			if (entity instanceof EntityPlayer) {
+				owner = new WeakReference<Entity>(entity);
+				CraneRegistry.instance.bindMagnetToPlayer(entity, this);
+			}
 		}
 	}
 
@@ -207,34 +151,22 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		if (owner != null) {
-			data.writeInt(owner.getType().ordinal());
-			owner.write(data);
-		} else data.writeInt(-1);
 		data.writeBoolean(isMagic);
 	}
 
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
-		int ownerTypeId = data.readInt();
-		if (ownerTypeId >= 0) {
-			OwnerType type = OwnerType.VALUES[ownerTypeId];
-			owner = type.createProvider(worldObj);
-			owner.read(data);
-		}
 		isMagic = data.readBoolean();
 	}
 
 	@Override
 	public void onUpdate() {
-		if (owner == null || !owner.isValid(this)) {
-			setDead();
-			return;
+		if (!worldObj.isRemote) {
+			if (owner == null || !owner.isValid(this)) {
+				setDead();
+				return;
+			} else if (owner != null) smoother.setTarget(owner.getTarget());
 		}
-
-		owner.update(this);
-
-		if (!worldObj.isRemote) smoother.setTarget(owner.getTarget());
 
 		updatePrevPosition();
 
@@ -311,13 +243,16 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<Entity> detectEntityTargets() {
-		if (owner == null) return ImmutableList.of();
+	@Override
+	public boolean isEntityApplicable(Entity entity) {
+		return (entity instanceof EntityLivingBase) || MagnetWhitelists.instance.entityWhitelist.check(entity);
+	}
 
+	@SuppressWarnings("unchecked")
+	protected List<Entity> detectEntityTargets() {
 		AxisAlignedBB aabb = boundingBox.expand(0.25, 0, 0.25).copy();
 		aabb.minY -= 1;
-		return worldObj.getEntitiesWithinAABBExcludingEntity(this, aabb, owner);
+		return worldObj.getEntitiesWithinAABBExcludingEntity(this, aabb, this);
 	}
 
 	private Entity getBlockEntity() {
