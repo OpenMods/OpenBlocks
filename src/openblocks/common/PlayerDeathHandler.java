@@ -19,7 +19,7 @@ public class PlayerDeathHandler {
 	@ForgeSubscribe(priority = EventPriority.LOW)
 	public void onPlayerDrops(PlayerDropsEvent event) {
 		if (event.entityLiving != null
-				&& event.entityLiving instanceof EntityPlayer) {
+				&& event.entityLiving instanceof EntityPlayer && !(event.entityLiving instanceof FakePlayer)) {
 
 			EntityPlayer player = (EntityPlayer)event.entityLiving;
 			World world = player.worldObj;
