@@ -137,6 +137,9 @@ public class Config {
 	@BlockId(description = "The id of the radio block")
 	public static int blockRadioId = 2577;
 
+	@BlockId(description = "The id of the sky block")
+	public static int blockSkyId = 2578;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -565,6 +568,10 @@ public class Config {
 		 * "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
 		 * }
 		 */
+
+		if (ConfigProcessing.canRegisterBlock(blockSkyId)) {
+			OpenBlocks.Blocks.sky = new BlockSky();
+		}
 
 		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
