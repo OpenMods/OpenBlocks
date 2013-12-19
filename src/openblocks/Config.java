@@ -141,6 +141,9 @@ public class Config {
 	@BlockId(description = "The id of the radio block")
 	public static int blockRadioId = 2577;
 
+	@BlockId(description = "The id of the sky block")
+	public static int blockSkyId = 2578;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -578,6 +581,16 @@ public class Config {
 		 * "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
 		 * }
 		 */
+
+		if (ConfigProcessing.canRegisterBlock(blockSkyId)) {
+			OpenBlocks.Blocks.sky = new BlockSky();
+			final ItemStack normal6 = new ItemStack(OpenBlocks.Blocks.sky, 6, 0);
+			final ItemStack normal = new ItemStack(OpenBlocks.Blocks.sky, 1, 1);
+			final ItemStack inverted = new ItemStack(OpenBlocks.Blocks.sky, 1, 0);
+			recipeList.add(new ShapedOreRecipe(normal6, "geg", "gsg", "geg", 'g', Block.glass, 'e', Item.enderPearl, 's', Block.whiteStone));
+			recipeList.add(new ShapelessOreRecipe(inverted, normal, Block.torchRedstoneActive));
+			recipeList.add(new ShapelessOreRecipe(normal, inverted, Block.torchRedstoneActive));
+		}
 
 		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();

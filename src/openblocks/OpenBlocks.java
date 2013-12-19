@@ -180,6 +180,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "radio", tileEntity = TileEntityRadio.class)
 		public static BlockRadio radio;
+
+		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class)
+		public static BlockSky sky;
 	}
 
 	public static class Items {

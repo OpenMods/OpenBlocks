@@ -68,6 +68,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 
 	@Override
 	public void drawDefaultBackground() {
+		GL11.glStencilMask(1);
 		GL11.glClearStencil(0);
 		GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
