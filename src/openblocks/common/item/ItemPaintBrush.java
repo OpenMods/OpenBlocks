@@ -15,6 +15,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockCanvas;
 import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.render.PaintUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -57,8 +58,8 @@ public class ItemPaintBrush extends Item {
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(int id, CreativeTabs par2CreativeTabs, List list) {
-		for (int color : ColorUtils.COLORS.values()) {
-			list.add(createStackWithColor(color));
+		for (ColorMeta color : ColorUtils.getAllColors()) {
+			list.add(createStackWithColor(color.rgb));
 		}
 	}
 

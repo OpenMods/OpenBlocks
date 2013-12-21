@@ -1,7 +1,6 @@
 package openblocks;
 
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -25,6 +24,7 @@ import openmods.config.ConfigProcessing;
 import openmods.config.ConfigProperty;
 import openmods.config.ItemId;
 import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 
 import com.google.common.collect.Lists;
 
@@ -373,9 +373,9 @@ public class Config {
 				recipeList.add(new ShapelessOreRecipe(pencil, Item.coal, "stickWood", Item.enderPearl, Item.slimeBall));
 			}
 
-			for (Map.Entry<String, Integer> e : ColorUtils.COLORS.entrySet()) {
-				ItemStack crayon = ItemImaginary.setupValues(e.getValue(), new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
-				recipeList.add(new ShapelessOreRecipe(crayon, e.getKey(), Item.paper, Item.enderPearl, Item.slimeBall));
+			for (ColorMeta color : ColorUtils.getAllColors()) {
+				ItemStack crayon = ItemImaginary.setupValues(color.rgb, new ItemStack(OpenBlocks.Blocks.imaginary, 1, 0));
+				recipeList.add(new ShapelessOreRecipe(crayon, color.oreName, Item.paper, Item.enderPearl, Item.slimeBall));
 			}
 
 			recipeList.add(new CrayonMixingRecipe());

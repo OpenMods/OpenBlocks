@@ -23,6 +23,7 @@ import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.BlockUtils;
 import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -224,8 +225,8 @@ public class ItemImaginary extends ItemOpenBlock {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(int id, CreativeTabs tab, List result) {
 		result.add(setupValues(null, new ItemStack(this, 1, DAMAGE_PENCIL)));
-		for (Integer color : ColorUtils.COLORS.values())
-			result.add(setupValues(color, new ItemStack(this, 1, DAMAGE_CRAYON)));
+		for (ColorMeta color : ColorUtils.getAllColors())
+			result.add(setupValues(color.rgb, new ItemStack(this, 1, DAMAGE_CRAYON)));
 	}
 
 	@Override

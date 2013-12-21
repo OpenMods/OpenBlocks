@@ -2,9 +2,6 @@ package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
@@ -60,26 +57,6 @@ public class TileEntityElevator extends OpenTileEntity {
 		}
 
 		return -1;
-	}
-
-	public boolean onActivated(EntityPlayer player) {
-		ItemStack stack = player.getHeldItem();
-		if (stack != null) {
-			Item item = stack.getItem();
-			if (item instanceof ItemDye) {
-				int dmg = stack.getItemDamage();
-				// temp hack, dont tell anyone.
-				if (dmg == 15) {
-					dmg = 0;
-				} else if (dmg == 0) {
-					dmg = 15;
-				}
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, dmg, 3);
-				worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override

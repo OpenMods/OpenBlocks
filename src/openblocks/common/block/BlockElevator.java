@@ -2,11 +2,13 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.common.tileentity.TileEntityElevator;
+import openmods.utils.BlockNotifyFlags;
+import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 
 public class BlockElevator extends OpenBlock {
 
@@ -43,10 +45,24 @@ public class BlockElevator extends OpenBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		TileEntityElevator drop = (TileEntityElevator)te;
-		return drop.onActivated(player);
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem();
+		if (stack != null) {
+			ColorMeta meta = ColorUtils.stackToColor(stack);
+			if (meta != null) {
+				int dmg = meta.vanillaId;
+				// temp hack, dont tell anyone
+				// NOTE: someone was to lazy to create custom item to make sure
+				// default meta is 15 (white). And now we have to support that
+				// weird stuff
+				if (dmg == 15) dmg = 0;
+				else if (dmg == 0) dmg = 15;
+				world.setBlockMetadataWithNotify(x, y, z, dmg, BlockNotifyFlags.ALL);
+				world.markBlockForRenderUpdate(x, y, z);
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

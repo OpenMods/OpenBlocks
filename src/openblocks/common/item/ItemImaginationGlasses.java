@@ -16,6 +16,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,8 +39,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 		@Override
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public void getSubItems(int itemId, CreativeTabs tab, List result) {
-			for (Integer color : ColorUtils.COLORS.values())
-				result.add(createCrayon(color));
+			for (ColorMeta color : ColorUtils.getAllColors())
+				result.add(createCrayon(color.rgb));
 		}
 
 		@Override
