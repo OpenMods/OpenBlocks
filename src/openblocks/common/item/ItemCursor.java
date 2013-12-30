@@ -1,33 +1,20 @@
 package openblocks.common.item;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.google.common.collect.ImmutableMap;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openmods.utils.io.TypeRW;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.Property;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCursor extends Item {
-	
-	// temporary
-	public static Map<Class<?>, Integer> damageMap = ImmutableMap.<Class<?>, Integer> builder()
-			.put(IInventory.class, 32)
-			.build();
-	
+
 	public ItemCursor() {
 		super(Config.itemCursorId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
@@ -39,6 +26,11 @@ public class ItemCursor extends Item {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:cursor");
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
+		return 50;
 	}
 
 	@Override
@@ -54,40 +46,64 @@ public class ItemCursor extends Item {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		
+	public ItemStack onItemRightClick(ItemStack itemStack, World world,
+			EntityPlayer player) {
+		if (itemStack.getItemDamage() > 0 && itemStack.getItemDamage() < Config.cursorMaxDamage) { return itemStack; }
 		NBTTagCompound tag = itemStack.getTagCompound();
 		if (tag != null) {
-			if (tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z") && tag.hasKey("dimension")) {
+			if (tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z")
+					&& tag.hasKey("dimension")) {
 				int x = tag.getInteger("x");
 				int y = tag.getInteger("y");
 				int z = tag.getInteger("z");
 				int dimension = tag.getInteger("dimension");
-				if (world.provider.dimensionId == dimension && world.blockExists(x, y, z)) {
+				if (world.provider.dimensionId == dimension
+						&& world.blockExists(x, y, z)) {
 					int blockId = world.getBlockId(x, y, z);
 					Block block = Block.blocksList[blockId];
 					if (block != null) {
-						int cost = 1;
-						TileEntity te = world.getBlockTileEntity(x, y, z);
-						if (te != null) {
-							for (Entry<Class<?>, Integer> entry : damageMap.entrySet()) {
-								if (entry.getKey().isAssignableFrom(te.getClass())) {
-									cost = entry.getValue();
-									break;
-								}
-							}
-						}
-						if (itemStack.getItemDamage() + cost >= Config.cursorMaxDamage) return itemStack;
 						block.onBlockActivated(world, x, y, z, player, 0, 0, 0, 0);
-						// this can cause a crash. havent really looked into why, but
-						// I think it's to do with the nethandler trying to find the stack
-						// that was used, but because we're damaging the item, the item is 'different'
-						// to what it's looking for.
-						//itemStack.damageItem(cost, player);
+						itemStack.damageItem(Config.cursorMaxDamage - 1, player);
 					}
 				}
 			}
 		}
 		return itemStack;
 	}
+
+	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
+		if (entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)entity;
+			int damage = stack.getItemDamage();
+			int max = stack.getMaxDamage();
+			double distance = getDistanceToLinkedBlock(world, player, stack);
+			double recharge = Math.max(1, (100 - distance) / 10);
+			if (damage > 0) {
+				stack.setItemDamage(damage - (int)recharge);
+			}
+		}
+	}
+
+	public static double getDistanceToLinkedBlock(World world, EntityPlayer player, ItemStack stack) {
+		NBTTagCompound tag = stack.getTagCompound();
+		if (tag != null) {
+			if (tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z")
+					&& tag.hasKey("dimension")) {
+				int x = tag.getInteger("x");
+				int y = tag.getInteger("y");
+				int z = tag.getInteger("z");
+				int dimension = tag.getInteger("dimension");
+				if (dimension == world.provider.dimensionId) {
+					double xd = player.posX - x;
+					double yd = player.posY - y;
+					double zd = player.posZ - z;
+					return Math.min(100, Math.sqrt(xd * xd + yd * yd + zd * zd));
+				} else {
+					return 100;
+				}
+			}
+		}
+		return 0;
+	}
+
 }

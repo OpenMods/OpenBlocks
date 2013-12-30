@@ -286,7 +286,7 @@ public class Config {
 	public static int explosiveEnchantmentId = 211;
 	
 	@ConfigProperty(category = "cursor", name = "cursorMaxDamage", comment = "Amount of damage a cursor can take")
-	public static int cursorMaxDamage = 512;
+	public static int cursorMaxDamage = 10240;
 	
 	public static List<String> disableMobNames = Lists.newArrayList();
 
