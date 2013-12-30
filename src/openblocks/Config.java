@@ -201,6 +201,12 @@ public class Config {
 	@ItemId(description = "The id of the golden eye item")
 	public static int itemGoldenEyeId = 14995;
 
+	@ItemId(description = "The id of the cursor item")
+	public static int itemCursorId = 14997;
+
+	@ItemId(description = "The id of the unstackable generic item")
+	public static int itemGenericUnstackableId = 14996;
+	
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
 
@@ -278,7 +284,10 @@ public class Config {
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
-
+	
+	@ConfigProperty(category = "cursor", name = "cursorMaxDamage", comment = "Amount of damage a cursor can take")
+	public static int cursorMaxDamage = 512;
+	
 	public static List<String> disableMobNames = Lists.newArrayList();
 
 	static void readConfig(Configuration configFile) {
@@ -297,6 +306,13 @@ public class Config {
 		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemOBGeneric();
 		MetasGeneric.registerItems();
+		if (itemFilledBucketId > 0) {
+			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
+			MetasBucket.registerItems();
+		}
+		
+		OpenBlocks.Items.genericUnstackable = new ItemOBGenericUnstackable();
+		MetasGenericUnstackable.registerItems();
 		if (itemFilledBucketId > 0) {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			MetasBucket.registerItems();
@@ -603,6 +619,11 @@ public class Config {
 		if (itemTastyClay > 0) {
 			OpenBlocks.Items.tastyClay = new ItemTastyClay();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Item.clay, Item.bucketMilk, new ItemStack(Item.dyePowder, 1, 3)));
+		}
+		
+		if (itemCursorId > 0) {
+			OpenBlocks.Items.cursor = new ItemCursor();
+			//TODO: add recipe
 		}
 
 		if (explosiveEnchantmentId > 0) {

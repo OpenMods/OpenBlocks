@@ -31,6 +31,6 @@ public class ItemTastyClay extends ItemFood {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:yum_yum");
+		itemIcon = registry.registerIcon("openblocks:yum_yum"); // lol
 	}
 }

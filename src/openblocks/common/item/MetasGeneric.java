@@ -73,11 +73,21 @@ public enum MetasGeneric {
 			return new MetaGeneric("map_memory", new ShapedOreRecipe(result, "rg", "rg", "rg", 'g', Item.goldNugget, 'r', Item.redstone));
 		}
 	},
+	/**
+	 * Deprecated. Moved to ItemCursor
+	 * Can't remove it from here because it'll re-index everyones items..
+	 * I guess the next time we add a meta, replace this one.
+	 */
 	cursor {
+		
+		@Override
+		public boolean isEnabled() {
+			return false;
+		}
+		
 		@Override
 		public IMetaItem createMetaItem() {
-			ItemStack result = newItemStack();
-			return new MetaCursor("cursor", new ShapedOreRecipe(result, "w  ", "www", "www", 'w', Block.cloth));
+			return null;
 		}
 	},
 	assistantBase {
@@ -101,59 +111,7 @@ public enum MetasGeneric {
 			return new MetaGeneric("sketching_pencil", new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', Item.coal, 's', Item.stick),
 					new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Item.coal, 1, 1), 's', Item.stick));
 		}
-	}
-	/*,
-	syringe {
-		@Override
-		public IMetaItem createMetaItem() {
-			return new MetaGeneric("syringe") {
-				@Override
-				public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase player) {
-					if (!player.worldObj.isRemote) {
-						IMutantDefinition definition = MutantRegistry.getDefinition(target.getClass());
-						if (definition != null) {
-							NBTTagCompound tag = new NBTTagCompound();
-							tag.setString("entity", EntityList.getEntityString(target));
-							ItemStack newStack = MetasGeneric.bloodSample.newItemStack();
-							newStack.setTagCompound(tag);
-							itemStack.stackSize--;
-							if (!(player instanceof EntityPlayer) || !((EntityPlayer)player).inventory.addItemStackToInventory(newStack)) {
-								BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, newStack);
-							}
-							if (itemStack.stackSize <= 0 && player instanceof EntityPlayer) {
-								((EntityPlayer)player).inventory.setInventorySlotContents(((EntityPlayer)player).inventory.currentItem, null);
-							}
-						}
-					}
-					return true;
-				}
-			};
-		}
-	},
-	bloodSample {
-		@Override
-		public IMetaItem createMetaItem() {
-			return new MetaGeneric("blood_sample") {
-				@Override
-				public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
-					int blockId = world.getBlockId(x, y, z);
-					Block block = Block.blocksList[blockId];
-					if (block != null && block == OpenBlocks.Blocks.goldenEgg) {
-						if (!world.isRemote) {
-							TileEntity te = world.getBlockTileEntity(x, y, z);
-							if (te instanceof TileEntityGoldenEgg) {
-								if (((TileEntityGoldenEgg)te).addDNAFromItemStack(itemStack)) {
-									player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-								}
-							}
-						}
-					}
-					return false;
-				}
-			};
-		}
-
-	}*/;
+	};
 
 	public ItemStack newItemStack(int size) {
 		return new ItemStack(OpenBlocks.Items.generic, size, ordinal());
@@ -164,7 +122,7 @@ public enum MetasGeneric {
 	}
 
 	public boolean isA(ItemStack stack) {
-		return (stack.getItem() instanceof ItemGeneric) && (stack.getItemDamage() == ordinal());
+		return (stack.getItem() instanceof ItemOBGeneric) && (stack.getItemDamage() == ordinal());
 	}
 
 	protected abstract IMetaItem createMetaItem();

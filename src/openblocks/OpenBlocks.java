@@ -239,6 +239,12 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "goldenEye", unlocalizedName = "golden_eye")
 		public static ItemGoldenEye goldenEye;
+
+		@RegisterItem(name = "genericUnstackable")
+		public static ItemOBGenericUnstackable genericUnstackable;
+
+		@RegisterItem(name = "cursor")
+		public static ItemCursor cursor;
 	}
 
 	public static class Fluids {
@@ -292,7 +298,11 @@ public class OpenBlocks {
 		}
 
 		MinecraftForge.EVENT_BUS.register(new TileEntityEventHandler());
-
+		
+		if (Config.itemCursorId > 0) {
+			MinecraftForge.EVENT_BUS.register(new GuiOpenHandler());
+		}
+		
 		if (Config.itemLuggageId > 0) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
 		}

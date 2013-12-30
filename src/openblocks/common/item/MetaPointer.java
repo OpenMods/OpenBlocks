@@ -12,17 +12,22 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import openblocks.api.IPointable;
 
-public class MetaCursor extends MetaGeneric {
+/**
+ * Pointer item is used for.. pointing
+ * @author Mikee
+ *
+ */
+public class MetaPointer extends MetaGeneric {
 
-	public MetaCursor(String name, Object... recipes) {
+	public MetaPointer(String name, Object[] recipes) {
 		super(name, recipes);
 	}
 
 	@Override
 	public void registerIcons(IconRegister register) {
-		registerIcon(register, "cursor");
+		registerIcon(register, "pointer");
 	}
-
+	
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world) {
 		if (!world.isRemote) {
@@ -64,5 +69,4 @@ public class MetaCursor extends MetaGeneric {
 		}
 		return itemStack;
 	}
-
 }
