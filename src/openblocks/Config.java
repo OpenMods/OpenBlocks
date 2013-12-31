@@ -80,9 +80,6 @@ public class Config {
 	@BlockId(description = "The id of the imaginary block")
 	public static int blockImaginaryId = 2556;
 
-	@BlockId(description = "The id of the fan block")
-	public static int blockFanId = 2556;
-
 	@BlockId(description = "The id of the xp bottler block")
 	public static int blockXPBottlerId = 2557;
 
@@ -139,6 +136,9 @@ public class Config {
 
 	//@BlockId(description = "The id of the golden egg block")
 	public static int blockGoldenEggId = 2575;
+
+	@BlockId(description = "The id of the fan block")
+	public static int blockFanId = 2576;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
