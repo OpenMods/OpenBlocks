@@ -1,3 +1,11 @@
+achievement.openblocks.droppedBrick=Zoinks!
+achievement.openblocks.droppedBrick.desc=К сожалению, это только что произошло...
+stat.openblocks.bricksDropped=Кирпичи сброшены
+
+openblocks.keybind.drop_brick=Be silly
+
+enchantment.openblocks.explosive=Неустойчивость
+
 openblocks.gui.luggage=Багаж
 openblocks.gui.sprinkler=Разбрызгиватель
 openblocks.gui.vacuumhopper=Вакуумная загрузочная воронка
@@ -12,6 +20,7 @@ openblocks.gui.donationstation=Станция пожертвований
 openblocks.gui.itemdropper=Выбрасыватель предметов
 openblocks.gui.blockplacer=Разместитель блоков
 openblocks.gui.paintmixer=Смеситель краски
+openblocks.gui.drawingtable=Стол для рисования
 
 openblocks.misc.type=Тип: %s
 openblocks.misc.uses=Использований: %.2f
@@ -25,6 +34,8 @@ openblocks.misc.mode.inverted_block=Инвертированный блок
 openblocks.misc.mode.inverted_panel=Инвертированный панель
 openblocks.misc.mode.inverted_half_panel=Инвертированная панель половинной высоты
 openblocks.misc.mode.inverted_stairs=Инвертированные ступеньки
+openblocks.misc.structure_pos=Отладка: найдена структура %s на (%d,%d,%d)
+openblocks.misc.locked=Locked
 
 openblocks.turtle.magnet=Магнит
 
@@ -32,7 +43,6 @@ tile.openblocks.elevator.name=Лифт
 tile.openblocks.heal.name=Исцелитель
 tile.openblocks.guide.name=Руководитель по строительству
 tile.openblocks.ladder.name=Лестница-люк
-tile.openblocks.lightbox.name=Световая коробка
 tile.openblocks.tank.name=Бак
 tile.openblocks.target.name=Мишень
 tile.openblocks.grave.name=Кладбище
@@ -57,8 +67,11 @@ tile.openblocks.blockbreaker.name=Разрушитель блоков
 tile.openblocks.blockPlacer.name=Разместитель блоков
 tile.openblocks.itemDropper.name=Выбрасыватель предметов
 tile.openblocks.canvas.name=Холст
+tile.openblocks.canvasglass.name=Glass Canvas
 tile.openblocks.paintmixer.name=Смеситель краски
 tile.openblocks.paintcan.name=Банка краски
+tile.openblocks.projector.name=Height Map Projector
+tile.openblocks.drawingtable.name=Стол для рисования
 
 item.openblocks.hangglider.name=Дельтаплан
 item.openblocks.gliderwing.name=Крыло дельтаплана
@@ -74,13 +87,25 @@ item.openblocks.crane_backpack.name=Крановое хранилище
 item.openblocks.crane_control.name=Крановое управление
 item.openblocks.crane_engine.name=Крановый двигатель
 item.openblocks.crane_magnet.name=Крановый магнит
-item.openblocks.beam.name=Beam
-item.openblocks.line.name=Line
+item.openblocks.beam.name=Балка
+item.openblocks.line.name=Шнур
 item.openblocks.miracle_magnet.name=§5Чудо магнит§r
 item.openblocks.slimalyzer.name=Слаймлизёр
 item.openblocks.xpbucket.name=Ведро опыта
 item.openblocks.sleepingbag.name=Спальный мешок
 item.openblocks.paintbrush.name=Кисточка
 item.openblocks.stencil.name=Трафарет
+item.openblocks.height_map.name=Height Map
+item.openblocks.empty_map.name=Пустая карта
+item.openblocks.map_controller.name=Map Controller Module
+item.openblocks.map_memory.name=Map Memory Module
+item.openblocks.cartographer.name=Картограф
+item.openblocks.assistant_base.name=Assistant's base
+item.openblocks.cursor.name=Указатель
+item.openblocks.squeegee.name=Резиновая швабра
+item.openblocks.unprepared_stencil.name=Неподготовленный трафарет
+item.openblocks.sketching_pencil.name=Карандаш для рисования
+item.openblocks.tasty_clay.name=Вкусный клей
+item.openblocks.golden_eye.name=Золотой глаз
 
 itemGroup.tabOpenBlocks=OpenBlocks
