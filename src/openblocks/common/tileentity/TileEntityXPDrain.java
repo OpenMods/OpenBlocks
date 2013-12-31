@@ -35,7 +35,8 @@ public class TileEntityXPDrain extends OpenTileEntity {
 					IFluidHandler tank = (IFluidHandler)tile;
 					for (EntityPlayer player : getPlayersOnGrid()) {
 						FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
-						int xpToDrain = Math.min(4, player.experienceTotal);
+						int experience = (int)(EnchantmentUtils.getExperienceForLevel(player.experienceLevel) + (player.experience * player.xpBarCap()));
+						int xpToDrain = Math.min(4, experience);
 						xpStack.amount = EnchantmentUtils.XPToLiquidRatio(xpToDrain);
 						/*
 						 * We should simulate and then check the amount of XP to
@@ -71,9 +72,9 @@ public class TileEntityXPDrain extends OpenTileEntity {
 							int xpDrained = EnchantmentUtils.liquidToXPRatio(filled);
 							while (xpDrained > 0) {
 								player.experienceTotal--;
-								player.experienceLevel = EnchantmentUtils.getLevelForExperience(player.experienceTotal);
+								player.experienceLevel = EnchantmentUtils.getLevelForExperience(experience - xpToDrain);
 								int expForLevel = EnchantmentUtils.getExperienceForLevel(player.experienceLevel);
-								player.experience = (float)(player.experienceTotal - expForLevel) / (float)player.xpBarCap();
+								player.experience = (float)((experience-xpToDrain) - expForLevel) / (float)player.xpBarCap();
 								xpDrained--;
 							}
 						}
