@@ -1,5 +1,6 @@
 package openblocks;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -11,6 +12,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Property;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.asm.EntityPlayerVisitor;
@@ -292,6 +294,8 @@ public class Config {
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);
+		Property prop = configFile.get("additional", "disableMobNames", new String[0], "List any mob names you want disabled on the server");
+		disableMobNames = Arrays.asList(prop.getStringList());
 	}
 
 	public static void register() {
