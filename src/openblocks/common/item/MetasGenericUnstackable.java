@@ -23,7 +23,7 @@ public enum MetasGenericUnstackable {
 	public boolean isA(ItemStack stack) {
 		return (stack.getItem() instanceof ItemOBGenericUnstackable) && (stack.getItemDamage() == ordinal());
 	}
-	
+
 	protected abstract IMetaItem createMetaItem();
 
 	protected boolean isEnabled() {

@@ -245,7 +245,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 			int l = Math.min(inputStackCopy.getItemDamageForDisplay(), inputStackCopy.getMaxDamage() / 4);
 
 			if (l <= 0) { return 0; }
-			
+
 			int i1;
 			for (i1 = 0; l > 0 && i1 < modifierStack.stackSize; ++i1) {
 				int j1 = inputStackCopy.getItemDamageForDisplay() - l;
@@ -279,7 +279,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 			@SuppressWarnings("unchecked")
 			Map<Integer, Integer> stackEnch = EnchantmentHelper.getEnchantments(modifierStack);
 
-			for (Map.Entry<Integer,Integer> e : stackEnch.entrySet()) {
+			for (Map.Entry<Integer, Integer> e : stackEnch.entrySet()) {
 				int enchId = e.getKey();
 				int enchLevel = e.getValue();
 				Enchantment enchantment = Enchantment.enchantmentsList[enchId];
@@ -377,9 +377,8 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 					extra = 1;
 			}
 
-			if (isEnchantedBook)
-				extra = Math.max(1, extra / 2);
-			
+			if (isEnchantedBook) extra = Math.max(1, extra / 2);
+
 			k += l + enchLevel * extra;
 		}
 
@@ -400,11 +399,11 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 		if (inputStackCopy != null) {
 			int cost = Math.max(inputStackCopy.getRepairCost(), modifierStack.getRepairCost());
 			if (inputStackCopy.hasDisplayName()) cost -= 9;
-			
+
 			if (cost < 0) cost = 0;
 			cost += 2;
 			inputStackCopy.setRepairCost(cost);
-			
+
 			EnchantmentHelper.setEnchantments(inputStackEnchantments, inputStackCopy);
 
 			int requiredXP = EnchantmentUtils.getExperienceForLevel(maximumCost);

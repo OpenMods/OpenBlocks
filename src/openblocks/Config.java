@@ -134,7 +134,7 @@ public class Config {
 	@BlockId(description = "The id of the drawing table")
 	public static int blockDrawingTable = 2574;
 
-	//@BlockId(description = "The id of the golden egg block")
+	// @BlockId(description = "The id of the golden egg block")
 	public static int blockGoldenEggId = 2575;
 
 	@BlockId(description = "The id of the fan block")
@@ -208,7 +208,7 @@ public class Config {
 
 	@ItemId(description = "The id of the unstackable generic item")
 	public static int itemGenericUnstackableId = 14996;
-	
+
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
 
@@ -223,7 +223,7 @@ public class Config {
 
 	@ConfigProperty(category = "tanks", name = "bucketsPerTank", comment = "The amount of buckets each tank can hold")
 	public static int bucketsPerTank = 16;
-	
+
 	@ConfigProperty(category = "hacks", name = "tryHookPlayerRenderer", comment = "Allow OpenBlocks to hook the player renderer to apply special effects")
 	public static boolean tryHookPlayerRenderer = true;
 
@@ -283,10 +283,10 @@ public class Config {
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
-	
+
 	@ConfigProperty(category = "cursor", name = "cursorMaxDamage", comment = "Amount of damage a cursor can take")
 	public static int cursorMaxDamage = 10240;
-	
+
 	public static List<String> disableMobNames = Lists.newArrayList();
 
 	static void readConfig(Configuration configFile) {
@@ -311,7 +311,7 @@ public class Config {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			MetasBucket.registerItems();
 		}
-		
+
 		OpenBlocks.Items.genericUnstackable = new ItemOBGenericUnstackable();
 		MetasGenericUnstackable.registerItems();
 		if (itemFilledBucketId > 0) {
@@ -492,11 +492,12 @@ public class Config {
 		}
 
 		/*
-		if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
-			OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg, "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
-		}
-		*/
+		 * if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
+		 * OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
+		 * recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg,
+		 * "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
+		 * }
+		 */
 
 		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
@@ -621,10 +622,10 @@ public class Config {
 			OpenBlocks.Items.tastyClay = new ItemTastyClay();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Item.clay, Item.bucketMilk, new ItemStack(Item.dyePowder, 1, 3)));
 		}
-		
+
 		if (itemCursorId > 0) {
 			OpenBlocks.Items.cursor = new ItemCursor();
-			//TODO: add recipe
+			// TODO: add recipe
 		}
 
 		if (explosiveEnchantmentId > 0) {

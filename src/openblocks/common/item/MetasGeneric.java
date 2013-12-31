@@ -77,12 +77,12 @@ public enum MetasGeneric {
 	 * I guess the next time we add a meta, replace this one.
 	 */
 	cursor {
-		
+
 		@Override
 		public boolean isEnabled() {
 			return false;
 		}
-		
+
 		@Override
 		public IMetaItem createMetaItem() {
 			return null;

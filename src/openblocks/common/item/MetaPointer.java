@@ -14,8 +14,9 @@ import openblocks.api.IPointable;
 
 /**
  * Pointer item is used for.. pointing
+ * 
  * @author Mikee
- *
+ * 
  */
 public class MetaPointer extends MetaGeneric {
 
@@ -27,7 +28,7 @@ public class MetaPointer extends MetaGeneric {
 	public void registerIcons(IconRegister register) {
 		registerIcon(register, "pointer");
 	}
-	
+
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world) {
 		if (!world.isRemote) {
