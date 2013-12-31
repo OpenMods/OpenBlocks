@@ -223,10 +223,7 @@ public class Config {
 
 	@ConfigProperty(category = "tanks", name = "bucketsPerTank", comment = "The amount of buckets each tank can hold")
 	public static int bucketsPerTank = 16;
-
-	@ConfigProperty(category = "grave", name = "enableGraves", comment = "Enable graves on player death")
-	public static boolean enableGraves = false;
-
+	
 	@ConfigProperty(category = "hacks", name = "tryHookPlayerRenderer", comment = "Allow OpenBlocks to hook the player renderer to apply special effects")
 	public static boolean tryHookPlayerRenderer = true;
 
