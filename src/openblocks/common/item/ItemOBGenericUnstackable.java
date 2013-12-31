@@ -6,7 +6,7 @@ import openmods.item.ItemGeneric;
 
 public class ItemOBGenericUnstackable extends ItemGeneric {
 
-	public ItemOBGenericUnstackable(){
+	public ItemOBGenericUnstackable() {
 		super(Config.itemGenericUnstackableId);
 		setMaxStackSize(1);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);

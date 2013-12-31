@@ -74,7 +74,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 								player.experienceTotal--;
 								player.experienceLevel = EnchantmentUtils.getLevelForExperience(experience - xpToDrain);
 								int expForLevel = EnchantmentUtils.getExperienceForLevel(player.experienceLevel);
-								player.experience = (float)((experience-xpToDrain) - expForLevel) / (float)player.xpBarCap();
+								player.experience = (float)((experience - xpToDrain) - expForLevel) / (float)player.xpBarCap();
 								xpDrained--;
 							}
 						}

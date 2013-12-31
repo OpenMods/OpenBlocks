@@ -12,7 +12,8 @@ import openblocks.utils.MutantUtils;
 
 public class MutantRendererSpider implements IMutantRenderer {
 
-	private static final ResourceLocation spiderEyesTextures = new ResourceLocation("textures/entity/spider_eyes.png");
+	// private static final ResourceLocation spiderEyesTextures = new
+	// ResourceLocation("textures/entity/spider_eyes.png");
 	private static final ResourceLocation texture = new ResourceLocation("textures/entity/spider/spider.png");
 
 	public ModelRenderer head;

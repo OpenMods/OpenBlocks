@@ -1,13 +1,11 @@
 package openblocks.common.item;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openmods.item.IMetaItem;
-import openmods.item.ItemGeneric;
 import cpw.mods.fml.common.Loader;
 
 public enum MetasGeneric {
@@ -79,12 +77,12 @@ public enum MetasGeneric {
 	 * I guess the next time we add a meta, replace this one.
 	 */
 	cursor {
-		
+
 		@Override
 		public boolean isEnabled() {
 			return false;
 		}
-		
+
 		@Override
 		public IMetaItem createMetaItem() {
 			return null;
