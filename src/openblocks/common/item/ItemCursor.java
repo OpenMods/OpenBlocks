@@ -71,11 +71,11 @@ public class ItemCursor extends Item {
 		return itemStack;
 	}
 
+	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)entity;
 			int damage = stack.getItemDamage();
-			int max = stack.getMaxDamage();
 			double distance = getDistanceToLinkedBlock(world, player, stack);
 			double recharge = Math.max(1, (100 - distance) / 10);
 			if (damage > 0) {

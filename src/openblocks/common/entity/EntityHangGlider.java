@@ -52,13 +52,10 @@ public class EntityHangGlider extends Entity implements
 			Entry<EntityPlayer, Integer> next = it.next();
 			EntityPlayer player = next.getKey();
 			Entity entity = worldObj.getEntityByID(next.getValue());
-			if (!(entity instanceof EntityHangGlider)) {
-				continue;
-			}
+			if (!(entity instanceof EntityHangGlider)) continue;
 			EntityHangGlider glider = (EntityHangGlider)entity;
 			if (player == null
 					|| player.isDead
-					|| glider == null
 					|| glider.isDead
 					|| player.getHeldItem() == null
 					|| !(player.getHeldItem().getItem() instanceof ItemHangGlider)

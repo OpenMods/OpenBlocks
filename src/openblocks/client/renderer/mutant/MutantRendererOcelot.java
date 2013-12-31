@@ -13,10 +13,10 @@ import openblocks.utils.MutantUtils;
 
 public class MutantRendererOcelot implements IMutantRenderer {
 
-	private static final ResourceLocation blackOcelotTextures = new ResourceLocation("textures/entity/cat/black.png");
+	//private static final ResourceLocation blackOcelotTextures = new ResourceLocation("textures/entity/cat/black.png");
 	private static final ResourceLocation ocelotTextures = new ResourceLocation("textures/entity/cat/ocelot.png");
-	private static final ResourceLocation redOcelotTextures = new ResourceLocation("textures/entity/cat/red.png");
-	private static final ResourceLocation siameseOcelotTextures = new ResourceLocation("textures/entity/cat/siamese.png");
+	//private static final ResourceLocation redOcelotTextures = new ResourceLocation("textures/entity/cat/red.png");
+	//private static final ResourceLocation siameseOcelotTextures = new ResourceLocation("textures/entity/cat/siamese.png");
 
 	private ModelRenderer tail1;
 	private ModelRenderer tail2;
