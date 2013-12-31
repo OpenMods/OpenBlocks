@@ -15,7 +15,7 @@ public enum MetasGenericUnstackable {
 		@Override
 		protected IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaPointer("pointer", new Object[0]);
+			return new MetaPointer("pointer", new Object[] { new ShapedOreRecipe(result, "w  ", "ww ", "w  ", 'w', Block.cloth) });
 		}
 	};
 	public ItemStack newItemStack(int size) {

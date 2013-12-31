@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,7 +49,6 @@ public class ItemCursor extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world,
 			EntityPlayer player) {
-		if (itemStack.getItemDamage() > 0 && itemStack.getItemDamage() < Config.cursorMaxDamage) { return itemStack; }
 		NBTTagCompound tag = itemStack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z")
@@ -59,29 +59,22 @@ public class ItemCursor extends Item {
 				int dimension = tag.getInteger("dimension");
 				if (world.provider.dimensionId == dimension
 						&& world.blockExists(x, y, z)) {
+					int distance = (int)getDistanceToLinkedBlock(world, player, itemStack);
+					if (distance > 8 && distance > Config.cursorMaxDamage - itemStack.getItemDamage()) {
+						return itemStack;
+					}
 					int blockId = world.getBlockId(x, y, z);
 					Block block = Block.blocksList[blockId];
 					if (block != null) {
 						block.onBlockActivated(world, x, y, z, player, 0, 0, 0, 0);
-						itemStack.damageItem(Config.cursorMaxDamage - 1, player);
+						if (distance > 8) {
+							itemStack.damageItem(distance, player);
+						}
 					}
 				}
 			}
 		}
 		return itemStack;
-	}
-
-	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
-		if (entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
-			int damage = stack.getItemDamage();
-			int max = stack.getMaxDamage();
-			double distance = getDistanceToLinkedBlock(world, player, stack);
-			double recharge = Math.max(1, (100 - distance) / 10);
-			if (damage > 0) {
-				stack.setItemDamage(damage - (int)recharge);
-			}
-		}
 	}
 
 	public static double getDistanceToLinkedBlock(World world, EntityPlayer player, ItemStack stack) {
@@ -97,9 +90,9 @@ public class ItemCursor extends Item {
 					double xd = player.posX - x;
 					double yd = player.posY - y;
 					double zd = player.posZ - z;
-					return Math.min(100, Math.sqrt(xd * xd + yd * yd + zd * zd));
+					return Math.sqrt(xd * xd + yd * yd + zd * zd);
 				} else {
-					return 100;
+					return 0;
 				}
 			}
 		}

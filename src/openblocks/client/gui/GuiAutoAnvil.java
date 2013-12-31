@@ -16,7 +16,7 @@ import openmods.sync.SyncableFlags;
 
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 
-	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/components.png");
+	private static final ResourceLocation texture = new ResourceLocation("openmodslib:textures/gui/components.png");
 
 	// tank
 	private GuiComponentTankLevel xpLevel;

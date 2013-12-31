@@ -437,6 +437,7 @@ public class OpenBlocks {
 		FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, MetasBucket.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
 
 		OpenBlocks.Items.generic.initRecipes();
+		OpenBlocks.Items.genericUnstackable.initRecipes();
 
 		MagnetWhitelists.instance.initTesters();
 

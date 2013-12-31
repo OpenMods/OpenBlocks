@@ -31,8 +31,10 @@ public class PlayerDeathHandler {
 				int y = (int)player.posY;
 				int z = (int)player.posZ;
 				boolean aboveIsAir = false;
+				
+				
 
-				for (int checkY = y; checkY > 1; checkY--) {
+				for (int checkY = y + 2; checkY > y - 4; checkY--) {
 					int bId = world.getBlockId(x, checkY, z);
 					Block block = Block.blocksList[bId];
 					boolean thisIsAir = world.isAirBlock(x, checkY, z) || (block != null && block.isBlockReplaceable(world, x, checkY, z));

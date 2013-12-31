@@ -285,7 +285,7 @@ public class Config {
 	public static int explosiveEnchantmentId = 211;
 	
 	@ConfigProperty(category = "cursor", name = "cursorMaxDamage", comment = "Amount of damage a cursor can take")
-	public static int cursorMaxDamage = 10240;
+	public static int cursorMaxDamage = 128;
 	
 	public static List<String> disableMobNames = Lists.newArrayList();
 
@@ -624,7 +624,7 @@ public class Config {
 		
 		if (itemCursorId > 0) {
 			OpenBlocks.Items.cursor = new ItemCursor();
-			//TODO: add recipe
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.cursor), "w  ", "www", "www", 'w', Block.cloth));
 		}
 
 		if (explosiveEnchantmentId > 0) {

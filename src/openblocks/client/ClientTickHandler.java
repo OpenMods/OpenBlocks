@@ -4,10 +4,13 @@ import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.events.PlayerMovementEvent;
 import openmods.tileentity.OpenTileEntity;
