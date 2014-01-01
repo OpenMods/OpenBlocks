@@ -109,3 +109,7 @@ item.openblocks.tasty_clay.name=Leckerer Lehm
 item.openblocks.golden_eye.name=Goldenes Auge
 
 itemGroup.tabOpenBlocks=OpenBlocks
+
+entity.OpenBlocks.Luggage.name=Reisegepäck
+entity.OpenBlocks.Cartographer.name=Kartograph
+entity.OpenBlocks.Block.name=Schwebender Block
