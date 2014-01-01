@@ -107,6 +107,7 @@ item.openblocks.unprepared_stencil.name=Unprepared Stencil
 item.openblocks.sketching_pencil.name=Sketching Pencil
 item.openblocks.tasty_clay.name=Tasty Clay
 item.openblocks.golden_eye.name=Golden eye
+item.openblocks.pointer.name=Pointer
 
 itemGroup.tabOpenBlocks=OpenBlocks
 

@@ -307,13 +307,10 @@ public class Config {
 		// Too many items would suffer from this. - NC
 		OpenBlocks.Items.generic = new ItemOBGeneric();
 		MetasGeneric.registerItems();
-		if (itemFilledBucketId > 0) {
-			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
-			MetasBucket.registerItems();
-		}
 
 		OpenBlocks.Items.genericUnstackable = new ItemOBGenericUnstackable();
 		MetasGenericUnstackable.registerItems();
+
 		if (itemFilledBucketId > 0) {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			MetasBucket.registerItems();
