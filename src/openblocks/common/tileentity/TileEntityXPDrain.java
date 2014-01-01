@@ -35,7 +35,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 					IFluidHandler tank = (IFluidHandler)tile;
 					for (EntityPlayer player : getPlayersOnGrid()) {
 						FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
-						int experience = (int)(EnchantmentUtils.getExperienceForLevel(player.experienceLevel) + (player.experience * player.xpBarCap()));
+						int experience = EnchantmentUtils.getPlayerXP(player);
 						int xpToDrain = Math.min(4, experience);
 						xpStack.amount = EnchantmentUtils.XPToLiquidRatio(xpToDrain);
 						/*
@@ -70,13 +70,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
 							}
 							int xpDrained = EnchantmentUtils.liquidToXPRatio(filled);
-							while (xpDrained > 0) {
-								player.experienceTotal--;
-								player.experienceLevel = EnchantmentUtils.getLevelForExperience(experience - xpToDrain);
-								int expForLevel = EnchantmentUtils.getExperienceForLevel(player.experienceLevel);
-								player.experience = (float)((experience - xpToDrain) - expForLevel) / (float)player.xpBarCap();
-								xpDrained--;
-							}
+							EnchantmentUtils.drainPlayerXP(player, xpDrained);
 						}
 					}
 				}

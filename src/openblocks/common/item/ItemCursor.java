@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openmods.utils.EnchantmentUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -20,7 +21,6 @@ public class ItemCursor extends Item {
 		super(Config.itemCursorId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
-		setMaxDamage(Config.cursorMaxDamage);
 	}
 
 	@Override
@@ -49,6 +49,9 @@ public class ItemCursor extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world,
 			EntityPlayer player) {
+		if (world.isRemote) {
+			return itemStack;
+		}
 		NBTTagCompound tag = itemStack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z")
@@ -60,16 +63,16 @@ public class ItemCursor extends Item {
 				if (world.provider.dimensionId == dimension
 						&& world.blockExists(x, y, z)) {
 					int distance = (int)getDistanceToLinkedBlock(world, player, itemStack);
-					if (distance > 8 && distance > Config.cursorMaxDamage - itemStack.getItemDamage()) {
+					distance = Math.max(0, distance - 10);
+					int playerExperience = EnchantmentUtils.getPlayerXP(player);
+					if (distance > playerExperience) {
 						return itemStack;
 					}
 					int blockId = world.getBlockId(x, y, z);
 					Block block = Block.blocksList[blockId];
 					if (block != null) {
 						block.onBlockActivated(world, x, y, z, player, 0, 0, 0, 0);
-						if (distance > 8) {
-							itemStack.damageItem(distance, player);
-						}
+						EnchantmentUtils.drainPlayerXP(player, distance);
 					}
 				}
 			}
