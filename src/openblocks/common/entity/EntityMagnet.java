@@ -141,6 +141,14 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	@Override
+	protected void dealFireDamage(int i) {}
+
+	@Override
+	public boolean canRenderOnFire() {
+		return false;
+	}
+
+	@Override
 	protected void entityInit() {}
 
 	@Override

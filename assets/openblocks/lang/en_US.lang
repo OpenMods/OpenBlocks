@@ -109,3 +109,7 @@ item.openblocks.tasty_clay.name=Tasty Clay
 item.openblocks.golden_eye.name=Golden eye
 
 itemGroup.tabOpenBlocks=OpenBlocks
+
+entity.OpenBlocks.Luggage.name=Luggage
+entity.OpenBlocks.Cartographer.name=Cartographer
+entity.OpenBlocks.Block.name=Floating Block
