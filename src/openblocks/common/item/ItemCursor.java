@@ -1,9 +1,7 @@
 package openblocks.common.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,9 +47,7 @@ public class ItemCursor extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world,
 			EntityPlayer player) {
-		if (world.isRemote) {
-			return itemStack;
-		}
+		if (world.isRemote) return itemStack;
 		NBTTagCompound tag = itemStack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z")
@@ -65,9 +61,7 @@ public class ItemCursor extends Item {
 					int distance = (int)getDistanceToLinkedBlock(world, player, itemStack);
 					distance = Math.max(0, distance - 10);
 					int playerExperience = EnchantmentUtils.getPlayerXP(player);
-					if (distance > playerExperience) {
-						return itemStack;
-					}
+					if (distance > playerExperience) { return itemStack; }
 					int blockId = world.getBlockId(x, y, z);
 					Block block = Block.blocksList[blockId];
 					if (block != null) {

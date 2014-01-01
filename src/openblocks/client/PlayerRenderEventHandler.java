@@ -1,7 +1,5 @@
 package openblocks.client;
 
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.OpenBlocks;
@@ -18,6 +16,6 @@ public class PlayerRenderEventHandler {
 				}
 			}
 		}
-		
+
 	}
 }
