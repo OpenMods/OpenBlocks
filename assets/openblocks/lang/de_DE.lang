@@ -107,6 +107,7 @@ item.openblocks.unprepared_stencil.name=Unvorbereitete Schablone
 item.openblocks.sketching_pencil.name=Skizzierstift
 item.openblocks.tasty_clay.name=Leckerer Lehm
 item.openblocks.golden_eye.name=Goldenes Auge
+item.openblocks.pointer.name=Zeiger
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
