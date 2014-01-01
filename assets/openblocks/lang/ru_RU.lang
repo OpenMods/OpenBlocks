@@ -109,3 +109,7 @@ item.openblocks.tasty_clay.name=Вкусный клей
 item.openblocks.golden_eye.name=Золотой глаз
 
 itemGroup.tabOpenBlocks=OpenBlocks
+
+entity.OpenBlocks.Luggage.name=Багаж
+entity.OpenBlocks.Cartographer.name=Картограф
+entity.OpenBlocks.Block.name=Парящий блок
