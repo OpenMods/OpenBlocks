@@ -221,6 +221,9 @@ public class Config {
 	@ConfigProperty(category = "dropblock", name = "maxPassThrough", comment = "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this")
 	public static int elevatorMaxBlockPassCount = 4;
 
+	@ConfigProperty(category = "dropblock", name = "elevatorDrainsXP", comment = "Does the elevator drain player XP when used?")
+	public static boolean elevatorDrainsXP = true;
+
 	@ConfigProperty(category = "tanks", name = "bucketsPerTank", comment = "The amount of buckets each tank can hold")
 	public static int bucketsPerTank = 16;
 
@@ -288,6 +291,7 @@ public class Config {
 	public static int cursorMaxDamage = 128;
 
 	public static List<String> disableMobNames = Lists.newArrayList();
+
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);

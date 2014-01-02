@@ -9,6 +9,7 @@ import openblocks.Config;
 import openblocks.events.PlayerMovementEvent;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
+import openmods.utils.EnchantmentUtils;
 
 import com.google.common.base.Preconditions;
 
@@ -65,8 +66,22 @@ public class TileEntityElevator extends OpenTileEntity {
 	private void activate(EntityPlayer player, ForgeDirection dir) {
 		int level = findLevel(dir);
 		if (level >= 0) {
-			player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
-			worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
+			int distance = (int)Math.abs(player.posY - level);
+			boolean drainXP = Config.elevatorDrainsXP && !player.capabilities.isCreativeMode;
+			boolean doTeleport = false;
+			if (drainXP) {
+				int playerXP = EnchantmentUtils.getPlayerXP(player);
+				if (playerXP >= distance) {
+					EnchantmentUtils.drainPlayerXP(player, distance);
+					doTeleport = true;
+				}
+			} else {
+				doTeleport = true;
+			}
+			if (doTeleport) {
+				player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
+				worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
+			}
 		}
 	}
 
