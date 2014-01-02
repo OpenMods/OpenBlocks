@@ -15,6 +15,7 @@ import openmods.GenericInventory;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 
+import com.google.common.base.Strings;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
@@ -92,6 +93,10 @@ public class EntityLuggage extends EntityTameable implements
 				NBTTagCompound tag = new NBTTagCompound();
 				inventory.writeToNBT(tag);
 				luggageItem.setTagCompound(tag);
+
+				String nameTag = getCustomNameTag();
+				if (!Strings.isNullOrEmpty(nameTag)) luggageItem.setItemName(nameTag);
+
 				BlockUtils.dropItemStackInWorld(worldObj, posX, posY, posZ, luggageItem);
 				setDead();
 			} else {

@@ -39,6 +39,9 @@ public class ItemLuggage extends Item {
 					luggage.setSpecial();
 				}
 			}
+
+			if (itemStack.hasDisplayName()) luggage.setCustomNameTag(itemStack.getDisplayName());
+
 			world.spawnEntityInWorld(luggage);
 			itemStack.stackSize--;
 
