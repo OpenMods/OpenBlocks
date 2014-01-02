@@ -108,5 +108,10 @@ item.openblocks.unprepared_stencil.name=空白模子
 item.openblocks.sketching_pencil.name=绘图笔
 item.openblocks.tasty_clay.name=美味粘土
 item.openblocks.golden_eye.name=黄金眼
+item.openblocks.pointer.name=指针
 
 itemGroup.tabOpenBlocks=开放式方块
+
+entity.OpenBlocks.Luggage.name=行李箱
+entity.OpenBlocks.Cartographer.name=制图机器人
+entity.OpenBlocks.Block.name=悬浮方块
