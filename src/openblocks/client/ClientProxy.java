@@ -28,7 +28,6 @@ import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import cpw.mods.fml.client.registry.*;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
-import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -160,11 +159,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
 			}
 		}
-	}
-
-	@Override
-	public IGuiHandler createGuiHandler() {
-		return new ClientGuiHandler();
 	}
 
 	@Override

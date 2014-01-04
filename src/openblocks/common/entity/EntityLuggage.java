@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
+import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openmods.GenericInventory;
 import openmods.utils.BlockUtils;
@@ -100,7 +101,7 @@ public class EntityLuggage extends EntityTameable implements
 				BlockUtils.dropItemStackInWorld(worldObj, posX, posY, posZ, luggageItem);
 				setDead();
 			} else {
-				player.openGui(OpenBlocks.instance, OpenBlocks.GuiId.luggage.ordinal(), player.worldObj, entityId, 0, 0);
+				player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, entityId, 0, 0);
 			}
 		}
 		return true;

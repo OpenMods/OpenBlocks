@@ -4,14 +4,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.IOpenBlocksProxy;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 public class ServerProxy implements IOpenBlocksProxy {
-
-	@Override
-	public IGuiHandler createGuiHandler() {
-		return new CommonGuiHandler();
-	}
 
 	@Override
 	public void preInit() {}

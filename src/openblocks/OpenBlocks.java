@@ -24,6 +24,7 @@ import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.rubbish.BrickManager;
 import openmods.Mods;
+import openmods.OpenMods;
 import openmods.config.RegisterBlock;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
@@ -248,12 +249,6 @@ public class OpenBlocks {
 
 	public static FluidStack XP_FLUID = null;
 
-	public static enum GuiId {
-		luggage
-	}
-
-	public static final GuiId[] GUIS = GuiId.values();
-
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
 		public ItemStack getIconItemStack() {
@@ -286,7 +281,7 @@ public class OpenBlocks {
 		if (configFile.hasChanged()) configFile.save();
 		Config.register();
 
-		NetworkRegistry.instance().registerGuiHandler(instance, proxy.createGuiHandler());
+		NetworkRegistry.instance().registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
 
 		if (Config.blockGraveId > 0) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
