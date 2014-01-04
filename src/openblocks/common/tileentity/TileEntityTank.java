@@ -10,12 +10,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
 
 public class TileEntityTank extends SyncedTileEntity implements
@@ -344,6 +346,18 @@ public class TileEntityTank extends SyncedTileEntity implements
 					}
 					drain(ForgeDirection.UNKNOWN, liquid.amount, true);
 					return true;
+				}
+			}
+		} else {
+			if (tank.getFluid() != null && tank.getFluid().isFluidEqual(OpenBlocks.XP_FLUID)) {
+				int currentXP = EnchantmentUtils.getPlayerXP(player);
+				int currentLevel = EnchantmentUtils.getLevelForExperience(currentXP);
+				int nextXP = EnchantmentUtils.getExperienceForLevel(currentLevel + 1);
+				int requiredXP = nextXP - currentXP;
+				int requiredXPJuice = EnchantmentUtils.XPToLiquidRatio(requiredXP);
+				FluidStack drained = tank.drain(requiredXPJuice, true);
+				if (drained != null) {
+					EnchantmentUtils.addPlayerXP(player, EnchantmentUtils.liquidToXPRatio(drained.amount));
 				}
 			}
 		}
