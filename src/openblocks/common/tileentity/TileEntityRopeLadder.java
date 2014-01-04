@@ -6,12 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openmods.api.IAwareTile;
+import openmods.api.IBreakAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.tileentity.OpenTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
+public class TileEntityRopeLadder extends OpenTileEntity implements IPlaceAwareTile, IBreakAwareTile {
 
 	private boolean shouldAnimate = true;
 
@@ -41,11 +42,6 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
 	public void onBlockBroken() {
 		if (worldObj.isRemote) return;
 		int y = yCoord;
@@ -58,11 +54,4 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IAwareTile {
 			}
 		}
 	}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
 }

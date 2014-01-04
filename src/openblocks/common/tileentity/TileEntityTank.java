@@ -10,14 +10,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
-import openmods.api.IAwareTile;
+import openmods.api.IActivateAwareTile;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ItemUtils;
 
 public class TileEntityTank extends SyncedTileEntity implements
-		IFluidHandler, IAwareTile {
+		IFluidHandler, INeighbourAwareTile, IPlaceAwareTile, IActivateAwareTile {
 
 	public static int getTankCapacity() {
 		return FluidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank;
@@ -291,11 +293,6 @@ public class TileEntityTank extends SyncedTileEntity implements
 	}
 
 	@Override
-	public void onBlockBroken() {
-		// invalidate();
-	}
-
-	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")) {
 			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag("tank");
@@ -391,9 +388,6 @@ public class TileEntityTank extends SyncedTileEntity implements
 		tank.writeToNBT(nbt);
 		return nbt;
 	}
-
-	@Override
-	public void onBlockAdded() {}
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {

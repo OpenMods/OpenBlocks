@@ -8,7 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
-import openmods.api.IAwareTileLite;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
@@ -18,7 +19,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTrophy extends SyncedTileEntity implements IAwareTileLite {
+public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 	private int sinceLastActivate = 0;

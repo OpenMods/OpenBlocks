@@ -4,19 +4,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
 import openmods.GenericInventory;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 import openmods.utils.OpenModsFakePlayer;
 
-public class TileEntityItemDropper extends OpenTileEntity
-		implements IActivateAwareTile, INeighbourAwareTile, IInventory, IHasGui {
+public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventory, IHasGui {
 	static final int BUFFER_SIZE = 9;
 
 	private boolean _redstoneSignal;
@@ -53,15 +50,6 @@ public class TileEntityItemDropper extends OpenTileEntity
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
-		}
-		return true;
-	}
-
-	@Override
 	public void onNeighbourChanged(int blockId) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
@@ -76,6 +64,11 @@ public class TileEntityItemDropper extends OpenTileEntity
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiItemDropper(new ContainerItemDropper(player.inventory, this));
+	}
+
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
 	}
 
 	@Override

@@ -5,11 +5,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
-import openmods.api.IAwareTile;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.BlockNotifyFlags;
 
-public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
+public class TileEntitySponge extends OpenTileEntity implements INeighbourAwareTile, IPlaceAwareTile {
 
 	private void clearupLiquid() {
 		if (worldObj.isRemote) { return; }
@@ -31,19 +32,6 @@ public class TileEntitySponge extends OpenTileEntity implements IAwareTile {
 		if (hitLava) {
 			sendBlockEvent(0, 0);
 		}
-	}
-
-	@Override
-	public void onBlockAdded() {
-		clearupLiquid();
-	}
-
-	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		return false;
 	}
 
 	@Override

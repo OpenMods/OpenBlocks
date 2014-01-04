@@ -13,7 +13,6 @@ import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openmods.GenericInventory;
 import openmods.OpenMods;
-import openmods.api.IAwareTile;
 import openmods.api.IHasGui;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
@@ -22,7 +21,7 @@ import openmods.utils.InventoryUtils;
 import openmods.utils.SlotSideHelper;
 
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
-		implements IAwareTile, IFluidHandler, ISidedInventory, IHasGui {
+		implements IFluidHandler, ISidedInventory, IHasGui {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
 
@@ -232,9 +231,12 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	}
 
 	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
 	}
+
+	@Override
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -287,27 +289,6 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return new FluidTankInfo[] { tank.getInfo() };
 	}
-
-	@Override
-	public void onBlockBroken() {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
-		}
-		return true;
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
 
 	public IFluidTank getTank() {
 		return tank;
@@ -383,5 +364,4 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	public void closeChest() {
 		inventory.closeChest();
 	}
-
 }

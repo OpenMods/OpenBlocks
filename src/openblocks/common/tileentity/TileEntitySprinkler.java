@@ -19,7 +19,7 @@ import openblocks.common.container.ContainerSprinkler;
 import openmods.GenericInventory;
 import openmods.Log;
 import openmods.OpenMods;
-import openmods.api.IAwareTile;
+import openmods.api.IBreakAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
@@ -29,7 +29,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
+public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Item.dyePowder, 1, 15);
@@ -93,6 +93,11 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiSprinkler(new ContainerSprinkler(player.inventory, this));
+	}
+
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
 	}
 
 	private void sprayParticles() {
@@ -168,13 +173,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 		}
 	}
 
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) openGui(OpenBlocks.instance, player);
-		return true;
-	}
-
 	public float getSprayPitch() {
 		return (float)(getSprayAngle() * Math.PI);
 	}
@@ -211,15 +209,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IAwareTile,
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
-
-	@Override
-	public void onBlockAdded() {}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
 
 	@Override
 	public int getSizeInventory() {

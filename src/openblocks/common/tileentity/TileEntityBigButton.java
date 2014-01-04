@@ -64,6 +64,11 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 		return new GuiBigButton(new ContainerBigButton(player.inventory, this));
 	}
 
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return false;
+	}
+
 	public int getTickTime() {
 		ItemStack stack = inventory.getStackInSlot(0);
 		return stack == null? 1 : stack.stackSize;

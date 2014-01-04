@@ -17,7 +17,6 @@ import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.container.ContainerAutoAnvil;
 import openmods.GenericInventory;
 import openmods.OpenMods;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
@@ -27,8 +26,7 @@ import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 import openmods.utils.SlotSideHelper;
 
-public class TileEntityAutoAnvil extends SyncedTileEntity implements
-		IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
+public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInventory, IFluidHandler, IHasGui {
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
@@ -120,6 +118,11 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 				cooldown--;
 			}
 		}
+	}
+
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
 	}
 
 	@Override
@@ -426,15 +429,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
-		}
-		return true;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Item.enchantedBook)) { return false; }
 		if (i == 2) { return false; }
@@ -543,5 +537,4 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements
 
 	@Override
 	public void closeChest() {}
-
 }

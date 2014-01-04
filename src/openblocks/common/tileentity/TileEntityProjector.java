@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
@@ -17,7 +16,6 @@ import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.GenericInventory;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.sync.ISyncableObject;
@@ -27,7 +25,7 @@ import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityProjector extends SyncedTileEntity implements IInventory, IActivateAwareTile, IHasGui {
+public class TileEntityProjector extends SyncedTileEntity implements IInventory, IHasGui {
 
 	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
 		@Override
@@ -178,12 +176,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) openGui(OpenBlocks.instance, player);
-		return true;
-	}
-
-	@Override
 	public Object getServerGui(EntityPlayer player) {
 		return new ContainerProjector(player.inventory, this);
 	}
@@ -191,6 +183,11 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiProjector(new ContainerProjector(player.inventory, this));
+	}
+
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
 	}
 
 	@Override

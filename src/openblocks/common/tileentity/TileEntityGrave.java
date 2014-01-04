@@ -14,17 +14,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import openmods.GenericInventory;
-import openmods.api.IAwareTile;
-import openmods.api.IInventoryContainer;
-import openmods.api.ISurfaceAttachment;
+import openmods.api.*;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
 public class TileEntityGrave extends SyncedTileEntity implements
-		IInventoryContainer,
-		ISurfaceAttachment, IAwareTile {
+		IInventoryContainer, ISurfaceAttachment, IPlaceAwareTile, IBreakAwareTile {
 
 	private SyncableString perishedUsername;
 	public boolean onSoil = true;
@@ -117,23 +114,9 @@ public class TileEntityGrave extends SyncedTileEntity implements
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
 	public void onBlockBroken() {
 		if (!worldObj.isRemote) {
 			BlockUtils.dropInventory(getLoot(), worldObj, xCoord, yCoord, zCoord);
 		}
 	}
-
-	@Override
-	public void onBlockAdded() {
-
-	}
-
 }

@@ -15,14 +15,13 @@ import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.container.ContainerXPBottler;
 import openmods.GenericInventory;
 import openmods.OpenMods;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 
-public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAwareTile, ISidedInventory, IFluidHandler, IHasGui {
+public class TileEntityXPBottler extends SyncedTileEntity implements ISidedInventory, IFluidHandler, IHasGui {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
@@ -123,6 +122,11 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 		return new GuiXPBottler(new ContainerXPBottler(player.inventory, this));
 	}
 
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
+	}
+
 	public SyncableFlags getGlassSides() {
 		return glassSides;
 	}
@@ -173,15 +177,6 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IActivateAw
 
 	public IFluidTank getTank() {
 		return tank;
-	}
-
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
-		}
-		return true;
 	}
 
 	@Override

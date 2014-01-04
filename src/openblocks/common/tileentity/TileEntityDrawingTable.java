@@ -3,7 +3,6 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
 import openblocks.common.Stencil;
@@ -11,14 +10,12 @@ import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.MetasGeneric;
 import openblocks.events.StencilCraftEvent;
 import openmods.GenericInventory;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityDrawingTable extends OpenTileEntity implements
-		IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
+public class TileEntityDrawingTable extends OpenTileEntity implements IInventory, IHasGui, IInventoryCallback {
 
 	public TileEntityDrawingTable() {
 		setInventory(new GenericInventory("drawingtable", true, 1));
@@ -57,12 +54,7 @@ public class TileEntityDrawingTable extends OpenTileEntity implements
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX,
-			float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
-		}
+	public boolean canOpenGui(EntityPlayer player) {
 		return true;
 	}
 

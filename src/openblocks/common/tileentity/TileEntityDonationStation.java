@@ -3,13 +3,11 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
 import openmods.GenericInventory;
 import openmods.Mods;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.sync.SyncableString;
@@ -20,8 +18,7 @@ import com.google.common.base.Joiner;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 
-public class TileEntityDonationStation extends OpenTileEntity implements
-		IInventory, IActivateAwareTile, IHasGui, IInventoryCallback {
+public class TileEntityDonationStation extends OpenTileEntity implements IInventory, IHasGui, IInventoryCallback {
 
 	private SyncableString modName = new SyncableString();
 	private SyncableString authors = new SyncableString();
@@ -74,15 +71,6 @@ public class TileEntityDonationStation extends OpenTileEntity implements
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
-		}
-		return true;
-	}
-
-	@Override
 	public Object getServerGui(EntityPlayer player) {
 		return new ContainerDonationStation(player.inventory, this);
 	}
@@ -90,6 +78,11 @@ public class TileEntityDonationStation extends OpenTileEntity implements
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiDonationStation(new ContainerDonationStation(player.inventory, this));
+	}
+
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
 	}
 
 	public SyncableString getModName() {

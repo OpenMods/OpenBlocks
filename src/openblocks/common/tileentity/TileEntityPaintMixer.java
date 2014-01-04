@@ -13,7 +13,6 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.container.ContainerPaintMixer;
 import openmods.GenericInventory;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.sync.*;
@@ -22,7 +21,7 @@ import openmods.utils.ColorUtils;
 
 import com.google.common.collect.Maps;
 
-public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IActivateAwareTile, IInventoryCallback {
+public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IInventoryCallback {
 
 	private static final int FULL_CAN_SIZE = 30;
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
@@ -211,15 +210,6 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		return color;
 	}
 
-	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (player.isSneaking()) { return false; }
-		if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
-		}
-		return true;
-	}
-
 	public boolean hasPaint() {
 		return flags.get(Flags.hasPaint);
 	}
@@ -303,6 +293,11 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiPaintMixer(new ContainerPaintMixer(player.inventory, this));
+	}
+
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
 	}
 
 	public void tryStartMixer() {

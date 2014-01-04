@@ -9,7 +9,8 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockFlag;
-import openmods.api.IAwareTileLite;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFloat;
@@ -19,7 +20,7 @@ import openmods.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachment, IAwareTileLite {
+public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachment, IPlaceAwareTile, IActivateAwareTile {
 
 	private SyncableFloat angle;
 	private SyncableInt colorIndex;

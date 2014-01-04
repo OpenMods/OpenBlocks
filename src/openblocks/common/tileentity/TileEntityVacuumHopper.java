@@ -146,6 +146,11 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 		return new GuiVacuumHopper(new ContainerVacuumHopper(player.inventory, this));
 	}
 
+	@Override
+	public boolean canOpenGui(EntityPlayer player) {
+		return true;
+	}
+
 	public List<Integer> getShuffledItemSlots() {
 		List<Integer> slots = new ArrayList<Integer>();
 		slots.addAll(getItemOutputs().getActiveSlots());
@@ -160,11 +165,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements
 				vacuumDisabled.toggle();
 				return true;
 			}
-			return false;
-		} else if (!worldObj.isRemote) {
-			openGui(OpenBlocks.instance, player);
 		}
-		return true;
+		return false;
 	}
 
 	public void onEntityCollidedWithBlock(Entity entity) {

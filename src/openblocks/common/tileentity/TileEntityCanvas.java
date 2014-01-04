@@ -13,14 +13,15 @@ import openblocks.common.Stencil;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
-import openmods.api.IAwareTile;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IBreakAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
+public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile {
 
 	/* Used for painting other blocks */
 	public SyncableInt paintedBlockId, paintedBlockMeta;
@@ -243,12 +244,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
-
-	@Override
-	public void onNeighbourChanged(int blockId) {}
-
-	@Override
 	public void onBlockBroken() {
 		if (worldObj.isRemote) return;
 		for (SyncableBlockLayers sideLayers : allSides) {
@@ -260,7 +255,4 @@ public class TileEntityCanvas extends SyncedTileEntity implements IAwareTile {
 			}
 		}
 	}
-
-	@Override
-	public void onBlockAdded() {}
 }
