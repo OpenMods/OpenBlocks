@@ -9,8 +9,7 @@ import net.minecraft.tileentity.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
-import openmods.utils.ITester;
-import openmods.utils.ObjectTester;
+import openmods.utils.*;
 import openmods.utils.ObjectTester.ClassNameTester;
 import openmods.utils.ObjectTester.ClassTester;
 

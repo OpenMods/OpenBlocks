@@ -9,10 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Property;
+import net.minecraftforge.common.*;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.asm.EntityPlayerVisitor;
@@ -21,10 +18,7 @@ import openblocks.common.block.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.recipe.*;
-import openmods.config.BlockId;
-import openmods.config.ConfigProcessing;
-import openmods.config.ConfigProperty;
-import openmods.config.ItemId;
+import openmods.config.*;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
 
@@ -291,7 +285,6 @@ public class Config {
 	public static int cursorMaxDamage = 128;
 
 	public static List<String> disableMobNames = Lists.newArrayList();
-
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);

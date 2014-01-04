@@ -1,9 +1,7 @@
 package openblocks.common.entity;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.WeakHashMap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

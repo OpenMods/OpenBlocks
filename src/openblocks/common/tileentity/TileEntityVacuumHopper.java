@@ -1,9 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -22,10 +19,7 @@ import openmods.GenericInventory;
 import openmods.OpenMods;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableBoolean;
-import openmods.sync.SyncableFlags;
-import openmods.sync.SyncableTank;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;

@@ -1,10 +1,7 @@
 package openblocks.integration;
 
 import openblocks.common.tileentity.TileEntityDonationStation;
-import openperipheral.api.IMultiReturn;
-import openperipheral.api.IPeripheralAdapter;
-import openperipheral.api.LuaMethod;
-import openperipheral.api.LuaType;
+import openperipheral.api.*;
 import dan200.computer.api.IComputerAccess;
 
 public class AdapterDonationStation implements IPeripheralAdapter {

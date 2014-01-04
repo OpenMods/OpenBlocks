@@ -2,10 +2,7 @@ package openblocks.asm;
 
 import openblocks.utils.AsmUtils;
 
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.*;
 
 public class EntityPlayerVisitor extends ClassVisitor {
 

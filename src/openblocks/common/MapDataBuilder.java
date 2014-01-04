@@ -1,9 +1,6 @@
 package openblocks.common;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;

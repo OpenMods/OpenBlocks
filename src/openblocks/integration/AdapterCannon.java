@@ -1,10 +1,7 @@
 package openblocks.integration;
 
 import openblocks.common.tileentity.TileEntityCannon;
-import openperipheral.api.Arg;
-import openperipheral.api.IPeripheralAdapter;
-import openperipheral.api.LuaMethod;
-import openperipheral.api.LuaType;
+import openperipheral.api.*;
 import dan200.computer.api.IComputerAccess;
 
 public class AdapterCannon implements IPeripheralAdapter {

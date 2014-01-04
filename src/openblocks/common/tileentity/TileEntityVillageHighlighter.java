@@ -1,9 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
