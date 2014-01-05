@@ -2,9 +2,12 @@ package openblocks.client.gui;
 
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
+import openmods.Log;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.component.BaseComponent.IComponentListener;
+
+import org.lwjgl.input.Keyboard;
 
 public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		implements IComponentListener {
@@ -82,11 +85,15 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 	@Override
 	public void componentKeyTyped(BaseComponent component, char par1, int par2) {
 		try {
+			// B: this is very bad code. veeeery bad.
+			if (par2 == Keyboard.KEY_ESCAPE) return;
 			int col = Integer.parseInt(textbox.getText(), 16);
 			getContainer().getOwner().getColor().setValue(col);
 			colorPicker.setFromColor(col);
 			confirmClicked(true, INVALIDATE_COLOR);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			Log.warn(e, "Exception in crappy code");
+		}
 	}
 
 }

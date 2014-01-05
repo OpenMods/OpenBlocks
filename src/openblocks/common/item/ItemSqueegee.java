@@ -4,9 +4,11 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityCanvas;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,15 +28,16 @@ public class ItemSqueegee extends Item {
 	}
 
 	@Override
-	public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6) {
-		return true;
-	}
-
-	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		int id = world.getBlockId(x, y, z);
-		if (id == OpenBlocks.Blocks.canvas.blockID ||
-				id == OpenBlocks.Blocks.canvasGlass.blockID) { return true; }
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+
+		if (te instanceof TileEntityCanvas) {
+			TileEntityCanvas canvas = (TileEntityCanvas)te;
+			if (player.isSneaking()) canvas.removePaint(TileEntityCanvas.ALL_SIDES);
+			else canvas.removePaint(side);
+			world.playSoundAtEntity(player, "openblocks:wipe", 1, 1);
+			return true;
+		}
 		return false;
 	}
 }

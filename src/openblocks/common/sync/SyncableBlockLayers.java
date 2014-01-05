@@ -3,6 +3,7 @@ package openblocks.common.sync;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -110,29 +111,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		}
 	}
 
-	public final List<Layer> layers = Lists.newArrayList();
-
-	public List<Layer> getAllLayers() {
-		return layers;
-	}
-
-	public boolean setColor(int color) {
-		if (layers.size() > 0) {
-			Layer layer = layers.get(layers.size() - 1);
-			if (layer.hasStencilCover()) {
-				layer.setColor(color);
-				layer.setHasStencilCover(false);
-				Layer newLayer = new Layer();
-				newLayer.setStencil(layer.getStencil());
-				newLayer.setHasStencilCover(true);
-				newLayer.setRotation(layer.getRotation());
-				layers.add(newLayer);
-				markDirty();
-				return true;
-			}
-		}
-		return false;
-	}
+	public final LinkedList<Layer> layers = Lists.newLinkedList();
 
 	public SyncableBlockLayers() {}
 
@@ -183,59 +162,80 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		}
 	}
 
+	public List<Layer> getAllLayers() {
+		return layers;
+	}
+
+	public boolean isLastLayerStencil() {
+		Layer last = layers.peekLast();
+		return last != null && last.hasStencilCover && last.stencil != null;
+	}
+
+	public void setLastLayerColor(int color) {
+		Layer last = getOrCreateLastLayer();
+		last.setColor(color);
+		markDirty();
+	}
+
+	public void setLastLayerStencil(Stencil stencil) {
+		Layer last = getOrCreateLastLayer();
+		last.hasStencilCover = true;
+		last.stencil = stencil;
+		markDirty();
+	}
+
+	private Layer getOrCreateLastLayer() {
+		Layer last = layers.peekLast();
+		if (last == null) {
+			last = new Layer();
+			layers.addLast(last);
+		}
+		return last;
+	}
+
+	public void moveStencilToNextLayer() {
+		Layer prevTop = layers.getLast();
+		prevTop.setHasStencilCover(false);
+
+		Layer newLayer = new Layer();
+		newLayer.setStencil(prevTop.getStencil());
+		newLayer.setHasStencilCover(true);
+		newLayer.setRotation(prevTop.getRotation());
+		layers.addLast(newLayer);
+		markDirty();
+	}
+
+	public void pushNewStencil(Stencil stencil) {
+		Layer newLayer = new Layer();
+		newLayer.setStencil(stencil);
+		newLayer.setHasStencilCover(true);
+		layers.addLast(newLayer);
+		markDirty();
+	}
+
 	public Layer getLayer(int i) {
 		if (i < layers.size()) { return layers.get(i); }
 		return null;
 	}
 
-	public boolean hasStencilCover() {
-		if (layers.size() > 0) {
-			Layer layer = layers.get(layers.size() - 1);
-			if (layer.hasStencilCover()) { return true; }
-		}
-		return false;
-	}
-
-	public void setStencilCover(Stencil stencil) {
-		if (layers.size() > 0) {
-			int lastIndex = layers.size() - 1;
-			if (layers.get(lastIndex).hasStencilCover()) {
-				layers.remove(lastIndex);
-			}
-		}
-		Layer newLayer = new Layer();
-		newLayer.setStencil(stencil);
-		newLayer.setHasStencilCover(true);
-		layers.add(newLayer);
-		markDirty();
-	}
-
 	public void removeCover() {
-		if (layers.size() > 0) {
-			int lastIndex = layers.size() - 1;
-			if (layers.get(lastIndex).hasStencilCover()) {
-				layers.remove(lastIndex);
-				markDirty();
-			}
+		Layer last = layers.peekLast();
+		if (last != null && last.hasStencilCover()) {
+			layers.removeLast();
+			markDirty();
 		}
 	}
 
 	public Stencil getTopStencil() {
-		if (layers.size() > 0) {
-			int lastIndex = layers.size() - 1;
-			return layers.get(lastIndex).getStencil();
-		}
-		return null;
+		Layer top = layers.peekLast();
+		return top != null? top.stencil : null;
 	}
 
 	public void rotateCover() {
-		if (layers.size() > 0) {
-			int lastIndex = layers.size() - 1;
-			Layer lastLayer = layers.get(lastIndex);
-			if (lastLayer.hasStencilCover()) {
-				lastLayer.rotate();
-				markDirty();
-			}
+		Layer lastLayer = layers.peekLast();
+		if (lastLayer != null && lastLayer.hasStencilCover()) {
+			lastLayer.rotate();
+			markDirty();
 		}
 	}
 
@@ -245,7 +245,6 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	public boolean isEmpty() {
-		return layers.size() == 0;
+		return layers.isEmpty();
 	}
-
 }

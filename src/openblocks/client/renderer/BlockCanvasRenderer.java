@@ -37,13 +37,14 @@ public class BlockCanvasRenderer implements IBlockRenderer {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 		if (tile instanceof TileEntityCanvas) {
 			BlockCanvas clayBlock = (BlockCanvas)block;
-			TileEntityCanvas clayTile = (TileEntityCanvas)tile;
+			TileEntityCanvas canvas = (TileEntityCanvas)tile;
 			for (int i = 0; i < 6; i++) {
+				renderBlocks.setAllFaces(0);
 				clayBlock.setLayerForRender(-1);
 				clayBlock.setSideForRender(i);
 				if (renderBlocks.renderStandardBlock(block, x, y, z)) {
 					visible = true;
-					SyncableBlockLayers sideLayersContainer = clayTile.getLayersForSide(i);
+					SyncableBlockLayers sideLayersContainer = canvas.getLayersForSide(i);
 					List<Layer> layers = sideLayersContainer.getAllLayers();
 					for (int l = 0; l < layers.size(); l++) {
 						clayBlock.setLayerForRender(l);

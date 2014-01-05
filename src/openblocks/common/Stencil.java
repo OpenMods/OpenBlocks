@@ -46,4 +46,6 @@ public enum Stencil {
 	public Icon getBlockIcon() {
 		return blockIcon;
 	}
+
+	public static final Stencil[] VALUES = values();
 }

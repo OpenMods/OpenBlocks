@@ -157,7 +157,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "oreCrusher", tileEntity = TileEntityOreCrusher.class)
 		public static BlockMachineOreCrusher machineOreCrusher;
 
-		@RegisterBlock(name = "paintcan", tileEntity = TileEntityPaintCan.class)
+		@RegisterBlock(name = "paintcan", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class)
 		public static BlockPaintCan paintCan;
 
 		@RegisterBlock(name = "canvasglass", tileEntity = TileEntityCanvas.class)

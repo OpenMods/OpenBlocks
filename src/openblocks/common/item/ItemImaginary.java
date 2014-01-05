@@ -139,7 +139,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		setHasSubtypes(true);
 		setMaxDamage(0);
 	}
-	
+
 	public static ItemStack setupValues(Integer color, ItemStack result) {
 		return setupValues(color, result, Config.imaginaryItemUseCount);
 	}
