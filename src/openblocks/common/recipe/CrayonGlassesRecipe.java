@@ -17,13 +17,13 @@ import com.google.common.collect.Lists;
 public class CrayonGlassesRecipe extends ShapelessRecipes {
 
 	private static List<ItemStack> createFakeIngredientsList() {
-		ItemStack block = new ItemStack(Blocks.imaginary);
+		ItemStack block = new ItemStack(Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON);
 		ItemImaginary.setupValues(0x00FFFF, block);
 		return Lists.newArrayList(new ItemStack(Item.paper), block);
 	}
 
 	private static ItemStack createFakeResult() {
-		return Items.crayonGlasses.createCrayon(0x00FFFF);
+		return Items.crayonGlasses.createCrayonGlasses(0x00FFFF);
 	}
 
 	public CrayonGlassesRecipe() {
@@ -60,7 +60,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack != null && stack.getItem() instanceof ItemImaginary) {
 				Integer color = ItemUtils.getInt(stack, ItemImaginary.TAG_COLOR);
-				return Items.crayonGlasses.createCrayon(color);
+				return Items.crayonGlasses.createCrayonGlasses(color);
 			}
 		}
 

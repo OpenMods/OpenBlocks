@@ -2,6 +2,7 @@ package openblocks.common.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
@@ -13,28 +14,39 @@ public enum MetasGeneric {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaGeneric("gliderwing", new ShapedOreRecipe(result, " sl", "sll", "lll", 's', "stickWood", 'l', Item.leather), new ShapedOreRecipe(result, "ls ", "lls", "lll", 's', "stickWood", 'l', Item.leather));
+			return new MetaGeneric("gliderwing",
+					new ShapedOreRecipe(result, " sl", "sll", "lll", 's', "stickWood", 'l', Item.leather),
+					new ShapedOreRecipe(result, "ls ", "lls", "lll", 's', "stickWood", 'l', Item.leather)
+			);
 		}
 	},
 	beam {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack(2);
-			return new MetaGeneric("beam", new ShapedOreRecipe(result, "iii", "b y", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow"), new ShapedOreRecipe(result, "iii", "y b", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow"));
+			return new MetaGeneric("beam",
+					new ShapedOreRecipe(result, "iii", "b y", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow"),
+					new ShapedOreRecipe(result, "iii", "y b", "iii", 'i', Item.ingotIron, 'b', "dyeBlack", 'y', "dyeYellow")
+			);
 		}
 	},
 	craneEngine {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaGeneric("crane_engine", new ShapedOreRecipe(result, "iii", "isi", "iri", 'i', Item.ingotIron, 's', "stickWood", 'r', Item.redstone));
+			return new MetaGeneric("crane_engine",
+					new ShapedOreRecipe(result, "iii", "isi", "iri", 'i', Item.ingotIron, 's', "stickWood", 'r', Item.redstone)
+			);
 		}
 	},
 	craneMagnet {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaGeneric("crane_magnet", new ShapedOreRecipe(result, "biy", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow"), new ShapedOreRecipe(result, "yib", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow"));
+			return new MetaGeneric("crane_magnet",
+					new ShapedOreRecipe(result, "biy", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow"),
+					new ShapedOreRecipe(result, "yib", "iri", 'i', Item.ingotIron, 'r', Item.redstone, 'b', "dyeBlack", 'y', "dyeYellow")
+			);
 		}
 	},
 	miracleMagnet {
@@ -42,7 +54,10 @@ public enum MetasGeneric {
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
 			ItemStack magnet = craneMagnet.newItemStack();
-			return new MetaMiracleMagnet("miracle_magnet", new ShapedOreRecipe(result, "rer", "eme", "rer", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet), new ShapedOreRecipe(result, "ere", "rmr", "ere", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet));
+			return new MetaMiracleMagnet("miracle_magnet",
+					new ShapedOreRecipe(result, "rer", "eme", "rer", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet),
+					new ShapedOreRecipe(result, "ere", "rmr", "ere", 'r', Item.redstone, 'e', Item.enderPearl, 'm', magnet)
+			);
 		}
 
 		@Override
@@ -54,21 +69,27 @@ public enum MetasGeneric {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack(2);
-			return new MetaGeneric("line", new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', Item.slimeBall));
+			return new MetaGeneric("line",
+					new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', Item.slimeBall)
+			);
 		}
 	},
 	mapController {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack(1);
-			return new MetaGeneric("map_controller", new ShapedOreRecipe(result, " r ", "rgr", " r ", 'r', Item.redstone, 'g', Item.ingotGold));
+			return new MetaGeneric("map_controller",
+					new ShapedOreRecipe(result, " r ", "rgr", " r ", 'r', Item.redstone, 'g', Item.ingotGold)
+			);
 		}
 	},
 	mapMemory {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack(1);
-			return new MetaGeneric("map_memory", new ShapedOreRecipe(result, "rg", "rg", "rg", 'g', Item.goldNugget, 'r', Item.redstone));
+			return new MetaGeneric("map_memory",
+					new ShapedOreRecipe(result, "rg", "rg", "rg", 'g', Item.goldNugget, 'r', Item.redstone)
+			);
 		}
 	},
 	/**
@@ -77,7 +98,6 @@ public enum MetasGeneric {
 	 * I guess the next time we add a meta, replace this one.
 	 */
 	cursor {
-
 		@Override
 		public boolean isEnabled() {
 			return false;
@@ -92,22 +112,27 @@ public enum MetasGeneric {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaGeneric("assistant_base", new ShapedOreRecipe(result, "iei", "iri", 'i', Item.ingotIron, 'e', Item.enderPearl, 'r', Item.redstone));
+			return new MetaGeneric("assistant_base",
+					new ShapedOreRecipe(result, "iei", "iri", 'i', Item.ingotIron, 'e', Item.enderPearl, 'r', Item.redstone)
+			);
 		}
 	},
 	unpreparedStencil {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaGeneric("unprepared_stencil", new ShapedOreRecipe(result, " p ", "pip", " p ", 'p', Item.paper, 'i', Item.ingotIron));
+			return new MetaGeneric("unprepared_stencil",
+					new ShapedOreRecipe(result, " p ", "pip", " p ", 'p', Item.paper, 'i', Item.ingotIron)
+			);
 		}
 	},
 	sketchingPencil {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaGeneric("sketching_pencil", new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', Item.coal, 's', Item.stick),
-					new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Item.coal, 1, 1), 's', Item.stick));
+			return new MetaGeneric("sketching_pencil",
+					new ShapedOreRecipe(result, "c  ", " s ", "  s", 'c', new ItemStack(Item.coal, 1, OreDictionary.WILDCARD_VALUE), 's', Item.stick)
+			);
 		}
 	};
 

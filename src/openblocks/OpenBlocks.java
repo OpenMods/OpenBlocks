@@ -321,10 +321,9 @@ public class OpenBlocks {
 		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
 		XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
 
-		FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, MetasBucket.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
-
-		OpenBlocks.Items.generic.initRecipes();
-		OpenBlocks.Items.genericUnstackable.initRecipes();
+		if (Items.filledBucket != null) {
+			FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, MetasBucket.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
+		}
 
 		MagnetWhitelists.instance.initTesters();
 

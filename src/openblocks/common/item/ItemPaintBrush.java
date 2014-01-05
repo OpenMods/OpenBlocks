@@ -16,6 +16,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.block.BlockCanvas;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
+import openmods.utils.ItemUtils;
 import openmods.utils.render.PaintUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,9 +38,8 @@ public class ItemPaintBrush extends Item {
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		int color = getColorFromStack(itemStack);
-		if (color < 0) color = 0;
-		list.add(String.format("#%06X", color));
+		Integer color = getColorFromStack(itemStack);
+		if (color != null) list.add(String.format("#%06X", color));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -58,16 +58,16 @@ public class ItemPaintBrush extends Item {
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(int id, CreativeTabs par2CreativeTabs, List list) {
+		list.add(new ItemStack(this));
 		for (ColorMeta color : ColorUtils.getAllColors()) {
 			list.add(createStackWithColor(color.rgb));
 		}
 	}
 
 	public static ItemStack createStackWithColor(int color) {
-		ItemStack stack = new ItemStack(OpenBlocks.Items.paintBrush, 1);
-		NBTTagCompound tag = new NBTTagCompound();
+		ItemStack stack = new ItemStack(OpenBlocks.Items.paintBrush);
+		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		tag.setInteger("color", color);
-		stack.setTagCompound(tag);
 		return stack;
 	}
 
@@ -79,7 +79,8 @@ public class ItemPaintBrush extends Item {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		/* Check that we can paint this */
-		if (stack.getItemDamage() >= MAX_USES) return true;
+		if (stack.getItemDamage() >= MAX_USES || getColorFromStack(stack) == null) return true;
+		
 		/* Check with our manager upstairs about white lists */
 		if (!PaintUtils.instance().isAllowedToPaint(world, x, y, z)) return true;
 		/* Do some logic to make sure it's okay to paint */
@@ -102,7 +103,12 @@ public class ItemPaintBrush extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack itemStack, int pass) {
-		return pass == 1? getColorFromStack(itemStack) : 0xFFFFFF;
+		if (pass == 1) {
+			Integer color = getColorFromStack(itemStack);
+			if (color != null) return color;
+		}
+
+		return 0xFFFFFF;
 	}
 
 	@Override
@@ -110,11 +116,11 @@ public class ItemPaintBrush extends Item {
 		return pass == 1? paintIcon : getIconFromDamage(dmg);
 	}
 
-	public static int getColorFromStack(ItemStack stack) {
+	public static Integer getColorFromStack(ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey("color")) { return tag.getInteger("color"); }
 		}
-		return -1;
+		return null;
 	}
 }

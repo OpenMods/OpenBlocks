@@ -17,7 +17,7 @@ import openblocks.api.IPointable;
  */
 public class MetaPointer extends MetaGeneric {
 
-	public MetaPointer(String name, Object[] recipes) {
+	public MetaPointer(String name, Object... recipes) {
 		super(name, recipes);
 	}
 

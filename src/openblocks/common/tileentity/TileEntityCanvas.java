@@ -23,6 +23,8 @@ import openmods.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile {
 
+	private static final int BASE_LAYER = -1;
+
 	/* Used for painting other blocks */
 	public SyncableInt paintedBlockId, paintedBlockMeta;
 
@@ -80,14 +82,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	public int getColorForRender(int renderSide, int layerId) {
-		if (layerId == -1) { return baseColors.getValue(renderSide); }
+		if (layerId == BASE_LAYER) { return baseColors.getValue(renderSide); }
 		Layer layer = getLayerForSide(renderSide, layerId);
 		if (layer != null) { return layer.getColorForRender(); }
 		return 0xCCCCCC;
 	}
 
 	public Icon getTextureForRender(int renderSide, int layerId) {
-		if (layerId > -1) {
+		if (layerId > BASE_LAYER) {
 			Layer layer = getLayerForSide(renderSide, layerId);
 			if (layer != null) {
 				Stencil stencil = layer.getStencil();
@@ -128,11 +130,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			Item item = heldItem.getItem();
 			// and it's a paintbrush
 			if (item.equals(OpenBlocks.Items.paintBrush) && heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) {
-				int color = ItemPaintBrush.getColorFromStack(heldItem);
+				Integer color = ItemPaintBrush.getColorFromStack(heldItem);
+				if (color == null) return false;
 
 				if (player.isSneaking()) {
 					for (int i = 0; i < 6; i++) {
-						if (heldItem.getItemDamage() == ItemPaintBrush.MAX_USES) break;
 						SyncableBlockLayers layer = getLayersForSide(i);
 						if (!layer.setColor(color)) {
 							// clear the layers
@@ -141,7 +143,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 						}
 						heldItem.damageItem(1, player);
 					}
-				} else if (heldItem.getItemDamage() < ItemPaintBrush.MAX_USES) {
+				} else {
 					if (!layers.setColor(color)) {
 						// clear the layers
 						layers.clear();

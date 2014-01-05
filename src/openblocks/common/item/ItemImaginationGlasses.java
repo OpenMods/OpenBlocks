@@ -40,7 +40,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public void getSubItems(int itemId, CreativeTabs tab, List result) {
 			for (ColorMeta color : ColorUtils.getAllColors())
-				result.add(createCrayon(color.rgb));
+				result.add(createCrayonGlasses(color.rgb));
 		}
 
 		@Override
@@ -48,7 +48,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 			return getGlassesColor(stack);
 		}
 
-		public ItemStack createCrayon(int color) {
+		public ItemStack createCrayonGlasses(int color) {
 			ItemStack stack = new ItemStack(this);
 
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);

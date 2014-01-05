@@ -82,8 +82,7 @@ public class BlockCanvas extends OpenBlock {
 	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 		TileEntityCanvas tile = this.getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile != null) { return tile.getColorForRender(renderSide, layer); }
-		return 16777215;
+		return tile != null? tile.getColorForRender(renderSide, layer) : 0xFFFFFFFF;
 	}
 
 	@Override

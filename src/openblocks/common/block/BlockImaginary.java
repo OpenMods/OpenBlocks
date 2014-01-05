@@ -128,7 +128,10 @@ public class BlockImaginary extends OpenBlock {
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
-		if (te != null) { return ItemImaginary.setupValues(te.color, new ItemStack(this)); }
+		if (te != null) {
+			int dmg = te.isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
+			return ItemImaginary.setupValues(te.color, new ItemStack(this, 1, dmg));
+		}
 		return null;
 	}
 }

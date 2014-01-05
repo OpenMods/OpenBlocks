@@ -30,8 +30,8 @@ public class ItemImaginary extends ItemOpenBlock {
 	public static final String TAG_USES = "Uses";
 	public static final String TAG_MODE = "Mode";
 
-	private static final int DAMAGE_PENCIL = 0;
-	private static final int DAMAGE_CRAYON = 1;
+	public static final int DAMAGE_PENCIL = 0;
+	public static final int DAMAGE_CRAYON = 1;
 
 	private enum PlacementMode {
 		BLOCK(1.0f, "block", "overlay_block", false) {
@@ -139,7 +139,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		setHasSubtypes(true);
 		setMaxDamage(0);
 	}
-
+	
 	public static ItemStack setupValues(Integer color, ItemStack result) {
 		return setupValues(color, result, Config.imaginaryItemUseCount);
 	}
