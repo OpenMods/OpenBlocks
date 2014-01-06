@@ -297,7 +297,7 @@ public class Config {
 		if (disableMobNames.size() > 0) {
 			MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
