@@ -29,6 +29,7 @@ import openmods.config.RegisterBlock;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
 import openmods.item.ItemGeneric;
+import openmods.network.events.TileEntityEventHandler;
 import openmods.utils.EnchantmentUtils;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -286,8 +287,6 @@ public class OpenBlocks {
 		if (Config.blockGraveId > 0) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
-
-		MinecraftForge.EVENT_BUS.register(new TileEntityEventHandler());
 
 		if (Config.itemCursorId > 0) {
 			MinecraftForge.EVENT_BUS.register(new GuiOpenHandler());
