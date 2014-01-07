@@ -8,13 +8,11 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.events.EventTypes;
 import openmods.Log;
-import openmods.OpenMods;
 import openmods.network.EventPacket;
 import openmods.network.IEventPacketType;
 import openmods.utils.ByteUtils;
@@ -180,10 +178,7 @@ public class MapDataManager {
 		evt.mapIds.addAll(mapsToUpdate);
 		mapsToUpdate.clear();
 
-		Packet toSend = EventPacket.serializeEvent(evt);
-		List<EntityPlayer> players = server.getConfigurationManager().playerEntityList;
-		for (EntityPlayer player : players)
-			OpenMods.proxy.sendPacketToPlayer((Player)player, toSend);
+		evt.sendToPlayers(server.getConfigurationManager().playerEntityList);
 	}
 
 	public void markDataUpdated(World world, int mapId) {
