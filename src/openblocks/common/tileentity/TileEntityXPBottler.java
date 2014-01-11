@@ -5,23 +5,33 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.container.ContainerXPBottler;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.OpenMods;
 import openmods.api.IHasGui;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
+import openmods.include.IncludeOverride;
+import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
+import openmods.utils.SidedInventoryAdapter;
 
-public class TileEntityXPBottler extends SyncedTileEntity implements ISidedInventory, IFluidHandler, IHasGui {
+public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
@@ -41,6 +51,17 @@ public class TileEntityXPBottler extends SyncedTileEntity implements ISidedInven
 		xp
 	}
 
+	private final GenericInventory inventory = new GenericInventory("xpbottler", true, 2) {
+		@Override
+		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+			if (slot != 0) return false;
+			return itemstack.getItem() == Item.glassBottle;
+		}
+	};
+
+	@IncludeInterface(ISidedInventory.class)
+	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);
+
 	/** synced data objects **/
 	private SyncableProgress progress;
 	private SyncableFlags glassSides;
@@ -49,9 +70,8 @@ public class TileEntityXPBottler extends SyncedTileEntity implements ISidedInven
 	private SyncableFlags automaticSlots;
 	private SyncableTank tank;
 
-	public TileEntityXPBottler() {
-		setInventory(new GenericInventory("xpbottler", true, 2));
-	}
+	@IncludeInterface
+	private final IFluidHandler tankWrapper = new SidedFluidHandler.Drain(xpSides, tank);
 
 	@Override
 	protected void createSyncedFields() {
@@ -61,6 +81,11 @@ public class TileEntityXPBottler extends SyncedTileEntity implements ISidedInven
 		xpSides = new SyncableFlags();
 		automaticSlots = new SyncableFlags();
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+	}
+
+	public TileEntityXPBottler() {
+		sided.registerSlot(Slots.input, glassSides, true, false);
+		sided.registerSlot(Slots.output, xpBottleSides, false, true);
 	}
 
 	@Override
@@ -179,67 +204,8 @@ public class TileEntityXPBottler extends SyncedTileEntity implements ISidedInven
 		return tank;
 	}
 
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
+	@IncludeOverride
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[] { tank.getInfo() };
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		boolean sideAllowsGlass = false;
-		boolean sideAllowsXP = false;
-		if (glassSides.getActiveSlots().contains(side)) {
-			sideAllowsGlass = true;
-		}
-		if (xpBottleSides.getActiveSlots().contains(side)) {
-			sideAllowsXP = true;
-		}
-		if (sideAllowsXP && sideAllowsGlass) { return new int[] { 0, 1 }; }
-		if (sideAllowsXP) { return new int[] { 1 }; }
-		if (sideAllowsGlass) { return new int[] { 0 }; }
-
-		return new int[0];
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		Item item = itemstack.getItem();
-		if (item == null) { return false; }
-		// slot 0, glass bottle, side accessible
-		return i == 0 && item == Item.glassBottle && glassSides.get(j);
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		Item item = itemstack.getItem();
-		if (item == null) { return false; }
-		if (item == Item.glassBottle) { return i == 0 && glassSides.get(j); }
-		if (item == Item.expBottle) { return i == 1 && xpBottleSides.get(j); }
 		return false;
 	}
 
@@ -247,58 +213,19 @@ public class TileEntityXPBottler extends SyncedTileEntity implements ISidedInven
 	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	public IInventory getInventory() {
+		return inventory;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 }

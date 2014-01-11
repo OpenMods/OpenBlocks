@@ -3,24 +3,28 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 import openmods.utils.OpenModsFakePlayer;
 
-public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventory, IHasGui {
+public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventoryProvider, IExtendable, IHasGui {
 	static final int BUFFER_SIZE = 9;
 
 	private boolean _redstoneSignal;
 
-	public TileEntityItemDropper() {
-		setInventory(new GenericInventory("itemDropper", false, 9));
-	}
+	private GenericInventory inventory = new GenericInventory("itemDropper", false, 9);
+
+	public TileEntityItemDropper() {}
 
 	public void setRedstoneSignal(boolean redstoneSignal) {
 		if (redstoneSignal != _redstoneSignal) {
@@ -34,13 +38,13 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	private void dropItem() {
 		if (worldObj.isRemote) return;
 
-		for (int i = 0, l = getSizeInventory(); i < l; i++) {
-			ItemStack stack = getStackInSlot(i);
+		for (int i = 0, l = inventory.getSizeInventory(); i < l; i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
 
 			ItemStack dropped = stack.splitStack(1);
 			if (stack.stackSize <= 0) {
-				setInventorySlotContents(i, null);
+				inventory.setInventorySlotContents(i, null);
 			}
 
 			OpenModsFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
@@ -72,58 +76,20 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 }

@@ -4,18 +4,18 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.common.tileentity.TileEntityProjector;
-import openmods.container.ContainerInventory;
+import openmods.container.ContainerInventoryProvider;
 
-public class ContainerProjector extends ContainerInventory<TileEntityProjector> {
+public class ContainerProjector extends ContainerInventoryProvider<TileEntityProjector> {
 
 	public ContainerProjector(IInventory playerInventory, TileEntityProjector owner) {
 		super(playerInventory, owner);
-		addSlotToContainer(new RestrictedSlot(owner, 0, 79, 130));
+		addSlotToContainer(new RestrictedSlot(inventory, 0, 79, 130));
 		addPlayerInventorySlots(8, 152);
 	}
 
 	public Integer getMapId() {
-		ItemStack map = getOwner().getStackInSlot(0);
+		ItemStack map = inventory.getStackInSlot(0);
 
 		if (map != null && map.getItem() instanceof ItemHeightMap) return map.getItemDamage();
 

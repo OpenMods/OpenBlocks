@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
 import openblocks.common.Stencil;
@@ -10,22 +11,31 @@ import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.MetasGeneric;
 import openblocks.events.StencilCraftEvent;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityDrawingTable extends OpenTileEntity implements IInventory, IHasGui, IInventoryCallback {
+public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryCallback, IExtendable, IInventoryProvider {
+
+	private final GenericInventory inventory = new GenericInventory("drawingtable", true, 1) {
+
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			return i == 0 && (itemstack == null || MetasGeneric.unpreparedStencil.isA(itemstack));
+		}
+
+	};
 
 	public TileEntityDrawingTable() {
-		setInventory(new GenericInventory("drawingtable", true, 1));
 		inventory.addCallback(this);
 	}
 
 	@Override
-	public void onInventoryChanged(IInventory inventory, int slotNumber) {
-
-	}
+	public void onInventoryChanged(IInventory inventory, int slotNumber) {}
 
 	public void onRequestStencilCreate(Stencil stencil) {
 		new StencilCraftEvent(this, stencil).sendToServer();
@@ -59,59 +69,20 @@ public class TileEntityDrawingTable extends OpenTileEntity implements IInventory
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return inventory.isItemValidForSlot(i, itemstack);
-	}
-
 }

@@ -2,9 +2,9 @@ package openblocks.common.container;
 
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntitySprinkler;
-import openmods.container.ContainerInventory;
+import openmods.container.ContainerInventoryProvider;
 
-public class ContainerSprinkler extends ContainerInventory<TileEntitySprinkler> {
+public class ContainerSprinkler extends ContainerInventoryProvider<TileEntitySprinkler> {
 
 	public ContainerSprinkler(IInventory playerInventory, TileEntitySprinkler sprinkler) {
 		super(playerInventory, sprinkler);

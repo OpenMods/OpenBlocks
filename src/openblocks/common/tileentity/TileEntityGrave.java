@@ -12,24 +12,26 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openmods.GenericInventory;
-import openmods.api.*;
+import openmods.api.IBreakAwareTile;
+import openmods.api.IPlaceAwareTile;
+import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntityGrave extends SyncedTileEntity implements
-		IInventoryContainer, ISurfaceAttachment, IPlaceAwareTile, IBreakAwareTile {
+public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachment, IPlaceAwareTile, IBreakAwareTile {
 
 	private SyncableString perishedUsername;
 	public boolean onSoil = true;
 	private int ticksSinceLastSound = 0;
 
-	public TileEntityGrave() {
-		setInventory(new GenericInventory("grave", false, 100));
-	}
+	private GenericInventory inventory = new GenericInventory("grave", false, 100);
+
+	public TileEntityGrave() {}
 
 	@Override
 	protected void createSyncedFields() {
@@ -88,11 +90,6 @@ public class TileEntityGrave extends SyncedTileEntity implements
 	}
 
 	@Override
-	public IInventory[] getInternalInventories() {
-		return new IInventory[] { inventory };
-	}
-
-	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return ForgeDirection.DOWN;
 	}
@@ -118,5 +115,17 @@ public class TileEntityGrave extends SyncedTileEntity implements
 		if (!worldObj.isRemote) {
 			BlockUtils.dropInventory(getLoot(), worldObj, xCoord, yCoord, zCoord);
 		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 }

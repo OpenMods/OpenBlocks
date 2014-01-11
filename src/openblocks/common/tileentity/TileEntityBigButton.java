@@ -6,21 +6,25 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.container.ContainerBigButton;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IInventory, IHasGui {
+public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IExtendable, IInventoryProvider {
 
 	private int tickCounter = 0;
 
@@ -30,9 +34,9 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	private SyncableFlags flags;
 
-	public TileEntityBigButton() {
-		setInventory(new GenericInventory("bigbutton", true, 1));
-	}
+	private final GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
+
+	public TileEntityBigButton() {}
 
 	@Override
 	protected void createSyncedFields() {
@@ -118,58 +122,20 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
 	}
 }

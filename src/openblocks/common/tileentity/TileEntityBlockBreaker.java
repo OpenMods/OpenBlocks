@@ -8,12 +8,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.api.INeighbourAwareTile;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
@@ -23,8 +27,7 @@ import openmods.utils.OpenModsFakePlayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBlockBreaker extends SyncedTileEntity
-		implements INeighbourAwareTile, IInventory {
+public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile, IExtendable, IInventoryProvider {
 
 	public enum Slots {
 		buffer
@@ -34,9 +37,12 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 	private int _redstoneAnimTimer;
 	private SyncableBoolean activated;
 
-	public TileEntityBlockBreaker() {
-		setInventory(new GenericInventory("blockbreaker", true, 1));
-	}
+	private final GenericInventory inventory = new GenericInventory("blockbreaker", true, 1) {
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			return false;
+		}
+	};
 
 	@Override
 	protected void createSyncedFields() {
@@ -127,7 +133,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 			inventory.setInventorySlotContents(Slots.buffer.ordinal(), stack);
 
 			// push the item out into a pipe or inventory
-			InventoryUtils.moveItemInto(this, Slots.buffer.ordinal(), targetInventory, -1, 64, direction, true);
+			InventoryUtils.moveItemInto(inventory, Slots.buffer.ordinal(), targetInventory, -1, 64, direction, true);
 			// if there's anything left for whatever reason (maybe no inventory)
 			ItemStack buffer = inventory.getStackInSlot(Slots.buffer);
 			if (buffer != null) {
@@ -146,11 +152,6 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return false;
-	}
-
-	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
 		if (changes.contains(activated)) {
 			worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
@@ -158,54 +159,21 @@ public class TileEntityBlockBreaker extends SyncedTileEntity
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 
 }

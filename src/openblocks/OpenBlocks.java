@@ -29,7 +29,6 @@ import openmods.config.RegisterBlock;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
 import openmods.item.ItemGeneric;
-import openmods.network.events.TileEntityEventHandler;
 import openmods.utils.EnchantmentUtils;
 
 import org.apache.commons.lang3.ObjectUtils;

@@ -4,26 +4,28 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 import openmods.utils.OpenModsFakePlayer;
 
-public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IInventory, IHasGui {
+public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IHasGui, IExtendable, IInventoryProvider {
 
 	static final int BUFFER_SIZE = 9;
 
 	private boolean _redstoneSignal;
 
-	public TileEntityBlockPlacer() {
-		setInventory(new GenericInventory("blockPlacer", false, BUFFER_SIZE));
-	}
+	private final GenericInventory inventory = new GenericInventory("blockPlacer", false, BUFFER_SIZE);
 
 	public void setRedstoneSignal(boolean redstoneSignal) {
 		if (redstoneSignal != _redstoneSignal) {
@@ -39,8 +41,8 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 
 		ForgeDirection direction = getRotation();
 		int x = xCoord + direction.offsetX, y = yCoord + direction.offsetY, z = zCoord + direction.offsetZ;
-		for (int i = 0, l = getSizeInventory(); i < l; i++) {
-			ItemStack stack = getStackInSlot(i);
+		for (int i = 0, l = inventory.getSizeInventory(); i < l; i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
 			OpenModsFakePlayer fakePlayer = OpenModsFakePlayer.getPlayerForWorld(worldObj);
 			ItemStack newStack = OpenModsFakePlayer.getPlayerForWorld(worldObj)
@@ -51,7 +53,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 							worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
 			fakePlayer.setDead();
 			if (newStack != null) {
-				setInventorySlotContents(i, newStack.stackSize > 0? newStack : null);
+				inventory.setInventorySlotContents(i, newStack.stackSize > 0? newStack : null);
 			}
 			return;
 		}
@@ -80,58 +82,20 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 }

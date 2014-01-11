@@ -14,14 +14,17 @@ import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
+import openmods.include.IncludeOverride;
+import openmods.liquids.GenericFluidHandler;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
 
-public class TileEntityTank extends SyncedTileEntity implements
-		IFluidHandler, INeighbourAwareTile, IPlaceAwareTile, IActivateAwareTile {
+public class TileEntityTank extends SyncedTileEntity implements INeighbourAwareTile, IPlaceAwareTile, IActivateAwareTile, IExtendable {
 
 	public static int getTankCapacity() {
 		return FluidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank;
@@ -35,6 +38,9 @@ public class TileEntityTank extends SyncedTileEntity implements
 	private double flowTimer = Math.random() * 100;
 
 	private int previousFluidId = 0;
+
+	@IncludeInterface(IFluidHandler.class)
+	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
 
 	@Override
 	protected void createSyncedFields() {
@@ -281,10 +287,6 @@ public class TileEntityTank extends SyncedTileEntity implements
 		return startAmount - resource.amount;
 	}
 
-	public FluidStack drain(int amount, boolean doDrain) {
-		return tank.drain(amount, doDrain);
-	}
-
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
 		int newFluidId = tank.getFluid() == null? 0 : tank.getFluid().fluidID;
@@ -344,7 +346,7 @@ public class TileEntityTank extends SyncedTileEntity implements
 							player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
 						}
 					}
-					drain(ForgeDirection.UNKNOWN, liquid.amount, true);
+					tank.drain(liquid.amount, true);
 					return true;
 				}
 			}
@@ -403,34 +405,9 @@ public class TileEntityTank extends SyncedTileEntity implements
 		return nbt;
 	}
 
-	@Override
+	@IncludeOverride
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 		return this.fill(resource, doFill, null);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return tank.drain(resource, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[] { tank.getInfo() };
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return drain(maxDrain, doDrain);
 	}
 
 	public int getFluidLightLevel() {

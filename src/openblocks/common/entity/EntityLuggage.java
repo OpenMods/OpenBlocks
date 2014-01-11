@@ -13,6 +13,7 @@ import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 
@@ -22,8 +23,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityLuggage extends EntityTameable implements
-		IEntityAdditionalSpawnData {
+public class EntityLuggage extends EntityTameable implements IInventoryProvider, IEntityAdditionalSpawnData {
 
 	protected GenericInventory inventory = new GenericInventory("luggage", false, 27);
 	public boolean special;
@@ -77,6 +77,7 @@ public class EntityLuggage extends EntityTameable implements
 		return true;
 	}
 
+	@Override
 	public GenericInventory getInventory() {
 		return inventory;
 	}

@@ -3,13 +3,17 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.Mods;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.sync.SyncableString;
 import openmods.tileentity.OpenTileEntity;
 
@@ -18,7 +22,7 @@ import com.google.common.base.Joiner;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 
-public class TileEntityDonationStation extends OpenTileEntity implements IInventory, IHasGui, IInventoryCallback {
+public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IInventoryCallback, IExtendable, IInventoryProvider {
 
 	private SyncableString modName = new SyncableString();
 	private SyncableString authors = new SyncableString();
@@ -28,9 +32,10 @@ public class TileEntityDonationStation extends OpenTileEntity implements IInvent
 		input
 	}
 
+	private final GenericInventory inventory = new GenericInventory("donationstation", true, 1);
+
 	public TileEntityDonationStation() {
-		setInventory(new GenericInventory("donationstation", true, 1));
-		addInventoryCallback(this);
+		inventory.addCallback(this);
 	}
 
 	@Override
@@ -89,63 +94,25 @@ public class TileEntityDonationStation extends OpenTileEntity implements IInvent
 		return modName;
 	}
 
-	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return true;
-	}
-
 	public void showSomeLove() {
 		// TODO: Impl.
+	}
+
+	@Override
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 }

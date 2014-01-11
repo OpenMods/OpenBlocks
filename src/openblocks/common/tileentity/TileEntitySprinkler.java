@@ -8,6 +8,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
@@ -16,12 +17,14 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
-import openmods.GenericInventory;
-import openmods.Log;
-import openmods.OpenMods;
+import openmods.*;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
+import openmods.include.IncludeOverride;
+import openmods.liquids.GenericFluidHandler;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
@@ -29,7 +32,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IFluidHandler, IInventory, IHasGui {
+public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IExtendable, IHasGui {
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Item.dyePowder, 1, 15);
@@ -43,9 +46,15 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	private SyncableFlags flags;
 	private SyncableTank tank;
 
-	public TileEntitySprinkler() {
-		setInventory(new GenericInventory("sprinkler", true, 9));
-	}
+	private final GenericInventory inventory = new GenericInventory("sprinkler", true, 9) {
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			return itemstack != null && itemstack.isItemEqual(BONEMEAL);
+		}
+	};
+
+	@IncludeInterface
+	private final IFluidHandler tankWrapper = new GenericFluidHandler.Drain(tank);
 
 	@Override
 	protected void createSyncedFields() {
@@ -152,16 +161,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return itemstack != null && itemstack.isItemEqual(BONEMEAL);
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
-	}
-
-	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return ForgeDirection.DOWN;
 	}
@@ -182,82 +181,29 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		return 0;
 	}
 
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
+	@IncludeOverride
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[] { tank.getInfo() };
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
 	}
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 }

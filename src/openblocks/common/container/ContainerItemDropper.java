@@ -2,10 +2,9 @@ package openblocks.common.container;
 
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityItemDropper;
-import openmods.container.ContainerInventory;
+import openmods.container.ContainerInventoryProvider;
 
-public class ContainerItemDropper extends
-		ContainerInventory<TileEntityItemDropper> {
+public class ContainerItemDropper extends ContainerInventoryProvider<TileEntityItemDropper> {
 	public ContainerItemDropper(IInventory playerInventory, TileEntityItemDropper itemDropper) {
 		super(playerInventory, itemDropper);
 		addInventoryGrid(62, 18, 3);

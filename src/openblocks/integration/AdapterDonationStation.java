@@ -13,7 +13,7 @@ public class AdapterDonationStation implements IPeripheralAdapter {
 
 	@LuaMethod(onTick = true, returnType = LuaType.STRING, description = "Find the mod name and mod authors")
 	public IMultiReturn getItemAuthor(IComputerAccess computer, final TileEntityDonationStation station) {
-		if (station.getStackInSlot(0) != null) { return new IMultiReturn() {
+		if (station.getInventory().getStackInSlot(0) != null) { return new IMultiReturn() {
 			@Override
 			public Object[] getObjects() {
 				return new Object[] { station.getModName().getValue(), station.getAuthors().getValue() };

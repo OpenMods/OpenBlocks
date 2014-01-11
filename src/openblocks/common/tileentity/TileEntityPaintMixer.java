@@ -7,21 +7,25 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.item.ItemPaintCan;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ColorUtils;
 
 import com.google.common.collect.Maps;
 
-public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory, IHasGui, IInventoryCallback {
+public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IExtendable {
 
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Item.bucketMilk);
@@ -62,8 +66,19 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 
 	public SyncableFloat lvlCyan, lvlMagenta, lvlYellow, lvlBlack;
 
+	private GenericInventory inventory = new GenericInventory("paintmixer", true, 6) {
+		@Override
+		public boolean isItemValidForSlot(int slotId, ItemStack stack) {
+			Slots[] values = Slots.values();
+			if (stack == null || slotId < 0 || slotId > values.length) return false;
+			Slots slot = values[slotId];
+
+			if (slot == Slots.paint) return PAINT_CAN.isItemEqual(stack) || MILK_BUCKET.isItemEqual(stack);
+			return isValidForSlot(slot, stack);
+		}
+	};
+
 	public TileEntityPaintMixer() {
-		setInventory(new GenericInventory("paintmixer", true, 6));
 		inventory.addCallback(this);
 	}
 
@@ -212,67 +227,6 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	public void onSync() {}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int slotId, ItemStack stack) {
-		Slots[] values = Slots.values();
-		if (stack == null || slotId < 0 || slotId > values.length) return false;
-		Slots slot = values[slotId];
-
-		if (slot == Slots.paint) return PAINT_CAN.isItemEqual(stack) || MILK_BUCKET.isItemEqual(stack);
-		return isValidForSlot(slot, stack);
-	}
-
-	@Override
 	public Object getServerGui(EntityPlayer player) {
 		return new ContainerPaintMixer(player.inventory, this);
 	}
@@ -339,5 +293,23 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		ItemStack gotStack = inventory.getStackInSlot(slot);
 		if (gotStack == null) { return false; }
 		return gotStack.isItemEqual(stack);
+	}
+
+	@Override
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 }

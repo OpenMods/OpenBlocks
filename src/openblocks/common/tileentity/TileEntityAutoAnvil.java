@@ -7,26 +7,35 @@ import java.util.Set;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.container.ContainerAutoAnvil;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.OpenMods;
 import openmods.api.IHasGui;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
+import openmods.include.IncludeOverride;
+import openmods.liquids.SidedFluidHandler;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
-import openmods.utils.SlotSideHelper;
+import openmods.utils.SidedInventoryAdapter;
 
-public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInventory, IFluidHandler, IHasGui {
+public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable {
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
@@ -62,14 +71,25 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 	private SyncableTank tank;
 	private SyncableFlags automaticSlots;
 
-	private SlotSideHelper slotSides = new SlotSideHelper();
+	private final GenericInventory inventory = new GenericInventory("autoanvil", true, 3) {
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Item.enchantedBook)) { return false; }
+			if (i == 2) { return false; }
+			return super.isItemValidForSlot(i, itemstack);
+		}
+	};
+
+	@IncludeInterface(ISidedInventory.class)
+	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
+
+	@IncludeInterface
+	private final IFluidHandler tankWrapper = new SidedFluidHandler.Drain(xpSides, tank);
 
 	public TileEntityAutoAnvil() {
-		setInventory(new GenericInventory("autoanvil", true, 3));
-
-		slotSides.addMapping(Slots.tool, toolSides);
-		slotSides.addMapping(Slots.modifier, modifierSides);
-		slotSides.addMapping(Slots.output, outputSides);
+		slotSides.registerSlot(Slots.tool, toolSides, true, false);
+		slotSides.registerSlot(Slots.modifier, modifierSides, true, false);
+		slotSides.registerSlot(Slots.output, outputSides, false, true);
 	}
 
 	@Override
@@ -428,56 +448,9 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 
 	}
 
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Item.enchantedBook)) { return false; }
-		if (i == 2) { return false; }
-		return inventory.isItemValidForSlot(i, itemstack);
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return null;
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return xpSides.get(from.ordinal());
-	}
-
-	@Override
+	@IncludeOverride
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[] { tank.getInfo() };
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return slotSides.getSlotsForSide(side);
-	}
-
-	@Override
-	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
-		return slotSides.canInsertItem(slot, side) && isItemValidForSlot(slot, itemstack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
-		return slotSides.canExtractItem(slot, side);
 	}
 
 	@Override
@@ -488,53 +461,19 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements ISidedInven
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	public IInventory getInventory() {
+		return slotSides;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		return inventory.decrStackSize(i, j);
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 }

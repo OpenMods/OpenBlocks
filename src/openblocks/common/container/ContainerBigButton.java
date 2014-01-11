@@ -2,9 +2,9 @@ package openblocks.common.container;
 
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityBigButton;
-import openmods.container.ContainerInventory;
+import openmods.container.ContainerInventoryProvider;
 
-public class ContainerBigButton extends ContainerInventory<TileEntityBigButton> {
+public class ContainerBigButton extends ContainerInventoryProvider<TileEntityBigButton> {
 
 	public ContainerBigButton(IInventory playerInventory, TileEntityBigButton button) {
 		super(playerInventory, button);

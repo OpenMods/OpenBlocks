@@ -16,8 +16,11 @@ import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableInt;
@@ -25,7 +28,7 @@ import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityProjector extends SyncedTileEntity implements IInventory, IHasGui {
+public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable {
 
 	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
 		@Override
@@ -54,8 +57,8 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 							ItemStack newStack = ItemEmptyMap.upgradeToMap(worldObj, stack);
 							setInventorySlotContents(slotNumber, newStack);
 						} else TileEntityProjector.this.mapId.setValue(-1);
-					} else
-					TileEntityProjector.this.mapId.setValue(-1);
+					} else TileEntityProjector.this.mapId.setValue(-1);
+					sync();
 				}
 
 				worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, TileEntityProjector.this);
@@ -120,62 +123,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slot, int quantity) {
-		return inventory.decrStackSize(slot, quantity);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack stack) {
-		inventory.setInventorySlotContents(i, stack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return true;
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
-
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return inventory.isItemValidForSlot(i, stack);
-	}
-
-	@Override
 	public Object getServerGui(EntityPlayer player) {
 		return new ContainerProjector(player.inventory, this);
 	}
@@ -227,5 +174,11 @@ public class TileEntityProjector extends SyncedTileEntity implements IInventory,
 	public void fetchMap() {
 		int mapId = this.mapId.getValue();
 		if (worldObj != null && mapId >= 0) MapDataManager.getMapData(worldObj, mapId);
+	}
+
+	@Override
+	@IncludeInterface
+	public IInventory getInventory() {
+		return inventory;
 	}
 }

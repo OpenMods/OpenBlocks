@@ -4,24 +4,32 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openmods.GenericInventory;
+import openmods.IInventoryProvider;
 import openmods.OpenMods;
 import openmods.api.IHasGui;
+import openmods.include.IExtendable;
+import openmods.include.IncludeInterface;
+import openmods.include.IncludeOverride;
+import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
-import openmods.utils.SlotSideHelper;
+import openmods.utils.SidedInventoryAdapter;
 
-public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
-		implements IFluidHandler, ISidedInventory, IHasGui {
+public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
 
@@ -43,7 +51,19 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	private SyncableInt targetLevel;
 	private SyncableFlags automaticSlots;
 
-	private SlotSideHelper slotSides = new SlotSideHelper();
+	private final GenericInventory inventory = new GenericInventory("autoenchant", true, 2) {
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			if (i == Slots.input.ordinal()) { return !itemstack.isItemEnchanted(); }
+			return i == Slots.input.ordinal();
+		}
+	};
+
+	@IncludeInterface(ISidedInventory.class)
+	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
+
+	@IncludeInterface
+	private final IFluidHandler tankWrapper = new SidedFluidHandler.Drain(xpSides, tank);
 
 	/**
 	 * grotesque book turning stuff taken from the main enchantment table
@@ -61,9 +81,8 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	private static Random rand = new Random();
 
 	public TileEntityAutoEnchantmentTable() {
-		setInventory(new GenericInventory("autoenchant", true, 2));
-		slotSides.addMapping(Slots.input, inputSides);
-		slotSides.addMapping(Slots.output, outputSides);
+		slotSides.registerSlot(Slots.input, inputSides, true, false);
+		slotSides.registerSlot(Slots.output, outputSides, false, true);
 	}
 
 	@Override
@@ -96,7 +115,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 			}
 
 			if (hasStack(Slots.input)
-					&& isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input))
+					&& inventory.isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input))
 					&& !hasStack(Slots.output)) {
 				int xpRequired = EnchantmentUtils.getLiquidForLevel(targetLevel.getValue());
 				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
@@ -238,56 +257,9 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {}
 
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if (i == Slots.input.ordinal()) { return !itemstack.isItemEnchanted(); }
-		return i == Slots.input.ordinal();
-	}
-
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return slotSides.getSlotsForSide(side);
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return slotSides.canInsertItem(i, j);
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return slotSides.canExtractItem(i, j);
-	}
-
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		if (resource == null) { return null; }
-		return drain(from, resource.amount, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return tank.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
+	@IncludeOverride
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[] { tank.getInfo() };
 	}
 
 	public IFluidTank getTank() {
@@ -311,57 +283,19 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	public IInventory getInventory() {
+		return slotSides;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return inventory.getStackInSlot(i);
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int stackIndex, int byAmount) {
-		return inventory.decrStackSize(stackIndex, byAmount);
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		return inventory.getStackInSlotOnClosing(i);
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		inventory.setInventorySlotContents(i, itemstack);
-	}
-
-	@Override
-	public String getInvName() {
-		return inventory.getInvName();
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return inventory.isInvNameLocalized();
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer);
-	}
-
-	@Override
-	public void openChest() {
-		inventory.openChest();
-	}
-
-	@Override
-	public void closeChest() {
-		inventory.closeChest();
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
 	}
 }
