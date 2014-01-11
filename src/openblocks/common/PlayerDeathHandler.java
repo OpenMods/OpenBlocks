@@ -36,7 +36,6 @@ public class PlayerDeathHandler {
 					for (int checkX = x - distance; checkX <= x + distance; checkX++) {
 						for (int checkY = y - distance; checkY <= y + distance; checkY++) {
 							for (int checkZ = z - distance; checkZ <= z + distance; checkZ++) {
-								System.out.println(String.format("%s,%s,%s", checkX, checkY, checkZ));
 								int bId = world.getBlockId(x, checkY, z);
 								Block block = Block.blocksList[bId];
 								boolean canPlaceBlock = world.blockExists(checkX, checkY, checkZ) &&
