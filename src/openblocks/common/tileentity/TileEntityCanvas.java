@@ -192,24 +192,21 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem instanceof ItemStencil) return false;
 		}
 
-		boolean madeCoverChange = false;
 		SyncableBlockLayers layer = getLayersForSide(side);
-		if (player.isSneaking()) {
-			if (!worldObj.isRemote) {
-				ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, layer.getTopStencil().ordinal());
-				dropStackFromSide(dropStack, side);
-			}
-			layer.removeCover();
-			madeCoverChange = true;
-		} else if (layer.isLastLayerStencil()) {
-			getLayersForSide(side).rotateCover();
-			madeCoverChange = true;
-		}
 
-		if (madeCoverChange) {
+		if (layer.isLastLayerStencil()) {
+			if (player.isSneaking()) {
+				if (!worldObj.isRemote) {
+					ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, layer.getTopStencil().ordinal());
+					dropStackFromSide(dropStack, side);
+				}
+				layer.removeCover();
+			} else getLayersForSide(side).rotateCover();
+
 			if (!worldObj.isRemote) sync();
 			return true;
 		}
+
 		return false;
 	}
 
