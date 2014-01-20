@@ -278,6 +278,9 @@ public class Config {
 	@ConfigProperty(category = "debug", name = "goldenEyeDebug", comment = "Show structures found by golden eye")
 	public static boolean eyeDebug = false;
 
+	@ConfigProperty(category = "debug", name = "gravesDebug", comment = "Dump extra amount of data, every time grave is created")
+	public static boolean debugGraves = false;
+
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
 
