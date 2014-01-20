@@ -114,3 +114,5 @@ itemGroup.tabOpenBlocks=OpenBlocks
 entity.OpenBlocks.Luggage.name=Luggage
 entity.OpenBlocks.Cartographer.name=Cartographer
 entity.OpenBlocks.Block.name=Floating Block
+
+fluid.OpenBlocks.xpjuice=Liquid XP
