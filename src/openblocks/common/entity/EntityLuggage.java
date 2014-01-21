@@ -36,6 +36,7 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 		setAIMoveSpeed(0.7F);
 		setMoveForward(0);
 		setTamed(true);
+		func_110163_bv(); // set persistent
 		getNavigator().setAvoidsWater(true);
 		getNavigator().setCanSwim(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
@@ -139,6 +140,11 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	@Override
 	public boolean isEntityInvulnerable() {
 		return true;
+	}
+
+	@Override
+	protected boolean canDespawn() {
+		return false;
 	}
 
 	@Override
