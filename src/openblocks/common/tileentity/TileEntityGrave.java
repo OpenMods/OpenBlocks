@@ -15,15 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openmods.GenericInventory;
-import openmods.api.IBreakAwareTile;
+import openmods.IInventoryProvider;
 import openmods.api.IPlaceAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.BlockUtils;
 
-public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachment, IPlaceAwareTile, IBreakAwareTile {
+public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachment, IPlaceAwareTile, IInventoryProvider {
 
 	private SyncableString perishedUsername;
 	public boolean onSoil = true;
@@ -77,10 +76,6 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 		return perishedUsername.getValue();
 	}
 
-	public IInventory getLoot() {
-		return inventory;
-	}
-
 	public void setUsername(String username) {
 		this.perishedUsername.setValue(username);
 	}
@@ -111,13 +106,6 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 	}
 
 	@Override
-	public void onBlockBroken() {
-		if (!worldObj.isRemote) {
-			BlockUtils.dropInventory(getLoot(), worldObj, xCoord, yCoord, zCoord);
-		}
-	}
-
-	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
@@ -127,5 +115,10 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	@Override
+	public IInventory getInventory() {
+		return inventory;
 	}
 }
