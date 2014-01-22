@@ -134,6 +134,9 @@ public class Config {
 	@BlockId(description = "The id of the fan block")
 	public static int blockFanId = 2576;
 
+	@BlockId(description = "The id of the radio block")
+	public static int blockRadioId = 2577;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -501,6 +504,10 @@ public class Config {
 		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
+		}
+
+		if (ConfigProcessing.canRegisterBlock(blockRadioId)) {
+			OpenBlocks.Blocks.radio = new BlockRadio();
 		}
 
 		if (itemHangGliderId > 0) {

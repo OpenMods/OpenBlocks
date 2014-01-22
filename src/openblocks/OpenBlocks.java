@@ -168,6 +168,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
+
+		@RegisterBlock(name = "radio", tileEntity = TileEntityRadio.class)
+		public static BlockRadio radio;
 	}
 
 	public static class Items {
