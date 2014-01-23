@@ -1,5 +1,9 @@
 package openblocks.client;
 
+import java.net.URL;
+import java.net.URLStreamHandler;
+import java.net.URLStreamHandlerFactory;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -18,6 +22,7 @@ import openblocks.OpenBlocks;
 import openblocks.client.bindings.BrickBindings;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
+import openblocks.client.radio.IcyURLStreamHandler;
 import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
@@ -28,6 +33,7 @@ import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import cpw.mods.fml.client.registry.*;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -145,6 +151,20 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.goldenEye != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());
+		}
+
+		if (OpenBlocks.Blocks.radio != null) {
+			NetworkRegistry.instance().registerConnectionHandler(new RadioRegistry());
+			try {
+				URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory() {
+					public URLStreamHandler createURLStreamHandler(String protocol) {
+						if ("icy".equals(protocol)) return new IcyURLStreamHandler();
+						return null;
+					}
+				});
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
 		}
 	}
 

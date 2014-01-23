@@ -23,7 +23,8 @@ public class SoundLoader {
 			"beep.ogg",
 			"wipe.ogg",
 			"cannon.ogg",
-			"fart1.ogg", "fart2.ogg", "fart3.ogg", "fart4.ogg"
+			"fart1.ogg", "fart2.ogg", "fart3.ogg", "fart4.ogg",
+			"radio.ogg"
 	};
 
 	@SideOnly(Side.CLIENT)

@@ -1,6 +1,7 @@
-package openblocks.client.sound;
+package openblocks.client.radio;
 
 import java.net.URL;
+import java.net.URLConnection;
 
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
@@ -25,7 +26,9 @@ public class StreamPlayer extends PlaybackListener implements Runnable {
 	@Override
 	public void run() {
 		try {
-			player = new AdvancedPlayer(new URL(streamURL).openStream());
+			URLConnection connection = new URL(streamURL).openConnection();
+			connection.connect();
+			player = new AdvancedPlayer(connection.getInputStream());
 			player.setPlayBackListener(this);
 			player.play();
 		} catch (Exception e) {
@@ -34,7 +37,7 @@ public class StreamPlayer extends PlaybackListener implements Runnable {
 	}
 
 	public void stop() {
-		if (player != null && isPlaying()) {
+		if (player != null) {
 			player.stop();
 		}
 	}
