@@ -4,8 +4,12 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.client.RadioRegistry;
 import openblocks.client.radio.StreamPlayer;
 import openmods.OpenMods;
@@ -19,7 +23,9 @@ public class TileEntityRadio extends SyncedTileEntity implements IAwareTile {
 
 	private SyncableString url;
 	private SyncableBoolean enabled;
-	private StreamPlayer player;
+	private StreamPlayer radioPlayer;
+	private float currentVolume = 1f;
+	private float targetVolume = 1f;
 
 	@Override
 	protected void createSyncedFields() {
@@ -45,23 +51,41 @@ public class TileEntityRadio extends SyncedTileEntity implements IAwareTile {
 		super.updateEntity();
 		if (worldObj.isRemote) {
 			EntityPlayer clientPlayer = OpenMods.proxy.getThePlayer();
-			if (clientPlayer != null && player != null) {
+			if (clientPlayer != null && radioPlayer != null) {
+
+				MovingObjectPosition mop = worldObj.clip(
+						clientPlayer.getPosition(1.0f),
+						Vec3.createVectorHelper(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5));
+
+				float targetVolume = 1f;
+
 				double dist = clientPlayer.getDistance(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-				if (dist > 50) {
-					player.setVolume(0);
-				} else if (dist < 5) {
-					player.setVolume(1);
-				} else {
-					player.setVolume(1f - ((float)dist / 50));
+				if (dist > 30) {
+					targetVolume = 1f;
+				} else if (dist > 5) {
+					targetVolume = 1f - ((float)dist / 30);
 				}
+
+				if (mop.typeOfHit == EnumMovingObjectType.TILE) {
+					if (worldObj.blockExists(mop.blockX, mop.blockY, mop.blockZ)) {
+						int blockId = worldObj.getBlockId(mop.blockX, mop.blockY, mop.blockZ);
+						if (blockId != OpenBlocks.Blocks.radio.blockID) {
+							targetVolume *= 0.5f;
+						}
+					}
+				}
+
+				currentVolume = currentVolume + ((targetVolume - currentVolume) * 0.1f);
+
+				radioPlayer.setVolume(currentVolume);
 			}
 		}
 	}
 
 	private void killMusic() {
-		if (worldObj.isRemote && player != null) {
-			player.stop();
-			player = null;
+		if (worldObj.isRemote && radioPlayer != null) {
+			radioPlayer.stop();
+			radioPlayer = null;
 		}
 	}
 
@@ -70,8 +94,8 @@ public class TileEntityRadio extends SyncedTileEntity implements IAwareTile {
 		if (worldObj.isRemote && changes.size() > 0) {
 			killMusic();
 			if (enabled.getValue()) {
-				if (player == null) {
-					RadioRegistry.registerPlayer(player = new StreamPlayer("icy://" + url.getValue()));
+				if (radioPlayer == null) {
+					RadioRegistry.registerPlayer(radioPlayer = new StreamPlayer("icy://" + url.getValue()));
 				}
 			}
 		}
