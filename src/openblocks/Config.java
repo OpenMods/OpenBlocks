@@ -298,13 +298,13 @@ public class Config {
 		ConfigProcessing.processAnnotations(configFile, Config.class);
 		Property prop = configFile.get("additional", "disableMobNames", new String[0], "List any mob names you want disabled on the server");
 		disableMobNames = Arrays.asList(prop.getStringList());
-		
+
 		// ick! temporary.
 		prop = configFile.get("additional", "radioStations", new String[] {
-		    	"50.7.130.108:80",
-		    	"176.28.2.147:80",
-		    	"66.197.229.245:8082",
-		    	"173.245.94.220:80"				
+				"50.7.130.108:80",
+				"176.28.2.147:80",
+				"66.197.229.245:8082",
+				"173.245.94.220:80"
 		}, "List any radio stations you want");
 		radioStations = Arrays.asList(prop.getStringList());
 	}

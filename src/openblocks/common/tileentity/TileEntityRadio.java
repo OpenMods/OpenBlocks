@@ -3,29 +3,28 @@ package openblocks.common.tileentity;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.client.RadioRegistry;
+import openblocks.client.radio.RadioRegistry;
 import openblocks.client.radio.StreamPlayer;
 import openmods.OpenMods;
-import openmods.api.IAwareTile;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IBreakAwareTile;
+import openmods.api.INeighbourAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityRadio extends SyncedTileEntity implements IAwareTile {
+public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile, INeighbourAwareTile {
 
 	private SyncableString url;
 	private SyncableBoolean enabled;
 	private StreamPlayer radioPlayer;
 	private float currentVolume = 1f;
-	private float targetVolume = 1f;
 
 	@Override
 	protected void createSyncedFields() {
@@ -103,10 +102,9 @@ public class TileEntityRadio extends SyncedTileEntity implements IAwareTile {
 
 	@Override
 	public void onNeighbourChanged(int blockId) {
-		enabled.setValue(
-				worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) &&
-						Config.radioStations.size() > 0
-				);
+		final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		final boolean hasStations = Config.radioStations.size() > 0;
+		enabled.setValue(isPowered && hasStations);
 		sync();
 	}
 
@@ -127,6 +125,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IAwareTile {
 		return true;
 	}
 
+	@Override
 	public void onChunkUnload() {
 		killMusic();
 	}
@@ -135,8 +134,4 @@ public class TileEntityRadio extends SyncedTileEntity implements IAwareTile {
 	public void onBlockBroken() {
 		killMusic();
 	}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {}
-
 }
