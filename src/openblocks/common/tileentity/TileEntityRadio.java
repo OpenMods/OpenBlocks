@@ -19,6 +19,10 @@ import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import com.google.common.base.Strings;
+
 public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile, INeighbourAwareTile {
 
 	private SyncableString url;
@@ -28,7 +32,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 	@Override
 	protected void createSyncedFields() {
-		url = new SyncableString(Config.radioStations.get(0));
+		url = new SyncableString();
 		enabled = new SyncableBoolean();
 	}
 
@@ -92,9 +96,10 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	public void onSynced(Set<ISyncableObject> changes) {
 		if (worldObj.isRemote && changes.size() > 0) {
 			killMusic();
-			if (enabled.getValue()) {
+			String urlValue = url.getValue();
+			if (enabled.getValue() && !Strings.isNullOrEmpty(urlValue)) {
 				if (radioPlayer == null) {
-					RadioRegistry.registerPlayer(radioPlayer = new StreamPlayer("icy://" + url.getValue()));
+					RadioRegistry.registerPlayer(radioPlayer = new StreamPlayer("icy://" + urlValue));
 				}
 			}
 		}
@@ -103,8 +108,10 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	@Override
 	public void onNeighbourChanged(int blockId) {
 		final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-		final boolean hasStations = Config.radioStations.size() > 0;
-		enabled.setValue(isPowered && hasStations);
+		final boolean hasStations = Config.radioStations.length > 0;
+		final boolean isEnabled = isPowered && hasStations;
+		enabled.setValue(isEnabled);
+		if (!isEnabled) killMusic();
 		sync();
 	}
 
@@ -113,13 +120,15 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		if (enabled.getValue()) {
 			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:radio", 1, 2f);
 			if (!worldObj.isRemote) {
-				int index = Config.radioStations.indexOf(url.getValue());
-				index++;
-				if (index >= Config.radioStations.size()) {
-					index = 0;
-				}
-				url.setValue(Config.radioStations.get(index));
-				sync();
+				if (Config.radioStations.length > 0) {
+					int index = ArrayUtils.indexOf(Config.radioStations, url.getValue());
+					index++;
+					if (index >= Config.radioStations.length) {
+						index = 0;
+					}
+					url.setValue(Config.radioStations[index]);
+					sync();
+				} else url.setValue("");
 			}
 		}
 		return true;

@@ -1,6 +1,5 @@
 package openblocks;
 
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -9,7 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.*;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.asm.EntityPlayerVisitor;
@@ -21,8 +22,6 @@ import openblocks.common.recipe.*;
 import openmods.config.*;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
-
-import com.google.common.collect.Lists;
 
 public class Config {
 
@@ -290,28 +289,19 @@ public class Config {
 	@ConfigProperty(category = "cursor", name = "cursorMaxDamage", comment = "Amount of damage a cursor can take")
 	public static int cursorMaxDamage = 128;
 
-	public static List<String> disableMobNames = Lists.newArrayList();
+	@ConfigProperty(category = "additional", name = "disableMobNames", comment = "List any mob names you want disabled on the server")
+	public static String[] disableMobNames = new String[0];
 
-	public static List<String> radioStations = Lists.newArrayList();
+	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
+	public static String[] radioStations = new String[0];
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);
-		Property prop = configFile.get("additional", "disableMobNames", new String[0], "List any mob names you want disabled on the server");
-		disableMobNames = Arrays.asList(prop.getStringList());
-
-		// ick! temporary.
-		prop = configFile.get("additional", "radioStations", new String[] {
-				"50.7.130.108:80",
-				"176.28.2.147:80",
-				"66.197.229.245:8082",
-				"173.245.94.220:80"
-		}, "List any radio stations you want");
-		radioStations = Arrays.asList(prop.getStringList());
 	}
 
 	public static void register() {
 
-		if (disableMobNames.size() > 0) {
+		if (disableMobNames.length > 0) {
 			MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 		}
 
