@@ -18,6 +18,7 @@
 			<fileset dir="openmodslib/integration" />
 			<fileset dir="src/" />
 			<fileset dir="integration/" />
+			<fileset dir="extlibs/" />
 			<filterset>
 				<filter token="VERSION" value="${mod.version}" />
 			</filterset>
@@ -28,6 +29,15 @@
 		<copy todir="${classes.dir}/">
 			<fileset dir=".">
 				<include name="assets/**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-extra-binaries">
+		<copy todir="${classes.dir}/">
+			<fileset dir="${mcp.dir}/reobf/minecraft/">
+				<include name="com/spoledge/**/*" />
+				<include name="javazoom/**/*" />
 			</fileset>
 		</copy>
 	</target>
