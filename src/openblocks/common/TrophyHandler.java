@@ -1,12 +1,10 @@
 package openblocks.common;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,6 +19,7 @@ import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.*;
 import openmods.Log;
 import openmods.utils.BlockUtils;
+import openmods.utils.ReflectionHelper;
 
 public class TrophyHandler {
 
@@ -64,26 +63,13 @@ public class TrophyHandler {
 		Silverfish(),
 		Spider(),
 		CaveSpider(new CaveSpiderBehavior()),
-		Slime(0.4) {
+		Slime(0.6) {
 			@Override
 			protected Entity createEntity() {
 				Entity entity = super.createEntity();
 
 				try {
-					Method slimeSizeMethod = null;
-					try {
-						slimeSizeMethod = EntitySlime.class.getDeclaredMethod("setSlimeSize", int.class);
-					} catch (NoSuchMethodException e) {
-						try {
-							slimeSizeMethod = EntitySlime.class.getDeclaredMethod("func_70799_a", int.class);
-						} catch (NoSuchMethodException f) {
-							Log.warn("setSlimeSize cannot be found");
-						}
-					}
-					if (slimeSizeMethod != null) {
-						slimeSizeMethod.setAccessible(true);
-						slimeSizeMethod.invoke(entity, 1);
-					}
+					ReflectionHelper.call(entity, new String[] { "func_70799_a", "setSlimeSize" }, ReflectionHelper.primitive(1));
 				} catch (Exception e) {
 					Log.warn(e, "Can't update slime size");
 				}
@@ -93,7 +79,7 @@ public class TrophyHandler {
 		},
 		Ghast(0.1, 0.2),
 		Enderman(0.3, new EndermanBehavior()),
-		LavaSlime(0.8),
+		LavaSlime(0.6),
 		Squid(0.3, 0.5, new SquidBehavior()),
 		MushroomCow(new MooshroomBehavior()),
 		VillagerGolem(0.3),
