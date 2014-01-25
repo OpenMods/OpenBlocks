@@ -46,6 +46,8 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	private SyncableFlags flags;
 	private SyncableTank tank;
 
+	public int ticks;
+
 	private final GenericInventory inventory = new GenericInventory("sprinkler", true, 9) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -63,7 +65,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	private void attemptFertilize() {
-		if (worldObj == null || worldObj.isRemote) return;
 		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance)) {
 			// http://goo.gl/RpQuk9
 			Random random = worldObj.rand;
@@ -110,7 +111,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	private void sprayParticles() {
-		if (worldObj == null || !worldObj.isRemote) return;
 		if (tank.getFluidAmount() > 0) {
 			for (int i = 0; i < 6; i++) {
 				float offset = (i - 2.5f) / 5f;
@@ -125,13 +125,13 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+		ticks++;
 		if (!worldObj.isRemote) {
 
 			tank.autoFillFromSides(OpenMods.proxy, 3, this);
 
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it
-			final long ticks = OpenMods.proxy.getTicks(worldObj);
 
 			if (ticks % 1200 == 0) {
 				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, BONEMEAL);
@@ -147,8 +147,8 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		// simplified this action because only one of these will execute
 		// depending on worldObj.isRemote
 		if (isEnabled()) {
-			attemptFertilize();
-			sprayParticles();
+			if (worldObj.isRemote) sprayParticles();
+			else attemptFertilize();
 		}
 	}
 
@@ -177,7 +177,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	public float getSprayAngle() {
-		if (isEnabled()) { return MathHelper.sin(OpenMods.proxy.getTicks(worldObj) * 0.02f) * (float)Math.PI * 0.035f; }
+		if (isEnabled()) { return MathHelper.sin(ticks * 0.02f) * (float)Math.PI * 0.035f; }
 		return 0;
 	}
 
