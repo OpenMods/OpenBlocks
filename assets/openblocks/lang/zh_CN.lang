@@ -115,3 +115,5 @@ itemGroup.tabOpenBlocks=开放式方块
 entity.OpenBlocks.Luggage.name=行李箱
 entity.OpenBlocks.Cartographer.name=制图机器人
 entity.OpenBlocks.Block.name=悬浮方块
+
+fluid.OpenBlocks.xpjuice=液态经验
