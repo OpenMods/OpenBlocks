@@ -114,3 +114,5 @@ itemGroup.tabOpenBlocks=OpenBlocks
 entity.OpenBlocks.Luggage.name=Reisegepäck
 entity.OpenBlocks.Cartographer.name=Kartograph
 entity.OpenBlocks.Block.name=Schwebender Block
+
+fluid.OpenBlocks.xpjuice=Flüssige XP
