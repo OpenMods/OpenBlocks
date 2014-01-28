@@ -1,10 +1,11 @@
 package openblocks.common.block;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -36,13 +37,19 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(createStackForBlock(world, x, y, z));
-		return ret;
+	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result) {
+		if (te instanceof TileEntityPaintCan) {
+			TileEntityPaintCan can = (TileEntityPaintCan)te;
+			result.add(ItemPaintCan.createStack(can.getColor(), can.getAmount()));
+		}
 	}
 
-	private ItemStack createStackForBlock(World world, int x, int y, int z) {
+	@Override
+	protected boolean hasNormalDrops() {
+		return false;
+	}
+
+	private static ItemStack createStackForBlock(World world, int x, int y, int z) {
 		TileEntityPaintCan tile = getTileEntity(world, x, y, z, TileEntityPaintCan.class);
 		if (tile == null) return null;
 		return ItemPaintCan.createStack(tile.getColor(), tile.getAmount());
@@ -87,7 +94,7 @@ public class BlockPaintCan extends OpenBlock {
 	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
 		if (renderPass == 0) { return 0xFFFFFF; }
-		TileEntityPaintCan tile = this.getTileEntity(world, x, y, z, TileEntityPaintCan.class);
+		TileEntityPaintCan tile = getTileEntity(world, x, y, z, TileEntityPaintCan.class);
 		if (tile != null) { return tile.getColor(); }
 		return 0xFFFFFF;
 	}

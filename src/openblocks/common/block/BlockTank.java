@@ -1,16 +1,19 @@
 package openblocks.common.block;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
+import openmods.utils.ItemUtils;
 
 public class BlockTank extends OpenBlock {
 
@@ -44,18 +47,22 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result) {
 		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
-		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
-		if (tile != null && tile.getTank().getFluidAmount() > 10) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			NBTTagCompound tankTag = tile.getItemNBT();
-			nbt.setCompoundTag("tank", tankTag);
-			stack.setTagCompound(nbt);
+		if (!(te instanceof TileEntityTank)) return;
+		TileEntityTank tank = (TileEntityTank)te;
+		if (tank.getTank().getFluidAmount() > 10) {
+			NBTTagCompound tankTag = tank.getItemNBT();
+
+			NBTTagCompound itemTag = ItemUtils.getItemTag(stack);
+			itemTag.setCompoundTag("tank", tankTag);
 		}
-		ret.add(stack);
-		return ret;
+		result.add(stack);
+	}
+
+	@Override
+	protected boolean hasNormalDrops() {
+		return false;
 	}
 
 	@Override
@@ -65,4 +72,19 @@ public class BlockTank extends OpenBlock {
 		if (tile != null) { return tile.getFluidLightLevel(); }
 		return 0;
 	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+		ItemStack result = new ItemStack(this);
+		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+		if (tile != null) {
+			NBTTagCompound tankTag = tile.getItemNBT();
+			if (tankTag.hasKey("Amount")) tankTag.setInteger("Amount", TileEntityTank.getTankCapacity());
+
+			NBTTagCompound nbt = ItemUtils.getItemTag(result);
+			nbt.setCompoundTag("tank", tankTag);
+		}
+		return result;
+	}
+
 }

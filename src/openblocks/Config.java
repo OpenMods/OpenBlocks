@@ -133,8 +133,8 @@ public class Config {
 	@BlockId(description = "The id of the fan block")
 	public static int blockFanId = 2576;
 
-	//@BlockId(description = "The id of the radio block")
-	public static int blockRadioId = /*2577*/ 0;
+	// @BlockId(description = "The id of the radio block")
+	public static int blockRadioId = /* 2577 */0;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;

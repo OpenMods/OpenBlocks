@@ -19,6 +19,7 @@ import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.*;
 import openmods.Log;
 import openmods.utils.BlockUtils;
+import openmods.utils.ItemUtils;
 import openmods.utils.ReflectionHelper;
 
 public class TrophyHandler {
@@ -129,9 +130,8 @@ public class TrophyHandler {
 
 		public ItemStack getItemStack() {
 			ItemStack stack = new ItemStack(OpenBlocks.Blocks.trophy, 1, ordinal());
-			NBTTagCompound tag = new NBTTagCompound();
+			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			tag.setString("entity", toString());
-			stack.setTagCompound(tag);
 			return stack;
 		}
 

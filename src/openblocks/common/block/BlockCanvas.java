@@ -1,11 +1,12 @@
 package openblocks.common.block;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -39,26 +40,25 @@ public class BlockCanvas extends OpenBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result) {
+		if (!(te instanceof TileEntityCanvas)) return;
+		TileEntityCanvas tile = (TileEntityCanvas)te;
+		int maskedBlockId = tile.paintedBlockId.getValue();
 
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile != null) {
-			int bId = tile.paintedBlockId.getValue();
-			int bMeta = tile.paintedBlockMeta.getValue();
-			if (bId > 0) {
-				int droppedId = Block.blocksList[bId].idDropped(bMeta, world.rand, fortune);
-				Block b = Block.blocksList[droppedId];
-				for (int i = 0; i < b.quantityDropped(world.rand); i++) {
-					ret.add(new ItemStack(b, 1, bMeta));
-				}
-			} else {
-				return super.getBlockDropped(world, x, y, z, metadata, fortune);
-			}
+		Block maskedBlock = Block.blocksList[maskedBlockId];
+		if (maskedBlock == null) return;
+		int maskedMeta = tile.paintedBlockMeta.getValue();
 
+		for (int i = 0; i < maskedBlock.quantityDropped(te.worldObj.rand); i++) {
+			int droppedId = maskedBlock.idDropped(maskedMeta, te.worldObj.rand, 0);
+			Block dropped = Block.blocksList[droppedId];
+			if (dropped != null) result.add(new ItemStack(dropped, 1, maskedBlock.damageDropped(maskedMeta)));
 		}
+	}
 
-		return ret;
+	@Override
+	protected boolean hasNormalDrops() {
+		return false;
 	}
 
 	@Override
@@ -81,13 +81,13 @@ public class BlockCanvas extends OpenBlock {
 
 	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
-		TileEntityCanvas tile = this.getTileEntity(world, x, y, z, TileEntityCanvas.class);
+		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
 		return tile != null? tile.getColorForRender(renderSide, layer) : 0xFFFFFFFF;
 	}
 
 	@Override
 	public Icon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
-		TileEntityCanvas tile = this.getTileEntity(world, x, y, z, TileEntityCanvas.class);
+		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
 		if (tile != null) { return tile.getTextureForRender(renderSide, layer); }
 		return super.getUnrotatedTexture(direction, world, x, y, z);
 

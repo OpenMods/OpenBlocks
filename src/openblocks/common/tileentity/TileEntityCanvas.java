@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -16,7 +17,7 @@ import openblocks.common.item.ItemStencil;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
-import openmods.api.IBreakAwareTile;
+import openmods.api.ISpecialDrops;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
@@ -24,7 +25,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
-public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile {
+public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ISpecialDrops {
 
 	private static final int BASE_LAYER = -1;
 
@@ -211,14 +212,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void onBlockBroken() {
-		if (worldObj.isRemote) return;
+	public void addDrops(List<ItemStack> drops) {
 		for (SyncableBlockLayers sideLayers : allSides) {
 			if (sideLayers.isLastLayerStencil()) {
 				Stencil stencil = sideLayers.getTopStencil();
-				if (stencil != null) {
-					BlockUtils.dropItemStackInWorld(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
-				}
+				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
 			}
 		}
 	}
