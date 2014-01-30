@@ -33,7 +33,9 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack stack) {
-			return stack == null || stack.getItem() instanceof ItemHeightMap;
+			if (stack == null) return false;
+			Item item = stack.getItem();
+			return item instanceof ItemHeightMap || item instanceof ItemEmptyMap;
 		}
 
 		@Override
