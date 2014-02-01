@@ -7,6 +7,7 @@ public class BlockSponge extends OpenBlock {
 
 	public BlockSponge() {
 		super(Config.blockSpongeId, Material.sponge);
+		setStepSound(soundClothFootstep);
 	}
 
 	@Override
