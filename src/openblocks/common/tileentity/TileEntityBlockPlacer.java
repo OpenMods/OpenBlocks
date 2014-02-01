@@ -52,9 +52,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 							direction.getOpposite(),
 							worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
 			fakePlayer.setDead();
-			if (newStack != null) {
-				inventory.setInventorySlotContents(i, newStack.stackSize > 0? newStack : null);
-			}
+			inventory.setInventorySlotContents(i, newStack);
 			return;
 		}
 	}
