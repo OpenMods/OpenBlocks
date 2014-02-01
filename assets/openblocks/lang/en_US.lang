@@ -37,6 +37,8 @@ openblocks.misc.mode.inverted_half_panel=Inverted Half-height panel
 openblocks.misc.mode.inverted_stairs=Inverted Stairs
 openblocks.misc.structure_pos=Debug: found structure %s at (%d,%d,%d)
 openblocks.misc.locked=Locked
+openblocks.misc.selected_cannon=Selected cannon for targeting
+openblocks.misc.pointed_cannon=Pointed cannon at %s, %s, %s
 
 openblocks.turtle.magnet=Magnet
 

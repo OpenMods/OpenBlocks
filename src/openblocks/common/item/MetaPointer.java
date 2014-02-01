@@ -5,9 +5,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import openblocks.api.IPointable;
+import openmods.utils.ItemUtils;
 
 /**
  * Pointer item is used for.. pointing
@@ -33,21 +36,18 @@ public class MetaPointer extends MetaGeneric {
 			Vec3 lookVec = player.getLook(1.0f);
 			Vec3 targetVec = posVec.addVector(lookVec.xCoord * 10f, lookVec.yCoord * 10f, lookVec.zCoord * 10f);
 			MovingObjectPosition movingObject = world.clip(posVec, targetVec);
-			NBTTagCompound tag = itemStack.getTagCompound();
-			if (tag == null) {
-				tag = new NBTTagCompound();
-				itemStack.setTagCompound(tag);
-			}
+			NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
 
 			if (movingObject != null && movingObject.typeOfHit.equals(EnumMovingObjectType.TILE)) {
-				if (world.getBlockTileEntity(movingObject.blockX, movingObject.blockY, movingObject.blockZ) instanceof IPointable) {
+				final TileEntity pointedTileEntity = world.getBlockTileEntity(movingObject.blockX, movingObject.blockY, movingObject.blockZ);
+				if (pointedTileEntity instanceof IPointable) {
 					NBTTagCompound linkTag = new NBTTagCompound();
 					linkTag.setInteger("x", movingObject.blockX);
 					linkTag.setInteger("y", movingObject.blockY);
 					linkTag.setInteger("z", movingObject.blockZ);
 					linkTag.setInteger("d", world.provider.dimensionId);
 					tag.setCompoundTag("lastPoint", linkTag);
-					player.sendChatToPlayer(ChatMessageComponent.createFromText("Selected block for linking"));
+					((IPointable)pointedTileEntity).onPointingStart(itemStack, player);
 				} else if (tag.hasKey("lastPoint")) {
 					NBTTagCompound cannonTag = tag.getCompoundTag("lastPoint");
 					int x = cannonTag.getInteger("x");
@@ -57,8 +57,7 @@ public class MetaPointer extends MetaGeneric {
 					if (world.provider.dimensionId == d && world.blockExists(x, y, z)) {
 						TileEntity tile = world.getBlockTileEntity(x, y, z);
 						if (tile instanceof IPointable) {
-							((IPointable)tile).onPoint(itemStack, player, movingObject.blockX, movingObject.blockY, movingObject.blockZ);
-							tag.removeTag("lastPoint");
+							((IPointable)tile).onPointingEnd(itemStack, player, movingObject.blockX, movingObject.blockY, movingObject.blockZ);
 						}
 					}
 				}

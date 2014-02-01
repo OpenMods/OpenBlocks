@@ -1,10 +1,14 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelCannon;
+import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.tileentity.TileEntityCannon;
+import openmods.OpenMods;
 
 import org.lwjgl.opengl.GL11;
 
@@ -25,12 +29,10 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		bindTexture(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
-		if (cannon.renderLine) {
-			GL11.glPushMatrix();
+		if (cannon.renderLine && playerHasCursor()) {
 			GL11.glTranslatef(0, -0.5F, 0);
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBegin(GL11.GL_LINE_STRIP);
 			GL11.glColor4f(0, 0, 0, 1f);
 			double motionX = cannon.motionX * cannon.currentSpeed;
@@ -52,11 +54,15 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 			GL11.glEnd();
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();
+	}
+
+	private static boolean playerHasCursor() {
+		EntityPlayer player = OpenMods.proxy.getThePlayer();
+		if (player == null) return false;
+		ItemStack held = player.getHeldItem();
+		return held != null && MetasGenericUnstackable.pointer.isA(held);
 	}
 
 }

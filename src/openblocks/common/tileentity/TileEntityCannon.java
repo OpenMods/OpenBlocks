@@ -13,7 +13,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
-import openmods.api.IActivateAwareTile;
+import openmods.api.ISurfaceAttachment;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableDouble;
@@ -23,8 +23,9 @@ import openmods.utils.render.GeometryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCannon extends SyncedTileEntity implements IActivateAwareTile, IPointable {
+public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment {
 
+	private static final int YAW_CHANGE_SPEED = 3;
 	public SyncableDouble targetPitch;
 	public SyncableDouble targetYaw;
 	public SyncableDouble targetSpeed;
@@ -61,17 +62,18 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (currentYaw < 0) currentYaw += 360;
-		currentYaw %= 360;
-		double rotationSpeed = 3;
 		// ugly, need to clean
 		currentPitch = currentPitch - ((currentPitch - targetPitch.getValue()) / 20);
-		if (Math.abs(currentYaw - targetYaw.getValue()) < rotationSpeed) currentYaw = targetYaw.getValue();
-		else currentYaw += rotationSpeed * GeometryUtils.getDirectionForRotation(currentYaw, targetYaw.getValue());
+
+		currentYaw = GeometryUtils.normalizeAngle(currentYaw);
+		final double targetYaw = GeometryUtils.normalizeAngle(this.targetYaw.getValue());
+		if (Math.abs(currentYaw - targetYaw) < YAW_CHANGE_SPEED) currentYaw = targetYaw;
+		else {
+			double dist = GeometryUtils.getAngleDistance(currentYaw, targetYaw);
+			currentYaw += YAW_CHANGE_SPEED * Math.signum(dist);
+		}
+
 		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.getValue()) / 20);
-		// currentPitch = targetPitch.getValue();
-		// currentYaw = targetYaw.getValue();
-		// currentSpeed = targetSpeed.getValue();
 		getMotionFromAngles();
 
 		if (!worldObj.isRemote) {
@@ -129,11 +131,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		return false;
-	}
-
-	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
 		getMotionFromAngles();
 	}
@@ -158,7 +155,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 		double dY = -(yCoord - y);
 		double dZ = (zCoord + 0.5) - (z + 0.5);
 
-		double yawDegrees = Math.toDegrees(Math.atan2(dZ, dX)) + 90;
+		final double atan2 = Math.atan2(dZ, dX);
+		double yawDegrees = Math.toDegrees(atan2) + 90;
+		System.out.println(String.format("%f %f %f %f", dX, dY, dZ, yawDegrees));
 		targetYaw.setValue(yawDegrees);
 		currentYaw = targetYaw.getValue();
 
@@ -181,8 +180,13 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void onPoint(ItemStack itemStack, EntityPlayer player, int x, int y, int z) {
-		player.sendChatToPlayer(ChatMessageComponent.createFromText(String.format("Pointed cannon at %s, %s, %s", x, y, z)));
+	public void onPointingStart(ItemStack itemStack, EntityPlayer player) {
+		player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.selected_cannon"));
+	}
+
+	@Override
+	public void onPointingEnd(ItemStack itemStack, EntityPlayer player, int x, int y, int z) {
+		player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions("openblocks.misc.pointed_cannon", x, y, z));
 		setTarget(x, y, z);
 	}
 
@@ -264,5 +268,10 @@ public class TileEntityCannon extends SyncedTileEntity implements IActivateAware
 			theta[1] = Math.atan(v * v - mComponent);
 			return theta;
 		}
+	}
+
+	@Override
+	public ForgeDirection getSurfaceDirection() {
+		return ForgeDirection.DOWN;
 	}
 }
