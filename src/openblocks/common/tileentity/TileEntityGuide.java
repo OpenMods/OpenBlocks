@@ -3,25 +3,28 @@ package openblocks.common.tileentity;
 import java.util.ArrayList;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IShapeProvider;
 import openblocks.shapes.GuideShape;
 import openmods.Log;
+import openmods.api.IActivateAwareTile;
 import openmods.shapes.IShapeable;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
-import openmods.utils.CompatibilityUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IShapeProvider {
+public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IShapeProvider, IActivateAwareTile {
 
 	private boolean shape[][][];
 	private boolean previousShape[][][];
@@ -114,14 +117,12 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 		return box.expand(getWidth(), getHeight(), getDepth());
 	}
 
-	public void switchMode(EntityPlayer player) {
+	private void switchMode(EntityPlayer player) {
 		switchMode();
-		if (player != null) {
-			CompatibilityUtils.sendChatToPlayer(player, String.format("Changing to %s mode", getCurrentMode().getDisplayName()));
-		}
+		player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
 	}
 
-	public void switchMode() {
+	private void switchMode() {
 		int nextMode = mode.getValue() + 1;
 		if (nextMode >= GuideShape.values().length) {
 			nextMode = 0;
@@ -135,12 +136,12 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 		sync();
 	}
 
-	public void changeDimensions(EntityPlayer player, ForgeDirection orientation) {
+	private void changeDimensions(EntityPlayer player, ForgeDirection orientation) {
 		changeDimensions(orientation);
-		CompatibilityUtils.sendChatToPlayer(player, String.format("Changing size to %sx%sx%s", width.getValue(), height.getValue(), depth.getValue()));
+		player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions("openblocks.misc.change_size", width.getValue(), height.getValue(), depth.getValue()));
 	}
 
-	public void changeDimensions(ForgeDirection orientation) {
+	private void changeDimensions(ForgeDirection orientation) {
 		if (width.getValue() > 0 && orientation == ForgeDirection.EAST) {
 			width.modify(-1);
 		} else if (orientation == ForgeDirection.WEST) {
@@ -202,16 +203,30 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 		recreateShape();
 	}
 
-	public void fill(EntityPlayer player) {
-		if (player.getHeldItem() != null) {
-			ItemStack held = player.getHeldItem();
-			if (held.getItem() instanceof ItemBlock) {
-				ItemBlock itemblock = (ItemBlock)held.getItem();
-				for (ChunkCoordinates coord : getShapeCoordinates()) {
-					worldObj.setBlock(coord.posX, coord.posY, coord.posZ, itemblock.getBlockID(), held.getItemDamage(), BlockNotifyFlags.ALL);
-				}
-			}
-		}
+	private void fill(EntityPlayer player, int side) {
+		ItemStack held = player.getHeldItem();
+		if (held == null) return;
+
+		final Item heldItem = held.getItem();
+		if (!(heldItem instanceof ItemBlock)) return;
+		final ItemBlock itemBlock = (ItemBlock)heldItem;
+
+		for (ChunkCoordinates coord : getShapeCoordinates())
+			worldObj.setBlock(coord.posX, coord.posY, coord.posZ, itemBlock.getBlockID(), itemBlock.getMetadata(held.getItemDamage()), BlockNotifyFlags.ALL);
 	}
 
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (worldObj.isRemote) return true;
+
+		if (player.isSneaking()) switchMode(player);
+		else if (player.capabilities.isCreativeMode && isInFillMode()) fill(player, side);
+		else changeDimensions(player, ForgeDirection.getOrientation(side));
+
+		return true;
+	}
+
+	private boolean isInFillMode() {
+		return worldObj.getBlockId(xCoord, yCoord + 1, zCoord) == Block.obsidian.blockID;
+	}
 }

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityHangGlider;
-import openmods.utils.CompatibilityUtils;
+import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -37,9 +37,9 @@ public class ItemRendererHangGlider implements IItemRenderer {
 		}
 
 		if (par2ItemStack.getItemSpriteNumber() == 0) {
-			CompatibilityUtils.bindDefaultTerrainTexture();
+			TextureUtils.bindDefaultTerrainTexture();
 		} else {
-			CompatibilityUtils.bindDefaultItemsTexture();
+			TextureUtils.bindDefaultItemsTexture();
 		}
 
 		Tessellator tessellator = Tessellator.instance;
