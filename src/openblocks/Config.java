@@ -133,8 +133,8 @@ public class Config {
 	@BlockId(description = "The id of the fan block")
 	public static int blockFanId = 2576;
 
-	// @BlockId(description = "The id of the radio block")
-	public static int blockRadioId = /* 2577 */0;
+	@BlockId(description = "The id of the radio block")
+	public static int blockRadioId = 2577;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
@@ -199,11 +199,14 @@ public class Config {
 	@ItemId(description = "The id of the golden eye item")
 	public static int itemGoldenEyeId = 14995;
 
+	@ItemId(description = "The id of the unstackable generic item")
+	public static int itemGenericUnstackableId = 14996;
+
 	@ItemId(description = "The id of the cursor item")
 	public static int itemCursorId = 14997;
 
-	@ItemId(description = "The id of the unstackable generic item")
-	public static int itemGenericUnstackableId = 14996;
+	@ItemId(description = "The id of tuned crystal item")
+	public static int itemTunedCrystalId = 14998;
 
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
@@ -293,7 +296,19 @@ public class Config {
 	public static String[] disableMobNames = new String[0];
 
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
-	public static String[] radioStations = new String[0];
+	public static String[] radioStations = new String[] {
+			"http://173.239.76.148:8600;Nu-Jazz;ReD",
+			"http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
+	};
+
+	@ConfigProperty(category = "radio", name = "enableChestLoot", comment = "Add tuned crystals as loot in chests")
+	public static boolean radioChests = true;
+
+	@ConfigProperty(category = "radio", name = "enableVillager", comment = "Spawn tuned crystal merchant")
+	public static boolean radioVillager = true;
+
+	@ConfigProperty(category = "radio", name = "range", comment = "Radio range")
+	public static float radioRadius = 30;
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);
@@ -632,6 +647,10 @@ public class Config {
 			OpenBlocks.Items.cursor = new ItemCursor();
 			final ItemStack whiteWool = ColorUtils.createDyedWool(ColorUtils.WHITE);
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.cursor, "w  ", "www", "www", 'w', whiteWool));
+		}
+
+		if (itemTunedCrystalId > 0) {
+			OpenBlocks.Items.tunedCrystal = new ItemTunedCrystal();
 		}
 
 		if (explosiveEnchantmentId > 0) {

@@ -22,6 +22,7 @@ openblocks.gui.blockplacer=Block Placer
 openblocks.gui.paintmixer=Paint Mixer
 openblocks.gui.drawingtable=Drawing Table
 
+openblocks.misc.url=URL: %s
 openblocks.misc.type=Type: %s
 openblocks.misc.uses=Uses: %.2f
 openblocks.misc.color=Color: %06X

@@ -4,49 +4,60 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import javazoom.jl.player.advanced.AdvancedPlayer;
-import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
 import openmods.Log;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+import com.spoledge.aacdecoder.IcyURLStreamHandler;
+
 public class StreamPlayer extends PlaybackListener implements Runnable {
 
-	private final String streamURL;
-	private final Thread thread;
+	private String streamURL;
+	private Thread thread;
 	private AdvancedPlayer player;
 
-	public StreamPlayer(String mp3url) {
-		streamURL = mp3url;
-		thread = new Thread(this);
-		thread.start();
-	}
+	public StreamPlayer() {}
 
 	@Override
 	public void run() {
 		try {
-			URLConnection connection = new URL(streamURL).openConnection();
-			connection.connect();
-			player = new AdvancedPlayer(connection.getInputStream());
-			player.setPlayBackListener(this);
-			player.play();
+			while (!Strings.isNullOrEmpty(streamURL)) {
+				URLConnection connection = new URL(null, streamURL, new IcyURLStreamHandler()).openConnection();
+				connection.connect();
+				player = new AdvancedPlayer(connection.getInputStream());
+				player.setPlayBackListener(this);
+				player.play(); // blocks until stop()
+			}
 		} catch (Throwable t) {
 			Log.warn(t, "Failed to play from radio stream for url %s", streamURL);
+		}
+		player = null;
+		thread = null;
+	}
+
+	private void ensureThreadLives() {
+		if (thread == null || !thread.isAlive()) {
+			thread = new Thread(this);
+			thread.start();
 		}
 	}
 
 	public void stop() {
+		streamURL = null;
 		if (player != null) player.stop();
 	}
 
-	@Override
-	public void playbackStarted(PlaybackEvent evt) {}
-
-	@Override
-	public void playbackFinished(PlaybackEvent evt) {}
+	public void startOrReplace(String newStreamURL) {
+		Preconditions.checkNotNull(newStreamURL);
+		if (newStreamURL.equals(streamURL)) return;
+		streamURL = newStreamURL;
+		if (player != null) player.stop();
+		ensureThreadLives();
+	}
 
 	public void setVolume(float f) {
-		if (player != null) {
-			player.setVolume(f);
-		}
+		if (player != null) player.setVolume(f);
 	}
 
 	public float getVolume() {

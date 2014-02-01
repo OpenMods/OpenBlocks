@@ -243,6 +243,9 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "cursor")
 		public static ItemCursor cursor;
+
+		@RegisterItem(name = "tunedCrystal", unlocalizedName = "tuned_crystal")
+		public static ItemTunedCrystal tunedCrystal;
 	}
 
 	public static class Fluids {

@@ -224,9 +224,6 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
-	public void onSync() {}
-
-	@Override
 	public Object getServerGui(EntityPlayer player) {
 		return new ContainerPaintMixer(player.inventory, this);
 	}

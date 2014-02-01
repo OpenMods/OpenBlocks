@@ -10,15 +10,15 @@ public class NEIOpenBlocksConfig implements IConfigureNEI {
 
 	@Override
 	public void loadConfig() {
-		if (Config.itemHeightMap > 0) {
-			try {
-				// I have no idea how to link with NEI API
-				Class<?> cls = Class.forName("codechicken.nei.api.API");
-				Method hide = cls.getMethod("hideItem", int.class);
-				hide.invoke(null, Config.itemHeightMap + 256);
-			} catch (Exception e) {
-				Throwables.propagate(e);
-			}
+		try {
+			// I have no idea how to link with NEI API
+			Class<?> cls = Class.forName("codechicken.nei.api.API");
+			Method hide = cls.getMethod("hideItem", int.class);
+
+			if (Config.itemHeightMap > 0) hide.invoke(null, Config.itemHeightMap + 256);
+			if (Config.itemTunedCrystalId > 0) hide.invoke(null, Config.itemTunedCrystalId + 256);
+		} catch (Throwable t) {
+			Throwables.propagate(t);
 		}
 	}
 
@@ -29,7 +29,7 @@ public class NEIOpenBlocksConfig implements IConfigureNEI {
 
 	@Override
 	public String getVersion() {
-		return "1.2.x";
+		return "@VERSION@";
 	}
 
 }
