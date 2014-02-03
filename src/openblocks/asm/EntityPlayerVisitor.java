@@ -1,8 +1,10 @@
 package openblocks.asm;
 
-import openblocks.utils.AsmUtils;
+import openmods.asm.MethodMatcher;
 
 import org.objectweb.asm.*;
+
+import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
 public class EntityPlayerVisitor extends ClassVisitor {
 
@@ -24,14 +26,15 @@ public class EntityPlayerVisitor extends ClassVisitor {
 			mv.visitInsn(Opcodes.IRETURN);
 			mv.visitLabel(skipReturn);
 			IsInBedHookSuccess = true;
+			FMLRelaunchLog.info("[OpenBlocks] isInBed patch applied. Enabling sleeping bags");
 		}
 	}
 
-	private final AsmUtils.MethodMatcher isInBedMatcher;
+	private final MethodMatcher isInBedMatcher;
 
 	public EntityPlayerVisitor(String obfClassName, ClassVisitor cv) {
 		super(Opcodes.ASM4, cv);
-		isInBedMatcher = new AsmUtils.MethodMatcher(obfClassName, "()Z", "isInBed", "func_71065_l");
+		isInBedMatcher = new MethodMatcher(obfClassName, "()Z", "isInBed", "func_71065_l");
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package openblocks.asm;
 
-import openblocks.OpenBlocksCorePlugin;
-import openblocks.utils.AsmUtils.MethodMatcher;
+import openmods.asm.MethodMatcher;
+import openmods.asm.VisitorHelper;
 
 import org.objectweb.asm.*;
 
@@ -81,7 +81,7 @@ public class MapGenStructureVisitor extends ClassVisitor {
 				FMLRelaunchLog.info("[OpenBlocks] MapGenFix: All conditions matched, inserting extra condition");
 				super.visitVarInsn(Opcodes.ALOAD, localVarId); // hopefully
 																// 'structurestart'
-				String getComponentsMethodName = OpenBlocksCorePlugin.isRuntimeDeobfuscated? "func_75073_b" : "getComponents";
+				String getComponentsMethodName = VisitorHelper.useSrgNames()? "func_75073_b" : "getComponents";
 				super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, structureStartCls, getComponentsMethodName, "()Ljava/util/LinkedList;");
 				super.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/util/LinkedList", "isEmpty", "()Z");
 				super.visitJumpInsn(Opcodes.IFNE, label);
@@ -97,7 +97,7 @@ public class MapGenStructureVisitor extends ClassVisitor {
 		String chunkPositionCls = "net/minecraft/world/ChunkPosition";
 		String worldCls = "net/minecraft/world/World";
 
-		if (OpenBlocksCorePlugin.isRuntimeDeobfuscated) {
+		if (VisitorHelper.useSrgNames()) {
 			structureStartCls = FMLDeobfuscatingRemapper.INSTANCE.unmap(structureStartCls);
 			chunkPositionCls = FMLDeobfuscatingRemapper.INSTANCE.unmap(chunkPositionCls);
 			worldCls = FMLDeobfuscatingRemapper.INSTANCE.unmap(worldCls);
