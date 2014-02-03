@@ -297,8 +297,8 @@ public class Config {
 
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
 	public static String[] radioStations = new String[] {
-			"http://173.239.76.148:8600;Nu-Jazz;ReD",
-			"http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
+			//"http://173.239.76.148:8600;Nu-Jazz;ReD",
+			//"http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
 	};
 
 	@ConfigProperty(category = "radio", name = "enableChestLoot", comment = "Add tuned crystals as loot in chests")
