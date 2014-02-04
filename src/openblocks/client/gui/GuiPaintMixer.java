@@ -51,7 +51,7 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer>
 		if (!par1) return;
 		switch (par2) {
 			case INVALIDATE_COLOR:
-				textbox.setText(Integer.toHexString(colorPicker.getColor().getValue()));
+				textbox.setText(String.format("%06X", colorPicker.getColor().getValue()));
 				break;
 		}
 	}
