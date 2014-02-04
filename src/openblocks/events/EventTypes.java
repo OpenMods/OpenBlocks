@@ -45,7 +45,7 @@ public enum EventTypes implements IEventPacketType {
 	PLAYER_MOVEMENT {
 		@Override
 		public EventPacket createPacket() {
-			return new PlayerMovementEvent();
+			return new ElevatorActionEvent();
 		}
 
 		@Override

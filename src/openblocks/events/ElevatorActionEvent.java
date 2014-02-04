@@ -3,31 +3,27 @@ package openblocks.events;
 import java.io.DataInput;
 import java.io.DataOutput;
 
+import openmods.movement.PlayerMovementEvent;
 import openmods.network.IEventPacketType;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 
-public class PlayerMovementEvent extends TileEntityMessageEventPacket {
+public class ElevatorActionEvent extends TileEntityMessageEventPacket {
 
-	public enum Type {
-		JUMP,
-		SNEAK
-	}
+	public ElevatorActionEvent() {}
 
-	public PlayerMovementEvent() {}
-
-	public PlayerMovementEvent(OpenTileEntity te, Type type) {
+	public ElevatorActionEvent(OpenTileEntity te, PlayerMovementEvent.Type type) {
 		super(te);
 		this.type = type;
 	}
 
-	public Type type;
+	public PlayerMovementEvent.Type type;
 
 	@Override
 	protected void readPayload(DataInput input) {
 		int typeId = ByteUtils.readVLI(input);
-		type = Type.values()[typeId];
+		type = PlayerMovementEvent.Type.VALUES[typeId];
 	}
 
 	@Override

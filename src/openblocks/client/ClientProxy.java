@@ -151,6 +151,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.radio != null) {
 			RadioRegistry.init();
 		}
+
+		if (OpenBlocks.Blocks.elevator != null) {
+			MinecraftForge.EVENT_BUS.register(new ElevatorMovementHandler());
+		}
 	}
 
 	@SuppressWarnings("unchecked")

@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
-import openblocks.events.PlayerMovementEvent;
+import openblocks.events.ElevatorActionEvent;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.EnchantmentUtils;
@@ -87,8 +87,8 @@ public class TileEntityElevator extends OpenTileEntity {
 
 	@Override
 	public void onEvent(TileEntityMessageEventPacket event) {
-		if (event instanceof PlayerMovementEvent) {
-			switch (((PlayerMovementEvent)event).type) {
+		if (event instanceof ElevatorActionEvent) {
+			switch (((ElevatorActionEvent)event).type) {
 				case JUMP:
 					activate((EntityPlayer)event.player, ForgeDirection.UP);
 					break;
