@@ -69,14 +69,24 @@ Use Github for Windows or use a command prompt/powershell with git binaries in t
 ```git clone https://github.com/OpenMods/OpenBlocks.git```
 #### Change directory
 ```cd OpenBlocks```
+#### Fetch dependencies (OpenModsLib etc.)
+```
+git submodule init
+git submodule update
+```
 #### Run ant build
 ```ant ```
 
-The resulting file should be in the bin folder
+The resulting file should be in the `build/dist` folder.
 
 ### Linux or OSX
 Much the same as Windows, open a terminal window where you wish to checkout the repo and type
-```git clone https://github.com/OpenMods/OpenBlocks.git && cd OpenBlocks```
+```
+git clone https://github.com/OpenMods/OpenBlocks.git
+cd OpenBlocks
+git submodule init
+git submodule update
+```
 
 In **OSX**, git is typically supplied. Otherwise it can be installed through the apps thingy that OSX has (Obviously I know very little about OSX but you want the dev tools stuff). 
 
