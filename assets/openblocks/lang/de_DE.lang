@@ -22,6 +22,7 @@ openblocks.gui.blockplacer=Blockplatzierer
 openblocks.gui.paintmixer=Farbmixer
 openblocks.gui.drawingtable=Zeichentisch
 
+openblocks.misc.url=URL: %s
 openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
 openblocks.misc.color=Farbe: %06X
@@ -36,6 +37,19 @@ openblocks.misc.mode.inverted_half_panel=Invertierte Halbhohe Platte
 openblocks.misc.mode.inverted_stairs=Invertierte Treppe
 openblocks.misc.structure_pos=Debug: Struktur %s gefunden bei (%d,%d,%d)
 openblocks.misc.locked=Gesperrt
+openblocks.misc.selected_cannon=Kanone zum Zielen ausgewählt
+openblocks.misc.pointed_cannon=Kanone zielt nun auf %s, %s, %s
+openblocks.misc.change_mode=Wechsle zu %s-Modus
+openblocks.misc.change_size=Ändere Größe zu %sx%sx%s
+
+openblocks.misc.shape.sphere=Kugel
+openblocks.misc.shape.cylinder=Zylinder
+openblocks.misc.shape.cuboid=Quader
+openblocks.misc.shape.dome=Kuppel
+openblocks.misc.shape.triangle=Dreieck
+openblocks.misc.shape.pentagon=Fünfeck
+openblocks.misc.shape.hexagon=Sechseck
+openblocks.misc.shape.octagon=Achteck
 
 openblocks.turtle.magnet=Magnetische
 
