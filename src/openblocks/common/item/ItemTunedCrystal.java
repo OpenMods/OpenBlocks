@@ -9,8 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openmods.config.ConfigurationChange;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
@@ -36,6 +38,13 @@ public class ItemTunedCrystal extends Item {
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
+	}
+
+	@ForgeSubscribe
+	public void onReconfiguration(ConfigurationChange.Post evt) {
+		if ("radio".equals(evt.category) && "radioStations".equals(evt.name)) {
+			predefinedStations = null;
+		}
 	}
 
 	public List<ItemStack> getPredefinedStations() {

@@ -9,7 +9,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -208,18 +207,19 @@ public class Config {
 	@ItemId(description = "The id of tuned crystal item")
 	public static int itemTunedCrystalId = 14998;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
 
-	@ConfigProperty(category = "dropblock", name = "mustFaceDirection", comment = "Must the user face the direction they want to travel?")
-	public static boolean elevatorBlockMustFaceDirection = false;
-
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "ignoreHalfBlocks", comment = "The elevator will ignore half blocks when counting the blocks it can pass through")
 	public static boolean elevatorIgnoreHalfBlocks = false;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "maxPassThrough", comment = "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this")
 	public static int elevatorMaxBlockPassCount = 4;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "elevatorDrainsXP", comment = "Does the elevator drain player XP when used?")
 	public static boolean elevatorDrainsXP = true;
 
@@ -229,30 +229,39 @@ public class Config {
 	@ConfigProperty(category = "hacks", name = "tryHookPlayerRenderer", comment = "Allow OpenBlocks to hook the player renderer to apply special effects")
 	public static boolean tryHookPlayerRenderer = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000")
 	public static double trophyDropChance = 0.001;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "irregularBlocksArePassable", comment = "The elevator will try to pass through blocks that have custom collision boxes")
 	public static boolean irregularBlocksArePassable = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "tanks", name = "emitLight", comment = "Tanks will emit light when they contain a liquid that glows (eg. lava)")
 	public static boolean tanksEmitLight = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "sprinkler", name = "fertilizeChance", comment = "1/chance that crops will be fertilized without bonemeal")
 	public static int sprinklerFertilizeChance = 500;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "sprinkler", name = "bonemealFertilizeChance", comment = "1/chance that crops will be fertilized with bonemeal")
 	public static int sprinklerBonemealFertizizeChance = 200;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "sprinkler", name = "effectiveRange", comment = "The range in each cardinal direction that crops will be affected.")
 	public static int sprinklerEffectiveRange = 4;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "glasses", name = "opacity", comment = "0.0 - no visible change to world, 1.0 - world fully obscured")
 	public static double sonicGlassesOpacity = 0.95;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "glasses", name = "useTexture", comment = "Use texture for obscuring world")
 	public static boolean sonicGlassesUseTexture = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "imaginary", name = "fadingSpeed", comment = "Speed of imaginary blocks fading/appearing")
 	public static float imaginaryFadingSpeed = 0.0075f;
 
@@ -262,6 +271,7 @@ public class Config {
 	@ConfigProperty(category = "crane", name = "doCraneCollisionCheck", comment = "Enable collision checking of crane arm")
 	public static boolean doCraneCollisionCheck = false;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "crane", name = "boringMode", comment = "Use shift to control crane direction (otherwise, toggle every time)")
 	public static boolean craneShiftControl = true;
 
@@ -277,12 +287,15 @@ public class Config {
 	@ConfigProperty(category = "tomfoolery", name = "weAreSeriousPeople", comment = "Are you serious too?")
 	public static boolean soSerious = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "tomfoolery", name = "doItWhileTyping", comment = "You know, THAT thing! That you shouldn't do in public!")
 	public static boolean fartTypying = false;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "goldenEyeDebug", comment = "Show structures found by golden eye")
 	public static boolean eyeDebug = false;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "gravesDebug", comment = "Dump extra amount of data, every time grave is created")
 	public static boolean debugGraves = false;
 
@@ -295,6 +308,7 @@ public class Config {
 	@ConfigProperty(category = "additional", name = "disableMobNames", comment = "List any mob names you want disabled on the server")
 	public static String[] disableMobNames = new String[0];
 
+	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
 	public static String[] radioStations = new String[] {
 			// "http://173.239.76.148:8600;Nu-Jazz;ReD",
@@ -307,12 +321,9 @@ public class Config {
 	@ConfigProperty(category = "radio", name = "enableVillager", comment = "Spawn tuned crystal merchant")
 	public static boolean radioVillager = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "range", comment = "Radio range")
 	public static float radioRadius = 30;
-
-	static void readConfig(Configuration configFile) {
-		ConfigProcessing.processAnnotations(configFile, Config.class);
-	}
 
 	public static void register() {
 
@@ -651,6 +662,7 @@ public class Config {
 
 		if (itemTunedCrystalId > 0) {
 			OpenBlocks.Items.tunedCrystal = new ItemTunedCrystal();
+			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.tunedCrystal);
 		}
 
 		if (explosiveEnchantmentId > 0) {
