@@ -15,7 +15,7 @@ public class BlockTrophy extends OpenBlock {
 
 	public BlockTrophy() {
 		super(Config.blockTrophyId, Material.ground);
-		setBlockBounds(0.3f, 0f, 0.3f, 0.7f, 0.8f, 0.7f);
+		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 0.2f, 0.8f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 
@@ -26,7 +26,7 @@ public class BlockTrophy extends OpenBlock {
 
 	@Override
 	public boolean shouldRenderBlock() {
-		return false;
+		return true;
 	}
 
 	protected ItemStack getDroppedBlock(TileEntityTrophy te) {
