@@ -22,7 +22,7 @@ public class BlockCanvasGlass extends BlockCanvas {
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		return true;
+		return false;
 	}
 
 	@Override
