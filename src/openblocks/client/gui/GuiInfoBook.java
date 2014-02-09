@@ -59,6 +59,7 @@ public class GuiInfoBook extends GuiScreen {
 		addStandardBlockPage("fan", Blocks.fan);
 		addStandardBlockPage("blockbreaker", Blocks.blockBreaker);
 		addStandardBlockPage("blockPlacer", Blocks.blockPlacer);
+		addStandardBlockPage("itemDropper", Blocks.itemDropper);
 		addStandardBlockPage("bigbutton", Blocks.bigButton);
 		addStandardBlockPage("autoanvil", Blocks.autoAnvil);
 		addStandardBlockPage("autoenchantmenttable", Blocks.autoEnchantmentTable);
@@ -68,7 +69,6 @@ public class GuiInfoBook extends GuiScreen {
 		addStandardBlockPage("xpbottler", Blocks.xpBottler);
 		addStandardBlockPage("xpdrain", Blocks.xpDrain);
 		addStandardBlockPage("drawingtable", Blocks.drawingTable);
-		addStandardBlockPage("radio", Blocks.radio);
 		
 		for (BaseComponent page : pages) {
 			page.setEnabled(false);
@@ -82,7 +82,7 @@ public class GuiInfoBook extends GuiScreen {
 	private void addStandardBlockPage(String name, Block block) {
 		if (block != null) {
 			String tileName = String.format("tile.openblocks.%s.name", name);
-			String tileDescription = String.format("openblocks.book.%s.description", name);
+			String tileDescription = String.format("tile.openblocks.%s.description", name);
 			pages.add(new StandardBlockPage(tileName, tileDescription, new ItemStack(block)));
 		}
 	}
