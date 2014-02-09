@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 import openblocks.OpenBlocks.Blocks;
+import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.pages.*;
 import openmods.gui.component.BaseComponent;
 import openmods.gui.component.BaseComponent.IComponentListener;
@@ -12,6 +13,8 @@ import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
@@ -46,29 +49,39 @@ public class GuiInfoBook extends GuiScreen {
 
 		pages.add(new BlankPage());
 		pages.add(new IntroPage());
-		addStandardBlockPage("elevator", Blocks.elevator);
-		addStandardBlockPage("sprinkler", Blocks.sprinkler);
-		addStandardBlockPage("paintmixer", Blocks.paintMixer);
-		addStandardBlockPage("beartrap", Blocks.bearTrap);
-		addStandardBlockPage("guide", Blocks.guide);
-		addStandardBlockPage("canvas", Blocks.canvas);
-		addStandardBlockPage("projector", Blocks.projector);
-		addStandardBlockPage("vacuumhopper", Blocks.vacuumHopper);
-		addStandardBlockPage("tank", Blocks.tank);
-		addStandardBlockPage("path", Blocks.path);
-		addStandardBlockPage("fan", Blocks.fan);
-		addStandardBlockPage("blockbreaker", Blocks.blockBreaker);
-		addStandardBlockPage("blockPlacer", Blocks.blockPlacer);
-		addStandardBlockPage("itemDropper", Blocks.itemDropper);
-		addStandardBlockPage("bigbutton", Blocks.bigButton);
-		addStandardBlockPage("autoanvil", Blocks.autoAnvil);
-		addStandardBlockPage("autoenchantmenttable", Blocks.autoEnchantmentTable);
-		addStandardBlockPage("sponge", Blocks.sponge);
-		addStandardBlockPage("ropeladder", Blocks.ropeLadder);
-		addStandardBlockPage("village_highlighter", Blocks.villageHighlighter);
-		addStandardBlockPage("xpbottler", Blocks.xpBottler);
-		addStandardBlockPage("xpdrain", Blocks.xpDrain);
-		addStandardBlockPage("drawingtable", Blocks.drawingTable);
+		addStandardRecipePage("elevator", Blocks.elevator);
+		addStandardRecipePage("sprinkler", Blocks.sprinkler);
+		addStandardRecipePage("paintmixer", Blocks.paintMixer);
+		addStandardRecipePage("beartrap", Blocks.bearTrap);
+		addStandardRecipePage("guide", Blocks.guide);
+		addStandardRecipePage("canvas", Blocks.canvas);
+		addStandardRecipePage("projector", Blocks.projector);
+		addStandardRecipePage("vacuumhopper", Blocks.vacuumHopper);
+		addStandardRecipePage("tank", Blocks.tank);
+		addStandardRecipePage("path", Blocks.path);
+		addStandardRecipePage("fan", Blocks.fan);
+		addStandardRecipePage("blockbreaker", Blocks.blockBreaker);
+		addStandardRecipePage("blockPlacer", Blocks.blockPlacer);
+		addStandardRecipePage("itemDropper", Blocks.itemDropper);
+		addStandardRecipePage("bigbutton", Blocks.bigButton);
+		addStandardRecipePage("autoanvil", Blocks.autoAnvil);
+		addStandardRecipePage("autoenchantmenttable", Blocks.autoEnchantmentTable);
+		addStandardRecipePage("sponge", Blocks.sponge);
+		addStandardRecipePage("ropeladder", Blocks.ropeLadder);
+		addStandardRecipePage("village_highlighter", Blocks.villageHighlighter);
+		addStandardRecipePage("xpbottler", Blocks.xpBottler);
+		addStandardRecipePage("xpdrain", Blocks.xpDrain);
+		addStandardRecipePage("drawingtable", Blocks.drawingTable);
+		addStandardRecipePage("sonicglasses", Items.sonicGlasses);
+		addStandardRecipePage("hangglider", Items.hangGlider);
+		addStandardRecipePage("cursor", Items.cursor);
+		addStandardRecipePage("cartographer", Items.cartographer);
+		addStandardRecipePage("golden_eye", Items.goldenEye);
+		addStandardRecipePage("sleepingbag", Items.sleepingBag);
+		addStandardRecipePage("squeegee", Items.squeegee);
+		addStandardRecipePage("tasty_clay", Items.tastyClay);
+		addStandardRecipePage("slimalyzer", Items.slimalyzer);
+		addStandardRecipePage("paintbrush", Items.paintBrush);
 		
 		for (BaseComponent page : pages) {
 			page.setEnabled(false);
@@ -79,12 +92,27 @@ public class GuiInfoBook extends GuiScreen {
 
 	}
 
-	private void addStandardBlockPage(String name, Block block) {
-		if (block != null) {
-			String tileName = String.format("tile.openblocks.%s.name", name);
-			String tileDescription = String.format("tile.openblocks.%s.description", name);
-			pages.add(new StandardBlockPage(tileName, tileDescription, new ItemStack(block)));
+	private boolean addStandardRecipePage(String name, Object item) {
+		ItemStack stack = null;
+		String type = "";
+		if (item instanceof ItemStack) {
+			stack = (ItemStack) item;
+			type = (stack.getItem() instanceof ItemBlock) ? "tile" : "item";
 		}
+		if (item instanceof Item) {
+			stack = new ItemStack((Item) item);
+			type = "item";
+		} else if (item instanceof Block) {
+			stack = new ItemStack((Block) item);	
+			type = "tile";		
+		}
+		if (stack != null) {
+			String fullName = String.format("%s.openblocks.%s.name", type, name);
+			String description = String.format("%s.openblocks.%s.description", type, name);
+			pages.add(new StandardRecipePage(fullName, description, stack));
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -98,9 +126,9 @@ public class GuiInfoBook extends GuiScreen {
 		if (pageLeft != null) pageLeft.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
 		if (pageRight != null) pageRight.mouseClicked(x - centerX, y - this.guiTop, button);
 
-		if (index > 0 && x > guiLeft && x < guiLeft + 20 && y > guiTop + 160 && y < guiTop + 180) {
+		if (index > 0 && x > guiLeft && x < guiLeft + 30 && y > guiTop + 150 && y < guiTop + 180) {
 			index -= 2;
-		} else if (index < pages.size() - 2 && x > centerX + 191 && x < centerX + 211 && y > guiTop + 160 && y < guiTop + 180) {
+		} else if (index < pages.size() - 2 && x > centerX + 181 && x < centerX + 211 && y > guiTop + 150 && y < guiTop + 180) {
 			index += 2;
 		}
 

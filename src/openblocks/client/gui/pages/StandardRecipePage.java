@@ -19,7 +19,7 @@ import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
 
-public class StandardBlockPage extends BaseComponent {
+public class StandardRecipePage extends BaseComponent {
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/book.png");
 
@@ -31,7 +31,7 @@ public class StandardBlockPage extends BaseComponent {
 	private GuiComponentLabel lblDescription;
 	private GuiComponentLabel lblTitle;
 
-	public StandardBlockPage(String title, String description, ItemStack resultingItem) {
+	public StandardRecipePage(String title, String description, ItemStack resultingItem) {
 		super(0, 0);
 
 		String translatedTitle = StatCollector.translateToLocal(title);
