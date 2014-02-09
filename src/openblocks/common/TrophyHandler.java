@@ -1,6 +1,6 @@
 package openblocks.common;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -22,9 +22,11 @@ import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
 import openmods.utils.ReflectionHelper;
 
+import com.google.common.collect.Maps;
+
 public class TrophyHandler {
 
-	public static HashMap<Trophy, Entity> entityCache = new HashMap<Trophy, Entity>();
+	public static Map<Trophy, Entity> entityCache = Maps.newHashMap();
 
 	public static Entity getEntityFromCache(Trophy trophy) {
 		Entity entity = entityCache.get(trophy);

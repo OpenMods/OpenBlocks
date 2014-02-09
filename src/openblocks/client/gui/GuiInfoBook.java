@@ -17,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiInfoBook extends GuiScreen {
 
-
 	private GuiComponentSprite imgLeftBackground;
 	private GuiComponentSprite imgRightBackground;
 
@@ -25,30 +24,36 @@ public class GuiInfoBook extends GuiScreen {
 	public static Icon iconPageRight = FakeIcon.createSheetIcon(0, 0, 211, 180);
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/book.png");
-	
+
 	public ArrayList<BaseComponent> pages;
-	
+
 	public BaseComponent pageLeft = null;
 	public BaseComponent pageRight = null;
-	
+
 	private int centerX;
 	private int guiLeft;
 	private int guiTop;
-	
+
 	private int index = 0;
-	
+
 	public GuiInfoBook() {
-		
+
 		imgLeftBackground = new GuiComponentSprite(0, 0, iconPageLeft, texture);
 		imgRightBackground = new GuiComponentSprite(0, 0, iconPageRight, texture);
-		
+
 		pages = new ArrayList<BaseComponent>();
-		
+
 		pages.add(new BlankPage());
 		pages.add(new IntroPage());
-		pages.add(new StandardBlockPage("tile.openblocks.elevator.name", "openblocks.book.guide.description", new ItemStack(Blocks.elevator)));
-		pages.add(new StandardBlockPage("tile.openblocks.sprinkler.name", "openblocks.book.sprinkler.description", new ItemStack(Blocks.sprinkler)));
-		pages.add(new StandardBlockPage("tile.openblocks.beartrap.name", "openblocks.book.beartrap.description", new ItemStack(Blocks.bearTrap)));
+		if (Blocks.elevator != null) {
+			pages.add(new StandardBlockPage("tile.openblocks.elevator.name", "openblocks.book.guide.description", new ItemStack(Blocks.elevator)));
+		}
+		if (Blocks.sprinkler != null) {
+			pages.add(new StandardBlockPage("tile.openblocks.sprinkler.name", "openblocks.book.sprinkler.description", new ItemStack(Blocks.sprinkler)));
+		}
+		if (Blocks.bearTrap != null) {
+			pages.add(new StandardBlockPage("tile.openblocks.beartrap.name", "openblocks.book.beartrap.description", new ItemStack(Blocks.bearTrap)));
+		}
 		pages.add(new StandardBlockPage("tile.openblocks.guide.name", "openblocks.book.guide.description", new ItemStack(Blocks.guide)));
 		pages.add(new StandardBlockPage("tile.openblocks.canvas.name", "openblocks.book.canvas.description", new ItemStack(Blocks.canvas)));
 		pages.add(new StandardBlockPage("tile.openblocks.projector.name", "openblocks.book.projector.description", new ItemStack(Blocks.projector)));
@@ -71,14 +76,14 @@ public class GuiInfoBook extends GuiScreen {
 		pages.add(new StandardBlockPage("tile.openblocks.paintCan.name", "openblocks.book.paintCan.description", new ItemStack(Blocks.paintCan)));
 		pages.add(new StandardBlockPage("tile.openblocks.radio.name", "openblocks.book.radio.description", new ItemStack(Blocks.radio)));
 		pages.add(new StandardBlockPage("tile.openblocks.grave.name", "openblocks.book.grave.description", new ItemStack(Blocks.grave)));
-		
+
 		for (BaseComponent page : pages) {
 			page.setEnabled(false);
 		}
-		
+
 		pageLeft = pages.get(0);
 		pageRight = pages.get(1);
-		
+
 	}
 
 	@Override
@@ -89,28 +94,26 @@ public class GuiInfoBook extends GuiScreen {
 	@Override
 	protected void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
-		if (pageLeft != null)
-			pageLeft.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
-		if (pageRight != null)
-			pageRight.mouseClicked(x - centerX, y - this.guiTop, button);
-		
+		if (pageLeft != null) pageLeft.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
+		if (pageRight != null) pageRight.mouseClicked(x - centerX, y - this.guiTop, button);
+
 		if (index > 0 && x > guiLeft && x < guiLeft + 20 && y > guiTop + 160 && y < guiTop + 180) {
 			index -= 2;
 		} else if (index < pages.size() - 2 && x > centerX + 191 && x < centerX + 211 && y > guiTop + 160 && y < guiTop + 180) {
 			index += 2;
 		}
-		
+
 		pageLeft = pages.get(index);
-		pageRight = index + 1 < pages.size() ? pages.get(index + 1) : null;
-		
+		pageRight = index + 1 < pages.size()? pages.get(index + 1) : null;
+
 	}
-	
+
 	public void drawScreen(int mouseX, int mouseY, float par3) {
-		
+
 		centerX = this.width / 2;
 		guiLeft = centerX - 211;
 		guiTop = (height - 200) / 2;
-		
+
 		imgLeftBackground.render(this.mc, guiLeft, guiTop, mouseX - guiLeft, mouseY - guiTop);
 		imgRightBackground.render(this.mc, centerX, guiTop, mouseX - centerX, mouseY - guiTop);
 		if (pageLeft != null) {
@@ -122,6 +125,5 @@ public class GuiInfoBook extends GuiScreen {
 			pageRight.render(this.mc, centerX, guiTop, mouseX - centerX, mouseY - guiTop);
 		}
 	}
-
 
 }

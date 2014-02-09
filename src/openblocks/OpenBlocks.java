@@ -1,5 +1,6 @@
 package openblocks;
 
+import java.io.File;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -25,6 +26,7 @@ import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.rubbish.BrickManager;
 import openmods.Mods;
 import openmods.OpenMods;
+import openmods.config.ConfigProcessing;
 import openmods.config.RegisterBlock;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
@@ -285,9 +287,11 @@ public class OpenBlocks {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		EventTypes.registerTypes();
-		Configuration configFile = new Configuration(evt.getSuggestedConfigurationFile());
-		Config.readConfig(configFile);
-		if (configFile.hasChanged()) configFile.save();
+		final File configFile = evt.getSuggestedConfigurationFile();
+		Configuration config = new Configuration(configFile);
+		ConfigProcessing.processAnnotations(configFile, "OpenBlocks", config, Config.class);
+
+		if (config.hasChanged()) config.save();
 		Config.register();
 
 		NetworkRegistry.instance().registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));

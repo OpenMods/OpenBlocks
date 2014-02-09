@@ -29,13 +29,12 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 
 	@Override
 	protected void createSyncedFields() {
-		trophyIndex = new SyncableInt();
+		trophyIndex = new SyncableInt(-1);
 	}
 
 	public Trophy getTrophy() {
-		Trophy t = Trophy.values()[trophyIndex.getValue()];
-		if (t != null) { return t; }
-		return t;
+		int trophyId = trophyIndex.getValue();
+		return trophyId >= 0? Trophy.VALUES[trophyId] : null;
 	}
 
 	@Override
@@ -75,12 +74,14 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 				set = true;
 			}
 		}
-		if (!set) {
-			int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
-			debugTrophy = Trophy.values()[next];
-			trophyIndex.setValue(debugTrophy.ordinal());
-		}
+
 		if (!worldObj.isRemote) {
+			if (!set) {
+				int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
+				debugTrophy = Trophy.values()[next];
+				trophyIndex.setValue(debugTrophy.ordinal());
+			}
+
 			sync();
 		}
 	}
