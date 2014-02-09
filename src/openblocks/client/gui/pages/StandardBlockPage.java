@@ -35,7 +35,7 @@ public class StandardBlockPage extends BaseComponent {
 		super(0, 0);
 
 		String translatedTitle = StatCollector.translateToLocal(title);
-		String translatedDescription = StatCollector.translateToLocal(description);
+		String translatedDescription = StatCollector.translateToLocal(description).replaceAll("\\\\n", "\n");
 		
 		lblTitle = new GuiComponentLabel((getWidth() - Minecraft.getMinecraft().fontRenderer.getStringWidth(translatedTitle)) / 2, 12, translatedTitle);
 		lblDescription = new GuiComponentLabel(27, 100, 340, 1000, translatedDescription);

@@ -10,6 +10,7 @@ import openmods.gui.component.BaseComponent;
 import openmods.gui.component.BaseComponent.IComponentListener;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -45,38 +46,30 @@ public class GuiInfoBook extends GuiScreen {
 
 		pages.add(new BlankPage());
 		pages.add(new IntroPage());
-		if (Blocks.elevator != null) {
-			pages.add(new StandardBlockPage("tile.openblocks.elevator.name", "openblocks.book.guide.description", new ItemStack(Blocks.elevator)));
-		}
-		if (Blocks.sprinkler != null) {
-			pages.add(new StandardBlockPage("tile.openblocks.sprinkler.name", "openblocks.book.sprinkler.description", new ItemStack(Blocks.sprinkler)));
-		}
-		if (Blocks.bearTrap != null) {
-			pages.add(new StandardBlockPage("tile.openblocks.beartrap.name", "openblocks.book.beartrap.description", new ItemStack(Blocks.bearTrap)));
-		}
-		pages.add(new StandardBlockPage("tile.openblocks.guide.name", "openblocks.book.guide.description", new ItemStack(Blocks.guide)));
-		pages.add(new StandardBlockPage("tile.openblocks.canvas.name", "openblocks.book.canvas.description", new ItemStack(Blocks.canvas)));
-		pages.add(new StandardBlockPage("tile.openblocks.projector.name", "openblocks.book.projector.description", new ItemStack(Blocks.projector)));
-		pages.add(new StandardBlockPage("tile.openblocks.vacuumhopper.name", "openblocks.book.vacuumhopper.description", new ItemStack(Blocks.vacuumHopper)));
-		pages.add(new StandardBlockPage("tile.openblocks.tank.name", "openblocks.book.tank.description", new ItemStack(Blocks.tank)));
-		pages.add(new StandardBlockPage("tile.openblocks.path.name", "openblocks.book.path.description", new ItemStack(Blocks.path)));
-		pages.add(new StandardBlockPage("tile.openblocks.fan.name", "openblocks.book.fan.description", new ItemStack(Blocks.fan)));
-		pages.add(new StandardBlockPage("tile.openblocks.blockbreaker.name", "openblocks.book.blockbreaker.description", new ItemStack(Blocks.blockBreaker)));
-		pages.add(new StandardBlockPage("tile.openblocks.blockPlacer.name", "openblocks.book.blockplacer.description", new ItemStack(Blocks.blockPlacer)));
-		pages.add(new StandardBlockPage("tile.openblocks.bigbutton.name", "openblocks.book.bigbutton.description", new ItemStack(Blocks.bigButton)));
-		pages.add(new StandardBlockPage("tile.openblocks.autoanvil.name", "openblocks.book.autoanvil.description", new ItemStack(Blocks.autoAnvil)));
-		pages.add(new StandardBlockPage("tile.openblocks.autoenchantmenttable.name", "openblocks.book.autoenchantmenttable.description", new ItemStack(Blocks.autoEnchantmentTable)));
-		pages.add(new StandardBlockPage("tile.openblocks.sponge.name", "openblocks.book.sponge.description", new ItemStack(Blocks.sponge)));
-		pages.add(new StandardBlockPage("tile.openblocks.heal.name", "openblocks.book.heal.description", new ItemStack(Blocks.heal)));
-		pages.add(new StandardBlockPage("tile.openblocks.ropeladder.name", "openblocks.book.ropeladder.description", new ItemStack(Blocks.ropeLadder)));
-		pages.add(new StandardBlockPage("tile.openblocks.villageHighlighter.name", "openblocks.book.villageHighlighter.description", new ItemStack(Blocks.villageHighlighter)));
-		pages.add(new StandardBlockPage("tile.openblocks.xpBottler.name", "openblocks.book.xpBottler.description", new ItemStack(Blocks.xpBottler)));
-		pages.add(new StandardBlockPage("tile.openblocks.xpDrain.name", "openblocks.book.xpDrain.description", new ItemStack(Blocks.xpDrain)));
-		pages.add(new StandardBlockPage("tile.openblocks.drawingTable.name", "openblocks.book.drawingTable.description", new ItemStack(Blocks.drawingTable)));
-		pages.add(new StandardBlockPage("tile.openblocks.paintCan.name", "openblocks.book.paintCan.description", new ItemStack(Blocks.paintCan)));
-		pages.add(new StandardBlockPage("tile.openblocks.radio.name", "openblocks.book.radio.description", new ItemStack(Blocks.radio)));
-		pages.add(new StandardBlockPage("tile.openblocks.grave.name", "openblocks.book.grave.description", new ItemStack(Blocks.grave)));
-
+		addStandardBlockPage("elevator", Blocks.elevator);
+		addStandardBlockPage("sprinkler", Blocks.sprinkler);
+		addStandardBlockPage("paintmixer", Blocks.paintMixer);
+		addStandardBlockPage("beartrap", Blocks.bearTrap);
+		addStandardBlockPage("guide", Blocks.guide);
+		addStandardBlockPage("canvas", Blocks.canvas);
+		addStandardBlockPage("projector", Blocks.projector);
+		addStandardBlockPage("vacuumhopper", Blocks.vacuumHopper);
+		addStandardBlockPage("tank", Blocks.tank);
+		addStandardBlockPage("path", Blocks.path);
+		addStandardBlockPage("fan", Blocks.fan);
+		addStandardBlockPage("blockbreaker", Blocks.blockBreaker);
+		addStandardBlockPage("blockPlacer", Blocks.blockPlacer);
+		addStandardBlockPage("bigbutton", Blocks.bigButton);
+		addStandardBlockPage("autoanvil", Blocks.autoAnvil);
+		addStandardBlockPage("autoenchantmenttable", Blocks.autoEnchantmentTable);
+		addStandardBlockPage("sponge", Blocks.sponge);
+		addStandardBlockPage("ropeladder", Blocks.ropeLadder);
+		addStandardBlockPage("village_highlighter", Blocks.villageHighlighter);
+		addStandardBlockPage("xpbottler", Blocks.xpBottler);
+		addStandardBlockPage("xpdrain", Blocks.xpDrain);
+		addStandardBlockPage("drawingtable", Blocks.drawingTable);
+		addStandardBlockPage("radio", Blocks.radio);
+		
 		for (BaseComponent page : pages) {
 			page.setEnabled(false);
 		}
@@ -86,6 +79,14 @@ public class GuiInfoBook extends GuiScreen {
 
 	}
 
+	private void addStandardBlockPage(String name, Block block) {
+		if (block != null) {
+			String tileName = String.format("tile.openblocks.%s.name", name);
+			String tileDescription = String.format("openblocks.book.%s.description", name);
+			pages.add(new StandardBlockPage(tileName, tileDescription, new ItemStack(block)));
+		}
+	}
+	
 	@Override
 	public boolean doesGuiPauseGame() {
 		return false;

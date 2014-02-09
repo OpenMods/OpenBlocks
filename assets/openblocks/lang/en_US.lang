@@ -53,9 +53,20 @@ openblocks.misc.shape.octagon=Octagon
 
 openblocks.turtle.magnet=Magnet
 
+openblocks.book.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color.
 openblocks.book.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simpily drop an OpenBlocks tank filled with water below it! You can also add bonemeal for an even faster rate of growth.\n\nIt also acts as a water source block!
-openblocks.book.paintmixer.description=Paint mixer description
+openblocks.book.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.
+openblocks.book.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
 openblocks.book.guide.description=The building guide will give you an outline of ghost blocks to in different shapes and sizes that'll help you plan out rooms.\n\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\n\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
+openblocks.book.tank.description=Tanks can hold liquids. If you place tanks next to each other and they'll distribute their liquid between the tanks. You can place liquid into the tanks using buckets. If the tank contains XP Juice you can click on them with an empty hand to give yourself some of the XP. When broken tanks will retain their liquid.
+openblocks.book.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
+openblocks.book.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color.
+openblocks.book.beartrap.description=Place a bear trap and click on it to open it up. When a mob walks over the trap they'll be unable to move!
+openblocks.book.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints.
+openblocks.book.fan.description=The fan will blow players, mobs or entities in the direction it's facing
+openblocks.book.sponge.description=The sponge is a replacement for the vanilla sponge. Perfect for removing small pockets of lava or water. Be careful when using it on large areas of liquid though as it'll start to get quite messy.
+openblocks.book.cannon.name=When given a redstone signal, the item cannon will shoot items that it finds in an adjacent inventory. Use the 'pointer' item to aim the cannon.
+openblocks.book.ropeladder.name=When you place a rope ladder it'll roll out all the way to the ground.
 
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
