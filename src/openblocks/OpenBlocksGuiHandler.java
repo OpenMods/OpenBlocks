@@ -2,6 +2,7 @@ package openblocks;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import openblocks.client.gui.GuiInfoBook;
 import openblocks.client.gui.GuiLuggage;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
@@ -11,7 +12,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 public class OpenBlocksGuiHandler implements IGuiHandler {
 
 	public static enum GuiId {
-		luggage;
+		luggage, infoBook;
 
 		public static final GuiId[] VALUES = GuiId.values();
 	}
@@ -37,6 +38,8 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		switch (guiId) {
 			case luggage:
 				return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)));
+			case infoBook:
+				return new GuiInfoBook();
 			default:
 				return null;
 		}

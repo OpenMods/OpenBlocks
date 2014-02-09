@@ -246,6 +246,9 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "tunedCrystal", unlocalizedName = "tuned_crystal")
 		public static ItemTunedCrystal tunedCrystal;
+
+		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
+		public static ItemInfoBook infoBook;
 	}
 
 	public static class Fluids {

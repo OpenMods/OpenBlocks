@@ -207,6 +207,9 @@ public class Config {
 
 	@ItemId(description = "The id of tuned crystal item")
 	public static int itemTunedCrystalId = 14998;
+	
+	@ItemId(description = "The id of info book")
+	public static int itemInfoBookId = 14999;
 
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
@@ -309,6 +312,7 @@ public class Config {
 
 	@ConfigProperty(category = "radio", name = "range", comment = "Radio range")
 	public static float radioRadius = 30;
+
 
 	static void readConfig(Configuration configFile) {
 		ConfigProcessing.processAnnotations(configFile, Config.class);
@@ -651,6 +655,10 @@ public class Config {
 
 		if (itemTunedCrystalId > 0) {
 			OpenBlocks.Items.tunedCrystal = new ItemTunedCrystal();
+		}
+
+		if (itemInfoBookId > 0) {
+			OpenBlocks.Items.infoBook = new ItemInfoBook();
 		}
 
 		if (explosiveEnchantmentId > 0) {

@@ -53,6 +53,10 @@ openblocks.misc.shape.octagon=Octagon
 
 openblocks.turtle.magnet=Magnet
 
+openblocks.book.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simpily drop an OpenBlocks tank filled with water below it! You can also add bonemeal for an even faster rate of growth.\n\nIt also acts as a water source block!
+openblocks.book.paintmixer.description=Paint mixer description
+openblocks.book.guide.description=The building guide will give you an outline of ghost blocks to in different shapes and sizes that'll help you plan out rooms.\n\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\n\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
+
 tile.openblocks.elevator.name=Elevator
 tile.openblocks.heal.name=Healer
 tile.openblocks.guide.name=Building Guide
