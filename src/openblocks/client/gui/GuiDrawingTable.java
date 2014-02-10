@@ -32,8 +32,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 				.addListener(this));
 		(iconDisplay = new GuiComponentSprite(80, 34, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture)
 				.setColor(0f, 0f, 0f))
-				.setOverlayMode(true) // New Feature, draws very last, above
-										// items and all.
+				.setOverlayMode(true)
 				.setEnabled(inventorySlots.getSlot(0).getStack() != null);
 		root.addComponent(iconDisplay);
 		root.addComponent(buttonLeft);

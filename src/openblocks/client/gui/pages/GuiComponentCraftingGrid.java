@@ -30,13 +30,12 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 	public GuiComponentCraftingGrid(int x, int y, ItemStack[] items, Icon icon, ResourceLocation texture) {
 		super(x, y, icon, texture);
 		this.items = items;
-		setOverlayMode(true);
 	}
 
 	@Override
-	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
-		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
-
+	public void renderOverlay(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		super.renderOverlay(minecraft, offsetX, offsetY, mouseX, mouseY);
+		
 		int relativeMouseX = mouseX + offsetX - x;
 		int relativeMouseY = mouseY + offsetY - y;
 		int gridOffsetX = 1;
@@ -59,7 +58,6 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 			}
 			i++;
 		}
-		GL11.glDisable(GL11.GL_LIGHTING);
 		if (tooltip != null) {
 			drawItemStackTooltip(tooltip, relativeMouseX + 25, relativeMouseY + 30);
 		}
@@ -68,6 +66,7 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 	protected void drawHoveringText(List par1List, int par2, int par3, FontRenderer font) {
 		
 		if (!par1List.isEmpty()) {
+			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 			RenderHelper.disableStandardItemLighting();
 			GL11.glDisable(GL11.GL_LIGHTING);

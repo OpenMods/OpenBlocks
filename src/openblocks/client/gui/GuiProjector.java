@@ -98,8 +98,6 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 			isInitialized = true;
 		}
 
-		BaseComponent.IS_OVERLAY_PASS = false;
-
 		mapHeight += Mouse.getDWheel() / 1000.0;
 		if (mapHeight > 10) mapHeight = 10;
 		if (mapHeight < -5) mapHeight = -5;

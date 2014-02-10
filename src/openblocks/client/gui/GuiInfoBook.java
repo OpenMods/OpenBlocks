@@ -114,7 +114,6 @@ public class GuiInfoBook extends GuiScreen {
 		guiLeft = centerX - 211;
 		guiTop = (height - 200) / 2;
 
-		BaseComponent.IS_OVERLAY_PASS = false;
 		GL11.glPushMatrix();
 		book.render(this.mc, guiLeft, guiTop, mouseX - this.guiLeft, mouseY - this.guiTop);
 		GL11.glPopMatrix();
@@ -125,8 +124,7 @@ public class GuiInfoBook extends GuiScreen {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glPushMatrix();
-		BaseComponent.IS_OVERLAY_PASS = true;
-		book.render(this.mc, guiLeft, guiTop, mouseX - this.guiLeft, mouseY - this.guiTop);
+		book.renderOverlay(this.mc, guiLeft, guiTop, mouseX - this.guiLeft, mouseY - this.guiTop);
 		GL11.glPopMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glEnable(GL11.GL_LIGHTING);
