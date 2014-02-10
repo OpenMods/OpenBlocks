@@ -10,9 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openmods.gui.component.BaseComponent;
 import openmods.gui.component.GuiComponentSprite;
 
 import org.lwjgl.opengl.GL11;
@@ -38,7 +35,7 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 	@Override
 	public void renderOverlay(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		super.renderOverlay(minecraft, offsetX, offsetY, mouseX, mouseY);
-		
+
 		int relativeMouseX = mouseX + offsetX - x;
 		int relativeMouseY = mouseY + offsetY - y;
 		int gridOffsetX = 1;

@@ -1,10 +1,5 @@
 package openblocks.common.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.OpenBlocksGuiHandler;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -13,6 +8,8 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemInfoBook extends Item {
 

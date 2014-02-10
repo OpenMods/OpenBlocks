@@ -1,6 +1,6 @@
 package openblocks.client.gui.pages;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -10,15 +10,14 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
-import openblocks.OpenBlocks.Blocks;
-import openblocks.OpenBlocks.Items;
 import openmods.gui.component.BaseComponent;
 import openmods.gui.component.BaseComponent.IComponentListener;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
 
-public class GuiComponentBook extends BaseComponent implements IComponentListener {
+import com.google.common.collect.Lists;
 
+public class GuiComponentBook extends BaseComponent implements IComponentListener {
 
 	private GuiComponentSprite imgLeftBackground;
 	private GuiComponentSprite imgRightBackground;
@@ -32,32 +31,28 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/book.png");
 
-	public ArrayList<BaseComponent> pages;
+	public List<BaseComponent> pages;
 
 	private int index = 0;
-	
-	private GuiScreen screen;
-	
+
 	public GuiComponentBook(GuiScreen screen) {
 		super(0, 0);
-		
-		this.screen = screen;
 
 		imgLeftBackground = new GuiComponentSprite(0, 0, iconPageLeft, texture);
 		imgRightBackground = new GuiComponentSprite(0, 0, iconPageRight, texture);
-		
+
 		imgPrev = new GuiComponentSprite(0, 140, iconPrev, texture);
 		imgPrev.addListener(this);
 		imgNext = new GuiComponentSprite(400, 140, iconNext, texture);
 		imgNext.addListener(this);
-		
+
 		addComponent(imgLeftBackground);
 		addComponent(imgRightBackground);
 		addComponent(imgPrev);
 		addComponent(imgNext);
 
-		pages = new ArrayList<BaseComponent>();
-		
+		pages = Lists.newArrayList();
+
 	}
 
 	@Override
@@ -69,26 +64,26 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 	public int getHeight() {
 		return iconPageRight.getIconHeight();
 	}
-	
+
 	public void addPage(BaseComponent page) {
 		addComponent(page);
 		page.setEnabled(false);
 		pages.add(page);
 	}
-	
+
 	public boolean addStandardRecipePage(String modId, String name, Object item) {
 		ItemStack stack = null;
 		String type = "";
 		if (item instanceof ItemStack) {
-			stack = (ItemStack) item;
-			type = (stack.getItem() instanceof ItemBlock) ? "tile" : "item";
+			stack = (ItemStack)item;
+			type = (stack.getItem() instanceof ItemBlock)? "tile" : "item";
 		}
 		if (item instanceof Item) {
-			stack = new ItemStack((Item) item);
+			stack = new ItemStack((Item)item);
 			type = "item";
 		} else if (item instanceof Block) {
-			stack = new ItemStack((Block) item);	
-			type = "tile";		
+			stack = new ItemStack((Block)item);
+			type = "tile";
 		}
 		if (stack != null) {
 			String fullName = String.format("%s.%s.%s.name", type, modId, name);
@@ -99,7 +94,7 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 		}
 		return false;
 	}
-	
+
 	public void enablePages() {
 		int i = 0;
 		for (BaseComponent page : pages) {
@@ -109,7 +104,7 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 		imgNext.setEnabled(index < pages.size() - 2);
 		imgPrev.setEnabled(index > 0);
 	}
-	
+
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
 		imgRightBackground.setX(iconPageRight.getIconWidth());
@@ -118,7 +113,7 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 		}
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 	}
-	
+
 	@Override
 	public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
 		if (component == imgPrev) {
