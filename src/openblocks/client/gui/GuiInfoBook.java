@@ -21,7 +21,7 @@ public class GuiInfoBook extends GuiScreen {
 
 	public GuiInfoBook() {
 
-		book = new GuiComponentBook(this);
+		book = new GuiComponentBook();
 
 		book.addPage(new BlankPage());
 		book.addPage(new IntroPage());

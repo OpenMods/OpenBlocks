@@ -61,7 +61,7 @@ tile.openblocks.heal.name=Healer
 tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.
 
 tile.openblocks.guide.name=Building Guide
-tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\n\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\n\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
+tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
 
 tile.openblocks.ladder.name=Jaded Ladder
 tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
@@ -85,7 +85,7 @@ tile.openblocks.ropeladder.name=Rope Ladder
 tile.openblocks.ropeladder.description=When you place a rope ladder it'll roll out all the way to the ground.
 
 tile.openblocks.sprinkler.name=Sprinkler
-tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simpily place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\n\nIt also acts as a water source block!
+tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simpily place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block!
 
 tile.openblocks.paintmixer.name=Paint Mixer
 tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
@@ -145,13 +145,13 @@ tile.openblocks.drawingtable.name=Drawing Table
 
 
 item.openblocks.cursor.name=Cursor
-item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\n\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
+item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
 
 item.openblocks.slimalyzer.name=Slimalyzer
 item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.
 
 item.openblocks.hangglider.name=Hang Glider
-item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\n\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
+item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
 
 item.openblocks.gliderwing.name=Glider Wing
 
@@ -159,9 +159,11 @@ item.openblocks.sleepingbag.name=Sleeping Bag
 item.openblocks.sleepingbag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back.
 
 item.openblocks.luggage.name=Luggage
-item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\n\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\n\nIf he ever gets struck by lightning he'll be able to carry even more items!
+item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items!
 
 item.openblocks.sonicglasses.name=Sonic Glasses
+item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear!
+
 item.openblocks.crayon.name=Magic Crayon
 item.openblocks.pencil.name=Magic Pencil
 item.openblocks.glasses.pencil.name=Pencil Glasses
