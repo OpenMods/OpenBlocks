@@ -1,8 +1,11 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +16,13 @@ public class ItemInfoBook extends Item {
 	public ItemInfoBook() {
 		super(Config.itemInfoBookId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
+	}
+
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister registry) {
+		itemIcon = registry.registerIcon("openblocks:info_book");
 	}
 	
 	@Override

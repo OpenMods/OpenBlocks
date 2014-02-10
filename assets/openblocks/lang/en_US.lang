@@ -61,7 +61,7 @@ tile.openblocks.heal.name=Healer
 tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.
 
 tile.openblocks.guide.name=Building Guide
-tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks to in different shapes and sizes that'll help you plan out rooms.\n\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\n\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
+tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\n\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\n\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
 
 tile.openblocks.ladder.name=Jaded Ladder
 tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
@@ -176,6 +176,7 @@ item.openblocks.beam.name=Beam
 item.openblocks.line.name=Line
 item.openblocks.miracle_magnet.name=§5Miracle Magnet§r
 
+item.openblocks.info_book.name=World Domination with OpenBlocks
 item.openblocks.xpbucket.name=XP Bucket
 item.openblocks.paintbrush.name=Paint Brush
 item.openblocks.stencil.name=Stencil
