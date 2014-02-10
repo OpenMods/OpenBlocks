@@ -19,6 +19,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import openmods.gui.component.BaseComponent;
 import openmods.gui.component.GuiComponentSprite;
 
 public class GuiComponentCraftingGrid extends GuiComponentSprite {
@@ -29,6 +30,7 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 	public GuiComponentCraftingGrid(int x, int y, ItemStack[] items, Icon icon, ResourceLocation texture) {
 		super(x, y, icon, texture);
 		this.items = items;
+		setOverlayMode(true);
 	}
 
 	@Override
