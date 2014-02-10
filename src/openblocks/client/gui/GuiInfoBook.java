@@ -71,17 +71,18 @@ public class GuiInfoBook extends GuiScreen {
 		addStandardRecipePage("village_highlighter", Blocks.villageHighlighter);
 		addStandardRecipePage("xpbottler", Blocks.xpBottler);
 		addStandardRecipePage("xpdrain", Blocks.xpDrain);
-		addStandardRecipePage("drawingtable", Blocks.drawingTable);
+		addStandardRecipePage("luggage", Items.luggage);
 		addStandardRecipePage("sonicglasses", Items.sonicGlasses);
 		addStandardRecipePage("hangglider", Items.hangGlider);
 		addStandardRecipePage("cursor", Items.cursor);
 		addStandardRecipePage("cartographer", Items.cartographer);
 		addStandardRecipePage("golden_eye", Items.goldenEye);
 		addStandardRecipePage("sleepingbag", Items.sleepingBag);
-		addStandardRecipePage("squeegee", Items.squeegee);
 		addStandardRecipePage("tasty_clay", Items.tastyClay);
-		addStandardRecipePage("slimalyzer", Items.slimalyzer);
 		addStandardRecipePage("paintbrush", Items.paintBrush);
+		addStandardRecipePage("squeegee", Items.squeegee);
+		addStandardRecipePage("drawingtable", Blocks.drawingTable);
+		addStandardRecipePage("slimalyzer", Items.slimalyzer);
 		
 		for (BaseComponent page : pages) {
 			page.setEnabled(false);
