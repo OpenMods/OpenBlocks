@@ -11,7 +11,7 @@ import openblocks.common.container.ContainerDonationStation;
 import openblocks.common.tileentity.TileEntityDonationStation;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
-import openmods.gui.component.BaseComponent.IComponentListener;
+import openmods.gui.component.IComponentListener;
 
 public class GuiDonationStation extends
 		BaseGuiContainer<ContainerDonationStation>

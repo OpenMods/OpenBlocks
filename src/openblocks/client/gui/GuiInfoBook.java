@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.pages.*;
+import openmods.gui.component.GuiComponentBook;
+import openmods.gui.component.GuiComponentYouTube;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
