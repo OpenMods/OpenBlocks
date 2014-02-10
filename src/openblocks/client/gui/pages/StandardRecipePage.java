@@ -43,7 +43,7 @@ public class StandardRecipePage extends BaseComponent {
 		}
 		
 		lblTitle = new GuiComponentLabel((getWidth() - Minecraft.getMinecraft().fontRenderer.getStringWidth(translatedTitle)) / 2, 12, translatedTitle);
-		lblDescription = new GuiComponentLabel(27, 100, 340, 1000, translatedDescription);
+		lblDescription = new GuiComponentLabel(27, 95, 340, 1000, translatedDescription);
 		arrow = new GuiComponentSprite(90, 50, iconArrow, texture);
 		craftingGrid = new GuiComponentCraftingGrid(25, 30, getFirstRecipeForItem(resultingItem), iconCraftingGrid, texture);
 		

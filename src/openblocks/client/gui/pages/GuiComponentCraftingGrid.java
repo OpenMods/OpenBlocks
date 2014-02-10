@@ -57,11 +57,10 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 			}
 			i++;
 		}
+		GL11.glDisable(GL11.GL_LIGHTING);
 		if (tooltip != null) {
 			drawItemStackTooltip(tooltip, relativeMouseX + 25, relativeMouseY + 30);
 		}
-
-		GL11.glDisable(GL11.GL_LIGHTING);
 	}
 
 	protected void drawHoveringText(List par1List, int par2, int par3, FontRenderer font) {
