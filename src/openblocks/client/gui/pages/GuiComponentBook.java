@@ -13,10 +13,11 @@ import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openmods.gui.component.BaseComponent;
+import openmods.gui.component.BaseComponent.IComponentListener;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
 
-public class GuiComponentBook extends BaseComponent {
+public class GuiComponentBook extends BaseComponent implements IComponentListener {
 
 
 	private GuiComponentSprite imgLeftBackground;
@@ -33,7 +34,7 @@ public class GuiComponentBook extends BaseComponent {
 
 	public ArrayList<BaseComponent> pages;
 
-	private int index = 2;
+	private int index = 0;
 	
 	private GuiScreen screen;
 	
@@ -46,7 +47,9 @@ public class GuiComponentBook extends BaseComponent {
 		imgRightBackground = new GuiComponentSprite(0, 0, iconPageRight, texture);
 		
 		imgPrev = new GuiComponentSprite(0, 140, iconPrev, texture);
+		imgPrev.addListener(this);
 		imgNext = new GuiComponentSprite(400, 140, iconNext, texture);
+		imgNext.addListener(this);
 		
 		addComponent(imgLeftBackground);
 		addComponent(imgRightBackground);
@@ -103,6 +106,8 @@ public class GuiComponentBook extends BaseComponent {
 			page.setEnabled(i == index || i == index + 1);
 			i++;
 		}
+		imgNext.setEnabled(index < pages.size() - 2);
+		imgPrev.setEnabled(index > 0);
 	}
 	
 	@Override
@@ -113,4 +118,31 @@ public class GuiComponentBook extends BaseComponent {
 		}
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 	}
+	
+	@Override
+	public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
+		if (component == imgPrev) {
+			if (index > 0) {
+				index -= 2;
+			}
+		}
+		if (component == imgNext) {
+			if (index < pages.size() - 2) {
+				index += 2;
+			}
+		}
+		enablePages();
+	}
+
+	@Override
+	public void componentMouseDrag(BaseComponent component, int offsetX, int offsetY, int button, long time) {}
+
+	@Override
+	public void componentMouseMove(BaseComponent component, int offsetX, int offsetY) {}
+
+	@Override
+	public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {}
+
+	@Override
+	public void componentKeyTyped(BaseComponent component, char par1, int par2) {}
 }
