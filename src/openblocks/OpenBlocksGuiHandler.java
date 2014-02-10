@@ -12,7 +12,8 @@ import cpw.mods.fml.common.network.IGuiHandler;
 public class OpenBlocksGuiHandler implements IGuiHandler {
 
 	public static enum GuiId {
-		luggage, infoBook;
+		luggage,
+		infoBook;
 
 		public static final GuiId[] VALUES = GuiId.values();
 	}

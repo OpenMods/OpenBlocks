@@ -1,7 +1,5 @@
 package openblocks.client.gui.pages;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -9,9 +7,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.tileentity.TileEntity;
 import openmods.gui.component.BaseComponent;
 import openmods.tileentity.OpenTileEntity;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiSpinBlock extends BaseComponent {
 
@@ -19,7 +18,7 @@ public class GuiSpinBlock extends BaseComponent {
 	private Block block;
 	private int meta = 0;
 	private static RenderBlocks blockRender = new RenderBlocks();
-	
+
 	public GuiSpinBlock(int x, int y, Block block, OpenTileEntity tile) {
 		super(x, y);
 		this.block = block;
@@ -38,7 +37,6 @@ public class GuiSpinBlock extends BaseComponent {
 	public int getHeight() {
 		return 64;
 	}
-	
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
@@ -52,7 +50,7 @@ public class GuiSpinBlock extends BaseComponent {
 		}
 		GL11.glPopMatrix();
 	}
-	
+
 	private void drawBlock(TextureManager manager, Tessellator t) {
 		GL11.glColor4f(1, 1, 1, 1);
 		manager.bindTexture(TextureMap.locationBlocksTexture);

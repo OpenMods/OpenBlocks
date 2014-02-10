@@ -4,7 +4,7 @@ import openmods.gui.component.BaseComponent;
 
 public class BlankPage extends BaseComponent {
 
-	public BlankPage () {
+	public BlankPage() {
 		super(0, 0);
 	}
 

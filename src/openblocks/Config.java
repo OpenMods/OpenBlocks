@@ -206,7 +206,7 @@ public class Config {
 
 	@ItemId(description = "The id of tuned crystal item")
 	public static int itemTunedCrystalId = 14998;
-	
+
 	@ItemId(description = "The id of info book")
 	public static int itemInfoBookId = 14999;
 
@@ -667,7 +667,7 @@ public class Config {
 			OpenBlocks.Items.tunedCrystal = new ItemTunedCrystal();
 			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.tunedCrystal);
 		}
-		
+
 		if (itemInfoBookId > 0) {
 			OpenBlocks.Items.infoBook = new ItemInfoBook();
 		}

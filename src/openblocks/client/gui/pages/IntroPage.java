@@ -18,5 +18,4 @@ public class IntroPage extends BaseComponent {
 		return 200;
 	}
 
-
 }

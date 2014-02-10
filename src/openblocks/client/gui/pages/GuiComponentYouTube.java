@@ -12,12 +12,12 @@ import openmods.gui.component.GuiComponentLabel;
 public class GuiComponentYouTube extends BaseComponent {
 
 	private final int PROMPT_REPLY_ACTION = 0;
-	
+
 	private GuiComponentLabel label;
 	private String url;
-	
+
 	public static URI youtubeUrl;
-	
+
 	public GuiComponentYouTube(int x, int y, String url) {
 		super(x, y);
 		label = new GuiComponentLabel(0, 0, "Watch video");
@@ -35,7 +35,7 @@ public class GuiComponentYouTube extends BaseComponent {
 	public int getHeight() {
 		return 5;
 	}
-	
+
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
@@ -49,7 +49,7 @@ public class GuiComponentYouTube extends BaseComponent {
 			}
 		}
 	}
-	
+
 	public static void openURI(URI uri) {
 		try {
 			Desktop.getDesktop().browse(uri);
