@@ -10,9 +10,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
-import openmods.gui.component.BaseComponent;
+import openmods.gui.component.*;
 import openmods.gui.component.BaseComponent.IComponentListener;
-import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
 
 import com.google.common.collect.Lists;
@@ -21,13 +20,15 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 
 	private GuiComponentSprite imgLeftBackground;
 	private GuiComponentSprite imgRightBackground;
-	private GuiComponentSprite imgPrev;
-	private GuiComponentSprite imgNext;
+	private GuiComponentSpriteButton imgPrev;
+	private GuiComponentSpriteButton imgNext;
 
 	public static Icon iconPageLeft = FakeIcon.createSheetIcon(-45, 0, -211, 180);
 	public static Icon iconPageRight = FakeIcon.createSheetIcon(0, 0, 211, 180);
-	public static Icon iconPrev = FakeIcon.createSheetIcon(0, 0, 20, 20);
-	public static Icon iconNext = FakeIcon.createSheetIcon(0, 0, 20, 20);
+	public static Icon iconPrev = FakeIcon.createSheetIcon(57, 226, 18, 10);
+	public static Icon iconNext = FakeIcon.createSheetIcon(57, 213, 18, 10);
+	public static Icon iconPrevHover = FakeIcon.createSheetIcon(80, 226, 18, 10);
+	public static Icon iconNextHover = FakeIcon.createSheetIcon(80, 213, 18, 10);
 
 	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/book.png");
 
@@ -41,9 +42,9 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 		imgLeftBackground = new GuiComponentSprite(0, 0, iconPageLeft, texture);
 		imgRightBackground = new GuiComponentSprite(0, 0, iconPageRight, texture);
 
-		imgPrev = new GuiComponentSprite(0, 140, iconPrev, texture);
+		imgPrev = new GuiComponentSpriteButton(24, 158, iconPrev, iconPrevHover, texture);
 		imgPrev.addListener(this);
-		imgNext = new GuiComponentSprite(400, 140, iconNext, texture);
+		imgNext = new GuiComponentSpriteButton(380, 158, iconNext, iconNextHover, texture);
 		imgNext.addListener(this);
 
 		addComponent(imgLeftBackground);
