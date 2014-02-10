@@ -1,139 +1,88 @@
 package openblocks.client.gui;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.RenderHelper;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.pages.*;
-import openmods.gui.component.BaseComponent;
-import openmods.gui.component.GuiComponentSprite;
-import openmods.utils.render.FakeIcon;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class GuiInfoBook extends GuiScreen {
-
-	private GuiComponentSprite imgLeftBackground;
-	private GuiComponentSprite imgRightBackground;
-
-	public static Icon iconPageLeft = FakeIcon.createSheetIcon(-45, 0, -211, 180);
-	public static Icon iconPageRight = FakeIcon.createSheetIcon(0, 0, 211, 180);
-
-	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/book.png");
-
-	public ArrayList<BaseComponent> pages;
-
-	public BaseComponent pageLeft = null;
-	public BaseComponent pageRight = null;
 
 	private int centerX;
 	private int guiLeft;
 	private int guiTop;
 
-	private int index = 0;
+	private GuiComponentBook book;
 
 	public GuiInfoBook() {
 
-		imgLeftBackground = new GuiComponentSprite(0, 0, iconPageLeft, texture);
-		imgRightBackground = new GuiComponentSprite(0, 0, iconPageRight, texture);
+		book = new GuiComponentBook(this);
 
-		pages = new ArrayList<BaseComponent>();
+		book.addPage(new BlankPage());
+		book.addPage(new IntroPage());
+		book.addStandardRecipePage("openblocks", "elevator", Blocks.elevator);
+		book.addStandardRecipePage("openblocks", "sprinkler", Blocks.sprinkler);
+		book.addStandardRecipePage("openblocks", "paintmixer", Blocks.paintMixer);
+		book.addStandardRecipePage("openblocks", "beartrap", Blocks.bearTrap);
+		book.addStandardRecipePage("openblocks", "guide", Blocks.guide);
+		book.addStandardRecipePage("openblocks", "canvas", Blocks.canvas);
+		book.addStandardRecipePage("openblocks", "projector", Blocks.projector);
+		book.addStandardRecipePage("openblocks", "vacuumhopper", Blocks.vacuumHopper);
+		book.addStandardRecipePage("openblocks", "tank", Blocks.tank);
+		book.addStandardRecipePage("openblocks", "path", Blocks.path);
+		book.addStandardRecipePage("openblocks", "fan", Blocks.fan);
+		book.addStandardRecipePage("openblocks", "blockbreaker", Blocks.blockBreaker);
+		book.addStandardRecipePage("openblocks", "blockPlacer", Blocks.blockPlacer);
+		book.addStandardRecipePage("openblocks", "itemDropper", Blocks.itemDropper);
+		book.addStandardRecipePage("openblocks", "bigbutton", Blocks.bigButton);
+		book.addStandardRecipePage("openblocks", "autoanvil", Blocks.autoAnvil);
+		book.addStandardRecipePage("openblocks", "autoenchantmenttable", Blocks.autoEnchantmentTable);
+		book.addStandardRecipePage("openblocks", "sponge", Blocks.sponge);
+		book.addStandardRecipePage("openblocks", "ropeladder", Blocks.ropeLadder);
+		book.addStandardRecipePage("openblocks", "village_highlighter", Blocks.villageHighlighter);
+		book.addStandardRecipePage("openblocks", "xpbottler", Blocks.xpBottler);
+		book.addStandardRecipePage("openblocks", "xpdrain", Blocks.xpDrain);
+		book.addStandardRecipePage("openblocks", "luggage", Items.luggage);
+		book.addStandardRecipePage("openblocks", "sonicglasses", Items.sonicGlasses);
+		book.addStandardRecipePage("openblocks", "hangglider", Items.hangGlider);
+		book.addStandardRecipePage("openblocks", "cursor", Items.cursor);
+		book.addStandardRecipePage("openblocks", "cartographer", Items.cartographer);
+		book.addStandardRecipePage("openblocks", "golden_eye", Items.goldenEye);
+		book.addStandardRecipePage("openblocks", "sleepingbag", Items.sleepingBag);
+		book.addStandardRecipePage("openblocks", "tasty_clay", Items.tastyClay);
+		book.addStandardRecipePage("openblocks", "paintbrush", Items.paintBrush);
+		book.addStandardRecipePage("openblocks", "squeegee", Items.squeegee);
+		book.addStandardRecipePage("openblocks", "drawingtable", Blocks.drawingTable);
+		book.addStandardRecipePage("openblocks", "slimalyzer", Items.slimalyzer);
 
-		pages.add(new BlankPage());
-		pages.add(new IntroPage());
-		addStandardRecipePage("elevator", Blocks.elevator);
-		addStandardRecipePage("sprinkler", Blocks.sprinkler);
-		addStandardRecipePage("paintmixer", Blocks.paintMixer);
-		addStandardRecipePage("beartrap", Blocks.bearTrap);
-		addStandardRecipePage("guide", Blocks.guide);
-		addStandardRecipePage("canvas", Blocks.canvas);
-		addStandardRecipePage("projector", Blocks.projector);
-		addStandardRecipePage("vacuumhopper", Blocks.vacuumHopper);
-		addStandardRecipePage("tank", Blocks.tank);
-		addStandardRecipePage("path", Blocks.path);
-		addStandardRecipePage("fan", Blocks.fan);
-		addStandardRecipePage("blockbreaker", Blocks.blockBreaker);
-		addStandardRecipePage("blockPlacer", Blocks.blockPlacer);
-		addStandardRecipePage("itemDropper", Blocks.itemDropper);
-		addStandardRecipePage("bigbutton", Blocks.bigButton);
-		addStandardRecipePage("autoanvil", Blocks.autoAnvil);
-		addStandardRecipePage("autoenchantmenttable", Blocks.autoEnchantmentTable);
-		addStandardRecipePage("sponge", Blocks.sponge);
-		addStandardRecipePage("ropeladder", Blocks.ropeLadder);
-		addStandardRecipePage("village_highlighter", Blocks.villageHighlighter);
-		addStandardRecipePage("xpbottler", Blocks.xpBottler);
-		addStandardRecipePage("xpdrain", Blocks.xpDrain);
-		addStandardRecipePage("luggage", Items.luggage);
-		addStandardRecipePage("sonicglasses", Items.sonicGlasses);
-		addStandardRecipePage("hangglider", Items.hangGlider);
-		addStandardRecipePage("cursor", Items.cursor);
-		addStandardRecipePage("cartographer", Items.cartographer);
-		addStandardRecipePage("golden_eye", Items.goldenEye);
-		addStandardRecipePage("sleepingbag", Items.sleepingBag);
-		addStandardRecipePage("tasty_clay", Items.tastyClay);
-		addStandardRecipePage("paintbrush", Items.paintBrush);
-		addStandardRecipePage("squeegee", Items.squeegee);
-		addStandardRecipePage("drawingtable", Blocks.drawingTable);
-		addStandardRecipePage("slimalyzer", Items.slimalyzer);
+		book.enablePages();
 
-		for (BaseComponent page : pages) {
-			page.setEnabled(false);
-		}
-
-		pageLeft = pages.get(0);
-		pageRight = pages.get(1);
-
-	}
-
-	private boolean addStandardRecipePage(String name, Object item) {
-		ItemStack stack = null;
-		String type = "";
-		if (item instanceof ItemStack) {
-			stack = (ItemStack)item;
-			type = (stack.getItem() instanceof ItemBlock)? "tile" : "item";
-		}
-		if (item instanceof Item) {
-			stack = new ItemStack((Item)item);
-			type = "item";
-		} else if (item instanceof Block) {
-			stack = new ItemStack((Block)item);
-			type = "tile";
-		}
-		if (stack != null) {
-			String fullName = String.format("%s.openblocks.%s.name", type, name);
-			String description = String.format("%s.openblocks.%s.description", type, name);
-			String video = String.format("%s.openblocks.%s.video", type, name);
-			pages.add(new StandardRecipePage(fullName, description, video, stack));
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
 	}
 
 	@Override
 	protected void mouseClicked(int x, int y, int button) {
 		super.mouseClicked(x, y, button);
-		if (pageLeft != null) pageLeft.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
-		if (pageRight != null) pageRight.mouseClicked(x - centerX, y - this.guiTop, button);
+		book.mouseClicked(x - this.guiLeft, y - this.guiTop, button);
+	}
 
-		if (index > 0 && x > guiLeft && x < guiLeft + 30 && y > guiTop + 150 && y < guiTop + 180) {
-			index -= 2;
-		} else if (index < pages.size() - 2 && x > centerX + 181 && x < centerX + 211 && y > guiTop + 150 && y < guiTop + 180) {
-			index += 2;
-		}
+	@Override
+	protected void mouseMovedOrUp(int x, int y, int button) {
+		super.mouseMovedOrUp(x, y, button);
+		book.mouseMovedOrUp(x - this.guiLeft, y - this.guiTop, button);
+	}
 
-		pageLeft = pages.get(index);
-		pageRight = index + 1 < pages.size()? pages.get(index + 1) : null;
+	@Override
+	protected void mouseClickMove(int mouseX, int mouseY, int button, long time) {
+		super.mouseClickMove(mouseX, mouseY, button, time);
+		book.mouseClickMove(mouseX - this.guiLeft, mouseY - this.guiTop, button, time);
+	}
 
+	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
 	}
 
 	@Override
@@ -146,20 +95,27 @@ public class GuiInfoBook extends GuiScreen {
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float par3) {
+		super.drawScreen(mouseX, mouseY, par3);
 		centerX = this.width / 2;
 		guiLeft = centerX - 211;
 		guiTop = (height - 200) / 2;
 
-		imgLeftBackground.render(this.mc, guiLeft, guiTop, mouseX - guiLeft, mouseY - guiTop);
-		imgRightBackground.render(this.mc, centerX, guiTop, mouseX - centerX, mouseY - guiTop);
-		if (pageLeft != null) {
-			pageLeft.setEnabled(true);
-			pageLeft.render(this.mc, guiLeft, guiTop, mouseX - guiLeft, mouseY - guiTop);
-		}
-		if (pageRight != null) {
-			pageRight.setEnabled(true);
-			pageRight.render(this.mc, centerX, guiTop, mouseX - centerX, mouseY - guiTop);
-		}
+		GL11.glPushMatrix();
+		book.render(this.mc, guiLeft, guiTop, mouseX - this.guiLeft, mouseY - this.guiTop);
+		GL11.glPopMatrix();
+
+		// second pass
+		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		RenderHelper.disableStandardItemLighting();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glPushMatrix();
+		book.renderOverlay(this.mc, guiLeft, guiTop, mouseX - this.guiLeft, mouseY - this.guiTop);
+		GL11.glPopMatrix();
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		RenderHelper.enableStandardItemLighting();
 	}
 
 }
