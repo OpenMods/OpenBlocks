@@ -109,7 +109,8 @@ public class GuiInfoBook extends GuiScreen {
 		if (stack != null) {
 			String fullName = String.format("%s.openblocks.%s.name", type, name);
 			String description = String.format("%s.openblocks.%s.description", type, name);
-			pages.add(new StandardRecipePage(fullName, description, stack));
+			String video = String.format("%s.openblocks.%s.video", type, name);
+			pages.add(new StandardRecipePage(fullName, description, video, stack));
 			return true;
 		}
 		return false;
@@ -137,6 +138,14 @@ public class GuiInfoBook extends GuiScreen {
 
 	}
 
+	@Override
+	public void confirmClicked(boolean result, int action) {
+		if (action == 0 && result) {
+			GuiComponentYouTube.openURI(GuiComponentYouTube.youtubeUrl);
+		}
+		this.mc.displayGuiScreen(this);
+	}
+	
 	public void drawScreen(int mouseX, int mouseY, float par3) {
 
 		centerX = this.width / 2;

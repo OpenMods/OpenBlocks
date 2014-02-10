@@ -31,11 +31,16 @@ public class StandardRecipePage extends BaseComponent {
 	private GuiComponentLabel lblDescription;
 	private GuiComponentLabel lblTitle;
 
-	public StandardRecipePage(String title, String description, ItemStack resultingItem) {
+	public StandardRecipePage(String title, String description, String videoLink, ItemStack resultingItem) {
 		super(0, 0);
 
 		String translatedTitle = StatCollector.translateToLocal(title);
 		String translatedDescription = StatCollector.translateToLocal(description).replaceAll("\\\\n", "\n");
+		String translatedLink = StatCollector.translateToLocal(videoLink);
+
+		if (videoLink != "" && !videoLink.equals(translatedLink)) {
+			addComponent(new GuiComponentYouTube(28, 150, translatedLink));
+		}
 		
 		lblTitle = new GuiComponentLabel((getWidth() - Minecraft.getMinecraft().fontRenderer.getStringWidth(translatedTitle)) / 2, 12, translatedTitle);
 		lblDescription = new GuiComponentLabel(27, 100, 340, 1000, translatedDescription);
@@ -70,9 +75,11 @@ public class StandardRecipePage extends BaseComponent {
 							if (obj instanceof ItemStack) {
 								recipeItems[i] = (ItemStack)obj;
 							} else if (obj instanceof ArrayList) {
-								System.out.println("arraylist");
+								ArrayList list = (ArrayList) obj;
+								if (list.size() > 0) {
+									recipeItems[i] = (ItemStack) list.get(0);
+								}
 							} else {
-								System.out.println(obj);
 							}
 						}
 					}
