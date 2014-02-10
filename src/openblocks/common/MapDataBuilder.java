@@ -44,6 +44,8 @@ public class MapDataBuilder {
 
 			if (block.blockMaterial.materialMapColor.colorIndex == 0) return null;
 
+			if (!MapDataManager.instance.isBlockTransparent(block)) return null;
+
 			return block;
 		}
 

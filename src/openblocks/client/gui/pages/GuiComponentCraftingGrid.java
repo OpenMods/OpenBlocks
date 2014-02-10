@@ -71,7 +71,7 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
-		//GL11.glDisable(GL11.GL_LIGHTING);
+		// GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		int width = 0;
 
@@ -111,7 +111,7 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 
 		this.zLevel = 0.0F;
 		itemRenderer.zLevel = 0.0F;
-		//GL11.glEnable(GL11.GL_LIGHTING);
+		// GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		RenderHelper.enableStandardItemLighting();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);

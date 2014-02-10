@@ -7,21 +7,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
+import openblocks.Config;
 import openblocks.events.EventTypes;
 import openmods.Log;
+import openmods.config.ConfigurationChange;
 import openmods.network.EventPacket;
 import openmods.network.IEventPacketType;
 import openmods.utils.ByteUtils;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MapDataManager {
 
@@ -97,6 +102,8 @@ public class MapDataManager {
 	}
 
 	public final static MapDataManager instance = new MapDataManager();
+
+	private Set<Block> blockBlacklist;
 
 	private Set<Integer> mapsToUpdate = Sets.newHashSet();
 
@@ -196,5 +203,43 @@ public class MapDataManager {
 			HeightMapData stub = new HeightMapData(mapId, true);
 			world.setItemData(stub.mapName, stub);
 		}
+	}
+
+	private Set<Block> getBlacklist() {
+		if (blockBlacklist == null) {
+			blockBlacklist = Sets.newIdentityHashSet();
+			for (String entry : Config.mapBlacklist) {
+				try {
+					String[] parts = entry.split(":");
+					Preconditions.checkState(parts.length == 2);
+					String modId = parts[0];
+					String blockName = parts[1];
+
+					Block block = null;
+					if ("id".equalsIgnoreCase(modId)) {
+						int blockId = Integer.parseInt(blockName);
+						block = Block.blocksList[blockId];
+					} else {
+						block = GameRegistry.findBlock(modId, blockName);
+					}
+
+					if (block != null) blockBlacklist.add(block);
+					else Log.warn("Can't find block %s", entry);
+				} catch (Throwable t) {
+					Log.warn(t, "Invalid entry in map blacklist: %s", entry);
+				}
+			}
+		}
+
+		return blockBlacklist;
+	}
+
+	@ForgeSubscribe
+	public void onReconfig(ConfigurationChange.Post evt) {
+		if ("cartographer".equals(evt.category) && "blockBlacklist".equals(evt.name)) blockBlacklist = null;
+	}
+
+	public boolean isBlockTransparent(Block block) {
+		return getBlacklist().contains(block);
 	}
 }

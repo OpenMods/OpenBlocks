@@ -318,6 +318,10 @@ public class Config {
 			// "http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
 			};
 
+	@OnLineModifiable
+	@ConfigProperty(category = "cartographer", name = "blockBlacklist", comment = "List of blocks that should be invisible to cartographer. Example: id:3,  OpenBlocks:openblocks_radio (case sensitive)")
+	public static String[] mapBlacklist = new String[] {};
+
 	@ConfigProperty(category = "radio", name = "enableChestLoot", comment = "Add tuned crystals as loot in chests")
 	public static boolean radioChests = true;
 
