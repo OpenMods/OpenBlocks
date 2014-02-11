@@ -236,7 +236,7 @@ public class MapDataManager {
 
 	@ForgeSubscribe
 	public void onReconfig(ConfigurationChange.Post evt) {
-		if ("cartographer".equals(evt.category) && "blockBlacklist".equals(evt.name)) blockBlacklist = null;
+		if (evt.check("cartographer", "blockBlacklist")) blockBlacklist = null;
 	}
 
 	public boolean isBlockTransparent(Block block) {

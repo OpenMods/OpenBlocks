@@ -308,6 +308,7 @@ public class Config {
 	@ConfigProperty(category = "cursor", name = "cursorMaxDamage", comment = "Amount of damage a cursor can take")
 	public static int cursorMaxDamage = 128;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "additional", name = "disableMobNames", comment = "List any mob names you want disabled on the server")
 	public static String[] disableMobNames = new String[0];
 

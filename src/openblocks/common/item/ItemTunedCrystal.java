@@ -42,9 +42,7 @@ public class ItemTunedCrystal extends Item {
 
 	@ForgeSubscribe
 	public void onReconfiguration(ConfigurationChange.Post evt) {
-		if ("radio".equals(evt.category) && "radioStations".equals(evt.name)) {
-			predefinedStations = null;
-		}
+		if (evt.check("radio", "radioStations")) predefinedStations = null;
 	}
 
 	public List<ItemStack> getPredefinedStations() {
