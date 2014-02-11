@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.StatCollector;
 import openmods.gui.component.BaseComponent;
 import openmods.gui.component.GuiComponentLabel;
+import openmods.utils.StringUtils;
 
 public class CreditsPage extends BlankPage {
 
@@ -13,7 +14,7 @@ public class CreditsPage extends BlankPage {
 	public CreditsPage() {
 		
 		String translatedTitle = StatCollector.translateToLocal("openblocks.gui.credits_title");
-		String translatedCredits = StatCollector.translateToLocal("openblocks.gui.credits").replaceAll("\\\\n", "\n");
+		String translatedCredits = StringUtils.format(StatCollector.translateToLocal("openblocks.gui.credits"));
 		
 		int x = (getWidth() - Minecraft.getMinecraft().fontRenderer.getStringWidth(translatedTitle)) / 2;
 		lblTitle = new GuiComponentLabel(x, 12, translatedTitle);
