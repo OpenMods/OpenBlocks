@@ -4,7 +4,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
-import openblocks.client.gui.pages.*;
+import openblocks.client.gui.pages.CreditsPage;
+import openblocks.client.gui.pages.IntroPage;
 import openmods.gui.component.GuiComponentBook;
 import openmods.gui.component.GuiComponentYouTube;
 
@@ -18,12 +19,12 @@ public class GuiInfoBook extends GuiScreen {
 	private int guiTop;
 
 	private GuiComponentBook book;
-
+	
 	public GuiInfoBook() {
 
 		book = new GuiComponentBook();
-
-		book.addPage(new BlankPage());
+		
+		book.addPage(new CreditsPage());
 		book.addPage(new IntroPage());
 		book.addStandardRecipePage("openblocks", "elevator", Blocks.elevator);
 		book.addStandardRecipePage("openblocks", "sprinkler", Blocks.sprinkler);
