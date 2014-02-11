@@ -25,12 +25,6 @@ public class ItemRendererTank implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glTranslated(-0.5, -0.5, -0.5);
-		if (type != ItemRenderType.INVENTORY) {
-			GL11.glTranslated(0, 0.5, 0);
-		}
-
 		if (item.hasTagCompound() && item.getTagCompound().hasKey("tank")) {
 			((SyncableTank)teTank.getTank()).readFromNBT(item.getTagCompound().getCompoundTag("tank"));
 		} else {
