@@ -21,7 +21,7 @@ public class EntityEventHandler {
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 
-		if (event.entity != null
+		if (Config.disableMobNames.length > 0 && event.entity != null
 				&& EntityList.classToStringMapping.containsKey(event.entity.getClass())) {
 			String livingName = (String)EntityList.classToStringMapping.get(event.entity.getClass());
 
