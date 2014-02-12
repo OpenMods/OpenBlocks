@@ -183,6 +183,9 @@ item.openblocks.luggage.description=Luggage is your new friend. He'll follow you
 item.openblocks.sonicglasses.name=Sonic Glasses
 item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear!
 
+item.openblocks.squeegee.name=Squeegee
+item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
+
 item.openblocks.crayon.name=Magic Crayon
 item.openblocks.pencil.name=Magic Pencil
 item.openblocks.glasses.pencil.name=Pencil Glasses
@@ -207,7 +210,6 @@ item.openblocks.map_controller.name=Map Controller Module
 item.openblocks.map_memory.name=Map Memory Module
 item.openblocks.cartographer.name=Cartographer
 item.openblocks.assistant_base.name=Assistant's base
-item.openblocks.squeegee.name=Squeegee
 item.openblocks.unprepared_stencil.name=Unprepared Stencil
 item.openblocks.sketching_pencil.name=Sketching Pencil
 item.openblocks.tasty_clay.name=Tasty Clay
