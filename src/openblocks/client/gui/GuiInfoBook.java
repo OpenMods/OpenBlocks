@@ -32,7 +32,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 	public GuiInfoBook() {
 
 		book = new GuiComponentBook();
-		BlankPage contentsPage = new TitledPage("openblocks.gui.welcome", "openblocks.gui.welcome_intro");
+		BlankPage contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 		
 		lblBlocks = new GuiComponentLabel(27, 90, "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
 		lblBlocks.addListener(this);
@@ -48,7 +48,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		
 		book.addPage(new BlankPage());
 		book.addPage(new IntroPage());
-		book.addPage(new TitledPage("openblocks.gui.credits_title", "openblocks.gui.credits"));
+		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 		book.addPage(contentsPage);
 		blocksIndex = book.getNumberOfPages();
 		book.addPage(new BlankPage());
@@ -102,7 +102,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		}
 		book.addPage(new BlankPage());
 		book.addPage(new SectionPage("openblocks.gui.misc"));
-		book.addPage(new BlankPage());
+		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
 		book.addPage(new BlankPage());
 		book.addPage(new BlankPage());
 		book.addPage(new BlankPage());
