@@ -2,7 +2,6 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +11,6 @@ import openmods.utils.BlockUtils;
 import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 
@@ -39,28 +37,13 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 					// yeah we don't care about fonts, but we do care that the
 					// renderManager is available
 					if (renderer != null && renderer.getFontRendererFromRenderManager() != null) {
-						if (renderWithLighting) {
-							GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-							RenderUtils.enableLightmap();
-						}
-
+						GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+						if (renderWithLighting) RenderUtils.enableLightmap();
 						renderer.doRender(entity, 0, 0, 0, 0, 0);
+						GL11.glPopAttrib();
 					}
 				}
 				entity.worldObj = null;
-
-				/*
-				 * Fix render issues caused by rendering an entity. Yes that was
-				 * a pain to fix :P
-				 * - NC
-				 */
-				if (renderWithLighting) {
-					GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-					RenderUtils.disableLightmap();
-				}
-
-				/* <EOF> End of Fix */
-				bindTexture(TextureMap.locationBlocksTexture);
 				GL11.glPopMatrix();
 
 			}
