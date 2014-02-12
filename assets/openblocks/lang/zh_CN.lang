@@ -22,7 +22,10 @@ openblocks.gui.itemdropper=物品投掷器
 openblocks.gui.blockplacer=方块放置机
 openblocks.gui.paintmixer=调色器
 openblocks.gui.drawingtable=绘图桌
+openblocks.gui.credits_title=制作组
+openblocks.gui.credits=*Boq, Mikee 以及 NeverCast* - OpenBlocks主开发者 (我们应该可以把自己添加到制作组里吧?)\n\n*SinZ 以及 Yoshi2* - OpenMods团队元老成员.\n\n*Vexatos 和 crafteverywhere* - 日常翻译人员.\n\n以及过去一年中所有其他对代码有贡献的人.\n\n*Direwolf20 和 ForgeCraft 的其他成员* - 感谢他们在我们发布前测试bug以及崩溃.\n\n以及制作介绍视频,直播视频和一开始就支持我们的朋友!
 
+openblocks.misc.url=链接: %s
 openblocks.misc.type=类型: %s
 openblocks.misc.uses=使用: %.2f
 openblocks.misc.color=颜色: %06X
@@ -37,41 +40,114 @@ openblocks.misc.mode.inverted_half_panel=反相半高面板
 openblocks.misc.mode.inverted_stairs=反相楼梯
 openblocks.misc.structure_pos=调试: 发现建筑物 %s 位于 (%d,%d,%d)
 openblocks.misc.locked=已锁定
+openblocks.misc.selected_cannon=选中加农炮以瞄准
+openblocks.misc.pointed_cannon=加农炮瞄准位置%s, %s, %s
+openblocks.misc.change_mode=切换为%s模式
+openblocks.misc.change_size=切换大小为%sx%sx%s
+
+openblocks.misc.shape.sphere=球体
+openblocks.misc.shape.cylinder=圆柱
+openblocks.misc.shape.cuboid=立方
+openblocks.misc.shape.dome=圆锥
+openblocks.misc.shape.triangle=三角
+openblocks.misc.shape.pentagon=五角
+openblocks.misc.shape.hexagon=六边
+openblocks.misc.shape.octagon=八角
 
 openblocks.turtle.magnet=磁铁
 
 tile.openblocks.elevator.name=电梯
+tile.openblocks.elevator.description=将一个电梯方块放置在另外一个电梯方块上方三格或更高,之间无方块阻隔。则当你在下方电梯方块上跳跃时会被传送至上方电梯方块上，在上方电梯上潜行时则会被传送到下方电梯上.手持颜料右击电梯可以为其染色,只有相同颜色的电梯才能相互传送.
+tile.openblocks.elevator.video=http://www.youtube.com/watch?v=Ksm73FltDHo
+
 tile.openblocks.heal.name=治愈器
+tile.openblocks.heal.description=治愈器为创造模式才能用的方块,会为玩家加持轻微的治愈效果buff.
+tile.openblocks.heal.video=
+
 tile.openblocks.guide.name=建筑指导机
+tile.openblocks.guide.description=建筑指导器用幽灵方块显示出不同形状大小的建筑轮廓来指导我们规划房间.\n潜行状态下点击它可以切换显示的形状,直接点击不同的面可以调整其对应方向上的大小.\n在创造模式时,如果将黑曜石方块放置于其上方,再拿着任意方块敲击建筑指导器,则会用该方块自动搭建出显示的形状.
+tile.openblocks.guide.video=http://www.youtube.com/watch?v=ZpaSkHMuwwc
+
 tile.openblocks.ladder.name=梯子活板门
+tile.openblocks.ladder.description=梯子活板门解决了从梯子上端的活板门中跳出来时经常遇到的烦心问题.梯子活板门是一个翻开时可以当作梯子爬的活板门.
+tile.openblocks.ladder.video=http://www.youtube.com/watch?v=CXWAz2E7M9o
+
 tile.openblocks.tank.name=蓄水槽
+tile.openblocks.tank.description=蓄水槽容纳液体.比邻而放的蓄水槽会变成一个整体.你可以使用水桶来填装蓄水槽.如果蓄水槽装着液态经验,空手点击就能获得一些经验.蓄水槽掉落成物品状态时仍会保留其容纳的液体.
+tile.openblocks.tank.video=http://www.youtube.com/watch?v=8CFQWyxUxYA
+
 tile.openblocks.target.name=靶子
+tile.openblocks.target.description=玩家精准射中会发出强红石信号.而接收红石信号则会立起来.
+
 tile.openblocks.grave.name=墓碑
+
 tile.openblocks.flag.name=旗子
-tile.openblocks.trophy.name=纪念雕像
+tile.openblocks.flag.description=用于装饰,或者洞穴冒险的归途标记.旗子会指向你放置时的方向。或者你也可以把它挂在墙上.如果拿着旗子按住潜行来点击则会切换其颜色.
+
 tile.openblocks.beartrap.name=捕兽夹
+tile.openblocks.beartrap.description=放置捕兽夹,点击可以将其打开,当生物走过时会被夹住,无法再动弹!
+
 tile.openblocks.sprinkler.name=洒水器
+tile.openblocks.sprinkler.description=洒水器会催费4格范围内的作物.将其放置在本模组提供的装满水的蓄水槽上方即可工作.你也可以添加骨粉使其催肥效率更高.\n也可以视为一个水源方块使用.
+
 tile.openblocks.vacuumhopper.name=虚空漏斗
+tile.openblocks.vacuumhopper.description=虚空漏斗会吸引附近的掉落物品以及经验球.你可以再设定栏里调整其输出方向.
+
 tile.openblocks.sponge.name=海绵
+tile.openblocks.sponge.description=这个海绵会替换掉原版的海绵.移除小范围的水或者岩浆的利器.在对付大面积的液体的时候请小心谨慎,因为它会开始变得相当混乱.
+
 tile.openblocks.cannon.name=传物加农炮
+tile.openblocks.cannon.name=当接收到红石信号时,加农炮会发射出依附它的物品栏中的物品.使用指针可以调整加农炮的弹道曲线.
+
 tile.openblocks.bigbutton.name=大型按钮
+tile.openblocks.bigbutton.description=可以放置在墙面上的大型按钮.如果空手时按住潜行键点击会打开一个一格物品栏,你可以放入物品来增加按钮按下持续的时间长度——1个物品增加1tick.
+
 tile.openblocks.fan.name=风扇
+tile.openblocks.fan.description=风扇会吹开正对方向上的玩家,生物和其他实体.
+
 tile.openblocks.xpbottler.name=经验装瓶器
+tile.openblocks.xpbottler.description=经验装盘器能够将液态经验装瓶变成附魔瓶.
+
 tile.openblocks.village_highlighter.name=村庄边界标记机
+tile.openblocks.village_highlighter.description=在村庄中放置村庄边界标记机并使其接收红石信号.它会显示出村庄的边界轮廓和铁傀儡的刷新区域.在判断两个临近村庄是否合并成了一个或制作铁傀儡农场时都很有用!
+
 tile.openblocks.path.name=铺路石
-tile.openblocks.autoanvil.name=自动型铁砧
+tile.openblocks.path.description=铺路石没啥特别的,只是看起来很不错!
+
 tile.openblocks.autoenchantmenttable.name=自动型附魔台
+tile.openblocks.autoenchantmenttable.description=自动附魔台类似原版附魔台,但它使用液态经验来驱动.在设定栏中可以设置物品和液态经验的输入方向.类似原版,书架也能对其附魔等级有加成作用.
+
 tile.openblocks.xpdrain.name=XP格栅板
+tile.openblocks.xpdrain.description=将其放置在本模组的蓄水槽上方并站立在上方.你的经验会被抽出来流入蓄水槽中,之后蓄水槽中的液态经验可以用于自动附魔台或者自动铁砧.
+
 tile.openblocks.ropeladder.name=绳梯
+tile.openblocks.ropeladder.description=当放置绳梯后,它会垂下来直到地面.
+
 tile.openblocks.donationStation.name=捐助站
+tile.openblocks.donationStation.description=喜爱某模组中的某方块或物品,以至于希望向模组开发者表示谢意?将它扔进捐助站,如果我们知道它的作者是谁,会显示其捐助页面的地址.
+
 tile.openblocks.blockbreaker.name=方块采掘机
+tile.openblocks.blockbreaker.description=接收到红石信号时会在正对方向采掘方块.
+
 tile.openblocks.blockPlacer.name=方块放置机
+tile.openblocks.blockPlacer.description=接收到红石信号时会在正对方向放置方块.
+
 tile.openblocks.itemDropper.name=物品投掷器
+tile.openblocks.itemDropper.description=类似原版投掷器,除了其投掷轨迹为直线外.
+
 tile.openblocks.canvas.name=画布
-tile.openblocks.canvasglass.name=透明画布
+tile.openblocks.canvas.description=适宜书写并绘画,欲详请看调色器.
+
 tile.openblocks.paintmixer.name=调色器
-tile.openblocks.paintcan.name=颜料罐
+tile.openblocks.paintmixer.description=调色器可以混调你希望的各种颜色!将牛奶或者已经有的颜料桶放入顶端格子中,然后丢入青色,品红色,黄色以及黑色颜料到其他4个格子中,点击混合!
+
 tile.openblocks.projector.name=高度图投影仪
+tile.openblocks.projector.description=
+
+tile.openblocks.autoanvil.name=自动型铁砧
+tile.openblocks.trophy.name=纪念雕像
+tile.openblocks.canvasglass.name=透明画布
+tile.openblocks.paintcan.name=颜料罐
 tile.openblocks.drawingtable.name=绘图桌
 
 item.openblocks.hangglider.name=悬挂式滑翔机
