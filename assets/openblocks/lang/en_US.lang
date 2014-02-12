@@ -25,7 +25,7 @@ openblocks.gui.credits_title=Credits
 openblocks.gui.credits=*Boq, Mikee and NeverCast* - Leading developers of OpenBlocks (are we allowed to credit ourselves?)\n\n*SinZ and Yoshi2* - members of the OpenMods team from the start.\n\n*Vexatos and crafteverywhere* - Regularly translating the mods.\n\nEveryone else who has contributed to the code over the past year.\n\n*Direwolf20 and the rest of ForgeCraft* - for putting up with the bugs and crashes before we release.\n\nEveryone who's done spotlights, lets plays and generally supported the mod since we started!
 openblocks.gui.blocks=Blocks
 openblocks.gui.items=Items
-openblocks.gui.tweaks=Tweaks
+openblocks.gui.misc=Misc
 openblocks.gui.welcome=Welcome!
 openblocks.gui.welcome_intro=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more!
 

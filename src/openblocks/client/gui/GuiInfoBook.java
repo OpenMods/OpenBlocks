@@ -23,10 +23,10 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 	private GuiComponentBook book;
 	private GuiComponentLabel lblBlocks;
 	private GuiComponentLabel lblItems;
-	private GuiComponentLabel lblTweaks;
+	private GuiComponentLabel lblMisc;
 	
 	private int itemsIndex = 0;
-	private int tweaksIndex = 0;
+	private int miscIndex = 0;
 	private int blocksIndex = 0;
 	
 	public GuiInfoBook() {
@@ -38,13 +38,13 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		lblBlocks.addListener(this);
 		lblItems = new GuiComponentLabel(27, 105, "- " + StatCollector.translateToLocal("openblocks.gui.items"));
 		lblItems.addListener(this);
-		lblTweaks = new GuiComponentLabel(27, 120, "- " + StatCollector.translateToLocal("openblocks.gui.tweaks"));
-		lblTweaks.addListener(this);
+		lblMisc = new GuiComponentLabel(27, 120, "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
+		lblMisc.addListener(this);
 
 
 		contentsPage.addComponent(lblBlocks);
 		contentsPage.addComponent(lblItems);
-		contentsPage.addComponent(lblTweaks);
+		contentsPage.addComponent(lblMisc);
 		
 		book.addPage(new BlankPage());
 		book.addPage(new IntroPage());
@@ -95,13 +95,13 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "squeegee", Items.squeegee);
 		book.addStandardRecipePage("openblocks", "slimalyzer", Items.slimalyzer);
 
-		tweaksIndex = book.getNumberOfPages();
-		if (tweaksIndex % 2 == 1) {
+		miscIndex = book.getNumberOfPages();
+		if (miscIndex % 2 == 1) {
 			book.addPage(new BlankPage());
-			tweaksIndex++;
+			miscIndex++;
 		}
 		book.addPage(new BlankPage());
-		book.addPage(new SectionPage("openblocks.gui.tweaks"));
+		book.addPage(new SectionPage("openblocks.gui.misc"));
 		book.addPage(new BlankPage());
 		book.addPage(new BlankPage());
 		book.addPage(new BlankPage());
@@ -172,8 +172,8 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 			book.gotoIndex(blocksIndex);
 		} else if (component.equals(lblItems)) {
 			book.gotoIndex(itemsIndex);
-		} else if (component.equals(lblTweaks)) {
-			book.gotoIndex(tweaksIndex);
+		} else if (component.equals(lblMisc)) {
+			book.gotoIndex(miscIndex);
 		}
 	}
 
