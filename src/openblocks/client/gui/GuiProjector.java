@@ -9,7 +9,6 @@ import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
-import openmods.gui.component.IComponentListener;
 import openmods.gui.misc.Trackball.TrackballWrapper;
 import openmods.utils.MathUtils;
 import openmods.utils.render.FakeIcon;

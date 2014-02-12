@@ -2,7 +2,6 @@ package openblocks.client.gui.pages;
 
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
-import openmods.gui.component.BaseComponent;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
 
@@ -16,5 +15,5 @@ public class IntroPage extends BlankPage {
 		image = new GuiComponentSprite(52, 48, iconImage, texture);
 		addComponent(image);
 	}
-	
+
 }

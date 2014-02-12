@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.common.ElevatorBlockRules;
 import openblocks.events.ElevatorActionEvent;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
@@ -24,10 +25,6 @@ public class TileEntityElevator extends OpenTileEntity {
 
 		final AxisAlignedBB aabb = block.getCollisionBoundingBoxFromPool(worldObj, x, y, z);
 		return aabb == null || aabb.getAverageEdgeLength() < 0.7;
-	}
-
-	private static boolean isPassable(int blockId) {
-		return Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId);
 	}
 
 	private int findLevel(ForgeDirection direction) {
@@ -54,7 +51,19 @@ public class TileEntityElevator extends OpenTileEntity {
 				}
 			}
 
-			if (!isPassable(blockId) && (++blocksInTheWay > Config.elevatorMaxBlockPassCount)) break;
+			Block block = Block.blocksList[blockId];
+			ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
+			switch (action) {
+				case ABORT:
+					return -1;
+				case IGNORE:
+					continue;
+				case INCREMENT:
+				default:
+					break;
+			}
+
+			if (++blocksInTheWay > Config.elevatorMaxBlockPassCount) break;
 		}
 
 		return -1;

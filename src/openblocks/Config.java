@@ -223,6 +223,10 @@ public class Config {
 	public static int elevatorMaxBlockPassCount = 4;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "dropblock", name = "specialBlockRules", comment = "Defines blocks that are handled specially by elevators. Entries are in form <modId>:<blockName>:<action> or id:<blockId>:<action>. Possible actions: abort (elevator can't pass block), increment (counts for elevatorMaxBlockPassCount limit) and ignore")
+	public static String[] elevatorRules = new String[0];
+
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "elevatorDrainsXP", comment = "Does the elevator drain player XP when used?")
 	public static boolean elevatorDrainsXP = true;
 

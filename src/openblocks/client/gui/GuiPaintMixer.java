@@ -5,7 +5,6 @@ import openblocks.common.tileentity.TileEntityPaintMixer;
 import openmods.Log;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
-import openmods.gui.component.IComponentListener;
 
 import org.lwjgl.input.Keyboard;
 

@@ -347,6 +347,10 @@ public class OpenBlocks {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
 		}
 
+		if (Config.blockElevatorId > 0) {
+			MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
+		}
+
 		proxy.preInit();
 	}
 

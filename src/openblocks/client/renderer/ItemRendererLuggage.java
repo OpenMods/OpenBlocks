@@ -29,7 +29,7 @@ public class ItemRendererLuggage implements IItemRenderer {
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		if (Minecraft.getMinecraft().theWorld != null) {
 			GL11.glPushMatrix();
-			
+
 			luggage.worldObj = Minecraft.getMinecraft().theWorld;
 
 			GL11.glTranslatef(0.5f, 0, 0.5f);

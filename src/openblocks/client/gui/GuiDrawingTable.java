@@ -5,7 +5,6 @@ import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
-import openmods.gui.component.IComponentListener;
 import openmods.utils.render.FakeIcon;
 
 public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
