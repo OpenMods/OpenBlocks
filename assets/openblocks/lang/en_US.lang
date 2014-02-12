@@ -104,7 +104,7 @@ tile.openblocks.ropeladder.name=Rope Ladder
 tile.openblocks.ropeladder.description=When you place a rope ladder it'll roll out all the way to the ground.
 
 tile.openblocks.sprinkler.name=Sprinkler
-tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simpily place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block!
+tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simply place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block!
 
 tile.openblocks.paintmixer.name=Paint Mixer
 tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
