@@ -34,6 +34,10 @@ openblocks.gui.credits.content=*Boq, Mikee and NeverCast* - Leading developers o
 openblocks.gui.config.title=Easy Config Editing
 openblocks.gui.config.content=OpenMods allow for both client and server config options to be changed from chat commands. Some don't even require restart!\n\nServer config settings can be changed using '*/om_config_s*' (op needed) and client config settings can be changed using '*/om_config_c*'\n\nFor example:\n\n*/om_config_s set OpenBlocks dropblock elevatorDrainsXP false*\n*/om_config_s save*\n\nFor a full list of commands type: */help om_config_s* or */help om_config_c*
 
+openblocks.gui.bkey.title=The Infamous 'B' Key
+openblocks.gui.bkey.content=The 'B' key is a very special key in OpenBlocks.\n\nEnabling the 'weAreSeriousPeople' config option in the 'tomfoolery' category of both the client and server config files will give you your very own digestive system.\n\nTry eating some of that tasty clay and press 'B' to digest!
+
+
 openblocks.misc.url=URL: %s
 openblocks.misc.type=Type: %s
 openblocks.misc.uses=Uses: %.2f
