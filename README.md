@@ -6,10 +6,25 @@ An open source random collection of blocks and miscellaneous cool stuff
 Current Version
 -
 
-**[v1.2.2](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.2.jar) for Minecraft 1.6.x**
+**[v1.2.4](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.4.jar) for Minecraft 1.6.x**
+You'll also need [OpenModsLib](https://dl.dropboxusercontent.com/u/4295615/OpenModsLib-0.1.jar).
 
 For stable release downloads, click [here](http://www.openmods.info/openblocks/downloads).  
 For snapshot versions, check the [Jenkins](http://www.openmods.info:8080/).
+
+FREQUENTLY ASKED QUESTIONS:
+-----------
+* "I dropped OpenBlocks into the mod folder and I **can't get it to work**!"
+  * OpenModsLib is required for versions past v.1.2.2.
+* "I want to **disable** feature X!"
+  * Setting any block or item's ID to 0 will disable it.
+* "How come my **elevators don't always work?**"
+  * Recently, we made a change to the way elevators work-- they now require XP. You can disable this change in the configs.
+* "About these automatic anvils and enchantment t--"
+  * They require bookshelves, just like their mundane counterparts.
+* "How can I **contact** the OpenMods team?"
+  * We're often on EsperNet IRC at #OpenMods, but you can also open up a new issue on the GitHub or send a message to us on reddit.
+
 
 What does it contain?
 -----------
@@ -18,7 +33,7 @@ What does it contain?
 * A combination ladder and trapdoor, also known as the **Jaded Ladder**
 * A creative-only **healer** block that slowly replenishes your health and food when you stand on it.
 * A **guide block** to assist in various constructions
-* Colorable **elevator blocks** to quickly travel between floors
+* Colorable **elevator blocks** to quickly travel between floors. Requires XP by default.
 * **Light boxes** to display your maps on the wall, ceiling or floor
 * Archery **targets** for a shooting range
 * ~~**Torch arrows!**~~ *No longer implemented*
@@ -47,13 +62,14 @@ What does it contain?
 * **XP Drain**-- stand on one attached to a tank, and your XP will be drained and turned into a liquid state
 * The **Auto Anvil** and **Auto Enchantment Table**, imported fresh from OpenXP. Uses liquid XP to perform their function automatically.
 * The **Sleeping Bag**. Finally, a way to sleep on the go without resetting your spawn point!
-* The **Rope Ladder**—- a magic ladder that doesn’t need support to hold itself up and adjusts its own size to match the ground. Single use.
-* The **Donation Station**—- tells you which mod a block or item comes from, and lets you support the modder that created it
+* The **Rope Ladder**-- a magic ladder that doesn’t need support to hold itself up and adjusts its own size to match the ground. Single use.
+* The **Donation Station**-- tells you which mod a block or item comes from, and lets you support the modder that created it
 * A painting/staining system for blocks, including: // m1.6.x, v.1.2.2
   * A **Paint Mixer**-- makes paint using dyes and milk. Millions of colors possible. 
   * A paint **brush** to paint white **canvas**es and other blocks.
   * **Stencils** that are made using the **Drawing Table** to paint specific areas of blocks
   * A **Squeegee** that liquefies paint to clean it off of blocks
+* Listen to music among other things with the **radio**!
 * Exciting graphics and much more to come.
 
 Compiling
