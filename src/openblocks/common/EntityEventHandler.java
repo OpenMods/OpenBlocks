@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import openblocks.Config;
+import openblocks.ModInfo;
 import openblocks.OpenBlocks;
 import openmods.Log;
 import openmods.config.ConfigurationChange;
@@ -22,6 +23,7 @@ public class EntityEventHandler {
 
 	public static final String OPENBLOCKS_PERSIST_TAG = "OpenBlocks";
 	public static final String GIVEN_MANUAL_TAG = "givenManual";
+	public static final String LATEST_CHANGELOG_TAG = "latestChangelog";
 
 	private Set<Class<?>> entityBlacklist;
 
@@ -71,21 +73,25 @@ public class EntityEventHandler {
 		 * If the player hasn't been given a manual, we'll give him one! (or
 		 * throw it on the floor..)
 		 */
-		if (OpenBlocks.Items.infoBook != null && entity instanceof EntityPlayer) {
-
+		if (!event.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)entity;
-
 			NBTTagCompound persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
-
-			if (!persistTag.getBoolean(GIVEN_MANUAL_TAG)) {
-
+			System.out.println(persistTag);
+			boolean shouldGiveManual = OpenBlocks.Items.infoBook != null && !persistTag.getBoolean(GIVEN_MANUAL_TAG);
+			if (shouldGiveManual) {
 				ItemStack manual = new ItemStack(OpenBlocks.Items.infoBook);
-
 				if (!player.inventory.addItemStackToInventory(manual)) {
 					BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, manual);
 				}
-
 				persistTag.setBoolean(GIVEN_MANUAL_TAG, true);
+			}
+			boolean shouldGiveChangelog = OpenBlocks.changeLog != null && !persistTag.getString(LATEST_CHANGELOG_TAG).equals(ModInfo.VERSION);
+			if (shouldGiveChangelog) {
+				ItemStack changeLog = OpenBlocks.changeLog.copy();
+				if (!player.inventory.addItemStackToInventory(changeLog)) {
+					BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, changeLog);
+				}
+				persistTag.setString(LATEST_CHANGELOG_TAG, ModInfo.VERSION);
 			}
 		}
 	}

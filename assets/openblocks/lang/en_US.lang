@@ -37,7 +37,7 @@ openblocks.gui.config.content=OpenMods allow for both client and server config o
 openblocks.gui.bkey.title=The Infamous 'B' Key
 openblocks.gui.bkey.content=The 'B' key is a very special key in OpenBlocks.\n\nEnabling the 'weAreSeriousPeople' config option in the 'tomfoolery' category of both the client and server config files will give you your very own digestive system.\n\nTry eating some of that tasty clay and press 'B' to digest!
 
-
+openblocks.changelog.title=What's new in OpenBlocks %s
 openblocks.misc.url=URL: %s
 openblocks.misc.type=Type: %s
 openblocks.misc.uses=Uses: %.2f

@@ -24,6 +24,7 @@ import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.rubbish.BrickManager;
+import openblocks.utils.ChangelogBuilder;
 import openmods.Mods;
 import openmods.OpenMods;
 import openmods.config.ConfigProcessing;
@@ -46,7 +47,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = "OpenBlocks", name = "OpenBlocks", version = "@VERSION@", dependencies = "required-after:OpenMods;after:OpenPeripheral")
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
 public class OpenBlocks {
 
@@ -59,10 +60,10 @@ public class OpenBlocks {
 	private static final int ENTITY_GOLDEN_EYE_ID = 707;
 	private static final int ENTITY_MAGNET_PLAYER_ID = 708;
 
-	@Instance(value = "OpenBlocks")
+	@Instance(value = ModInfo.ID)
 	public static OpenBlocks instance;
 
-	@SidedProxy(clientSide = "openblocks.client.ClientProxy", serverSide = "openblocks.common.ServerProxy")
+	@SidedProxy(clientSide = ModInfo.PROXY_CLIENT, serverSide = ModInfo.PROXY_SERVER)
 	public static IOpenBlocksProxy proxy;
 
 	public static class Blocks {
@@ -283,6 +284,8 @@ public class OpenBlocks {
 	public static final StatBase brickStat = (new StatBasic(70998, "stat.openblocks.bricksDropped")).registerStat();
 
 	public static Enchantment explosiveEnch;
+	
+	public static ItemStack changeLog;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
@@ -364,6 +367,7 @@ public class OpenBlocks {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
+		changeLog = ChangelogBuilder.createChangeLog();
 	}
 
 	@Mod.EventHandler
