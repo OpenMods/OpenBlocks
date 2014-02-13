@@ -560,6 +560,9 @@ public class Config {
 		if (itemSonicGlassesId > 0) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Item.helmetIron, 'o', Block.obsidian, 'i', Item.ingotIron));
+			ItemStack stack = new ItemStack(OpenBlocks.Items.sonicGlasses);
+			WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
+			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
@@ -612,6 +615,15 @@ public class Config {
 		if (itemPaintBrushId > 0) {
 			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
+			int[] colors = new int[] { 0xFF0000, 0x00FF00, 0x0000FF };
+			for (int color : colors) {
+				ItemStack stack = OpenBlocks.Items.paintBrush.createStackWithColor(color);
+				WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			}
 		}
 
 		if (itemStencilId > 0) {
@@ -677,6 +689,7 @@ public class Config {
 
 		if (itemInfoBookId > 0) {
 			OpenBlocks.Items.infoBook = new ItemInfoBook();
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.infoBook), Item.clay, Item.book));
 		}
 
 		if (explosiveEnchantmentId > 0) {

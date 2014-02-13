@@ -104,6 +104,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addPage(new SectionPage("openblocks.gui.misc"));
 		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
 		book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
+		book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
 		book.enablePages();
 
 	}
