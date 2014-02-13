@@ -158,12 +158,15 @@ tile.openblocks.xpbottler.name=XP Bottler
 tile.openblocks.xpbottler.description=The XP bottler will take XP juice and bottle it up into glass bottles to create bottles o' enchanting.
 
 tile.openblocks.autoanvil.name=Auto Anvil
+tile.openblocks.autoanvil.description=The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.\n\nUse the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted. Right click and drag the anvil in the tab to spin it around and select other sides!
+
+tile.openblocks.drawingtable.name=Drawing Table
+tile.openblocks.drawingtable.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want!
 
 tile.openblocks.grave.name=Grave
 tile.openblocks.trophy.name=Trophy
 tile.openblocks.canvasglass.name=Glass Canvas
 tile.openblocks.paintcan.name=Paint Can
-tile.openblocks.drawingtable.name=Drawing Table
 
 
 item.openblocks.cursor.name=Cursor
@@ -189,6 +192,13 @@ item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic G
 item.openblocks.squeegee.name=Squeegee
 item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
 
+item.openblocks.paintbrush.name=Paint Brush
+item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil!
+
+item.openblocks.unprepared_stencil.name=Unprepared Stencil
+item.openblocks.unprepared_stencil.description="What are these pesky stencils I keep finding in chests?"\n\nStencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
+
+item.openblocks.stencil.name=Stencil
 item.openblocks.crayon.name=Magic Crayon
 item.openblocks.pencil.name=Magic Pencil
 item.openblocks.glasses.pencil.name=Pencil Glasses
@@ -205,15 +215,12 @@ item.openblocks.miracle_magnet.name=§5Miracle Magnet§r
 
 item.openblocks.info_book.name=World Domination with OpenBlocks
 item.openblocks.xpbucket.name=XP Bucket
-item.openblocks.paintbrush.name=Paint Brush
-item.openblocks.stencil.name=Stencil
 item.openblocks.height_map.name=Height Map
 item.openblocks.empty_map.name=Empty Map
 item.openblocks.map_controller.name=Map Controller Module
 item.openblocks.map_memory.name=Map Memory Module
 item.openblocks.cartographer.name=Cartographer
 item.openblocks.assistant_base.name=Assistant's base
-item.openblocks.unprepared_stencil.name=Unprepared Stencil
 item.openblocks.sketching_pencil.name=Sketching Pencil
 item.openblocks.tasty_clay.name=Tasty Clay
 item.openblocks.golden_eye.name=Golden eye

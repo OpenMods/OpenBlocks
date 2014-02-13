@@ -8,6 +8,7 @@ import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.pages.*;
+import openblocks.common.item.MetasGeneric;
 import openmods.gui.component.*;
 import openmods.utils.render.FakeIcon;
 
@@ -59,7 +60,9 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "beartrap", Blocks.bearTrap);
 		book.addStandardRecipePage("openblocks", "guide", Blocks.guide);
 		book.addStandardRecipePage("openblocks", "canvas", Blocks.canvas);
+		/** leaving for boq
 		book.addStandardRecipePage("openblocks", "projector", Blocks.projector);
+		**/
 		book.addStandardRecipePage("openblocks", "vacuumhopper", Blocks.vacuumHopper);
 		book.addStandardRecipePage("openblocks", "tank", Blocks.tank);
 		book.addStandardRecipePage("openblocks", "path", Blocks.path);
@@ -87,10 +90,13 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "sonicglasses", Items.sonicGlasses);
 		book.addStandardRecipePage("openblocks", "hangglider", Items.hangGlider);
 		book.addStandardRecipePage("openblocks", "cursor", Items.cursor);
+		book.addStandardRecipePage("openblocks", "unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack());
+		book.addStandardRecipePage("openblocks", "sleepingbag", Items.sleepingBag);
+		/** leaving for boq
 		book.addStandardRecipePage("openblocks", "cartographer", Items.cartographer);
 		book.addStandardRecipePage("openblocks", "golden_eye", Items.goldenEye);
-		book.addStandardRecipePage("openblocks", "sleepingbag", Items.sleepingBag);
 		book.addStandardRecipePage("openblocks", "tasty_clay", Items.tastyClay);
+		**/
 		book.addStandardRecipePage("openblocks", "paintbrush", Items.paintBrush);
 		book.addStandardRecipePage("openblocks", "squeegee", Items.squeegee);
 		book.addStandardRecipePage("openblocks", "slimalyzer", Items.slimalyzer);
