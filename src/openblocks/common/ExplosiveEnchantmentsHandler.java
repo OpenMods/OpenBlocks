@@ -97,7 +97,9 @@ public class ExplosiveEnchantmentsHandler {
 	}
 
 	public static void createExplosionForEntity(Entity entity, float power, boolean isDestructive) {
-		entity.worldObj.createExplosion(entity, entity.posX, entity.boundingBox.minY, entity.posZ, power, isDestructive);
+		if (!entity.worldObj.isRemote) {
+			entity.worldObj.createExplosion(entity, entity.posX, entity.boundingBox.minY, entity.posZ, power, isDestructive);
+		}
 	}
 
 	private Map<Entity, JumpInfo> jumpBoosts = new MapMaker().weakKeys().makeMap();
