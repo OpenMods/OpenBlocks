@@ -18,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import openblocks.OpenBlocks;
+import openblocks.Config;
 import openmods.OpenMods;
 
 import com.google.common.collect.ImmutableSet;
