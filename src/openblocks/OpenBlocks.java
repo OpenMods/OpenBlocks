@@ -284,7 +284,7 @@ public class OpenBlocks {
 	public static final StatBase brickStat = (new StatBasic(70998, "stat.openblocks.bricksDropped")).registerStat();
 
 	public static Enchantment explosiveEnch;
-	
+
 	public static ItemStack changeLog;
 
 	@EventHandler

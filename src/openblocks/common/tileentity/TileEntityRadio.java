@@ -7,12 +7,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import openblocks.Config;
-import openblocks.client.radio.RadioRegistry;
-import openblocks.client.radio.StreamPlayer;
+import openblocks.client.radio.RadioManager;
 import openblocks.common.item.ItemTunedCrystal;
 import openmods.GenericInventory;
-import openmods.OpenMods;
 import openmods.api.*;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -28,8 +25,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 	private SyncableString url;
 	private SyncableBoolean isPowered;
-	private final StreamPlayer radioPlayer = new StreamPlayer();
-	private float currentVolume = 1f;
+	private String soundId;
 
 	@IncludeInterface(IInventory.class)
 	private final GenericInventory inventory = new GenericInventory("openblocks.radio", false, 1) {
@@ -42,7 +38,6 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	};
 
 	public TileEntityRadio() {
-		RadioRegistry.registerPlayer(radioPlayer);
 		inventory.addCallback(this);
 	}
 
@@ -73,29 +68,10 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		updateURL(inventory.getStackInSlot(0));
 	}
 
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
-		if (worldObj.isRemote) updateVolume();
-	}
-
-	protected void updateVolume() {
-		EntityPlayer clientPlayer = OpenMods.proxy.getThePlayer();
-		if (clientPlayer == null) return;
-
-		double dist = clientPlayer.getDistance(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-		float targetVolume = 1 - (float)Math.min(dist / Config.radioRadius, 1);
-
-		currentVolume = currentVolume + ((targetVolume - currentVolume) * 0.05f);
-
-		radioPlayer.setVolume(currentVolume);
-
-	}
-
 	private void killMusic() {
-		if (worldObj.isRemote && radioPlayer != null) {
-			radioPlayer.stop();
+		if (soundId != null) {
+			RadioManager.instance.stopPlaying(soundId);
+			soundId = null;
 		}
 	}
 
@@ -112,15 +88,14 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	protected void syncCommon(Set<ISyncableObject> changes) {
 		if (changes.isEmpty()) return;
 		final boolean hasPower = isPowered.getValue();
-		final boolean hasUrl = !Strings.isNullOrEmpty(url.getValue());
+		final String urlValue = url.getValue();
 
+		final boolean hasUrl = !Strings.isNullOrEmpty(urlValue);
 		final boolean canPlay = hasUrl && hasPower;
 
 		if (worldObj.isRemote) {
-			if (canPlay) {
-				radioPlayer.startOrReplace(url.getValue());
-				currentVolume = 0f;
-			} else killMusic();
+			if (canPlay) soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f);
+			else killMusic();
 		} else if (canPlay) playStatic();
 	}
 

@@ -18,7 +18,7 @@ import openblocks.OpenBlocks;
 import openblocks.client.bindings.BrickBindings;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
-import openblocks.client.radio.RadioRegistry;
+import openblocks.client.radio.RadioManager;
 import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
@@ -149,7 +149,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		if (OpenBlocks.Blocks.radio != null) {
-			RadioRegistry.init();
+			RadioManager.instance.init();
 		}
 
 		if (OpenBlocks.Blocks.elevator != null) {

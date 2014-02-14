@@ -9,7 +9,7 @@ public class TitledPage extends BlankPage {
 
 	private GuiComponentLabel lblTitle;
 	private GuiComponentLabel lblContent;
-	
+
 	public TitledPage(String title, String content) {
 
 		String translatedTitle = StatCollector.translateToLocal(title);
@@ -25,5 +25,5 @@ public class TitledPage extends BlankPage {
 		addComponent(lblTitle);
 		addComponent(lblContent);
 	}
-	
+
 }

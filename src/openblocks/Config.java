@@ -334,8 +334,8 @@ public class Config {
 	public static boolean radioVillager = true;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "radio", name = "range", comment = "Radio range")
-	public static float radioRadius = 30;
+	@ConfigProperty(category = "radio", name = "maxSources", comment = "Maximum number of sources playing at one time")
+	public static int maxRadioSources = 3;
 
 	public static void register() {
 
@@ -617,7 +617,7 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
 			int[] colors = new int[] { 0xFF0000, 0x00FF00, 0x0000FF };
 			for (int color : colors) {
-				ItemStack stack = OpenBlocks.Items.paintBrush.createStackWithColor(color);
+				ItemStack stack = ItemPaintBrush.createStackWithColor(color);
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(drop);

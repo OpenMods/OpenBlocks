@@ -2,15 +2,12 @@ package openblocks.client.gui;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.Icon;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.pages.*;
 import openblocks.common.item.MetasGeneric;
 import openmods.gui.component.*;
-import openmods.utils.render.FakeIcon;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -25,16 +22,16 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 	private GuiComponentLabel lblBlocks;
 	private GuiComponentLabel lblItems;
 	private GuiComponentLabel lblMisc;
-	
+
 	private int itemsIndex = 0;
 	private int miscIndex = 0;
 	private int blocksIndex = 0;
-	
+
 	public GuiInfoBook() {
 
 		book = new GuiComponentBook();
 		BlankPage contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
-		
+
 		lblBlocks = new GuiComponentLabel(27, 90, "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
 		lblBlocks.addListener(this);
 		lblItems = new GuiComponentLabel(27, 105, "- " + StatCollector.translateToLocal("openblocks.gui.items"));
@@ -42,11 +39,10 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		lblMisc = new GuiComponentLabel(27, 120, "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
 		lblMisc.addListener(this);
 
-
 		contentsPage.addComponent(lblBlocks);
 		contentsPage.addComponent(lblItems);
 		contentsPage.addComponent(lblMisc);
-		
+
 		book.addPage(new BlankPage());
 		book.addPage(new IntroPage());
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
@@ -60,9 +56,11 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "beartrap", Blocks.bearTrap);
 		book.addStandardRecipePage("openblocks", "guide", Blocks.guide);
 		book.addStandardRecipePage("openblocks", "canvas", Blocks.canvas);
-		/** leaving for boq
-		book.addStandardRecipePage("openblocks", "projector", Blocks.projector);
-		**/
+		/**
+		 * leaving for boq
+		 * book.addStandardRecipePage("openblocks", "projector",
+		 * Blocks.projector);
+		 **/
 		book.addStandardRecipePage("openblocks", "vacuumhopper", Blocks.vacuumHopper);
 		book.addStandardRecipePage("openblocks", "tank", Blocks.tank);
 		book.addStandardRecipePage("openblocks", "path", Blocks.path);
@@ -92,11 +90,15 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "cursor", Items.cursor);
 		book.addStandardRecipePage("openblocks", "unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack());
 		book.addStandardRecipePage("openblocks", "sleepingbag", Items.sleepingBag);
-		/** leaving for boq
-		book.addStandardRecipePage("openblocks", "cartographer", Items.cartographer);
-		book.addStandardRecipePage("openblocks", "golden_eye", Items.goldenEye);
-		book.addStandardRecipePage("openblocks", "tasty_clay", Items.tastyClay);
-		**/
+		/**
+		 * leaving for boq
+		 * book.addStandardRecipePage("openblocks", "cartographer",
+		 * Items.cartographer);
+		 * book.addStandardRecipePage("openblocks", "golden_eye",
+		 * Items.goldenEye);
+		 * book.addStandardRecipePage("openblocks", "tasty_clay",
+		 * Items.tastyClay);
+		 **/
 		book.addStandardRecipePage("openblocks", "paintbrush", Items.paintBrush);
 		book.addStandardRecipePage("openblocks", "squeegee", Items.squeegee);
 		book.addStandardRecipePage("openblocks", "slimalyzer", Items.slimalyzer);
@@ -152,7 +154,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		centerX = this.width / 2;
 		guiLeft = centerX - 211;
 		guiTop = (height - 200) / 2;
-		
+
 		GL11.glPushMatrix();
 		book.render(this.mc, guiLeft, guiTop, mouseX - this.guiLeft, mouseY - this.guiTop);
 		GL11.glPopMatrix();
@@ -184,22 +186,22 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 
 	@Override
 	public void componentMouseDrag(BaseComponent component, int offsetX, int offsetY, int button, long time) {
-	
+
 	}
 
 	@Override
 	public void componentMouseMove(BaseComponent component, int offsetX, int offsetY) {
-	
+
 	}
 
 	@Override
 	public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {
-		
+
 	}
 
 	@Override
 	public void componentKeyTyped(BaseComponent component, char par1, int par2) {
-		
+
 	}
 
 }
