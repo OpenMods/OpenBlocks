@@ -308,6 +308,10 @@ public class Config {
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
+	
+	@OnLineModifiable
+	@ConfigProperty(category = "features", name = "explosiveEnchantGrief", comment = "Explosive enchant can break blocks at level 3")
+	public static boolean explosiveEnchantGrief = true;
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantGrief", comment = "Explosive enchant can break blocks at level 3")
 	public static boolean explosiveEnchantGrief = true;
