@@ -75,7 +75,7 @@ public class ExplosiveEnchantmentsHandler {
 			null, // 1-based
 			new EnchantmentLevel(0.10, 5, 5, 1, false, 1),
 			new EnchantmentLevel(0.75, 7.5, 10, 2, false, 2),
-			new EnchantmentLevel(1.00, 10, 5, 4, true, 4)
+			new EnchantmentLevel(1.00, 10, 5, 4, Config.explosiveEnchantGrief, 4)
 	};
 
 	private static class JumpInfo {
