@@ -18,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import openblocks.OpenBlocks;
+import openblocks.Config;
 import openmods.OpenMods;
 
 import com.google.common.collect.ImmutableSet;
@@ -75,7 +76,7 @@ public class ExplosiveEnchantmentsHandler {
 			null, // 1-based
 			new EnchantmentLevel(0.10, 5, 5, 1, false, 1),
 			new EnchantmentLevel(0.75, 7.5, 10, 2, false, 2),
-			new EnchantmentLevel(1.00, 10, 5, 4, true, 4)
+			new EnchantmentLevel(1.00, 10, 5, 4, Config.explosiveEnchantGrief, 4)
 	};
 
 	private static class JumpInfo {
@@ -97,7 +98,9 @@ public class ExplosiveEnchantmentsHandler {
 	}
 
 	public static void createExplosionForEntity(Entity entity, float power, boolean isDestructive) {
-		entity.worldObj.createExplosion(entity, entity.posX, entity.boundingBox.minY, entity.posZ, power, isDestructive);
+		if (!entity.worldObj.isRemote) {
+			entity.worldObj.createExplosion(entity, entity.posX, entity.boundingBox.minY, entity.posZ, power, isDestructive);
+		}
 	}
 
 	private Map<Entity, JumpInfo> jumpBoosts = new MapMaker().weakKeys().makeMap();
