@@ -322,9 +322,10 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
 	public static String[] radioStations = new String[] {
-			// "http://173.239.76.148:8600;Nu-Jazz;ReD",
-			// "http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
-			};
+			 "http://69.46.75.101:80;idobi Radio (idobi.com);Red",
+			 "http://theradio.cc:8000/trcc-stream.mp3;TheRadioCC;Red",
+			 "http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
+	};
 
 	@OnLineModifiable
 	@ConfigProperty(category = "cartographer", name = "blockBlacklist", comment = "List of blocks that should be invisible to cartographer. Example: id:3,  OpenBlocks:openblocks_radio (case sensitive)")

@@ -85,7 +85,7 @@ tile.openblocks.guide.video=http://www.youtube.com/watch?v=ZpaSkHMuwwc
 
 tile.openblocks.ladder.name=Jaded Ladder
 tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
-tile.openblocks.ladder.video=http://www.youtube.com/watch?v=CXWAz2E7M9o
+tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
 
 tile.openblocks.tank.name=Tank
 tile.openblocks.tank.description=Tanks can hold liquids. If you place tanks next to each other and they'll distribute their liquid between the tanks. You can place liquid into the tanks using buckets. If the tank contains XP Juice you can click on them with an empty hand to give yourself some of the XP. When broken tanks will retain their liquid.

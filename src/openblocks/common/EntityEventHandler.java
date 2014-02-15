@@ -76,7 +76,7 @@ public class EntityEventHandler {
 		if (!event.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)entity;
 			NBTTagCompound persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
-			System.out.println(persistTag);
+
 			boolean shouldGiveManual = OpenBlocks.Items.infoBook != null && !persistTag.getBoolean(GIVEN_MANUAL_TAG);
 			if (shouldGiveManual) {
 				ItemStack manual = new ItemStack(OpenBlocks.Items.infoBook);
