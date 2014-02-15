@@ -12,6 +12,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.client.radio.RadioManager;
+import openblocks.client.radio.RadioManager.RadioStation;
 import openmods.config.ConfigurationChange;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
@@ -19,8 +21,6 @@ import openmods.utils.ItemUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
@@ -47,30 +47,19 @@ public class ItemTunedCrystal extends Item {
 
 	public List<ItemStack> getPredefinedStations() {
 		if (predefinedStations == null) {
-			ImmutableList.Builder<ItemStack> stations = ImmutableList.builder();
-			for (String stationDesc : Config.radioStations) {
-				if (stationDesc.startsWith("\"") && stationDesc.endsWith("\"")) stationDesc = stationDesc.substring(1, stationDesc.length() - 1);
-				stationDesc = StringUtils.strip(stationDesc);
-
-				List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
-				Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
-
-				String url = fields.get(0);
-				String name = (fields.size() > 1)? fields.get(1) : "";
-				Iterable<String> attributes = (fields.size() > 2)? Splitter.on(",").split(fields.get(2)) : ImmutableList.<String> of();
-
-				stations.add(createStack(url, name, attributes));
-			}
-			predefinedStations = stations.build();
+			ImmutableList.Builder<ItemStack> items = ImmutableList.builder();
+			for (RadioStation s : RadioManager.instance.getRadioStations())
+				items.add(createStack(s));
+			predefinedStations = items.build();
 		}
 		return predefinedStations;
 	}
 
-	public ItemStack createStack(String url, String name, Iterable<String> attributes) {
+	public ItemStack createStack(RadioStation station) {
 		ColorMeta color = ColorUtils.vanillaToColor(ColorUtils.WHITE);
 		boolean hidden = false;
 
-		for (String attribute : attributes) {
+		for (String attribute : station.attributes) {
 			attribute = StringUtils.strip(attribute);
 			ColorMeta possibleColor = ColorUtils.nameToColor(attribute);
 			if (possibleColor != null) {
@@ -85,8 +74,8 @@ public class ItemTunedCrystal extends Item {
 
 		ItemStack result = new ItemStack(this, 1, color.vanillaId);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
-		tag.setString(TAG_URL, url);
-		if (!Strings.isNullOrEmpty(name)) result.setItemName(name);
+		tag.setString(TAG_URL, station.url);
+		if (!Strings.isNullOrEmpty(station.name)) result.setItemName(station.name);
 		if (hidden) tag.setBoolean(TAG_HIDDEN, true);
 		return result;
 	}
