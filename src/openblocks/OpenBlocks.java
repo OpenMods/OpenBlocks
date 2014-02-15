@@ -14,6 +14,7 @@ import net.minecraft.stats.StatBasic;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.*;
+import openblocks.client.radio.RadioManager;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
@@ -44,6 +45,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -352,6 +354,11 @@ public class OpenBlocks {
 
 		if (Config.blockElevatorId > 0) {
 			MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
+		}
+
+		if (Config.radioVillagerId > 0) {
+			VillagerRegistry.instance().registerVillagerId(Config.radioVillagerId);
+			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, RadioManager.instance);
 		}
 
 		proxy.preInit();

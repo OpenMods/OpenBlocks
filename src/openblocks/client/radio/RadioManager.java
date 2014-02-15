@@ -4,13 +4,23 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundManager;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.item.ItemTunedCrystal;
 import openmods.Log;
+import openmods.config.ConfigurationChange;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,9 +33,10 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.*;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class RadioManager {
+public class RadioManager implements IVillageTradeHandler {
 
 	public static class RadioException extends RuntimeException {
 		private static final long serialVersionUID = 1026197667827191392L;
@@ -39,11 +50,20 @@ public class RadioManager {
 		public final String url;
 		public final String name;
 		public final Iterable<String> attributes;
+		public ItemStack stack;
 
 		public RadioStation(String url, String name, Iterable<String> attributes) {
 			this.url = url;
 			this.name = name;
 			this.attributes = attributes;
+		}
+
+		public ItemStack getStack() {
+			final ItemTunedCrystal tunedCrystal = OpenBlocks.Items.tunedCrystal;
+			if (stack == null && tunedCrystal != null) {
+				stack = tunedCrystal.createStack(this);
+			}
+			return stack;
 		}
 	}
 
@@ -92,25 +112,35 @@ public class RadioManager {
 		getRadioStations(); // preload
 	}
 
+	private List<RadioStation> stations;
+
+	@ForgeSubscribe
+	public void onReconfiguration(ConfigurationChange.Post evt) {
+		if (evt.check("radio", "radioStations")) stations = null;
+	}
+
 	public List<RadioStation> getRadioStations() {
-		ImmutableList.Builder<RadioStation> stations = ImmutableList.builder();
-		List<String> urls = Lists.newArrayList();
-		for (String stationDesc : Config.radioStations) {
-			if (stationDesc.startsWith("\"") && stationDesc.endsWith("\"")) stationDesc = stationDesc.substring(1, stationDesc.length() - 1);
-			stationDesc = StringUtils.strip(stationDesc);
+		if (stations == null) {
+			ImmutableList.Builder<RadioStation> stations = ImmutableList.builder();
+			List<String> urls = Lists.newArrayList();
+			for (String stationDesc : Config.radioStations) {
+				if (stationDesc.startsWith("\"") && stationDesc.endsWith("\"")) stationDesc = stationDesc.substring(1, stationDesc.length() - 1);
+				stationDesc = StringUtils.strip(stationDesc);
 
-			List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
-			Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
+				List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
+				Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
 
-			String url = fields.get(0);
-			String name = (fields.size() > 1)? fields.get(1) : "";
-			Iterable<String> attributes = (fields.size() > 2)? Splitter.on(",").split(fields.get(2)) : ImmutableList.<String> of();
+				String url = fields.get(0);
+				String name = (fields.size() > 1)? fields.get(1) : "";
+				Iterable<String> attributes = (fields.size() > 2)? Splitter.on(",").split(fields.get(2)) : ImmutableList.<String> of();
 
-			stations.add(new RadioStation(url, name, attributes));
-			urls.add(url);
+				stations.add(new RadioStation(url, name, attributes));
+				urls.add(url);
+			}
+			if (FMLCommonHandler.instance().getSide() == Side.CLIENT) RadioManager.instance.preloadStreams(urls);
+			this.stations = stations.build();
 		}
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) RadioManager.instance.preloadStreams(urls);
-		return stations.build();
+		return stations;
 	}
 
 	@ForgeSubscribe
@@ -264,4 +294,42 @@ public class RadioManager {
 		}
 	}
 
+	private static ItemStack randomItemAmount(Random random, Item item, int min, int max) {
+		int amount = random.nextInt(max - min) + min;
+		return new ItemStack(item, amount);
+	}
+
+	private static ItemStack randomEmeralds(Random random, int min, int max) {
+		return randomItemAmount(random, Item.emerald, min, max);
+	}
+
+	@Override
+	public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
+
+		if (Config.radioVillagerRecords) {
+			for (ItemStack record : OreDictionary.getOres("record"))
+				if (random.nextFloat() < 0.01) recipeList.addToListWithCheck(
+						new MerchantRecipe(
+								randomEmeralds(random, 7, 15),
+								record));
+		}
+
+		for (RadioStation st : getRadioStations()) {
+			if (random.nextFloat() < 0.2) recipeList.addToListWithCheck(
+					new MerchantRecipe(
+							randomEmeralds(random, 3, 7),
+							randomItemAmount(random, Item.redstone, 4, 20),
+							st.getStack().copy()));
+		}
+
+		if (random.nextFloat() > 0.5) recipeList.addToListWithCheck(
+				new MerchantRecipe(
+						randomEmeralds(random, 1, 2),
+						new ItemStack(Block.music)));
+
+		if (random.nextFloat() > 0.25 || recipeList.isEmpty()) recipeList.addToListWithCheck(
+				new MerchantRecipe(
+						randomEmeralds(random, 3, 7),
+						new ItemStack(Block.jukebox)));
+	}
 }

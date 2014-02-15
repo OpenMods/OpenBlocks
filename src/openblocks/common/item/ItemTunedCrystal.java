@@ -9,12 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.radio.RadioManager;
 import openblocks.client.radio.RadioManager.RadioStation;
-import openmods.config.ConfigurationChange;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
@@ -22,7 +20,6 @@ import openmods.utils.ItemUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,21 +35,6 @@ public class ItemTunedCrystal extends Item {
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-	}
-
-	@ForgeSubscribe
-	public void onReconfiguration(ConfigurationChange.Post evt) {
-		if (evt.check("radio", "radioStations")) predefinedStations = null;
-	}
-
-	public List<ItemStack> getPredefinedStations() {
-		if (predefinedStations == null) {
-			ImmutableList.Builder<ItemStack> items = ImmutableList.builder();
-			for (RadioStation s : RadioManager.instance.getRadioStations())
-				items.add(createStack(s));
-			predefinedStations = items.build();
-		}
-		return predefinedStations;
 	}
 
 	public ItemStack createStack(RadioStation station) {
@@ -109,7 +91,8 @@ public class ItemTunedCrystal extends Item {
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getSubItems(int itemId, CreativeTabs tab, List result) {
-		result.addAll(getPredefinedStations());
+		for (RadioStation station : RadioManager.instance.getRadioStations())
+			result.add(station.getStack());
 	}
 
 }

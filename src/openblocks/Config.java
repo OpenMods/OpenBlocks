@@ -322,9 +322,9 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
 	public static String[] radioStations = new String[] {
-			 "http://69.46.75.101:80;idobi Radio (idobi.com);Red",
-			 "http://theradio.cc:8000/trcc-stream.mp3;TheRadioCC;Red",
-			 "http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
+			"http://69.46.75.101:80;idobi Radio (idobi.com);Red",
+			"http://theradio.cc:8000/trcc-stream.mp3;TheRadioCC;Red",
+			"http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
 	};
 
 	@OnLineModifiable
@@ -334,8 +334,12 @@ public class Config {
 	@ConfigProperty(category = "radio", name = "enableChestLoot", comment = "Add tuned crystals as loot in chests")
 	public static boolean radioChests = true;
 
-	@ConfigProperty(category = "radio", name = "enableVillager", comment = "Spawn tuned crystal merchant")
-	public static boolean radioVillager = true;
+	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Tuned crystals merchant id (-1 to disable)")
+	public static int radioVillagerId = 6156;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "radio", name = "radioVillagerSellsRecords", comment = "Should tuned crystals sell records too")
+	public static boolean radioVillagerRecords = true;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "maxSources", comment = "Maximum number of sources playing at one time")
@@ -688,7 +692,6 @@ public class Config {
 
 		if (itemTunedCrystalId > 0) {
 			OpenBlocks.Items.tunedCrystal = new ItemTunedCrystal();
-			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.tunedCrystal);
 		}
 
 		if (itemInfoBookId > 0) {

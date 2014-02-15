@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -30,11 +31,14 @@ import openmods.entity.renderer.EntityBlockRenderer;
 import cpw.mods.fml.client.registry.*;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy implements IOpenBlocksProxy {
 
 	public ClientProxy() {}
+
+	private static final ResourceLocation RADIO_VILLAGER_TEXTURE = new ResourceLocation("openblocks", "textures/models/king-ish.png");
 
 	public static class Icons {
 		public static Icon xpJuiceStill;
@@ -59,6 +63,9 @@ public class ClientProxy implements IOpenBlocksProxy {
 			KeyBindingRegistry.registerKeyBinding(handler);
 		}
 
+		if (Config.radioVillagerId > 0) {
+			VillagerRegistry.instance().registerVillagerSkin(Config.radioVillagerId, RADIO_VILLAGER_TEXTURE);
+		}
 	}
 
 	@Override
