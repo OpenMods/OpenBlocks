@@ -80,22 +80,22 @@ openblocks.turtle.magnet=Magnetische
 
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.elevator.description=Platziere einen Fahrstuhl drei oder mehr Blöcke oberhalb eines anderen ohne Blöcke dazwischen und du wirst fähig sein, entweder zu 'springen', um dich aufwärts zu bewegen oder zu 'kriechen', um dich abwärts zu bewegen. Fahrstühle können gefärbt werden, indem man mit einem Farbstoff in der Hand rechtsklickt, jedoch kannst du dich nur zwischen Fahrstühlen in der selben Farbe teleportieren.
-tile.openblocks.elevator.video=http://www.youtube.com/watch?v=Ksm73FltDHo
+tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
 tile.openblocks.heal.name=Heiler
 tile.openblocks.heal.description=Der Heil-Block ist ein Block für den Kreativ-Modus, der nach und nach einen kleinen Heilungs-Effekt bringt.
 
 tile.openblocks.guide.name=Bau-Hilfe
 tile.openblocks.guide.description=Die Bau-Hilfe wird dir eine Schablone aus unechten Blöcken geben, in unterschiedlichen Formen und Größen, um dir zu helfen, deine Bauten zu planen.\nDu kannst den Block Shift-rechtsklicken, um die Form zu verändern, oder du kannst verschiedene Seiten anklicken, um die Schablone zu vergößern bzw. zu verkleinern.\nIm Kreativ-Modus kannst du einen Obsidian-Block oberhalb der Bau-Hilfe platzieren und diese dann mit irgendeinem Block rechtsklicken, um die Schablone automatisch mit diesem Block auszufüllen.
-tile.openblocks.guide.video=http://www.youtube.com/watch?v=ZpaSkHMuwwc
+tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
 tile.openblocks.ladder.name=Jaded-Leiter
 tile.openblocks.ladder.description=Die Jaded-Leiter löst das nervige Problem, über eine Falltür an der Spitze einer Leiter springen zu müssen. Die Jaded-Leiter funktioniert zeitgleich wie eine Falltür und wie eine Leiter.
-tile.openblocks.ladder.video=http://www.youtube.com/watch?v=CXWAz2E7M9o
+tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
 
 tile.openblocks.tank.name=Tank
 tile.openblocks.tank.description=Tanks können Flüssigkeiten halten. Wenn du Tanks nebeneinander platzierst, werden sie ihre Flüssigkeit untereinander aufteilen. Du kannst Flüssigkeiten mit Eimern in Tanks füllen. Wenn der Tank Flüssige XP enthält, kannst du mit einer leeren Hand rechtsklicken, um dir ein wenig dieser XP zu geben. Wenn abgebaut, behalten Tanks ihren Inhalt.
-tile.openblocks.tank.video=http://www.youtube.com/watch?v=8CFQWyxUxYA
+tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
 
 tile.openblocks.flag.name=Flagge
 tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color.
@@ -117,9 +117,11 @@ tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up
 
 tile.openblocks.paintmixer.name=Farbmixer
 tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
+tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.canvas.name=Leinwand
 tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints.
+tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.fan.name=Ventilator
 tile.openblocks.fan.description=The fan will blow players, mobs or entities in the direction it's facing.
@@ -197,12 +199,15 @@ item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic G
 
 item.openblocks.squeegee.name=Scheibenwischer
 item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
+item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.paintbrush.name=Pinsel
 item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil!
+item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=Unbearbeitete Schablone
 item.openblocks.unprepared_stencil.description="What are these pesky stencils I keep finding in chests?"\n\nStencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
+item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.stencil.name=Schablone
 item.openblocks.crayon.name=Magischer Buntstift
