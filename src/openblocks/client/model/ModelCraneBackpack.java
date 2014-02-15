@@ -67,7 +67,7 @@ public class ModelCraneBackpack extends ModelBiped {
 
 	@Override
 	public void render(Entity entity, float swingTime, float swingAmpl, float rightArmAngle, float headAngleX, float headAngleY, float scale) {
-		isSneak = entity.isSneaking();
+		isSneak = entity != null && entity.isSneaking();
 		setRotationAngles(swingTime, swingAmpl, rightArmAngle, headAngleX, headAngleY, scale, entity);
 		bipedBody.render(scale);
 
@@ -125,12 +125,9 @@ public class ModelCraneBackpack extends ModelBiped {
 		armX += armLength * MathHelper.cos(head);
 		armZ += armLength * MathHelper.sin(head);
 
-		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick)
-				- RenderManager.renderPosX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick)
-				- RenderManager.renderPosY + 0.35;
-		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick)
-				- RenderManager.renderPosZ;
+		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick) - RenderManager.renderPosX;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick) - RenderManager.renderPosY + 0.35;
+		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick) - RenderManager.renderPosZ;
 
 		GL11.glLineWidth(2);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -159,12 +156,13 @@ public class ModelCraneBackpack extends ModelBiped {
 		final double posX = 1.9 * MathHelper.cos(yaw);
 		final double posZ = 1.9 * MathHelper.sin(yaw);
 
-		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, partialTickTime)
-				- RenderManager.renderPosX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialTickTime)
-				- RenderManager.renderPosY + 0.35;
-		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialTickTime)
-				- RenderManager.renderPosZ;
+		final double centerX = interpolatePos(player.posX, player.lastTickPosX, partialTickTime);
+		final double centerY = interpolatePos(player.posY, player.lastTickPosY, partialTickTime);
+		final double centerZ = interpolatePos(player.posZ, player.lastTickPosZ, partialTickTime);
+
+		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, partialTickTime) - centerX;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialTickTime) - centerY + 0.35;
+		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialTickTime) - centerZ;
 
 		drawLine(magnetX, magnetY, magnetZ, posX, 0.6, posZ);
 	}
