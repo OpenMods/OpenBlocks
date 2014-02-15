@@ -6,11 +6,12 @@ import openmods.renderer.BlockRenderingHandlerBase;
 public class BlockRenderingHandler extends BlockRenderingHandlerBase {
 
 	public BlockRenderingHandler() {
-		blockRenderers.put(OpenBlocks.Blocks.path, new BlockPathRenderer());
+		addRenderer(OpenBlocks.Blocks.path, new BlockPathRenderer());
 		BlockCanvasRenderer canvasRenderer = new BlockCanvasRenderer();
-		blockRenderers.put(OpenBlocks.Blocks.canvas, canvasRenderer);
-		blockRenderers.put(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
-		blockRenderers.put(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
+		addRenderer(OpenBlocks.Blocks.canvas, canvasRenderer);
+		addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
+		addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
+		addRenderer(OpenBlocks.Blocks.radio, new BlockRadioRenderer());
 	}
 
 	@Override
