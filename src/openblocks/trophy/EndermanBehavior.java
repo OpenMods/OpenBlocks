@@ -13,7 +13,9 @@ public class EndermanBehavior implements ITrophyBehavior {
 		if (world.isRemote) return;
 		EntityEnderPearl e = new EntityEnderPearl(world, player);
 		e.setPosition(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5);
-		e.setVelocity(world.rand.nextGaussian(), 1, world.rand.nextGaussian());
+		e.motionX = world.rand.nextGaussian();
+		e.motionY = 1;
+		e.motionZ = world.rand.nextGaussian();
 		world.spawnEntityInWorld(e);
 	}
 
