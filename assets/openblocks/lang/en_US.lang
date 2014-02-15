@@ -170,6 +170,7 @@ tile.openblocks.autoanvil.description=The auto anvil works just like the vanilla
 
 tile.openblocks.drawingtable.name=Drawing Table
 tile.openblocks.drawingtable.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want!
+tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.grave.name=Grave
 tile.openblocks.trophy.name=Trophy
@@ -185,6 +186,7 @@ item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your h
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
+item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
 
 item.openblocks.gliderwing.name=Glider Wing
 
