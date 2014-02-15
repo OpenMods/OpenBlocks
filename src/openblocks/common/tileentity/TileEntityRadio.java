@@ -2,12 +2,14 @@ package openblocks.common.tileentity;
 
 import java.util.Set;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.client.radio.RadioManager;
+import openblocks.client.radio.RadioManager.RadioException;
 import openblocks.common.item.ItemTunedCrystal;
 import openmods.GenericInventory;
 import openmods.api.*;
@@ -94,7 +96,12 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		final boolean canPlay = hasUrl && hasPower;
 
 		if (worldObj.isRemote) {
-			if (canPlay) soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f);
+			if (canPlay) try {
+				soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f);
+			} catch (RadioException e) {
+				Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
+				soundId = null;
+			}
 			else killMusic();
 		} else if (canPlay) playStatic();
 	}
@@ -126,17 +133,19 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 			if (held == null && current != null) {
 				player.setCurrentItemOrArmor(0, current.copy());
 				inventory.setInventorySlotContents(0, null);
+				onInventoryChanged();
 				url.clear();
+				return true;
 			} else if (held != null) {
 				Item heldItem = held.getItem();
 				if (heldItem instanceof ItemTunedCrystal) {
 					inventory.setInventorySlotContents(0, held.copy());
 					player.setCurrentItemOrArmor(0, current);
+					onInventoryChanged();
 					updateURL(held);
+					return true;
 				}
 			}
-
-			return true;
 		}
 
 		return false;

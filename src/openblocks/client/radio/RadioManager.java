@@ -2,9 +2,7 @@ package openblocks.client.radio;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundManager;
@@ -13,17 +11,51 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 import openblocks.Config;
 import openmods.Log;
+
+import org.apache.commons.lang3.StringUtils;
+
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
 import com.google.common.collect.*;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+
 public class RadioManager {
+
+	public static class RadioException extends RuntimeException {
+		private static final long serialVersionUID = 1026197667827191392L;
+
+		public RadioException(String message) {
+			super(message);
+		}
+	}
+
+	public static class RadioStation {
+		public final String url;
+		public final String name;
+		public final Iterable<String> attributes;
+
+		public RadioStation(String url, String name, Iterable<String> attributes) {
+			this.url = url;
+			this.name = name;
+			this.attributes = attributes;
+		}
+	}
+
+	public static RadioException error(String userMsg, String logMsg, Object... args) {
+		Log.warn(logMsg, args);
+		throw new RadioException(userMsg);
+	}
 
 	private static final String OGG_EXT = "ogg";
 	private static final String MP3_EXT = "mp3";
-	private static final String ERROR_EXT = "error!";
+	private static final String ERROR_EXT = "!error!";
+	private static final String RESOLVING_EXT = "!resolving!";
 
 	private static final String SOUND_ID = "openblocks.radio.";
 
@@ -37,7 +69,7 @@ public class RadioManager {
 			.put("audio/vorbis", OGG_EXT)
 			.build();
 
-	private final Map<String, String> streamFormats = Maps.newHashMap();
+	private final Map<String, String> streamFormats = Maps.newConcurrentMap();
 
 	private final Set<String> usedSounds = Sets.newHashSet();
 
@@ -56,6 +88,29 @@ public class RadioManager {
 		} catch (Throwable t) {
 			throw Throwables.propagate(t);
 		}
+
+		getRadioStations(); // preload
+	}
+
+	public List<RadioStation> getRadioStations() {
+		ImmutableList.Builder<RadioStation> stations = ImmutableList.builder();
+		List<String> urls = Lists.newArrayList();
+		for (String stationDesc : Config.radioStations) {
+			if (stationDesc.startsWith("\"") && stationDesc.endsWith("\"")) stationDesc = stationDesc.substring(1, stationDesc.length() - 1);
+			stationDesc = StringUtils.strip(stationDesc);
+
+			List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
+			Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
+
+			String url = fields.get(0);
+			String name = (fields.size() > 1)? fields.get(1) : "";
+			Iterable<String> attributes = (fields.size() > 2)? Splitter.on(",").split(fields.get(2)) : ImmutableList.<String> of();
+
+			stations.add(new RadioStation(url, name, attributes));
+			urls.add(url);
+		}
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) RadioManager.instance.preloadStreams(urls);
+		return stations.build();
 	}
 
 	@ForgeSubscribe
@@ -89,17 +144,42 @@ public class RadioManager {
 
 	public String startPlaying(String soundId, String url, float x, float y, float z) {
 		if (soundId == null) soundId = allocateNewName();
-		if (soundId == null) {
-			Log.warn("No resources to play %s, aborting", url);
-		} else {
-			if (reallyStartPlaying(soundId, url, x, y, z)) Log.info("Started playing %s (id: %s)", url, soundId);
-			else {
-				releaseName(soundId);
-				return null;
-			}
-		}
+		if (soundId == null) throw error("openblocks.misc.radio.too_many", "No resources to play %s, aborting", url);
 
-		return soundId;
+		try {
+			final Minecraft mc = Minecraft.getMinecraft();
+			final SoundManager sndManager = mc.sndManager;
+			final SoundSystem sndSystem = sndManager.sndSystem;
+
+			if (sndSystem == null || mc.gameSettings.soundVolume == 0.0F) throw new RadioException("openblocks.misc.radio.muted");
+
+			if (sndSystem.playing(soundId)) {
+				sndSystem.stop(soundId);
+				sndSystem.removeSource(soundId);
+			}
+
+			final String ext = resolveStreamExt(url);
+
+			if (ERROR_EXT.equals(ext)) throw error("openblocks.misc.radio.invalid_stream", "Invalid data in stream %s (soundId : %s), aborting", url, soundId);
+
+			if (RESOLVING_EXT.equals(ext)) throw error("openblocks.misc.radio.not_ready", "Stream %s (soundId : %s) not yet resolved, aborting", url, soundId);
+
+			try {
+				URL realUrl = new URL(null, url, AutoConnectingStreamHandler.createManaged(soundId));
+				String dummyFilename = "radio_dummy." + ext;
+				sndSystem.newStreamingSource(false, soundId, realUrl, dummyFilename, false, x, y, z, SoundSystemConfig.ATTENUATION_LINEAR, 32);
+				sndSystem.play(soundId);
+			} catch (Throwable t) {
+				Log.warn(t, "Exception during opening url %s (soundId: %s)", url, soundId);
+				throw new RadioException("openblocks.misc.radio.unknown_error");
+			}
+
+			Log.info("Started playing %s (id: %s)", url, soundId);
+			return soundId;
+		} catch (RadioException e) {
+			releaseName(soundId);
+			throw e;
+		}
 	}
 
 	public void stopPlaying(String soundId) {
@@ -115,72 +195,73 @@ public class RadioManager {
 		releaseName(soundId);
 	}
 
-	private boolean reallyStartPlaying(String soundId, String url, float x, float y, float z) {
-		final Minecraft mc = Minecraft.getMinecraft();
-		final SoundManager sndManager = mc.sndManager;
-		final SoundSystem sndSystem = sndManager.sndSystem;
-
-		if (sndSystem == null || mc.gameSettings.soundVolume == 0.0F) return false;
-
-		if (sndSystem.playing(soundId)) {
-			sndSystem.stop(soundId);
-			sndSystem.removeSource(soundId);
-		}
-
-		String ext = identifyStream(url);
-
-		if (ext.equals(ERROR_EXT)) {
-			Log.info("Invalid data in stream %s (soundId : %s), aborting", url, soundId);
-			return false;
-		}
-
-		try {
-			URL realUrl = new URL(null, url, AutoConnectingStreamHandler.createManaged(soundId));
-			String dummyFilename = "radio_dummy." + ext;
-			sndSystem.newStreamingSource(false, soundId, realUrl, dummyFilename, false, x, y, z, SoundSystemConfig.ATTENUATION_LINEAR, 32);
-			sndSystem.play(soundId);
-		} catch (Throwable t) {
-			Log.warn(t, "Exception during opening url %s (soundId: %s)", url, soundId);
-			return false;
-		}
-
-		return true;
-	}
-
-	private String identifyStream(String url) {
-		String result = streamFormats.get(url);
-		if (result == null) {
-			result = getStreamExt(url);
-			streamFormats.put(url, result);
-		}
-		return result;
-	}
-
-	private static String getStreamExt(String url) {
+	private void resolveStreamType(final String url) {
+		streamFormats.put(url, RESOLVING_EXT);
 		final HttpURLConnection connection;
 		try {
 			URL realUrl = new URL(null, url, new AutoConnectingStreamHandler());
 			connection = (HttpURLConnection)realUrl.openConnection();
 		} catch (Throwable t) {
 			Log.warn(t, "Exception during opening url %s", url);
-			return ERROR_EXT;
+			streamFormats.put(url, ERROR_EXT);
+			return;
 		}
 
 		try {
-			String contentType = connection.getContentType();
+			final String contentType = connection.getContentType();
 			String ext = PROTOCOLS.get(contentType);
 
-			if (ext != null) return ext;
+			if (ext == null) {
+				ext = ERROR_EXT;
+				Log.warn("Unknown content type '%s' in url '%s', aborting", contentType, url);
+			}
 
-			Log.warn("Unknown content type '%s' in url '%s', aborting", contentType, url);
-			connection.disconnect();
+			streamFormats.put(url, ext);
 		} catch (Throwable t) {
 			Log.warn(t, "Exception during opening url %s", url);
 		} finally {
 			connection.disconnect();
 		}
+	}
 
-		return ERROR_EXT;
+	public void preloadStreams(final Collection<String> urls) {
+		if (urls.isEmpty()) return;
+		final Thread th = new Thread() {
+			@Override
+			public void run() {
+				for (String url : urls) {
+					Log.info("Preloading stream: %s", url);
+					resolveStreamType(url);
+					Log.info("Finished preloading stream: %s", url);
+				}
+			}
+		};
+
+		th.setDaemon(true);
+		th.start();
+	}
+
+	private String resolveStreamExt(final String url) {
+		final String ext = streamFormats.get(url);
+		if (ext != null) return ext;
+
+		final Thread th = new Thread() {
+			@Override
+			public void run() {
+				resolveStreamType(url);
+			}
+		};
+
+		th.setDaemon(true);
+		th.start();
+		try {
+			th.join(750); // seems to be reasonable delay
+			return streamFormats.get(url);
+		} catch (InterruptedException e) {
+			Log.warn(e, "Thread interrupted!");
+			streamFormats.put(url, ERROR_EXT);
+			return ERROR_EXT;
+		}
 	}
 
 }
