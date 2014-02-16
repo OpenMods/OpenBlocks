@@ -50,7 +50,7 @@ public class RadioManager implements IVillageTradeHandler {
 		public final String url;
 		public final String name;
 		public final Iterable<String> attributes;
-		public ItemStack stack;
+		private ItemStack stack;
 
 		public RadioStation(String url, String name, Iterable<String> attributes) {
 			this.url = url;

@@ -13,6 +13,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.asm.EntityPlayerVisitor;
+import openblocks.client.radio.RadioManager;
+import openblocks.client.radio.RadioManager.RadioStation;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.item.*;
@@ -324,7 +326,6 @@ public class Config {
 	public static String[] radioStations = new String[] {
 			"http://69.46.75.101:80;idobi Radio (idobi.com);Blue",
 			"http://192.184.9.79:8006;CINEMIX;Blue",
-			"http://50.7.79.77:80;Infowars;Blue",
 			"http://radiorivendell.de:80/;Radio Rivendell;Blue",
 			"http://theradio.cc:8000/trcc-stream.mp3;TheRadioCC;Red",
 			"http://streaming202.radionomy.com:80/abacusfm-vintage-jazz;Vintage Jazz;Red",
@@ -558,6 +559,7 @@ public class Config {
 
 		if (ConfigProcessing.canRegisterBlock(blockRadioId)) {
 			OpenBlocks.Blocks.radio = new BlockRadio();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.radio, "pbp", "prp", "pgp", 'p', "plankWood", 'b', Block.fenceIron, 'r', Item.redstone, 'g', Item.ingotGold));
 		}
 
 		if (itemHangGliderId > 0) {
@@ -697,6 +699,12 @@ public class Config {
 
 		if (itemTunedCrystalId > 0) {
 			OpenBlocks.Items.tunedCrystal = new ItemTunedCrystal();
+
+			for (RadioStation station : RadioManager.instance.getRadioStations()) {
+				WeightedRandomChestContent drop = new WeightedRandomChestContent(station.getStack().copy(), 1, 1, 2);
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			}
 		}
 
 		if (itemInfoBookId > 0) {

@@ -30,6 +30,9 @@
 			<fileset dir=".">
 				<include name="assets/**/*" />
 			</fileset>
+			<fileset dir="extlibs">
+				<include name="javazoom/jl/decoder/*.ser" />
+			</fileset>
 			<fileset dir="changelogs">
 				<include name="**/*" />
 			</fileset>

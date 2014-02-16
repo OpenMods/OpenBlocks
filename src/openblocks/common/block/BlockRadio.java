@@ -32,6 +32,7 @@ public class BlockRadio extends OpenBlock {
 		iconTop = registry.registerIcon("openblocks:radio_top");
 		iconBottom = registry.registerIcon("openblocks:radio_bottom");
 		iconInside = registry.registerIcon("openblocks:radio_inside");
+		blockIcon = iconFront;
 	}
 
 	@Override

@@ -88,7 +88,7 @@ public class IcyURLConnection extends HttpURLConnection {
 			parseHeaderLine(line);
 			line = readLine();
 		}
-		
+
 		if (instanceFollowRedirects) {
 			String redirection = getHeaderField("location");
 			if (redirection != null && redirectionLoopCount++ < 10) {
@@ -99,7 +99,6 @@ public class IcyURLConnection extends HttpURLConnection {
 		}
 	}
 
-	
 	@Override
 	public InputStream getInputStream() {
 		return inputStream;

@@ -41,7 +41,7 @@ public class CodecMp3 implements ICodec {
 			audioFormat = new AudioFormat(decoder.getOutputFrequency(), 16, decoder.getOutputChannels(), true, false);
 			return true;
 		} catch (Throwable t) {
-			Log.warn("Failed to initalize codec for url '%s'", url);
+			Log.warn(t, "Failed to initalize codec for url '%s'", url);
 		}
 
 		return false;

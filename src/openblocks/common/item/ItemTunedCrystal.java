@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -28,7 +29,8 @@ public class ItemTunedCrystal extends Item {
 
 	private static final String TAG_HIDDEN = "Hidden";
 	public static final String TAG_URL = "URL";
-	private List<ItemStack> predefinedStations;
+
+	private Icon crystal;
 
 	public ItemTunedCrystal() {
 		super(Config.itemTunedCrystalId);
@@ -64,10 +66,27 @@ public class ItemTunedCrystal extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
+		if (renderPass == 1) return 0xFFFFFF;
 		int damage = stack.getItemDamage();
 		ColorMeta color = ColorUtils.vanillaToColor(damage);
 		return color != null? color.rgb : 0xFFFFFF;
+	}
+
+	@Override
+	public int getRenderPasses(int metadata) {
+		return 2;
+	}
+
+	@Override
+	public Icon getIcon(ItemStack stack, int pass) {
+		return pass == 1? itemIcon : crystal;
 	}
 
 	@Override
@@ -85,7 +104,8 @@ public class ItemTunedCrystal extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegistry) {
-		itemIcon = iconRegistry.registerIcon("openblocks:tuned_crystal");
+		itemIcon = iconRegistry.registerIcon("openblocks:tuned_crystal_2");
+		crystal = iconRegistry.registerIcon("openblocks:tuned_crystal_1");
 	}
 
 	@Override

@@ -16,18 +16,20 @@ import openmods.OpenMods;
 import openmods.api.*;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableBoolean;
-import openmods.sync.SyncableString;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
 
 import com.google.common.base.Strings;
 
 public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile, INeighbourAwareTile, IInventoryCallback, IExtendable {
 
+	private static final byte NO_CRYSTAL = (byte)-1;
 	private SyncableString url;
 	private SyncableString streamName;
+	private SyncableByte crystalColor;
 	private SyncableBoolean isPowered;
 	private String soundId;
 
@@ -48,6 +50,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	@Override
 	protected void createSyncedFields() {
 		url = new SyncableString();
+		crystalColor = new SyncableByte(NO_CRYSTAL);
 		isPowered = new SyncableBoolean();
 		streamName = new SyncableString();
 	}
@@ -59,11 +62,14 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	}
 
 	private void updateURL(ItemStack stack) {
-		if (stack == null) url.clear();
-		else {
+		if (stack == null) {
+			url.clear();
+			crystalColor.setValue(NO_CRYSTAL);
+		} else {
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			url.setValue(tag.getString(ItemTunedCrystal.TAG_URL));
 			streamName.setValue(stack.getDisplayName());
+			crystalColor.setValue((byte)stack.getItemDamage());
 		}
 		sync();
 	}
@@ -84,6 +90,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
 		syncCommon(changes);
+		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -139,7 +146,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 				player.setCurrentItemOrArmor(0, current.copy());
 				inventory.setInventorySlotContents(0, null);
 				onInventoryChanged();
-				url.clear();
+				updateURL(null);
 				return true;
 			} else if (held != null) {
 				Item heldItem = held.getItem();
@@ -176,6 +183,12 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	public Integer getCrystalColor() {
+		if (Strings.isNullOrEmpty(url.getValue())) return null;
+		ColorMeta color = ColorUtils.vanillaToColor(crystalColor.getValue());
+		return color != null? color.rgb : null;
 	}
 
 }
