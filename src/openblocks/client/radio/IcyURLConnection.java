@@ -42,6 +42,7 @@ public class IcyURLConnection extends HttpURLConnection {
 	protected Map<String, List<String>> requestProps;
 	protected Map<String, List<String>> headers;
 	protected String responseLine;
+	private int redirectionLoopCount = 0;
 
 	public IcyURLConnection(URL url) {
 		super(url);
@@ -87,8 +88,18 @@ public class IcyURLConnection extends HttpURLConnection {
 			parseHeaderLine(line);
 			line = readLine();
 		}
+		
+		if (instanceFollowRedirects) {
+			String redirection = getHeaderField("location");
+			if (redirection != null && redirectionLoopCount++ < 10) {
+				connected = false;
+				url = new URL(redirection);
+				connect();
+			}
+		}
 	}
 
+	
 	@Override
 	public InputStream getInputStream() {
 		return inputStream;

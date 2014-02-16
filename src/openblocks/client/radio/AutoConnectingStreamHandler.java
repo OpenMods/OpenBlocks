@@ -63,6 +63,7 @@ public class AutoConnectingStreamHandler extends URLStreamHandler {
 	protected HttpURLConnection openConnection(URL url) throws IOException {
 		HttpURLConnection connection = new IcyURLConnection(url);
 
+		connection.setInstanceFollowRedirects(true);
 		connection.connect();
 		int responseCode = connection.getResponseCode();
 		if (responseCode != 200) {
