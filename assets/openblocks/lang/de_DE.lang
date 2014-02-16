@@ -185,31 +185,31 @@ item.openblocks.slimalyzer.name=Schleimalysierer
 item.openblocks.slimalyzer.description=Renne mit einem Schleimalysierer in deiner Hand herum, und er wird jedes Mal aufleuchten, wenn du dich in einem Schleime spawnenden Chunk befindest.
 
 item.openblocks.hangglider.name=Gleitschirm
-item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
+item.openblocks.hangglider.description=Der Gleitschirm ist selbsterklärend. Halte ihn in deiner Hand und klicke, um ihn auf deinem Rücken zu platzieren. Und jetzt spring!\nUm deine Geschwindigkeit zu erhöhen, kannst du Shift drücken während du gleitest, aber pass auf, du wirst schneller sinken!
 item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
 
 item.openblocks.gliderwing.name=Gleitschirmflügel
 
 item.openblocks.sleepingbag.name=Schlafsack
-item.openblocks.sleepingbag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back.
+item.openblocks.sleepingbag.description=Mit dem Schlafsack kannst du in der Wildnis schlafen ohne deine Spawn-Position zurückzusetzen. Um zu schlafen, trage ihn einfach am Rücken.
 
 item.openblocks.luggage.name=Reisegepäck
-item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items!
+item.openblocks.luggage.description=Das Reisegepäck ist dein neuer Freund. Es folgt dir überall hin und sammelt alle Items, die es am Boden findet, ein. Nom nom nom!\nUm es aufzuheben, Shift-klicke einfach auf es und es verwandelt sich zurück in ein Item das du umhertragen kannst.\nWenn es jemals von einem Blitz getroffen werden sollte, wird es noch mehr Items tragen können!
 item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
 
 item.openblocks.sonicglasses.name=Schallbrille
-item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear!
+item.openblocks.sonicglasses.description=Wir stellen vor: Die fabelhafte neue Schallbrille!\nDiese neue und spannende Technologie der OpenMods AG erlaubt dir zu sehen was du hörst!
 
 item.openblocks.squeegee.name=Scheibenwischer
-item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
+item.openblocks.squeegee.description=Der Scheibenwischer entfernt jegliche Farbe von gefärbten Blöcken. Klicke einfach auf die Seite eines Blockes, von der du die Farbe entfernen möchtest, oder Shift-klicke um die Farbe von allen Seiten zu entfernen!
 item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.paintbrush.name=Pinsel
-item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil!
+item.openblocks.paintbrush.description=Pinsel lassen dich Blöcke in der Farbe deiner Wahl färben!\n\nTauche deinen Pinsel in einen Farbeimer, den du im Farbmixer erstellt hast, und dann auf einen Block um diesen zu färben.\n\nLeinwand-Blöcke sind perfekt zum anmalen, du kannst aber auch einige Vanilla- und sogar manche Mod-Blöcke färben. Du kannst auch Schablonen auf Blöcken platzieren und dann über die Schablone zeichnen!
 item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=Unbearbeitete Schablone
-item.openblocks.unprepared_stencil.description="What are these pesky stencils I keep finding in chests?"\n\nStencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
+item.openblocks.unprepared_stencil.description="Was sind diese nervigen Schablonen die ich dauern in Kisten finde?"\n\nSchablonen köännen auf Blöcken platziert werden und dann mit einem Pinsel übermalt werden!\n\nDu kannst einen Block mit mehreren Schablonen bemalen und du kannst mit einer leeren Hand auf sie klicken um sie zu drehen.\n\nPlatziere eine unbearbeitete Schablone in einem Zeichentisch um verschiedene Formen zu erstellen.
 item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.stencil.name=Schablone
