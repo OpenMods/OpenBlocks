@@ -198,6 +198,7 @@ public class RadioManager implements IVillageTradeHandler {
 				URL realUrl = new URL(null, url, AutoConnectingStreamHandler.createManaged(soundId));
 				String dummyFilename = "radio_dummy." + ext;
 				sndSystem.newStreamingSource(false, soundId, realUrl, dummyFilename, false, x, y, z, SoundSystemConfig.ATTENUATION_LINEAR, 32);
+				sndSystem.setVolume(soundId, 0.05f);
 				sndSystem.play(soundId);
 			} catch (Throwable t) {
 				Log.warn(t, "Exception during opening url %s (soundId: %s)", url, soundId);
@@ -217,12 +218,30 @@ public class RadioManager implements IVillageTradeHandler {
 		final SoundManager sndManager = mc.sndManager;
 		final SoundSystem sndSystem = sndManager.sndSystem;
 
-		if (sndSystem != null && sndSystem.playing(soundId)) {
-			sndSystem.stop(soundId);
+		if (sndSystem != null) {
+			try {
+				sndSystem.stop(soundId);
+			}catch(Exception e) {
+				// boq, calling playing(soundId) caused issues with small redstone pulses
+				// because I guess it wasn't 'fully' playing. it works fine without it
+				// but putting the try/catch in for now because I don't trust myself.
+				// better to be safe than sorry! :)
+			}
 		}
 
 		AutoConnectingStreamHandler.disconnectManaged(soundId);
 		releaseName(soundId);
+	}
+
+	public void setVolume(String soundId, float value) {
+		final Minecraft mc = Minecraft.getMinecraft();
+		final SoundManager sndManager = mc.sndManager;
+		final SoundSystem sndSystem = sndManager.sndSystem;
+		try {
+			sndSystem.setVolume(soundId, value);
+		} catch (Exception e) {
+			
+		}
 	}
 
 	private void resolveStreamType(final String url) {

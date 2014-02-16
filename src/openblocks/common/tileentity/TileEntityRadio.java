@@ -31,6 +31,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	private SyncableString streamName;
 	private SyncableByte crystalColor;
 	private SyncableBoolean isPowered;
+	private SyncableFloat volume;
 	private String soundId;
 
 	@IncludeInterface(IInventory.class)
@@ -53,6 +54,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		crystalColor = new SyncableByte(NO_CRYSTAL);
 		isPowered = new SyncableBoolean();
 		streamName = new SyncableString();
+		volume = new SyncableFloat(1f);
 	}
 
 	@Override
@@ -105,17 +107,24 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 		final boolean hasUrl = !Strings.isNullOrEmpty(urlValue);
 		final boolean canPlay = hasUrl && hasPower;
-
-		if (worldObj.isRemote) {
-			if (canPlay) try {
-				soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f);
-				OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
-			} catch (RadioException e) {
-				Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
-				soundId = null;
+		if (changes.contains(isPowered) || changes.contains(url)) {
+			if (worldObj.isRemote) {
+				if (canPlay) try {
+					soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f);
+					RadioManager.instance.setVolume(soundId, volume.getValue());
+					OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
+				} catch (RadioException e) {
+					Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
+					soundId = null;
+				}
+				else killMusic();
+			} else if (canPlay) playStatic();
+		}
+		if (worldObj.isRemote && changes.contains(volume)) {
+			if (soundId != null) {
+				RadioManager.instance.setVolume(soundId, volume.getValue());
 			}
-			else killMusic();
-		} else if (canPlay) playStatic();
+		}
 	}
 
 	private void playStatic() {
@@ -127,6 +136,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		if (!worldObj.isRemote) {
 			final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			this.isPowered.setValue(isPowered);
+			this.volume.setValue((float)worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) / 15f);
 			sync();
 		}
 	}
