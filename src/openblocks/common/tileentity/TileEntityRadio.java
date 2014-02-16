@@ -12,6 +12,7 @@ import openblocks.client.radio.RadioManager;
 import openblocks.client.radio.RadioManager.RadioException;
 import openblocks.common.item.ItemTunedCrystal;
 import openmods.GenericInventory;
+import openmods.OpenMods;
 import openmods.api.*;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -26,6 +27,7 @@ import com.google.common.base.Strings;
 public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile, INeighbourAwareTile, IInventoryCallback, IExtendable {
 
 	private SyncableString url;
+	private SyncableString streamName;
 	private SyncableBoolean isPowered;
 	private String soundId;
 
@@ -47,6 +49,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	protected void createSyncedFields() {
 		url = new SyncableString();
 		isPowered = new SyncableBoolean();
+		streamName = new SyncableString();
 	}
 
 	@Override
@@ -60,6 +63,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		else {
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			url.setValue(tag.getString(ItemTunedCrystal.TAG_URL));
+			streamName.setValue(stack.getDisplayName());
 		}
 		sync();
 	}
@@ -98,6 +102,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		if (worldObj.isRemote) {
 			if (canPlay) try {
 				soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f);
+				OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
 			} catch (RadioException e) {
 				Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
 				soundId = null;
