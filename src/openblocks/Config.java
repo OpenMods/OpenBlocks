@@ -322,9 +322,14 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
 	public static String[] radioStations = new String[] {
-			"http://69.46.75.101:80;idobi Radio (idobi.com);Red",
+			"http://69.46.75.101:80;idobi Radio (idobi.com);Blue",
+			"http://192.184.9.79:8006;CINEMIX;Blue",
+			"http://50.7.79.77:80;Infowars;Blue",
+			"http://radiorivendell.de:80/;Radio Rivendell;Blue",
 			"http://theradio.cc:8000/trcc-stream.mp3;TheRadioCC;Red",
-			"http://173.239.76.148:8406;Wub-dub-dub;blue,hidden"
+			"http://streaming202.radionomy.com:80/abacusfm-vintage-jazz;Vintage Jazz;Red",
+			"http://s1.stream-experts.net:8032/;Nature sounds;Red",
+			"http://91.121.166.38:7016/;British Comedy;Red"
 	};
 
 	@OnLineModifiable
