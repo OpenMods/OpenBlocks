@@ -52,6 +52,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addPage(new SectionPage("openblocks.gui.blocks"));
 		book.addStandardRecipePage("openblocks", "elevator", Blocks.elevator);
 		book.addStandardRecipePage("openblocks", "sprinkler", Blocks.sprinkler);
+		book.addStandardRecipePage("openblocks", "radio", Blocks.radio);
 		book.addStandardRecipePage("openblocks", "paintmixer", Blocks.paintMixer);
 		book.addStandardRecipePage("openblocks", "beartrap", Blocks.bearTrap);
 		book.addStandardRecipePage("openblocks", "guide", Blocks.guide);

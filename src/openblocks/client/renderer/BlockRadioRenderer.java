@@ -16,6 +16,7 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 	public void renderInventoryBlock(BlockRadio block, int metadata, int modelID, RenderBlocks renderer) {
 		Tessellator tes = new Tessellator();
 		tes.startDrawingQuads();
+		tes.setTranslation(-0.5, -0.5, -0.5);
 		renderRadio(block, tes, false);
 		tes.draw();
 	}
