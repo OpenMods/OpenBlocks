@@ -109,18 +109,17 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		final boolean canPlay = hasUrl && hasPower;
 		if (changes.contains(isPowered) || changes.contains(url)) {
 			if (worldObj.isRemote) {
-				if (canPlay) try {
-					soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f);
-					RadioManager.instance.setVolume(soundId, volume.getValue());
-					OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
-				} catch (RadioException e) {
-					Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
-					soundId = null;
-				}
-				else killMusic();
+				if (canPlay) {
+					try {
+						soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, volume.getValue());
+						OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
+					} catch (RadioException e) {
+						Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
+						soundId = null;
+					}
+				} else killMusic();
 			} else if (canPlay) playStatic();
-		}
-		if (worldObj.isRemote && changes.contains(volume)) {
+		} else if (worldObj.isRemote && changes.contains(volume)) {
 			if (soundId != null) {
 				RadioManager.instance.setVolume(soundId, volume.getValue());
 			}
@@ -136,7 +135,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		if (!worldObj.isRemote) {
 			final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			this.isPowered.setValue(isPowered);
-			this.volume.setValue((float)worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) / 15f);
+			this.volume.setValue(worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) / 15f);
 			sync();
 		}
 	}

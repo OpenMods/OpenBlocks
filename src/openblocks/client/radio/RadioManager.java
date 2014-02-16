@@ -172,14 +172,13 @@ public class RadioManager implements IVillageTradeHandler {
 		if (usedSounds.remove(name)) freeSounds.add(name);
 	}
 
-	public String startPlaying(String soundId, String url, float x, float y, float z) {
+	public String startPlaying(String soundId, String url, float x, float y, float z, float volume) {
 		if (soundId == null) soundId = allocateNewName();
 		if (soundId == null) throw error("openblocks.misc.radio.too_many", "No resources to play %s, aborting", url);
 
 		try {
+			final SoundSystem sndSystem = getSoundSystem();
 			final Minecraft mc = Minecraft.getMinecraft();
-			final SoundManager sndManager = mc.sndManager;
-			final SoundSystem sndSystem = sndManager.sndSystem;
 
 			if (sndSystem == null || mc.gameSettings.soundVolume == 0.0F) throw new RadioException("openblocks.misc.radio.muted");
 
@@ -198,7 +197,7 @@ public class RadioManager implements IVillageTradeHandler {
 				URL realUrl = new URL(null, url, AutoConnectingStreamHandler.createManaged(soundId));
 				String dummyFilename = "radio_dummy." + ext;
 				sndSystem.newStreamingSource(false, soundId, realUrl, dummyFilename, false, x, y, z, SoundSystemConfig.ATTENUATION_LINEAR, 32);
-				sndSystem.setVolume(soundId, 0.05f);
+				sndSystem.setVolume(soundId, volume);
 				sndSystem.play(soundId);
 			} catch (Throwable t) {
 				Log.warn(t, "Exception during opening url %s (soundId: %s)", url, soundId);
@@ -214,34 +213,24 @@ public class RadioManager implements IVillageTradeHandler {
 	}
 
 	public void stopPlaying(String soundId) {
-		final Minecraft mc = Minecraft.getMinecraft();
-		final SoundManager sndManager = mc.sndManager;
-		final SoundSystem sndSystem = sndManager.sndSystem;
+		final SoundSystem sndSystem = getSoundSystem();
 
-		if (sndSystem != null) {
-			try {
-				sndSystem.stop(soundId);
-			}catch(Exception e) {
-				// boq, calling playing(soundId) caused issues with small redstone pulses
-				// because I guess it wasn't 'fully' playing. it works fine without it
-				// but putting the try/catch in for now because I don't trust myself.
-				// better to be safe than sorry! :)
-			}
-		}
+		if (sndSystem != null) sndSystem.stop(soundId);
 
 		AutoConnectingStreamHandler.disconnectManaged(soundId);
 		releaseName(soundId);
 	}
 
 	public void setVolume(String soundId, float value) {
+		final SoundSystem sndSystem = getSoundSystem();
+		sndSystem.setVolume(soundId, value);
+	}
+
+	private static SoundSystem getSoundSystem() {
 		final Minecraft mc = Minecraft.getMinecraft();
 		final SoundManager sndManager = mc.sndManager;
 		final SoundSystem sndSystem = sndManager.sndSystem;
-		try {
-			sndSystem.setVolume(soundId, value);
-		} catch (Exception e) {
-			
-		}
+		return sndSystem;
 	}
 
 	private void resolveStreamType(final String url) {
