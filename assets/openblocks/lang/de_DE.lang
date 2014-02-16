@@ -21,7 +21,26 @@ openblocks.gui.itemdropper=Itemspender
 openblocks.gui.blockplacer=Blockplatzierer
 openblocks.gui.paintmixer=Farbmixer
 openblocks.gui.drawingtable=Zeichentisch
+openblocks.gui.blocks=Blöcke
+openblocks.gui.items=Items
+openblocks.gui.misc=Misc
 
+openblocks.gui.welcome.title=Willkommen!
+openblocks.gui.welcome.content=OpenBlocks ist eine neue Open-Source-Mod, die verschiedene Ideen in Minecraft einbringt, inklusive Gleitschirme, Aufzüge, Tanks, Gräber, Farben, Kräne, flüssige XP, Kartographen, Trophäen und mehr!
+
+openblocks.gui.credits_title=Credits
+openblocks.gui.credits=§LBoq, Mikee und NeverCast§R - Führende Entwickler von OpenBlocks (Dürfen wir uns selbst hier nennen?)\n\n§LSinZ und Yoshi2§R - Von Anfang an Mitglieder des OpenMods-Teams.\n\n§LVexatos und crafteverywhere§R - Arbeitsame Übersetzer.\n\nJeder, der innerhalb des letzten Jahres zum Code beigetragen hat.\n\n*Direwolf20 and the rest of ForgeCraft* - Für das Entdecken von Bugs und Crashes vor der Veröffentlichung einer Version.\n\nJeder, der ein Spotlight oder Let's Play machte sowie generell die Modifikation untertützt hat, seit wir begannen!
+
+openblocks.gui.config.title=Einfache Config-Bearbeitung
+openblocks.gui.config.content=OpenMods erlaubt, sowohl Client- als auch Serverkonfigurationen über den Chat zu ändern. Manche brauchen nicht mal einen Neustart!\n\nServerkonfigurationen können mit '§L/om_config_s§R' (setzt Operator-Rechte vorraus) und Clientkonfigurationen mit '§L/om_config_c§R' geändert werden.\n\nZum Beispiel:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFür eine Liste aller verfügbaren Kommandos benutze: §L/help om_config_s§R oder §L/help om_config_c§R
+
+openblocks.gui.bkey.title=Die berüchtigte 'B'-Taste
+openblocks.gui.bkey.content=Die 'B'-Taste ist eine sehr spezielle Taste in OpenBlocks.\n\nAktivieren der Option 'weAreSeriousPeople' im Abschnitt 'tomfoolery' sowohl in der Client- als auch in der Serverkonfiguration gibt dir dein eigenes Verdauungssystem.\n\nVersuche etwas von diesem Leckeren Lehm zu essen und drücke 'B', um ihn zu verdauen!
+
+openblocks.gui.unstable.title='Instabil'-Verzauberung
+openblocks.gui.unstable.content=Wir hatten unbestätigte Berichte, dass diese Verzauberung jegliches Schießpulver, das du trägst, instabil werden lässt, wenn du attackiert wirst oder von etwas herunterspringst.\n\nBenutzung auf eigene Gefahr!
+
+openblocks.changelog.title=Was neu ist in OpenBlocks %s
 openblocks.misc.url=URL: %s
 openblocks.misc.type=Typ: %s
 openblocks.misc.uses=Nutzt: %.2f
@@ -51,46 +70,149 @@ openblocks.misc.shape.pentagon=Fünfeck
 openblocks.misc.shape.hexagon=Sechseck
 openblocks.misc.shape.octagon=Achteck
 
+openblocks.misc.radio.too_many=Es laufen bereits zu viele Radios
+openblocks.misc.radio.invalid_stream=Ungültiger Stream
+openblocks.misc.radio.not_ready=Stream nicht bereit ready, versuche es später nochmal
+openblocks.misc.radio.unknown_error=Unbekannter Fehler
+openblocks.misc.radio.muted=Geräusche sind deaktiviert!
+
 openblocks.turtle.magnet=Magnetische
 
 tile.openblocks.elevator.name=Fahrstuhl
+tile.openblocks.elevator.description=Platziere einen Fahrstuhl drei oder mehr Blöcke oberhalb eines anderen ohne Blöcke dazwischen und du wirst fähig sein, entweder zu 'springen', um dich aufwärts zu bewegen oder zu 'kriechen', um dich abwärts zu bewegen. Fahrstühle können gefärbt werden, indem man mit einem Farbstoff in der Hand rechtsklickt, jedoch kannst du dich nur zwischen Fahrstühlen in der selben Farbe teleportieren.
+tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
+
 tile.openblocks.heal.name=Heiler
+tile.openblocks.heal.description=Der Heil-Block ist ein Block für den Kreativ-Modus, der nach und nach einen kleinen Heilungs-Effekt bringt.
+
 tile.openblocks.guide.name=Bau-Hilfe
+tile.openblocks.guide.description=Die Bau-Hilfe wird dir eine Schablone aus unechten Blöcken geben, in unterschiedlichen Formen und Größen, um dir zu helfen, deine Bauten zu planen.\nDu kannst den Block Shift-rechtsklicken, um die Form zu verändern, oder du kannst verschiedene Seiten anklicken, um die Schablone zu vergößern bzw. zu verkleinern.\nIm Kreativ-Modus kannst du einen Obsidian-Block oberhalb der Bau-Hilfe platzieren und diese dann mit irgendeinem Block rechtsklicken, um die Schablone automatisch mit diesem Block auszufüllen.
+tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
+
 tile.openblocks.ladder.name=Jaded-Leiter
+tile.openblocks.ladder.description=Die Jaded-Leiter löst das nervige Problem, über eine Falltür an der Spitze einer Leiter springen zu müssen. Die Jaded-Leiter funktioniert zeitgleich wie eine Falltür und wie eine Leiter.
+tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
+
 tile.openblocks.tank.name=Tank
-tile.openblocks.target.name=Zielscheibe
-tile.openblocks.grave.name=Grab
+tile.openblocks.tank.description=Tanks können Flüssigkeiten halten. Wenn du Tanks nebeneinander platzierst, werden sie ihre Flüssigkeit untereinander aufteilen. Du kannst Flüssigkeiten mit Eimern in Tanks füllen. Wenn der Tank Flüssige XP enthält, kannst du mit einer leeren Hand rechtsklicken, um dir ein wenig dieser XP zu geben. Wenn abgebaut, behalten Tanks ihren Inhalt.
+tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
+
 tile.openblocks.flag.name=Flagge
-tile.openblocks.trophy.name=Trophäe
+tile.openblocks.flag.description=Flaggen können als Dekoration verwendet werden oder, um den Weg aus einer Höhle zu markieren, die du gerade erforscht hast. Die Flagge zeigt in die Richtung, in der du sie platzierst, du kannst sie aber auch an die Wand hängen. Wenn du mit der Flagge in der Hand Shift-klickst, ändert sie ihre Farbe.
+
 tile.openblocks.beartrap.name=Bärenfalle
-tile.openblocks.sprinkler.name=Rasensprenger
-tile.openblocks.vacuumhopper.name=Vakuumtrichter
+tile.openblocks.beartrap.description=Platziere eine Bärenfalle und klicke auf sie, um sie zu öffnen. Wenn ein NPC über sie läuft, wird er sich nicht mehr bewegen können!
+
 tile.openblocks.sponge.name=Schwamm
+tile.openblocks.sponge.description=Der Schwamm ist ein Ersatz für den Vanilla-Schwamm. Perfekt, um kleine Mengen an Lava oder Wasser zu entfernen. Sei jedoch vorsichtig, wenn du mit größeren Mengen an Flüssigkeit arbeitest, denn es könnte ziemlich unordentlich werden.
+
 tile.openblocks.cannon.name=Item-Kanone
-tile.openblocks.bigbutton.name=Großer Knopf
-tile.openblocks.fan.name=Ventilator
-tile.openblocks.xpbottler.name=XP-Abfüllgerät
-tile.openblocks.village_highlighter.name=Dorf-Highlighter
-tile.openblocks.path.name=Pfad
-tile.openblocks.autoanvil.name=Auto-Amboss
-tile.openblocks.autoenchantmenttable.name=Auto-Zaubertisch
-tile.openblocks.xpdrain.name=XP-Sauger
+tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Item-Kannone Items, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger', um die Kannone auszurichten.
+
 tile.openblocks.ropeladder.name=Strickleiter
-tile.openblocks.donationStation.name=Spendenstation
-tile.openblocks.blockbreaker.name=Blockbrecher
-tile.openblocks.blockPlacer.name=Blockplatzierer
-tile.openblocks.itemDropper.name=Itemspender
-tile.openblocks.canvas.name=Leinwand
-tile.openblocks.canvasglass.name=Glasleinwand
+tile.openblocks.ropeladder.description=Wenn du eine Strickleiter platzierst, wird sie sich bis zum Boden ausrollen.
+
+tile.openblocks.sprinkler.name=Rasensprenger
+tile.openblocks.sprinkler.description=Der Rasensprenger hilft dir, Pflanzen bis zu 4 Blöcke weit weg zu düngen. Platziere ihn einfach über einem OpenBlocks-Tank, der mit Wasser gefüllt ist! Du kannst auch Knochenmehl für noch schnelleres Wachstum hinzufügen.\nEr zählt auch als Wasser-Quellblock!
+
 tile.openblocks.paintmixer.name=Farbmixer
-tile.openblocks.paintcan.name=Farbeimer
+tile.openblocks.paintmixer.description=Der Farbmixer kann jede Farbe, die du willst, zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Türkisen, Magentafarbenen, Gelben und Schwarzen Farbstoff in die anderen vier Slots und klicke auf Mixen!
+tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.canvas.name=Leinwand
+tile.openblocks.canvas.description=Die Leinwand ist ein perfekt weißer Block, der perfekt zum Streichen ist. Siehe die Farbmixer-Information für die Herstellung von Farbe.
+tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.fan.name=Ventilator
+tile.openblocks.fan.description=Der Ventilator bläst Spieler, NPCs und andere Objekte in die Richtung, in die er zeigt.
+
+tile.openblocks.target.name=Zielscheibe
+tile.openblocks.target.description=Die Zielscheibe gibt ein Redstone-Signal mit einer Stärke abhängig von der Genauigkeit des Schützen aus. Gib einer Zielscheibe ein Redstone-Signal, um sie auklappen zu lassen!
+
+tile.openblocks.path.name=Pfad
+tile.openblocks.path.description=Der Pfad macht überhaupt nichts. Er sieht einfach nur gut aus!
+
+tile.openblocks.itemDropper.name=Itemspender
+tile.openblocks.itemDropper.description=Der Itemspender ist dem Vanilla-Spender ähnlich, außer dass er Items direkt in einer geraden Linie nach unten wirft.
+
+tile.openblocks.bigbutton.name=Großer Knopf
+tile.openblocks.bigbutton.description=Der große Knopf ist ein Knopf, der an der Wand platziert werden kann. Wenn du auf den Knopf mit einer leeren Hand Shift-klickst, wird ein Inventar mit einem einzelnen Slot erscheinen. Du kannst Items in diesen Slot geben, um die Zeit, die der Knopf gedrückt ist, zu verlängern - ein Item erhöht die Dauer um einen Tick.
+
+tile.openblocks.xpdrain.name=XP-Gitter
+tile.openblocks.xpdrain.description=Platziere ein XP-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine XP werden in den Tank entleert, was dann für Blöcke wie den Auto-Zaubertisch oder den Auto-Amboss benutzt werden kann.
+
+tile.openblocks.vacuumhopper.name=Vakuumtrichter
+tile.openblocks.vacuumhopper.description=Der Vakuumtrichter saugt Items und XP-Kugeln um sich herum auf. Du kannst die Tabs auf der rechten Seite des Interfaces verwenden, um auszuwählen, zu welchen Seiten etwas ausgegeben werden soll.
+
+tile.openblocks.village_highlighter.name=Dorf-Highlighter
+tile.openblocks.village_highlighter.description=Platziere den Dorf-Highlighter in einem Dorf und gib ihm ein Redstone-Signal. Er wird den Umriss des Dorfes darstellen und eine Box im Eisengolem-Spawnbereich zeichnen. Nützlich, wenn du sichergehen willst, dass Dörfer nicht verschmelzen, oder wenn du eine Eisengolem-Farm baust!
+
+tile.openblocks.donationStation.name=Spendenstation
+tile.openblocks.donationStation.description=Du magst einen Block oder ein Item und willst dem Mod-Entwickler ein wenig Anerkennung zeigen? Schmeiß es in die Spendenstation und, wenn wir die Spendenseite der Entwickler kennen, geben wir dir einen Link.
+
+tile.openblocks.blockPlacer.name=Blockplatzierer
+tile.openblocks.blockPlacer.description=Wenn er ein Redstone-Signal bekommt, platziert der Blockplatzierer ein Item in die Richtung, in die er schaut.
+
+tile.openblocks.blockbreaker.name=Blockbrecher
+tile.openblocks.blockbreaker.description=Wenn er ein Redstone-Signal bekommt, bricht der Blockbrecher den Block, den er ansieht.
+
 tile.openblocks.projector.name=Höhenkartenprojektor
+tile.openblocks.projector.description=Ich überlasse es boq, das hier zu schreiben!
+
+tile.openblocks.autoenchantmenttable.name=Auto-Zaubertisch
+tile.openblocks.autoenchantmenttable.description=Der Auto-Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er mit flüssigen XP arbeitet. Benutze die Tabs auf der rechten Seite des Interfaces, um auszuwählen, von wo Items und XP genommen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.
+
+tile.openblocks.xpbottler.name=XP-Abfüllgerät
+tile.openblocks.xpbottler.description=Das XP-Abfüllgerät nimmt flüssige XP und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
+
+tile.openblocks.autoanvil.name=Auto-Amboss
+tile.openblocks.autoanvil.description=Der Auto-Amboss funktioniert ähnlich wie ein Vanilla-Amboss, außer dass er mit flüssigen XP arbeitet und komplett automatisierbar ist.\n\nBenutze die Tabs auf der rechten Seite des Interfaces, um auszuwählen, welche Seiten des Ambosses für Ein-/Ausgabe von Items oder Flüssigkeiten vorgesehen sind. Rechts-klicke und ziehe den Amboss im Tab, um ihn zu drehen und andere Seiten auszuwählen!
+
 tile.openblocks.drawingtable.name=Zeichentisch
+tile.openblocks.drawingtable.description=Der Zeichentisch wird gebraucht, um Schablonen herzustellen, die zum Zeichnen gebraucht werden. Gib eine unbearbeitete Schablone in den Zeichentisch und benutze die Pfeile, um die gewünschte Schablone auszuwählen!
+tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.grave.name=Grab
+tile.openblocks.trophy.name=Trophäe
+tile.openblocks.canvasglass.name=Glasleinwand
+tile.openblocks.paintcan.name=Farbeimer
+
+item.openblocks.cursor.name=Cursor
+item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
+item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
+
+item.openblocks.slimalyzer.name=Schleimalysierer
+item.openblocks.slimalyzer.description=Renne mit einem Schleimalysierer in deiner Hand herum, und er wird jedes Mal aufleuchten, wenn du dich in einem Schleime spawnenden Chunk befindest.
 
 item.openblocks.hangglider.name=Gleitschirm
-item.openblocks.gliderwing.name=Gleiter-Flügel
+item.openblocks.hangglider.description=Der Gleitschirm ist selbsterklärend. Halte ihn in deiner Hand und klicke, um ihn auf deinem Rücken zu platzieren. Und jetzt spring!\nUm deine Geschwindigkeit zu erhöhen, kannst du Shift drücken, während du gleitest, aber pass auf, du wirst schneller sinken!
+item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
+
+item.openblocks.gliderwing.name=Gleitschirmflügel
+
+item.openblocks.sleepingbag.name=Schlafsack
+item.openblocks.sleepingbag.description=Mit dem Schlafsack kannst du in der Wildnis schlafen, ohne deine Spawn-Position zurückzusetzen. Um zu schlafen, trage ihn einfach auf dem Rücken.
+
 item.openblocks.luggage.name=Reisegepäck
+item.openblocks.luggage.description=Das Reisegepäck ist dein neuer Freund. Es folgt dir überall hin und sammelt alle Items, die es am Boden findet, ein. Nom nom nom!\nUm es aufzuheben, Shift-klicke einfach auf es und es verwandelt sich zurück in ein Item, das du umhertragen kannst.\nWenn es jemals von einem Blitz getroffen werden sollte, wird es noch mehr Items tragen können!
+item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
+
 item.openblocks.sonicglasses.name=Schallbrille
+item.openblocks.sonicglasses.description=Wir stellen vor: Die fabelhafte neue Schallbrille!\nDiese neue und spannende Technologie der OpenMods GmbH erlaubt dir zu sehen, was du hörst!
+
+item.openblocks.squeegee.name=Scheibenwischer
+item.openblocks.squeegee.description=Der Scheibenwischer entfernt jegliche Farbe von gefärbten Blöcken. Klicke einfach auf die Seite eines Blockes, von der du die Farbe entfernen möchtest, oder Shift-klicke, um die Farbe von allen Seiten zu entfernen!
+item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.paintbrush.name=Pinsel
+item.openblocks.paintbrush.description=Pinsel lassen dich Blöcke in der Farbe deiner Wahl färben!\n\nTauche deinen Pinsel in einen Farbeimer, den du im Farbmixer erstellt hast, und dann auf einen Block, um diesen zu färben.\n\nLeinwand-Blöcke sind perfekt zum anmalen, du kannst aber auch einige Vanilla- und sogar manche Mod-Blöcke färben. Du kannst auch Schablonen auf Blöcken platzieren und dann über die Schablone zeichnen!
+item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.unprepared_stencil.name=Unbearbeitete Schablone
+item.openblocks.unprepared_stencil.description="Was sind diese nervigen Schablonen, die ich dauernd in Truhen finde?"\n\nSchablonen können auf Blöcken platziert werden und dann mit einem Pinsel übermalt werden!\n\nDu kannst einen Block mit mehreren Schablonen bemalen und du kannst mit einer leeren Hand auf sie klicken, um sie zu drehen.\n\nPlatziere eine unbearbeitete Schablone in einen Zeichentisch, um verschiedene Formen zu erstellen.
+item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.stencil.name=Schablone
 item.openblocks.crayon.name=Magischer Buntstift
 item.openblocks.pencil.name=Magischer Bleistift
 item.openblocks.glasses.pencil.name=Bleistiftbrille
@@ -104,20 +226,15 @@ item.openblocks.crane_magnet.name=Kranmagnet
 item.openblocks.beam.name=Balken
 item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
-item.openblocks.slimalyzer.name=Schleimalysierer
+
+item.openblocks.info_book.name=Welteroberung mit OpenBlocks
 item.openblocks.xpbucket.name=XP-Eimer
-item.openblocks.sleepingbag.name=Schlafsack
-item.openblocks.paintbrush.name=Pinsel
-item.openblocks.stencil.name=Schablone
 item.openblocks.height_map.name=Höhenkarte
 item.openblocks.empty_map.name=Leere Karte
 item.openblocks.map_controller.name=Kartenkontrollmodul
 item.openblocks.map_memory.name=Kartenspeichermodul
 item.openblocks.cartographer.name=Kartograph
 item.openblocks.assistant_base.name=Assistenzbasis
-item.openblocks.cursor.name=Cursor
-item.openblocks.squeegee.name=Scheibenwischer
-item.openblocks.unprepared_stencil.name=Unvorbereitete Schablone
 item.openblocks.sketching_pencil.name=Skizzierstift
 item.openblocks.tasty_clay.name=Leckerer Lehm
 item.openblocks.golden_eye.name=Goldenes Auge
