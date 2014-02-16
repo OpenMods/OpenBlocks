@@ -176,6 +176,7 @@ tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
 tile.openblocks.canvasglass.name=Glasleinwand
 tile.openblocks.paintcan.name=Farbeimer
+tile.openblocks.radio.name=Radio
 
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
@@ -239,6 +240,7 @@ item.openblocks.sketching_pencil.name=Skizzierstift
 item.openblocks.tasty_clay.name=Leckerer Lehm
 item.openblocks.golden_eye.name=Goldenes Auge
 item.openblocks.pointer.name=Zeiger
+item.openblocks.tuned_crystal.name=Wellenkristall
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
