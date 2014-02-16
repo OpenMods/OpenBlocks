@@ -49,7 +49,7 @@ public class ItemCursor extends Item {
 		if (world.isRemote) return itemStack;
 
 		NBTTagCompound tag = itemStack.getTagCompound();
-		if (tag != null & tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z") && tag.hasKey("dimension")) {
+		if (tag != null && tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z") && tag.hasKey("dimension")) {
 			final int x = tag.getInteger("x");
 			final int y = tag.getInteger("y");
 			final int z = tag.getInteger("z");
