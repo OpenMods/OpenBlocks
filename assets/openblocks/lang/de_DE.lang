@@ -26,19 +26,19 @@ openblocks.gui.items=Items
 openblocks.gui.misc=Misc
 
 openblocks.gui.welcome.title=Willkommen!
-openblocks.gui.welcome.content=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more!
+openblocks.gui.welcome.content=OpenBlocks ist eine neue Open-Source-Mod die verschiedene Ideen in Minecraft einbringt, inklusive Gleitschirme, Aufzüge, Tanks, Gräber, Farben, Kräne, flüssige XP, Kartographen, Trophäen und mehr!
 
 openblocks.gui.credits_title=Credits
-openblocks.gui.credits=*Boq, Mikee and NeverCast* - Führende Entwickler von OpenBlocks (Dürfen wir uns selbst hier nennen?)\n\n*SinZ and Yoshi2* - Von Anfang an Mitglieder des OpenMods-Teams.\n\n*Vexatos and crafteverywhere* - Arbeitsame Übersetzer.\n\nJeder, der innerhalb des letzten Jahres zum Code beigetragen hat.\n\n*Direwolf20 and the rest of ForgeCraft* - Für das Entdecken von Bugs und Crashes vor der Veröffentlichung einer Version.\n\nJeder, der ein Spotlight oder Let's Play machte sowie generell die Modifikation untertützt hat, seit wir begannen!
+openblocks.gui.credits=§LBoq, Mikee und NeverCast§R - Führende Entwickler von OpenBlocks (Dürfen wir uns selbst hier nennen?)\n\n§LSinZ und Yoshi2§R - Von Anfang an Mitglieder des OpenMods-Teams.\n\n§LVexatos und crafteverywhere§R - Arbeitsame Übersetzer.\n\nJeder, der innerhalb des letzten Jahres zum Code beigetragen hat.\n\n*Direwolf20 and the rest of ForgeCraft* - Für das Entdecken von Bugs und Crashes vor der Veröffentlichung einer Version.\n\nJeder, der ein Spotlight oder Let's Play machte sowie generell die Modifikation untertützt hat, seit wir begannen!
 
 openblocks.gui.config.title=Einfache Config-Bearbeitung
-openblocks.gui.config.content=OpenMods allow for both client and server config options to be changed from chat commands. Some don't even require restart!\n\nServer config settings can be changed using '§L/om_config_s§R' (op needed) and client config settings can be changed using '§L/om_config_c§R'\n\nFor example:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFor a full list of commands type: §L/help om_config_s§R or §L/help om_config_c§R
+openblocks.gui.config.content=OpenMods erlaubt sowohl Client- als auch Serverkonfigurationen über den Chat zu ändern. Manche brauchen nicht mal einen Neustart!\n\nServerkonfigurationen können mit '§L/om_config_s§R' (setzt Operator-Rechte vorraus) und Clientkonfigurationen mit '§L/om_config_c§R' geändert werden.\n\nZum Beispiel:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFür eine Liste aller verfügbaren Kommandos benutze: §L/help om_config_s§R oder §L/help om_config_c§R
 
 openblocks.gui.bkey.title=Die berüchtigte 'B'-Taste
-openblocks.gui.bkey.content=The 'B' key is a very special key in OpenBlocks.\n\nEnabling the 'weAreSeriousPeople' config option in the 'tomfoolery' category of both the client and server config files will give you your very own digestive system.\n\nTry eating some of that tasty clay and press 'B' to digest!
+openblocks.gui.bkey.content=Die 'B'-Taste ist eine sehr spezielle Taste in OpenBlocks.\n\nAktivieren der Option 'weAreSeriousPeople' im Abschnitt 'tomfoolery' sowohl in der Client- als auch in der Serverkonfiguration gibt dir dein eigenes Verdauungssystem.\n\nVersuche etwas von diesem Leckeren Lehm zu essen und drücke 'B' um zu verdauen!
 
 openblocks.gui.unstable.title='Instabil'-Verzauberung
-openblocks.gui.unstable.content=We've had unconfirmed reports that this enchantment causes any gunpowder you're carrying to become unstable when you're attacked or when you jump off something.\n\nUse at your own risk!
+openblocks.gui.unstable.content=Wir hatten unbestätigte Berichte dass diese Verzauberung jegliches Schießpulver das du trägst, instabil werden lässt, wenn du attackiert wirst oder von etwas herunterspringst.\n\nBenutzung auf eigene Gefahr!
 
 openblocks.changelog.title=Was neu ist in OpenBlocks %s
 openblocks.misc.url=URL: %s
@@ -71,7 +71,7 @@ openblocks.misc.shape.hexagon=Sechseck
 openblocks.misc.shape.octagon=Achteck
 
 openblocks.misc.radio.too_many=Es laufen bereits zu viele Radios
-openblocks.misc.radio.invalid_stream=Üngültiger Stream
+openblocks.misc.radio.invalid_stream=Ungültiger Stream
 openblocks.misc.radio.not_ready=Stream nicht bereit ready, versuche es später nochmal
 openblocks.misc.radio.unknown_error=Unbekannter Fehler
 openblocks.misc.radio.muted=Geräusche sind deaktiviert!
@@ -98,78 +98,78 @@ tile.openblocks.tank.description=Tanks können Flüssigkeiten halten. Wenn du Ta
 tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
 
 tile.openblocks.flag.name=Flagge
-tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color.
+tile.openblocks.flag.description=Flaggen können als Dekoration verwendet werden oder um den Weg aus einer Höhle zu markieren, die du gerade erforscht hast. Die Flagge zeigt in die Richtung in der du sie platzierst, du kannst sie aber auch an die Wand hängen. Wenn du mit der Flagge in der Hand Shift-klickst, ändert sie ihre Farbe.
 
 tile.openblocks.beartrap.name=Bärenfalle
-tile.openblocks.beartrap.description=Place a bear trap and click on it to open it up. When a mob walks over the trap they'll be unable to move!
+tile.openblocks.beartrap.description=Platziere eine Bärenfalle und klicke auf sie um sie zu öffnen. Wenn ein NPC über sie läuft, wird er sich nicht mehr bewegen können!
 
 tile.openblocks.sponge.name=Schwamm
-tile.openblocks.sponge.description=The sponge is a replacement for the vanilla sponge. Perfect for removing small pockets of lava or water. Be careful when using it on large areas of liquid though as it'll start to get quite messy.
+tile.openblocks.sponge.description=Der Schwamm ist ein Ersatz für den Vanilla-Schwamm. Perfekt, um kleine Mengen an Lava oder Wasser zu entfernen. Sei jedoch vorsichtig wenn du mit größeren Mengen an Flüssigkeit arbeitest, denn es könnte ziemlich unordentlich werden.
 
 tile.openblocks.cannon.name=Item-Kanone
-tile.openblocks.cannon.description=When given a redstone signal, the item cannon will shoot items that it finds in an adjacent inventory. Use the 'pointer' item to aim the cannon.
+tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Item-Kannone Items, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger' um die Kannone auszurichten.
 
 tile.openblocks.ropeladder.name=Strickleiter
-tile.openblocks.ropeladder.description=When you place a rope ladder it'll roll out all the way to the ground.
+tile.openblocks.ropeladder.description=Wenn du eine Strickleiter platzierst, wird sie sich bis zum Boden ausrollen.
 
 tile.openblocks.sprinkler.name=Rasensprenger
-tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simply place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block!
+tile.openblocks.sprinkler.description=Der Rasensprenger hilft dir, Pflanzen bis zu 4 Blöcke weit weg zu düngen. Platziere ihn einfach über einem OpenBlocks-Tank, der mit Wasser gefüllt ist! Du kannst auch Knochenmehl für noch schnelleres Wachsen hinzufügen.\nEr zählt auch als Wasser-Quellblock!
 
 tile.openblocks.paintmixer.name=Farbmixer
-tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
+tile.openblocks.paintmixer.description=Der Farbmixer kann jede Farbe die du willst zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Cyan, Magenta, Gelbe und Schwarz in die anderen vier Slots und klicke auf Mixen!
 tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.canvas.name=Leinwand
-tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints.
+tile.openblocks.canvas.description=Die Leinwand ist ein perfekt weißer Block der perfekt zum Streichen ist. Siehe die Farbmixer-Information für die Herstellung von Farbe.
 tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.fan.name=Ventilator
-tile.openblocks.fan.description=The fan will blow players, mobs or entities in the direction it's facing.
+tile.openblocks.fan.description=Der Ventilator bläst Spieler, NPCs und andere Objekte in die Richtung in die er zeigt.
 
 tile.openblocks.target.name=Zielscheibe
-tile.openblocks.target.description=The target will give out a redstone signal of a strength relative to the accuracy of the players aim. Give the target a redstone signal to make it pop up!
+tile.openblocks.target.description=Die Zielscheibe gibt ein Redstone-Signal mit einer Stärke abhängig von der Genauigkeit des Schützen aus. Gib einer Zielscheibe ein Redstone-Signal um sie auklappen zu lassen!
 
 tile.openblocks.path.name=Pfad
-tile.openblocks.path.description=The path doesn't do anything. It just looks nice!
+tile.openblocks.path.description=Der Pfad macht überhaupt nichts. Er schaut einfach nur gut aus!
 
 tile.openblocks.itemDropper.name=Itemspender
-tile.openblocks.itemDropper.description=The item dropper is similar to the vanilla dropper, except it drops items directly down in a straight line.
+tile.openblocks.itemDropper.description=Der Itemspender ist ähnlich zum Vanilla-Spender, außer dass er Items direkt in einer geraden Linie nach unten wirft.
 
 tile.openblocks.bigbutton.name=Großer Knopf
-tile.openblocks.bigbutton.description=The big button is a large button that can be placed on walls. If you shift-click on the button with an empty hand it will bring up an inventory with a single slot. You can put items into this slot to increase the length of time the button is pressed - one item increases the button press by one tick.
+tile.openblocks.bigbutton.description=Der große Knopf ist ein Knopf, der an der Wand platziert werden kann. Wenn du auf den Knopf mit einer leeren Hand Shift-klickst, wird ein Inventar mit einem einzelnen Slot erscheinen. Du kannst Items in diesen Slot geben, um die Zeit, die der Knopf gedrückt ist, zu verlängern - ein Item erhöht die Dauer um einen Tick.
 
 tile.openblocks.xpdrain.name=XP-Gitter
-tile.openblocks.xpdrain.description=Place the XP drain above an OpenBlocks tank and stand on it. Your XP will drain into the tank, which can then be used for blocks such as the auto enchantment table or the auto anvil.
+tile.openblocks.xpdrain.description=Platziere ein XP-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine XP werden in den Tank entleert, was dann für Blöcke wie den Auto-Zaubertisch oder den Auto-Amboss benutzt werden kann.
 
 tile.openblocks.vacuumhopper.name=Vakuumtrichter
-tile.openblocks.vacuumhopper.description=The vacuum hopper will suck up items and XP orbs around it. You can use the tabs on the right of the interface to select which sides to output to.
+tile.openblocks.vacuumhopper.description=Der Vakuumtrichter saugt Items und XP-Kugeln um sich herum auf. Du kannst die Tabs auf der rechten Seite des Interfaces verwenden, um auszuwählen, zu welchen Seiten etwas ausgegeben werden soll.
 
 tile.openblocks.village_highlighter.name=Dorf-Highlighter
-tile.openblocks.village_highlighter.description=Drop the village highlighter down in a village and give it a redstone signal. It will outline the perimeter of the village and draw a box in the iron golem spawning area. Useful if you want to make sure villages don't merge into each other or you're making an iron farm!
+tile.openblocks.village_highlighter.description=Platziere den Dorf-Highlighter in einem Dorf und gib ihm ein Redstone-Signal. Er wird den Umriss des Dorfes darstellen und eine Box im Eisengolem-Spawnbereich zeichnen. Nützlich wenn du sichergehen willst, dass Dörfer nicht verschmelzen oder du eine Eisengolem-Farm baust!
 
 tile.openblocks.donationStation.name=Spendenstation
-tile.openblocks.donationStation.description=Love a block or item and want to show the mod developer some appreciation? Drop it into the donation station and if we know the authors donation page we'll give you a link.
+tile.openblocks.donationStation.description=Du magst einen Block oder ein Item und willst dem Mod-Entwickler ein wenig Anerkennung zeigen? Schmeiß es in die Spendenstation und wenn wir die Spendenseite der Entwickler kennen, geben wir dir einen Link.
 
 tile.openblocks.blockPlacer.name=Blockplatzierer
-tile.openblocks.blockPlacer.description=When given a redstone pulse the block placer will place an item in the direction it's facing.
+tile.openblocks.blockPlacer.description=Wenn er ein Redstone-Signal bekommt, platziert der Blockplatzierer ein Item in die Richtung in die er schaut.
 
 tile.openblocks.blockbreaker.name=Blockbrecher
-tile.openblocks.blockbreaker.description=When given a redstone pulse the block breaker will break the block it's facing.
+tile.openblocks.blockbreaker.description=Wenn er ein Redstone-Signal bekommt, bricht der Blockbrecher den Block den er ansieht.
 
 tile.openblocks.projector.name=Höhenkartenprojektor
-tile.openblocks.projector.description=I'll let you write this one boq!
+tile.openblocks.projector.description=Ich überlasse es boq, das zu schreiben!
 
 tile.openblocks.autoenchantmenttable.name=Auto-Zaubertisch
-tile.openblocks.autoenchantmenttable.description=The auto enchantment table works in a similar way to the vanilla enchantment table except it runs off XP juice. Use the tabs on the right side of the interface to select where items or xp can be pulled from. Just like with the vanilla table bookshelves are required for higher levels.
+tile.openblocks.autoenchantmenttable.description=Der Auto-Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er von flüssigen XP läuft. Benutze die Tabs auf der rechten Seite des Interfaces um auszuwählen, von wo Items und XP gezogen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.
 
 tile.openblocks.xpbottler.name=XP-Abfüllgerät
-tile.openblocks.xpbottler.description=The XP bottler will take XP juice and bottle it up into glass bottles to create bottles o' enchanting.
+tile.openblocks.xpbottler.description=Das XP-Abfüllgerät nimmt flüssige XP und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
 
 tile.openblocks.autoanvil.name=Auto-Amboss
-tile.openblocks.autoanvil.description=The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.\n\nUse the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted. Right click and drag the anvil in the tab to spin it around and select other sides!
+tile.openblocks.autoanvil.description=Der Auto-Amboss funktioniert ähnlich wie ein Vanilla-Amboss, außer dass er von flüssigen XP läuft und komplett automatisierbar ist.\n\nBenutze die Tabs auf der rechten Seite des Interfaces um auszuwählen, welche Seiten des Ambosses für Ein-/Ausgabe von Items oder Flüssigkeiten vorgesehen sind. Rechts-klicke und ziehe den Amboss im Tab um ihn zu drehen und andere Seiten auszuwählen!
 
 tile.openblocks.drawingtable.name=Zeichentisch
-tile.openblocks.drawingtable.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want!
+tile.openblocks.drawingtable.description=Der Zeichentisch wird gebraucht, um Schablonen herzustellen, die zum Zeichnen gebraucht werden. Gib eine unbearbeitete Schablone in den Zeichentisch und benutze die Pfeile um die gewünschte Schablone auszuwählen!
 
 tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
@@ -178,7 +178,7 @@ tile.openblocks.paintcan.name=Farbeimer
 
 
 item.openblocks.cursor.name=Cursor
-item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
+item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn wo immer du willst um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig von wie weit du vom Ziel entfernt bist.
 
 item.openblocks.slimalyzer.name=Schleimalysierer
 item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.
