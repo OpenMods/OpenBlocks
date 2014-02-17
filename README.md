@@ -6,8 +6,8 @@ An open source random collection of blocks and miscellaneous cool stuff
 Current Version
 -
 
-**[v1.2.4](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.4.jar) for Minecraft 1.6.x**
-You'll also need [OpenModsLib](https://dl.dropboxusercontent.com/u/4295615/OpenModsLib-0.1.jar).
+**[v1.2.5](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.5.jar) for Minecraft 1.6.x**
+You'll also need [OpenModsLib](https://dl.dropboxusercontent.com/u/4295615/OpenModsLib-0.2.jar).
 
 For stable release downloads, click [here](http://www.openmods.info/openblocks/downloads).  
 For snapshot versions, check the [Jenkins](http://www.openmods.info:8080/).
@@ -20,8 +20,10 @@ FREQUENTLY ASKED QUESTIONS:
   * Setting any block or item's ID to 0 will disable it.
 * "How come my **elevators don't always work?**"
   * Recently, we made a change to the way elevators work-- they now require XP. You can disable this change in the configs.
-* "About these automatic anvils and enchantment t--"
+* "Automatic enchantment tables won't enchant past a certain level!"
   * They require bookshelves, just like their mundane counterparts.
+* "Things like Thermal Expansion Fluiducts won't work with the automatic enchanter/anvil!"
+  * You need to select the relevant side on the GUI to allow input. The tab you're looking for is on the right.
 * "How can I **contact** the OpenMods team?"
   * We're often on EsperNet IRC at #OpenMods, but you can also open up a new issue on the GitHub or send a message to us on reddit.
 
