@@ -40,7 +40,10 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		if (worldObj.isRemote) return;
 
 		ForgeDirection direction = getRotation();
-		int x = xCoord + direction.offsetX, y = yCoord + direction.offsetY, z = zCoord + direction.offsetZ;
+		final int x = xCoord + direction.offsetX;
+		final int y = yCoord + direction.offsetY;
+		final int z = zCoord + direction.offsetZ;
+
 		for (int i = 0, l = inventory.getSizeInventory(); i < l; i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
@@ -53,7 +56,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 							worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
 			fakePlayer.setDead();
 			inventory.setInventorySlotContents(i, newStack);
-			return;
+			break;
 		}
 	}
 
