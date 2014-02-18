@@ -5,19 +5,19 @@ import java.util.Arrays;
 import net.minecraft.client.Minecraft;
 import openmods.gui.component.BaseComponent;
 import openmods.sync.SyncableInt;
+import openmods.sync.SyncableIntArray;
 
 class GuiComponentPixelGrid extends BaseComponent {
 
 	private int cols;
 	private int rows;
 	private int scale;
-	private int[] pixels;
 	private SyncableInt color;
+	private SyncableIntArray colorGrid;
 
-	public GuiComponentPixelGrid(int x, int y, int cols, int rows, int scale, SyncableInt color) {
+	public GuiComponentPixelGrid(int x, int y, int cols, int rows, int scale, SyncableIntArray colorGrid, SyncableInt color) {
 		super(x, y);
-		this.pixels = new int[cols * rows];
-		Arrays.fill(this.pixels, 0xFFFFFFFF);
+		this.colorGrid = colorGrid;
 		this.cols = cols;
 		this.rows = rows;
 		this.scale = scale;
@@ -39,6 +39,7 @@ class GuiComponentPixelGrid extends BaseComponent {
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 		int startX = x + offsetX;
 		int startY = y + offsetY;
+		int[] pixels = colorGrid.getValue();
 		for (int c = 0, i = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++, i++) {
 				int bX = startX + (c * scale);
@@ -48,12 +49,20 @@ class GuiComponentPixelGrid extends BaseComponent {
 		}
 	}
 
-	@Override
 	public void mouseClicked(int mouseX, int mouseY, int button) {
 		super.mouseClicked(mouseX, mouseY, button);
+		drawPixels(mouseX, mouseY);
+	}
+
+	@Override
+	public void mouseClickMove(int mouseX, int mouseY, int button, /* love you */long time) {
+		super.mouseClickMove(mouseX, mouseY, button, time);
+		drawPixels(mouseX, mouseY);
+	}
+	
+	private void drawPixels(int mouseX, int mouseY) {
 		if (isMouseOver(mouseX + x, mouseY + y)) {
-			System.out.println((color.getValue() << 24) | 0xFFFFFF);
-			pixels[(mouseX / scale) * rows + (mouseY / scale)] = color.getValue() | (0xFF << 24);
+			colorGrid.setValue((mouseX / scale) * rows + (mouseY / scale), color.getValue() | (0xFF << 24));
 		}
 	}
 }
