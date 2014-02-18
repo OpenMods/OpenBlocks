@@ -7,9 +7,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
 import openmods.api.IPlaceAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFloat;
@@ -17,6 +17,7 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
+	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
 	private SyncableFloat angle;
 
 	public TileEntityFan() {}
@@ -28,74 +29,55 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 	@Override
 	public void updateEntity() {
+		final double maxForce = Config.fanForce * (Config.redstoneActivatedFan? worldObj.getBlockPowerInput(xCoord, yCoord, zCoord) / 15.0 : 1);
+		if (maxForce <= 0) return;
 		@SuppressWarnings("unchecked")
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
-		Vec3 blockPos = getBlockPosition();
+		if (entities.isEmpty()) return;
+
+		final Vec3 blockPos = getConeApex();
+		final Vec3 basePos = getConeBaseCenter();
+		final Vec3 coneAxis = blockPos.subtract(basePos);
+
 		for (Entity entity : entities) {
-			Vec3 entityPos = getEntityPosition(entity);
-			Vec3 basePos = getConeBaseCenter();
-			double dX = entityPos.xCoord - blockPos.xCoord;
-			double dY = entityPos.yCoord - blockPos.yCoord;
-			double dZ = entityPos.zCoord - blockPos.zCoord;
-			double dist = MathHelper.sqrt_double(dX * dX + dZ * dZ);
-			if (isLyingInCone(entityPos, blockPos, basePos, 1.2f)) {
-				double yaw = Math.atan2(dZ, dX) - (Math.PI / 2);
-				float pitch = (float)(-(Math.atan2(dY, dist)));
-				double f1 = MathHelper.cos((float)-yaw);
-				double f2 = MathHelper.sin((float)-yaw);
-				double f3 = -MathHelper.cos(-pitch);
-				double f4 = MathHelper.sin(-pitch);
-				Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(f2
-						* f3, f4, f1 * f3);
-				double force = 1.0 - (dist / 10.0);
-				force = Math.max(0, force);
-				entity.motionX -= force * directionVec.xCoord * 0.05;
-				entity.motionZ -= force * directionVec.zCoord * 0.05;
+			if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) continue;
+			Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(
+					entity.posX - blockPos.xCoord,
+					entity.posY - blockPos.yCoord,
+					entity.posZ - blockPos.zCoord);
+
+			if (isLyingInSphericalCone(coneAxis, directionVec, CONE_HALF_APERTURE)) {
+				final double distToOrigin = directionVec.lengthVector();
+				final double force = (1.0 - distToOrigin / Config.fanRange) * maxForce;
+				if (force <= 0) continue;
+				Vec3 normal = directionVec.normalize();
+				entity.motionX += force * normal.xCoord;
+				entity.motionZ += force * normal.zCoord;
 			}
 		}
 	}
 
-	public Vec3 getEntityPosition(Entity entity) {
-		return worldObj.getWorldVec3Pool().getVecFromPool(entity.posX, entity.posY, entity.posZ);
-	}
-
-	public Vec3 getConeBaseCenter() {
+	private Vec3 getConeBaseCenter() {
 		double angle = Math.toRadians(getAngle() - 90);
-		return worldObj.getWorldVec3Pool().getVecFromPool(xCoord
-				+ (Math.cos(angle) * 10), yCoord + 0.5, zCoord
-				+ (Math.sin(angle) * 10));
+		return worldObj.getWorldVec3Pool().getVecFromPool(
+				xCoord + (Math.cos(angle) * Config.fanRange),
+				yCoord + 0.5,
+				zCoord + (Math.sin(angle) * Config.fanRange));
 	}
 
-	public Vec3 getBlockPosition() {
+	private Vec3 getConeApex() {
 		double angle = Math.toRadians(getAngle() - 90);
 		return worldObj.getWorldVec3Pool().getVecFromPool(xCoord + 0.5 - Math.cos(angle) * 1.1, yCoord + 0.5, zCoord + 0.5 - Math.sin(angle) * 1.1);
 	}
 
-	public AxisAlignedBB getEntitySearchBoundingBox() {
+	private AxisAlignedBB getEntitySearchBoundingBox() {
 		AxisAlignedBB boundingBox = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord - 2, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
-		return boundingBox.expand(10.0, 10.0, 10.0);
+		return boundingBox.expand(Config.fanRange, Config.fanRange, Config.fanRange);
 	}
 
-	public boolean isLyingInCone(Vec3 point, Vec3 t, Vec3 b, float aperture) {
-
-		float halfAperture = aperture / 2.f;
-
-		Vec3 apexToXVect = dif(t, point);
-		Vec3 axisVect = dif(t, b);
-
-		boolean isInInfiniteCone = apexToXVect.dotProduct(axisVect)
-				/ apexToXVect.lengthVector() / axisVect.lengthVector() > Math.cos(halfAperture);
-
-		if (!isInInfiniteCone) return false;
-
-		boolean isUnderRoundCap = apexToXVect.dotProduct(axisVect)
-				/ axisVect.lengthVector() < axisVect.lengthVector();
-		return isUnderRoundCap;
-	}
-
-	static public Vec3 dif(Vec3 a, Vec3 b) {
-		return Vec3.createVectorHelper(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord
-				- b.zCoord);
+	private static boolean isLyingInSphericalCone(Vec3 coneAxis, Vec3 originToTarget, double halfAperture) {
+		double angleToAxisCos = originToTarget.dotProduct(coneAxis) / originToTarget.lengthVector() / coneAxis.lengthVector();
+		return angleToAxisCos > Math.cos(halfAperture);
 	}
 
 	@Override

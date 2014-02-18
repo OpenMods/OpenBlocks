@@ -353,6 +353,18 @@ public class Config {
 	@ConfigProperty(category = "radio", name = "maxSources", comment = "Maximum number of sources playing at one time")
 	public static int maxRadioSources = 3;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "fan", name = "fanForce", comment = "Maximum force applied every tick to entities nearby (linear decay)")
+	public static double fanForce = 0.05;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "fan", name = "fanRange", comment = "Range of fan in blocks")
+	public static double fanRange = 10;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "fan", name = "isRedstoneActivated", comment = "Is fan force controlled by redstone current")
+	public static boolean redstoneActivatedFan = true;
+
 	public static void register() {
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
