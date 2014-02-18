@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.client.WallpaperManager;
 import openblocks.common.Stencil;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
@@ -18,9 +19,7 @@ import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ISpecialDrops;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableInt;
-import openmods.sync.SyncableIntArray;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
@@ -42,8 +41,16 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public SyncableBlockLayers stencilsWest;
 	public SyncableBlockLayers stencilsNorth;
 	public SyncableBlockLayers stencilsSouth;
-
 	public SyncableBlockLayers[] allSides;
+
+	public SyncableString wallpaperUp;
+	public SyncableString wallpaperDown;
+	public SyncableString wallpaperEast;
+	public SyncableString wallpaperWest;
+	public SyncableString wallpaperNorth;
+	public SyncableString wallpaperSouth;
+	
+	public SyncableString[] allWallpapers;
 
 	@Override
 	public void initialize() {}
@@ -70,15 +77,37 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		baseColors = new SyncableIntArray(new int[] { 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF });
 		paintedBlockId = new SyncableInt(0);
 		paintedBlockMeta = new SyncableInt(0);
+		
+		wallpaperUp = new SyncableString();
+		wallpaperDown = new SyncableString();
+		wallpaperEast = new SyncableString();
+		wallpaperWest = new SyncableString();
+		wallpaperNorth = new SyncableString();
+		wallpaperSouth = new SyncableString();
+		allWallpapers = new SyncableString[] {
+				wallpaperDown, wallpaperUp, wallpaperNorth, wallpaperSouth, wallpaperWest, wallpaperEast
+		};
 	}
 
 	public SyncableBlockLayers getLayersForSide(int side) {
 		return allSides[side];
 	}
+	
+	public SyncableString getWallpaperForSide(int side) {
+		return allWallpapers[side];
+	}
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
 		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		for (ISyncableObject change : changes) {
+			for (SyncableString wallpaper : allWallpapers) {
+				if (wallpaper.equals(change) && !wallpaper.getValue().equals("")) {
+					WallpaperManager.requestWallpaper(wallpaper.getValue());
+					break;
+				}
+			}
+		}
 	}
 
 	public Layer getLayerForSide(int renderSide, int layerId) {
@@ -219,5 +248,13 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
 			}
 		}
+	}
+
+	public boolean useWallpaper(int side, String textureName) {
+		getWallpaperForSide(side).setValue(textureName);
+		if (!worldObj.isRemote) {
+			sync();
+		}
+		return true;
 	}
 }

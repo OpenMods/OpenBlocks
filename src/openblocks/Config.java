@@ -215,6 +215,9 @@ public class Config {
 	@ItemId(description = "The id of info book")
 	public static int itemInfoBookId = 14999;
 
+	@ItemId(description = "The id of the wallpaper item")
+	public static int itemWallpaperId = 15000;
+
 	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
@@ -719,6 +722,10 @@ public class Config {
 		if (itemInfoBookId > 0) {
 			OpenBlocks.Items.infoBook = new ItemInfoBook();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.infoBook), Item.clay, Item.book));
+		}
+		
+		if (itemWallpaperId > 0) {
+			OpenBlocks.Items.wallpaper = new ItemWallpaper();
 		}
 
 		if (explosiveEnchantmentId > 0) {

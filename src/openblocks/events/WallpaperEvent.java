@@ -44,6 +44,10 @@ public class WallpaperEvent extends TileEntityMessageEventPacket {
 		}
 	}
 	
+	public int[] getColors() {
+		return colors;
+	}
+	
 	@Override
 	public IEventPacketType getType() {
 		return EventTypes.WALLPAPER;
