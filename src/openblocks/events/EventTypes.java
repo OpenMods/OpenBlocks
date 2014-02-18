@@ -74,6 +74,18 @@ public enum EventTypes implements IEventPacketType {
 		public PacketDirection getDirection() {
 			return PacketDirection.FROM_CLIENT;
 		}
+	},
+	WALLPAPER {
+
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.ANY;
+		}
+		
+		@Override
+		public EventPacket createPacket() {
+			return new WallpaperEvent();
+		}
 	};
 
 	@Override

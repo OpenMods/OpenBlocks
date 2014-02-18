@@ -9,9 +9,11 @@ import openblocks.client.gui.GuiSprinkler;
 import openblocks.client.gui.GuiTexturingTable;
 import openblocks.common.container.ContainerSprinkler;
 import openblocks.common.container.ContainerTexturingTable;
+import openblocks.events.WallpaperEvent;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
+import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.OpenTileEntity;
@@ -63,6 +65,18 @@ public class TileEntityTexturingTable extends OpenTileEntity implements IHasGui,
 
 	public SyncableIntArray getClientColorGrid() {
 		return clientColorGrid;
+	}
+	
+	public void sendColorsToServer() {
+		new WallpaperEvent(this, getClientColorGrid().getValue()).sendToServer();
+	}
+	
+
+	@Override
+	public void onEvent(TileEntityMessageEventPacket event) {
+		if (event instanceof WallpaperEvent) {
+			System.out.println("Got data!");
+		}
 	}
 
 }

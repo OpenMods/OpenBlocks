@@ -8,7 +8,7 @@ public class ContainerTexturingTable extends ContainerInventoryProvider<TileEnti
 
 	public ContainerTexturingTable(IInventory playerInventory, TileEntityTexturingTable owner) {
 		super(playerInventory, owner);
-		addSlotToContainer(new RestrictedSlot(inventory, 0, 130, 26));
+		addSlotToContainer(new RestrictedSlot(inventory, 0, 134, 28));
 		addPlayerInventorySlots(117);
 	}
 
