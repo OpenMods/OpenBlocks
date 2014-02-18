@@ -137,6 +137,9 @@ public class Config {
 	@BlockId(description = "The id of the radio block")
 	public static int blockRadioId = 2577;
 
+	@BlockId(description = "The id of the texturing table")
+	public static int blockTexturingTableId = 2578;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -544,6 +547,10 @@ public class Config {
 			final ItemStack lapis = new ItemStack(Item.dyePowder, 1, ColorUtils.BLUE);
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', lapis));
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', lapis));
+		}
+		
+		if (ConfigProcessing.canRegisterBlock(blockTexturingTableId)) {
+			OpenBlocks.Blocks.texturingTable = new BlockTexturingTable();
 		}
 
 		/*
