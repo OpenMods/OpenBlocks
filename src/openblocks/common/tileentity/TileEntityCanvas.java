@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.client.WallpaperIconManager;
+import openblocks.client.wallpapers.WallpaperIconManager;
 import openblocks.common.Stencil;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
@@ -103,7 +103,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		for (ISyncableObject change : changes) {
 			for (SyncableString wallpaper : allWallpapers) {
 				if (wallpaper.equals(change) && !wallpaper.getValue().equals("")) {
-					WallpaperIconManager.requestWallpaper(wallpaper.getValue());
+					WallpaperIconManager.instance.requestWallpaper(wallpaper.getValue());
 					break;
 				}
 			}
@@ -137,7 +137,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	private Icon getBaseTexture(int side) {
 		String wallpaper = getWallpaperForSide(side).getValue();
 		if (wallpaper != null && !wallpaper.equals("")) {
-			return WallpaperIconManager.requestWallpaper(wallpaper);
+			return WallpaperIconManager.instance.requestWallpaper(wallpaper);
 		}
 		if (paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.baseIcon;
 		Block block = Block.blocksList[paintedBlockId.getValue()];

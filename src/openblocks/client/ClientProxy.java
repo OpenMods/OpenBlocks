@@ -23,7 +23,10 @@ import openblocks.client.radio.RadioManager;
 import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
+import openblocks.client.wallpapers.WallpaperIconManager;
+import openblocks.common.WallpaperManager;
 import openblocks.common.entity.*;
+import openblocks.common.item.ItemWallpaper;
 import openblocks.common.tileentity.*;
 import openmods.binding.KeyDispatcherBuilder;
 import openmods.entity.EntityBlock;
@@ -161,6 +164,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.elevator != null) {
 			MinecraftForge.EVENT_BUS.register(new ElevatorMovementHandler());
+		}
+
+		if (Config.itemWallpaperId > 0) {
+			MinecraftForge.EVENT_BUS.register(WallpaperIconManager.instance);
 		}
 	}
 

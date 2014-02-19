@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
-import openblocks.client.WallpaperIconManager;
+import openblocks.client.wallpapers.WallpaperIconManager;
 import openblocks.events.EventTypes;
 import openmods.network.EventPacket;
 import openmods.network.IEventPacketType;
@@ -70,7 +70,6 @@ public class WallpaperManager {
 			id = input.readUTF();
 			data = new WallpaperData(id);
 			data.readFromStream(input);
-			WallpaperIconManager.setWallpaper(id, data.colorData);
 		}
 
 		@Override
@@ -141,16 +140,5 @@ public class WallpaperManager {
 		System.out.println("Requested data for "+id);
 		System.out.println("data = "+data);
 		evt.reply(new WallpaperResponseEvent(id, data));
-	}
-	
-	@ForgeSubscribe
-	public void onWallpaperResponse(WallpaperResponseEvent evt) {
-		String id = evt.getId();
-		WallpaperIconManager.setWallpaper(id, evt.getData().colorData);
-	}
-	
-	@ForgeSubscribe
-	public void onWorldUnload(WorldEvent.Unload evt) {
-		WallpaperIconManager.unloadAll();
 	}
 }
