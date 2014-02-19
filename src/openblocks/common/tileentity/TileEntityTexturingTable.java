@@ -5,14 +5,16 @@ import java.util.Arrays;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import net.minecraftforge.common.DimensionManager;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.client.gui.GuiTexturingTable;
 import openblocks.common.WallpaperData;
 import openblocks.common.container.ContainerSprinkler;
 import openblocks.common.container.ContainerTexturingTable;
 import openblocks.common.item.ItemWallpaper;
-import openblocks.events.WallpaperEvent;
+import openblocks.events.WallpaperEvents;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
@@ -72,19 +74,20 @@ public class TileEntityTexturingTable extends OpenTileEntity implements IHasGui,
 	
 	public void sendColorsToServer() {
 		if (hasWallpaper()) {
-			new WallpaperEvent(this, getClientColorGrid().getValue()).sendToServer();
+			new WallpaperEvents.WallpaperCreateEvent(this, getClientColorGrid().getValue()).sendToServer();
 		}
 	}
 	
 	@Override
 	public void onEvent(TileEntityMessageEventPacket event) {
-		if (event instanceof WallpaperEvent && hasWallpaper()) {
-			int id = worldObj.getUniqueDataId("wallpaper");
+		if (event instanceof WallpaperEvents.WallpaperCreateEvent && hasWallpaper()) {
+			World overworld = DimensionManager.getWorld(0);
+			int id = overworld.getUniqueDataId("wallpaper");
 			WallpaperData data = new WallpaperData(id);
-			data.setColorData(((WallpaperEvent)event).getColors());
+			data.setColorData(((WallpaperEvents.WallpaperCreateEvent)event).getColors());
 			ItemStack stack = inventory.getStackInSlot(0);
 			ItemWallpaper.setDataName(stack, data.mapName);
-			worldObj.setItemData(data.mapName, data);
+			overworld.setItemData(data.mapName, data);
 		}
 	}
 	

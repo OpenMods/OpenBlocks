@@ -2,7 +2,6 @@ package openblocks.client.gui;
 
 import openblocks.common.container.ContainerTexturingTable;
 import openblocks.common.tileentity.TileEntityTexturingTable;
-import openblocks.events.WallpaperEvent;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
 import openmods.sync.SyncableInt;

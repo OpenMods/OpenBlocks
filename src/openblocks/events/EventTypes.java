@@ -75,7 +75,7 @@ public enum EventTypes implements IEventPacketType {
 			return PacketDirection.FROM_CLIENT;
 		}
 	},
-	WALLPAPER {
+	WALLPAPER_CREATE {
 
 		@Override
 		public PacketDirection getDirection() {
@@ -84,8 +84,35 @@ public enum EventTypes implements IEventPacketType {
 		
 		@Override
 		public EventPacket createPacket() {
-			return new WallpaperEvent();
+			return new WallpaperEvents.WallpaperCreateEvent();
 		}
+	},
+	WALLPAPER_REQUEST {
+		
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.ANY;
+		}
+
+		@Override
+		public EventPacket createPacket() {
+			return new WallpaperEvents.WallpaperRequestEvent();
+		}
+
+		
+	},
+	WALLPAPER_RESPONSE {
+
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.ANY;
+		}
+		
+		@Override
+		public EventPacket createPacket() {
+			return new WallpaperEvents.WallpaperResponseEvent();
+		}
+		
 	};
 
 	@Override

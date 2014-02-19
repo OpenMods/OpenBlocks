@@ -21,6 +21,7 @@ openblocks.gui.itemdropper=Item Dropper
 openblocks.gui.blockplacer=Block Placer
 openblocks.gui.paintmixer=Paint Mixer
 openblocks.gui.drawingtable=Drawing Table
+openblocks.gui.texturingtable=Texturing Table
 openblocks.gui.blocks=Blocks
 openblocks.gui.items=Items
 openblocks.gui.misc=Misc
@@ -176,6 +177,7 @@ tile.openblocks.grave.name=Grave
 tile.openblocks.trophy.name=Trophy
 tile.openblocks.canvasglass.name=Glass Canvas
 tile.openblocks.paintcan.name=Paint Can
+tile.openblocks.texturingtable.name=Texturing Table
 
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=The radio allows you to stream internet radio! First, you need some tuned crystals which you can find in dungeon chests or from a special villager. Place the crystal in the radio and supply it with a redstone signal to turn it on.  The redstone strength controls the volume.\n\nYou can configure which radio stations are available in the servers config file.
