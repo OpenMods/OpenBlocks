@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -38,7 +39,9 @@ public class BlockCanvas extends OpenBlock {
 			stencil.registerBlockIcons(registry);
 		}
 		for (int i = 1; i <= 5; i++) {
-			WallpaperIconManager.registerIcon(registry.registerIcon("openblocks:wallpaper_" + i));
+			String iconName = "openblocks:wallpaper" + i + "x";
+			Icon icon = registry.registerIcon(iconName);
+			WallpaperIconManager.registerIcon("openblocks:wallpaper" + i + "x");
 		}
 		super.registerIcons(registry);
 	}
