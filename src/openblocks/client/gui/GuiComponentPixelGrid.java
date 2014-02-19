@@ -35,15 +35,25 @@ class GuiComponentPixelGrid extends BaseComponent {
 	}
 
 	@Override
-	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
-		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
+	public void renderOverlay(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		super.renderOverlay(minecraft, offsetX, offsetY, mouseX, mouseY);
 		int startX = x + offsetX;
 		int startY = y + offsetY;
+		drawAt(startX, startY);
+		if (isMouseOver(mouseX, mouseY)) {
+			drawAt(startX - getWidth(), startY);
+			drawAt(startX + getWidth(), startY);
+			drawAt(startX, startY + getHeight());
+			drawAt(startX, startY - getHeight());
+		}
+	}
+	
+	private void drawAt(int x, int y) {
 		int[] pixels = colorGrid.getValue();
 		for (int c = 0, i = 0; c < cols; c++) {
 			for (int r = 0; r < rows; r++, i++) {
-				int bX = startX + (c * scale);
-				int bY = startY + (r * scale);
+				int bX = x + (c * scale);
+				int bY = y + (r * scale);
 				drawRect(bX, bY, bX + scale, bY + scale, pixels[i]);
 			}
 		}
