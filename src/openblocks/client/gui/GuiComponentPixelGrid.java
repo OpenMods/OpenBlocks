@@ -50,8 +50,8 @@ class GuiComponentPixelGrid extends BaseComponent {
 	
 	private void drawAt(int x, int y) {
 		int[] pixels = colorGrid.getValue();
-		for (int c = 0, i = 0; c < cols; c++) {
-			for (int r = 0; r < rows; r++, i++) {
+		for (int r = 0, i = 0; r < rows; r++) {
+			for (int c = 0; c < cols; c++, i++) {
 				int bX = x + (c * scale);
 				int bY = y + (r * scale);
 				drawRect(bX, bY, bX + scale, bY + scale, pixels[i]);
@@ -72,7 +72,7 @@ class GuiComponentPixelGrid extends BaseComponent {
 	
 	private void drawPixels(int mouseX, int mouseY) {
 		if (isMouseOver(mouseX + x, mouseY + y)) {
-			colorGrid.setValue((mouseX / scale) * rows + (mouseY / scale), color.getValue() | (0xFF << 24));
+			colorGrid.setValue((mouseY / scale) * cols + (mouseX / scale), color.getValue() | (0xFF << 24));
 		}
 	}
 }
