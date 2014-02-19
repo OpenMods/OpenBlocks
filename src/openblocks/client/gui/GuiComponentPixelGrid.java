@@ -14,6 +14,7 @@ class GuiComponentPixelGrid extends BaseComponent {
 	private int scale;
 	private SyncableInt color;
 	private SyncableIntArray colorGrid;
+	private int opacity = 0x0;
 
 	public GuiComponentPixelGrid(int x, int y, int cols, int rows, int scale, SyncableIntArray colorGrid, SyncableInt color) {
 		super(x, y);
@@ -39,22 +40,33 @@ class GuiComponentPixelGrid extends BaseComponent {
 		super.renderOverlay(minecraft, offsetX, offsetY, mouseX, mouseY);
 		int startX = x + offsetX;
 		int startY = y + offsetY;
-		drawAt(startX, startY);
+		drawAt(startX, startY, 0xFF);
 		if (isMouseOver(mouseX, mouseY)) {
-			drawAt(startX - getWidth(), startY);
-			drawAt(startX + getWidth(), startY);
-			drawAt(startX, startY + getHeight());
-			drawAt(startX, startY - getHeight());
+			opacity += 0x4;
+		} else {
+			opacity -= 0x2;
+		}
+		if (opacity > 0xFF) {
+			opacity = 0xFF;
+		}
+		if (opacity < 0) {
+			opacity = 0;
+		}
+		if (opacity > 0) {
+			drawAt(startX - getWidth(), startY, opacity);
+			drawAt(startX + getWidth(), startY, opacity);
+			drawAt(startX, startY + getHeight(), opacity);
+			drawAt(startX, startY - getHeight(), opacity);
 		}
 	}
 	
-	private void drawAt(int x, int y) {
+	private void drawAt(int x, int y, int opacity) {
 		int[] pixels = colorGrid.getValue();
 		for (int r = 0, i = 0; r < rows; r++) {
 			for (int c = 0; c < cols; c++, i++) {
 				int bX = x + (c * scale);
 				int bY = y + (r * scale);
-				drawRect(bX, bY, bX + scale, bY + scale, pixels[i]);
+				drawRect(bX, bY, bX + scale, bY + scale, ((pixels[i] & 0x00FFFFFF) | (opacity << 24)));
 			}
 		}
 	}
