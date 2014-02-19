@@ -1,6 +1,7 @@
 package openblocks.events;
 
 import openblocks.common.MapDataManager;
+import openblocks.common.WallpaperManager;
 import openmods.network.*;
 
 public enum EventTypes implements IEventPacketType {
@@ -79,24 +80,24 @@ public enum EventTypes implements IEventPacketType {
 
 		@Override
 		public PacketDirection getDirection() {
-			return PacketDirection.ANY;
+			return PacketDirection.FROM_CLIENT;
 		}
 		
 		@Override
 		public EventPacket createPacket() {
-			return new WallpaperEvents.WallpaperCreateEvent();
+			return new WallpaperManager.WallpaperCreateEvent();
 		}
 	},
 	WALLPAPER_REQUEST {
 		
 		@Override
 		public PacketDirection getDirection() {
-			return PacketDirection.ANY;
+			return PacketDirection.FROM_CLIENT;
 		}
 
 		@Override
 		public EventPacket createPacket() {
-			return new WallpaperEvents.WallpaperRequestEvent();
+			return new WallpaperManager.WallpaperRequestEvent();
 		}
 
 		
@@ -105,12 +106,12 @@ public enum EventTypes implements IEventPacketType {
 
 		@Override
 		public PacketDirection getDirection() {
-			return PacketDirection.ANY;
+			return PacketDirection.TO_CLIENT;
 		}
 		
 		@Override
 		public EventPacket createPacket() {
-			return new WallpaperEvents.WallpaperResponseEvent();
+			return new WallpaperManager.WallpaperResponseEvent();
 		}
 		
 	};

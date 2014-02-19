@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.client.WallpaperManager;
+import openblocks.client.WallpaperIconManager;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
 
@@ -37,8 +37,8 @@ public class BlockCanvas extends OpenBlock {
 		for (Stencil stencil : Stencil.values()) {
 			stencil.registerBlockIcons(registry);
 		}
-		for (int i = 0; i < 100; i++) {
-			WallpaperManager.registerIcon(registry.registerIcon("openblocks:wallpaper_" + i));
+		for (int i = 1; i <= 5; i++) {
+			WallpaperIconManager.registerIcon(registry.registerIcon("openblocks:wallpaper_" + i));
 		}
 		super.registerIcons(registry);
 	}

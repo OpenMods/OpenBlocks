@@ -726,6 +726,7 @@ public class Config {
 		
 		if (itemWallpaperId > 0) {
 			OpenBlocks.Items.wallpaper = new ItemWallpaper();
+			MinecraftForge.EVENT_BUS.register(new WallpaperManager());
 		}
 
 		if (explosiveEnchantmentId > 0) {

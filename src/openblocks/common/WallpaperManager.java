@@ -1,24 +1,21 @@
-package openblocks.events;
+package openblocks.common;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import net.minecraftforge.common.DimensionManager;
-
-import openblocks.client.WallpaperManager;
-import openblocks.common.WallpaperData;
-import openmods.OpenMods;
+import net.minecraftforge.event.ForgeSubscribe;
+import openblocks.client.WallpaperIconManager;
+import openblocks.events.EventTypes;
 import openmods.network.EventPacket;
 import openmods.network.IEventPacketType;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 
-public class WallpaperEvents {
-	
+public class WallpaperManager {
+
 	public static class WallpaperRequestEvent extends EventPacket {
 
 		private String id;
@@ -29,6 +26,10 @@ public class WallpaperEvents {
 			this.id = id;
 		}
 		
+		public String getId() {
+			return id;
+		}
+		
 		@Override
 		public IEventPacketType getType() {
 			return EventTypes.WALLPAPER_REQUEST;
@@ -37,10 +38,6 @@ public class WallpaperEvents {
 		@Override
 		protected void readFromStream(DataInput input) throws IOException {
 			id = input.readUTF();
-			// nope, cant do that here. Gotta subscribe properly I guess.
-			World overworld = DimensionManager.getWorld(0);
-			WallpaperData data = (WallpaperData) overworld.loadItemData(WallpaperData.class, id);
-			new WallpaperResponseEvent(id, data).sendToPlayer(player);
 		}
 
 		@Override
@@ -72,13 +69,21 @@ public class WallpaperEvents {
 			id = input.readUTF();
 			data = new WallpaperData(id);
 			data.readFromStream(input);
-			WallpaperManager.setWallpaper(id, data.colorData);
+			WallpaperIconManager.setWallpaper(id, data.colorData);
 		}
 
 		@Override
 		protected void writeToStream(DataOutput output) throws IOException {
 			output.writeUTF(id);
 			data.writeToStream(output);
+		}
+		
+		public String getId() {
+			return id;
+		}
+		
+		public WallpaperData getData() {
+			return data;
 		}
 		
 	}
@@ -125,5 +130,19 @@ public class WallpaperEvents {
 		public IEventPacketType getType() {
 			return EventTypes.WALLPAPER_CREATE;
 		}
+	}
+	
+	@ForgeSubscribe
+	public void onWallpaperRequest(WallpaperRequestEvent evt) {
+		World overworld = DimensionManager.getWorld(0);
+		String id = evt.getId();
+		WallpaperData data = (WallpaperData) overworld.loadItemData(WallpaperData.class, id);
+		evt.reply(new WallpaperResponseEvent(id, data));
+	}
+	
+	@ForgeSubscribe
+	public void onWallpaperResponse(WallpaperResponseEvent evt) {
+		String id = evt.getId();
+		WallpaperIconManager.setWallpaper(id, evt.getData().colorData);
 	}
 }
