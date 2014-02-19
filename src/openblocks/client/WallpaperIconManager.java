@@ -37,6 +37,8 @@ public class WallpaperIconManager {
 			names.put(textureName, iconName);
 			new WallpaperManager.WallpaperRequestEvent(textureName).sendToServer();
 		}
+
+		System.out.println("sent request "+textureName);
 		return getBlockIcon(iconName);
 	}
 
@@ -51,9 +53,16 @@ public class WallpaperIconManager {
 		return getBlockTextureMap().getAtlasSprite(iconName);
 	}
 	
-	private static TextureMap getBlockTextureMap() {
+	public static TextureMap getBlockTextureMap() {
 		Minecraft mc = Minecraft.getMinecraft();
 		return (TextureMap)mc.renderEngine.getTexture(TextureMap.locationBlocksTexture);
+	}
+
+	public static void unloadAll() {
+		for (String name : names.values()) {
+			unusedIcons.add(name);
+		}
+		names.clear();
 	}
 	
 }

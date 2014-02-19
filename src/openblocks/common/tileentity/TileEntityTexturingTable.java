@@ -86,6 +86,7 @@ public class TileEntityTexturingTable extends OpenTileEntity implements IHasGui,
 			WallpaperData data = new WallpaperData(id);
 			data.setColorData(((WallpaperManager.WallpaperCreateEvent)event).getColors());
 			ItemStack stack = inventory.getStackInSlot(0);
+			data.markDirty();
 			ItemWallpaper.setDataName(stack, data.mapName);
 			overworld.setItemData(data.mapName, data);
 		}

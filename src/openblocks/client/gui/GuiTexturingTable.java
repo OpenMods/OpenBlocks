@@ -1,5 +1,6 @@
 package openblocks.client.gui;
 
+import net.minecraft.item.ItemStack;
 import openblocks.common.container.ContainerTexturingTable;
 import openblocks.common.tileentity.TileEntityTexturingTable;
 import openmods.gui.BaseGuiContainer;

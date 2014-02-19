@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent;
 import openblocks.client.WallpaperIconManager;
 import openblocks.events.EventTypes;
 import openmods.network.EventPacket;
@@ -137,6 +138,8 @@ public class WallpaperManager {
 		World overworld = DimensionManager.getWorld(0);
 		String id = evt.getId();
 		WallpaperData data = (WallpaperData) overworld.loadItemData(WallpaperData.class, id);
+		System.out.println("Requested data for "+id);
+		System.out.println("data = "+data);
 		evt.reply(new WallpaperResponseEvent(id, data));
 	}
 	
@@ -144,5 +147,10 @@ public class WallpaperManager {
 	public void onWallpaperResponse(WallpaperResponseEvent evt) {
 		String id = evt.getId();
 		WallpaperIconManager.setWallpaper(id, evt.getData().colorData);
+	}
+	
+	@ForgeSubscribe
+	public void onWorldUnload(WorldEvent.Unload evt) {
+		WallpaperIconManager.unloadAll();
 	}
 }
