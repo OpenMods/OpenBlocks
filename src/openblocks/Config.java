@@ -444,7 +444,7 @@ public class Config {
 
 		if (ConfigProcessing.canRegisterBlock(blockSpongeId)) {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.sponge, Block.cloth, Item.slimeBall));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.sponge, Block.cloth, "slimeball"));
 		}
 
 		if (ConfigProcessing.canRegisterBlock(blockBigButton)) {
@@ -456,7 +456,7 @@ public class Config {
 			OpenBlocks.Blocks.imaginary = new BlockImaginary();
 			{
 				ItemStack pencil = ItemImaginary.setupValues(null, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_PENCIL));
-				recipeList.add(new ShapelessOreRecipe(pencil, Item.coal, "stickWood", Item.enderPearl, Item.slimeBall));
+				recipeList.add(new ShapelessOreRecipe(pencil, Item.coal, "stickWood", Item.enderPearl, "slimeball"));
 			}
 
 			for (ColorMeta color : ColorUtils.getAllColors()) {
