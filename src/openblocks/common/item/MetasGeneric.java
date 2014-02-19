@@ -70,7 +70,7 @@ public enum MetasGeneric {
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack(2);
 			return new MetaGeneric("line",
-					new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', Item.slimeBall)
+					new ShapedOreRecipe(result, "sss", "bbb", "sss", 's', Item.silk, 'b', "slimeball")
 			);
 		}
 	},
