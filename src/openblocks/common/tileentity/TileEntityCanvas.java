@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
-import openblocks.common.Stencil;
+import openblocks.client.stencils.StencilManager;
+import openblocks.client.stencils.StencilManager.StencilData;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
 import openblocks.common.item.ItemStencil;
@@ -98,17 +100,20 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		if (layerId > BASE_LAYER) {
 			Layer layer = getLayerForSide(renderSide, layerId);
 			if (layer != null) {
-				Stencil stencil = layer.getStencil();
-				if (stencil != null) { return layer.hasStencilCover()? stencil.getCoverBlockIcon() : stencil.getBlockIcon(); }
+				BigInteger bits = layer.getBits();
+				if (bits != null) {
+					StencilData data = StencilManager.instance.getStencilIcon(bits);
+					return layer.hasStencilCover()? data.coverIcon : data.invertedIcon;
+				}
 			}
 		}
 		return getBaseTexture(renderSide);
 	}
 
 	private Icon getBaseTexture(int side) {
-		if (paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.baseIcon;
+		if (paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.getIcon(0, 0);
 		Block block = Block.blocksList[paintedBlockId.getValue()];
-		if (block == null) return OpenBlocks.Blocks.canvas.baseIcon;
+		if (block == null) return OpenBlocks.Blocks.canvas.getIcon(0, 0);
 		return block.getIcon(side, paintedBlockMeta.getValue());
 	}
 
@@ -122,7 +127,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public void applyPaint(int color, int... sides) {
 		for (int side : sides) {
 			SyncableBlockLayers layer = getLayersForSide(side);
-			if (layer.isLastLayerStencil()) {
+			if (layer.isLastLayerCover()) {
 				layer.setLastLayerColor(color);
 				layer.moveStencilToNextLayer();
 			} else {
@@ -152,9 +157,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			SyncableBlockLayers layer = getLayersForSide(side);
 
 			// If there is a stencil on top, pop it off.
-			if (layer.isLastLayerStencil()) {
-				Stencil stencil = layer.getTopStencil();
-				ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal());
+			if (layer.isLastLayerCover()) {
+				BigInteger stencil = layer.getTopStencil();
+				ItemStack dropStack = OpenBlocks.Items.stencil.createItemStack(stencil);
 				dropStackFromSide(dropStack, side);
 			}
 
@@ -170,16 +175,16 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		if (!worldObj.isRemote) sync();
 	}
 
-	public boolean useStencil(int side, Stencil stencil) {
+	public boolean useStencil(int side, BigInteger bits) {
 		SyncableBlockLayers layer = getLayersForSide(side);
-		if (layer.isLastLayerStencil()) {
-			Stencil topStencil = layer.getTopStencil();
-			if (topStencil == stencil) return false;
+		if (layer.isLastLayerCover()) {
+			BigInteger topStencil = layer.getTopStencil();
+			if (topStencil == bits) return false;
 
-			ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, topStencil.ordinal());
+			ItemStack dropStack = OpenBlocks.Items.stencil.createItemStack(topStencil);
 			dropStackFromSide(dropStack, side);
-			layer.setLastLayerStencil(stencil);
-		} else layer.pushNewStencil(stencil);
+			layer.setLastLayerStencil(bits);
+		} else layer.pushNewStencil(bits);
 
 		if (!worldObj.isRemote) sync();
 		return true;
@@ -195,13 +200,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 		SyncableBlockLayers layer = getLayersForSide(side);
 
-		if (layer.isLastLayerStencil()) {
+		if (layer.isLastLayerCover()) {
 			if (player.isSneaking()) {
+				BigInteger bits = layer.removeCover();
 				if (!worldObj.isRemote) {
-					ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, layer.getTopStencil().ordinal());
+					ItemStack dropStack = OpenBlocks.Items.stencil.createItemStack(bits);
 					dropStackFromSide(dropStack, side);
 				}
-				layer.removeCover();
+
 			} else getLayersForSide(side).rotateCover();
 
 			if (!worldObj.isRemote) sync();
@@ -214,9 +220,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	@Override
 	public void addDrops(List<ItemStack> drops) {
 		for (SyncableBlockLayers sideLayers : allSides) {
-			if (sideLayers.isLastLayerStencil()) {
-				Stencil stencil = sideLayers.getTopStencil();
-				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
+			if (sideLayers.isLastLayerCover()) {
+				BigInteger bits = sideLayers.getTopStencil();
+				if (bits != null) drops.add(OpenBlocks.Items.stencil.createItemStack(bits));
 			}
 		}
 	}

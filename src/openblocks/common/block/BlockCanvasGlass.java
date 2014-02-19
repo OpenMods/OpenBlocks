@@ -4,9 +4,12 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.world.IBlockAccess;
 import openblocks.Config;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCanvasGlass extends BlockCanvas {
 
@@ -35,4 +38,8 @@ public class BlockCanvasGlass extends BlockCanvas {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public void getSubBlocks(int par1, CreativeTabs creativeTabs, List list) {}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister registry) {}
 }

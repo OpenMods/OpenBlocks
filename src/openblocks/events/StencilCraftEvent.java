@@ -3,7 +3,7 @@ package openblocks.events;
 import java.io.DataInput;
 import java.io.DataOutput;
 
-import openblocks.common.Stencil;
+import openblocks.client.stencils.Stencil;
 import openmods.network.IEventPacketType;
 import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;

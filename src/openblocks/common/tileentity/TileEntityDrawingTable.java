@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.GuiDrawingTable;
-import openblocks.common.Stencil;
+import openblocks.client.stencils.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.MetasGeneric;
 import openblocks.events.StencilCraftEvent;

@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
@@ -13,14 +14,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.Stencil;
+import openblocks.client.stencils.StencilManager;
 import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.Log;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCanvas extends OpenBlock {
 
 	private int layer = 0;
 	private int renderSide = 0;
-	public Icon baseIcon;
 
 	public BlockCanvas() {
 		super(Config.blockCanvasId, Material.ground);
@@ -31,12 +34,12 @@ public class BlockCanvas extends OpenBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
-		baseIcon = registry.registerIcon("openblocks:canvas");
-		for (Stencil stencil : Stencil.values()) {
-			stencil.registerBlockIcons(registry);
-		}
-		super.registerIcons(registry);
+		blockIcon = registry.registerIcon("openblocks:canvas");
+
+		if (registry instanceof TextureMap) StencilManager.instance.allocatePlaceholderIcons((TextureMap)registry);
+		else Log.warn("registerIcon called with class %s, not registering", registry.getClass());
 	}
 
 	@Override
@@ -46,7 +49,10 @@ public class BlockCanvas extends OpenBlock {
 		int maskedBlockId = tile.paintedBlockId.getValue();
 
 		Block maskedBlock = Block.blocksList[maskedBlockId];
-		if (maskedBlock == null) return;
+		if (maskedBlock == null) {
+			result.add(new ItemStack(this));
+			return;
+		}
 		int maskedMeta = tile.paintedBlockMeta.getValue();
 
 		for (int i = 0; i < maskedBlock.quantityDropped(te.worldObj.rand); i++) {

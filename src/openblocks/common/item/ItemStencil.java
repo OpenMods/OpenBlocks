@@ -1,24 +1,32 @@
 package openblocks.common.item;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByteArray;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.Stencil;
+import openblocks.client.stencils.Stencil;
+import openblocks.client.stencils.StencilManager;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.utils.ItemUtils;
 import openmods.utils.render.PaintUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemStencil extends Item {
+
+	private static final String TAG_BITS = "Bits";
 
 	public ItemStencil() {
 		super(Config.itemStencilId);
@@ -32,17 +40,48 @@ public class ItemStencil extends Item {
 		return 0;
 	}
 
-	@Override
-	public Icon getIconFromDamage(int dmg) {
-		return Stencil.values()[dmg].getCoverBlockIcon();
+	public ItemStack createItemStack(BigInteger bits) {
+		ItemStack stack = new ItemStack(this);
+		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		tag.setByteArray(TAG_BITS, bits.toByteArray());
+		return stack;
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(int id, CreativeTabs par2CreativeTabs, List list) {
-		for (Stencil stencil : Stencil.values()) {
-			list.add(new ItemStack(id, 1, stencil.ordinal()));
+	@SideOnly(Side.CLIENT)
+	public Icon getIconIndex(ItemStack stack) {
+		return getIcon(stack);
+	}
+
+	@Override
+	public Icon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+		return getIcon(stack);
+	}
+
+	protected Icon getIcon(ItemStack stack) {
+		BigInteger bits = getBitsFromStack(stack);
+		return StencilManager.instance.getStencilIcon(bits).coverIcon;
+	}
+
+	private static BigInteger getBitsFromStack(ItemStack stack) {
+		BigInteger bits;
+		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+
+		NBTBase bytes = tag.getTag(TAG_BITS);
+		if (bytes instanceof NBTTagByteArray) {
+			bits = new BigInteger(((NBTTagByteArray)bytes).byteArray);
+		} else {
+			bits = Stencil.bitsFromLegacyStencil(stack.getItemDamage());
+			tag.setByteArray(TAG_BITS, bits.toByteArray());
 		}
+		return bits;
+	}
+
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void getSubItems(int id, CreativeTabs tab, List list) {
+		for (Stencil s : Stencil.VALUES)
+			list.add(createItemStack(s.bits));
 	}
 
 	@Override
@@ -56,15 +95,8 @@ public class ItemStencil extends Item {
 
 		if (te instanceof TileEntityCanvas) {
 			TileEntityCanvas canvas = (TileEntityCanvas)te;
-			int stencilId = stack.getItemDamage();
-			Stencil stencil;
-			try {
-				stencil = Stencil.VALUES[stencilId];
-			} catch (ArrayIndexOutOfBoundsException e) {
-				return false;
-			}
-
-			if (canvas.useStencil(side, stencil)) stack.stackSize--;
+			BigInteger bits = getBitsFromStack(stack);
+			if (canvas.useStencil(side, bits)) stack.stackSize--;
 			return true;
 		}
 

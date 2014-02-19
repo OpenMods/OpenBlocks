@@ -3,12 +3,16 @@ package openblocks.common.sync;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import openblocks.common.Stencil;
+import net.minecraft.nbt.NBTTagList;
+import openblocks.client.stencils.Stencil;
 import openmods.sync.SyncableObjectBase;
+import openmods.utils.ByteUtils;
 
 import com.google.common.collect.Lists;
 
@@ -17,7 +21,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	public static class Layer {
 
 		private int color;
-		private Stencil stencil;
+		private BigInteger stencilBits = BigInteger.ZERO;
 		private byte rotation;
 		private boolean hasStencilCover = false;
 
@@ -31,18 +35,16 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			return color;
 		}
 
-		/***
-		 * If the layer has a cover on it, return white.
-		 * Otherwise we render on the stored color
-		 * 
-		 * @return
-		 */
 		public int getColorForRender() {
 			return hasStencilCover()? 0xFFFFFF : getColor();
 		}
 
-		public Stencil getStencil() {
-			return stencil;
+		public BigInteger getBits() {
+			return stencilBits;
+		}
+
+		public void setBits(BigInteger stencilBits) {
+			this.stencilBits = stencilBits;
 		}
 
 		public byte getRotation() {
@@ -61,27 +63,21 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			this.rotation = rotation;
 		}
 
-		public void setStencil(Stencil st) {
-			this.stencil = st;
-		}
-
 		public void setColor(int color) {
 			this.color = color;
 		}
 
-		public static Layer createFromStream(DataInput stream) {
+		public static Layer createFromStream(DataInput stream) throws IOException {
 			Layer layer = new Layer();
-			try {
-				layer.setColor(stream.readInt());
-				layer.setRotation(stream.readByte());
-				byte b = stream.readByte();
-				if (b > -1) {
-					layer.setStencil(Stencil.values()[b]);
-				}
-				layer.setHasStencilCover(stream.readBoolean());
-			} catch (Exception e) {
+			layer.setColor(stream.readInt());
+			layer.setRotation(stream.readByte());
 
-			}
+			int size = ByteUtils.readVLI(stream);
+			byte[] bytes = new byte[size];
+			stream.readFully(bytes);
+			layer.setBits(new BigInteger(bytes));
+
+			layer.setHasStencilCover(stream.readBoolean());
 			return layer;
 		}
 
@@ -92,10 +88,10 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			}
 		}
 
-		public NBTTagCompound getNBT() {
+		public NBTTagCompound writeToNBT() {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setByte("rotation", rotation);
-			nbt.setString("stencil", stencil.name());
+			nbt.setByteArray("bits", stencilBits.toByteArray());
 			nbt.setBoolean("hasStencilCover", hasStencilCover);
 			nbt.setInteger("color", color);
 			return nbt;
@@ -106,7 +102,19 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			layer.setColor(compoundTag.getInteger("color"));
 			layer.setHasStencilCover(compoundTag.getBoolean("hasStencilCover"));
 			layer.setRotation(compoundTag.getByte("rotation"));
-			layer.setStencil(Stencil.valueOf(compoundTag.getString("stencil")));
+			byte[] bits = compoundTag.getByteArray("bits");
+			if (bits.length == 0) {
+				Stencil legacyStencil;
+				try {
+					legacyStencil = Stencil.valueOf(compoundTag.getString("stencil"));
+				} catch (Exception e) {
+					legacyStencil = Stencil.CREEPER_FACE;
+				}
+				layer.setBits(legacyStencil.bits);
+			} else {
+				layer.setBits(new BigInteger(bits));
+			}
+
 			return layer;
 		}
 	}
@@ -117,48 +125,53 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {
-		int size = stream.readByte();
 		layers.clear();
-		for (byte i = 0; i < size; i++) {
+		int size = ByteUtils.readVLI(stream);
+		for (int i = 0; i < size; i++) {
 			layers.add(Layer.createFromStream(stream));
 		}
 	}
 
 	@Override
-	public void writeToStream(DataOutput stream, boolean fullData)
-			throws IOException {
-		stream.writeByte(layers.size());
+	public void writeToStream(DataOutput stream, boolean fullData) throws IOException {
+		ByteUtils.writeVLI(stream, layers.size());
 		for (Layer layer : layers) {
 			stream.writeInt(layer.getColor());
 			stream.writeByte(layer.getRotation());
-			if (layer.getStencil() != null) {
-				stream.writeByte(layer.getStencil().ordinal());
-			} else {
-				stream.writeByte(-1);
-			}
+			byte[] bits = layer.stencilBits.toByteArray();
+			ByteUtils.writeVLI(stream, bits.length);
+			stream.write(bits);
 			stream.writeBoolean(layer.hasStencilCover());
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt, String name) {
-		NBTTagCompound subTag = new NBTTagCompound();
-		subTag.setInteger("size", layers.size());
-		int i = 0;
-		for (Layer layer : layers) {
-			subTag.setCompoundTag("layer_" + i, layer.getNBT());
-			i++;
-		}
-		nbt.setCompoundTag(name, subTag);
+		NBTTagList list = new NBTTagList();
+		for (Layer layer : layers)
+			list.appendTag(layer.writeToNBT());
+
+		nbt.setTag(name, list);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt, String name) {
-		NBTTagCompound subTag = nbt.getCompoundTag(name);
-		int size = subTag.getInteger("size");
-		layers.clear();
-		for (int i = 0; i < size; i++) {
-			layers.add(Layer.createFromNBT(subTag.getCompoundTag("layer_" + i)));
+		NBTBase tag = nbt.getTag(name);
+		if (tag instanceof NBTTagCompound) {
+			NBTTagCompound subTag = (NBTTagCompound)tag;
+			int size = subTag.getInteger("size");
+			layers.clear();
+			for (int i = 0; i < size; i++) {
+				Layer layer = Layer.createFromNBT(subTag.getCompoundTag("layer_" + i));
+				layers.add(layer);
+			}
+		} else if (tag instanceof NBTTagList) {
+			NBTTagList list = (NBTTagList)tag;
+			for (int i = 0; i < list.tagCount(); i++) {
+				NBTTagCompound layerTag = (NBTTagCompound)list.tagAt(i);
+				Layer layer = Layer.createFromNBT(layerTag);
+				layers.add(layer);
+			}
 		}
 	}
 
@@ -166,9 +179,9 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		return layers;
 	}
 
-	public boolean isLastLayerStencil() {
+	public boolean isLastLayerCover() {
 		Layer last = layers.peekLast();
-		return last != null && last.hasStencilCover && last.stencil != null;
+		return last != null && last.hasStencilCover;
 	}
 
 	public void setLastLayerColor(int color) {
@@ -177,10 +190,10 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		markDirty();
 	}
 
-	public void setLastLayerStencil(Stencil stencil) {
+	public void setLastLayerStencil(BigInteger bits) {
 		Layer last = getOrCreateLastLayer();
 		last.hasStencilCover = true;
-		last.stencil = stencil;
+		last.stencilBits = bits;
 		markDirty();
 	}
 
@@ -198,16 +211,16 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		prevTop.setHasStencilCover(false);
 
 		Layer newLayer = new Layer();
-		newLayer.setStencil(prevTop.getStencil());
+		newLayer.stencilBits = prevTop.stencilBits;
 		newLayer.setHasStencilCover(true);
 		newLayer.setRotation(prevTop.getRotation());
 		layers.addLast(newLayer);
 		markDirty();
 	}
 
-	public void pushNewStencil(Stencil stencil) {
+	public void pushNewStencil(BigInteger bits) {
 		Layer newLayer = new Layer();
-		newLayer.setStencil(stencil);
+		newLayer.stencilBits = bits;
 		newLayer.setHasStencilCover(true);
 		layers.addLast(newLayer);
 		markDirty();
@@ -218,17 +231,18 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		return null;
 	}
 
-	public void removeCover() {
+	public BigInteger removeCover() {
 		Layer last = layers.peekLast();
 		if (last != null && last.hasStencilCover()) {
 			layers.removeLast();
 			markDirty();
 		}
+		return last.stencilBits;
 	}
 
-	public Stencil getTopStencil() {
+	public BigInteger getTopStencil() {
 		Layer top = layers.peekLast();
-		return top != null? top.stencil : null;
+		return top != null? top.stencilBits : null;
 	}
 
 	public void rotateCover() {

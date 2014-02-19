@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.asm.EntityPlayerVisitor;
 import openblocks.client.radio.RadioManager;
 import openblocks.client.radio.RadioManager.RadioStation;
+import openblocks.client.stencils.Stencil;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.item.*;
