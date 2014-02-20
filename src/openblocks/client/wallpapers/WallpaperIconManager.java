@@ -1,26 +1,17 @@
 package openblocks.client.wallpapers;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.Icon;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent;
 import openblocks.common.WallpaperManager;
 import openblocks.common.WallpaperManager.WallpaperResponseEvent;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureObject;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Icon;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent;
 
 public class WallpaperIconManager {
 
@@ -32,7 +23,7 @@ public class WallpaperIconManager {
 	
 	public LinkedList<ReplaceableIcon> unusedIcons = Lists.newLinkedList();
 	public Map<String, ReplaceableIcon> names = Maps.newHashMap();
-		
+	
 	public Icon requestWallpaper(String textureName) {
 		if (names.containsKey(textureName)) {
 			return names.get(textureName);
@@ -60,7 +51,7 @@ public class WallpaperIconManager {
 	public void onWorldUnload(WorldEvent.Unload evt) {
 		unloadAll();
 	}
-
+	
 	public void unloadAll() {
 		for (ReplaceableIcon icon : names.values()) {
 			unusedIcons.add(icon);

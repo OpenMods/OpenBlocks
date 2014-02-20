@@ -1,7 +1,5 @@
 package openblocks.client.gui;
 
-import java.util.Arrays;
-
 import net.minecraft.client.Minecraft;
 import openmods.gui.component.BaseComponent;
 import openmods.sync.SyncableInt;

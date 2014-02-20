@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class ReplaceableIcon extends TextureAtlasSprite {
 
-	private static final int SIZE = 16;
+	public static final int SIZE = 16;
 	
 	protected int[] bytes = new int[SIZE * SIZE];
 	protected boolean loaded = false;
@@ -19,6 +19,11 @@ public class ReplaceableIcon extends TextureAtlasSprite {
 	protected ReplaceableIcon(String id) {
 		super(id);
 		Arrays.fill(bytes, 0xFFFFFFFF);
+	}
+	
+	public void reset() {
+		Arrays.fill(bytes, 0xFFFFFFFF);
+		pushBitsToTexture();
 	}
 
 	@Override
@@ -44,7 +49,6 @@ public class ReplaceableIcon extends TextureAtlasSprite {
 	protected void pushBitsToTexture() {
 		TextureManager manager = Minecraft.getMinecraft().getTextureManager();
 		manager.bindTexture(TextureMap.locationBlocksTexture);
-
 		TextureUtil.uploadTextureSub(bytes, width, height, originX, originY, false, false);
 	}
 

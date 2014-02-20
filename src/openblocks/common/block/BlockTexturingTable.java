@@ -1,7 +1,7 @@
 package openblocks.common.block;
 
-import openblocks.Config;
 import net.minecraft.block.material.Material;
+import openblocks.Config;
 
 public class BlockTexturingTable extends OpenBlock {
 

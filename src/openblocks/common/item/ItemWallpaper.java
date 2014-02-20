@@ -1,17 +1,16 @@
 package openblocks.common.item;
 
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.Stencil;
-import openblocks.common.block.BlockCanvas;
-import openblocks.common.tileentity.TileEntityCanvas;
-import openmods.utils.render.PaintUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.block.BlockCanvas;
+import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.utils.render.PaintUtils;
 
 public class ItemWallpaper extends Item {
 

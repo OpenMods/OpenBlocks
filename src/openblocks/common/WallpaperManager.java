@@ -7,8 +7,6 @@ import java.io.IOException;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent;
-import openblocks.client.wallpapers.WallpaperIconManager;
 import openblocks.events.EventTypes;
 import openmods.network.EventPacket;
 import openmods.network.IEventPacketType;
