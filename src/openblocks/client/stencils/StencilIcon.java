@@ -13,6 +13,8 @@ import net.minecraft.client.resources.Resource;
 import net.minecraft.client.resources.ResourceManager;
 import net.minecraft.util.ResourceLocation;
 
+import com.google.common.base.Preconditions;
+
 public abstract class StencilIcon extends TextureAtlasSprite {
 
 	private static final int STENCIL_SIZE = 16;
@@ -21,6 +23,8 @@ public abstract class StencilIcon extends TextureAtlasSprite {
 
 	public static class CoverIcon extends StencilIcon {
 		private static int[] coverBase;
+		private static int coverWidth;
+		private static int coverHeight;
 
 		public CoverIcon(String id) {
 			super(id);
@@ -32,23 +36,38 @@ public abstract class StencilIcon extends TextureAtlasSprite {
 				Resource res = manager.getResource(COVER_BASE);
 				InputStream inputstream = res.getInputStream();
 				BufferedImage bufferedimage = ImageIO.read(inputstream);
-				int height = bufferedimage.getHeight();
-				int width = bufferedimage.getWidth();
-				coverBase = new int[height * width];
-				bufferedimage.getRGB(0, 0, width, height, coverBase, 0, width);
+				coverHeight = bufferedimage.getHeight();
+				coverWidth = bufferedimage.getWidth();
+				Preconditions.checkState(coverHeight == coverWidth, "stencil_cover.png must be square");
+				coverBase = new int[coverWidth * coverHeight];
+				bufferedimage.getRGB(0, 0, coverWidth, coverHeight, coverBase, 0, coverWidth);
 			}
 
-			if (bytes == null) bytes = coverBase;
-			return super.load(manager, location);
+			this.bytes = coverBase;
+			this.width = coverWidth;
+			this.height = coverHeight;
+			return true;
 		}
 
 		@Override
 		public void loadBits(BigInteger bits) {
 			bytes = coverBase.clone();
-			for (int i = 0; i < STENCIL_SIZE * STENCIL_SIZE; i++)
-				if (bits.testBit(i)) bytes[i] = 0x00000000;
+
+			final int xRatio = coverWidth / STENCIL_SIZE;
+			final int yRatio = coverHeight / STENCIL_SIZE;
+
+			for (int x = 0; x < coverWidth; x++)
+				for (int y = 0; y < coverHeight; y++) {
+					final int texIndex = y * coverWidth + x;
+					final int bitsIndex = (y / yRatio) * STENCIL_SIZE + (x / xRatio);
+					if (bits.testBit(bitsIndex)) bytes[texIndex] = 0x00000000;
+				}
 
 			pushBitsToTexture();
+		}
+
+		public static void clearBaseData() {
+			coverBase = null;
 		}
 	}
 
@@ -62,8 +81,9 @@ public abstract class StencilIcon extends TextureAtlasSprite {
 
 		@Override
 		public boolean load(ResourceManager manager, ResourceLocation location) throws IOException {
-			if (bytes == null) bytes = blankBytes;
-			return super.load(manager, location);
+			this.bytes = blankBytes;
+			this.width = this.height = STENCIL_SIZE;
+			return true;
 		}
 
 		@Override
@@ -108,12 +128,6 @@ public abstract class StencilIcon extends TextureAtlasSprite {
 
 	@Override
 	public void loadSprite(Resource par1Resource) {}
-
-	@Override
-	public boolean load(ResourceManager manager, ResourceLocation location) throws IOException {
-		this.width = this.height = STENCIL_SIZE;
-		return true;
-	}
 
 	@Override
 	public void updateAnimation() {}

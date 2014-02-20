@@ -3,6 +3,7 @@ package openblocks.common.item;
 import java.math.BigInteger;
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -36,6 +37,10 @@ public class ItemStencil extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister) {}
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public int getSpriteNumber() {
 		return 0;
 	}
@@ -60,7 +65,7 @@ public class ItemStencil extends Item {
 
 	protected Icon getIcon(ItemStack stack) {
 		BigInteger bits = getBitsFromStack(stack);
-		return StencilManager.instance.getStencilIcon(bits).coverIcon;
+		return StencilManager.instance.getIcon(bits).coverIcon;
 	}
 
 	private static BigInteger getBitsFromStack(ItemStack stack) {

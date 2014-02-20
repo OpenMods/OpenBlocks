@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.client.stencils.StencilIconPair;
 import openblocks.client.stencils.StencilManager;
-import openblocks.client.stencils.StencilManager.StencilData;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
 import openblocks.common.item.ItemStencil;
@@ -102,7 +102,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			if (layer != null) {
 				BigInteger bits = layer.getBits();
 				if (bits != null) {
-					StencilData data = StencilManager.instance.getStencilIcon(bits);
+					StencilIconPair data = StencilManager.instance.getIcon(bits);
 					return layer.hasStencilCover()? data.coverIcon : data.invertedIcon;
 				}
 			}

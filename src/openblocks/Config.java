@@ -366,6 +366,12 @@ public class Config {
 	@ConfigProperty(category = "fan", name = "isRedstoneActivated", comment = "Is fan force controlled by redstone current")
 	public static boolean redstoneActivatedFan = true;
 
+	@ConfigProperty(category = "stencil", name = "initialPoolSize", comment = "Intial size of preallocated stencil icons")
+	public static int stencilIntialPoolSize = 128;
+
+	@ConfigProperty(category = "stencil", name = "poolGrowthRate", comment = "How much pool will grow after it runs out of space (during texture reload). Set to less than 1 to disable reloading")
+	public static float stencilPoolGrowthRate = 2;
+
 	public static void register() {
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());

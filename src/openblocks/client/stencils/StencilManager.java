@@ -1,67 +1,44 @@
 package openblocks.client.stencils;
 
 import java.math.BigInteger;
-import java.util.Deque;
-import java.util.Map;
 
 import net.minecraft.client.renderer.texture.TextureMap;
+import openblocks.Config;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+public class StencilManager extends IconPool<BigInteger, StencilIconPair> {
 
-public class StencilManager {
-
-	private static final int PLACEHOLDER_COUNT = 128;
-
-	public static class StencilData {
-		public final StencilIcon coverIcon;
-		public final StencilIcon invertedIcon;
-
-		public StencilData(StencilIcon coverIcon, StencilIcon invertedIcon) {
-			this.coverIcon = coverIcon;
-			this.invertedIcon = invertedIcon;
-		}
+	private StencilManager() {
+		super(Config.stencilIntialPoolSize);
 	}
-
-	private StencilManager() {}
 
 	public static final StencilManager instance = new StencilManager();
 
-	private final Map<BigInteger, StencilData> usedIcons = Maps.newHashMap();
-	private final Deque<StencilData> freeIcons = Lists.newLinkedList();
-
-	public synchronized StencilData getStencilIcon(BigInteger bits) {
-		StencilData icon = usedIcons.get(bits);
-		if (icon == null) {
-			icon = createIcons(bits);
-			usedIcons.put(bits, icon);
-		}
-
-		return icon;
+	@Override
+	protected void onReload(TextureMap map) {
+		StencilIcon.CoverIcon.clearBaseData();
 	}
 
-	private StencilData createIcons(BigInteger bits) {
-		StencilData data = freeIcons.pop();
-		data.invertedIcon.loadBits(bits);
-		data.coverIcon.loadBits(bits);
-		return data;
+	@Override
+	protected StencilIconPair createData(TextureMap map, String id) {
+		final String coverId = "openblocks.stencil_cover_" + id;
+		final String invertedId = "openblocks.stencil_inverted_" + id;
+
+		StencilIcon coverIcon = new StencilIcon.CoverIcon(coverId);
+		StencilIcon invertedIcon = new StencilIcon.InvertedIcon(invertedId);
+
+		map.setTextureEntry(coverId, coverIcon);
+		map.setTextureEntry(invertedId, invertedIcon);
+		return new StencilIconPair(coverIcon, invertedIcon);
 	}
 
-	public synchronized void allocatePlaceholderIcons(TextureMap registry) {
-		usedIcons.clear();
-		freeIcons.clear();
+	@Override
+	protected void loadData(StencilIconPair icons, BigInteger bits) {
+		icons.invertedIcon.loadBits(bits);
+		icons.coverIcon.loadBits(bits);
+	}
 
-		for (int i = 0; i < PLACEHOLDER_COUNT; i++) {
-			final String coverId = "openblocks.stencil_cover_" + i;
-			final String invertedId = "openblocks.stencil_inverted_" + i;
-
-			StencilIcon coverIcon = new StencilIcon.CoverIcon(coverId);
-			StencilIcon invertedIcon = new StencilIcon.InvertedIcon(invertedId);
-
-			registry.setTextureEntry(coverId, coverIcon);
-			registry.setTextureEntry(invertedId, invertedIcon);
-
-			freeIcons.add(new StencilData(coverIcon, invertedIcon));
-		}
+	@Override
+	protected int getNewSize() {
+		return (int)(size * Config.stencilPoolGrowthRate);
 	}
 }

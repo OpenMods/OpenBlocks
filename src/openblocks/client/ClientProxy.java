@@ -23,6 +23,7 @@ import openblocks.client.radio.RadioManager;
 import openblocks.client.renderer.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
+import openblocks.client.stencils.StencilManager;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openmods.binding.KeyDispatcherBuilder;
@@ -161,6 +162,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.elevator != null) {
 			MinecraftForge.EVENT_BUS.register(new ElevatorMovementHandler());
+		}
+
+		if (OpenBlocks.Blocks.canvas != null || OpenBlocks.Blocks.canvasGlass != null || OpenBlocks.Items.stencil != null) {
+			MinecraftForge.EVENT_BUS.register(StencilManager.instance);
 		}
 	}
 
