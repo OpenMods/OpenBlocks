@@ -25,6 +25,10 @@ class GuiComponentPixelGrid extends BaseComponent {
 		this.color = color;
 	}
 
+	public void setColors(int[] data) {
+			this.colorGrid.setValue(data);
+	}
+	
 	@Override
 	public int getWidth() {
 		return cols * scale;
