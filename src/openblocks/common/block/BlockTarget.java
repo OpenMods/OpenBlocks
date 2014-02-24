@@ -35,58 +35,62 @@ public class BlockTarget extends OpenBlock {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-
+		
 		if (!world.isRemote && entity != null && entity instanceof EntityArrow) {
-
-			TileEntity tile = world.getBlockTileEntity(x, y, z);
-
-			if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
-
-			/**
-			 * onEntityCollidedWithBlock is called twice when the arrow is hit
-			 * The first is from the raytracing, which is predictive and
-			 * inaccurate The second is from the bounding box collision. We only
-			 * care about the second one
-			 */
 			if (lastEntityHit != entity.entityId) {
 				lastEntityHit = entity.entityId;
 				return;
 			}
 			lastEntityHit = entity.entityId;
-
-			TileEntityTarget target = (TileEntityTarget)tile;
-
-			if (!target.isEnabled()) { return; }
-
-			ForgeDirection rotation = target.getRotation();
-			ForgeDirection opposite = rotation.getOpposite();
-
-			double centerX = x + 0.5 + (opposite.offsetX * 0.5);
-			double centerY = y + 0.55 + (opposite.offsetY * 0.45);
-			double centerZ = z + 0.5 + (opposite.offsetZ * 0.5);
-
-			double entityX = entity.posX;
-			double entityY = entity.posY;
-			double entityZ = entity.posZ;
-
-			if (opposite == ForgeDirection.NORTH
-					|| opposite == ForgeDirection.SOUTH) {
-				entityZ = centerZ;
-			} else if (opposite == ForgeDirection.EAST
-					|| opposite == ForgeDirection.WEST) {
-				entityX = centerX;
-			}
-
-			Vec3Pool pool = world.getWorldVec3Pool();
-
-			Vec3 bullseye = pool.getVecFromPool(centerX, centerY, centerZ);
-			Vec3 arrow = pool.getVecFromPool(entityX, entityY, entityZ);
-
-			double distance = arrow.distanceTo(bullseye);
-
-			target.setStrength(15 - ((int)Math.min(15, Math.max(0, Math.round(distance * 32)))));
-
+			onTargetHit(world, x, y, z, world.getWorldVec3Pool().getVecFromPool(entity.posX, entity.posY, entity.posZ));
 		}
+	}
+	
+	public void onTargetHit(World world, int x, int y, int z, Vec3 entityPosition) {
+
+		if (world.isRemote) {
+			return;
+		}
+		
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
+
+		if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
+
+		/**
+		 * onEntityCollidedWithBlock is called twice when the arrow is hit
+		 * The first is from the raytracing, which is predictive and
+		 * inaccurate The second is from the bounding box collision. We only
+		 * care about the second one
+		 */
+
+
+		TileEntityTarget target = (TileEntityTarget)tile;
+
+		if (!target.isEnabled()) { return; }
+
+		ForgeDirection rotation = target.getRotation();
+		ForgeDirection opposite = rotation.getOpposite();
+
+		double centerX = x + 0.5 + (opposite.offsetX * 0.5);
+		double centerY = y + 0.55 + (opposite.offsetY * 0.45);
+		double centerZ = z + 0.5 + (opposite.offsetZ * 0.5);
+
+		if (opposite == ForgeDirection.NORTH
+				|| opposite == ForgeDirection.SOUTH) {
+			entityPosition.zCoord = centerZ;
+		} else if (opposite == ForgeDirection.EAST
+				|| opposite == ForgeDirection.WEST) {
+			entityPosition.xCoord = centerX;
+		}
+
+		Vec3Pool pool = world.getWorldVec3Pool();
+
+		Vec3 bullseye = pool.getVecFromPool(centerX, centerY, centerZ);
+
+		double distance = entityPosition.distanceTo(bullseye);
+
+		target.setStrength(15 - ((int)Math.min(15, Math.max(0, Math.round(distance * 32)))));
+
 	}
 
 	@Override

@@ -4,18 +4,24 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
+import openblocks.OpenBlocks.Blocks;
+import openmods.Mods;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,6 +31,9 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	private int tickCounter = -1;
 
 	private SyncableBoolean active;
+
+	private Class flansBulletClass;
+	private boolean triedFlans = false;
 
 	public TileEntityTarget() {}
 
@@ -37,6 +46,27 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	public void updateEntity() {
 		super.updateEntity();
 		tickCounter--;
+		if (!worldObj.isRemote && Loader.isModLoaded(Mods.FLANSMOD)) {
+			if (!triedFlans && flansBulletClass == null) {
+				try {
+					flansBulletClass = Class.forName("co.uk.flansmods.common.guns.EntityBullet");
+				} catch (ClassNotFoundException e) {}
+				triedFlans = true;
+			}
+			if (flansBulletClass != null) {
+				List<Entity> bullets = worldObj.getEntitiesWithinAABB(flansBulletClass, getBB().expand(8, 8, 8));
+				if (bullets.size() > 0) {
+					for (Entity bullet : bullets) {
+						Vec3 posVec = Vec3.createVectorHelper(bullet.posX, bullet.posY, bullet.posZ);
+						Vec3 nextPosVec = Vec3.createVectorHelper(bullet.posX + bullet.motionX, bullet.posY + bullet.motionY, bullet.posZ + bullet.motionZ);
+						MovingObjectPosition hit = worldObj.rayTraceBlocks_do_do(posVec, nextPosVec, false, true);
+						if (hit != null && hit.blockX == xCoord && hit.blockY == yCoord && hit.blockZ == zCoord) {
+							Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
+						}
+					}
+				}
+			}
+		}
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
