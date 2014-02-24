@@ -247,5 +247,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		layers.setBaseTextureBlockId(blockId);
 		layers.setBaseTextureMetadata(blockMeta);
 		layers.setBaseTextureSide(blockSide);
+		if (!worldObj.isRemote) sync(); 
 	}
 }
