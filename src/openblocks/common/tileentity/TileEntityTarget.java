@@ -60,13 +60,15 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	private void predictOtherProjectiles() {
-		for (Class klazz : predictedProjectileClasses) {
-			if (klazz == null) continue;
-			List<Entity> projectiles = worldObj.getEntitiesWithinAABB(klazz, getBB().expand(20, 20, 20));
-			for (Entity projectile : projectiles) {
-				MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);
-				if (BlockUtils.isBlockHit(hit, this)) {
-					Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
+		if (!worldObj.isRemote) { 
+			for (Class klazz : predictedProjectileClasses) {
+				if (klazz == null) continue;
+				List<Entity> projectiles = worldObj.getEntitiesWithinAABB(klazz, getBB().expand(20, 20, 20));
+				for (Entity projectile : projectiles) {
+					MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);
+					if (BlockUtils.isBlockHit(hit, this)) {
+						Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
+					}
 				}
 			}
 		}
