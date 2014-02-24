@@ -211,16 +211,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		if (held != null) {
 			Item heldItem = held.getItem();
 			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem instanceof ItemStencil) return false;
-			if (heldItem instanceof ItemBlock && !player.isSneaking()) {
-				int blockId = ((ItemBlock)heldItem).getBlockID();
-				Block block = Block.blocksList[blockId];
-				if (PaintUtils.instance.isAllowedToReplace(block)) {
-					layer.setBaseTextureBlockId(blockId);
-					layer.setBaseTextureMetadata(held.getItemDamage());
-					if (!worldObj.isRemote) sync();
-					return true;
-				}
-			}
 		}
 
 		if (layer.isLastLayerStencil()) {
@@ -250,5 +240,12 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
 			}
 		}
+	}
+
+	public void setWallpaper(int toSide, int blockId, int blockMeta, int blockSide) {
+		SyncableBlockLayers layers = getLayersForSide(toSide);
+		layers.setBaseTextureBlockId(blockId);
+		layers.setBaseTextureMetadata(blockMeta);
+		layers.setBaseTextureSide(blockSide);
 	}
 }
