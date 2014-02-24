@@ -34,6 +34,7 @@ import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
 import openmods.item.ItemGeneric;
 import openmods.utils.EnchantmentUtils;
+import openmods.utils.ReflectionHelper;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -255,6 +256,11 @@ public class OpenBlocks {
 		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
 		public static ItemInfoBook infoBook;
 	}
+	
+
+	public static class ClassReferences {
+		public static Class flansmodsEntityBullet;
+	}
 
 	public static class Fluids {
 		public static Fluid XPJuice;
@@ -375,6 +381,9 @@ public class OpenBlocks {
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
 		changeLog = ChangelogBuilder.createChangeLog();
+		if (Loader.isModLoaded(Mods.FLANSMOD)) {
+			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
+		}
 	}
 
 	@Mod.EventHandler

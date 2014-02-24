@@ -3,6 +3,8 @@ package openblocks.common.tileentity;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -14,6 +16,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks.Blocks;
+import openblocks.OpenBlocks.ClassReferences;
 import openmods.Mods;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
@@ -21,6 +24,7 @@ import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
+import openmods.utils.EntityUtils;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,11 +35,12 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	private int tickCounter = -1;
 
 	private SyncableBoolean active;
+	
+	private List<Class> predictedProjectileClasses;
 
-	private Class flansBulletClass;
-	private boolean triedFlans = false;
-
-	public TileEntityTarget() {}
+	public TileEntityTarget() {
+		predictedProjectileClasses = Lists.newArrayList(ClassReferences.flansmodsEntityBullet);
+	}
 
 	@Override
 	protected void createSyncedFields() {
@@ -46,31 +51,24 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	public void updateEntity() {
 		super.updateEntity();
 		tickCounter--;
-		if (!worldObj.isRemote && Loader.isModLoaded(Mods.FLANSMOD)) {
-			if (!triedFlans && flansBulletClass == null) {
-				try {
-					flansBulletClass = Class.forName("co.uk.flansmods.common.guns.EntityBullet");
-				} catch (ClassNotFoundException e) {}
-				triedFlans = true;
-			}
-			if (flansBulletClass != null) {
-				List<Entity> bullets = worldObj.getEntitiesWithinAABB(flansBulletClass, getBB().expand(8, 8, 8));
-				if (bullets.size() > 0) {
-					for (Entity bullet : bullets) {
-						Vec3 posVec = Vec3.createVectorHelper(bullet.posX, bullet.posY, bullet.posZ);
-						Vec3 nextPosVec = Vec3.createVectorHelper(bullet.posX + bullet.motionX, bullet.posY + bullet.motionY, bullet.posZ + bullet.motionZ);
-						MovingObjectPosition hit = worldObj.rayTraceBlocks_do_do(posVec, nextPosVec, false, true);
-						if (hit != null && hit.blockX == xCoord && hit.blockY == yCoord && hit.blockZ == zCoord) {
-							Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
-						}
-					}
-				}
-			}
-		}
+		predictOtherProjectiles();
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockTargetId);
+		}
+	}
+
+	private void predictOtherProjectiles() {
+		for (Class klazz : predictedProjectileClasses) {
+			if (klazz == null) continue;
+			List<Entity> projectiles = worldObj.getEntitiesWithinAABB(klazz, getBB().expand(20, 20, 20));
+			for (Entity projectile : projectiles) {
+				MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);
+				if (BlockUtils.isBlockHit(hit, this)) {
+					Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
+				}
+			}
 		}
 	}
 
