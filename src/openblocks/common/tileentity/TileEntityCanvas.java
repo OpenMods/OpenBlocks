@@ -6,6 +6,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
@@ -24,6 +25,7 @@ import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
+import openmods.utils.render.PaintUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ISpecialDrops {
 
@@ -45,6 +47,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	public SyncableBlockLayers[] allSides;
 
+	@Override
+    public boolean canUpdate() {
+        return false;
+    }
+	
 	@Override
 	public void initialize() {}
 
@@ -106,10 +113,20 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	private Icon getBaseTexture(int side) {
-		if (paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.baseIcon;
-		Block block = Block.blocksList[paintedBlockId.getValue()];
-		if (block == null) return OpenBlocks.Blocks.canvas.baseIcon;
-		return block.getIcon(side, paintedBlockMeta.getValue());
+		SyncableBlockLayers layers = getLayersForSide(side);
+		int blockId = layers.getBaseTextureBlockId();
+		int blockMeta = layers.getBaseTextureMetadata();
+		if (blockId == 0) {
+			blockId = paintedBlockId.getValue();
+			blockMeta = paintedBlockMeta.getValue();
+		}
+		if (blockId > 0) {
+			Block block = Block.blocksList[blockId];
+			if (block != null) {
+				return block.getIcon(side, blockMeta);
+			}
+		}
+		return OpenBlocks.Blocks.canvas.baseIcon;
 	}
 
 	private boolean isBlockUnpainted() {
@@ -128,7 +145,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			} else {
 				// collapse all layers, since they will be fully covered by
 				// paint
-				layer.clear();
+				layer.clear(false);
 				baseColors.setValue(side, color);
 			}
 		}
@@ -158,7 +175,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 				dropStackFromSide(dropStack, side);
 			}
 
-			layer.clear();
+			layer.clear(true);
 
 			baseColors.setValue(side, 0xFFFFFF);
 		}
@@ -187,13 +204,24 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+
+		SyncableBlockLayers layer = getLayersForSide(side);
+		
 		ItemStack held = player.getHeldItem();
 		if (held != null) {
 			Item heldItem = held.getItem();
 			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem instanceof ItemStencil) return false;
+			if (heldItem instanceof ItemBlock && !player.isSneaking()) {
+				int blockId = ((ItemBlock)heldItem).getBlockID();
+				Block block = Block.blocksList[blockId];
+				if (PaintUtils.instance.isAllowedToReplace(block)) {
+					layer.setBaseTextureBlockId(blockId);
+					layer.setBaseTextureMetadata(held.getItemDamage());
+					if (!worldObj.isRemote) sync();
+					return true;
+				}
+			}
 		}
-
-		SyncableBlockLayers layer = getLayersForSide(side);
 
 		if (layer.isLastLayerStencil()) {
 			if (player.isSneaking()) {
@@ -213,6 +241,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	public void addDrops(List<ItemStack> drops) {
+		if (paintedBlockId.getValue() == 0) {
+			drops.add(new ItemStack(getBlockType()));
+		}
 		for (SyncableBlockLayers sideLayers : allSides) {
 			if (sideLayers.isLastLayerStencil()) {
 				Stencil stencil = sideLayers.getTopStencil();

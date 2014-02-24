@@ -112,11 +112,16 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	public final LinkedList<Layer> layers = Lists.newLinkedList();
+	
+	public int baseTextureBlockId = 0;
+	public int baseTextureMetadata = 0;
 
 	public SyncableBlockLayers() {}
 
 	@Override
 	public void readFromStream(DataInput stream) throws IOException {
+		baseTextureBlockId = stream.readInt();
+		baseTextureMetadata = stream.readInt();
 		int size = stream.readByte();
 		layers.clear();
 		for (byte i = 0; i < size; i++) {
@@ -127,6 +132,8 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	@Override
 	public void writeToStream(DataOutput stream, boolean fullData)
 			throws IOException {
+		stream.writeInt(baseTextureBlockId);
+		stream.writeInt(baseTextureMetadata);
 		stream.writeByte(layers.size());
 		for (Layer layer : layers) {
 			stream.writeInt(layer.getColor());
@@ -143,6 +150,8 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	@Override
 	public void writeToNBT(NBTTagCompound nbt, String name) {
 		NBTTagCompound subTag = new NBTTagCompound();
+		subTag.setInteger("blockId", baseTextureBlockId);
+		subTag.setInteger("meta", baseTextureMetadata);
 		subTag.setInteger("size", layers.size());
 		int i = 0;
 		for (Layer layer : layers) {
@@ -157,6 +166,12 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		NBTTagCompound subTag = nbt.getCompoundTag(name);
 		int size = subTag.getInteger("size");
 		layers.clear();
+		if (subTag.hasKey("blockId")) {
+			baseTextureBlockId = subTag.getInteger("blockId");
+		}
+		if (subTag.hasKey("meta")) {
+			baseTextureMetadata = subTag.getInteger("meta");
+		}
 		for (int i = 0; i < size; i++) {
 			layers.add(Layer.createFromNBT(subTag.getCompoundTag("layer_" + i)));
 		}
@@ -193,6 +208,29 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		return last;
 	}
 
+	
+	public int getBaseTextureBlockId() {
+		return baseTextureBlockId;
+	}
+	
+	public int getBaseTextureMetadata() {
+		return baseTextureMetadata;
+	}
+	
+	public void setBaseTextureBlockId(int id) {
+		if (id != baseTextureBlockId) {
+			baseTextureBlockId = id;
+			markDirty();
+		}
+	}
+	
+	public void setBaseTextureMetadata(int meta) {
+		if (meta != baseTextureMetadata) {
+			baseTextureMetadata = meta;
+			markDirty();
+		}
+	}
+	
 	public void moveStencilToNextLayer() {
 		Layer prevTop = layers.getLast();
 		prevTop.setHasStencilCover(false);
@@ -239,8 +277,12 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		}
 	}
 
-	public void clear() {
+	public void clear(boolean clearTexture) {
 		layers.clear();
+		if (clearTexture) {
+			setBaseTextureBlockId(0);
+			setBaseTextureMetadata(0);
+		}
 		markDirty();
 	}
 
