@@ -255,6 +255,9 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
 		public static ItemInfoBook infoBook;
+
+		@RegisterItem(name = "wallpaper")
+		public static ItemWallpaper wallpaper;
 	}
 	
 
