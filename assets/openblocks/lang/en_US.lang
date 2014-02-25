@@ -76,6 +76,13 @@ openblocks.misc.radio.not_ready=Stream not ready, try again later
 openblocks.misc.radio.unknown_error=Unknown error
 openblocks.misc.radio.muted=Sounds are muted!
 
+openblocks.misc.side.east=East side
+openblocks.misc.side.west=West side
+openblocks.misc.side.north=North side
+openblocks.misc.side.south=South side
+openblocks.misc.side.up=Top side
+openblocks.misc.side.down=Bottom side
+
 openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Elevator
@@ -244,6 +251,8 @@ item.openblocks.tasty_clay.name=Tasty Clay
 item.openblocks.golden_eye.name=Golden eye
 item.openblocks.pointer.name=Pointer
 item.openblocks.tuned_crystal.name=Tuned Crystal
+
+item.openblocks.wallpaper.name=Wallpaper
 
 itemGroup.tabOpenBlocks=OpenBlocks
 

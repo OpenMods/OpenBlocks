@@ -2,20 +2,7 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.block.BlockCanvas;
-import openblocks.common.sync.SyncableBlockLayers;
-import openblocks.common.sync.SyncableBlockLayers.Layer;
-import openblocks.common.tileentity.TileEntityCanvas;
-import openmods.utils.BlockUtils;
-import openmods.utils.render.PaintUtils;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -24,7 +11,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import openblocks.Config;
+import openblocks.OpenBlocks;
+import openblocks.common.block.BlockCanvas;
+import openblocks.common.sync.SyncableBlockLayers;
+import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.utils.BlockUtils;
+import openmods.utils.ItemUtils;
+import openmods.utils.render.PaintUtils;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWallpaper extends Item {
 
@@ -45,16 +45,20 @@ public class ItemWallpaper extends Item {
 		}
 
 		public Icon getIcon() {
-			Block block = Block.blocksList[blockId];
+			Block block = getBlock();
 			if (block != null) { return block.getIcon(blockSide, blockMeta); }
 			return null;
+		}
+
+		public Block getBlock() {
+			return Block.blocksList[blockId];
 		}
 
 		public static BlockSideTexture fromItemStack(ItemStack stack) {
 
 			if (stack.hasTagCompound()) {
 
-				NBTTagCompound tag = stack.getTagCompound();
+				NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
 				if (tag.hasKey(TAG_BLOCK_ID) &&
 						tag.hasKey(TAG_BLOCK_META) &&
@@ -69,11 +73,10 @@ public class ItemWallpaper extends Item {
 		}
 
 		public void writeToStack(ItemStack stack) {
-			NBTTagCompound tag = new NBTTagCompound();
+			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			tag.setInteger(TAG_BLOCK_ID, blockId);
 			tag.setInteger(TAG_BLOCK_META, blockMeta);
 			tag.setInteger(TAG_BLOCK_SIDE, blockSide);
-			stack.setTagCompound(tag);
 		}
 
 		public int getBlockId() {
@@ -86,6 +89,16 @@ public class ItemWallpaper extends Item {
 
 		public int getBlockSide() {
 			return blockSide;
+		}
+
+		public String getTranslatedSide() {
+			return StatCollector.translateToLocal("openblocks.misc.side." + ForgeDirection.getOrientation(blockSide).name().toLowerCase());
+		}
+
+		public String getBlockName() {
+			Block block = getBlock();
+			if (block != null) { return block.getLocalizedName(); }
+			return "Unknown block";
 		}
 	}
 
@@ -106,6 +119,15 @@ public class ItemWallpaper extends Item {
 		BlockSideTexture texture = BlockSideTexture.fromItemStack(stack);
 		if (texture != null) { return texture.getIcon(); }
 		return itemIcon;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+		BlockSideTexture texture = BlockSideTexture.fromItemStack(stack);
+		if (texture != null) {
+			list.add(texture.getTranslatedSide());
+			list.add(texture.getBlockName());
+		}
 	}
 
 	@Override
