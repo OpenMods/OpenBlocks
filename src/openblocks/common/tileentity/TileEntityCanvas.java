@@ -12,9 +12,8 @@ import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
-import openblocks.common.item.ItemPaintBrush;
-import openblocks.common.item.ItemSqueegee;
-import openblocks.common.item.ItemStencil;
+import openblocks.common.item.*;
+import openblocks.common.item.ItemWallpaper.BlockSideTexture;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
@@ -48,10 +47,10 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public SyncableBlockLayers[] allSides;
 
 	@Override
-    public boolean canUpdate() {
-        return false;
-    }
-	
+	public boolean canUpdate() {
+		return false;
+	}
+
 	@Override
 	public void initialize() {}
 
@@ -124,9 +123,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 		if (blockId > 0) {
 			Block block = Block.blocksList[blockId];
-			if (block != null) {
-				return block.getIcon(side, blockMeta);
-			}
+			if (block != null) { return block.getIcon(side, blockMeta); }
 		}
 		return OpenBlocks.Blocks.canvas.baseIcon;
 	}
@@ -208,7 +205,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 
 		SyncableBlockLayers layer = getLayersForSide(side);
-		
+
 		ItemStack held = player.getHeldItem();
 		if (held != null) {
 			Item heldItem = held.getItem();
@@ -244,11 +241,12 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 	}
 
-	public void setWallpaper(int toSide, int blockId, int blockMeta, int blockSide) {
+	public void setWallpaper(int toSide, BlockSideTexture texture) {
 		SyncableBlockLayers layers = getLayersForSide(toSide);
-		layers.setBaseTextureBlockId(blockId);
-		layers.setBaseTextureMetadata(blockMeta);
-		layers.setBaseTextureSide(blockSide);
-		if (!worldObj.isRemote) sync(); 
+		layers.setBaseTextureBlockId(texture.getBlockId());
+		layers.setBaseTextureMetadata(texture.getBlockMeta());
+		layers.setBaseTextureSide(texture.getBlockSide());
+		if (!worldObj.isRemote) sync();
 	}
+
 }
