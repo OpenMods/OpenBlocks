@@ -223,6 +223,10 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	public int getBaseTextureMetadata() {
 		return baseTextureMetadata;
 	}
+
+	public int getBaseTextureSide() {
+		return baseTextureSide;
+	}
 	
 	public void setBaseTextureBlockId(int id) {
 		if (id != baseTextureBlockId) {
@@ -301,6 +305,10 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	public boolean isEmpty() {
-		return layers.isEmpty();
+		return layers.isEmpty() && !hasWallpaper();
+	}
+
+	private boolean hasWallpaper() {
+		return baseTextureBlockId != 0;
 	}
 }

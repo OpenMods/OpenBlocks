@@ -119,6 +119,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		if (blockId == 0) {
 			blockId = paintedBlockId.getValue();
 			blockMeta = paintedBlockMeta.getValue();
+		} else {
+			side = layers.getBaseTextureSide();
 		}
 		if (blockId > 0) {
 			Block block = Block.blocksList[blockId];
