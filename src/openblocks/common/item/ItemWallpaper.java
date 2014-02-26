@@ -113,6 +113,11 @@ public class ItemWallpaper extends Item {
 	public int getSpriteNumber() {
 		return 0;
 	}
+	
+	@Override
+    public Icon getIcon(ItemStack stack, int pass){
+    	return getIconIndex(stack);
+    }
 
 	@Override
 	public Icon getIconIndex(ItemStack stack) {
