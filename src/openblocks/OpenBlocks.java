@@ -256,10 +256,9 @@ public class OpenBlocks {
 		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
 		public static ItemInfoBook infoBook;
 	}
-	
 
 	public static class ClassReferences {
-		public static Class flansmodsEntityBullet;
+		public static Class<?> flansmodsEntityBullet;
 	}
 
 	public static class Fluids {

@@ -35,7 +35,7 @@ public class BlockTarget extends OpenBlock {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		
+
 		if (!world.isRemote && entity != null && entity instanceof EntityArrow) {
 			if (lastEntityHit != entity.entityId) {
 				lastEntityHit = entity.entityId;
@@ -45,13 +45,11 @@ public class BlockTarget extends OpenBlock {
 			onTargetHit(world, x, y, z, world.getWorldVec3Pool().getVecFromPool(entity.posX, entity.posY, entity.posZ));
 		}
 	}
-	
+
 	public void onTargetHit(World world, int x, int y, int z, Vec3 entityPosition) {
 
-		if (world.isRemote) {
-			return;
-		}
-		
+		if (world.isRemote) { return; }
+
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
 
 		if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
@@ -62,7 +60,6 @@ public class BlockTarget extends OpenBlock {
 		 * inaccurate The second is from the bounding box collision. We only
 		 * care about the second one
 		 */
-
 
 		TileEntityTarget target = (TileEntityTarget)tile;
 
