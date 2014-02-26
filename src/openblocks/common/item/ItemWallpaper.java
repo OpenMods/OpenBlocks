@@ -2,6 +2,8 @@ package openblocks.common.item;
 
 import java.util.List;
 
+import appeng.api.Blocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -123,7 +125,7 @@ public class ItemWallpaper extends Item {
 	public Icon getIconIndex(ItemStack stack) {
 		BlockSideTexture texture = BlockSideTexture.fromItemStack(stack);
 		if (texture != null) { return texture.getIcon(); }
-		return itemIcon;
+		return OpenBlocks.Blocks.canvas.wallpaper;
 	}
 
 	@Override
@@ -138,6 +140,8 @@ public class ItemWallpaper extends Item {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
+		int hitSide = side;
+		
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 
 		boolean canReplaceBlock = PaintUtils.instance.isAllowedToReplace(world, x, y, z);
@@ -176,6 +180,12 @@ public class ItemWallpaper extends Item {
 					blockId = layer.getBaseTextureBlockId();
 					meta = layer.getBaseTextureMetadata();
 					side = layer.getBaseTextureSide();
+					
+					if (blockId == 0) {
+						blockId = canvas.paintedBlockId.getValue();
+						meta = canvas.paintedBlockMeta.getValue();
+						side = hitSide;
+					}
 				}
 
 				texture = new BlockSideTexture(blockId, meta, side);

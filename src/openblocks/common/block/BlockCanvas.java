@@ -21,6 +21,7 @@ public class BlockCanvas extends OpenBlock {
 	private int layer = 0;
 	private int renderSide = 0;
 	public Icon baseIcon;
+	public Icon wallpaper;
 
 	public BlockCanvas() {
 		super(Config.blockCanvasId, Material.ground);
@@ -33,6 +34,7 @@ public class BlockCanvas extends OpenBlock {
 	@Override
 	public void registerIcons(IconRegister registry) {
 		baseIcon = registry.registerIcon("openblocks:canvas");
+		wallpaper = registry.registerIcon("openblocks:wallpaper");
 		for (Stencil stencil : Stencil.values()) {
 			stencil.registerBlockIcons(registry);
 		}
