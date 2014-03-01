@@ -733,7 +733,7 @@ public class Config {
 		}
 		
 		if (itemWallpaperId > 0) {
-			OpenBlocks.Items.wallpaper = new ItemWallpaper();
+			//OpenBlocks.Items.wallpaper = new ItemWallpaper();
 		}
 
 		if (explosiveEnchantmentId > 0) {

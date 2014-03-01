@@ -159,7 +159,7 @@ public class ItemWallpaper extends Item {
 				if (te instanceof TileEntityCanvas) {
 
 					TileEntityCanvas canvas = (TileEntityCanvas)te;
-					canvas.setWallpaper(side, texture);
+					//canvas.setWallpaper(side, texture);
 
 					stack.stackSize--;
 				}
@@ -175,9 +175,9 @@ public class ItemWallpaper extends Item {
 
 					SyncableBlockLayers layer = canvas.getLayersForSide(side);
 
-					blockId = layer.getBaseTextureBlockId();
-					meta = layer.getBaseTextureMetadata();
-					side = layer.getBaseTextureSide();
+					//blockId = layer.getBaseTextureBlockId();
+					//meta = layer.getBaseTextureMetadata();
+					//side = layer.getBaseTextureSide();
 					
 					if (blockId == 0) {
 						blockId = canvas.paintedBlockId.getValue();
