@@ -5,6 +5,7 @@ stat.openblocks.bricksDropped=Fallen gelassene Ziegel
 openblocks.keybind.drop_brick=Sei albern
 
 enchantment.openblocks.explosive=Instabil
+enchantment.openblocks.laststand=Letzte Rettung
 
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
@@ -252,7 +253,8 @@ item.openblocks.golden_eye.name=Goldenes Auge
 item.openblocks.pointer.name=Zeiger
 item.openblocks.tuned_crystal.name=Wellenkristall
 
-item.openblocks.wallpaper.name=Wallpaper
+item.openblocks.wallpaper.name=Poster
+
 itemGroup.tabOpenBlocks=OpenBlocks
 
 entity.OpenBlocks.Luggage.name=Reisegepäck
