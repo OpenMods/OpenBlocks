@@ -3,8 +3,6 @@ package openblocks.common.tileentity;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -12,12 +10,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.ClassReferences;
-import openmods.Mods;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
@@ -25,7 +21,9 @@ import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 import openmods.utils.EntityUtils;
-import cpw.mods.fml.common.Loader;
+
+import com.google.common.collect.Lists;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,12 +33,14 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	private int tickCounter = -1;
 
 	private SyncableBoolean active;
-	
-	private List<Class> predictedProjectileClasses;
 
-	public TileEntityTarget() {
-		predictedProjectileClasses = Lists.newArrayList(ClassReferences.flansmodsEntityBullet);
+	private final static List<Class<?>> predictedProjectileClasses = Lists.newArrayList();
+
+	static {
+		predictedProjectileClasses.add(ClassReferences.flansmodsEntityBullet);
 	}
+
+	public TileEntityTarget() {}
 
 	@Override
 	protected void createSyncedFields() {
@@ -60,9 +60,10 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	private void predictOtherProjectiles() {
-		if (!worldObj.isRemote) { 
-			for (Class klazz : predictedProjectileClasses) {
+		if (!worldObj.isRemote) {
+			for (Class<?> klazz : predictedProjectileClasses) {
 				if (klazz == null) continue;
+				@SuppressWarnings("unchecked")
 				List<Entity> projectiles = worldObj.getEntitiesWithinAABB(klazz, getBB().expand(20, 20, 20));
 				for (Entity projectile : projectiles) {
 					MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);

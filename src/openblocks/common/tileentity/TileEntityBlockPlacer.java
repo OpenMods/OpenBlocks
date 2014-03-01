@@ -47,13 +47,12 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		for (int i = 0, l = inventory.getSizeInventory(); i < l; i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
-			OpenModsFakePlayer fakePlayer = OpenModsFakePlayer.getPlayerForWorld(worldObj);
-			ItemStack newStack = OpenModsFakePlayer.getPlayerForWorld(worldObj)
-					.equipWithAndRightClick(stack,
-							Vec3.createVectorHelper(xCoord, yCoord, zCoord),
-							Vec3.createVectorHelper(x, y - 1, z),
-							direction.getOpposite(),
-							worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
+			OpenModsFakePlayer fakePlayer = new OpenModsFakePlayer(worldObj);
+			ItemStack newStack = fakePlayer.equipWithAndRightClick(stack,
+					Vec3.createVectorHelper(xCoord, yCoord, zCoord),
+					Vec3.createVectorHelper(x, y - 1, z),
+					direction.getOpposite(),
+					worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
 			fakePlayer.setDead();
 			inventory.setInventorySlotContents(i, newStack);
 			break;

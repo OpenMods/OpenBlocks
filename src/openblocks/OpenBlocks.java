@@ -259,10 +259,9 @@ public class OpenBlocks {
 		@RegisterItem(name = "wallpaper")
 		public static ItemWallpaper wallpaper;
 	}
-	
 
 	public static class ClassReferences {
-		public static Class flansmodsEntityBullet;
+		public static Class<?> flansmodsEntityBullet;
 	}
 
 	public static class Fluids {

@@ -90,9 +90,9 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 			if (block != null) {
 				int metadata = worldObj.getBlockMetadata(x, y, z);
 				if (block != Block.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
-					EntityPlayer fakePlayer = OpenModsFakePlayer.getPlayerForWorld(worldObj);
+					EntityPlayer fakePlayer = new OpenModsFakePlayer(worldObj);
 					fakePlayer.inventory.currentItem = 0;
-					fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Item.pickaxeDiamond));
+					fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Item.pickaxeDiamond, 0, 0));
 
 					BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
 					if (MinecraftForge.EVENT_BUS.post(event)) return;

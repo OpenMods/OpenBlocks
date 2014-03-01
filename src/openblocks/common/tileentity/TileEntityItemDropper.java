@@ -47,7 +47,9 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 				inventory.setInventorySlotContents(i, null);
 			}
 
-			OpenModsFakePlayer.getPlayerForWorld(worldObj).dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+			OpenModsFakePlayer player = new OpenModsFakePlayer(worldObj);
+			player.dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+			player.setDead();
 
 			return;
 		}
