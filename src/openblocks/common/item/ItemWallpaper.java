@@ -2,8 +2,6 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import appeng.api.Blocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

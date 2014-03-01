@@ -6,7 +6,6 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraftforge.common.ForgeDirection;
@@ -24,7 +23,6 @@ import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
-import openmods.utils.render.PaintUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ISpecialDrops {
 

@@ -2,15 +2,13 @@ package openblocks.common;
 
 import java.util.Map;
 
-import openblocks.Config;
-import openblocks.OpenBlocks;
-import openmods.utils.EnchantmentUtils;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import openblocks.OpenBlocks;
+import openmods.utils.EnchantmentUtils;
 
 public class LastStandEnchantmentsHandler {
 
