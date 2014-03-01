@@ -313,6 +313,9 @@ public class Config {
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
+	
+	@ConfigProperty(category = "features", name = "lastStandEnchantmentId", comment = "Id of last stand enchantment")
+	public static int lastStandEnchantmentId = 212;
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantGrief", comment = "Explosive enchant can break blocks at level 3")
 	public static boolean explosiveEnchantGrief = true;
@@ -736,6 +739,11 @@ public class Config {
 		if (explosiveEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new ExplosiveEnchantmentsHandler());
 			OpenBlocks.explosiveEnch = new EnchantmentExplosive(explosiveEnchantmentId);
+		}
+		
+		if (lastStandEnchantmentId > 0) {
+			MinecraftForge.EVENT_BUS.register(new LastStandEnchantmentsHandler());
+			OpenBlocks.lastStandEnch = new EnchantmentLastStand(lastStandEnchantmentId);
 		}
 
 		final String modId = "openblocks";

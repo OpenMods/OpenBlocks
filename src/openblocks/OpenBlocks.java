@@ -283,6 +283,7 @@ public class OpenBlocks {
 		public void displayAllReleventItems(List result) {
 			super.displayAllReleventItems(result);
 			if (explosiveEnch != null) EnchantmentUtils.addAllBooks(explosiveEnch, result);
+			if (lastStandEnch != null) EnchantmentUtils.addAllBooks(lastStandEnch, result);
 		}
 
 	};
@@ -294,6 +295,8 @@ public class OpenBlocks {
 	public static final StatBase brickStat = (new StatBasic(70998, "stat.openblocks.bricksDropped")).registerStat();
 
 	public static Enchantment explosiveEnch;
+	
+	public static Enchantment lastStandEnch;
 
 	public static ItemStack changeLog;
 
