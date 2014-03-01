@@ -76,6 +76,13 @@ openblocks.misc.radio.not_ready=Stream nicht bereit ready, versuche es später n
 openblocks.misc.radio.unknown_error=Unbekannter Fehler
 openblocks.misc.radio.muted=Geräusche sind deaktiviert!
 
+openblocks.misc.side.east=Ostseite
+openblocks.misc.side.west=Westseite
+openblocks.misc.side.north=Nordseite
+openblocks.misc.side.south=Südseite
+openblocks.misc.side.up=Oberseite
+openblocks.misc.side.down=Unterseite
+
 openblocks.turtle.magnet=Magnetische
 
 tile.openblocks.elevator.name=Fahrstuhl
@@ -245,6 +252,7 @@ item.openblocks.golden_eye.name=Goldenes Auge
 item.openblocks.pointer.name=Zeiger
 item.openblocks.tuned_crystal.name=Wellenkristall
 
+item.openblocks.wallpaper.name=Wallpaper
 itemGroup.tabOpenBlocks=OpenBlocks
 
 entity.OpenBlocks.Luggage.name=Reisegepäck
