@@ -18,7 +18,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import openblocks.Config;
-import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Enchantments;
 import openmods.OpenMods;
 
 import com.google.common.collect.ImmutableSet;
@@ -128,7 +128,7 @@ public class ExplosiveEnchantmentsHandler {
 		if (armor == null || !(armor.getItem() instanceof ItemArmor)) return null;
 		@SuppressWarnings("unchecked")
 		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(armor);
-		Integer ench = enchantments.get(OpenBlocks.explosiveEnch.effectId);
+		Integer ench = enchantments.get(Enchantments.explosive.effectId);
 		if (ench == null || ench > LEVELS.length) return null;
 		EnchantmentLevel level = LEVELS[ench];
 		if (level == null) return null;

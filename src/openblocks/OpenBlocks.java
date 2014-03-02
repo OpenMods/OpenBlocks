@@ -268,6 +268,11 @@ public class OpenBlocks {
 		public static Fluid XPJuice;
 		public static Fluid openBlocksXPJuice;
 	}
+	
+	public static class Enchantments {
+		public static Enchantment explosive;
+		public static Enchantment lastStand;
+	}
 
 	public static FluidStack XP_FLUID = null;
 
@@ -282,8 +287,8 @@ public class OpenBlocks {
 		@SideOnly(Side.CLIENT)
 		public void displayAllReleventItems(List result) {
 			super.displayAllReleventItems(result);
-			if (explosiveEnch != null) EnchantmentUtils.addAllBooks(explosiveEnch, result);
-			if (lastStandEnch != null) EnchantmentUtils.addAllBooks(lastStandEnch, result);
+			if (Enchantments.explosive != null) EnchantmentUtils.addAllBooks(Enchantments.explosive, result);
+			if (Enchantments.lastStand != null) EnchantmentUtils.addAllBooks(Enchantments.lastStand, result);
 		}
 
 	};
@@ -293,10 +298,6 @@ public class OpenBlocks {
 	public static final Achievement brickAchievement = new Achievement(70997, "openblocks.droppedBrick", 13, 13, Item.brick, null).registerAchievement();
 
 	public static final StatBase brickStat = (new StatBasic(70998, "stat.openblocks.bricksDropped")).registerStat();
-
-	public static Enchantment explosiveEnch;
-	
-	public static Enchantment lastStandEnch;
 
 	public static ItemStack changeLog;
 

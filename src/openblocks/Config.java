@@ -12,6 +12,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import openblocks.OpenBlocks.Enchantments;
 import openblocks.asm.EntityPlayerVisitor;
 import openblocks.client.radio.RadioManager;
 import openblocks.client.radio.RadioManager.RadioStation;
@@ -738,12 +739,12 @@ public class Config {
 
 		if (explosiveEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new ExplosiveEnchantmentsHandler());
-			OpenBlocks.explosiveEnch = new EnchantmentExplosive(explosiveEnchantmentId);
+			Enchantments.explosive = new EnchantmentExplosive(explosiveEnchantmentId);
 		}
 		
 		if (lastStandEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new LastStandEnchantmentsHandler());
-			OpenBlocks.lastStandEnch = new EnchantmentLastStand(lastStandEnchantmentId);
+			Enchantments.lastStand = new EnchantmentLastStand(lastStandEnchantmentId);
 		}
 
 		final String modId = "openblocks";

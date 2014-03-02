@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Enchantments;
 import openmods.utils.EnchantmentUtils;
 
 public class LastStandEnchantmentsHandler {
@@ -48,7 +48,7 @@ public class LastStandEnchantmentsHandler {
 			for (ItemStack stack : player.inventory.armorInventory) {
 				if (stack != null) {
 					Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-					Integer ench = enchantments.get(OpenBlocks.lastStandEnch.effectId);
+					Integer ench = enchantments.get(Enchantments.lastStand.effectId);
 					if (ench != null) {
 						count += ench;
 					}
