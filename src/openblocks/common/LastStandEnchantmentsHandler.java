@@ -28,12 +28,9 @@ public class LastStandEnchantmentsHandler {
 				float xpRequired = 0.5f - healthAvailable;
 
 				xpRequired *= 50;
-				System.out.println("Required: "+xpRequired);
 				xpRequired /= enchantmentLevels;
-
 				xpRequired = Math.max(1, xpRequired);
-				System.out.println("Required: "+xpRequired);
-				System.out.println("Available: " + xpAvailable);
+				
 				if (xpAvailable >= xpRequired) {
 					player.setHealth(0.7f);
 					EnchantmentUtils.drainPlayerXP(player, (int)xpRequired);
