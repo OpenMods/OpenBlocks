@@ -37,7 +37,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 		final Vec3 blockPos = getConeApex();
 		final Vec3 basePos = getConeBaseCenter();
-		final Vec3 coneAxis = blockPos.subtract(basePos);
+		final Vec3 coneAxis = worldObj.getWorldVec3Pool().getVecFromPool(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
 
 		for (Entity entity : entities) {
 			if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) continue;
