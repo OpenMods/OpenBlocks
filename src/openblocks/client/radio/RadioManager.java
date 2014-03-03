@@ -174,7 +174,7 @@ public class RadioManager implements IVillageTradeHandler {
 			final UrlMeta ext = resolveStreamExt(url);
 
 			if (!ext.isResolved()) throw error("openblocks.misc.radio.not_ready", "Stream %s (soundId : %s) not yet resolved, aborting", url, soundId);
-			
+
 			if (!ext.isValid()) throw error("openblocks.misc.radio.invalid_stream", "Invalid data in stream %s (soundId : %s), aborting", url, soundId);
 
 			try {
