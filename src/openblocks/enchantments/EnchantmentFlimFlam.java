@@ -1,0 +1,27 @@
+package openblocks.enchantments;
+
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
+
+public class EnchantmentFlimFlam extends Enchantment {
+
+	public EnchantmentFlimFlam(int id) {
+		super(id, 2, EnumEnchantmentType.all);
+		setName("openblocks.flimflam");
+	}
+
+	@Override
+	public int getMaxLevel() {
+		return 1;
+	}
+
+	@Override
+	public int getMinEnchantability(int level) {
+		return 100;
+	}
+
+	@Override
+	public int getMaxEnchantability(int level) {
+		return getMinEnchantability(level) + 10;
+	}
+}

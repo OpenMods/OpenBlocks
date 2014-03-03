@@ -272,6 +272,7 @@ public class OpenBlocks {
 	public static class Enchantments {
 		public static Enchantment explosive;
 		public static Enchantment lastStand;
+		public static Enchantment flimFlam;
 	}
 
 	public static FluidStack XP_FLUID = null;
@@ -289,6 +290,7 @@ public class OpenBlocks {
 			super.displayAllReleventItems(result);
 			if (Enchantments.explosive != null) EnchantmentUtils.addAllBooks(Enchantments.explosive, result);
 			if (Enchantments.lastStand != null) EnchantmentUtils.addAllBooks(Enchantments.lastStand, result);
+			if (Enchantments.flimFlam != null) EnchantmentUtils.addAllBooks(Enchantments.flimFlam, result);
 		}
 
 	};

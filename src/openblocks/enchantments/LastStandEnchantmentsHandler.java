@@ -1,4 +1,4 @@
-package openblocks.common;
+package openblocks.enchantments;
 
 import java.util.Map;
 

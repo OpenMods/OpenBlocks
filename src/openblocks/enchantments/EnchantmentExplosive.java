@@ -1,4 +1,4 @@
-package openblocks.common;
+package openblocks.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
