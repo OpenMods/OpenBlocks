@@ -42,7 +42,6 @@ public class IcyURLConnection extends HttpURLConnection {
 	protected Map<String, List<String>> requestProps;
 	protected Map<String, List<String>> headers;
 	protected String responseLine;
-	private int redirectionLoopCount = 0;
 
 	public IcyURLConnection(URL url) {
 		super(url);
@@ -69,7 +68,7 @@ public class IcyURLConnection extends HttpURLConnection {
 		// BB: Changed: wrapped result stream
 		inputStream = new SafeInputStream(socket.getInputStream());
 
-		writeLine("GET " + ("".equals(url.getPath())? "/" : url.getPath()) + " HTTP/1.1");
+		writeLine("GET " + ("".equals(url.getPath())? "/" : url.getPath()) + " HTTP/1.0");
 		writeLine("Host: " + url.getHost());
 
 		if (requestProps != null) {
@@ -87,15 +86,6 @@ public class IcyURLConnection extends HttpURLConnection {
 		for (String line = readLine(); !Strings.isNullOrEmpty(line);) {
 			parseHeaderLine(line);
 			line = readLine();
-		}
-
-		if (instanceFollowRedirects) {
-			String redirection = getHeaderField("location");
-			if (redirection != null && redirectionLoopCount++ < 10) {
-				connected = false;
-				url = new URL(redirection);
-				connect();
-			}
 		}
 	}
 

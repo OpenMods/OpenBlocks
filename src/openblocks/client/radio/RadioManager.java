@@ -1,6 +1,5 @@
 package openblocks.client.radio;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
@@ -72,24 +71,9 @@ public class RadioManager implements IVillageTradeHandler {
 		throw new RadioException(userMsg);
 	}
 
-	private static final String OGG_EXT = "ogg";
-	private static final String MP3_EXT = "mp3";
-	private static final String ERROR_EXT = "!error!";
-	private static final String RESOLVING_EXT = "!resolving!";
-
 	private static final String SOUND_ID = "openblocks.radio.";
 
-	private static final Map<String, String> PROTOCOLS = ImmutableMap.<String, String> builder()
-			.put("audio/mpeg", MP3_EXT)
-			.put("audio/x-mpeg", MP3_EXT)
-			.put("audio/mpeg3", MP3_EXT)
-			.put("audio/x-mpeg3", MP3_EXT)
-			.put("audio/ogg", OGG_EXT)
-			.put("application/ogg", OGG_EXT)
-			.put("audio/vorbis", OGG_EXT)
-			.build();
-
-	private final Map<String, String> streamFormats = Maps.newConcurrentMap();
+	private final Map<String, UrlMeta> urlMeta = Maps.newHashMap();
 
 	private final Set<String> usedSounds = Sets.newHashSet();
 
@@ -104,7 +88,7 @@ public class RadioManager implements IVillageTradeHandler {
 	public void init() {
 		MinecraftForge.EVENT_BUS.register(this);
 		try {
-			SoundSystemConfig.setCodec(MP3_EXT, CodecMp3.class);
+			SoundSystemConfig.setCodec(UrlMeta.MP3_EXT, CodecMp3.class);
 		} catch (Throwable t) {
 			throw Throwables.propagate(t);
 		}
@@ -187,15 +171,15 @@ public class RadioManager implements IVillageTradeHandler {
 				sndSystem.removeSource(soundId);
 			}
 
-			final String ext = resolveStreamExt(url);
+			final UrlMeta ext = resolveStreamExt(url);
 
-			if (ERROR_EXT.equals(ext)) throw error("openblocks.misc.radio.invalid_stream", "Invalid data in stream %s (soundId : %s), aborting", url, soundId);
-
-			if (RESOLVING_EXT.equals(ext)) throw error("openblocks.misc.radio.not_ready", "Stream %s (soundId : %s) not yet resolved, aborting", url, soundId);
+			if (!ext.isResolved()) throw error("openblocks.misc.radio.not_ready", "Stream %s (soundId : %s) not yet resolved, aborting", url, soundId);
+			
+			if (!ext.isValid()) throw error("openblocks.misc.radio.invalid_stream", "Invalid data in stream %s (soundId : %s), aborting", url, soundId);
 
 			try {
-				URL realUrl = new URL(null, url, AutoConnectingStreamHandler.createManaged(soundId));
-				String dummyFilename = "radio_dummy." + ext;
+				URL realUrl = new URL(null, ext.getUrl(), AutoConnectingStreamHandler.createManaged(soundId));
+				String dummyFilename = "radio_dummy." + ext.getExtension();
 				sndSystem.newStreamingSource(false, soundId, realUrl, dummyFilename, false, x, y, z, SoundSystemConfig.ATTENUATION_LINEAR, 32);
 				sndSystem.setVolume(soundId, volume);
 				sndSystem.play(soundId);
@@ -233,35 +217,6 @@ public class RadioManager implements IVillageTradeHandler {
 		return sndSystem;
 	}
 
-	private void resolveStreamType(final String url) {
-		streamFormats.put(url, RESOLVING_EXT);
-		final HttpURLConnection connection;
-		try {
-			URL realUrl = new URL(null, url, new AutoConnectingStreamHandler());
-			connection = (HttpURLConnection)realUrl.openConnection();
-		} catch (Throwable t) {
-			Log.warn(t, "Exception during opening url %s", url);
-			streamFormats.put(url, ERROR_EXT);
-			return;
-		}
-
-		try {
-			final String contentType = connection.getContentType();
-			String ext = PROTOCOLS.get(contentType);
-
-			if (ext == null) {
-				ext = ERROR_EXT;
-				Log.warn("Unknown content type '%s' in url '%s', aborting", contentType, url);
-			}
-
-			streamFormats.put(url, ext);
-		} catch (Throwable t) {
-			Log.warn(t, "Exception during opening url %s", url);
-		} finally {
-			connection.disconnect();
-		}
-	}
-
 	public void preloadStreams(final Collection<String> urls) {
 		if (urls.isEmpty()) return;
 		final Thread th = new Thread() {
@@ -269,7 +224,12 @@ public class RadioManager implements IVillageTradeHandler {
 			public void run() {
 				for (String url : urls) {
 					Log.info("Preloading stream: %s", url);
-					resolveStreamType(url);
+					final UrlMeta data;
+					synchronized (urlMeta) {
+						data = new UrlMeta(url);
+						urlMeta.put(url, data);
+					}
+					data.resolve();
 					Log.info("Finished preloading stream: %s", url);
 				}
 			}
@@ -279,14 +239,21 @@ public class RadioManager implements IVillageTradeHandler {
 		th.start();
 	}
 
-	private String resolveStreamExt(final String url) {
-		final String ext = streamFormats.get(url);
-		if (ext != null) return ext;
+	private UrlMeta resolveStreamExt(final String url) {
+		UrlMeta data;
+		synchronized (urlMeta) {
+			data = urlMeta.get(url);
+			if (data != null) return data;
+			data = new UrlMeta(url);
+			urlMeta.put(url, data);
+		}
+
+		final UrlMeta closure = data;
 
 		final Thread th = new Thread() {
 			@Override
 			public void run() {
-				resolveStreamType(url);
+				closure.resolve();
 			}
 		};
 
@@ -294,12 +261,11 @@ public class RadioManager implements IVillageTradeHandler {
 		th.start();
 		try {
 			th.join(750); // seems to be reasonable delay
-			return streamFormats.get(url);
 		} catch (InterruptedException e) {
 			Log.warn(e, "Thread interrupted!");
-			streamFormats.put(url, ERROR_EXT);
-			return ERROR_EXT;
+			data.markAsFailed();
 		}
+		return data;
 	}
 
 	private static ItemStack randomItemAmount(Random random, Item item, int min, int max) {

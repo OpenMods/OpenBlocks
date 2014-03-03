@@ -111,7 +111,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 			if (worldObj.isRemote) {
 				if (canPlay) {
 					try {
-						soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, volume.getValue());
+						soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.getValue());
 						OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
 					} catch (RadioException e) {
 						Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
