@@ -57,12 +57,12 @@ public class UrlMeta {
 		return extension;
 	}
 
-	public void markAsFailed() {
+	public synchronized void markAsFailed() {
 		isResolved = true;
 		isValid = false;
 	}
 
-	public void resolve() {
+	public synchronized void resolve() {
 		if (!isResolved) {
 			try {
 				isValid = resolveImpl();
