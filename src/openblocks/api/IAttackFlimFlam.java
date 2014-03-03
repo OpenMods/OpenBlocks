@@ -18,7 +18,7 @@ public interface IAttackFlimFlam {
 			} else if (target) { return FlimFlammer.DEFENDER; }
 			return null;
 		}
-	};
+	}
 
 	/**
 	 * 

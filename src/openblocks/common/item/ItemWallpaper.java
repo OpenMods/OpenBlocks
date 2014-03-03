@@ -17,7 +17,6 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockCanvas;
-import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
@@ -113,11 +112,11 @@ public class ItemWallpaper extends Item {
 	public int getSpriteNumber() {
 		return 0;
 	}
-	
+
 	@Override
-    public Icon getIcon(ItemStack stack, int pass){
-    	return getIconIndex(stack);
-    }
+	public Icon getIcon(ItemStack stack, int pass) {
+		return getIconIndex(stack);
+	}
 
 	@Override
 	public Icon getIconIndex(ItemStack stack) {
@@ -139,7 +138,7 @@ public class ItemWallpaper extends Item {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 
 		int hitSide = side;
-		
+
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 
 		boolean canReplaceBlock = PaintUtils.instance.isAllowedToReplace(world, x, y, z);
@@ -158,9 +157,6 @@ public class ItemWallpaper extends Item {
 
 				if (te instanceof TileEntityCanvas) {
 
-					TileEntityCanvas canvas = (TileEntityCanvas)te;
-					//canvas.setWallpaper(side, texture);
-
 					stack.stackSize--;
 				}
 
@@ -173,12 +169,12 @@ public class ItemWallpaper extends Item {
 
 					TileEntityCanvas canvas = (TileEntityCanvas)te;
 
-					SyncableBlockLayers layer = canvas.getLayersForSide(side);
+					canvas.getLayersForSide(side);
 
-					//blockId = layer.getBaseTextureBlockId();
-					//meta = layer.getBaseTextureMetadata();
-					//side = layer.getBaseTextureSide();
-					
+					// blockId = layer.getBaseTextureBlockId();
+					// meta = layer.getBaseTextureMetadata();
+					// side = layer.getBaseTextureSide();
+
 					if (blockId == 0) {
 						blockId = canvas.paintedBlockId.getValue();
 						meta = canvas.paintedBlockMeta.getValue();

@@ -270,7 +270,7 @@ public class OpenBlocks {
 		public static Fluid XPJuice;
 		public static Fluid openBlocksXPJuice;
 	}
-	
+
 	public static class Enchantments {
 		public static Enchantment explosive;
 		public static Enchantment lastStand;

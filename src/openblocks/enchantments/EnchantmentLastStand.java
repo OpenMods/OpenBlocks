@@ -24,7 +24,7 @@ public class EnchantmentLastStand extends Enchantment {
 				return 25;
 		}
 	}
-	
+
 	@Override
 	public int getMaxEnchantability(int level) {
 		return getMinEnchantability(level) + 10;

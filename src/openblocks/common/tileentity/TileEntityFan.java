@@ -28,7 +28,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 	}
 
 	@Override
-	public void updateEntity() {		
+	public void updateEntity() {
 		final double maxForce = Config.fanForce * (Config.redstoneActivatedFan? worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) / 15.0 : 1);
 		if (maxForce <= 0) return;
 		@SuppressWarnings("unchecked")

@@ -16,7 +16,9 @@ import openblocks.OpenBlocks.Enchantments;
 import openblocks.asm.EntityPlayerVisitor;
 import openblocks.client.radio.RadioManager;
 import openblocks.client.radio.RadioManager.RadioStation;
-import openblocks.common.*;
+import openblocks.common.EntityEventHandler;
+import openblocks.common.Stencil;
+import openblocks.common.TrophyHandler;
 import openblocks.common.block.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
@@ -315,10 +317,10 @@ public class Config {
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
-	
+
 	@ConfigProperty(category = "features", name = "lastStandEnchantmentId", comment = "Id of last stand enchantment")
 	public static int lastStandEnchantmentId = 212;
-	
+
 	@ConfigProperty(category = "features", name = "flimFlamEnchantmentId", comment = "Id of flim flam enchantment")
 	public static int flimFlamEnchantmentId = 213;
 
@@ -736,24 +738,24 @@ public class Config {
 			OpenBlocks.Items.infoBook = new ItemInfoBook();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.infoBook), Item.clay, Item.book));
 		}
-		
+
 		if (itemWallpaperId > 0) {
-			//OpenBlocks.Items.wallpaper = new ItemWallpaper();
+			// OpenBlocks.Items.wallpaper = new ItemWallpaper();
 		}
 
 		if (explosiveEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new ExplosiveEnchantmentsHandler());
 			Enchantments.explosive = new EnchantmentExplosive(explosiveEnchantmentId);
 		}
-		
+
 		if (lastStandEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new LastStandEnchantmentsHandler());
 			Enchantments.lastStand = new EnchantmentLastStand(lastStandEnchantmentId);
 		}
-		
+
 		if (flimFlamEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new FlimFlamEnchantmentsHandler());
-			Enchantments.flimFlam = new EnchantmentFlimFlam(flimFlamEnchantmentId);	
+			Enchantments.flimFlam = new EnchantmentFlimFlam(flimFlamEnchantmentId);
 		}
 
 		final String modId = "openblocks";

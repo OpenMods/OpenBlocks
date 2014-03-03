@@ -35,9 +35,6 @@ public class FlimFlamEnchantmentsHandler {
 				// return;
 			}
 
-			boolean sourceHasFlimFlam = hasFlimFlamTool(sourcePlayer);
-			boolean targetHasFlimFlam = hasFlimFlamArmor(targetPlayer);
-
 			FlimFlammer whoBeFlimFlam = FlimFlammer.getFlimFlam(
 					hasFlimFlamTool(sourcePlayer),
 					hasFlimFlamArmor(targetPlayer)
@@ -47,7 +44,7 @@ public class FlimFlamEnchantmentsHandler {
 
 				List<IAttackFlimFlam> flimFlams = FlimFlamRegistry.getAttackFlimFlams();
 				Collections.shuffle(flimFlams);
-				
+
 				for (IAttackFlimFlam flimFlam : flimFlams) {
 					if (flimFlam.execute(sourcePlayer, targetPlayer, whoBeFlimFlam)) {
 						break;
@@ -71,6 +68,7 @@ public class FlimFlamEnchantmentsHandler {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static boolean hasFlimFlam(ItemStack stack) {
 		if (stack == null) { return false; }
 		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
