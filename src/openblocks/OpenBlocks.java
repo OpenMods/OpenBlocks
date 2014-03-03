@@ -14,6 +14,7 @@ import net.minecraft.stats.StatBasic;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.*;
+import openblocks.api.FlimFlamRegistry;
 import openblocks.client.radio.RadioManager;
 import openblocks.common.*;
 import openblocks.common.block.*;
@@ -21,6 +22,7 @@ import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.tileentity.*;
+import openblocks.enchantments.flimflams.TeleportFlimFlam;
 import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
@@ -391,6 +393,9 @@ public class OpenBlocks {
 		changeLog = ChangelogBuilder.createChangeLog();
 		if (Loader.isModLoaded(Mods.FLANSMOD)) {
 			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
+		}
+		if (Enchantments.flimFlam != null) {
+			FlimFlamRegistry.registerAttackFlimFlam(new TeleportFlimFlam());
 		}
 	}
 

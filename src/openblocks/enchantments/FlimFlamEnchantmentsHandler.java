@@ -1,6 +1,6 @@
 package openblocks.enchantments;
 
-import java.util.Map;
+import java.util.*;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -9,11 +9,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import openblocks.OpenBlocks.Enchantments;
+import openblocks.api.FlimFlamRegistry;
+import openblocks.api.IAttackFlimFlam;
+import openblocks.api.IAttackFlimFlam.FlimFlammer;
 
 public class FlimFlamEnchantmentsHandler {
 
+	public static Random rnd = new Random();
+
 	@ForgeSubscribe
 	public void onDamage(LivingAttackEvent e) {
+
 		if (e.entityLiving instanceof EntityPlayer) {
 
 			EntityPlayer targetPlayer = (EntityPlayer)e.entityLiving;
@@ -32,12 +38,21 @@ public class FlimFlamEnchantmentsHandler {
 			boolean sourceHasFlimFlam = hasFlimFlamTool(sourcePlayer);
 			boolean targetHasFlimFlam = hasFlimFlamArmor(targetPlayer);
 
-			if (sourceHasFlimFlam) {
-				System.out.println("Source has flim flam");
-			}
+			FlimFlammer whoBeFlimFlam = FlimFlammer.getFlimFlam(
+					hasFlimFlamTool(sourcePlayer),
+					hasFlimFlamArmor(targetPlayer)
+					);
 
-			if (targetHasFlimFlam) {
-				System.out.println("Target has flim flam");
+			if (whoBeFlimFlam != null) {
+
+				List<IAttackFlimFlam> flimFlams = FlimFlamRegistry.getAttackFlimFlams();
+				Collections.shuffle(flimFlams);
+				
+				for (IAttackFlimFlam flimFlam : flimFlams) {
+					if (flimFlam.execute(sourcePlayer, targetPlayer, whoBeFlimFlam)) {
+						break;
+					}
+				}
 			}
 		}
 	}

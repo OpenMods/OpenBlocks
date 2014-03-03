@@ -753,7 +753,7 @@ public class Config {
 		
 		if (flimFlamEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new FlimFlamEnchantmentsHandler());
-			Enchantments.flimFlam = new EnchantmentFlimFlam(flimFlamEnchantmentId);			
+			Enchantments.flimFlam = new EnchantmentFlimFlam(flimFlamEnchantmentId);	
 		}
 
 		final String modId = "openblocks";
