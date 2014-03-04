@@ -1,4 +1,4 @@
-package openblocks.client.renderer;
+package openblocks.client.renderer.item;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;

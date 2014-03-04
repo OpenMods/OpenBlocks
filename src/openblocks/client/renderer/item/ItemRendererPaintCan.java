@@ -1,6 +1,6 @@
-package openblocks.client.renderer;
+package openblocks.client.renderer.item;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 import net.minecraft.client.renderer.RenderBlocks;
@@ -16,12 +16,7 @@ import org.lwjgl.opengl.GL12;
 
 public class ItemRendererPaintCan implements IItemRenderer {
 
-	private Set<ForgeDirection> secondPassEnabledSides;
-
-	public ItemRendererPaintCan() {
-		secondPassEnabledSides = new HashSet<ForgeDirection>();
-		secondPassEnabledSides.add(ForgeDirection.UP);
-	}
+	private static final Set<ForgeDirection> secondPassEnabledSides = EnumSet.of(ForgeDirection.UP);
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -36,7 +31,7 @@ public class ItemRendererPaintCan implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack itemstack, Object... data) {
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-		// GL11.glTranslated(-0.5, -0.5, -0.5);
+
 		if (type != ItemRenderType.INVENTORY) {
 			GL11.glTranslated(0.5, 0.5, -0.5);
 		}

@@ -1,6 +1,8 @@
 package openblocks.enchantments.flimflams;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,7 +19,7 @@ public class InventoryShuffleFlimFlam implements IAttackFlimFlam {
 	public float weight() {
 		return 1;
 	}
-	
+
 	@Override
 	public void execute(EntityPlayer source, EntityPlayer target) {
 		if (target.worldObj.isRemote) return;

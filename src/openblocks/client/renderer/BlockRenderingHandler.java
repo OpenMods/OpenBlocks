@@ -1,6 +1,7 @@
 package openblocks.client.renderer;
 
 import openblocks.OpenBlocks;
+import openblocks.client.renderer.block.*;
 import openmods.renderer.BlockRenderingHandlerBase;
 
 public class BlockRenderingHandler extends BlockRenderingHandlerBase {

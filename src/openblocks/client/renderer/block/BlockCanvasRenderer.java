@@ -1,4 +1,4 @@
-package openblocks.client.renderer;
+package openblocks.client.renderer.block;
 
 import java.util.List;
 

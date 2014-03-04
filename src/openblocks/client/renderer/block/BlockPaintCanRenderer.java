@@ -1,4 +1,4 @@
-package openblocks.client.renderer;
+package openblocks.client.renderer.block;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
@@ -14,7 +14,7 @@ public class BlockPaintCanRenderer implements IBlockRenderer<BlockPaintCan> {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockPaintCan block, int modelId, RenderBlocks renderer) {
 		block.renderPass = 0;
 		renderer.renderStandardBlock(block, x, y, z);
-		block.renderPass++;
+		block.renderPass = 1;
 		renderer.renderStandardBlock(block, x, y, z);
 		return true;
 	}
