@@ -5,6 +5,8 @@ stat.openblocks.bricksDropped=Fallen gelassene Ziegel
 openblocks.keybind.drop_brick=Sei albern
 
 enchantment.openblocks.explosive=Instabil
+enchantment.openblocks.laststand=Letzte Rettung
+enchantment.openblocks.flimflam=Blödsinn
 
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
@@ -75,6 +77,13 @@ openblocks.misc.radio.invalid_stream=Ungültiger Stream
 openblocks.misc.radio.not_ready=Stream nicht bereit ready, versuche es später nochmal
 openblocks.misc.radio.unknown_error=Unbekannter Fehler
 openblocks.misc.radio.muted=Geräusche sind deaktiviert!
+
+openblocks.misc.side.east=Ostseite
+openblocks.misc.side.west=Westseite
+openblocks.misc.side.north=Nordseite
+openblocks.misc.side.south=Südseite
+openblocks.misc.side.up=Oberseite
+openblocks.misc.side.down=Unterseite
 
 openblocks.turtle.magnet=Magnetische
 
@@ -244,6 +253,8 @@ item.openblocks.tasty_clay.name=Leckerer Lehm
 item.openblocks.golden_eye.name=Goldenes Auge
 item.openblocks.pointer.name=Zeiger
 item.openblocks.tuned_crystal.name=Wellenkristall
+
+item.openblocks.wallpaper.name=Poster
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
