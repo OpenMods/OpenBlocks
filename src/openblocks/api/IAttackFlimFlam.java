@@ -4,29 +4,17 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IAttackFlimFlam {
 
-	public enum FlimFlammer {
-		ATTACKER,
-		DEFENDER,
-		BOTH;
-		public static FlimFlammer getFlimFlam(boolean source, boolean target) {
-			if (source) {
-				if (target) {
-					return FlimFlammer.BOTH;
-				} else {
-					return FlimFlammer.ATTACKER;
-				}
-			} else if (target) { return FlimFlammer.DEFENDER; }
-			return null;
-		}
-	}
-
 	/**
 	 * 
 	 * @param attacker
 	 * @param target
 	 * @param flimFlammers
-	 * @return was it successful?
 	 */
-	public boolean execute(EntityPlayer attacker, EntityPlayer target, FlimFlammer flimFlammers);
+	public void execute(EntityPlayer source, EntityPlayer target);
+
+	public String name();
+
+	// TODO: to be implemented
+	public float weight();
 
 }

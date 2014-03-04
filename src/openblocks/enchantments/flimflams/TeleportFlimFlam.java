@@ -8,41 +8,25 @@ import openblocks.api.IAttackFlimFlam;
 public class TeleportFlimFlam implements IAttackFlimFlam {
 
 	@Override
-	public boolean execute(EntityPlayer attacker, EntityPlayer target, FlimFlammer flimFlammers) {
+	public void execute(EntityPlayer attacker, EntityPlayer target) {
 		final World world = target.worldObj;
-		if (world.isRemote) return true;
 
-		// lols
-		if (flimFlammers == FlimFlammer.ATTACKER) {
+		EntityEnderPearl e = new EntityEnderPearl(world, target);
+		e.setPosition(target.posX, target.posY + 1, target.posZ);
+		e.motionX = world.rand.nextGaussian();
+		e.motionY = 0.5;
+		e.motionZ = world.rand.nextGaussian();
+		world.spawnEntityInWorld(e);
+	}
 
-			EntityEnderPearl e = new EntityEnderPearl(world, target);
-			e.setPosition(target.posX, target.posY + 1, target.posZ);
-			e.motionX = world.rand.nextGaussian();
-			e.motionY = 0.5;
-			e.motionZ = world.rand.nextGaussian();
-			world.spawnEntityInWorld(e);
+	@Override
+	public String name() {
+		return "teleport";
+	}
 
-			return true;
-
-			// If the defender has flimflam too, swap their positions!
-		} else if (flimFlammers == FlimFlammer.BOTH) {
-
-			double x = target.posX;
-			double y = target.posY;
-			double z = target.posZ;
-			float pitch = target.rotationPitch;
-			float yaw = target.rotationYaw;
-			target.rotationPitch = target.prevRotationPitch = attacker.rotationPitch;
-			target.rotationYaw = target.prevRotationYaw = attacker.rotationYaw;
-			target.setPositionAndUpdate(attacker.posX, attacker.posY, attacker.posZ);
-			attacker.setPositionAndUpdate(x, y, z);
-			attacker.rotationPitch = attacker.prevRotationPitch = pitch;
-			attacker.rotationYaw = attacker.prevRotationYaw = yaw;
-
-			return true;
-		}
-
-		return false;
+	@Override
+	public float weight() {
+		return 1;
 	}
 
 }
