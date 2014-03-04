@@ -21,10 +21,10 @@ public class InventoryShuffleFlimFlam implements IAttackFlimFlam {
 	@Override
 	public void execute(EntityPlayer source, EntityPlayer target) {
 		if (target.worldObj.isRemote) return;
-		int inventorySize = target.inventory.mainInventory.length;
-		List<ItemStack> stacks = Arrays.asList(target.inventory.mainInventory);
+		final ItemStack[] mainInventory = target.inventory.mainInventory;
+		List<ItemStack> stacks = Arrays.asList(mainInventory);
 		Collections.shuffle(stacks);
-		target.inventory.mainInventory = stacks.toArray(new ItemStack[inventorySize]);
+		target.inventory.mainInventory = stacks.toArray(mainInventory);
 	}
 
 }
