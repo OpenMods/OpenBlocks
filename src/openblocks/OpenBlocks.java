@@ -22,8 +22,7 @@ import openblocks.common.entity.*;
 import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.tileentity.*;
-import openblocks.enchantments.flimflams.InventoryShuffleFlimFlam;
-import openblocks.enchantments.flimflams.TeleportFlimFlam;
+import openblocks.enchantments.flimflams.*;
 import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
@@ -401,6 +400,8 @@ public class OpenBlocks {
 		if (Enchantments.flimFlam != null) {
 			FlimFlamRegistry.registerAttackFlimFlam(new TeleportFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new InventoryShuffleFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new UselessToolFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new BaneFlimFlam());
 		}
 	}
 
