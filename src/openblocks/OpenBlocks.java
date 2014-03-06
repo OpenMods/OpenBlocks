@@ -402,7 +402,7 @@ public class OpenBlocks {
 			FlimFlamRegistry.registerAttackFlimFlam(new InventoryShuffleFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new UselessToolFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new BaneFlimFlam());
-			// FlimFlamRegistry.registerAttackFlimFlam(new LoreFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new LoreFlimFlam());
 		}
 	}
 
