@@ -403,6 +403,9 @@ public class OpenBlocks {
 			FlimFlamRegistry.registerAttackFlimFlam(new UselessToolFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new BaneFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new LoreFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new RenameFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new SquidFilmFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new SheepDyeFlimFlam());
 		}
 	}
 

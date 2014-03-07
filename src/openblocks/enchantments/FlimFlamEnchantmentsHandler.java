@@ -19,6 +19,7 @@ public class FlimFlamEnchantmentsHandler {
 	@ForgeSubscribe
 	public void onDamage(LivingAttackEvent e) {
 		if (!(e.entityLiving instanceof EntityPlayer)) return;
+		if (e.entityLiving.worldObj.isRemote) return;
 
 		final EntityPlayer targetPlayer = (EntityPlayer)e.entityLiving;
 
