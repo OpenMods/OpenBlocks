@@ -35,19 +35,19 @@ public class LoreGenerator {
 	}
 
 	private static IGenerator createHeroGenerator() {
-		IGenerator heroesPrefix = alt("Grunnar", "Hermann", "Sven", "Grarg", "Blarf", "Zerg", "Hans", "Nathan", "Oglaf", "Eric", "Bob");
-		IGenerator heroesPostfix = alt("", "ish", "ilde", "monkeybutt", "son", "shvili", "berg", "bert", "us");
-		IGenerator heroName = word(heroesPrefix, heroesPostfix);
+		IGenerator heroesPrefix = alt("Grunnar", "Hermann", "Sven", "Grarg", "Blarf", "Hans", "Nathan", "Oglaf", "Eric", "Bob", "Banan", "Alaric");
+		IGenerator heroesPostfix = alt("ish", "ilde", "monkeybutt", "son", "shvili", "berg", "bert", "us");
+		IGenerator heroName = word(heroesPrefix, opt(0.6f, heroesPostfix));
 		IGenerator heroOptional = alt("slightly", "sometimes", "mistakenly", "somehow", "part-time");
 		IGenerator heroAdj = alt("insane", "brave", "smelly", "philosophical", "jumping", "toothless", "burning", "heroic", "shy", "narcoleptic", "manly", "girly", "non-euclidian", "euphoric", "misanthropic", "ambivalent");
-		IGenerator heroTitle = alt("babycrusher", "wrestler", "nitpicker", "barber", "anesthesiologist", "sharpshooter", "plumber", "insurance salesman", "rouge (lvl. 9)", "empiricist", "defenestrator");
-		IGenerator classicHeroes = capitalizeFully(seq(heroName, "the", seq(opt(0.2f, heroOptional), heroAdj, heroTitle)));
+		IGenerator heroClass = alt("babycrusher", "wrestler", "nitpicker", "barber", "anesthesiologist", "sharpshooter", "plumber", "insurance salesman", "clown", "empiricist", "defenestrator", "visigoth");
+		IGenerator classicHeroes = capitalizeFully(seq(heroName, "the", seq(opt(0.2f, heroOptional), heroAdj, heroClass, opt(0.2f, word("(lvl. ", range(1, 11), ")")))));
 
-		IGenerator firstName = alt("Bill", "Juliet", "Nigel", "Steve", "Parsnip", "Cucumber", "Ludwig", "Markus", "Sven", "Clark", "Carl", "Throatwobbler", "Raymond", "Nancy", "Brian");
-		IGenerator lastNameComponent = alt("Smith", "Weston", "Banana", "Drum", "Forklift", "Ampersand", "Fruitbat", "Fhtagn", "Svenson", "Stein", "Gutenabend", "Mangrove", "Bigglesworth", "Larch", "Semicolon");
+		IGenerator firstName = alt("Bill", "Juliet", "Nigel", "Steve", "Parsnip", "Cucumber", "Ludwig", "Markus", "Sven", "Clark", "Carl", "Throatwobbler", "Raymond", "Nancy", "Brian", "Brunhilda", "Richard");
+		IGenerator lastNameComponent = alt("Smith", "Weston", "Banana", "Drum", "Forklift", "Ampersand", "Fruitbat", "Fhtagn", "Svenson", "Stein", "Gutenabend", "Mangrove", "Bigglesworth", "Larch", "Semicolon", "Wurst", "Nixon", "Baden");
 		IGenerator lastName = alt(lastNameComponent, word(lastNameComponent, "-", lastNameComponent));
-		IGenerator pseudonym = alt("Duckie", "Nosepicker", "Snort", "Bomber", "Ouch", "Anvil", "Halfslab", "Radiator", "Barbie", "Biggles", "Income Tax", "Not In Face");
-		IGenerator namePrefix = alt("Dr.", "Rev.", "Ms", "Mr", "Prof.", "Hon.", "Sgt.", "Cmdr.", "Sir", "Lady");
+		IGenerator pseudonym = alt("Duckie", "Nosepicker", "Snort", "Bomber", "Ouch", "Anvil", "Halfslab", "Radiator", "Barbie", "Biggles", "Income Tax", "Not In Face", "Tea Time", "Twerk", "Mutalisk", "Bueno", "Sixpack");
+		IGenerator namePrefix = alt("Dr.", "Rev.", "Ms", "Mr", "Prof.", "Hon.", "Sgt.", "Cmdr.", "Sir", "Lady", "Comrade", "His Magnificence", "Her Holiness", "The Right Honourable");
 		IGenerator middleName = alt("W.", "T.", "F.");
 		IGenerator nameSuffix = alt("M.Sc", "Ph.D", "OBE", "Jr.", "Sr.", "III", "II", "Esq.");
 
@@ -68,13 +68,14 @@ public class LoreGenerator {
 		IGenerator adjs = seq(opt(0.7f, adj2), adj1);
 		IGenerator parts = alt("codpiece", "loincloth", "tootbrush", "dental floss", "eggbeater", "rubber chicken with a pulley in the middle", "shovel", "hammoc", "panties", "spatula", "fedora");
 
-		IGenerator placeAdj = alt("deadly", "dreadful", "boring", "cheap", "backwater", "tax-free", "gluten-free");
+		IGenerator placeAdj = alt("deadly", "dreadful", "boring", "cheap", "backwater", "tax-free", "gluten-free", "dark", "evil", "misunderstood");
 		IGenerator kingdomAdjective = alt("loathing", "meat", "potatoes", "hydrocarbonates", "sweden", "slighlty unpleasant things", "herpaderp", "sobbing", "knitting");
-		IGenerator kingdomish = seq(opt(0.3f, placeAdj), alt("kingdom", "cave", "gorge", "convention", "pit", "bazaar"));
+		IGenerator kingdomish = seq(opt(0.4f, placeAdj), alt("kingdom", "cave", "gorge", "convention", "pit", "bazaar", "land"));
 		IGenerator placeWithAdj = seq(kingdomish, "of", kingdomAdjective, opt(0.2f, seq("and", kingdomAdjective)));
 		IGenerator mountainName = alt("lard", "butter", "rotten eggs", "brimstone", "newts", "doom", "croc", "flipflop");
-		IGenerator mountain = seq("Mt.", opt(0.4f, placeAdj), mountainName);
-		IGenerator places = capitalizeFully(alt(placeWithAdj, mountain, "dalania", "prussia", "foobaria"));
+		IGenerator mountain = seq(opt(0.6f, placeAdj), "Mt.", mountainName);
+		final IGenerator hardcodedPlaces = alt("dalania", "prussia", "foobaria", "hot dog stand", "abyssinia", "zanzibar", "eastasia", "freedonia", "latveria", "woolloomooloo", "breslau", "uzbekistan", "north korea", "lower intestine");
+		IGenerator places = capitalizeFully(alt(placeWithAdj, mountain, hardcodedPlaces));
 
 		IGenerator otherPeople = alt("youtube personalities", "dwarves", "villagers", "elves", "tax collectors", "quality testers", "boring people");
 		IGenerator actor = seq(alt(heroGenerator, seq(otherPeople, "of", places)));
@@ -98,15 +99,18 @@ public class LoreGenerator {
 		IGenerator ownerInfo = seq(playerGet, "by", opt(0.3f, seq(taunt, "named")), sub("player", "Frank"));
 
 		IGenerator randomItems = alt("bananas", "grapes", "hairpins", "corks", "shuffling", "squash", "penguins");
-		IGenerator universitySpeciality = alt(randomItems, seq(randomItems, "and", randomItems));
-		IGenerator universityLocation = alt("woolloomooloo", "breslau", "uzbekistan", "north korea", "lower intestine");
-		IGenerator university = capitalizeFully(seq("university of", alt(universityLocation, universitySpeciality)));
+		IGenerator organizationSpeciality = alt(randomItems, seq(randomItems, "and", randomItems));
+
+		IGenerator university = capitalizeFully(seq("university of", alt(hardcodedPlaces, organizationSpeciality)));
+
+		IGenerator institutish = alt("institute", "council", "committee");
+		IGenerator institute = capitalizeFully(seq(institutish, "of", organizationSpeciality));
 
 		IGenerator foundationFirst = alt("lick", "pick", "poke", "prod", "smell", "ring", "steal", "hug", "kick", "fwap");
 		IGenerator foundationSecond = alt("fish", "sauce", "leopard", "pick", "smell", "mayonaise", "steal", "grave", "derp");
 		IGenerator foundation = seq(word(capitalizeFully(foundationFirst), "-a-", capitalizeFully(foundationSecond)), "foundation");
 
-		IGenerator organization = alt(university, foundation);
+		IGenerator organization = alt(university, foundation, institute);
 
 		IGenerator restoredInfo = seq("restored by", organization);
 		IGenerator recent = seq("Recently", alt(ownerInfo, restoredInfo));
