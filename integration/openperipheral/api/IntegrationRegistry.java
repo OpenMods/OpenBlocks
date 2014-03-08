@@ -7,7 +7,8 @@ package openperipheral.api;
 public class IntegrationRegistry {
 
 	/**
-	 * @deprecated Use static version {@link OpenPeripheralAPI#register(IPeripheralAdapter)}
+	 * @deprecated Use static version
+	 *             {@link OpenPeripheralAPI#register(IPeripheralAdapter)}
 	 */
 	@Deprecated
 	public boolean registerAdapter(IPeripheralAdapter adapter) {
@@ -15,7 +16,8 @@ public class IntegrationRegistry {
 	}
 
 	/**
-	 * @deprecated Use static version {@link OpenPeripheralAPI#register(ITypeConverter)}
+	 * @deprecated Use static version
+	 *             {@link OpenPeripheralAPI#register(ITypeConverter)}
 	 */
 	@Deprecated
 	public boolean registerTypeConverter(ITypeConverter converter) {
