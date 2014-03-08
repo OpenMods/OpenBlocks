@@ -3,12 +3,12 @@ package openblocks.enchantments.flimflams;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import openblocks.api.IAttackFlimFlam;
+import openblocks.api.IFlimFlamEffect;
 
-public class TeleportFlimFlam implements IAttackFlimFlam {
+public class TeleportFlimFlam implements IFlimFlamEffect {
 
 	@Override
-	public void execute(EntityPlayer attacker, EntityPlayer target) {
+	public boolean execute(EntityPlayer target) {
 		final World world = target.worldObj;
 
 		EntityEnderPearl e = new EntityEnderPearl(world, target);
@@ -17,6 +17,7 @@ public class TeleportFlimFlam implements IAttackFlimFlam {
 		e.motionY = 0.5;
 		e.motionZ = world.rand.nextGaussian();
 		world.spawnEntityInWorld(e);
+		return true;
 	}
 
 	@Override
@@ -27,6 +28,11 @@ public class TeleportFlimFlam implements IAttackFlimFlam {
 	@Override
 	public float weight() {
 		return 1;
+	}
+
+	@Override
+	public float cost() {
+		return 15;
 	}
 
 }

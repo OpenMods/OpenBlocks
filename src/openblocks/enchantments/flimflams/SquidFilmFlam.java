@@ -5,11 +5,11 @@ import java.util.Random;
 
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayer;
-import openblocks.api.IAttackFlimFlam;
+import openblocks.api.IFlimFlamEffect;
 
 import com.google.common.collect.ImmutableList;
 
-public class SquidFilmFlam implements IAttackFlimFlam {
+public class SquidFilmFlam implements IFlimFlamEffect {
 
 	private static final Random random = new Random();
 
@@ -22,17 +22,18 @@ public class SquidFilmFlam implements IAttackFlimFlam {
 			"???");
 
 	@Override
-	public void execute(EntityPlayer source, EntityPlayer target) {
-		if (target.riddenByEntity == null || target.riddenByEntity.isDead) {
-			EntitySquid squid = new EntitySquid(target.worldObj);
-			squid.moveEntity(target.posX, target.boundingBox.minY, target.posZ);
+	public boolean execute(EntityPlayer target) {
+		if (target.riddenByEntity != null && !target.riddenByEntity.isDead) return false;
 
-			int selected = random.nextInt(names.size());
-			squid.setCustomNameTag(names.get(selected));
+		EntitySquid squid = new EntitySquid(target.worldObj);
+		squid.moveEntity(target.posX, target.boundingBox.minY, target.posZ);
 
-			target.worldObj.spawnEntityInWorld(squid);
-			squid.mountEntity(target);
-		}
+		int selected = random.nextInt(names.size());
+		squid.setCustomNameTag(names.get(selected));
+
+		target.worldObj.spawnEntityInWorld(squid);
+		squid.mountEntity(target);
+		return true;
 	}
 
 	@Override
@@ -43,6 +44,11 @@ public class SquidFilmFlam implements IAttackFlimFlam {
 	@Override
 	public float weight() {
 		return 1;
+	}
+
+	@Override
+	public float cost() {
+		return 20;
 	}
 
 }

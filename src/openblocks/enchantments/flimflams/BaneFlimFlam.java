@@ -3,19 +3,19 @@ package openblocks.enchantments.flimflams;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import openblocks.api.IAttackFlimFlam;
+import openblocks.api.IFlimFlamEffect;
 
-public class BaneFlimFlam implements IAttackFlimFlam {
+public class BaneFlimFlam implements IFlimFlamEffect {
 
 	@Override
-	public void execute(EntityPlayer source, EntityPlayer target) {
-		if (source.worldObj.isRemote) return;
+	public boolean execute(EntityPlayer target) {
 		for (ItemStack stack : target.inventory.mainInventory) {
 			if (stack != null && stack.getMaxStackSize() == 1 && !stack.isItemEnchantable() && !stack.isItemEnchanted()) {
 				stack.addEnchantment(Enchantment.baneOfArthropods, 5);
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Override
@@ -26,6 +26,11 @@ public class BaneFlimFlam implements IAttackFlimFlam {
 	@Override
 	public float weight() {
 		return 1;
+	}
+
+	@Override
+	public float cost() {
+		return 50;
 	}
 
 }

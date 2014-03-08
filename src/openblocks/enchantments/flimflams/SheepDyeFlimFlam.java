@@ -7,24 +7,25 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import openblocks.api.IAttackFlimFlam;
+import openblocks.api.IFlimFlamEffect;
 
-public class SheepDyeFlimFlam implements IAttackFlimFlam {
+public class SheepDyeFlimFlam implements IFlimFlamEffect {
 
 	private static final Random random = new Random();
 
 	@Override
-	public void execute(EntityPlayer source, EntityPlayer target) {
+	public boolean execute(EntityPlayer target) {
 		World world = target.worldObj;
 		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
 		@SuppressWarnings("unchecked")
 		List<EntitySheep> sheeps = world.getEntitiesWithinAABB(EntitySheep.class, around);
 
-		if (sheeps.isEmpty()) return;
+		if (sheeps.isEmpty()) return false;
 
 		EntitySheep chosenOne = sheeps.get(random.nextInt(sheeps.size()));
 		int color = chosenOne.getFleeceColor();
 		chosenOne.setFleeceColor(color + random.nextInt(15));
+		return true;
 	}
 
 	@Override
@@ -35,6 +36,11 @@ public class SheepDyeFlimFlam implements IAttackFlimFlam {
 	@Override
 	public float weight() {
 		return 1;
+	}
+
+	@Override
+	public float cost() {
+		return 5;
 	}
 
 }

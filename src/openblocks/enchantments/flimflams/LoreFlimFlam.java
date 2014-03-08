@@ -1,14 +1,14 @@
 package openblocks.enchantments.flimflams;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import openblocks.api.IAttackFlimFlam;
+import openblocks.api.IFlimFlamEffect;
 import openblocks.rubbish.LoreGenerator;
 import openmods.utils.ItemUtils;
 
@@ -16,32 +16,40 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-public class LoreFlimFlam implements IAttackFlimFlam {
-
-	private static final Random random = new Random();
+public class LoreFlimFlam implements IFlimFlamEffect {
 
 	@Override
-	public void execute(EntityPlayer source, EntityPlayer target) {
-		int slot = random.nextInt(5);
+	public boolean execute(EntityPlayer target) {
+		List<Integer> slots = Lists.newArrayList(0, 1, 2, 3, 4);
+		Collections.shuffle(slots);
+
+		for (int slot : slots)
+			if (tryAddLore(target, slot)) return true;
+
+		return false;
+	}
+
+	private static boolean tryAddLore(EntityPlayer target, int slot) {
 		ItemStack item;
 
 		if (slot == 4) item = target.getHeldItem();
 		else item = target.inventory.armorInventory[slot];
 
-		if (item != null) {
-			NBTTagCompound tag = ItemUtils.getItemTag(item);
+		if (item == null) return false;
 
-			NBTTagCompound display = tag.getCompoundTag("display");
-			if (!tag.hasKey("display")) tag.setTag("display", display);
+		NBTTagCompound tag = ItemUtils.getItemTag(item);
 
-			String lore = LoreGenerator.generateLore(target.username, identityType(item));
+		NBTTagCompound display = tag.getCompoundTag("display");
+		if (!tag.hasKey("display")) tag.setTag("display", display);
 
-			NBTTagList loreList = new NBTTagList();
-			for (String line : splitText(lore, 30))
-				loreList.appendTag(new NBTTagString("lies", line));
+		String lore = LoreGenerator.generateLore(target.username, identityType(item));
 
-			display.setTag("Lore", loreList);
-		}
+		NBTTagList loreList = new NBTTagList();
+		for (String line : splitText(lore, 30))
+			loreList.appendTag(new NBTTagString("lies", line));
+
+		display.setTag("Lore", loreList);
+		return true;
 	}
 
 	private static List<String> splitText(String lore, int maxSize) {
@@ -91,12 +99,17 @@ public class LoreFlimFlam implements IAttackFlimFlam {
 
 	@Override
 	public String name() {
-		return "epic lore add";
+		return "epic-lore";
 	}
 
 	@Override
 	public float weight() {
 		return 0;
+	}
+
+	@Override
+	public float cost() {
+		return 30;
 	}
 
 }

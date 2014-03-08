@@ -126,6 +126,7 @@ public class ItemWallpaper extends Item {
 	}
 
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		BlockSideTexture texture = BlockSideTexture.fromItemStack(stack);
 		if (texture != null) {

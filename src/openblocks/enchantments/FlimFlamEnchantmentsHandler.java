@@ -1,20 +1,50 @@
 package openblocks.enchantments;
 
-import java.util.*;
+import java.util.Map;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import openblocks.OpenBlocks.Enchantments;
-import openblocks.api.FlimFlamRegistry;
-import openblocks.api.IAttackFlimFlam;
 
 public class FlimFlamEnchantmentsHandler {
 
-	public static Random rnd = new Random();
+	public static final String LUCK_PROPERTY = "OpenBlocks-Luck";
+
+	private static class Luck implements IExtendedEntityProperties {
+
+		public int luck;
+
+		@Override
+		public void saveNBTData(NBTTagCompound entityTag) {
+			entityTag.setInteger(LUCK_PROPERTY, luck);
+		}
+
+		@Override
+		public void loadNBTData(NBTTagCompound entityTag) {
+			luck = entityTag.getInteger(LUCK_PROPERTY);
+		}
+
+		@Override
+		public void init(Entity entity, World world) {}
+	}
+
+	private static Luck getProperty(Entity entity) {
+		IExtendedEntityProperties prop = entity.getExtendedProperties(LUCK_PROPERTY);
+		return (prop instanceof Luck)? (Luck)prop : null;
+	}
+
+	@ForgeSubscribe
+	public void onEntityConstruct(EntityEvent.EntityConstructing evt) {
+		if (evt.entity instanceof EntityPlayer) evt.entity.registerExtendedProperties(LUCK_PROPERTY, new Luck());
+	}
 
 	@ForgeSubscribe
 	public void onDamage(LivingAttackEvent e) {
@@ -35,27 +65,16 @@ public class FlimFlamEnchantmentsHandler {
 		final int sourceFlimFlam = getFlimFlamToolLevel(sourcePlayer);
 		final int targetFlimFlam = getFlimFlamArmorLevel(targetPlayer);
 
-		if (sourceFlimFlam + targetFlimFlam <= 0) return;
+		Luck targetLuck = getProperty(e.entityLiving);
+		if (targetLuck != null) targetLuck.luck -= calculateLuckChange(sourceFlimFlam);
 
-		List<IAttackFlimFlam> flimFlams = FlimFlamRegistry.getAttackFlimFlams();
-		Collections.shuffle(flimFlams);
+		Luck sourceLuck = getProperty(sourcePlayer);
+		if (sourceLuck != null) sourceLuck.luck -= calculateLuckChange(targetFlimFlam);
+	}
 
-		// TODO Select n needed elements based on probability (probaly sample
-		// with replacement, why not)
-
-		Iterator<IAttackFlimFlam> it = flimFlams.iterator();
-
-		for (int i = 0; i < sourceFlimFlam; i++) {
-			if (!it.hasNext()) break;
-			IAttackFlimFlam flimFlam = it.next();
-			flimFlam.execute(sourcePlayer, targetPlayer);
-		}
-
-		for (int i = 0; i < targetFlimFlam; i++) {
-			if (!it.hasNext()) break;
-			IAttackFlimFlam flimFlam = it.next();
-			flimFlam.execute(targetPlayer, sourcePlayer);
-		}
+	private static int calculateLuckChange(int sourceFlimFlam) {
+		// TODO
+		return 20 * sourceFlimFlam;
 	}
 
 	private static int getFlimFlamToolLevel(EntityPlayer player) {

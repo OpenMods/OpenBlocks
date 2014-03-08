@@ -27,6 +27,7 @@ import openblocks.events.EventTypes;
 import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.rubbish.BrickManager;
+import openblocks.rubbish.CommandFlimFlam;
 import openblocks.utils.ChangelogBuilder;
 import openmods.Mods;
 import openmods.OpenMods;
@@ -409,13 +410,18 @@ public class OpenBlocks {
 		}
 	}
 
-	@Mod.EventHandler
+	@EventHandler
 	public void processMessage(FMLInterModComms.IMCEvent event) {
 		for (FMLInterModComms.IMCMessage m : event.getMessages()) {
 			if (m.isStringMessage() && m.key.equalsIgnoreCase("donateUrl")) {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
 			}
 		}
+	}
+
+	@EventHandler
+	public void severStart(FMLServerStartingEvent evt) {
+		evt.registerServerCommand(new CommandFlimFlam());
 	}
 
 	public static String getModId() {

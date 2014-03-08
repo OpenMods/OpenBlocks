@@ -85,6 +85,12 @@ openblocks.misc.side.south=South side
 openblocks.misc.side.up=Top side
 openblocks.misc.side.down=Bottom side
 
+openblocks.misc.command.invalid=Invalid command arguments
+openblocks.misc.command.no_flim_flam=Invalid flim-flam name
+openblocks.misc.command.flim_flam_source=Player %s had been successfully flim-flammed with %s
+openblocks.misc.command.flim_flam_target=Someone doesn't like you. Someone with power
+openblocks.misc.command.flim_flam_failed=Flim-flamming failed!
+
 openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Elevator

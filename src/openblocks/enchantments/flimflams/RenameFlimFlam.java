@@ -9,14 +9,14 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import openblocks.api.IAttackFlimFlam;
+import openblocks.api.IFlimFlamEffect;
 import openblocks.rubbish.LoreGenerator;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Strings;
 
-public class RenameFlimFlam implements IAttackFlimFlam {
+public class RenameFlimFlam implements IFlimFlamEffect {
 
 	private static final IEntitySelector NON_PLAYER = new IEntitySelector() {
 		@Override
@@ -26,7 +26,7 @@ public class RenameFlimFlam implements IAttackFlimFlam {
 	};
 
 	@Override
-	public void execute(EntityPlayer source, EntityPlayer target) {
+	public boolean execute(EntityPlayer target) {
 		World world = target.worldObj;
 		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
 		@SuppressWarnings("unchecked")
@@ -36,9 +36,11 @@ public class RenameFlimFlam implements IAttackFlimFlam {
 		for (EntityLiving e : living) {
 			if (Strings.isNullOrEmpty(e.getCustomNameTag())) {
 				e.setCustomNameTag(StringUtils.abbreviate(LoreGenerator.generateName(), 64));
-				break;
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	@Override
@@ -49,6 +51,11 @@ public class RenameFlimFlam implements IAttackFlimFlam {
 	@Override
 	public float weight() {
 		return 1;
+	}
+
+	@Override
+	public float cost() {
+		return 10;
 	}
 
 }
