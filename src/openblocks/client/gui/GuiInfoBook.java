@@ -79,7 +79,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "xpdrain", Blocks.xpDrain);
 		book.addStandardRecipePage("openblocks", "drawingtable", Blocks.drawingTable);
 		book.addStandardRecipePage("openblocks", "sky.normal", Blocks.sky);
-		
+
 		itemsIndex = book.getNumberOfPages();
 		if (itemsIndex % 2 == 1) {
 			book.addPage(new BlankPage());

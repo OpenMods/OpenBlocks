@@ -20,6 +20,9 @@ import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
+
+import com.google.common.base.Objects;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -264,7 +267,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int pass) {
-		if (isCrayon(stack) && pass == 1) return ItemUtils.getInt(stack, TAG_COLOR);
+		if (isCrayon(stack) && pass == 1) return Objects.firstNonNull(ItemUtils.getInt(stack, TAG_COLOR), 0x000000);
 
 		return 0xFFFFFF;
 	}
