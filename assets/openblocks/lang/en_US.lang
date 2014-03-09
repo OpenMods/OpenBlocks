@@ -42,6 +42,9 @@ openblocks.gui.bkey.content=The 'B' key is a very special key in OpenBlocks.\n\n
 openblocks.gui.unstable.title=Unstable Enchantment
 openblocks.gui.unstable.content=We've had unconfirmed reports that this enchantment causes any gunpowder you're carrying to become unstable when you're attacked or when you jump off something.\n\nUse at your own risk!
 
+openblocks.gui.flimflam.title=Flim Flam Enchantment
+openblocks.gui.flimflam.content=Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam
+
 openblocks.changelog.title=What's new in OpenBlocks %s
 openblocks.misc.url=URL: %s
 openblocks.misc.type=Type: %s
