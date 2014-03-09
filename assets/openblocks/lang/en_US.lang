@@ -43,7 +43,7 @@ openblocks.gui.unstable.title=Unstable Enchantment
 openblocks.gui.unstable.content=We've had unconfirmed reports that this enchantment causes any gunpowder you're carrying to become unstable when you're attacked or when you jump off something.\n\nUse at your own risk!
 
 openblocks.gui.flimflam.title=Flim Flam Enchantment
-openblocks.gui.flimflam.content=Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam
+openblocks.gui.flimflam.content=Scientists have yet to discover the properties of this enchantment.
 
 openblocks.gui.laststand.title=Last Stand Enchantment
 openblocks.gui.laststand.content=The last stand enchantment uses your XP bar as a final protection against dying.\n\nWhen you reach 0.5 hearts, the game will take XP from you whenever you're damaged instead of killing you. The higher number of enchantments you have the cheaper the XP cost will be.
