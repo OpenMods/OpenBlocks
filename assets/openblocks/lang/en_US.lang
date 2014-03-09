@@ -45,6 +45,9 @@ openblocks.gui.unstable.content=We've had unconfirmed reports that this enchantm
 openblocks.gui.flimflam.title=Flim Flam Enchantment
 openblocks.gui.flimflam.content=Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam Flim Flam
 
+openblocks.gui.laststand.title=Last Stand Enchantment
+openblocks.gui.laststand.content=The last stand enchantment uses your XP bar as a final protection against dying.\n\nWhen you reach 0.5 hearts, the game will take XP from you whenever you're damaged instead of killing you. The higher number of enchantments you have the cheaper the XP cost will be.
+
 openblocks.changelog.title=What's new in OpenBlocks %s
 openblocks.misc.url=URL: %s
 openblocks.misc.type=Type: %s
@@ -197,7 +200,9 @@ tile.openblocks.grave.name=Grave
 tile.openblocks.trophy.name=Trophy
 tile.openblocks.canvasglass.name=Glass Canvas
 tile.openblocks.paintcan.name=Paint Can
+
 tile.openblocks.sky.normal.name=Sky Block
+tile.openblocks.sky.normal.description=Bring the outside inside with the new Sky block! Just apply a redstone signal. We also offer an inverted version.
 tile.openblocks.sky.inverted.name=Inverted Sky Block
 
 tile.openblocks.radio.name=Radio

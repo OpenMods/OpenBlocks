@@ -78,6 +78,8 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "xpbottler", Blocks.xpBottler);
 		book.addStandardRecipePage("openblocks", "xpdrain", Blocks.xpDrain);
 		book.addStandardRecipePage("openblocks", "drawingtable", Blocks.drawingTable);
+		book.addStandardRecipePage("openblocks", "sky.normal", Blocks.sky);
+		
 		itemsIndex = book.getNumberOfPages();
 		if (itemsIndex % 2 == 1) {
 			book.addPage(new BlankPage());
@@ -114,6 +116,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
 		book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
 		book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
+		book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
 		book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
 		book.enablePages();
 
