@@ -27,6 +27,7 @@ import openblocks.events.EventTypes;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
+import openblocks.rubbish.CommandLuck;
 import openblocks.utils.ChangelogBuilder;
 import openmods.Mods;
 import openmods.OpenMods;
@@ -423,6 +424,7 @@ public class OpenBlocks {
 	@EventHandler
 	public void severStart(FMLServerStartingEvent evt) {
 		evt.registerServerCommand(new CommandFlimFlam());
+		evt.registerServerCommand(new CommandLuck());
 	}
 
 	public static String getModId() {

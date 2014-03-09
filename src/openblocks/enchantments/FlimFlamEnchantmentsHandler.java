@@ -1,22 +1,32 @@
 package openblocks.enchantments;
 
-import java.util.Map;
+import java.util.*;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import openblocks.OpenBlocks.Enchantments;
+import openblocks.api.FlimFlamRegistry;
+import openblocks.api.IFlimFlamEffect;
+import openmods.Log;
+
+import com.google.common.collect.Lists;
 
 public class FlimFlamEnchantmentsHandler {
 
 	public static final String LUCK_PROPERTY = "OpenBlocks-Luck";
+
+	public static final int LUCK_MARGIN = 5;
+
+	private static final Random random = new Random();
 
 	private static class Luck implements IExtendedEntityProperties {
 
@@ -77,6 +87,68 @@ public class FlimFlamEnchantmentsHandler {
 		return 20 * sourceFlimFlam;
 	}
 
+	public static void deliverKarma(EntityPlayer player) {
+		Luck property = getProperty(player);
+		if (property == null || !canFlimFlam(property.luck)) return;
+		final int luck = property.luck;
+		final int maxCost = Math.abs(luck);
+
+		int totalWeight = 0;
+		List<IFlimFlamEffect> selectedEffects = Lists.newArrayList();
+
+		for (IFlimFlamEffect effect : FlimFlamRegistry.getFlimFlams())
+			if (effect.cost() <= maxCost) {
+				selectedEffects.add(effect);
+				totalWeight += effect.weight();
+			}
+
+		if (selectedEffects.isEmpty()) return;
+
+		Collections.shuffle(selectedEffects);
+
+		while (!selectedEffects.isEmpty()) {
+			final int selectedWeight = random.nextInt(totalWeight);
+			int currentWeight = 0;
+			Iterator<IFlimFlamEffect> it = selectedEffects.iterator();
+
+			while (it.hasNext()) {
+				final IFlimFlamEffect effect = it.next();
+				currentWeight += effect.weight();
+				if (selectedWeight <= currentWeight) {
+					if (effect.execute(player)) {
+						property.luck += effect.cost();
+						Log.fine("Player %s flim-flammed with %s, current luck: %s", player, effect.name(), property.luck);
+						player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
+						return;
+					}
+					totalWeight -= effect.weight();
+					it.remove();
+					break;
+				}
+			}
+		}
+	}
+
+	public static int getLuck(EntityPlayer player) {
+		Luck property = getProperty(player);
+		return property != null? property.luck : 0;
+	}
+
+	public static int modifyLuck(EntityPlayer player, int amount) {
+		Luck property = getProperty(player);
+		if (property == null) return 0;
+		property.luck += amount;
+		return property.luck;
+	}
+
+	private static boolean canFlimFlam(int luck) {
+		if (luck > -LUCK_MARGIN) return false;
+
+		double probability = Math.atan(-luck / 1000.0) / Math.PI;
+		double r = random.nextDouble();
+		return r < probability;
+	}
+
 	private static int getFlimFlamToolLevel(EntityPlayer player) {
 		return getFlimFlamLevel(player.getHeldItem());
 	}
@@ -90,7 +162,7 @@ public class FlimFlamEnchantmentsHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static int getFlimFlamLevel(ItemStack stack) {
+	private static int getFlimFlamLevel(ItemStack stack) {
 		if (stack == null) return 0;
 		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 		Integer result = enchantments.get(Enchantments.flimFlam.effectId);

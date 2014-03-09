@@ -2,7 +2,9 @@ package openblocks.common;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import openblocks.enchantments.FlimFlamEnchantmentsHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -22,7 +24,8 @@ public class ServerTickHandler implements ITickHandler {
 					MapDataManager.instance.sendUpdates(server);
 				}
 			}
-
+		} else if (type.contains(TickType.PLAYER)) {
+			FlimFlamEnchantmentsHandler.deliverKarma((EntityPlayer)tickData[0]);
 		}
 	}
 
@@ -31,7 +34,7 @@ public class ServerTickHandler implements ITickHandler {
 
 	@Override
 	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.SERVER);
+		return EnumSet.of(TickType.SERVER, TickType.PLAYER);
 	}
 
 	@Override

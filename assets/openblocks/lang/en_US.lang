@@ -90,6 +90,9 @@ openblocks.misc.command.no_flim_flam=Invalid flim-flam name
 openblocks.misc.command.flim_flam_source=Player %s had been successfully flim-flammed with %s
 openblocks.misc.command.flim_flam_target=Someone doesn't like you. Someone with power
 openblocks.misc.command.flim_flam_failed=Flim-flamming failed!
+openblocks.misc.command.luck_added=Luck changed for player %s, current: %d
+openblocks.misc.command.luck_current=Player %s luck: %d
+openblocks.flim_flammed=Something weird happens around you
 
 openblocks.turtle.magnet=Magnet
 
