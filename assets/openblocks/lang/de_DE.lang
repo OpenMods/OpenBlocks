@@ -85,6 +85,12 @@ openblocks.misc.side.south=Südseite
 openblocks.misc.side.up=Oberseite
 openblocks.misc.side.down=Unterseite
 
+openblocks.misc.command.invalid=Ungültige Befehlsparameter
+openblocks.misc.command.no_flim_flam=Ungültiger Blödsinns-Name
+openblocks.misc.command.flim_flam_source=Spieler %s wurde erfolgreich vom Blödsinn mit %s heimgesucht
+openblocks.misc.command.flim_flam_target=Jemand mag dich nicht. Jemand mit Macht
+openblocks.misc.command.flim_flam_failed=Der Blödsinn hat nicht funktioniert!
+
 openblocks.turtle.magnet=Magnetische
 
 tile.openblocks.elevator.name=Fahrstuhl
@@ -185,6 +191,8 @@ tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
 tile.openblocks.canvasglass.name=Glasleinwand
 tile.openblocks.paintcan.name=Farbeimer
+tile.openblocks.sky.normal.name=Himmelsblock
+tile.openblocks.sky.inverted.name=Invertierter Himmelsblock
 
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=Das Radio erlaubt es dir, Internetradio zu spielen! Zunächst brauchst du Wellenkristalle, die du in Dungeon-Truhen findest oder von einem bestimmten Dorfbewohner bekommst. Platziere den Kristall ins Radio und gib diesem ein Redstone-Signal, um es anzuschalten.  Die Stärke des Redstone-Signals bestimmt die Lautstärke.\n\nIn der Konfigurations-Datei des Servers kannst du konfigurieren, welche Radiosender verfügbar sind.
