@@ -4,26 +4,12 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import com.google.common.base.Preconditions;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import dan200.turtle.api.ITurtleUpgrade;
 
 public class CCUtils {
 
-	public static Object[] wrap(Object... args) {
-		return args;
-	}
-
-	public final static Object[] TRUE = wrap(true);
-	public final static Object[] FALSE = wrap(false);
 	private static final int NUMBER_OF_TURTLE_TOOLS = 7;
-
-	public static double toDouble(Object obj) {
-		Preconditions.checkArgument(obj instanceof Number, "Invalid argument type");
-		return ((Number)obj).doubleValue();
-	}
 
 	public static ItemStack getExpandedTurtleItemStack() {
 		return GameRegistry.findItemStack("CCTurtle", "CC-TurtleExpanded", 1);

@@ -297,8 +297,11 @@ public class Config {
 	@ConfigProperty(category = "crane", name = "turtleMagnetRange", comment = "Range of magnet CC peripheral")
 	public static double turtleMagnetRange = 4;
 
-	@ConfigProperty(category = "crane", name = "addTurtles", comment = "Enable magnet turtles in creative list")
-	public static boolean addCraneTurtles = true;
+	@ConfigProperty(category = "crane", name = "addTurtles", comment = "Enable magnet turtles")
+	public static boolean enableCraneTurtles = true;
+
+	@ConfigProperty(category = "crane", name = "showTurtles", comment = "Show magnet turtles in creative list")
+	public static boolean showCraneTurtles = true;
 
 	@ConfigProperty(category = "hacks", name = "enableExperimentalFeatures", comment = "Enable experimental features that may be buggy or broken entirely")
 	public static boolean experimentalFeatures = false;

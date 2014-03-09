@@ -7,6 +7,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
+import openperipheral.api.OpenPeripheralAPI;
 import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.*;
 
@@ -42,7 +43,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
 	@Override
 	public IHostedPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-		return new MagnetControlPeripheral(turtle, side);
+		return OpenPeripheralAPI.createHostedPeripheral(new MagnetControlAdapter(turtle, side));
 	}
 
 	@Override

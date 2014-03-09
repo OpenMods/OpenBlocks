@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openmods.item.IMetaItem;
@@ -62,7 +63,7 @@ public enum MetasGeneric {
 
 		@Override
 		public boolean isEnabled() {
-			return Loader.isModLoaded(openmods.Mods.COMPUTERCRAFT);
+			return Loader.isModLoaded(openmods.Mods.OPENPERIPHERALCORE) && Config.enableCraneTurtles;
 		}
 	},
 	line {

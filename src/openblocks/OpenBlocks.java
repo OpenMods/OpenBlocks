@@ -24,7 +24,6 @@ import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.*;
 import openblocks.events.EventTypes;
-import openblocks.integration.ModuleComputerCraft;
 import openblocks.integration.ModuleOpenPeripheral;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
@@ -365,8 +364,10 @@ public class OpenBlocks {
 
 		MinecraftForge.EVENT_BUS.register(MapDataManager.instance);
 
-		if (Loader.isModLoaded(Mods.COMPUTERCRAFT)) ModuleComputerCraft.registerAddons();
-		if (Loader.isModLoaded(Mods.OPENPERIPHERALCORE)) ModuleOpenPeripheral.registerAdapters();
+		if (Loader.isModLoaded(Mods.OPENPERIPHERALCORE)) {
+			ModuleOpenPeripheral.registerAdapters();
+			if (Config.enableCraneTurtles) ModuleOpenPeripheral.registerMagnetTurtle();
+		}
 
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());

@@ -1,29 +1,23 @@
 package openblocks.integration;
 
-import static openblocks.integration.CCUtils.TRUE;
-import static openblocks.integration.CCUtils.toDouble;
-import static openblocks.integration.CCUtils.wrap;
-
 import java.lang.ref.WeakReference;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
-import openmods.Log;
+import openperipheral.api.*;
 
 import com.google.common.base.Preconditions;
 
-import dan200.computer.api.IComputerAccess;
-import dan200.computer.api.IHostedPeripheral;
-import dan200.computer.api.ILuaContext;
 import dan200.turtle.api.ITurtleAccess;
 import dan200.turtle.api.TurtleSide;
 
-public class MagnetControlPeripheral implements IHostedPeripheral {
+@OnTick
+@Freeform
+public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 
 	public static class Owner implements EntityMagnet.IOwner {
 
@@ -84,100 +78,86 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 	private WeakReference<EntityMagnet> magnet = new WeakReference<EntityMagnet>(null);
 	private Owner magnetOwner;
 
-	private TurtleSide side;
+	private final TurtleSide side;
 
 	private final ITurtleAccess turtle;
 
 	private int fuelTick = 0;
 
-	public MagnetControlPeripheral(ITurtleAccess turtle, TurtleSide side) {
+	public MagnetControlAdapter(ITurtleAccess turtle, TurtleSide side) {
 		this.turtle = turtle;
 		this.side = side;
 	}
 
-	@Override
-	public String getType() {
-		return "magnet";
+	@LuaCallable(description = "Activate magnet")
+	public void activate() {
+		EntityMagnet magnet = this.magnet.get();
+		Preconditions.checkState(magnet == null || magnet.isDead, "Magnet already active");
+		World world = turtle.getWorld();
+		Preconditions.checkNotNull(world, "Trying to spawn magnet, but turtle is unloaded");
+		Preconditions.checkState(canSpawn(world), "Can't deploy magnet");
+		Preconditions.checkState(turtle.consumeFuel(5), "No fuel");
+
+		magnetOwner = new Owner(turtle);
+		magnetOwner.target.zCoord = side == TurtleSide.Left? -1 : 1;
+		magnet = new EntityMagnet(world, magnetOwner, true);
+		world.spawnEntityInWorld(magnet);
+
+		magnet.playSound("mob.endermen.portal", 1, 1);
+		this.magnet = new WeakReference<EntityMagnet>(magnet);
+	}
+
+	@LuaCallable(description = "Deactive magnet")
+	public void deactivate() {
+		despawnMagnet(true);
+	}
+
+	@LuaCallable(description = "Set target for magnet")
+	public void setTarget(@Arg(name = "x", type = LuaType.NUMBER) double x,
+			@Arg(name = "x", type = LuaType.NUMBER) double y,
+			@Arg(name = "x", type = LuaType.NUMBER) double z) {
+		Preconditions.checkNotNull(magnetOwner, "Magnet not active");
+		Preconditions.checkArgument(checkTargetRange(x, y, z), "Target out of range");
+		magnetOwner.setTarget(x, y, z);
+	}
+
+	@LuaCallable(returnTypes = { LuaType.NUMBER, LuaType.NUMBER, LuaType.NUMBER },
+			description = "Get turtle position")
+	public IMultiReturn getPosition() {
+		EntityMagnet magnet = getMagnet();
+		Vec3 rotated = getRelativeDistance(turtle, magnet);
+		return OpenPeripheralAPI.wrap(rotated.xCoord, rotated.yCoord, rotated.zCoord);
+	}
+
+	@LuaCallable(returnTypes = LuaType.BOOLEAN, description = "Is magnet above grabbable entity")
+	public boolean isAboveEntity() {
+		return getMagnet().isAboveTarget();
+	}
+
+	@Alias("toggle")
+	@LuaCallable(returnTypes = LuaType.BOOLEAN, description = "Grab or release entity/block under magnet")
+	public boolean toggleMagnet() {
+		return getMagnet().toggleMagnet();
+	}
+
+	@LuaCallable(returnTypes = LuaType.BOOLEAN, description = "Is magnet currently grabbing block or entity")
+	public boolean isGrabbing() {
+		return getMagnet().isLocked();
+	}
+
+	@Alias("distance")
+	@LuaCallable(returnTypes = { LuaType.NUMBER, LuaType.NUMBER, LuaType.NUMBER })
+	public IMultiReturn getDistanceToTarget() {
+		EntityMagnet magnet = getMagnet();
+		Vec3 current = getRelativeDistance(turtle, magnet);
+		Vec3 target = magnetOwner.target;
+		return OpenPeripheralAPI.wrap(current.xCoord - target.xCoord,
+				current.yCoord - target.yCoord,
+				current.zCoord - target.zCoord);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {}
-
-	@Override
-	public boolean canAttachToSide(int side) {
-		return true;
-	}
-
-	@Override
-	public void attach(IComputerAccess computer) {}
-
-	@Override
-	public void detach(IComputerAccess computer) {}
-
-	@Override
-	public String[] getMethodNames() {
-		return new String[] { "activate", "deactivate", "setTarget", "getPosition", "toggle", "isAboveEntity", "isGrabbing", "toTarget" };
-	}
-
-	@Override
-	public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments)
-			throws Exception {
-		switch (method) {
-			case 0: // activate
-				return spawnMagnet();
-			case 1: // deactivate
-				return despawnMagnet(true);
-			case 2: {// setTarget
-				if (magnetOwner == null) return wrap(false, "Magnet not active");
-
-				Preconditions.checkArgument(arguments.length == 3, "Method needs three numbers");
-				double x = toDouble(arguments[0]);
-				double y = toDouble(arguments[1]);
-				double z = toDouble(arguments[2]);
-				if (!checkTargetRange(x, y, z)) return wrap(false, "Target out of range");
-
-				magnetOwner.setTarget(x, y, z);
-				return TRUE;
-			}
-			case 3: {// getPosition
-				EntityMagnet magnet = this.magnet.get();
-				if (magnet == null || magnet.isDead) return wrap(false, "Magnet not active");
-				Vec3 rotated = getRelativeDistance(turtle, magnet);
-				return wrap(rotated.xCoord, rotated.yCoord, rotated.zCoord);
-			}
-			case 4: {// toggle
-				EntityMagnet magnet = this.magnet.get();
-				if (magnet == null || magnet.isDead) return wrap(false, "Magnet not active");
-				return wrap(magnet.toggleMagnet());
-			}
-			case 5: { // isAboveEntity
-				EntityMagnet magnet = this.magnet.get();
-				if (magnet == null || magnet.isDead) return wrap(false, "Magnet not active");
-				return wrap(magnet.isAboveTarget());
-			}
-			case 6: {// isGrabbing
-				EntityMagnet magnet = this.magnet.get();
-				if (magnet == null || magnet.isDead) return wrap(false, "Magnet not active");
-				return wrap(magnet.isLocked());
-			}
-			case 7: { // toTarget
-				EntityMagnet magnet = this.magnet.get();
-				if (magnet == null || magnet.isDead) return wrap(false, "Magnet not active");
-				Vec3 current = getRelativeDistance(turtle, magnet);
-				Vec3 target = magnetOwner.target;
-				Vec3 dist = target.subtract(current);
-				return wrap(dist.xCoord, dist.yCoord, dist.zCoord);
-			}
-		}
-
-		throw new IllegalArgumentException("Invalid method id: " + method);
-	}
-
-	@Override
-	public void update() {
+	public void onPeripheralUpdate() {
 		EntityMagnet magnet = this.magnet.get();
 		if (magnet != null && !magnet.isDead) {
 			if (++fuelTick >= 20) {
@@ -228,43 +208,33 @@ public class MagnetControlPeripheral implements IHostedPeripheral {
 		return world.isAirBlock(x, y, z);
 	}
 
-	private Object[] spawnMagnet() {
+	private EntityMagnet getMagnet() {
 		EntityMagnet magnet = this.magnet.get();
-		if (magnet != null && !magnet.isDead) return wrap(false, "Magnet already active");
-		World world = turtle.getWorld();
-		if (world == null) {
-			Log.warn("Trying to spawn magnet, but turtle is unloaded");
-			return wrap(false, "WTF?");
-		}
-
-		if (!canSpawn(world)) return wrap(false, "Can't deploy magnet");
-
-		if (!turtle.consumeFuel(5)) return wrap(false, "No fuel");
-
-		magnetOwner = new Owner(turtle);
-		magnetOwner.target.zCoord = side == TurtleSide.Left? -1 : 1;
-		magnet = new EntityMagnet(world, magnetOwner, true);
-		world.spawnEntityInWorld(magnet);
-
-		magnet.playSound("mob.endermen.portal", 1, 1);
-		this.magnet = new WeakReference<EntityMagnet>(magnet);
-		return TRUE;
+		Preconditions.checkState(magnet != null && !magnet.isDead, "Magnet not active");
+		return magnet;
 	}
 
-	private Object[] despawnMagnet(boolean checkPosition) {
+	private void despawnMagnet(boolean checkPosition) {
 		EntityMagnet magnet = this.magnet.get();
-		if (magnet == null) return wrap(false, "Magnet not active");
+		Preconditions.checkNotNull(magnet, "Magnet not active");
 
 		Vec3 magnetPos = Vec3.createVectorHelper(magnet.posX, magnet.posY, magnet.posZ);
 		Vec3 turtlePos = turtle.getPosition().addVector(0.5, 0.5, 0.5);
 
-		if (checkPosition && magnetPos.squareDistanceTo(turtlePos) > 1.2 * 1.2) return wrap(false, "Magnet too far");
+		Preconditions.checkState(!checkPosition || canOperateOnMagnet(magnetPos, turtlePos), "Magnet too far");
 
 		magnet.playSound("mob.endermen.portal", 1, 1);
 		magnet.setDead();
 		this.magnet.clear();
 		magnetOwner = null;
+	}
 
-		return TRUE;
+	private static boolean canOperateOnMagnet(Vec3 magnetPos, Vec3 turtlePos) {
+		return magnetPos.squareDistanceTo(turtlePos) > 1.2 * 1.2;
+	}
+
+	@Override
+	public World getWorld() {
+		return turtle.getWorld();
 	}
 }

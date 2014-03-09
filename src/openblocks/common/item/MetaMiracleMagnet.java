@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import openblocks.Config;
 import openblocks.integration.CCUtils;
-import openblocks.integration.ModuleComputerCraft;
+import openblocks.integration.ModuleOpenPeripheral;
 
 public class MetaMiracleMagnet extends MetaGeneric {
 
@@ -28,8 +28,8 @@ public class MetaMiracleMagnet extends MetaGeneric {
 	public void addToCreativeList(int itemId, int meta, List<ItemStack> result) {
 		super.addToCreativeList(itemId, meta, result);
 
-		if (Config.addCraneTurtles) {
-			CCUtils.addUpgradedTurtles(result, ModuleComputerCraft.magnetUpgrade);
+		if (Config.enableCraneTurtles && Config.showCraneTurtles && ModuleOpenPeripheral.magnetUpgrade != null) {
+			CCUtils.addUpgradedTurtles(result, ModuleOpenPeripheral.magnetUpgrade);
 		}
 	}
 }
