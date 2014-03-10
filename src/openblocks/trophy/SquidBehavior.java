@@ -9,15 +9,16 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class SquidBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		final World worldObj = tile.worldObj;
-		if (worldObj == null || worldObj.isRemote) return;
 		int x = MathHelper.floor_double(player.posX);
 		int y = MathHelper.floor_double(player.posY + 1);
 		int z = MathHelper.floor_double(player.posZ);
 
 		if (worldObj.provider.isHellWorld) worldObj.playSoundEffect(x, y, z, "random.fizz", 0.5F, 2.6F);
 		else if (worldObj.isAirBlock(x, y, z)) worldObj.setBlock(x, y, z, Block.waterMoving.blockID);
+
+		return 10;
 	}
 
 	@Override

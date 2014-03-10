@@ -7,8 +7,7 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class SnowmanBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		if (tile.worldObj.isRemote) { return; }
+	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
 				int pX = x + tile.xCoord;
@@ -20,6 +19,8 @@ public class SnowmanBehavior implements ITrophyBehavior {
 				}
 			}
 		}
+
+		return 10;
 	}
 
 	@Override

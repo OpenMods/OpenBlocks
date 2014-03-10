@@ -6,11 +6,9 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class CreeperBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		if (!tile.worldObj.isRemote) {
-			tile.worldObj.createExplosion(player, tile.xCoord, tile.yCoord, tile.zCoord, 2, false);
-
-		}
+	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+		tile.worldObj.createExplosion(player, tile.xCoord, tile.yCoord, tile.zCoord, 2, false);
+		return 0;
 	}
 
 	@Override

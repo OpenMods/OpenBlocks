@@ -1,36 +1,35 @@
 package openblocks.trophy;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import openblocks.common.tileentity.TileEntityTrophy;
+
+import com.google.common.base.Strings;
 
 public class ItemDropBehavior implements ITrophyBehavior {
 
-	private int minTicks = 0;
-	private String sound = "";
-	private int itemId = 0;
+	private final int minTicks;
+	private final String sound;
+	private final ItemStack drop;
 
-	public ItemDropBehavior(int minTicks, int itemId) {
-		this(minTicks, itemId, "");
+	public ItemDropBehavior(int minTicks, ItemStack drop) {
+		this(minTicks, drop, "");
 	}
 
-	public ItemDropBehavior(int minTicks, int itemId, String sound) {
+	public ItemDropBehavior(int minTicks, ItemStack drop, String sound) {
 		this.minTicks = minTicks;
 		this.sound = sound;
-		this.itemId = itemId;
+		this.drop = drop.copy();
 	}
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		if (!tile.worldObj.isRemote) {
-			if (tile.sinceLastActivate() > minTicks) {
-				if (!sound.isEmpty()) {
-					player.playSound(sound, 1.0F, (tile.worldObj.rand.nextFloat() - tile.worldObj.rand.nextFloat()) * 0.2F + 1.0F);
-				}
-
-				player.dropItem(itemId, 1);
-				tile.resetActivationTimer();
-			}
+	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+		if (!Strings.isNullOrEmpty(sound)) {
+			player.playSound(sound, 1.0F, (tile.worldObj.rand.nextFloat() - tile.worldObj.rand.nextFloat()) * 0.2F + 1.0F);
 		}
+
+		player.entityDropItem(drop.copy(), 0);
+		return minTicks;
 	}
 
 	@Override
