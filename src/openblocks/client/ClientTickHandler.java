@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
+import openblocks.client.billboards.BillboardEventsManager;
 import openblocks.common.entity.EntityHangGlider;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -43,9 +44,7 @@ public class ClientTickHandler implements ITickHandler {
 	}
 
 	public void clientTick() {
-		if (SoundEventsManager.isPlayerWearingGlasses()) {
-			SoundEventsManager.instance.tickUpdate();
-		}
+		BillboardEventsManager.instance.tickUpdate();
 		ticks++;
 	}
 

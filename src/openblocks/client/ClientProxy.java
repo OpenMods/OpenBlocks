@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
+import openblocks.client.billboards.BillboardEventsManager;
 import openblocks.client.bindings.BrickBindings;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
@@ -135,6 +136,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 		}
+		
+		MinecraftForge.EVENT_BUS.register(BillboardEventsManager.instance);
 
 		if (OpenBlocks.Items.craneBackpack != null) {
 			ModelCraneBackpack.instance.init();
