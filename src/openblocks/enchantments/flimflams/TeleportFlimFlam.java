@@ -35,4 +35,9 @@ public class TeleportFlimFlam implements IFlimFlamEffect {
 		return 15;
 	}
 
+	@Override
+	public boolean isSilent() {
+		return false;
+	}
+
 }

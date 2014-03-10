@@ -26,11 +26,15 @@ public class FlimFlamEnchantmentsHandler {
 
 	public static final int LUCK_MARGIN = 5;
 
+	public static final int EFFECT_DELAY = 20;
+
 	private static final Random random = new Random();
 
 	private static class Luck implements IExtendedEntityProperties {
 
 		public int luck;
+
+		public int cooldown;
 
 		@Override
 		public void saveNBTData(NBTTagCompound entityTag) {
@@ -89,7 +93,7 @@ public class FlimFlamEnchantmentsHandler {
 
 	public static void deliverKarma(EntityPlayer player) {
 		Luck property = getProperty(player);
-		if (property == null || !canFlimFlam(property.luck)) return;
+		if (property == null || !canFlimFlam(property)) return;
 		final int luck = property.luck;
 		final int maxCost = Math.abs(luck);
 
@@ -117,8 +121,8 @@ public class FlimFlamEnchantmentsHandler {
 				if (selectedWeight <= currentWeight) {
 					if (effect.execute(player)) {
 						property.luck += effect.cost();
-						Log.fine("Player %s flim-flammed with %s, current luck: %s", player, effect.name(), property.luck);
-						player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
+						Log.info("Player %s flim-flammed with %s, current luck: %s", player, effect.name(), property.luck);
+						if (!effect.isSilent()) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
 						return;
 					}
 					totalWeight -= effect.weight();
@@ -141,10 +145,10 @@ public class FlimFlamEnchantmentsHandler {
 		return property.luck;
 	}
 
-	private static boolean canFlimFlam(int luck) {
-		if (luck > -LUCK_MARGIN) return false;
-
-		double probability = Math.atan(-luck / 1000.0) / Math.PI;
+	private static boolean canFlimFlam(Luck property) {
+		if (property.luck > -LUCK_MARGIN || property.cooldown-- > 0) return false;
+		property.cooldown = EFFECT_DELAY;
+		double probability = Math.abs(2 * Math.atan(property.luck / 500.0) / Math.PI);
 		double r = random.nextDouble();
 		return r < probability;
 	}

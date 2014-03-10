@@ -133,4 +133,9 @@ public class UselessToolFlimFlam implements IFlimFlamEffect {
 		return 50;
 	}
 
+	@Override
+	public boolean isSilent() {
+		return false;
+	}
+
 }

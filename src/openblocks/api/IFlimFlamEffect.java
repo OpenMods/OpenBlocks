@@ -12,4 +12,6 @@ public interface IFlimFlamEffect {
 
 	public float cost();
 
+	public boolean isSilent();
+
 }

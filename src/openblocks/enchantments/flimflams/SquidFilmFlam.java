@@ -51,4 +51,9 @@ public class SquidFilmFlam implements IFlimFlamEffect {
 		return 20;
 	}
 
+	@Override
+	public boolean isSilent() {
+		return false;
+	}
+
 }

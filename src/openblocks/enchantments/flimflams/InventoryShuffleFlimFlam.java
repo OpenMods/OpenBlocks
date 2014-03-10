@@ -34,4 +34,9 @@ public class InventoryShuffleFlimFlam implements IFlimFlamEffect {
 		return 10;
 	}
 
+	@Override
+	public boolean isSilent() {
+		return false;
+	}
+
 }

@@ -3,33 +3,39 @@ package openblocks.enchantments.flimflams;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamEffect;
 import openmods.utils.WorldUtils;
 
-public class SheepDyeFlimFlam implements IFlimFlamEffect {
+public class InvisibleMobsFlimFlam implements IFlimFlamEffect {
 
+	private static final int MIN_10 = 10 * 60 * 20;
 	private static final Random random = new Random();
 
 	@Override
 	public boolean execute(EntityPlayer target) {
-		World world = target.worldObj;
-		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
-		List<EntitySheep> sheeps = WorldUtils.getEntitiesWithinAABB(world, EntitySheep.class, around);
-		if (sheeps.isEmpty()) return false;
+		final World world = target.worldObj;
 
-		EntitySheep chosenOne = sheeps.get(random.nextInt(sheeps.size()));
-		int color = chosenOne.getFleeceColor();
-		chosenOne.setFleeceColor(color + random.nextInt(15));
+		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
+		List<EntityLiving> mobs = WorldUtils.getEntitiesWithinAABB(world, EntityLiving.class, around, WorldUtils.NON_PLAYER);
+
+		if (mobs.isEmpty()) return false;
+
+		for (EntityLiving e : mobs) {
+			if (random.nextFloat() < 0.3) e.addPotionEffect(new PotionEffect(Potion.invisibility.id, MIN_10, 1));
+		}
+
 		return true;
 	}
 
 	@Override
 	public String name() {
-		return "sheep-dye";
+		return "invisible-mobs";
 	}
 
 	@Override
@@ -39,7 +45,7 @@ public class SheepDyeFlimFlam implements IFlimFlamEffect {
 
 	@Override
 	public float cost() {
-		return 5;
+		return 10;
 	}
 
 	@Override

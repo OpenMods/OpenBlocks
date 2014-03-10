@@ -25,12 +25,17 @@ public class BaneFlimFlam implements IFlimFlamEffect {
 
 	@Override
 	public float weight() {
-		return 1;
+		return 2;
 	}
 
 	@Override
 	public float cost() {
 		return 50;
+	}
+
+	@Override
+	public boolean isSilent() {
+		return false;
 	}
 
 }

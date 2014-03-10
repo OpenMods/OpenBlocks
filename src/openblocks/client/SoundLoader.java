@@ -24,7 +24,9 @@ public class SoundLoader {
 			"wipe.ogg",
 			"cannon.ogg",
 			"fart1.ogg", "fart2.ogg", "fart3.ogg", "fart4.ogg",
-			"radio.ogg"
+			"radio.ogg",
+			"mosquito.ogg",
+			"alarmclock.ogg"
 	};
 
 	@SideOnly(Side.CLIENT)
