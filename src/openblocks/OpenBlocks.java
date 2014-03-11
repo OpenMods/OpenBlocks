@@ -412,6 +412,8 @@ public class OpenBlocks {
 			FlimFlamRegistry.registerAttackFlimFlam(new InvisibleMobsFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new SoundFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new MountFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new EncaseFlimFlam());
+			
 		}
 	}
 
