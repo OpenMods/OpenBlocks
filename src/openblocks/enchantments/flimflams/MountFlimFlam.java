@@ -42,12 +42,12 @@ public class MountFlimFlam implements IFlimFlamEffect {
 	}
 
 	@Override
-	public float weight() {
-		return 0.5f;
+	public int weight() {
+		return 5;
 	}
 
 	@Override
-	public float cost() {
+	public int cost() {
 		return 10;
 	}
 

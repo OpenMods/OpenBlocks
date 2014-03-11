@@ -39,12 +39,12 @@ public class InvisibleMobsFlimFlam implements IFlimFlamEffect {
 	}
 
 	@Override
-	public float weight() {
-		return 1;
+	public int weight() {
+		return 10;
 	}
 
 	@Override
-	public float cost() {
+	public int cost() {
 		return 10;
 	}
 

@@ -80,14 +80,17 @@ public class FlimFlamEnchantmentsHandler {
 		final int targetFlimFlam = getFlimFlamArmorLevel(targetPlayer);
 
 		Luck targetLuck = getProperty(e.entityLiving);
-		if (targetLuck != null) targetLuck.luck -= calculateLuckChange(sourceFlimFlam);
+		if (targetLuck != null) targetLuck.luck -= calculateWeaponLuckChange(sourceFlimFlam);
 
 		Luck sourceLuck = getProperty(sourcePlayer);
-		if (sourceLuck != null) sourceLuck.luck -= calculateLuckChange(targetFlimFlam);
+		if (sourceLuck != null) sourceLuck.luck -= calculateArmorLuckChange(targetFlimFlam);
 	}
 
-	private static int calculateLuckChange(int sourceFlimFlam) {
-		// TODO
+	private static int calculateWeaponLuckChange(int sourceFlimFlam) {
+		return 40 * sourceFlimFlam;
+	}
+
+	private static int calculateArmorLuckChange(int sourceFlimFlam) {
 		return 20 * sourceFlimFlam;
 	}
 

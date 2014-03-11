@@ -13,6 +13,7 @@ public class SoundFlimFlam implements IFlimFlamEffect {
 	private static final List<String> sounds = ImmutableList.of(
 			"openblocks:mosquito",
 			"openblocks:alarmclock",
+			"openblocks:vibrate",
 			"openblocks:fart",
 			"random.fuse",
 			"random.explode",
@@ -20,7 +21,8 @@ public class SoundFlimFlam implements IFlimFlamEffect {
 			"mob.blaze.breathe",
 			"mob.endermen.stare",
 			"mob.ghast.charge",
-			"mob.zombiepig.zpigangry"
+			"mob.zombiepig.zpigangry",
+			"mob.creeper.say"
 			);
 
 	@Override
@@ -36,12 +38,12 @@ public class SoundFlimFlam implements IFlimFlamEffect {
 	}
 
 	@Override
-	public float weight() {
-		return 4;
+	public int weight() {
+		return 40;
 	}
 
 	@Override
-	public float cost() {
+	public int cost() {
 		return 3;
 	}
 

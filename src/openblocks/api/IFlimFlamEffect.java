@@ -8,9 +8,9 @@ public interface IFlimFlamEffect {
 
 	public String name();
 
-	public float weight();
+	public int weight();
 
-	public float cost();
+	public int cost();
 
 	public boolean isSilent();
 

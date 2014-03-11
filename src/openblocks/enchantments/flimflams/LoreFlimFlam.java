@@ -103,12 +103,12 @@ public class LoreFlimFlam implements IFlimFlamEffect {
 	}
 
 	@Override
-	public float weight() {
-		return 3;
+	public int weight() {
+		return 30;
 	}
 
 	@Override
-	public float cost() {
+	public int cost() {
 		return 30;
 	}
 
