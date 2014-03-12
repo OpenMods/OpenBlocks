@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
+import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
 import openblocks.common.entity.EntityMutant;
 import openmods.OpenMods;
@@ -57,13 +58,14 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 			}
 			if (stage.getValue() >= 4) {
-				// TODO: check whitelist
-				// maybe this should be more.. interesting. shapes or
-				// something?!
+
 				int posX = xCoord + worldObj.rand.nextInt(20) - 10;
 				int posY = yCoord + worldObj.rand.nextInt(2) - 1;
 				int posZ = zCoord + worldObj.rand.nextInt(20) - 10;
-				if (blocks != null && posX != xCoord && posY != yCoord && posZ != zCoord && worldObj.rand.nextInt(10) == 0) {
+				
+				boolean canMove = blocks != null && MagnetWhitelists.instance.testBlock(worldObj, posX, posY, posZ);
+				
+				if (canMove && worldObj.rand.nextInt(6) == 0) {
 					EntityBlock block = EntityBlock.create(worldObj, posX, posY, posZ);
 					if (block != null) {
 						block.setHasAirResistance(false);

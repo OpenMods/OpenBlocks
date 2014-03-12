@@ -114,6 +114,7 @@ public class EntityAIBreakCrop extends EntityAIBase {
 					world.setBlockToAir(blockCoord.x, blockCoord.y, blockCoord.z);
 				}
 				fakePlayer.setDead();
+				blockCoord = null;
 			}
 		}
 	}
