@@ -6,9 +6,7 @@ import java.util.Random;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.OpenMods;
-import openmods.utils.Coord;
-import openmods.utils.InventoryUtils;
-import openmods.utils.OpenModsFakePlayer;
+import openmods.utils.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +35,6 @@ public class EntityAIBreakCrop extends EntityAIBase {
 		setMutexBits(3);
 		rand = new Random(minime.entityId);
 		tickOffset = rand.nextInt(10);
-		blockCoord = new Coord();
 	}
 	
 	@Override
@@ -49,13 +46,15 @@ public class EntityAIBreakCrop extends EntityAIBase {
 				int x = rand.nextInt(12) - 6;
 				int y = rand.nextInt(3) - 1;
 				int z = rand.nextInt(12) - 6;
-				blockCoord.x = (int)(x + minime.posX);
-				blockCoord.y = (int)(y + minime.posY);
-				blockCoord.z = (int)(z + minime.posZ);
-				validCoord = canHarvestBlock(blockCoord);
-				if (validCoord) {
+				blockCoord = new Coord(
+					(int)(x + minime.posX),
+					(int)(y + minime.posY),
+					(int)(z + minime.posZ)
+				);
+				if (canHarvestBlock(blockCoord)) {
 					return true;
 				}
+				blockCoord = null;
 			}
 		}		
 		return false;
@@ -70,6 +69,7 @@ public class EntityAIBreakCrop extends EntityAIBase {
 	public boolean continueExecuting() {
 		return minime.isEntityAlive() &&
 				!pathFinder.noPath() &&
+				blockCoord != null && 
 				canHarvestBlock(blockCoord);
 	}
 
@@ -84,14 +84,14 @@ public class EntityAIBreakCrop extends EntityAIBase {
 	public void updateTask() {
 		super.updateTask();
 		World world = minime.worldObj;
-		if (!world.isRemote && canHarvestBlock(blockCoord)) {
+		if (!world.isRemote && blockCoord != null && canHarvestBlock(blockCoord)) {
 			if (minime.getDistance(0.5 + blockCoord.x, 0.5 + blockCoord.y, 0.5 + blockCoord.z) < 1.0) {
 				
 				EntityPlayer fakePlayer = new OpenModsFakePlayer(world);
 				fakePlayer.inventory.currentItem = 0;
 				
-				Block block = Block.blocksList[blockCoord.getBlockID(minime.worldObj)];
-				int meta = blockCoord.getBlockMetadata(world);
+				Block block = BlockProperties.getBlock(blockCoord, world);
+				int meta = BlockProperties.getBlockMetadata(blockCoord, world);
 				
 				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(
 						blockCoord.x,
@@ -119,6 +119,6 @@ public class EntityAIBreakCrop extends EntityAIBase {
 	}
 
 	private boolean canHarvestBlock(Coord coord) {
-		return coord.isFlower(minime.worldObj);
+		return BlockProperties.isFlower(coord, minime.worldObj);
 	}
 }
