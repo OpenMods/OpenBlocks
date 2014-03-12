@@ -132,7 +132,7 @@ public class Config {
 	@BlockId(description = "The id of the drawing table")
 	public static int blockDrawingTable = 2574;
 
-	// @BlockId(description = "The id of the golden egg block")
+	@BlockId(description = "The id of the golden egg block")
 	public static int blockGoldenEggId = 2575;
 
 	@BlockId(description = "The id of the fan block")
@@ -577,13 +577,11 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', lapis));
 		}
 
-		/*
-		 * if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
-		 * OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
-		 * recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg,
-		 * "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
-		 * }
-		 */
+		if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
+			OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg,
+					"ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
+		}
 
 		if (ConfigProcessing.canRegisterBlock(blockSkyId)) {
 			OpenBlocks.Blocks.sky = new BlockSky();

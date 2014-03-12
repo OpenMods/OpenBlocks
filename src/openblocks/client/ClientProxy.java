@@ -108,8 +108,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
-		// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class,
-		// new TileEntityGoldenEggRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
 
 		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 
@@ -131,7 +130,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 			attachPlayerRenderer();
 		}
-
+		
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			MinecraftForge.EVENT_BUS.register(SoundEventsManager.instance);
 		}
@@ -140,6 +139,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 			ModelCraneBackpack.instance.init();
 			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new EntityMagnetRenderer());
 			RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, new EntityBlockRenderer());
+		}
+		
+		if (OpenBlocks.Blocks.goldenEgg != null) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityMiniMe.class, new EntityMiniMeRenderer());			
 		}
 
 		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());
