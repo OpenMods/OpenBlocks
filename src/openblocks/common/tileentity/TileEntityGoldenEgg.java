@@ -19,8 +19,8 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile {
 
-	private static final int STAGE_CHANGE_TICK = 300;//600;
-	public static final int ANIMATION_TIME = 100;//400;
+	private static final int STAGE_CHANGE_TICK = 600;
+	public static final int ANIMATION_TIME = 400;
 	private static final double STAGE_CHANGE_CHANCE = 0.8;
 	public int animationStageTicks = 0;
 	public float rotation;
@@ -88,7 +88,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			if (stage.getValue() >= 5) {
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
-				EntityMiniMe miniMe = new EntityMiniMe(worldObj, owner);
+				EntityMiniMe miniMe = new EntityMiniMe(worldObj, "Mikeemoo");
 				miniMe.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 0, 0);
 				worldObj.spawnEntityInWorld(miniMe);
 				return;
