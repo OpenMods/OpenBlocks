@@ -418,6 +418,11 @@ public class OpenBlocks {
 			FlimFlamRegistry.registerAttackFlimFlam(new RenameFlimFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new SquidFilmFlam());
 			FlimFlamRegistry.registerAttackFlimFlam(new SheepDyeFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new InvisibleMobsFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new SoundFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new MountFlimFlam());
+			FlimFlamRegistry.registerAttackFlimFlam(new EncaseFlimFlam());
+
 		}
 	}
 

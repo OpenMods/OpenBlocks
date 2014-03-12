@@ -53,6 +53,7 @@ public class CommandLuck implements ICommand {
 			} catch (NumberFormatException e) {
 				throw error("openblocks.misc.command.invalid");
 			}
+
 			int result = FlimFlamEnchantmentsHandler.modifyLuck(player, amount);
 			respond(sender, "openblocks.misc.command.luck_added", playerName, result);
 		} else throw error("openblocks.misc.command.invalid");

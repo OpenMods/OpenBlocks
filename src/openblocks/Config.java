@@ -1,8 +1,10 @@
 package openblocks;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -770,6 +772,16 @@ public class Config {
 		if (flimFlamEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new FlimFlamEnchantmentsHandler());
 			Enchantments.flimFlam = new EnchantmentFlimFlam(flimFlamEnchantmentId);
+
+			for (int i = 0; i < 4; i++) {
+				int emeraldCount = 1 << i;
+				ItemStack result = Item.enchantedBook.getEnchantedItemStack(new EnchantmentData(Enchantments.flimFlam, i + 1));
+				Object recipe[] = new Object[emeraldCount + 1];
+				recipe[0] = Item.book;
+				Arrays.fill(recipe, 1, recipe.length, Item.emerald);
+				recipeList.add(new ShapelessOreRecipe(result, recipe));
+			}
+
 		}
 
 		final String modId = "openblocks";

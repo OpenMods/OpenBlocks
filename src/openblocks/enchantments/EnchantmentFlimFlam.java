@@ -17,7 +17,7 @@ public class EnchantmentFlimFlam extends Enchantment {
 
 	@Override
 	public int getMinEnchantability(int level) {
-		return 100;
+		return 31 + level * 10;
 	}
 
 	@Override

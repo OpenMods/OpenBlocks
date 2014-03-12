@@ -22,7 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
-	private int sinceLastActivate = 0;
+	private int cooldown = 0;
 	private SyncableInt trophyIndex;
 
 	public TileEntityTrophy() {}
@@ -42,12 +42,8 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 			Trophy trophy = getTrophy();
-			if (trophy != null) {
-				trophy.executeTickBehavior(this);
-			}
-			if (sinceLastActivate < Integer.MAX_VALUE) {
-				sinceLastActivate++;
-			}
+			if (trophy != null) trophy.executeTickBehavior(this);
+			if (cooldown > 0) cooldown--;
 		}
 	}
 
@@ -57,7 +53,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 			Trophy trophyType = getTrophy();
 			if (trophyType != null) {
 				trophyType.playSound(worldObj, xCoord, yCoord, zCoord);
-				trophyType.executeActivateBehavior(this, player);
+				if (cooldown <= 0) cooldown = trophyType.executeActivateBehavior(this, player);
 			}
 		}
 		return true;
@@ -89,23 +85,13 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		if (tag.hasKey("sinceLastActivate")) {
-			sinceLastActivate = tag.getInteger("sinceLastActivate");
-		}
-	}
-
-	public int sinceLastActivate() {
-		return sinceLastActivate;
-	}
-
-	public void resetActivationTimer() {
-		sinceLastActivate = 0;
+		cooldown = tag.getInteger("cooldown");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		tag.setInteger("sinceLastActivate", sinceLastActivate);
+		tag.setInteger("cooldown", cooldown);
 	}
 
 	@Override

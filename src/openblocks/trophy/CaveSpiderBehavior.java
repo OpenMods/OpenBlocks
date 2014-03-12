@@ -8,10 +8,9 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class CaveSpiderBehavior implements ITrophyBehavior {
 
 	@Override
-	public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		if (!tile.worldObj.isRemote) {
-			player.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 3));
-		}
+	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+		player.addPotionEffect(new PotionEffect(Potion.poison.id, 200, 3));
+		return 0;
 	}
 
 	@Override

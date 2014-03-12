@@ -37,13 +37,22 @@ public class TrophyHandler {
 		return entity;
 	}
 
+	private static Entity setSlimeSize(Entity entity, int size) {
+		try {
+			ReflectionHelper.call(entity, new String[] { "func_70799_a", "setSlimeSize" }, ReflectionHelper.primitive(size));
+		} catch (Exception e) {
+			Log.warn(e, "Can't update slime size");
+		}
+		return entity;
+	}
+
 	public enum Trophy {
 		Wolf(),
-		Chicken(new ItemDropBehavior(10000, Item.egg.itemID, "mob.chicken.plop")),
-		Cow(new ItemDropBehavior(20000, Item.leather.itemID)),
+		Chicken(new ItemDropBehavior(10000, new ItemStack(Item.egg), "mob.chicken.plop")),
+		Cow(new ItemDropBehavior(20000, new ItemStack(Item.leather))),
 		Creeper(new CreeperBehavior()),
 		Skeleton(new SkeletonBehavior()),
-		PigZombie(new ItemDropBehavior(20000, Item.goldNugget.itemID)),
+		PigZombie(new ItemDropBehavior(20000, new ItemStack(Item.goldNugget))),
 		Bat(1.0, -0.3),
 		Zombie(),
 		Witch(0.35),
@@ -69,25 +78,22 @@ public class TrophyHandler {
 		Slime(0.6) {
 			@Override
 			protected Entity createEntity() {
-				Entity entity = super.createEntity();
-
-				try {
-					ReflectionHelper.call(entity, new String[] { "func_70799_a", "setSlimeSize" }, ReflectionHelper.primitive(1));
-				} catch (Exception e) {
-					Log.warn(e, "Can't update slime size");
-				}
-
-				return entity;
+				return setSlimeSize(super.createEntity(), 1);
 			}
 		},
 		Ghast(0.1, 0.2),
 		Enderman(0.3, new EndermanBehavior()),
-		LavaSlime(0.6),
+		LavaSlime(0.6) {
+			@Override
+			protected Entity createEntity() {
+				return setSlimeSize(super.createEntity(), 1);
+			}
+		},
 		Squid(0.3, 0.5, new SquidBehavior()),
 		MushroomCow(new MooshroomBehavior()),
 		VillagerGolem(0.3),
 		SnowMan(new SnowmanBehavior()),
-		Pig(new ItemDropBehavior(20000, Item.porkRaw.itemID));
+		Pig(new ItemDropBehavior(20000, new ItemStack(Item.porkRaw)));
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
@@ -148,16 +154,13 @@ public class TrophyHandler {
 			}
 		}
 
-		public void executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-			if (behavior != null) {
-				behavior.executeActivateBehavior(tile, player);
-			}
+		public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
+			if (behavior != null) return behavior.executeActivateBehavior(tile, player);
+			return 0;
 		}
 
 		public void executeTickBehavior(TileEntityTrophy tile) {
-			if (behavior != null) {
-				behavior.executeTickBehavior(tile);
-			}
+			if (behavior != null) behavior.executeTickBehavior(tile);
 		}
 
 		protected Entity createEntity() {

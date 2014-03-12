@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamEffect;
+import openmods.utils.WorldUtils;
 
 public class SheepDyeFlimFlam implements IFlimFlamEffect {
 
@@ -17,9 +18,7 @@ public class SheepDyeFlimFlam implements IFlimFlamEffect {
 	public boolean execute(EntityPlayer target) {
 		World world = target.worldObj;
 		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
-		@SuppressWarnings("unchecked")
-		List<EntitySheep> sheeps = world.getEntitiesWithinAABB(EntitySheep.class, around);
-
+		List<EntitySheep> sheeps = WorldUtils.getEntitiesWithinAABB(world, EntitySheep.class, around);
 		if (sheeps.isEmpty()) return false;
 
 		EntitySheep chosenOne = sheeps.get(random.nextInt(sheeps.size()));
@@ -34,13 +33,18 @@ public class SheepDyeFlimFlam implements IFlimFlamEffect {
 	}
 
 	@Override
-	public float weight() {
-		return 1;
+	public int weight() {
+		return 10;
 	}
 
 	@Override
-	public float cost() {
+	public int cost() {
 		return 5;
+	}
+
+	@Override
+	public boolean isSilent() {
+		return false;
 	}
 
 }

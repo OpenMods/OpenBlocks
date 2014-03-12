@@ -42,6 +42,12 @@ openblocks.gui.bkey.content=Die 'B'-Taste ist eine sehr spezielle Taste in OpenB
 openblocks.gui.unstable.title='Instabil'-Verzauberung
 openblocks.gui.unstable.content=Wir hatten unbestätigte Berichte, dass diese Verzauberung jegliches Schießpulver, das du trägst, instabil werden lässt, wenn du attackiert wirst oder von etwas herunterspringst.\n\nBenutzung auf eigene Gefahr!
 
+openblocks.gui.flimflam.title='Blödsinn'-Verzauberung
+openblocks.gui.flimflam.content=Wissenschaftler sind noch dabei, die Eigenschaften dieser Verzauberung zu erforschen.
+
+openblocks.gui.laststand.title='Letzte Rettung'-Verzauberung
+openblocks.gui.laststand.content=Die 'Letzte Rettung'-Verzauberung verwendet deine XP-Leiste als letzten Schutz vor dem Tod.\n\nWenn du 0.5 Herzen erreichst, wird das Spiel dir XP entziehen, wenn du Schaden bekommst, statt dich zu töten. Je höher das Verzauberungs-Level ist, desto weniger XP wird dies kosten.
+
 openblocks.changelog.title=Was neu ist in OpenBlocks %s
 openblocks.misc.url=URL: %s
 openblocks.misc.type=Typ: %s
@@ -88,8 +94,11 @@ openblocks.misc.side.down=Unterseite
 openblocks.misc.command.invalid=Ungültige Befehlsparameter
 openblocks.misc.command.no_flim_flam=Ungültiger Blödsinns-Name
 openblocks.misc.command.flim_flam_source=Spieler %s wurde erfolgreich vom Blödsinn mit %s heimgesucht
-openblocks.misc.command.flim_flam_target=Jemand mag dich nicht. Jemand mit Macht
+openblocks.misc.command.flim_flam_target=Jemand mag dich nicht. Jemand mit Macht...
 openblocks.misc.command.flim_flam_failed=Der Blödsinn hat nicht funktioniert!
+openblocks.misc.command.luck_added=Glück von Spieler %s geändert, aktuell: %d
+openblocks.misc.command.luck_current=Glück von Spieler %s: %d
+openblocks.flim_flammed=Etwas seltsames geschieht um dich herum...
 
 openblocks.turtle.magnet=Magnetische
 
@@ -191,7 +200,9 @@ tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
 tile.openblocks.canvasglass.name=Glasleinwand
 tile.openblocks.paintcan.name=Farbeimer
+
 tile.openblocks.sky.normal.name=Himmelsblock
+tile.openblocks.sky.normal.description=Bringe das Außen nach innen mit dem neuen Himmelsblock! Du musst lediglich ein Redstone-Signal geben. Wir bieten auch die invertierte Version an.
 tile.openblocks.sky.inverted.name=Invertierter Himmelsblock
 
 tile.openblocks.radio.name=Radio
