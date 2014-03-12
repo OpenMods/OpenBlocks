@@ -5,7 +5,7 @@ import java.util.Random;
 
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import openblocks.api.IFlimFlamEffect;
@@ -103,7 +103,7 @@ public class UselessToolFlimFlam implements IFlimFlamEffect {
 	}
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		Item tool = selectTool();
 		ItemStack dropped = new ItemStack(tool);
 		@SuppressWarnings("unchecked")

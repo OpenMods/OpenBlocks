@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import openblocks.api.IFlimFlamEffect;
 
@@ -16,7 +16,7 @@ public class InventoryShuffleFlimFlam implements IFlimFlamEffect {
 	}
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		final ItemStack[] mainInventory = target.inventory.mainInventory;
 		List<ItemStack> stacks = Arrays.asList(mainInventory);
 		Collections.shuffle(stacks);

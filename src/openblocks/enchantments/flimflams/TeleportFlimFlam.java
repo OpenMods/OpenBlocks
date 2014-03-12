@@ -1,14 +1,14 @@
 package openblocks.enchantments.flimflams;
 
 import net.minecraft.entity.item.EntityEnderPearl;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamEffect;
 
 public class TeleportFlimFlam implements IFlimFlamEffect {
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		final World world = target.worldObj;
 
 		EntityEnderPearl e = new EntityEnderPearl(world, target);
@@ -27,7 +27,7 @@ public class TeleportFlimFlam implements IFlimFlamEffect {
 
 	@Override
 	public int weight() {
-		return 10;
+		return 3;
 	}
 
 	@Override

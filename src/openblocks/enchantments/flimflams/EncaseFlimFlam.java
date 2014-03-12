@@ -1,14 +1,14 @@
 package openblocks.enchantments.flimflams;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
 import openblocks.api.IFlimFlamEffect;
 
 public class EncaseFlimFlam implements IFlimFlamEffect {
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 
 		int playerX = MathHelper.floor_double(target.posX);
 		int playerY = MathHelper.floor_double(target.boundingBox.minY) - 1;
@@ -46,7 +46,7 @@ public class EncaseFlimFlam implements IFlimFlamEffect {
 
 	@Override
 	public int weight() {
-		return 20;
+		return 5;
 	}
 
 	@Override

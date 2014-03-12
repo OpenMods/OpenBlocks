@@ -1,14 +1,14 @@
 package openblocks.enchantments.flimflams;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import openblocks.api.IFlimFlamEffect;
 
 public class BaneFlimFlam implements IFlimFlamEffect {
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		for (ItemStack stack : target.inventory.mainInventory) {
 			if (stack != null && stack.getMaxStackSize() == 1 && !stack.isItemEnchantable() && !stack.isItemEnchanted()) {
 				stack.addEnchantment(Enchantment.baneOfArthropods, 5);

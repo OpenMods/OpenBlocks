@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -19,7 +20,7 @@ import com.google.common.collect.Lists;
 public class LoreFlimFlam implements IFlimFlamEffect {
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		List<Integer> slots = Lists.newArrayList(0, 1, 2, 3, 4);
 		Collections.shuffle(slots);
 

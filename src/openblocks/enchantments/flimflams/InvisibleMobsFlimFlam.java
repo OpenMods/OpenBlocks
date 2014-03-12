@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -18,7 +18,7 @@ public class InvisibleMobsFlimFlam implements IFlimFlamEffect {
 	private static final Random random = new Random();
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		final World world = target.worldObj;
 
 		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
