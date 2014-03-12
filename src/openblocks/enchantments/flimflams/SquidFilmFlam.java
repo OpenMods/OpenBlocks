@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import openblocks.api.IFlimFlamEffect;
 
 import com.google.common.collect.ImmutableList;
@@ -22,7 +22,7 @@ public class SquidFilmFlam implements IFlimFlamEffect {
 			"???");
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		if (target.riddenByEntity != null && !target.riddenByEntity.isDead) return false;
 
 		EntitySquid squid = new EntitySquid(target.worldObj);

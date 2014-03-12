@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamEffect;
@@ -15,7 +15,7 @@ public class SheepDyeFlimFlam implements IFlimFlamEffect {
 	private static final Random random = new Random();
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		World world = target.worldObj;
 		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
 		List<EntitySheep> sheeps = WorldUtils.getEntitiesWithinAABB(world, EntitySheep.class, around);

@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamEffect;
@@ -25,7 +25,7 @@ public class MountFlimFlam implements IFlimFlamEffect {
 	};
 
 	@Override
-	public boolean execute(EntityPlayer target) {
+	public boolean execute(EntityPlayerMP target) {
 		final World world = target.worldObj;
 
 		AxisAlignedBB around = target.boundingBox.expand(40, 40, 40);

@@ -316,6 +316,10 @@ public class Config {
 	public static boolean fartTypying = false;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "tomfoolery", name = "flimFlamBlacklist", comment = "Blacklist for effects used by flim-flam enchantment")
+	public static String[] flimFlamBlacklist = new String[0];
+
+	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "goldenEyeDebug", comment = "Show structures found by golden eye")
 	public static boolean eyeDebug = false;
 

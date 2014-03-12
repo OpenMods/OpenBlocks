@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import openblocks.api.FlimFlamRegistry;
 import openblocks.api.IFlimFlamEffect;
 import openmods.utils.CollectionUtils;
@@ -43,7 +43,7 @@ public class CommandFlimFlam implements ICommand {
 		if (params.length != 1 && params.length != 2) throw error("openblocks.misc.command.invalid");
 
 		String playerName = params[0];
-		EntityPlayer player = getPlayer(sender, playerName);
+		EntityPlayerMP player = getPlayer(sender, playerName);
 
 		String effectName = (params.length > 1)? params[1] : null;
 

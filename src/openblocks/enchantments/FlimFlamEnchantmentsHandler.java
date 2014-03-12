@@ -5,6 +5,7 @@ import java.util.*;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatMessageComponent;
@@ -13,12 +14,15 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.api.FlimFlamRegistry;
 import openblocks.api.IFlimFlamEffect;
 import openmods.Log;
+import openmods.config.ConfigurationChange;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class FlimFlamEnchantmentsHandler {
 
@@ -26,15 +30,37 @@ public class FlimFlamEnchantmentsHandler {
 
 	public static final int LUCK_MARGIN = 5;
 
-	public static final int EFFECT_DELAY = 20;
+	public static final int EFFECT_DELAY = 20 * 15; // 15s cooldown
 
 	private static final Random random = new Random();
+
+	private static Set<String> blacklist;
+
+	private static Set<String> getBlacklist() {
+		if (blacklist == null) {
+			blacklist = Sets.newHashSet();
+			Set<String> validNames = Sets.newHashSet(FlimFlamRegistry.getAllFlimFlamsNames());
+			for (String s : Config.flimFlamBlacklist) {
+				if (validNames.contains(s)) blacklist.add(s);
+				else Log.warn("Trying to blacklist unknown flimflam name '%s'", s);
+			}
+		}
+
+		return blacklist;
+	}
+
+	@ForgeSubscribe
+	public void onReconfig(ConfigurationChange.Post evt) {
+		if (evt.check("tomfoolery", "flimFlamBlacklist")) blacklist = null;
+	}
 
 	private static class Luck implements IExtendedEntityProperties {
 
 		public int luck;
 
 		public int cooldown;
+
+		public boolean forceNext;
 
 		@Override
 		public void saveNBTData(NBTTagCompound entityTag) {
@@ -80,21 +106,28 @@ public class FlimFlamEnchantmentsHandler {
 		final int targetFlimFlam = getFlimFlamArmorLevel(targetPlayer);
 
 		Luck targetLuck = getProperty(e.entityLiving);
-		if (targetLuck != null) targetLuck.luck -= calculateWeaponLuckChange(sourceFlimFlam);
+		if (targetLuck != null) {
+			targetLuck.luck -= calculateWeaponLuckChange(sourceFlimFlam);
+			if (targetLuck.luck < LUCK_MARGIN) targetLuck.forceNext = true;
+		}
 
 		Luck sourceLuck = getProperty(sourcePlayer);
-		if (sourceLuck != null) sourceLuck.luck -= calculateArmorLuckChange(targetFlimFlam);
+		if (sourceLuck != null) {
+			sourceLuck.luck -= calculateArmorLuckChange(targetFlimFlam);
+			if (sourceLuck.luck < LUCK_MARGIN) sourceLuck.forceNext = true;
+		}
 	}
 
 	private static int calculateWeaponLuckChange(int sourceFlimFlam) {
-		return 40 * sourceFlimFlam;
+		return 10 * sourceFlimFlam;
 	}
 
 	private static int calculateArmorLuckChange(int sourceFlimFlam) {
-		return 20 * sourceFlimFlam;
+		return 5 * sourceFlimFlam;
 	}
 
-	public static void deliverKarma(EntityPlayer player) {
+	public static void deliverKarma(EntityPlayerMP player) {
+		if (player.isDead) return;
 		Luck property = getProperty(player);
 		if (property == null || !canFlimFlam(property)) return;
 		final int luck = property.luck;
@@ -102,9 +135,9 @@ public class FlimFlamEnchantmentsHandler {
 
 		int totalWeight = 0;
 		List<IFlimFlamEffect> selectedEffects = Lists.newArrayList();
-
+		Set<String> blacklist = getBlacklist();
 		for (IFlimFlamEffect effect : FlimFlamRegistry.getFlimFlams())
-			if (effect.cost() <= maxCost) {
+			if (effect.cost() <= maxCost && !blacklist.contains(effect.name())) {
 				selectedEffects.add(effect);
 				totalWeight += effect.weight();
 			}
@@ -149,9 +182,15 @@ public class FlimFlamEnchantmentsHandler {
 	}
 
 	private static boolean canFlimFlam(Luck property) {
+		if (property.forceNext) {
+			property.forceNext = false;
+			property.cooldown = EFFECT_DELAY;
+			return true;
+		}
+
 		if (property.luck > -LUCK_MARGIN || property.cooldown-- > 0) return false;
 		property.cooldown = EFFECT_DELAY;
-		double probability = Math.abs(2 * Math.atan(property.luck / 500.0) / Math.PI);
+		double probability = Math.abs(Math.atan(property.luck / 250.0) / Math.PI);
 		double r = random.nextDouble();
 		return r < probability;
 	}

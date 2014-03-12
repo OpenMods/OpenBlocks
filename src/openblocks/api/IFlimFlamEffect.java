@@ -1,10 +1,10 @@
 package openblocks.api;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public interface IFlimFlamEffect {
 
-	public boolean execute(EntityPlayer target);
+	public boolean execute(EntityPlayerMP target);
 
 	public String name();
 
