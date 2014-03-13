@@ -23,19 +23,19 @@ public class FlimFlamRegistry {
 		private final int cost;
 		private final int weight;
 		private final IFlimFlamAction effect;
-		
+
 		public FlimFlamMeta(String name, int cost, int weight, IFlimFlamAction effect) {
 			this.name = name;
 			this.cost = cost;
 			this.weight = weight;
 			this.effect = effect;
 		}
-		
+
 		public FlimFlamMeta markSafe() {
 			isSafe = true;
 			return this;
 		}
-		
+
 		public FlimFlamMeta markSilent() {
 			isSilent = true;
 			return this;
@@ -71,7 +71,7 @@ public class FlimFlamRegistry {
 			return effect;
 		}
 	}
-	
+
 	public static FlimFlamMeta registerFlimFlam(String name, int cost, int weight, IFlimFlamAction effect) {
 		final FlimFlamMeta meta = new FlimFlamMeta(name, cost, weight, effect);
 		registerFlimFlam(name, meta);

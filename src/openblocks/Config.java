@@ -320,6 +320,10 @@ public class Config {
 	public static String[] flimFlamBlacklist = new String[0];
 
 	@OnLineModifiable
+	@ConfigProperty(category = "tomfoolery", name = "safeOnly", comment = "Allow only flimflams that don't cause death (or at least very rarely)")
+	public static boolean safeFlimFlams = false;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "goldenEyeDebug", comment = "Show structures found by golden eye")
 	public static boolean eyeDebug = false;
 

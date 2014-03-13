@@ -39,14 +39,14 @@ public class LoreGenerator {
 		IGenerator heroesPostfix = alt("ish", "ilde", "monkeybutt", "son", "shvili", "berg", "bert", "us");
 		IGenerator heroName = word(heroesPrefix, opt(0.6f, heroesPostfix));
 		IGenerator heroOptional = alt("slightly", "sometimes", "mistakenly", "somehow", "part-time");
-		IGenerator heroAdj = alt("insane", "brave", "smelly", "philosophical", "jumping", "toothless", "burning", "heroic", "shy", "narcoleptic", "manly", "girly", "non-euclidian", "euphoric", "misanthropic", "ambivalent");
+		IGenerator heroAdj = alt("insane", "brave", "smelly", "philosophical", "jumping", "toothless", "burning", "heroic", "shy", "narcoleptic", "manly", "girly", "non-euclidian", "euphoric", "misanthropic", "ambivalent", "fictional", "fetishist");
 		IGenerator heroClass = alt("babycrusher", "wrestler", "nitpicker", "barber", "anesthesiologist", "sharpshooter", "plumber", "insurance salesman", "clown", "empiricist", "defenestrator", "visigoth");
 		IGenerator classicHeroes = capitalizeFully(seq(heroName, "the", seq(opt(0.2f, heroOptional), heroAdj, heroClass, opt(0.2f, word("(lvl. ", range(1, 11), ")")))));
 
-		IGenerator firstName = alt("Bill", "Juliet", "Nigel", "Steve", "Parsnip", "Cucumber", "Ludwig", "Markus", "Sven", "Clark", "Carl", "Throatwobbler", "Raymond", "Nancy", "Brian", "Brunhilda", "Richard");
-		IGenerator lastNameComponent = alt("Smith", "Weston", "Banana", "Drum", "Forklift", "Ampersand", "Fruitbat", "Fhtagn", "Svenson", "Stein", "Gutenabend", "Mangrove", "Bigglesworth", "Larch", "Semicolon", "Wurst", "Nixon", "Baden");
+		IGenerator firstName = alt("Bill", "Juliet", "Nigel", "Steve", "Parsnip", "Cucumber", "Ludwig", "Markus", "Sven", "Clark", "Carl", "Throatwobbler", "Raymond", "Nancy", "Brian", "Brunhilda", "Richard", "Rupert");
+		IGenerator lastNameComponent = alt("Smith", "Weston", "Banana", "Drum", "Forklift", "Ampersand", "Fruitbat", "Fhtagn", "Svenson", "Stein", "Gutenabend", "Mangrove", "Bigglesworth", "Larch", "Semicolon", "Wurst", "Nixon", "Baden", "Priapus");
 		IGenerator lastName = alt(lastNameComponent, word(lastNameComponent, "-", lastNameComponent));
-		IGenerator pseudonym = alt("Duckie", "Nosepicker", "Snort", "Bomber", "Ouch", "Anvil", "Halfslab", "Radiator", "Barbie", "Biggles", "Income Tax", "Not In Face", "Tea Time", "Twerk", "Mutalisk", "Bueno", "Sixpack");
+		IGenerator pseudonym = alt("Duckie", "Nosepicker", "Snort", "Bomber", "Ouch", "Anvil", "Halfslab", "Radiator", "Barbie", "Biggles", "Income Tax", "Not In Face", "Tea Time", "Twerk", "Mutalisk", "Bueno", "Sixpack", "Yellow Snow");
 		IGenerator namePrefix = alt("Dr.", "Rev.", "Ms", "Mr", "Prof.", "Hon.", "Sgt.", "Cmdr.", "Sir", "Lady", "Comrade", "His Magnificence", "Her Holiness", "The Right Honourable");
 		IGenerator middleName = alt("W.", "T.", "F.");
 		IGenerator nameSuffix = alt("M.Sc", "Ph.D", "OBE", "Jr.", "Sr.", "III", "II", "Esq.");
@@ -63,7 +63,7 @@ public class LoreGenerator {
 	}
 
 	private static IGenerator createLoreGenerator() {
-		IGenerator adj1 = alt("overpowered", "misspelled", "store-brand", "unsettling", "unremarkable", "sleazy", "boring", "golden", "junky");
+		IGenerator adj1 = alt("overpowered", "misspelled", "store-brand", "unsettling", "unremarkable", "sleazy", "boring", "golden", "junky", "ergonomic", "low voltage", "many-angled");
 		IGenerator adj2 = alt("cursed", "legendary", "unique", "penultimate", "awesome", "suboptimal", "mighty", "ridiculously", "slightly");
 		IGenerator adjs = seq(opt(0.7f, adj2), adj1);
 		IGenerator parts = alt("codpiece", "loincloth", "tootbrush", "dental floss", "eggbeater", "rubber chicken with a pulley in the middle", "shovel", "hammoc", "panties", "spatula", "fedora");
@@ -74,7 +74,7 @@ public class LoreGenerator {
 		IGenerator placeWithAdj = seq(kingdomish, "of", kingdomAdjective, opt(0.2f, seq("and", kingdomAdjective)));
 		IGenerator mountainName = alt("lard", "butter", "rotten eggs", "brimstone", "newts", "doom", "croc", "flipflop");
 		IGenerator mountain = seq(opt(0.6f, placeAdj), "Mt.", mountainName);
-		final IGenerator hardcodedPlaces = alt("dalania", "prussia", "foobaria", "hot dog stand", "abyssinia", "zanzibar", "eastasia", "freedonia", "latveria", "woolloomooloo", "breslau", "uzbekistan", "north korea", "lower intestine");
+		final IGenerator hardcodedPlaces = alt("dalania", "prussia", "foobaria", "hot dog stand", "abyssinia", "zanzibar", "eastasia", "freedonia", "latveria", "woolloomooloo", "breslau", "uzbekistan", "north korea", "lower intestine", "hyperborea");
 		IGenerator places = capitalizeFully(alt(placeWithAdj, mountain, hardcodedPlaces));
 
 		IGenerator otherPeople = alt("youtube personalities", "dwarves", "villagers", "elves", "tax collectors", "quality testers", "boring people");
@@ -92,7 +92,7 @@ public class LoreGenerator {
 		IGenerator itemAction = alt("beating", "bleeding", "winds", "things", word(sub("item", "thing"), "ing"), "cooking", "looting", "scrubing", "backpain", "hernia");
 		IGenerator itemType = alt(sub("item", "stuff"), alt("gizmo", "thingmajig", "doodad", "tat", "thingie"));
 		IGenerator item = capitalize(seq(opt(0.9f, adjs), itemType, opt(0.9f, seq("of", itemAction))));
-		IGenerator fullItem = seq(opt(0.1f, itemModifier), item);
+		IGenerator fullItem = seq(opt(0.1f, itemModifier), item, opt(0.05f, seq("(TM)")));
 
 		IGenerator taunt = alt("wimp", "noob", "git", "fool", "that scoundrel", "scumbag");
 		IGenerator playerGet = seq(alt("stolen from", "found in", "bought in", "dug out in", "smuggled from"), places);
@@ -115,7 +115,7 @@ public class LoreGenerator {
 		IGenerator restoredInfo = seq("restored by", organization);
 		IGenerator recent = seq("Recently", alt(ownerInfo, restoredInfo));
 
-		IGenerator extra = alt("$1.99 each", "5 quids in plain wrapper", "Accept no substitues", "Made in China", "Batteries not included");
+		IGenerator extra = alt("$1.99 each", "5 quids in plain wrapper", "Accept no substitues", "Made in China", "Batteries not included", "Patent pending");
 		return word(fullItem, opt(0.5f, seq(",", origin)), opt(0.5f, seq(".", recent)), opt(0.2f, seq(".", extra)));
 	}
 
@@ -128,7 +128,7 @@ public class LoreGenerator {
 		}
 
 		for (int i = 0; i < 50; i++) {
-			System.out.println(generate(heroGenerator, Maps.<String, String> newHashMap()));
+			System.out.println(generateName());
 		}
 	}
 }

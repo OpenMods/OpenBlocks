@@ -401,19 +401,24 @@ public class OpenBlocks {
 			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
 		}
 		if (Enchantments.flimFlam != null) {
-			FlimFlamRegistry.registerFlimFlam("teleport", 3, 15, new TeleportFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("inventory-shuffle", 10, 10, new InventoryShuffleFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("useless-tool", 10, 50, new UselessToolFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("bane", 20, 50, new BaneFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("epic-lore", 30, 30, new LoreFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("living-rename", 30, 10, new RenameFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("squid", 10, 20, new SquidFilmFlam());
-			FlimFlamRegistry.registerFlimFlam("sheep-dye", 10, 5, new SheepDyeFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("invisible-mobs", 10, 10, new InvisibleMobsFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("sound", 40, 3, new SoundFlimFlam()).markSilent();
-			FlimFlamRegistry.registerFlimFlam("mount", 5, 10, new MountFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("encase", 5, 50, new EncaseFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("inventory-shuffle", 50, 100, new InventoryShuffleFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("useless-tool", 125, 50, new UselessToolFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("bane", 125, 100, new BaneFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("epic-lore", 10, 100, new LoreFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("living-rename", 10, 100, new RenameFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("squid", 75, 50, new SquidFilmFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("sheep-dye", 5, 50, new SheepDyeFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("invisible-mobs", 25, 10, new InvisibleMobsFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("sound", 5, 150, new SoundFlimFlam()).markSilent().markSafe();
 
+			FlimFlamRegistry.registerFlimFlam("snowballs", 50, 50, new SnowballsFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("teleport", 100, 30, new TeleportFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("mount", 150, 25, new MountFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("encase", 200, 50, new EncaseFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("creepers", 60, 50, new DummyCreepersFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("disarm", 50, 50, new ItemDropFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("effect", 75, 75, new EffectFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("skyblock", 250, 150, new SkyblockFlimFlam());
 		}
 	}
 

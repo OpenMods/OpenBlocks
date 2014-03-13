@@ -137,7 +137,7 @@ public class FlimFlamEnchantmentsHandler {
 		List<IFlimFlamEffect> selectedEffects = Lists.newArrayList();
 		Set<String> blacklist = getBlacklist();
 		for (IFlimFlamEffect effectMeta : FlimFlamRegistry.getFlimFlams())
-			if (effectMeta.cost() <= maxCost && !blacklist.contains(effectMeta.name())) {
+			if (effectMeta.cost() <= maxCost && (!Config.safeFlimFlams || effectMeta.isSafe()) && !blacklist.contains(effectMeta.name())) {
 				selectedEffects.add(effectMeta);
 				totalWeight += effectMeta.weight();
 			}
@@ -155,11 +155,15 @@ public class FlimFlamEnchantmentsHandler {
 				final IFlimFlamEffect effectMeta = it.next();
 				currentWeight += effectMeta.weight();
 				if (selectedWeight <= currentWeight) {
-					if (effectMeta.action().execute(player)) {
-						property.luck += effectMeta.cost();
-						Log.info("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
-						if (!effectMeta.isSilent()) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
-						return;
+					try {
+						if (effectMeta.action().execute(player)) {
+							property.luck += effectMeta.cost();
+							Log.info("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
+							if (!effectMeta.isSilent()) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
+							return;
+						}
+					} catch (Throwable t) {
+						Log.warn(t, "Error during flimflam '%s' execution", effectMeta.name());
 					}
 					totalWeight -= effectMeta.weight();
 					it.remove();
@@ -190,7 +194,7 @@ public class FlimFlamEnchantmentsHandler {
 
 		if (property.luck > -LUCK_MARGIN || property.cooldown-- > 0) return false;
 		property.cooldown = EFFECT_DELAY;
-		double probability = Math.abs(Math.atan(property.luck / 250.0) / Math.PI);
+		double probability = 0.75 * 2.0 * Math.abs(Math.atan(property.luck / 250.0) / Math.PI);
 		double r = random.nextDouble();
 		return r < probability;
 	}
