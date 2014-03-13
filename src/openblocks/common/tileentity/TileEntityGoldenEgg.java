@@ -1,16 +1,14 @@
 package openblocks.common.tileentity;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
-import openblocks.common.entity.EntityMutant;
 import openmods.OpenMods;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;

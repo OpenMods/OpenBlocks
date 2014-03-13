@@ -1,24 +1,20 @@
 package openblocks.common.entity.ai;
 
-import java.util.List;
 import java.util.Random;
 
-import openblocks.common.entity.EntityLuggage;
-import openblocks.common.entity.EntityMiniMe;
-import openmods.OpenMods;
-import openmods.utils.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
+import openblocks.common.entity.EntityMiniMe;
+import openmods.OpenMods;
+import openmods.utils.BlockProperties;
+import openmods.utils.Coord;
+import openmods.utils.OpenModsFakePlayer;
 
 public class EntityAIBreakCrop extends EntityAIBase {
 
@@ -28,7 +24,7 @@ public class EntityAIBreakCrop extends EntityAIBase {
 	private boolean validCoord = false;
 	private int tickOffset = 0;
 	private Random rand;
-	
+
 	public EntityAIBreakCrop(EntityMiniMe minime) {
 		this.minime = minime;
 		this.pathFinder = minime.getNavigator();
@@ -36,40 +32,39 @@ public class EntityAIBreakCrop extends EntityAIBase {
 		rand = new Random(minime.entityId);
 		tickOffset = rand.nextInt(10);
 	}
-	
+
 	@Override
 	public boolean shouldExecute() {
 		if (!pathFinder.noPath()) return false;
-		boolean hasTicked = (OpenMods.proxy.getTicks(minime.worldObj) + tickOffset) % 10 == 0;
+		boolean hasTicked = (OpenMods.proxy.getTicks(minime.worldObj) + tickOffset) % 4 == 0;
 		if (hasTicked && minime.worldObj != null && !minime.worldObj.isRemote) {
-			for (int i = 0; i < 10; i++) {
-				int x = rand.nextInt(12) - 6;
+			for (int i = 0; i < 20; i++) {
+				int x = rand.nextInt(16) - 8;
 				int y = rand.nextInt(3) - 1;
-				int z = rand.nextInt(12) - 6;
+				int z = rand.nextInt(16) - 8;
 				blockCoord = new Coord(
-					(int)(x + minime.posX),
-					(int)(y + minime.posY),
-					(int)(z + minime.posZ)
-				);
-				if (canHarvestBlock(blockCoord)) {
-					return true;
-				}
+						(int)(x + minime.posX),
+						(int)(y + minime.posY),
+						(int)(z + minime.posZ)
+						);
+				if (canHarvestBlock(blockCoord)) { return true; }
 				blockCoord = null;
 			}
-		}		
+		}
 		return false;
 	}
 
 	@Override
 	public void resetTask() {
 		pathFinder.clearPathEntity();
+		blockCoord = null;
 	}
 
 	@Override
 	public boolean continueExecuting() {
 		return minime.isEntityAlive() &&
 				!pathFinder.noPath() &&
-				blockCoord != null && 
+				blockCoord != null &&
 				canHarvestBlock(blockCoord);
 	}
 
@@ -86,13 +81,13 @@ public class EntityAIBreakCrop extends EntityAIBase {
 		World world = minime.worldObj;
 		if (!world.isRemote && blockCoord != null && canHarvestBlock(blockCoord)) {
 			if (minime.getDistance(0.5 + blockCoord.x, 0.5 + blockCoord.y, 0.5 + blockCoord.z) < 1.0) {
-				
+
 				EntityPlayer fakePlayer = new OpenModsFakePlayer(world);
 				fakePlayer.inventory.currentItem = 0;
-				
+
 				Block block = BlockProperties.getBlock(blockCoord, world);
 				int meta = BlockProperties.getBlockMetadata(blockCoord, world);
-				
+
 				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(
 						blockCoord.x,
 						blockCoord.y,
@@ -101,7 +96,7 @@ public class EntityAIBreakCrop extends EntityAIBase {
 						block,
 						meta,
 						fakePlayer);
-				
+
 				if (MinecraftForge.EVENT_BUS.post(event)) return;
 
 				if (ForgeHooks.canHarvestBlock(block, fakePlayer, meta)) {
