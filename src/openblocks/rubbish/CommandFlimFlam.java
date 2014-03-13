@@ -47,16 +47,16 @@ public class CommandFlimFlam implements ICommand {
 
 		String effectName = (params.length > 1)? params[1] : null;
 
-		IFlimFlamEffect effect;
+		IFlimFlamEffect meta;
 		if (effectName == null) {
-			effect = CollectionUtils.getRandom(FlimFlamRegistry.getFlimFlams());
-			effectName = effect.name();
+			meta = CollectionUtils.getRandom(FlimFlamRegistry.getFlimFlams());
+			effectName = meta.name();
 		} else {
-			effect = FlimFlamRegistry.getFlimFlamByName(effectName);
-			if (effect == null) throw error("openblocks.misc.command.no_flim_flam");
+			meta = FlimFlamRegistry.getFlimFlamByName(effectName);
+			if (meta == null) throw error("openblocks.misc.command.no_flim_flam");
 		}
 
-		if (effect.execute(player)) {
+		if (meta.action().execute(player)) {
 			respond(sender, "openblocks.misc.command.flim_flam_source", playerName, effectName);
 			if (!player.equals(sender)) respond(player, "openblocks.misc.command.flim_flam_target");
 		} else throw error("openblocks.misc.command.flim_flam_failed");

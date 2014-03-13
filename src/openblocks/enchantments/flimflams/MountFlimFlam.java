@@ -11,11 +11,11 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 import openmods.utils.CollectionUtils;
 import openmods.utils.WorldUtils;
 
-public class MountFlimFlam implements IFlimFlamEffect {
+public class MountFlimFlam implements IFlimFlamAction {
 
 	private static final IEntitySelector SAFE_SELECTOR = new IEntitySelector() {
 		@Override
@@ -34,26 +34,6 @@ public class MountFlimFlam implements IFlimFlamEffect {
 		EntityLiving selected = CollectionUtils.getRandom(mobs);
 		target.mountEntity(selected);
 		return true;
-	}
-
-	@Override
-	public String name() {
-		return "mount";
-	}
-
-	@Override
-	public int weight() {
-		return 5;
-	}
-
-	@Override
-	public int cost() {
-		return 10;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

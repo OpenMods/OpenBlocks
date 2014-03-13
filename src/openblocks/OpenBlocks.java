@@ -401,18 +401,18 @@ public class OpenBlocks {
 			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
 		}
 		if (Enchantments.flimFlam != null) {
-			FlimFlamRegistry.registerAttackFlimFlam(new TeleportFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new InventoryShuffleFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new UselessToolFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new BaneFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new LoreFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new RenameFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new SquidFilmFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new SheepDyeFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new InvisibleMobsFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new SoundFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new MountFlimFlam());
-			FlimFlamRegistry.registerAttackFlimFlam(new EncaseFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("teleport", 3, 15, new TeleportFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("inventory-shuffle", 10, 10, new InventoryShuffleFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("useless-tool", 10, 50, new UselessToolFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("bane", 20, 50, new BaneFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("epic-lore", 30, 30, new LoreFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("living-rename", 30, 10, new RenameFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("squid", 10, 20, new SquidFilmFlam());
+			FlimFlamRegistry.registerFlimFlam("sheep-dye", 10, 5, new SheepDyeFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("invisible-mobs", 10, 10, new InvisibleMobsFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("sound", 40, 3, new SoundFlimFlam()).markSilent();
+			FlimFlamRegistry.registerFlimFlam("mount", 5, 10, new MountFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("encase", 5, 50, new EncaseFlimFlam());
 
 		}
 	}

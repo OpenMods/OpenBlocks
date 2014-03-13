@@ -3,9 +3,9 @@ package openblocks.enchantments.flimflams;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 
-public class TeleportFlimFlam implements IFlimFlamEffect {
+public class TeleportFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -18,26 +18,6 @@ public class TeleportFlimFlam implements IFlimFlamEffect {
 		e.motionZ = world.rand.nextGaussian();
 		world.spawnEntityInWorld(e);
 		return true;
-	}
-
-	@Override
-	public String name() {
-		return "teleport";
-	}
-
-	@Override
-	public int weight() {
-		return 3;
-	}
-
-	@Override
-	public int cost() {
-		return 15;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

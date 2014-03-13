@@ -5,11 +5,11 @@ import java.util.Random;
 
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayerMP;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 
 import com.google.common.collect.ImmutableList;
 
-public class SquidFilmFlam implements IFlimFlamEffect {
+public class SquidFilmFlam implements IFlimFlamAction {
 
 	private static final Random random = new Random();
 
@@ -34,26 +34,6 @@ public class SquidFilmFlam implements IFlimFlamEffect {
 		target.worldObj.spawnEntityInWorld(squid);
 		squid.mountEntity(target);
 		return true;
-	}
-
-	@Override
-	public String name() {
-		return "squid";
-	}
-
-	@Override
-	public int weight() {
-		return 10;
-	}
-
-	@Override
-	public int cost() {
-		return 20;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

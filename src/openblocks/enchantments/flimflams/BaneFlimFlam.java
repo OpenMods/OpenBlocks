@@ -3,9 +3,9 @@ package openblocks.enchantments.flimflams;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 
-public class BaneFlimFlam implements IFlimFlamEffect {
+public class BaneFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -15,26 +15,6 @@ public class BaneFlimFlam implements IFlimFlamEffect {
 				return true;
 			}
 		}
-		return false;
-	}
-
-	@Override
-	public String name() {
-		return "bane";
-	}
-
-	@Override
-	public int weight() {
-		return 20;
-	}
-
-	@Override
-	public int cost() {
-		return 50;
-	}
-
-	@Override
-	public boolean isSilent() {
 		return false;
 	}
 

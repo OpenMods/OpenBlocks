@@ -6,14 +6,9 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 
-public class InventoryShuffleFlimFlam implements IFlimFlamEffect {
-
-	@Override
-	public String name() {
-		return "inventoryshuffle";
-	}
+public class InventoryShuffleFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -22,21 +17,6 @@ public class InventoryShuffleFlimFlam implements IFlimFlamEffect {
 		Collections.shuffle(stacks);
 		target.inventory.mainInventory = stacks.toArray(mainInventory);
 		return true;
-	}
-
-	@Override
-	public int weight() {
-		return 10;
-	}
-
-	@Override
-	public int cost() {
-		return 10;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

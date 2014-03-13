@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 import openblocks.rubbish.LoreGenerator;
 import openmods.utils.WorldUtils;
 
@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Strings;
 
-public class RenameFlimFlam implements IFlimFlamEffect {
+public class RenameFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -31,26 +31,6 @@ public class RenameFlimFlam implements IFlimFlamEffect {
 			}
 		}
 
-		return false;
-	}
-
-	@Override
-	public String name() {
-		return "living-rename";
-	}
-
-	@Override
-	public int weight() {
-		return 30;
-	}
-
-	@Override
-	public int cost() {
-		return 10;
-	}
-
-	@Override
-	public boolean isSilent() {
 		return false;
 	}
 

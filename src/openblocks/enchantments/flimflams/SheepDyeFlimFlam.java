@@ -7,10 +7,10 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 import openmods.utils.WorldUtils;
 
-public class SheepDyeFlimFlam implements IFlimFlamEffect {
+public class SheepDyeFlimFlam implements IFlimFlamAction {
 
 	private static final Random random = new Random();
 
@@ -25,26 +25,6 @@ public class SheepDyeFlimFlam implements IFlimFlamEffect {
 		int color = chosenOne.getFleeceColor();
 		chosenOne.setFleeceColor(color + random.nextInt(15));
 		return true;
-	}
-
-	@Override
-	public String name() {
-		return "sheep-dye";
-	}
-
-	@Override
-	public int weight() {
-		return 10;
-	}
-
-	@Override
-	public int cost() {
-		return 5;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

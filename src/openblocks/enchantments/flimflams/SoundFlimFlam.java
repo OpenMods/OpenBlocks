@@ -4,12 +4,12 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet62LevelSound;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 import openmods.utils.CollectionUtils;
 
 import com.google.common.collect.ImmutableList;
 
-public class SoundFlimFlam implements IFlimFlamEffect {
+public class SoundFlimFlam implements IFlimFlamAction {
 
 	private static final List<String> sounds = ImmutableList.of(
 			"openblocks:mosquito",
@@ -30,26 +30,6 @@ public class SoundFlimFlam implements IFlimFlamEffect {
 	public boolean execute(EntityPlayerMP target) {
 		String sound = CollectionUtils.getRandom(sounds);
 		target.playerNetServerHandler.sendPacketToPlayer(new Packet62LevelSound(sound, target.posX, target.posY, target.posZ, 1, 1));
-		return true;
-	}
-
-	@Override
-	public String name() {
-		return "sound";
-	}
-
-	@Override
-	public int weight() {
-		return 40;
-	}
-
-	@Override
-	public int cost() {
-		return 3;
-	}
-
-	@Override
-	public boolean isSilent() {
 		return true;
 	}
 

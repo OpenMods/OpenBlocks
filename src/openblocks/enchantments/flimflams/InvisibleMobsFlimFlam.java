@@ -9,10 +9,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 import openmods.utils.WorldUtils;
 
-public class InvisibleMobsFlimFlam implements IFlimFlamEffect {
+public class InvisibleMobsFlimFlam implements IFlimFlamAction {
 
 	private static final int MIN_10 = 10 * 60 * 20;
 	private static final Random random = new Random();
@@ -31,26 +31,6 @@ public class InvisibleMobsFlimFlam implements IFlimFlamEffect {
 		}
 
 		return true;
-	}
-
-	@Override
-	public String name() {
-		return "invisible-mobs";
-	}
-
-	@Override
-	public int weight() {
-		return 10;
-	}
-
-	@Override
-	public int cost() {
-		return 10;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

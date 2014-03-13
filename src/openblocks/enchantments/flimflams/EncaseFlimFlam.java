@@ -3,9 +3,9 @@ package openblocks.enchantments.flimflams;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 
-public class EncaseFlimFlam implements IFlimFlamEffect {
+public class EncaseFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -37,26 +37,6 @@ public class EncaseFlimFlam implements IFlimFlamEffect {
 		}
 
 		return true;
-	}
-
-	@Override
-	public String name() {
-		return "encase";
-	}
-
-	@Override
-	public int weight() {
-		return 5;
-	}
-
-	@Override
-	public int cost() {
-		return 50;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

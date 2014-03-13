@@ -8,11 +8,11 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 import openmods.utils.BlockUtils;
 import openmods.utils.CollectionUtils;
 
-public class UselessToolFlimFlam implements IFlimFlamEffect {
+public class UselessToolFlimFlam implements IFlimFlamAction {
 
 	private static final Random random = new Random();
 
@@ -116,26 +116,6 @@ public class UselessToolFlimFlam implements IFlimFlamEffect {
 		BlockUtils.dropItemStackInWorld(target.worldObj, target.posX, target.posY, target.posZ, dropped);
 
 		return true;
-	}
-
-	@Override
-	public String name() {
-		return "useless-tool";
-	}
-
-	@Override
-	public int weight() {
-		return 10;
-	}
-
-	@Override
-	public int cost() {
-		return 50;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }

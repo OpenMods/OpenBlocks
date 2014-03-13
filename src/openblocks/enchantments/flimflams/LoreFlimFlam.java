@@ -9,7 +9,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamAction;
 import openblocks.rubbish.LoreGenerator;
 import openmods.utils.ItemUtils;
 
@@ -17,7 +17,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
-public class LoreFlimFlam implements IFlimFlamEffect {
+public class LoreFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -96,26 +96,6 @@ public class LoreFlimFlam implements IFlimFlamEffect {
 		else if (item instanceof ItemBucket) return "bucket";
 
 		return "junk";
-	}
-
-	@Override
-	public String name() {
-		return "epic-lore";
-	}
-
-	@Override
-	public int weight() {
-		return 30;
-	}
-
-	@Override
-	public int cost() {
-		return 30;
-	}
-
-	@Override
-	public boolean isSilent() {
-		return false;
 	}
 
 }
