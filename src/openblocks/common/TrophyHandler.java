@@ -55,7 +55,7 @@ public class TrophyHandler {
 		PigZombie(new ItemDropBehavior(20000, new ItemStack(Item.goldNugget))),
 		Bat(1.0, -0.3),
 		Zombie(),
-		Witch(0.35),
+		Witch(0.35, new WitchBehavior()),
 		Villager(),
 		Ozelot() {
 			@Override
