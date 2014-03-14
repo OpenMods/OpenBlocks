@@ -4,9 +4,18 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IFlimFlamAction;
 
 public class SkyblockFlimFlam implements IFlimFlamAction {
+
+	private static final ForgeDirection BUILD[] = new ForgeDirection[] {
+			ForgeDirection.DOWN,
+			ForgeDirection.EAST,
+			ForgeDirection.NORTH,
+			ForgeDirection.SOUTH,
+			ForgeDirection.WEST,
+	};
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -17,12 +26,13 @@ public class SkyblockFlimFlam implements IFlimFlamAction {
 
 		final World world = target.worldObj;
 
-		for (int dy = 0; dy <= 2; dy++)
-			if (!world.isAirBlock(coordX, coordY + dy, coordZ)) return false;
+		for (ForgeDirection d : BUILD)
+			if (!world.isAirBlock(coordX + d.offsetX, coordY + d.offsetY, coordZ + d.offsetZ)) return false;
 
-		world.setBlock(coordX, coordY, coordZ, Block.ice.blockID);
+		for (ForgeDirection d : BUILD)
+			world.setBlock(coordX + d.offsetX, coordY + d.offsetY, coordZ + d.offsetZ, Block.ice.blockID);
 
-		target.setPositionAndUpdate(coordX + 0.5, coordY + 2, coordZ + 0.5);
+		target.setPositionAndUpdate(coordX + 0.5, coordY + 1, coordZ + 0.5);
 		return true;
 	}
 }
