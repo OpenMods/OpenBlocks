@@ -19,12 +19,13 @@ public class SkyblockFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
+		final World world = target.worldObj;
+		if (world.provider.hasNoSky || world.provider.isHellWorld) return false;
+
 		int coordX = MathHelper.floor_double(target.posX);
 		int currentY = MathHelper.floor_double(target.posY);
 		int coordY = Math.min(currentY + 150, 250);
 		int coordZ = MathHelper.floor_double(target.posZ);
-
-		final World world = target.worldObj;
 
 		for (ForgeDirection d : BUILD)
 			if (!world.isAirBlock(coordX + d.offsetX, coordY + d.offsetY, coordZ + d.offsetZ)) return false;

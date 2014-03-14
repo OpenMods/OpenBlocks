@@ -9,15 +9,13 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class WitchBehavior implements ITrophyBehavior {
 
 	@Override
-	public int executeActivateBehavior(TileEntityTrophy tile,
-			EntityPlayer player) {
+	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		player.addPotionEffect(new PotionEffect(Potion.blindness.id, 70, 1));
-		player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.get_witched"));		
+		player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.get_witched"));
 		return 0;
 	}
 
 	@Override
-	public void executeTickBehavior(TileEntityTrophy tile) {
-	}
+	public void executeTickBehavior(TileEntityTrophy tile) {}
 
 }
