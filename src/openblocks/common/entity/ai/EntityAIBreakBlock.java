@@ -3,6 +3,7 @@ package openblocks.common.entity.ai;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
@@ -10,23 +11,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
-import openblocks.common.entity.EntityMiniMe;
 import openmods.OpenMods;
 import openmods.utils.BlockProperties;
 import openmods.utils.Coord;
 import openmods.utils.OpenModsFakePlayer;
 
-public class EntityAIBreakCrop extends EntityAIBase {
+public class EntityAIBreakBlock extends EntityAIBase {
 
-	private EntityMiniMe minime;
+	private EntityLiving entity;
 	private PathNavigate pathFinder;
 	private Coord blockCoord;
 	private boolean validCoord = false;
 	private int tickOffset = 0;
 	private Random rand;
 
-	public EntityAIBreakCrop(EntityMiniMe minime) {
-		this.minime = minime;
+	public EntityAIBreakBlock(EntityLiving minime) {
+		this.entity = minime;
 		this.pathFinder = minime.getNavigator();
 		setMutexBits(3);
 		rand = new Random(minime.entityId);
@@ -36,16 +36,16 @@ public class EntityAIBreakCrop extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		if (!pathFinder.noPath()) return false;
-		boolean hasTicked = (OpenMods.proxy.getTicks(minime.worldObj) + tickOffset) % 4 == 0;
-		if (hasTicked && minime.worldObj != null && !minime.worldObj.isRemote) {
+		boolean hasTicked = (OpenMods.proxy.getTicks(entity.worldObj) + tickOffset) % 4 == 0;
+		if (hasTicked && entity.worldObj != null && !entity.worldObj.isRemote) {
 			for (int i = 0; i < 20; i++) {
 				int x = rand.nextInt(16) - 8;
 				int y = rand.nextInt(3) - 1;
 				int z = rand.nextInt(16) - 8;
 				blockCoord = new Coord(
-						(int)(x + minime.posX),
-						(int)(y + minime.posY),
-						(int)(z + minime.posZ)
+						(int)(x + entity.posX),
+						(int)(y + entity.posY),
+						(int)(z + entity.posZ)
 						);
 				if (canHarvestBlock(blockCoord)) { return true; }
 				blockCoord = null;
@@ -62,7 +62,7 @@ public class EntityAIBreakCrop extends EntityAIBase {
 
 	@Override
 	public boolean continueExecuting() {
-		return minime.isEntityAlive() &&
+		return entity.isEntityAlive() &&
 				!pathFinder.noPath() &&
 				blockCoord != null &&
 				canHarvestBlock(blockCoord);
@@ -78,9 +78,9 @@ public class EntityAIBreakCrop extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		World world = minime.worldObj;
+		World world = entity.worldObj;
 		if (!world.isRemote && blockCoord != null && canHarvestBlock(blockCoord)) {
-			if (minime.getDistance(0.5 + blockCoord.x, 0.5 + blockCoord.y, 0.5 + blockCoord.z) < 1.0) {
+			if (entity.getDistance(0.5 + blockCoord.x, 0.5 + blockCoord.y, 0.5 + blockCoord.z) < 1.0) {
 
 				EntityPlayer fakePlayer = new OpenModsFakePlayer(world);
 				fakePlayer.inventory.currentItem = 0;
@@ -92,7 +92,7 @@ public class EntityAIBreakCrop extends EntityAIBase {
 						blockCoord.x,
 						blockCoord.y,
 						blockCoord.z,
-						minime.worldObj,
+						entity.worldObj,
 						block,
 						meta,
 						fakePlayer);
@@ -114,7 +114,8 @@ public class EntityAIBreakCrop extends EntityAIBase {
 		}
 	}
 
-	private boolean canHarvestBlock(Coord coord) {
-		return BlockProperties.isFlower(coord, minime.worldObj);
+	public boolean canHarvestBlock(Coord coord) {
+		return BlockProperties.isFlower(coord, entity.worldObj) ||
+				BlockProperties.getBlock(coord, entity.worldObj) == Block.torchWood;
 	}
 }

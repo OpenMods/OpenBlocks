@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import openblocks.common.entity.ai.EntityAIBreakCrop;
+import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -46,7 +46,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		getNavigator().setCanSwim(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIPickupPlayer(this));
-		this.tasks.addTask(3, new EntityAIBreakCrop(this));
+		this.tasks.addTask(3, new EntityAIBreakBlock(this));
 		this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
 		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
