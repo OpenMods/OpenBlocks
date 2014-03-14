@@ -68,6 +68,7 @@ openblocks.misc.selected_cannon=Kanone zum Zielen ausgewählt
 openblocks.misc.pointed_cannon=Kanone zielt nun auf %s, %s, %s
 openblocks.misc.change_mode=Wechsle zu %s-Modus
 openblocks.misc.change_size=Ändere Größe zu %sx%sx%s
+openblocks.misc.get_witched=Werde verhext!
 
 openblocks.misc.shape.sphere=Kugel
 openblocks.misc.shape.cylinder=Zylinder
