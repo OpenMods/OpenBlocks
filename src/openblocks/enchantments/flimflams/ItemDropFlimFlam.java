@@ -1,4 +1,4 @@
-package openblocks.common.entity;
+package openblocks.enchantments.flimflams;
 
 import java.util.Random;
 
