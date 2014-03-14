@@ -158,7 +158,7 @@ public class FlimFlamEnchantmentsHandler {
 					try {
 						if (effectMeta.action().execute(player)) {
 							property.luck += effectMeta.cost();
-							Log.info("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
+							Log.fine("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
 							if (!effectMeta.isSilent()) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
 							return;
 						}
