@@ -29,6 +29,7 @@ import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
 import openblocks.utils.ChangelogBuilder;
+import openmods.Log;
 import openmods.Mods;
 import openmods.OpenMods;
 import openmods.config.ConfigProcessing;
@@ -383,6 +384,8 @@ public class OpenBlocks {
 			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, RadioManager.instance);
 		}
 
+		FMLInterModComms.sendMessage("NotEnoughCodecs", "listCodecs", "");
+
 		proxy.preInit();
 	}
 
@@ -425,8 +428,13 @@ public class OpenBlocks {
 	@EventHandler
 	public void processMessage(FMLInterModComms.IMCEvent event) {
 		for (FMLInterModComms.IMCMessage m : event.getMessages()) {
-			if (m.isStringMessage() && m.key.equalsIgnoreCase("donateUrl")) {
+			if (m.isStringMessage() && "donateUrl".equalsIgnoreCase(m.key)) {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
+			}
+
+			if (m.isNBTMessage() && "knownCodecs".equalsIgnoreCase(m.key)) {
+				Log.info("Updating codec list with message from %s", m.getSender());
+				RadioManager.addCodecsInfo(m.getNBTValue());
 			}
 		}
 	}
