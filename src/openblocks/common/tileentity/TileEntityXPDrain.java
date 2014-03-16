@@ -65,6 +65,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 						// What're you going to do.
 						xpStack.amount = filled;
 						filled = tank.fill(ForgeDirection.UP, xpStack, true);
+
 						if (filled > 0) {
 							if (OpenMods.proxy.getTicks(worldObj) % 4 == 0) {
 								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
