@@ -81,7 +81,11 @@ openblocks.misc.shape.octagon=Achteck
 
 openblocks.misc.radio.too_many=Es laufen bereits zu viele Radios
 openblocks.misc.radio.invalid_stream=Ungültiger Stream
-openblocks.misc.radio.not_ready=Stream nicht bereit ready, versuche es später nochmal
+openblocks.misc.radio.invalid_url=Ungültige URL
+openblocks.misc.radio.url_not_found=URL nicht gefunden
+openblocks.misc.radio.unknown_stream_type=Unbekannter Stream-Typ
+openblocks.misc.radio.malformed_data=Fehlerhafte Daten im Stream
+openblocks.misc.radio.not_ready=Stream nicht bereit, versuche es später nochmal
 openblocks.misc.radio.unknown_error=Unbekannter Fehler
 openblocks.misc.radio.muted=Geräusche sind deaktiviert!
 
@@ -209,6 +213,9 @@ tile.openblocks.sky.inverted.name=Invertierter Himmelsblock
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=Das Radio erlaubt es dir, Internetradio zu spielen! Zunächst brauchst du Wellenkristalle, die du in Dungeon-Truhen findest oder von einem bestimmten Dorfbewohner bekommst. Platziere den Kristall ins Radio und gib diesem ein Redstone-Signal, um es anzuschalten.  Die Stärke des Redstone-Signals bestimmt die Lautstärke.\n\nIn der Konfigurations-Datei des Servers kannst du konfigurieren, welche Radiosender verfügbar sind.
 tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
+
+tile.openblocks.xpshower.name=XP-Dusche
+tile.openblocks.xpshower.description=Bringe eine XP-Dusche an einen Tank voller XP-Saft an und sie wird XP-Orbs ausschütten. Diese Orbs können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.
 
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
