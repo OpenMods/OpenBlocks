@@ -55,7 +55,6 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 	}
 
-	@SuppressWarnings("unused")
 	private static void renderBeam(TileEntityGoldenEgg egg, Tessellator tessellator, float partialTicks) {
 
 		float par2 = 0f, par4 = 0f, par6 = 0f;
