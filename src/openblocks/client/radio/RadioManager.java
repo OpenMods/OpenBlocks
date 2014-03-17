@@ -9,6 +9,8 @@ import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,7 +30,7 @@ import paulscode.sound.SoundSystemConfig;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
-import com.google.common.base.Throwables;
+import com.google.common.base.Strings;
 import com.google.common.collect.*;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -66,6 +68,16 @@ public class RadioManager implements IVillageTradeHandler {
 		}
 	}
 
+	public static final String OGG_EXT = "ogg";
+
+	private static final Map<String, String> PROTOCOLS = Maps.newHashMap();
+
+	static {
+		PROTOCOLS.put("audio/ogg", OGG_EXT);
+		PROTOCOLS.put("application/ogg", OGG_EXT);
+		PROTOCOLS.put("audio/vorbis", OGG_EXT);
+	}
+
 	public static RadioException error(String userMsg, String logMsg, Object... args) {
 		Log.warn(logMsg, args);
 		throw new RadioException(userMsg);
@@ -87,12 +99,6 @@ public class RadioManager implements IVillageTradeHandler {
 
 	public void init() {
 		MinecraftForge.EVENT_BUS.register(this);
-		try {
-			SoundSystemConfig.setCodec(UrlMeta.MP3_EXT, CodecMp3.class);
-		} catch (Throwable t) {
-			throw Throwables.propagate(t);
-		}
-
 		getRadioStations(); // preload
 	}
 
@@ -101,6 +107,16 @@ public class RadioManager implements IVillageTradeHandler {
 	@ForgeSubscribe
 	public void onReconfiguration(ConfigurationChange.Post evt) {
 		if (evt.check("radio", "radioStations")) stations = null;
+	}
+
+	public static void addCodecsInfo(NBTTagCompound codecs) {
+		NBTTagList data = codecs.getTagList("data");
+		for (int i = 0; i < data.tagCount(); i++) {
+			NBTTagCompound tag = (NBTTagCompound)data.tagAt(i);
+			String ext = tag.getString("ext");
+			String mime = tag.getString("mime");
+			PROTOCOLS.put(mime, ext);
+		}
 	}
 
 	public List<RadioStation> getRadioStations() {
@@ -173,13 +189,18 @@ public class RadioManager implements IVillageTradeHandler {
 
 			final UrlMeta ext = resolveStreamExt(url);
 
-			if (!ext.isResolved()) throw error("openblocks.misc.radio.not_ready", "Stream %s (soundId : %s) not yet resolved, aborting", url, soundId);
+			UrlMeta.Status status = ext.getStatus();
 
-			if (!ext.isValid()) throw error("openblocks.misc.radio.invalid_stream", "Invalid data in stream %s (soundId : %s), aborting", url, soundId);
+			if (!status.valid) throw error(status.message, "Error in stream %s (soundId : %s): %s", url, soundId, status);
+
+			String mimeType = ext.getContentType();
+			String fileExt = PROTOCOLS.get(mimeType);
+
+			if (Strings.isNullOrEmpty(fileExt)) throw error("openblocks.misc.radio.unknown_stream_type", "Unknown MIME type %s in stream %s", mimeType, url);
 
 			try {
 				URL realUrl = new URL(null, ext.getUrl(), AutoConnectingStreamHandler.createManaged(soundId));
-				String dummyFilename = "radio_dummy." + ext.getExtension();
+				String dummyFilename = "radio_dummy." + fileExt;
 				sndSystem.newStreamingSource(false, soundId, realUrl, dummyFilename, false, x, y, z, SoundSystemConfig.ATTENUATION_LINEAR, 32);
 				sndSystem.setVolume(soundId, volume);
 				sndSystem.play(soundId);
@@ -230,7 +251,7 @@ public class RadioManager implements IVillageTradeHandler {
 						urlMeta.put(url, data);
 					}
 					data.resolve();
-					Log.info("Finished preloading stream: %s", url);
+					Log.info("Finished preloading stream: %s, result %s, type %s", url, data.getStatus(), data.getContentType());
 				}
 			}
 		};

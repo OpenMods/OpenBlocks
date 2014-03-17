@@ -131,13 +131,12 @@ public class FlimFlamEnchantmentsHandler {
 		Luck property = getProperty(player);
 		if (property == null || !canFlimFlam(property)) return;
 		final int luck = property.luck;
-		final int maxCost = Math.abs(luck);
 
 		int totalWeight = 0;
 		List<IFlimFlamEffect> selectedEffects = Lists.newArrayList();
 		Set<String> blacklist = getBlacklist();
 		for (IFlimFlamEffect effectMeta : FlimFlamRegistry.getFlimFlams())
-			if (effectMeta.cost() <= maxCost && (!Config.safeFlimFlams || effectMeta.isSafe()) && !blacklist.contains(effectMeta.name())) {
+			if (effectMeta.canApply(luck) && (!Config.safeFlimFlams || effectMeta.isSafe()) && !blacklist.contains(effectMeta.name())) {
 				selectedEffects.add(effectMeta);
 				totalWeight += effectMeta.weight();
 			}
@@ -157,7 +156,7 @@ public class FlimFlamEnchantmentsHandler {
 				if (selectedWeight <= currentWeight) {
 					try {
 						if (effectMeta.action().execute(player)) {
-							property.luck += effectMeta.cost();
+							property.luck -= effectMeta.cost();
 							Log.fine("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
 							if (!effectMeta.isSilent()) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
 							return;

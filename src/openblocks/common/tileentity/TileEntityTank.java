@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.lang.ref.WeakReference;
 import java.util.*;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +11,6 @@ import net.minecraftforge.fluids.*;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
-import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -21,18 +19,49 @@ import openmods.liquids.GenericFluidHandler;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.Coord;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
 
-public class TileEntityTank extends SyncedTileEntity implements INeighbourAwareTile, IPlaceAwareTile, IActivateAwareTile, IExtendable {
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
-	public static int getTankCapacity() {
-		return FluidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank;
+public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, IExtendable {
+
+	public class RenderContext {
+		public EnumMap<ForgeDirection, TileEntityTank> neighbors = Maps.newEnumMap(ForgeDirection.class);
+
+		public RenderContext() {
+			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+				TileEntityTank tank = getTankInDirection(dir);
+				if (tank != null) neighbors.put(dir, tank);
+			}
+		}
+
+		public double getLiquidHeightForSide(ForgeDirection... sides) {
+			double renderHeight = getHeightForRender();
+			if (renderHeight <= 0) return 0;
+			if (renderHeight > 0.98) return 1.0;
+
+			double fullness = renderHeight + getFlowOffset();
+			int count = 1;
+			final FluidStack fluid = tank.getFluid();
+			for (ForgeDirection side : sides) {
+				TileEntityTank sideTank = neighbors.get(side);
+				if (sideTank != null && sideTank.canReceiveLiquid(fluid)) {
+					fullness += sideTank.getHeightForRender() + sideTank.getFlowOffset();
+					count++;
+				}
+			}
+			return Math.max(0, Math.min(1, fullness / count));
+		}
+
+		public boolean hasNeighbor(ForgeDirection side) {
+			return neighbors.containsKey(side);
+		}
 	}
 
-	/**
-	 * The tank holding the liquid
-	 */
 	private SyncableTank tank;
 
 	private double flowTimer = Math.random() * 100;
@@ -47,242 +76,167 @@ public class TileEntityTank extends SyncedTileEntity implements INeighbourAwareT
 		tank = new SyncableTank(getTankCapacity());
 	}
 
-	public HashMap<ForgeDirection, WeakReference<TileEntityTank>> neighbours = new HashMap<ForgeDirection, WeakReference<TileEntityTank>>();
-	public HashMap<ForgeDirection, Boolean> surroundingBlocks = new HashMap<ForgeDirection, Boolean>();
+	public static int getTankCapacity() {
+		return FluidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank;
+	}
 
 	public static final ForgeDirection[] horizontalDirections = new ForgeDirection[] { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST };
 
-	protected Comparator<TileEntityTank> sortBySpace = new Comparator<TileEntityTank>() {
+	private static final Comparator<TileEntityTank> sortBySpace = new Comparator<TileEntityTank>() {
 		@Override
 		public int compare(TileEntityTank c1, TileEntityTank c2) {
 			return c2.getSpace() - c1.getSpace();
 		}
 	};
 
-	/**
-	 * Tell neighbour tanks to update themselves
-	 */
-	protected void updateNeighbours() {
-		TileEntityTank up, down, north, south, east, west;
-		up = getTankInDirection(ForgeDirection.UP);
-		down = getTankInDirection(ForgeDirection.DOWN);
-		north = getTankInDirection(ForgeDirection.NORTH);
-		south = getTankInDirection(ForgeDirection.SOUTH);
-		east = getTankInDirection(ForgeDirection.EAST);
-		west = getTankInDirection(ForgeDirection.WEST);
-		if (up != null) up.findNeighbours();
-		if (down != null) down.findNeighbours();
-		if (north != null) north.findNeighbours();
-		if (south != null) south.findNeighbours();
-		if (east != null) east.findNeighbours();
-		if (west != null) west.findNeighbours();
-	}
-
-	/**
-	 * Find the neighbouring tanks and store them in a hashmap
-	 */
-	protected void findNeighbours() {
-		neighbours.clear();
-		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-			TileEntity neighbour = getTileInDirection(direction);
-			if (neighbour != null && neighbour instanceof TileEntityTank) {
-				neighbours.put(direction, new WeakReference<TileEntityTank>((TileEntityTank)neighbour));
-			}
-			surroundingBlocks.put(direction, !worldObj.isAirBlock(xCoord
-					+ direction.offsetX, yCoord + direction.offsetY, zCoord
-					+ direction.offsetZ));
+	private static final Comparator<TileEntityTank> sortByAmount = new Comparator<TileEntityTank>() {
+		@Override
+		public int compare(TileEntityTank c1, TileEntityTank c2) {
+			return c2.getAmount() - c1.getAmount();
 		}
-		if (!worldObj.isRemote) {
-			sendBlockEvent(0, 0);
-		}
-	}
+	};
 
-	public boolean hasBlockOnSide(ForgeDirection side) {
-		return surroundingBlocks.containsKey(side)
-				&& surroundingBlocks.get(side);
-	}
-
-	public TileEntityTank getTankInDirection(ForgeDirection direction) {
-		if (neighbours.containsKey(direction)) {
-			WeakReference<TileEntityTank> neighbour = neighbours.get(direction);
-			if (neighbour != null) {
-				TileEntityTank otherTank = neighbour.get();
-				if (otherTank == null) { return null; }
-				if (otherTank.isInvalid()) { return null; }
-				if (otherTank.canReceiveLiquid(getTank().getFluid())) { return otherTank; }
-			}
-		}
+	private TileEntityTank getTankInDirection(ForgeDirection direction) {
+		TileEntity neighbor = getTileInDirection(direction);
+		if (neighbor instanceof TileEntityTank && !neighbor.isInvalid()) return (TileEntityTank)neighbor;
 		return null;
 	}
 
-	public TileEntityTank[] getSurroundingTanks() {
-		ArrayList<TileEntityTank> tanks = new ArrayList<TileEntityTank>();
-		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-			TileEntityTank t = getTankInDirection(direction);
-			if (t != null) {
-				tanks.add(t);
-			}
-		}
-		return tanks.toArray(new TileEntityTank[tanks.size()]);
-	}
-
-	public ArrayList<TileEntityTank> getHorizontalTanksOrdererdBySpace(HashSet<TileEntityTank> except) {
-		ArrayList<TileEntityTank> horizontalTanks = new ArrayList<TileEntityTank>();
+	private List<TileEntityTank> getHorizontalTanks(Set<Coord> except) {
+		List<TileEntityTank> horizontalTanks = Lists.newArrayList();
+		Coord self = new Coord(xCoord, yCoord, zCoord);
 		for (ForgeDirection direction : horizontalDirections) {
-			TileEntityTank tank = getTankInDirection(direction);
-			if (tank != null && !except.contains(tank)) {
-				horizontalTanks.add(tank);
+			Coord neigbor = self.getAdjacentCoord(direction);
+			if (!except.contains(neigbor)) {
+				TileEntity te = getTankInDirection(direction);
+				if (te instanceof TileEntityTank) horizontalTanks.add((TileEntityTank)te);
 			}
 		}
-		Collections.sort(horizontalTanks, sortBySpace);
 		return horizontalTanks;
-	}
-
-	/**
-	 * Refresh the neighbours because something changed
-	 */
-	@Override
-	public void onNeighbourChanged(int blockId) {
-		findNeighbours();
-	}
-
-	@Override
-	public boolean receiveClientEvent(int eventId, int eventParam) {
-		if (worldObj.isRemote) {
-			findNeighbours();
-		}
-		return true;
-	}
-
-	public boolean containsValidLiquid() {
-		return tank.getFluid() != null;
-	}
-
-	@Override
-	protected void initialize() {
-		findNeighbours();
-		updateNeighbours();
 	}
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			HashSet<TileEntityTank> except = new HashSet<TileEntityTank>();
-			except.add(this);
-
-			// if we have a liquid
-			if (tank.getFluid() != null) {
-				// try to fill up the tank below with as much liquid as possible
-				TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
-				if (below != null) {
-					if (below.getSpace() > 0) {
-						FluidStack myLiquid = tank.getFluid().copy();
-						if (below.canReceiveLiquid(myLiquid)) {
-							int toFill = Math.min(below.getSpace(), myLiquid.amount);
-							myLiquid.amount = toFill;
-							int filled = below.fill(myLiquid, true, except);
-							tank.drain(filled, true);
-						}
-					}
-				}
-
-				if (containsValidLiquid()) {
-					// now fill up the horizontal tanks, start with the least
-					// full
-					ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
-					for (TileEntityTank horizontal : horizontals) {
-						FluidStack liquid = tank.getFluid();
-						if (horizontal.canReceiveLiquid(liquid)
-								&& liquid != null) {
-							int difference = tank.getFluidAmount()
-									- horizontal.getTank().getFluidAmount();
-							if (difference <= 0) continue;
-							int halfDifference = Math.max(difference / 2, 1);
-							FluidStack liquidCopy = liquid.copy();
-							liquidCopy.amount = Math.min(500, halfDifference);
-							int filled = horizontal.fill(liquidCopy, true, except);
-							tank.drain(filled, true);
-						}
-					}
-				}
-			}
+			Set<Coord> except = Sets.newHashSet(getPosition());
+			if (tank.getFluidAmount() > 0) updateTankBelow(except);
+			if (tank.getFluidAmount() > 0) updateHorizontalNeighbors(except);
 			sync();
-
 		} else {
 			flowTimer += 0.1f;
 		}
 	}
 
-	public boolean canReceiveLiquid(FluidStack liquid) {
-		if (tank.getFluid() == null) { return true; }
-		if (liquid == null) { return true; }
-		FluidStack otherLiquid = tank.getFluid();
-		if (otherLiquid != null) { return otherLiquid.isFluidEqual(liquid); }
-		return true;
+	private void updateHorizontalNeighbors(Set<Coord> except) {
+		List<TileEntityTank> horizontals = getHorizontalTanks(except);
+		Collections.sort(horizontals, sortBySpace);
+		for (TileEntityTank horizontal : horizontals) {
+			FluidStack liquid = tank.getFluid();
+			if (horizontal.canReceiveLiquid(liquid) && liquid != null) {
+				int difference = tank.getFluidAmount() - horizontal.getTank().getFluidAmount();
+				if (difference <= 1) continue;
+				FluidStack liquidCopy = liquid.copy();
+				liquidCopy.amount = Math.min(difference / 2, 500);
+				int filled = horizontal.fill(liquidCopy, true, except);
+				tank.drain(filled, true);
+			}
+		}
+	}
+
+	private void updateTankBelow(Set<Coord> except) {
+		TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
+		if (below != null && below.getSpace() > 0) {
+			FluidStack myLiquid = tank.getFluid().copy();
+			if (below.canReceiveLiquid(myLiquid)) {
+				int toFill = Math.min(below.getSpace(), myLiquid.amount);
+				myLiquid.amount = toFill;
+				int filled = below.fill(myLiquid, true, except);
+				tank.drain(filled, true);
+			}
+		}
+	}
+
+	private boolean canReceiveLiquid(FluidStack liquid) {
+		if (liquid == null) return true;
+		final FluidStack otherLiquid = tank.getFluid();
+		return otherLiquid == null || otherLiquid.isFluidEqual(liquid);
 	}
 
 	public IFluidTank getTank() {
 		return tank;
 	}
 
-	public boolean isFull() {
-		return tank.getSpace() == 0;
-	}
-
-	public int getSpace() {
+	private int getSpace() {
 		return tank.getSpace();
 	}
 
-	public int fill(FluidStack resource, boolean doFill, HashSet<TileEntityTank> except) {
-		TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
-		int filled = 0;
-		if (except == null) {
-			except = new HashSet<TileEntityTank>();
-		}
-		if (resource == null) { return 0; }
+	private int getAmount() {
+		return tank.getFluidAmount();
+	}
 
-		int startAmount = resource.amount;
-		if (except.contains(this)) { return 0; }
-		except.add(this);
+	private int fill(FluidStack resource, boolean doFill, Set<Coord> except) {
+		if (resource == null) return 0;
+		if (except == null) except = Sets.newHashSet();
+		final Coord pos = getPosition();
+		if (except.contains(pos)) return 0;
+		except.add(pos);
+		if (!canReceiveLiquid(resource)) return 0;
 
 		resource = resource.copy();
 
-		// fill the tank below as much as possible
-		if (below != null && below.getSpace() > 0) {
-			filled = below.fill(resource, doFill, except);
-			resource.amount -= filled;
-		}
+		final int startAmount = resource.amount;
+		tryFillTankBelow(resource, doFill, except);
+
+		if (resource.amount <= 0) return startAmount;
 
 		// fill myself up
-		if (resource.amount > 0) {
-			filled = tank.fill(resource, doFill);
+		{
+			int filled = tank.fill(resource, doFill);
 			resource.amount -= filled;
 		}
 
-		// ok we cant, so lets fill the tank above
-		if (resource.amount > 0) {
-			TileEntityTank above = getTankInDirection(ForgeDirection.UP);
-			if (above != null) {
-				filled = above.fill(resource, doFill, except);
+		if (resource.amount <= 0) return startAmount;
+		tryFillHorizontals(resource, doFill, except);
+
+		if (resource.amount <= 0) return startAmount;
+		tryFillTankAbove(resource, doFill, except);
+
+		return startAmount - resource.amount;
+	}
+
+	private void tryFillHorizontals(FluidStack resource, boolean doFill, Set<Coord> except) {
+		List<TileEntityTank> horizontals = getHorizontalTanks(except);
+		final int count = horizontals.size();
+		if (count != 0) {
+			final int amountPerSide = resource.amount / count;
+			final int lastAmount = resource.amount - amountPerSide * (count - 1);
+			// Last amount is either same or greater than normal, so we move
+			// tank most likely to accept to end
+			if (lastAmount != amountPerSide) Collections.sort(horizontals, sortByAmount);
+			for (int i = 0; i < count; i++) {
+				FluidStack copy = resource.copy();
+				copy.amount = (i == count - 1)? lastAmount : amountPerSide;
+				int filled = horizontals.get(i).fill(copy, doFill, except);
 				resource.amount -= filled;
 			}
 		}
+	}
 
-		// finally, distribute any remaining to the sides
-		if (resource.amount > 0 && canReceiveLiquid(resource)) {
-			ArrayList<TileEntityTank> horizontals = getHorizontalTanksOrdererdBySpace(except);
-			if (horizontals.size() > 0) {
-				int amountPerSide = resource.amount / horizontals.size();
-				for (TileEntityTank sideTank : horizontals) {
-					FluidStack copy = resource.copy();
-					copy.amount = amountPerSide;
-					filled = sideTank.fill(copy, doFill, except);
-					resource.amount -= filled;
-				}
-			}
+	private void tryFillTankAbove(FluidStack resource, boolean doFill, Set<Coord> except) {
+		TileEntityTank above = getTankInDirection(ForgeDirection.UP);
+		if (above != null) {
+			int filled = above.fill(resource, doFill, except);
+			resource.amount -= filled;
 		}
-		return startAmount - resource.amount;
+	}
+
+	private void tryFillTankBelow(FluidStack resource, boolean doFill, Set<Coord> except) {
+		TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
+		if (below != null) {
+			int filled = below.fill(resource, doFill, except);
+			resource.amount -= filled;
+		}
 	}
 
 	@Override
@@ -300,15 +254,6 @@ public class TileEntityTank extends SyncedTileEntity implements INeighbourAwareT
 			NBTTagCompound tankTag = stack.getTagCompound().getCompoundTag("tank");
 			this.tank.readFromNBT(tankTag);
 		}
-	}
-
-	public int countDownwardsTanks() {
-		int count = 1;
-		TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
-		if (below != null) {
-			count += below.countDownwardsTanks();
-		}
-		return count;
 	}
 
 	@Override
@@ -376,27 +321,6 @@ public class TileEntityTank extends SyncedTileEntity implements INeighbourAwareT
 		return Math.sin(flowTimer) / 35;
 	}
 
-	public double getLiquidHeightForSide(ForgeDirection... sides) {
-		if (containsValidLiquid()) {
-			double percentFull = getHeightForRender();
-
-			if (percentFull > 0.98) { return 1.0; }
-			double fullness = percentFull + getFlowOffset();
-			int count = 1;
-			for (ForgeDirection side : sides) {
-				TileEntityTank sideTank = getTankInDirection(side);
-				if (sideTank != null
-						&& sideTank.canReceiveLiquid(tank.getFluid())) {
-					fullness += sideTank.getHeightForRender()
-							+ sideTank.getFlowOffset();
-					count++;
-				}
-			}
-			return Math.max(0, Math.min(1, fullness / count));
-		}
-		return 0D; /* No D for you ;) */
-	}
-
 	public NBTTagCompound getItemNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		tank.writeToNBT(nbt);
@@ -416,5 +340,9 @@ public class TileEntityTank extends SyncedTileEntity implements INeighbourAwareT
 			} catch (Exception e) {}
 		}
 		return 0;
+	}
+
+	public RenderContext createRenderContext() {
+		return new RenderContext();
 	}
 }

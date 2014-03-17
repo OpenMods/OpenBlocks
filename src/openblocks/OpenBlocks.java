@@ -29,6 +29,7 @@ import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
 import openblocks.utils.ChangelogBuilder;
+import openmods.Log;
 import openmods.Mods;
 import openmods.OpenMods;
 import openmods.config.ConfigProcessing;
@@ -389,6 +390,8 @@ public class OpenBlocks {
 			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, RadioManager.instance);
 		}
 
+		FMLInterModComms.sendMessage("NotEnoughCodecs", "listCodecs", "");
+
 		proxy.preInit();
 	}
 
@@ -407,32 +410,37 @@ public class OpenBlocks {
 			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
 		}
 		if (Enchantments.flimFlam != null) {
-			FlimFlamRegistry.registerFlimFlam("inventory-shuffle", 50, 100, new InventoryShuffleFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("useless-tool", 125, 50, new UselessToolFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("bane", 125, 100, new BaneFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("epic-lore", 10, 100, new LoreFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("living-rename", 10, 100, new RenameFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("squid", 75, 50, new SquidFilmFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("sheep-dye", 5, 50, new SheepDyeFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("invisible-mobs", 25, 10, new InvisibleMobsFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("sound", 5, 150, new SoundFlimFlam()).markSilent().markSafe();
+			FlimFlamRegistry.registerFlimFlam("inventory-shuffle", -50, 100, new InventoryShuffleFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("useless-tool", -125, 50, new UselessToolFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("bane", -125, 100, new BaneFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("epic-lore", -10, 100, new LoreFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("living-rename", -10, 100, new RenameFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("squid", -75, 50, new SquidFilmFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("sheep-dye", -5, 50, new SheepDyeFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("invisible-mobs", -25, 10, new InvisibleMobsFlimFlam()).markSafe();
+			FlimFlamRegistry.registerFlimFlam("sound", -5, 150, new SoundFlimFlam()).markSilent().markSafe();
 
-			FlimFlamRegistry.registerFlimFlam("snowballs", 50, 50, new SnowballsFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("teleport", 100, 30, new TeleportFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("mount", 150, 25, new MountFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("encase", 200, 50, new EncaseFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("creepers", 60, 50, new DummyCreepersFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("disarm", 50, 50, new ItemDropFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("effect", 75, 75, new EffectFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("skyblock", 250, 150, new SkyblockFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("snowballs", -50, 50, new SnowballsFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("teleport", -100, 30, new TeleportFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("mount", -150, 25, new MountFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("encase", -50, 50, new EncaseFlimFlam()).setRange(Integer.MIN_VALUE, -300);
+			FlimFlamRegistry.registerFlimFlam("creepers", -60, 50, new DummyCreepersFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("disarm", -50, 50, new ItemDropFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("effect", -75, 75, new EffectFlimFlam());
+			FlimFlamRegistry.registerFlimFlam("skyblock", -100, 150, new SkyblockFlimFlam()).setRange(Integer.MIN_VALUE, -400);
 		}
 	}
 
 	@EventHandler
 	public void processMessage(FMLInterModComms.IMCEvent event) {
 		for (FMLInterModComms.IMCMessage m : event.getMessages()) {
-			if (m.isStringMessage() && m.key.equalsIgnoreCase("donateUrl")) {
+			if (m.isStringMessage() && "donateUrl".equalsIgnoreCase(m.key)) {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
+			}
+
+			if (m.isNBTMessage() && "knownCodecs".equalsIgnoreCase(m.key)) {
+				Log.info("Updating codec list with message from %s", m.getSender());
+				RadioManager.addCodecsInfo(m.getNBTValue());
 			}
 		}
 	}
