@@ -38,15 +38,13 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 
 		if (this.worldObj.getBlockMaterial(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) == Material.lava) {
 			this.motionY = 0.20000000298023224D;
-			this.motionX = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.motionZ = (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
-			this.playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
+			this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
+			playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
-		this.pushOutOfBlocks(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
-		double d0 = 8.0D;
-
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		pushOutOfBlocks(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
+		moveEntity(this.motionX, this.motionY, this.motionZ);
 		float f = 0.98F;
 
 		if (this.onGround) {
@@ -57,9 +55,9 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 			}
 		}
 
-		this.motionX *= (double)f;
+		this.motionX *= f;
 		this.motionY *= 0.9800000190734863D;
-		this.motionZ *= (double)f;
+		this.motionZ *= f;
 
 		if (this.onGround) {
 			this.motionY *= -0.8999999761581421D;
@@ -69,7 +67,7 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		++this.xpOrbAge;
 
 		if (this.xpOrbAge >= 6000) {
-			this.setDead();
+			setDead();
 		}
 	}
 

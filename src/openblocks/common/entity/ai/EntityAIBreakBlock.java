@@ -21,7 +21,6 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	private EntityLiving entity;
 	private PathNavigate pathFinder;
 	private Coord blockCoord;
-	private boolean validCoord = false;
 	private int tickOffset = 0;
 	private Random rand;
 

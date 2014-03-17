@@ -41,6 +41,7 @@ public class BlockXPShower extends OpenBlock {
 		return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
 	}
 
+	@Override
 	public void setBoundsBasedOnRotation(ForgeDirection direction) {
 		float min = 0.4375f;
 		float max = 0.5625f;

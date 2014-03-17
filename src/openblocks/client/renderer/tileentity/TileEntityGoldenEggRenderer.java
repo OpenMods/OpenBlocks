@@ -55,66 +55,6 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 	}
 
-	private static void renderBeam(TileEntityGoldenEgg egg, Tessellator tessellator, float partialTicks) {
-
-		float par2 = 0f, par4 = 0f, par6 = 0f;
-
-		float progress = (egg.animationStageTicks + partialTicks) / TileEntityGoldenEgg.ANIMATION_TIME;
-
-		if (progress > 0.9) {
-			GL11.glPushMatrix();
-			GL11.glTranslatef(-0.5f, 0f, -0.5f);
-			RenderHelper.disableStandardItemLighting();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-			GL11.glDepthMask(false);
-			for (int i = 45; i < 360; i += 90) {
-				tessellator.startDrawingQuads();
-
-				double size = 1.2D * ((progress - 0.8) / 0.2f);
-				double off = 1 - size;
-
-				tessellator.setColorRGBA(255, 255, 255, (int)(64 * (size / 1.2D)));
-				double d18 = off;
-				double d19 = off;
-				double d20 = size;
-				double d21 = off;
-				double d22 = off;
-				double d23 = size;
-				double d24 = size;
-				double d25 = size;
-				double d26 = -(32.0F * size / 1.2D);
-				double d27 = 0.0D;
-				double d28 = 1.0D;
-				double d29 = -1.0F + 0;
-				double d30 = 256.0F;
-				tessellator.addVertexWithUV(par2 + d18, par4 + d26, par6 + d19, d28, d30);
-				tessellator.addVertexWithUV(par2 + d18, par4 - d26, par6 + d19, d28, d29);
-				tessellator.addVertexWithUV(par2 + d20, par4 - d26, par6 + d21, d27, d29);
-				tessellator.addVertexWithUV(par2 + d20, par4 + d26, par6 + d21, d27, d30);
-				tessellator.addVertexWithUV(par2 + d24, par4 + d26, par6 + d25, d28, d30);
-				tessellator.addVertexWithUV(par2 + d24, par4 - d26, par6 + d25, d28, d29);
-				tessellator.addVertexWithUV(par2 + d22, par4 - d26, par6 + d23, d27, d29);
-				tessellator.addVertexWithUV(par2 + d22, par4 + d26, par6 + d23, d27, d30);
-				tessellator.addVertexWithUV(par2 + d20, par4 + d26, par6 + d21, d28, d30);
-				tessellator.addVertexWithUV(par2 + d20, par4 - d26, par6 + d21, d28, d29);
-				tessellator.addVertexWithUV(par2 + d24, par4 - d26, par6 + d25, d27, d29);
-				tessellator.addVertexWithUV(par2 + d24, par4 + d26, par6 + d25, d27, d30);
-				tessellator.addVertexWithUV(par2 + d22, par4 + d26, par6 + d23, d28, d30);
-				tessellator.addVertexWithUV(par2 + d22, par4 - d26, par6 + d23, d28, d29);
-				tessellator.addVertexWithUV(par2 + d18, par4 - d26, par6 + d19, d27, d29);
-				tessellator.addVertexWithUV(par2 + d18, par4 + d26, par6 + d19, d27, d30);
-				tessellator.draw();
-			}
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDepthMask(true);
-
-			RenderHelper.enableStandardItemLighting();
-			GL11.glPopMatrix();
-		}
-	}
-
 	private void renderPhantom(TileEntityGoldenEgg egg, Tessellator tessellator, float partialTicks) {
 		final float SCALE = 1.5f;
 

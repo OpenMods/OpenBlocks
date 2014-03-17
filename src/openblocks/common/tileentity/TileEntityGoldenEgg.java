@@ -60,9 +60,9 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 				int posX = xCoord + worldObj.rand.nextInt(20) - 10;
 				int posY = yCoord + worldObj.rand.nextInt(2) - 1;
 				int posZ = zCoord + worldObj.rand.nextInt(20) - 10;
-				
+
 				boolean canMove = blocks != null && MagnetWhitelists.instance.testBlock(worldObj, posX, posY, posZ);
-				
+
 				if (canMove && worldObj.rand.nextInt(6) == 0) {
 					EntityBlock block = EntityBlock.create(worldObj, posX, posY, posZ);
 					if (block != null) {
@@ -115,15 +115,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		owner = nbt.getString("owner");
 	}
 
 	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-	}
+	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {

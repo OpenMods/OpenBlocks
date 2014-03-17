@@ -63,7 +63,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 						while (xpInTank > 0) {
 							int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
 							xpInTank -= xpAmount;
-							worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, (double)xCoord + 0.5D, (double)yCoord, (double)zCoord + 0.5D, xpAmount));
+							worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, xCoord + 0.5D, yCoord, zCoord + 0.5D, xpAmount));
 						}
 					}
 				}

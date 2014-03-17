@@ -75,8 +75,8 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(10.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.3D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.3D);
 	}
 
 	@SideOnly(Side.CLIENT)
