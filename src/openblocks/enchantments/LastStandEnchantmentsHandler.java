@@ -3,6 +3,7 @@ package openblocks.enchantments;
 import java.util.Map;
 
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -10,6 +11,7 @@ import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import openblocks.OpenBlocks.Enchantments;
+import openblocks.utils.HackyUtils;
 import openmods.utils.EnchantmentUtils;
 
 public class LastStandEnchantmentsHandler {
@@ -21,14 +23,20 @@ public class LastStandEnchantmentsHandler {
 			
 			float damageAmount = e.ammount;
 			
-			EntityPlayer player = (EntityPlayer)e.entityLiving;
+			// lord forgive me
+			if (HackyUtils.isCalledFromClass(EntityLivingBase.class)) {
+				return;
+			}
 			
+			EntityPlayer player = (EntityPlayer)e.entityLiving;
+
 			int enchantmentLevels = countLastStandEnchantmentLevels(player);
 
 			if (e.source.isDifficultyScaled()) {
 				
 				World world = e.entityLiving.worldObj;
 				
+				// scale the damage based on their difficulty setting.
                 if (world.difficultySetting == 0) {
                 	damageAmount = 0.0F;
                 } else if (world.difficultySetting == 1) {
