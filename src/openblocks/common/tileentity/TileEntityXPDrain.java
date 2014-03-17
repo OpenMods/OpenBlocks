@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -26,13 +27,28 @@ public class TileEntityXPDrain extends OpenTileEntity {
 		if (OpenMods.proxy.getTicks(worldObj) % 100 == 0) {
 			searchForTank();
 		}
+
 		if (targetTank != null) {
 			TileEntity tile = targetTank.get();
 			if (!(tile instanceof IFluidHandler) || tile.isInvalid()) {
 				targetTank = null;
 			} else {
+
 				if (!worldObj.isRemote) {
 					IFluidHandler tank = (IFluidHandler)tile;
+
+					for (EntityXPOrb orb : getXPOrbsOnGrid()) {
+						if (!orb.isDead) {
+							FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
+							xpStack.amount = EnchantmentUtils.XPToLiquidRatio(orb.getXpValue());
+							int filled = tank.fill(ForgeDirection.UP, xpStack, false);
+							if (filled == xpStack.amount) {
+								tank.fill(ForgeDirection.UP, xpStack, true);
+								orb.setDead();
+							}
+						}
+					}
+
 					for (EntityPlayer player : getPlayersOnGrid()) {
 						FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
 						int experience = EnchantmentUtils.getPlayerXP(player);
@@ -99,6 +115,12 @@ public class TileEntityXPDrain extends OpenTileEntity {
 	protected List<EntityPlayer> getPlayersOnGrid() {
 		AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
 		return worldObj.getEntitiesWithinAABB(EntityPlayer.class, bb);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected List<EntityXPOrb> getXPOrbsOnGrid() {
+		AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 0.3, zCoord + 1);
+		return worldObj.getEntitiesWithinAABB(EntityXPOrb.class, bb);
 	}
 
 }

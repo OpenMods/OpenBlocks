@@ -10,6 +10,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
@@ -115,9 +116,31 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			for (int i = 0; i < 6; i++) {
 				float offset = (i - 2.5f) / 5f;
 				ForgeDirection rotation = getRotation();
+
+				Vec3 vec = worldObj.getWorldVec3Pool().getVecFromPool(0, 0, 0);
+
+				float pitch = getSprayPitch();
+
+				double sinPitch = Math.sin(pitch);
+				double cosPitch = Math.cos(pitch);
+
+				if (rotation.offsetZ == 0) {
+					vec.yCoord = Math.abs(cosPitch);
+					vec.zCoord = sinPitch * rotation.offsetX;
+					vec.xCoord = (worldObj.rand.nextDouble() - 0.5) * 2 * offset;
+				} else {
+					vec.yCoord = Math.abs(cosPitch);
+					vec.xCoord = -sinPitch * rotation.offsetZ;
+					vec.zCoord = (worldObj.rand.nextDouble() - 0.5) * 2 * offset;
+				}
+
+				vec.xCoord /= 2;
+				vec.yCoord /= 2;
+				vec.zCoord /= 2;
+
 				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(), xCoord + 0.5
 						+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
-						+ (offset * 0.6 * rotation.offsetZ), rotation, getSprayPitch(), 2 * offset);
+						+ (offset * 0.6 * rotation.offsetZ), 0.3f, 0.7f, vec);
 			}
 		}
 	}

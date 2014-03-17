@@ -6,10 +6,10 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.fluids.FluidStack;
@@ -108,6 +108,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPShower.class, new TileEntityXPShowerRenderer());
 		// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class,
 		// new TileEntityGoldenEggRenderer());
 
@@ -180,8 +181,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 	}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, ForgeDirection direction, float angleRadians, float spread) {
-		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, direction, angleRadians, spread);
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, float scale, float gravity, Vec3 vec) {
+		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, scale, gravity, vec);
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
 	}
 }

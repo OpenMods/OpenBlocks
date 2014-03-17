@@ -168,13 +168,11 @@ public class TileEntityTank extends SyncedTileEntity implements INeighbourAwareT
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-
 			HashSet<TileEntityTank> except = new HashSet<TileEntityTank>();
 			except.add(this);
 
 			// if we have a liquid
 			if (tank.getFluid() != null) {
-
 				// try to fill up the tank below with as much liquid as possible
 				TileEntityTank below = getTankInDirection(ForgeDirection.DOWN);
 				if (below != null) {

@@ -65,6 +65,7 @@ public class OpenBlocks {
 	private static final int ENTITY_CANON_ITEM_ID = 706;
 	private static final int ENTITY_GOLDEN_EYE_ID = 707;
 	private static final int ENTITY_MAGNET_PLAYER_ID = 708;
+	private static final int ENTITY_XP_ID = 709;
 
 	@Instance(value = ModInfo.ID)
 	public static OpenBlocks instance;
@@ -183,6 +184,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class)
 		public static BlockSky sky;
+
+		@RegisterBlock(name = "xpshower", tileEntity = TileEntityXPShower.class)
+		public static BlockXPShower xpShower;
 	}
 
 	public static class Items {
@@ -332,6 +336,8 @@ public class OpenBlocks {
 		if (Config.itemLuggageId > 0) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
 		}
+
+		EntityRegistry.registerModEntity(EntityXPOrbNoFly.class, "XPOrbNoFly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
 
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
 
