@@ -5,6 +5,8 @@ import java.util.Map;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import openblocks.OpenBlocks.Enchantments;
@@ -14,28 +16,50 @@ public class LastStandEnchantmentsHandler {
 
 	@ForgeSubscribe
 	public void onDamage(LivingAttackEvent e) {
+		
 		if (e.entityLiving instanceof EntityPlayer) {
+			
+			float damageAmount = e.ammount;
+			
 			EntityPlayer player = (EntityPlayer)e.entityLiving;
+			
 			int enchantmentLevels = countLastStandEnchantmentLevels(player);
 
-			float healthAvailable = player.getHealth();
-			healthAvailable -= e.ammount;
-
-			if (healthAvailable < 0.5f) {
-
-				int xpAvailable = EnchantmentUtils.getPlayerXP(player);
-
-				float xpRequired = 0.5f - healthAvailable;
-
-				xpRequired *= 50;
-				xpRequired /= enchantmentLevels;
-				xpRequired = Math.max(1, xpRequired);
-
-				if (xpAvailable >= xpRequired) {
-					player.setHealth(0.7f);
-					EnchantmentUtils.drainPlayerXP(player, (int)xpRequired);
-					e.setCanceled(true);
-					player.attackEntityFrom(e.source, 0.1f);
+			if (e.source.isDifficultyScaled()) {
+				
+				World world = e.entityLiving.worldObj;
+				
+                if (world.difficultySetting == 0) {
+                	damageAmount = 0.0F;
+                } else if (world.difficultySetting == 1) {
+                	damageAmount = damageAmount / 2.0F + 1.0F;
+                } else if (world.difficultySetting == 3) {
+                	damageAmount = damageAmount * 3.0F / 2.0F;
+                }
+                
+            }			
+			
+			if (enchantmentLevels > 0 && e.ammount > 1f) {
+			
+				float healthAvailable = player.getHealth();
+				healthAvailable -= damageAmount;
+	
+				if (healthAvailable < 1f) {
+	
+					int xpAvailable = EnchantmentUtils.getPlayerXP(player);
+	
+					float xpRequired = 1f - healthAvailable;
+	
+					xpRequired *= 50;
+					xpRequired /= enchantmentLevels;
+					xpRequired = Math.max(1, xpRequired);
+	
+					if (xpAvailable >= xpRequired) {
+						player.setHealth(1f);
+						EnchantmentUtils.drainPlayerXP(player, (int)xpRequired);
+						e.setCanceled(true);
+						player.attackEntityFrom(e.source, 0f);
+					}
 				}
 			}
 
