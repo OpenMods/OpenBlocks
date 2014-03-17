@@ -53,6 +53,7 @@ public class StencilSkyRenderer extends StencilRendererHandler {
 		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
 
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_LIGHTING);
 
 		setupFog(partialTickTime);
 		context.renderSky(partialTickTime);

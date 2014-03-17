@@ -6,6 +6,8 @@ import openmods.api.INeighbourAwareTile;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntitySky extends SyncedTileEntity implements INeighbourAwareTile {
 
@@ -40,6 +42,12 @@ public class TileEntitySky extends SyncedTileEntity implements INeighbourAwareTi
 
 	public boolean isPowered() {
 		return powered.getValue();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 256 * 256;
 	}
 
 	@Override
