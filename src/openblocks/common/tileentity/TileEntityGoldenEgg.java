@@ -1,14 +1,14 @@
 package openblocks.common.tileentity;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
-import openblocks.common.entity.EntityMutant;
+import openblocks.common.MagnetWhitelists;
+import openblocks.common.entity.EntityMiniMe;
 import openmods.OpenMods;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
@@ -18,8 +18,6 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile {
 
-	private static final String TALLY_NBT_KEY = "tally";
-	// private static final String STAGE_NBT_KEY = "stage";
 	private static final int STAGE_CHANGE_TICK = 600;
 	public static final int ANIMATION_TIME = 400;
 	private static final double STAGE_CHANGE_CHANCE = 0.8;
@@ -27,7 +25,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	public float rotation;
 
 	private ArrayList<EntityBlock> blocks = new ArrayList<EntityBlock>();
-	private HashMap<String, Integer> dnas = new HashMap<String, Integer>();
 	private SyncableInt stage;
 
 	private String owner;
@@ -59,13 +56,14 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 			}
 			if (stage.getValue() >= 4) {
-				// TODO: check whitelist
-				// maybe this should be more.. interesting. shapes or
-				// something?!
+
 				int posX = xCoord + worldObj.rand.nextInt(20) - 10;
 				int posY = yCoord + worldObj.rand.nextInt(2) - 1;
 				int posZ = zCoord + worldObj.rand.nextInt(20) - 10;
-				if (blocks != null && posX != xCoord && posY != yCoord && posZ != zCoord && worldObj.rand.nextInt(10) == 0) {
+				
+				boolean canMove = blocks != null && MagnetWhitelists.instance.testBlock(worldObj, posX, posY, posZ);
+				
+				if (canMove && worldObj.rand.nextInt(6) == 0) {
 					EntityBlock block = EntityBlock.create(worldObj, posX, posY, posZ);
 					if (block != null) {
 						block.setHasAirResistance(false);
@@ -90,11 +88,10 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			if (stage.getValue() >= 5) {
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
-				EntityMutant mutant = new EntityMutant(worldObj);
-				mutant.setOwner(owner);
-				mutant.setTraitsFromMap(dnas);
-				mutant.setPositionAndRotation(0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 0, 0);
-				worldObj.spawnEntityInWorld(mutant);
+				EntityMiniMe miniMe = new EntityMiniMe(worldObj, "Mikeemoo");
+				miniMe.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 0, 0);
+				worldObj.spawnEntityInWorld(miniMe);
+				return;
 			}
 		}
 		if (stage.getValue() >= 4 && animationStageTicks < ANIMATION_TIME) {
@@ -107,36 +104,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	private void incrementStage() {
-		if (dnas.size() > 0) {
-			stage.modify(1);
-			sync();
-		}
-	}
-
-	public boolean addDNAFromItemStack(ItemStack itemStack) {
-		if (itemStack != null && stage.getValue() == 0) {
-			NBTTagCompound tag = itemStack.getTagCompound();
-			if (tag != null && tag.hasKey("entity")) {
-				String entity = tag.getString("entity");
-				int count = 0;
-				if (dnas.containsKey(entity)) {
-					count = dnas.get(entity);
-				}
-				dnas.put(entity, count + 1);
-				return true;
-			}
-		}
-		return false;
+		stage.modify(1);
+		sync();
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		NBTTagCompound entitiesTag = new NBTTagCompound();
-		for (Entry<String, Integer> dnaTally : dnas.entrySet()) {
-			entitiesTag.setInteger(dnaTally.getKey(), dnaTally.getValue());
-		}
-		nbt.setCompoundTag(TALLY_NBT_KEY, entitiesTag);
 		nbt.setString("owner", owner);
 	}
 
@@ -144,19 +118,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	@SuppressWarnings("unchecked")
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		dnas.clear();
-		if (nbt.hasKey(TALLY_NBT_KEY)) {
-			NBTTagCompound tallyTag = nbt.getCompoundTag(TALLY_NBT_KEY);
-			for (NBTBase tag : (Collection<NBTBase>)tallyTag.getTags()) {
-				dnas.put(tag.getName(), tallyTag.getInteger(tag.getName()));
-			}
-		}
 		owner = nbt.getString("owner");
 	}
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
-
 	}
 
 	@Override

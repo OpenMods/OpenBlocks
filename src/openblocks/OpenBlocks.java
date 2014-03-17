@@ -67,6 +67,7 @@ public class OpenBlocks {
 	private static final int ENTITY_GOLDEN_EYE_ID = 707;
 	private static final int ENTITY_MAGNET_PLAYER_ID = 708;
 	private static final int ENTITY_XP_ID = 709;
+	private static final int ENTITY_MINIME_ID = 710;
 
 	@Instance(value = ModInfo.ID)
 	public static OpenBlocks instance;
@@ -185,10 +186,13 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "xpshower", tileEntity = TileEntityXPShower.class)
 		public static BlockXPShower xpShower;
+
+		@RegisterBlock(name = "goldenEgg", tileEntity = TileEntityGoldenEgg.class)
+		public static BlockGoldenEgg goldenEgg;
 	}
 
 	public static class Items {
-		// uhh, unlocalized names are messy...
+
 		@RegisterItem(name = "hangglider")
 		public static ItemHangGlider hangGlider;
 
@@ -266,6 +270,7 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "wallpaper")
 		public static ItemWallpaper wallpaper;
+		
 	}
 
 	public static class ClassReferences {
@@ -354,6 +359,10 @@ public class OpenBlocks {
 		if (Config.itemGoldenEyeId > 0) {
 			EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
 			MinecraftForge.EVENT_BUS.register(StructureRegistry.instance);
+		}
+
+		if (Config.blockGoldenEggId > 0) {
+			EntityRegistry.registerModEntity(EntityMiniMe.class, "MiniMe", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
 		}
 
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
