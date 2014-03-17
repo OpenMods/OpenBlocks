@@ -119,9 +119,6 @@ public class Config {
 	@BlockId(description = "The id of the canvas block")
 	public static int blockCanvasId = 2569;
 
-	@BlockId(description = "The id of the Ore Crusher")
-	public static int blockMachineOreCrusherId = 2570;
-
 	@BlockId(description = "The id of the paint tin")
 	public static int blockPaintCanId = 2571;
 
@@ -569,10 +566,6 @@ public class Config {
 		if (ConfigProcessing.canRegisterBlock(blockCanvasId)) {
 			OpenBlocks.Blocks.canvas = new BlockCanvas();
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Item.paper, 'f', Block.fence));
-		}
-
-		if (experimentalFeatures && ConfigProcessing.canRegisterBlock(blockMachineOreCrusherId)) {
-			OpenBlocks.Blocks.machineOreCrusher = new BlockMachineOreCrusher();
 		}
 
 		if (ConfigProcessing.canRegisterBlock(blockPaintCanId)) {
