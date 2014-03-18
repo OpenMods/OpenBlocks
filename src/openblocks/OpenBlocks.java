@@ -411,10 +411,9 @@ public class OpenBlocks {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
-		
-		if (Config.enableChangelogBooks)
-			changeLog = ChangelogBuilder.createChangeLog();
-		
+
+		if (Config.enableChangelogBooks) changeLog = ChangelogBuilder.createChangeLog();
+
 		if (Loader.isModLoaded(Mods.FLANSMOD)) {
 			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
 		}

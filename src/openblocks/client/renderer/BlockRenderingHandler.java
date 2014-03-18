@@ -13,6 +13,7 @@ public class BlockRenderingHandler extends BlockRenderingHandlerBase {
 		addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
 		addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 		addRenderer(OpenBlocks.Blocks.radio, new BlockRadioRenderer());
+		addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
 	}
 
 	@Override

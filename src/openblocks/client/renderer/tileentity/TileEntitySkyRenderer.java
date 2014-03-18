@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.client.StencilSkyRenderer;
-import openblocks.common.tileentity.TileEntitySky;
+import openblocks.common.block.BlockSky;
 import openmods.renderer.StencilRendererHandler;
 import openmods.utils.ColorUtils.RGB;
 import openmods.utils.render.RenderUtils;
@@ -14,22 +14,18 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 
-	private static final double Z_FIGHTER = 0.005;
-	private static final double DM = 0 - Z_FIGHTER;
-	private static final double DP = 1 + Z_FIGHTER;
-
 	private boolean disableStencil;
 	private boolean initialized;
 
-	private int stencilDisplayList;
+	private int displayListBase;
 	private StencilRendererHandler handler;
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTickTime) {
 		if (disableStencil) return;
 
-		TileEntitySky sky = (TileEntitySky)te;
-		if (!sky.isPowered()) return;
+		int meta = te.getBlockMetadata();
+		if (!BlockSky.isActive(meta)) return;
 
 		if (!initialized) {
 			intialize();
@@ -40,9 +36,8 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslated(x, y, z);
 		RGB fog = RenderUtils.getFogColor();
 		GL11.glColor3f(fog.getR(), fog.getG(), fog.getB());
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glCallList(stencilDisplayList);
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCallList(displayListBase + MinecraftForgeClient.getRenderPass()); // fancy!
+
 		GL11.glPopMatrix();
 		handler.markForRender();
 
@@ -54,8 +49,12 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		if (stencilBit >= 0) {
 			final int mask = 1 << stencilBit;
 
-			stencilDisplayList = GL11.glGenLists(1);
-			GL11.glNewList(stencilDisplayList, GL11.GL_COMPILE);
+			displayListBase = GL11.glGenLists(2);
+			GL11.glNewList(displayListBase, GL11.GL_COMPILE);
+			renderCube();
+			GL11.glEndList();
+
+			GL11.glNewList(displayListBase + 1, GL11.GL_COMPILE);
 			cutHoleInWorld(mask);
 			GL11.glEndList();
 
@@ -63,46 +62,40 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		} else disableStencil = true;
 	}
 
-	private static void cutHoleInWorld(int stencilMask) {
+	private static void renderCube() {
 		final Tessellator tes = new Tessellator();
 		tes.startDrawingQuads();
 
-		tes.addVertex(DM, DM, DM);
-		tes.addVertex(DM, DP, DM);
-		tes.addVertex(DP, DP, DM);
-		tes.addVertex(DP, DM, DM);
+		tes.addVertex(0, 0, 0);
+		tes.addVertex(0, 1, 0);
+		tes.addVertex(1, 1, 0);
+		tes.addVertex(1, 0, 0);
 
-		tes.addVertex(DM, DM, DP);
-		tes.addVertex(DP, DM, DP);
-		tes.addVertex(DP, DP, DP);
-		tes.addVertex(DM, DP, DP);
+		tes.addVertex(0, 0, 1);
+		tes.addVertex(1, 0, 1);
+		tes.addVertex(1, 1, 1);
+		tes.addVertex(0, 1, 1);
 
-		tes.addVertex(DM, DM, DM);
-		tes.addVertex(DM, DM, DP);
-		tes.addVertex(DM, DP, DP);
-		tes.addVertex(DM, DP, DM);
+		tes.addVertex(0, 0, 0);
+		tes.addVertex(0, 0, 1);
+		tes.addVertex(0, 1, 1);
+		tes.addVertex(0, 1, 0);
 
-		tes.addVertex(DP, DM, DM);
-		tes.addVertex(DP, DP, DM);
-		tes.addVertex(DP, DP, DP);
-		tes.addVertex(DP, DM, DP);
+		tes.addVertex(1, 0, 0);
+		tes.addVertex(1, 1, 0);
+		tes.addVertex(1, 1, 1);
+		tes.addVertex(1, 0, 1);
 
-		tes.addVertex(DM, DM, DM);
-		tes.addVertex(DP, DM, DM);
-		tes.addVertex(DP, DM, DP);
-		tes.addVertex(DM, DM, DP);
+		tes.addVertex(0, 0, 0);
+		tes.addVertex(1, 0, 0);
+		tes.addVertex(1, 0, 1);
+		tes.addVertex(0, 0, 1);
 
-		tes.addVertex(DM, DP, DM);
-		tes.addVertex(DM, DP, DP);
-		tes.addVertex(DP, DP, DP);
-		tes.addVertex(DP, DP, DM);
+		tes.addVertex(0, 1, 0);
+		tes.addVertex(0, 1, 1);
+		tes.addVertex(1, 1, 1);
+		tes.addVertex(1, 1, 0);
 
-		GL11.glStencilMask(stencilMask);
-		GL11.glEnable(GL11.GL_STENCIL_TEST);
-		GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-
-		GL11.glCullFace(GL11.GL_FRONT);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		RenderUtils.disableLightmap();
@@ -110,8 +103,16 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		RenderUtils.enableLightmap();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glCullFace(GL11.GL_BACK);
+	}
 
+	private static void cutHoleInWorld(int stencilMask) {
+		GL11.glStencilMask(stencilMask);
+		GL11.glEnable(GL11.GL_STENCIL_TEST);
+		GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
+		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+		GL11.glColorMask(false, false, false, false);
+		renderCube();
+		GL11.glColorMask(true, true, true, true);
 		GL11.glStencilMask(0);
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
 	}
