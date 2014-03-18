@@ -41,6 +41,7 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 		tes.setTranslation(x + tx, y + ty, z + tz);
 
 		Tessellator rotated = RotatedTessellator.wrap(tes, dir);
+		tes.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
 		renderRadio(block, rotated, te != null? te.getCrystalColor() : null);
 
 		tes.setTranslation(tx, ty, tz);
@@ -223,7 +224,7 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 		final double bz = 3.5 * UNIT;
 
 		final Icon tex = b.iconInside;
-
+		
 		tes.addVertexWithUV(rx, by, fz, tex.getInterpolatedU(1), tex.getInterpolatedV(4));
 		tes.addVertexWithUV(lx, by, fz, tex.getInterpolatedU(3), tex.getInterpolatedV(4));
 		tes.addVertexWithUV(lx, ty, fz, tex.getInterpolatedU(3), tex.getInterpolatedV(2));
