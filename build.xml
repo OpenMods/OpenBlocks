@@ -6,7 +6,7 @@
 	<target name="set-env">
 		<property name="env.BUILD_NUMBER" value="0" />
 		<property name="env.JOB_NAME" value="OpenBlocks" />
-		<property name="mod.version" value="1.2.6" />
+		<property name="mod.version" value="1.2.7" />
 		<property name="mod.name" value="OpenBlocks" />
 		<property name="mod.dir" value="openblocks" />
 		<echo message="Starting build for ${mod.name} v${mod.version}" />

@@ -328,6 +328,10 @@ public class Config {
 	public static boolean eyeDebug = false;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "debug", name = "enableChangelogBooks", comment = "Enable the changelog books")
+	public static boolean enableChangelogBooks = true;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "gravesDebug", comment = "Dump extra amount of data, every time grave is created")
 	public static boolean debugGraves = false;
 
