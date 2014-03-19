@@ -106,7 +106,8 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "paintbrush", Items.paintBrush);
 		book.addStandardRecipePage("openblocks", "squeegee", Items.squeegee);
 		book.addStandardRecipePage("openblocks", "slimalyzer", Items.slimalyzer);
-
+		book.addStandardRecipePage("openblocks", "spongeonastick", Items.spongeonastick);
+		
 		miscIndex = book.getNumberOfPages();
 		if (miscIndex % 2 == 1) {
 			book.addPage(new BlankPage());

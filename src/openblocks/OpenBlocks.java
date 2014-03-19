@@ -271,6 +271,8 @@ public class OpenBlocks {
 		@RegisterItem(name = "wallpaper")
 		public static ItemWallpaper wallpaper;
 
+		@RegisterItem(name = "spongeonastick")
+		public static ItemSpongeOnAStick spongeonastick;
 	}
 
 	public static class ClassReferences {
