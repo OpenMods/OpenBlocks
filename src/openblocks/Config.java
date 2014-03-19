@@ -224,6 +224,9 @@ public class Config {
 	@ItemId(description = "The id of wallpaper")
 	public static int itemWallpaperId = 15000;
 
+	@ItemId(description = "The id of sponge on a stick")
+	public static int itemSpongeOnAStickId = 15001;
+
 	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
@@ -772,6 +775,13 @@ public class Config {
 
 		if (itemWallpaperId > 0) {
 			// OpenBlocks.Items.wallpaper = new ItemWallpaper();
+		}
+
+		if (itemSpongeOnAStickId > 0) {
+			OpenBlocks.Items.spongeonastick = new ItemSpongeOnAStick();
+			if (OpenBlocks.Blocks.sponge != null) {
+				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.spongeonastick, " s ", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
+			}
 		}
 
 		if (explosiveEnchantmentId > 0) {
