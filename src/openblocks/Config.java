@@ -587,13 +587,12 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', lapis));
 		}
 
-		/*
+		
 		if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
 			OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg,
-					"ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg, "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
 		}
-		*/
+		
 
 		if (ConfigProcessing.canRegisterBlock(blockSkyId)) {
 			OpenBlocks.Blocks.sky = new BlockSky();

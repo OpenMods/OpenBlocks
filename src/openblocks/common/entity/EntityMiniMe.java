@@ -27,20 +27,22 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	@SideOnly(Side.CLIENT)
 	private ResourceLocation locationSkin;
 
-	private String username = "[nobody]";
+	private String owner = "[nobody]";
+	private String previousSkin;
 
 	private int pickupCooldown = 0;
+	
 
 	private boolean wasRidden = false;
 
-	public EntityMiniMe(World world, String username) {
+	public EntityMiniMe(World world, String owner) {
 		this(world);
-		this.username = username;
+		this.owner = owner;
 	}
 
 	public EntityMiniMe(World world) {
 		super(world);
-		setSize(0.6F, 1.5F);
+		setSize(0.6F, 0.95F);
 		func_110163_bv();
 		getNavigator().setAvoidsWater(true);
 		getNavigator().setCanSwim(true);
@@ -63,6 +65,11 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 			wasRidden = true;
 		}
 	}
+	
+	@Override
+	public double getMountedYOffset() {
+		return height + 0.15;
+	}
 
 	public int getPickupCooldown() {
 		return pickupCooldown;
@@ -81,11 +88,23 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLocationSkin() {
-		if (locationSkin == null) {
-			locationSkin = AbstractClientPlayer.getLocationSkin(username);
-			downloadImageSkin = AbstractClientPlayer.getDownloadImageSkin(locationSkin, username);
+		String newSkin = getPlayerSkin();
+		if (newSkin != previousSkin) {
+			locationSkin = null;
+			downloadImageSkin = null;
 		}
+		if (locationSkin == null) {
+			System.out.println("Downloading new skin for "+ newSkin);
+			locationSkin = AbstractClientPlayer.getLocationSkin(newSkin);
+			System.out.println(locationSkin);
+			downloadImageSkin = AbstractClientPlayer.getDownloadImageSkin(locationSkin, newSkin);
+		}
+		previousSkin = newSkin;
 		return locationSkin;
+	}
+	
+	public String getPlayerSkin() {
+		return hasCustomNameTag() ? getCustomNameTag() : owner;
 	}
 
 	@Override
@@ -104,31 +123,29 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	}
 
 	public String getUsername() {
-		return username;
+		return owner;
 	}
 
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) {
-		data.writeUTF(username);
+		data.writeUTF(owner);
 	}
 
 	@Override
 	public void readSpawnData(ByteArrayDataInput data) {
-		username = data.readUTF();
+		owner = data.readUTF();
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
-		tag.setString("username", username);
+		tag.setString("owner", owner);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
-		super.readEntityFromNBT(tag);
-		if (tag.hasKey("username")) {
-			username = tag.getString("username");
-		}
+		super.readEntityFromNBT(tag);	
+		if (tag.hasKey("owner")) owner = tag.getString("owner");
 	}
 
 }
