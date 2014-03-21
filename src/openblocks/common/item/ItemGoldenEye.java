@@ -17,10 +17,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.common.StructureRegistry;
 import openblocks.common.entity.EntityGoldenEye;
 import openmods.Log;
 import openmods.utils.ItemUtils;
+import openmods.world.StructureRegistry;
 
 import com.google.common.base.Strings;
 

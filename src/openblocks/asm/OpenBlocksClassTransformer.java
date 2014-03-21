@@ -23,14 +23,6 @@ public class OpenBlocksClassTransformer implements IClassTransformer {
 			}
 		});
 
-		if (transformedName.equals("net.minecraft.world.gen.structure.MapGenStructure")) return VisitorHelper.apply(bytes, ClassWriter.COMPUTE_FRAMES, new TransformProvider() {
-			@Override
-			public ClassVisitor createVisitor(ClassVisitor cv) {
-				FMLRelaunchLog.info("[OpenBlocks] Trying to patch MapGenStructure (class: %s)", name);
-				return new MapGenStructureVisitor(name, cv);
-			}
-		});
-
 		return bytes;
 	}
 }

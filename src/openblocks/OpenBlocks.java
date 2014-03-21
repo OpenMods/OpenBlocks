@@ -358,7 +358,6 @@ public class OpenBlocks {
 
 		if (Config.itemGoldenEyeId > 0) {
 			EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
-			MinecraftForge.EVENT_BUS.register(StructureRegistry.instance);
 		}
 
 		if (Config.blockGoldenEggId > 0) {
