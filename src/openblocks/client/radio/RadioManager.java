@@ -244,14 +244,19 @@ public class RadioManager implements IVillageTradeHandler {
 			@Override
 			public void run() {
 				for (String url : urls) {
-					Log.info("Preloading stream: %s", url);
-					final UrlMeta data;
+					UrlMeta data = null;
 					synchronized (urlMeta) {
-						data = new UrlMeta(url);
-						urlMeta.put(url, data);
+						if (!urlMeta.containsKey(url)) {
+							data = new UrlMeta(url);
+							urlMeta.put(url, data);
+						}
 					}
-					data.resolve();
-					Log.info("Finished preloading stream: %s, result %s, type %s", url, data.getStatus(), data.getContentType());
+
+					if (data != null) {
+						Log.info("Preloading stream: %s", url);
+						data.resolve();
+						Log.info("Finished preloading stream: %s, result %s, type %s", url, data.getStatus(), data.getContentType());
+					}
 				}
 			}
 		};

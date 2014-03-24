@@ -2,9 +2,7 @@ package openblocks.client.radio;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.Iterator;
 import java.util.Scanner;
 
@@ -21,6 +19,7 @@ public class UrlMeta {
 	public enum Status {
 		NOT_YET_RESOLVED(false, "not_ready"),
 		UNKOWN_ERROR(false, "unknown_error"),
+		CANT_CONNECT(false, "cant_connect"),
 		INVALID_URL(false, "invalid_url"),
 		NOT_FOUND(false, "url_not_found"),
 		MALFORMED_DATA(false, "malformed_data"),
@@ -76,7 +75,14 @@ public class UrlMeta {
 				}
 				connection = (HttpURLConnection)url.openConnection();
 				connection.setRequestProperty("User-Agent", "OpenMods/0.0 Minecraft/1.6.4");
-				connection.connect();
+				connection.setRequestProperty("Host", url.getHost() + ":" + url.getPort());
+
+				try {
+					connection.connect();
+				} catch (ConnectException e) {
+					Log.warn(e, "Can't connect to %s", url);
+					return Status.CANT_CONNECT;
+				}
 
 				final int responseCode = connection.getResponseCode();
 				switch (responseCode) {

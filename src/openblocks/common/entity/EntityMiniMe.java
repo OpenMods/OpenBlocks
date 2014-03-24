@@ -31,7 +31,6 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	private String previousSkin;
 
 	private int pickupCooldown = 0;
-	
 
 	private boolean wasRidden = false;
 
@@ -65,7 +64,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 			wasRidden = true;
 		}
 	}
-	
+
 	@Override
 	public double getMountedYOffset() {
 		return height + 0.15;
@@ -94,7 +93,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 			downloadImageSkin = null;
 		}
 		if (locationSkin == null) {
-			System.out.println("Downloading new skin for "+ newSkin);
+			System.out.println("Downloading new skin for " + newSkin);
 			locationSkin = AbstractClientPlayer.getLocationSkin(newSkin);
 			System.out.println(locationSkin);
 			downloadImageSkin = AbstractClientPlayer.getDownloadImageSkin(locationSkin, newSkin);
@@ -102,9 +101,9 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		previousSkin = newSkin;
 		return locationSkin;
 	}
-	
+
 	public String getPlayerSkin() {
-		return hasCustomNameTag() ? getCustomNameTag() : owner;
+		return hasCustomNameTag()? getCustomNameTag() : owner;
 	}
 
 	@Override
@@ -144,7 +143,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
-		super.readEntityFromNBT(tag);	
+		super.readEntityFromNBT(tag);
 		if (tag.hasKey("owner")) owner = tag.getString("owner");
 	}
 

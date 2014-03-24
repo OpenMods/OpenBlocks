@@ -86,6 +86,7 @@ openblocks.misc.radio.url_not_found=URL not found
 openblocks.misc.radio.unknown_stream_type=Unknown stream type
 openblocks.misc.radio.malformed_data=Malformed data in stream
 openblocks.misc.radio.not_ready=Stream not ready, try again later
+openblocks.misc.radio.cant_connect=Can't connect
 openblocks.misc.radio.unknown_error=Unknown error
 openblocks.misc.radio.muted=Sounds are muted!
 
