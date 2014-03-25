@@ -1,6 +1,5 @@
 package openblocks.client.model;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -90,39 +89,27 @@ public class ModelFan extends ModelBase {
 		setRotation(fan, 0F, 0F, 0F);
 	}
 
-	public void render(TileEntity te, float f) {
+	public void render(TileEntity te, float partialTickTime, float bladeRotation) {
+		fan.rotateAngleZ = bladeRotation;
 
-		float f5 = 0.0625F;
-		setRotationAngles(te, f);
-		outline1.render(f5);
-		outline2.render(f5);
-		outline3.render(f5);
-		outline4.render(f5);
-		outline5.render(f5);
-		outline6.render(f5);
-		outline7.render(f5);
-		outline8.render(f5);
-		stand.render(f5);
-		base.render(f5);
-		fan.render(f5);
+		final float scale = 1.0f / 16.0f;
+		outline1.render(scale);
+		outline2.render(scale);
+		outline3.render(scale);
+		outline4.render(scale);
+		outline5.render(scale);
+		outline6.render(scale);
+		outline7.render(scale);
+		outline8.render(scale);
+		stand.render(scale);
+		base.render(scale);
+		fan.render(scale);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
-	}
-
-	/**
-	 * @param te
-	 * @param f
-	 *            I don't know what f is
-	 *            ---
-	 *            It's partial tick, Mikee for sub-tick timing :)
-	 *            More than 1 frame per ms ;)
-	 */
-	public void setRotationAngles(TileEntity te, float f) {
-		fan.rotateAngleZ = (float)Math.toRadians(Minecraft.getSystemTime() % 360);
 	}
 
 }

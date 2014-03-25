@@ -14,7 +14,7 @@ public class TileEntityFanRenderer extends TileEntitySpecialRenderer {
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/fan.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTickTime) {
 		GL11.glPushMatrix();
 		TileEntityFan fan = (TileEntityFan)tileentity;
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
@@ -23,7 +23,7 @@ public class TileEntityFanRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(fan.getAngle(), 0F, 1.0F, 0.0F);
 		GL11.glPushMatrix();
 		bindTexture(texture);
-		model.render(tileentity, f);
+		model.render(tileentity, partialTickTime, fan.getBladeRotation(partialTickTime));
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}

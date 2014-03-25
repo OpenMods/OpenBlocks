@@ -19,6 +19,8 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
 	private SyncableFloat angle;
+	private float bladeRotation;
+	private float bladeRotationSpeed;
 
 	public TileEntityFan() {}
 
@@ -29,7 +31,11 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 	@Override
 	public void updateEntity() {
-		final double maxForce = Config.fanForce * (Config.redstoneActivatedFan? worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) / 15.0 : 1);
+		int redstonePower = Config.redstoneActivatedFan? worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) : 15;
+		bladeRotationSpeed = (redstonePower / 15.0f);
+		bladeRotation += bladeRotationSpeed;
+
+		final double maxForce = Config.fanForce * (redstonePower / 15.0);
 		if (maxForce <= 0) return;
 		@SuppressWarnings("unchecked")
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
@@ -91,5 +97,9 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 	public float getAngle() {
 		return angle.getValue();
+	}
+
+	public float getBladeRotation(float partialTickTime) {
+		return bladeRotation + bladeRotationSpeed * partialTickTime;
 	}
 }

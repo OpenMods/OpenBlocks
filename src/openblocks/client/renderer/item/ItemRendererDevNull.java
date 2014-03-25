@@ -51,8 +51,6 @@ public class ItemRendererDevNull implements IItemRenderer {
 
 		if (containedStack.isItemEqual(stack)) return;
 
-		RenderBlocks renderBlocks = (RenderBlocks)data[0];
-
 		if (type == ItemRenderType.INVENTORY) {
 			FontRenderer fontRenderer = RenderManager.instance.getFontRenderer();
 			if (fontRenderer == null) return;
@@ -62,7 +60,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			short short1 = 240;
 			short short2 = 240;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)short1 / 1.0F, (float)short2 / 1.0F);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1 / 1.0F, short2 / 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			itemRenderer.renderItemAndEffectIntoGUI(fontRenderer, mc.getTextureManager(), containedStack, 0, 0);
 			String sizeToRender = "";

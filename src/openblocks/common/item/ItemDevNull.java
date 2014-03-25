@@ -57,7 +57,6 @@ public class ItemDevNull extends Item {
 		EntityPlayer player = evt.entityPlayer;
 		ItemStack pickedStack = evt.item.getEntityItem();
 
-		final int currentStackSize = pickedStack.stackSize;
 		final ItemStack compareStack = new ItemStack(this);
 
 		boolean foundMatchingContainer = false;
