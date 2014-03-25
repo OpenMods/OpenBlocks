@@ -74,7 +74,11 @@ public class ItemRendererDevNull implements IItemRenderer {
 		} else {
 			GL11.glPushMatrix();
 			GL11.glTranslated(0.5, 0.5, 0.5);
+			GL11.glLineWidth(2.0f);
+			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 			RenderManager.instance.itemRenderer.renderItem(player, containedStack, 0, type);
+			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+			GL11.glLineWidth(1f);
 			GL11.glPopMatrix();
 		}
 	}

@@ -73,7 +73,8 @@ public class ItemDevNull extends Item {
 					ItemInventory inventory = new ItemInventory(player, 1, i);
 					ItemStack containedStack = inventory.getStackInSlot(0);
 					if (containedStack != null) {
-						boolean isMatching = InventoryUtils.areMergeCandidates(pickedStack, containedStack);
+						boolean isMatching = pickedStack.isItemEqual(containedStack)
+								&& ItemStack.areItemStackTagsEqual(pickedStack, containedStack);
 						foundMatchingContainer |= isMatching;
 						if (isMatching) {
 							InventoryUtils.tryInsertStack(inventory, 0, pickedStack, true);

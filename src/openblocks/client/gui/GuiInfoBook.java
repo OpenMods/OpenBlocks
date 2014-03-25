@@ -94,6 +94,7 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addStandardRecipePage("openblocks", "cursor", Items.cursor);
 		book.addStandardRecipePage("openblocks", "unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack());
 		book.addStandardRecipePage("openblocks", "sleepingbag", Items.sleepingBag);
+		book.addStandardRecipePage("openBlocks", "devnull", Items.devNull);
 		/**
 		 * leaving for boq
 		 * book.addStandardRecipePage("openblocks", "cartographer",

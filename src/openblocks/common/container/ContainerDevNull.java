@@ -13,8 +13,8 @@ public class ContainerDevNull extends ContainerBase<Void> {
 	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory) {
 		super(playerInventory, ownerInventory, null);
 		this.playerInventory = (InventoryPlayer)playerInventory;
-		addInventoryGrid(33, 31, 1);
-		addPlayerInventorySlots(85);
+		addInventoryGrid(80, 22, 1);
+		addPlayerInventorySlots(55);
 	}
 
 	@Override
