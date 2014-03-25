@@ -2,10 +2,13 @@ package openblocks;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import openblocks.client.gui.GuiDevNull;
 import openblocks.client.gui.GuiInfoBook;
 import openblocks.client.gui.GuiLuggage;
+import openblocks.common.container.ContainerDevNull;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
+import openmods.ItemInventory;
 import openmods.Log;
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -13,7 +16,8 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 
 	public static enum GuiId {
 		luggage,
-		infoBook;
+		infoBook,
+		devNull;
 
 		public static final GuiId[] VALUES = GuiId.values();
 	}
@@ -26,6 +30,8 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		switch (guiId) {
 			case luggage:
 				return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x));
+			case devNull:
+				return new ContainerDevNull(player.inventory, new ItemInventory(player, 1));
 			default:
 				return null;
 		}
@@ -41,6 +47,8 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 				return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)));
 			case infoBook:
 				return new GuiInfoBook();
+			case devNull:
+				return new GuiDevNull((ContainerDevNull) getServerGuiElement(id, player, world, x, y, z));
 			default:
 				return null;
 		}

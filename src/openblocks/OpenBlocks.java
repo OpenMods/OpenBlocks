@@ -271,6 +271,9 @@ public class OpenBlocks {
 		@RegisterItem(name = "wallpaper")
 		public static ItemWallpaper wallpaper;
 
+		@RegisterItem(name = "devnull")
+		public static ItemDevNull devNull;
+
 	}
 
 	public static class ClassReferences {
