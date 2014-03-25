@@ -1,8 +1,5 @@
 package openblocks.client.renderer.item;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -11,14 +8,15 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.IItemRenderer;
 import openmods.GenericInventory;
 import openmods.ItemInventory;
 import openmods.utils.ItemUtils;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class ItemRendererDevNull implements IItemRenderer {
 
@@ -33,7 +31,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper helper) {
-		return false;
+		return type != ItemRenderType.INVENTORY;
 	}
 
 	@Override
@@ -56,10 +54,8 @@ public class ItemRendererDevNull implements IItemRenderer {
 		RenderBlocks renderBlocks = (RenderBlocks)data[0];
 
 		if (type == ItemRenderType.INVENTORY) {
-
-			Slot fakeSlot = new Slot(inventory, 0, 0, 0);
-
 			FontRenderer fontRenderer = RenderManager.instance.getFontRenderer();
+			if (fontRenderer == null) return;
 			RenderHelper.enableGUIStandardItemLighting();
 			GL11.glPushMatrix();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -76,10 +72,10 @@ public class ItemRendererDevNull implements IItemRenderer {
 			itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.getTextureManager(), containedStack, 0, 0, sizeToRender);
 			GL11.glPopMatrix();
 		} else {
-
-			// argh now idea how to best do 1st person and all that jazz.
-			// HELP ME BOQ :'(
-
+			GL11.glPushMatrix();
+			GL11.glTranslated(0.5, 0.5, 0.5);
+			RenderManager.instance.itemRenderer.renderItem(player, containedStack, 0, type);
+			GL11.glPopMatrix();
 		}
 	}
 
