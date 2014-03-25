@@ -1,10 +1,12 @@
 package openblocks.common;
 
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -12,21 +14,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.*;
 import openmods.Log;
-import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
 import openmods.utils.ReflectionHelper;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 public class TrophyHandler {
 
-	public static Map<Trophy, Entity> entityCache = Maps.newHashMap();
+	private static final Random DROP_RAND = new Random();
+
+	private static final Map<Trophy, Entity> entityCache = Maps.newHashMap();
 
 	public static Entity getEntityFromCache(Trophy trophy) {
 		Entity entity = entityCache.get(trophy);
@@ -167,20 +171,27 @@ public class TrophyHandler {
 			return EntityList.createEntityByName(toString(), null);
 		}
 
+		private final static Map<String, Trophy> TYPES = Maps.newHashMap();
+
+		static {
+			for (Trophy t : values())
+				TYPES.put(t.name(), t);
+		}
+
 		public final static Trophy[] VALUES = values();
 	}
 
 	@ForgeSubscribe
-	public void onLivingDeath(LivingDeathEvent event) {
-		if (!event.entity.worldObj.isRemote) {
-			if (Math.random() < Config.trophyDropChance) {
-				Entity entity = event.entity;
-				String entityName = EntityList.getEntityString(entity);
-				if (entityName != null && !entityName.isEmpty()) {
-					try {
-						Trophy mobTrophy = Trophy.valueOf(entityName);
-						BlockUtils.dropItemStackInWorld(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
-					} catch (IllegalArgumentException e) {}
+	public void onLivingDrops(LivingDropsEvent event) {
+		if (event.recentlyHit && DROP_RAND.nextDouble() < Config.trophyDropChance * event.lootingLevel) {
+			final Entity entity = event.entity;
+			String entityName = EntityList.getEntityString(entity);
+			if (!Strings.isNullOrEmpty(entityName)) {
+				Trophy mobTrophy = Trophy.TYPES.get(entityName);
+				if (mobTrophy != null) {
+					EntityItem drop = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
+					drop.delayBeforeCanPickup = 10;
+					event.drops.add(drop);
 				}
 			}
 		}
