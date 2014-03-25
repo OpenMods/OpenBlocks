@@ -14,7 +14,7 @@ import openmods.ItemInventory;
 import openmods.utils.InventoryUtils;
 
 public class ItemDevNull extends Item {
-	
+
 	public ItemDevNull() {
 		super(Config.itemDevNullId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
@@ -30,10 +30,10 @@ public class ItemDevNull extends Item {
 		}
 		return stack;
 	}
-	
+
 	@Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
-        if (!world.isRemote && player.isSneaking()) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
+		if (!world.isRemote && player.isSneaking()) {
 			ItemInventory inventory = new ItemInventory(player, 1);
 			ItemStack containedStack = inventory.getStackInSlot(0);
 			if (containedStack != null) {
@@ -47,29 +47,29 @@ public class ItemDevNull extends Item {
 					return response;
 				}
 			}
-        }
+		}
 		return false;
-    }
+	}
 
 	@ForgeSubscribe
 	public void onItemPickUp(EntityItemPickupEvent evt) {
-		
+
 		EntityPlayer player = evt.entityPlayer;
 		ItemStack pickedStack = evt.item.getEntityItem();
-		
+
 		final int currentStackSize = pickedStack.stackSize;
 		final ItemStack compareStack = new ItemStack(this);
-		
+
 		boolean foundMatchingContainer = false;
-		
+
 		if (pickedStack != null && player != null) {
-			
+
 			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-				
+
 				ItemStack stack = player.inventory.getStackInSlot(i);
-				
+
 				if (stack != null && stack.isItemEqual(compareStack)) {
-					
+
 					ItemInventory inventory = new ItemInventory(player, 1, i);
 					ItemStack containedStack = inventory.getStackInSlot(0);
 					if (containedStack != null) {
@@ -82,7 +82,7 @@ public class ItemDevNull extends Item {
 				}
 			}
 		}
-		
+
 		if (foundMatchingContainer) {
 			pickedStack.stackSize = 0;
 		}

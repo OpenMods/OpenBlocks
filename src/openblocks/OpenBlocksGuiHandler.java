@@ -48,7 +48,7 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 			case infoBook:
 				return new GuiInfoBook();
 			case devNull:
-				return new GuiDevNull((ContainerDevNull) getServerGuiElement(id, player, world, x, y, z));
+				return new GuiDevNull((ContainerDevNull)getServerGuiElement(id, player, world, x, y, z));
 			default:
 				return null;
 		}

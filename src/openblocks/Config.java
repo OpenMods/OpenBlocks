@@ -223,7 +223,7 @@ public class Config {
 
 	@ItemId(description = "The id of wallpaper")
 	public static int itemWallpaperId = 15000;
-	
+
 	@ItemId(description = "The id of the dev null item")
 	public static int itemDevNullId = 15001;
 
@@ -769,7 +769,7 @@ public class Config {
 			OpenBlocks.Items.infoBook = new ItemInfoBook();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.infoBook), Item.clay, Item.book));
 		}
-		
+
 		if (itemDevNullId > 0) {
 			OpenBlocks.Items.devNull = new ItemDevNull();
 			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);

@@ -9,14 +9,14 @@ import openmods.container.ContainerBase;
 public class ContainerDevNull extends ContainerBase<Void> {
 
 	private InventoryPlayer playerInventory;
-	
+
 	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory) {
 		super(playerInventory, ownerInventory, null);
 		this.playerInventory = (InventoryPlayer)playerInventory;
 		addInventoryGrid(33, 31, 1);
 		addPlayerInventorySlots(85);
 	}
-	
+
 	@Override
 	protected void addPlayerInventorySlots(int offsetX, int offsetY) {
 		for (int row = 0; row < 3; row++)
@@ -32,9 +32,9 @@ public class ContainerDevNull extends ContainerBase<Void> {
 
 			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58) {
 				@Override
-			    public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
-			        return currentSlot != playerInventory.currentItem;
-			    }
+				public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
+					return currentSlot != playerInventory.currentItem;
+				}
 			});
 
 		}
