@@ -33,13 +33,16 @@ public class ItemDevNull extends Item {
 	
 	@Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
-        if (player.isSneaking()) {
+        if (!world.isRemote && player.isSneaking()) {
 			ItemInventory inventory = new ItemInventory(player, 1);
 			ItemStack containedStack = inventory.getStackInSlot(0);
 			if (containedStack != null) {
 				Item item = containedStack.getItem();
 				if (item instanceof ItemBlock) {
 					boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, par7, par8, par9, par10);
+					if (containedStack.stackSize == 0) {
+						inventory.setInventorySlotContents(0, null);
+					}
 					inventory.onInventoryChanged();
 					return response;
 				}

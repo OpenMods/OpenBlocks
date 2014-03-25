@@ -144,6 +144,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.goldenEgg != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityMiniMe.class, new EntityMiniMeRenderer());
 		}
+		
+		if (OpenBlocks.Items.devNull != null) {
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.devNull.itemID, new ItemRendererDevNull());
+		}
 
 		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());
 		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
