@@ -1,12 +1,11 @@
 package openblocks.common.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -15,8 +14,15 @@ import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.ItemInventory;
 import openmods.utils.InventoryUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemDevNull extends Item {
+
+	public static class Icons {
+		public static Icon iconFull;
+		public static Icon iconTransparent;
+	}
 
 	public ItemDevNull() {
 		super(Config.itemDevNullId);
@@ -90,9 +96,11 @@ public class ItemDevNull extends Item {
 			pickedStack.stackSize = 0;
 		}
 	}
-	
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IconRegister register) {
-        itemIcon = register.registerIcon("openblocks:devnull");
-    }
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister register) {
+		Icons.iconTransparent = itemIcon = register.registerIcon("openblocks:devnull");
+		Icons.iconFull = register.registerIcon("openblocks:devfull");
+	}
 }

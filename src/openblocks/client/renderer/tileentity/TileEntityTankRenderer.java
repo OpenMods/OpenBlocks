@@ -142,10 +142,10 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			t.addVertexWithUV(-0.5, -0.5, 0.5, uMin, vMax);
 			t.addVertexWithUV(-0.5, -0.5, -0.5, uMax, vMax);
 			t.draw();
+			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 
 		// may be disabled by other procedures
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
 
 	}

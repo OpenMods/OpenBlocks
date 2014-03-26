@@ -2,12 +2,10 @@ package openblocks.client.renderer.item;
 
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.sync.SyncableTank;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class ItemRendererTank implements IItemRenderer {
 
@@ -25,14 +23,15 @@ public class ItemRendererTank implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		if (item.hasTagCompound() && item.getTagCompound().hasKey("tank")) {
-			((SyncableTank)teTank.getTank()).readFromNBT(item.getTagCompound().getCompoundTag("tank"));
+		final SyncableTank tank = (SyncableTank)teTank.getTank();
+		NBTTagCompound tag = item.getTagCompound();
+		if (tag != null && tag.hasKey("tank")) {
+			tank.readFromNBT(tag.getCompoundTag("tank"));
 		} else {
-			((SyncableTank)teTank.getTank()).setFluid(null);
+			tank.setFluid(null);
 		}
 
-		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, 0.0D, 0.0D, 0.0F);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, -0.1D, 0.0D, 0.0F);
 	}
 
 }
