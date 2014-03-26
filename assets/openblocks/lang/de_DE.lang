@@ -86,6 +86,7 @@ openblocks.misc.radio.url_not_found=URL nicht gefunden
 openblocks.misc.radio.unknown_stream_type=Unbekannter Stream-Typ
 openblocks.misc.radio.malformed_data=Fehlerhafte Daten im Stream
 openblocks.misc.radio.not_ready=Stream nicht bereit, versuche es später nochmal
+openblocks.misc.radio.cant_connect=Konnte nicht verbinden
 openblocks.misc.radio.unknown_error=Unbekannter Fehler
 openblocks.misc.radio.muted=Geräusche sind deaktiviert!
 
@@ -220,6 +221,9 @@ tile.openblocks.xpshower.description=Bringe eine XP-Dusche an einen Tank voller 
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
 item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
+
+item.openblocks.devnull.name=/dev/null
+item.openblocks.devnull.description=Klicke mit /dev/null, um das Inventar zu öffnen. Es gibt einen einzigen Inventar-Slot - dort legst du ein Item hinein, Erde zum Beispiel. Wenn du nun Erde abbaust, wird sich dieser Slot auffüllen. Sobald er voll ist, wird jegliche weitere Erde, die du einsammelst, automatisch weggeworfen. Du kannst das Item in deiner Hand Shift-klicken, als wenn du den Block platzieren würdest!
 
 item.openblocks.slimalyzer.name=Schleimalysierer
 item.openblocks.slimalyzer.description=Renne mit einem Schleimalysierer in deiner Hand herum, und er wird jedes Mal aufleuchten, wenn du dich in einem Schleime spawnenden Chunk befindest.
