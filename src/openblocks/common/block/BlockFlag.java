@@ -109,4 +109,9 @@ public class BlockFlag extends OpenBlock {
 		return Block.planks.getIcon(par1, par2);
 	}
 
+	@Override
+	public boolean canRotateWithTool() {
+		return false;
+	}
+
 }

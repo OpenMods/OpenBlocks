@@ -111,4 +111,9 @@ public class BlockRopeLadder extends OpenBlock {
 
 	}
 
+	@Override
+	public boolean canRotateWithTool() {
+		return false;
+	}
+
 }

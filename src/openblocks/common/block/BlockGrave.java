@@ -28,4 +28,9 @@ public class BlockGrave extends OpenBlock {
 	public int quantityDropped(Random rand) {
 		return 0;
 	}
+
+	@Override
+	public boolean canRotateWithTool() {
+		return false;
+	}
 }
