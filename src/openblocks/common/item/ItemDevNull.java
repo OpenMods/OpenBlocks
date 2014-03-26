@@ -1,5 +1,8 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -33,7 +36,7 @@ public class ItemDevNull extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
-		if (!world.isRemote && player.isSneaking()) {
+		if (player.isSneaking()) {
 			ItemInventory inventory = new ItemInventory(player, 1);
 			ItemStack containedStack = inventory.getStackInSlot(0);
 			if (containedStack != null) {
@@ -48,7 +51,7 @@ public class ItemDevNull extends Item {
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@ForgeSubscribe
@@ -87,4 +90,9 @@ public class ItemDevNull extends Item {
 			pickedStack.stackSize = 0;
 		}
 	}
+	
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister register) {
+        itemIcon = register.registerIcon("openblocks:devnull");
+    }
 }
