@@ -118,10 +118,12 @@ public class ItemRendererDevNull implements IItemRenderer {
 		TextureUtils.bindDefaultItemsTexture();
 		cube.render();
 
-		GL11.glTranslated(0.5, 0.5, 0.5);
-		GL11.glScalef(0.8f, 0.8f, 0.8f);
-		Minecraft mc = Minecraft.getMinecraft();
-		RenderManager.instance.itemRenderer.renderItem(mc.thePlayer, containedStack, 0, type);
+		if (containedStack != null) {
+			GL11.glTranslated(0.5, 0.5, 0.5);
+			GL11.glScalef(0.8f, 0.8f, 0.8f);
+			Minecraft mc = Minecraft.getMinecraft();
+			RenderManager.instance.itemRenderer.renderItem(mc.thePlayer, containedStack, 0, type);
+		}
 
 		GL11.glPopMatrix();
 	}
