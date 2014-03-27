@@ -772,7 +772,8 @@ public class Config {
 
 		if (itemDevNullId > 0) {
 			OpenBlocks.Items.devNull = new ItemDevNull();
-			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);
+			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);	
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.devNull), Block.cobblestone, Item.appleRed));
 		}
 
 		if (itemWallpaperId > 0) {
