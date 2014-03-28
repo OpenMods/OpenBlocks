@@ -224,7 +224,7 @@ public class MapDataManager {
 					}
 
 					if (block != null) blockBlacklist.add(block);
-					else Log.warn("Can't find block %s", entry);
+					else Log.info("Can't find block %s", entry);
 				} catch (Throwable t) {
 					Log.warn(t, "Invalid entry in map blacklist: %s", entry);
 				}

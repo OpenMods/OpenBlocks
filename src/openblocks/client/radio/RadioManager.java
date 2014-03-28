@@ -22,9 +22,6 @@ import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTunedCrystal;
 import openmods.Log;
 import openmods.config.ConfigurationChange;
-
-import org.apache.commons.lang3.StringUtils;
-
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 
@@ -124,9 +121,6 @@ public class RadioManager implements IVillageTradeHandler {
 			ImmutableList.Builder<RadioStation> stations = ImmutableList.builder();
 			List<String> urls = Lists.newArrayList();
 			for (String stationDesc : Config.radioStations) {
-				if (stationDesc.startsWith("\"") && stationDesc.endsWith("\"")) stationDesc = stationDesc.substring(1, stationDesc.length() - 1);
-				stationDesc = StringUtils.strip(stationDesc);
-
 				List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
 				Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
 

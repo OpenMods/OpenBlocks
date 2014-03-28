@@ -373,7 +373,9 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "cartographer", name = "blockBlacklist", comment = "List of blocks that should be invisible to cartographer. Example: id:3,  OpenBlocks:openblocks_radio (case sensitive)")
-	public static String[] mapBlacklist = new String[] {};
+	public static String[] mapBlacklist = new String[] {
+			"Natura:Cloud"
+	};
 
 	@ConfigProperty(category = "radio", name = "enableChestLoot", comment = "Add tuned crystals as loot in chests")
 	public static boolean radioChests = true;
@@ -772,7 +774,7 @@ public class Config {
 
 		if (itemDevNullId > 0) {
 			OpenBlocks.Items.devNull = new ItemDevNull();
-			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);	
+			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.devNull), Block.cobblestone, Item.appleRed));
 		}
 
