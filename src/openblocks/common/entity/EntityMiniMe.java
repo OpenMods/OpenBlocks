@@ -93,9 +93,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 			downloadImageSkin = null;
 		}
 		if (locationSkin == null) {
-			System.out.println("Downloading new skin for " + newSkin);
 			locationSkin = AbstractClientPlayer.getLocationSkin(newSkin);
-			System.out.println(locationSkin);
 			downloadImageSkin = AbstractClientPlayer.getDownloadImageSkin(locationSkin, newSkin);
 		}
 		previousSkin = newSkin;
@@ -139,12 +137,14 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
 		tag.setString("owner", owner);
+		tag.setInteger("pickupCooldown", pickupCooldown);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
 		if (tag.hasKey("owner")) owner = tag.getString("owner");
+		if (tag.hasKey("pickupCooldown")) pickupCooldown = tag.getInteger("pickupCooldown");
 	}
 
 }

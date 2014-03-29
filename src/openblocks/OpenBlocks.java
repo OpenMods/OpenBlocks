@@ -187,7 +187,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "xpshower", tileEntity = TileEntityXPShower.class)
 		public static BlockXPShower xpShower;
 
-		@RegisterBlock(name = "goldenEgg", tileEntity = TileEntityGoldenEgg.class)
+		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
 		public static BlockGoldenEgg goldenEgg;
 	}
 
