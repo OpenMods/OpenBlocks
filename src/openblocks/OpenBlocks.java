@@ -24,7 +24,9 @@ import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.*;
 import openblocks.events.EventTypes;
-import openblocks.integration.ModuleOpenPeripheral;
+import openblocks.integration.ModuleAdapters;
+import openblocks.integration.cc15.ModuleTurtlesCC15X;
+import openblocks.integration.cc16.ModuleTurtlesCC16;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
@@ -36,6 +38,7 @@ import openmods.config.ConfigProcessing;
 import openmods.config.RegisterBlock;
 import openmods.config.RegisterItem;
 import openmods.entity.EntityBlock;
+import openmods.integration.Integration;
 import openmods.item.ItemGeneric;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ReflectionHelper;
@@ -380,10 +383,10 @@ public class OpenBlocks {
 
 		MinecraftForge.EVENT_BUS.register(MapDataManager.instance);
 
-		if (Loader.isModLoaded(Mods.OPENPERIPHERALCORE)) {
-			ModuleOpenPeripheral.registerAdapters();
-			if (Config.enableCraneTurtles) ModuleOpenPeripheral.registerMagnetTurtle();
-		}
+		Integration.addModule(new ModuleAdapters());
+		// order significant - should always use newer API
+		Integration.addModule(new ModuleTurtlesCC15X());
+		Integration.addModule(new ModuleTurtlesCC16());
 
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());

@@ -11,8 +11,6 @@ import openperipheral.api.LuaType;
 
 import com.google.common.collect.Maps;
 
-import dan200.computer.api.IComputerAccess;
-
 public class AdapterVillageHighlighter implements IPeripheralAdapter {
 
 	@Override
@@ -22,7 +20,7 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 
 	@SuppressWarnings({ "unchecked" })
 	@LuaMethod(onTick = true, returnType = LuaType.TABLE, description = "Get information about the villages this block is inside")
-	public Map<?, ?> getVillages(IComputerAccess computer, TileEntityVillageHighlighter vh) {
+	public Map<?, ?> getVillages(TileEntityVillageHighlighter vh) {
 		Map<Integer, Object> map = Maps.newHashMap();
 		int i = 1;
 		for (Village village : (List<Village>)vh.worldObj.villageCollectionObj.getVillageList()) {

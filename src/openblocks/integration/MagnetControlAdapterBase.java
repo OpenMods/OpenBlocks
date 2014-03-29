@@ -8,24 +8,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
+import openblocks.common.entity.EntityMagnet.IOwner;
 import openperipheral.api.*;
 
 import com.google.common.base.Preconditions;
 
-import dan200.turtle.api.ITurtleAccess;
-import dan200.turtle.api.TurtleSide;
-
 @OnTick
 @Freeform
-public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
+public abstract class MagnetControlAdapterBase implements IUpdateHandler, IWorldProvider {
 
-	public static class Owner implements EntityMagnet.IOwner {
+	public abstract static class OwnerBase implements IOwner {
 
 		private final Vec3 target;
-		private WeakReference<ITurtleAccess> turtle;
 
-		public Owner(ITurtleAccess turtle) {
-			this.turtle = new WeakReference<ITurtleAccess>(turtle);
+		public OwnerBase() {
 			this.target = Vec3.createVectorHelper(0, 0, 0);
 		}
 
@@ -35,15 +31,8 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 			target.zCoord = z;
 		}
 
-		@Override
-		public synchronized Vec3 getTarget() {
-			ITurtleAccess turtle = this.turtle.get();
-			if (turtle == null) return null;
-
-			Vec3 pos = turtle.getPosition().addVector(0.5, 0.5, 0.5);
-
+		public Vec3 getTarget(Vec3 pos, ForgeDirection side) {
 			pos.yCoord += target.yCoord;
-			ForgeDirection side = ForgeDirection.getOrientation(turtle.getFacingDir());
 			switch (side) {
 				case NORTH:
 					pos.xCoord += target.zCoord;
@@ -65,41 +54,41 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 					break;
 			}
 
-			return pos;
-		}
-
-		@Override
-		public boolean isValid(EntityMagnet magnet) {
-			ITurtleAccess turtle = this.turtle.get();
-			return turtle != null && turtle.getWorld() != null;
+			return pos.addVector(0.5, 0.5, 0.5);
 		}
 	}
 
 	private WeakReference<EntityMagnet> magnet = new WeakReference<EntityMagnet>(null);
-	private Owner magnetOwner;
+	private OwnerBase magnetOwner;
 
-	private final TurtleSide side;
-
-	private final ITurtleAccess turtle;
+	public enum SpawnSide {
+		Left,
+		Right;
+	}
 
 	private int fuelTick = 0;
 
-	public MagnetControlAdapter(ITurtleAccess turtle, TurtleSide side) {
-		this.turtle = turtle;
-		this.side = side;
-	}
+	protected abstract OwnerBase createOwner();
+
+	protected abstract boolean consumeFuel(int amount);
+
+	protected abstract SpawnSide getSpawnSide();
+
+	protected abstract ForgeDirection getTurtleFacing();
+
+	protected abstract Vec3 getTurtlePosition();
 
 	@LuaCallable(description = "Activate magnet")
 	public void activate() {
 		EntityMagnet magnet = this.magnet.get();
 		Preconditions.checkState(magnet == null || magnet.isDead, "Magnet already active");
-		World world = turtle.getWorld();
+		World world = getWorld();
 		Preconditions.checkNotNull(world, "Trying to spawn magnet, but turtle is unloaded");
 		Preconditions.checkState(canSpawn(world), "Can't deploy magnet");
-		Preconditions.checkState(turtle.consumeFuel(5), "No fuel");
+		Preconditions.checkState(consumeFuel(5), "No fuel");
 
-		magnetOwner = new Owner(turtle);
-		magnetOwner.target.zCoord = side == TurtleSide.Left? -1 : 1;
+		magnetOwner = createOwner();
+		magnetOwner.target.zCoord = getSpawnSide() == SpawnSide.Left? -1 : 1;
 		magnet = new EntityMagnet(world, magnetOwner, true);
 		world.spawnEntityInWorld(magnet);
 
@@ -125,7 +114,7 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 			description = "Get turtle position")
 	public IMultiReturn getPosition() {
 		EntityMagnet magnet = getMagnet();
-		Vec3 rotated = getRelativeDistance(turtle, magnet);
+		Vec3 rotated = getRelativeDistance(magnet);
 		return OpenPeripheralAPI.wrap(rotated.xCoord, rotated.yCoord, rotated.zCoord);
 	}
 
@@ -149,7 +138,7 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 	@LuaCallable(returnTypes = { LuaType.NUMBER, LuaType.NUMBER, LuaType.NUMBER })
 	public IMultiReturn getDistanceToTarget() {
 		EntityMagnet magnet = getMagnet();
-		Vec3 current = getRelativeDistance(turtle, magnet);
+		Vec3 current = getRelativeDistance(magnet);
 		Vec3 target = magnetOwner.target;
 		return OpenPeripheralAPI.wrap(current.xCoord - target.xCoord,
 				current.yCoord - target.yCoord,
@@ -163,7 +152,7 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 			if (++fuelTick >= 20) {
 				fuelTick = 0;
 				int fuel = magnet.isLocked()? 2 : 1;
-				if (!turtle.consumeFuel(fuel)) despawnMagnet(false);
+				if (!consumeFuel(fuel)) despawnMagnet(false);
 
 			}
 		}
@@ -175,13 +164,13 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 				&& Math.abs(z) <= Config.turtleMagnetRange;
 	}
 
-	private static Vec3 getRelativeDistance(ITurtleAccess turtle, EntityMagnet magnet) {
+	private Vec3 getRelativeDistance(EntityMagnet magnet) {
 		Vec3 magnetPos = Vec3.createVectorHelper(magnet.posX, magnet.posY, magnet.posZ);
-		Vec3 turtlePos = turtle.getPosition().addVector(0.5, 0.5, 0.5);
+		Vec3 turtlePos = getTurtlePosition().addVector(0.5, 0.5, 0.5);
 
 		Vec3 dist = turtlePos.subtract(magnetPos);
 
-		ForgeDirection side = ForgeDirection.getOrientation(turtle.getFacingDir());
+		ForgeDirection side = getTurtleFacing();
 
 		switch (side) {
 			case NORTH:
@@ -198,9 +187,11 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 	}
 
 	private boolean canSpawn(World world) {
-		ForgeDirection facing = ForgeDirection.getOrientation(turtle.getFacingDir());
-		ForgeDirection spawnSide = facing.getRotation((side == TurtleSide.Left)? ForgeDirection.DOWN : ForgeDirection.UP);
-		Vec3 position = turtle.getPosition();
+		ForgeDirection facing = getTurtleFacing();
+		Vec3 position = getTurtlePosition();
+		SpawnSide side = getSpawnSide();
+
+		ForgeDirection spawnSide = facing.getRotation((side == SpawnSide.Left)? ForgeDirection.DOWN : ForgeDirection.UP);
 		int x = MathHelper.floor_double(position.xCoord) + spawnSide.offsetX;
 		int y = MathHelper.floor_double(position.yCoord) + spawnSide.offsetY;
 		int z = MathHelper.floor_double(position.zCoord) + spawnSide.offsetZ;
@@ -219,7 +210,7 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 		Preconditions.checkNotNull(magnet, "Magnet not active");
 
 		Vec3 magnetPos = Vec3.createVectorHelper(magnet.posX, magnet.posY, magnet.posZ);
-		Vec3 turtlePos = turtle.getPosition().addVector(0.5, 0.5, 0.5);
+		Vec3 turtlePos = getTurtlePosition().addVector(0.5, 0.5, 0.5);
 
 		Preconditions.checkState(!checkPosition || canOperateOnMagnet(magnetPos, turtlePos), "Magnet too far");
 
@@ -230,11 +221,6 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 	}
 
 	private static boolean canOperateOnMagnet(Vec3 magnetPos, Vec3 turtlePos) {
-		return magnetPos.squareDistanceTo(turtlePos) > 1.2 * 1.2;
-	}
-
-	@Override
-	public World getWorld() {
-		return turtle.getWorld();
+		return magnetPos.squareDistanceTo(turtlePos) <= 1.5 * 1.5;
 	}
 }

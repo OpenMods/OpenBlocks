@@ -14,8 +14,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.UnsignedBytes;
 
-import dan200.computer.api.IComputerAccess;
-
 public class AdapterProjector implements IPeripheralAdapter {
 
 	private static IMultiReturn wrap(final Object... values) {
@@ -37,13 +35,13 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@LuaMethod(returnType = LuaType.NUMBER, description = "Get current map id")
-	public Integer getMapId(IComputerAccess computer, final TileEntityProjector projector) {
+	public Integer getMapId(TileEntityProjector projector) {
 		int mapId = projector.mapId();
 		return (mapId >= 0)? mapId : null;
 	}
 
 	@LuaMethod(returnType = LuaType.TABLE, description = "Get current map info")
-	public Map<String, Object> getMapInfo(IComputerAccess computer, final TileEntityProjector projector) {
+	public Map<String, Object> getMapInfo(final TileEntityProjector projector) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
 
@@ -67,7 +65,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	@LuaMethod(returnType = LuaType.VOID, description = "Set current map info", args = {
 			@Arg(name = "properties", description = "Map of properties", type = LuaType.OBJECT),
 	})
-	public void setMapInfo(IComputerAccess computer, final TileEntityProjector projector, Map<String, Object> args) {
+	public void setMapInfo(TileEntityProjector projector, Map<String, Object> args) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
 
@@ -105,14 +103,14 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@LuaMethod(returnType = LuaType.NUMBER, description = "Get displayed map rotation")
-	public int getRotation(IComputerAccess computer, final TileEntityProjector projector) {
+	public int getRotation(TileEntityProjector projector) {
 		return projector.rotation();
 	}
 
 	@LuaMethod(returnType = LuaType.VOID, description = "Rotate displayed map rotation", args = {
 			@Arg(name = "delta", description = "Rotation delta (positive - CW, negative - CCW)", type = LuaType.NUMBER)
 	})
-	public void rotate(IComputerAccess computer, final TileEntityProjector projector, int delta) {
+	public void rotate(TileEntityProjector projector, int delta) {
 		projector.rotate(delta);
 	}
 
@@ -121,7 +119,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 			@Arg(name = "column", description = "Map column (0..63)", type = LuaType.NUMBER),
 			@Arg(name = "layer", description = "Map layer", type = LuaType.NUMBER)
 	})
-	public IMultiReturn getPoint(IComputerAccess computer, final TileEntityProjector projector, int row, int column, int layer) {
+	public IMultiReturn getPoint(TileEntityProjector projector, int row, int column, int layer) {
 		Preconditions.checkElementIndex(row, 64, "row");
 		Preconditions.checkElementIndex(column, 64, "column");
 
@@ -141,7 +139,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 			@Arg(name = "height", description = "Point color", type = LuaType.NUMBER),
 			@Arg(name = "color", description = "Point height", type = LuaType.NUMBER)
 	})
-	public void setPoint(IComputerAccess computer, final TileEntityProjector projector, int row, int column, int layer, int height, int color) {
+	public void setPoint(TileEntityProjector projector, int row, int column, int layer, int height, int color) {
 		Preconditions.checkElementIndex(row, 64, "row");
 		Preconditions.checkElementIndex(column, 64, "column");
 		Preconditions.checkElementIndex(height, 256, "height");
@@ -159,7 +157,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@LuaMethod(returnType = LuaType.VOID, description = "Clear map")
-	public void clearMap(IComputerAccess computer, final TileEntityProjector projector) {
+	public void clearMap(TileEntityProjector projector) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
 		data.layers = new LayerData[0];
@@ -169,7 +167,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	@LuaMethod(returnType = LuaType.VOID, description = "Clear single layer", args = {
 			@Arg(name = "layer", description = "Map layer", type = LuaType.NUMBER)
 	})
-	public void clearLayer(IComputerAccess computer, final TileEntityProjector projector, int layer) {
+	public void clearLayer(TileEntityProjector projector, int layer) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
 		Preconditions.checkElementIndex(layer, data.layers.length, "layer");
@@ -181,7 +179,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@LuaMethod(returnType = LuaType.VOID, description = "Append layer")
-	public void appendLayer(IComputerAccess computer, final TileEntityProjector projector) {
+	public void appendLayer(TileEntityProjector projector) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
 		LayerData newLayer = new LayerData();

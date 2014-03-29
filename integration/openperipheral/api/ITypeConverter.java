@@ -15,32 +15,21 @@ package openperipheral.api;
 public interface ITypeConverter {
 
 	/**
-	 * Convert a lua type to the required type. tables in lua
-	 * are passed in as Maps
-	 * e.g.
-	 * if (expected.equals(MyCustomClass.class) && o instanceof Map) {
-	 * // return create new MyCustomClass from the map
-	 * }
-	 * return null;
+	 * Convert a lua type to the required type. Tables in Lua are passed in as Maps
 	 * 
 	 * @param obj
 	 * @param expected
-	 * @return either null if you're not handling this object, or a valid object
+	 * @return either null if you're not handling this object, or a valid object of type {@code expected}
 	 */
 	public Object fromLua(Object obj, Class<?> expected);
 
 	/**
-	 * Convert to a lua friendly format. You can pass most primitives back,
-	 * but also maps. If it's not the specific class you're dealing with
-	 * Just return null.
-	 * e.g.
-	 * if (obj instanceof MyClass) {
-	 * // return ((MyClass)obj).toMap();
-	 * }
-	 * return null;
+	 * Convert to a Lua friendly format. You can pass most primitives back,
+	 * Return only types understood by ComputerCraft API (i.e. primitives, String, Maps and LuaObject), otherwise it will be converted to {@code nil} on Lua side
 	 * 
 	 * @param obj
-	 * @return
+	 *            either null if you're not handling this object, or a valid object
+	 * @return converted value or null
 	 */
 	public Object toLua(Object obj);
 }

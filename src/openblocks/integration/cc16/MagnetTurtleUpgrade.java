@@ -1,4 +1,4 @@
-package openblocks.integration;
+package openblocks.integration.cc16;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -7,9 +7,10 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
-import openperipheral.api.OpenPeripheralAPI;
-import dan200.computer.api.IHostedPeripheral;
-import dan200.turtle.api.*;
+import openperipheral.api.IUpdateHandler;
+import openperipheral.api.cc16.ComputerCraftWrappers;
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.turtle.*;
 
 public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
@@ -37,18 +38,13 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	}
 
 	@Override
-	public boolean isSecret() {
-		return false;
+	public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
+		return ComputerCraftWrappers.createPeripheral(new MagnetControlAdapter(turtle, side));
 	}
 
 	@Override
-	public IHostedPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-		return OpenPeripheralAPI.createHostedPeripheral(new MagnetControlAdapter(turtle, side));
-	}
-
-	@Override
-	public boolean useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
-		return false;
+	public TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
+		return null;
 	}
 
 	@Override
@@ -59,6 +55,12 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	@ForgeSubscribe
 	public void registerIcons(TextureStitchEvent evt) {
 		if (evt.map.getTextureType() == Icons.ICON_TYPE_BLOCK) icon = evt.map.registerIcon("openblocks:magnet_upgrade");
+	}
+
+	@Override
+	public void update(ITurtleAccess turtle, TurtleSide side) {
+		IPeripheral peripheral = turtle.getPeripheral(side);
+		if (peripheral instanceof IUpdateHandler) ((IUpdateHandler)peripheral).onPeripheralUpdate();
 	}
 
 }
