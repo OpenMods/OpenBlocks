@@ -218,6 +218,8 @@ tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
 tile.openblocks.xpshower.name=XP-Dusche
 tile.openblocks.xpshower.description=Bringe eine XP-Dusche an einen Tank voller XP-Saft an und sie wird XP-Orbs ausschütten. Diese Orbs können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.
 
+tile.openblocks.goldenegg.name=Goldenes Ei
+
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
 item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
@@ -292,5 +294,6 @@ itemGroup.tabOpenBlocks=OpenBlocks
 entity.OpenBlocks.Luggage.name=Reisegepäck
 entity.OpenBlocks.Cartographer.name=Kartograph
 entity.OpenBlocks.Block.name=Schwebender Block
+entity.OpenBlocks.MiniMe.name=Mini-Ich
 
 fluid.OpenBlocks.xpjuice=Flüssige XP
