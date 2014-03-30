@@ -6,9 +6,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.integration.MagnetControlAdapterBase;
+import openperipheral.api.ProxyInterfaces;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 
+@ProxyInterfaces
 public class MagnetControlAdapter extends MagnetControlAdapterBase {
 
 	public class Owner extends OwnerBase {
