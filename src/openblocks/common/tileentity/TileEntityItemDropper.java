@@ -11,11 +11,13 @@ import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
+import openmods.fakeplayer.FakePlayerPool;
+import openmods.fakeplayer.FakePlayerPool.PlayerUser;
+import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
-import openmods.utils.OpenModsFakePlayer;
 
 public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventoryProvider, IExtendable, IHasGui {
 	static final int BUFFER_SIZE = 9;
@@ -42,14 +44,17 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
 
-			ItemStack dropped = stack.splitStack(1);
+			final ItemStack dropped = stack.splitStack(1);
 			if (stack.stackSize <= 0) {
 				inventory.setInventorySlotContents(i, null);
+			} else {
+				FakePlayerPool.instance.executeOnPlayer(worldObj, new PlayerUser() {
+					@Override
+					public void usePlayer(OpenModsFakePlayer fakePlayer) {
+						fakePlayer.dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+					}
+				});
 			}
-
-			OpenModsFakePlayer player = new OpenModsFakePlayer(worldObj);
-			player.dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
-			player.setDead();
 
 			return;
 		}

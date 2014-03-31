@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,9 @@ import net.minecraftforge.event.world.BlockEvent;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.INeighbourAwareTile;
+import openmods.fakeplayer.FakePlayerPool;
+import openmods.fakeplayer.FakePlayerPool.PlayerUser;
+import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.sync.ISyncableObject;
@@ -25,7 +27,6 @@ import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
-import openmods.utils.OpenModsFakePlayer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -79,42 +80,49 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	private void breakBlock() {
 		if (worldObj.isRemote) return;
 
-		ForgeDirection direction = getRotation();
+		final ForgeDirection direction = getRotation();
 		final int x = xCoord + direction.offsetX;
 		final int y = yCoord + direction.offsetY;
 		final int z = zCoord + direction.offsetZ;
 
 		if (worldObj.blockExists(x, y, z)) {
 			int blockId = worldObj.getBlockId(x, y, z);
-			Block block = Block.blocksList[blockId];
+			final Block block = Block.blocksList[blockId];
 			if (block != null) {
-				int metadata = worldObj.getBlockMetadata(x, y, z);
+				final int metadata = worldObj.getBlockMetadata(x, y, z);
 				if (block != Block.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
-					EntityPlayer fakePlayer = new OpenModsFakePlayer(worldObj);
-					fakePlayer.inventory.currentItem = 0;
-					fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Item.pickaxeDiamond, 0, 0));
-
-					BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
-					if (MinecraftForge.EVENT_BUS.post(event)) return;
-
-					if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
-						List<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
-						if (items != null) {
-							ForgeDirection back = direction.getOpposite();
-							ejectAt(worldObj,
-									xCoord + back.offsetX,
-									yCoord + back.offsetY,
-									zCoord + back.offsetZ,
-									back, items);
-						}
-					}
-					fakePlayer.setDead();
+					breakBlock(direction, x, y, z, block, metadata);
 					worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
 					worldObj.setBlockToAir(x, y, z);
 				}
 			}
 			worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 		}
+	}
+
+	private void breakBlock(final ForgeDirection direction, final int x, final int y, final int z, final Block block, final int metadata) {
+		FakePlayerPool.instance.executeOnPlayer(worldObj, new PlayerUser() {
+			@Override
+			public void usePlayer(OpenModsFakePlayer fakePlayer) {
+				fakePlayer.inventory.currentItem = 0;
+				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Item.pickaxeDiamond, 0, 0));
+
+				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
+				if (MinecraftForge.EVENT_BUS.post(event)) return;
+
+				if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
+					List<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
+					if (items != null) {
+						ForgeDirection back = direction.getOpposite();
+						ejectAt(worldObj,
+								xCoord + back.offsetX,
+								yCoord + back.offsetY,
+								zCoord + back.offsetZ,
+								back, items);
+					}
+				}
+			}
+		});
 	}
 
 	private void ejectAt(World world, int x, int y, int z, ForgeDirection direction, List<ItemStack> itemStacks) {

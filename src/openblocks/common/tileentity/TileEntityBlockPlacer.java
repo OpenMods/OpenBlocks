@@ -13,11 +13,13 @@ import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
+import openmods.fakeplayer.FakePlayerPool;
+import openmods.fakeplayer.FakePlayerPool.PlayerUser;
+import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
-import openmods.utils.OpenModsFakePlayer;
 
 public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IHasGui, IExtendable, IInventoryProvider {
 
@@ -39,24 +41,31 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 	private void placeBlock() {
 		if (worldObj.isRemote) return;
 
-		ForgeDirection direction = getRotation();
+		final ForgeDirection direction = getRotation();
 		final int x = xCoord + direction.offsetX;
 		final int y = yCoord + direction.offsetY;
 		final int z = zCoord + direction.offsetZ;
 
-		for (int i = 0, l = inventory.getSizeInventory(); i < l; i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			final int slotId = i;
+			final ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null || stack.stackSize == 0) continue;
-			OpenModsFakePlayer fakePlayer = new OpenModsFakePlayer(worldObj);
-			ItemStack newStack = fakePlayer.equipWithAndRightClick(stack,
-					Vec3.createVectorHelper(xCoord, yCoord, zCoord),
-					Vec3.createVectorHelper(x, y - 1, z),
-					direction.getOpposite(),
-					worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
-			fakePlayer.setDead();
-			inventory.setInventorySlotContents(i, newStack);
-			break;
+			placeBlock(direction, x, y, z, slotId, stack);
 		}
+	}
+
+	private void placeBlock(final ForgeDirection direction, final int x, final int y, final int z, final int slotId, final ItemStack stack) {
+		FakePlayerPool.instance.executeOnPlayer(worldObj, new PlayerUser() {
+			@Override
+			public void usePlayer(OpenModsFakePlayer fakePlayer) {
+				ItemStack newStack = fakePlayer.equipWithAndRightClick(stack,
+						Vec3.createVectorHelper(xCoord, yCoord, zCoord),
+						Vec3.createVectorHelper(x, y - 1, z),
+						direction.getOpposite(),
+						worldObj.blockExists(x, y, z) && !worldObj.isAirBlock(x, y, z) && !Block.blocksList[worldObj.getBlockId(x, y, z)].isBlockReplaceable(worldObj, x, y, z));
+				inventory.setInventorySlotContents(slotId, newStack);
+			}
+		});
 	}
 
 	@Override

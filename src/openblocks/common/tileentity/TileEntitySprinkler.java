@@ -11,17 +11,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
-import openmods.*;
+import openmods.GenericInventory;
+import openmods.IInventoryProvider;
+import openmods.OpenMods;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
+import openmods.fakeplayer.FakePlayerPool;
+import openmods.fakeplayer.FakePlayerPool.PlayerUser;
+import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
@@ -37,6 +41,8 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Item.dyePowder, 1, 15);
+
+	private static final Random RANDOM = new Random();
 
 	private boolean hasBonemeal = false;
 
@@ -65,34 +71,28 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID);
 	}
 
+	private static int selectFromRange(int range) {
+		return RANDOM.nextInt(2 * range + 1) - range;
+	}
+
 	private void attemptFertilize() {
-		if (worldObj.rand.nextDouble() < 1.0 / (hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance)) {
-			// http://goo.gl/RpQuk9
-			Random random = worldObj.rand;
-			int x = (random.nextInt(Config.sprinklerEffectiveRange + 1))
-					* (random.nextBoolean()? 1 : -1) + xCoord;
-			int z = (random.nextInt(Config.sprinklerEffectiveRange + 1))
-					* (random.nextBoolean()? 1 : -1) + zCoord;
-			/*
-			 * What? Okay think about this. i = -1 y = yCoord - 1 i = 0 y =
-			 * yCoord - 1 i = 1 y = yCoord
-			 * 
-			 * Is this the intended operation? I've changed it for now -NC
-			 */
-			for (int i = -1; i <= 1; i++) {
-				int y = yCoord + i;
-				try {
-					for (int a = 0; a < 10; a++) {
-						// Mikee, why do we try to apply it 10 times? Is it
-						// likely to fail? -NC
-						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, x, y, z, new FakePlayer(worldObj, "sprinkler"))) {
-							break;
-						}
+		final int fertilizerChance = hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance;
+		if (RANDOM.nextDouble() < 1.0 / fertilizerChance) {
+			FakePlayerPool.instance.executeOnPlayer(worldObj, new PlayerUser() {
+				@Override
+				public void usePlayer(OpenModsFakePlayer fakePlayer) {
+					final int x = selectFromRange(Config.sprinklerEffectiveRange) + xCoord;
+					final int z = selectFromRange(Config.sprinklerEffectiveRange) + zCoord;
+
+					for (int i = -1; i <= 1; i++) {
+						int y = yCoord + i;
+
+						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, x, y, z, fakePlayer))
+						break;
+
 					}
-				} catch (Exception e) {
-					Log.warn(e, "Exception during bonemeal applying");
 				}
-			}
+			});
 		}
 	}
 
