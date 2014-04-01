@@ -32,29 +32,23 @@ public class ItemDevNull extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (!world.isRemote) {
-			if (!player.isSneaking()) {
-				player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
-			}
-		}
+		if (!world.isRemote) player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
 		return stack;
 	}
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
-		if (player.isSneaking()) {
-			ItemInventory inventory = new ItemInventory(player, 1);
-			ItemStack containedStack = inventory.getStackInSlot(0);
-			if (containedStack != null) {
-				Item item = containedStack.getItem();
-				if (item instanceof ItemBlock) {
-					boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, par7, par8, par9, par10);
-					if (containedStack.stackSize == 0) {
-						inventory.setInventorySlotContents(0, null);
-					}
-					inventory.onInventoryChanged();
-					return response;
+		ItemInventory inventory = new ItemInventory(player, 1);
+		ItemStack containedStack = inventory.getStackInSlot(0);
+		if (containedStack != null) {
+			Item item = containedStack.getItem();
+			if (item instanceof ItemBlock) {
+				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, par7, par8, par9, par10);
+				if (containedStack.stackSize == 0) {
+					inventory.setInventorySlotContents(0, null);
 				}
+				inventory.onInventoryChanged();
+				return response;
 			}
 		}
 		return true;
