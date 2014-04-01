@@ -100,7 +100,6 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			setUsername(player.username);
-			setLoot(player.inventory);
 			sync();
 		}
 	}
