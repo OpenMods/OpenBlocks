@@ -226,7 +226,7 @@ public class Config {
 
 	@ItemId(description = "The id of the dev null item")
 	public static int itemDevNullId = 15001;
-	
+
 	@ItemId(description = "The id of sponge on a stick")
 	public static int itemSpongeOnAStickId = 15002;
 
@@ -405,6 +405,17 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "fan", name = "isRedstoneActivated", comment = "Is fan force controlled by redstone current")
 	public static boolean redstoneActivatedFan = true;
+
+	@ConfigProperty(category = "sponge", name = "spongeStickUseCount", comment = "SpongeOnAStick use count")
+	public static int spongeMaxDamage = 256;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "sponge", name = "spongeRange", comment = "Sponge block range (distance from center)")
+	public static int spongeRange = 3;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "sponge", name = "spongeRange", comment = "Sponge block range (distance from center)")
+	public static int spongeStickRange = 3;
 
 	public static void register() {
 

@@ -18,12 +18,9 @@ public class TileEntitySponge extends OpenTileEntity implements INeighbourAwareT
 		for (int x = -3; x <= 3; x++) {
 			for (int y = -3; y <= 3; y++) {
 				for (int z = -3; z <= 3; z++) {
-					Material material = worldObj.getBlockMaterial(xCoord + x, yCoord
-							+ y, zCoord + z);
+					Material material = worldObj.getBlockMaterial(xCoord + x, yCoord + y, zCoord + z);
 					if (material.isLiquid()) {
-						if (material == Material.lava) {
-							hitLava = true;
-						}
+						hitLava |= material == Material.lava;
 						worldObj.setBlock(xCoord + x, yCoord + y, zCoord + z, 0, 0, BlockNotifyFlags.SEND_TO_CLIENTS);
 					}
 				}

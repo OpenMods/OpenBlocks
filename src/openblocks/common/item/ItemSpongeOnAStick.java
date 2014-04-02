@@ -13,15 +13,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSpongeOnAStick extends Item {
-	
-	public static final int MAX_DAMAGE = 4096;
-	
+
 	public ItemSpongeOnAStick() {
 		super(Config.itemSpongeOnAStickId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setHasSubtypes(true);
 		setMaxStackSize(1);
-		setMaxDamage(MAX_DAMAGE);
+		setMaxDamage(Config.spongeMaxDamage);
 	}
 
 	@Override
@@ -32,51 +29,41 @@ public class ItemSpongeOnAStick extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		return soakUp(world, x, y, z, player, stack);
-	}
-	
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
-	{
-		soakUp(world, (int)player.posX, (int)player.posY, (int)player.posZ, player, stack);
-	    return stack;
+		soakUp(world, x, y, z, player, stack);
+		return true;
 	}
 
-	public boolean soakUp(World world, int xCoord, int yCoord, int zCoord, EntityPlayer player, ItemStack stack) {
-		if (world.isRemote) { return true; }
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		soakUp(world, (int)player.posX, (int)player.posY, (int)player.posZ, player, stack);
+		return stack;
+	}
+
+	public void soakUp(World world, int xCoord, int yCoord, int zCoord, EntityPlayer player, ItemStack stack) {
+		if (world.isRemote) return;
 		boolean hitLava = false;
-		int dmg = 0;
-		int predmg = stack.getItemDamage();	
-		
-		for (int x = -3; x <= 3; x++) {
-			for (int y = -3; y <= 3; y++) {
-				for (int z = -3; z <= 3; z++) {
-					Material material = world.getBlockMaterial(xCoord + x, yCoord
-							+ y, zCoord + z);
+		int damage = stack.getItemDamage();
+
+		for (int x = -Config.spongeStickRange; x <= Config.spongeStickRange; x++) {
+			for (int y = -Config.spongeStickRange; y <= Config.spongeStickRange; y++) {
+				for (int z = -Config.spongeStickRange; z <= Config.spongeStickRange; z++) {
+					Material material = world.getBlockMaterial(xCoord + x, yCoord + y, zCoord + z);
 					if (material.isLiquid()) {
-						if (material == Material.lava) {
-							hitLava = true; 
-						}
+						hitLava |= material == Material.lava;
 						world.setBlock(xCoord + x, yCoord + y, zCoord + z, 0, 0, BlockNotifyFlags.SEND_TO_CLIENTS);
-						dmg++;
-						if (dmg + predmg >= MAX_DAMAGE) 
-							break;
+						if (++damage >= getMaxDamage()) break;
 					}
 				}
 			}
 		}
+
 		if (hitLava) {
-			// Set fire to the user?
+			stack.stackSize = 0;
 			player.setFire(6);
 		}
-		
-		if (dmg + predmg >= MAX_DAMAGE) {
-			stack.stackSize = 0;
-		}
-		else {
-			stack.setItemDamage(dmg + predmg);
-		}
-		return true;
+
+		if (damage >= getMaxDamage()) stack.stackSize = 0;
+		else stack.setItemDamage(damage);
 	}
-	
 
 }
