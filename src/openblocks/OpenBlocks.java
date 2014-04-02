@@ -277,6 +277,8 @@ public class OpenBlocks {
 		@RegisterItem(name = "devnull")
 		public static ItemDevNull devNull;
 
+		@RegisterItem(name = "spongeonastick")
+		public static ItemSpongeOnAStick spongeonastick;
 	}
 
 	public static class ClassReferences {
