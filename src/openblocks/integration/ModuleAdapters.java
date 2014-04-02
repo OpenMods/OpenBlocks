@@ -1,12 +1,14 @@
 package openblocks.integration;
 
-import openmods.integration.ApiIntegration;
+import static openmods.integration.Conditions.modLoaded;
+import openmods.Mods;
+import openmods.integration.IntegrationModule;
 import openperipheral.api.OpenPeripheralAPI;
 
-public class ModuleAdapters extends ApiIntegration {
+public class ModuleAdapters extends IntegrationModule {
 
 	public ModuleAdapters() {
-		super("openperipheral.api.OpenPeripheralAPI");
+		super(modLoaded(Mods.OPENPERIPHERALCORE));
 	}
 
 	@Override

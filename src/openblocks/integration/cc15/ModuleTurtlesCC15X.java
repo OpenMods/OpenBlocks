@@ -1,19 +1,27 @@
 package openblocks.integration.cc15;
 
+import static openmods.conditions.Conditions.all;
+import static openmods.integration.Conditions.classExists;
+import static openmods.integration.Conditions.modLoaded;
+
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.item.MetaMiracleMagnet;
 import openblocks.common.item.MetaMiracleMagnet.ITurtleLister;
+import openmods.Mods;
 import openmods.OpenMods;
-import openmods.integration.ApiIntegration;
+import openmods.integration.IntegrationModule;
 import dan200.turtle.api.TurtleAPI;
 
-public class ModuleTurtlesCC15X extends ApiIntegration {
+public class ModuleTurtlesCC15X extends IntegrationModule {
 
 	public ModuleTurtlesCC15X() {
-		super("dan200.turtle.api.ITurtleUpgrade");
+		super(all(
+				modLoaded(Mods.OPENPERIPHERALCORE),
+				modLoaded(Mods.COMPUTERCRAFT_TURTLE),
+				classExists("dan200.turtle.api.ITurtleUpgrade")));
 	}
 
 	@Override
@@ -31,7 +39,6 @@ public class ModuleTurtlesCC15X extends ApiIntegration {
 			@Override
 			public void addTurtles(List<ItemStack> result) {
 				CCUtils.addUpgradedTurtles(result, magnetUpgrade);
-
 			}
 		};
 	}
