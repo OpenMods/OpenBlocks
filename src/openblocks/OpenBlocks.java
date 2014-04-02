@@ -118,7 +118,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "vacuumhopper", tileEntity = TileEntityVacuumHopper.class)
 		public static BlockVacuumHopper vacuumHopper;
 
-		@RegisterBlock(name = "sponge", tileEntity = TileEntitySponge.class)
+		@RegisterBlock(name = "sponge")
 		public static BlockSponge sponge;
 
 		@RegisterBlock(name = "bigbutton", tileEntity = TileEntityBigButton.class)

@@ -39,7 +39,7 @@ public class ItemSpongeOnAStick extends Item {
 		return stack;
 	}
 
-	public void soakUp(World world, int xCoord, int yCoord, int zCoord, EntityPlayer player, ItemStack stack) {
+	private void soakUp(World world, int xCoord, int yCoord, int zCoord, EntityPlayer player, ItemStack stack) {
 		if (world.isRemote) return;
 		boolean hitLava = false;
 		int damage = stack.getItemDamage();
