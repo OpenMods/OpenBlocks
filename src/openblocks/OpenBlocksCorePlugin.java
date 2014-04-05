@@ -5,7 +5,10 @@ import java.util.logging.Logger;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 
+//must be higher than one in openmodslib
+@SortingIndex(32)
 public class OpenBlocksCorePlugin implements IFMLLoadingPlugin {
 
 	public static Logger log;

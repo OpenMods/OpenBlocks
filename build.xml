@@ -35,14 +35,6 @@
 		</copy>
 	</target>
 
-	<target name="copy-extra-binaries">
-		<copy todir="${classes.dir}/">
-			<fileset dir="${mcp.dir}/reobf/minecraft/">
-                <include name="openmods/asm/*.class" /><!-- Include this one, since core mod may be loaded before lib -->
-			</fileset>
-		</copy>
-	</target>
-
 	<target name="create-manifest">
 		<mkdir dir="${classes.dir}/META-INF" />
 		<manifest file="${classes.dir}/META-INF/MANIFEST.MF">
