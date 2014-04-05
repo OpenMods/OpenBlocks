@@ -7,19 +7,18 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
+import openblocks.integration.TurtleIds;
 import openperipheral.api.IUpdateHandler;
 import openperipheral.api.cc16.ComputerCraftWrappers;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 
 public class MagnetTurtleUpgrade implements ITurtleUpgrade {
-
 	public Icon icon;
 
 	@Override
 	public int getUpgradeID() {
-		return 9260; // TODO Allocate proper one on Wiki. This one should be
-						// free.
+		return TurtleIds.MAGNET_TURTLE_ID;
 	}
 
 	@Override

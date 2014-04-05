@@ -5,15 +5,10 @@ import java.util.List;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import openblocks.Config;
+import openblocks.integration.TurtleIds;
+import openblocks.integration.TurtleUtils;
 
 public class MetaMiracleMagnet extends MetaGeneric {
-
-	public interface ITurtleLister {
-		public void addTurtles(List<ItemStack> result);
-	}
-
-	public static ITurtleLister lister;
-
 	public MetaMiracleMagnet(String name, Object... recipes) {
 		super(name, recipes);
 	}
@@ -32,8 +27,8 @@ public class MetaMiracleMagnet extends MetaGeneric {
 	public void addToCreativeList(int itemId, int meta, List<ItemStack> result) {
 		super.addToCreativeList(itemId, meta, result);
 
-		if (Config.enableCraneTurtles && Config.showCraneTurtles && lister != null) {
-			lister.addTurtles(result);
+		if (Config.enableCraneTurtles && Config.showCraneTurtles) {
+			TurtleUtils.addUpgradedTurtles(result, TurtleIds.MAGNET_TURTLE_ID);
 		}
 	}
 }

@@ -18,9 +18,15 @@ public class ModuleAdapters extends IntegrationModule {
 
 	@Override
 	public void load() {
-		OpenPeripheralAPI.register(new AdapterVillageHighlighter());
-		OpenPeripheralAPI.register(new AdapterDonationStation());
-		OpenPeripheralAPI.register(new AdapterCannon());
-		OpenPeripheralAPI.register(new AdapterProjector());
+		LoadHack.load();
+	}
+
+	private static class LoadHack {
+		private static void load() {
+			OpenPeripheralAPI.register(new AdapterVillageHighlighter());
+			OpenPeripheralAPI.register(new AdapterDonationStation());
+			OpenPeripheralAPI.register(new AdapterCannon());
+			OpenPeripheralAPI.register(new AdapterProjector());
+		}
 	}
 }
