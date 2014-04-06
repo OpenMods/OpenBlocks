@@ -18,7 +18,7 @@ import openmods.utils.ItemUtils;
 public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
-		super(Config.blockTankId, Material.ground);
+		super(Config.blockTankId, Material.circuits);
 	}
 
 	@Override
