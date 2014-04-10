@@ -146,6 +146,9 @@ public class Config {
 	@BlockId(description = "The id of the xp shower")
 	public static int blockXPShowerId = 2579;
 
+	@BlockId(description = "The id of the creative item spawner")
+	public static int blockCreativeItemSpawnerId = 2580;
+
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;
 
@@ -636,6 +639,10 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Item.ingotIron, 'o', Block.obsidian));
 		}
 
+		if (ConfigProcessing.canRegisterBlock(blockCreativeItemSpawnerId)) {
+			OpenBlocks.Blocks.itemSpawner = new BlockCreativeItemSpawner();
+		}
+		
 		if (itemHangGliderId > 0) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.hangGlider, "wsw", 'w', MetasGeneric.gliderWing.newItemStack(), 's', "stickWood"));

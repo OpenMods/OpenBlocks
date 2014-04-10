@@ -26,6 +26,7 @@ openblocks.gui.drawingtable=Drawing Table
 openblocks.gui.blocks=Blocks
 openblocks.gui.items=Items
 openblocks.gui.misc=Misc
+openblocks.gui.itemspawner=Creative Item Spawner
 
 openblocks.gui.welcome.title=Welcome!
 openblocks.gui.welcome.content=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more!
@@ -222,6 +223,8 @@ tile.openblocks.xpshower.name=XP Shower
 tile.openblocks.xpshower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer.
 
 tile.openblocks.goldenegg.name=Golden Egg
+
+tile.openblocks.creativeitemspawner.name=Creative Item Spawner
 
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.

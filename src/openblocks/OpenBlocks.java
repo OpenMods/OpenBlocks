@@ -192,6 +192,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
 		public static BlockGoldenEgg goldenEgg;
+		
+		@RegisterBlock(name = "creativeitemspawner", tileEntity = TileEntityCreativeItemSpawner.class)
+		public static BlockCreativeItemSpawner itemSpawner;
 	}
 
 	public static class Items {
