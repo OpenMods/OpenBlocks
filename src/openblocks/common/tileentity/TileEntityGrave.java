@@ -13,16 +13,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.ForgeDirection;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
+import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
-import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachment, IPlaceAwareTile, IInventoryProvider {
+public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile {
 
 	private SyncableString perishedUsername;
 	public boolean onSoil = true;
@@ -38,14 +42,6 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 	}
 
 	@Override
-	public void initialize() {
-		Block block = Block.blocksList[worldObj.getBlockId(xCoord, yCoord - 1, zCoord)];
-		if (block != null) {
-			onSoil = (block == Block.dirt || block == Block.grass);
-		}
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public void updateEntity() {
 		super.updateEntity();
@@ -57,8 +53,7 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 		}
 
 		if (!worldObj.isRemote) {
-			if (worldObj.difficultySetting > 0
-					&& worldObj.rand.nextDouble() < 0.002) {
+			if (worldObj.difficultySetting > 0 && worldObj.rand.nextDouble() < 0.002) {
 				List<Entity> mobs = worldObj.getEntitiesWithinAABB(IMob.class, getBB().expand(7, 7, 7));
 				if (mobs.size() < 5) {
 					double chance = worldObj.rand.nextDouble();
@@ -84,11 +79,6 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 		inventory.copyFrom(invent);
 	}
 
-	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return ForgeDirection.DOWN;
-	}
-
 	public boolean isOnSoil() {
 		return onSoil;
 	}
@@ -98,9 +88,9 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) {
+		if (!worldObj.isRemote && !(player instanceof FakePlayer)) {
 			setUsername(player.username);
-			setLoot(player.inventory);
+			if (player.capabilities.isCreativeMode) setLoot(player.inventory);
 			sync();
 		}
 	}
@@ -121,4 +111,27 @@ public class TileEntityGrave extends SyncedTileEntity implements ISurfaceAttachm
 	public IInventory getInventory() {
 		return inventory;
 	}
+
+	protected void updateBlockBelow() {
+		int blockId = this.worldObj.getBlockId(xCoord, yCoord - 1, zCoord);
+		Block block = Block.blocksList[blockId];
+		onSoil = (block == Block.dirt || block == Block.grass);
+	}
+
+	@Override
+	public void initialize() {
+		updateBlockBelow();
+	}
+
+	@Override
+	public void onNeighbourChanged(int blockId) {
+		updateBlockBelow();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox() {
+		return AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
+	}
+
 }

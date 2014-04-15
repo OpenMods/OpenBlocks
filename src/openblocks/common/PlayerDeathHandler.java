@@ -48,6 +48,7 @@ public class PlayerDeathHandler {
 						if (tryPlaceGrave(world, checkX, checkY, checkZ, player, drops)) {
 							Log.fine("Placing grave for player '%s' @ (%d,%d,%d) with %d items", player.username, checkX, checkY, checkZ, drops.size());
 							if (Config.debugGraves) dumpDebugInfo(event);
+							drops.clear();
 							event.setCanceled(true);
 							return;
 						}

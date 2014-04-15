@@ -11,6 +11,7 @@ public class BlockAutoAnvil extends OpenBlock {
 		super(Config.blockAutoAnvilId, Material.anvil);
 		setStepSound(soundAnvilFootstep);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setInventoryRenderRotation(ForgeDirection.NORTH);
 	}
 
 	@Override
@@ -27,4 +28,5 @@ public class BlockAutoAnvil extends OpenBlock {
 	public boolean shouldRenderBlock() {
 		return false;
 	}
+
 }

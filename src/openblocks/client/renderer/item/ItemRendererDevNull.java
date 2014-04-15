@@ -135,7 +135,6 @@ public class ItemRendererDevNull implements IItemRenderer {
 
 		GL11.glPushMatrix();
 		RenderUtils.disableLightmap();
-		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 
@@ -145,14 +144,11 @@ public class ItemRendererDevNull implements IItemRenderer {
 
 		if (fontRenderer != null && containedStack != null) {
 			GL11.glPushMatrix();
+			RenderHelper.enableGUIStandardItemLighting();
 			GL11.glScalef(14.0f / 16.0f, 14.0f / 16.0f, 1);
 			itemRenderer.renderItemAndEffectIntoGUI(fontRenderer, textureManager, containedStack, 1, 1);
 			GL11.glPopMatrix();
-			String sizeToRender = "";
-			if (containedStack.stackSize > 1) {
-				sizeToRender = "" + containedStack.stackSize;
-			}
-
+			final String sizeToRender = (containedStack.stackSize > 1)? Integer.toString(containedStack.stackSize) : "";
 			itemRenderer.renderItemOverlayIntoGUI(fontRenderer, textureManager, containedStack, 0, 0, sizeToRender);
 		}
 
