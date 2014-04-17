@@ -339,11 +339,11 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "giveChangelogBooks", comment = "Whether to give players ChangelogBooks on join")
-	public static boolean enableChangelogBooks = true;
+	public static boolean giveChangelogBooks = true;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "giveInfoBooks", comment = "Whether to give players InfoBooks on join")
-	public static boolean enableChangelogBooks = true;
+	public static boolean giveInfoBooks = true;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "gravesDebug", comment = "Dump extra amount of data, every time grave is created")
