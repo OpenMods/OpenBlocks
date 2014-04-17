@@ -77,7 +77,7 @@ public class EntityEventHandler {
 			EntityPlayer player = (EntityPlayer)entity;
 			NBTTagCompound persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
 
-			boolean shouldGiveManual = OpenBlocks.Items.infoBook != null && !persistTag.getBoolean(GIVEN_MANUAL_TAG);
+			boolean shouldGiveManual = OpenBlocks.Items.infoBook != && Config.giveInfoBooks null && !persistTag.getBoolean(GIVEN_MANUAL_TAG);
 			if (shouldGiveManual) {
 				ItemStack manual = new ItemStack(OpenBlocks.Items.infoBook);
 				if (!player.inventory.addItemStackToInventory(manual)) {
@@ -85,7 +85,7 @@ public class EntityEventHandler {
 				}
 				persistTag.setBoolean(GIVEN_MANUAL_TAG, true);
 			}
-			boolean shouldGiveChangelog = OpenBlocks.changeLog != null && !persistTag.getString(LATEST_CHANGELOG_TAG).equals(ModInfo.VERSION);
+			boolean shouldGiveChangelog = OpenBlocks.changeLog != null && Config.giveChangelogBooks && !persistTag.getString(LATEST_CHANGELOG_TAG).equals(ModInfo.VERSION);
 			if (shouldGiveChangelog) {
 				ItemStack changeLog = OpenBlocks.changeLog.copy();
 				if (!player.inventory.addItemStackToInventory(changeLog)) {
