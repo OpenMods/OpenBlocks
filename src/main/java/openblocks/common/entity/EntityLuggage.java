@@ -1,5 +1,6 @@
 package openblocks.common.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -161,4 +162,8 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	public double getMountedYOffset() {
 		return 0.825;
 	}
+	
+    public Entity getOwner() {
+    	return func_130012_q();
+    }
 }
