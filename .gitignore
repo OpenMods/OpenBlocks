@@ -6,3 +6,4 @@ download
 .idea/
 Thumbs.db
 ForgeModLoader-client*
+/.gradle
