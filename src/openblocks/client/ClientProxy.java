@@ -109,6 +109,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPShower.class, new TileEntityXPShowerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDigitalFuse.class, new TileEntityDigitalFuseRenderer());
 
 		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
 

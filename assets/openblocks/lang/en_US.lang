@@ -26,6 +26,7 @@ openblocks.gui.drawingtable=Drawing Table
 openblocks.gui.blocks=Blocks
 openblocks.gui.items=Items
 openblocks.gui.misc=Misc
+openblocks.gui.digitalfuse=Digital Fuse
 
 openblocks.gui.welcome.title=Welcome!
 openblocks.gui.welcome.content=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more!
