@@ -1,0 +1,3 @@
+[submodule "OpenModsLib"]
+	path = OpenModsLib
+	url = http://github.com/OpenMods/OpenModsLib.git
