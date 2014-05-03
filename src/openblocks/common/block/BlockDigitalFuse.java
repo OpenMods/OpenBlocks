@@ -51,6 +51,10 @@ public class BlockDigitalFuse extends OpenBlock {
 		return isProvidingWeakPower(world, x, y, z, side);
 	}
 
+	public boolean useTESRForInventory() {
+		return false;
+	}
+
 	@Override
 	public void registerIcons(IconRegister registry) {
 		for (int i = 0; i < 8; i++) {
