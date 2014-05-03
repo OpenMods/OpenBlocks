@@ -1,0 +1,157 @@
+/*
+ * OpenModsLib build file.
+ * @author Arkan <arkan@emberwalker.cc>
+ */
+
+//================================================
+// Variables
+mod_version = '1.2.8'
+mc_ver = '1.6.4'
+forge_ver = '9.11.1.964'
+
+//================================================
+// Pre-execute
+
+buildscript {
+    repositories {
+        // General deps
+        mavenCentral()
+        // Minecraft Forge
+        maven {
+            name = 'Forge'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+        // Sonatype (for SpecialSource in 1.7+)
+        maven {
+            name = "Sonatype Nexus"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+	}
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+    }
+}
+
+repositories {
+	maven {
+        name 'Forge'
+        url 'http://files.minecraftforge.net/maven'
+    }
+    maven {
+        name 'MinecraftS3'
+        url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
+    }
+}
+
+apply plugin: 'forge'
+
+//================================================
+// Dependencies
+
+dependencies {
+    compile project(":OpenModsLib") // Load OpenModsLib from submodule
+}
+
+//================================================
+// Jar data
+
+// Grab system env
+env = System.getenv()
+
+version = mc_ver + "-" + mod_version
+
+in_jenkins = false
+// Get Jenkins metadata
+jenkinsManifest = manifest {
+    if (env.BUILD_TAG != null) { // If this works, we'll assume we're in Jenkins atleast.
+        attributes("Jenkins-Build": "true", "Jenkins-Tag": env.BUILD_TAG, "Jenkins-ID": env.BUILD_ID)
+        in_jenkins = true
+    } else {
+        attributes("Jenkins-Build": "false")
+    }
+}
+
+def branch = null
+def hash = null
+def proc1 = "git rev-parse --short HEAD".execute()
+proc1.in.eachLine { line -> hash = line }
+proc1.err.eachLine { line -> println line }
+proc1.waitFor()
+
+
+if (!in_jenkins) {
+    def proc2 = "git rev-parse --abbrev-ref HEAD".execute()
+    proc2.in.eachLine { line -> branch = line }
+    proc2.err.eachLine { line -> println line }
+    proc2.waitFor()
+} else { // In Jenkins
+    branch = env.GIT_BRANCH.minus("origin/")
+}
+
+// If not on master, add branch to jar name
+if (branch != null && !branch.equals("master")) {
+    version += "-" + branch
+} else {
+    //version += "-" + hash
+}
+
+// Version tag for jar file name
+if (env.BUILD_NUMBER != null) {
+    version += "-snapshot-" + env.BUILD_NUMBER
+}
+
+// Get Git metadata (if in Jenkins)
+gitManifest = manifest {
+    if (env.GIT_BRANCH != null) {
+        attributes("Git-Branch": branch, "Git-Hash": hash)
+    }
+}
+
+// Setup Forge plugin
+minecraft {
+    version = mc_ver + "-" + forge_ver
+    assetDir = 'run/assets'
+    replace '${version}', mod_version
+}
+
+processResources {
+	// Process mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.info'
+        expand 'version':mod_version,'MCVersion':mc_ver
+    }
+
+    // Copy anything else directly
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.info'
+    }
+}
+
+//================================================
+// Jar tasks
+
+// Generate FML Coremod manifest
+fmlManifest = manifest {
+    attributes("FMLCorePlugin": "openblocks.OpenBlocksCorePlugin", "FMLCorePluginContainsFMLMod": "true")
+}
+
+// Merge Jenkins and Git manifests to form final manifest in final release jar
+jar {
+    manifest {
+        from jenkinsManifest, gitManifest, fmlManifest
+    }
+}
+
+// Dev jar
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+    manifest {
+        from jenkinsManifest, gitManifest, fmlManifest
+    }
+}
+
+artifacts {
+    archives deobfJar
+}
