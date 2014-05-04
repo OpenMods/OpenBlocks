@@ -6,6 +6,8 @@ stat.openblocks.bricksDropped=砖块已掉落
 openblocks.keybind.drop_brick=傻了
 
 enchantment.openblocks.explosive=震荡不定
+enchantment.openblocks.laststand=屹立不倒
+enchantment.openblocks.flimflam=欺骗
 
 openblocks.gui.luggage=行李
 openblocks.gui.sprinkler=洒水器
@@ -22,9 +24,32 @@ openblocks.gui.itemdropper=物品投掷器
 openblocks.gui.blockplacer=方块放置机
 openblocks.gui.paintmixer=调色器
 openblocks.gui.drawingtable=绘图桌
+openblocks.gui.blocks=方块
+openblocks.gui.items=物品
+openblocks.gui.misc=杂项
+
+openblocks.gui.welcome.title=欢迎!
+openblocks.gui.welcome.content=OpenBlocks是一个新的开源模组，它将大量新奇点子引入了Minecraft, 包括滑翔风筝, 电梯, 水槽, 墓碑, 画笔, 起重机, 液态经验, 地图绘制器, 奖杯等!
+
 openblocks.gui.credits_title=制作组
 openblocks.gui.credits=*Boq, Mikee 以及 NeverCast* - OpenBlocks主开发者 (我们应该可以把自己添加到制作组里吧?)\n\n*SinZ 以及 Yoshi2* - OpenMods团队元老成员.\n\n*Vexatos 和 crafteverywhere* - 日常翻译人员.\n\n以及过去一年中所有其他对代码有贡献的人.\n\n*Direwolf20 和 ForgeCraft 的其他成员* - 感谢他们在我们发布前测试bug以及崩溃.\n\n以及制作介绍视频,直播视频和一开始就支持我们的朋友!
 
+openblocks.gui.config.title=简单配置编辑
+openblocks.gui.config.content=OpenMods允许通过使用聊天框输入指令来更改客户端及服务端的配置. 有些甚至都不需要重新启动!\n\n要想更改服务端配置，请使用 '§L/om_config_s§R' (需要op及以上的权限)，更改客户端的配置文件需要输入 '§L/om_config_c§R'\n\n比如:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\n查看全部指令，请输入: §L/help om_config_s§R or §L/help om_config_c§R
+
+openblocks.gui.bkey.title=邪恶的'B'键
+openblocks.gui.bkey.content='B' 键在OpenBlocks里是一个特殊的键.\n\n启用 'weAreSeriousPeople'配置选项，在客户端和服务端的配置文件中，你会获得你自己的消化系统.\n\n试着吃些美味粘土，然后按'B'消化!
+
+openblocks.gui.unstable.title=不稳定附魔
+openblocks.gui.unstable.content=我们得到一条未经证实的消息，当你跳过某个方块或者受到攻击时，这个附魔会使你所携带的火药变得极其不稳定.\n\n恕不负责因此造成的任何损失!
+
+openblocks.gui.flimflam.title=欺骗附魔
+openblocks.gui.flimflam.content=科学家尚未研究出这种附魔的作用.
+
+openblocks.gui.laststand.title=屹立不倒附魔
+openblocks.gui.laststand.content=屹立不倒附魔使用你的经验条作为最后的防护，以抵挡死亡.\n\n当你的血量达到0.5颗心, 继续受到伤害时，游戏就会从你身体拿走经验，而不是杀死你. 附魔等级越高，经验消耗越低.
+
+openblocks.changelog.title=开放式方块更新了什么 %s
 openblocks.misc.url=链接: %s
 openblocks.misc.type=类型: %s
 openblocks.misc.uses=使用: %.2f
@@ -44,6 +69,7 @@ openblocks.misc.selected_cannon=选中加农炮以瞄准
 openblocks.misc.pointed_cannon=加农炮瞄准位置%s, %s, %s
 openblocks.misc.change_mode=切换为%s模式
 openblocks.misc.change_size=切换大小为%sx%sx%s
+openblocks.misc.get_witched=着迷!
 
 openblocks.misc.shape.sphere=球体
 openblocks.misc.shape.cylinder=圆柱
@@ -54,6 +80,33 @@ openblocks.misc.shape.pentagon=五角
 openblocks.misc.shape.hexagon=六边
 openblocks.misc.shape.octagon=八角
 
+openblocks.misc.radio.too_many=太多收音机正在播放
+openblocks.misc.radio.invalid_stream=无效网络流
+openblocks.misc.radio.invalid_url=无效URL
+openblocks.misc.radio.url_not_found=URL没有找到
+openblocks.misc.radio.unknown_stream_type=未知流类型
+openblocks.misc.radio.malformed_data=网络流中畸形数据
+openblocks.misc.radio.not_ready=数据流尚未准备好, 待会再来尝试
+openblocks.misc.radio.cant_connect=无法连接
+openblocks.misc.radio.unknown_error=未知错误
+openblocks.misc.radio.muted=声音已被消除!
+
+openblocks.misc.side.east=东方
+openblocks.misc.side.west=西方
+openblocks.misc.side.north=北方
+openblocks.misc.side.south=南方
+openblocks.misc.side.up=顶部
+openblocks.misc.side.down=底部
+
+openblocks.misc.command.invalid=无效命令变量
+openblocks.misc.command.no_flim_flam=无效欺骗名称
+openblocks.misc.command.flim_flam_source=玩家 %s 已经被 %s成功欺骗
+openblocks.misc.command.flim_flam_target=有个有权利的人不喜欢你. 
+openblocks.misc.command.flim_flam_failed=欺骗失败!
+openblocks.misc.command.luck_added=与玩家 %s交换运气, 当前: %d
+openblocks.misc.command.luck_current=玩家 %s 运气: %d
+openblocks.flim_flammed=你周围发生了一些诡异的事
+
 openblocks.turtle.magnet=磁铁
 
 tile.openblocks.elevator.name=电梯
@@ -62,7 +115,6 @@ tile.openblocks.elevator.video=http://www.youtube.com/watch?v=Ksm73FltDHo
 
 tile.openblocks.heal.name=治愈器
 tile.openblocks.heal.description=治愈器为创造模式才能用的方块,会为玩家加持轻微的治愈效果buff.
-tile.openblocks.heal.video=
 
 tile.openblocks.guide.name=建筑指导机
 tile.openblocks.guide.description=建筑指导器用幽灵方块显示出不同形状大小的建筑轮廓来指导我们规划房间.\n潜行状态下点击它可以切换显示的形状,直接点击不同的面可以调整其对应方向上的大小.\n在创造模式时,如果将黑曜石方块放置于其上方,再拿着任意方块敲击建筑指导器,则会用该方块自动搭建出显示的形状.
@@ -76,84 +128,141 @@ tile.openblocks.tank.name=蓄水槽
 tile.openblocks.tank.description=蓄水槽容纳液体.比邻而放的蓄水槽会变成一个整体.你可以使用水桶来填装蓄水槽.如果蓄水槽装着液态经验,空手点击就能获得一些经验.蓄水槽掉落成物品状态时仍会保留其容纳的液体.
 tile.openblocks.tank.video=http://www.youtube.com/watch?v=8CFQWyxUxYA
 
-tile.openblocks.target.name=靶子
-tile.openblocks.target.description=玩家精准射中会发出强红石信号.而接收红石信号则会立起来.
-
-tile.openblocks.grave.name=墓碑
-
 tile.openblocks.flag.name=旗子
 tile.openblocks.flag.description=用于装饰,或者洞穴冒险的归途标记.旗子会指向你放置时的方向。或者你也可以把它挂在墙上.如果拿着旗子按住潜行来点击则会切换其颜色.
 
 tile.openblocks.beartrap.name=捕兽夹
 tile.openblocks.beartrap.description=放置捕兽夹,点击可以将其打开,当生物走过时会被夹住,无法再动弹!
 
-tile.openblocks.sprinkler.name=洒水器
-tile.openblocks.sprinkler.description=洒水器会催费4格范围内的作物.将其放置在本模组提供的装满水的蓄水槽上方即可工作.你也可以添加骨粉使其催肥效率更高.\n也可以视为一个水源方块使用.
-
-tile.openblocks.vacuumhopper.name=虚空漏斗
-tile.openblocks.vacuumhopper.description=虚空漏斗会吸引附近的掉落物品以及经验球.你可以再设定栏里调整其输出方向.
-
 tile.openblocks.sponge.name=海绵
 tile.openblocks.sponge.description=这个海绵会替换掉原版的海绵.移除小范围的水或者岩浆的利器.在对付大面积的液体的时候请小心谨慎,因为它会开始变得相当混乱.
 
+tile.openblocks.spongeonastick.name=海绵棍
+tile.openblocks.spongeonastick.description=木棍上的海绵是一种能帮助清理液体的工具. 工作起来就像海绵, 但是以会损坏为代价，更加地灵活机动.
+
 tile.openblocks.cannon.name=传物加农炮
-tile.openblocks.cannon.name=当接收到红石信号时,加农炮会发射出依附它的物品栏中的物品.使用指针可以调整加农炮的弹道曲线.
-
-tile.openblocks.bigbutton.name=大型按钮
-tile.openblocks.bigbutton.description=可以放置在墙面上的大型按钮.如果空手时按住潜行键点击会打开一个一格物品栏,你可以放入物品来增加按钮按下持续的时间长度——1个物品增加1tick.
-
-tile.openblocks.fan.name=风扇
-tile.openblocks.fan.description=风扇会吹开正对方向上的玩家,生物和其他实体.
-
-tile.openblocks.xpbottler.name=经验装瓶器
-tile.openblocks.xpbottler.description=经验装盘器能够将液态经验装瓶变成附魔瓶.
-
-tile.openblocks.village_highlighter.name=村庄边界标记机
-tile.openblocks.village_highlighter.description=在村庄中放置村庄边界标记机并使其接收红石信号.它会显示出村庄的边界轮廓和铁傀儡的刷新区域.在判断两个临近村庄是否合并成了一个或制作铁傀儡农场时都很有用!
-
-tile.openblocks.path.name=铺路石
-tile.openblocks.path.description=铺路石没啥特别的,只是看起来很不错!
-
-tile.openblocks.autoenchantmenttable.name=自动型附魔台
-tile.openblocks.autoenchantmenttable.description=自动附魔台类似原版附魔台,但它使用液态经验来驱动.在设定栏中可以设置物品和液态经验的输入方向.类似原版,书架也能对其附魔等级有加成作用.
-
-tile.openblocks.xpdrain.name=XP格栅板
-tile.openblocks.xpdrain.description=将其放置在本模组的蓄水槽上方并站立在上方.你的经验会被抽出来流入蓄水槽中,之后蓄水槽中的液态经验可以用于自动附魔台或者自动铁砧.
+tile.openblocks.cannon.description=当接收到红石信号时,加农炮会发射出依附它的物品栏中的物品.使用指针可以调整加农炮的弹道曲线.
 
 tile.openblocks.ropeladder.name=绳梯
 tile.openblocks.ropeladder.description=当放置绳梯后,它会垂下来直到地面.
 
-tile.openblocks.donationStation.name=捐助站
-tile.openblocks.donationStation.description=喜爱某模组中的某方块或物品,以至于希望向模组开发者表示谢意?将它扔进捐助站,如果我们知道它的作者是谁,会显示其捐助页面的地址.
+tile.openblocks.sprinkler.name=洒水器
+tile.openblocks.sprinkler.description=洒水器会催费4格范围内的作物.将其放置在本模组提供的装满水的蓄水槽上方即可工作.你也可以添加骨粉使其催肥效率更高.\n也可以视为一个水源方块使用.
 
-tile.openblocks.blockbreaker.name=方块采掘机
-tile.openblocks.blockbreaker.description=接收到红石信号时会在正对方向采掘方块.
+tile.openblocks.paintmixer.name=调色器
+tile.openblocks.paintmixer.description=调色器可以混调你希望的各种颜色!将牛奶或者已经有的颜料桶放入顶端格子中,然后丢入青色,品红色,黄色以及黑色颜料到其他4个格子中,点击混合!
+tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
-tile.openblocks.blockPlacer.name=方块放置机
-tile.openblocks.blockPlacer.description=接收到红石信号时会在正对方向放置方块.
+tile.openblocks.canvas.name=画布
+tile.openblocks.canvas.description=适宜书写并绘画,欲详请看调色器.
+tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.fan.name=风扇
+tile.openblocks.fan.description=风扇会吹开正对方向上的玩家,生物和其他实体.
+
+tile.openblocks.target.name=靶子
+tile.openblocks.target.description=玩家精准射中会发出强红石信号.而接收红石信号则会立起来.
+
+tile.openblocks.path.name=铺路石
+tile.openblocks.path.description=铺路石没啥特别的,只是看起来很不错!
 
 tile.openblocks.itemDropper.name=物品投掷器
 tile.openblocks.itemDropper.description=类似原版投掷器,除了其投掷轨迹为直线外.
 
-tile.openblocks.canvas.name=画布
-tile.openblocks.canvas.description=适宜书写并绘画,欲详请看调色器.
+tile.openblocks.bigbutton.name=大型按钮
+tile.openblocks.bigbutton.description=可以放置在墙面上的大型按钮.如果空手时按住潜行键点击会打开一个一格物品栏,你可以放入物品来增加按钮按下持续的时间长度——1个物品增加1tick.
 
-tile.openblocks.paintmixer.name=调色器
-tile.openblocks.paintmixer.description=调色器可以混调你希望的各种颜色!将牛奶或者已经有的颜料桶放入顶端格子中,然后丢入青色,品红色,黄色以及黑色颜料到其他4个格子中,点击混合!
+tile.openblocks.xpdrain.name=XP格栅板
+tile.openblocks.xpdrain.description=将其放置在本模组的蓄水槽上方并站立在上方.你的经验会被抽出来流入蓄水槽中,之后蓄水槽中的液态经验可以用于自动附魔台或者自动铁砧.
+
+tile.openblocks.vacuumhopper.name=虚空漏斗
+tile.openblocks.vacuumhopper.description=虚空漏斗会吸引附近的掉落物品以及经验球.你可以再设定栏里调整其输出方向.
+
+tile.openblocks.village_highlighter.name=村庄边界标记机
+tile.openblocks.village_highlighter.description=在村庄中放置村庄边界标记机并使其接收红石信号.它会显示出村庄的边界轮廓和铁傀儡的刷新区域.在判断两个临近村庄是否合并成了一个或制作铁傀儡农场时都很有用!
+
+tile.openblocks.donationStation.name=捐助站
+tile.openblocks.donationStation.description=喜爱某模组中的某方块或物品,以至于希望向模组开发者表示谢意?将它扔进捐助站,如果我们知道它的作者是谁,会显示其捐助页面的地址.
+
+tile.openblocks.blockPlacer.name=方块放置机
+tile.openblocks.blockPlacer.description=接收到红石信号时会在正对方向放置方块.
+
+tile.openblocks.blockbreaker.name=方块采掘机
+tile.openblocks.blockbreaker.description=接收到红石信号时会在正对方向采掘方块.
 
 tile.openblocks.projector.name=高度图投影仪
-tile.openblocks.projector.description=
+tile.openblocks.projector.description=我会让你在博客里写一个的!
+
+tile.openblocks.autoenchantmenttable.name=自动型附魔台
+tile.openblocks.autoenchantmenttable.description=自动附魔台类似原版附魔台,但它使用液态经验来驱动.在设定栏中可以设置物品和液态经验的输入方向.类似原版,书架也能对其附魔等级有加成作用.
+
+tile.openblocks.xpbottler.name=经验装瓶器
+tile.openblocks.xpbottler.description=经验装盘器能够将液态经验装瓶变成附魔瓶.
 
 tile.openblocks.autoanvil.name=自动型铁砧
+tile.openblocks.autoanvil.description=自动型铁砧工作起来就像原版的铁砧, 但是它消耗液体经验且完全自动.\n\n使用GUI右侧的选项，来决定需要修复的物品或者液态经验从哪个方向导入或者取出. 右击然后拖拉铁砧到选项栏里来旋转铁砧或者选择方向!
+
+tile.openblocks.drawingtable.name=绘图桌
+tile.openblocks.drawingtable.description=T绘图桌用于创造模板，模板可以在油刷时使用. 将空白模板放入绘图桌里，然后使用箭头选择你想要的模板!
+tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.grave.name=墓碑
 tile.openblocks.trophy.name=纪念雕像
 tile.openblocks.canvasglass.name=透明画布
 tile.openblocks.paintcan.name=颜料罐
-tile.openblocks.drawingtable.name=绘图桌
+
+tile.openblocks.sky.normal.name=天空方块
+tile.openblocks.sky.normal.description=带来内外全新的天空方块! 只要给予一个红石信号. 我们就可以反转天空.
+tile.openblocks.sky.inverted.name=反转天空方块
+
+tile.openblocks.radio.name=收音机
+tile.openblocks.radio.description=收音机允许你连接接收网络收音机! 首先，你需要调台水晶，你可以在地牢的箱子里面或者 从特殊的村民那儿得到它们. 将水晶放入收音机里，同时给予一个红石信号来打开它.  红石信号强度控制音量.\n\n你可以在服务端配置器文件里面配置可收听的频道.
+tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
+
+tile.openblocks.xpshower.name=XP淋浴喷头
+tile.openblocks.xpshower.description=将一个XP淋浴喷头贴在一个装有液体经验的容器的一面，然后它就会从中取出经验球.这些经验球可以被XP收集器或者MFR污水管收集.
+
+tile.openblocks.goldenegg.name=金蛋
+
+item.openblocks.cursor.name=游标
+item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
+item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
+
+item.openblocks.devnull.name=/dev/null
+item.openblocks.devnull.description=Click using /dev/null to open the inventory. There's a single inventory slot - put an item in there - dirt, for example. As you gather dirt from the ground this slot will fill up. Once it's full, any more dirt you pick up will be automatically discarded. You can shift-click with the item in your hand as though you were placing the block!
+
+item.openblocks.slimalyzer.name=史莱姆区块探测器
+item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.
 
 item.openblocks.hangglider.name=悬挂式滑翔机
+item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
+item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
+
 item.openblocks.gliderwing.name=滑翔翼
+
+item.openblocks.sleepingbag.name=睡袋
+item.openblocks.sleepingbag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back.
+
 item.openblocks.luggage.name=行李
+item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items!
+item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
+
 item.openblocks.sonicglasses.name=音波眼镜
+item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear!
+
+item.openblocks.squeegee.name=刮刀
+item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
+item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.paintbrush.name=颜料刷
+item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil!
+item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.unprepared_stencil.name=空白模子
+item.openblocks.unprepared_stencil.description="这些我一直能在箱子里找到的讨厌的模板是干什么用的?"\n\n这些模板可以放在方块上面，然后使用颜料刷油漆!\n\n你可以使用多个模板漆刷同一个方块， 空手右击可以旋转它们.\n\n在绘图桌上放置空白的模板，你可以创造你喜欢的模板.
+item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.stencil.name=模子
 item.openblocks.crayon.name=魔法蜡笔
 item.openblocks.pencil.name=魔法铅笔
 item.openblocks.glasses.pencil.name=铅笔眼镜
@@ -161,35 +270,34 @@ item.openblocks.glasses.crayon.name=蜡笔眼镜
 item.openblocks.glasses.technicolor.name=惊艳科幻色调眼镜
 item.openblocks.glasses.admin.name=恶棍眼镜
 item.openblocks.crane_backpack.name=起重背包
-item.openblocks.crane_control.name=起重控制
+item.openblocks.crane_control.name=起重控制器
 item.openblocks.crane_engine.name=起重引擎
 item.openblocks.crane_magnet.name=起重磁铁
 item.openblocks.beam.name=束
 item.openblocks.line.name=线
 item.openblocks.miracle_magnet.name=§5奇迹磁铁§r
-item.openblocks.slimalyzer.name=史莱姆区块探测器
+
+item.openblocks.info_book.name=用开放式方块主宰世界
 item.openblocks.xpbucket.name=XP桶
-item.openblocks.sleepingbag.name=睡袋
-item.openblocks.paintbrush.name=颜料刷
-item.openblocks.stencil.name=模子
 item.openblocks.height_map.name=高度图
 item.openblocks.empty_map.name=空地图
 item.openblocks.map_controller.name=地图控制模块
 item.openblocks.map_memory.name=地图存储模块
 item.openblocks.cartographer.name=制图机器人
 item.openblocks.assistant_base.name=助力基座
-item.openblocks.cursor.name=游标
-item.openblocks.squeegee.name=刮刀
-item.openblocks.unprepared_stencil.name=空白模子
 item.openblocks.sketching_pencil.name=绘图笔
 item.openblocks.tasty_clay.name=美味粘土
 item.openblocks.golden_eye.name=黄金眼
 item.openblocks.pointer.name=指针
+item.openblocks.tuned_crystal.name=调台水晶
+
+item.openblocks.wallpaper.name=墙纸
 
 itemGroup.tabOpenBlocks=开放式方块
 
 entity.OpenBlocks.Luggage.name=行李箱
 entity.OpenBlocks.Cartographer.name=制图机器人
 entity.OpenBlocks.Block.name=悬浮方块
+entity.OpenBlocks.MiniMe.name=Mini Me
 
 fluid.OpenBlocks.xpjuice=液态经验
