@@ -40,7 +40,7 @@ openblocks.gui.config.content=OpenMods允许通过使用聊天框输入指令来
 openblocks.gui.bkey.title=邪恶的'B'键
 openblocks.gui.bkey.content='B' 键在OpenBlocks里是一个特殊的键.\n\n启用 'weAreSeriousPeople'配置选项，在客户端和服务端的配置文件中，你会获得你自己的消化系统.\n\n试着吃些美味粘土，然后按'B'消化!
 
-openblocks.gui.unstable.title=不稳定附魔
+openblocks.gui.unstable.title=震荡不定附魔
 openblocks.gui.unstable.content=我们得到一条未经证实的消息，当你跳过某个方块或者受到攻击时，这个附魔会使你所携带的火药变得极其不稳定.\n\n恕不负责因此造成的任何损失!
 
 openblocks.gui.flimflam.title=欺骗附魔
