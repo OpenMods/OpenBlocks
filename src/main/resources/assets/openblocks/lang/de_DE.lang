@@ -26,6 +26,7 @@ openblocks.gui.drawingtable=Zeichentisch
 openblocks.gui.blocks=Blöcke
 openblocks.gui.items=Items
 openblocks.gui.misc=Misc
+openblocks.gui.digitalfuse=Digitalzünder
 
 openblocks.gui.welcome.title=Willkommen!
 openblocks.gui.welcome.content=OpenBlocks ist eine neue Open-Source-Mod, die verschiedene Ideen in Minecraft einbringt, inklusive Gleitschirme, Aufzüge, Tanks, Gräber, Farben, Kräne, flüssige XP, Kartographen, Trophäen und mehr!
@@ -106,7 +107,7 @@ openblocks.misc.command.luck_added=Glück von Spieler %s geändert, aktuell: %d
 openblocks.misc.command.luck_current=Glück von Spieler %s: %d
 openblocks.flim_flammed=Etwas seltsames geschieht um dich herum...
 
-openblocks.turtle.magnet=Magnetische
+openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.elevator.description=Platziere einen Fahrstuhl drei oder mehr Blöcke oberhalb eines anderen ohne Blöcke dazwischen und du wirst fähig sein, entweder zu 'springen', um dich aufwärts zu bewegen oder zu 'kriechen', um dich abwärts zu bewegen. Fahrstühle können gefärbt werden, indem man mit einem Farbstoff in der Hand rechtsklickt, jedoch kannst du dich nur zwischen Fahrstühlen in der selben Farbe teleportieren.
@@ -223,6 +224,7 @@ tile.openblocks.xpshower.description=Bringe eine XP-Dusche an einen Tank voller 
 
 tile.openblocks.goldenegg.name=Goldenes Ei
 
+tile.openblocks.digitalfuse.name=Digitalzünder
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
 item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
