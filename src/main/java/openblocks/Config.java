@@ -366,7 +366,7 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
 	public static String[] radioStations = new String[] {
-			"http://69.46.75.101:80;idobi Radio (idobi.com);Blue",
+			"http://idobiradio.idobi.com;idobi Radio (idobi.com);Blue",
 			"http://192.184.9.79:8006;CINEMIX;Blue",
 			"http://radiorivendell.de:80/;Radio Rivendell;Blue",
 			"http://205.164.62.15:10052;1.fm Love Classics;Blue",
