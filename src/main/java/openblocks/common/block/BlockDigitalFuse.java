@@ -27,6 +27,7 @@ public class BlockDigitalFuse extends OpenBlock {
 		return true;
 	}
 
+	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
@@ -51,6 +52,7 @@ public class BlockDigitalFuse extends OpenBlock {
 		return isProvidingWeakPower(world, x, y, z, side);
 	}
 
+	@Override
 	public boolean useTESRForInventory() {
 		return false;
 	}
@@ -70,6 +72,7 @@ public class BlockDigitalFuse extends OpenBlock {
 		setDefaultTexture(Icons.topIcons[0]);
 	}
 
+	@Override
 	public Icon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
 		if (direction.equals(ForgeDirection.UP)) {
 

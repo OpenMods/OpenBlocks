@@ -45,6 +45,7 @@ public class TileEntityDigitalFuse extends SyncedTileEntity implements INeighbou
 		onNeighbourChanged(0);
 	}
 
+	@Override
 	public void updateEntity() {
 
 		super.updateEntity();

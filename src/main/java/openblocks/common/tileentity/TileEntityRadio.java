@@ -20,7 +20,6 @@ import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
-import openmods.utils.ItemUtils;
 
 import com.google.common.base.Strings;
 
@@ -68,8 +67,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 			url.clear();
 			crystalColor.setValue(NO_CRYSTAL);
 		} else {
-			NBTTagCompound tag = ItemUtils.getItemTag(stack);
-			url.setValue(tag.getString(ItemTunedCrystal.TAG_URL));
+			url.setValue(ItemTunedCrystal.getUrl(stack));
 			streamName.setValue(stack.getDisplayName());
 			crystalColor.setValue((byte)stack.getItemDamage());
 		}

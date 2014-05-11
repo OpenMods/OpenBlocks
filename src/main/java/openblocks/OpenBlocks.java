@@ -335,6 +335,8 @@ public class OpenBlocks {
 		ConfigProcessing.processAnnotations(configFile, "OpenBlocks", config, Config.class);
 
 		if (config.hasChanged()) config.save();
+
+		RadioManager.instance.readConfigs();
 		Config.register();
 
 		NetworkRegistry.instance().registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));

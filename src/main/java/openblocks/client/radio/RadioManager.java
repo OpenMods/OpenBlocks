@@ -50,8 +50,8 @@ public class RadioManager implements IVillageTradeHandler {
 		public final Iterable<String> attributes;
 		private ItemStack stack;
 
-		public RadioStation(String url, String name, Iterable<String> attributes) {
-			this.url = url;
+		private RadioStation(String url, String name, Iterable<String> attributes) {
+			this.url = instance.updateURL(url);
 			this.name = name;
 			this.attributes = attributes;
 		}
@@ -59,7 +59,7 @@ public class RadioManager implements IVillageTradeHandler {
 		public ItemStack getStack() {
 			final ItemTunedCrystal tunedCrystal = OpenBlocks.Items.tunedCrystal;
 			if (stack == null && tunedCrystal != null) {
-				stack = tunedCrystal.createStack(this);
+				stack = tunedCrystal.createStack(url, name, attributes);
 			}
 			return stack;
 		}
@@ -68,6 +68,8 @@ public class RadioManager implements IVillageTradeHandler {
 	public static final String OGG_EXT = "ogg";
 
 	private static final Map<String, String> PROTOCOLS = Maps.newHashMap();
+
+	private static final Map<String, String> REPLACEMENTS = Maps.newHashMap();
 
 	static {
 		PROTOCOLS.put("audio/ogg", OGG_EXT);
@@ -94,9 +96,24 @@ public class RadioManager implements IVillageTradeHandler {
 
 	public static final RadioManager instance = new RadioManager();
 
+	public void readConfigs() {
+		for (String entry : Config.derpList) {
+			String[] parts = entry.split("\\s+");
+			Preconditions.checkArgument(parts.length == 2, "Invalid format in replacementList");
+			REPLACEMENTS.put(parts[0], parts[1]);
+		}
+	}
+
 	public void init() {
 		MinecraftForge.EVENT_BUS.register(this);
 		getRadioStations(); // preload
+	}
+
+	public String updateURL(String url) {
+		for (Map.Entry<String, String> e : REPLACEMENTS.entrySet())
+			if (url.equals(e.getKey())) return e.getValue();
+
+		return url;
 	}
 
 	private List<RadioStation> stations;
@@ -124,14 +141,14 @@ public class RadioManager implements IVillageTradeHandler {
 				List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
 				Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
 
-				String url = fields.get(0);
+				String url = updateURL(fields.get(0));
 				String name = (fields.size() > 1)? fields.get(1) : "";
 				Iterable<String> attributes = (fields.size() > 2)? Splitter.on(",").split(fields.get(2)) : ImmutableList.<String> of();
 
 				stations.add(new RadioStation(url, name, attributes));
 				urls.add(url);
 			}
-			if (FMLCommonHandler.instance().getSide() == Side.CLIENT) RadioManager.instance.preloadStreams(urls);
+			if (FMLCommonHandler.instance().getSide() == Side.CLIENT) preloadStreams(urls);
 			this.stations = stations.build();
 		}
 		return stations;

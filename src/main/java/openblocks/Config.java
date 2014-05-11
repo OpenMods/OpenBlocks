@@ -377,6 +377,11 @@ public class Config {
 			"http://50.7.173.162:8010;Audiophile Baroque;Red"
 	};
 
+	@ConfigProperty(category = "radio", name = "replaceList", comment = "List of URLs that need to be updated (url, whitespace, replacement")
+	public static String[] derpList = new String[] {
+			"http://69.46.75.101:80 http://idobiradio.idobi.com"
+	};
+
 	@OnLineModifiable
 	@ConfigProperty(category = "cartographer", name = "blockBlacklist", comment = "List of blocks that should be invisible to cartographer. Example: id:3,  OpenBlocks:openblocks_radio (case sensitive)")
 	public static String[] mapBlacklist = new String[] {

@@ -162,8 +162,9 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	public double getMountedYOffset() {
 		return 0.825;
 	}
-	
-    public Entity getOwner() {
-    	return func_130012_q();
-    }
+
+	@Override
+	public Entity getOwner() {
+		return func_130012_q();
+	}
 }

@@ -28,7 +28,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemTunedCrystal extends Item {
 
 	private static final String TAG_HIDDEN = "Hidden";
-	public static final String TAG_URL = "URL";
+	private static final String TAG_URL = "URL";
 
 	private Icon crystal;
 
@@ -39,11 +39,11 @@ public class ItemTunedCrystal extends Item {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
-	public ItemStack createStack(RadioStation station) {
+	public ItemStack createStack(String url, String name, Iterable<String> attributes) {
 		ColorMeta color = ColorUtils.vanillaToColor(ColorUtils.WHITE);
 		boolean hidden = false;
 
-		for (String attribute : station.attributes) {
+		for (String attribute : attributes) {
 			attribute = StringUtils.strip(attribute);
 			ColorMeta possibleColor = ColorUtils.nameToColor(attribute);
 			if (possibleColor != null) {
@@ -58,8 +58,8 @@ public class ItemTunedCrystal extends Item {
 
 		ItemStack result = new ItemStack(this, 1, color.vanillaId);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
-		tag.setString(TAG_URL, station.url);
-		if (!Strings.isNullOrEmpty(station.name)) result.setItemName(station.name);
+		tag.setString(TAG_URL, url);
+		if (!Strings.isNullOrEmpty(name)) result.setItemName(name);
 		if (hidden) tag.setBoolean(TAG_HIDDEN, true);
 		return result;
 	}
@@ -115,4 +115,13 @@ public class ItemTunedCrystal extends Item {
 			result.add(station.getStack());
 	}
 
+	public static String getUrl(ItemStack stack) {
+		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		if (tag == null) return null;
+		String url = tag.getString(TAG_URL);
+		if (Strings.isNullOrEmpty(url)) return null;
+		String updatedUrl = RadioManager.instance.updateURL(url);
+		if (!updatedUrl.equals(url)) tag.setString(TAG_URL, updatedUrl);
+		return updatedUrl;
+	}
 }

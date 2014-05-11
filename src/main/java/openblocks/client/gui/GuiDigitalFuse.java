@@ -52,6 +52,7 @@ public class GuiDigitalFuse extends BaseGuiContainer<ContainerDigitalFuse> {
 		root.addComponent(resetLabel);
 	}
 
+	@Override
 	public void preRender(float mouseX, float mouseY) {
 		super.preRender(mouseX, mouseY);
 		SyncableInt timeLeft = getContainer().getOwner().getTimeLeft();
