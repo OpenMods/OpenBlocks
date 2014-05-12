@@ -203,7 +203,7 @@ tile.openblocks.autoanvil.name=自动型铁砧
 tile.openblocks.autoanvil.description=自动型铁砧工作起来就像原版的铁砧, 但是它消耗液体经验且完全自动.\n\n使用GUI右侧的选项,来决定需要修复的物品或者液态经验从哪个方向导入或者取出. 右击然后拖拉铁砧到选项栏里来旋转铁砧或者选择方向!
 
 tile.openblocks.drawingtable.name=绘图桌
-tile.openblocks.drawingtable.description=T绘图桌用于创造模板,模板可以在油刷时使用. 将空白模板放入绘图桌里,然后使用箭头选择你想要的模板!
+tile.openblocks.drawingtable.description=绘图桌用于创造模板,模板可以在油刷时使用. 将空白模板放入绘图桌里,然后使用箭头选择你想要的模板!
 tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.grave.name=墓碑
