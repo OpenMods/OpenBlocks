@@ -21,6 +21,8 @@ import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
+import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -34,6 +36,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 	protected SyncableInt height;
 	protected SyncableInt depth;
 	protected SyncableInt mode;
+	protected SyncableInt color;
 
 	public TileEntityGuide() {}
 
@@ -43,6 +46,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 		height = new SyncableInt(8);
 		depth = new SyncableInt(8);
 		mode = new SyncableInt(0);
+		color = new SyncableInt(0xFFFFFF);
 	}
 
 	public int getWidth() {
@@ -55,6 +59,10 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 
 	public int getDepth() {
 		return depth.getValue();
+	}
+
+	public int getColor() {
+		return color.getValue();
 	}
 
 	public void setWidth(int w) {
@@ -220,13 +228,34 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, ISh
 		if (worldObj.isRemote) return true;
 
 		if (player.isSneaking()) switchMode(player);
-		else if (player.capabilities.isCreativeMode && isInFillMode()) fill(player, side);
-		else changeDimensions(player, ForgeDirection.getOrientation(side));
+		else {
+			ItemStack held = player.getHeldItem();
+			if (held != null) {
+				ColorMeta color = ColorUtils.stackToColor(held);
+				if (color != null) {
+					changeColor(color.rgb);
+					return true;
+				}
+			}
+
+			if (player.capabilities.isCreativeMode && isInFillMode()) fill(player, side);
+			else changeDimensions(player, ForgeDirection.getOrientation(side));
+		}
 
 		return true;
 	}
 
+	protected void changeColor(int color) {
+		this.color.setValue(color);
+		if (!worldObj.isRemote) sync();
+	}
+
 	private boolean isInFillMode() {
 		return worldObj.getBlockId(xCoord, yCoord + 1, zCoord) == Block.obsidian.blockID;
+	}
+
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
 	}
 }
