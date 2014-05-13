@@ -1,5 +1,7 @@
 package openblocks.client.renderer.tileentity;
 
+import java.util.Collection;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -8,6 +10,7 @@ import net.minecraft.util.Icon;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 import openmods.renderer.DisplayListWrapper;
+import openmods.utils.Coord;
 import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
@@ -37,14 +40,17 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide)tileentity;
 
+		GL11.glPushMatrix();
+		GL11.glTranslated(x, y, z);
 		float scaleDelta = guide.getTimeSinceChange();
-		renderShape(guide.getShape(), guide.getHeight(), guide.getWidth(), guide.getDepth(), guide.getColor(), x, y, z, scaleDelta);
+		renderShape(guide.getShape(), guide.getColor(), scaleDelta);
 		if (scaleDelta < 1.0) {
-			renderShape(guide.getPreviousShape(), guide.getHeight(), guide.getWidth(), guide.getDepth(), guide.getColor(), x, y, z, 1.0f - scaleDelta);
+			renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
 		}
+		GL11.glPopMatrix();
 	}
 
-	private void renderShape(boolean[][][] shape, int height, int width, int depth, int color, double x, double y, double z, float scale) {
+	private void renderShape(Collection<Coord> shape, int color, float scale) {
 		if (shape == null) return;
 
 		TextureUtils.bindDefaultTerrainTexture();
@@ -54,10 +60,8 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDisable(GL11.GL_LIGHTING);
 
-		for (int y2 = 0; y2 < shape.length; y2++)
-			for (int x2 = 0; x2 < shape[y2].length; x2++)
-				for (int z2 = 0; z2 < shape[y2][x2].length; z2++)
-					if (shape[y2][x2][z2]) renderAt(x + x2 - width, y + y2 - height, z + z2 - depth, scale);
+		for (Coord coord : shape)
+			renderAt(coord.x, coord.y, coord.z, scale);
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
@@ -65,7 +69,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 	private void renderAt(double x, double y, double z, float scale) {
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
+		GL11.glTranslated(x + 0.5F, y, z + 0.5F);
 		GL11.glScalef(scale, scale, scale);
 		wrapper.render();
 		GL11.glPopMatrix();

@@ -69,6 +69,7 @@ openblocks.misc.selected_cannon=Selected cannon for targeting
 openblocks.misc.pointed_cannon=Pointed cannon at %s, %s, %s
 openblocks.misc.change_mode=Changing to %s mode
 openblocks.misc.change_size=Changing size to %sx%sx%s
+openblocks.misc.total_blocks=Total block count: %d
 openblocks.misc.get_witched=Get witched!
 
 openblocks.misc.shape.sphere=Sphere
