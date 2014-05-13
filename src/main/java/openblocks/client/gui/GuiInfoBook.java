@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL12;
 
 public class GuiInfoBook extends GuiScreen implements IComponentListener {
 
+	private static final String MODID = "openblocks";
 	private int centerX;
 	private int guiLeft;
 	private int guiTop;
@@ -50,36 +51,36 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		blocksIndex = book.getNumberOfPages();
 		book.addPage(new BlankPage());
 		book.addPage(new SectionPage("openblocks.gui.blocks"));
-		book.addStandardRecipePage("openblocks", "elevator", Blocks.elevator);
-		book.addStandardRecipePage("openblocks", "sprinkler", Blocks.sprinkler);
-		book.addStandardRecipePage("openblocks", "radio", Blocks.radio);
-		book.addStandardRecipePage("openblocks", "paintmixer", Blocks.paintMixer);
-		book.addStandardRecipePage("openblocks", "beartrap", Blocks.bearTrap);
-		book.addStandardRecipePage("openblocks", "guide", Blocks.guide);
-		book.addStandardRecipePage("openblocks", "canvas", Blocks.canvas);
+		book.addStandardRecipePage(MODID, "elevator", Blocks.elevator);
+		book.addStandardRecipePage(MODID, "sprinkler", Blocks.sprinkler);
+		book.addStandardRecipePage(MODID, "radio", Blocks.radio);
+		book.addStandardRecipePage(MODID, "paintmixer", Blocks.paintMixer);
+		book.addStandardRecipePage(MODID, "beartrap", Blocks.bearTrap);
+		book.addStandardRecipePage(MODID, "guide", Blocks.guide);
+		book.addStandardRecipePage(MODID, "canvas", Blocks.canvas);
 		/**
 		 * leaving for boq
 		 * book.addStandardRecipePage("openblocks", "projector",
 		 * Blocks.projector);
 		 **/
-		book.addStandardRecipePage("openblocks", "vacuumhopper", Blocks.vacuumHopper);
-		book.addStandardRecipePage("openblocks", "tank", Blocks.tank);
-		book.addStandardRecipePage("openblocks", "path", Blocks.path);
-		book.addStandardRecipePage("openblocks", "fan", Blocks.fan);
-		book.addStandardRecipePage("openblocks", "blockbreaker", Blocks.blockBreaker);
-		book.addStandardRecipePage("openblocks", "blockPlacer", Blocks.blockPlacer);
-		book.addStandardRecipePage("openblocks", "itemDropper", Blocks.itemDropper);
-		book.addStandardRecipePage("openblocks", "bigbutton", Blocks.bigButton);
-		book.addStandardRecipePage("openblocks", "autoanvil", Blocks.autoAnvil);
-		book.addStandardRecipePage("openblocks", "autoenchantmenttable", Blocks.autoEnchantmentTable);
-		book.addStandardRecipePage("openblocks", "sponge", Blocks.sponge);
-		book.addStandardRecipePage("openblocks", "ropeladder", Blocks.ropeLadder);
-		book.addStandardRecipePage("openblocks", "village_highlighter", Blocks.villageHighlighter);
-		book.addStandardRecipePage("openblocks", "xpbottler", Blocks.xpBottler);
-		book.addStandardRecipePage("openblocks", "xpdrain", Blocks.xpDrain);
-		book.addStandardRecipePage("openblocks", "drawingtable", Blocks.drawingTable);
-		book.addStandardRecipePage("openblocks", "sky.normal", Blocks.sky);
-		book.addStandardRecipePage("openblocks", "xpshower", Blocks.xpShower);
+		book.addStandardRecipePage(MODID, "vacuumhopper", Blocks.vacuumHopper);
+		book.addStandardRecipePage(MODID, "tank", Blocks.tank);
+		book.addStandardRecipePage(MODID, "path", Blocks.path);
+		book.addStandardRecipePage(MODID, "fan", Blocks.fan);
+		book.addStandardRecipePage(MODID, "blockbreaker", Blocks.blockBreaker);
+		book.addStandardRecipePage(MODID, "blockPlacer", Blocks.blockPlacer);
+		book.addStandardRecipePage(MODID, "itemDropper", Blocks.itemDropper);
+		book.addStandardRecipePage(MODID, "bigbutton", Blocks.bigButton);
+		book.addStandardRecipePage(MODID, "autoanvil", Blocks.autoAnvil);
+		book.addStandardRecipePage(MODID, "autoenchantmenttable", Blocks.autoEnchantmentTable);
+		book.addStandardRecipePage(MODID, "sponge", Blocks.sponge);
+		book.addStandardRecipePage(MODID, "ropeladder", Blocks.ropeLadder);
+		book.addStandardRecipePage(MODID, "village_highlighter", Blocks.villageHighlighter);
+		book.addStandardRecipePage(MODID, "xpbottler", Blocks.xpBottler);
+		book.addStandardRecipePage(MODID, "xpdrain", Blocks.xpDrain);
+		book.addStandardRecipePage(MODID, "drawingtable", Blocks.drawingTable);
+		book.addStandardRecipePage(MODID, "sky.normal", Blocks.sky);
+		book.addStandardRecipePage(MODID, "xpshower", Blocks.xpShower);
 
 		itemsIndex = book.getNumberOfPages();
 		if (itemsIndex % 2 == 1) {
@@ -88,13 +89,13 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		}
 		book.addPage(new BlankPage());
 		book.addPage(new SectionPage("openblocks.gui.items"));
-		book.addStandardRecipePage("openblocks", "luggage", Items.luggage);
-		book.addStandardRecipePage("openblocks", "sonicglasses", Items.sonicGlasses);
-		book.addStandardRecipePage("openblocks", "hangglider", Items.hangGlider);
-		book.addStandardRecipePage("openblocks", "cursor", Items.cursor);
-		book.addStandardRecipePage("openblocks", "unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack());
-		book.addStandardRecipePage("openblocks", "sleepingbag", Items.sleepingBag);
-		book.addStandardRecipePage("openBlocks", "devnull", Items.devNull);
+		book.addStandardRecipePage(MODID, "luggage", Items.luggage);
+		book.addStandardRecipePage(MODID, "sonicglasses", Items.sonicGlasses);
+		book.addStandardRecipePage(MODID, "hangglider", Items.hangGlider);
+		book.addStandardRecipePage(MODID, "cursor", Items.cursor);
+		book.addStandardRecipePage(MODID, "unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack());
+		book.addStandardRecipePage(MODID, "sleepingbag", Items.sleepingBag);
+		book.addStandardRecipePage(MODID, "devnull", Items.devNull);
 		/**
 		 * leaving for boq
 		 * book.addStandardRecipePage("openblocks", "cartographer",
@@ -104,10 +105,10 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		 * book.addStandardRecipePage("openblocks", "tasty_clay",
 		 * Items.tastyClay);
 		 **/
-		book.addStandardRecipePage("openblocks", "paintbrush", Items.paintBrush);
-		book.addStandardRecipePage("openblocks", "squeegee", Items.squeegee);
-		book.addStandardRecipePage("openblocks", "slimalyzer", Items.slimalyzer);
-		book.addStandardRecipePage("openblocks", "spongeonastick", Items.spongeonastick);
+		book.addStandardRecipePage(MODID, "paintbrush", Items.paintBrush);
+		book.addStandardRecipePage(MODID, "squeegee", Items.squeegee);
+		book.addStandardRecipePage(MODID, "slimalyzer", Items.slimalyzer);
+		book.addStandardRecipePage(MODID, "spongeonastick", Items.spongeonastick);
 
 		miscIndex = book.getNumberOfPages();
 		if (miscIndex % 2 == 1) {

@@ -137,8 +137,8 @@ tile.openblocks.beartrap.description=Platziere eine Bärenfalle und klicke auf s
 tile.openblocks.sponge.name=Schwamm
 tile.openblocks.sponge.description=Der Schwamm ist ein Ersatz für den Vanilla-Schwamm. Perfekt, um kleine Mengen an Lava oder Wasser zu entfernen. Sei jedoch vorsichtig, wenn du mit größeren Mengen an Flüssigkeit arbeitest, denn es könnte ziemlich unordentlich werden.
 
-tile.openblocks.spongeonastick.name=Schwamm
-tile.openblocks.spongeonastick.description=Der Schwamm am Stiel ist ein Werkzeug zum Enfernen von Flüssigkeiten. Funktioniert wie der Schwamm, ist aber mobil und wird mit der Zeit aufgebraucht.
+item.openblocks.spongeonastick.name=Schwamm
+item.openblocks.spongeonastick.description=Der Schwamm am Stiel ist ein Werkzeug zum Enfernen von Flüssigkeiten. Funktioniert wie der Schwamm, ist aber mobil und wird mit der Zeit aufgebraucht.
 
 tile.openblocks.cannon.name=Item-Kanone
 tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Item-Kannone Items, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger', um die Kannone auszurichten.

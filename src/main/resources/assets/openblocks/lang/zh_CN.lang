@@ -137,8 +137,8 @@ tile.openblocks.beartrap.description=放置捕兽夹,点击可以将其打开,�
 tile.openblocks.sponge.name=海绵
 tile.openblocks.sponge.description=这个海绵会替换掉原版的海绵.移除小范围的水或者岩浆的利器.在对付大面积的液体的时候请小心谨慎,因为它会开始变得相当混乱.
 
-tile.openblocks.spongeonastick.name=海绵棍
-tile.openblocks.spongeonastick.description=木棍上的海绵是一种能帮助清理液体的工具. 工作起来就像海绵, 但是以会损坏为代价，更加地灵活机动.
+item.openblocks.spongeonastick.name=海绵棍
+item.openblocks.spongeonastick.description=木棍上的海绵是一种能帮助清理液体的工具. 工作起来就像海绵, 但是以会损坏为代价，更加地灵活机动.
 
 tile.openblocks.cannon.name=传物加农炮
 tile.openblocks.cannon.description=当接收到红石信号时,加农炮会发射出依附它的物品栏中的物品.使用指针可以调整加农炮的弹道曲线.
