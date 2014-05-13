@@ -8,14 +8,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.StatCollector;
-import openblocks.ModInfo;
 import openblocks.OpenBlocks;
 
 public class ChangelogBuilder {
 
 	public static ItemStack createChangeLog() {
 
-		String filename = String.format("/openblocks/changelogs/%s", ModInfo.VERSION);
+		String filename = String.format("/openblocks/changelogs/%s", OpenBlocks.VERSION);
 		InputStream input = OpenBlocks.class.getResourceAsStream(filename);
 
 		if (input != null) {
@@ -24,7 +23,7 @@ public class ChangelogBuilder {
 
 			NBTTagCompound bookTag = new NBTTagCompound();
 
-			bookTag.setString("title", String.format(StatCollector.translateToLocal("openblocks.changelog.title"), ModInfo.VERSION));
+			bookTag.setString("title", String.format(StatCollector.translateToLocal("openblocks.changelog.title"), OpenBlocks.VERSION));
 			bookTag.setString("author", "The OpenMods team");
 
 			NBTTagList bookPages = new NBTTagList("pages");

@@ -5,9 +5,9 @@
 
 //================================================
 // Variables
-mod_version = '1.2.8'
-mc_ver = '1.6.4'
-forge_ver = '9.11.1.964'
+ext.mod_version = '1.2.8'
+ext.mc_ver = '1.6.4'
+ext.forge_ver = '9.11.1.964'
 
 //================================================
 // Pre-execute
@@ -26,7 +26,7 @@ buildscript {
             name = "Sonatype Nexus"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
-	}
+    }
 
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
@@ -34,7 +34,7 @@ buildscript {
 }
 
 repositories {
-	maven {
+    maven {
         name 'Forge'
         url 'http://files.minecraftforge.net/maven'
     }
@@ -57,13 +57,13 @@ dependencies {
 // Jar data
 
 // Grab system env
-env = System.getenv()
+ext.env = System.getenv()
 
 version = mc_ver + "-" + mod_version
 
-in_jenkins = false
+ext.in_jenkins = false
 // Get Jenkins metadata
-jenkinsManifest = manifest {
+ext.jenkinsManifest = manifest {
     if (env.BUILD_TAG != null) { // If this works, we'll assume we're in Jenkins atleast.
         attributes("Jenkins-Build": "true", "Jenkins-Tag": env.BUILD_TAG, "Jenkins-ID": env.BUILD_ID)
         in_jenkins = true
@@ -102,7 +102,7 @@ if (env.BUILD_NUMBER != null) {
 }
 
 // Get Git metadata (if in Jenkins)
-gitManifest = manifest {
+ext.gitManifest = manifest {
     if (env.GIT_BRANCH != null) {
         attributes("Git-Branch": branch, "Git-Hash": hash)
     }
@@ -112,11 +112,15 @@ gitManifest = manifest {
 minecraft {
     version = mc_ver + "-" + forge_ver
     assetDir = 'run/assets'
-    replace '${version}', mod_version
+
+    replaceIn "openblocks/OpenBlocks.java"
+    replace "@VERSION@", rootProject.mod_version
 }
 
 processResources {
-	// Process mcmod.info
+    inputs.property "version", rootProject.mod_version
+
+    // Process mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         include '**/*.info'
         expand 'version':mod_version,'MCVersion':mc_ver
@@ -132,7 +136,7 @@ processResources {
 // Jar tasks
 
 // Generate FML Coremod manifest
-fmlManifest = manifest {
+ext.fmlManifest = manifest {
     attributes("FMLCorePlugin": "openblocks.OpenBlocksCorePlugin", "FMLCorePluginContainsFMLMod": "true")
 }
 

@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import openblocks.Config;
-import openblocks.ModInfo;
 import openblocks.OpenBlocks;
 import openmods.Log;
 import openmods.config.ConfigurationChange;
@@ -85,13 +84,13 @@ public class EntityEventHandler {
 				}
 				persistTag.setBoolean(GIVEN_MANUAL_TAG, true);
 			}
-			boolean shouldGiveChangelog = OpenBlocks.changeLog != null && !persistTag.getString(LATEST_CHANGELOG_TAG).equals(ModInfo.VERSION);
+			boolean shouldGiveChangelog = OpenBlocks.changeLog != null && !persistTag.getString(LATEST_CHANGELOG_TAG).equals(OpenBlocks.VERSION);
 			if (shouldGiveChangelog) {
 				ItemStack changeLog = OpenBlocks.changeLog.copy();
 				if (!player.inventory.addItemStackToInventory(changeLog)) {
 					BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, changeLog);
 				}
-				persistTag.setString(LATEST_CHANGELOG_TAG, ModInfo.VERSION);
+				persistTag.setString(LATEST_CHANGELOG_TAG, OpenBlocks.VERSION);
 			}
 		}
 	}

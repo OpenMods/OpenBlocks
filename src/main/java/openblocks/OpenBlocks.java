@@ -57,9 +57,15 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, dependencies = ModInfo.DEPENDENCIES)
+@Mod(modid = OpenBlocks.ID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES)
 @NetworkMod(serverSideRequired = true, clientSideRequired = true)
 public class OpenBlocks {
+	public static final String ID = "OpenBlocks";
+	public static final String NAME = "OpenBlocks";
+	public static final String VERSION = "@VERSION@";
+	public static final String PROXY_SERVER = "openblocks.common.ServerProxy";
+	public static final String PROXY_CLIENT = "openblocks.client.ClientProxy";
+	public static final String DEPENDENCIES = "required-after:OpenMods@[0.4,];after:OpenPeripheral;after:NotEnoughCodecs";
 
 	private static final int ENTITY_HANGGLIDER_ID = 701;
 	private static final int ENTITY_LUGGAGE_ID = 702;
@@ -72,10 +78,10 @@ public class OpenBlocks {
 	private static final int ENTITY_XP_ID = 709;
 	private static final int ENTITY_MINIME_ID = 710;
 
-	@Instance(value = ModInfo.ID)
+	@Instance(value = OpenBlocks.ID)
 	public static OpenBlocks instance;
 
-	@SidedProxy(clientSide = ModInfo.PROXY_CLIENT, serverSide = ModInfo.PROXY_SERVER)
+	@SidedProxy(clientSide = OpenBlocks.PROXY_CLIENT, serverSide = OpenBlocks.PROXY_SERVER)
 	public static IOpenBlocksProxy proxy;
 
 	public static class Blocks {
