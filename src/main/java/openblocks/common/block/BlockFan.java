@@ -8,7 +8,7 @@ import openblocks.Config;
 public class BlockFan extends OpenBlock {
 
 	public BlockFan() {
-		super(Config.blockFanId, Material.ground);
+		super(Config.blockFanId, Material.circuits);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 1.0f, 0.8f);
 		/* No rotation, handled by TE */
 	}

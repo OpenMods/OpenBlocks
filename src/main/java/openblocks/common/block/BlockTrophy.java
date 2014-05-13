@@ -15,7 +15,7 @@ import openblocks.common.tileentity.TileEntityTrophy;
 public class BlockTrophy extends OpenBlock {
 
 	public BlockTrophy() {
-		super(Config.blockTrophyId, Material.ground);
+		super(Config.blockTrophyId, Material.rock);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 0.2f, 0.8f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}

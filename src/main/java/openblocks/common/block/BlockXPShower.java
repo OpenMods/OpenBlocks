@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockXPShower extends OpenBlock {
 
 	public BlockXPShower() {
-		super(Config.blockXPShowerId, Material.ground);
+		super(Config.blockXPShowerId, Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}

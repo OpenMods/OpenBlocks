@@ -18,7 +18,7 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	private Icon iconBottom;
 
 	public BlockAutoEnchantmentTable() {
-		super(Config.blockAutoEnchantmentTableId, Material.ground);
+		super(Config.blockAutoEnchantmentTableId, Material.rock);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
 	}
 

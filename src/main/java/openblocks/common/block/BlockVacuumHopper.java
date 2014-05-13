@@ -11,7 +11,7 @@ import openblocks.common.tileentity.TileEntityVacuumHopper;
 public class BlockVacuumHopper extends OpenBlock {
 
 	public BlockVacuumHopper() {
-		super(Config.blockVacuumHopperId, Material.ground);
+		super(Config.blockVacuumHopperId, Material.rock);
 	}
 
 	@Override

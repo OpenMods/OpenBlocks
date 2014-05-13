@@ -7,7 +7,7 @@ import openblocks.Config;
 public class BlockDonationStation extends OpenBlock {
 
 	public BlockDonationStation() {
-		super(Config.blockDonationStationId, Material.ground);
+		super(Config.blockDonationStationId, Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0.2f, 0.25f, 0.2f, 0.8f, 0.85f, 0.8f);
 	}

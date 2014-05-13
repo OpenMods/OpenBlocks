@@ -24,7 +24,7 @@ public class BlockCanvas extends OpenBlock {
 	public Icon wallpaper;
 
 	public BlockCanvas() {
-		super(Config.blockCanvasId, Material.ground);
+		super(Config.blockCanvasId, Material.rock);
 	}
 
 	public BlockCanvas(int id, Material material) {

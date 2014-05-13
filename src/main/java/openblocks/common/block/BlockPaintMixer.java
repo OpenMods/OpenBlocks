@@ -6,7 +6,7 @@ import openblocks.Config;
 public class BlockPaintMixer extends OpenBlock {
 
 	public BlockPaintMixer() {
-		super(Config.blockPaintMixer, Material.ground);
+		super(Config.blockPaintMixer, Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0.125f, 0f, 0.125f, 0.875f, 1f, 0.875f);
 	}

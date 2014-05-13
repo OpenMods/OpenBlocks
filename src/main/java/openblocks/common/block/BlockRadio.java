@@ -15,7 +15,7 @@ public class BlockRadio extends OpenBlock {
 	public Icon iconInside;
 
 	public BlockRadio() {
-		super(Config.blockRadioId, Material.ground);
+		super(Config.blockRadioId, Material.wood);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

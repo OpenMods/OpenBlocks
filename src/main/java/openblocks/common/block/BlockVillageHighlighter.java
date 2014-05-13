@@ -8,7 +8,7 @@ import openblocks.common.tileentity.TileEntityVillageHighlighter;
 public class BlockVillageHighlighter extends OpenBlock {
 
 	public BlockVillageHighlighter() {
-		super(Config.blockVillageHighlighterId, Material.ground);
+		super(Config.blockVillageHighlighterId, Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

@@ -18,7 +18,7 @@ public class BlockTarget extends OpenBlock {
 	private int lastEntityHit = 0;
 
 	public BlockTarget() {
-		super(Config.blockTargetId, Material.ground);
+		super(Config.blockTargetId, Material.rock);
 		setLightValue(0.3f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}

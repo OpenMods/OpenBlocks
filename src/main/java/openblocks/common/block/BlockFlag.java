@@ -44,7 +44,7 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	public BlockFlag() {
-		super(Config.blockFlagId, Material.ground);
+		super(Config.blockFlagId, Material.circuits);
 		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
