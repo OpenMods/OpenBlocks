@@ -112,8 +112,10 @@ public class ItemRendererDevNull implements IItemRenderer {
 	protected void renderInHandStack(ItemRenderType type, ItemStack containerStack, ItemStack containedStack) {
 		GL11.glPushMatrix();
 
-		if (type == ItemRenderType.ENTITY) GL11.glTranslated(-0.5, -0.5, -0.5);
-		// GL11.glLineWidth(1.0f);
+		if (type == ItemRenderType.ENTITY) {
+			GL11.glTranslated(-0.25, -0.25, -0.25);
+			GL11.glScaled(0.5, 0.5, 0.5);
+		}
 
 		TextureUtils.bindDefaultItemsTexture();
 		cube.render();
