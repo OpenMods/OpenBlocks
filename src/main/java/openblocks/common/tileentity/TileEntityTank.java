@@ -41,7 +41,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 		public double getLiquidHeightForSide(ForgeDirection... sides) {
 			double renderHeight = getHeightForRender();
-			if (renderHeight <= 0) return 0;
+			if (renderHeight <= 0.02) return 0.02;
 			if (renderHeight > 0.98) return 1.0;
 
 			double fullness = renderHeight + getFlowOffset();
@@ -171,7 +171,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return tank.getSpace();
 	}
 
-	private int getAmount() {
+	public int getAmount() {
 		return tank.getFluidAmount();
 	}
 

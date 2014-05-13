@@ -64,7 +64,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		FluidStack fluidStack = internalTank.getFluid();
 
-		if (fluidStack != null && tankTile.getHeightForRender() > 0.05) {
+		if (fluidStack != null) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 
 			final Fluid fluid = fluidStack.getFluid();

@@ -77,7 +77,7 @@ public class BlockTank extends OpenBlock {
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		ItemStack result = new ItemStack(this);
 		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
-		if (tile != null) {
+		if (tile != null && tile.getAmount() > 0) {
 			NBTTagCompound tankTag = tile.getItemNBT();
 			if (tankTag.hasKey("Amount")) tankTag.setInteger("Amount", TileEntityTank.getTankCapacity());
 

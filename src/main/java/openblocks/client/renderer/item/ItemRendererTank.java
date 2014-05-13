@@ -24,12 +24,9 @@ public class ItemRendererTank implements IItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		final SyncableTank tank = (SyncableTank)teTank.getTank();
+		tank.setFluid(null);
 		NBTTagCompound tag = item.getTagCompound();
-		if (tag != null && tag.hasKey("tank")) {
-			tank.readFromNBT(tag.getCompoundTag("tank"));
-		} else {
-			tank.setFluid(null);
-		}
+		if (tag != null && tag.hasKey("tank")) tank.readFromNBT(tag.getCompoundTag("tank"));
 
 		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, -0.1D, 0.0D, 0.0F);
 	}

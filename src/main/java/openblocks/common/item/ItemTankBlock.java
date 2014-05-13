@@ -23,13 +23,11 @@ public class ItemTankBlock extends ItemOpenBlock {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("tank")) {
 			fakeTank.readFromNBT(stack.getTagCompound().getCompoundTag("tank"));
 			FluidStack liquid = fakeTank.getFluid();
-			int amount = 0;
-			if (liquid != null) {
-				amount = liquid.amount;
+			if (liquid != null && liquid.amount > 0) {
+				double percent = Math.max(100.0 / fakeTank.getCapacity() * liquid.amount, 1);
+				list.add(Math.round(percent) + "%");
+				list.add(liquid.amount + "mB");
 			}
-			double percent = Math.max(100.0 / fakeTank.getCapacity() * amount, amount > 0? 1 : 0);
-			list.add(Math.round(percent) + "%");
-			list.add(amount + "mB");
 		}
 	}
 
