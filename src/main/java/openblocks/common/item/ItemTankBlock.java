@@ -26,9 +26,8 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 		FluidTank fakeTank = readTank(stack);
 		FluidStack liquid = fakeTank.getFluid();
 		if (liquid != null && liquid.amount > 0) {
-			double percent = Math.max(100.0 / fakeTank.getCapacity() * liquid.amount, 1);
-			list.add(Math.round(percent) + "%");
-			list.add(liquid.amount + "mB");
+			float percent = Math.max(100.0f / fakeTank.getCapacity() * liquid.amount, 1);
+			list.add(String.format("%d mB (%.0f%%)", liquid.amount, percent));
 		}
 	}
 
