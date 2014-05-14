@@ -110,8 +110,8 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	public static float getUses(NBTTagCompound tag) {
 		NBTBase value = tag.getTag(TAG_USES);
+		if (value == null) return 0;
 		if (value instanceof NBTTagInt) return ((NBTTagInt)value).data;
-
 		if (value instanceof NBTTagFloat) return ((NBTTagFloat)value).data;
 
 		throw new IllegalStateException("Invalid tag type: " + value);
