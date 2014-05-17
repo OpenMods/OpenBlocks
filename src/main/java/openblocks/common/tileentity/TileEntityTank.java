@@ -44,7 +44,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 
 		public double getLiquidHeightForSide(ForgeDirection... sides) {
-			double renderHeight = getHeightForRender();
+			double renderHeight = getFluidRatio();
 			if (renderHeight <= 0.02) return 0.02;
 			if (renderHeight > 0.98) return 1.0;
 
@@ -54,7 +54,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			for (ForgeDirection side : sides) {
 				TileEntityTank sideTank = neighbors.get(side);
 				if (sideTank != null && sideTank.accepts(fluid)) {
-					fullness += sideTank.getHeightForRender() + sideTank.getFlowOffset();
+					fullness += sideTank.getFluidRatio() + sideTank.getFlowOffset();
 					count++;
 				}
 			}
@@ -66,8 +66,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 	}
 
-	private int TANK_UPDATE_PERIOD = 20;
-
 	private SyncableTank tank;
 
 	private double flowTimer = Math.random() * 100;
@@ -75,8 +73,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	private int previousFluidId = 0;
 
 	private boolean forceUpdate;
-
-	private int updateCountdown = 0;
 
 	@IncludeInterface(IFluidHandler.class)
 	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
@@ -86,7 +82,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		tank = new SyncableTank(getTankCapacity());
 	}
 
-	private double getHeightForRender() {
+	public double getFluidRatio() {
 		return (double)tank.getFluidAmount() / (double)tank.getCapacity();
 	}
 
@@ -238,11 +234,9 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		updateCountdown--;
 
-		if (Config.shouldTanksUpdate && !worldObj.isRemote && (forceUpdate || updateCountdown <= 0)) {
+		if (Config.shouldTanksUpdate && !worldObj.isRemote && forceUpdate) {
 			forceUpdate = false;
-			updateCountdown = TANK_UPDATE_PERIOD;
 
 			FluidStack contents = tank.getFluid();
 			if (contents != null && contents.amount > 0 && yCoord > 0) {
@@ -288,7 +282,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			int diff = amount - suggestedAmount;
 			if (diff != 1 && diff != 0 && diff != -1) {
 				n.tank.setFluid(suggestedStack.copy());
-				n.tank.markDirty();
+				n.tankChanged();
 				sum -= suggestedAmount;
 				n.forceUpdate = true;
 			} else {
@@ -299,8 +293,18 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		FluidStack s = tank.getFluid();
 		if (sum != s.amount) {
 			s.amount = sum;
-			tank.markDirty();
+			tankChanged();
 		}
+	}
+
+	private void tankChanged() {
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType().blockID);
+		tank.markDirty();
+	}
+
+	private void markUpdated() {
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType().blockID);
+		forceUpdate = true;
 	}
 
 	private void tryFillBottomTank(FluidStack fluid) {
@@ -313,7 +317,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private FluidStack internalDrain(int amount, boolean doDrain) {
 		FluidStack drained = tank.drain(amount, doDrain);
-		if (drained != null && doDrain) forceUpdate = true;
+		if (drained != null && doDrain) markUpdated();
 		return drained;
 	}
 
@@ -335,7 +339,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private int internalFill(FluidStack resource, boolean doFill) {
 		int amount = tank.fill(resource, doFill);
-		if (amount > 0 && doFill) forceUpdate = true;
+		if (amount > 0 && doFill) markUpdated();
 		return amount;
 	}
 

@@ -6,6 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -88,6 +89,20 @@ public class BlockTank extends OpenBlock {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public boolean hasComparatorInputOverride() {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+		double value = tile.getFluidRatio() * 15;
+		if (value == 0) return 0;
+		int trunc = MathHelper.floor_double(value);
+		return Math.max(trunc, 1);
 	}
 
 }
