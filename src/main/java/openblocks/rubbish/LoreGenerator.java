@@ -40,7 +40,7 @@ public class LoreGenerator {
 		IGenerator heroName = word(heroesPrefix, opt(0.6f, heroesPostfix));
 		IGenerator heroOptional = alt("slightly", "sometimes", "mistakenly", "somehow", "part-time");
 		IGenerator heroAdj = alt("insane", "brave", "smelly", "philosophical", "jumping", "toothless", "burning", "heroic", "shy", "narcoleptic", "manly", "girly", "non-euclidian", "euphoric", "misanthropic", "ambivalent", "fictional", "fetishist");
-		IGenerator heroClass = alt("babycrusher", "wrestler", "nitpicker", "barber", "anesthesiologist", "sharpshooter", "plumber", "insurance salesman", "clown", "empiricist", "defenestrator", "visigoth");
+		IGenerator heroClass = alt("babycrusher", "wrestler", "nitpicker", "barber", "anesthesiologist", "sharpshooter", "plumber", "insurance salesman", "clown", "empiricist", "defenestrator", "visigoth", "nipple twister");
 		IGenerator classicHeroes = capitalizeFully(seq(heroName, "the", seq(opt(0.2f, heroOptional), heroAdj, heroClass, opt(0.2f, word("(lvl. ", range(1, 11), ")")))));
 
 		IGenerator firstName = alt("Bill", "Juliet", "Nigel", "Steve", "Parsnip", "Cucumber", "Ludwig", "Markus", "Sven", "Clark", "Carl", "Throatwobbler", "Raymond", "Nancy", "Brian", "Brunhilda", "Richard", "Rupert");
@@ -90,7 +90,7 @@ public class LoreGenerator {
 
 		IGenerator itemModifier = alt("replica of");
 		IGenerator itemAction = alt("beating", "bleeding", "winds", "things", word(sub("item", "thing"), "ing"), "cooking", "looting", "scrubing", "backpain", "hernia");
-		IGenerator itemType = alt(sub("item", "stuff"), alt("gizmo", "thingmajig", "doodad", "tat", "thingie"));
+		IGenerator itemType = alt(sub("item", "gizmo"), alt("gizmo", "thingmajig", "doodad", "tat", "thingie"));
 		IGenerator item = capitalize(seq(opt(0.9f, adjs), itemType, opt(0.9f, seq("of", itemAction))));
 		IGenerator fullItem = seq(opt(0.1f, itemModifier), item, opt(0.05f, seq("(TM)")));
 

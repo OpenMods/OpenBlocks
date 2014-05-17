@@ -95,7 +95,7 @@ public class LoreFlimFlam implements IFlimFlamAction {
 		else if (item instanceof ItemBlock) return "block";
 		else if (item instanceof ItemBucket) return "bucket";
 
-		return "junk";
+		return "gizmo";
 	}
 
 }
