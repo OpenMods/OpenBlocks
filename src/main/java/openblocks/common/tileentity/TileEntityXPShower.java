@@ -45,7 +45,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 			if (!isPowered && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
 
-				bufferTank.autoFillFromSides(OpenMods.proxy, DRAIN_PER_CYCLE, this, sides);
+				bufferTank.fillFromSides(DRAIN_PER_CYCLE, worldObj, getPosition(), sides);
 
 				int amountInTank = bufferTank.getFluidAmount();
 

@@ -17,7 +17,6 @@ import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
-import openmods.OpenMods;
 import openmods.api.IHasGui;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -102,7 +101,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		if (!worldObj.isRemote) {
 
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(OpenMods.proxy, 80, this, xpSides);
+				tank.fillFromSides(80, worldObj, getPosition(), xpSides);
 			}
 
 			if (shouldAutoOutput() && hasStack(Slots.output)) {

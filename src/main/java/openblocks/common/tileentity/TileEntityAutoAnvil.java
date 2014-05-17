@@ -21,7 +21,6 @@ import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.container.ContainerAutoAnvil;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
-import openmods.OpenMods;
 import openmods.api.IHasGui;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -109,7 +108,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		if (!worldObj.isRemote) {
 			// if we should auto-drink liquid, do it!
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(OpenMods.proxy, 100, this, xpSides);
+				tank.fillFromSides(100, worldObj, getPosition(), xpSides);
 			}
 
 			if (shouldAutoOutput() && hasOutput()) {

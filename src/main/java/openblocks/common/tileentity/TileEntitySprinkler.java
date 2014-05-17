@@ -19,7 +19,6 @@ import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
-import openmods.OpenMods;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
@@ -151,7 +150,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		ticks++;
 		if (!worldObj.isRemote) {
 
-			tank.autoFillFromSides(OpenMods.proxy, 3, this);
+			tank.fillFromSides(3, worldObj, getPosition());
 
 			// every 60 ticks drain from the tank
 			// if there's nothing to drain, disable it

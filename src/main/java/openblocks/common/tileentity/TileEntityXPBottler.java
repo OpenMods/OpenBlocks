@@ -19,7 +19,6 @@ import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.container.ContainerXPBottler;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
-import openmods.OpenMods;
 import openmods.api.IHasGui;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -95,7 +94,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			// if we should, we'll autofill the tank
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.autoFillFromSides(OpenMods.proxy, 10, this, xpSides);
+				tank.fillFromSides(10, worldObj, getPosition(), xpSides);
 			}
 
 			// if they've ticked auto output, and we have something to output

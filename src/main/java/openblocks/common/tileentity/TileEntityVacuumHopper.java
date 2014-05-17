@@ -133,7 +133,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	private void outputToNeighbors() {
-		tank.autoOutputToSides(OpenMods.proxy, 50, this, xpOutputs);
+		tank.distributeToSides(50, worldObj, getPosition(), xpOutputs);
 		if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) autoInventoryOutput();
 	}
 

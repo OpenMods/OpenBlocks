@@ -81,7 +81,7 @@ public class TileEntityElevator extends OpenTileEntity {
 			if (drainXP) {
 				int playerXP = EnchantmentUtils.getPlayerXP(player);
 				if (playerXP >= distance) {
-					EnchantmentUtils.drainPlayerXP(player, distance);
+					EnchantmentUtils.addPlayerXP(player, -distance);
 					doTeleport = true;
 				}
 			} else {

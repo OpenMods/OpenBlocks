@@ -14,7 +14,7 @@ import openmods.utils.ItemUtils;
 
 public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem {
 
-	private static final String TANK_TAG = "tank";
+	public static final String TANK_TAG = "tank";
 
 	public ItemTankBlock(int id) {
 		super(id);

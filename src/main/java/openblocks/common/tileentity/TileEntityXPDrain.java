@@ -87,7 +87,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
 							}
 							int xpDrained = EnchantmentUtils.liquidToXPRatio(filled);
-							EnchantmentUtils.drainPlayerXP(player, xpDrained);
+							player.addExperience(-xpDrained);
 						}
 					}
 				}

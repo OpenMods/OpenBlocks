@@ -70,7 +70,7 @@ public class ItemCursor extends Item {
 				final int playerExperience = EnchantmentUtils.getPlayerXP(player);
 				if (cost <= playerExperience) {
 					block.onBlockActivated(world, x, y, z, player, side, 0, 0, 0);
-					EnchantmentUtils.drainPlayerXP(player, cost);
+					EnchantmentUtils.addPlayerXP(player, -cost);
 				}
 			}
 		}

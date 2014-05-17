@@ -256,6 +256,10 @@ public class Config {
 	@ConfigProperty(category = "tanks", name = "bucketsPerTank", comment = "The amount of buckets each tank can hold")
 	public static int bucketsPerTank = 16;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "tanks", name = "tankTicks", comment = "Should tanks try to balance liquid amounts with neighbours")
+	public static boolean shouldTanksUpdate = true;
+
 	@ConfigProperty(category = "hacks", name = "tryHookPlayerRenderer", comment = "Allow OpenBlocks to hook the player renderer to apply special effects")
 	public static boolean tryHookPlayerRenderer = true;
 

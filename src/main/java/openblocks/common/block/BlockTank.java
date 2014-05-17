@@ -10,6 +10,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.fluids.IFluidTank;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
@@ -69,20 +70,22 @@ public class BlockTank extends OpenBlock {
 	public int getLightValue(IBlockAccess world, int x, int y, int z) {
 		if (!Config.tanksEmitLight) return 0;
 		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
-		if (tile != null) { return tile.getFluidLightLevel(); }
-		return 0;
+		return tile != null? tile.getFluidLightLevel() : 0;
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
 		ItemStack result = new ItemStack(this);
 		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
-		if (tile != null && tile.getAmount() > 0) {
-			NBTTagCompound tankTag = tile.getItemNBT();
-			if (tankTag.hasKey("Amount")) tankTag.setInteger("Amount", TileEntityTank.getTankCapacity());
+		if (tile != null) {
+			IFluidTank tank = tile.getTank();
+			if (tank.getFluidAmount() > 0) {
+				NBTTagCompound tankTag = tile.getItemNBT();
+				if (tankTag.hasKey("Amount")) tankTag.setInteger("Amount", tank.getCapacity());
 
-			NBTTagCompound nbt = ItemUtils.getItemTag(result);
-			nbt.setCompoundTag("tank", tankTag);
+				NBTTagCompound nbt = ItemUtils.getItemTag(result);
+				nbt.setCompoundTag("tank", tankTag);
+			}
 		}
 		return result;
 	}
