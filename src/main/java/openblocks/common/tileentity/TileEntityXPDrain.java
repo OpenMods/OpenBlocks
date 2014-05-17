@@ -37,60 +37,50 @@ public class TileEntityXPDrain extends OpenTileEntity {
 				if (!worldObj.isRemote) {
 					IFluidHandler tank = (IFluidHandler)tile;
 
-					for (EntityXPOrb orb : getXPOrbsOnGrid()) {
-						if (!orb.isDead) {
-							FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
-							xpStack.amount = EnchantmentUtils.XPToLiquidRatio(orb.getXpValue());
-							int filled = tank.fill(ForgeDirection.UP, xpStack, false);
-							if (filled == xpStack.amount) {
-								tank.fill(ForgeDirection.UP, xpStack, true);
-								orb.setDead();
-							}
-						}
-					}
+					for (EntityXPOrb orb : getXPOrbsOnGrid())
+						tryConsumeOrb(tank, orb);
 
-					for (EntityPlayer player : getPlayersOnGrid()) {
-						FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
-						int experience = EnchantmentUtils.getPlayerXP(player);
-						int xpToDrain = Math.min(4, experience);
-						xpStack.amount = EnchantmentUtils.XPToLiquidRatio(xpToDrain);
-						/*
-						 * We should simulate and then check the amount of XP to
-						 * be drained,
-						 * if one is zero and the other is not, we don't apply
-						 * the draining.
-						 */
-
-						int filled = tank.fill(ForgeDirection.UP, xpStack, false);
-						int theoreticalDrain = EnchantmentUtils.liquidToXPRatio(filled);
-						if (theoreticalDrain <= 0 && filled > 0 || filled <= 0 && theoreticalDrain > 0) {
-							// Regardless of ratio, this will protect against
-							// infini-loops caused by
-							// rounding.
-							// ALERT: There is a return here, if code is added
-							// under this for-loop
-							// In the future, it could have unexpected outcomes.
-							// Don't change the code
-							// :P - NC
-							return;
-						}
-						// Limit the stack to what we got last time. Keeps
-						// things all sync'ed.
-						// I realize that the update loop is single threaded,
-						// but I'm paranoid.
-						// What're you going to do.
-						xpStack.amount = filled;
-						filled = tank.fill(ForgeDirection.UP, xpStack, true);
-
-						if (filled > 0) {
-							if (OpenMods.proxy.getTicks(worldObj) % 4 == 0) {
-								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
-							}
-							int xpDrained = EnchantmentUtils.liquidToXPRatio(filled);
-							player.addExperience(-xpDrained);
-						}
-					}
+					for (EntityPlayer player : getPlayersOnGrid())
+						tryDrainPlayer(tank, player);
 				}
+			}
+		}
+	}
+
+	protected void tryDrainPlayer(IFluidHandler tank, EntityPlayer player) {
+		int playerXP = EnchantmentUtils.getPlayerXP(player);
+		if (playerXP <= 0) return;
+
+		int maxDrainedXp = Math.min(4, playerXP);
+
+		FluidStack liquid = OpenBlocks.XP_FLUID.copy();
+		liquid.amount = EnchantmentUtils.XPToLiquidRatio(maxDrainedXp);
+		int maxAcceptedLiquid = tank.fill(ForgeDirection.UP, liquid, false);
+
+		// rounding down, so we only use as much as we can
+		int acceptedXP = EnchantmentUtils.liquidToXPRatio(maxAcceptedLiquid);
+		int acceptedLiquid = EnchantmentUtils.XPToLiquidRatio(acceptedXP);
+
+		liquid.amount = acceptedLiquid;
+		int finallyAcceptedLiquid = tank.fill(ForgeDirection.UP, liquid, true);
+
+		if (finallyAcceptedLiquid <= 0) return;
+
+		if (OpenMods.proxy.getTicks(worldObj) % 4 == 0) {
+			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
+		}
+
+		EnchantmentUtils.addPlayerXP(player, -acceptedXP);
+	}
+
+	protected void tryConsumeOrb(IFluidHandler tank, EntityXPOrb orb) {
+		if (!orb.isDead) {
+			FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
+			xpStack.amount = EnchantmentUtils.XPToLiquidRatio(orb.getXpValue());
+			int filled = tank.fill(ForgeDirection.UP, xpStack, false);
+			if (filled == xpStack.amount) {
+				tank.fill(ForgeDirection.UP, xpStack, true);
+				orb.setDead();
 			}
 		}
 	}
