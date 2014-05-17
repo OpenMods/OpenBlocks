@@ -72,7 +72,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private int previousFluidId = 0;
 
-	private boolean forceUpdate;
+	private boolean forceUpdate = true;
 
 	@IncludeInterface(IFluidHandler.class)
 	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
