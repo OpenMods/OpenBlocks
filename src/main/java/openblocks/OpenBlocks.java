@@ -288,6 +288,9 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "spongeonastick")
 		public static ItemSpongeOnAStick spongeonastick;
+
+		@RegisterItem(name = "pedometer")
+		public static ItemPedometer pedometer;
 	}
 
 	public static class ClassReferences {

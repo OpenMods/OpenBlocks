@@ -233,6 +233,9 @@ public class Config {
 	@ItemId(description = "The id of sponge on a stick")
 	public static int itemSpongeOnAStickId = 15002;
 
+	@ItemId(description = "The id of pedometer")
+	public static int itemPedometer = 15003;
+
 	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
@@ -821,6 +824,11 @@ public class Config {
 			if (OpenBlocks.Blocks.sponge != null) {
 				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.spongeonastick, " s ", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 			}
+		}
+
+		if (itemPedometer > 0) {
+			OpenBlocks.Items.pedometer = new ItemPedometer();
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Item.redstone, 'c', Item.pocketSundial));
 		}
 
 		if (explosiveEnchantmentId > 0) {

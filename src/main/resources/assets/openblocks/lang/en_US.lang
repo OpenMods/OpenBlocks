@@ -76,6 +76,16 @@ openblocks.misc.cant_store=Can't store player %s inventory
 openblocks.misc.stored_inventory=Stored player inventory to %s
 openblocks.misc.restored_inventory=Restored inventory for player %s
 
+openblocks.misc.pedometer.tracking_started=Tracking started/reseted
+openblocks.misc.pedometer.tracking_not_started=Tracking not started!
+openblocks.misc.pedometer.start_point=Start point: %s
+openblocks.misc.pedometer.avg_speed=Average speed: %s
+openblocks.misc.pedometer.straigh_line_speed=Straight line speed: %s
+openblocks.misc.pedometer.speed=Speed: %s
+openblocks.misc.pedometer.total_distance=Total distance: %s
+openblocks.misc.pedometer.straght_line=Staight line distance: %s
+openblocks.misc.pedometer.total_time=Total time: %ds
+
 openblocks.misc.shape.sphere=Sphere
 openblocks.misc.shape.cylinder=Cylinder
 openblocks.misc.shape.cuboid=Cuboid
@@ -282,7 +292,6 @@ item.openblocks.crane_magnet.name=Crane Magnet
 item.openblocks.beam.name=Beam
 item.openblocks.line.name=Line
 item.openblocks.miracle_magnet.name=§5Miracle Magnet§r
-
 item.openblocks.info_book.name=World Domination with OpenBlocks
 item.openblocks.xpbucket.name=XP Bucket
 item.openblocks.height_map.name=Height Map
@@ -296,6 +305,7 @@ item.openblocks.tasty_clay.name=Tasty Clay
 item.openblocks.golden_eye.name=Golden eye
 item.openblocks.pointer.name=Pointer
 item.openblocks.tuned_crystal.name=Tuned Crystal
+item.openblocks.pedometer.name=Pedometer
 
 item.openblocks.wallpaper.name=Wallpaper
 
