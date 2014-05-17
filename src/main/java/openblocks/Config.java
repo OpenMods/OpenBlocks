@@ -368,6 +368,10 @@ public class Config {
 	public static String[] disableMobNames = new String[0];
 
 	@OnLineModifiable
+	@ConfigProperty(category = "additional", name = "dumpDeadPlayersInventories", comment = "Should player inventories be stored after death (can later be restored with command)")
+	public static boolean dumpStiffsStuff = true;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
 	public static String[] radioStations = new String[] {
 			"http://idobiradio.idobi.com;idobi Radio (idobi.com);Blue",

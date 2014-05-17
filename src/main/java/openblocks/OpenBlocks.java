@@ -416,6 +416,8 @@ public class OpenBlocks {
 
 		FMLInterModComms.sendMessage("NotEnoughCodecs", "listCodecs", "");
 
+		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
+
 		proxy.preInit();
 	}
 
@@ -475,6 +477,7 @@ public class OpenBlocks {
 	public void severStart(FMLServerStartingEvent evt) {
 		evt.registerServerCommand(new CommandFlimFlam());
 		evt.registerServerCommand(new CommandLuck());
+		evt.registerServerCommand(new CommandInventory());
 	}
 
 	public static String getModId() {
