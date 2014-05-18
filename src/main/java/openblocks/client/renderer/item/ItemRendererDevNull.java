@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
@@ -120,7 +121,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 		TextureUtils.bindDefaultItemsTexture();
 		cube.render();
 
-		if (containedStack != null) {
+		if (containedStack != null && (containedStack.getItem() instanceof ItemBlock)) {
 			GL11.glTranslated(0.5, 0.5, 0.5);
 			GL11.glScalef(0.8f, 0.8f, 0.8f);
 			Minecraft mc = Minecraft.getMinecraft();
