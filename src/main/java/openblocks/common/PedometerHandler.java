@@ -48,12 +48,18 @@ public class PedometerHandler {
 			isRunning = false;
 			totalDistance = 0;
 			lastResult = null;
+
+			lastCheckPos = null;
+			lastCheckTime = 0;
+
+			prevTickPos = null;
+			prevTickTime = 0;
 		}
 
 		@Override
 		public void init(Entity entity, World world) {
-			prevTickPos = startPos = getEntityPosition(entity);
-			startTicks = OpenMods.proxy.getTicks(world);
+			lastCheckPos = prevTickPos = startPos = getEntityPosition(entity);
+			lastCheckTime = prevTickTime = startTicks = OpenMods.proxy.getTicks(world);
 			isRunning = true;
 		}
 
@@ -78,7 +84,7 @@ public class PedometerHandler {
 			double distanceFromLastCheck = 0;
 			if (lastCheckPos != null) distanceFromLastCheck = subtract(currentPosition, lastCheckPos).lengthVector();
 
-			double timeFromLastCheck = currentTime - lastCheckTime;
+			long timeFromLastCheck = currentTime - lastCheckTime;
 
 			lastResult = new PedometerData(startPos, ticksFromStart, totalDistance, distanceFromStart, distanceFromLastCheck, timeFromLastCheck, currentSpeed);
 		}
@@ -100,14 +106,16 @@ public class PedometerHandler {
 		public final double totalDistance;
 		public final double straightLineDistance;
 		public final double lastCheckDistance;
-		public final double lastCheckTime;
+		public final long lastCheckTime;
 
 		public final double currentSpeed;
 
 		private PedometerData(Vec3 startingPoint,
-				long totalTime, double totalDistance,
+				long totalTime,
+				double totalDistance,
 				double straightLineDistance,
-				double lastCheckDistance, double lastCheckTime,
+				double lastCheckDistance,
+				long lastCheckTime,
 				double currentSpeed) {
 			this.startingPoint = startingPoint;
 			this.totalTime = totalTime;
