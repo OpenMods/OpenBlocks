@@ -15,16 +15,11 @@ public class PedometerHandler {
 		return Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ);
 	}
 
-	public static Vec3 getEntityVelocity(Entity entity) {
-		if (entity.ridingEntity != null) return getEntityVelocity(entity.ridingEntity);
-		return Vec3.createVectorHelper(entity.motionX, entity.motionY, entity.motionZ);
-	}
-
 	public static Vec3 subtract(Vec3 a, Vec3 b) {
 		return Vec3.createVectorHelper(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
 	}
 
-	public static class PedometerTracker implements IExtendedEntityProperties {
+	public static class PedometerState implements IExtendedEntityProperties {
 		private double totalDistance;
 
 		private long startTicks;
@@ -33,7 +28,15 @@ public class PedometerHandler {
 
 		private Vec3 prevTickPos;
 
+		private long prevTickTime;
+
+		private Vec3 lastCheckPos;
+
+		private long lastCheckTime;
+
 		private PedometerData lastResult;
+
+		private boolean isRunning;
 
 		@Override
 		public void saveNBTData(NBTTagCompound compound) {}
@@ -41,86 +44,119 @@ public class PedometerHandler {
 		@Override
 		public void loadNBTData(NBTTagCompound compound) {}
 
-		@Override
-		public void init(Entity entity, World world) {
+		public void reset() {
+			isRunning = false;
 			totalDistance = 0;
 			lastResult = null;
+		}
+
+		@Override
+		public void init(Entity entity, World world) {
 			prevTickPos = startPos = getEntityPosition(entity);
 			startTicks = OpenMods.proxy.getTicks(world);
+			isRunning = true;
 		}
 
 		public void update(Entity entity) {
 			Vec3 currentPosition = getEntityPosition(entity);
-			Vec3 currentVelocity = getEntityVelocity(entity);
-
-			Vec3 dS = subtract(currentPosition, prevTickPos);
+			Vec3 deltaSinceLastUpdate = subtract(currentPosition, prevTickPos);
 			prevTickPos = currentPosition;
-			Vec3 totalDelta = subtract(currentPosition, startPos);
-
-			double dist = dS.lengthVector();
-			totalDistance += dist;
 
 			long currentTime = OpenMods.proxy.getTicks(entity.worldObj);
-			double totalTime = currentTime - startTicks;
+			double ticksSinceLastUpdate = currentTime - prevTickTime;
+			prevTickTime = currentTime;
 
-			lastResult = new PedometerData(startPos, totalTime, totalDistance, totalDelta.lengthVector(), currentVelocity.lengthVector());
+			double distanceSinceLastTick = deltaSinceLastUpdate.lengthVector();
+			double currentSpeed = ticksSinceLastUpdate != 0? distanceSinceLastTick / ticksSinceLastUpdate : 0;
+			totalDistance += distanceSinceLastTick;
+
+			Vec3 deltaFromStart = subtract(currentPosition, startPos);
+			long ticksFromStart = currentTime - startTicks;
+
+			double distanceFromStart = deltaFromStart.lengthVector();
+
+			double distanceFromLastCheck = 0;
+			if (lastCheckPos != null) distanceFromLastCheck = subtract(currentPosition, lastCheckPos).lengthVector();
+
+			double timeFromLastCheck = currentTime - lastCheckTime;
+
+			lastResult = new PedometerData(startPos, ticksFromStart, totalDistance, distanceFromStart, distanceFromLastCheck, timeFromLastCheck, currentSpeed);
+		}
+
+		public boolean isRunning() {
+			return isRunning;
+		}
+
+		public PedometerData getData() {
+			lastCheckPos = prevTickPos;
+			lastCheckTime = prevTickTime;
+			return lastResult;
 		}
 	}
 
 	public static class PedometerData {
 		public final Vec3 startingPoint;
-		public final double totalTime;
+		public final long totalTime;
 		public final double totalDistance;
 		public final double straightLineDistance;
+		public final double lastCheckDistance;
+		public final double lastCheckTime;
 
 		public final double currentSpeed;
 
-		private PedometerData(Vec3 startingPoint, double totalTime, double totalDistance, double straightLineDistance, double currentSpeed) {
+		private PedometerData(Vec3 startingPoint,
+				long totalTime, double totalDistance,
+				double straightLineDistance,
+				double lastCheckDistance, double lastCheckTime,
+				double currentSpeed) {
 			this.startingPoint = startingPoint;
 			this.totalTime = totalTime;
 			this.totalDistance = totalDistance;
 			this.straightLineDistance = straightLineDistance;
+			this.lastCheckDistance = lastCheckDistance;
+			this.lastCheckTime = lastCheckTime;
 			this.currentSpeed = currentSpeed;
 		}
 
 		public double averageSpeed() {
+			if (totalTime == 0) return 0;
 			return totalDistance / totalTime;
 		}
 
 		public double straightLineSpeed() {
+			if (totalTime == 0) return 0;
 			return straightLineDistance / totalTime;
+		}
+
+		public double lastCheckSpeed() {
+			if (lastCheckTime == 0) return 0;
+			return lastCheckDistance / lastCheckTime;
 		}
 	}
 
-	public static void reset(World world, Entity entity) {
+	public static PedometerState getProperty(Entity entity) {
 		IExtendedEntityProperties property = entity.getExtendedProperties(PROPERTY_PEDOMETER);
 
-		PedometerTracker data;
-		if (property instanceof PedometerTracker) {
-			data = (PedometerTracker)property;
+		PedometerState state;
+		if (property instanceof PedometerState) {
+			state = (PedometerState)property;
 		} else {
-			data = new PedometerTracker();
-			entity.registerExtendedProperties(PROPERTY_PEDOMETER, data);
+			state = new PedometerState();
+			entity.registerExtendedProperties(PROPERTY_PEDOMETER, state);
 		}
+		return state;
+	}
 
-		data.init(entity, world);
+	public static void reset(Entity entity) {
+		PedometerState state = getProperty(entity);
+		state.reset();
 	}
 
 	public static void updatePedometerData(Entity entity) {
 		IExtendedEntityProperties property = entity.getExtendedProperties(PROPERTY_PEDOMETER);
-		if (property instanceof PedometerTracker) {
-			PedometerTracker data = (PedometerTracker)property;
-			data.update(entity);
+		if (property instanceof PedometerState) {
+			PedometerState state = (PedometerState)property;
+			if (state.isRunning) state.update(entity);
 		}
-	}
-
-	public static PedometerData getPedometerData(Entity entity) {
-		IExtendedEntityProperties property = entity.getExtendedProperties(PROPERTY_PEDOMETER);
-		if (property instanceof PedometerTracker) {
-			PedometerTracker data = (PedometerTracker)property;
-			return data.lastResult;
-		}
-
-		return null;
 	}
 }

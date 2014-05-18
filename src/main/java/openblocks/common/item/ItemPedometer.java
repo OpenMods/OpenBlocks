@@ -12,6 +12,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.PedometerHandler;
 import openblocks.common.PedometerHandler.PedometerData;
+import openblocks.common.PedometerHandler.PedometerState;
 import openmods.utils.Units.DistanceUnit;
 import openmods.utils.Units.SpeedUnit;
 import cpw.mods.fml.relauncher.Side;
@@ -46,33 +47,43 @@ public class ItemPedometer extends Item {
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if (world.isRemote) {
 			if (player.isSneaking()) {
-				PedometerHandler.reset(world, player);
-				player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.pedometer.tracking_started"));
+				PedometerHandler.reset(player);
+				player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.pedometer.tracking_reset"));
 			} else {
-				PedometerData result = PedometerHandler.getPedometerData(player);
-				if (result != null) {
-					player.sendChatToPlayer(ChatMessageComponent.createFromText(""));
-					send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.xCoord, result.startingPoint.yCoord, result.startingPoint.zCoord));
-
-					send(player, "openblocks.misc.pedometer.avg_speed", speedUnit.format(result.averageSpeed()));
-					send(player, "openblocks.misc.pedometer.straigh_line_speed", speedUnit.format(result.straightLineSpeed()));
-					send(player, "openblocks.misc.pedometer.speed", speedUnit.format(result.currentSpeed));
-
-					send(player, "openblocks.misc.pedometer.total_distance", distanceUnit.format(result.totalDistance));
-					send(player, "openblocks.misc.pedometer.straght_line", distanceUnit.format(result.straightLineDistance));
-
-					send(player, "openblocks.misc.pedometer.total_time", result.totalTime);
+				PedometerState state = PedometerHandler.getProperty(player);
+				if (state.isRunning()) {
+					showPedometerData(player, state);
 				} else {
-					player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.pedometer.tracking_not_started"));
+					state.init(player, world);
+					player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.pedometer.tracking_started"));
 				}
 			}
 		}
 		return stack;
 	}
 
+	protected void showPedometerData(EntityPlayer player, PedometerState state) {
+		PedometerData result = state.getData();
+		player.sendChatToPlayer(ChatMessageComponent.createFromText(""));
+		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.xCoord, result.startingPoint.yCoord, result.startingPoint.zCoord));
+
+		send(player, "openblocks.misc.pedometer.speed", speedUnit.format(result.currentSpeed));
+		send(player, "openblocks.misc.pedometer.avg_speed", speedUnit.format(result.averageSpeed()));
+		send(player, "openblocks.misc.pedometer.total_distance", distanceUnit.format(result.totalDistance));
+
+		send(player, "openblocks.misc.pedometer.straght_line_distance", distanceUnit.format(result.straightLineDistance));
+		send(player, "openblocks.misc.pedometer.straigh_line_speed", speedUnit.format(result.straightLineSpeed()));
+
+		send(player, "openblocks.misc.pedometer.last_check_speed", speedUnit.format(result.lastCheckSpeed()));
+		send(player, "openblocks.misc.pedometer.last_check_distance", distanceUnit.format(result.lastCheckDistance));
+		send(player, "openblocks.misc.pedometer.last_check_time", result.lastCheckTime);
+
+		send(player, "openblocks.misc.pedometer.total_time", result.totalTime);
+	}
+
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slotId, boolean isSelected) {
-		if (world.isRemote) PedometerHandler.updatePedometerData(entity);
+		if (world.isRemote && slotId < 9) PedometerHandler.updatePedometerData(entity);
 	}
 
 	@Override
