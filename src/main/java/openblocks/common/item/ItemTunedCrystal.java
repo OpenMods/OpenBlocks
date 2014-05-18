@@ -117,9 +117,9 @@ public class ItemTunedCrystal extends Item {
 
 	public static String getUrl(ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
-		if (tag == null) return null;
+		if (tag == null) return "";
 		String url = tag.getString(TAG_URL);
-		if (Strings.isNullOrEmpty(url)) return null;
+		if (Strings.isNullOrEmpty(url)) return "";
 		String updatedUrl = RadioManager.instance.updateURL(url);
 		if (!updatedUrl.equals(url)) tag.setString(TAG_URL, updatedUrl);
 		return updatedUrl;
