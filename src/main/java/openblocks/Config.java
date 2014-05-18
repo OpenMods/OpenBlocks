@@ -146,8 +146,8 @@ public class Config {
 	@BlockId(description = "The id of the xp shower")
 	public static int blockXPShowerId = 2579;
 
-	@BlockId(description = "The id of the digital fuse")
-	public static int blockDigitalFuseId = 2580;
+	// @BlockId(description = "The id of the digital fuse")
+	public static int blockDigitalFuseId /*= 2580*/;
 
 	@ItemId(description = "The id of the hang glider")
 	public static int itemHangGliderId = 14975;

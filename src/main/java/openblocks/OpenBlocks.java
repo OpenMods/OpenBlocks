@@ -199,7 +199,8 @@ public class OpenBlocks {
 		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
 		public static BlockGoldenEgg goldenEgg;
 
-		@RegisterBlock(name = "digitalfuse", tileEntity = TileEntityDigitalFuse.class)
+		// @RegisterBlock(name = "digitalfuse", tileEntity =
+		// TileEntityDigitalFuse.class)
 		public static BlockDigitalFuse digitalFuse;
 	}
 
