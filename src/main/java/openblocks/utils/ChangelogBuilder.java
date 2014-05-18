@@ -9,27 +9,29 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
+import openmods.Log;
+import openmods.utils.ItemUtils;
 
 public class ChangelogBuilder {
 
-	public static ItemStack createChangeLog() {
+	public static ItemStack createChangeLog(String version) {
 
-		String filename = String.format("/openblocks/changelogs/%s", OpenBlocks.VERSION);
+		String filename = String.format("/openblocks/changelogs/%s", version);
 		InputStream input = OpenBlocks.class.getResourceAsStream(filename);
 
 		if (input != null) {
 
 			ItemStack book = new ItemStack(Item.writtenBook);
 
-			NBTTagCompound bookTag = new NBTTagCompound();
+			NBTTagCompound bookTag = ItemUtils.getItemTag(book);
 
-			bookTag.setString("title", String.format(StatCollector.translateToLocal("openblocks.changelog.title"), OpenBlocks.VERSION));
+			bookTag.setString("title", StatCollector.translateToLocalFormatted("openblocks.changelog.title", version));
 			bookTag.setString("author", "The OpenMods team");
 
 			NBTTagList bookPages = new NBTTagList("pages");
+			bookTag.setTag("pages", bookPages);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(input));
-
 			try {
 
 				int pageNumber = 1;
@@ -38,7 +40,7 @@ public class ChangelogBuilder {
 
 				while ((line = in.readLine()) != null) {
 					if (line.equals("EOP")) {
-						bookPages.appendTag(new NBTTagString("" + pageNumber++, pageInfo.toString()));
+						bookPages.appendTag(new NBTTagString(Integer.toString(pageNumber++), pageInfo.toString()));
 						pageInfo = new StringBuilder();
 					} else {
 						pageInfo.append(line);
@@ -46,11 +48,8 @@ public class ChangelogBuilder {
 					}
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.warn(e, "Failed to read changelog");
 			}
-
-			bookTag.setTag("pages", bookPages);
-			book.setTagCompound(bookTag);
 
 			return book;
 		}
