@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.api.FlimFlamRegistry;
@@ -28,11 +28,11 @@ public class FlimFlamEnchantmentsHandler {
 
 	public static final String LUCK_PROPERTY = "OpenBlocks-Luck";
 
-	public static final int LUCK_MARGIN = 5;
+	public static final int LUCK_MARGIN = -30;
 
 	public static final int EFFECT_DELAY = 20 * 15; // 15s cooldown
 
-	private static final Random random = new Random();
+	private static final Random RANDOM = new Random();
 
 	private static Set<String> blacklist;
 
@@ -87,7 +87,7 @@ public class FlimFlamEnchantmentsHandler {
 	}
 
 	@ForgeSubscribe
-	public void onDamage(LivingAttackEvent e) {
+	public void onDamage(LivingHurtEvent e) {
 		if (!(e.entityLiving instanceof EntityPlayer)) return;
 		if (e.entityLiving.worldObj.isRemote) return;
 
@@ -105,25 +105,37 @@ public class FlimFlamEnchantmentsHandler {
 		final int sourceFlimFlam = getFlimFlamToolLevel(sourcePlayer);
 		final int targetFlimFlam = getFlimFlamArmorLevel(targetPlayer);
 
-		Luck targetLuck = getProperty(e.entityLiving);
-		if (targetLuck != null) {
-			targetLuck.luck -= calculateWeaponLuckChange(sourceFlimFlam);
-			if (targetLuck.luck < LUCK_MARGIN) targetLuck.forceNext = true;
+		// armor is less effective, since we can have more levels
+		final int flimFlamDiff = targetFlimFlam / 3 - sourceFlimFlam;
+
+		final EntityPlayer flimFlamTarget;
+		final int flimFlamsToApply;
+		if (flimFlamDiff == 0) return;
+
+		if (flimFlamDiff > 0) {
+			// target is better protected
+			flimFlamTarget = sourcePlayer;
+			flimFlamsToApply = flimFlamDiff;
+		} else {
+			flimFlamTarget = targetPlayer;
+			flimFlamsToApply = -flimFlamDiff;
 		}
 
-		Luck sourceLuck = getProperty(sourcePlayer);
-		if (sourceLuck != null) {
-			sourceLuck.luck -= calculateArmorLuckChange(targetFlimFlam);
-			if (sourceLuck.luck < LUCK_MARGIN) sourceLuck.forceNext = true;
+		Luck victimLuck = getProperty(flimFlamTarget);
+		if (victimLuck != null) {
+			for (int i = 0; i < flimFlamsToApply; i++) {
+				int roll = rollD20();
+				// critical
+				if (roll == 20) victimLuck.forceNext = true;
+				victimLuck.luck -= roll;
+			}
+
+			if (victimLuck.luck < LUCK_MARGIN) victimLuck.forceNext = true;
 		}
 	}
 
-	private static int calculateWeaponLuckChange(int sourceFlimFlam) {
-		return 10 * sourceFlimFlam;
-	}
-
-	private static int calculateArmorLuckChange(int sourceFlimFlam) {
-		return 5 * sourceFlimFlam;
+	private static int rollD20() {
+		return RANDOM.nextInt(21);
 	}
 
 	public static void deliverKarma(EntityPlayerMP player) {
@@ -146,7 +158,7 @@ public class FlimFlamEnchantmentsHandler {
 		Collections.shuffle(selectedEffects);
 
 		while (!selectedEffects.isEmpty()) {
-			final int selectedWeight = random.nextInt(totalWeight);
+			final int selectedWeight = RANDOM.nextInt(totalWeight);
 			int currentWeight = 0;
 			Iterator<IFlimFlamEffect> it = selectedEffects.iterator();
 
@@ -194,7 +206,7 @@ public class FlimFlamEnchantmentsHandler {
 		if (property.luck > -LUCK_MARGIN || property.cooldown-- > 0) return false;
 		property.cooldown = EFFECT_DELAY;
 		double probability = 0.75 * 2.0 * Math.abs(Math.atan(property.luck / 250.0) / Math.PI);
-		double r = random.nextDouble();
+		double r = RANDOM.nextDouble();
 		return r < probability;
 	}
 
