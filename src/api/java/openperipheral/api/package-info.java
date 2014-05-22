@@ -52,7 +52,7 @@
  * </ul>
  */
 
-@API(apiVersion = "1.0", owner = "OpenPeripheralCore", provides = "OpenPeripheralApi")
+@API(apiVersion = "1.1", owner = "OpenPeripheralCore", provides = "OpenPeripheralApi")
 package openperipheral.api;
 
 import cpw.mods.fml.common.API;

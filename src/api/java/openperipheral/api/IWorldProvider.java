@@ -7,4 +7,6 @@ import net.minecraft.world.World;
  */
 public interface IWorldProvider {
 	public World getWorld();
+
+	public boolean isValid();
 }

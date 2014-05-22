@@ -223,4 +223,10 @@ public abstract class MagnetControlAdapterBase implements IUpdateHandler, IWorld
 	private static boolean canOperateOnMagnet(Vec3 magnetPos, Vec3 turtlePos) {
 		return magnetPos.squareDistanceTo(turtlePos) <= 1.5 * 1.5;
 	}
+
+	@Override
+	public boolean isValid() {
+		EntityMagnet magnet = this.magnet.get();
+		return magnet != null && magnet.addedToChunk;
+	}
 }
