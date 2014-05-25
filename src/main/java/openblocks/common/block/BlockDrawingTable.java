@@ -13,7 +13,7 @@ public class BlockDrawingTable extends OpenBlock {
 	Icon topIcon, frontIcon;
 
 	public BlockDrawingTable() {
-		super(Config.blockDrawingTable, Material.wood);
+		super(Material.wood);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

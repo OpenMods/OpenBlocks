@@ -17,7 +17,7 @@ public class BlockSponge extends OpenBlock {
 	private static final Random RANDOM = new Random();
 
 	public BlockSponge() {
-		super(Config.blockSpongeId, Material.sponge);
+		super(Material.sponge);
 		setStepSound(soundClothFootstep);
 		setTickRandomly(true);
 	}

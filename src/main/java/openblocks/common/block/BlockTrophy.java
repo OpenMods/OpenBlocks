@@ -8,14 +8,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class BlockTrophy extends OpenBlock {
 
 	public BlockTrophy() {
-		super(Config.blockTrophyId, Material.rock);
+		super(Material.rock);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 0.2f, 0.8f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}

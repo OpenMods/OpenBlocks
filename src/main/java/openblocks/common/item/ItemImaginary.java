@@ -2,16 +2,14 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.tileentity.*;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
@@ -136,8 +134,8 @@ public class ItemImaginary extends ItemOpenBlock {
 		return stack.getItemDamage() == DAMAGE_CRAYON;
 	}
 
-	public ItemImaginary(int id) {
-		super(id);
+	public ItemImaginary(Block block) {
+		super(block);
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 		setMaxDamage(0);

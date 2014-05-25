@@ -21,7 +21,7 @@ public class BlockBlockBreaker extends OpenBlock {
 	}
 
 	public BlockBlockBreaker() {
-		super(Config.blockBlockBreakerId, Material.rock);
+		super(Material.rock);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 		setInventoryRenderRotation(ForgeDirection.EAST);

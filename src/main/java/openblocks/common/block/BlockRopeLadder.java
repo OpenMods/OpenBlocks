@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockRopeLadder extends OpenBlock {
 
 	public BlockRopeLadder() {
-		super(Config.blockRopeLadderId, Material.circuits);
+		super(Material.circuits);
 		setHardness(0.4F);
 		setStepSound(soundLadderFootstep);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);

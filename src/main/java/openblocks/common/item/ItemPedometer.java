@@ -21,7 +21,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemPedometer extends Item {
 
 	public ItemPedometer() {
-		super(Config.itemPedometer);
 		setMaxStackSize(1);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}

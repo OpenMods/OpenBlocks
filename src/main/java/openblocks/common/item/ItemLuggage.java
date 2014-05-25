@@ -13,7 +13,6 @@ import openblocks.common.entity.EntityLuggage;
 public class ItemLuggage extends Item {
 
 	public ItemLuggage() {
-		super(Config.itemLuggageId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}

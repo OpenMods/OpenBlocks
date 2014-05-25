@@ -15,7 +15,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemSpongeOnAStick extends Item {
 
 	public ItemSpongeOnAStick() {
-		super(Config.itemSpongeOnAStickId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 		setMaxDamage(Config.spongeMaxDamage);

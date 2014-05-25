@@ -33,7 +33,6 @@ public class ItemGoldenEye extends Item {
 	private static final String TAG_STRUCTURE = "Structure";
 
 	public ItemGoldenEye() {
-		super(Config.itemGoldenEyeId);
 		setMaxDamage(MAX_DAMAGE);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);

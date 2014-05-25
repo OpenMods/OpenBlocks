@@ -31,7 +31,7 @@ public class BlockElevator extends OpenBlock {
 	};
 
 	public BlockElevator() {
-		super(Config.blockElevatorId, Material.rock);
+		super(Material.rock);
 	}
 
 	@Override

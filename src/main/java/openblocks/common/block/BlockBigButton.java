@@ -10,7 +10,7 @@ import openblocks.common.tileentity.TileEntityBigButton;
 public class BlockBigButton extends OpenBlock {
 
 	public BlockBigButton() {
-		super(Config.blockBigButton, Material.circuits);
+		super(Material.circuits);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}

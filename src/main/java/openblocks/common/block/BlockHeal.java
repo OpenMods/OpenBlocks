@@ -9,7 +9,7 @@ import openblocks.Config;
 public class BlockHeal extends OpenBlock {
 
 	public BlockHeal() {
-		super(Config.blockHealId, Material.rock);
+		super(Material.rock);
 	}
 
 	@Override

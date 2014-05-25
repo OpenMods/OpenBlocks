@@ -17,7 +17,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemCursor extends Item {
 
 	public ItemCursor() {
-		super(Config.itemCursorId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}

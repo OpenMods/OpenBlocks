@@ -19,7 +19,7 @@ public class ItemSonicGlasses extends ItemArmor {
 	private static final int ARMOR_HELMET = 0;
 
 	public ItemSonicGlasses() {
-		super(Config.itemSonicGlassesId, EnumArmorMaterial.IRON, 2, ARMOR_HELMET);
+		super(ArmorMaterial.IRON, 2, ARMOR_HELMET);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

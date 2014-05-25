@@ -16,7 +16,7 @@ public class BlockGuide extends OpenBlock {
 	}
 
 	public BlockGuide() {
-		super(Config.blockGuideId, Material.rock);
+		super(Material.rock);
 	}
 
 	@Override

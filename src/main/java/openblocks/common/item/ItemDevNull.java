@@ -25,7 +25,6 @@ public class ItemDevNull extends Item {
 	}
 
 	public ItemDevNull() {
-		super(Config.itemDevNullId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}

@@ -15,7 +15,7 @@ public class BlockProjector extends OpenBlock {
 	private Icon sideIcon;
 
 	public BlockProjector() {
-		super(Config.blockProjectorId, Material.iron);
+		super(Material.iron);
 		setBlockBounds(0, 0, 0, 1, 0.5f, 1);
 	}
 

@@ -17,7 +17,7 @@ public class BlockLadder extends BlockTrapDoor {
 	public static boolean disableValidation = false;
 
 	public BlockLadder() {
-		super(Config.blockLadderId, Material.wood);
+		super(Material.wood);
 		setHardness(3.0F);
 		setStepSound(soundWoodFootstep);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);

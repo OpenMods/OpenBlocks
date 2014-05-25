@@ -16,7 +16,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemHeightMap extends Item {
 
 	public ItemHeightMap() {
-		super(Config.itemHeightMap);
 		setHasSubtypes(true);
 		setMaxDamage(0);
 	}

@@ -14,7 +14,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemInfoBook extends Item {
 
 	public ItemInfoBook() {
-		super(Config.itemInfoBookId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

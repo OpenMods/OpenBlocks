@@ -17,7 +17,7 @@ public class BlockXPBottler extends OpenBlock {
 	}
 
 	public BlockXPBottler() {
-		super(Config.blockXPBottlerId, Material.rock);
+		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

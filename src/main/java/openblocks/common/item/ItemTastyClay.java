@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemTastyClay extends ItemFood {
 
 	public ItemTastyClay() {
-		super(Config.itemTastyClay, 1, 0.1f, false);
+		super(1, 0.1f, false);
 		setAlwaysEdible();
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}

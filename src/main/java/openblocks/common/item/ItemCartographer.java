@@ -42,7 +42,6 @@ public class ItemCartographer extends Item {
 	}
 
 	public ItemCartographer() {
-		super(Config.itemCartographerId);
 		setMaxDamage(0);
 		setHasSubtypes(true);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);

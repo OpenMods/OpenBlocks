@@ -40,7 +40,7 @@ public class BlockImaginary extends OpenBlock {
 	};
 
 	public BlockImaginary() {
-		super(Config.blockImaginaryId, Material.glass);
+		super(Material.glass);
 		setHardness(0.3f);
 		stepSound = drawingSounds;
 	}

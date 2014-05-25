@@ -11,7 +11,7 @@ import openblocks.Config;
 public class BlockCanvasGlass extends BlockCanvas {
 
 	public BlockCanvasGlass() {
-		super(Config.blockCanvasGlassId, Material.glass);
+		super(Material.glass);
 		setStepSound(soundGlassFootstep);
 	}
 

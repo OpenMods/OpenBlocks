@@ -102,7 +102,6 @@ public class ItemWallpaper extends Item {
 	}
 
 	public ItemWallpaper() {
-		super(Config.itemWallpaperId);
 		setHasSubtypes(true);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}

@@ -32,8 +32,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 	public static class ItemCrayonGlasses extends ItemImaginationGlasses {
 
-		public ItemCrayonGlasses(int itemId) {
-			super(itemId, Type.CRAYON);
+		public ItemCrayonGlasses() {
+			super(Type.CRAYON);
 		}
 
 		@Override
@@ -82,8 +82,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 	public final Type type;
 
-	public ItemImaginationGlasses(int itemId, Type type) {
-		super(itemId, EnumArmorMaterial.GOLD, 1, ARMOR_HELMET);
+	public ItemImaginationGlasses(Type type) {
+		super(ArmorMaterial.GOLD, 1, ARMOR_HELMET);
 		this.type = type;
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);

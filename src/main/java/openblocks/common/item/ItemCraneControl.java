@@ -31,7 +31,6 @@ public class ItemCraneControl extends Item {
 	private Icon iconDetected;
 
 	public ItemCraneControl() {
-		super(Config.itemCraneControl);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}

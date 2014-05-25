@@ -5,8 +5,8 @@ import openblocks.OpenBlocks;
 
 public abstract class OpenBlock extends openmods.block.OpenBlock {
 
-	protected OpenBlock(int id, Material material) {
-		super(id, material);
+	protected OpenBlock(Material material) {
+		super(material);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

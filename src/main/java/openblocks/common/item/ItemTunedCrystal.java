@@ -33,7 +33,6 @@ public class ItemTunedCrystal extends Item {
 	private Icon crystal;
 
 	public ItemTunedCrystal() {
-		super(Config.itemTunedCrystalId);
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);

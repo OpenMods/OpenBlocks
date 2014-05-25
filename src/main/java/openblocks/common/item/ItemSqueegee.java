@@ -15,7 +15,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemSqueegee extends Item {
 
 	public ItemSqueegee() {
-		super(Config.itemSqueegeeId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 		setMaxStackSize(1);

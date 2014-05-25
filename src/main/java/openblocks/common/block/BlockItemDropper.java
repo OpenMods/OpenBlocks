@@ -13,7 +13,7 @@ public class BlockItemDropper extends OpenBlock {
 	private Icon downIcon;
 
 	public BlockItemDropper() {
-		super(Config.blockItemDropperId, Material.rock);
+		super(Material.rock);
 		setRotationMode(BlockRotationMode.NONE);
 	}
 

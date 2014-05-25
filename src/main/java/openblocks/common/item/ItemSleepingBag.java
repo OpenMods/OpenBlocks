@@ -26,7 +26,7 @@ public class ItemSleepingBag extends ItemArmor {
 	public static final String TEXTURE_SLEEPINGBAG = "openblocks:textures/models/sleepingbag.png";
 
 	public ItemSleepingBag() {
-		super(Config.itemSleepingBagId, EnumArmorMaterial.IRON, 2, ARMOR_CHESTPIECE);
+		super(ArmorMaterial.IRON, 2, ARMOR_CHESTPIECE);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

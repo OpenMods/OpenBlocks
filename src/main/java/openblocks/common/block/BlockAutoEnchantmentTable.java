@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -14,11 +15,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAutoEnchantmentTable extends OpenBlock {
 
-	private Icon iconTop;
-	private Icon iconBottom;
+	private IIcon iconTop;
+	private IIcon iconBottom;
 
 	public BlockAutoEnchantmentTable() {
-		super(Config.blockAutoEnchantmentTableId, Material.rock);
+		super(Material.rock);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
 	}
 

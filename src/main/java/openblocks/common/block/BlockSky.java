@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockSky extends OpenBlock {
 
 	public BlockSky() {
-		super(Config.blockSkyId, Material.iron);
+		super(Material.iron);
 	}
 
 	@Override

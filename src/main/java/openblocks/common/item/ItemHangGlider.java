@@ -15,7 +15,6 @@ import openblocks.common.entity.EntityHangGlider;
 public class ItemHangGlider extends Item {
 
 	public ItemHangGlider() {
-		super(Config.itemHangGliderId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

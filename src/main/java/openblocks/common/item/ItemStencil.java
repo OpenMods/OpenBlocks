@@ -21,7 +21,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemStencil extends Item {
 
 	public ItemStencil() {
-		super(Config.itemStencilId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 	}

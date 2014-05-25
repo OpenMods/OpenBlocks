@@ -19,7 +19,6 @@ public class ItemSlimalyzer extends Item {
 	public Icon off;
 
 	public ItemSlimalyzer() {
-		super(Config.itemSlimalyzerId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 

@@ -17,7 +17,7 @@ public class BlockDigitalFuse extends OpenBlock {
 	}
 
 	public BlockDigitalFuse() {
-		super(Config.blockDigitalFuseId, Material.circuits);
+		super(Material.circuits);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
 	}

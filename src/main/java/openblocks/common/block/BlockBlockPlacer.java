@@ -17,7 +17,7 @@ public class BlockBlockPlacer extends OpenBlock {
 	}
 
 	public BlockBlockPlacer() {
-		super(Config.blockBlockPlacerId, Material.rock);
+		super(Material.rock);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setInventoryRenderRotation(ForgeDirection.EAST);
 	}

@@ -11,7 +11,7 @@ import openblocks.common.tileentity.TileEntitySprinkler;
 public class BlockSprinkler extends OpenBlock {
 
 	public BlockSprinkler() {
-		super(Config.blockSprinklerId, Material.water);
+		super(Material.water);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

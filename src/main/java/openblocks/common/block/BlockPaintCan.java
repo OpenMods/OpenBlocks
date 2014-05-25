@@ -29,7 +29,7 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	public BlockPaintCan() {
-		super(Config.blockPaintCanId, Material.rock);
+		super(Material.rock);
 		setHardness(0);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);

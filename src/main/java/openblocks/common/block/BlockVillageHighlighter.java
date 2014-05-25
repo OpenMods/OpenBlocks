@@ -2,13 +2,12 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
-import openblocks.Config;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 
 public class BlockVillageHighlighter extends OpenBlock {
 
 	public BlockVillageHighlighter() {
-		super(Config.blockVillageHighlighterId, Material.rock);
+		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 	}
 

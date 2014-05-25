@@ -31,7 +31,6 @@ public class ItemPaintBrush extends Item {
 	public Icon paintIcon;
 
 	public ItemPaintBrush() {
-		super(Config.itemPaintBrushId);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 		setMaxDamage(MAX_USES); // Damage dealt in Canvas block

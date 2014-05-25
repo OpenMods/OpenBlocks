@@ -3,9 +3,9 @@ package openblocks;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentData;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -32,210 +32,8 @@ import openmods.utils.ColorUtils.ColorMeta;
 
 public class Config {
 
-	@BlockId(description = "The id of the ladder")
-	public static int blockLadderId = 2540;
-
-	@BlockId(description = "The id of the guide")
-	public static int blockGuideId = 2541;
-
-	@BlockId(description = "The id of the elevator block")
-	public static int blockElevatorId = 2542;
-
-	@BlockId(description = "The id of the heal block")
-	public static int blockHealId = 2543;
-
-	@BlockId(description = "The id of the target block")
-	public static int blockTargetId = 2545;
-
-	@BlockId(description = "The id of the grave block")
-	public static int blockGraveId = 2546;
-
-	@BlockId(description = "The id of the flag block")
-	public static int blockFlagId = 2547;
-
-	@BlockId(description = "The id of the tank block")
-	public static int blockTankId = 2548;
-
-	@BlockId(description = "The id of the trophy block")
-	public static int blockTrophyId = 2549;
-
-	@BlockId(description = "The id of the bear trap")
-	public static int blockBearTrapId = 2550;
-
-	@BlockId(description = "The id of the sprinkler block")
-	public static int blockSprinklerId = 2551;
-
-	@BlockId(description = "The id of the cannon block")
-	public static int blockCannonId = 2552;
-
-	@BlockId(description = "The id of the vacuum hopper block")
-	public static int blockVacuumHopperId = 2553;
-
-	@BlockId(description = "The id of the sponge block")
-	public static int blockSpongeId = 2554;
-
-	@BlockId(description = "The id of the big button block")
-	public static int blockBigButton = 2555;
-
-	@BlockId(description = "The id of the imaginary block")
-	public static int blockImaginaryId = 2556;
-
-	@BlockId(description = "The id of the xp bottler block")
-	public static int blockXPBottlerId = 2557;
-
-	@BlockId(description = "The id of the village highlighter block")
-	public static int blockVillageHighlighterId = 2558;
-
-	@BlockId(description = "The id of the path block")
-	public static int blockPathId = 2559;
-
-	@BlockId(description = "The id of the auto anvil")
-	public static int blockAutoAnvilId = 2560;
-
-	@BlockId(description = "The id of the auto enchantment table")
-	public static int blockAutoEnchantmentTableId = 2561;
-
-	@BlockId(description = "The id of the xp drain block")
-	public static int blockXPDrainId = 2562;
-
-	@BlockId(description = "The id of the block-breaker block")
-	public static int blockBlockBreakerId = 2563;
-
-	@BlockId(description = "The id of the block-placer block")
-	public static int blockBlockPlacerId = 2564;
-
-	@BlockId(description = "The id of the item-dropper block")
-	public static int blockItemDropperId = 2565;
-
-	@BlockId(description = "The id of the rope ladder block")
-	public static int blockRopeLadderId = 2566;
-
-	@BlockId(description = "The id of the donation station block")
-	public static int blockDonationStationId = 2567;
-
-	@BlockId(description = "The id of the clay stainer block")
-	public static int blockPaintMixer = 2568;
-
-	@BlockId(description = "The id of the canvas block")
-	public static int blockCanvasId = 2569;
-
-	@BlockId(description = "The id of the paint tin")
-	public static int blockPaintCanId = 2571;
-
-	@BlockId(description = "The id of the glass canvas block")
-	public static int blockCanvasGlassId = 2572;
-
-	@BlockId(description = "The id of the map projector block")
-	public static int blockProjectorId = 2573;
-
-	@BlockId(description = "The id of the drawing table")
-	public static int blockDrawingTable = 2574;
-
-	@BlockId(description = "The id of the golden egg block")
-	public static int blockGoldenEggId = 2575;
-
-	@BlockId(description = "The id of the fan block")
-	public static int blockFanId = 2576;
-
-	@BlockId(description = "The id of the radio block")
-	public static int blockRadioId = 2577;
-
-	@BlockId(description = "The id of the sky block")
-	public static int blockSkyId = 2578;
-
-	@BlockId(description = "The id of the xp shower")
-	public static int blockXPShowerId = 2579;
-
-	// @BlockId(description = "The id of the digital fuse")
-	public static int blockDigitalFuseId /* = 2580 */;
-
-	@ItemId(description = "The id of the hang glider")
-	public static int itemHangGliderId = 14975;
-
-	@ItemId(description = "The id of the generic item")
-	public static int itemGenericId = 14976;
-
-	@ItemId(description = "The id of the luggage item")
-	public static int itemLuggageId = 14977;
-
-	@ItemId(description = "The id of the sonic glasses item")
-	public static int itemSonicGlassesId = 14978;
-
-	@ItemId(description = "The id of the imaginary pencil glasses item")
-	public static int itemGlassesPencil = 14979;
-
-	@ItemId(description = "The id of the imaginary crayon glasses item")
-	public static int itemGlassesCrayon = 14980;
-
-	@ItemId(description = "The id of the amazing technicolor glasses item")
-	public static int itemGlassesTechnicolor = 14981;
-
-	@ItemId(description = "The id of the serious admin glasses item")
-	public static int itemGlassesSerious = 14982;
-
-	@ItemId(description = "The id of the crane controller item")
-	public static int itemCraneControl = 14983;
-
-	@ItemId(description = "The id of the crane backpack item")
-	public static int itemCraneId = 14984;
-
-	@ItemId(description = "The id of slimalyzer item")
-	public static int itemSlimalyzerId = 14985;
-
-	@ItemId(description = "The id of the filled bucket")
-	public static int itemFilledBucketId = 14986;
-
-	@ItemId(description = "The id of the sleeping bag")
-	public static int itemSleepingBagId = 14987;
-
-	@ItemId(description = "The id of the paint brush")
-	public static int itemPaintBrushId = 14988;
-
-	@ItemId(description = "The id of the stencil")
-	public static int itemStencilId = 14989;
-
-	@ItemId(description = "The id of the Squeegee")
-	public static int itemSqueegeeId = 14990;
-
-	@ItemId(description = "The id of the height map item")
-	public static int itemHeightMap = 14991;
-
-	@ItemId(description = "The id of the empty height map item")
-	public static int itemEmptyMap = 14992;
-
-	@ItemId(description = "The id of the cartographer spawner item")
-	public static int itemCartographerId = 14993;
-
-	@ItemId(description = "The id of the tasty clay item!")
-	public static int itemTastyClay = 14994;
-
-	@ItemId(description = "The id of the golden eye item")
-	public static int itemGoldenEyeId = 14995;
-
-	@ItemId(description = "The id of the unstackable generic item")
-	public static int itemGenericUnstackableId = 14996;
-
-	@ItemId(description = "The id of the cursor item")
-	public static int itemCursorId = 14997;
-
-	@ItemId(description = "The id of tuned crystal item")
-	public static int itemTunedCrystalId = 14998;
-
-	@ItemId(description = "The id of info book")
-	public static int itemInfoBookId = 14999;
-
-	@ItemId(description = "The id of wallpaper")
-	public static int itemWallpaperId = 15000;
-
-	@ItemId(description = "The id of the dev null item")
-	public static int itemDevNullId = 15001;
-
-	@ItemId(description = "The id of sponge on a stick")
-	public static int itemSpongeOnAStickId = 15002;
-
-	@ItemId(description = "The id of pedometer")
-	public static int itemPedometer = 15003;
-
+	public static final FeatureManager FEATURES = new FeatureManager();
+	
 	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
@@ -454,279 +252,285 @@ public class Config {
 		MetasGenericUnstackable.registerItems();
 		OpenBlocks.Items.genericUnstackable.initRecipes();
 
-		if (itemFilledBucketId > 0) {
+		final String modId = "openblocks";
+		FEATURES.collectFromBlocks(OpenBlocks.Items.class);
+		FEATURES.collectFromItems(OpenBlocks.Blocks.class);
+		
+		ConfigProcessing.registerBlocks(OpenBlocks.Blocks.class, modId);
+		
+		if (FEATURES.isBlockEnabled("filledbucket")) {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			MetasBucket.registerItems();
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockLadderId)) {
+		if (FEATURES.isBlockEnabled("ladder")) {
 			OpenBlocks.Blocks.ladder = new BlockLadder();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.ladder, Block.ladder, Block.trapdoor));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.ladder, Blocks.ladder, Blocks.trapdoor));
 		}
-		if (ConfigProcessing.canRegisterBlock(blockGuideId)) {
+		if (FEATURES.isBlockEnabled("guide")) {
 			OpenBlocks.Blocks.guide = new BlockGuide();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "ggg", "gtg", "ggg", 'g', Block.glass, 't', Block.torchWood));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "ggg", "gtg", "ggg", 'g', Blocks.glass, 't', Blocks.torch));
 		}
-		if (ConfigProcessing.canRegisterBlock(blockElevatorId)) {
+		if (FEATURES.isBlockEnabled("elevator")) {
 			OpenBlocks.Blocks.elevator = new BlockElevator();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.elevator, "www", "wew", "www", 'w', Block.cloth, 'e', Item.enderPearl));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.elevator, "www", "wew", "www", 'w', Blocks.wool, 'e', Items.ender_pearl));
 		}
-		if (ConfigProcessing.canRegisterBlock(blockHealId)) {
+		if (FEATURES.isBlockEnabled("heal")) {
 			OpenBlocks.Blocks.heal = new BlockHeal();
 		}
-		if (ConfigProcessing.canRegisterBlock(blockTargetId)) {
+		if (FEATURES.isBlockEnabled("target")) {
 			OpenBlocks.Blocks.target = new BlockTarget();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.target, "www", "www", "s s", 'w', Block.cloth, 's', "stickWood"));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.target, "www", "www", "s s", 'w', Blocks.wool, 's', "stickWood"));
 		}
-		if (ConfigProcessing.canRegisterBlock(blockGraveId)) {
+		if (FEATURES.isBlockEnabled("grave")) {
 			OpenBlocks.Blocks.grave = new BlockGrave();
 		}
-		if (ConfigProcessing.canRegisterBlock(blockFlagId)) {
+		if (FEATURES.isBlockEnabled("flag")) {
 			OpenBlocks.Blocks.flag = new BlockFlag();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag, 3), "scc", "sc ", "s  ", 'c', Block.carpet, 's', "stickWood"));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag, 3), "scc", "sc ", "s  ", 'c', Blocks.carpet, 's', "stickWood"));
 		}
-		if (ConfigProcessing.canRegisterBlock(blockTankId)) {
+		if (FEATURES.isBlockEnabled("tank")) {
 			OpenBlocks.Blocks.tank = new BlockTank();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), "ogo", "ggg", "ogo", 'g', Block.thinGlass, 'o', Block.obsidian));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), "ogo", "ggg", "ogo", 'g', Blocks.glass_pane, 'o', Blocks.obsidian));
 		}
-		if (ConfigProcessing.canRegisterBlock(blockTrophyId)) {
+		if (FEATURES.isBlockEnabled("trophy")) {
 			OpenBlocks.Blocks.trophy = new BlockTrophy();
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
 		}
-		if (ConfigProcessing.canRegisterBlock(blockBearTrapId)) {
+		if (FEATURES.isBlockEnabled("beartrap")) {
 			OpenBlocks.Blocks.bearTrap = new BlockBearTrap();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.bearTrap, "fif", "fif", "fif", 'f', Block.fenceIron, 'i', Item.ingotIron));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.bearTrap, "fif", "fif", "fif", 'f', Blocks.iron_bars, 'i', Items.iron_ingot));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockSprinklerId)) {
+		if (FEATURES.isBlockEnabled("sprinkler")) {
 			OpenBlocks.Blocks.sprinkler = new BlockSprinkler();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.sprinkler, "ifi", "iri", "ifi", 'i', Item.ingotIron, 'r', Block.torchRedstoneActive, 'f', Block.fenceIron));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.sprinkler, "ifi", "iri", "ifi", 'i', Items.iron_ingot, 'r', Blocks.redstone_torch, 'f', Blocks.iron_bars));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockCannonId)) {
+		if (FEATURES.isBlockEnabled("cannon")) {
 			OpenBlocks.Blocks.cannon = new BlockCannon();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.cannon, " d ", " f ", "iri", 'd', Block.dispenser, 'f', Block.fenceIron, 'i', Item.ingotIron, 'r', Block.blockRedstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.cannon, " d ", " f ", "iri", 'd', Blocks.dispenser, 'f', Blocks.iron_bars, 'i', Items.iron_ingot, 'r', Blocks.redstone_block));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockVacuumHopperId)) {
+		if (FEATURES.isBlockEnabled("vacuumHopper")) {
 			OpenBlocks.Blocks.vacuumHopper = new BlockVacuumHopper();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.vacuumHopper, Block.hopperBlock, Block.obsidian, Item.enderPearl));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.vacuumHopper, Blocks.hopper, Blocks.obsidian, Items.ender_eye));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockSpongeId)) {
+		if (FEATURES.isBlockEnabled("sponge")) {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.sponge, Block.cloth, Item.slimeBall));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.sponge, Blocks.wool, Items.slime_ball));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockBigButton)) {
+		if (FEATURES.isBlockEnabled("bigbutton")) {
 			OpenBlocks.Blocks.bigButton = new BlockBigButton();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.bigButton, "bb", "bb", 'b', Block.stoneButton));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.bigButton, "bb", "bb", 'b', Blocks.stone_button));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockImaginaryId)) {
+		if (FEATURES.isBlockEnabled("imaginary")) {
 			OpenBlocks.Blocks.imaginary = new BlockImaginary();
 			{
 				ItemStack pencil = ItemImaginary.setupValues(null, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_PENCIL));
-				recipeList.add(new ShapelessOreRecipe(pencil, Item.coal, "stickWood", Item.enderPearl, Item.slimeBall));
+				recipeList.add(new ShapelessOreRecipe(pencil, Items.coal, "stickWood", Items.ender_eye, Items.slime_ball));
 			}
 
 			for (ColorMeta color : ColorUtils.getAllColors()) {
 				ItemStack crayon = ItemImaginary.setupValues(color.rgb, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON));
-				recipeList.add(new ShapelessOreRecipe(crayon, color.oreName, Item.paper, Item.enderPearl, Item.slimeBall));
+				recipeList.add(new ShapelessOreRecipe(crayon, color.oreName, Items.paper, Items.ender_eye, Items.slime_ball));
 			}
 
 			recipeList.add(new CrayonMixingRecipe());
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockFanId)) {
+		if (FEATURES.isBlockEnabled("fan")) {
 			OpenBlocks.Blocks.fan = new BlockFan();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.fan, "f", "i", "s", 'f', Block.fenceIron, 'i', Item.ingotIron, 's', Block.stoneSingleSlab));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.fan, "f", "i", "s", 'f', Blocks.iron_bars, 'i', Items.iron_ingot, 's', Blocks.stone_slab));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockXPBottlerId)) {
+		if (FEATURES.isBlockEnabled("xpBottler")) {
 			OpenBlocks.Blocks.xpBottler = new BlockXPBottler();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpBottler, "iii", "ibi", "iii", 'i', Item.ingotIron, 'b', Item.glassBottle));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpBottler, "iii", "ibi", "iii", 'i', Items.iron_ingot, 'b', Items.glass_bottle));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockVillageHighlighterId)) {
+		if (FEATURES.isBlockEnabled("village_highlighter")) {
 			OpenBlocks.Blocks.villageHighlighter = new BlockVillageHighlighter();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.villageHighlighter, "www", "wew", "ccc", 'w', "plankWood", 'e', Item.emerald, 'c', Block.cobblestone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.villageHighlighter, "www", "wew", "ccc", 'w', "plankWood", 'e', Items.emerald, 'c', Blocks.cobblestone));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockPathId)) {
+		if (FEATURES.isBlockEnabled("path")) {
 			OpenBlocks.Blocks.path = new BlockPath();
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Blocks.path, 2), "stone", "cobblestone"));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockAutoAnvilId)) {
+		if (FEATURES.isBlockEnabled("autoanvil")) {
 			OpenBlocks.Blocks.autoAnvil = new BlockAutoAnvil();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoAnvil, "iii", "iai", "rrr", 'i', Item.ingotIron, 'a', Block.anvil, 'r', Item.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoAnvil, "iii", "iai", "rrr", 'i', Items.iron_ingot, 'a', Blocks.anvil, 'r', Items.redstone));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockAutoEnchantmentTableId)) {
+		if (FEATURES.isBlockEnabled("autoenchantmenttable")) {
 			OpenBlocks.Blocks.autoEnchantmentTable = new BlockAutoEnchantmentTable();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoEnchantmentTable, "iii", "iei", "rrr", 'i', Item.ingotIron, 'e', Block.enchantmentTable, 'r', Item.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoEnchantmentTable, "iii", "iei", "rrr", 'i', Items.iron_ingot, 'e', Blocks.enchanting_table, 'r', Items.redstone));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockXPDrainId)) {
+		if (FEATURES.isBlockEnabled("xpdrain")) {
 			OpenBlocks.Blocks.xpDrain = new BlockXPDrain();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpDrain, "iii", "iii", "iii", 'i', Block.fenceIron));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpDrain, "iii", "iii", "iii", 'i', Blocks.iron_bars));
 		}
-		if (ConfigProcessing.canRegisterBlock(blockBlockBreakerId)) {
+		if (FEATURES.isBlockEnabled("blockbreaker")) {
 			OpenBlocks.Blocks.blockBreaker = new BlockBlockBreaker();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockBreaker, "icc", "src", "icc", 'i', Item.ingotIron, 'c', Block.cobblestone, 'r', Item.redstone, 's', Item.pickaxeDiamond));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockBreaker, "icc", "src", "icc", 'i', Items.iron_ingot, 'c', Blocks.cobblestone, 'r', Items.redstone, 's', Items.diamond_pickaxe));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockBlockPlacerId)) {
+		if (FEATURES.isBlockEnabled("blockPlacer")) {
 			OpenBlocks.Blocks.blockPlacer = new BlockBlockPlacer();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockPlacer, "icc", "src", "icc", 'i', Item.ingotIron, 'c', Block.cobblestone, 'r', Item.redstone, 's', Block.pistonBase));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockPlacer, "icc", "src", "icc", 'i', Items.iron_ingot, 'c', Blocks.cobblestone, 'r', Items.redstone, 's', Blocks.piston));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockItemDropperId)) {
+		if (FEATURES.isBlockEnabled("itemDropper")) {
 			OpenBlocks.Blocks.itemDropper = new BlockItemDropper();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.itemDropper, "icc", "src", "icc", 'i', Item.ingotIron, 'c', Block.cobblestone, 'r', Item.redstone, 's', Block.hopperBlock));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.itemDropper, "icc", "src", "icc", 'i', Items.iron_ingot, 'c', Blocks.cobblestone, 'r', Items.redstone, 's', Blocks.hopper));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockRopeLadderId)) {
+		if (FEATURES.isBlockEnabled("ropeladder")) {
 			OpenBlocks.Blocks.ropeLadder = new BlockRopeLadder();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.ropeLadder, "sts", "sts", "sts", 't', "stickWood", 's', Item.silk));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.ropeLadder, "sts", "sts", "sts", 't', "stickWood", 's', Items.string));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockDonationStationId)) {
+		if (FEATURES.isBlockEnabled("donationStation")) {
 			OpenBlocks.Blocks.donationStation = new BlockDonationStation();
 			WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Blocks.donationStation), 1, 1, 2);
 			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 			ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.donationStation, "ppp", "pcp", "ppp", 'p', Item.porkRaw, 'c', Block.chest));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.donationStation, "ppp", "pcp", "ppp", 'p', Items.porkchop, 'c', Blocks.chest));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockPaintMixer)) {
+		if (FEATURES.isBlockEnabled("paintmixer")) {
 			OpenBlocks.Blocks.paintMixer = new BlockPaintMixer();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.paintMixer, "ooo", "i i", "iii", 'o', Block.obsidian, 'i', Item.ingotIron));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.paintMixer, "ooo", "i i", "iii", 'o', Blocks.obsidian, 'i', Items.iron_ingot));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockCanvasId)) {
+		if (FEATURES.isBlockEnabled("canvas")) {
 			OpenBlocks.Blocks.canvas = new BlockCanvas();
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Item.paper, 'f', Block.fence));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Items.paper, 'f', Blocks.fence));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockPaintCanId)) {
+		if (FEATURES.isBlockEnabled("paintcan")) {
 			OpenBlocks.Blocks.paintCan = new BlockPaintCan();
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockCanvasGlassId)) {
+		if (FEATURES.isBlockEnabled("canvasglass")) {
 			OpenBlocks.Blocks.canvasGlass = new BlockCanvasGlass();
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockProjectorId)) {
+		if (FEATURES.isBlockEnabled("projector")) {
 			OpenBlocks.Blocks.projector = new BlockProjector();
-			final ItemStack lapis = new ItemStack(Item.dyePowder, 1, ColorUtils.BLUE);
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', lapis));
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Block.stoneSingleSlab, 'r', Item.redstone, 'g', Item.glowstone, 'i', Item.ingotIron, 'l', lapis));
+			final ItemStack lapis = new ItemStack(Items.dye, 1, ColorUtils.BLUE);
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', lapis));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', lapis));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockGoldenEggId)) {
+		if (FEATURES.isBlockEnabled("goldenegg")) {
 			OpenBlocks.Blocks.goldenEgg = new BlockGoldenEgg();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg, "ggg", "geg", "ggg", 'g', Item.ingotGold, 'e', Item.egg));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg, "ggg", "geg", "ggg", 'g', Items.gold_ingot, 'e', Items.egg));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockSkyId)) {
+		if (FEATURES.isBlockEnabled("sky")) {
 			OpenBlocks.Blocks.sky = new BlockSky();
 			final ItemStack normal6 = new ItemStack(OpenBlocks.Blocks.sky, 6, 0);
 			final ItemStack normal = new ItemStack(OpenBlocks.Blocks.sky, 1, 1);
 			final ItemStack inverted = new ItemStack(OpenBlocks.Blocks.sky, 1, 0);
-			recipeList.add(new ShapedOreRecipe(normal6, "geg", "gsg", "geg", 'g', Block.glass, 'e', Item.enderPearl, 's', Block.whiteStone));
-			recipeList.add(new ShapelessOreRecipe(inverted, normal, Block.torchRedstoneActive));
-			recipeList.add(new ShapelessOreRecipe(normal, inverted, Block.torchRedstoneActive));
+			recipeList.add(new ShapedOreRecipe(normal6, "geg", "gsg", "geg", 'g', Blocks.glass, 'e', Items.ender_eye, 's', Blocks.end_stone));
+			recipeList.add(new ShapelessOreRecipe(inverted, normal, Blocks.redstone_torch));
+			recipeList.add(new ShapelessOreRecipe(normal, inverted, Blocks.redstone_torch));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockDrawingTable)) {
+		if (FEATURES.isBlockEnabled("drawingtable")) {
 			OpenBlocks.Blocks.drawingTable = new BlockDrawingTable();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', Block.planks, 'c', Block.workbench, 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', "plankWood", 'c', Blocks.crafting_table, 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockRadioId)) {
+		if (FEATURES.isBlockEnabled("radio")) {
 			OpenBlocks.Blocks.radio = new BlockRadio();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.radio, "pbp", "prp", "pgp", 'p', "plankWood", 'b', Block.fenceIron, 'r', Item.redstone, 'g', Item.ingotGold));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.radio, "pbp", "prp", "pgp", 'p', "plankWood", 'b', Blocks.iron_bars, 'r', Items.redstone, 'g', Items.gold_ingot));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockXPShowerId)) {
+		if (FEATURES.isBlockEnabled("xpshower")) {
 			OpenBlocks.Blocks.xpShower = new BlockXPShower();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Item.ingotIron, 'o', Block.obsidian));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Items.iron_ingot, 'o', Blocks.obsidian));
 		}
 
-		if (ConfigProcessing.canRegisterBlock(blockDigitalFuseId)) {
+		if (FEATURES.isBlockEnabled("[disabled]")) {
 			OpenBlocks.Blocks.digitalFuse = new BlockDigitalFuse();
 		}
 
-		if (itemHangGliderId > 0) {
+		if (FEATURES.isItemEnabled("hangglider")) {
 			OpenBlocks.Items.hangGlider = new ItemHangGlider();
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.hangGlider, "wsw", 'w', MetasGeneric.gliderWing.newItemStack(), 's', "stickWood"));
 		}
 
-		if (itemLuggageId > 0) {
+		if (FEATURES.isItemEnabled("luggage")) {
 			OpenBlocks.Items.luggage = new ItemLuggage();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.luggage, "sds", "scs", "sss", 's', "stickWood", 'd', Item.diamond, 'c', Block.chest));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.luggage, "sds", "scs", "sss", 's', "stickWood", 'd', Items.diamond, 'c', Blocks.chest));
 		}
 
-		if (itemSonicGlassesId > 0) {
+		if (FEATURES.isItemEnabled("sonicglasses")) {
 			OpenBlocks.Items.sonicGlasses = new ItemSonicGlasses();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Item.helmetIron, 'o', Block.obsidian, 'i', Item.ingotIron));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Items.iron_helmet, 'o', Blocks.obsidian, 'i', Items.iron_ingot));
 			ItemStack stack = new ItemStack(OpenBlocks.Items.sonicGlasses);
 			WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
 			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
-			if (itemGlassesPencil > 0) {
-				OpenBlocks.Items.pencilGlasses = new ItemImaginationGlasses(itemGlassesPencil, ItemImaginationGlasses.Type.PENCIL);
+			if (FEATURES.isItemEnabled("pencilGlasses")) {
+				OpenBlocks.Items.pencilGlasses = new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
 				ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_PENCIL);
 				ItemImaginary.setupValues(null, block);
-				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.pencilGlasses, block, Item.paper));
+				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.pencilGlasses, block, Items.paper));
 			}
 
-			if (itemGlassesCrayon > 0) {
-				OpenBlocks.Items.crayonGlasses = new ItemCrayonGlasses(itemGlassesCrayon);
+			if (FEATURES.isItemEnabled("crayonGlasses")) {
+				OpenBlocks.Items.crayonGlasses = new ItemCrayonGlasses();
 				recipeList.add(new CrayonGlassesRecipe());
 			}
 
-			if (itemGlassesTechnicolor > 0) {
-				OpenBlocks.Items.technicolorGlasses = new ItemImaginationGlasses(itemGlassesTechnicolor, ItemImaginationGlasses.Type.TECHNICOLOR);
+			if (FEATURES.isItemEnabled("technicolorGlasses")) {
+				OpenBlocks.Items.technicolorGlasses = new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.technicolorGlasses), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
 			}
 
-			if (itemGlassesSerious > 0) {
-				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(itemGlassesSerious, ItemImaginationGlasses.Type.BASTARD);
+			if (FEATURES.isItemEnabled("seriousGlasses")) {
+				OpenBlocks.Items.seriousGlasses = new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
 			}
 		}
 
-		if (itemCraneControl > 0) {
+		if (FEATURES.isItemEnabled("craneControl")) {
 			OpenBlocks.Items.craneControl = new ItemCraneControl();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', Item.ingotIron, 'g', Item.goldNugget, 'l', Item.glowstone, 'r', Item.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', Items.iron_ingot, 'g', Items.gold_nugget, 'l', Items.glowstone_dust, 'r', Items.redstone));
 		}
 
-		if (itemCraneId > 0) {
+		if (FEATURES.isItemEnabled("craneBackpack")) {
 			OpenBlocks.Items.craneBackpack = new ItemCraneBackpack();
 			ItemStack line = MetasGeneric.line.newItemStack();
 			ItemStack beam = MetasGeneric.beam.newItemStack();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack, MetasGeneric.craneEngine.newItemStack(), MetasGeneric.craneMagnet.newItemStack(), beam, beam, line, line, line, Item.leather));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.craneBackpack, MetasGeneric.craneEngine.newItemStack(), MetasGeneric.craneMagnet.newItemStack(), beam, beam, line, line, line, Items.leather));
 		}
 
-		if (itemSlimalyzerId > 0) {
+		if (FEATURES.isItemEnabled("slimalyzer")) {
 			OpenBlocks.Items.slimalyzer = new ItemSlimalyzer();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Item.ingotIron, 'g', Block.thinGlass, 's', Item.slimeBall, 'r', Item.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Items.iron_ingot, 'g', Blocks.glass_pane, 's', Items.slime_ball, 'r', Items.redstone));
 		}
 
-		if (itemSleepingBagId > 0 && EntityPlayerVisitor.IsInBedHookSuccess) {
+		if (FEATURES.isItemEnabled("sleepingBag") && EntityPlayerVisitor.IsInBedHookSuccess) {
 			OpenBlocks.Items.sleepingBag = new ItemSleepingBag();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Block.carpet, 'w', Block.cloth));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Blocks.carpet, 'w', Blocks.wool));
 		}
 
-		if (itemPaintBrushId > 0) {
+		if (FEATURES.isItemEnabled("paintBrush")) {
 			OpenBlocks.Items.paintBrush = new ItemPaintBrush();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Block.cloth, 's', "stickWood"));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Blocks.wool, 's', "stickWood"));
 			int[] colors = new int[] { 0xFF0000, 0x00FF00, 0x0000FF };
 			for (int color : colors) {
 				ItemStack stack = ItemPaintBrush.createStackWithColor(color);
@@ -738,7 +542,7 @@ public class Config {
 			}
 		}
 
-		if (itemStencilId > 0) {
+		if (FEATURES.isItemEnabled("stencil")) {
 			OpenBlocks.Items.stencil = new ItemStencil();
 			for (Stencil stencil : Stencil.values()) {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
@@ -747,21 +551,21 @@ public class Config {
 			}
 		}
 
-		if (itemSqueegeeId > 0) {
+		if (FEATURES.isItemEnabled("squeegee")) {
 			OpenBlocks.Items.squeegee = new ItemSqueegee();
 			if (OpenBlocks.Blocks.sponge != null) {
 				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 			} else {
-				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', Item.slimeBall, 'w', "stickWood"));
+				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', Items.slime_ball, 'w', "stickWood"));
 			}
 		}
 
-		if (itemHeightMap > 0) {
+		if (FEATURES.isItemEnabled("heightMap")) {
 			OpenBlocks.Items.heightMap = new ItemHeightMap();
-			if (itemEmptyMap > 0) recipeList.add(new MapCloneRecipe());
+			if (FEATURES.isItemEnabled("")) recipeList.add(new MapCloneRecipe());
 		}
 
-		if (itemEmptyMap > 0) {
+		if (FEATURES.isItemEnabled("emptyMap")) {
 			OpenBlocks.Items.emptyMap = new ItemEmptyMap();
 			recipeList.add(new MapResizeRecipe());
 
@@ -771,30 +575,30 @@ public class Config {
 					" m ", "mcm", " m ", 'm', memory, 'c', cpu));
 		}
 
-		if (itemCartographerId > 0) {
+		if (FEATURES.isItemEnabled("cartographer")) {
 			OpenBlocks.Items.cartographer = new ItemCartographer();
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, MetasGeneric.assistantBase.newItemStack(), Item.eyeOfEnder));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.cartographer, MetasGeneric.assistantBase.newItemStack(), Items.ender_eye));
 		}
 
-		if (itemGoldenEyeId > 0) {
+		if (FEATURES.isItemEnabled("goldenEye")) {
 			OpenBlocks.Items.goldenEye = new ItemGoldenEye();
 			recipeList.add(new GoldenEyeRechargeRecipe());
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', Item.goldNugget, 'e', Item.eyeOfEnder));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', Items.gold_nugget, 'e', Items.ender_eye));
 		}
 
-		if (itemTastyClay > 0) {
+		if (FEATURES.isItemEnabled("tastyClay")) {
 			OpenBlocks.Items.tastyClay = new ItemTastyClay();
-			final ItemStack cocoa = new ItemStack(Item.dyePowder, 1, ColorUtils.BROWN);
-			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Item.clay, Item.bucketMilk, cocoa));
+			final ItemStack cocoa = new ItemStack(Items.dye, 1, ColorUtils.BROWN);
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Items.clay_ball, Items.milk_bucket, cocoa));
 		}
 
-		if (itemCursorId > 0) {
+		if (FEATURES.isItemEnabled("cursor")) {
 			OpenBlocks.Items.cursor = new ItemCursor();
 			final ItemStack whiteWool = ColorUtils.createDyedWool(ColorUtils.WHITE);
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.cursor, "w  ", "www", "www", 'w', whiteWool));
 		}
 
-		if (itemTunedCrystalId > 0) {
+		if (FEATURES.isItemEnabled("tunedCrystal")) {
 			OpenBlocks.Items.tunedCrystal = new ItemTunedCrystal();
 
 			for (RadioStation station : RadioManager.instance.getRadioStations()) {
@@ -804,31 +608,31 @@ public class Config {
 			}
 		}
 
-		if (itemInfoBookId > 0) {
+		if (FEATURES.isItemEnabled("infoBook")) {
 			OpenBlocks.Items.infoBook = new ItemInfoBook();
-			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.infoBook), Item.clay, Item.book));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.infoBook), Items.clay_ball, Items.book));
 		}
 
-		if (itemDevNullId > 0) {
+		if (FEATURES.isItemEnabled("devnull")) {
 			OpenBlocks.Items.devNull = new ItemDevNull();
 			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);
-			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.devNull), Block.cobblestone, Item.appleRed));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.devNull), Blocks.cobblestone, Items.apple));
 		}
 
-		if (itemWallpaperId > 0) {
+		//if (itemWallpaperId > 0) {
 			// OpenBlocks.Items.wallpaper = new ItemWallpaper();
-		}
+		//}
 
-		if (itemSpongeOnAStickId > 0) {
+		if (FEATURES.isItemEnabled("spongeonastick")) {
 			OpenBlocks.Items.spongeonastick = new ItemSpongeOnAStick();
 			if (OpenBlocks.Blocks.sponge != null) {
 				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.spongeonastick, " s ", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 			}
 		}
 
-		if (itemPedometer > 0) {
+		if (FEATURES.isItemEnabled("pedometer")) {
 			OpenBlocks.Items.pedometer = new ItemPedometer();
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Item.redstone, 'c', Item.pocketSundial));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Items.redstone, 'c', Items.clock));
 		}
 
 		if (explosiveEnchantmentId > 0) {
@@ -847,16 +651,15 @@ public class Config {
 
 			for (int i = 0; i < 4; i++) {
 				int emeraldCount = 1 << i;
-				ItemStack result = Item.enchantedBook.getEnchantedItemStack(new EnchantmentData(Enchantments.flimFlam, i + 1));
+				ItemStack result = Items.enchanted_book.getEnchantedItemStack(new EnchantmentData(Enchantments.flimFlam, i + 1));
 				Object recipe[] = new Object[emeraldCount + 1];
-				recipe[0] = Item.book;
-				Arrays.fill(recipe, 1, recipe.length, Item.emerald);
+				recipe[0] = Items.book;
+				Arrays.fill(recipe, 1, recipe.length, Items.emerald);
 				recipeList.add(new ShapelessOreRecipe(result, recipe));
 			}
 
 		}
 
-		final String modId = "openblocks";
 		ConfigProcessing.registerItems(OpenBlocks.Items.class, modId);
 		ConfigProcessing.registerBlocks(OpenBlocks.Blocks.class, modId);
 	}

@@ -23,7 +23,6 @@ public class ItemEmptyMap extends Item {
 	public static final int MAX_SCALE = 4;
 
 	public ItemEmptyMap() {
-		super(Config.itemEmptyMap);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
