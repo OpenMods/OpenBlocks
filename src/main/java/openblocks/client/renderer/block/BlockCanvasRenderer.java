@@ -33,7 +33,7 @@ public class BlockCanvasRenderer implements IBlockRenderer<BlockCanvas> {
 		renderBlocks.setWorld(world);
 		renderBlocks.setRenderBoundsFromBlock(block);
 		boolean visible = false;
-		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityCanvas) {
 			TileEntityCanvas canvas = (TileEntityCanvas)tile;
 			for (int i = 0; i < 6; i++) {

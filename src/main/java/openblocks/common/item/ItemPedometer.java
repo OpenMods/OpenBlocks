@@ -5,6 +5,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
@@ -34,7 +36,7 @@ public class ItemPedometer extends Item {
 	}
 
 	private static void send(EntityPlayer player, String format, Object... args) {
-		player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions(format, args));
+		player.addChatComponentMessage(new ChatComponentTranslation(format, args));
 	}
 
 	private SpeedUnit speedUnit = SpeedUnit.M_PER_TICK;
@@ -45,14 +47,14 @@ public class ItemPedometer extends Item {
 		if (world.isRemote) {
 			if (player.isSneaking()) {
 				PedometerHandler.reset(player);
-				player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.pedometer.tracking_reset"));
+				send(player, "openblocks.misc.pedometer.tracking_reset");
 			} else {
 				PedometerState state = PedometerHandler.getProperty(player);
 				if (state.isRunning()) {
 					showPedometerData(player, state);
 				} else {
 					state.init(player, world);
-					player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.misc.pedometer.tracking_started"));
+					send(player, "openblocks.misc.pedometer.tracking_started");
 				}
 			}
 		}
@@ -61,7 +63,7 @@ public class ItemPedometer extends Item {
 
 	protected void showPedometerData(EntityPlayer player, PedometerState state) {
 		PedometerData result = state.getData();
-		player.sendChatToPlayer(ChatMessageComponent.createFromText(""));
+		player.addChatComponentMessage(new ChatComponentText(""));
 		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.xCoord, result.startingPoint.yCoord, result.startingPoint.zCoord));
 
 		send(player, "openblocks.misc.pedometer.speed", speedUnit.format(result.currentSpeed));

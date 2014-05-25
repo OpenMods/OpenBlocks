@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
@@ -106,15 +107,15 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	@Override
 	public void onServerSync(Set<ISyncableObject> changed) {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton.blockID);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton);
 		ForgeDirection rot = getRotation();
 		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord
-				+ rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton.blockID);
+				+ rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton);
 	}
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public boolean isButtonActive() {

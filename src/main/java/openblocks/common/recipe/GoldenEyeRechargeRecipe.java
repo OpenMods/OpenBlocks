@@ -1,12 +1,13 @@
 package openblocks.common.recipe;
 
+import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemEnderPearl;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openblocks.OpenBlocks.Items;
+import openblocks.OpenBlocks;
 import openblocks.common.item.ItemGoldenEye;
 
 public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
@@ -14,7 +15,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
 	private static final int PEARL_RECHARGE = 10;
 
 	public GoldenEyeRechargeRecipe() {
-		super(new ItemStack(Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE - PEARL_RECHARGE), new ItemStack(Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), Item.enderPearl);
+		super(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE - PEARL_RECHARGE), new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), Items.ender_pearl);
 	}
 
 	@Override

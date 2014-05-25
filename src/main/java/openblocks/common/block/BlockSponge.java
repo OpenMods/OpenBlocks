@@ -19,7 +19,7 @@ public class BlockSponge extends OpenBlock {
 
 	public BlockSponge() {
 		super(Material.sponge);
-		setStepSound(soundClothFootstep);
+		setStepSound(soundTypeCloth);
 		setTickRandomly(true);
 	}
 
@@ -50,10 +50,11 @@ public class BlockSponge extends OpenBlock {
 		for (int dx = -Config.spongeRange; dx <= Config.spongeRange; dx++) {
 			for (int dy = -Config.spongeRange; dy <= Config.spongeRange; dy++) {
 				for (int dz = -Config.spongeRange; dz <= Config.spongeRange; dz++) {
-					Material material = world.getBlockMaterial(x + dx, y + dy, z + dz);
+					Block block = world.getBlock(x + dx, y + dy, z + dz);
+					Material material = block.getMaterial();
 					if (material.isLiquid()) {
 						hitLava |= material == Material.lava;
-						world.setBlock(x + dx, y + dy, z + dz, 0, 0, BlockNotifyFlags.SEND_TO_CLIENTS);
+						world.setBlockToAir(x + dx, y + dy, z + dz);
 					}
 				}
 			}
@@ -71,7 +72,7 @@ public class BlockSponge extends OpenBlock {
 				world.spawnParticle("largesmoke", px, py, pz, 0.0D, 0.0D, 0.0D);
 			}
 		} else {
-			world.setBlock(x, y, z, Blocks.fire.blockID, 0, BlockNotifyFlags.ALL);
+			world.setBlock(x, y, z, Blocks.fire, 0, BlockNotifyFlags.ALL);
 		}
 		return true;
 	}

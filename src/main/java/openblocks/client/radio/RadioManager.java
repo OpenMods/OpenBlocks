@@ -5,8 +5,11 @@ import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.Config;
@@ -124,9 +128,9 @@ public class RadioManager implements IVillageTradeHandler {
 	}
 
 	public static void addCodecsInfo(NBTTagCompound codecs) {
-		NBTTagList data = codecs.getTagList("data");
+		NBTTagList data = codecs.getTagList("data", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < data.tagCount(); i++) {
-			NBTTagCompound tag = (NBTTagCompound)data.tagAt(i);
+			NBTTagCompound tag = data.getCompoundTagAt(i);
 			String ext = tag.getString("ext");
 			String mime = tag.getString("mime");
 			PROTOCOLS.put(mime, ext);
@@ -191,7 +195,7 @@ public class RadioManager implements IVillageTradeHandler {
 			final SoundSystem sndSystem = getSoundSystem();
 			final Minecraft mc = Minecraft.getMinecraft();
 
-			if (sndSystem == null || mc.gameSettings.soundVolume == 0.0F) throw new RadioException("openblocks.misc.radio.muted");
+			if (sndSystem == null || mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) == 0.0F) throw new RadioException("openblocks.misc.radio.muted");
 
 			if (sndSystem.playing(soundId)) {
 				sndSystem.stop(soundId);
@@ -311,7 +315,7 @@ public class RadioManager implements IVillageTradeHandler {
 	}
 
 	private static ItemStack randomEmeralds(Random random, int min, int max) {
-		return randomItemAmount(random, Item.emerald, min, max);
+		return randomItemAmount(random, Items.emerald, min, max);
 	}
 
 	@Override
@@ -329,18 +333,18 @@ public class RadioManager implements IVillageTradeHandler {
 			if (random.nextFloat() < 0.2) recipeList.addToListWithCheck(
 					new MerchantRecipe(
 							randomEmeralds(random, 3, 7),
-							randomItemAmount(random, Item.redstone, 4, 20),
+							randomItemAmount(random, Items.redstone, 4, 20),
 							st.getStack().copy()));
 		}
 
 		if (random.nextFloat() > 0.5) recipeList.addToListWithCheck(
 				new MerchantRecipe(
 						randomEmeralds(random, 1, 2),
-						new ItemStack(Block.music)));
+						new ItemStack(Blocks.noteblock)));
 
 		if (random.nextFloat() > 0.25 || recipeList.isEmpty()) recipeList.addToListWithCheck(
 				new MerchantRecipe(
 						randomEmeralds(random, 3, 7),
-						new ItemStack(Block.jukebox)));
+						new ItemStack(Blocks.jukebox)));
 	}
 }

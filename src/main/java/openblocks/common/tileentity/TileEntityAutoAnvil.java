@@ -7,6 +7,7 @@ import java.util.Set;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -73,7 +74,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private final GenericInventory inventory = new GenericInventory("autoanvil", true, 3) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Item.enchantedBook)) { return false; }
+			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Items.enchanted_book)) { return false; }
 			if (i == 2) { return false; }
 			return super.isItemValidForSlot(i, itemstack);
 		}
@@ -248,6 +249,11 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		ItemStack inputStack = inventory.getStackInSlot(0);
 		if (inputStack == null || modifierStack == null) return 0;
 
+		Item inputItem = inputStack.getItem();
+		Item modifierItem = modifierStack.getItem();
+		
+		if (modifierItem == null || inputItem == null) return 0;
+		
 		int maximumCost = 0;
 		int i = 0;
 		byte b0 = 0;
@@ -259,11 +265,12 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		int k = b0 + inputStack.getRepairCost() + modifierStack.getRepairCost();
 		int stackSizeToBeUsedInRepair = 0;
 
-		final boolean isEnchantedBook = modifierStack.itemID == Item.enchantedBook.itemID
-				&& Item.enchantedBook.func_92110_g(modifierStack).tagCount() > 0;
+		final boolean isEnchantedBook = modifierStack.getItem() == Items.enchanted_book
+				&& Items.enchanted_book.func_92110_g(modifierStack).tagCount() > 0;
 
+		
 		if (inputStackCopy.isItemStackDamageable()
-				&& Item.itemsList[inputStackCopy.itemID].getIsRepairable(inputStack, modifierStack)) {
+				&& inputItem.getIsRepairable(inputStack, modifierStack)) {
 			int l = Math.min(inputStackCopy.getItemDamageForDisplay(), inputStackCopy.getMaxDamage() / 4);
 
 			if (l <= 0) { return 0; }
@@ -279,13 +286,11 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 			stackSizeToBeUsedInRepair = i1;
 		} else {
 			if (!isEnchantedBook
-					&& (inputStackCopy.itemID != modifierStack.itemID || !inputStackCopy.isItemStackDamageable())) { return 0; }
+					&& (inputItem != modifierItem || !inputStackCopy.isItemStackDamageable())) { return 0; }
 
 			if (inputStackCopy.isItemStackDamageable() && !isEnchantedBook) {
-				int l = inputStack.getMaxDamage()
-						- inputStack.getItemDamageForDisplay();
-				int i1 = modifierStack.getMaxDamage()
-						- modifierStack.getItemDamageForDisplay();
+				int l = inputStack.getMaxDamage() - inputStack.getItemDamageForDisplay();
+				int i1 = modifierStack.getMaxDamage() - modifierStack.getItemDamageForDisplay();
 				int j1 = i1 + inputStackCopy.getMaxDamage() * 12 / 100;
 				int i2 = l + j1;
 				int k1 = inputStackCopy.getMaxDamage() - i2;
@@ -408,7 +413,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 			k = Math.max(1, k / 2);
 		}
 
-		if (isEnchantedBook && !Item.itemsList[inputStackCopy.itemID].isBookEnchantable(inputStackCopy, modifierStack)) {
+		if (isEnchantedBook && !inputItem.isBookEnchantable(inputStackCopy, modifierStack)) {
 			inputStackCopy = null;
 		}
 

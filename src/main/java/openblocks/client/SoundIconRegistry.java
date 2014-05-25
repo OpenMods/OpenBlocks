@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -33,7 +34,7 @@ public class SoundIconRegistry {
 	public interface ISoundCategory {
 		public IDrawableIcon getIcon(Iterator<String> path);
 
-		public void registerIcons(int type, IconRegister registry);
+		public void registerIcons(int type, IIconRegister registry);
 	}
 
 	public static class ConstantIcon implements ISoundCategory {
@@ -44,7 +45,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
+		public void registerIcons(int type, IIconRegister registry) {
 			icon.registerIcons(type, registry);
 		}
 
@@ -78,7 +79,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
+		public void registerIcons(int type, IIconRegister registry) {
 			if (defaultIcon != null) defaultIcon.registerIcons(type, registry);
 
 			for (ISoundCategory cat : subCategories.values())
@@ -110,7 +111,7 @@ public class SoundIconRegistry {
 			this.deathIcon = deathIcon;
 		}
 
-		private void registerIcons(int type, IconRegister registry) {
+		private void registerIcons(int type, IIconRegister registry) {
 			normalIcon.registerIcons(type, registry);
 			hurtIcon.registerIcons(type, registry);
 			deathIcon.registerIcons(type, registry);
@@ -150,7 +151,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
+		public void registerIcons(int type, IIconRegister registry) {
 			unknownMob.registerIcons(type, registry);
 			for (MobIcons icons : mobs.values())
 				icons.registerIcons(type, registry);
@@ -179,7 +180,7 @@ public class SoundIconRegistry {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
+		public void registerIcons(int type, IIconRegister registry) {
 			child.registerIcons(type, registry);
 		}
 
@@ -193,7 +194,7 @@ public class SoundIconRegistry {
 
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent evt) {
-		root.registerIcons(evt.map.textureType, evt.map);
+		root.registerIcons(evt.map.getTextureType(), evt.map);
 	}
 
 	public IDrawableIcon getIcon(String sound) {

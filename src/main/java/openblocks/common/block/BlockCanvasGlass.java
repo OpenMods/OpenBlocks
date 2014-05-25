@@ -5,13 +5,15 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 
 public class BlockCanvasGlass extends BlockCanvas {
 
 	public BlockCanvasGlass() {
 		super(Material.glass);
-		setStepSound(soundGlassFootstep);
+		setStepSound(soundTypeGlass);
 	}
 
 	@Override
@@ -33,5 +35,5 @@ public class BlockCanvasGlass extends BlockCanvas {
 
 	@Override
 	@SuppressWarnings("rawtypes")
-	public void getSubBlocks(int par1, CreativeTabs creativeTabs, List list) {}
+	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list) {}
 }

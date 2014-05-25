@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,7 @@ import com.google.common.collect.Maps;
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IExtendable {
 
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
-	private static final ItemStack MILK_BUCKET = new ItemStack(Item.bucketMilk);
+	private static final ItemStack MILK_BUCKET = new ItemStack(Items.milk_bucket);
 	private static final int PROGRESS_TICKS = 300;
 
 	public static enum Slots {

@@ -1,7 +1,7 @@
 package openblocks.client.gui;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -57,7 +57,7 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		TileEntityAutoAnvil te = container.getOwner();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 
-		ItemStack enchantedAxe = new ItemStack(Item.pickaxeDiamond, 1);
+		ItemStack enchantedAxe = new ItemStack(Items.diamond_pickaxe, 1);
 		enchantedAxe.addEnchantment(Enchantment.fortune, 1);
 
 		// create tank level
@@ -67,10 +67,10 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 
 		// create tabs
-		tabTool = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Item.pickaxeDiamond, 1), 100, 100);
-		tabModifier = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Item.enchantedBook, 1), 100, 100);
+		tabTool = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Items.diamond_pickaxe, 1), 100, 100);
+		tabModifier = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Items.enchanted_book, 1), 100, 100);
 		tabOutput = new GuiComponentTab(TabColor.green.getColor(), enchantedAxe, 100, 100);
-		tabXP = new GuiComponentTab(TabColor.yellow.getColor(), new ItemStack(Item.bucketEmpty, 1), 100, 100);
+		tabXP = new GuiComponentTab(TabColor.yellow.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
 
 		// create side selectors
 		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getToolSides(), true);

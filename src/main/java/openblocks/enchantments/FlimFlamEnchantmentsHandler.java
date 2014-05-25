@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -169,8 +170,8 @@ public class FlimFlamEnchantmentsHandler {
 					try {
 						if (effectMeta.action().execute(player)) {
 							property.luck -= effectMeta.cost();
-							Log.fine("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
-							if (!effectMeta.isSilent()) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("openblocks.flim_flammed"));
+							Log.debug("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
+							if (!effectMeta.isSilent()) player.addChatMessage(new ChatComponentTranslation("openblocks.flim_flammed"));
 							return;
 						}
 					} catch (Throwable t) {

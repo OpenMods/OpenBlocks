@@ -33,7 +33,7 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IPlaceAwareT
 			int y = yCoord;
 			while (y-- > 0) {
 				if (worldObj.isAirBlock(xCoord, y, zCoord) && OpenBlocks.Blocks.ropeLadder.canPlaceBlockOnSide(worldObj, xCoord, y, zCoord, getRotation())) {
-					worldObj.setBlock(xCoord, y, zCoord, getBlockType().blockID, getMetadata(), 3);
+					worldObj.setBlock(xCoord, y, zCoord, getBlockType(), getMetadata(), 3);
 				} else {
 					return;
 				}
@@ -46,7 +46,7 @@ public class TileEntityRopeLadder extends OpenTileEntity implements IPlaceAwareT
 		if (worldObj.isRemote) return;
 		int y = yCoord;
 		while (y-- > 0) {
-			TileEntity te = worldObj.getBlockTileEntity(xCoord, y, zCoord);
+			TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
 			if (te instanceof TileEntityRopeLadder) {
 				worldObj.setBlockToAir(xCoord, y, zCoord);
 			} else {

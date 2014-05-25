@@ -47,9 +47,9 @@ public class GuiDonationStation extends
 	public void postRender(int mouseX, int mouseY) {
 		super.postRender(mouseX, mouseY);
 		if (lblAuthors.capturingMouse()) {
-			List lines = fontRenderer.listFormattedStringToWidth(lblAuthors.getText(), 150);
+			List lines = fontRendererObj.listFormattedStringToWidth(lblAuthors.getText(), 150);
 			if (lines.size() < lblAuthors.getMaxLines()) return;
-			drawHoveringText(lines, mouseX - this.guiLeft, mouseY - this.guiTop, fontRenderer);
+			drawHoveringText(lines, mouseX - this.guiLeft, mouseY - this.guiTop, fontRendererObj);
 		}
 	}
 

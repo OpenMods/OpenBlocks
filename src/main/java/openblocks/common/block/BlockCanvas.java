@@ -96,15 +96,15 @@ public class BlockCanvas extends OpenBlock {
 	}
 
 	public static void replaceBlock(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
+		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		Material material = world.getBlockMaterial(x, y, z);
-		if (material == Material.glass) {
-			world.setBlock(x, y, z, OpenBlocks.Blocks.canvasGlass.blockID);
+		
+		if (block.getMaterial() == Material.glass) {
+			world.setBlock(x, y, z, OpenBlocks.Blocks.canvasGlass);
 		} else {
-			world.setBlock(x, y, z, OpenBlocks.Blocks.canvas.blockID);
+			world.setBlock(x, y, z, OpenBlocks.Blocks.canvas);
 		}
-		TileEntityCanvas tile = (TileEntityCanvas)world.getBlockTileEntity(x, y, z);
+		TileEntityCanvas tile = (TileEntityCanvas)world.getTileEntity(x, y, z);
 		tile.paintedBlockId.setValue(id);
 		tile.paintedBlockMeta.setValue(meta);
 	}

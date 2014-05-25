@@ -63,13 +63,7 @@ public class ElevatorBlockRules {
 
 		Preconditions.checkNotNull(action, "Unknown action: %s", actionName);
 
-		Block block = null;
-		if ("id".equalsIgnoreCase(modId)) {
-			int blockId = Integer.parseInt(blockName);
-			block = Block.blocksList[blockId];
-		} else {
-			block = GameRegistry.findBlock(modId, blockName);
-		}
+		Block block = GameRegistry.findBlock(modId, blockName);
 
 		if (block != null) rules.put(block, action);
 		else Log.warn("Can't find block %s", entry);
@@ -80,8 +74,8 @@ public class ElevatorBlockRules {
 		if (evt.check("dropblock", "specialBlockRules")) rules = null;
 	}
 
-	private static boolean isPassable(int blockId) {
-		return Config.elevatorIgnoreHalfBlocks && !Block.isNormalCube(blockId);
+	private static boolean isPassable(Block block) {
+		return Config.elevatorIgnoreHalfBlocks && !block.isNormalCube();
 	}
 
 	public Action getActionForBlock(Block block) {
@@ -89,7 +83,7 @@ public class ElevatorBlockRules {
 		Action action = getRules().get(block);
 		if (action != null) return action;
 
-		return isPassable(block.blockID)? Action.IGNORE : Action.INCREMENT;
+		return isPassable(block)? Action.IGNORE : Action.INCREMENT;
 	}
 
 }

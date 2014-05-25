@@ -11,7 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.*;
 import openblocks.api.FlimFlamRegistry;
 import openblocks.client.radio.RadioManager;
@@ -24,7 +26,6 @@ import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.*;
 import openblocks.events.EventTypes;
 import openblocks.integration.ModuleAdapters;
-import openblocks.integration.cc15.ModuleTurtlesCC15X;
 import openblocks.integration.cc16.ModuleTurtlesCC16;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
@@ -42,7 +43,7 @@ import openmods.item.ItemGeneric;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ReflectionHelper;
 
-import org.apache.commons.lang3.ObjectUtils;
+import com.google.common.base.Objects;
 
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -55,7 +56,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid = OpenBlocks.ID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES)
-@NetworkMod(serverSideRequired = true, clientSideRequired = true)
 public class OpenBlocks {
 	public static final String ID = "OpenBlocks";
 	public static final String NAME = "OpenBlocks";
@@ -310,8 +310,9 @@ public class OpenBlocks {
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
-		public ItemStack getIconItemStack() {
-			return new ItemStack(ObjectUtils.firstNonNull(OpenBlocks.Blocks.flag, Block.sponge), 1, 0);
+		public Item getTabIconItem() {
+			Block block = Objects.firstNonNull(OpenBlocks.Blocks.flag, net.minecraft.init.Blocks.sponge);
+			return Item.getItemFromBlock(block);
 		}
 
 		@Override
@@ -328,9 +329,11 @@ public class OpenBlocks {
 
 	public static int renderId;
 
-	public static final Achievement brickAchievement = new Achievement(70997, "openblocks.droppedBrick", 13, 13, Item.brick, null).registerAchievement();
+	public static final Achievement brickAchievement = new Achievement("openblocks.oops", "openblocks.droppedBrick", 13, 13, net.minecraft.init.Items.brick, null).registerStat();
 
-	public static final StatBase brickStat = (new StatBasic(70998, "stat.openblocks.bricksDropped")).registerStat();
+	public static final StatBase brickStat = new StatBasic("openblocks.dropped",
+			new ChatComponentTranslation("stat.openblocks.bricksDropped"),
+			StatBase.simpleStatType).registerStat();
 
 	public static ItemStack changeLog;
 
@@ -348,15 +351,15 @@ public class OpenBlocks {
 
 		NetworkRegistry.instance().registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
 
-		if (Config.blockGraveId > 0) {
+		if (Config.FEATURES.isBlockEnabled("grave")) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
 
-		if (Config.itemCursorId > 0) {
+		if (Config.FEATURES.isBlockEnabled("cursor")) {
 			MinecraftForge.EVENT_BUS.register(new GuiOpenHandler());
 		}
 
-		if (Config.itemLuggageId > 0) {
+		if (Config.FEATURES.isItemEnabled("luggage")) {
 			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
 		}
 
@@ -364,23 +367,23 @@ public class OpenBlocks {
 
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
 
-		if (Config.itemCraneId > 0) {
+		if (Config.FEATURES.isItemEnabled("crane")) {
 			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
 			EntityRegistry.registerModEntity(EntityBlock.class, "Block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
 			EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "Player-Magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
 		}
 
-		if (Config.itemCartographerId > 0) {
+		if (Config.FEATURES.isItemEnabled("cartographer")) {
 			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
 		}
 
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
 
-		if (Config.itemGoldenEyeId > 0) {
+		if (Config.FEATURES.isItemEnabled("goldenEye")) {
 			EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
 		}
 
-		if (Config.blockGoldenEggId > 0) {
+		if (Config.FEATURES.isBlockEnabled("goldenegg")) {
 			EntityRegistry.registerModEntity(EntityMiniMe.class, "MiniMe", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
 		}
 
@@ -399,14 +402,13 @@ public class OpenBlocks {
 
 		Integration.addModule(new ModuleAdapters());
 		// order significant - should always use newer API
-		Integration.addModule(new ModuleTurtlesCC15X());
 		Integration.addModule(new ModuleTurtlesCC16());
 
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
 		}
 
-		if (Config.blockElevatorId > 0) {
+		if (Config.FEATURES.isBlockEnabled("elevator")) {
 			MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
 		}
 
@@ -424,7 +426,7 @@ public class OpenBlocks {
 
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		TickRegistry.registerTickHandler(new ServerTickHandler(), Side.SERVER);
+		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
 		proxy.init();
 		proxy.registerRenderInformation();
 	}

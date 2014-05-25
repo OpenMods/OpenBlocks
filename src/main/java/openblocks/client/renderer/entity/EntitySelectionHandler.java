@@ -11,6 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class EntitySelectionHandler {
@@ -37,7 +38,7 @@ public class EntitySelectionHandler {
 
 	@SubscribeEvent
 	public void renderEvents(RenderWorldLastEvent evt) {
-		final Minecraft mc = evt.context.mc;
+		final Minecraft mc = Minecraft.getMinecraft();
 
 		if (mc.objectMouseOver != null) {
 			final Entity target = mc.objectMouseOver.entityHit;

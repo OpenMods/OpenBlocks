@@ -35,21 +35,18 @@ public class MapDataBuilder {
 		public byte liquidColor;
 		public int liquidHeight;
 
-		private static Block getValidBlock(Chunk chunk, int x, int y, int z) {
-			int blockId = chunk.getBlockID(x, y, z);
-			if (blockId == 0) return null;
+		private static Block getValidBlock(World world, Chunk chunk, int x, int y, int z) {
+			Block block = chunk.getBlock(x, y, z);
+			if (block.isAir(world, x, y, z)) return null;
 
-			Block block = Block.blocksList[blockId];
-			if (block == null) return null;
-
-			if (block.blockMaterial.materialMapColor.colorIndex == 0) return null;
+			if (block.getMaterial().getMaterialMapColor().colorIndex == 0) return null;
 
 			if (MapDataManager.instance.isBlockTransparent(block)) return null;
 
 			return block;
 		}
 
-		public void average(Chunk chunk, int startX, int startZ, int size) {
+		public void average(World world, Chunk chunk, int startX, int startZ, int size) {
 			double groundHeightSum = 0;
 			int[] groundColors = new int[MapColor.mapColorArray.length];
 
@@ -66,10 +63,10 @@ public class MapDataBuilder {
 					int heightSolid = 0;
 
 					for (int y = 255; y >= 0; y--) {
-						Block block = getValidBlock(chunk, x, y, z);
+						Block block = getValidBlock(world, chunk, x, y, z);
 						if (block == null) continue;
 
-						if (block.blockMaterial.isLiquid()) {
+						if (block.getMaterial().isLiquid()) {
 							if (blockLiquid == null) {
 								blockLiquid = block;
 								heightLiquid = y;
@@ -83,13 +80,13 @@ public class MapDataBuilder {
 
 					if (blockSolid != null) {
 						groundHeightSum += heightSolid;
-						int color = blockSolid.blockMaterial.materialMapColor.colorIndex;
+						int color = blockSolid.getMaterial().getMaterialMapColor().colorIndex;
 						groundColors[color]++;
 					}
 
 					if (blockLiquid != null) {
 						liquidHeightSum += heightLiquid;
-						int color = blockLiquid.blockMaterial.materialMapColor.colorIndex;
+						int color = blockLiquid.getMaterial().getMaterialMapColor().colorIndex;
 						liquidColors[color]++;
 						liquidCount++;
 					}
@@ -144,7 +141,7 @@ public class MapDataBuilder {
 				int blockInChunkZ = 0;
 				for (int mapY = mapMinY; mapY < mapMinY + pixelsPerChunk; mapY++) {
 					BlockCount count = new BlockCount();
-					count.average(chunk, blockInChunkX, blockInChunkZ, blocksPerPixel);
+					count.average(world, chunk, blockInChunkX, blockInChunkZ, blocksPerPixel);
 
 					int index = mapY * 64 + mapX;
 

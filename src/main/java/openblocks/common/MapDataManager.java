@@ -11,6 +11,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import openblocks.Config;
@@ -216,15 +217,9 @@ public class MapDataManager {
 					String modId = parts[0];
 					String blockName = parts[1];
 
-					Block block = null;
-					if ("id".equalsIgnoreCase(modId)) {
-						int blockId = Integer.parseInt(blockName);
-						block = Block.blocksList[blockId];
-					} else {
-						block = GameRegistry.findBlock(modId, blockName);
-					}
+					Block block = GameRegistry.findBlock(modId, blockName);
 
-					if (block != null) blockBlacklist.add(block);
+					if (block != Blocks.air) blockBlacklist.add(block);
 					else Log.info("Can't find block %s", entry);
 				} catch (Throwable t) {
 					Log.warn(t, "Invalid entry in map blacklist: %s", entry);

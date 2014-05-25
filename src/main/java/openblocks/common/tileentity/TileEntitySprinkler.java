@@ -4,13 +4,14 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
@@ -39,7 +40,7 @@ import openmods.utils.InventoryUtils;
 public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IExtendable, IHasGui {
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
-	private static final ItemStack BONEMEAL = new ItemStack(Item.dyePowder, 1, 15);
+	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
 
 	private static final Random RANDOM = new Random();
 
@@ -75,9 +76,10 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	private void attemptFertilize() {
+		if (!(worldObj instanceof WorldServer)) return;
 		final int fertilizerChance = hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance;
 		if (RANDOM.nextDouble() < 1.0 / fertilizerChance) {
-			FakePlayerPool.instance.executeOnPlayer(worldObj, new PlayerUser() {
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
 				@Override
 				public void usePlayer(OpenModsFakePlayer fakePlayer) {
 					final int x = selectFromRange(Config.sprinklerEffectiveRange) + xCoord;

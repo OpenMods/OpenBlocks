@@ -1,12 +1,11 @@
 package openblocks.client.model;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
+import net.minecraft.util.IIcon;
 
 import org.lwjgl.opengl.GL11;
 
@@ -50,7 +49,7 @@ public class ModelCartographer extends ModelBase {
 			tes.zOffset = 0.25f;
 			tes.yOffset = -0.5;
 
-			final Icon icon = Item.eyeOfEnder.getIconFromDamage(0);
+			final IIcon icon = Items.ender_eye.getIconFromDamage(0);
 			ItemRenderer.renderItemIn2D(
 					tes,
 					icon.getInterpolatedU(15), icon.getInterpolatedV(2),

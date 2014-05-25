@@ -1,6 +1,6 @@
 package openblocks.client.gui;
 
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
@@ -45,9 +45,9 @@ public class GuiXPBottler extends BaseGuiContainer<ContainerXPBottler> {
 		// create tabs
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 
-		tabGlassBottle = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Item.glassBottle, 1), 100, 100);
-		tabXPBottle = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Item.expBottle), 100, 100);
-		tabXPFluid = new GuiComponentTab(TabColor.green.getColor(), new ItemStack(Item.bucketEmpty), 100, 100);
+		tabGlassBottle = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Items.glass_bottle, 1), 100, 100);
+		tabXPBottle = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Items.experience_bottle), 100, 100);
+		tabXPFluid = new GuiComponentTab(TabColor.green.getColor(), new ItemStack(Items.bucket), 100, 100);
 
 		// create side selectors
 		sideSelectorGlassBottle = new GuiComponentSideSelector(30, 30, 40.0, null, meta, OpenBlocks.Blocks.xpBottler, te.getGlassSides(), true);

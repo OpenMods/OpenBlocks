@@ -1,10 +1,10 @@
 package openblocks.client;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import openmods.Log;
 
@@ -30,7 +30,7 @@ public class Icons {
 		}
 	}
 
-	public static void renderQuad(Tessellator tes, double scale, Icon icon) {
+	public static void renderQuad(Tessellator tes, double scale, IIcon icon) {
 		tes.addVertexWithUV(scale, scale, 0, icon.getMinU(), icon.getMinV());
 		tes.addVertexWithUV(scale, -scale, 0, icon.getMinU(), icon.getMaxV());
 		tes.addVertexWithUV(-scale, -scale, 0, icon.getMaxU(), icon.getMaxV());
@@ -40,11 +40,11 @@ public class Icons {
 	public interface IDrawableIcon {
 		void draw(TextureManager tex, double alpha, double scale);
 
-		void registerIcons(int type, IconRegister registry);
+		void registerIcons(int type, IIconRegister registry);
 	}
 
 	public static class SingleIcon implements IDrawableIcon {
-		protected Icon icon;
+		protected IIcon icon;
 		public final int color;
 		public final int type;
 
@@ -53,7 +53,7 @@ public class Icons {
 			this.type = type;
 		}
 
-		public SingleIcon(Icon icon, int color, int type) {
+		public SingleIcon(IIcon icon, int color, int type) {
 			this(color, type);
 			this.icon = icon;
 		}
@@ -71,7 +71,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {}
+		public void registerIcons(int type, IIconRegister registry) {}
 	}
 
 	private static class LoadableSingleIcon extends SingleIcon {
@@ -83,7 +83,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
+		public void registerIcons(int type, IIconRegister registry) {
 			if (this.type == type) icon = registry.registerIcon(iconId);
 		}
 	}
@@ -109,7 +109,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
+		public void registerIcons(int type, IIconRegister registry) {
 			front.registerIcons(type, registry);
 			back.registerIcons(type, registry);
 		}
@@ -137,7 +137,7 @@ public class Icons {
 		}
 
 		@Override
-		public void registerIcons(int type, IconRegister registry) {
+		public void registerIcons(int type, IIconRegister registry) {
 			wrappedIcon.registerIcons(type, registry);
 		}
 

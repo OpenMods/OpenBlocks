@@ -1,7 +1,8 @@
 package openblocks.trophy;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class MooshroomBehavior implements ITrophyBehavior {
@@ -13,9 +14,10 @@ public class MooshroomBehavior implements ITrophyBehavior {
 				int pX = x + tile.xCoord;
 				int pY = tile.yCoord;
 				int pZ = z + tile.zCoord;
-				if (tile.worldObj.isAirBlock(pX, pY, pZ)
-						&& Block.mushroomBrown.canPlaceBlockAt(tile.worldObj, pX, pY, pZ)) {
-					tile.worldObj.setBlock(pX, pY, pZ, Block.mushroomBrown.blockID);
+				final World worldObj = tile.getWorldObj();
+				if (worldObj.isAirBlock(pX, pY, pZ)
+						&& Blocks.brown_mushroom.canPlaceBlockAt(worldObj, pX, pY, pZ)) {
+					worldObj.setBlock(pX, pY, pZ, Blocks.brown_mushroom);
 				}
 			}
 

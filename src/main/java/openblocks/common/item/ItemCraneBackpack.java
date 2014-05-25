@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +40,7 @@ public class ItemCraneBackpack extends ItemArmor {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIIconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:crane_backpack");
 	}
 

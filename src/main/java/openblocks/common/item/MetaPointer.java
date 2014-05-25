@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import openblocks.api.IPointable;
@@ -34,18 +35,20 @@ public class MetaPointer extends MetaGeneric {
 			Vec3 posVec = player.worldObj.getWorldVec3Pool().getVecFromPool(player.posX, player.posY + 1.62F, player.posZ);
 			Vec3 lookVec = player.getLook(1.0f);
 			Vec3 targetVec = posVec.addVector(lookVec.xCoord * 10f, lookVec.yCoord * 10f, lookVec.zCoord * 10f);
-			MovingObjectPosition movingObject = world.clip(posVec, targetVec);
+			
+			// TODO: verify
+			MovingObjectPosition movingObject = world.rayTraceBlocks(posVec, targetVec);
 			NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
 
-			if (movingObject != null && movingObject.typeOfHit.equals(EnumMovingObjectType.TILE)) {
-				final TileEntity pointedTileEntity = world.getBlockTileEntity(movingObject.blockX, movingObject.blockY, movingObject.blockZ);
+			if (movingObject != null && movingObject.typeOfHit.equals(MovingObjectType.BLOCK)) {
+				final TileEntity pointedTileEntity = world.getTileEntity(movingObject.blockX, movingObject.blockY, movingObject.blockZ);
 				if (pointedTileEntity instanceof IPointable) {
 					NBTTagCompound linkTag = new NBTTagCompound();
 					linkTag.setInteger("x", movingObject.blockX);
 					linkTag.setInteger("y", movingObject.blockY);
 					linkTag.setInteger("z", movingObject.blockZ);
 					linkTag.setInteger("d", world.provider.dimensionId);
-					tag.setCompoundTag("lastPoint", linkTag);
+					tag.setTag("lastPoint", linkTag);
 					((IPointable)pointedTileEntity).onPointingStart(itemStack, player);
 				} else if (tag.hasKey("lastPoint")) {
 					NBTTagCompound cannonTag = tag.getCompoundTag("lastPoint");
@@ -54,7 +57,7 @@ public class MetaPointer extends MetaGeneric {
 					int z = cannonTag.getInteger("z");
 					int d = cannonTag.getInteger("d");
 					if (world.provider.dimensionId == d && world.blockExists(x, y, z)) {
-						TileEntity tile = world.getBlockTileEntity(x, y, z);
+						TileEntity tile = world.getTileEntity(x, y, z);
 						if (tile instanceof IPointable) {
 							((IPointable)tile).onPointingEnd(itemStack, player, movingObject.blockX, movingObject.blockY, movingObject.blockZ);
 						}

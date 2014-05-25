@@ -6,8 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTBase.NBTPrimitive;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -111,8 +114,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	public static float getUses(NBTTagCompound tag) {
 		NBTBase value = tag.getTag(TAG_USES);
 		if (value == null) return 0;
-		if (value instanceof NBTTagInt) return ((NBTTagInt)value).data;
-		if (value instanceof NBTTagFloat) return ((NBTTagFloat)value).data;
+		if (value instanceof NBTPrimitive) return ((NBTPrimitive)value).func_150288_h();
 
 		throw new IllegalStateException("Invalid tag type: " + value);
 	}
@@ -166,7 +168,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
 		PlacementMode mode = getMode(tag);
 		ICollisionData collisions = mode.createCollisionData(stack, player);
-		world.setBlockTileEntity(x, y, z, new TileEntityImaginary(color == null? null : color.data, mode.isInverted, collisions));
+		world.setTileEntity(x, y, z, new TileEntityImaginary(color == null? null : color.func_150287_d(), mode.isInverted, collisions));
 
 		if (!player.capabilities.isCreativeMode) {
 			float uses = Math.max(getUses(tag) - mode.cost, 0);
@@ -212,7 +214,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		result.add(StatCollector.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
 
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
-		if (color != null) result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", color.data));
+		if (color != null) result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", color.func_150287_d()));
 
 		PlacementMode mode = getMode(tag);
 		String translatedMode = StatCollector.translateToLocal(mode.name);
@@ -221,7 +223,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(int id, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		result.add(setupValues(null, new ItemStack(this, 1, DAMAGE_PENCIL)));
 		for (ColorMeta color : ColorUtils.getAllColors())
 			result.add(setupValues(color.rgb, new ItemStack(this, 1, DAMAGE_CRAYON)));
@@ -316,8 +318,8 @@ public class ItemImaginary extends ItemOpenBlock {
 
 			if (world.isRemote) {
 				PlacementMode mode = PlacementMode.VALUES[modeId];
-				ChatMessageComponent modeName = ChatMessageComponent.createFromTranslationKey(mode.name);
-				player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions("openblocks.misc.mode", modeName));
+				ChatComponentTranslation modeName = new ChatComponentTranslation(mode.name);
+				player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.mode", modeName));
 			}
 		}
 

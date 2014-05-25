@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.ElevatorBlockRules;
 import openblocks.events.ElevatorActionEvent;
 import openmods.events.network.TileEntityMessageEventPacket;
@@ -17,9 +18,8 @@ import com.google.common.base.Preconditions;
 public class TileEntityElevator extends OpenTileEntity {
 
 	private boolean canTeleportPlayer(int x, int y, int z) {
-		int blockId = worldObj.getBlockId(x, y, z);
-		Block block = Block.blocksList[blockId];
-		if (block == null || block.isAirBlock(worldObj, x, y, z)) return true;
+		Block block = worldObj.getBlock(x, y, z);
+		if (block == null || block.isAir(worldObj, x, y, z)) return true;
 
 		if (!Config.irregularBlocksArePassable) return false;
 
@@ -39,10 +39,10 @@ public class TileEntityElevator extends OpenTileEntity {
 			if (!worldObj.blockExists(xCoord, y, zCoord)) break;
 			if (worldObj.isAirBlock(xCoord, y, zCoord)) continue;
 
-			int blockId = worldObj.getBlockId(xCoord, y, zCoord);
+			Block block = worldObj.getBlock(xCoord, y, zCoord);
 
-			if (blockId == Config.blockElevatorId) {
-				TileEntity otherBlock = worldObj.getBlockTileEntity(xCoord, y, zCoord);
+			if (block == OpenBlocks.Blocks.elevator) {
+				TileEntity otherBlock = worldObj.getTileEntity(xCoord, y, zCoord);
 				if (otherBlock instanceof TileEntityElevator) {
 					final int otherColor = otherBlock.getBlockMetadata();
 					if (otherColor == thisColor &&
@@ -50,8 +50,7 @@ public class TileEntityElevator extends OpenTileEntity {
 							canTeleportPlayer(xCoord, y + 2, zCoord)) return y;
 				}
 			}
-
-			Block block = Block.blocksList[blockId];
+			
 			ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
 			switch (action) {
 				case ABORT:

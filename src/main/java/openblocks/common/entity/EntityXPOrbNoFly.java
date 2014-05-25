@@ -36,7 +36,12 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.029999999329447746D;
 
-		if (this.worldObj.getBlockMaterial(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)) == Material.lava) {
+		Block block = worldObj.getBlock(
+				MathHelper.floor_double(this.posX),
+				MathHelper.floor_double(this.posY),
+				MathHelper.floor_double(this.posZ));
+
+		if (block.getMaterial() == Material.lava) {
 			this.motionY = 0.20000000298023224D;
 			this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 			this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
@@ -49,10 +54,12 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 
 		if (this.onGround) {
 			f = 0.58800006F;
-			int i = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
-			if (i > 0) {
-				f = Block.blocksList[i].slipperiness * 0.98F;
-			}
+			Block blockUnder = worldObj.getBlock(
+					MathHelper.floor_double(this.posX),
+					MathHelper.floor_double(this.boundingBox.minY) - 1,
+					MathHelper.floor_double(this.posZ));
+
+			f = blockUnder.slipperiness * 0.98F;
 		}
 
 		this.motionX *= f;

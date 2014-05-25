@@ -10,10 +10,12 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmods.GenericInventory;
@@ -53,7 +55,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		}
 
 		if (!worldObj.isRemote) {
-			if (worldObj.difficultySetting > 0 && worldObj.rand.nextDouble() < 0.002) {
+			if (worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < 0.002) {
 				List<Entity> mobs = worldObj.getEntitiesWithinAABB(IMob.class, getBB().expand(7, 7, 7));
 				if (mobs.size() < 5) {
 					double chance = worldObj.rand.nextDouble();
@@ -89,7 +91,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote && !(player instanceof FakePlayer)) {
-			setUsername(player.username);
+			setUsername(player.getGameProfile().getName());
 			if (player.capabilities.isCreativeMode) setLoot(player.inventory);
 			sync();
 		}
@@ -113,9 +115,8 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	protected void updateBlockBelow() {
-		int blockId = this.worldObj.getBlockId(xCoord, yCoord - 1, zCoord);
-		Block block = Block.blocksList[blockId];
-		onSoil = (block == Block.dirt || block == Block.grass);
+		Block block = worldObj.getBlock(xCoord, yCoord - 1, zCoord);
+		onSoil = (block == Blocks.dirt || block == Blocks.grass);
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
+	public void onNeighbourChanged() {
 		updateBlockBelow();
 	}
 

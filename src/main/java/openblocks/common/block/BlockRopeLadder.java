@@ -20,7 +20,7 @@ public class BlockRopeLadder extends OpenBlock {
 	public BlockRopeLadder() {
 		super(Material.circuits);
 		setHardness(0.4F);
-		setStepSound(soundLadderFootstep);
+		setStepSound(soundTypeLadder);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}

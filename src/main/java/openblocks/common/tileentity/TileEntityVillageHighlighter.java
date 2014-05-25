@@ -4,7 +4,7 @@ import java.util.*;
 
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
-import openblocks.Config;
+import openblocks.OpenBlocks;
 import openmods.OpenMods;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableIntArray;
@@ -58,7 +58,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 				sync();
 				boolean canBreed = canVillagersBreed();
 				if (previousBreedStatus != canBreed) {
-					worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockVillageHighlighterId);
+					worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.villageHighlighter);
 					previousBreedStatus = canBreed;
 				}
 			}

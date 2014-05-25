@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -58,12 +59,12 @@ public class ItemGoldenEye extends Item {
 
 		for (Map.Entry<String, ChunkPosition> e : nearbyStructures.entrySet()) {
 			ChunkPosition pos = e.getValue();
-			if (Config.eyeDebug) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions(
-					"openblocks.misc.structure_pos", e.getKey(), pos.x, pos.y, pos.z));
+			if (Config.eyeDebug) player.addChatMessage(new ChatComponentTranslation(
+					"openblocks.misc.structure_pos", e.getKey(), pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ));
 
-			double dx = pos.x - player.posX;
-			double dy = pos.y - player.posY;
-			double dz = pos.z - player.posZ;
+			double dx = pos.chunkPosX - player.posX;
+			double dy = pos.chunkPosY - player.posY;
+			double dz = pos.chunkPosZ - player.posZ;
 
 			double dist = (dx * dx) + (dy * dy) + (dz * dz);
 
@@ -93,8 +94,8 @@ public class ItemGoldenEye extends Item {
 
 		ChunkPosition structurePos = nearbyStructures.get(structureName);
 		if (structurePos != null) {
-			if (Config.eyeDebug) player.sendChatToPlayer(ChatMessageComponent.createFromTranslationWithSubstitutions(
-					"openblocks.misc.structure_pos", structureName, structurePos.x, structurePos.y, structurePos.z));
+			if (Config.eyeDebug) player.addChatComponentMessage(new ChatComponentTranslation(
+					"openblocks.misc.structure_pos", structureName, structurePos.chunkPosX, structurePos.chunkPosY, structurePos.chunkPosZ));
 
 			stack.setItemDamage(damage + 1);
 			EntityGoldenEye eye = new EntityGoldenEye(world, stack, player, structurePos);

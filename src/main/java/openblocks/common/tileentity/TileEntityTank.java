@@ -133,12 +133,12 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
 		int newFluidId = tank.getFluid() == null? -1 : tank.getFluid().fluidID;
-		if (newFluidId != previousFluidId) worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		if (newFluidId != previousFluidId) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		previousFluidId = newFluidId;
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
+	public void onNeighbourChanged() {
 		forceUpdate = true;
 	}
 
@@ -298,17 +298,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	private void tankChanged() {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType().blockID);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		tank.markDirty();
 	}
 
 	private void markUpdated() {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType().blockID);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		forceUpdate = true;
 	}
 
 	private void tryFillBottomTank(FluidStack fluid) {
-		TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord - 1, zCoord);
+		TileEntity te = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
 		if (te instanceof TileEntityTank) {
 			int amount = ((TileEntityTank)te).internalFill(fluid, true);
 			if (amount > 0) internalDrain(amount, true);
@@ -325,7 +325,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		if (!containsFluid(needed) || needed.amount <= 0) return;
 
 		if (yCoord < 255) {
-			TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord + 1, zCoord);
+			TileEntity te = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
 			if (te instanceof TileEntityTank) ((TileEntityTank)te).drainFromColumn(needed, doDrain);
 		}
 
@@ -351,7 +351,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		resource.amount -= amount;
 
 		if (resource.amount > 0 && yCoord < 255) {
-			TileEntity te = worldObj.getBlockTileEntity(xCoord, yCoord + 1, zCoord);
+			TileEntity te = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
 			if (te instanceof TileEntityTank) ((TileEntityTank)te).fillColumn(resource, doFill);
 		}
 	}

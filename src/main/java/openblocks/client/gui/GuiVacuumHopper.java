@@ -1,7 +1,7 @@
 package openblocks.client.gui;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
@@ -34,11 +34,11 @@ public class GuiVacuumHopper extends BaseGuiContainer<ContainerVacuumHopper> {
 
 		tabs = new GuiComponentTabs(xSize - 3, 4);
 
-		xpTab = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Item.expBottle, 1), 100, 100);
+		xpTab = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Items.experience_bottle, 1), 100, 100);
 		xpTab.addComponent(xpSideSelector);
 		xpTab.addComponent(xpOutputsLabel);
 
-		itemsTab = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Block.chest), 100, 100);
+		itemsTab = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Blocks.chest), 100, 100);
 		itemsTab.addComponent(itemSideSelector);
 		itemsTab.addComponent(itemOutputsLabel);
 

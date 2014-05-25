@@ -8,7 +8,7 @@ public class BlockAutoAnvil extends OpenBlock {
 
 	public BlockAutoAnvil() {
 		super(Material.anvil);
-		setStepSound(soundAnvilFootstep);
+		setStepSound(soundTypeAnvil);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setInventoryRenderRotation(ForgeDirection.NORTH);
 	}

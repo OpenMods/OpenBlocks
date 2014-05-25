@@ -59,10 +59,12 @@ public class EntityItemProjectile extends EntityItem {
 				|| (int)this.prevPosZ != (int)this.posZ;
 
 		if (flag || this.ticksExisted % 25 == 0) {
-			if (this.worldObj.getBlockMaterial(
+			Block block = worldObj.getBlock(
 					MathHelper.floor_double(this.posX),
 					MathHelper.floor_double(this.posY),
-					MathHelper.floor_double(this.posZ)) == Material.lava) {
+					MathHelper.floor_double(this.posZ));
+			
+			if (block.getMaterial() == Material.lava) {
 				this.motionY = 0.20000000298023224D;
 				this.motionX = (this.rand.nextFloat() - this.rand
 						.nextFloat()) * 0.2F;
@@ -83,13 +85,13 @@ public class EntityItemProjectile extends EntityItem {
 		// Keep ground friction
 		if (this.onGround) {
 			f = 0.58800006F;
-			int i = this.worldObj.getBlockId(
+			Block block = worldObj.getBlock(
 					MathHelper.floor_double(this.posX),
 					MathHelper.floor_double(this.boundingBox.minY) - 1,
 					MathHelper.floor_double(this.posZ));
 
-			if (i > 0) {
-				f = Block.blocksList[i].slipperiness * 0.98F;
+			if (block != null) {
+				f = block.slipperiness * 0.98F;
 			}
 		}
 

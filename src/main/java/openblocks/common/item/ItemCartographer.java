@@ -2,6 +2,7 @@ package openblocks.common.item;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -54,7 +55,7 @@ public class ItemCartographer extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIIconRegister register) {
+	public void registerIcons(IIconRegister register) {
 		for (AssistantType type : AssistantType.VALUES)
 			type.icon = register.registerIcon(type.iconName);
 	}
@@ -62,9 +63,9 @@ public class ItemCartographer extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(int id, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		for (AssistantType type : AssistantType.VALUES)
-			result.add(new ItemStack(id, 1, type.ordinal()));
+			result.add(new ItemStack(this, 1, type.ordinal()));
 	}
 
 	@Override

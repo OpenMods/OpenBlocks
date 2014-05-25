@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -33,8 +34,8 @@ import openmods.utils.SidedInventoryAdapter;
 public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
-	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Item.glassBottle, 1);
-	protected static final ItemStack XP_BOTTLE = new ItemStack(Item.expBottle, 1);
+	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
+	protected static final ItemStack XP_BOTTLE = new ItemStack(Items.experience_bottle, 1);
 	public static final int PROGRESS_TICKS = 40;
 
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
@@ -54,7 +55,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 			if (slot != 0) return false;
-			return itemstack.getItem() == Item.glassBottle;
+			return itemstack.getItem() == Items.glass_bottle;
 		}
 	};
 

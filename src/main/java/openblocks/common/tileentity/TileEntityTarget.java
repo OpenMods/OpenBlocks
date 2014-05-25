@@ -6,12 +6,12 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.util.ForgeDirection;
-import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.ClassReferences;
 import openmods.api.INeighbourAwareTile;
@@ -55,7 +55,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockTargetId);
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.target);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	public void setStrength(int strength) {
 		this.strength = strength;
 		tickCounter = 10;
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, Config.blockTargetId);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.target);
 	}
 
 	private void onRedstoneChanged() {
@@ -116,7 +116,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 			}
 
 			if (pickableCount > 0) {
-				ItemStack newStack = new ItemStack(Item.arrow, pickableCount, 0);
+				ItemStack newStack = new ItemStack(Items.arrow, pickableCount, 0);
 				BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, newStack);
 			}
 		}
@@ -142,7 +142,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
+	public void onNeighbourChanged() {
 		onRedstoneChanged();
 	}
 }

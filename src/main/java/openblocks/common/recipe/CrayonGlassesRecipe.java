@@ -2,13 +2,12 @@ package openblocks.common.recipe;
 
 import java.util.List;
 
+import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks.Blocks;
-import openblocks.OpenBlocks.Items;
+import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
 import openmods.utils.ItemUtils;
 
@@ -17,13 +16,13 @@ import com.google.common.collect.Lists;
 public class CrayonGlassesRecipe extends ShapelessRecipes {
 
 	private static List<ItemStack> createFakeIngredientsList() {
-		ItemStack block = new ItemStack(Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON);
+		ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON);
 		ItemImaginary.setupValues(0x00FFFF, block);
-		return Lists.newArrayList(new ItemStack(Item.paper), block);
+		return Lists.newArrayList(new ItemStack(Items.paper), block);
 	}
 
 	private static ItemStack createFakeResult() {
-		return Items.crayonGlasses.createCrayonGlasses(0x00FFFF);
+		return OpenBlocks.Items.crayonGlasses.createCrayonGlasses(0x00FFFF);
 	}
 
 	public CrayonGlassesRecipe() {
@@ -43,7 +42,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 							|| ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
 
 					gotCrayon = true;
-				} else if (stack.getItem() == Item.paper) {
+				} else if (stack.getItem() == Items.paper) {
 					if (gotPaper) return false;
 
 					gotPaper = true;
@@ -60,7 +59,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack != null && stack.getItem() instanceof ItemImaginary) {
 				Integer color = ItemUtils.getInt(stack, ItemImaginary.TAG_COLOR);
-				return Items.crayonGlasses.createCrayonGlasses(color);
+				return OpenBlocks.Items.crayonGlasses.createCrayonGlasses(color);
 			}
 		}
 

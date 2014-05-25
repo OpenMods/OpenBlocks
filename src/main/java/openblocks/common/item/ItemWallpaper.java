@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,24 +33,18 @@ public class ItemWallpaper extends Item {
 		public static final String TAG_BLOCK_META = "blockMeta";
 		public static final String TAG_BLOCK_SIDE = "blockSide";
 
-		private int blockId;
+		private Block block;
 		private int blockMeta;
 		private int blockSide;
 
-		public BlockSideTexture(int id, int meta, int side) {
-			blockId = id;
+		public BlockSideTexture(Block block, int meta, int side) {
+			this.block = block;
 			blockMeta = meta;
 			blockSide = side;
 		}
 
 		public IIcon getIcon() {
-			Block block = getBlock();
-			if (block != null) { return block.getIcon(blockSide, blockMeta); }
-			return null;
-		}
-
-		public Block getBlock() {
-			return Block.blocksList[blockId];
+			return block.getIcon(blockSide, blockMeta);
 		}
 
 		public static BlockSideTexture fromItemStack(ItemStack stack) {
@@ -77,10 +72,6 @@ public class ItemWallpaper extends Item {
 			tag.setInteger(TAG_BLOCK_SIDE, blockSide);
 		}
 
-		public int getBlockId() {
-			return blockId;
-		}
-
 		public int getBlockMeta() {
 			return blockMeta;
 		}
@@ -94,9 +85,7 @@ public class ItemWallpaper extends Item {
 		}
 
 		public String getBlockName() {
-			Block block = getBlock();
-			if (block != null) { return block.getLocalizedName(); }
-			return "Unknown block";
+			return block.getLocalizedName();
 		}
 	}
 
@@ -138,7 +127,7 @@ public class ItemWallpaper extends Item {
 
 		int hitSide = side;
 
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 
 		boolean canReplaceBlock = PaintUtils.instance.isAllowedToReplace(world, x, y, z);
 
@@ -152,7 +141,7 @@ public class ItemWallpaper extends Item {
 					BlockCanvas.replaceBlock(world, x, y, z);
 				}
 
-				te = world.getBlockTileEntity(x, y, z);
+				te = world.getTileEntity(x, y, z);
 
 				if (te instanceof TileEntityCanvas) {
 
@@ -160,8 +149,7 @@ public class ItemWallpaper extends Item {
 				}
 
 			} else if (!world.isRemote) {
-
-				int blockId = world.getBlockId(x, y, z);
+				Block block = world.getBlock(x, y, z);
 				int meta = world.getBlockMetadata(x, y, z);
 
 				if (te instanceof TileEntityCanvas) {
@@ -170,18 +158,14 @@ public class ItemWallpaper extends Item {
 
 					canvas.getLayersForSide(side);
 
-					// blockId = layer.getBaseTextureBlockId();
-					// meta = layer.getBaseTextureMetadata();
-					// side = layer.getBaseTextureSide();
-
-					if (blockId == 0) {
+					if (blockId != Blocks.air) {
 						blockId = canvas.paintedBlockId.getValue();
 						meta = canvas.paintedBlockMeta.getValue();
 						side = hitSide;
 					}
 				}
 
-				texture = new BlockSideTexture(blockId, meta, side);
+				texture = new BlockSideTexture(block, meta, side);
 
 				ItemStack cloneStack = stack.copy();
 				cloneStack.stackSize = 1;

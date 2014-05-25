@@ -1,9 +1,7 @@
 package openblocks.events;
 
 import openblocks.common.MapDataManager;
-import openmods.network.event.EventPacket;
-import openmods.network.event.EventPacketManager;
-import openmods.network.event.IEventPacketType;
+import openmods.network.event.*;
 
 public enum EventTypes implements IEventPacketType {
 	MAP_DATA_REQUEST {
@@ -13,8 +11,8 @@ public enum EventTypes implements IEventPacketType {
 		}
 
 		@Override
-		public PacketDirection getDirection() {
-			return PacketDirection.FROM_CLIENT;
+		public PacketDirectionValidator getDirection() {
+			return PacketDirectionValidator.C2S;
 		}
 	},
 	MAP_DATA_RESPONSE {
@@ -24,8 +22,8 @@ public enum EventTypes implements IEventPacketType {
 		}
 
 		@Override
-		public PacketDirection getDirection() {
-			return PacketDirection.TO_CLIENT;
+		public PacketDirectionValidator getDirection() {
+			return PacketDirectionValidator.S2C;
 		}
 
 		@Override
@@ -40,8 +38,8 @@ public enum EventTypes implements IEventPacketType {
 		}
 
 		@Override
-		public PacketDirection getDirection() {
-			return PacketDirection.TO_CLIENT;
+		public PacketDirectionValidator getDirection() {
+			return PacketDirectionValidator.S2C;
 		}
 	},
 	PLAYER_MOVEMENT {
@@ -51,8 +49,8 @@ public enum EventTypes implements IEventPacketType {
 		}
 
 		@Override
-		public PacketDirection getDirection() {
-			return PacketDirection.FROM_CLIENT;
+		public PacketDirectionValidator getDirection() {
+			return PacketDirectionValidator.C2S;
 		}
 	},
 	STENCIL_CRAFT {
@@ -62,8 +60,8 @@ public enum EventTypes implements IEventPacketType {
 		}
 
 		@Override
-		public PacketDirection getDirection() {
-			return PacketDirection.FROM_CLIENT;
+		public PacketDirectionValidator getDirection() {
+			return PacketDirectionValidator.C2S;
 		}
 	},
 	PLAYER_ACTION {
@@ -73,8 +71,8 @@ public enum EventTypes implements IEventPacketType {
 		}
 
 		@Override
-		public PacketDirection getDirection() {
-			return PacketDirection.FROM_CLIENT;
+		public PacketDirectionValidator getDirection() {
+			return PacketDirectionValidator.C2S;
 		}
 	};
 
@@ -90,11 +88,11 @@ public enum EventTypes implements IEventPacketType {
 
 	@Override
 	public int getId() {
-		return EventIdRanges.OPEN_BLOCKS_ID_START + ordinal();
+		return ordinal();
 	}
 
 	public static void registerTypes() {
-		for (IEventPacketType type : values())
-			EventPacketManager.registerType(type);
+		// TODO
+		EventPacketManager.INSTANCE.registerEvent(type);
 	}
 }

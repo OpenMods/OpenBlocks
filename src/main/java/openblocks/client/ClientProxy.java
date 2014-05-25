@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -30,6 +32,7 @@ import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -41,13 +44,13 @@ public class ClientProxy implements IOpenBlocksProxy {
 	private static final ResourceLocation RADIO_VILLAGER_TEXTURE = new ResourceLocation("openblocks", "textures/models/king-ish.png");
 
 	public static class Icons {
-		public static Icon xpJuiceStill;
-		public static Icon xpJuiceFlowing;
+		public static IIcon xpJuiceStill;
+		public static IIcon xpJuiceFlowing;
 	}
 
 	@SubscribeEvent
 	public void textureHook(TextureStitchEvent.Pre event) {
-		if (event.map.textureType == 0) {
+		if (event.map.getTextureType() == 0) {
 			Icons.xpJuiceFlowing = event.map.registerIcon("openblocks:xpjuiceflowing");
 			Icons.xpJuiceStill = event.map.registerIcon("openblocks:xpjuicestill");
 			if (OpenBlocks.Fluids.openBlocksXPJuice != null) {
@@ -70,7 +73,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@Override
 	public void init() {
-		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
+		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 		MinecraftForge.EVENT_BUS.register(this);
 	}
@@ -110,22 +113,22 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDigitalFuse.class, new TileEntityDigitalFuseRenderer());
 
-		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.tank.blockID, new ItemRendererTank());
+		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(OpenBlocks.Blocks.tank), new ItemRendererTank());
 
 		if (OpenBlocks.Items.luggage != null) {
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage.itemID, new ItemRendererLuggage());
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage, new ItemRendererLuggage());
 			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
 		}
 
 		if (OpenBlocks.Blocks.paintCan != null) {
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Blocks.paintCan.blockID, new ItemRendererPaintCan());
+			MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(OpenBlocks.Blocks.paintCan), new ItemRendererPaintCan());
 		}
 
 		if (OpenBlocks.Items.hangGlider != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
 
 			ItemRendererHangGlider hangGliderRenderer = new ItemRendererHangGlider();
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider.itemID, hangGliderRenderer);
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider, hangGliderRenderer);
 			MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
 
 			attachPlayerRenderer();
@@ -146,7 +149,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		if (OpenBlocks.Items.devNull != null) {
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.devNull.itemID, new ItemRendererDevNull());
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.devNull, new ItemRendererDevNull());
 		}
 
 		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());

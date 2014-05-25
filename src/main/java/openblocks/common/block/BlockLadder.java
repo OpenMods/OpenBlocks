@@ -18,7 +18,7 @@ public class BlockLadder extends BlockTrapDoor {
 	public BlockLadder() {
 		super(Material.wood);
 		setHardness(3.0F);
-		setStepSound(soundWoodFootstep);
+		setStepSound(soundTypeWood);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);
 	}

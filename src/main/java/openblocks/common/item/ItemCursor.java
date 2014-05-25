@@ -3,6 +3,7 @@ package openblocks.common.item;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -59,9 +60,8 @@ public class ItemCursor extends Item {
 	}
 
 	private static void clickBlock(World world, EntityPlayer player, final int x, final int y, final int z, int side) {
-		int blockId = world.getBlockId(x, y, z);
-		Block block = Block.blocksList[blockId];
-		if (block != null) {
+		Block block = world.getBlock(x, y, z);
+		if (block != Blocks.air) {
 			if (player.capabilities.isCreativeMode) block.onBlockActivated(world, x, y, z, player, side, 0, 0, 0);
 			else {
 				final int cost = (int)Math.max(0, getDistanceToLinkedBlock(player, x, y, z) - 10);

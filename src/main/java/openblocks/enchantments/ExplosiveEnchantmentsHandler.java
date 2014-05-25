@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -106,7 +106,7 @@ public class ExplosiveEnchantmentsHandler {
 
 	private Map<Entity, JumpInfo> jumpBoosts = new MapMaker().weakKeys().makeMap();
 
-	private static final ItemStack gunpowder = new ItemStack(Item.gunpowder);
+	private static final ItemStack gunpowder = new ItemStack(Items.gunpowder);
 
 	private static void useItems(EntityPlayer player, int gunpowderSlot, int armorSlot, int gunpowderAmout) {
 		if (player.capabilities.isCreativeMode) return;

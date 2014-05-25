@@ -30,9 +30,11 @@ public class BlockImaginary extends OpenBlock {
 	public IIcon texturePencilHalfPanel;
 	public IIcon textureCrayonHalfPanel;
 
-	public static final StepSound drawingSounds = new StepSound("cloth", 0.5f, 1.0f) {
+	public static final SoundType drawingSounds = new SoundType("cloth", 0.5f, 1.0f) {
+		
+		// TODO verify
 		@Override
-		public String getPlaceSound() {
+		public String func_150496_b() {
 			return "openblocks:draw";
 		}
 	};

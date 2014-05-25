@@ -1,7 +1,7 @@
 package openblocks.enchantments.flimflams;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import openblocks.api.IFlimFlamAction;
 
@@ -23,17 +23,17 @@ public class EncaseFlimFlam implements IFlimFlamAction {
 							z == playerZ;
 
 					if (!isGap && target.worldObj.isAirBlock(x, y, z)) {
-						target.worldObj.setBlock(x, y, z, Block.dirt.blockID);
+						target.worldObj.setBlock(x, y, z, Blocks.dirt);
 					}
 				}
 			}
 		}
 
 		boolean doTorch = target.worldObj.isAirBlock(playerX, playerY + 2, playerZ) &&
-				Block.torchWood.canPlaceBlockAt(target.worldObj, playerX, playerY + 2, playerZ);
+				Blocks.torch.canPlaceBlockAt(target.worldObj, playerX, playerY + 2, playerZ);
 
 		if (doTorch) {
-			target.worldObj.setBlock(playerX, playerY + 2, playerZ, Block.torchWood.blockID);
+			target.worldObj.setBlock(playerX, playerY + 2, playerZ, Blocks.torch);
 		}
 
 		return true;

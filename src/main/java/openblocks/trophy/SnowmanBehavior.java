@@ -1,7 +1,8 @@
 package openblocks.trophy;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class SnowmanBehavior implements ITrophyBehavior {
@@ -13,9 +14,9 @@ public class SnowmanBehavior implements ITrophyBehavior {
 				int pX = x + tile.xCoord;
 				int pY = tile.yCoord;
 				int pZ = z + tile.zCoord;
-				if (tile.worldObj.isAirBlock(pX, pY, pZ)
-						&& Block.snow.canPlaceBlockAt(tile.worldObj, pX, pY, pZ)) {
-					tile.worldObj.setBlock(pX, pY, pZ, Block.snow.blockID);
+				final World worldObj = tile.getWorldObj();
+				if (worldObj.isAirBlock(pX, pY, pZ) && Blocks.snow.canPlaceBlockAt(worldObj, pX, pY, pZ)) {
+					worldObj.setBlock(pX, pY, pZ, Blocks.snow);
 				}
 			}
 		}
