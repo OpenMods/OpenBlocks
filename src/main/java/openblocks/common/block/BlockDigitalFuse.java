@@ -1,19 +1,20 @@
 package openblocks.common.block;
 
+import javax.swing.Icon;
+
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityDigitalFuse;
 
 public class BlockDigitalFuse extends OpenBlock {
 
 	public static class Icons {
 		public static Icon[] topIcons = new Icon[8];
-		public static Icon side;
+		public static IIcon side;
 	}
 
 	public BlockDigitalFuse() {
@@ -58,7 +59,7 @@ public class BlockDigitalFuse extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		for (int i = 0; i < 8; i++) {
 			Icons.topIcons[i] = registry.registerIcon("openblocks:digitalfuse_" + i);
 		}
@@ -73,7 +74,7 @@ public class BlockDigitalFuse extends OpenBlock {
 	}
 
 	@Override
-	public Icon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
+	public IIcon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
 		if (direction.equals(ForgeDirection.UP)) {
 
 			TileEntityDigitalFuse tile = getTileEntity(world, x, y, z, TileEntityDigitalFuse.class);

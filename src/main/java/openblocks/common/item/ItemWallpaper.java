@@ -10,11 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
@@ -43,7 +42,7 @@ public class ItemWallpaper extends Item {
 			blockSide = side;
 		}
 
-		public Icon getIcon() {
+		public IIcon getIcon() {
 			Block block = getBlock();
 			if (block != null) { return block.getIcon(blockSide, blockMeta); }
 			return null;
@@ -113,12 +112,12 @@ public class ItemWallpaper extends Item {
 	}
 
 	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
+	public IIcon getIcon(ItemStack stack, int pass) {
 		return getIconIndex(stack);
 	}
 
 	@Override
-	public Icon getIconIndex(ItemStack stack) {
+	public IIcon getIconIndex(ItemStack stack) {
 		BlockSideTexture texture = BlockSideTexture.fromItemStack(stack);
 		if (texture != null) { return texture.getIcon(); }
 		return OpenBlocks.Blocks.canvas.wallpaper;

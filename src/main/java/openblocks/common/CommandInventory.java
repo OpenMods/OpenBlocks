@@ -9,7 +9,6 @@ import java.util.List;
 
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatMessageComponent;
 import openmods.Log;
 
 import com.google.common.collect.Lists;

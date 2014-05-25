@@ -3,7 +3,6 @@ package openblocks.enchantments.flimflams;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.packet.Packet62LevelSound;
 import openblocks.api.IFlimFlamAction;
 import openmods.utils.CollectionUtils;
 

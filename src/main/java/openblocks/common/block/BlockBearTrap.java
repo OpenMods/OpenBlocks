@@ -5,8 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityBearTrap;
 
 public class BlockBearTrap extends OpenBlock {

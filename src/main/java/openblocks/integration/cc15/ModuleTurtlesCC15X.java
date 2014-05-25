@@ -7,7 +7,6 @@ import net.minecraftforge.common.MinecraftForge;
 import openmods.Mods;
 import openmods.OpenMods;
 import openmods.integration.IntegrationModule;
-import dan200.turtle.api.TurtleAPI;
 
 public class ModuleTurtlesCC15X extends IntegrationModule {
 

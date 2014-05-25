@@ -3,10 +3,12 @@ package openblocks.common.item;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -92,7 +94,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		public final String name;
 		public final String overlayName;
 		public final boolean isInverted;
-		public Icon overlay;
+		public IIcon overlay;
 
 		private PlacementMode(float cost, String name, String overlayName, boolean isInverted) {
 			this.cost = cost;
@@ -230,13 +232,13 @@ public class ItemImaginary extends ItemOpenBlock {
 		return 1; // render as item
 	}
 
-	private Icon iconCrayonBackground;
-	private Icon iconCrayonColor;
-	private Icon iconPencil;
+	private IIcon iconCrayonBackground;
+	private IIcon iconCrayonColor;
+	private IIcon iconPencil;
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		iconCrayonBackground = registry.registerIcon("openblocks:crayon_1");
 		iconCrayonColor = registry.registerIcon("openblocks:crayon_2");
 		iconPencil = registry.registerIcon("openblocks:pencil");
@@ -247,7 +249,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final Icon getIcon(ItemStack stack, int pass) {
+	public final IIcon getIcon(ItemStack stack, int pass) {
 		if (!isCrayon(stack)) return pass == 1? getMode(stack).overlay : iconPencil;
 
 		switch (pass) {

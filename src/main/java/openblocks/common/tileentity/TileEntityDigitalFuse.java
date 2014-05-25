@@ -4,7 +4,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.client.gui.GuiDigitalFuse;
 import openblocks.common.container.ContainerDigitalFuse;

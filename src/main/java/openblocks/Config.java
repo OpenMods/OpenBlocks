@@ -33,7 +33,7 @@ import openmods.utils.ColorUtils.ColorMeta;
 public class Config {
 
 	public static final FeatureManager FEATURES = new FeatureManager();
-	
+
 	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
 	public static int elevatorTravelDistance = 20;
@@ -255,9 +255,9 @@ public class Config {
 		final String modId = "openblocks";
 		FEATURES.collectFromBlocks(OpenBlocks.Items.class);
 		FEATURES.collectFromItems(OpenBlocks.Blocks.class);
-		
+
 		ConfigProcessing.registerBlocks(OpenBlocks.Blocks.class, modId);
-		
+
 		if (FEATURES.isBlockEnabled("filledbucket")) {
 			OpenBlocks.Items.filledBucket = new ItemFilledBucket();
 			MetasBucket.registerItems();
@@ -619,9 +619,9 @@ public class Config {
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.devNull), Blocks.cobblestone, Items.apple));
 		}
 
-		//if (itemWallpaperId > 0) {
-			// OpenBlocks.Items.wallpaper = new ItemWallpaper();
-		//}
+		// if (itemWallpaperId > 0) {
+		// OpenBlocks.Items.wallpaper = new ItemWallpaper();
+		// }
 
 		if (FEATURES.isItemEnabled("spongeonastick")) {
 			OpenBlocks.Items.spongeonastick = new ItemSpongeOnAStick();

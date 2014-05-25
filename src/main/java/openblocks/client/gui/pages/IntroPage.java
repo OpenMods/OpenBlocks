@@ -1,6 +1,7 @@
 package openblocks.client.gui.pages;
 
-import net.minecraft.util.Icon;
+import javax.swing.Icon;
+
 import net.minecraft.util.ResourceLocation;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;

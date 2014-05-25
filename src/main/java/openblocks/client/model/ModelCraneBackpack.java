@@ -13,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.item.ItemCraneBackpack;

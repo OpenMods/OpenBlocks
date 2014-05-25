@@ -6,7 +6,7 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.OpenMods;

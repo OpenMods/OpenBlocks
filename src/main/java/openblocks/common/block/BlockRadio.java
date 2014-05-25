@@ -1,18 +1,17 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
-import openblocks.Config;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 
 public class BlockRadio extends OpenBlock {
 
-	public Icon iconFront;
-	public Icon iconBack;
-	public Icon iconSide;
-	public Icon iconTop;
-	public Icon iconBottom;
-	public Icon iconInside;
+	public IIcon iconFront;
+	public IIcon iconBack;
+	public IIcon iconSide;
+	public IIcon iconTop;
+	public IIcon iconBottom;
+	public IIcon iconInside;
 
 	public BlockRadio() {
 		super(Material.wood);
@@ -25,7 +24,7 @@ public class BlockRadio extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		iconFront = registry.registerIcon("openblocks:radio_front");
 		iconBack = registry.registerIcon("openblocks:radio_back");
 		iconSide = registry.registerIcon("openblocks:radio_side");

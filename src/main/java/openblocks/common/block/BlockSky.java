@@ -1,10 +1,9 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.render.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -28,7 +27,7 @@ public class BlockSky extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		blockIcon = registry.registerIcon("openblocks:sky_inactive");
 	}
 

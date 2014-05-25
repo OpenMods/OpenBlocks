@@ -15,15 +15,15 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.FakePlayer;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import openblocks.Config;
 import openmods.GenericInventory;
 import openmods.Log;
 
 import com.google.common.collect.Lists;
+
+import cpw.mods.fml.common.eventhandler.EventPriority;
 
 public class PlayerInventoryStore {
 

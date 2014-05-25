@@ -1,16 +1,15 @@
 package openblocks.integration.cc15;
 
+import javax.swing.Icon;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
 import openblocks.integration.TurtleIds;
-import openperipheral.api.cc15x.ComputerCraftWrappers;
-import dan200.computer.api.IHostedPeripheral;
-import dan200.turtle.api.*;
+import openperipheral.api.cc16.ComputerCraftWrappers;
+import dan200.computercraft.api.turtle.*;
 
 public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 

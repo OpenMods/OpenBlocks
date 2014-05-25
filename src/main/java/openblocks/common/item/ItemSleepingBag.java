@@ -1,19 +1,17 @@
 package openblocks.common.item;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EnumStatus;
-import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.entity.player.EntityPlayer.EnumStatus;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
 import openmods.utils.BlockUtils;
@@ -37,7 +35,7 @@ public class ItemSleepingBag extends ItemArmor {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:sleepingbag");
 	}
 

@@ -2,15 +2,14 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.radio.RadioManager;
 import openblocks.client.radio.RadioManager.RadioStation;
@@ -30,7 +29,7 @@ public class ItemTunedCrystal extends Item {
 	private static final String TAG_HIDDEN = "Hidden";
 	private static final String TAG_URL = "URL";
 
-	private Icon crystal;
+	private IIcon crystal;
 
 	public ItemTunedCrystal() {
 		setMaxStackSize(1);
@@ -84,7 +83,7 @@ public class ItemTunedCrystal extends Item {
 	}
 
 	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
+	public IIcon getIcon(ItemStack stack, int pass) {
 		return pass == 1? itemIcon : crystal;
 	}
 
@@ -102,7 +101,7 @@ public class ItemTunedCrystal extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegistry) {
+	public void registerIcons(IIconRegister iconRegistry) {
 		itemIcon = iconRegistry.registerIcon("openblocks:tuned_crystal_2");
 		crystal = iconRegistry.registerIcon("openblocks:tuned_crystal_1");
 	}

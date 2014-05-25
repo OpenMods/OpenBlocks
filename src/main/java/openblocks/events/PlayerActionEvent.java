@@ -4,8 +4,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import openmods.network.EventPacket;
-import openmods.network.IEventPacketType;
+import openmods.network.event.EventPacket;
+import openmods.network.event.IEventPacketType;
 import openmods.utils.ByteUtils;
 
 public class PlayerActionEvent extends EventPacket {

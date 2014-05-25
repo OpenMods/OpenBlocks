@@ -1,10 +1,10 @@
 package openblocks.client;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import openmods.Log;
 

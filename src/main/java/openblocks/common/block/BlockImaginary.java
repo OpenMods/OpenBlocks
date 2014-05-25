@@ -3,15 +3,13 @@ package openblocks.common.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
@@ -23,14 +21,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockImaginary extends OpenBlock {
 
-	public Icon texturePencilBlock;
-	public Icon textureCrayonBlock;
+	public IIcon texturePencilBlock;
+	public IIcon textureCrayonBlock;
 
-	public Icon texturePencilPanel;
-	public Icon textureCrayonPanel;
+	public IIcon texturePencilPanel;
+	public IIcon textureCrayonPanel;
 
-	public Icon texturePencilHalfPanel;
-	public Icon textureCrayonHalfPanel;
+	public IIcon texturePencilHalfPanel;
+	public IIcon textureCrayonHalfPanel;
 
 	public static final StepSound drawingSounds = new StepSound("cloth", 0.5f, 1.0f) {
 		@Override
@@ -94,7 +92,7 @@ public class BlockImaginary extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		blockIcon = texturePencilBlock = registry.registerIcon("openblocks:pencilBlock");
 		textureCrayonBlock = registry.registerIcon("openblocks:crayonBlock");
 

@@ -3,7 +3,6 @@ package openblocks.common;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openmods.Log;
 import openmods.config.ConfigurationChange;

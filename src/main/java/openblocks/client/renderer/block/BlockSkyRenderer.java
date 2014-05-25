@@ -2,7 +2,7 @@ package openblocks.client.renderer.block;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.block.BlockSky;
 import openmods.renderer.IBlockRenderer;
 import openmods.utils.render.RenderUtils;

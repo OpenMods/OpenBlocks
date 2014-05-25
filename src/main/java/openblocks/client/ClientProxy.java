@@ -1,17 +1,17 @@
 package openblocks.client;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
@@ -26,12 +26,10 @@ import openblocks.client.renderer.item.*;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
-import openmods.binding.KeyDispatcherBuilder;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
-import cpw.mods.fml.client.registry.*;
-import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
-import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 

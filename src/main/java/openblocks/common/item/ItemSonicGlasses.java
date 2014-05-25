@@ -1,14 +1,12 @@
 package openblocks.common.item;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import openblocks.Config;
+import net.minecraft.util.IIcon;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSonicGlasses;
 import cpw.mods.fml.relauncher.Side;
@@ -29,13 +27,13 @@ public class ItemSonicGlasses extends ItemArmor {
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerIcons(IIconRegister register) {
 		itemIcon = register.registerIcon("openblocks:sonicglasses");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage(int par1) {
+	public IIcon getIconFromDamage(int par1) {
 		return itemIcon;
 	}
 

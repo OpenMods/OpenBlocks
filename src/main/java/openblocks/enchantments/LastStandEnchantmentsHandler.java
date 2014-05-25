@@ -5,7 +5,6 @@ import java.util.Map;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.utils.EnchantmentUtils;

@@ -3,15 +3,14 @@ package openblocks.common.block;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.item.ItemPaintCan;
 import openblocks.common.tileentity.TileEntityPaintCan;
 
@@ -20,12 +19,12 @@ public class BlockPaintCan extends OpenBlock {
 	public int renderPass = 0;
 
 	public static class Icons {
-		public static Icon top;
-		public static Icon back;
-		public static Icon left;
-		public static Icon right;
-		public static Icon front;
-		public static Icon bottom;
+		public static IIcon top;
+		public static IIcon back;
+		public static IIcon left;
+		public static IIcon right;
+		public static IIcon front;
+		public static IIcon bottom;
 	}
 
 	public BlockPaintCan() {
@@ -56,7 +55,7 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerIcons(IIconRegister register) {
 		Icons.back = register.registerIcon("openblocks:paintcan_side");
 		Icons.front = register.registerIcon("openblocks:paintcan_front");
 		Icons.left = register.registerIcon("openblocks:paintcan_left");

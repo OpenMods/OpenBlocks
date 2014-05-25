@@ -1,7 +1,9 @@
 package openblocks.events;
 
 import openblocks.common.MapDataManager;
-import openmods.network.*;
+import openmods.network.event.EventPacket;
+import openmods.network.event.EventPacketManager;
+import openmods.network.event.IEventPacketType;
 
 public enum EventTypes implements IEventPacketType {
 	MAP_DATA_REQUEST {

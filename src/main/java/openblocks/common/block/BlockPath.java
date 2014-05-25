@@ -4,8 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockPath extends OpenBlock {
 

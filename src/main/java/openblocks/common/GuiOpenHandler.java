@@ -1,8 +1,6 @@
 package openblocks.common;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.Event.Result;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import openblocks.OpenBlocks.Items;
 

@@ -1,10 +1,10 @@
 package openblocks.integration.cc16;
 
+import javax.swing.Icon;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
 import openblocks.integration.TurtleIds;

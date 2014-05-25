@@ -7,11 +7,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.EntityEggInfo;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.client.Icons.ComposedIcon;
 import openblocks.client.Icons.IDrawableIcon;
 import openmods.Log;

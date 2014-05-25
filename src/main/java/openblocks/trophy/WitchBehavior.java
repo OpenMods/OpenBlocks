@@ -3,7 +3,6 @@ package openblocks.trophy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChatMessageComponent;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class WitchBehavior implements ITrophyBehavior {

@@ -1,14 +1,12 @@
 package openblocks.common.item;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.PedometerHandler;
 import openblocks.common.PedometerHandler.PedometerData;
@@ -25,12 +23,12 @@ public class ItemPedometer extends Item {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
-	private Icon pedometerMoving;
-	private Icon pedometerStill;
+	private IIcon pedometerMoving;
+	private IIcon pedometerStill;
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		pedometerMoving = registry.registerIcon("openblocks:pedometer_moving");
 		itemIcon = pedometerStill = registry.registerIcon("openblocks:pedometer_still");
 	}
@@ -86,7 +84,7 @@ public class ItemPedometer extends Item {
 	}
 
 	@Override
-	public Icon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
 		if (player.motionX * player.motionX + player.motionY * player.motionY + player.motionZ * player.motionZ > 0.01) return pedometerMoving;
 		return pedometerStill;
 	}

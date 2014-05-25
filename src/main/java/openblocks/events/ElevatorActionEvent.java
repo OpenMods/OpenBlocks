@@ -5,7 +5,7 @@ import java.io.DataOutput;
 
 import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.movement.PlayerMovementEvent;
-import openmods.network.IEventPacketType;
+import openmods.network.event.IEventPacketType;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 

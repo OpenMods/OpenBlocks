@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.model.ModelCartographer;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectionRenderer;
 import openblocks.common.entity.EntityCartographer;

@@ -1,10 +1,10 @@
 package openblocks.common.block;
 
+import javax.swing.Icon;
+
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,7 +24,7 @@ public class BlockDrawingTable extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		super.registerIcons(registry);
 		this.topIcon = registry.registerIcon("openblocks:drawingtable_top");
 		this.frontIcon = registry.registerIcon("openblocks:drawingtable_front");

@@ -3,7 +3,7 @@ package openblocks.integration.cc16;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.integration.MagnetControlAdapterBase;
 import openperipheral.api.ProxyInterfaces;

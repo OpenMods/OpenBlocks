@@ -1,15 +1,13 @@
 package openblocks.common.item;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.ItemInventory;
@@ -20,8 +18,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemDevNull extends Item {
 
 	public static class Icons {
-		public static Icon iconFull;
-		public static Icon iconTransparent;
+		public static IIcon iconFull;
+		public static IIcon iconTransparent;
 	}
 
 	public ItemDevNull() {
@@ -92,7 +90,7 @@ public class ItemDevNull extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister register) {
+	public void registerIcons(IIconRegister register) {
 		Icons.iconTransparent = itemIcon = register.registerIcon("openblocks:devnull");
 		Icons.iconFull = register.registerIcon("openblocks:devfull");
 	}

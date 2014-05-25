@@ -1,19 +1,18 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockXPBottler extends OpenBlock {
 
 	public static class Icons {
-		public static Icon back;
-		public static Icon top;
-		public static Icon side;
-		public static Icon front;
-		public static Icon bottom;
+		public static IIcon back;
+		public static IIcon top;
+		public static IIcon side;
+		public static IIcon front;
+		public static IIcon bottom;
 	}
 
 	public BlockXPBottler() {
@@ -27,7 +26,7 @@ public class BlockXPBottler extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		Icons.front = registry.registerIcon("openblocks:xpbottler_front");
 		Icons.top = registry.registerIcon("openblocks:xpbottler_top");
 		Icons.side = registry.registerIcon("openblocks:xpbottler_sides");

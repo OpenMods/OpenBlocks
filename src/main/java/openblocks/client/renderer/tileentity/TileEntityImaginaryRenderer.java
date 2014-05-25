@@ -1,13 +1,13 @@
 package openblocks.client.renderer.tileentity;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.common.tileentity.*;
@@ -92,6 +92,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 
 	private final static ElementDisplay blockDisplay = new ElementDisplay() {
 		@Override
+		@Override
 		public void addQuads(Tessellator tes, Icon icon) {
 			final double delta0 = 0.001;
 			final double delta1 = 1 - 0.001;
@@ -140,6 +141,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 
 	private final static ElementDisplay panelDisplay = new ElementDisplay() {
 		@Override
+		@Override
 		public void addQuads(Tessellator tes, Icon icon) {
 			tes.addVertexWithUV(0, 0, 0, icon.getMinU(), icon.getMinV());
 			tes.addVertexWithUV(0, 0, 1, icon.getMinU(), icon.getMaxV());
@@ -159,6 +161,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 	};
 
 	private final static ElementDisplay halfPanelDisplay = new ElementDisplay() {
+		@Override
 		@Override
 		public void addQuads(Tessellator tes, Icon icon) {
 			tes.addVertexWithUV(-0.5, 0, -0.5, icon.getMinU(), icon.getMaxV());

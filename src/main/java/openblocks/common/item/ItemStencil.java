@@ -7,9 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.block.BlockCanvas;
@@ -32,7 +31,7 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	public Icon getIconFromDamage(int dmg) {
+	public IIcon getIconFromDamage(int dmg) {
 		return Stencil.values()[dmg].getCoverBlockIcon();
 	}
 

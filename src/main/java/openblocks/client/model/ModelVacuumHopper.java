@@ -2,7 +2,7 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.sync.SyncableFlags;
 

@@ -1,5 +1,7 @@
 package openblocks.client.renderer.item;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -11,7 +13,6 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.item.ItemDevNull.Icons;
 import openmods.GenericInventory;

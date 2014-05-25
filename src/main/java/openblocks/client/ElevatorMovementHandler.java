@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.events.ElevatorActionEvent;
 import openmods.movement.PlayerMovementEvent;
 import openmods.tileentity.OpenTileEntity;

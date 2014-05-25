@@ -5,7 +5,7 @@ import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncableObject;

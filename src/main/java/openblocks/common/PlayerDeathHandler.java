@@ -11,14 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.FakePlayer;
-import net.minecraftforge.event.*;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.GenericInventory;
 import openmods.Log;
 import openmods.utils.InventoryUtils;
+import cpw.mods.fml.common.eventhandler.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class PlayerDeathHandler {

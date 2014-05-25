@@ -1,11 +1,12 @@
 package openblocks.client.model;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.Item;
-import net.minecraft.util.Icon;
 
 import org.lwjgl.opengl.GL11;
 

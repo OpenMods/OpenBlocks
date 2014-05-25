@@ -3,14 +3,13 @@ package openblocks.common.item;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -25,10 +24,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCraneControl extends Item {
 
-	private Icon iconDown;
-	private Icon iconUp;
-	private Icon iconLocked;
-	private Icon iconDetected;
+	private IIcon iconDown;
+	private IIcon iconUp;
+	private IIcon iconLocked;
+	private IIcon iconDetected;
 
 	public ItemCraneControl() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
@@ -92,7 +91,7 @@ public class ItemCraneControl extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIIconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:manipulator_idle");
 		iconLocked = registry.registerIcon("openblocks:manipulator_locked");
 		iconDetected = registry.registerIcon("openblocks:manipulator_detected");
@@ -101,7 +100,7 @@ public class ItemCraneControl extends Item {
 	}
 
 	@Override
-	public Icon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
 		if (player != null && ItemCraneBackpack.isWearingCrane(player)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
 			if (data != null) {

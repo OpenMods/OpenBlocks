@@ -1,8 +1,7 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
-import openblocks.Config;
+import net.minecraft.client.renderer.texture.IIconRegister;
 
 public class BlockDonationStation extends OpenBlock {
 
@@ -13,7 +12,7 @@ public class BlockDonationStation extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		blockIcon = registry.registerIcon("openblocks:donationstation");
 	}
 

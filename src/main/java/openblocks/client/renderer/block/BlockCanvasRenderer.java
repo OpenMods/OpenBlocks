@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;

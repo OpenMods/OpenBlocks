@@ -6,8 +6,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import openblocks.enchantments.FlimFlamEnchantmentsHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
 
 public class ServerTickHandler implements ITickHandler {
 

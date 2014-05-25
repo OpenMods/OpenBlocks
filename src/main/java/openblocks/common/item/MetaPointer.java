@@ -1,11 +1,10 @@
 package openblocks.common.item;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -25,7 +24,7 @@ public class MetaPointer extends MetaGeneric {
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerIcons(IIconRegister register) {
 		registerIcon(register, "pointer");
 	}
 

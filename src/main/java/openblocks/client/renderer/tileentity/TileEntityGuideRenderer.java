@@ -2,11 +2,12 @@ package openblocks.client.renderer.tileentity;
 
 import java.util.Collection;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 import openmods.renderer.DisplayListWrapper;

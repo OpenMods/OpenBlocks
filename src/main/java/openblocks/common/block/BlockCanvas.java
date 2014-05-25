@@ -4,14 +4,13 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import openblocks.Config;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
@@ -20,19 +19,19 @@ public class BlockCanvas extends OpenBlock {
 
 	private int layer = 0;
 	private int renderSide = 0;
-	public Icon baseIcon;
-	public Icon wallpaper;
+	public IIcon baseIcon;
+	public IIcon wallpaper;
 
 	public BlockCanvas() {
 		super(Material.rock);
 	}
 
-	public BlockCanvas(int id, Material material) {
-		super(id, material);
+	public BlockCanvas(Material material) {
+		super(material);
 	}
 
 	@Override
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		baseIcon = registry.registerIcon("openblocks:canvas");
 		wallpaper = registry.registerIcon("openblocks:wallpaper");
 		for (Stencil stencil : Stencil.values()) {
@@ -88,7 +87,7 @@ public class BlockCanvas extends OpenBlock {
 	}
 
 	@Override
-	public Icon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
+	public IIcon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
 		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
 		if (tile != null) { return tile.getTextureForRender(renderSide, layer); }
 		return super.getUnrotatedTexture(direction, world, x, y, z);

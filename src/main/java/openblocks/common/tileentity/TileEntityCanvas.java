@@ -3,12 +3,13 @@ package openblocks.common.tileentity;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.Icon;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.item.ItemPaintBrush;

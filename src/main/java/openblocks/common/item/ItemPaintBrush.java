@@ -2,16 +2,15 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
@@ -28,7 +27,7 @@ public class ItemPaintBrush extends Item {
 
 	public static final int MAX_USES = 24;
 
-	public Icon paintIcon;
+	public IIcon paintIcon;
 
 	public ItemPaintBrush() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
@@ -51,7 +50,7 @@ public class ItemPaintBrush extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:paintbrush");
 		paintIcon = registry.registerIcon("openblocks:paintbrush_paint");
 	}
@@ -113,7 +112,7 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public Icon getIconFromDamageForRenderPass(int dmg, int pass) {
+	public IIcon getIconFromDamageForRenderPass(int dmg, int pass) {
 		return pass == 1? paintIcon : getIconFromDamage(dmg);
 	}
 

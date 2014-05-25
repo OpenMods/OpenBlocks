@@ -1,11 +1,10 @@
 package openblocks.common.item;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.BrickManager.BowelContents;
@@ -30,7 +29,7 @@ public class ItemTastyClay extends ItemFood {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister registry) {
+	public void registerIcons(IIconRegister registry) {
 		itemIcon = registry.registerIcon("openblocks:yum_yum"); // lol
 	}
 }

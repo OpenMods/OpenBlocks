@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import openblocks.Config;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;

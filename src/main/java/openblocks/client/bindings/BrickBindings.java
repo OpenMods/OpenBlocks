@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import openblocks.Config;
 import openblocks.events.PlayerActionEvent;
-import openmods.binding.ActionBind;
 
 import org.lwjgl.input.Keyboard;
 

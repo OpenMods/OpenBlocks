@@ -2,7 +2,7 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import openblocks.Config;
 import openblocks.integration.TurtleIds;
@@ -14,7 +14,7 @@ public class MetaMiracleMagnet extends MetaGeneric {
 	}
 
 	@Override
-	public void registerIcons(IconRegister register) {
+	public void registerIcons(IIconRegister register) {
 		registerIcon(register, "crane_magnet"); // reuse!
 	}
 

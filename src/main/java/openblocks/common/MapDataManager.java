@@ -1,5 +1,7 @@
 package openblocks.common;
 
+import ibxm.Player;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -11,13 +13,12 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeSubscribe;
 import openblocks.Config;
 import openblocks.events.EventTypes;
 import openmods.Log;
 import openmods.config.ConfigurationChange;
-import openmods.network.EventPacket;
-import openmods.network.IEventPacketType;
+import openmods.network.event.EventPacket;
+import openmods.network.event.IEventPacketType;
 import openmods.utils.ByteUtils;
 
 import com.google.common.base.Preconditions;
@@ -25,7 +26,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MapDataManager {
