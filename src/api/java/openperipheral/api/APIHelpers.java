@@ -4,15 +4,12 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import cpw.mods.fml.common.FMLLog;
-
 public class APIHelpers {
 
 	public static final Logger logger;
 
 	static {
 		logger = Logger.getLogger("OpenPeripheral API");
-		logger.setParent(FMLLog.getLogger());
 	}
 
 	public static <A> boolean callWithoutReturn(String klazzName, String methodName, Class<? extends A> argType, A argValue) {
