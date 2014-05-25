@@ -92,7 +92,6 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 
 	private final static ElementDisplay blockDisplay = new ElementDisplay() {
 		@Override
-		@Override
 		public void addQuads(Tessellator tes, Icon icon) {
 			final double delta0 = 0.001;
 			final double delta1 = 1 - 0.001;
@@ -141,7 +140,6 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 
 	private final static ElementDisplay panelDisplay = new ElementDisplay() {
 		@Override
-		@Override
 		public void addQuads(Tessellator tes, Icon icon) {
 			tes.addVertexWithUV(0, 0, 0, icon.getMinU(), icon.getMinV());
 			tes.addVertexWithUV(0, 0, 1, icon.getMinU(), icon.getMaxV());
@@ -161,7 +159,6 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 	};
 
 	private final static ElementDisplay halfPanelDisplay = new ElementDisplay() {
-		@Override
 		@Override
 		public void addQuads(Tessellator tes, Icon icon) {
 			tes.addVertexWithUV(-0.5, 0, -0.5, icon.getMinU(), icon.getMaxV());

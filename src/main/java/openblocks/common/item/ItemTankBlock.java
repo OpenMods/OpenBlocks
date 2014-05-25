@@ -2,6 +2,7 @@ package openblocks.common.item;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,8 +17,8 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 
 	public static final String TANK_TAG = "tank";
 
-	public ItemTankBlock(int id) {
-		super(id);
+	public ItemTankBlock(Block block) {
+		super(block);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

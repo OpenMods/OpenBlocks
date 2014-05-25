@@ -3,6 +3,7 @@ package openblocks.rubbish;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -95,7 +96,7 @@ public class BrickManager {
 	}
 
 	private static EntityItem createBrick(Entity dropper) {
-		ItemStack brick = new ItemStack(Item.brick);
+		ItemStack brick = new ItemStack(Items.brick);
 		EntityItem drop = ItemUtils.createDrop(dropper, brick);
 		double rotation = Math.toRadians(dropper.rotationYaw) - Math.PI / 2;
 		double dx = Math.cos(rotation);

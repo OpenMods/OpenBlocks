@@ -2,6 +2,7 @@ package openblocks.common.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -72,9 +73,9 @@ public class BlockFlag extends OpenBlock {
 		TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
 		if (flag != null) {
 			ForgeDirection onSurface = flag.getSurfaceDirection();
-			if (onSurface == DOWN) {
+			if (onSurface == ForgeDirection.DOWN) {
 				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
-			} else if (onSurface == EAST || onSurface == WEST) {
+			} else if (onSurface == ForgeDirection.EAST || onSurface == ForgeDirection.WEST) {
 				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 5 / 16f, 1f, 1 / 16f);
 			} else {
 				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 5 / 16f);
@@ -84,15 +85,15 @@ public class BlockFlag extends OpenBlock {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		if (side == DOWN) {
+		if (side ==  ForgeDirection.DOWN) {
 			int belowBlockId = world.getBlockId(x, y - 1, z);
 			Block belowBlock = Block.blocksList[belowBlockId];
 			if (belowBlock != null) {
-				if (belowBlock == Block.fence) {
+				if (belowBlock == Blocks.fence) {
 					return true;
 				} else if (belowBlock == this) {
 					TileEntityFlag flag = getTileEntity(world, x, y - 1, z, TileEntityFlag.class);
-					if (flag != null && flag.getSurfaceDirection().equals(DOWN)) { return true; }
+					if (flag != null && flag.getSurfaceDirection().equals(ForgeDirection.DOWN)) { return true; }
 				}
 			}
 		} else if (side == ForgeDirection.UP) { return false; }

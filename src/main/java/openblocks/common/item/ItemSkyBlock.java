@@ -2,6 +2,7 @@ package openblocks.common.item;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -11,8 +12,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSkyBlock extends ItemBlock {
 
-	public ItemSkyBlock(int id) {
-		super(id);
+	public ItemSkyBlock(Block block) {
+		super(block);
 		setHasSubtypes(true);
 	}
 
