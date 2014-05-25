@@ -30,6 +30,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.*;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -117,7 +118,7 @@ public class RadioManager implements IVillageTradeHandler {
 
 	private List<RadioStation> stations;
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onReconfiguration(ConfigurationChange.Post evt) {
 		if (evt.check("radio", "radioStations")) stations = null;
 	}
@@ -153,7 +154,7 @@ public class RadioManager implements IVillageTradeHandler {
 		return stations;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload evt) {
 		if (evt.world.isRemote) {
 			for (String soundId : ImmutableList.copyOf(usedSounds))

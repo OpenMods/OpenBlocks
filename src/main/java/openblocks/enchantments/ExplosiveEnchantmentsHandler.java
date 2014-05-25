@@ -24,6 +24,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class ExplosiveEnchantmentsHandler {
 
 	public static final int ARMOR_HELMET = 3;
@@ -153,7 +155,7 @@ public class ExplosiveEnchantmentsHandler {
 		return null;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onFall(LivingFallEvent evt) {
 		final Entity e = evt.entityLiving;
 		if (evt.distance > 4 && !e.isSneaking() && e instanceof EntityPlayer) {
@@ -182,7 +184,7 @@ public class ExplosiveEnchantmentsHandler {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onJump(LivingJumpEvent e) {
 		final Entity entity = e.entity;
 		JumpInfo boost = jumpBoosts.remove(entity);
@@ -199,7 +201,7 @@ public class ExplosiveEnchantmentsHandler {
 		return source instanceof EntityDamageSource && ALLOWED_DAMAGE_SOURCE.contains(source.damageType);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onDamage(LivingAttackEvent e) {
 		final Entity victim = e.entity;
 		if (victim instanceof EntityPlayerMP && checkSource(e.source)) {

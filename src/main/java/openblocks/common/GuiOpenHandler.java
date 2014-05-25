@@ -3,10 +3,11 @@ package openblocks.common;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import openblocks.OpenBlocks.Items;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiOpenHandler {
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onGuiOpen(PlayerOpenContainerEvent event) {
 		// TODO: this shouldn't allow EVERYTHING. need to find a way
 		// to only allow ones that are actually valid.

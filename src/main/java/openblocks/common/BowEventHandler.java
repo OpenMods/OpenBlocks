@@ -12,12 +12,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import openblocks.common.entity.EntityTorchArrow;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class BowEventHandler {
 
 	Random rand = new Random();
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onArrowNock(ArrowNockEvent event) {
 		if (!event.entity.worldObj.isRemote) {
 			NBTTagCompound tag = event.result.getTagCompound();
@@ -27,7 +28,7 @@ public class BowEventHandler {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onArrowLoose(ArrowLooseEvent event) {
 		// System.out.println("onArrowLoose");
 		EntityPlayer player = event.entityPlayer;

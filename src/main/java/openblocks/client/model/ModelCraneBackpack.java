@@ -19,6 +19,8 @@ import openblocks.common.item.ItemCraneBackpack;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class ModelCraneBackpack extends ModelBiped {
 
 	public static final ModelCraneBackpack instance = new ModelCraneBackpack();
@@ -83,7 +85,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		return prev + partialTickTime * (current - prev);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void renderLines(RenderPlayerEvent.Pre evt) {
 		final EntityPlayer player = evt.entityPlayer;
 
@@ -209,7 +211,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void renderFppArm(RenderWorldLastEvent evt) {
 		final Minecraft mc = evt.context.mc;
 

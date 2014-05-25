@@ -12,6 +12,7 @@ import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.ItemInventory;
 import openmods.utils.InventoryUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -51,7 +52,7 @@ public class ItemDevNull extends Item {
 		return true;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onItemPickUp(EntityItemPickupEvent evt) {
 
 		EntityPlayer player = evt.entityPlayer;

@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import openblocks.events.ElevatorActionEvent;
 import openmods.movement.PlayerMovementEvent;
 import openmods.tileentity.OpenTileEntity;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ElevatorMovementHandler {
 
@@ -23,7 +24,7 @@ public class ElevatorMovementHandler {
 		return null;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onPlayerMovement(PlayerMovementEvent evt) {
 		OpenTileEntity te = getTileUnderPlayer(evt.entityPlayer);
 		if (te == null) return;

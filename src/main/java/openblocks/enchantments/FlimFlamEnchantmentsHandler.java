@@ -22,6 +22,8 @@ import openmods.config.ConfigurationChange;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class FlimFlamEnchantmentsHandler {
 
 	public static final String LUCK_PROPERTY = "OpenBlocks-Luck";
@@ -47,7 +49,7 @@ public class FlimFlamEnchantmentsHandler {
 		return blacklist;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onReconfig(ConfigurationChange.Post evt) {
 		if (evt.check("tomfoolery", "flimFlamBlacklist")) blacklist = null;
 	}
@@ -79,12 +81,12 @@ public class FlimFlamEnchantmentsHandler {
 		return (prop instanceof Luck)? (Luck)prop : null;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onEntityConstruct(EntityEvent.EntityConstructing evt) {
 		if (evt.entity instanceof EntityPlayer) evt.entity.registerExtendedProperties(LUCK_PROPERTY, new Luck());
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onDamage(LivingHurtEvent e) {
 		if (!(e.entityLiving instanceof EntityPlayer)) return;
 		if (e.entityLiving.worldObj.isRemote) return;

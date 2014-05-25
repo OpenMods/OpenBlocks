@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class PlayerDeathHandler {
 
-	@ForgeSubscribe(priority = EventPriority.LOW)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onPlayerDrops(PlayerDropsEvent event) {
 		if (Config.blockGraveId == 0) return;
 

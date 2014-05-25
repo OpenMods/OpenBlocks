@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ElevatorBlockRules {
@@ -74,7 +75,7 @@ public class ElevatorBlockRules {
 		else Log.warn("Can't find block %s", entry);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onReconfig(ConfigurationChange.Post evt) {
 		if (evt.check("dropblock", "specialBlockRules")) rules = null;
 	}

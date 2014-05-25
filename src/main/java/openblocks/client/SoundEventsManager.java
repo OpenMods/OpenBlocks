@@ -24,6 +24,7 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.collect.Lists;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SoundEventsManager {
 
@@ -91,12 +92,12 @@ public class SoundEventsManager {
 		events.add(new SoundEvent(x, y, z, icon, size, time));
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onSoundEvent(PlaySoundEvent evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, Math.log(evt.volume + 1), 5 * evt.pitch);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onSoundEvent(PlayStreamingEvent evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
 			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "."
@@ -195,7 +196,7 @@ public class SoundEventsManager {
 		if (renderNotPumpkin != null) GL11.glDeleteLists(renderNotPumpkin, 1);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Minecraft mc = evt.context.mc;
 

@@ -11,6 +11,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class EntitySelectionHandler {
 
 	public interface ISelectAware {}
@@ -33,7 +35,7 @@ public class EntitySelectionHandler {
 
 	private final Map<Class<? extends Entity>, ISelectionRenderer<Entity>> registry = Maps.newIdentityHashMap();
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void renderEvents(RenderWorldLastEvent evt) {
 		final Minecraft mc = evt.context.mc;
 
@@ -46,7 +48,7 @@ public class EntitySelectionHandler {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	@SuppressWarnings("unchecked")
 	public void handleRegister(RegisterSelectionRendererEvent<?> evt) {
 		registry.put(evt.cls, (ISelectionRenderer<Entity>)evt.renderer);

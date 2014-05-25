@@ -17,6 +17,8 @@ import openmods.utils.PlayerUtils;
 
 import com.google.common.collect.Sets;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class EntityEventHandler {
 
 	public static final String OPENBLOCKS_PERSIST_TAG = "OpenBlocks";
@@ -50,12 +52,12 @@ public class EntityEventHandler {
 		return entityBlacklist;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onReconfigure(ConfigurationChange.Post evt) {
 		if (evt.check("additional", "disableMobNames")) entityBlacklist = null;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 
 		final Entity entity = event.entity;

@@ -18,6 +18,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class SoundIconRegistry {
 
 	private final static String ICON_FRAME = "openblocks:sound_frame";
@@ -189,7 +191,7 @@ public class SoundIconRegistry {
 
 	public static final int DEFAULT_COLOR = 0xFFFFFF;
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent evt) {
 		root.registerIcons(evt.map.textureType, evt.map);
 	}

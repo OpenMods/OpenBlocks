@@ -25,6 +25,8 @@ import openmods.utils.ReflectionHelper;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class TrophyHandler {
 
 	private static final Random DROP_RAND = new Random();
@@ -180,7 +182,7 @@ public class TrophyHandler {
 		public final static Trophy[] VALUES = values();
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onLivingDrops(LivingDropsEvent event) {
 		if (event.recentlyHit && DROP_RAND.nextDouble() < Config.trophyDropChance * event.lootingLevel) {
 			final Entity entity = event.entity;

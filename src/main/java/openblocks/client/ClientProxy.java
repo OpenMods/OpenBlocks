@@ -30,6 +30,7 @@ import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -44,7 +45,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		public static Icon xpJuiceFlowing;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void textureHook(TextureStitchEvent.Pre event) {
 		if (event.map.textureType == 0) {
 			Icons.xpJuiceFlowing = event.map.registerIcon("openblocks:xpjuiceflowing");

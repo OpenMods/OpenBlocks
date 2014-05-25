@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MapDataManager {
@@ -133,7 +134,7 @@ public class MapDataManager {
 		return ((EntityPlayer)player).worldObj;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onMapDataRequest(MapDataRequestEvent evt) {
 		World world = getPlayerWorld(evt.player);
 
@@ -150,7 +151,7 @@ public class MapDataManager {
 		evt.reply(response);
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onMapDataResponse(MapDataResponseEvent evt) {
 		World world = getPlayerWorld(evt.player);
 
@@ -160,7 +161,7 @@ public class MapDataManager {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onMapUpdates(MapUpdatesEvent evt) {
 		World world = getPlayerWorld(evt.player);
 
@@ -234,7 +235,7 @@ public class MapDataManager {
 		return blockBlacklist;
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onReconfig(ConfigurationChange.Post evt) {
 		if (evt.check("cartographer", "blockBlacklist")) blockBlacklist = null;
 	}

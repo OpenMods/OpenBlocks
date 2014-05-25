@@ -8,10 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.utils.EnchantmentUtils;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class LastStandEnchantmentsHandler {
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onHurt(LivingHurtEvent e) {
 
 		if (e.entityLiving instanceof EntityPlayer) {

@@ -24,6 +24,7 @@ import openmods.Log;
 import com.google.common.collect.Lists;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerInventoryStore {
 
@@ -146,7 +147,7 @@ public class PlayerInventoryStore {
 		return true;
 	}
 
-	@ForgeSubscribe(priority = EventPriority.HIGH)
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onPlayerDeath(LivingDeathEvent event) {
 		if (Config.dumpStiffsStuff && (event.entity instanceof EntityPlayerMP) && !(event.entity instanceof FakePlayer)) {
 			EntityPlayer player = (EntityPlayer)event.entity;

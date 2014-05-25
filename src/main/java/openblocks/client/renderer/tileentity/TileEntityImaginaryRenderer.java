@@ -18,6 +18,8 @@ import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 
 	private abstract static class ElementDisplay {
@@ -255,7 +257,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 	/**
 	 * @param evt
 	 */
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onTextureReload(TextureStitchEvent.Pre evt) {
 		blockDisplay.clear();
 		panelDisplay.clear();
