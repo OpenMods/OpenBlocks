@@ -8,7 +8,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.ElevatorBlockRules;
 import openblocks.events.ElevatorActionEvent;
-import openmods.network.events.TileEntityMessageEventPacket;
+import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.EnchantmentUtils;
 

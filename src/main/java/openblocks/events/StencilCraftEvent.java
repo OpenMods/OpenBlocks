@@ -4,8 +4,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 
 import openblocks.common.Stencil;
+import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.network.IEventPacketType;
-import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 

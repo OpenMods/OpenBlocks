@@ -14,7 +14,7 @@ import net.minecraftforge.common.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
 import openmods.api.ISurfaceAttachment;
-import openmods.network.events.TileEntityMessageEventPacket;
+import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;

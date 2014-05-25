@@ -14,9 +14,9 @@ import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
+import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
-import openmods.network.events.TileEntityMessageEventPacket;
 import openmods.tileentity.OpenTileEntity;
 
 public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryCallback, IExtendable, IInventoryProvider {
