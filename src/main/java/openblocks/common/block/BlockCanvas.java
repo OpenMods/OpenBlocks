@@ -31,13 +31,13 @@ public class BlockCanvas extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		baseIcon = registry.registerIcon("openblocks:canvas");
 		wallpaper = registry.registerIcon("openblocks:wallpaper");
 		for (Stencil stencil : Stencil.values()) {
 			stencil.registerBlockIcons(registry);
 		}
-		super.registerIcons(registry);
+		super.registerBlockIcons(registry);
 	}
 
 	@Override
@@ -46,6 +46,7 @@ public class BlockCanvas extends OpenBlock {
 		TileEntityCanvas tile = (TileEntityCanvas)te;
 		int maskedBlockId = tile.paintedBlockId.getValue();
 
+		// TODO
 		Block maskedBlock = Block.blocksList[maskedBlockId];
 		if (maskedBlock == null) return;
 		int maskedMeta = tile.paintedBlockMeta.getValue();

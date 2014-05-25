@@ -55,7 +55,7 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		Icons.back = register.registerIcon("openblocks:paintcan_side");
 		Icons.front = register.registerIcon("openblocks:paintcan_front");
 		Icons.left = register.registerIcon("openblocks:paintcan_left");

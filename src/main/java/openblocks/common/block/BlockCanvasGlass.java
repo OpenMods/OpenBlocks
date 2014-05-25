@@ -26,8 +26,8 @@ public class BlockCanvasGlass extends BlockCanvas {
 
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-		int i1 = world.getBlockId(x, y, z);
-		if (i1 == this.blockID || i1 == Block.glass.blockID) { return false; }
+		Block block = world.getBlock(x, y, z);
+		if (block == this || block == Blocks.glass) { return false; }
 		return super.shouldSideBeRendered(world, x, y, z, side);
 	}
 

@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -44,7 +45,7 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 
 				if (rand.nextInt(16) == 0) {
 					for (int j1 = y; j1 <= y + 1; ++j1) {
-						if (world.getBlockId(l, j1, i1) == Block.bookShelf.blockID) {
+						if (world.getBlock(l, j1, i1) == Blocks.bookshelf) {
 							if (!world.isAirBlock((l - x) / 2 + x, j1, (i1 - z)
 									/ 2 + z)) {
 								break;
@@ -67,8 +68,8 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
+	public void registerBlockIcons(IIconRegister registry) {
+		super.registerBlockIcons(registry);
 		iconTop = registry.registerIcon("openblocks:autoenchantmenttable_top");
 		iconBottom = registry.registerIcon("openblocks:autoenchantmenttable_bottom");
 	}

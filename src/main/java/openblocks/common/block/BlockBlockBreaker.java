@@ -33,7 +33,7 @@ public class BlockBlockBreaker extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 
 		Icons.top = registry.registerIcon("openblocks:blockBreaker");
 		Icons.top_active = registry.registerIcon("openblocks:blockBreaker_active");

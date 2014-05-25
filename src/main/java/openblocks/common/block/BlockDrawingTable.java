@@ -1,16 +1,16 @@
 package openblocks.common.block;
 
-import javax.swing.Icon;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockDrawingTable extends OpenBlock {
 
-	Icon topIcon, frontIcon;
+	private IIcon topIcon;
+	private IIcon frontIcon;
 
 	public BlockDrawingTable() {
 		super(Material.wood);
@@ -24,8 +24,8 @@ public class BlockDrawingTable extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
+	public void registerBlockIcons(IIconRegister registry) {
+		super.registerBlockIcons(registry);
 		this.topIcon = registry.registerIcon("openblocks:drawingtable_top");
 		this.frontIcon = registry.registerIcon("openblocks:drawingtable_front");
 		setTexture(ForgeDirection.UP, topIcon);

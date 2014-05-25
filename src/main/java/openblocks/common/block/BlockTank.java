@@ -57,7 +57,7 @@ public class BlockTank extends OpenBlock {
 			NBTTagCompound tankTag = tank.getItemNBT();
 
 			NBTTagCompound itemTag = ItemUtils.getItemTag(stack);
-			itemTag.setCompoundTag("tank", tankTag);
+			itemTag.setTag("tank", tankTag);
 		}
 		result.add(stack);
 	}
@@ -85,7 +85,7 @@ public class BlockTank extends OpenBlock {
 				if (tankTag.hasKey("Amount")) tankTag.setInteger("Amount", tank.getCapacity());
 
 				NBTTagCompound nbt = ItemUtils.getItemTag(result);
-				nbt.setCompoundTag("tank", tankTag);
+				nbt.setTag("tank", tankTag);
 			}
 		}
 		return result;

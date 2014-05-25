@@ -40,7 +40,7 @@ public class BlockProjector extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		sideIcon = registry.registerIcon("stone_slab_side");
 		blockIcon = registry.registerIcon("stone_slab_top");
 	}

@@ -1,5 +1,6 @@
 package openblocks.common;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,7 +32,7 @@ public enum Stencil {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IconRegister register) {
+	public void registerBlockIcons(IIconRegister register) {
 		blockIcon = register.registerIcon("openblocks:stencil_" + iconName);
 		coverBlockIcon = register.registerIcon("openblocks:stencilcover_" + iconName);
 	}

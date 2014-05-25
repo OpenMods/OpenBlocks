@@ -28,7 +28,7 @@ public class BlockBlockPlacer extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		Icons.top = registry.registerIcon("openblocks:blockPlacer");
 		Icons.sides = registry.registerIcon("openblocks:blockPlacer_side");
 		Icons.bottom = registry.registerIcon("openblocks:blockPlacer_bottom");

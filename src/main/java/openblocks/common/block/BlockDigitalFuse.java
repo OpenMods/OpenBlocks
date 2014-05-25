@@ -13,7 +13,7 @@ import openblocks.common.tileentity.TileEntityDigitalFuse;
 public class BlockDigitalFuse extends OpenBlock {
 
 	public static class Icons {
-		public static Icon[] topIcons = new Icon[8];
+		public static IIcon[] topIcons = new Icon[8];
 		public static IIcon side;
 	}
 
@@ -59,7 +59,7 @@ public class BlockDigitalFuse extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		for (int i = 0; i < 8; i++) {
 			Icons.topIcons[i] = registry.registerIcon("openblocks:digitalfuse_" + i);
 		}

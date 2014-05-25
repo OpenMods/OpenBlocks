@@ -34,7 +34,7 @@ public class BlockGuide extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		Icons.ends = registry.registerIcon("openblocks:guide");
 		Icons.side = registry.registerIcon("openblocks:guide_side");
 

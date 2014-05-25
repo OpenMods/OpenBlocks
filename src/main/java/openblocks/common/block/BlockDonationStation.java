@@ -12,7 +12,7 @@ public class BlockDonationStation extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		blockIcon = registry.registerIcon("openblocks:donationstation");
 	}
 

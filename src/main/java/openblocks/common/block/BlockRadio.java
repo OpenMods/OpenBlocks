@@ -24,7 +24,7 @@ public class BlockRadio extends OpenBlock {
 	}
 
 	@Override
-	public void registerIcons(IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		iconFront = registry.registerIcon("openblocks:radio_front");
 		iconBack = registry.registerIcon("openblocks:radio_back");
 		iconSide = registry.registerIcon("openblocks:radio_side");

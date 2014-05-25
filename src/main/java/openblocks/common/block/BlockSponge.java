@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -28,7 +29,7 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int blockId) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		clearupLiquid(world, x, y, z);
 	}
 
@@ -40,7 +41,7 @@ public class BlockSponge extends OpenBlock {
 	@Override
 	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
 		clearupLiquid(world, x, y, z);
-		world.scheduleBlockUpdate(x, y, z, blockID, TICK_RATE + RANDOM.nextInt(5));
+		world.scheduleBlockUpdate(x, y, z, this, TICK_RATE + RANDOM.nextInt(5));
 	}
 
 	private void clearupLiquid(World world, int x, int y, int z) {
@@ -57,7 +58,7 @@ public class BlockSponge extends OpenBlock {
 				}
 			}
 		}
-		if (hitLava) world.addBlockEvent(x, y, z, blockID, 0, 0);
+		if (hitLava) world.addBlockEvent(x, y, z, this, 0, 0);
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class BlockSponge extends OpenBlock {
 				world.spawnParticle("largesmoke", px, py, pz, 0.0D, 0.0D, 0.0D);
 			}
 		} else {
-			world.setBlock(x, y, z, Block.fire.blockID, 0, BlockNotifyFlags.ALL);
+			world.setBlock(x, y, z, Blocks.fire.blockID, 0, BlockNotifyFlags.ALL);
 		}
 		return true;
 	}
@@ -78,7 +79,7 @@ public class BlockSponge extends OpenBlock {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
 		clearupLiquid(world, x, y, z);
-		world.scheduleBlockUpdate(x, y, z, blockID, TICK_RATE + RANDOM.nextInt(5));
+		world.scheduleBlockUpdate(x, y, z, this, TICK_RATE + RANDOM.nextInt(5));
 	}
 
 }

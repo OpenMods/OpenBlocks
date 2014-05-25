@@ -35,14 +35,13 @@ public class BlockPath extends OpenBlock {
 	}
 
 	protected boolean isValidLocation(World world, int x, int y, int z) {
-		int bId = world.getBlockId(x, y - 1, z);
-		Block below = Block.blocksList[bId];
+		Block below = world.getBlock(x, y - 1, z);
 		if (below != null) { return below.isBlockSolidOnSide(world, x, y - 1, z, ForgeDirection.UP); }
 		return false;
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		if (!world.isRemote && !isValidLocation(world, x, y, z)) {
 			dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 			world.setBlockToAir(x, y, z);

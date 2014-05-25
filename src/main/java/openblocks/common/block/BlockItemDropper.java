@@ -23,8 +23,8 @@ public class BlockItemDropper extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
+	public void registerBlockIcons(IIconRegister registry) {
+		super.registerBlockIcons(registry);
 		this.downIcon = registry.registerIcon("openblocks:itemDropper_down");
 		setTexture(ForgeDirection.UP, blockIcon);
 		setTexture(ForgeDirection.DOWN, downIcon);
