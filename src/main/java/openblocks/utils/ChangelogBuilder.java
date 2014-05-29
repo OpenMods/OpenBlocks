@@ -28,7 +28,7 @@ public class ChangelogBuilder {
 			bookTag.setString("title", StatCollector.translateToLocalFormatted("openblocks.changelog.title", version));
 			bookTag.setString("author", "The OpenMods team");
 
-			NBTTagList bookPages = new NBTTagList("pages");
+			NBTTagList bookPages = new NBTTagList();
 			bookTag.setTag("pages", bookPages);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(input));

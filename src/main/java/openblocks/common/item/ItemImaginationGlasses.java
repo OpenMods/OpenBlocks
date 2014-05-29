@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,7 +38,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 		@Override
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		public void getSubItems(int itemId, CreativeTabs tab, List result) {
+		public void getSubItems(Item item, CreativeTabs tab, List result) {
 			for (ColorMeta color : ColorUtils.getAllColors())
 				result.add(createCrayonGlasses(color.rgb));
 		}
@@ -152,7 +153,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(int itemId, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		result.add(new ItemStack(this));
 	}
 

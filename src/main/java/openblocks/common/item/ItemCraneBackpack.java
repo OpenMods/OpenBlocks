@@ -45,8 +45,8 @@ public class ItemCraneBackpack extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
-		return TEXTURE_CRANE;
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+		return TEXTURE_CRANE; //TODO: chheck
 	}
 
 	private static boolean isPointInBlock(World world, EntityPlayer player, double radius) {
@@ -61,11 +61,11 @@ public class ItemCraneBackpack extends ItemArmor {
 						/ 180);
 
 		AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
-		return !world.getCollidingBlockBounds(aabb).isEmpty();
+		return !world.getCollidingBoundingBoxes(player, aabb).isEmpty(); //TODO: check that passing in player is ok
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack) {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		CraneRegistry.Data data = CraneRegistry.instance.getData(player, true);
 		if (!world.isRemote) CraneRegistry.instance.ensureMagnetExists(player);
 

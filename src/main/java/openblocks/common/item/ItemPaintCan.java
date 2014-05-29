@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks;
@@ -37,7 +38,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(int id, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		for (ColorMeta meta : ColorUtils.getAllColors()) {
 			result.add(createStack(meta.rgb, FULL_CAN_SIZE));
 		}

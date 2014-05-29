@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import openmods.utils.render.RenderUtils;
@@ -25,7 +26,7 @@ public class ItemSkyBlock extends ItemBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(int par1, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		result.add(new ItemStack(this, 1, 0));
 		result.add(new ItemStack(this, 1, 1));
 	}

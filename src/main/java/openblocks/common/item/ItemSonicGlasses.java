@@ -52,7 +52,7 @@ public class ItemSonicGlasses extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		return "openblocks:textures/models/glasses.png";
 	}
 

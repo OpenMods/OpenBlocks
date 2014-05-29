@@ -57,7 +57,7 @@ public class ItemPaintBrush extends Item {
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(int id, CreativeTabs par2CreativeTabs, List list) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List list) {
 		list.add(new ItemStack(this));
 		for (ColorMeta color : ColorUtils.getAllColors()) {
 			list.add(createStackWithColor(color.rgb));
@@ -80,7 +80,7 @@ public class ItemPaintBrush extends Item {
 			BlockCanvas.replaceBlock(world, x, y, z);
 		}
 
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 
 		if (te instanceof TileEntityCanvas) {
 			TileEntityCanvas canvas = (TileEntityCanvas)te;

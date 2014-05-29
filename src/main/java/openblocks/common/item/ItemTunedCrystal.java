@@ -108,7 +108,7 @@ public class ItemTunedCrystal extends Item {
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(int itemId, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		for (RadioStation station : RadioManager.instance.getRadioStations())
 			result.add(station.getStack());
 	}

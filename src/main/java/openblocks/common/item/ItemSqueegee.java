@@ -27,7 +27,7 @@ public class ItemSqueegee extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 
 		if (te instanceof TileEntityCanvas) {
 			TileEntityCanvas canvas = (TileEntityCanvas)te;

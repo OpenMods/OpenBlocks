@@ -1,5 +1,6 @@
 package openblocks.common.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,11 +47,15 @@ public class ItemSpongeOnAStick extends Item {
 		for (int x = -Config.spongeStickRange; x <= Config.spongeStickRange; x++) {
 			for (int y = -Config.spongeStickRange; y <= Config.spongeStickRange; y++) {
 				for (int z = -Config.spongeStickRange; z <= Config.spongeStickRange; z++) {
-					Material material = world.getBlockMaterial(xCoord + x, yCoord + y, zCoord + z);
-					if (material.isLiquid()) {
-						hitLava |= material == Material.lava;
-						world.setBlock(xCoord + x, yCoord + y, zCoord + z, 0, 0, BlockNotifyFlags.SEND_TO_CLIENTS);
-						if (++damage >= getMaxDamage()) break;
+					Block block = world.getBlock(xCoord + x, yCoord + y, zCoord + z);
+					if (block != null) {
+						Material material = block.getMaterial();
+						if (material.isLiquid()) {
+							hitLava |= material == Material.lava;
+							//TODO: check
+							world.setBlockToAir(xCoord + x, yCoord + y, zCoord + z);
+							if (++damage >= getMaxDamage()) break;
+						}
 					}
 				}
 			}

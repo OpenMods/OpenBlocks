@@ -90,7 +90,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
 		syncCommon(changes);
-		worldObj.markBlockForRenderUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
 	}
 
 	@Override

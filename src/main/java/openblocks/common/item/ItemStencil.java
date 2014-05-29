@@ -37,9 +37,9 @@ public class ItemStencil extends Item {
 
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(int id, CreativeTabs par2CreativeTabs, List list) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List list) {
 		for (Stencil stencil : Stencil.values()) {
-			list.add(new ItemStack(id, 1, stencil.ordinal()));
+			list.add(new ItemStack(item, 1, stencil.ordinal()));
 		}
 	}
 
@@ -50,7 +50,7 @@ public class ItemStencil extends Item {
 			BlockCanvas.replaceBlock(world, x, y, z);
 		}
 
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 
 		if (te instanceof TileEntityCanvas) {
 			TileEntityCanvas canvas = (TileEntityCanvas)te;

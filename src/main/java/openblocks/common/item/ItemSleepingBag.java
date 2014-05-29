@@ -29,7 +29,7 @@ public class ItemSleepingBag extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		return TEXTURE_SLEEPINGBAG;
 	}
 
@@ -71,7 +71,7 @@ public class ItemSleepingBag extends ItemArmor {
 	}
 
 	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack) {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		if (!world.isRemote) {
 			NBTTagCompound tag = getOrCreateTag(itemStack);
 			if (!player.isPlayerSleeping()) {

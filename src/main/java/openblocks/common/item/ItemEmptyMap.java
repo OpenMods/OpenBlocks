@@ -43,7 +43,7 @@ public class ItemEmptyMap extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(int id, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
 			result.add(OpenBlocks.Items.emptyMap.createMap(scale));
 	}

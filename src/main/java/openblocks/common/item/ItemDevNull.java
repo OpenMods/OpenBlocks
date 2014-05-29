@@ -45,7 +45,7 @@ public class ItemDevNull extends Item {
 				if (containedStack.stackSize == 0) {
 					inventory.setInventorySlotContents(0, null);
 				}
-				inventory.onInventoryChanged();
+				inventory.markDirty();
 				return response;
 			}
 		}

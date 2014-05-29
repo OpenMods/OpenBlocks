@@ -109,9 +109,9 @@ public class ItemGoldenEye extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(int id, CreativeTabs tab, List result) {
-		result.add(new ItemStack(id, 1, 0));
-		result.add(new ItemStack(id, 1, getMaxDamage()));
+	public void getSubItems(Item item, CreativeTabs tab, List result) {
+		result.add(new ItemStack(item, 1, 0));
+		result.add(new ItemStack(item, 1, getMaxDamage()));
 	}
 
 	@Override

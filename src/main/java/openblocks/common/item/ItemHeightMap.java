@@ -44,6 +44,6 @@ public class ItemHeightMap extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("rawtypes")
-	public void getSubItems(int id, CreativeTabs tab, List items) {}
+	public void getSubItems(Item item, CreativeTabs tab, List items) {}
 
 }
