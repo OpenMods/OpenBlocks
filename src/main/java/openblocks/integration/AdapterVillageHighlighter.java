@@ -5,9 +5,6 @@ import java.util.Map;
 
 import net.minecraft.village.Village;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
-import openperipheral.api.IPeripheralAdapter;
-import openperipheral.api.LuaMethod;
-import openperipheral.api.LuaType;
 
 import com.google.common.collect.Maps;
 

@@ -1,10 +1,5 @@
 package openblocks;
 
-import java.lang.reflect.Method;
-
-import codechicken.nei.api.IConfigureNEI;
-
-import com.google.common.base.Throwables;
 
 public class NEIOpenBlocksConfig implements IConfigureNEI {
 

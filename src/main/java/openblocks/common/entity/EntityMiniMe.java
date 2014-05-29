@@ -12,10 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

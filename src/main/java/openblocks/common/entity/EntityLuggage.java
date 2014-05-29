@@ -20,8 +20,6 @@ import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 
 import com.google.common.base.Strings;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 

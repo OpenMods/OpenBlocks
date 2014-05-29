@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import openblocks.common.entity.EntityTorchArrow;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class BowEventHandler {

@@ -3,7 +3,6 @@ package openblocks.client.radio;
 import java.net.URL;
 import java.util.*;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.audio.SoundManager;

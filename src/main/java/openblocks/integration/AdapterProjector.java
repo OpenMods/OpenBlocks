@@ -6,7 +6,6 @@ import net.minecraft.block.material.MapColor;
 import openblocks.common.HeightMapData;
 import openblocks.common.HeightMapData.LayerData;
 import openblocks.common.tileentity.TileEntityProjector;
-import openperipheral.api.*;
 
 import org.apache.commons.lang3.ArrayUtils;
 

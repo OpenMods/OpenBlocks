@@ -13,8 +13,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import com.google.common.base.Strings;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;

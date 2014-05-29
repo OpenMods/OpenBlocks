@@ -2,7 +2,6 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockAutoAnvil extends OpenBlock {

@@ -9,7 +9,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMagnet.IOwner;
-import openperipheral.api.*;
 
 import com.google.common.base.Preconditions;
 

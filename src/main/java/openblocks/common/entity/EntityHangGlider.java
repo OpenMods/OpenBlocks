@@ -13,10 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemHangGlider;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
