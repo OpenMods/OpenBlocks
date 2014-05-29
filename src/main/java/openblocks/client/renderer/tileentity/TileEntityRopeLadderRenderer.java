@@ -23,7 +23,7 @@ public class TileEntityRopeLadderRenderer extends TileEntitySpecialRenderer {
 		TileEntityRopeLadder rope = (TileEntityRopeLadder)tileentity;
 		GL11.glPushMatrix();
 		bindTexture(TextureMap.locationBlocksTexture);
-		long ticks = OpenMods.proxy.getTicks(rope.worldObj);
+		long ticks = OpenMods.proxy.getTicks(rope.getWorldObj());
 		double offset = 0.0;
 		if (rope.shouldAnimate()) {
 			offset = (MathHelper.sin((float)(rope.yCoord + ((double)ticks / 5))) / 50);

@@ -25,7 +25,7 @@ public class ItemDropBehavior implements ITrophyBehavior {
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		if (!Strings.isNullOrEmpty(sound)) {
-			player.playSound(sound, 1.0F, (tile.worldObj.rand.nextFloat() - tile.worldObj.rand.nextFloat()) * 0.2F + 1.0F);
+			player.playSound(sound, 1.0F, (tile.getWorldObj().rand.nextFloat() - tile.getWorldObj().rand.nextFloat()) * 0.2F + 1.0F);
 		}
 
 		player.entityDropItem(drop.copy(), 0);

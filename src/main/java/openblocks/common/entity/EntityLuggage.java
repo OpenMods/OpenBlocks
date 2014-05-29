@@ -1,5 +1,6 @@
 package openblocks.common.entity;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
@@ -149,12 +150,12 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeInt(inventory.getSizeInventory());
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		inventory = new GenericInventory("luggage", false, data.readInt());
 	}
 

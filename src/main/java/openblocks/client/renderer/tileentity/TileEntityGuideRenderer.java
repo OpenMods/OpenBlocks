@@ -2,12 +2,11 @@ package openblocks.client.renderer.tileentity;
 
 import java.util.Collection;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 import openmods.renderer.DisplayListWrapper;
@@ -26,7 +25,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 			renderBlocks.setRenderBounds(0.05D, 0.05D, 0.05D, 0.95D, 0.95D, 0.95D);
 			t.startDrawingQuads();
 			t.setBrightness(200);
-			Icon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
+			IIcon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
 			renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
 			renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
 			renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);

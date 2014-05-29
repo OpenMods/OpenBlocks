@@ -30,7 +30,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
 		float rotationSpeed = (18 * egg.animationStageTicks + f) / TileEntityGoldenEgg.ANIMATION_TIME + 1;
-		if (egg.worldObj != null && egg.getStage() > 0) {
+		if (egg.getWorldObj() != null && egg.getStage() > 0) {
 			egg.rotation += rotationSpeed * f;
 			GL11.glRotatef(egg.rotation % 360, 0, 1, 0);
 		}

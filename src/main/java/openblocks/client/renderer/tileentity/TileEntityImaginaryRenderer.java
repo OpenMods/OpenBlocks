@@ -1,11 +1,10 @@
 package openblocks.client.renderer.tileentity;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.Config;
@@ -59,7 +58,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 			return pencilDisplayList;
 		}
 
-		private int compileList(Icon icon) {
+		private int compileList(IIcon icon) {
 			int displayList = GL11.glGenLists(1);
 
 			GL11.glNewList(displayList, GL11.GL_COMPILE);
@@ -85,16 +84,16 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 			return displayList;
 		}
 
-		protected abstract void addQuads(Tessellator tes, Icon icon);
+		protected abstract void addQuads(Tessellator tes, IIcon icon);
 
-		protected abstract Icon getPencilTexture();
+		protected abstract IIcon getPencilTexture();
 
-		protected abstract Icon getCrayonTexture();
+		protected abstract IIcon getCrayonTexture();
 	}
 
 	private final static ElementDisplay blockDisplay = new ElementDisplay() {
 		@Override
-		public void addQuads(Tessellator tes, Icon icon) {
+		public void addQuads(Tessellator tes, IIcon icon) {
 			final double delta0 = 0.001;
 			final double delta1 = 1 - 0.001;
 
@@ -130,19 +129,19 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 		}
 
 		@Override
-		protected Icon getPencilTexture() {
+		protected IIcon getPencilTexture() {
 			return Blocks.imaginary.texturePencilBlock;
 		}
 
 		@Override
-		protected Icon getCrayonTexture() {
+		protected IIcon getCrayonTexture() {
 			return Blocks.imaginary.textureCrayonBlock;
 		}
 	};
 
 	private final static ElementDisplay panelDisplay = new ElementDisplay() {
 		@Override
-		public void addQuads(Tessellator tes, Icon icon) {
+		public void addQuads(Tessellator tes, IIcon icon) {
 			tes.addVertexWithUV(0, 0, 0, icon.getMinU(), icon.getMinV());
 			tes.addVertexWithUV(0, 0, 1, icon.getMinU(), icon.getMaxV());
 			tes.addVertexWithUV(1, 0, 1, icon.getMaxU(), icon.getMaxV());
@@ -150,19 +149,19 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 		}
 
 		@Override
-		protected Icon getPencilTexture() {
+		protected IIcon getPencilTexture() {
 			return Blocks.imaginary.texturePencilPanel;
 		}
 
 		@Override
-		protected Icon getCrayonTexture() {
+		protected IIcon getCrayonTexture() {
 			return Blocks.imaginary.textureCrayonPanel;
 		}
 	};
 
 	private final static ElementDisplay halfPanelDisplay = new ElementDisplay() {
 		@Override
-		public void addQuads(Tessellator tes, Icon icon) {
+		public void addQuads(Tessellator tes, IIcon icon) {
 			tes.addVertexWithUV(-0.5, 0, -0.5, icon.getMinU(), icon.getMaxV());
 			tes.addVertexWithUV(-0.5, 0, +0.5, icon.getMinU(), icon.getMinV());
 			tes.addVertexWithUV(+0.5, 0, +0.5, icon.getMaxU(), icon.getMinV());
@@ -170,12 +169,12 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 		}
 
 		@Override
-		protected Icon getPencilTexture() {
+		protected IIcon getPencilTexture() {
 			return Blocks.imaginary.texturePencilHalfPanel;
 		}
 
 		@Override
-		protected Icon getCrayonTexture() {
+		protected IIcon getCrayonTexture() {
 			return Blocks.imaginary.textureCrayonHalfPanel;
 		}
 	};

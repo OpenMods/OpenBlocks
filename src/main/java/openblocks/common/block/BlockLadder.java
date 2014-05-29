@@ -53,7 +53,6 @@ public class BlockLadder extends BlockTrapDoor {
 
 	@Override
 	public void setBlockBoundsForBlockRender(int par1) {
-
 		float f = 0.125F;
 
 		if ((par1 & 8) != 0) {

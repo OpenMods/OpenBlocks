@@ -1,7 +1,5 @@
 package openblocks.common.block;
 
-import javax.swing.Icon;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
@@ -13,7 +11,7 @@ import openblocks.common.tileentity.TileEntityDigitalFuse;
 public class BlockDigitalFuse extends OpenBlock {
 
 	public static class Icons {
-		public static IIcon[] topIcons = new Icon[8];
+		public static IIcon[] topIcons = new IIcon[8];
 		public static IIcon side;
 	}
 
@@ -29,7 +27,7 @@ public class BlockDigitalFuse extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
 		return true;
 	}
 

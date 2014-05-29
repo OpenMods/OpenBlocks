@@ -72,7 +72,7 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 
 	private boolean canRidePlayer(EntityPlayer player) {
 		return player != null &&
-				player.username != minime.getUsername() &&
+				player.getDisplayName() != minime.getUsername() &&
 				player.ridingEntity == null;
 	}
 }

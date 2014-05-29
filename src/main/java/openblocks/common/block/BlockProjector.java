@@ -24,7 +24,7 @@ public class BlockProjector extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockNormalCube(World world, int x, int y, int z) {
+	public boolean isBlockNormalCube() {
 		return false;
 	}
 
@@ -47,7 +47,7 @@ public class BlockProjector extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTexture(IBlockAccess world, int x, int y, int z, int side) {
+	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
 		return (side < 2)? blockIcon : sideIcon;
 	}
 }

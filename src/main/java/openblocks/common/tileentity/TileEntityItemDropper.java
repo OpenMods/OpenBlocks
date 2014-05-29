@@ -61,7 +61,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
+	public void onNeighbourChanged() {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}

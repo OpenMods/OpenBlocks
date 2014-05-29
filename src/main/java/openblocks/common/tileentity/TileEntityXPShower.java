@@ -90,7 +90,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
+	public void onNeighbourChanged() {
 		if (!worldObj.isRemote) updateState();
 	}
 

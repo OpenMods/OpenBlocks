@@ -9,7 +9,7 @@ public class EndermanBehavior implements ITrophyBehavior {
 
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		final World world = tile.worldObj;
+		final World world = tile.getWorldObj();
 		EntityEnderPearl e = new EntityEnderPearl(world, player);
 		e.setPosition(tile.xCoord + 0.5, tile.yCoord + 0.5, tile.zCoord + 0.5);
 		e.motionX = world.rand.nextGaussian();

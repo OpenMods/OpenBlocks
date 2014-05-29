@@ -1,9 +1,8 @@
 package openblocks.client.renderer.block;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.block.BlockRadio;
@@ -54,10 +53,10 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 		final double my = 1 - dy;
 		final double mz = 1 - dz;
 
-		final Icon front = b.iconFront;
-		final Icon back = b.iconBack;
-		final Icon side = b.iconSide;
-		final Icon top = b.iconTop;
+		final IIcon front = b.iconFront;
+		final IIcon back = b.iconBack;
+		final IIcon side = b.iconSide;
+		final IIcon top = b.iconTop;
 
 		tes.addVertexWithUV(mx, 0, dz, front.getInterpolatedU(dx * 16), front.getMaxV());
 		tes.addVertexWithUV(dx, 0, dz, front.getInterpolatedU(mx * 16), front.getMaxV());
@@ -107,7 +106,7 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 		final double fz = 1 * UNIT;
 		final double bz = 5 * UNIT;
 
-		final Icon inside = b.iconInside;
+		final IIcon inside = b.iconInside;
 
 		final float u0 = inside.getInterpolatedU(0);
 		final float u6 = inside.getInterpolatedU(6);
@@ -155,7 +154,7 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 		final double fz = 2.25 * UNIT;
 		final double bz = 3.75 * UNIT;
 
-		final Icon tex = b.iconInside;
+		final IIcon tex = b.iconInside;
 
 		final float u6 = tex.getInterpolatedU(6);
 		final float u10 = tex.getInterpolatedU(10);
@@ -224,7 +223,7 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 		final double fz = 2.5 * UNIT;
 		final double bz = 3.5 * UNIT;
 
-		final Icon tex = b.iconInside;
+		final IIcon tex = b.iconInside;
 
 		tes.addVertexWithUV(rx, by, fz, tex.getInterpolatedU(1), tex.getInterpolatedV(4));
 		tes.addVertexWithUV(lx, by, fz, tex.getInterpolatedU(3), tex.getInterpolatedV(4));

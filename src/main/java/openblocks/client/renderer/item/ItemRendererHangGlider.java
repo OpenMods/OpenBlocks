@@ -1,11 +1,10 @@
 package openblocks.client.renderer.item;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.utils.TextureUtils;
@@ -29,7 +28,7 @@ public class ItemRendererHangGlider implements IItemRenderer {
 	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
 		EntityLivingBase par1EntityLiving = (EntityLivingBase)data[1];
 		if (EntityHangGlider.isEntityHoldingGlider(par1EntityLiving)) return;
-		Icon icon = par1EntityLiving.getItemIcon(stack, 0);
+		IIcon icon = par1EntityLiving.getItemIcon(stack, 0);
 
 		if (icon == null) return;
 

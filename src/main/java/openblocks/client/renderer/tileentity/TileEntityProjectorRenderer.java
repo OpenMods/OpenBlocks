@@ -42,8 +42,8 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer {
 	}
 
 	private static void renderMap(final TileEntityProjector projector, int mapId) {
-		if (projector.worldObj != null) {
-			HeightMapData data = MapDataManager.getMapData(projector.worldObj, mapId);
+		if (projector.getWorldObj() != null) {
+			HeightMapData data = MapDataManager.getMapData(projector.getWorldObj(), mapId);
 			if (data.isValid()) {
 				GL11.glTranslatef(0, 1, 0);
 				HeightMapRenderer.instance.render(mapId, data);
@@ -55,7 +55,7 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslated(0.25, 0.5, 0.25);
 		bindTexture(texture);
 		if (active) {
-			long ticks = OpenMods.proxy.getTicks(projector.worldObj);
+			long ticks = OpenMods.proxy.getTicks(projector.getWorldObj());
 			model.render(ticks * 0.01f, ticks * 0.3f, 0.25f * MathHelper.sin(ticks * 0.005f) + 0.25f);
 		} else {
 			model.render(0, 0, 0);

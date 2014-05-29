@@ -1,7 +1,6 @@
 package openblocks.client.gui.pages;
 
-import javax.swing.Icon;
-
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.utils.render.FakeIcon;
@@ -10,7 +9,7 @@ public class IntroPage extends BlankPage {
 
 	private GuiComponentSprite image;
 	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/bookimage.png");
-	public static Icon iconImage = new FakeIcon(0, 0.7421875f, 0, 0.546875f, 95, 70);
+	public static IIcon iconImage = new FakeIcon(0, 0.7421875f, 0, 0.546875f, 95, 70);
 
 	public IntroPage() {
 		image = new GuiComponentSprite(52, 48, iconImage, texture);

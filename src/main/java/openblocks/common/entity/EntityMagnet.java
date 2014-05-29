@@ -1,5 +1,7 @@
 package openblocks.common.entity;
 
+import io.netty.buffer.ByteBuf;
+
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.List;
@@ -91,14 +93,14 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		}
 
 		@Override
-		public void writeSpawnData(ByteArrayDataOutput data) {
+		public void writeSpawnData(ByteBuf data) {
 			super.writeSpawnData(data);
 			Entity owner = this.owner.get();
-			data.writeInt(owner != null? owner.entityId : -1);
+			data.writeInt(owner != null? owner.getEntityId() : -1);
 		}
 
 		@Override
-		public void readSpawnData(ByteArrayDataInput data) {
+		public void readSpawnData(ByteBuf data) {
 			super.readSpawnData(data);
 			int entityId = data.readInt();
 			if (entityId >= 0) DelayedEntityLoadManager.instance.registerLoadListener(worldObj, this, entityId);
@@ -158,12 +160,12 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	protected void writeEntityToNBT(NBTTagCompound tag) {}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeBoolean(isMagic);
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		isMagic = data.readBoolean();
 	}
 

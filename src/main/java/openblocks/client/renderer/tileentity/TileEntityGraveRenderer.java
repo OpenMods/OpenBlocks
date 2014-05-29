@@ -31,7 +31,7 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer {
 		model.render(tileentity, f);
 		String username = target.getUsername();
 
-		FontRenderer renderer = getFontRenderer();
+		FontRenderer renderer = func_147498_b();
 		if (renderer != null) {
 
 			int stringWidth = renderer.getStringWidth(username);

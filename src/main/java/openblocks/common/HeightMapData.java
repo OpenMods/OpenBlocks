@@ -102,11 +102,11 @@ public class HeightMapData extends WorldSavedData {
 
 		scale = tag.getByte("Scale");
 
-		NBTTagList layersData = tag.getTagList("Layers");
+		NBTTagList layersData = tag.getTagList("Layers", 10);
 		int length = layersData.tagCount();
 		layers = new LayerData[length];
 		for (int i = 0; i < length; i++) {
-			NBTTagCompound layerData = (NBTTagCompound)layersData.tagAt(i);
+			NBTTagCompound layerData = (NBTTagCompound)layersData.getCompoundTagAt(i);
 			LayerData layer = new LayerData();
 			layer.readFromNBT(layerData);
 			layers[i] = layer;

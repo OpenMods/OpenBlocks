@@ -1,5 +1,7 @@
 package openblocks.common.entity;
 
+import io.netty.buffer.ByteBuf;
+
 import java.lang.ref.WeakReference;
 
 import net.minecraft.entity.Entity;
@@ -105,12 +107,12 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeUTF(Strings.nullToEmpty(owner));
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		owner = data.readUTF();
 	}
 

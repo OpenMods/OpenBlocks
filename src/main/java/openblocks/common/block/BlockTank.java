@@ -24,12 +24,12 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean canBeReplacedByLeaves(World world, int x, int y, int z) {
+	public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
 		return false;
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, int metadata, ForgeDirection face) {
+	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		return false;
 	}
 
@@ -44,7 +44,7 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
 		return true;
 	}
 

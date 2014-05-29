@@ -11,7 +11,7 @@ public class ContainerXPBottler extends ContainerInventoryProvider<TileEntityXPB
 		addSlotToContainer(new RestrictedSlot(inventory, 0, 48, 30));
 		addSlotToContainer(new RestrictedSlot(inventory, 1, 110, 30));
 		addPlayerInventorySlots(69);
-		if (!xpbottler.worldObj.isRemote) xpbottler.sync();
+		if (!xpbottler.getWorldObj().isRemote) xpbottler.sync();
 	}
 
 }

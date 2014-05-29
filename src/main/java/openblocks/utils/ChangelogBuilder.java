@@ -2,6 +2,7 @@ package openblocks.utils;
 
 import java.io.*;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +22,7 @@ public class ChangelogBuilder {
 
 		if (input != null) {
 
-			ItemStack book = new ItemStack(Item.writtenBook);
+			ItemStack book = new ItemStack(Items.written_book);
 
 			NBTTagCompound bookTag = ItemUtils.getItemTag(book);
 

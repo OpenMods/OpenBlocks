@@ -52,6 +52,7 @@ public class PlayerInventoryStore {
 		}
 	}
 
+	//TODO: check player.getDisplayName() (multiple instances)
 	public File storePlayerInventory(EntityPlayer player) {
 		InventoryPlayer inv = player.inventory;
 		GenericInventory copy = new GenericInventory("tmp", false, inv.getSizeInventory());
@@ -59,7 +60,7 @@ public class PlayerInventoryStore {
 
 		Date now = new Date();
 
-		Matcher matcher = SAFE_CHARS.matcher(player.username);
+		Matcher matcher = SAFE_CHARS.matcher(player.getDisplayName());
 		String playerName = matcher.replaceAll("_");
 		File dumpFile = getNewDumpFile(now, playerName, player.worldObj);
 
@@ -69,7 +70,7 @@ public class PlayerInventoryStore {
 		NBTTagCompound root = new NBTTagCompound();
 		root.setTag(TAG_INVENTORY, invData);
 		root.setLong("Created", now.getTime());
-		root.setString("Player", player.username);
+		root.setString("Player", player.getDisplayName());
 
 		try {
 			OutputStream stream = new FileOutputStream(dumpFile);
@@ -79,7 +80,7 @@ public class PlayerInventoryStore {
 				stream.close();
 			}
 		} catch (IOException e) {
-			Log.warn("Failed to dump data for player %s, file %s", player.username, dumpFile.getAbsoluteFile());
+			Log.warn("Failed to dump data for player %s, file %s", player.getDisplayName(), dumpFile.getAbsoluteFile());
 		}
 
 		return dumpFile;
@@ -154,9 +155,9 @@ public class PlayerInventoryStore {
 			try {
 
 				File file = storePlayerInventory(player);
-				Log.info("Storing post-mortem inventory of player %s into %s", player.username, file.getAbsolutePath());
+				Log.info("Storing post-mortem inventory of player %s into %s", player.getDisplayName(), file.getAbsolutePath());
 			} catch (Exception e) {
-				Log.severe(e, "Failed to store inventory for player %s", player.username);
+				Log.severe(e, "Failed to store inventory for player %s", player.getDisplayName());
 			}
 		}
 	}

@@ -18,8 +18,4 @@ public class EntityMiniMeRenderer extends RenderLiving {
 		return ((EntityMiniMe)entity).getLocationSkin();
 	}
 
-	@Override
-	protected void renderLivingLabel(EntityLivingBase par1EntityLivingBase, String par2Str, double par3, double par5, double par7, int par9) {
-		super.renderLivingLabel(par1EntityLivingBase, par2Str, par3, par5, par7, par9);
-	}
 }

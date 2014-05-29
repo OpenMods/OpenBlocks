@@ -146,10 +146,10 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		subTag.setInteger("size", layers.size());
 		int i = 0;
 		for (Layer layer : layers) {
-			subTag.setCompoundTag("layer_" + i, layer.getNBT());
+			subTag.setTag("layer_" + i, layer.getNBT());
 			i++;
 		}
-		nbt.setCompoundTag(name, subTag);
+		nbt.setTag(name, subTag);
 	}
 
 	@Override

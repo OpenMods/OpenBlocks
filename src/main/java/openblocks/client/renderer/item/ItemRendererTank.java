@@ -1,5 +1,6 @@
 package openblocks.client.renderer.item;
 
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.IItemRenderer;
@@ -27,7 +28,7 @@ public class ItemRendererTank implements IItemRenderer {
 		NBTTagCompound tag = item.getTagCompound();
 		if (tag != null && tag.hasKey("tank")) tank.readFromNBT(tag.getCompoundTag("tank"));
 
-		TileEntityRenderer.instance.renderTileEntityAt(teTank, 0.0D, -0.1D, 0.0D, 0.0F);
+		TileEntityRendererDispatcher.instance.renderTileEntityAt(teTank, 0.0D, -0.1D, 0.0D, 0.0F);
 	}
 
 }

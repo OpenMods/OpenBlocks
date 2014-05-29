@@ -28,7 +28,7 @@ public class ItemDropFlimFlam implements IFlimFlamAction {
 		ItemStack stack = inv.getStackInSlot(slot);
 		if (stack == null || random.nextFloat() > 0.5f) return false;
 
-		target.dropPlayerItem(inv.decrStackSize(slot, 1));
+		target.dropItem(inv.decrStackSize(slot, 1));
 		return true;
 	}
 

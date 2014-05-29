@@ -1,12 +1,11 @@
 package openblocks.client.renderer.entity;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks.Items;
 import openmods.utils.render.RenderUtils;
@@ -25,7 +24,7 @@ public class EntityGoldenEyeRenderer extends Render {
 		GL11.glTranslated(x, y, z);
 		GL11.glRotatef(yaw, 0, 1, 0);
 		GL11.glRotatef(pitch, 1, 0, 0);
-		final Icon icon = Items.goldenEye.getIconFromDamage(0);
+		final IIcon icon = Items.goldenEye.getIconFromDamage(0);
 
 		GL11.glScaled(1.0 / 6.0, 1.0 / 6.0, 1.0 / 6.0);
 		Tessellator tes = new Tessellator();

@@ -7,7 +7,7 @@ public class CreeperBehavior implements ITrophyBehavior {
 
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		tile.worldObj.createExplosion(player, tile.xCoord, tile.yCoord, tile.zCoord, 2, false);
+		tile.getWorldObj().createExplosion(player, tile.xCoord, tile.yCoord, tile.zCoord, 2, false);
 		return 0;
 	}
 

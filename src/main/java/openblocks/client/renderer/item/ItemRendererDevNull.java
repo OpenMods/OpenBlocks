@@ -1,7 +1,5 @@
 package openblocks.client.renderer.item;
 
-import javax.swing.Icon;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -13,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.item.ItemDevNull.Icons;
 import openmods.GenericInventory;
@@ -35,7 +34,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 
 		@Override
 		public void compile() {
-			Icon backgroundIcon = Icons.iconFull;
+			IIcon backgroundIcon = Icons.iconFull;
 			final float minU = backgroundIcon.getMinU();
 			final float minV = backgroundIcon.getMinV();
 			final float maxV = backgroundIcon.getMaxV();
@@ -142,7 +141,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 
-		Icon backgroundIcon = Icons.iconTransparent;
+		IIcon backgroundIcon = Icons.iconTransparent;
 		TextureUtils.bindDefaultItemsTexture();
 		itemRenderer.renderIcon(0, 0, backgroundIcon, 16, 16);
 

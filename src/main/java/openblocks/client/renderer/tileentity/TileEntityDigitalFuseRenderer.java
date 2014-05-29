@@ -19,7 +19,7 @@ public class TileEntityDigitalFuseRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glRotatef(-BlockUtils.getRotationFromDirection(fuse.getRotation()), 0, 1, 0);
 
-		FontRenderer renderer = getFontRenderer();
+		FontRenderer renderer = func_147498_b();
 		if (renderer != null) {
 			GL11.glScalef(0.02f, 0.02f, 0.02f);
 			GL11.glRotatef(90.0F, -1.0F, 0.0F, 0.0F);

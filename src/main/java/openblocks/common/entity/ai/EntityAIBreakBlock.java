@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -29,7 +30,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 		this.entity = minime;
 		this.pathFinder = minime.getNavigator();
 		setMutexBits(3);
-		rand = new Random(minime.entityId);
+		rand = new Random(minime.getEntityId());
 		tickOffset = rand.nextInt(10);
 	}
 
@@ -119,6 +120,6 @@ public class EntityAIBreakBlock extends EntityAIBase {
 
 	public boolean canHarvestBlock(Coord coord) {
 		return BlockProperties.isFlower(coord, entity.worldObj) ||
-				BlockProperties.getBlock(coord, entity.worldObj) == Block.torchWood;
+				BlockProperties.getBlock(coord, entity.worldObj) == Blocks.torch;
 	}
 }

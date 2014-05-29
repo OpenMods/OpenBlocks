@@ -2,6 +2,7 @@ package openblocks.client.renderer.entity;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
@@ -75,12 +76,15 @@ public class EntityCartographerRenderer extends Render {
 			compileCone();
 
 			GL11.glColor4f(1, 1, 1, 1);
+			
+			final TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+			
 			if (e.isMapping.getValue()) {
 				GL11.glTranslated(+BASE_SIZE, +BASE_SIZE, -CONE_END);
-				bindMapTexture(context.renderEngine);
+				bindMapTexture(textureManager);
 				renderProgressMap(e.jobs);
 			} else {
-				context.renderEngine.bindTexture(texture);
+				textureManager.bindTexture(texture);
 				drawBase();
 				GL11.glTranslated(+BASE_SIZE, +BASE_SIZE, -CONE_END - Z_FIGHTER);
 				renderText(e, context);
@@ -108,7 +112,7 @@ public class EntityCartographerRenderer extends Render {
 
 		private static void renderText(EntityCartographer e, RenderGlobal context) {
 			GL11.glScaled(2 * BASE_SIZE / 16.0, 2 * BASE_SIZE / 16.0, 1);
-			FontRenderer fonts = context.mc.fontRenderer;
+			FontRenderer fonts = Minecraft.getMinecraft().fontRenderer;
 			String coords = String.format("%d,%d", e.getNewMapCenterX(), e.getNewMapCenterZ());
 			int len = fonts.getStringWidth(coords);
 			double scaleV = 4.0 / 8.0;

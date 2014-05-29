@@ -194,7 +194,7 @@ public class ModelCraneBackpack extends ModelBiped {
 	}
 
 	private void drawArm(RenderWorldLastEvent evt, final EntityPlayer player) {
-		final TextureManager tex = evt.context.renderEngine;
+		final TextureManager tex = Minecraft.getMinecraft().getTextureManager();
 		tex.bindTexture(texture);
 
 		GL11.glColor3f(1, 1, 1);
@@ -213,7 +213,7 @@ public class ModelCraneBackpack extends ModelBiped {
 
 	@SubscribeEvent
 	public void renderFppArm(RenderWorldLastEvent evt) {
-		final Minecraft mc = evt.context.mc;
+		final Minecraft mc = Minecraft.getMinecraft();
 
 		if (mc.gameSettings.thirdPersonView != 0) return;
 

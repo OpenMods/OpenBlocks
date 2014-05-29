@@ -349,7 +349,7 @@ public class OpenBlocks {
 		RadioManager.instance.readConfigs();
 		Config.register();
 
-		NetworkRegistry.instance().registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
 
 		if (Config.FEATURES.isBlockEnabled("grave")) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());

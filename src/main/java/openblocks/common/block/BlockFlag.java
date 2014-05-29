@@ -59,7 +59,7 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side) {
+	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
 		return false;
 	}
 

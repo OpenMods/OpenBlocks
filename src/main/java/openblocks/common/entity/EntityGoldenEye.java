@@ -78,8 +78,8 @@ public class EntityGoldenEye extends EntitySmoothMove {
 
 	private void targetStructure(Entity owner, ChunkPosition target) {
 		double playerY = owner.posY + 1.62 - owner.yOffset;
-		double dx = target.x - owner.posX;
-		double dz = target.z - owner.posZ;
+		double dx = target.chunkPosX - owner.posX;
+		double dz = target.chunkPosZ - owner.posZ;
 		double dist = Math.sqrt(dx * dx + dz * dz);
 		dx /= dist;
 		dz /= dist;

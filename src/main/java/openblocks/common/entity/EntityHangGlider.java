@@ -1,5 +1,7 @@
 package openblocks.common.entity;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -81,7 +83,7 @@ public class EntityHangGlider extends Entity implements
 	public EntityHangGlider(World world, EntityPlayer player) {
 		this(world);
 		this.player = player;
-		gliderMap.put(player, entityId);
+		gliderMap.put(player, getEntityId());
 	}
 
 	@Override
@@ -182,7 +184,7 @@ public class EntityHangGlider extends Entity implements
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		if (player != null) {
 			data.writeUTF(player.username);
 		} else {
@@ -191,13 +193,13 @@ public class EntityHangGlider extends Entity implements
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		String username = data.readUTF();
 		if ("[none]".equals(username)) {
 			setDead();
 		} else {
 			player = worldObj.getPlayerEntityByName(username);
-			gliderClientMap.put(player, entityId);
+			gliderClientMap.put(player, getEntityId());
 		}
 	}
 

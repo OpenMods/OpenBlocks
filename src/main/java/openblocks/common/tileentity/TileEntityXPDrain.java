@@ -90,7 +90,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 		for (int y = yCoord - 1; y > 0; y--) {
 			boolean isAir = worldObj.isAirBlock(xCoord, y, zCoord);
 			if (!isAir) {
-				TileEntity te = worldObj.getBlockTileEntity(xCoord, y, zCoord);
+				TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
 				if (!(te instanceof IFluidHandler) && te != null) {
 					Block block = te.getBlockType();
 					if (block.isOpaqueCube()) { return; }

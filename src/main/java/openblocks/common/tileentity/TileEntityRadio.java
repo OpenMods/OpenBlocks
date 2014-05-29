@@ -59,7 +59,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	@Override
 	protected void initialize() {
 		if (worldObj.isRemote) return;
-		onNeighbourChanged(0);
+		onNeighbourChanged();
 	}
 
 	private void updateURL(ItemStack stack) {
@@ -129,7 +129,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	}
 
 	@Override
-	public void onNeighbourChanged(int blockId) {
+	public void onNeighbourChanged() {
 		if (!worldObj.isRemote) {
 			final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			this.isPowered.setValue(isPowered);
@@ -152,7 +152,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 			if (held == null && current != null) {
 				player.setCurrentItemOrArmor(0, current.copy());
 				inventory.setInventorySlotContents(0, null);
-				onInventoryChanged();
+				markDirty();
 				updateURL(null);
 				return true;
 			} else if (held != null) {
@@ -160,7 +160,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 				if (heldItem instanceof ItemTunedCrystal) {
 					inventory.setInventorySlotContents(0, held.copy());
 					player.setCurrentItemOrArmor(0, current);
-					onInventoryChanged();
+					markDirty();
 					updateURL(held);
 					return true;
 				}

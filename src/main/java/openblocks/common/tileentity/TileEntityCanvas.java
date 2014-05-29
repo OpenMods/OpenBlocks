@@ -3,12 +3,11 @@ package openblocks.common.tileentity;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.Icon;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
@@ -95,7 +94,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return 0xCCCCCC;
 	}
 
-	public Icon getTextureForRender(int renderSide, int layerId) {
+	public IIcon getTextureForRender(int renderSide, int layerId) {
 		if (layerId > BASE_LAYER) {
 			Layer layer = getLayerForSide(renderSide, layerId);
 			if (layer != null) {
@@ -106,7 +105,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return getBaseTexture(renderSide);
 	}
 
-	private Icon getBaseTexture(int side) {
+	private IIcon getBaseTexture(int side) {
 		if (paintedBlockId.getValue() == 0) return OpenBlocks.Blocks.canvas.baseIcon;
 		Block block = Block.blocksList[paintedBlockId.getValue()];
 		if (block == null) return OpenBlocks.Blocks.canvas.baseIcon;

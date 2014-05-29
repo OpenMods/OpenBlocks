@@ -5,6 +5,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -107,13 +108,13 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 			@Override
 			public void usePlayer(OpenModsFakePlayer fakePlayer) {
 				fakePlayer.inventory.currentItem = 0;
-				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Item.pickaxeDiamond, 0, 0));
+				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 0, 0));
 
 				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
 				if (MinecraftForge.EVENT_BUS.post(event)) return;
 
 				if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
-					List<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
+					List<ItemStack> items = block.getDrops(worldObj, x, y, z, metadata, 0);
 					if (items != null) {
 						ForgeDirection back = direction.getOpposite();
 						ejectAt(worldObj,

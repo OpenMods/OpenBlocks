@@ -18,7 +18,7 @@ public class ElevatorMovementHandler {
 			int x = MathHelper.floor_double(player.posX);
 			int y = MathHelper.floor_double(player.boundingBox.minY) - 1;
 			int z = MathHelper.floor_double(player.posZ);
-			TileEntity te = world.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof OpenTileEntity) return (OpenTileEntity)te;
 		}
 		return null;
