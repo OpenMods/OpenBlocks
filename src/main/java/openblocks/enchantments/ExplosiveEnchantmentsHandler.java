@@ -129,7 +129,7 @@ public class ExplosiveEnchantmentsHandler {
 		@SuppressWarnings("unchecked")
 		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(armor);
 		Integer ench = enchantments.get(Enchantments.explosive.effectId);
-		if (ench == null || ench > LEVELS.length) return null;
+		if (ench == null || ench >= LEVELS.length) return null;
 		EnchantmentLevel level = LEVELS[ench];
 		if (level == null) return null;
 
