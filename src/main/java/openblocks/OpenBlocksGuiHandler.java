@@ -31,6 +31,7 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 			case luggage:
 				return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x));
 			case devNull:
+				if (player.inventory.getCurrentItem() == null) return null;
 				return new ContainerDevNull(player.inventory, new ItemInventory(player, 1));
 			default:
 				return null;
