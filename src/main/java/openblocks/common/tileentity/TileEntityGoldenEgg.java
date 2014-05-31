@@ -16,8 +16,11 @@ import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 
+import com.google.common.base.Strings;
+
 public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile {
 
+	private static final String MR_GLITCH = "Mikeemoo";
 	private static final int STAGE_CHANGE_TICK = 600;
 	public static final int ANIMATION_TIME = 400;
 	private static final double STAGE_CHANGE_CHANCE = 0.8;
@@ -44,7 +47,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 		if (!worldObj.isRemote) {
 			if (stageElapsed()) {
 				incrementStage();
-				System.out.println("Egg entering stage" + stage.getValue());
 			}
 			if (stage.getValue() >= 1) {
 
@@ -88,7 +90,8 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			if (stage.getValue() >= 5) {
 				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 				worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
-				EntityMiniMe miniMe = new EntityMiniMe(worldObj, "Mikeemoo");
+				if (Strings.isNullOrEmpty(owner)) owner = MR_GLITCH;
+				EntityMiniMe miniMe = new EntityMiniMe(worldObj, owner);
 				miniMe.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 0, 0);
 				worldObj.spawnEntityInWorld(miniMe);
 				return;
