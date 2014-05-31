@@ -27,7 +27,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private ArrayList<EntityBlock> blocks = new ArrayList<EntityBlock>();
 	private SyncableInt stage;
 
-	private String owner;
+	private String owner = "";
 
 	@Override
 	protected void createSyncedFields() {
@@ -125,9 +125,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (player != null) {
-			owner = player.username;
-		}
+		if (player != null) owner = player.username;
 	}
 
 }
