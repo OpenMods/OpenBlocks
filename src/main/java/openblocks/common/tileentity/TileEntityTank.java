@@ -66,6 +66,9 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 	}
 
+	private static final int SYNC_THRESHOLD = 8;
+	private static final int UPDATE_THRESHOLD = 20;
+
 	private SyncableTank tank;
 
 	private double flowTimer = Math.random() * 100;
@@ -73,6 +76,14 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	private int previousFluidId = 0;
 
 	private boolean forceUpdate = true;
+
+	private int ticksSinceLastSync = hashCode() % SYNC_THRESHOLD;
+
+	private boolean needsSync;
+
+	private int ticksSinceLastUpdate = hashCode() % UPDATE_THRESHOLD;
+
+	private boolean needsUpdate;
 
 	@IncludeInterface(IFluidHandler.class)
 	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
@@ -235,6 +246,9 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	public void updateEntity() {
 		super.updateEntity();
 
+		ticksSinceLastSync++;
+		ticksSinceLastUpdate++;
+
 		if (Config.shouldTanksUpdate && !worldObj.isRemote && forceUpdate) {
 			forceUpdate = false;
 
@@ -248,10 +262,26 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 				tryBalanceNeighbors(contents);
 			}
 
-			sync();
+			needsSync = true;
 		} else {
 			flowTimer += 0.1f;
 		}
+
+		if (needsSync && !worldObj.isRemote && ticksSinceLastSync > SYNC_THRESHOLD) {
+			needsSync = false;
+			sync();
+		}
+
+		if (needsUpdate && ticksSinceLastUpdate > UPDATE_THRESHOLD) {
+			needsUpdate = false;
+			ticksSinceLastUpdate = 0;
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType().blockID);
+		}
+	}
+
+	@Override
+	public void onServerSync(Set<ISyncableObject> changed) {
+		ticksSinceLastSync = 0;
 	}
 
 	private void tryGetNeighbor(List<TileEntityTank> result, FluidStack fluid, ForgeDirection side) {
@@ -297,13 +327,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 	}
 
+	private void notifyNeigbours() {
+		needsUpdate = true;
+	}
+
 	private void tankChanged() {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType().blockID);
+		notifyNeigbours();
 		tank.markDirty();
 	}
 
 	private void markUpdated() {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType().blockID);
+		notifyNeigbours();
 		forceUpdate = true;
 	}
 
