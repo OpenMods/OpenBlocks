@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openmods.utils.BlockUtils;
@@ -31,19 +32,24 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 				GL11.glRotatef(BlockUtils.getRotationFromDirection(trophy.getRotation()), 0, 1, 0);
 
 				GL11.glScaled(ratio, ratio, ratio);
-				entity.worldObj = RenderUtils.getRenderWorld();
-				if (entity.worldObj != null) {
+				World renderWorld = RenderUtils.getRenderWorld();
+				if (renderWorld != null) {
 					Render renderer = RenderManager.instance.getEntityRenderObject(entity);
 					// yeah we don't care about fonts, but we do care that the
 					// renderManager is available
 					if (renderer != null && renderer.getFontRendererFromRenderManager() != null) {
 						GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 						if (renderWithLighting) RenderUtils.enableLightmap();
-						renderer.doRender(entity, 0, 0, 0, 0, 0);
+
+						synchronized (entity) {
+							entity.worldObj = renderWorld;
+							renderer.doRender(entity, 0, 0, 0, 0, 0);
+							entity.worldObj = null;
+						}
+
 						GL11.glPopAttrib();
 					}
 				}
-				entity.worldObj = null;
 				GL11.glPopMatrix();
 
 			}

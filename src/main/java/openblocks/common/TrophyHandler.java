@@ -148,13 +148,19 @@ public class TrophyHandler {
 		}
 
 		public void playSound(World world, double x, double y, double z) {
+			if (world == null) return;
+
 			Entity e = getEntity();
-			e.posX = x;
-			e.posY = y;
-			e.posZ = z;
-			e.worldObj = world;
-			if (e instanceof EntityLiving && world != null) {
-				((EntityLiving)e).playLivingSound();
+			if (e instanceof EntityLiving) {
+				e.posX = x;
+				e.posY = y;
+				e.posZ = z;
+
+				synchronized (e) {
+					e.worldObj = world;
+					((EntityLiving)e).playLivingSound();
+					e.worldObj = null;
+				}
 			}
 		}
 
