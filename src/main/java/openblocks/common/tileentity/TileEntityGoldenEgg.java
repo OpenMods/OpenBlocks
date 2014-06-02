@@ -11,6 +11,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
+import openmods.api.IBreakAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
 import openmods.sync.ISyncableObject;
@@ -23,7 +24,7 @@ import com.google.common.collect.Lists;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile {
+public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile, IBreakAwareTile {
 
 	private static final float SPEED_CHANGE_RATE = 0.1f;
 	private static final Random RANDOM = new Random();
@@ -260,6 +261,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {}
+
+	@Override
+	public void onBlockBroken() {
+		dropBlocks();
+	}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
