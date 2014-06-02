@@ -2,9 +2,6 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
-
-import org.lwjgl.opengl.GL11;
 
 public class ModelEgg extends ModelBase {
 	ModelRenderer egg;
@@ -34,10 +31,7 @@ public class ModelEgg extends ModelBase {
 		egg.addBox(-7F, 8, -7F, 14, 5, 14);
 	}
 
-	public void render(TileEntity te, float partialTicks, float scale) {
-		GL11.glPushMatrix();
-		GL11.glScalef(scale, scale, scale);
+	public void render() {
 		egg.render(0.0625f);
-		GL11.glPopMatrix();
 	}
 }
