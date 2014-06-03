@@ -20,6 +20,7 @@ public class BlockSponge extends OpenBlock {
 		super(Config.blockSpongeId, Material.sponge);
 		setStepSound(soundClothFootstep);
 		setTickRandomly(true);
+		setHarvestLevel("axe", 0);
 	}
 
 	@Override
