@@ -64,6 +64,7 @@ public class ItemPedometer extends Item {
 
 	protected void showPedometerData(EntityPlayer player, PedometerState state) {
 		PedometerData result = state.getData();
+		if (result == null) return;
 		player.sendChatToPlayer(ChatMessageComponent.createFromText(""));
 		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.xCoord, result.startingPoint.yCoord, result.startingPoint.zCoord));
 
