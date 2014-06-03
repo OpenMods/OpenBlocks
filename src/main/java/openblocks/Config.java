@@ -516,6 +516,7 @@ public class Config {
 		if (ConfigProcessing.canRegisterBlock(blockSpongeId)) {
 			OpenBlocks.Blocks.sponge = new BlockSponge();
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.sponge, Block.cloth, Item.slimeBall));
+			MinecraftForge.setBlockHarvestLevel(OpenBlocks.Blocks.sponge, "axe", 1);
 		}
 
 		if (ConfigProcessing.canRegisterBlock(blockBigButton)) {
