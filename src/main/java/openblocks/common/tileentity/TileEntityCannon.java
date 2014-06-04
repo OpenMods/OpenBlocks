@@ -93,7 +93,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 								item.motionY = motionY * currentSpeed;
 								item.motionZ = motionZ * currentSpeed;
 								worldObj.spawnEntityInWorld(item);
-								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:cannon", 0.2f, 1.0f);
+								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:cannon.activate", 0.2f, 1.0f);
 								break;
 							}
 						}

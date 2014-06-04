@@ -76,9 +76,9 @@ public class EntityCartographerRenderer extends Render {
 			compileCone();
 
 			GL11.glColor4f(1, 1, 1, 1);
-			
+
 			final TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-			
+
 			if (e.isMapping.getValue()) {
 				GL11.glTranslated(+BASE_SIZE, +BASE_SIZE, -CONE_END);
 				bindMapTexture(textureManager);

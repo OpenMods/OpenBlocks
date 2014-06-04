@@ -48,7 +48,7 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 			playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
-		pushOutOfBlocks(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
+		func_145771_j(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
 		moveEntity(this.motionX, this.motionY, this.motionZ);
 		float f = 0.98F;
 

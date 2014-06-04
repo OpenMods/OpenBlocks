@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
@@ -38,7 +39,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	}
 
 	private void dropItem() {
-		if (worldObj.isRemote) return;
+		if (!(worldObj instanceof WorldServer)) return;
 
 		for (int i = 0, l = inventory.getSizeInventory(); i < l; i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
@@ -48,7 +49,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 			if (stack.stackSize <= 0) {
 				inventory.setInventorySlotContents(i, null);
 			} else {
-				FakePlayerPool.instance.executeOnPlayer(worldObj, new PlayerUser() {
+				FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
 					@Override
 					public void usePlayer(OpenModsFakePlayer fakePlayer) {
 						fakePlayer.dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);

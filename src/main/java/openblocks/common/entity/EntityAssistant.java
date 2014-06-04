@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 import com.google.common.base.Strings;
 
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -30,7 +31,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 		super(world);
 		this.cachedOwner = new WeakReference<EntityPlayer>(owner);
 
-		if (owner != null) this.owner = owner.getEntityName();
+		if (owner != null) this.owner = owner.getCommandSenderName();
 	}
 
 	public EntityPlayer findOwner() {
@@ -106,12 +107,12 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		data.writeUTF(Strings.nullToEmpty(owner));
+		ByteBufUtils.writeUTF8String(data, Strings.nullToEmpty(owner));
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		owner = data.readUTF();
+		owner = ByteBufUtils.readUTF8String(data);
 	}
 
 	public void setSpawnPosition(Entity owner) {

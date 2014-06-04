@@ -57,6 +57,8 @@ public class ItemPedometer extends Item {
 					send(player, "openblocks.misc.pedometer.tracking_started");
 				}
 			}
+		} else {
+			world.playSoundAtEntity(player, "openblocks:pedometer.use", 1F, 1F);
 		}
 		return stack;
 	}

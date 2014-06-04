@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -108,7 +107,8 @@ public class EntityGoldenEye extends EntitySmoothMove {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean isInRangeToRenderVec3D(Vec3 vec) {
+	public boolean isInRangeToRender3d(double x, double y, double z) {
 		return true;
 	}
+
 }

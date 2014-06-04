@@ -12,6 +12,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
+
+import com.google.common.base.Strings;
+
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -78,8 +82,8 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setAttribute(10.0D);
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setAttribute(0.3D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -122,12 +126,12 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		data.writeUTF(owner);
+		ByteBufUtils.writeUTF8String(data, Strings.nullToEmpty(owner));
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		owner = data.readUTF();
+		owner = ByteBufUtils.readUTF8String(data);
 	}
 
 	@Override

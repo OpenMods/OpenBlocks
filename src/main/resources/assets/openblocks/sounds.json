@@ -1,0 +1,132 @@
+{
+    "elevator.activate": {
+        "category": "block",
+        "sounds": [
+            "teleport"
+        ]
+    },
+    "cannon.activate": {
+        "category": "block",
+        "sounds": [
+            "cannon"
+        ]
+    },
+    "radio.activate": {
+        "category": "block",
+        "sounds": [
+            "radio"
+        ]
+    },
+    "bottler.signal": {
+        "category": "block",
+        "sounds": [
+            "fill"
+        ]
+    },
+    "crayon.place": {
+        "category": "block",
+        "sounds": [
+            "draw1",
+            "draw2",
+            "draw3",
+            "draw4"
+        ]
+    },
+    "target.open": {
+        "category": "block",
+        "sounds": [
+            "open"
+        ]
+    },
+    "target.close": {
+        "category": "block",
+        "sounds": [
+            "close"
+        ]
+    },
+    "beartrap.open": {
+        "category": "block",
+        "sounds": [
+            "beartrapopen"
+        ]
+    },
+    "beartrap.close": {
+        "category": "block",
+        "sounds": [
+            "beartrapclose",
+            "beartrapcloseb"
+        ]
+    },
+
+    "luggage.eat.item": {
+        "category": "entity",
+        "sounds": [
+            "chomp.ogg"
+        ]
+    },
+    "luggage.eat.food": {
+        "category": "entity",
+        "sounds": [
+            "slowpokenom"
+        ]
+    },
+    "luggage.walk": {
+        "category": "entity",
+        "sounds": [
+            "feet"
+        ]
+    },
+
+    "slimalyzer.signal": {
+        "category": "player",
+        "sounds": [
+            "beep"
+        ]
+    },
+    "pedometer.use": {
+        "category": "player",
+        "sounds": [
+            "beep"
+        ]
+    },
+    "squeegee.use": {
+        "category": "player",
+        "sounds": [
+            "wipe"
+        ]
+    },
+    "best.feature.ever.fart": {
+        "category": "player",
+        "sounds": [
+            "fart1",
+            "fart2",
+            "fart3",
+            "fart4"
+        ]
+    },
+
+    "annoying.mosquito": {
+        "category": "master",
+        "sounds": [
+            "mosquito"
+        ]
+    },
+    "annoying.alarmclock": {
+        "category": "master",
+        "sounds": [
+            "alarmclock"
+        ]
+    },
+    "annoying.vibrate": {
+        "category": "master",
+        "sounds": [
+            "vibrate"
+        ]
+    },
+    "unused": {
+        "category": "master",
+        "sounds": [
+            "mortar"
+        ]
+    }
+]

@@ -5,6 +5,9 @@ import java.util.Map;
 
 import net.minecraft.village.Village;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
+import openperipheral.api.IPeripheralAdapter;
+import openperipheral.api.LuaMethod;
+import openperipheral.api.LuaType;
 
 import com.google.common.collect.Maps;
 
@@ -20,7 +23,7 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 	public Map<?, ?> getVillages(TileEntityVillageHighlighter vh) {
 		Map<Integer, Object> map = Maps.newHashMap();
 		int i = 1;
-		for (Village village : (List<Village>)vh.worldObj.villageCollectionObj.getVillageList()) {
+		for (Village village : (List<Village>)vh.getWorldObj().villageCollectionObj.getVillageList()) {
 			if (village.isInRange(vh.xCoord, vh.yCoord, vh.zCoord)) {
 				Map<String, Object> villageMap = Maps.newHashMap();
 				villageMap.put("x", village.getCenter().posX - vh.xCoord);

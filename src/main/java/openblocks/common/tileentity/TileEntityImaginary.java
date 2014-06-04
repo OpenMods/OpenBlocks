@@ -11,13 +11,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.item.ItemImaginationGlasses;
 import openmods.OpenMods;
+import openmods.tileentity.SimpleNetTileEntity;
 
 import com.google.common.base.Preconditions;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityImaginary extends Packet132TileEntity {
+public class TileEntityImaginary extends SimpleNetTileEntity {
 
 	public static final double PANEL_HEIGHT = 0.1;
 

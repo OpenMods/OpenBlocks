@@ -120,8 +120,8 @@ public class ItemCraneControl extends Item {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack itemstack, Block block, int metadata) {
-		return 0;
+	public boolean func_150897_b(Block block) {
+		return false;
 	}
 
 }

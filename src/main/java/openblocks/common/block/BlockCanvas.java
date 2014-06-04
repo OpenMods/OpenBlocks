@@ -98,7 +98,7 @@ public class BlockCanvas extends OpenBlock {
 	public static void replaceBlock(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		
+
 		if (block.getMaterial() == Material.glass) {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.canvasGlass);
 		} else {

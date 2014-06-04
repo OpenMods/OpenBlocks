@@ -1,6 +1,7 @@
 package openblocks.integration;
 
 import openblocks.common.tileentity.TileEntityDonationStation;
+import openperipheral.api.*;
 
 public class AdapterDonationStation implements IPeripheralAdapter {
 

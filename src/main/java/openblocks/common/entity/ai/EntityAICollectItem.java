@@ -75,19 +75,16 @@ public class EntityAICollectItem extends EntityAIBase {
 	public void updateTask() {
 		super.updateTask();
 		if (!luggage.worldObj.isRemote) {
-			if (targetItem != null
-					&& luggage.getDistanceToEntity(targetItem) < 1.0) {
+			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
 				int preEatSize = stack.stackSize;
 				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
 				// Check that the size changed
 				if (preEatSize != stack.stackSize) {
 					if (luggage.lastSound > 15) {
-						if (stack.getItem() instanceof ItemFood) {
-							luggage.playSound("openblocks:slowpokenom", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
-						} else {
-							luggage.playSound("openblocks:chomp", 0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
-						}
+						boolean isFood = stack.getItem() instanceof ItemFood;
+						luggage.playSound(isFood? "openblocks:luggage.eat.food" : "openblocks:luggage.eat.item",
+								0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						luggage.lastSound = 0;
 					}
 					if (stack.stackSize == 0) {

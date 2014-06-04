@@ -26,7 +26,7 @@ import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.*;
 import openblocks.events.EventTypes;
 import openblocks.integration.ModuleAdapters;
-import openblocks.integration.cc16.ModuleTurtlesCC16;
+import openblocks.integration.ModuleTurtles;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
@@ -278,9 +278,6 @@ public class OpenBlocks {
 		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
 		public static ItemInfoBook infoBook;
 
-		@RegisterItem(name = "wallpaper")
-		public static ItemWallpaper wallpaper;
-
 		@RegisterItem(name = "devnull")
 		public static ItemDevNull devNull;
 
@@ -402,7 +399,7 @@ public class OpenBlocks {
 
 		Integration.addModule(new ModuleAdapters());
 		// order significant - should always use newer API
-		Integration.addModule(new ModuleTurtlesCC16());
+		Integration.addModule(new ModuleTurtles());
 
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());

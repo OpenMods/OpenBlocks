@@ -3,6 +3,7 @@ package openblocks.integration;
 import static openmods.integration.Conditions.modLoaded;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
+import openperipheral.api.OpenPeripheralAPI;
 
 public class ModuleAdapters extends IntegrationModule {
 

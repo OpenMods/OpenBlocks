@@ -24,7 +24,7 @@ public class MagnetWhitelists {
 		public final int x;
 		public final int y;
 		public final int z;
-		
+
 		public BlockCoords(Block block, World world, int x, int y, int z) {
 			this.block = block;
 			this.world = world;
@@ -33,7 +33,7 @@ public class MagnetWhitelists {
 			this.z = z;
 		}
 	}
-	
+
 	private MagnetWhitelists() {}
 
 	public final ObjectTester<Entity> entityWhitelist = ObjectTester.create();
@@ -51,7 +51,6 @@ public class MagnetWhitelists {
 			tester.addTester(new ClassTester<T>(cls));
 		}
 
-		@SuppressWarnings("unchecked")
 		public void addClassNames(Class<? extends T>... cls) {
 			tester.addTester(new ClassNameTester<T>().addClasses(cls));
 		}
@@ -80,7 +79,7 @@ public class MagnetWhitelists {
 			super(tester);
 		}
 	}
-	
+
 	public static ITester<BlockCoords> createBlockIdentityTester(final Block template) {
 		return new ITester<BlockCoords>() {
 			@Override
@@ -89,7 +88,7 @@ public class MagnetWhitelists {
 			}
 		};
 	}
-	
+
 	public static ITester<BlockCoords> createBlockClassTester(final Class<? extends Block> cls) {
 		return new ITester<BlockCoords>() {
 			@Override
@@ -128,17 +127,17 @@ public class MagnetWhitelists {
 		MinecraftForge.EVENT_BUS.post(new BlockRegisterEvent(blockWhitelist));
 
 		tileEntityWhitelist
-			.addTester(new ClassTester<TileEntity>(TileEntityBeacon.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityBrewingStand.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityChest.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityCommandBlock.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityDispenser.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityEnchantmentTable.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityEnderChest.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityFurnace.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityHopper.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityNote.class))
-			.addTester(new ClassTester<TileEntity>(TileEntityJukebox.class));
+				.addTester(new ClassTester<TileEntity>(TileEntityBeacon.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityBrewingStand.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityChest.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityCommandBlock.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityDispenser.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityEnchantmentTable.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityEnderChest.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityFurnace.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityHopper.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityNote.class))
+				.addTester(new ClassTester<TileEntity>(TileEntityJukebox.class));
 	}
 
 	public boolean testBlock(World world, int x, int y, int z) {

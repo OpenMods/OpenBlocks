@@ -8,6 +8,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
@@ -80,10 +81,10 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	public void updateTask() {
 		super.updateTask();
 		final World world = entity.worldObj;
-		if (!world.isRemote && blockCoord != null && canHarvestBlock(blockCoord)) {
+		if ((world instanceof WorldServer) && blockCoord != null && canHarvestBlock(blockCoord)) {
 			if (entity.getDistance(0.5 + blockCoord.x, 0.5 + blockCoord.y, 0.5 + blockCoord.z) < 1.0) {
 
-				FakePlayerPool.instance.executeOnPlayer(world, new PlayerUser() {
+				FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new PlayerUser() {
 					@Override
 					public void usePlayer(OpenModsFakePlayer fakePlayer) {
 						fakePlayer.inventory.currentItem = 0;

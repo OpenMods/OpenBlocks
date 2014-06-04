@@ -31,11 +31,9 @@ public class BlockImaginary extends OpenBlock {
 	public IIcon textureCrayonHalfPanel;
 
 	public static final SoundType drawingSounds = new SoundType("cloth", 0.5f, 1.0f) {
-		
-		// TODO verify
 		@Override
 		public String func_150496_b() {
-			return "openblocks:draw";
+			return "openblocks:crayon.place";
 		}
 	};
 
@@ -121,7 +119,7 @@ public class BlockImaginary extends OpenBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune) {
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		return Lists.newArrayList();
 	}
 

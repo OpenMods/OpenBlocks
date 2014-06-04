@@ -42,7 +42,7 @@ public class ItemSlimalyzer extends Item {
 				stack.setItemDamage(chunk.getRandomWithSeed(987234911L).nextInt(10) == 0? 1 : 0);
 				if (previousDamage != stack.getItemDamage()
 						&& previousDamage == 0) {
-					world.playSoundAtEntity(entity, "openblocks:beep", 1F, 1F);
+					world.playSoundAtEntity(entity, "openblocks:slimalyzer.signal", 1F, 1F);
 				}
 			} else {
 				stack.setItemDamage(0);

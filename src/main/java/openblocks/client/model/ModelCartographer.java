@@ -45,9 +45,7 @@ public class ModelCartographer extends ModelBase {
 			GL11.glScalef(SCALE * 3, SCALE * 3, SCALE);
 
 			Tessellator tes = new Tessellator();
-			tes.xOffset = -0.5;
-			tes.zOffset = 0.25f;
-			tes.yOffset = -0.5;
+			tes.setTranslation(-0.5, 0.25, -0.5);
 
 			final IIcon icon = Items.ender_eye.getIconFromDamage(0);
 			ItemRenderer.renderItemIn2D(

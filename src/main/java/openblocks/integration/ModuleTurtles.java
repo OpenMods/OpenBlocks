@@ -1,16 +1,18 @@
-package openblocks.integration.cc16;
+package openblocks.integration;
 
 import static openmods.conditions.Conditions.all;
 import static openmods.integration.Conditions.classExists;
 import static openmods.integration.Conditions.modLoaded;
 import net.minecraftforge.common.MinecraftForge;
 import openmods.Mods;
-import openmods.OpenMods;
 import openmods.integration.IntegrationModule;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import dan200.computercraft.api.ComputerCraftAPI;
 
-public class ModuleTurtlesCC16 extends IntegrationModule {
+public class ModuleTurtles extends IntegrationModule {
 
-	public ModuleTurtlesCC16() {
+	public ModuleTurtles() {
 		super(all(
 				modLoaded(Mods.OPENPERIPHERALCORE),
 				modLoaded(Mods.COMPUTERCRAFT),
@@ -31,7 +33,7 @@ public class ModuleTurtlesCC16 extends IntegrationModule {
 		private static void load() {
 			final MagnetTurtleUpgrade magnetUpgrade = new MagnetTurtleUpgrade();
 			ComputerCraftAPI.registerTurtleUpgrade(magnetUpgrade);
-			if (!OpenMods.proxy.isServerOnly()) MinecraftForge.EVENT_BUS.register(magnetUpgrade);
+			if (FMLCommonHandler.instance().getSide() == Side.CLIENT) MinecraftForge.EVENT_BUS.register(magnetUpgrade);
 		}
 	}
 

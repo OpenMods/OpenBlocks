@@ -1,6 +1,7 @@
 package openblocks.integration;
 
 import openblocks.common.tileentity.TileEntityCannon;
+import openperipheral.api.*;
 
 public class AdapterCannon implements IPeripheralAdapter {
 

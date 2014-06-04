@@ -13,6 +13,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemHangGlider;
+
+import com.google.common.base.Strings;
+
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -181,17 +185,13 @@ public class EntityHangGlider extends Entity implements
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		if (player != null) {
-			data.writeUTF(player.username);
-		} else {
-			data.writeUTF("[none]");
-		}
+		ByteBufUtils.writeUTF8String(data, player != null? player.getCommandSenderName() : "");
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		String username = data.readUTF();
-		if ("[none]".equals(username)) {
+		String username = ByteBufUtils.readUTF8String(data);
+		if (Strings.isNullOrEmpty(username)) {
 			setDead();
 		} else {
 			player = worldObj.getPlayerEntityByName(username);

@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openmods.utils.BlockNotifyFlags;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -52,7 +51,7 @@ public class ItemSpongeOnAStick extends Item {
 						Material material = block.getMaterial();
 						if (material.isLiquid()) {
 							hitLava |= material == Material.lava;
-							//TODO: check
+							// TODO: check
 							world.setBlockToAir(xCoord + x, yCoord + y, zCoord + z);
 							if (++damage >= getMaxDamage()) break;
 						}

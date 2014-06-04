@@ -47,41 +47,38 @@ public class BlockLadder extends BlockTrapDoor {
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
-		setBlockBoundsForBlockRender(par1IBlockAccess.getBlockMetadata(par2, par3, par4));
-	}
+	public void func_150117_b(int metadata) {
+		float f = 0.1875F;
 
-	@Override
-	public void setBlockBoundsForBlockRender(int par1) {
-		float f = 0.125F;
+		final boolean isOpen = (metadata & 4) != 0;
+		if (isOpen) {
+			switch (metadata & 3) {
+				case 0:
+					setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
+					break;
 
-		if ((par1 & 8) != 0) {
-			setBlockBounds(0.0F, 1.0F - f, 0.0F, 1.0F, 1.0F, 1.0F);
+				case 1:
+					setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
+					break;
+
+				case 2:
+					setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+					break;
+
+				case 3:
+				default:
+					setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
+					break;
+			}
 		} else {
-			setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, f, 1.0F);
-		}
-
-		if (isTrapdoorOpen(par1)) {
-			if ((par1 & 3) == 0) {
-				setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-			}
-
-			if ((par1 & 3) == 1) {
-				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-			}
-
-			if ((par1 & 3) == 2) {
-				setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-			}
-
-			if ((par1 & 3) == 3) {
-				setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
-			}
+			boolean isOnTop = (metadata & 8) != 0;
+			if (isOnTop) setBlockBounds(0.0F, 1.0F - f, 0.0F, 1.0F, 1.0F, 1.0F);
+			else setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, f, 1.0F);
 		}
 	}
 
 	@Override
-	public boolean isLadder(World world, int x, int y, int z, EntityLivingBase entity) {
+	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}
 

@@ -50,7 +50,7 @@ public class TileEntityElevator extends OpenTileEntity {
 							canTeleportPlayer(xCoord, y + 2, zCoord)) return y;
 				}
 			}
-			
+
 			ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
 			switch (action) {
 				case ABORT:
@@ -88,7 +88,7 @@ public class TileEntityElevator extends OpenTileEntity {
 			}
 			if (doTeleport) {
 				player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
-				worldObj.playSoundAtEntity(player, "openblocks:teleport", 1F, 1F);
+				worldObj.playSoundAtEntity(player, "openblocks:elevator.activate", 1F, 1F);
 			}
 		}
 	}

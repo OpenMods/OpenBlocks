@@ -46,7 +46,7 @@ public class ItemCraneBackpack extends ItemArmor {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return TEXTURE_CRANE; //TODO: chheck
+		return TEXTURE_CRANE; // TODO: chheck
 	}
 
 	private static boolean isPointInBlock(World world, EntityPlayer player, double radius) {
@@ -61,7 +61,7 @@ public class ItemCraneBackpack extends ItemArmor {
 						/ 180);
 
 		AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
-		return !world.getCollidingBoundingBoxes(player, aabb).isEmpty(); //TODO: check that passing in player is ok
+		return !world.getCollidingBoundingBoxes(player, aabb).isEmpty(); // TODO: check that passing in player is ok
 	}
 
 	@Override

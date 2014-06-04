@@ -42,39 +42,32 @@ public class EntityItemProjectile extends EntityItem {
 
 		super.onEntityUpdate();
 
-		if (this.delayBeforeCanPickup > 0) {
-			--this.delayBeforeCanPickup;
-		}
+		if (delayBeforeCanPickup > 0) --delayBeforeCanPickup;
 
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		this.motionY -= 0.03999999910593033D;
-		this.noClip = pushOutOfBlocks(this.posX,
-				(this.boundingBox.minY + this.boundingBox.maxY) / 2.0D,
-				this.posZ);
-		moveEntity(this.motionX, this.motionY, this.motionZ);
-		boolean flag = (int)this.prevPosX != (int)this.posX
-				|| (int)this.prevPosY != (int)this.posY
-				|| (int)this.prevPosZ != (int)this.posZ;
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
+		motionY -= 0.03999999910593033D;
+		noClip = func_145771_j(posX, (boundingBox.minY + boundingBox.maxY) / 2.0D, posZ);
+		moveEntity(motionX, motionY, motionZ);
+		boolean flag = (int)prevPosX != (int)posX
+				|| (int)prevPosY != (int)posY
+				|| (int)prevPosZ != (int)posZ;
 
-		if (flag || this.ticksExisted % 25 == 0) {
+		if (flag || ticksExisted % 25 == 0) {
 			Block block = worldObj.getBlock(
-					MathHelper.floor_double(this.posX),
-					MathHelper.floor_double(this.posY),
-					MathHelper.floor_double(this.posZ));
-			
+					MathHelper.floor_double(posX),
+					MathHelper.floor_double(posY),
+					MathHelper.floor_double(posZ));
+
 			if (block.getMaterial() == Material.lava) {
-				this.motionY = 0.20000000298023224D;
-				this.motionX = (this.rand.nextFloat() - this.rand
-						.nextFloat()) * 0.2F;
-				this.motionZ = (this.rand.nextFloat() - this.rand
-						.nextFloat()) * 0.2F;
-				playSound("random.fizz", 0.4F,
-						2.0F + this.rand.nextFloat() * 0.4F);
+				motionY = 0.20000000298023224D;
+				motionX = (rand.nextFloat() - rand.nextFloat()) * 0.2F;
+				motionZ = (rand.nextFloat() - rand.nextFloat()) * 0.2F;
+				playSound("random.fizz", 0.4F, 2.0F + rand.nextFloat() * 0.4F);
 			}
 
-			if (!this.worldObj.isRemote) {
+			if (!worldObj.isRemote) {
 				searchForOtherItemsNearby();
 			}
 		}
@@ -83,32 +76,32 @@ public class EntityItemProjectile extends EntityItem {
 		float f = 1F;
 
 		// Keep ground friction
-		if (this.onGround) {
+		if (onGround) {
 			f = 0.58800006F;
 			Block block = worldObj.getBlock(
-					MathHelper.floor_double(this.posX),
-					MathHelper.floor_double(this.boundingBox.minY) - 1,
-					MathHelper.floor_double(this.posZ));
+					MathHelper.floor_double(posX),
+					MathHelper.floor_double(boundingBox.minY) - 1,
+					MathHelper.floor_double(posZ));
 
 			if (block != null) {
 				f = block.slipperiness * 0.98F;
 			}
 		}
 
-		this.motionX *= f;
+		motionX *= f;
 		// Y would there be Y resistance :D
-		// this.motionY *= 0.9800000190734863D;
-		this.motionZ *= f;
+		// motionY *= 0.9800000190734863D;
+		motionZ *= f;
 
-		if (this.onGround) {
-			this.motionY *= -0.5D;
+		if (onGround) {
+			motionY *= -0.5D;
 		}
 
-		++this.age;
+		++age;
 
 		ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
 
-		if (!this.worldObj.isRemote && this.age >= lifespan) {
+		if (!worldObj.isRemote && age >= lifespan) {
 			if (item != null) {
 				ItemExpireEvent event = new ItemExpireEvent(this,
 						(item.getItem() == null? 6000 : item.getItem()
@@ -126,7 +119,7 @@ public class EntityItemProjectile extends EntityItem {
 		if (item != null && item.stackSize <= 0) {
 			setDead();
 		}
-		if (!worldObj.isRemote && this.onGround && !isDead) {
+		if (!worldObj.isRemote && onGround && !isDead) {
 			EntityItem standardEntity = new EntityItem(worldObj);
 			NBTTagCompound transferTag = new NBTTagCompound();
 			writeToNBT(transferTag);

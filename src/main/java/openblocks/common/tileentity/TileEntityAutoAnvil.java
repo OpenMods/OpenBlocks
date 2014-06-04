@@ -251,9 +251,9 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 		Item inputItem = inputStack.getItem();
 		Item modifierItem = modifierStack.getItem();
-		
+
 		if (modifierItem == null || inputItem == null) return 0;
-		
+
 		int maximumCost = 0;
 		int i = 0;
 		byte b0 = 0;
@@ -268,7 +268,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		final boolean isEnchantedBook = modifierStack.getItem() == Items.enchanted_book
 				&& Items.enchanted_book.func_92110_g(modifierStack).tagCount() > 0;
 
-		
 		if (inputStackCopy.isItemStackDamageable()
 				&& inputItem.getIsRepairable(inputStack, modifierStack)) {
 			int l = Math.min(inputStackCopy.getItemDamageForDisplay(), inputStackCopy.getMaxDamage() / 4);

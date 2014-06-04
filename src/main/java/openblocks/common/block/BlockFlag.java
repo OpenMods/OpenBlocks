@@ -85,7 +85,7 @@ public class BlockFlag extends OpenBlock {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		if (side ==  ForgeDirection.DOWN) {
+		if (side == ForgeDirection.DOWN) {
 			Block belowBlock = world.getBlock(x, y - 1, z);
 			if (belowBlock != null) {
 				if (belowBlock == Blocks.fence) {

@@ -118,7 +118,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 				progress.increase();
 			} else {
 				// this happens when the progress has completed
-				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:fill", .5f, .8f);
+				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:bottler.signal", .5f, .8f);
 				inventory.decrStackSize(Slots.input.ordinal(), 1);
 				// drain the entire tank (it stores enough for 1 bottle)
 				tank.drain(tank.getFluidAmount(), true);

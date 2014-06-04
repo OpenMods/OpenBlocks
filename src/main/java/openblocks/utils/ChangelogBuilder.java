@@ -34,13 +34,12 @@ public class ChangelogBuilder {
 			BufferedReader in = new BufferedReader(new InputStreamReader(input));
 			try {
 
-				int pageNumber = 1;
 				StringBuilder pageInfo = new StringBuilder();
 				String line = null;
 
 				while ((line = in.readLine()) != null) {
 					if (line.equals("EOP")) {
-						bookPages.appendTag(new NBTTagString(Integer.toString(pageNumber++), pageInfo.toString()));
+						bookPages.appendTag(new NBTTagString(pageInfo.toString()));
 						pageInfo = new StringBuilder();
 					} else {
 						pageInfo.append(line);

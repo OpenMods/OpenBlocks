@@ -120,7 +120,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 				BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, newStack);
 			}
 		}
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks:open" : "openblocks:close", 0.5f, 1.0f);
+		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks:target.open" : "openblocks:target.close", 0.5f, 1.0f);
 
 		setEnabled(isPowered);
 		sync();

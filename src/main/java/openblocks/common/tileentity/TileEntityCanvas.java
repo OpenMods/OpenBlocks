@@ -18,10 +18,7 @@ import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ISpecialDrops;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableInt;
-import openmods.sync.SyncableIntArray;
-import openmods.sync.SyncableString;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockProperties;
@@ -81,7 +78,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	public void onSynced(Set<ISyncableObject> changes) {
-		worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord); //TODO: confirm
+		worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord); // TODO: confirm
 	}
 
 	public Layer getLayerForSide(int renderSide, int layerId) {
@@ -165,7 +162,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 			baseColors.setValue(side, 0xFFFFFF);
 		}
-		
+
 		if (isBlockUnpainted() && !paintedBlockId.getValue().isEmpty()) {
 			Block block = BlockProperties.getBlockByName(paintedBlockId.getValue());
 			if (block != null) {

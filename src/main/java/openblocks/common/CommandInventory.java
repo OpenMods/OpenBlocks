@@ -69,8 +69,8 @@ public class CommandInventory implements ICommand {
 			try {
 				File result = PlayerInventoryStore.instance.storePlayerInventory(player);
 				sender.addChatMessage(new ChatComponentTranslation(
-								"openblocks.misc.stored_inventory",
-								result.getAbsolutePath()));
+						"openblocks.misc.stored_inventory",
+						result.getAbsolutePath()));
 			} catch (Exception e) {
 				Log.warn(e, "Failed to store inventory, player %s, file %s", playerName);
 				throw new CommandException("openblocks.misc.cant_Store", playerName);

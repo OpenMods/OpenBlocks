@@ -45,8 +45,8 @@ public class BlockRopeLadder extends OpenBlock {
 	}
 
 	@Override
-	public int idDropped(int par1, Random par2Random, int par3) {
-		return -1;
+	public int quantityDropped(Random random) {
+		return 0;
 	}
 
 	@Override

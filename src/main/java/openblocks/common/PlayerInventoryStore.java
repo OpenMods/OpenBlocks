@@ -52,7 +52,7 @@ public class PlayerInventoryStore {
 		}
 	}
 
-	//TODO: check player.getDisplayName() (multiple instances)
+	// TODO: check player.getDisplayName() (multiple instances)
 	public File storePlayerInventory(EntityPlayer player) {
 		InventoryPlayer inv = player.inventory;
 		GenericInventory copy = new GenericInventory("tmp", false, inv.getSizeInventory());

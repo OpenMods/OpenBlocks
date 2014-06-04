@@ -3,6 +3,7 @@ package openblocks.enchantments.flimflams;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.S29PacketSoundEffect;
 import openblocks.api.IFlimFlamAction;
 import openmods.utils.CollectionUtils;
 
@@ -28,7 +29,7 @@ public class SoundFlimFlam implements IFlimFlamAction {
 	@Override
 	public boolean execute(EntityPlayerMP target) {
 		String sound = CollectionUtils.getRandom(sounds);
-		target.playerNetServerHandler.sendPacketToPlayer(new Packet62LevelSound(sound, target.posX, target.posY, target.posZ, 1, 1));
+		target.playerNetServerHandler.sendPacket(new S29PacketSoundEffect(sound, target.posX, target.posY, target.posZ, 1, 1));
 		return true;
 	}
 

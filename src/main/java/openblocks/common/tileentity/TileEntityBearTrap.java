@@ -67,7 +67,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20
 					&& entity instanceof EntityCreature) {
 				trappedEntityId.setValue(entity.getEntityId());
-				entity.worldObj.playSoundAtEntity(entity, worldObj.rand.nextBoolean()? "openblocks:beartrapclose" : "openblocks:beartrapcloseb", 0.5F, 1.0F);
+				entity.worldObj.playSoundAtEntity(entity, "openblocks:beartrap.close", 0.5F, 1.0F);
 				flags.set(Flags.isShut, true);
 			}
 		}

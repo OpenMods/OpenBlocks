@@ -71,7 +71,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 	@Override
 	public void init() {
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
-		MinecraftForge.EVENT_BUS.register(new SoundLoader());
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 

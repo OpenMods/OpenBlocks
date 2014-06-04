@@ -33,7 +33,7 @@ public class ItemSqueegee extends Item {
 			TileEntityCanvas canvas = (TileEntityCanvas)te;
 			if (player.isSneaking()) canvas.removePaint(TileEntityCanvas.ALL_SIDES);
 			else canvas.removePaint(side);
-			world.playSoundAtEntity(player, "openblocks:wipe", 1, 1);
+			world.playSoundAtEntity(player, "openblocks:squeegee.use", 1, 1);
 			return true;
 		}
 		return false;

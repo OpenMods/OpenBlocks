@@ -1,7 +1,7 @@
 package openblocks.common.entity;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -98,12 +98,12 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 				luggageItem.setTagCompound(tag);
 
 				String nameTag = getCustomNameTag();
-				if (!Strings.isNullOrEmpty(nameTag)) luggageItem.setItemName(nameTag);
+				if (!Strings.isNullOrEmpty(nameTag)) luggageItem.setStackDisplayName(nameTag);
 
 				BlockUtils.dropItemStackInWorld(worldObj, posX, posY, posZ, luggageItem);
 				setDead();
 			} else {
-				player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, entityId, 0, 0);
+				player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, getEntityId(), 0, 0);
 			}
 		}
 		return true;
@@ -114,8 +114,8 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	}
 
 	@Override
-	protected void playStepSound(int par1, int par2, int par3, int par4) {
-		playSound("openblocks:feet", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+	protected void func_145780_a(int x, int y, int z, Block block) {
+		playSound("openblocks:luggage.walk", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
 	}
 
 	@Override
@@ -160,10 +160,5 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	@Override
 	public double getMountedYOffset() {
 		return 0.825;
-	}
-
-	@Override
-	public Entity getOwner() {
-		return func_130012_q();
 	}
 }

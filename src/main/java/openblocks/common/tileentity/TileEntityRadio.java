@@ -125,7 +125,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	}
 
 	private void playStatic() {
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:radio", 1, 2f);
+		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:radio.activate", 1, 2f);
 	}
 
 	@Override

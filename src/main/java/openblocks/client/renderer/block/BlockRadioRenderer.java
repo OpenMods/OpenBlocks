@@ -35,16 +35,13 @@ public class BlockRadioRenderer implements IBlockRenderer<BlockRadio> {
 		ForgeDirection dir = ForgeDirection.getOrientation(meta);
 
 		Tessellator tes = Tessellator.instance;
-		double tx = tes.xOffset;
-		double ty = tes.yOffset;
-		double tz = tes.zOffset;
-		tes.setTranslation(x + tx, y + ty, z + tz);
+		tes.addTranslation(x, y, z);
 
 		Tessellator rotated = RotatedTessellator.wrap(tes, dir);
 		tes.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
 		renderRadio(block, rotated, te != null? te.getCrystalColor() : null);
 
-		tes.setTranslation(tx, ty, tz);
+		tes.addTranslation(-x, -y, -z);
 		return true;
 	}
 

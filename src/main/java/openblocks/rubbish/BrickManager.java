@@ -83,7 +83,7 @@ public class BrickManager {
 	public void onPlayerScared(PlayerActionEvent evt) {
 		if (evt.type == Type.BOO) {
 			EntityPlayer player = (EntityPlayer)evt.player;
-			player.worldObj.playSoundAtEntity(player, "openblocks:fart", 1, 1);
+			player.worldObj.playSoundAtEntity(player, "openblocks:best.feature.ever.fart", 1, 1);
 
 			if (canDropBrick(player)) {
 				EntityItem drop = createBrick(player);

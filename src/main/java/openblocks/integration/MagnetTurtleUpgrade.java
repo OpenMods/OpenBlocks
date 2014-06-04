@@ -1,17 +1,18 @@
-package openblocks.integration.cc16;
-
-import javax.swing.Icon;
+package openblocks.integration;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
-import openblocks.integration.TurtleIds;
+import openperipheral.api.IUpdateHandler;
+import openperipheral.api.cc16.ComputerCraftWrappers;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.turtle.*;
 
 public class MagnetTurtleUpgrade implements ITurtleUpgrade {
-	public Icon icon;
+	public IIcon icon;
 
 	@Override
 	public int getUpgradeID() {
@@ -19,8 +20,8 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	}
 
 	@Override
-	public String getAdjective() {
-		return StatCollector.translateToLocal("openblocks.turtle.magnet");
+	public String getUnlocalisedAdjective() {
+		return "openblocks.turtle.magnet";
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	}
 
 	@Override
-	public Icon getIcon(ITurtleAccess turtle, TurtleSide side) {
+	public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
 		return icon;
 	}
 
