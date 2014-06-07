@@ -39,7 +39,7 @@ public class BlockTrophy extends OpenBlock {
 	}
 
 	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result) {
+	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
 		TileEntityTrophy trophy = (te instanceof TileEntityTrophy)? (TileEntityTrophy)te : null;
 		result.add(getDroppedBlock(trophy));
 	}

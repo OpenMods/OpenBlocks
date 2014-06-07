@@ -23,7 +23,9 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 			if (tag.hasKey("entity")) {
 				String entityKey = tag.getString("entity");
 				Trophy trophyType = Trophy.valueOf(entityKey);
-				list.add(trophyType.getEntity().getTranslatedEntityName());
+
+				// TODO: verify
+				list.add(trophyType.getEntity().getCommandSenderName());
 			}
 		}
 	}

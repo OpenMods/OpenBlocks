@@ -36,7 +36,7 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result) {
+	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
 		if (te instanceof TileEntityPaintCan) {
 			TileEntityPaintCan can = (TileEntityPaintCan)te;
 			result.add(ItemPaintCan.createStack(can.getColor(), can.getAmount()));

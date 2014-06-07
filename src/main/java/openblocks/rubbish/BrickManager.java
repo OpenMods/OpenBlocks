@@ -81,8 +81,8 @@ public class BrickManager {
 
 	@SubscribeEvent
 	public void onPlayerScared(PlayerActionEvent evt) {
-		if (evt.type == Type.BOO) {
-			EntityPlayer player = (EntityPlayer)evt.player;
+		if (evt.type == Type.BOO && evt.sender != null) {
+			final EntityPlayer player = evt.sender;
 			player.worldObj.playSoundAtEntity(player, "openblocks:best.feature.ever.fart", 1, 1);
 
 			if (canDropBrick(player)) {

@@ -96,12 +96,13 @@ public class TileEntityElevator extends OpenTileEntity {
 	@Override
 	public void onEvent(TileEntityMessageEventPacket event) {
 		if (event instanceof ElevatorActionEvent) {
-			switch (((ElevatorActionEvent)event).type) {
+			final ElevatorActionEvent elevatorEvent = (ElevatorActionEvent)event;
+			if (elevatorEvent.sender != null) switch (elevatorEvent.type) {
 				case JUMP:
-					activate((EntityPlayer)event.player, ForgeDirection.UP);
+					activate(event.sender, ForgeDirection.UP);
 					break;
 				case SNEAK:
-					activate((EntityPlayer)event.player, ForgeDirection.DOWN);
+					activate(event.sender, ForgeDirection.DOWN);
 					break;
 			}
 		}

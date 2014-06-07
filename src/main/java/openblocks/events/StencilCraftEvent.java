@@ -10,6 +10,7 @@ import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 
 public class StencilCraftEvent extends TileEntityMessageEventPacket {
+	public static final IEventPacketType EVENT_TYPE = EventTypes.STENCIL_CRAFT;
 
 	private Stencil stencil;
 
@@ -33,10 +34,5 @@ public class StencilCraftEvent extends TileEntityMessageEventPacket {
 
 	public Stencil getStencil() {
 		return stencil;
-	}
-
-	@Override
-	public IEventPacketType getType() {
-		return EventTypes.STENCIL_CRAFT;
 	}
 }

@@ -9,6 +9,7 @@ import openmods.network.event.IEventPacketType;
 import openmods.utils.ByteUtils;
 
 public class PlayerActionEvent extends EventPacket {
+	public static final IEventPacketType EVENT_TYPE = EventTypes.PLAYER_ACTION;
 
 	public enum Type {
 		BOO
@@ -20,11 +21,6 @@ public class PlayerActionEvent extends EventPacket {
 
 	public PlayerActionEvent(Type type) {
 		this.type = type;
-	}
-
-	@Override
-	public IEventPacketType getType() {
-		return EventTypes.PLAYER_ACTION;
 	}
 
 	@Override

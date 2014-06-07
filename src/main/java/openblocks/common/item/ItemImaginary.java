@@ -291,18 +291,19 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public boolean hasContainerItem() {
+	public boolean hasContainerItem(ItemStack stack) {
 		return true;
 	}
 
 	@Override
-	public ItemStack getContainerItemStack(ItemStack stack) {
+	public ItemStack getContainerItem(ItemStack stack) {
+		NBTTagCompound tag = ItemUtils.getItemTag(stack);
+		float uses = getUses(tag) - CRAFTING_COST;
+		if (uses < 0) return null;
+
 		ItemStack copy = stack.copy();
-
-		NBTTagCompound tag = ItemUtils.getItemTag(copy);
-		float uses = Math.max(getUses(tag) - CRAFTING_COST, 0);
-		tag.setFloat(TAG_USES, uses);
-
+		NBTTagCompound copyTag = ItemUtils.getItemTag(copy);
+		copyTag.setFloat(TAG_USES, uses);
 		return copy;
 	}
 

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -21,7 +22,6 @@ import openmods.api.ISpecialDrops;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
-import openmods.utils.BlockProperties;
 import openmods.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ISpecialDrops {
@@ -31,7 +31,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public static final int[] ALL_SIDES = { 0, 1, 2, 3, 4, 5 };
 
 	/* Used for painting other blocks */
-	public SyncableString paintedBlockId;
+	public SyncableBlock paintedBlock;
 	public SyncableInt paintedBlockMeta;
 
 	private SyncableIntArray baseColors;
@@ -68,7 +68,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 				stencilsDown, stencilsUp, stencilsNorth, stencilsSouth, stencilsWest, stencilsEast
 		};
 		baseColors = new SyncableIntArray(new int[] { 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF });
-		paintedBlockId = new SyncableString();
+		paintedBlock = new SyncableBlock();
 		paintedBlockMeta = new SyncableInt(0);
 	}
 
@@ -106,9 +106,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	private IIcon getBaseTexture(int side) {
-		if (paintedBlockId.getValue().isEmpty()) return OpenBlocks.Blocks.canvas.baseIcon;
-		Block block = BlockProperties.getBlockByName(paintedBlockId.getValue());
-		if (block == null) return OpenBlocks.Blocks.canvas.baseIcon;
+		Block block = paintedBlock.getValue();
+		if (block == Blocks.air) return OpenBlocks.Blocks.canvas.baseIcon;
 		return block.getIcon(side, paintedBlockMeta.getValue());
 	}
 
@@ -163,11 +162,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			baseColors.setValue(side, 0xFFFFFF);
 		}
 
-		if (isBlockUnpainted() && !paintedBlockId.getValue().isEmpty()) {
-			Block block = BlockProperties.getBlockByName(paintedBlockId.getValue());
-			if (block != null) {
-				worldObj.setBlock(xCoord, yCoord, zCoord, block, paintedBlockMeta.getValue(), BlockNotifyFlags.SEND_TO_CLIENTS);
-			}
+		if (isBlockUnpainted() && paintedBlock.containsValidBlock()) {
+			Block block = paintedBlock.getValue();
+			worldObj.setBlock(xCoord, yCoord, zCoord, block, paintedBlockMeta.getValue(), BlockNotifyFlags.SEND_TO_CLIENTS);
 		}
 
 		if (!worldObj.isRemote) sync();
@@ -215,10 +212,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void addDrops(List<ItemStack> drops) {
-		if (paintedBlockId.getValue().isEmpty()) {
-			drops.add(new ItemStack(getBlockType()));
-		}
+	public void addDrops(List<ItemStack> drops, int fortune) {
 		for (SyncableBlockLayers sideLayers : allSides) {
 			if (sideLayers.isLastLayerStencil()) {
 				Stencil stencil = sideLayers.getTopStencil();

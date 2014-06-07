@@ -107,20 +107,23 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		final boolean canPlay = hasUrl && hasPower;
 		if (changes.contains(isPowered) || changes.contains(url)) {
 			if (worldObj.isRemote) {
-				if (canPlay) {
-					try {
-						soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.getValue());
-						OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
-					} catch (RadioException e) {
-						Minecraft.getMinecraft().thePlayer.addChatMessage(e.getMessage());
-						soundId = null;
-					}
-				} else killMusic();
+				if (canPlay) startPlayClient(urlValue);
+				else killMusic();
 			} else if (canPlay) playStatic();
 		} else if (worldObj.isRemote && changes.contains(volume)) {
 			if (soundId != null) {
 				RadioManager.instance.setVolume(soundId, volume.getValue());
 			}
+		}
+	}
+
+	private void startPlayClient(final String urlValue) {
+		try {
+			soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.getValue());
+			OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
+		} catch (RadioException e) {
+			Minecraft.getMinecraft().thePlayer.sendChatMessage(e.getMessage());
+			soundId = null;
 		}
 	}
 

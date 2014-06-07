@@ -49,7 +49,7 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result) {
+	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
 		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
 		if (!(te instanceof TileEntityTank)) return;
 		TileEntityTank tank = (TileEntityTank)te;

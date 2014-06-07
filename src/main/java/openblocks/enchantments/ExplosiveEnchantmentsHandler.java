@@ -3,6 +3,7 @@ package openblocks.enchantments;
 import java.util.*;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -172,12 +173,10 @@ public class ExplosiveEnchantmentsHandler {
 				// Loved By Everyone...
 				// Possibly Buggy
 				// TEEERRRRRIIIIBLE HAAAAAACK!
-				Minecraft.getMinecraft().gameSettings.keyBindJump.pressed = true;
+				// TODO: maybe this version?
+				KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), true);
 				// no, seriously, can't find better way to make jump
 				jumpBoosts.put(player, boost);
-			} else if (e instanceof EntityPlayerMP) {
-				EntityPlayerMP serverPlayer = (EntityPlayerMP)player;
-				serverPlayer.playerNetServerHandler.ticksForFloatKick = 0;
 			} else return;
 
 			evt.setCanceled(true);
@@ -192,7 +191,7 @@ public class ExplosiveEnchantmentsHandler {
 			boost.modifyVelocity(entity);
 
 			if (OpenMods.proxy.isClientPlayer(entity)) {
-				Minecraft.getMinecraft().gameSettings.keyBindJump.pressed = false;
+				KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), false);
 			}
 		}
 	}

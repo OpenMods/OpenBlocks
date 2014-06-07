@@ -10,6 +10,7 @@ import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 
 public class ElevatorActionEvent extends TileEntityMessageEventPacket {
+	public static final IEventPacketType EVENT_TYPE = EventTypes.PLAYER_MOVEMENT;
 
 	public ElevatorActionEvent() {}
 
@@ -30,10 +31,4 @@ public class ElevatorActionEvent extends TileEntityMessageEventPacket {
 	protected void writePayload(DataOutput output) {
 		ByteUtils.writeVLI(output, type.ordinal());
 	}
-
-	@Override
-	public IEventPacketType getType() {
-		return EventTypes.PLAYER_MOVEMENT;
-	}
-
 }

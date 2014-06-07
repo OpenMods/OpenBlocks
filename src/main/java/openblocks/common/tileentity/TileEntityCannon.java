@@ -9,7 +9,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
@@ -86,7 +85,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
 							if (stack != null) {
 								getMotionFromAngles();
-								new TileEntityMessageEventPacket(this).sendToWatchers((WorldServer)worldObj);
+								new TileEntityMessageEventPacket(this).sendToWatchers();
 								EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
 								item.motionX = motionX * currentSpeed;

@@ -57,7 +57,7 @@ public class ItemTunedCrystal extends Item {
 		ItemStack result = new ItemStack(this, 1, color.vanillaId);
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 		tag.setString(TAG_URL, url);
-		if (!Strings.isNullOrEmpty(name)) result.setItemName(name);
+		if (!Strings.isNullOrEmpty(name)) result.setStackDisplayName(name);
 		if (hidden) tag.setBoolean(TAG_HIDDEN, true);
 		return result;
 	}

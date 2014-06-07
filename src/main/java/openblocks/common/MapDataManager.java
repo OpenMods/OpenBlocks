@@ -1,7 +1,5 @@
 package openblocks.common;
 
-import ibxm.Player;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -10,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -53,27 +50,17 @@ public class MapDataManager {
 	}
 
 	public static class MapDataRequestEvent extends MapIdRequest {
-		@Override
-		public IEventPacketType getType() {
-			return EventTypes.MAP_DATA_REQUEST;
-		}
+		public static final IEventPacketType EVENT_TYPE = EventTypes.MAP_DATA_REQUEST;
 	}
 
 	public static class MapUpdatesEvent extends MapIdRequest {
-		@Override
-		public IEventPacketType getType() {
-			return EventTypes.MAP_UPDATES;
-		}
+		public static final IEventPacketType EVENT_TYPE = EventTypes.MAP_UPDATES;
 	}
 
 	public static class MapDataResponseEvent extends EventPacket {
+		public static final IEventPacketType EVENT_TYPE = EventTypes.MAP_DATA_RESPONSE;
 
 		public Map<Integer, HeightMapData> maps = Maps.newHashMap();
-
-		@Override
-		public IEventPacketType getType() {
-			return EventTypes.MAP_DATA_RESPONSE;
-		}
 
 		@Override
 		protected void readFromStream(DataInput input) throws IOException {
@@ -131,13 +118,9 @@ public class MapDataManager {
 		world.setItemData(data.mapName, data);
 	}
 
-	private static World getPlayerWorld(Player player) {
-		return ((EntityPlayer)player).worldObj;
-	}
-
 	@SubscribeEvent
 	public void onMapDataRequest(MapDataRequestEvent evt) {
-		World world = getPlayerWorld(evt.player);
+		World world = evt.sender.worldObj;
 
 		MapDataResponseEvent response = new MapDataResponseEvent();
 		for (Integer mapId : evt.mapIds) {
@@ -145,7 +128,7 @@ public class MapDataManager {
 			if (map != null) {
 				response.maps.put(mapId, map);
 			} else {
-				Log.info("Player %s asked for non-existent map %d", evt.player, mapId);
+				Log.info("Player %s asked for non-existent map %d", evt.sender, mapId);
 			}
 		}
 
@@ -154,7 +137,7 @@ public class MapDataManager {
 
 	@SubscribeEvent
 	public void onMapDataResponse(MapDataResponseEvent evt) {
-		World world = getPlayerWorld(evt.player);
+		World world = evt.sender.worldObj;
 
 		for (Map.Entry<Integer, HeightMapData> e : evt.maps.entrySet()) {
 			HeightMapData mapData = e.getValue();
@@ -164,7 +147,7 @@ public class MapDataManager {
 
 	@SubscribeEvent
 	public void onMapUpdates(MapUpdatesEvent evt) {
-		World world = getPlayerWorld(evt.player);
+		World world = evt.sender.worldObj;
 
 		Set<Integer> mapsToUpdate = Sets.newHashSet();
 		for (Integer mapId : evt.mapIds) {
@@ -179,7 +162,6 @@ public class MapDataManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void sendUpdates(MinecraftServer server) {
 		if (mapsToUpdate.isEmpty()) return;
 
@@ -187,7 +169,7 @@ public class MapDataManager {
 		evt.mapIds.addAll(mapsToUpdate);
 		mapsToUpdate.clear();
 
-		evt.sendToPlayers(server.getConfigurationManager().playerEntityList);
+		evt.sendToAll();
 	}
 
 	public void markDataUpdated(World world, int mapId) {

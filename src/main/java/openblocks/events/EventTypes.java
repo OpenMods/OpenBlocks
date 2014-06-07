@@ -92,7 +92,12 @@ public enum EventTypes implements IEventPacketType {
 	}
 
 	public static void registerTypes() {
-		// TODO
-		EventPacketManager.INSTANCE.registerEvent(type);
+		EventPacketManager.INSTANCE.registerEvent(MapDataManager.MapDataRequestEvent.class);
+		EventPacketManager.INSTANCE.registerEvent(MapDataManager.MapDataResponseEvent.class);
+		EventPacketManager.INSTANCE.registerEvent(MapDataManager.MapUpdatesEvent.class);
+		EventPacketManager.INSTANCE.registerEvent(ElevatorActionEvent.class);
+		EventPacketManager.INSTANCE.registerEvent(StencilCraftEvent.class);
+		EventPacketManager.INSTANCE.registerEvent(PlayerActionEvent.class);
+
 	}
 }

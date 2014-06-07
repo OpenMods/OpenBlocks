@@ -93,7 +93,7 @@ public class UrlMeta {
 					case 303:
 					case 307: {
 						final String redirectedUrl = connection.getHeaderField("location");
-						Log.fine("Redirection to URL %s (code: %d)", redirectedUrl, responseCode);
+						Log.debug("Redirection to URL %s (code: %d)", redirectedUrl, responseCode);
 						connection.disconnect();
 						this.url = redirectedUrl;
 						continue;
@@ -115,7 +115,7 @@ public class UrlMeta {
 
 	private Status processStream(HttpURLConnection connection) {
 		String contentType = connection.getContentType();
-		Log.fine("URL %s has content type %s", url, contentType);
+		Log.debug("URL %s has content type %s", url, contentType);
 		if (contentType.equals(MIME_PLS)) return parsePLS(connection);
 		else if (contentType.equals(MIME_M3U_APP) || contentType.equals(MIME_M3U_AUDIO)) return parseM3U(connection);
 
@@ -124,7 +124,7 @@ public class UrlMeta {
 	}
 
 	private Status parsePLS(HttpURLConnection connection) {
-		Log.fine("Parsing PLS file at URL %s", url);
+		Log.debug("Parsing PLS file at URL %s", url);
 		Scanner scanner = null;
 		try {
 			Reader reader = new InputStreamReader(connection.getInputStream());
@@ -142,7 +142,7 @@ public class UrlMeta {
 				String name = it.next();
 				if (name.startsWith("File")) {
 					String value = it.next();
-					Log.fine("Trying playlist %s entry %s = %s)", url, name, value);
+					Log.debug("Trying playlist %s entry %s = %s)", url, name, value);
 					url = value;
 					Status result = resolveImpl();
 					if (result.valid) return result;
@@ -165,7 +165,7 @@ public class UrlMeta {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				if (line.startsWith("#")) continue;
-				Log.fine("Trying playlist %s entry %s)", url, line);
+				Log.debug("Trying playlist %s entry %s)", url, line);
 				url = line;
 				Status result = resolveImpl();
 				if (result.valid) return result;
