@@ -1,11 +1,16 @@
 package openblocks.client.radio;
 
-import java.net.URL;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
-import net.minecraft.client.audio.SoundManager;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.data.IMetadataSection;
+import net.minecraft.client.resources.data.IMetadataSerializer;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -13,9 +18,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.oredict.OreDictionary;
@@ -24,8 +29,6 @@ import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTunedCrystal;
 import openmods.Log;
 import openmods.config.ConfigurationChange;
-import paulscode.sound.SoundSystem;
-import paulscode.sound.SoundSystemConfig;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -35,6 +38,7 @@ import com.google.common.collect.*;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 
 public class RadioManager implements IVillageTradeHandler {
@@ -68,11 +72,59 @@ public class RadioManager implements IVillageTradeHandler {
 		}
 	}
 
+	private class RadioResourcePack implements IResourcePack {
+
+		public static final String RESOURCE_PACK_ID = "OpenBlocks-Radio";
+
+		@Override
+		public InputStream getInputStream(ResourceLocation location) throws IOException {
+			String url = locationToUrl.get(location);
+
+			if (url == null) return null;
+
+			try {
+				return streamManager.getStream(location, url);
+			} catch (IOException e) {
+				Log.warn("Failed to open url %s (location %s)", location, url);
+				return null;
+			}
+		}
+
+		@Override
+		public boolean resourceExists(ResourceLocation location) {
+			return locationToUrl.containsKey(location);
+		}
+
+		@Override
+		@SuppressWarnings("rawtypes")
+		public Set getResourceDomains() {
+			return ImmutableSet.of(RESOURCE_PACK_ID);
+		}
+
+		@Override
+		public IMetadataSection getPackMetadata(IMetadataSerializer var1, String var2) throws IOException {
+			return null;
+		}
+
+		@Override
+		public BufferedImage getPackImage() throws IOException {
+			return null;
+		}
+
+		@Override
+		public String getPackName() {
+			return RESOURCE_PACK_ID;
+		}
+
+	}
+
 	public static final String OGG_EXT = "ogg";
 
 	private static final Map<String, String> PROTOCOLS = Maps.newHashMap();
 
 	private static final Map<String, String> REPLACEMENTS = Maps.newHashMap();
+
+	private final RadioStreamManager streamManager = new RadioStreamManager();
 
 	static {
 		PROTOCOLS.put("audio/ogg", OGG_EXT);
@@ -85,15 +137,11 @@ public class RadioManager implements IVillageTradeHandler {
 		throw new RadioException(userMsg);
 	}
 
-	private static final String SOUND_ID = "openblocks.radio.";
-
 	private final Map<String, UrlMeta> urlMeta = Maps.newHashMap();
 
-	private final Set<String> usedSounds = Sets.newHashSet();
+	private final BiMap<ResourceLocation, String> locationToUrl = HashBiMap.create();
 
-	private final Set<String> freeSounds = Sets.newHashSet();
-
-	private int soundCounter;
+	private int locationCounter = 0;
 
 	private RadioManager() {}
 
@@ -108,8 +156,11 @@ public class RadioManager implements IVillageTradeHandler {
 	}
 
 	public void init() {
-		MinecraftForge.EVENT_BUS.register(this);
-		getRadioStations(); // preload
+		reloadStations();
+
+		// TODO: add SRG name once we verify it actually works
+		List<IResourcePack> packs = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "defaultResourcePacks");
+		packs.add(new RadioResourcePack());
 	}
 
 	public String updateURL(String url) {
@@ -121,11 +172,6 @@ public class RadioManager implements IVillageTradeHandler {
 
 	private List<RadioStation> stations;
 
-	@SubscribeEvent
-	public void onReconfiguration(ConfigurationChange.Post evt) {
-		if (evt.check("radio", "radioStations")) stations = null;
-	}
-
 	public static void addCodecsInfo(NBTTagCompound codecs) {
 		NBTTagList data = codecs.getTagList("data", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < data.tagCount(); i++) {
@@ -136,120 +182,82 @@ public class RadioManager implements IVillageTradeHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public void onReconfiguration(ConfigurationChange.Post evt) {
+		if (evt.check("radio", "radioStations")) stations = null;
+	}
+
 	public List<RadioStation> getRadioStations() {
-		if (stations == null) {
-			ImmutableList.Builder<RadioStation> stations = ImmutableList.builder();
-			List<String> urls = Lists.newArrayList();
-			for (String stationDesc : Config.radioStations) {
-				List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
-				Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
-
-				String url = updateURL(fields.get(0));
-				String name = (fields.size() > 1)? fields.get(1) : "";
-				Iterable<String> attributes = (fields.size() > 2)? Splitter.on(",").split(fields.get(2)) : ImmutableList.<String> of();
-
-				stations.add(new RadioStation(url, name, attributes));
-				urls.add(url);
-			}
-			if (FMLCommonHandler.instance().getSide() == Side.CLIENT) preloadStreams(urls);
-			this.stations = stations.build();
-		}
+		if (stations == null) reloadStations();
 		return stations;
+	}
+
+	private void reloadStations() {
+		locationToUrl.clear();
+		ImmutableList.Builder<RadioStation> stations = ImmutableList.builder();
+		List<String> urls = Lists.newArrayList();
+		for (String stationDesc : Config.radioStations) {
+			List<String> fields = ImmutableList.copyOf(Splitter.on(';').split(stationDesc));
+			Preconditions.checkState(fields.size() > 0 && fields.size() <= 3, "Invalid radio station descripion: %s", stationDesc);
+
+			String url = updateURL(fields.get(0));
+			String name = (fields.size() > 1)? fields.get(1) : "";
+			Iterable<String> attributes = (fields.size() > 2)? Splitter.on(",").split(fields.get(2)) : ImmutableList.<String> of();
+
+			final RadioStation station = new RadioStation(url, name, attributes);
+			stations.add(station);
+			urls.add(url);
+		}
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) preloadStreams(urls);
+		this.stations = stations.build();
+	}
+
+	private ResourceLocation getResourceForUrl(String url) {
+		ResourceLocation location = locationToUrl.inverse().get(url);
+
+		if (location == null) {
+			String locationName = "radio-" + locationCounter++;
+			location = new ResourceLocation(RadioResourcePack.RESOURCE_PACK_ID, locationName);
+			locationToUrl.put(location, url);
+		}
+
+		return location;
 	}
 
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload evt) {
-		if (evt.world.isRemote) {
-			for (String soundId : ImmutableList.copyOf(usedSounds))
-				stopPlaying(soundId);
-
-			AutoConnectingStreamHandler.disconnectAll();
-		}
+		if (evt.world.isRemote) streamManager.disconnectAll();
 	}
 
-	private synchronized String allocateNewName() {
-		String name = null;
+	public ISound startPlaying(String url, float x, float y, float z, float volume) {
+		final UrlMeta ext = resolveStreamExt(url);
 
-		if (freeSounds.isEmpty()) {
-			if (usedSounds.size() < Config.maxRadioSources) name = SOUND_ID + soundCounter++;
-		} else {
-			Iterator<String> it = freeSounds.iterator();
-			name = it.next();
-			it.remove();
-		}
+		UrlMeta.Status status = ext.getStatus();
 
-		if (name != null) usedSounds.add(name);
-		return name;
-	}
+		if (!status.valid) throw error(status.message, "Error in stream %s: %s", url, status);
 
-	private synchronized void releaseName(String name) {
-		if (usedSounds.remove(name)) freeSounds.add(name);
-	}
+		String mimeType = ext.getContentType();
+		String fileExt = PROTOCOLS.get(mimeType);
 
-	public String startPlaying(String soundId, String url, float x, float y, float z, float volume) {
-		if (soundId == null) soundId = allocateNewName();
-		if (soundId == null) throw error("openblocks.misc.radio.too_many", "No resources to play %s, aborting", url);
+		if (Strings.isNullOrEmpty(fileExt)) throw error("openblocks.misc.radio.unknown_stream_type", "Unknown MIME type %s in stream %s", mimeType, url);
+
+		ResourceLocation dummyLocation = getResourceForUrl(url);
+		ISound sound = new PositionedSoundRecord(dummyLocation, volume, 1.0f, x, y, z);
 
 		try {
-			final SoundSystem sndSystem = getSoundSystem();
-			final Minecraft mc = Minecraft.getMinecraft();
-
-			if (sndSystem == null || mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) == 0.0F) throw new RadioException("openblocks.misc.radio.muted");
-
-			if (sndSystem.playing(soundId)) {
-				sndSystem.stop(soundId);
-				sndSystem.removeSource(soundId);
-			}
-
-			final UrlMeta ext = resolveStreamExt(url);
-
-			UrlMeta.Status status = ext.getStatus();
-
-			if (!status.valid) throw error(status.message, "Error in stream %s (soundId : %s): %s", url, soundId, status);
-
-			String mimeType = ext.getContentType();
-			String fileExt = PROTOCOLS.get(mimeType);
-
-			if (Strings.isNullOrEmpty(fileExt)) throw error("openblocks.misc.radio.unknown_stream_type", "Unknown MIME type %s in stream %s", mimeType, url);
-
-			try {
-				URL realUrl = new URL(null, ext.getUrl(), AutoConnectingStreamHandler.createManaged(soundId));
-				String dummyFilename = "radio_dummy." + fileExt;
-				sndSystem.newStreamingSource(false, soundId, realUrl, dummyFilename, false, x, y, z, SoundSystemConfig.ATTENUATION_LINEAR, 32);
-				sndSystem.setVolume(soundId, volume);
-				sndSystem.play(soundId);
-			} catch (Throwable t) {
-				Log.warn(t, "Exception during opening url %s (soundId: %s)", url, soundId);
-				throw new RadioException("openblocks.misc.radio.unknown_error");
-			}
-
-			Log.info("Started playing %s (id: %s)", url, soundId);
-			return soundId;
-		} catch (RadioException e) {
-			releaseName(soundId);
-			throw e;
+			Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+		} catch (Throwable t) {
+			Log.warn(t, "Exception during opening url %s", url);
+			throw new RadioException("openblocks.misc.radio.unknown_error");
 		}
+
+		Log.info("Started playing %s", url);
+		return sound;
 	}
 
-	public void stopPlaying(String soundId) {
-		final SoundSystem sndSystem = getSoundSystem();
-
-		if (sndSystem != null) sndSystem.stop(soundId);
-
-		AutoConnectingStreamHandler.disconnectManaged(soundId);
-		releaseName(soundId);
-	}
-
-	public void setVolume(String soundId, float value) {
-		final SoundSystem sndSystem = getSoundSystem();
-		sndSystem.setVolume(soundId, value);
-	}
-
-	private static SoundSystem getSoundSystem() {
-		final Minecraft mc = Minecraft.getMinecraft();
-		final SoundManager sndManager = mc.sndManager;
-		final SoundSystem sndSystem = sndManager.sndSystem;
-		return sndSystem;
+	public void stopPlaying(ISound sound) {
+		Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
+		streamManager.disconnect(sound.getPositionedSoundLocation());
 	}
 
 	public void preloadStreams(final Collection<String> urls) {

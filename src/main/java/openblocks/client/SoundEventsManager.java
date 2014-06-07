@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
@@ -11,8 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.client.event.sound.PlayStreamingEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.Config;
 import openblocks.client.Icons.IDrawableIcon;
@@ -93,16 +93,10 @@ public class SoundEventsManager {
 	}
 
 	@SubscribeEvent
-	public void onSoundEvent(PlaySoundEvent evt) {
-		if (SoundEventsManager.isPlayerWearingGlasses()) addEvent(evt.x, evt.y, evt.z, evt.name, Math.log(evt.volume + 1), 5 * evt.pitch);
-	}
-
-	@SubscribeEvent
-	public void onSoundEvent(PlayStreamingEvent evt) {
+	public void onSoundEvent(PlaySoundEvent17 evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
-			String soundName = SoundIconRegistry.CATEGORY_STREAMING + "."
-					+ evt.name;
-			addEvent(evt.x, evt.y, evt.z, soundName, 1, 10);
+			ISound sound = evt.sound;
+			addEvent(sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), evt.name, Math.log(sound.getVolume() + 1), 5 * sound.getPitch());
 		}
 	}
 
@@ -198,10 +192,10 @@ public class SoundEventsManager {
 
 	@SubscribeEvent
 	public void renderEvents(RenderWorldLastEvent evt) {
-		final Minecraft mc = evt.context.mc;
+		final Minecraft mc = Minecraft.getMinecraft();
 
 		if (mc.gameSettings.thirdPersonView != 0) return;
-		final TextureManager tex = evt.context.renderEngine;
+		final TextureManager tex = mc.renderEngine;
 		final Entity rve = mc.renderViewEntity;
 		if (!isEntityWearingGlasses(rve)) return;
 
@@ -209,12 +203,9 @@ public class SoundEventsManager {
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		dimWorld(tex, mc);
 
-		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX)
-				* evt.partialTicks;
-		final double interpY = rve.prevPosY + (rve.posY - rve.prevPosY)
-				* evt.partialTicks;
-		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ)
-				* evt.partialTicks;
+		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX) * evt.partialTicks;
+		final double interpY = rve.prevPosY + (rve.posY - rve.prevPosY) * evt.partialTicks;
+		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ) * evt.partialTicks;
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);

@@ -2,6 +2,7 @@ achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Sorry, it just happened...
 stat.openblocks.bricksDropped=Bricks dropped
 
+openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Be silly
 
 enchantment.openblocks.explosive=Unstable

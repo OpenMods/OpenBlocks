@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
-import openblocks.client.bindings.BrickBindings;
+import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.radio.RadioManager;
@@ -58,10 +58,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@Override
 	public void preInit() {
-		if (!Config.soSerious) {
-			KeyHandler handler = new KeyDispatcherBuilder().addBinding(new BrickBindings()).build();
-			KeyBindingRegistry.registerKeyBinding(handler);
-		}
+		new KeyInputHandler().setup();
 
 		if (Config.radioVillagerId > 0) {
 			VillagerRegistry.instance().registerVillagerSkin(Config.radioVillagerId, RADIO_VILLAGER_TEXTURE);

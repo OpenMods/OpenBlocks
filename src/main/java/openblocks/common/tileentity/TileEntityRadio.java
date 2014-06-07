@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -31,7 +32,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	private SyncableByte crystalColor;
 	private SyncableBoolean isPowered;
 	private SyncableFloat volume;
-	private String soundId;
+	private ISound sound;
 
 	@IncludeInterface(IInventory.class)
 	private final GenericInventory inventory = new GenericInventory("openblocks.radio", false, 1) {
@@ -81,9 +82,9 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	}
 
 	private void killMusic() {
-		if (soundId != null) {
-			RadioManager.instance.stopPlaying(soundId);
-			soundId = null;
+		if (sound != null) {
+			RadioManager.instance.stopPlaying(sound);
+			sound = null;
 		}
 	}
 
@@ -111,19 +112,20 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 				else killMusic();
 			} else if (canPlay) playStatic();
 		} else if (worldObj.isRemote && changes.contains(volume)) {
-			if (soundId != null) {
-				RadioManager.instance.setVolume(soundId, volume.getValue());
+			if (sound != null) {
+				// TODO Implement, once we are sure rest is working
+				// RadioManager.instance.setVolume(sound, volume.getValue());
 			}
 		}
 	}
 
-	private void startPlayClient(final String urlValue) {
+	private void startPlayClient(String urlValue) {
 		try {
-			soundId = RadioManager.instance.startPlaying(soundId, urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.getValue());
+			sound = RadioManager.instance.startPlaying(urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.getValue());
 			OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
 		} catch (RadioException e) {
 			Minecraft.getMinecraft().thePlayer.sendChatMessage(e.getMessage());
-			soundId = null;
+			sound = null;
 		}
 	}
 
