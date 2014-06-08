@@ -34,12 +34,9 @@ import openblocks.utils.ChangelogBuilder;
 import openmods.Log;
 import openmods.Mods;
 import openmods.OpenMods;
-import openmods.config.ConfigProcessing;
-import openmods.config.RegisterBlock;
-import openmods.config.RegisterItem;
+import openmods.config.*;
 import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
-import openmods.item.ItemGeneric;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ReflectionHelper;
 
@@ -198,6 +195,7 @@ public class OpenBlocks {
 
 		// @RegisterBlock(name = "digitalfuse", tileEntity =
 		// TileEntityDigitalFuse.class)
+		@IgnoreFeature
 		public static BlockDigitalFuse digitalFuse;
 	}
 
@@ -207,7 +205,7 @@ public class OpenBlocks {
 		public static ItemHangGlider hangGlider;
 
 		@RegisterItem(name = "generic")
-		public static ItemGeneric generic;
+		public static ItemOBGeneric generic;
 
 		@RegisterItem(name = "luggage")
 		public static ItemLuggage luggage;
@@ -339,7 +337,9 @@ public class OpenBlocks {
 		EventTypes.registerTypes();
 		final File configFile = evt.getSuggestedConfigurationFile();
 		Configuration config = new Configuration(configFile);
+
 		ConfigProcessing.processAnnotations(configFile, "OpenBlocks", config, Config.class);
+		Config.processFeatures(config);
 
 		if (config.hasChanged()) config.save();
 
@@ -348,41 +348,24 @@ public class OpenBlocks {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
 
-		if (Config.FEATURES.isBlockEnabled("grave")) {
+		if (OpenBlocks.Blocks.grave != null) {
 			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 		}
 
-		if (Config.FEATURES.isBlockEnabled("cursor")) {
+		if (OpenBlocks.Items.cursor != null) {
 			MinecraftForge.EVENT_BUS.register(new GuiOpenHandler());
 		}
 
-		if (Config.FEATURES.isItemEnabled("luggage")) {
-			EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
-		}
-
+		EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityXPOrbNoFly.class, "XPOrbNoFly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
-
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
-
-		if (Config.FEATURES.isItemEnabled("crane")) {
-			EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
-			EntityRegistry.registerModEntity(EntityBlock.class, "Block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
-			EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "Player-Magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
-		}
-
-		if (Config.FEATURES.isItemEnabled("cartographer")) {
-			EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
-		}
-
+		EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityBlock.class, "Block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "Player-Magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
-
-		if (Config.FEATURES.isItemEnabled("goldenEye")) {
-			EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
-		}
-
-		if (Config.FEATURES.isBlockEnabled("goldenegg")) {
-			EntityRegistry.registerModEntity(EntityMiniMe.class, "MiniMe", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
-		}
+		EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
+		EntityRegistry.registerModEntity(EntityMiniMe.class, "MiniMe", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
 
 		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
 		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
@@ -398,14 +381,13 @@ public class OpenBlocks {
 		MinecraftForge.EVENT_BUS.register(MapDataManager.instance);
 
 		Integration.addModule(new ModuleAdapters());
-		// order significant - should always use newer API
 		Integration.addModule(new ModuleTurtles());
 
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
 		}
 
-		if (Config.FEATURES.isBlockEnabled("elevator")) {
+		if (OpenBlocks.Blocks.elevator != null) {
 			MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
 		}
 
@@ -417,6 +399,8 @@ public class OpenBlocks {
 		FMLInterModComms.sendMessage("NotEnoughCodecs", "listCodecs", "");
 
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
+
+		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		proxy.preInit();
 	}

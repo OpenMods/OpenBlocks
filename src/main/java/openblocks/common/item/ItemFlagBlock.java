@@ -1,16 +1,16 @@
 package openblocks.common.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.common.block.BlockFlag;
 import openmods.item.ItemOpenBlock;
 
 public class ItemFlagBlock extends ItemOpenBlock {
 
-	public ItemFlagBlock() {
-		super(OpenBlocks.Blocks.flag);
+	public ItemFlagBlock(Block block) {
+		super(block);
 	}
 
 	@Override
