@@ -59,19 +59,19 @@
     },
 
     "luggage.eat.item": {
-        "category": "entity",
+        "category": "neutral",
         "sounds": [
-            "chomp.ogg"
+            "chomp"
         ]
     },
     "luggage.eat.food": {
-        "category": "entity",
+        "category": "neutral",
         "sounds": [
             "slowpokenom"
         ]
     },
     "luggage.walk": {
-        "category": "entity",
+        "category": "neutral",
         "sounds": [
             "feet"
         ]
@@ -123,10 +123,10 @@
             "vibrate"
         ]
     },
-    "unused": {
+    "unused.mortar": {
         "category": "master",
         "sounds": [
             "mortar"
         ]
     }
-]
+}
