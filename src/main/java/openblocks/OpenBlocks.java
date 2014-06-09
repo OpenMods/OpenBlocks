@@ -205,7 +205,7 @@ public class OpenBlocks {
 		@RegisterItem(name = "hangglider")
 		public static ItemHangGlider hangGlider;
 
-		@RegisterItem(name = "generic")
+		@RegisterItem(name = "generic", isConfigurable = false)
 		public static ItemOBGeneric generic;
 
 		@RegisterItem(name = "luggage")
@@ -265,7 +265,7 @@ public class OpenBlocks {
 		@RegisterItem(name = "goldenEye", unlocalizedName = "golden_eye")
 		public static ItemGoldenEye goldenEye;
 
-		@RegisterItem(name = "genericUnstackable")
+		@RegisterItem(name = "genericUnstackable", isConfigurable = false)
 		public static ItemOBGenericUnstackable genericUnstackable;
 
 		@RegisterItem(name = "cursor")
