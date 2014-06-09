@@ -61,7 +61,7 @@ public class BlockSky extends OpenBlock {
 	@Override
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
-		return isActive(meta)? AxisAlignedBB.getAABBPool().getAABB(0, 0, 0, 0, 0, 0) : super.getSelectedBoundingBoxFromPool(world, x, y, z);
+		return isActive(meta)? AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0) : super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
 }

@@ -60,7 +60,7 @@ public class ItemCraneBackpack extends ItemArmor {
 				* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI
 						/ 180);
 
-		AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
+		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
 		return !world.getCollidingBoundingBoxes(player, aabb).isEmpty(); // TODO: check that passing in player is ok
 	}
 

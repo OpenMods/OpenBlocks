@@ -80,13 +80,13 @@ public class TileEntityImaginary extends SimpleNetTileEntity {
 
 		@Override
 		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1, y + 1, z + 1);
+			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
 			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
 		}
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getAABBPool().getAABB(0, 0, 0, 1, 1, 1);
+			return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
 		}
 	};
 
@@ -116,14 +116,13 @@ public class TileEntityImaginary extends SimpleNetTileEntity {
 
 		@Override
 		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(x, y
-					+ height - PANEL_HEIGHT, z, x + 1, y + height, z + 1);
+			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(x, y + height - PANEL_HEIGHT, z, x + 1, y + height, z + 1);
 			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
 		}
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getAABBPool().getAABB(0, height - PANEL_HEIGHT, 0, 1, height, 1);
+			return AxisAlignedBB.getBoundingBox(0, height - PANEL_HEIGHT, 0, 1, height, 1);
 		}
 	}
 
@@ -172,20 +171,20 @@ public class TileEntityImaginary extends SimpleNetTileEntity {
 
 			switch (orientation) {
 				case NORTH:
-					lower = AxisAlignedBB.getAABBPool().getAABB(x, lowerBottom, z + 0.5, x + 1, lowerTop, z + 1.0);
-					upper = AxisAlignedBB.getAABBPool().getAABB(x, upperBottom, z + 0.0, x + 1, upperTop, z + 0.5);
+					lower = AxisAlignedBB.getBoundingBox(x, lowerBottom, z + 0.5, x + 1, lowerTop, z + 1.0);
+					upper = AxisAlignedBB.getBoundingBox(x, upperBottom, z + 0.0, x + 1, upperTop, z + 0.5);
 					break;
 				case SOUTH:
-					lower = AxisAlignedBB.getAABBPool().getAABB(x, lowerBottom, z + 0.0, x + 1, lowerTop, z + 0.5);
-					upper = AxisAlignedBB.getAABBPool().getAABB(x, upperBottom, z + 0.5, x + 1, upperTop, z + 1.0);
+					lower = AxisAlignedBB.getBoundingBox(x, lowerBottom, z + 0.0, x + 1, lowerTop, z + 0.5);
+					upper = AxisAlignedBB.getBoundingBox(x, upperBottom, z + 0.5, x + 1, upperTop, z + 1.0);
 					break;
 				case WEST:
-					lower = AxisAlignedBB.getAABBPool().getAABB(x + 0.5, lowerBottom, z, x + 1.0, lowerTop, z + 1);
-					upper = AxisAlignedBB.getAABBPool().getAABB(x + 0.0, upperBottom, z, x + 0.5, upperTop, z + 1);
+					lower = AxisAlignedBB.getBoundingBox(x + 0.5, lowerBottom, z, x + 1.0, lowerTop, z + 1);
+					upper = AxisAlignedBB.getBoundingBox(x + 0.0, upperBottom, z, x + 0.5, upperTop, z + 1);
 					break;
 				case EAST:
-					lower = AxisAlignedBB.getAABBPool().getAABB(x + 0.0, lowerBottom, z, x + 0.5, lowerTop, z + 1);
-					upper = AxisAlignedBB.getAABBPool().getAABB(x + 0.5, upperBottom, z, x + 1.0, upperTop, z + 1);
+					lower = AxisAlignedBB.getBoundingBox(x + 0.0, lowerBottom, z, x + 0.5, lowerTop, z + 1);
+					upper = AxisAlignedBB.getBoundingBox(x + 0.5, upperBottom, z, x + 1.0, upperTop, z + 1);
 					break;
 				default:
 					lower = upper = null;
@@ -198,7 +197,7 @@ public class TileEntityImaginary extends SimpleNetTileEntity {
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getAABBPool().getAABB(0, lowerPanelHeight, 0, 1, upperPanelHeight, 1);
+			return AxisAlignedBB.getBoundingBox(0, lowerPanelHeight, 0, 1, upperPanelHeight, 1);
 		}
 	}
 

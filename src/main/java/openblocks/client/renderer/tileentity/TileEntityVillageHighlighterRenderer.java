@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityVillageHighlighterRenderer extends
 		TileEntitySpecialRenderer {
 
+	private static final AxisAlignedBB BOUNDING_BOX = AxisAlignedBB.getBoundingBox(-8, -3, -8, 8, 3, 8);
 	private ModelVillage model = new ModelVillage();
 	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/village.png");
 
@@ -62,7 +63,7 @@ public class TileEntityVillageHighlighterRenderer extends
 				}
 				t.draw();
 				GL11.glPopMatrix();
-				drawBox(AxisAlignedBB.getAABBPool().getAABB(-8, -3, -8, 8, 3, 8));
+				drawBox(BOUNDING_BOX);
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				GL11.glPopMatrix();
 			}

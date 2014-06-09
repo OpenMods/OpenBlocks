@@ -103,7 +103,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		if (isPowered == isEnabled()) return;
 
 		if (!isPowered) {
-			final AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(xCoord - 0.1, yCoord - 0.1, zCoord - 0.1, xCoord + 1.1, yCoord + 1.1, zCoord + 1.1);
+			final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord - 0.1, yCoord - 0.1, zCoord - 0.1, xCoord + 1.1, yCoord + 1.1, zCoord + 1.1);
 
 			@SuppressWarnings("unchecked")
 			List<EntityArrow> arrows = worldObj.getEntitiesWithinAABB(EntityArrow.class, aabb);

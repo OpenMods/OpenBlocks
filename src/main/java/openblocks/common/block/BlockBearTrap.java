@@ -38,7 +38,7 @@ public class BlockBearTrap extends OpenBlock {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z) {
-		return AxisAlignedBB.getAABBPool().getAABB(x, y, z, x + 1.0, y + 0.1, z + 1.0);
+		return AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0, y + 0.1, z + 1.0);
 	}
 
 	@Override

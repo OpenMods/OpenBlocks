@@ -104,13 +104,13 @@ public class TileEntityXPDrain extends OpenTileEntity {
 
 	@SuppressWarnings("unchecked")
 	protected List<EntityPlayer> getPlayersOnGrid() {
-		AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
+		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
 		return worldObj.getEntitiesWithinAABB(EntityPlayer.class, bb);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected List<EntityXPOrb> getXPOrbsOnGrid() {
-		AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 0.3, zCoord + 1);
+		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 0.3, zCoord + 1);
 		return worldObj.getEntitiesWithinAABB(EntityXPOrb.class, bb);
 	}
 

@@ -77,7 +77,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 	}
 
 	private AxisAlignedBB getEntitySearchBoundingBox() {
-		AxisAlignedBB boundingBox = AxisAlignedBB.getAABBPool().getAABB(xCoord, yCoord - 2, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
+		AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(xCoord, yCoord - 2, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
 		return boundingBox.expand(Config.fanRange, Config.fanRange, Config.fanRange);
 	}
 

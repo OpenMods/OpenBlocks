@@ -275,7 +275,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getAABBPool().getAABB(xCoord, -1024, zCoord, xCoord + 1, 1024, zCoord + 1);
+		return AxisAlignedBB.getBoundingBox(xCoord, -1024, zCoord, xCoord + 1, 1024, zCoord + 1);
 	}
 
 }

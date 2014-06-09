@@ -33,7 +33,7 @@ public class BlockPathRenderer implements IBlockRenderer<BlockPath> {
 			double length = rnd.nextDouble() * 0.3 + 0.1;
 			double pX = rnd.nextDouble() * (1.0 - width);
 			double pZ = rnd.nextDouble() * (1.0 - length);
-			AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(pX, 0, pZ, pX + width, 1, pZ + length);
+			AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(pX, 0, pZ, pX + width, 1, pZ + length);
 			boolean hit = false;
 			for (AxisAlignedBB box : boundingBoxes) {
 				if (box.intersectsWith(bb)) {
