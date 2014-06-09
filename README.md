@@ -68,7 +68,7 @@ What does it contain?
 * The **Donation Station**-- tells you which mod a block or item comes from, and lets you support the modder that created it
 * A painting/staining system for blocks, including: // m1.6.x, v.1.2.2
   * A **Paint Mixer**-- makes paint using dyes and milk. Millions of colors possible. 
-  * A paint **brush** to paint white **canvas**es and other blocks.
+  * A paint **brush** to paint white **canvases** and other blocks.
   * **Stencils** that are made using the **Drawing Table** to paint specific areas of blocks
   * A **Squeegee** that liquefies paint to clean it off of blocks
 * Listen to music among other things with the **radio**!

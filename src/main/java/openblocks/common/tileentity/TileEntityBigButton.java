@@ -106,10 +106,10 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	@Override
 	public void onServerSync(Set<ISyncableObject> changed) {
+		super.onServerSync(changed);
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton);
 		ForgeDirection rot = getRotation();
-		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord
-				+ rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton);
+		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton);
 	}
 
 	@Override

@@ -96,6 +96,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 	@Override
 	public void onServerSync(Set<ISyncableObject> changed) {
+		super.onServerSync(changed);
 		syncCommon(changed);
 	}
 

@@ -21,6 +21,7 @@ public class BlockSponge extends OpenBlock {
 		super(Material.sponge);
 		setStepSound(soundTypeCloth);
 		setTickRandomly(true);
+		setHarvestLevel("axe", 1);
 	}
 
 	@Override

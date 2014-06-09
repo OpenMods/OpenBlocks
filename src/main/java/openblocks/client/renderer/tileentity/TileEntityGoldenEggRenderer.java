@@ -4,91 +4,77 @@ import java.util.Random;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderLightningBolt;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
+import openblocks.common.tileentity.TileEntityGoldenEgg.State;
 
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 
-	ModelEgg model = new ModelEgg();
-	RenderLightningBolt lightningRenderer = new RenderLightningBolt();
+	private static final float PHANTOM_SCALE = 1.5f;
 
-	private static final ResourceLocation texture = new ResourceLocation(
-			"openblocks", "textures/models/egg.png");
+	private final ModelEgg model = new ModelEgg();
+
+	private static final Random RANDOM = new Random(432L);
+
+	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/egg.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y,
-			double z, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTickTime) {
 		GL11.glPushMatrix();
 		TileEntityGoldenEgg egg = (TileEntityGoldenEgg)tileentity;
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glPushMatrix();
-		float rotationSpeed = (18 * egg.animationStageTicks + f) / TileEntityGoldenEgg.ANIMATION_TIME + 1;
-		if (egg.getWorldObj() != null && egg.getStage() > 0) {
-			egg.rotation += rotationSpeed * f;
-			GL11.glRotatef(egg.rotation % 360, 0, 1, 0);
-		}
-		float amount = (egg.animationStageTicks + f)
-				/ TileEntityGoldenEgg.ANIMATION_TIME;
-		float totalOffset = amount * 1f; /* 1 being meters */
-		if (egg.getStage() == 4) {
-			// Animate the egg climbing
-			GL11.glTranslatef(0, -totalOffset, 0);
-		}
-		bindTexture(texture);
-		Tessellator.instance.setBrightness(128 + (int)(128 * amount));
-		model.render(egg, f, 1f);
-		GL11.glPopMatrix();
-		if (egg.getStage() >= 4) { /* Render star and phantom block ;) */
 
-			// Not anything like what I wanted
-			// renderBeam(egg, Tessellator.instance, f);
-			renderPhantom(egg, Tessellator.instance, f);
-			renderStar(egg, Tessellator.instance, f);
-		}
+		float rotation = egg.getRotation(partialTickTime);
+		float progress = egg.getProgress(partialTickTime);
+		float offset = egg.getOffset(partialTickTime);
+
+		GL11.glTranslatef(0, -offset, 0);
+
+		GL11.glPushMatrix();
+
+		GL11.glRotatef(rotation, 0, 1, 0);
+
+		bindTexture(texture);
+		Tessellator.instance.setBrightness(128 + (int)(128 * progress));
+		model.render();
+
+		State state = egg.getState();
+		if (state.specialEffects) renderPhantom(rotation, progress, Tessellator.instance, partialTickTime);
+		GL11.glPopMatrix();
+
+		if (state.specialEffects) renderStar(rotation, progress, Tessellator.instance, partialTickTime);
+
 		GL11.glPopMatrix();
 	}
 
-	private void renderPhantom(TileEntityGoldenEgg egg, Tessellator tessellator, float partialTicks) {
-		final float SCALE = 1.5f;
-
-		GL11.glPushMatrix();
+	private void renderPhantom(float rotation, float progress, Tessellator tessellator, float partialTicks) {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
-		float progress = (egg.animationStageTicks + partialTicks)
-				/ TileEntityGoldenEgg.ANIMATION_TIME;
-		GL11.glColor4f(1f, 1f, 1f, 0.2f + 0.4f * progress * 2);
-		GL11.glRotatef(egg.rotation % 360, 0, 1, 0);
-		GL11.glTranslatef(0, -progress * SCALE * (0.2f + progress * 0.8f), 0);
+		GL11.glColor4f(1f, 1f, 1f, 0.2f + 0.8f * progress);
+		float scale = PHANTOM_SCALE * (0.2f + progress * 0.8f);
 
 		tessellator.setBrightness(255);
-		model.render(egg, partialTicks, SCALE * (0.2f + progress * 0.8f));
+		GL11.glTranslatef(0, -0.1f * progress, 0);
+		GL11.glScalef(scale, scale, scale);
+		model.render();
 
 		GL11.glDisable(GL11.GL_BLEND);
 		RenderHelper.enableStandardItemLighting();
-		GL11.glPopMatrix();
 	}
 
-	private static void renderStar(TileEntityGoldenEgg egg, Tessellator tessellator, float partialTicks) {
-
-		GL11.glPushMatrix();
-		float f1 = (egg.animationStageTicks + partialTicks)
-				/ TileEntityGoldenEgg.ANIMATION_TIME;
-
+	private static void renderStar(float rotation, float progress, Tessellator tessellator, float partialTicks) {
 		/* Shift down a bit */
 		GL11.glTranslatef(0f, 0.5f, 0);
-		/* Line up with center of floating egg */
-		GL11.glTranslatef(0, -f1, 0);
 		/* Rotate opposite direction at 20% speed */
-		GL11.glRotatef(egg.rotation * -0.2f % 360, 0.5f, 1, 0.5f);
+		GL11.glRotatef(rotation * -0.2f % 360, 0.5f, 1, 0.5f);
 
 		/* Configuration tweaks */
 		float BEAM_START_DISTANCE = 2F;
@@ -98,11 +84,10 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 		RenderHelper.disableStandardItemLighting();
 		float f2 = 0.0F;
 
-		if (f1 > 0.8F) {
-			f2 = (f1 - 0.8F) / 0.2F;
+		if (progress > 0.8F) {
+			f2 = (progress - 0.8F) / 0.2F;
 		}
 
-		Random random = new Random(432L);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -110,19 +95,19 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glDepthMask(false);
-		GL11.glPushMatrix();
-		// GL11.glTranslatef(0.0F, -1.0F, -2.0F);
 
-		for (int i = 0; i < (f1 + f1 * f1) / 2.0F * 60.0F; ++i) {
-			GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F + f1 * 90.0F, 0.0F, 0.0F, 1.0F);
+		RANDOM.setSeed(432L);
+
+		for (int i = 0; i < (progress + progress * progress) / 2.0F * 60.0F; ++i) {
+			GL11.glRotatef(RANDOM.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(RANDOM.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(RANDOM.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
+			GL11.glRotatef(RANDOM.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(RANDOM.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(RANDOM.nextFloat() * 360.0F + progress * 90.0F, 0.0F, 0.0F, 1.0F);
 			tessellator.startDrawing(6);
-			float f3 = random.nextFloat() * BEAM_END_DISTANCE + 5.0F + f2 * 10.0F;
-			float f4 = random.nextFloat() * BEAM_START_DISTANCE + 1.0F + f2 * 2.0F;
+			float f3 = RANDOM.nextFloat() * BEAM_END_DISTANCE + 5.0F + f2 * 10.0F;
+			float f4 = RANDOM.nextFloat() * BEAM_START_DISTANCE + 1.0F + f2 * 2.0F;
 			tessellator.setBrightness(255);
 			tessellator.setColorRGBA_I(16777215, (int)(MAX_OPACITY * (1.0F - f2)));
 			tessellator.addVertex(0.0D, 0.0D, 0.0D);
@@ -134,7 +119,6 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 			tessellator.draw();
 		}
 
-		GL11.glPopMatrix();
 		GL11.glDepthMask(true);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glDisable(GL11.GL_BLEND);
@@ -143,8 +127,6 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		RenderHelper.enableStandardItemLighting();
-
-		GL11.glPopMatrix();
 	}
 
 }

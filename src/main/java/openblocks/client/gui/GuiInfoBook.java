@@ -3,6 +3,7 @@ package openblocks.client.gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.StatCollector;
+import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.pages.*;
@@ -119,9 +120,10 @@ public class GuiInfoBook extends GuiScreen implements IComponentListener {
 		book.addPage(new SectionPage("openblocks.gui.misc"));
 		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
 		book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
-		book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
-		book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
-		book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
+
+		if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
+		if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
+		if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
 		book.enablePages();
 
 	}
