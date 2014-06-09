@@ -7,6 +7,7 @@ import openblocks.events.PlayerActionEvent;
 
 import org.lwjgl.input.Keyboard;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
@@ -18,17 +19,20 @@ public class KeyInputHandler {
 	private boolean brickKeyPressed;
 
 	public void setup() {
-		brickBinding = new KeyBinding("openblocks.keybind.drop_brick", Keyboard.KEY_B, "openblocks.keybind.category");
+		if (!Config.soSerious) {
+			brickBinding = new KeyBinding("openblocks.keybind.drop_brick", Keyboard.KEY_B, "openblocks.keybind.category");
+			ClientRegistry.registerKeyBinding(brickBinding);
+		}
 		FMLCommonHandler.instance().bus().register(this);
 	}
 
 	private static boolean isNastyStuffAllowed() {
-		return Config.soSerious && (Config.fartTypying || Minecraft.getMinecraft().currentScreen == null);
+		return !Config.soSerious && (Config.fartTypying || Minecraft.getMinecraft().currentScreen == null);
 	}
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent evt) {
-		if (brickBinding.isPressed()) {
+		if (brickBinding != null && brickBinding.isPressed()) {
 			if (!brickKeyPressed) {
 				if (isNastyStuffAllowed()) new PlayerActionEvent(PlayerActionEvent.Type.BOO).sendToServer();
 				brickKeyPressed = true;
