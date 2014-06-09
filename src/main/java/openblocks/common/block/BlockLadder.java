@@ -48,8 +48,7 @@ public class BlockLadder extends BlockTrapDoor {
 
 	@Override
 	public void func_150117_b(int metadata) {
-		float f = 0.1875F;
-
+		float f = 0.125f;
 		final boolean isOpen = (metadata & 4) != 0;
 		if (isOpen) {
 			switch (metadata & 3) {
@@ -79,7 +78,8 @@ public class BlockLadder extends BlockTrapDoor {
 
 	@Override
 	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-		return true;
+		int metadata = world.getBlockMetadata(x, y, z);
+		return (metadata & 4) != 0;
 	}
 
 	@Override

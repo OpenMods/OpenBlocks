@@ -9,6 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class BlockGuide extends OpenBlock {
 
 	public static class Icons {
+		public static IIcon marker;
 		public static IIcon ends;
 		public static IIcon side;
 	}
@@ -34,7 +35,8 @@ public class BlockGuide extends OpenBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister registry) {
-		Icons.ends = registry.registerIcon("openblocks:guide");
+		Icons.marker = registry.registerIcon("openblocks:guide");
+		Icons.ends = registry.registerIcon("openblocks:guide_top");
 		Icons.side = registry.registerIcon("openblocks:guide_side");
 
 		setTexture(ForgeDirection.UP, Icons.ends);

@@ -23,9 +23,7 @@ public class BlockBearTrap extends OpenBlock {
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
 		TileEntityBearTrap te = getTileEntity(world, x, y, z, TileEntityBearTrap.class);
-		if (te != null) {
-			te.onEntityCollided(entity);
-		}
+		if (te != null) te.onEntityCollided(entity);
 	}
 
 	@Override
@@ -53,4 +51,14 @@ public class BlockBearTrap extends OpenBlock {
 		return isOnTopOfSolidBlock(world, x, y, z, side);
 	}
 
+	@Override
+	public boolean hasComparatorInputOverride() {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
+		TileEntityBearTrap tile = getTileEntity(world, x, y, z, TileEntityBearTrap.class);
+		return tile != null? tile.getComparatorLevel() : 0;
+	}
 }

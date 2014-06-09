@@ -6,8 +6,8 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import openblocks.OpenBlocks;
+import openblocks.common.block.BlockGuide.Icons;
 import openblocks.common.tileentity.TileEntityGuide;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.Coord;
@@ -25,13 +25,12 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 			renderBlocks.setRenderBounds(0.05D, 0.05D, 0.05D, 0.95D, 0.95D, 0.95D);
 			t.startDrawingQuads();
 			t.setBrightness(200);
-			IIcon renderingIcon = OpenBlocks.Blocks.guide.getBlockTextureFromSide(0);
-			renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-			renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-			renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-			renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-			renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
-			renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, renderingIcon);
+			renderBlocks.renderFaceXNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, Icons.marker);
+			renderBlocks.renderFaceXPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, Icons.marker);
+			renderBlocks.renderFaceYNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, Icons.marker);
+			renderBlocks.renderFaceYPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, Icons.marker);
+			renderBlocks.renderFaceZNeg(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, Icons.marker);
+			renderBlocks.renderFaceZPos(OpenBlocks.Blocks.guide, -0.5D, 0.0D, -0.5D, Icons.marker);
 			t.draw();
 		}
 	};
@@ -57,7 +56,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
 		GL11.glColor3ub((byte)(color >> 16), (byte)(color >> 8), (byte)(color >> 0));
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDisable(GL11.GL_LIGHTING);
 
 		for (Coord coord : shape)

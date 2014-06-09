@@ -7,20 +7,20 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmods.api.IActivateAwareTile;
+import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableFlags;
-import openmods.sync.SyncableInt;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityBearTrap extends SyncedTileEntity implements
-		IActivateAwareTile, ISurfaceAttachment {
+public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile {
 
 	public enum Flags {
 		isShut
 	}
 
 	private SyncableFlags flags;
+	// can't be added as new flag, since animation depends on it
+	private SyncableBoolean isLocked;
 	private SyncableInt trappedEntityId;
 
 	public TileEntityBearTrap() {}
@@ -29,6 +29,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 	protected void createSyncedFields() {
 		flags = new SyncableFlags();
 		trappedEntityId = new SyncableInt();
+		isLocked = new SyncableBoolean();
 		flags.on(Flags.isShut);
 	}
 
@@ -64,11 +65,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (!flags.get(Flags.isShut) && tickSinceOpened() > 20
-					&& entity instanceof EntityCreature) {
-				trappedEntityId.setValue(entity.getEntityId());
-				entity.worldObj.playSoundAtEntity(entity, "openblocks:beartrap.close", 0.5F, 1.0F);
-				flags.set(Flags.isShut, true);
+			if (entity instanceof EntityCreature && !isLocked.getValue() && tickSinceOpened() > 20) {
+				close(entity);
 			}
 		}
 	}
@@ -77,24 +75,41 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 		return flags.get(Flags.isShut);
 	}
 
+	public int getComparatorLevel() {
+		int entityId = trappedEntityId.getValue();
+		if (entityId == 0) return 0;
+		Entity e = worldObj.getEntityByID(entityId);
+		if (e == null) return 0;
+
+		return e.myEntitySize.ordinal() + 1;
+	}
+
 	public int tickSinceOpened() {
 		return flags.getTicksSinceChange(worldObj);
 	}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) {
-			if (flags.get(Flags.isShut)) {
-				flags.off(Flags.isShut);
-				trappedEntityId.setValue(0);
-				player.worldObj.playSoundAtEntity(player, "openblocks:beartrapopen", 0.5F, 1.0F);
-			}
-		}
+		if (!worldObj.isRemote) open();
 		return true;
 	}
 
-	public void setOpen() {
-		flags.set(Flags.isShut, false);
+	private void close(Entity trapped) {
+		if (!flags.get(Flags.isShut)) {
+			flags.on(Flags.isShut);
+			trappedEntityId.setValue(trapped.getEntityId());
+			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:beartrap.close", 0.5F, 1.0F);
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+		}
+	}
+
+	private void open() {
+		if (flags.get(Flags.isShut)) {
+			flags.off(Flags.isShut);
+			trappedEntityId.setValue(0);
+			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:beartrap.open", 0.5F, 1.0F);
+			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+		}
 	}
 
 	@Override
@@ -103,6 +118,16 @@ public class TileEntityBearTrap extends SyncedTileEntity implements
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return ForgeDirection.DOWN;
+	}
+
+	@Override
+	public void onNeighbourChanged() {
+		if (!worldObj.isRemote) {
+			int redstoneLevel = worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord);
+			boolean isLocked = redstoneLevel > 0;
+			this.isLocked.setValue(isLocked);
+			if (isLocked) open();
+		}
 	}
 
 }

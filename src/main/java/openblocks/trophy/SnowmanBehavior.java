@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityTrophy;
+import openmods.utils.BlockNotifyFlags;
 
 public class SnowmanBehavior implements ITrophyBehavior {
 
@@ -15,8 +16,8 @@ public class SnowmanBehavior implements ITrophyBehavior {
 				int pY = tile.yCoord;
 				int pZ = z + tile.zCoord;
 				final World worldObj = tile.getWorldObj();
-				if (worldObj.isAirBlock(pX, pY, pZ) && Blocks.snow.canPlaceBlockAt(worldObj, pX, pY, pZ)) {
-					worldObj.setBlock(pX, pY, pZ, Blocks.snow);
+				if (worldObj.isAirBlock(pX, pY, pZ) && Blocks.snow_layer.canPlaceBlockAt(worldObj, pX, pY, pZ)) {
+					worldObj.setBlock(pX, pY, pZ, Blocks.snow_layer, worldObj.rand.nextInt(4), BlockNotifyFlags.ALL);
 				}
 			}
 		}
