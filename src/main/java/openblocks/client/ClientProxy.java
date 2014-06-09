@@ -50,8 +50,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (event.map.getTextureType() == 0) {
 			Icons.xpJuiceFlowing = event.map.registerIcon("openblocks:xpjuiceflowing");
 			Icons.xpJuiceStill = event.map.registerIcon("openblocks:xpjuicestill");
-			if (OpenBlocks.Fluids.openBlocksXPJuice != null) {
-				OpenBlocks.Fluids.openBlocksXPJuice.setIcons(Icons.xpJuiceStill, Icons.xpJuiceFlowing);
+			if (OpenBlocks.Fluids.xpJuice != null) {
+				OpenBlocks.Fluids.xpJuice.setIcons(Icons.xpJuiceStill, Icons.xpJuiceFlowing);
 			}
 		}
 	}

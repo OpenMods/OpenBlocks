@@ -200,7 +200,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 				}
 			} else if (entity instanceof EntityXPOrb) {
 				if (tank.getSpace() > 0) {
-					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.XPJuice, EnchantmentUtils.XPToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
+					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, EnchantmentUtils.XPToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
 					tank.fill(newFluid, true);
 					entity.setDead();
 				}

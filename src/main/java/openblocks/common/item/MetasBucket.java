@@ -1,17 +1,26 @@
 package openblocks.common.item;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
+import openblocks.OpenBlocks.Fluids;
 import openblocks.OpenBlocks.Items;
 import openmods.item.IMetaItem;
 
 public enum MetasBucket {
-	xpbucket {
+	xpbucket(new FluidStack(Fluids.xpJuice, FluidContainerRegistry.BUCKET_VOLUME)) {
 		@Override
 		public IMetaItem createMetaItem() {
 			return new MetaGeneric("xpbucket");
 		}
 	};
+
+	private final FluidStack liquid;
+
+	private MetasBucket(FluidStack liquid) {
+		this.liquid = liquid;
+	}
 
 	public ItemStack newItemStack(int size) {
 		return new ItemStack(OpenBlocks.Items.filledBucket, size, ordinal());
@@ -33,6 +42,9 @@ public enum MetasBucket {
 
 	public static void registerItems() {
 		for (MetasBucket m : values())
-			if (m.isEnabled()) Items.filledBucket.registerItem(m.ordinal(), m.createMetaItem());
+			if (m.isEnabled()) {
+				Items.filledBucket.registerItem(m.ordinal(), m.createMetaItem());
+				FluidContainerRegistry.registerFluidContainer(m.liquid.copy(), m.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
+			}
 	}
 }

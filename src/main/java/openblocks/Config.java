@@ -15,6 +15,8 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Enchantments;
@@ -434,10 +436,6 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Items.iron_ingot, 'o', Blocks.obsidian));
 		}
 
-		if (OpenBlocks.Items.filledBucket != null) {
-			MetasBucket.registerItems();
-		}
-
 		if (OpenBlocks.Items.hangGlider != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.hangGlider, "wsw", 'w', MetasGeneric.gliderWing.newItemStack(), 's', "stickWood"));
 		}
@@ -576,6 +574,13 @@ public class Config {
 
 		if (OpenBlocks.Items.pedometer != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Items.redstone, 'c', Items.clock));
+		}
+
+		OpenBlocks.Fluids.xpJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		FluidRegistry.registerFluid(OpenBlocks.Fluids.xpJuice);
+
+		if (OpenBlocks.Items.filledBucket != null) {
+			MetasBucket.registerItems();
 		}
 
 		if (explosiveEnchantmentId > 0) {

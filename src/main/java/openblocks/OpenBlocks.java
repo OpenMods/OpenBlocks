@@ -14,7 +14,8 @@ import net.minecraft.stats.StatBasic;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import openblocks.api.FlimFlamRegistry;
 import openblocks.client.radio.RadioManager;
 import openblocks.common.*;
@@ -291,8 +292,7 @@ public class OpenBlocks {
 	}
 
 	public static class Fluids {
-		public static Fluid XPJuice;
-		public static Fluid openBlocksXPJuice;
+		public static Fluid xpJuice;
 	}
 
 	public static class Enchantments {
@@ -367,14 +367,7 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
 		EntityRegistry.registerModEntity(EntityMiniMe.class, "MiniMe", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
 
-		Fluids.openBlocksXPJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
-		FluidRegistry.registerFluid(Fluids.openBlocksXPJuice);
-		Fluids.XPJuice = FluidRegistry.getFluid("xpjuice");
-		XP_FLUID = new FluidStack(OpenBlocks.Fluids.openBlocksXPJuice, 1);
-
-		if (Items.filledBucket != null) {
-			FluidContainerRegistry.registerFluidContainer(Fluids.XPJuice, MetasBucket.xpbucket.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
-		}
+		XP_FLUID = new FluidStack(OpenBlocks.Fluids.xpJuice, 1);
 
 		MagnetWhitelists.instance.initTesters();
 
