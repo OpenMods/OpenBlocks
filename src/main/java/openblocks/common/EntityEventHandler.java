@@ -11,7 +11,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.Log;
-import openmods.config.ConfigurationChange;
+import openmods.config.properties.ConfigurationChange;
 import openmods.utils.BlockUtils;
 import openmods.utils.PlayerUtils;
 

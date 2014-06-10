@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.events.EventTypes;
 import openmods.Log;
-import openmods.config.ConfigurationChange;
+import openmods.config.properties.ConfigurationChange;
 import openmods.network.event.EventPacket;
 import openmods.network.event.IEventPacketType;
 import openmods.utils.ByteUtils;

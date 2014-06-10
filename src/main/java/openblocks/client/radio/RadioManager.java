@@ -28,7 +28,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTunedCrystal;
 import openmods.Log;
-import openmods.config.ConfigurationChange;
+import openmods.config.properties.ConfigurationChange;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;

@@ -3,18 +3,15 @@ package openblocks;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -28,13 +25,12 @@ import openblocks.common.TrophyHandler;
 import openblocks.common.item.*;
 import openblocks.common.recipe.*;
 import openblocks.enchantments.*;
-import openmods.config.*;
+import openmods.config.properties.ConfigProperty;
+import openmods.config.properties.OnLineModifiable;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
 
 public class Config {
-
-	public static final FeatureManager FEATURES = new FeatureManager();
 
 	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "searchDistance", comment = "The range of the drop block")
@@ -236,44 +232,9 @@ public class Config {
 	@ConfigProperty(category = "sponge", name = "spongeRange", comment = "Sponge block range (distance from center)")
 	public static int spongeStickRange = 3;
 
-	public static void processFeatures(Configuration config) {
-		FEATURES.collectFromBlocks(OpenBlocks.Blocks.class);
-		FEATURES.collectFromItems(OpenBlocks.Items.class);
-		FEATURES.loadFromConfiguration(config);
-	}
-
 	public static void register() {
-		final String modId = "openblocks";
-
-		final FactoryRegistry<Item> itemFactory = new FactoryRegistry<Item>();
-		final FactoryRegistry<Block> blockFactory = new FactoryRegistry<Block>();
-
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
-
-		itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
-			}
-		});
-
-		itemFactory.registerFactory("technicolorGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
-			}
-		});
-
-		itemFactory.registerFactory("seriousGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
-			}
-		});
-
-		ConfigProcessing.registerItems(OpenBlocks.Items.class, modId, FEATURES, itemFactory);
-		ConfigProcessing.registerBlocks(OpenBlocks.Blocks.class, modId, FEATURES, blockFactory);
 
 		// There is no fail checking here because if the Generic item fails,
 		// then I doubt anyone wants this to be silent.

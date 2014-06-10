@@ -28,7 +28,7 @@ public class PlayerDeathHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onPlayerDrops(PlayerDropsEvent event) {
-		if (!Config.FEATURES.isBlockEnabled("grave")) return;
+		if (OpenBlocks.Blocks.grave == null) return;
 
 		final List<EntityItem> drops = event.drops;
 		if (drops.isEmpty()) return;

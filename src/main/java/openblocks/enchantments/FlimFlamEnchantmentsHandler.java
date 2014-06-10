@@ -18,7 +18,7 @@ import openblocks.OpenBlocks.Enchantments;
 import openblocks.api.FlimFlamRegistry;
 import openblocks.api.IFlimFlamEffect;
 import openmods.Log;
-import openmods.config.ConfigurationChange;
+import openmods.config.properties.ConfigurationChange;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

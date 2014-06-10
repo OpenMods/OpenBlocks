@@ -5,7 +5,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import openblocks.Config;
 import openmods.Log;
-import openmods.config.ConfigurationChange;
+import openmods.config.properties.ConfigurationChange;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;

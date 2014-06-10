@@ -35,13 +35,17 @@ import openblocks.utils.ChangelogBuilder;
 import openmods.Log;
 import openmods.Mods;
 import openmods.OpenMods;
-import openmods.config.*;
+import openmods.config.BlockInstances;
+import openmods.config.ItemInstances;
+import openmods.config.game.*;
+import openmods.config.properties.ConfigProcessing;
 import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ReflectionHelper;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -79,7 +83,7 @@ public class OpenBlocks {
 	@SidedProxy(clientSide = OpenBlocks.PROXY_CLIENT, serverSide = OpenBlocks.PROXY_SERVER)
 	public static IOpenBlocksProxy proxy;
 
-	public static class Blocks {
+	public static class Blocks implements BlockInstances {
 		@RegisterBlock(name = "ladder")
 		public static BlockLadder ladder;
 
@@ -200,7 +204,7 @@ public class OpenBlocks {
 		public static BlockDigitalFuse digitalFuse;
 	}
 
-	public static class Items {
+	public static class Items implements ItemInstances {
 
 		@RegisterItem(name = "hangglider")
 		public static ItemHangGlider hangGlider;
@@ -332,16 +336,51 @@ public class OpenBlocks {
 
 	public static ItemStack changeLog;
 
+	private GameConfigProvider gameConfig;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		EventTypes.registerTypes();
+
+		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
+		features.collectFromBlocks(OpenBlocks.Blocks.class);
+		features.collectFromItems(OpenBlocks.Items.class);
+
 		final File configFile = evt.getSuggestedConfigurationFile();
 		Configuration config = new Configuration(configFile);
 
 		ConfigProcessing.processAnnotations(configFile, "OpenBlocks", config, Config.class);
-		Config.processFeatures(config);
+		features.loadFromConfiguration(config);
 
 		if (config.hasChanged()) config.save();
+
+		gameConfig = new GameConfigProvider("openblocks");
+		gameConfig.setFeatures(features);
+
+		final FactoryRegistry<Item> itemFactory = gameConfig.getItemFactory();
+		itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
+			@Override
+			public Item construct() {
+				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
+			}
+		});
+
+		itemFactory.registerFactory("technicolorGlasses", new FactoryRegistry.Factory<Item>() {
+			@Override
+			public Item construct() {
+				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
+			}
+		});
+
+		itemFactory.registerFactory("seriousGlasses", new FactoryRegistry.Factory<Item>() {
+			@Override
+			public Item construct() {
+				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
+			}
+		});
+
+		gameConfig.registerBlocks(OpenBlocks.Blocks.class);
+		gameConfig.registerItems(OpenBlocks.Items.class);
 
 		RadioManager.instance.readConfigs();
 		Config.register();
@@ -448,6 +487,12 @@ public class OpenBlocks {
 				RadioManager.addCodecsInfo(m.getNBTValue());
 			}
 		}
+	}
+
+	@EventHandler
+	public void handleRenames(FMLMissingMappingsEvent event) {
+		Preconditions.checkNotNull(gameConfig, "What?");
+		gameConfig.handleRemaps(event.get());
 	}
 
 	@EventHandler
