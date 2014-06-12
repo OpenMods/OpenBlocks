@@ -92,8 +92,6 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 				final int metadata = worldObj.getBlockMetadata(x, y, z);
 				if (block != Block.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
 					breakBlock(direction, x, y, z, block, metadata);
-					worldObj.playAuxSFX(2001, x, y, z, blockId + (metadata << 12));
-					worldObj.setBlockToAir(x, y, z);
 				}
 			}
 			worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
@@ -111,6 +109,9 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 				if (MinecraftForge.EVENT_BUS.post(event)) return;
 
 				if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
+					worldObj.playAuxSFX(2001, x, y, z, block.blockID + (metadata << 12));
+					worldObj.setBlockToAir(x, y, z);
+
 					List<ItemStack> items = block.getBlockDropped(worldObj, x, y, z, metadata, 0);
 					if (items != null) {
 						ForgeDirection back = direction.getOpposite();
