@@ -11,6 +11,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.ItemInventory;
+import openmods.PlayerItemInventory;
 import openmods.utils.InventoryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -36,7 +37,7 @@ public class ItemDevNull extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
-		ItemInventory inventory = new ItemInventory(player, 1);
+		PlayerItemInventory inventory = new PlayerItemInventory(player, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
 		if (containedStack != null) {
 			Item item = containedStack.getItem();
@@ -55,38 +56,30 @@ public class ItemDevNull extends Item {
 	@SubscribeEvent
 	public void onItemPickUp(EntityItemPickupEvent evt) {
 
-		EntityPlayer player = evt.entityPlayer;
-		ItemStack pickedStack = evt.item.getEntityItem();
+		final EntityPlayer player = evt.entityPlayer;
+		final ItemStack pickedStack = evt.item.getEntityItem();
 
-		final ItemStack compareStack = new ItemStack(this);
+		if (pickedStack == null || player == null) return;
 
 		boolean foundMatchingContainer = false;
 
-		if (pickedStack != null && player != null) {
+		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+			ItemStack stack = player.inventory.getStackInSlot(i);
 
-			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-
-				ItemStack stack = player.inventory.getStackInSlot(i);
-
-				if (stack != null && stack.isItemEqual(compareStack)) {
-
-					ItemInventory inventory = new ItemInventory(player, 1, i);
-					ItemStack containedStack = inventory.getStackInSlot(0);
-					if (containedStack != null) {
-						boolean isMatching = pickedStack.isItemEqual(containedStack)
-								&& ItemStack.areItemStackTagsEqual(pickedStack, containedStack);
-						foundMatchingContainer |= isMatching;
-						if (isMatching) {
-							InventoryUtils.tryInsertStack(inventory, 0, pickedStack, true);
-						}
+			if (stack != null && stack.getItem() == this) {
+				ItemInventory inventory = new ItemInventory(stack, 1);
+				ItemStack containedStack = inventory.getStackInSlot(0);
+				if (containedStack != null) {
+					boolean isMatching = InventoryUtils.areItemAndTagEqual(pickedStack, containedStack);
+					if (isMatching) {
+						foundMatchingContainer = true;
+						InventoryUtils.tryInsertStack(inventory, 0, pickedStack, true);
 					}
 				}
 			}
 		}
 
-		if (foundMatchingContainer) {
-			pickedStack.stackSize = 0;
-		}
+		if (foundMatchingContainer) pickedStack.stackSize = 0;
 	}
 
 	@Override

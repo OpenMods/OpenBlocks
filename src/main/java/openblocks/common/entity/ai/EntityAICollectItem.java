@@ -30,7 +30,7 @@ public class EntityAICollectItem extends EntityAIBase {
 		if (!pathFinder.noPath()) { return false; }
 		if (luggage.worldObj != null) {
 			@SuppressWarnings("unchecked")
-			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
+			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
 			EntityItem closest = null;
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {

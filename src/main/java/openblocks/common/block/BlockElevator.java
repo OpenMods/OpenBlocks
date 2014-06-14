@@ -1,12 +1,13 @@
 package openblocks.common.block;
 
+import java.util.Set;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import openmods.utils.BlockNotifyFlags;
-import openmods.utils.ColorUtils;
+import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
 
 public class BlockElevator extends OpenBlock {
@@ -47,8 +48,9 @@ public class BlockElevator extends OpenBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem();
 		if (stack != null) {
-			ColorMeta meta = ColorUtils.stackToColor(stack);
-			if (meta != null) {
+			Set<ColorMeta> metas = ColorUtils.stackToColor(stack);
+			if (!metas.isEmpty()) {
+				ColorMeta meta = CollectionUtils.getRandom(metas);
 				int dmg = meta.vanillaId;
 				// temp hack, dont tell anyone
 				// NOTE: someone was to lazy to create custom item to make sure

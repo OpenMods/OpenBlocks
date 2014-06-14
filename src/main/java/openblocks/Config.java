@@ -367,9 +367,8 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.projector != null) {
-			final ItemStack lapis = new ItemStack(Items.dye, 1, ColorUtils.BLUE);
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', lapis));
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', lapis));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', "gemLapis"));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', "gemLapis"));
 		}
 
 		if (OpenBlocks.Blocks.goldenEgg != null) {
@@ -527,7 +526,6 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.spongeonastick != null) {
-			OpenBlocks.Items.spongeonastick = new ItemSpongeOnAStick();
 			if (OpenBlocks.Blocks.sponge != null) {
 				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.spongeonastick, " s ", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 			}

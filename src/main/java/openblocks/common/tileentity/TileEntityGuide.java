@@ -227,9 +227,10 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 			}
 		}
 
-		ColorMeta color = ColorUtils.stackToColor(heldStack);
-		if (color != null) {
-			changeColor(color.rgb);
+		Set<ColorMeta> colors = ColorUtils.stackToColor(heldStack);
+		if (!colors.isEmpty()) {
+			ColorMeta selected = CollectionUtils.getRandom(colors);
+			changeColor(selected.rgb);
 			return true;
 		}
 

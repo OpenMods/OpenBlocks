@@ -10,14 +10,11 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.item.ItemDevNull.Icons;
-import openmods.GenericInventory;
 import openmods.ItemInventory;
 import openmods.renderer.DisplayListWrapper;
-import openmods.utils.ItemUtils;
 import openmods.utils.TextureUtils;
 import openmods.utils.render.RenderUtils;
 
@@ -27,8 +24,6 @@ import org.lwjgl.opengl.GL12;
 public class ItemRendererDevNull implements IItemRenderer {
 
 	protected static RenderItem itemRenderer = new RenderItem();
-
-	private GenericInventory inventory = new GenericInventory("", false, 1);
 
 	private DisplayListWrapper cube = new DisplayListWrapper() {
 
@@ -76,9 +71,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			GL11.glFrontFace(GL11.GL_CW);
 			GL11.glDisable(GL11.GL_LIGHTING);
-			RenderUtils.disableLightmap();
 			tes.draw();
-			RenderUtils.enableLightmap();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glFrontFace(GL11.GL_CCW);
 			GL11.glDisable(GL11.GL_CULL_FACE);
@@ -97,13 +90,10 @@ public class ItemRendererDevNull implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack containerStack, Object... data) {
-
 		if (data.length == 0 || !(data[0] instanceof RenderBlocks)) { return; }
 
-		NBTTagCompound tag = ItemUtils.getItemTag(containerStack);
-		NBTTagCompound inventoryTag = ItemInventory.getInventoryTag(tag);
-		inventory.readFromNBT(inventoryTag);
-		ItemStack containedStack = inventory.getStackInSlot(0);
+		ItemInventory inv = new ItemInventory(containerStack, 1);
+		ItemStack containedStack = inv.getStackInSlot(0);
 
 		if (type == ItemRenderType.INVENTORY) renderInventoryStack(containerStack, containedStack);
 		else renderInHandStack(type, containerStack, containedStack);
@@ -116,10 +106,15 @@ public class ItemRendererDevNull implements IItemRenderer {
 		if (type == ItemRenderType.ENTITY) {
 			GL11.glTranslated(-0.25, -0.25, -0.25);
 			GL11.glScaled(0.5, 0.5, 0.5);
+			RenderUtils.disableLightmap();
 		}
 
 		TextureUtils.bindDefaultItemsTexture();
 		cube.render();
+
+		if (type == ItemRenderType.ENTITY) {
+			RenderUtils.enableLightmap();
+		}
 
 		if (containedStack != null && (containedStack.getItem() instanceof ItemBlock)) {
 			GL11.glTranslated(0.5, 0.5, 0.5);

@@ -23,6 +23,8 @@ import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ColorUtils;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.google.common.collect.Maps;
 
 public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IExtendable {
@@ -197,7 +199,9 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 
 	private static boolean isValidForSlot(Slots slot, ItemStack stack) {
 		Integer allowedColor = ALLOWED_COLORS.get(slot);
-		return allowedColor != null && stack != null && OreDictionary.getOreID(stack) == allowedColor;
+		if (allowedColor == null || stack == null) return false;
+		int[] oreIds = OreDictionary.getOreIDs(stack);
+		return ArrayUtils.contains(oreIds, allowedColor);
 	}
 
 	@Override
