@@ -22,10 +22,6 @@ public class ContainerProjector extends ContainerInventoryProvider<TileEntityPro
 		return null;
 	}
 
-	public void rotate(int rotation) {
-		owner.rotate(rotation);
-	}
-
 	public int rotation() {
 		return owner.rotation();
 	}

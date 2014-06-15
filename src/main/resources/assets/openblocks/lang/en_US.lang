@@ -72,6 +72,7 @@ openblocks.misc.change_mode=Changing to %s mode
 openblocks.misc.change_size=Changing size to %sx%sx%s
 openblocks.misc.total_blocks=Total block count: %d
 openblocks.misc.get_witched=Get witched!
+openblocks.misc.page=Page %d of %d
 
 openblocks.misc.cant_restore=Can't restore inventory for player %s
 openblocks.misc.cant_store=Can't store player %s inventory

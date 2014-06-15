@@ -11,6 +11,5 @@ public class ContainerAutoEnchantmentTable extends ContainerInventoryProvider<Ti
 		addSlotToContainer(new RestrictedSlot(inventory, 0, 18, 40));
 		addSlotToContainer(new RestrictedSlot(inventory, 1, 100, 40));
 		addPlayerInventorySlots(93);
-		tile.sync();
 	}
 }

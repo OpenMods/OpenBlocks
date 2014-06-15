@@ -12,7 +12,6 @@ public class ContainerAutoAnvil extends ContainerInventoryProvider<TileEntityAut
 		addSlotToContainer(new RestrictedSlot(inventory, 1, 56, 40));
 		addSlotToContainer(new RestrictedSlot(inventory, 2, 110, 40));
 		addPlayerInventorySlots(93);
-		tile.sync();
 	}
 
 }

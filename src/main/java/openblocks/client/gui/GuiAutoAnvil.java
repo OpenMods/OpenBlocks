@@ -8,11 +8,9 @@ import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
-import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.BaseComponent.TabColor;
 import openmods.gui.component.*;
-import openmods.sync.SyncableFlags;
+import openmods.gui.component.BaseComponent.TabColor;
 
 public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 
@@ -26,8 +24,6 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 	private GuiComponentSideSelector sideSelectorModifier;
 	private GuiComponentSideSelector sideSelectorOutput;
 	private GuiComponentSideSelector sideSelectorXP;
-
-	private GuiComponentTabs tabs;
 
 	// tabs
 	private GuiComponentTab tabTool;
@@ -51,10 +47,9 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 	private GuiComponentSprite spriteHammer;
 	private GuiComponentSprite spritePlus;
 
-	public GuiAutoAnvil(ContainerAutoAnvil container) {
-		super(container, 176, 175, "openblocks.gui.autoanvil");
-
-		TileEntityAutoAnvil te = container.getOwner();
+	@Override
+	protected BaseComponent createRoot() {
+		TileEntityAutoAnvil te = getContainer().getOwner();
 		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
 
 		ItemStack enchantedAxe = new ItemStack(Items.diamond_pickaxe, 1);
@@ -63,9 +58,6 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		// create tank level
 		xpLevel = new GuiComponentTankLevel(140, 30, 17, 37, te.getTank());
 
-		// create tabs container
-		tabs = new GuiComponentTabs(xSize - 3, 4);
-
 		// create tabs
 		tabTool = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Items.diamond_pickaxe, 1), 100, 100);
 		tabModifier = new GuiComponentTab(TabColor.lightblue.getColor(), new ItemStack(Items.enchanted_book, 1), 100, 100);
@@ -73,17 +65,15 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		tabXP = new GuiComponentTab(TabColor.yellow.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
 
 		// create side selectors
-		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getToolSides(), true);
-		sideSelectorModifier = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getModifierSides(), true);
-		sideSelectorOutput = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getOutputSides(), true);
-		sideSelectorXP = new GuiComponentSideSelector(30, 30, 40.0, te, meta, OpenBlocks.Blocks.autoAnvil, te.getXPSides(), true);
+		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
+		sideSelectorModifier = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
+		sideSelectorOutput = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
+		sideSelectorXP = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
 
-		SyncableFlags autoFlags = te.getAutomaticSlots();
-
-		checkboxAutoExtractTool = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.tool.ordinal(), 0xFFFFFF);
-		checkboxAutoExtractModifier = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.modifier.ordinal(), 0xFFFFFF);
-		checkboxAutoEjectOutput = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.output.ordinal(), 0xFFFFFF);
-		checkboxAutoDrinkXP = new GuiComponentCheckbox(10, 82, autoFlags, AutoSlots.xp.ordinal(), 0xFFFFFF);
+		checkboxAutoExtractTool = new GuiComponentCheckbox(10, 82, false, 0xFFFFFF);
+		checkboxAutoExtractModifier = new GuiComponentCheckbox(10, 82, false, 0xFFFFFF);
+		checkboxAutoEjectOutput = new GuiComponentCheckbox(10, 82, false, 0xFFFFFF);
+		checkboxAutoDrinkXP = new GuiComponentCheckbox(10, 82, false, 0xFFFFFF);
 
 		// create labels
 		labelAutoExtractTool = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
@@ -113,18 +103,23 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 		tabOutput.addComponent(labelAutoEjectOutput);
 		tabXP.addComponent(labelAutoDrinkXP);
 
-		// add tabs
+		BaseComponent main = super.createRoot();
+		main.addComponent(spriteHammer);
+		main.addComponent(spritePlus);
+		main.addComponent(xpLevel);
+
+		GuiComponentTabWrapper tabs = new GuiComponentTabWrapper(0, 0, main);
+
 		tabs.addComponent(tabTool);
 		tabs.addComponent(tabModifier);
 		tabs.addComponent(tabOutput);
 		tabs.addComponent(tabXP);
 
-		// append to main
-		root.addComponent(spriteHammer);
-		root.addComponent(spritePlus);
-		root.addComponent(tabs);
-		root.addComponent(xpLevel);
+		return tabs;
+	}
 
+	public GuiAutoAnvil(ContainerAutoAnvil container) {
+		super(container, 176, 175, "openblocks.gui.autoanvil");
 	}
 
 }

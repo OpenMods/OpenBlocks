@@ -10,9 +10,6 @@ public class ContainerVacuumHopper extends ContainerInventoryProvider<TileEntity
 		super(playerInventory, hopper);
 		addInventoryGrid(44, 20, 5);
 		addPlayerInventorySlots(69);
-		if (!hopper.getWorldObj().isRemote) {
-			hopper.sync();
-		}
 	}
 
 }

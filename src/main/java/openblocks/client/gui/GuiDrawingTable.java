@@ -5,10 +5,10 @@ import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
+import openmods.gui.listener.IMouseDownListener;
 import openmods.utils.render.FakeIcon;
 
-public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
-		implements IComponentListener {
+public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 
 	public static final int BUTTON_DRAW = 0;
 
@@ -22,13 +22,32 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
 		buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), BaseComponent.TEXTURE_SHEET);
-		buttonLeft.addListener(this);
+		buttonLeft.addListener(new IMouseDownListener() {
+			@Override
+			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
+				getContainer().getOwner().onRequestStencilCreate(Stencil.VALUES[patternIndex]);
+			}
+		});
 		buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), BaseComponent.TEXTURE_SHEET);
-		buttonRight.addListener(this);
-		root.addComponent((buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF))
-				.setText("Draw")
-				.setName("btnDraw")
-				.addListener(this));
+		buttonRight.addListener(new IMouseDownListener() {
+			@Override
+			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
+				patternIndex--;
+				if (patternIndex < 0) patternIndex = Stencil.VALUES.length - 1;
+				iconDisplay.setIcon(Stencil.VALUES[patternIndex].getBlockIcon());
+			}
+		});
+		buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF);
+		buttonDraw.setText("Draw").setName("btnDraw").addListener(new IMouseDownListener() {
+			@Override
+			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
+				patternIndex++;
+				if (patternIndex >= Stencil.VALUES.length) patternIndex = 0;
+				iconDisplay.setIcon(Stencil.VALUES[patternIndex].getBlockIcon());
+			}
+		});
+
+		root.addComponent(buttonDraw);
 		(iconDisplay = new GuiComponentSprite(80, 34, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture)
 				.setColor(0f, 0f, 0f))
 				.setOverlayMode(true)
@@ -43,41 +62,4 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable>
 		super.updateScreen();
 		iconDisplay.setEnabled(inventorySlots.getSlot(0).getStack() != null && inventorySlots.getSlot(0).isItemValid(inventorySlots.getSlot(0).getStack()));
 	}
-
-	@Override
-	public void componentMouseDown(BaseComponent component, int offsetX,
-			int offsetY, int button) {
-
-		Stencil[] stencils = Stencil.values();
-		if (component.equals(buttonDraw)) {
-			getContainer().getOwner().onRequestStencilCreate(stencils[patternIndex]);
-		} else {
-			if (component.equals(buttonLeft)) {
-				patternIndex--;
-				if (patternIndex < 0) {
-					patternIndex = stencils.length - 1;
-				}
-			} else if (component.equals(buttonRight)) {
-				patternIndex++;
-				patternIndex = patternIndex % stencils.length;
-			}
-			iconDisplay.setIcon(stencils[patternIndex].getBlockIcon());
-		}
-	}
-
-	@Override
-	public void componentMouseDrag(BaseComponent component, int offsetX,
-			int offsetY, int button, long time) {}
-
-	@Override
-	public void componentMouseMove(BaseComponent component, int offsetX,
-			int offsetY) {}
-
-	@Override
-	public void componentMouseUp(BaseComponent component, int offsetX,
-			int offsetY, int button) {}
-
-	@Override
-	public void componentKeyTyped(BaseComponent component, char par1, int par2) {}
-
 }

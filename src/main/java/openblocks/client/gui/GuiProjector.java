@@ -8,7 +8,10 @@ import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent;
+import openmods.gui.component.DummyComponent;
+import openmods.gui.component.GuiComponentIconButton;
+import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.misc.Trackball.TrackballWrapper;
 import openmods.utils.MathUtils;
 import openmods.utils.render.FakeIcon;
@@ -24,25 +27,12 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 	private static final int VIEW_WIDTH = 160;
 	private TrackballWrapper trackball = new TrackballWrapper(1, 150);
 
-	private IComponentListener createRotationListener(final int rotation) {
-		return new IComponentListener() {
-
-			@Override
-			public void componentMouseUp(BaseComponent component, int offsetX, int offsetY, int button) {}
-
-			@Override
-			public void componentMouseMove(BaseComponent component, int offsetX, int offsetY) {}
-
-			@Override
-			public void componentMouseDrag(BaseComponent component, int offsetX, int offsetY, int button, long time) {}
-
+	private IMouseDownListener createRotationListener(final int rotation) {
+		return new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
-				getContainer().rotate(rotation);
+				// TODO getContainer().rotate(rotation);
 			}
-
-			@Override
-			public void componentKeyTyped(BaseComponent component, char par1, int par2) {}
 		};
 	}
 
