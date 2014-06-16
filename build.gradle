@@ -5,7 +5,7 @@
 
 //================================================
 // Variables
-ext.mod_version = '1.2.8'
+ext.mod_version = '1.2.9'
 ext.mc_ver = '1.6.4'
 ext.forge_ver = '9.11.1.964'
 
