@@ -27,7 +27,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 
 	private boolean _redstoneSignal;
 
-	private final GenericInventory inventory = new GenericInventory("blockPlacer", false, BUFFER_SIZE);
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockPlacer", false, BUFFER_SIZE));
 
 	public void setRedstoneSignal(boolean redstoneSignal) {
 		if (redstoneSignal != _redstoneSignal) {

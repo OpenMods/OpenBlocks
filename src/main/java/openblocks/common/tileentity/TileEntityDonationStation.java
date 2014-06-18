@@ -46,6 +46,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	@Override
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {
 		findModNameForInventoryItem();
+		markUpdated();
 	}
 
 	public String getDonateUrl() {

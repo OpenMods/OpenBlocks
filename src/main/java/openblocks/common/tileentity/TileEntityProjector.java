@@ -63,7 +63,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 					sync();
 				}
 
-				worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, TileEntityProjector.this);
+				markUpdated();
 			}
 		}
 	};

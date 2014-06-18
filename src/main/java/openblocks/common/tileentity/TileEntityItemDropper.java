@@ -24,7 +24,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 
 	private boolean _redstoneSignal;
 
-	private GenericInventory inventory = new GenericInventory("itemDropper", false, 9);
+	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("itemDropper", false, 9));
 
 	public TileEntityItemDropper() {}
 

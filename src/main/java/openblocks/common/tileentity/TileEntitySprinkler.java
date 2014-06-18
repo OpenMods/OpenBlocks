@@ -54,12 +54,12 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	public int ticks;
 
-	private final GenericInventory inventory = new GenericInventory("sprinkler", true, 9) {
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("sprinkler", true, 9) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return itemstack != null && itemstack.isItemEqual(BONEMEAL);
 		}
-	};
+	});
 
 	@IncludeInterface
 	private final IFluidHandler tankWrapper = new GenericFluidHandler.Drain(tank);

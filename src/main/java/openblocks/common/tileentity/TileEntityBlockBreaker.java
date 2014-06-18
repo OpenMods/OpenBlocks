@@ -37,12 +37,12 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	private int redstoneAnimTimer;
 	private SyncableBoolean activated;
 
-	private final GenericInventory inventory = new GenericInventory("blockbreaker", true, 1) {
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockbreaker", true, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return false;
 		}
-	};
+	});
 
 	@Override
 	protected void createSyncedFields() {

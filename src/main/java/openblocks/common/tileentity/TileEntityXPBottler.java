@@ -50,13 +50,13 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		xp
 	}
 
-	private final GenericInventory inventory = new GenericInventory("xpbottler", true, 2) {
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("xpbottler", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 			if (slot != 0) return false;
 			return itemstack.getItem() == Item.glassBottle;
 		}
-	};
+	});
 
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);

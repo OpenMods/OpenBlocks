@@ -283,6 +283,8 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 			}
 			flags.set(Flags.hasPaint, hasPaint);
 			sync();
+
+			markUpdated();
 		}
 	}
 

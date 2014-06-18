@@ -263,7 +263,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			}
 
 			needsSync = true;
-			worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+			markUpdated();
 		} else {
 			flowTimer += 0.1f;
 		}
@@ -337,7 +337,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		tank.markDirty();
 	}
 
-	private void markUpdated() {
+	private void markContentsUpdated() {
 		notifyNeigbours();
 		forceUpdate = true;
 	}
@@ -352,7 +352,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private FluidStack internalDrain(int amount, boolean doDrain) {
 		FluidStack drained = tank.drain(amount, doDrain);
-		if (drained != null && doDrain) markUpdated();
+		if (drained != null && doDrain) markContentsUpdated();
 		return drained;
 	}
 
@@ -374,7 +374,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private int internalFill(FluidStack resource, boolean doFill) {
 		int amount = tank.fill(resource, doFill);
-		if (amount > 0 && doFill) markUpdated();
+		if (amount > 0 && doFill) markContentsUpdated();
 		return amount;
 	}
 
