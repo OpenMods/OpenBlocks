@@ -7,7 +7,7 @@ Current Version
 -
 
 **[v1.2.8](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.8.jar) for Minecraft 1.6.x**
-You'll also need [OpenModsLib](https://dl.dropboxusercontent.com/u/4295615/OpenModsLib-0.4b.jar).
+You'll also need [OpenModsLib](https://dl.dropboxusercontent.com/u/4295615/OpenModsLib-0.5.jar).
 
 For stable release downloads, click [here](http://www.openmods.info/openblocks/downloads).  
 For snapshot versions, check the [Jenkins](http://www.openmods.info:8080/).
