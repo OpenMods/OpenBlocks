@@ -6,7 +6,7 @@ An open source random collection of blocks and miscellaneous cool stuff
 Current Version
 -
 
-**[v1.2.7](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.7.jar) for Minecraft 1.6.x**
+**[v1.2.8](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.8.jar) for Minecraft 1.6.x**
 You'll also need [OpenModsLib](https://dl.dropboxusercontent.com/u/4295615/OpenModsLib-0.4b.jar).
 
 For stable release downloads, click [here](http://www.openmods.info/openblocks/downloads).  
