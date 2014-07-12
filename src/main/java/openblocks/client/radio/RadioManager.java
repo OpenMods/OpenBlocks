@@ -40,6 +40,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class RadioManager implements IVillageTradeHandler {
 
@@ -147,7 +148,7 @@ public class RadioManager implements IVillageTradeHandler {
 
 	public static final RadioManager instance = new RadioManager();
 
-	public void readConfigs() {
+	public static void readConfigs() {
 		for (String entry : Config.derpList) {
 			String[] parts = entry.split("\\s+");
 			Preconditions.checkArgument(parts.length == 2, "Invalid format in replacementList");
@@ -229,6 +230,7 @@ public class RadioManager implements IVillageTradeHandler {
 		if (evt.world.isRemote) streamManager.disconnectAll();
 	}
 
+	@SideOnly(Side.CLIENT)
 	public ISound startPlaying(String url, float x, float y, float z, float volume) {
 		final UrlMeta ext = resolveStreamExt(url);
 
@@ -255,6 +257,7 @@ public class RadioManager implements IVillageTradeHandler {
 		return sound;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void stopPlaying(ISound sound) {
 		Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
 		streamManager.disconnect(sound.getPositionedSoundLocation());

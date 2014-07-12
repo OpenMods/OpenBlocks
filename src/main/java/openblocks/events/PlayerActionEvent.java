@@ -4,13 +4,13 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import openmods.network.event.EventPacket;
-import openmods.network.event.IEventPacketType;
+import openmods.network.event.EventDirection;
+import openmods.network.event.NetworkEvent;
+import openmods.network.event.NetworkEventMeta;
 import openmods.utils.ByteUtils;
 
-public class PlayerActionEvent extends EventPacket {
-	public static final IEventPacketType EVENT_TYPE = EventTypes.PLAYER_ACTION;
-
+@NetworkEventMeta(direction = EventDirection.C2S)
+public class PlayerActionEvent extends NetworkEvent {
 	public enum Type {
 		BOO
 	}

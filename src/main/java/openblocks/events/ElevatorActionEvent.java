@@ -5,12 +5,13 @@ import java.io.DataOutput;
 
 import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.movement.PlayerMovementEvent;
-import openmods.network.event.IEventPacketType;
+import openmods.network.event.EventDirection;
+import openmods.network.event.NetworkEventMeta;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 
+@NetworkEventMeta(direction = EventDirection.C2S)
 public class ElevatorActionEvent extends TileEntityMessageEventPacket {
-	public static final IEventPacketType EVENT_TYPE = EventTypes.PLAYER_MOVEMENT;
 
 	public ElevatorActionEvent() {}
 

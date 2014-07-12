@@ -25,7 +25,9 @@ import openblocks.common.item.*;
 import openblocks.common.item.ItemImaginationGlasses.ItemCrayonGlasses;
 import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.*;
-import openblocks.events.EventTypes;
+import openblocks.events.ElevatorActionEvent;
+import openblocks.events.PlayerActionEvent;
+import openblocks.events.StencilCraftEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
 import openblocks.rubbish.BrickManager;
@@ -41,6 +43,7 @@ import openmods.config.game.*;
 import openmods.config.properties.ConfigProcessing;
 import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
+import openmods.network.event.NetworkEventManager;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ReflectionHelper;
 
@@ -340,7 +343,14 @@ public class OpenBlocks {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
-		EventTypes.registerTypes();
+		NetworkEventManager.INSTANCE
+				.startRegistration()
+				.register(MapDataManager.MapDataRequestEvent.class)
+				.register(MapDataManager.MapDataResponseEvent.class)
+				.register(MapDataManager.MapUpdatesEvent.class)
+				.register(ElevatorActionEvent.class)
+				.register(StencilCraftEvent.class)
+				.register(PlayerActionEvent.class);
 
 		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
 		features.collectFromBlocks(OpenBlocks.Blocks.class);
@@ -382,7 +392,7 @@ public class OpenBlocks {
 		gameConfig.registerBlocks(OpenBlocks.Blocks.class);
 		gameConfig.registerItems(OpenBlocks.Items.class);
 
-		RadioManager.instance.readConfigs();
+		RadioManager.readConfigs();
 		Config.register();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));

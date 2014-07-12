@@ -5,13 +5,13 @@ import java.io.DataOutput;
 
 import openblocks.common.Stencil;
 import openmods.events.network.TileEntityMessageEventPacket;
-import openmods.network.event.IEventPacketType;
+import openmods.network.event.EventDirection;
+import openmods.network.event.NetworkEventMeta;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 
+@NetworkEventMeta(direction = EventDirection.C2S)
 public class StencilCraftEvent extends TileEntityMessageEventPacket {
-	public static final IEventPacketType EVENT_TYPE = EventTypes.STENCIL_CRAFT;
-
 	private Stencil stencil;
 
 	public StencilCraftEvent() {}

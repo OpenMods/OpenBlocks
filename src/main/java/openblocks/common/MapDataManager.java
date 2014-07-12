@@ -12,11 +12,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.events.EventTypes;
 import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
-import openmods.network.event.EventPacket;
-import openmods.network.event.IEventPacketType;
+import openmods.network.event.EventDirection;
+import openmods.network.event.NetworkEvent;
+import openmods.network.event.NetworkEventMeta;
 import openmods.utils.ByteUtils;
 
 import com.google.common.base.Preconditions;
@@ -29,7 +29,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MapDataManager {
 
-	public abstract static class MapIdRequest extends EventPacket {
+	public abstract static class MapIdRequest extends NetworkEvent {
 		public List<Integer> mapIds = Lists.newArrayList();
 
 		@Override
@@ -49,17 +49,14 @@ public class MapDataManager {
 		}
 	}
 
-	public static class MapDataRequestEvent extends MapIdRequest {
-		public static final IEventPacketType EVENT_TYPE = EventTypes.MAP_DATA_REQUEST;
-	}
+	@NetworkEventMeta(direction = EventDirection.C2S)
+	public static class MapDataRequestEvent extends MapIdRequest {}
 
-	public static class MapUpdatesEvent extends MapIdRequest {
-		public static final IEventPacketType EVENT_TYPE = EventTypes.MAP_UPDATES;
-	}
+	@NetworkEventMeta(direction = EventDirection.S2C)
+	public static class MapUpdatesEvent extends MapIdRequest {}
 
-	public static class MapDataResponseEvent extends EventPacket {
-		public static final IEventPacketType EVENT_TYPE = EventTypes.MAP_DATA_RESPONSE;
-
+	@NetworkEventMeta(direction = EventDirection.S2C, compressed = true)
+	public static class MapDataResponseEvent extends NetworkEvent {
 		public Map<Integer, HeightMapData> maps = Maps.newHashMap();
 
 		@Override
