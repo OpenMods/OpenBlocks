@@ -9,17 +9,16 @@ import openblocks.client.gui.GuiDrawingTable;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.MetasGeneric;
-import openblocks.events.StencilCraftEvent;
+import openblocks.rpc.IStencilCrafter;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
-import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryCallback, IExtendable, IInventoryProvider {
+public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryCallback, IExtendable, IInventoryProvider, IStencilCrafter {
 
 	private final GenericInventory inventory = new GenericInventory("drawingtable", true, 1) {
 
@@ -36,22 +35,6 @@ public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, I
 
 	@Override
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {}
-
-	public void onRequestStencilCreate(Stencil stencil) {
-		new StencilCraftEvent(this, stencil).sendToServer();
-	}
-
-	@Override
-	public void onEvent(TileEntityMessageEventPacket event) {
-		if (event instanceof StencilCraftEvent) {
-			ItemStack stack = inventory.getStackInSlot(0);
-			if (stack != null && MetasGeneric.unpreparedStencil.isA(stack)) {
-				ItemStack stencil = new ItemStack(Items.stencil, 1, ((StencilCraftEvent)event).getStencil().ordinal());
-				stencil.stackSize = stack.stackSize;
-				inventory.setInventorySlotContents(0, stencil);
-			}
-		}
-	}
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {
@@ -84,5 +67,15 @@ public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, I
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	@Override
+	public void craft(Stencil stencil) {
+		ItemStack stack = inventory.getStackInSlot(0);
+		if (stack != null && MetasGeneric.unpreparedStencil.isA(stack)) {
+			ItemStack stencilItem = new ItemStack(Items.stencil, 1, stencil.ordinal());
+			stencilItem.stackSize = stack.stackSize;
+			inventory.setInventorySlotContents(0, stencilItem);
+		}
 	}
 }

@@ -3,6 +3,7 @@ package openblocks.client.gui;
 import net.minecraft.client.renderer.texture.TextureMap;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
+import openblocks.rpc.IStencilCrafter;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
@@ -25,15 +26,17 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 		buttonLeft.addListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				getContainer().getOwner().onRequestStencilCreate(Stencil.VALUES[patternIndex]);
+				patternIndex--;
+				if (patternIndex < 0) patternIndex = Stencil.VALUES.length - 1;
+				iconDisplay.setIcon(Stencil.VALUES[patternIndex].getBlockIcon());
 			}
 		});
 		buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), BaseComponent.TEXTURE_SHEET);
 		buttonRight.addListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				patternIndex--;
-				if (patternIndex < 0) patternIndex = Stencil.VALUES.length - 1;
+				patternIndex++;
+				if (patternIndex >= Stencil.VALUES.length) patternIndex = 0;
 				iconDisplay.setIcon(Stencil.VALUES[patternIndex].getBlockIcon());
 			}
 		});
@@ -41,9 +44,8 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 		buttonDraw.setText("Draw").setName("btnDraw").addListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				patternIndex++;
-				if (patternIndex >= Stencil.VALUES.length) patternIndex = 0;
-				iconDisplay.setIcon(Stencil.VALUES[patternIndex].getBlockIcon());
+				IStencilCrafter rpcProxy = getContainer().getOwner().getRpcProxy(IStencilCrafter.class);
+				rpcProxy.craft(Stencil.VALUES[patternIndex]);
 			}
 		});
 

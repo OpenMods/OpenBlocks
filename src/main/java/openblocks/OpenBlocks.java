@@ -27,9 +27,9 @@ import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.*;
 import openblocks.events.ElevatorActionEvent;
 import openblocks.events.PlayerActionEvent;
-import openblocks.events.StencilCraftEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
+import openblocks.rpc.IStencilCrafter;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
@@ -44,6 +44,7 @@ import openmods.config.properties.ConfigProcessing;
 import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
 import openmods.network.event.NetworkEventManager;
+import openmods.network.rpc.RpcCallDispatcher;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ReflectionHelper;
 
@@ -349,8 +350,10 @@ public class OpenBlocks {
 				.register(MapDataManager.MapDataResponseEvent.class)
 				.register(MapDataManager.MapUpdatesEvent.class)
 				.register(ElevatorActionEvent.class)
-				.register(StencilCraftEvent.class)
 				.register(PlayerActionEvent.class);
+
+		RpcCallDispatcher.INSTANCE.startRegistration()
+				.registerInterface(IStencilCrafter.class);
 
 		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
 		features.collectFromBlocks(OpenBlocks.Blocks.class);
