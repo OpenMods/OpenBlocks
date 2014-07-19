@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -24,7 +23,9 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.*;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableProgress;
+import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
@@ -207,9 +208,6 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public IInventory getInventory() {

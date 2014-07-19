@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +10,6 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openmods.api.IPlaceAwareTile;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
 
@@ -91,9 +89,6 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 		angle.setValue(player.rotationYawHead);
 		sync();
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	public float getAngle() {
 		return angle.getValue();

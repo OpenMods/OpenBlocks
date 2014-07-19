@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.Random;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -30,7 +29,6 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.GenericFluidHandler;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
@@ -209,9 +207,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	@IncludeInterface

@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.Random;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -22,7 +21,9 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.*;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableInt;
+import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
@@ -252,9 +253,6 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public boolean canOpenGui(EntityPlayer player) {
 		return true;
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@IncludeOverride
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {

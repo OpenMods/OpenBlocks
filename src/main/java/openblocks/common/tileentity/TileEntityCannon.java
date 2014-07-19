@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +12,6 @@ import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
 import openmods.api.ISurfaceAttachment;
 import openmods.events.network.TileEntityMessageEventPacket;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.InventoryUtils;
@@ -41,8 +38,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	private int ticksSinceLastFire = Integer.MAX_VALUE;
 
-	public TileEntityCannon() {}
-
 	@Override
 	protected void createSyncedFields() {
 		targetPitch = new SyncableDouble();
@@ -63,8 +58,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		// ugly, need to clean
 		currentPitch = currentPitch - ((currentPitch - targetPitch.getValue()) / 20);
-
 		currentYaw = GeometryUtils.normalizeAngle(currentYaw);
+
 		final double targetYaw = GeometryUtils.normalizeAngle(this.targetYaw.getValue());
 		if (Math.abs(currentYaw - targetYaw) < YAW_CHANGE_SPEED) currentYaw = targetYaw;
 		else {
@@ -73,10 +68,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		}
 
 		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.getValue()) / 20);
-		getMotionFromAngles();
 
 		if (!worldObj.isRemote) {
-
 			if (worldObj.getWorldTime() % 20 == 0) {
 				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
 					for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
@@ -84,7 +77,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 						if (inventory != null) {
 							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
 							if (stack != null) {
-								getMotionFromAngles();
+								recalcMotionFromAngles();
 								new TileEntityMessageEventPacket(this).sendToWatchers();
 								EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;
@@ -129,12 +122,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		return box.expand(32.0, 32.0, 32.0);
 	}
 
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-		getMotionFromAngles();
-	}
-
-	private void getMotionFromAngles() {
+	private void recalcMotionFromAngles() {
 		double p = Math.toRadians(currentPitch);
 		double y = Math.toRadians(180 - currentYaw);
 		double sinPitch = Math.sin(p);

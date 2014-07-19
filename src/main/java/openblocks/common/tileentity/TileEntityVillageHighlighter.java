@@ -1,12 +1,13 @@
 package openblocks.common.tileentity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
 import openblocks.OpenBlocks;
 import openmods.OpenMods;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
@@ -68,9 +69,6 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 	public SyncableIntArray getVillageData() {
 		return villageData;
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	@SideOnly(Side.CLIENT)

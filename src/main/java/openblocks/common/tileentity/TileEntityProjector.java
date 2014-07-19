@@ -7,7 +7,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
@@ -18,17 +17,14 @@ import openblocks.common.item.ItemHeightMap;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
-import openmods.api.IInventoryCallback;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableByte;
-import openmods.sync.SyncableInt;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable {
+public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable, ISyncListener {
 
 	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
 		@Override
@@ -71,22 +67,8 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	private SyncableByte rotation;
 	private SyncableInt mapId;
 
-	public static class MapInventory extends GenericInventory {
-
-		public MapInventory(String name, boolean isInvNameLocalized, int size) {
-			super(name, isInvNameLocalized, size);
-		}
-	}
-
-	public GenericInventory addUpdateCallback(MapInventory inventory, final TileEntity te) {
-		inventory.addCallback(new IInventoryCallback() {
-			@Override
-			public void onInventoryChanged(IInventory inventory, int slotNumber) {
-
-			}
-		});
-
-		return inventory;
+	public TileEntityProjector() {
+		syncMap.addUpdateListener(this);
 	}
 
 	@Override
@@ -140,8 +122,8 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-		if (worldObj.isRemote && changes.contains(mapId)) {
+	public void onSync(Set<ISyncableObject> changes) {
+		if (changes.contains(mapId)) {
 			int mapId = this.mapId.getValue();
 			if (mapId >= 0 && MapDataManager.getMapData(worldObj, mapId).isEmpty()) MapDataManager.requestMapData(worldObj, mapId);
 		}

@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableSet;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncHandler {
+public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncProvider {
 
 	private static final int MAP_JOB_DELAY = 5;
 	private static final int MOVE_DELAY = 35;
@@ -137,7 +137,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	private final SyncMapEntity<EntityCartographer> syncMap = new SyncMapEntity<EntityCartographer>(this);
 
 	{
-		syncMap.autoregister();
+		SyncObjectScanner.INSTANCE.registerAllFields(syncMap, this);
 		setSize(0.2f, 0.2f);
 	}
 
@@ -278,9 +278,6 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	public SyncMap<EntityCartographer> getSyncMap() {
 		return syncMap;
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	public int getNewMapCenterX() {
 		return ((int)posX) & ~0x0F;

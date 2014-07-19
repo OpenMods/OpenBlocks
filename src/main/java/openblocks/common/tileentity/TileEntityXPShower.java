@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.Set;
-
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
@@ -11,7 +9,6 @@ import openblocks.common.entity.EntityXPOrbNoFly;
 import openmods.OpenMods;
 import openmods.api.INeighbourAwareTile;
 import openmods.liquids.GenericTank;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableFlags;
 import openmods.tileentity.SyncedTileEntity;
@@ -26,13 +23,14 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 			OpenBlocks.XP_FLUID
 			);
 
-	private SyncableFlags sides = new SyncableFlags();
+	private SyncableFlags sides;
 	private int drainedCountdown = 0;
 	private SyncableBoolean isOn;
 	private boolean isPowered = false;
 
 	@Override
 	protected void createSyncedFields() {
+		sides = new SyncableFlags();
 		isOn = new SyncableBoolean();
 	}
 
@@ -107,11 +105,6 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		bufferTank.writeToNBT(nbt);
-	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-
 	}
 
 }

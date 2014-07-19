@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.shapes.GuideShape;
 import openmods.api.IActivateAwareTile;
 import openmods.shapes.IShapeable;
+import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
@@ -25,7 +26,7 @@ import com.google.common.collect.Sets;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IActivateAwareTile {
+public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IActivateAwareTile, ISyncListener {
 
 	private Set<Coord> shape;
 	private Set<Coord> previousShape;
@@ -37,7 +38,9 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	protected SyncableInt mode;
 	protected SyncableInt color;
 
-	public TileEntityGuide() {}
+	public TileEntityGuide() {
+		syncMap.addUpdateListener(this);
+	}
 
 	@Override
 	protected void createSyncedFields() {
@@ -201,7 +204,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	}
 
 	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
+	public void onSync(Set<ISyncableObject> changes) {
 		recreateShape();
 	}
 

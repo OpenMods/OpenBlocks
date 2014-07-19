@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -27,7 +26,6 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
@@ -455,9 +453,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 		return false;
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	public IFluidTank getTank() {
 		return tank;

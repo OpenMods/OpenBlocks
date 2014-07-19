@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,6 @@ import openblocks.common.entity.EntityMiniMe;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 
@@ -258,9 +256,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 		super.readFromNBT(nbt);
 		owner = nbt.getString("owner");
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public void onBlockBroken() {

@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
@@ -30,7 +29,9 @@ import openmods.api.IHasGui;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.*;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
@@ -207,9 +208,6 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 			}
 		}
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public IInventory getInventory() {

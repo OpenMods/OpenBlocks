@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,7 +10,6 @@ import openblocks.common.block.BlockFlag;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.api.ISurfaceAttachment;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFloat;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
@@ -35,9 +32,6 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 
 	@Override
 	protected void initialize() {}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	public IIcon getIcon() {
 		return OpenBlocks.Blocks.flag.getIcon(0, 0);

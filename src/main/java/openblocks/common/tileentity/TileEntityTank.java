@@ -20,6 +20,7 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.GenericFluidHandler;
+import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
@@ -73,8 +74,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private double flowTimer = Math.random() * 100;
 
-	private int previousFluidId = 0;
-
 	private boolean forceUpdate = true;
 
 	private int ticksSinceLastSync = hashCode() % SYNC_THRESHOLD;
@@ -87,6 +86,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@IncludeInterface(IFluidHandler.class)
 	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
+
+	public TileEntityTank() {
+		syncMap.addSyncListener(new ISyncListener() {
+			@Override
+			public void onSync(Set<ISyncableObject> changes) {
+				ticksSinceLastSync = 0;
+			}
+		});
+
+		syncMap.addUpdateListener(createRenderUpdateListener(tank));
+	}
 
 	@Override
 	protected void createSyncedFields() {
@@ -139,13 +149,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		NBTTagCompound nbt = new NBTTagCompound();
 		tank.writeToNBT(nbt);
 		return nbt;
-	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-		int newFluidId = tank.getFluid() == null? -1 : tank.getFluid().fluidID;
-		if (newFluidId != previousFluidId) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		previousFluidId = newFluidId;
 	}
 
 	@Override
@@ -278,11 +281,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			ticksSinceLastUpdate = 0;
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		}
-	}
-
-	@Override
-	public void onServerSync(Set<ISyncableObject> changed) {
-		ticksSinceLastSync = 0;
 	}
 
 	private void tryGetNeighbor(List<TileEntityTank> result, FluidStack fluid, ForgeDirection side) {

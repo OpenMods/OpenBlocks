@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +18,9 @@ import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ISpecialDrops;
-import openmods.sync.*;
+import openmods.sync.SyncableBlock;
+import openmods.sync.SyncableInt;
+import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
@@ -45,11 +46,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	public SyncableBlockLayers[] allSides;
 
-	@Override
-	public void initialize() {}
-
-	public void setupForItemRenderer() {
-		createSyncedFields();
+	public TileEntityCanvas() {
+		syncMap.addSyncListener(createRenderUpdateListener());
 	}
 
 	public SyncableIntArray getBaseColors() {
@@ -74,11 +72,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	public SyncableBlockLayers getLayersForSide(int side) {
 		return allSides[side];
-	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-		worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord); // TODO: confirm
 	}
 
 	public Layer getLayerForSide(int renderSide, int layerId) {

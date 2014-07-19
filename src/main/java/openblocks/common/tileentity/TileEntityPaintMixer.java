@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.EnumMap;
-import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -223,9 +222,6 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	public boolean hasPaint() {
 		return flags.get(Flags.hasPaint);
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {

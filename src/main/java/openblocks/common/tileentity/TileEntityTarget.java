@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -16,7 +15,6 @@ import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.ClassReferences;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
@@ -137,9 +135,6 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		super.prepareForInventoryRender(block, metadata);
 		setEnabled(true);
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public void onNeighbourChanged() {

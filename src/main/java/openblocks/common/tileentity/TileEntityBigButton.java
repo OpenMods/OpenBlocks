@@ -18,13 +18,14 @@ import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IExtendable, IInventoryProvider {
+public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IExtendable, IInventoryProvider, ISyncListener {
 
 	private int tickCounter = 0;
 
@@ -36,7 +37,10 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	private final GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
 
-	public TileEntityBigButton() {}
+	public TileEntityBigButton() {
+		syncMap.addUpdateListener(createRenderUpdateListener());
+		syncMap.addSyncListener(this);
+	}
 
 	@Override
 	protected void createSyncedFields() {
@@ -104,19 +108,6 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 		super.prepareForInventoryRender(block, metadata);
 	}
 
-	@Override
-	public void onServerSync(Set<ISyncableObject> changed) {
-		super.onServerSync(changed);
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton);
-		ForgeDirection rot = getRotation();
-		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton);
-	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-	}
-
 	public boolean isButtonActive() {
 		return flags.get(Flags.active);
 	}
@@ -137,5 +128,12 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
+	}
+
+	@Override
+	public void onSync(Set<ISyncableObject> changes) {
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton);
+		ForgeDirection rot = getRotation();
+		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton);
 	}
 }

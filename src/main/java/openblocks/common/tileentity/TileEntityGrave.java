@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -22,7 +21,6 @@ import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
@@ -84,9 +82,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	public boolean isOnSoil() {
 		return onSoil;
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {

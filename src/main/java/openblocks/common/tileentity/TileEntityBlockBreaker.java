@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -24,7 +23,6 @@ import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
@@ -45,6 +43,10 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 			return false;
 		}
 	};
+
+	public TileEntityBlockBreaker() {
+		syncMap.addUpdateListener(createRenderUpdateListener());
+	}
 
 	@Override
 	protected void createSyncedFields() {
@@ -157,13 +159,6 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	public void onNeighbourChanged() {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
-		}
-	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-		if (changes.contains(activated)) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 	}
 

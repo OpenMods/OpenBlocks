@@ -14,6 +14,8 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile {
 
+	public static final int OPENING_ANIMATION_TIME = 20;
+
 	public enum Flags {
 		isShut
 	}
@@ -22,8 +24,16 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	// can't be added as new flag, since animation depends on it
 	private SyncableBoolean isLocked;
 	private SyncableInt trappedEntityId;
+	private int ticksSinceChange;
 
-	public TileEntityBearTrap() {}
+	public TileEntityBearTrap() {
+		syncMap.addUpdateListener(new ISyncListener() {
+			@Override
+			public void onSync(Set<ISyncableObject> changes) {
+				ticksSinceChange = 0;
+			}
+		});
+	}
 
 	@Override
 	protected void createSyncedFields() {
@@ -34,38 +44,37 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	protected void initialize() {}
-
-	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (trappedEntityId.getValue() != 0) {
-			Entity trappedEntity = worldObj.getEntityByID(trappedEntityId.getValue());
-			if (trappedEntity != null) {
-				trappedEntity.distanceWalkedOnStepModified = 0.0f;
-				trappedEntity.distanceWalkedModified = 0.0f;
-				trappedEntity.posX = 0.5 + xCoord;
-				trappedEntity.posZ = 0.5 + zCoord;
-				trappedEntity.posY = yCoord;
-				trappedEntity.prevPosX = 0.5 + xCoord;
-				trappedEntity.prevPosZ = 0.5 + zCoord;
-				trappedEntity.prevPosY = yCoord;
-				trappedEntity.lastTickPosX = 0.5 + xCoord;
-				trappedEntity.lastTickPosZ = 0.5 + zCoord;
-				trappedEntity.lastTickPosY = yCoord;
-				trappedEntity.motionX = 0;
-				trappedEntity.motionY = 0;
-				trappedEntity.motionZ = 0;
-			}
-		}
-		if (!worldObj.isRemote) {
-			sync();
+		ticksSinceChange++;
+		final int entityId = trappedEntityId.getValue();
+		if (entityId != 0) immobilizeEntity(entityId);
+		if (!worldObj.isRemote) sync();
+	}
+
+	private void immobilizeEntity(int entityId) {
+		Entity trappedEntity = worldObj.getEntityByID(entityId);
+		if (trappedEntity != null) {
+			trappedEntity.distanceWalkedOnStepModified = 0.0f;
+			trappedEntity.distanceWalkedModified = 0.0f;
+			trappedEntity.posX = 0.5 + xCoord;
+			trappedEntity.posZ = 0.5 + zCoord;
+			trappedEntity.posY = yCoord;
+			trappedEntity.prevPosX = 0.5 + xCoord;
+			trappedEntity.prevPosZ = 0.5 + zCoord;
+			trappedEntity.prevPosY = yCoord;
+			trappedEntity.lastTickPosX = 0.5 + xCoord;
+			trappedEntity.lastTickPosZ = 0.5 + zCoord;
+			trappedEntity.lastTickPosY = yCoord;
+			trappedEntity.motionX = 0;
+			trappedEntity.motionY = 0;
+			trappedEntity.motionZ = 0;
 		}
 	}
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (entity instanceof EntityCreature && !isLocked.getValue() && tickSinceOpened() > 20) {
+			if (entity instanceof EntityCreature && !isLocked.getValue() && ticksSinceChange > OPENING_ANIMATION_TIME) {
 				close(entity);
 			}
 		}
@@ -84,8 +93,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 		return e.myEntitySize.ordinal() + 1;
 	}
 
-	public int tickSinceOpened() {
-		return flags.getTicksSinceChange(worldObj);
+	public int tickSinceChange() {
+		return ticksSinceChange;
 	}
 
 	@Override
@@ -111,9 +120,6 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		}
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {

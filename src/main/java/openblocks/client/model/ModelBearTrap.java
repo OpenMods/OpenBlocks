@@ -2,6 +2,7 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import openblocks.common.tileentity.TileEntityBearTrap;
 
 public class ModelBearTrap extends ModelBase {
 
@@ -146,7 +147,7 @@ public class ModelBearTrap extends ModelBase {
 		float rot = 1.4F;
 
 		if (!shut) {
-			rot = Math.max(0.0f, 1.4f - (ticksSinceOpened * 0.1f));
+			rot = Math.max(0.0f, 1.4f - (ticksSinceOpened / TileEntityBearTrap.OPENING_ANIMATION_TIME));
 		}
 
 		leftnearside.rotateAngleZ = -rot;

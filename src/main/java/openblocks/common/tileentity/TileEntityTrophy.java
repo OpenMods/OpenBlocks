@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -10,7 +8,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
-import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 
@@ -101,8 +98,5 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 		super.prepareForInventoryRender(block, metadata);
 		trophyIndex.setValue(metadata);
 	}
-
-	@Override
-	public void onSynced(Set<ISyncableObject> changes) {}
 
 }

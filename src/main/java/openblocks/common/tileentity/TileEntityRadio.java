@@ -24,7 +24,7 @@ import openmods.utils.ColorUtils.ColorMeta;
 
 import com.google.common.base.Strings;
 
-public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile, INeighbourAwareTile, IInventoryCallback, IExtendable {
+public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareTile, IBreakAwareTile, INeighbourAwareTile, IInventoryCallback, IExtendable, ISyncListener {
 
 	private static final byte NO_CRYSTAL = (byte)-1;
 	private SyncableString url;
@@ -46,6 +46,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 	public TileEntityRadio() {
 		inventory.addCallback(this);
+		syncMap.addSyncListener(this);
 	}
 
 	@Override
@@ -81,38 +82,24 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		updateURL(inventory.getStackInSlot(0));
 	}
 
-	private void killMusic() {
-		if (sound != null) {
-			RadioManager.instance.stopPlaying(sound);
-			sound = null;
-		}
-	}
-
 	@Override
-	public void onSynced(Set<ISyncableObject> changes) {
-		syncCommon(changes);
-		worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
-	}
-
-	@Override
-	public void onServerSync(Set<ISyncableObject> changed) {
-		super.onServerSync(changed);
-		syncCommon(changed);
-	}
-
-	protected void syncCommon(Set<ISyncableObject> changes) {
+	public void onSync(Set<ISyncableObject> changes) {
 		if (changes.isEmpty()) return;
-		final boolean hasPower = isPowered.getValue();
-		final String urlValue = url.getValue();
 
-		final boolean hasUrl = !Strings.isNullOrEmpty(urlValue);
-		final boolean canPlay = hasUrl && hasPower;
+		if (changes.contains(crystalColor)) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+
 		if (changes.contains(isPowered) || changes.contains(url)) {
-			if (worldObj.isRemote) {
-				if (canPlay) startPlayClient(urlValue);
-				else killMusic();
-			} else if (canPlay) playStatic();
-		} else if (worldObj.isRemote && changes.contains(volume)) {
+			final boolean hasPower = isPowered.getValue();
+			final String urlValue = url.getValue();
+
+			final boolean hasUrl = !Strings.isNullOrEmpty(urlValue);
+			final boolean canPlay = hasUrl && hasPower;
+
+			if (canPlay) {
+				playStatic();
+				startPlayClient(urlValue);
+			} else killMusic();
+		} else if (changes.contains(volume)) {
 			if (sound != null) {
 				// TODO Implement, once we are sure rest is working
 				// RadioManager.instance.setVolume(sound, volume.getValue());
@@ -131,7 +118,15 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	}
 
 	private void playStatic() {
+		// TODO: verify if it's good method for client side
 		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:radio.activate", 1, 2f);
+	}
+
+	private void killMusic() {
+		if (sound != null) {
+			RadioManager.instance.stopPlaying(sound);
+			sound = null;
+		}
 	}
 
 	@Override
