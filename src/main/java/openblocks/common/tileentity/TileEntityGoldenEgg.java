@@ -217,7 +217,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	public State getState() {
-		int stateId = stage.getValue();
+		int stateId = stage.get();
 		if (stateId < 0 || stateId >= State.STATES.length) return State.INERT;
 		return State.STATES[stateId];
 	}
@@ -238,7 +238,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 			State nextState = state.getNextState(this);
 			if (nextState != null) {
-				stage.setValue(nextState.ordinal());
+				stage.set(nextState.ordinal());
 				nextState.onEntry(this);
 				sync();
 			}

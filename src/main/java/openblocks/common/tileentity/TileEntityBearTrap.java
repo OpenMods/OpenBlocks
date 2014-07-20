@@ -37,7 +37,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	@Override
 	protected void createSyncedFields() {
-		flags = new SyncableFlags();
+		flags = SyncableFlags.create(Flags.values().length);
 		trappedEntityId = new SyncableInt();
 		isLocked = new SyncableBoolean();
 		flags.on(Flags.isShut);
@@ -47,7 +47,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	public void updateEntity() {
 		super.updateEntity();
 		ticksSinceChange++;
-		final int entityId = trappedEntityId.getValue();
+		final int entityId = trappedEntityId.get();
 		if (entityId != 0) immobilizeEntity(entityId);
 		if (!worldObj.isRemote) sync();
 	}
@@ -74,7 +74,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (entity instanceof EntityCreature && !isLocked.getValue() && ticksSinceChange > OPENING_ANIMATION_TIME) {
+			if (entity instanceof EntityCreature && !isLocked.get() && ticksSinceChange > OPENING_ANIMATION_TIME) {
 				close(entity);
 			}
 		}
@@ -85,7 +85,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	public int getComparatorLevel() {
-		int entityId = trappedEntityId.getValue();
+		int entityId = trappedEntityId.get();
 		if (entityId == 0) return 0;
 		Entity e = worldObj.getEntityByID(entityId);
 		if (e == null) return 0;
@@ -106,7 +106,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	private void close(Entity trapped) {
 		if (!flags.get(Flags.isShut)) {
 			flags.on(Flags.isShut);
-			trappedEntityId.setValue(trapped.getEntityId());
+			trappedEntityId.set(trapped.getEntityId());
 			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:beartrap.close", 0.5F, 1.0F);
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		}
@@ -115,7 +115,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	private void open() {
 		if (flags.get(Flags.isShut)) {
 			flags.off(Flags.isShut);
-			trappedEntityId.setValue(0);
+			trappedEntityId.set(0);
 			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:beartrap.open", 0.5F, 1.0F);
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		}
@@ -131,7 +131,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 		if (!worldObj.isRemote) {
 			int redstoneLevel = worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord);
 			boolean isLocked = redstoneLevel > 0;
-			this.isLocked.setValue(isLocked);
+			this.isLocked.set(isLocked);
 			if (isLocked) open();
 		}
 	}

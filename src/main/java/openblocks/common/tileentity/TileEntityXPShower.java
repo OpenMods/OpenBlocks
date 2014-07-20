@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
@@ -10,7 +12,6 @@ import openmods.OpenMods;
 import openmods.api.INeighbourAwareTile;
 import openmods.liquids.GenericTank;
 import openmods.sync.SyncableBoolean;
-import openmods.sync.SyncableFlags;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 
@@ -23,14 +24,12 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 			OpenBlocks.XP_FLUID
 			);
 
-	private SyncableFlags sides;
 	private int drainedCountdown = 0;
 	private SyncableBoolean isOn;
 	private boolean isPowered = false;
 
 	@Override
 	protected void createSyncedFields() {
-		sides = new SyncableFlags();
 		isOn = new SyncableBoolean();
 	}
 
@@ -43,7 +42,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 			if (!isPowered && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
 
-				bufferTank.fillFromSides(DRAIN_PER_CYCLE, worldObj, getPosition(), sides);
+				bufferTank.fillFromSides(DRAIN_PER_CYCLE, worldObj, getPosition(), EnumSet.of(getRotation()));
 
 				int amountInTank = bufferTank.getFluidAmount();
 
@@ -67,10 +66,10 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 				}
 			}
 
-			isOn.setValue(drainedCountdown-- > 0 && !isPowered);
+			isOn.set(drainedCountdown-- > 0 && !isPowered);
 			sync();
 
-		} else if (isOn.getValue()) {
+		} else if (isOn.get()) {
 
 			Vec3 vec = worldObj.getWorldVec3Pool().getVecFromPool(
 					(worldObj.rand.nextDouble() - 0.5) * 0.05,
@@ -94,7 +93,6 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	public void updateState() {
 		isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-		sides.set(getRotation(), true);
 	}
 
 	@Override

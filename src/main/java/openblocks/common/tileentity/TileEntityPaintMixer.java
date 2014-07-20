@@ -95,7 +95,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 
-			if (chosenColor != color.getValue()) {
+			if (chosenColor != color.get()) {
 				progress.reset();
 				isWorking = false;
 			}
@@ -110,9 +110,9 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 					progress.increase();
 				} else {
 					consumeInk();
-					ItemStack output = ItemPaintCan.createStack(color.getValue(), ItemPaintCan.FULL_CAN_SIZE);
+					ItemStack output = ItemPaintCan.createStack(color.get(), ItemPaintCan.FULL_CAN_SIZE);
 					inventory.setInventorySlotContents(Slots.paint.ordinal(), output);
-					canColor.setValue(color.getValue());
+					canColor.set(color.get());
 					progress.reset();
 					isWorking = false;
 				}
@@ -123,24 +123,24 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	private void checkAutoConsumption() {
-		if (lvlCyan.getValue() <= 1f) { /* We can store 2.0, so <= */
+		if (lvlCyan.get() <= 1f) { /* We can store 2.0, so <= */
 			if (tryUseInk(Slots.dyeCyan, 1)) {
-				lvlCyan.setValue(lvlCyan.getValue() + 1f);
+				lvlCyan.set(lvlCyan.get() + 1f);
 			}
 		}
-		if (lvlMagenta.getValue() <= 1f) {
+		if (lvlMagenta.get() <= 1f) {
 			if (tryUseInk(Slots.dyeMagenta, 1)) {
-				lvlMagenta.setValue(lvlMagenta.getValue() + 1f);
+				lvlMagenta.set(lvlMagenta.get() + 1f);
 			}
 		}
-		if (lvlYellow.getValue() <= 1f) {
+		if (lvlYellow.get() <= 1f) {
 			if (tryUseInk(Slots.dyeYellow, 1)) {
-				lvlYellow.setValue(lvlYellow.getValue() + 1f);
+				lvlYellow.set(lvlYellow.get() + 1f);
 			}
 		}
-		if (lvlBlack.getValue() <= 1f) {
+		if (lvlBlack.get() <= 1f) {
 			if (tryUseInk(Slots.dyeBlack, 1)) {
-				lvlBlack.setValue(lvlBlack.getValue() + 1f);
+				lvlBlack.set(lvlBlack.get() + 1f);
 			}
 		}
 
@@ -151,39 +151,39 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	private void consumeInk() {
-		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.getValue()).toCYMK();
-		lvlCyan.setValue(lvlCyan.getValue() - cymk.getCyan());
-		lvlBlack.setValue(lvlBlack.getValue() - cymk.getKey());
-		lvlYellow.setValue(lvlYellow.getValue() - cymk.getYellow());
-		lvlMagenta.setValue(lvlMagenta.getValue() - cymk.getMagenta());
+		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.get()).toCYMK();
+		lvlCyan.set(lvlCyan.get() - cymk.getCyan());
+		lvlBlack.set(lvlBlack.get() - cymk.getKey());
+		lvlYellow.set(lvlYellow.get() - cymk.getYellow());
+		lvlMagenta.set(lvlMagenta.get() - cymk.getMagenta());
 	}
 
 	private boolean hasSufficientInk() {
-		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.getValue()).toCYMK();
-		if (cymk.getCyan() > lvlCyan.getValue()) {
+		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.get()).toCYMK();
+		if (cymk.getCyan() > lvlCyan.get()) {
 			if (tryUseInk(Slots.dyeCyan, 1)) {
-				lvlCyan.setValue(lvlCyan.getValue() + 1f);
+				lvlCyan.set(lvlCyan.get() + 1f);
 			} else {
 				return false;
 			}
 		}
-		if (cymk.getYellow() > lvlYellow.getValue()) {
+		if (cymk.getYellow() > lvlYellow.get()) {
 			if (tryUseInk(Slots.dyeYellow, 1)) {
-				lvlYellow.setValue(lvlYellow.getValue() + 1f);
+				lvlYellow.set(lvlYellow.get() + 1f);
 			} else {
 				return false;
 			}
 		}
-		if (cymk.getMagenta() > lvlMagenta.getValue()) {
+		if (cymk.getMagenta() > lvlMagenta.get()) {
 			if (tryUseInk(Slots.dyeMagenta, 1)) {
-				lvlMagenta.setValue(lvlMagenta.getValue() + 1f);
+				lvlMagenta.set(lvlMagenta.get() + 1f);
 			} else {
 				return false;
 			}
 		}
-		if (cymk.getKey() > lvlBlack.getValue()) {
+		if (cymk.getKey() > lvlBlack.get()) {
 			if (tryUseInk(Slots.dyeBlack, 1)) {
-				lvlBlack.setValue(lvlBlack.getValue() + 1f);
+				lvlBlack.set(lvlBlack.get() + 1f);
 			} else {
 				return false;
 			}
@@ -206,7 +206,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	@Override
 	protected void createSyncedFields() {
 		color = new SyncableInt(0xFF0000);
-		flags = new SyncableFlags();
+		flags = SyncableFlags.create(Flags.values().length);
 		progress = new SyncableProgress(PROGRESS_TICKS);
 		lvlBlack = new SyncableFloat();
 		lvlCyan = new SyncableFloat();
@@ -241,7 +241,7 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	public void tryStartMixer() {
 		if (!worldObj.isRemote) {
 			isWorking = true;
-			chosenColor = color.getValue();
+			chosenColor = color.get();
 		}
 	}
 
@@ -250,11 +250,11 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	public int getCanColor() {
-		return canColor.getValue();
+		return canColor.get();
 	}
 
 	public boolean isEnabled() {
-		return progress.getValue() > 0;
+		return progress.get() > 0;
 	}
 
 	public boolean hasValidInput() {
@@ -276,8 +276,8 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 			if (can != null) {
 				Integer c = getColor(can);
 				if (c != null) {
-					color.setValue(c);
-					canColor.setValue(c);
+					color.set(c);
+					canColor.set(c);
 					hasPaint = true;
 				}
 			}

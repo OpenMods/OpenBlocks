@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
-import openmods.sync.SyncableFlags;
+import openmods.utils.bitmap.IReadableBitMap;
 
 public class ModelVacuumHopper extends ModelBase {
 
@@ -53,8 +53,7 @@ public class ModelVacuumHopper extends ModelBase {
 		setRotation(outputItems, 0F, 0F, 0F);
 	}
 
-	private void renderValve(SyncableFlags itemOutputs, SyncableFlags xpOutputs, ForgeDirection direction, float rotX, float rotZ, float f5) {
-
+	private void renderValve(IReadableBitMap<ForgeDirection> itemOutputs, IReadableBitMap<ForgeDirection> xpOutputs, ForgeDirection direction, float rotX, float rotZ, float f5) {
 		boolean items = itemOutputs.get(direction);
 		boolean xp = xpOutputs.get(direction);
 
@@ -74,8 +73,9 @@ public class ModelVacuumHopper extends ModelBase {
 
 		float f5 = 0.0625F;
 		middle.render(f5);
-		SyncableFlags itemOutputs = hopper.getItemOutputs();
-		SyncableFlags xpOutputs = hopper.getXPOutputs();
+		final IReadableBitMap<ForgeDirection> itemOutputs = hopper.getItemOutputs();
+		final IReadableBitMap<ForgeDirection> xpOutputs = hopper.getXPOutputs();
+
 		renderValve(itemOutputs, xpOutputs, ForgeDirection.UP, 0, 0, f5);
 		renderValve(itemOutputs, xpOutputs, ForgeDirection.DOWN, (float)Math.toRadians(180), 0, f5);
 		renderValve(itemOutputs, xpOutputs, ForgeDirection.EAST, 0, (float)Math.toRadians(90), f5);

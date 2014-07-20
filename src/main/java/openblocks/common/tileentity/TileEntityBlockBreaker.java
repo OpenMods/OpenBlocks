@@ -55,15 +55,15 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 
 	@SideOnly(Side.CLIENT)
 	public boolean isActivated() {
-		return activated.getValue();
+		return activated.get();
 	}
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (!worldObj.isRemote && activated.getValue()) {
+		if (!worldObj.isRemote && activated.get()) {
 			if (redstoneAnimTimer <= 0) {
-				activated.setValue(false);
+				activated.set(false);
 				sync();
 			} else redstoneAnimTimer--;
 
@@ -73,9 +73,9 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	private void setRedstoneSignal(boolean redstoneSignal) {
 		if (worldObj.isRemote) return;
 
-		if (redstoneSignal && !activated.getValue()) {
+		if (redstoneSignal && !activated.get()) {
 			redstoneAnimTimer = 5;
-			activated.setValue(true);
+			activated.set(true);
 			sync();
 			breakBlock();
 		}

@@ -38,16 +38,16 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 	}
 
 	public void setColorIndex(int index) {
-		colorIndex.setValue(index);
+		colorIndex.set(index);
 	}
 
 	public void setAngle(float ang) {
-		angle.setValue(ang);
+		angle.set(ang);
 	}
 
 	public int getColor() {
-		if (colorIndex.getValue() >= BlockFlag.COLORS.length) colorIndex.setValue(0);
-		return BlockFlag.COLORS[colorIndex.getValue()];
+		if (colorIndex.get() >= BlockFlag.COLORS.length) colorIndex.set(0);
+		return BlockFlag.COLORS[colorIndex.get()];
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 	}
 
 	public float getAngle() {
-		return angle.getValue();
+		return angle.get();
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 		if (player != null && player.isSneaking()) { return true; }
 		if (!worldObj.isRemote) {
 			if (getSurfaceDirection() == ForgeDirection.DOWN) {
-				angle.setValue(angle.getValue() + 10f);
+				angle.set(angle.get() + 10f);
 				sync();
 				return false;
 			}

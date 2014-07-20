@@ -57,17 +57,17 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		super.updateEntity();
 
 		// ugly, need to clean
-		currentPitch = currentPitch - ((currentPitch - targetPitch.getValue()) / 20);
+		currentPitch = currentPitch - ((currentPitch - targetPitch.get()) / 20);
 		currentYaw = GeometryUtils.normalizeAngle(currentYaw);
 
-		final double targetYaw = GeometryUtils.normalizeAngle(this.targetYaw.getValue());
+		final double targetYaw = GeometryUtils.normalizeAngle(this.targetYaw.get());
 		if (Math.abs(currentYaw - targetYaw) < YAW_CHANGE_SPEED) currentYaw = targetYaw;
 		else {
 			double dist = GeometryUtils.getAngleDistance(currentYaw, targetYaw);
 			currentYaw += YAW_CHANGE_SPEED * Math.signum(dist);
 		}
 
-		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.getValue()) / 20);
+		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.get()) / 20);
 
 		if (!worldObj.isRemote) {
 			if (worldObj.getWorldTime() % 20 == 0) {
@@ -145,20 +145,20 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		final double atan2 = Math.atan2(dZ, dX);
 		double yawDegrees = Math.toDegrees(atan2) + 90;
 		System.out.println(String.format("%f %f %f %f", dX, dY, dZ, yawDegrees));
-		targetYaw.setValue(yawDegrees);
-		currentYaw = targetYaw.getValue();
+		targetYaw.set(yawDegrees);
+		currentYaw = targetYaw.get();
 
 		double[] calc = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
 		double theta = Math.max(calc[0], calc[1]);
-		targetPitch.setValue(Math.toDegrees(theta));
-		currentPitch = targetPitch.getValue();
+		targetPitch.set(Math.toDegrees(theta));
+		currentPitch = targetPitch.get();
 
 		// We have selected what we feel to be the best angle
 		// But the velocity suggested doesn't scale on all 3 axis
 		// So we have to change that a bit
 		double d = Math.sqrt(dX * dX + dZ * dZ);
 		double v = Math.sqrt((d * -TileEntityCannonLogic.WORLD_GRAVITY) / Math.sin(2 * theta));
-		targetSpeed.setValue(v);
+		targetSpeed.set(v);
 		sync();
 	}
 
@@ -178,17 +178,17 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	public void setSpeed(double speed) {
-		targetSpeed.setValue(speed);
+		targetSpeed.set(speed);
 		sync();
 	}
 
 	public void setPitch(double pitch2) {
-		targetPitch.setValue(pitch2);
+		targetPitch.set(pitch2);
 		sync();
 	}
 
 	public void setYaw(double yaw2) {
-		targetYaw.setValue(yaw2);
+		targetYaw.set(yaw2);
 		sync();
 	}
 

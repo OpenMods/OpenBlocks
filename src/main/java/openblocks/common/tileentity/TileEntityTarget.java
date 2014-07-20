@@ -74,11 +74,11 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	public void setEnabled(boolean en) {
-		active.setValue(en);
+		active.set(en);
 	}
 
 	public boolean isEnabled() {
-		return active.getValue();
+		return active.get();
 	}
 
 	public float getTargetRotation() {

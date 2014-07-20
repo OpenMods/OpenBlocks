@@ -21,9 +21,7 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.SyncableFlags;
-import openmods.sync.SyncableInt;
-import openmods.sync.SyncableTank;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
@@ -45,9 +43,9 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	private SyncableTank tank;
-	private SyncableFlags inputSides;
-	private SyncableFlags outputSides;
-	private SyncableFlags xpSides;
+	private SyncableDirs inputSides;
+	private SyncableDirs outputSides;
+	private SyncableDirs xpSides;
 	private SyncableInt targetLevel;
 	private SyncableFlags automaticSlots;
 
@@ -88,11 +86,11 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	@Override
 	protected void createSyncedFields() {
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
-		inputSides = new SyncableFlags();
-		outputSides = new SyncableFlags();
-		xpSides = new SyncableFlags();
+		inputSides = new SyncableDirs();
+		outputSides = new SyncableDirs();
+		xpSides = new SyncableDirs();
 		targetLevel = new SyncableInt(1);
-		automaticSlots = new SyncableFlags();
+		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
 
 	@Override
@@ -102,31 +100,31 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		if (!worldObj.isRemote) {
 
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.fillFromSides(80, worldObj, getPosition(), xpSides);
+				tank.fillFromSides(80, worldObj, getPosition(), xpSides.getValue());
 			}
 
 			if (shouldAutoOutput() && hasStack(Slots.output)) {
-				InventoryUtils.moveItemsToOneOfSides(this, Slots.output, 1, outputSides);
+				InventoryUtils.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue());
 			}
 
 			// if we should auto input the tool and we don't currently have one
 			if (shouldAutoInput() && !hasStack(Slots.input)) {
-				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, Slots.input, inputSides);
+				InventoryUtils.moveItemsFromOneOfSides(this, inventory, 1, Slots.input.ordinal(), inputSides.getValue());
 			}
 
 			if (hasStack(Slots.input)
 					&& inventory.isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input))
 					&& !hasStack(Slots.output)) {
-				int xpRequired = EnchantmentUtils.getLiquidForLevel(targetLevel.getValue());
+				int xpRequired = EnchantmentUtils.getLiquidForLevel(targetLevel.get());
 				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
 					double power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
 					int enchantability = EnchantmentUtils.calcEnchantability(getStack(Slots.input), (int)power, true);
-					if (enchantability >= targetLevel.getValue()) {
+					if (enchantability >= targetLevel.get()) {
 						ItemStack inputStack = getStack(Slots.input);
 						if (inputStack == null) return;
 						ItemStack resultingStack = inputStack.copy();
 						resultingStack.stackSize = 1;
-						if (EnchantmentUtils.enchantItem(resultingStack, targetLevel.getValue(), worldObj.rand)) {
+						if (EnchantmentUtils.enchantItem(resultingStack, targetLevel.get(), worldObj.rand)) {
 							tank.drain(xpRequired, true);
 							inputStack.stackSize--;
 							if (inputStack.stackSize < 1) {
@@ -261,22 +259,6 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	public IFluidTank getTank() {
 		return tank;
-	}
-
-	public SyncableFlags getInputSides() {
-		return inputSides;
-	}
-
-	public SyncableFlags getOutputSides() {
-		return outputSides;
-	}
-
-	public SyncableFlags getXPSides() {
-		return xpSides;
-	}
-
-	public SyncableFlags getAutomaticSlots() {
-		return automaticSlots;
 	}
 
 	@Override

@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableSet;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncProvider {
+public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncMapProvider {
 
 	private static final int MAP_JOB_DELAY = 5;
 	private static final int MOVE_DELAY = 35;
@@ -160,7 +160,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	public void onUpdate() {
 		if (!worldObj.isRemote) {
 			float yaw = 0;
-			if (isMapping.getValue()) {
+			if (isMapping.get()) {
 				if (countdownToMove-- <= 0) {
 					countdownToMove = MOVE_DELAY;
 					randomDelta = 2 * (float)Math.PI * RANDOM.nextFloat();
@@ -178,7 +178,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		super.onUpdate();
 
 		if (!worldObj.isRemote) {
-			if (worldObj.provider.dimensionId == mappingDimension && isMapping.getValue() && countdownToAction-- <= 0) {
+			if (worldObj.provider.dimensionId == mappingDimension && isMapping.get() && countdownToAction-- <= 0) {
 				jobs.runJob(worldObj, (int)posX, (int)posZ);
 				countdownToAction = MAP_JOB_DELAY;
 			}
@@ -200,7 +200,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			NBTTagCompound mapItem = tag.getCompoundTag("MapItem");
 			this.mapItem = ItemStack.loadItemStackFromNBT(mapItem);
 
-			if (isMapping.getValue()) {
+			if (isMapping.get()) {
 				int mapId = this.mapItem.getItemDamage();
 				jobs.resumeMapping(worldObj, mapId);
 			}

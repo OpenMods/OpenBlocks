@@ -101,7 +101,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	private IIcon getBaseTexture(int side) {
 		Block block = paintedBlock.getValue();
 		if (block == Blocks.air) return OpenBlocks.Blocks.canvas.baseIcon;
-		return block.getIcon(side, paintedBlockMeta.getValue());
+		return block.getIcon(side, paintedBlockMeta.get());
 	}
 
 	private boolean isBlockUnpainted() {
@@ -157,7 +157,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 		if (isBlockUnpainted() && paintedBlock.containsValidBlock()) {
 			Block block = paintedBlock.getValue();
-			worldObj.setBlock(xCoord, yCoord, zCoord, block, paintedBlockMeta.getValue(), BlockNotifyFlags.SEND_TO_CLIENTS);
+			worldObj.setBlock(xCoord, yCoord, zCoord, block, paintedBlockMeta.get(), BlockNotifyFlags.SEND_TO_CLIENTS);
 		}
 
 		if (!worldObj.isRemote) sync();

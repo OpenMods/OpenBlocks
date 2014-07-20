@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -26,12 +27,12 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.SyncableFlags;
-import openmods.sync.SyncableTank;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.bitmap.IRpcDirectionBitMap;
 
 public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable {
 
@@ -62,10 +63,10 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	/**
 	 * The shared/syncable objects
 	 */
-	private SyncableFlags toolSides;
-	private SyncableFlags modifierSides;
-	private SyncableFlags outputSides;
-	private SyncableFlags xpSides;
+	private SyncableDirs toolSides;
+	private SyncableDirs modifierSides;
+	private SyncableDirs outputSides;
+	private SyncableDirs xpSides;
 	private SyncableTank tank;
 	private SyncableFlags automaticSlots;
 
@@ -92,12 +93,12 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 	@Override
 	protected void createSyncedFields() {
-		toolSides = new SyncableFlags();
-		modifierSides = new SyncableFlags();
-		outputSides = new SyncableFlags();
-		xpSides = new SyncableFlags();
+		toolSides = new SyncableDirs();
+		modifierSides = new SyncableDirs();
+		outputSides = new SyncableDirs();
+		xpSides = new SyncableDirs();
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
-		automaticSlots = new SyncableFlags();
+		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
 
 	@Override
@@ -107,27 +108,26 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		if (!worldObj.isRemote) {
 			// if we should auto-drink liquid, do it!
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.fillFromSides(100, worldObj, getPosition(), xpSides);
+				tank.fillFromSides(100, worldObj, getPosition(), xpSides.getValue());
 			}
 
 			if (shouldAutoOutput() && hasOutput()) {
-				InventoryUtils.moveItemsToOneOfSides(this, Slots.output, 1, outputSides);
+				InventoryUtils.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue());
 			}
 
 			// if we should auto input the tool and we don't currently have one
 			if (shouldAutoInputTool() && !hasTool()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, Slots.tool, toolSides);
+				InventoryUtils.moveItemsFromOneOfSides(this, inventory, 1, Slots.tool.ordinal(), toolSides.getValue());
 			}
 
 			// if we should auto input the modifier
 			if (shouldAutoInputModifier()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, null, 1, Slots.modifier, modifierSides);
+				InventoryUtils.moveItemsFromOneOfSides(this, inventory, 1, Slots.modifier.ordinal(), modifierSides.getValue());
 			}
 
 			if (cooldown == 0) {
 				int liquidRequired = updateRepairOutput(false);
-				if (liquidRequired > 0
-						&& tank.getFluidAmount() >= liquidRequired) {
+				if (liquidRequired > 0 && tank.getFluidAmount() >= liquidRequired) {
 					liquidRequired = updateRepairOutput(true);
 					worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.anvil_use", 0.3f, 1f);
 					cooldown = TOTAL_COOLDOWN;
@@ -151,50 +151,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiAutoAnvil(new ContainerAutoAnvil(player.inventory, this));
-	}
-
-	/**
-	 * Get the sides that tools and be inserted from
-	 * 
-	 * @return
-	 */
-	public SyncableFlags getToolSides() {
-		return toolSides;
-	}
-
-	/**
-	 * Get the sides that modifiers can be inserted from
-	 * 
-	 * @return
-	 */
-	public SyncableFlags getModifierSides() {
-		return modifierSides;
-	}
-
-	/**
-	 * Get the sides that the final product can be extracted from
-	 * 
-	 * @return
-	 */
-	public SyncableFlags getOutputSides() {
-		return outputSides;
-	}
-
-	/**
-	 * Get the sides that the XP can be injected from
-	 */
-	public SyncableFlags getXPSides() {
-		return xpSides;
-	}
-
-	/**
-	 * Get the sides that can be auto extracted/injected/inserted.
-	 * This is a syncableFlag and it uses AutoSides as the enum key
-	 * 
-	 * @return
-	 */
-	public SyncableFlags getAutomaticSlots() {
-		return automaticSlots;
 	}
 
 	/**
@@ -473,5 +429,13 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	public IValueProvider<Set<ForgeDirection>> getToolSides() {
+		return toolSides;
+	}
+
+	public IRpcDirectionBitMap getToolSidesProxy() {
+		return createRpcProxy(toolSides, IRpcDirectionBitMap.class);
 	}
 }

@@ -49,7 +49,7 @@ public class BlockCanvas extends OpenBlock {
 		TileEntityCanvas tile = (TileEntityCanvas)te;
 		if (tile.paintedBlock.containsValidBlock()) {
 			Block paintedBlock = tile.paintedBlock.getValue();
-			int paintedBlockMeta = tile.paintedBlockMeta.getValue();
+			int paintedBlockMeta = tile.paintedBlockMeta.get();
 
 			final Random rand = te.getWorldObj().rand;
 
@@ -114,6 +114,6 @@ public class BlockCanvas extends OpenBlock {
 		}
 		TileEntityCanvas tile = (TileEntityCanvas)world.getTileEntity(x, y, z);
 		tile.paintedBlock.setValue(block);
-		tile.paintedBlockMeta.setValue(meta);
+		tile.paintedBlockMeta.set(meta);
 	}
 }

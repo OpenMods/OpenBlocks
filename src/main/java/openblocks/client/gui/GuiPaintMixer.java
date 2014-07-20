@@ -28,7 +28,7 @@ public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer> {
 		root.addComponent(new GuiComponentLevel(141 + 21, 94 + 6, 2, 14, 0xFF000000, 0xFF888888, 0f, 2f, 0));
 
 		textbox = new GuiComponentTextbox(65, 90, 44, 10);
-		textbox.setText(String.format("#%06X", mixer.getColor().getValue()));
+		textbox.setText(String.format("#%06X", mixer.getColor().get()));
 		root.addComponent(textbox);
 
 		buttonMix = new GuiComponentTextButton(125, 57, 30, 13, 0xFFFFFF);

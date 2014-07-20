@@ -23,9 +23,7 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.SyncableFlags;
-import openmods.sync.SyncableProgress;
-import openmods.sync.SyncableTank;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
@@ -64,9 +62,9 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	/** synced data objects **/
 	private SyncableProgress progress;
-	private SyncableFlags glassSides;
-	private SyncableFlags xpBottleSides;
-	private SyncableFlags xpSides;
+	private SyncableDirs glassSides;
+	private SyncableDirs xpBottleSides;
+	private SyncableDirs xpSides;
 	private SyncableFlags automaticSlots;
 	private SyncableTank tank;
 
@@ -76,10 +74,10 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	@Override
 	protected void createSyncedFields() {
 		progress = new SyncableProgress(PROGRESS_TICKS);
-		glassSides = new SyncableFlags();
-		xpBottleSides = new SyncableFlags();
-		xpSides = new SyncableFlags();
-		automaticSlots = new SyncableFlags();
+		glassSides = new SyncableDirs();
+		xpBottleSides = new SyncableDirs();
+		xpSides = new SyncableDirs();
+		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 	}
 
@@ -95,17 +93,17 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			// if we should, we'll autofill the tank
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.fillFromSides(10, worldObj, getPosition(), xpSides);
+				tank.fillFromSides(10, worldObj, getPosition(), xpSides.getValue());
 			}
 
 			// if they've ticked auto output, and we have something to output
 			if (shouldAutoOutput() && hasOutputStack()) {
-				InventoryUtils.moveItemsToOneOfSides(this, Slots.output, 1, xpBottleSides);
+				InventoryUtils.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, xpBottleSides.getValue());
 			}
 
 			// if we should auto input and we don't have any glass in the slot
 			if (shouldAutoInput() && !hasGlassInInput()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, GLASS_BOTTLE, 1, Slots.input, glassSides);
+				InventoryUtils.moveItemsFromOneOfSides(this, inventory, GLASS_BOTTLE, 1, Slots.input.ordinal(), glassSides.getValue());
 			}
 
 			// if there's no space in the output, we've got no input bottles or
@@ -150,22 +148,6 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	@Override
 	public boolean canOpenGui(EntityPlayer player) {
 		return true;
-	}
-
-	public SyncableFlags getGlassSides() {
-		return glassSides;
-	}
-
-	public SyncableFlags getXPBottleSides() {
-		return xpBottleSides;
-	}
-
-	public SyncableFlags getXPSides() {
-		return xpSides;
-	}
-
-	public SyncableFlags getAutomaticSlots() {
-		return automaticSlots;
 	}
 
 	public SyncableProgress getProgress() {

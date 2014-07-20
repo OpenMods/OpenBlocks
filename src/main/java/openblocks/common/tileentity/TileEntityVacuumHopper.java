@@ -30,12 +30,13 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.SyncableBoolean;
-import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableDirs;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.bitmap.IReadableBitMap;
 
 import com.google.common.collect.Lists;
 
@@ -44,8 +45,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	private static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
 	private SyncableTank tank;
-	public SyncableFlags xpOutputs;
-	public SyncableFlags itemOutputs;
+	public SyncableDirs xpOutputs;
+	public SyncableDirs itemOutputs;
 	public SyncableBoolean vacuumDisabled;
 
 	private final GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
@@ -59,8 +60,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	@Override
 	protected void createSyncedFields() {
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
-		xpOutputs = new SyncableFlags();
-		itemOutputs = new SyncableFlags();
+		xpOutputs = new SyncableDirs();
+		itemOutputs = new SyncableDirs();
 		vacuumDisabled = new SyncableBoolean();
 	}
 
@@ -68,11 +69,11 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		sided.registerAllSlots(itemOutputs, false, true);
 	}
 
-	public SyncableFlags getXPOutputs() {
+	public IReadableBitMap<ForgeDirection> getXPOutputs() {
 		return xpOutputs;
 	}
 
-	public SyncableFlags getItemOutputs() {
+	public IReadableBitMap<ForgeDirection> getItemOutputs() {
 		return itemOutputs;
 	}
 
@@ -100,7 +101,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (vacuumDisabled.getValue()) return;
+		if (vacuumDisabled.get()) return;
 
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
@@ -134,7 +135,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	private void outputToNeighbors() {
-		tank.distributeToSides(50, worldObj, getPosition(), xpOutputs);
+		tank.distributeToSides(50, worldObj, getPosition(), xpOutputs.getValue());
 		if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) autoInventoryOutput();
 	}
 
@@ -149,13 +150,12 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 		if (firstUsedSlot < 0) return;
 
-		List<Integer> slots = Lists.newArrayList(getItemOutputs().getActiveSlots());
-		Collections.shuffle(slots);
+		List<ForgeDirection> outputSides = Lists.newArrayList(itemOutputs.getValue());
+		Collections.shuffle(outputSides);
 
-		for (Integer dir : slots) {
-			ForgeDirection directionToOutputItem = ForgeDirection.getOrientation(dir);
-			TileEntity tileOnSurface = getTileInDirection(directionToOutputItem);
-			if (InventoryUtils.moveItemInto(inventory, firstUsedSlot, tileOnSurface, -1, 64, directionToOutputItem, true) > 0) {
+		for (ForgeDirection output : outputSides) {
+			TileEntity tileOnSurface = getTileInDirection(output);
+			if (InventoryUtils.moveItemInto(inventory, firstUsedSlot, tileOnSurface, -1, 64, output, true) > 0) {
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				break;
 			}

@@ -44,7 +44,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	@Override
 	protected void createSyncedFields() {
-		flags = new SyncableFlags();
+		flags = SyncableFlags.create(Flags.values().length);
 	}
 
 	@Override

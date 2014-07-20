@@ -30,7 +30,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	public Trophy getTrophy() {
-		int trophyId = trophyIndex.getValue();
+		int trophyId = trophyIndex.get();
 		return trophyId >= 0? Trophy.VALUES[trophyId] : null;
 	}
 
@@ -63,7 +63,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 			NBTTagCompound tag = stack.getTagCompound();
 			if (tag.hasKey("entity")) {
 				String entityKey = tag.getString("entity");
-				trophyIndex.setValue(Trophy.valueOf(entityKey).ordinal());
+				trophyIndex.set(Trophy.valueOf(entityKey).ordinal());
 				set = true;
 			}
 		}
@@ -72,7 +72,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 			if (!set) {
 				int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
 				debugTrophy = Trophy.values()[next];
-				trophyIndex.setValue(debugTrophy.ordinal());
+				trophyIndex.set(debugTrophy.ordinal());
 			}
 
 			sync();
@@ -96,7 +96,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	public void prepareForInventoryRender(Block block, int metadata) {
 		Preconditions.checkElementIndex(metadata, Trophy.VALUES.length);
 		super.prepareForInventoryRender(block, metadata);
-		trophyIndex.setValue(metadata);
+		trophyIndex.set(metadata);
 	}
 
 }

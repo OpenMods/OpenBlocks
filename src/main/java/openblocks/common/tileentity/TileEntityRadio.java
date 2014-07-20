@@ -67,11 +67,11 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	private void updateURL(ItemStack stack) {
 		if (stack == null) {
 			url.clear();
-			crystalColor.setValue(NO_CRYSTAL);
+			crystalColor.set(NO_CRYSTAL);
 		} else {
 			url.setValue(ItemTunedCrystal.getUrl(stack));
 			streamName.setValue(stack.getDisplayName());
-			crystalColor.setValue((byte)stack.getItemDamage());
+			crystalColor.set((byte)stack.getItemDamage());
 		}
 		sync();
 	}
@@ -89,7 +89,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 		if (changes.contains(crystalColor)) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 
 		if (changes.contains(isPowered) || changes.contains(url)) {
-			final boolean hasPower = isPowered.getValue();
+			final boolean hasPower = isPowered.get();
 			final String urlValue = url.getValue();
 
 			final boolean hasUrl = !Strings.isNullOrEmpty(urlValue);
@@ -109,7 +109,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 	private void startPlayClient(String urlValue) {
 		try {
-			sound = RadioManager.instance.startPlaying(urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.getValue());
+			sound = RadioManager.instance.startPlaying(urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.get());
 			OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
 		} catch (RadioException e) {
 			Minecraft.getMinecraft().thePlayer.sendChatMessage(e.getMessage());
@@ -133,8 +133,8 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	public void onNeighbourChanged() {
 		if (!worldObj.isRemote) {
 			final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
-			this.isPowered.setValue(isPowered);
-			this.volume.setValue(worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) / 15f);
+			this.isPowered.set(isPowered);
+			this.volume.set(worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) / 15f);
 			sync();
 		}
 	}
@@ -195,7 +195,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 	public Integer getCrystalColor() {
 		if (Strings.isNullOrEmpty(url.getValue())) return null;
-		ColorMeta color = ColorUtils.vanillaToColor(crystalColor.getValue());
+		ColorMeta color = ColorUtils.vanillaToColor(crystalColor.get());
 		return color != null? color.rgb : null;
 	}
 

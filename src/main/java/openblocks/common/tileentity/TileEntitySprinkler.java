@@ -65,7 +65,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	@Override
 	protected void createSyncedFields() {
-		flags = new SyncableFlags();
+		flags = SyncableFlags.create(Flags.values().length);
 		tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID);
 	}
 

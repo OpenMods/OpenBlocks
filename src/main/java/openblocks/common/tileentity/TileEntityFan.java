@@ -86,12 +86,12 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		angle.setValue(player.rotationYawHead);
+		angle.set(player.rotationYawHead);
 		sync();
 	}
 
 	public float getAngle() {
-		return angle.getValue();
+		return angle.get();
 	}
 
 	public float getBladeRotation(float partialTickTime) {

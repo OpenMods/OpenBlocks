@@ -50,12 +50,12 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 						Item item = stack.getItem();
 						if (item instanceof ItemHeightMap) {
 							int mapId = stack.getItemDamage();
-							TileEntityProjector.this.mapId.setValue(mapId);
+							TileEntityProjector.this.mapId.set(mapId);
 						} else if (item instanceof ItemEmptyMap && worldObj != null) {
 							ItemStack newStack = ItemEmptyMap.upgradeToMap(worldObj, stack);
 							setInventorySlotContents(slotNumber, newStack);
-						} else TileEntityProjector.this.mapId.setValue(-1);
-					} else TileEntityProjector.this.mapId.setValue(-1);
+						} else TileEntityProjector.this.mapId.set(-1);
+					} else TileEntityProjector.this.mapId.set(-1);
 					sync();
 				}
 
@@ -124,39 +124,39 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@Override
 	public void onSync(Set<ISyncableObject> changes) {
 		if (changes.contains(mapId)) {
-			int mapId = this.mapId.getValue();
+			int mapId = this.mapId.get();
 			if (mapId >= 0 && MapDataManager.getMapData(worldObj, mapId).isEmpty()) MapDataManager.requestMapData(worldObj, mapId);
 		}
 	}
 
 	public void rotate(int delta) {
-		int value = rotation.getValue() + delta;
-		rotation.setValue((byte)(value & 0x3));
+		int value = rotation.get() + delta;
+		rotation.set((byte)(value & 0x3));
 		sync();
 	}
 
 	public byte rotation() {
-		return rotation.getValue();
+		return rotation.get();
 	}
 
 	public int mapId() {
-		return mapId.getValue();
+		return mapId.get();
 	}
 
 	public HeightMapData getMap() {
-		int mapId = this.mapId.getValue();
+		int mapId = this.mapId.get();
 		if (worldObj == null || mapId < 0) return null;
 
 		return MapDataManager.getMapData(worldObj, mapId);
 	}
 
 	public void markMapDirty() {
-		int mapId = this.mapId.getValue();
+		int mapId = this.mapId.get();
 		if (worldObj != null || mapId < 0) MapDataManager.instance.markDataUpdated(worldObj, mapId);
 	}
 
 	public void fetchMap() {
-		int mapId = this.mapId.getValue();
+		int mapId = this.mapId.get();
 		if (worldObj != null && mapId >= 0) MapDataManager.getMapData(worldObj, mapId);
 	}
 

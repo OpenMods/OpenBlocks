@@ -79,7 +79,7 @@ public class EntityCartographerRenderer extends Render {
 
 			final TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
-			if (e.isMapping.getValue()) {
+			if (e.isMapping.get()) {
 				GL11.glTranslated(+BASE_SIZE, +BASE_SIZE, -CONE_END);
 				bindMapTexture(textureManager);
 				renderProgressMap(e.jobs);

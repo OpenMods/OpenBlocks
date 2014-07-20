@@ -52,35 +52,35 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	}
 
 	public int getWidth() {
-		return width.getValue();
+		return width.get();
 	}
 
 	public int getHeight() {
-		return height.getValue();
+		return height.get();
 	}
 
 	public int getDepth() {
-		return depth.getValue();
+		return depth.get();
 	}
 
 	public int getColor() {
-		return color.getValue();
+		return color.get();
 	}
 
 	public void setWidth(int w) {
-		width.setValue(w);
+		width.set(w);
 	}
 
 	public void setDepth(int d) {
-		depth.setValue(d);
+		depth.set(d);
 	}
 
 	public void setHeight(int h) {
-		height.setValue(h);
+		height.set(h);
 	}
 
 	public GuideShape getCurrentMode() {
-		return GuideShape.values()[mode.getValue()];
+		return GuideShape.values()[mode.get()];
 	}
 
 	@Override
@@ -130,11 +130,11 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	}
 
 	private void switchMode() {
-		int nextMode = mode.getValue() + 1;
+		int nextMode = mode.get() + 1;
 		if (nextMode >= GuideShape.values().length) {
 			nextMode = 0;
 		}
-		mode.setValue(nextMode);
+		mode.set(nextMode);
 		if (getCurrentMode().fixedRatio) {
 			setHeight(getWidth());
 			setDepth(getWidth());
@@ -145,7 +145,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 
 	private void changeDimensions(EntityPlayer player, ForgeDirection orientation) {
 		changeDimensions(orientation);
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_size", width.getValue(), height.getValue(), depth.getValue()));
+		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_size", width.get(), height.get(), depth.get()));
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
@@ -154,7 +154,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	}
 
 	private static void dec(SyncableInt v) {
-		if (v.getValue() > 0) v.modify(-1);
+		if (v.get() > 0) v.modify(-1);
 	}
 
 	private void changeDimensions(ForgeDirection orientation) {
@@ -192,11 +192,11 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 				setHeight(w);
 				setDepth(w);
 			} else if (h != w && h != d) {
-				depth.setValue(h);
-				width.setValue(h);
+				depth.set(h);
+				width.set(h);
 			} else if (d != w && d != h) {
-				width.setValue(d);
-				height.setValue(d);
+				width.set(d);
+				height.set(d);
 			}
 		}
 		recreateShape();
@@ -251,7 +251,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	}
 
 	protected void changeColor(int color) {
-		this.color.setValue(color);
+		this.color.set(color);
 		if (!worldObj.isRemote) sync();
 	}
 

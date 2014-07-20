@@ -25,16 +25,16 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		color.setValue(ItemPaintCan.getColorFromStack(stack));
-		amount.setValue(ItemPaintCan.getAmountFromStack(stack));
+		color.set(ItemPaintCan.getColorFromStack(stack));
+		amount.set(ItemPaintCan.getAmountFromStack(stack));
 	}
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && amount.getValue() > 0) {
+		if (!worldObj.isRemote && amount.get() > 0) {
 			ItemStack heldStack = player.getHeldItem();
 			if (heldStack != null && heldStack.getItem() instanceof ItemPaintBrush) {
-				ItemPaintBrush.setColor(heldStack, color.getValue());
+				ItemPaintBrush.setColor(heldStack, color.get());
 				heldStack.setItemDamage(0);
 				amount.modify(-1);
 				sync();
@@ -42,7 +42,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 			}
 		}
 
-		if (amount.getValue() <= 0 && !worldObj.isRemote) {
+		if (amount.get() <= 0 && !worldObj.isRemote) {
 			ItemStack item = new ItemStack(Items.bucket);
 			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, item);
 			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
@@ -51,15 +51,15 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 	}
 
 	public int getColor() {
-		return color.getValue();
+		return color.get();
 	}
 
 	public int getAmount() {
-		return amount.getValue();
+		return amount.get();
 	}
 
 	public void setAmount(int amt) {
-		amount.setValue(amt);
+		amount.set(amt);
 	}
 
 }

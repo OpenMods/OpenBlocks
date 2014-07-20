@@ -8,11 +8,11 @@ import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
-import openmods.gui.BaseGuiContainer;
+import openmods.gui.SyncedGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.component.BaseComponent.TabColor;
 
-public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
+public class GuiAutoAnvil extends SyncedGuiContainer<ContainerAutoAnvil> {
 
 	private static final ResourceLocation texture = new ResourceLocation("openmodslib:textures/gui/components.png");
 
@@ -66,6 +66,8 @@ public class GuiAutoAnvil extends BaseGuiContainer<ContainerAutoAnvil> {
 
 		// create side selectors
 		sideSelectorTool = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
+		addSyncUpdateListener(sideSelectorTool.createUpdater(te.getToolSides(), te.getToolSidesProxy()));
+
 		sideSelectorModifier = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
 		sideSelectorOutput = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
 		sideSelectorXP = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
