@@ -73,8 +73,8 @@ public class ModelVacuumHopper extends ModelBase {
 
 		float f5 = 0.0625F;
 		middle.render(f5);
-		final IReadableBitMap<ForgeDirection> itemOutputs = hopper.getItemOutputs();
-		final IReadableBitMap<ForgeDirection> xpOutputs = hopper.getXPOutputs();
+		final IReadableBitMap<ForgeDirection> itemOutputs = hopper.getReadableItemOutputs();
+		final IReadableBitMap<ForgeDirection> xpOutputs = hopper.getReadableXpOutputs();
 
 		renderValve(itemOutputs, xpOutputs, ForgeDirection.UP, 0, 0, f5);
 		renderValve(itemOutputs, xpOutputs, ForgeDirection.DOWN, (float)Math.toRadians(180), 0, f5);

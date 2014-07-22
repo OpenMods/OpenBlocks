@@ -1,20 +1,16 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.model.ModelBook;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
-import openmods.tileentity.renderer.OpenRenderHelper;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityAutoEnchantmentTableRenderer extends
-		TileEntitySpecialRenderer {
+public class TileEntityAutoEnchantmentTableRenderer extends TileEntitySpecialRenderer {
 
 	private static final ResourceLocation enchantingTableBookTextures = new ResourceLocation("textures/entity/enchanting_table_book.png");
 	private ModelBook enchantmentBook = new ModelBook();
@@ -23,11 +19,6 @@ public class TileEntityAutoEnchantmentTableRenderer extends
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		TileEntityAutoEnchantmentTable table = (TileEntityAutoEnchantmentTable)tileentity;
-		GL11.glPushMatrix();
-		bindTexture(TextureMap.locationBlocksTexture);
-		GL11.glTranslatef((float)x, (float)y, (float)z);
-		OpenRenderHelper.renderCube(0, 0, 0, 1, 0.75, 1, OpenBlocks.Blocks.autoEnchantmentTable, null);
-		GL11.glPopMatrix();
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 0.75F, (float)z + 0.5F);
 		float f1 = table.tickCount + f;

@@ -36,7 +36,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 import openmods.utils.SidedInventoryAdapter;
-import openmods.utils.bitmap.IReadableBitMap;
+import openmods.utils.bitmap.*;
 
 import com.google.common.collect.Lists;
 
@@ -69,12 +69,20 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		sided.registerAllSlots(itemOutputs, false, true);
 	}
 
-	public IReadableBitMap<ForgeDirection> getXPOutputs() {
+	public IReadableBitMap<ForgeDirection> getReadableXpOutputs() {
 		return xpOutputs;
 	}
 
-	public IReadableBitMap<ForgeDirection> getItemOutputs() {
+	public IWriteableBitMap<ForgeDirection> getWriteableXpOutputs() {
+		return BitMapUtils.createRpcAdapter(createRpcProxy(xpOutputs, IRpcDirectionBitMap.class));
+	}
+
+	public IReadableBitMap<ForgeDirection> getReadableItemOutputs() {
 		return itemOutputs;
+	}
+
+	public IWriteableBitMap<ForgeDirection> getWriteableItemOutputs() {
+		return BitMapUtils.createRpcAdapter(createRpcProxy(itemOutputs, IRpcDirectionBitMap.class));
 	}
 
 	public IFluidTank getTank() {

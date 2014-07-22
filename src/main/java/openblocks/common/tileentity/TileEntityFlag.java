@@ -81,7 +81,6 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 		}
 		setAngle(ang);
 		setColorIndex(stack.getItemDamage());
-		sync();
 	}
 
 	@Override

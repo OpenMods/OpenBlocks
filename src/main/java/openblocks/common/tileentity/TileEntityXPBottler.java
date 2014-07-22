@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -16,9 +17,13 @@ import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.container.ContainerXPBottler;
+import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
+import openmods.api.IValueProvider;
+import openmods.api.IValueReceiver;
+import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
@@ -28,8 +33,9 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.bitmap.*;
 
-public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable {
+public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots> {
 
 	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
@@ -206,5 +212,40 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	private SyncableDirs selectSlotMap(AutoSlots slot) {
+		switch (slot) {
+			case input:
+				return glassSides;
+			case output:
+				return xpBottleSides;
+			case xp:
+				return xpSides;
+			default:
+				throw new IllegalArgumentException(slot.toString());
+		}
+	}
+
+	@Override
+	public IValueProvider<Set<ForgeDirection>> createAllowedDirectionsProvider(AutoSlots slot) {
+		return selectSlotMap(slot);
+	}
+
+	@Override
+	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
+		SyncableDirs dirs = selectSlotMap(slot);
+		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
+	}
+
+	@Override
+	public IValueProvider<Boolean> createAutoFlagProvider(AutoSlots slot) {
+		return BitMapUtils.singleBitProvider(automaticSlots, slot.ordinal());
+	}
+
+	@Override
+	public IValueReceiver<Boolean> createAutoSlotReceiver(AutoSlots slot) {
+		IRpcIntBitMap bits = createRpcProxy(automaticSlots, IRpcIntBitMap.class);
+		return BitMapUtils.singleBitReceiver(bits, slot.ordinal());
 	}
 }

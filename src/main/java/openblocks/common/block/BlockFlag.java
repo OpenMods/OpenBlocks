@@ -2,9 +2,9 @@ package openblocks.common.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -100,14 +100,14 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int par1, int par2) {
-		return Blocks.planks.getIcon(par1, par2);
+	public boolean canRotateWithTool() {
+		return false;
 	}
 
 	@Override
-	public boolean canRotateWithTool() {
-		return false;
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister registry) {
+		blockIcon = registry.registerIcon("planks_oak");
 	}
 
 }

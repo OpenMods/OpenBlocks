@@ -5,16 +5,13 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAutoEnchantmentTable extends OpenBlock {
-
-	private IIcon iconTop;
-	private IIcon iconBottom;
 
 	public BlockAutoEnchantmentTable() {
 		super(Material.rock);
@@ -28,7 +25,7 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 
 	@Override
 	public boolean shouldRenderBlock() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -69,13 +66,8 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	@Override
 	public void registerBlockIcons(IIconRegister registry) {
 		super.registerBlockIcons(registry);
-		iconTop = registry.registerIcon("openblocks:autoenchantmenttable_top");
-		iconBottom = registry.registerIcon("openblocks:autoenchantmenttable_bottom");
-	}
-
-	@Override
-	public IIcon getIcon(int side, int meta) {
-		return side == 0? iconBottom : side == 1? iconTop : this.blockIcon;
+		setTexture(ForgeDirection.UP, registry.registerIcon("openblocks:autoenchantmenttable_top"));
+		setTexture(ForgeDirection.DOWN, registry.registerIcon("openblocks:autoenchantmenttable_bottom"));
 	}
 
 }

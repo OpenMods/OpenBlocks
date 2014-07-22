@@ -4,100 +4,62 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import openblocks.OpenBlocks;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
-import openmods.gui.BaseGuiContainer;
+import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
+import openmods.gui.GuiConfigurableSlots;
 import openmods.gui.component.*;
-import openmods.gui.component.BaseComponent.TabColor;
 
-public class GuiAutoEnchantmentTable extends
-		BaseGuiContainer<ContainerAutoEnchantmentTable> {
+import com.google.common.collect.ImmutableList;
 
-	// tank
-	private GuiComponentTankLevel xpLevel;
-
-	// tabs
-	private GuiComponentTab tabInput;
-	private GuiComponentTab tabOutput;
-	private GuiComponentTab tabXP;
-
-	// side selectors
-	private GuiComponentSideSelector sideSelectorInput;
-	private GuiComponentSideSelector sideSelectorOutput;
-	private GuiComponentSideSelector sideSelectorXP;
-
-	// checkboxes
-	private GuiComponentCheckbox checkboxAutoExtractInput;
-	private GuiComponentCheckbox checkboxAutoEjectOutput;
-	private GuiComponentCheckbox checkboxAutoDrinkXP;
-
-	// labels
-	private GuiComponentLabel labelAutoExtractInput;
-	private GuiComponentLabel labelAutoEjectOutput;
-	private GuiComponentLabel labelAutoDrinkXP;
-
-	private GuiComponentSlider sliderLevel;
-
-	@Override
-	protected BaseComponent createRoot() {
-		TileEntityAutoEnchantmentTable te = getContainer().getOwner();
-		int meta = te.getWorldObj().getBlockMetadata(te.xCoord, te.yCoord, te.zCoord);
-
-		ItemStack enchantedAxe = new ItemStack(Items.diamond_pickaxe, 1);
-		enchantedAxe.addEnchantment(Enchantment.fortune, 1);
-
-		// create tank level
-		xpLevel = new GuiComponentTankLevel(140, 30, 17, 37, te.getTank());
-
-		// create tabs
-		tabInput = new GuiComponentTab(TabColor.blue.getColor(), new ItemStack(Items.diamond_pickaxe, 1), 100, 100);
-		tabOutput = new GuiComponentTab(TabColor.lightblue.getColor(), enchantedAxe, 100, 100);
-		tabXP = new GuiComponentTab(TabColor.green.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
-
-		// create side selectors
-		sideSelectorInput = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
-		sideSelectorOutput = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
-		sideSelectorXP = new GuiComponentSideSelector(30, 30, 40.0, OpenBlocks.Blocks.autoAnvil, meta, te, true);
-
-		checkboxAutoExtractInput = new GuiComponentCheckbox(10, 82, false, 0xFFFFFF);
-		checkboxAutoEjectOutput = new GuiComponentCheckbox(10, 82, false, 0xFFFFFF);
-		checkboxAutoDrinkXP = new GuiComponentCheckbox(10, 82, false, 0xFFFFFF);
-
-		// create labels
-		labelAutoExtractInput = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
-		labelAutoEjectOutput = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
-		labelAutoDrinkXP = new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
-
-		sliderLevel = new GuiComponentSlider(44, 39, 45, 1, 30, 0);
-
-		tabInput.addComponent(labelAutoExtractInput);
-		tabInput.addComponent(checkboxAutoExtractInput);
-		tabInput.addComponent(sideSelectorInput);
-
-		tabOutput.addComponent(labelAutoEjectOutput);
-		tabOutput.addComponent(checkboxAutoEjectOutput);
-		tabOutput.addComponent(sideSelectorOutput);
-
-		tabXP.addComponent(labelAutoDrinkXP);
-		tabXP.addComponent(checkboxAutoDrinkXP);
-		tabXP.addComponent(sideSelectorXP);
-
-		BaseComponent main = super.createRoot();
-		main.addComponent(xpLevel);
-		main.addComponent(sliderLevel);
-
-		GuiComponentTabWrapper tabs = new GuiComponentTabWrapper(0, 0, main);
-		tabs.addComponent(tabInput);
-		tabs.addComponent(tabOutput);
-		tabs.addComponent(tabXP);
-
-		return tabs;
-	}
+public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAutoEnchantmentTable, ContainerAutoEnchantmentTable, TileEntityAutoEnchantmentTable.AutoSlots> {
 
 	public GuiAutoEnchantmentTable(ContainerAutoEnchantmentTable container) {
 		super(container, 176, 175, "openblocks.gui.autoenchantmenttable");
+	}
 
+	@Override
+	protected Iterable<AutoSlots> getSlots() {
+		return ImmutableList.of(AutoSlots.input, AutoSlots.xp, AutoSlots.output);
+	}
+
+	@Override
+	protected void addCustomizations(BaseComponent root) {
+		TileEntityAutoEnchantmentTable te = getContainer().getOwner();
+		root.addComponent(new GuiComponentTankLevel(140, 30, 17, 37, te.getTank()));
+		root.addComponent(new GuiComponentSlider(44, 39, 45, 1, 30, 0));
+	}
+
+	@Override
+	protected GuiComponentTab createTab(AutoSlots slot) {
+		switch (slot) {
+			case input:
+				return new GuiComponentTab(StandardPalette.blue.getColor(), new ItemStack(Items.diamond_pickaxe, 1), 100, 100);
+			case output: {
+				ItemStack enchantedAxe = new ItemStack(Items.diamond_pickaxe, 1);
+				enchantedAxe.addEnchantment(Enchantment.fortune, 1);
+				return new GuiComponentTab(StandardPalette.lightblue.getColor(), enchantedAxe, 100, 100);
+			}
+			case xp:
+				return new GuiComponentTab(StandardPalette.green.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
+			default:
+				throw new IllegalArgumentException(slot.toString());
+		}
+	}
+
+	@Override
+	protected GuiComponentLabel createLabel(AutoSlots slot) {
+		switch (slot) {
+			case input:
+				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
+			case output:
+				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
+			case xp:
+				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
+			default:
+				throw new IllegalArgumentException(slot.toString());
+
+		}
 	}
 
 }
