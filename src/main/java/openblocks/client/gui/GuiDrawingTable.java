@@ -23,7 +23,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
 		buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), BaseComponent.TEXTURE_SHEET);
-		buttonLeft.addListener(new IMouseDownListener() {
+		buttonLeft.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				patternIndex--;
@@ -32,7 +32,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 			}
 		});
 		buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), BaseComponent.TEXTURE_SHEET);
-		buttonRight.addListener(new IMouseDownListener() {
+		buttonRight.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				patternIndex++;
@@ -41,10 +41,10 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 			}
 		});
 		buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF);
-		buttonDraw.setText("Draw").setName("btnDraw").addListener(new IMouseDownListener() {
+		buttonDraw.setText("Draw").setName("btnDraw").setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				IStencilCrafter rpcProxy = getContainer().getOwner().getRpcProxy(IStencilCrafter.class);
+				IStencilCrafter rpcProxy = getContainer().getOwner().createRpcProxy(IStencilCrafter.class);
 				rpcProxy.craft(Stencil.VALUES[patternIndex]);
 			}
 		});

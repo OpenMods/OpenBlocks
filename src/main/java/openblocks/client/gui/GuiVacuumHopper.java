@@ -10,6 +10,7 @@ import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.gui.SyncedGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.component.GuiComponentSideSelector.ISideSelectedListener;
+import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.bitmap.IReadableBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
@@ -23,7 +24,9 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 		final TileEntityVacuumHopper te = getContainer().getOwner();
 
 		BaseComponent main = super.createRoot();
-		main.addComponent(new GuiComponentTankLevel(140, 18, 17, 37, te.getTank()));
+		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 18, 17, 37, TileEntityVacuumHopper.TANK_CAPACITY);
+		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));
+		main.addComponent(tankLevel);
 
 		GuiComponentTabWrapper tabs = new GuiComponentTabWrapper(0, 0, main);
 
@@ -50,7 +53,7 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 	}
 
 	private static void wireSideSelector(final GuiComponentSideSelector sideSelector, final IReadableBitMap<ForgeDirection> readableSides, final IWriteableBitMap<ForgeDirection> writeableSides) {
-		sideSelector.addListener(new ISideSelectedListener() {
+		sideSelector.setListener(new ISideSelectedListener() {
 			@Override
 			public void onSideToggled(ForgeDirection side, boolean currentState) {
 				writeableSides.toggle(side);

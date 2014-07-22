@@ -8,6 +8,8 @@ import openblocks.common.tileentity.TileEntityXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
 import openmods.gui.GuiConfigurableSlots;
 import openmods.gui.component.*;
+import openmods.gui.logic.ValueCopyAction;
+import openmods.utils.MiscUtils;
 
 import com.google.common.collect.ImmutableList;
 
@@ -25,8 +27,13 @@ public class GuiXPBottler extends GuiConfigurableSlots<TileEntityXPBottler, Cont
 	@Override
 	protected void addCustomizations(BaseComponent root) {
 		TileEntityXPBottler te = getContainer().getOwner();
-		root.addComponent(new GuiComponentTankLevel(140, 18, 17, 37, te.getTank()));
-		root.addComponent(new GuiComponentProgress(72, 33, 0));
+		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 18, 17, 37, TileEntityXPBottler.TANK_CAPACITY);
+		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));
+		root.addComponent(tankLevel);
+
+		final GuiComponentProgress progress = new GuiComponentProgress(72, 33, TileEntityXPBottler.PROGRESS_TICKS);
+		addSyncUpdateListener(ValueCopyAction.create(te.getProgress(), progress.progressReceiver()));
+		root.addComponent(progress);
 	}
 
 	@Override
@@ -39,7 +46,7 @@ public class GuiXPBottler extends GuiConfigurableSlots<TileEntityXPBottler, Cont
 			case xp:
 				return new GuiComponentTab(StandardPalette.green.getColor(), new ItemStack(Items.bucket), 100, 100);
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 		}
 	}
 
@@ -53,7 +60,7 @@ public class GuiXPBottler extends GuiConfigurableSlots<TileEntityXPBottler, Cont
 			case xp:
 				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 
 		}
 	}

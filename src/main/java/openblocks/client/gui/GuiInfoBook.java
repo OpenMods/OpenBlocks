@@ -39,7 +39,7 @@ public class GuiInfoBook extends ComponentGui {
 		BlankPage contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 
 		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, 90, "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
-		lblBlocks.addListener(new IMouseDownListener() {
+		lblBlocks.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				book.gotoIndex(blocksIndex);
@@ -47,7 +47,7 @@ public class GuiInfoBook extends ComponentGui {
 			}
 		});
 		GuiComponentLabel lblItems = new GuiComponentLabel(27, 105, "- " + StatCollector.translateToLocal("openblocks.gui.items"));
-		lblItems.addListener(new IMouseDownListener() {
+		lblItems.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				book.gotoIndex(itemsIndex);
@@ -55,7 +55,7 @@ public class GuiInfoBook extends ComponentGui {
 			}
 		});
 		GuiComponentLabel lblMisc = new GuiComponentLabel(27, 120, "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
-		lblMisc.addListener(new IMouseDownListener() {
+		lblMisc.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				book.gotoIndex(miscIndex);

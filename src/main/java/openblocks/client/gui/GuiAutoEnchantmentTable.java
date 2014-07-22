@@ -9,6 +9,8 @@ import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openmods.gui.GuiConfigurableSlots;
 import openmods.gui.component.*;
+import openmods.gui.logic.ValueCopyAction;
+import openmods.utils.MiscUtils;
 
 import com.google.common.collect.ImmutableList;
 
@@ -26,8 +28,11 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 	@Override
 	protected void addCustomizations(BaseComponent root) {
 		TileEntityAutoEnchantmentTable te = getContainer().getOwner();
-		root.addComponent(new GuiComponentTankLevel(140, 30, 17, 37, te.getTank()));
 		root.addComponent(new GuiComponentSlider(44, 39, 45, 1, 30, 0));
+
+		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoEnchantmentTable.TANK_CAPACITY);
+		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));
+		root.addComponent(tankLevel);
 	}
 
 	@Override
@@ -43,7 +48,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 			case xp:
 				return new GuiComponentTab(StandardPalette.green.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 		}
 	}
 
@@ -57,7 +62,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 			case xp:
 				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 
 		}
 	}

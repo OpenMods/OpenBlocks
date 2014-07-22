@@ -2,54 +2,148 @@ package openblocks.client.gui;
 
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
-import openmods.gui.BaseGuiContainer;
+import openblocks.common.tileentity.TileEntityPaintMixer.DyeSlot;
+import openblocks.rpc.IColorChanger;
+import openmods.api.IValueProvider;
+import openmods.gui.SyncedGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
+import openmods.gui.listener.IValueChangedListener;
+import openmods.gui.logic.IValueUpdateAction;
+import openmods.gui.logic.ValueCopyAction;
 
-public class GuiPaintMixer extends BaseGuiContainer<ContainerPaintMixer> {
+import com.google.common.collect.ImmutableList;
 
-	private GuiComponentTextButton buttonMix;
-	private GuiComponentTextbox textbox;
-	private GuiComponentColorPicker colorPicker;
-	private GuiComponentSlider slider;
+public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
+
+	private static final int CYAN = 0xFF4B9FC1;
+	private static final int MAGENTA = 0xFFDB7AD5;
+	private static final int YELLOW = 0xFFE7E72A;
+	private static final int KEY = 0xFF000000;
+
+	private int selectedColor;
 
 	public GuiPaintMixer(ContainerPaintMixer container) {
 		super(container, 176, 200, "openblocks.gui.paintmixer");
 		TileEntityPaintMixer mixer = container.getOwner();
+		final IColorChanger rpcIntf = mixer.createRpcProxy();
 
-		root.addComponent(new GuiComponentRect(121, 74, 20, 20, 0xFF4b9fc1));
-		root.addComponent(new GuiComponentRect(141, 74, 20, 20, 0xFFdb7ad5));
-		root.addComponent(new GuiComponentRect(121, 94, 20, 20, 0xFFe7e72a));
-		root.addComponent(new GuiComponentRect(141, 94, 20, 20, 0xFF000000));
+		root.addComponent(new GuiComponentRect(121, 74, 20, 20, CYAN));
+		root.addComponent(new GuiComponentRect(141, 74, 20, 20, MAGENTA));
+		root.addComponent(new GuiComponentRect(121, 94, 20, 20, YELLOW));
+		root.addComponent(new GuiComponentRect(141, 94, 20, 20, KEY));
 
-		root.addComponent(new GuiComponentLevel(118, 74 + 6, 2, 14, 0xFF4b9fc1, 0xFF888888, 0f, 2f, 0));
-		root.addComponent(new GuiComponentLevel(141 + 21, 74 + 6, 2, 14, 0xFFdb7ad5, 0xFF888888, 0f, 2f, 0));
-		root.addComponent(new GuiComponentLevel(118, 94 + 6, 2, 14, 0xFFe7e72a, 0xFF888888, 0f, 2f, 0));
-		root.addComponent(new GuiComponentLevel(141 + 21, 94 + 6, 2, 14, 0xFF000000, 0xFF888888, 0f, 2f, 0));
+		{
+			final GuiComponentLevel level = new GuiComponentLevel(118, 74 + 6, 2, 14, CYAN, 0xFF888888, 0f, 2f, 0);
+			addSyncUpdateListener(ValueCopyAction.create(mixer.getDyeSlot(DyeSlot.cyan), level));
+			root.addComponent(level);
+		}
 
-		textbox = new GuiComponentTextbox(65, 90, 44, 10);
-		textbox.setText(String.format("#%06X", mixer.getColor().get()));
-		root.addComponent(textbox);
+		{
+			final GuiComponentLevel level = new GuiComponentLevel(141 + 21, 74 + 6, 2, 14, MAGENTA, 0xFF888888, 0f, 2f, 0);
+			addSyncUpdateListener(ValueCopyAction.create(mixer.getDyeSlot(DyeSlot.magenta), level));
+			root.addComponent(level);
+		}
 
-		buttonMix = new GuiComponentTextButton(125, 57, 30, 13, 0xFFFFFF);
-		buttonMix.setText("Mix").setName("btnMix")
-				.addListener(new IMouseDownListener() {
-					@Override
-					public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-						sendButtonClick(0);
+		{
+			final GuiComponentLevel level = new GuiComponentLevel(118, 94 + 6, 2, 14, YELLOW, 0xFF888888, 0f, 2f, 0);
+			addSyncUpdateListener(ValueCopyAction.create(mixer.getDyeSlot(DyeSlot.yellow), level));
+			root.addComponent(level);
+		}
+
+		{
+			final GuiComponentLevel level = new GuiComponentLevel(141 + 21, 94 + 6, 2, 14, KEY, 0xFF888888, 0f, 2f, 0);
+			addSyncUpdateListener(ValueCopyAction.create(mixer.getDyeSlot(DyeSlot.black), level));
+			root.addComponent(level);
+		}
+
+		{
+			GuiComponentProgress progress = new GuiComponentProgress(125, 43, TileEntityPaintMixer.PROGRESS_TICKS);
+			addSyncUpdateListener(ValueCopyAction.create(mixer.getProgress(), progress.progressReceiver()));
+			root.addComponent(progress);
+		}
+
+		{
+			GuiComponentTextButton buttonMix = new GuiComponentTextButton(125, 57, 30, 13, 0xFFFFFF);
+			buttonMix.setText("Mix").setName("btnMix")
+					.setListener(new IMouseDownListener() {
+						@Override
+						public void componentMouseDown(BaseComponent component, int x, int y, int button) {
+							rpcIntf.changeColor(selectedColor);
+						}
+					});
+			root.addComponent(buttonMix);
+		}
+
+		{
+			final GuiComponentTextbox textbox = new GuiComponentTextbox(65, 90, 44, 10);
+			root.addComponent(textbox);
+
+			final GuiComponentColorPicker colorPicker = new GuiComponentColorPicker(10, 20);
+			root.addComponent(colorPicker);
+
+			final GuiComponentSlider slider = new GuiComponentSlider(10, 75, 100, 0, 255, 0, false);
+			root.addComponent(slider);
+
+			final GuiComponentColorBox colorBox = new GuiComponentColorBox(10, 90, 45, 10, 0xFFFFFF);
+			root.addComponent(colorBox);
+
+			textbox.setListener(new IValueChangedListener<String>() {
+				@Override
+				public void valueChanged(String value) {
+					try {
+						int parsed = Integer.parseInt(value, 16);
+
+						selectedColor = parsed;
+						colorPicker.setValue(parsed);
+						slider.setValue(colorPicker.tone);
+						colorBox.setValue(parsed);
+					} catch (NumberFormatException e) {
+						// NO-OP, user derp
 					}
-				});
-		root.addComponent(buttonMix);
-		colorPicker = new GuiComponentColorPicker(10, 20);
-		root.addComponent(colorPicker);
+				}
+			});
 
-		slider = new GuiComponentSlider(10, 75, 100, 0, 255, 0, false);
-		root.addComponent(slider);
+			colorPicker.setListener(new IValueChangedListener<Integer>() {
+				@Override
+				public void valueChanged(Integer value) {
+					selectedColor = value;
+					textbox.setValue(String.format("%06X", value));
+					colorBox.setValue(value);
+				}
+			});
 
-		root.addComponent(new GuiComponentProgress(125, 43, 0));
-		root.addComponent(new GuiComponentColorBox(10, 90, 45, 10, 0xFFFFFF));
+			slider.setListener(new IValueChangedListener<Integer>() {
+				@Override
+				public void valueChanged(Integer value) {
+					colorPicker.tone = value;
+					int color = colorPicker.getColor();
+					textbox.setValue(String.format("%06X", color));
+					colorBox.setValue(color);
+				}
+			});
+
+			final IValueProvider<Integer> color = mixer.getColor();
+
+			addSyncUpdateListener(new IValueUpdateAction() {
+				@Override
+				public Iterable<?> getTriggers() {
+					return ImmutableList.of(color);
+				}
+
+				@Override
+				public void execute() {
+					int value = color.getValue();
+					selectedColor = value;
+					textbox.setValue(String.format("%06X", value));
+					colorPicker.setValue(value);
+					slider.setValue(colorPicker.tone);
+					colorBox.setValue(value);
+				}
+			});
+
+			dispatcher().triggerAll();
+		}
+
 	}
-
-	// TODO: textbox.setText(String.format("%06X", colorPicker.getColor()));
-
 }

@@ -1,6 +1,5 @@
 package openblocks.common.container;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer.Slots;
@@ -17,10 +16,5 @@ public class ContainerPaintMixer extends ContainerInventoryProvider<TileEntityPa
 		addSlotToContainer(new RestrictedSlot(inventory, Slots.dyeYellow.ordinal(), 123, 96));
 		addSlotToContainer(new RestrictedSlot(inventory, Slots.dyeBlack.ordinal(), 143, 96));
 		addPlayerInventorySlots(120);
-	}
-
-	@Override
-	public void onButtonClicked(EntityPlayer player, int buttonId) {
-		getOwner().tryStartMixer();
 	}
 }

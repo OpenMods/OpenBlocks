@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.container.ContainerXPBottler;
@@ -23,6 +23,7 @@ import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
+import openmods.gamelogic.WorkerLogic;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -30,17 +31,16 @@ import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.EnchantmentUtils;
-import openmods.utils.InventoryUtils;
-import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.*;
 import openmods.utils.bitmap.*;
 
 public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots> {
 
-	protected static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
+	public static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
+	public static final int PROGRESS_TICKS = 40;
+
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Items.experience_bottle, 1);
-	public static final int PROGRESS_TICKS = 40;
 
 	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
 
@@ -58,7 +58,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	private final GenericInventory inventory = new GenericInventory("xpbottler", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-			if (slot != 0) return false;
+			if (slot != Slots.input.ordinal()) return false;
 			return itemstack.getItem() == Items.glass_bottle;
 		}
 	};
@@ -67,19 +67,21 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);
 
 	/** synced data objects **/
-	private SyncableProgress progress;
+	private SyncableInt progress;
 	private SyncableDirs glassSides;
 	private SyncableDirs xpBottleSides;
 	private SyncableDirs xpSides;
 	private SyncableFlags automaticSlots;
 	private SyncableTank tank;
 
+	private final WorkerLogic logic = new WorkerLogic(progress, PROGRESS_TICKS);
+
 	@IncludeInterface
 	private final IFluidHandler tankWrapper = new SidedFluidHandler.Drain(xpSides, tank);
 
 	@Override
 	protected void createSyncedFields() {
-		progress = new SyncableProgress(PROGRESS_TICKS);
+		progress = new SyncableInt();
 		glassSides = new SyncableDirs();
 		xpBottleSides = new SyncableDirs();
 		xpSides = new SyncableDirs();
@@ -112,32 +114,26 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 				InventoryUtils.moveItemsFromOneOfSides(this, inventory, GLASS_BOTTLE, 1, Slots.input.ordinal(), glassSides.getValue());
 			}
 
-			// if there's no space in the output, we've got no input bottles or
-			// the tank isnt full, reset progress
-			if (!hasSpaceInOutput() || !hasGlassInInput() || !isTankFull()) {
-				progress.reset();
-				return;
-			}
-			// while progress is moving, modify by 1
-			if (!progress.isComplete()) {
-				progress.increase();
-			} else {
+			logic.checkWorkCondition(hasSpaceInOutput() && hasGlassInInput() && isTankFull());
+
+			if (logic.update()) {
 				// this happens when the progress has completed
 				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:bottler.signal", .5f, .8f);
 				inventory.decrStackSize(Slots.input.ordinal(), 1);
-				// drain the entire tank (it stores enough for 1 bottle)
-				tank.drain(tank.getFluidAmount(), true);
-				// increase the stacksize of the output slot
-				if (inventory.getStackInSlot(Slots.output.ordinal()) == null) {
+				tank.setFluid(null);
+
+				ItemStack outputStack = inventory.getStackInSlot(Slots.output.ordinal());
+
+				if (outputStack == null) {
 					inventory.setInventorySlotContents(Slots.output.ordinal(), XP_BOTTLE.copy());
 				} else {
-					ItemStack outputStack = inventory.getStackInSlot(Slots.output.ordinal()).copy();
 					outputStack.stackSize++;
-					inventory.setInventorySlotContents(Slots.output.ordinal(), outputStack);
 				}
-				// reset progress
-				progress.reset();
+
+				inventory.onInventoryChanged(Slots.output.ordinal());
 			}
+
+			sync();
 		}
 	}
 
@@ -156,7 +152,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		return true;
 	}
 
-	public SyncableProgress getProgress() {
+	public IValueProvider<Integer> getProgress() {
 		return progress;
 	}
 
@@ -188,7 +184,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		return tank.getFluidAmount() == tank.getCapacity();
 	}
 
-	public IFluidTank getTank() {
+	public IValueProvider<FluidStack> getFluidProvider() {
 		return tank;
 	}
 
@@ -223,7 +219,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 			case xp:
 				return xpSides;
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 		}
 	}
 

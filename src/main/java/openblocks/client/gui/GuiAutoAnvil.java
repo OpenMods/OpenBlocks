@@ -10,6 +10,8 @@ import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
 import openmods.gui.GuiConfigurableSlots;
 import openmods.gui.component.*;
+import openmods.gui.logic.ValueCopyAction;
+import openmods.utils.MiscUtils;
 
 import com.google.common.collect.ImmutableList;
 
@@ -24,7 +26,11 @@ public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, Cont
 		TileEntityAutoAnvil te = getContainer().getOwner();
 		main.addComponent(new GuiComponentSprite(80, 34, GuiComponentSprite.Sprites.hammer, BaseComponent.TEXTURE_SHEET));
 		main.addComponent(new GuiComponentSprite(36, 41, GuiComponentSprite.Sprites.plus, BaseComponent.TEXTURE_SHEET));
-		main.addComponent(new GuiComponentTankLevel(140, 30, 17, 37, te.getTank()));
+
+		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoAnvil.TANK_CAPACITY);
+		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));
+
+		main.addComponent(tankLevel);
 	}
 
 	@Override
@@ -47,7 +53,7 @@ public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, Cont
 			case xp:
 				return new GuiComponentTab(StandardPalette.yellow.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 		}
 	}
 
@@ -62,7 +68,7 @@ public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, Cont
 			case xp:
 				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 
 		}
 	}

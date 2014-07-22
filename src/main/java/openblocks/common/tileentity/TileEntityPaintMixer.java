@@ -12,25 +12,31 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.item.ItemPaintCan;
+import openblocks.rpc.IColorChanger;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
+import openmods.api.IValueProvider;
+import openmods.gamelogic.WorkerLogic;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
-import openmods.sync.*;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableFloat;
+import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ColorUtils;
+import openmods.utils.MiscUtils;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.Maps;
 
-public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IExtendable {
+public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IExtendable, IColorChanger {
 
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.milk_bucket);
-	private static final int PROGRESS_TICKS = 300;
+	public static final int PROGRESS_TICKS = 300;
 
 	public static enum Slots {
 		paint,
@@ -39,6 +45,13 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		dyeMagenta,
 		dyeYellow,
 		dyeBlack
+	}
+
+	public static enum DyeSlot {
+		cyan,
+		magenta,
+		yellow,
+		black
 	}
 
 	private static EnumMap<Slots, Integer> ALLOWED_COLORS = Maps.newEnumMap(Slots.class);
@@ -56,10 +69,10 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 
 	private SyncableInt canColor;
 	private SyncableInt color;
-	private boolean isWorking;
-	private SyncableProgress progress;
+	private SyncableInt progress;
 	private SyncableFlags flags;
-	private int chosenColor;
+	private final WorkerLogic logic = new WorkerLogic(progress, PROGRESS_TICKS);
+
 	// These could be optimized with a byte array later
 	// Not important for release
 	// Levels should be 0-2, so that if there is 0.3 left, 1 can be consumed and
@@ -95,28 +108,17 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 
-			if (chosenColor != color.get()) {
-				progress.reset();
-				isWorking = false;
-			}
-
-			if (isWorking) {
-				if (!hasValidInput() || !hasCMYK()) {
-					progress.reset();
-					isWorking = false;
-					return;
-				}
-				if (!progress.isComplete()) {
-					progress.increase();
-				} else {
+			if (logic.isWorking()) {
+				if (!hasValidInput() || !hasSufficientInk()) {
+					logic.reset();
+				} else if (logic.update()) {
 					consumeInk();
 					ItemStack output = ItemPaintCan.createStack(color.get(), ItemPaintCan.FULL_CAN_SIZE);
 					inventory.setInventorySlotContents(Slots.paint.ordinal(), output);
 					canColor.set(color.get());
-					progress.reset();
-					isWorking = false;
 				}
 			}
+
 			checkAutoConsumption();
 			sync();
 		}
@@ -144,10 +146,6 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 			}
 		}
 
-	}
-
-	public boolean hasCMYK() {
-		return hasSufficientInk();
 	}
 
 	private void consumeInk() {
@@ -207,20 +205,12 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	protected void createSyncedFields() {
 		color = new SyncableInt(0xFF0000);
 		flags = SyncableFlags.create(Flags.values().length);
-		progress = new SyncableProgress(PROGRESS_TICKS);
+		progress = new SyncableInt();
 		lvlBlack = new SyncableFloat();
 		lvlCyan = new SyncableFloat();
 		lvlMagenta = new SyncableFloat();
 		lvlYellow = new SyncableFloat();
 		canColor = new SyncableInt(0xFFFFFF);
-	}
-
-	public SyncableInt getColor() {
-		return color;
-	}
-
-	public boolean hasPaint() {
-		return flags.get(Flags.hasPaint);
 	}
 
 	@Override
@@ -238,15 +228,43 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		return true;
 	}
 
-	public void tryStartMixer() {
+	@Override
+	public void changeColor(int requestedColor) {
 		if (!worldObj.isRemote) {
-			isWorking = true;
-			chosenColor = color.get();
+			if (logic.isWorking()) {
+				if (requestedColor != color.get()) logic.reset();
+				else return;
+			}
+			color.set(requestedColor);
+			logic.start();
 		}
 	}
 
-	public SyncableProgress getProgress() {
+	public IValueProvider<Integer> getProgress() {
 		return progress;
+	}
+
+	public IValueProvider<Integer> getColor() {
+		return color;
+	}
+
+	public IValueProvider<Float> getDyeSlot(DyeSlot slot) {
+		switch (slot) {
+			case black:
+				return lvlBlack;
+			case cyan:
+				return lvlCyan;
+			case magenta:
+				return lvlMagenta;
+			case yellow:
+				return lvlYellow;
+			default:
+				throw MiscUtils.unhandledEnum(slot);
+		}
+	}
+
+	public boolean hasPaint() {
+		return flags.get(Flags.hasPaint);
 	}
 
 	public int getCanColor() {
@@ -261,9 +279,9 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 		return hasStack(Slots.paint, PAINT_CAN) || hasStack(Slots.paint, MILK_BUCKET);
 	}
 
-	private static Integer getColor(ItemStack stack) {
+	private static Integer getColor(ItemStack stack, boolean canColor) {
 		if (stack.isItemEqual(PAINT_CAN)) return ItemPaintCan.getColorFromStack(stack);
-		else if (stack.isItemEqual(MILK_BUCKET)) return 0xFFFFFF;
+		else if (canColor && stack.isItemEqual(MILK_BUCKET)) return 0xFFFFFF;
 		return null;
 	}
 
@@ -274,10 +292,16 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 			boolean hasPaint = false;
 			ItemStack can = inventory.getStackInSlot(Slots.paint);
 			if (can != null) {
-				Integer c = getColor(can);
-				if (c != null) {
-					color.set(c);
-					canColor.set(c);
+				Integer pickerColor = getColor(can, false);
+				if (pickerColor != null && !logic.isWorking()) {
+					color.set(pickerColor);
+					// force GUI refresh
+					color.markDirty();
+				}
+
+				Integer canColor = getColor(can, true);
+				if (canColor != null) {
+					this.canColor.set(canColor);
 					hasPaint = true;
 				}
 			}
@@ -308,5 +332,9 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	public IColorChanger createRpcProxy() {
+		return createRpcProxy(IColorChanger.class);
 	}
 }

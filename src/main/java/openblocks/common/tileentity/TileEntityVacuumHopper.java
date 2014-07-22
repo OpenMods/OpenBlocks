@@ -16,7 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.container.ContainerVacuumHopper;
@@ -26,6 +25,7 @@ import openmods.IInventoryProvider;
 import openmods.OpenMods;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
+import openmods.api.IValueProvider;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.liquids.SidedFluidHandler;
@@ -42,7 +42,7 @@ import com.google.common.collect.Lists;
 
 public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, IExtendable, IEntitySelector {
 
-	private static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
+	public static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
 	private SyncableTank tank;
 	public SyncableDirs xpOutputs;
@@ -85,7 +85,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		return BitMapUtils.createRpcAdapter(createRpcProxy(itemOutputs, IRpcDirectionBitMap.class));
 	}
 
-	public IFluidTank getTank() {
+	public IValueProvider<FluidStack> getFluidProvider() {
 		return tank;
 	}
 

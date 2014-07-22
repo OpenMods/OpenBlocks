@@ -39,9 +39,9 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 	public GuiProjector(ContainerProjector container) {
 		super(container, 176, 234, "");
 		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(7, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176, 0, 13, 13), texture);
-		buttonLeft.addListener(createRotationListener(-1));
+		buttonLeft.setListener(createRotationListener(-1));
 		GuiComponentIconButton buttonRight = new GuiComponentIconButton(152, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176 + 13, 0, -13, 13), texture);
-		buttonRight.addListener(createRotationListener(+1));
+		buttonRight.setListener(createRotationListener(+1));
 
 		root.addComponent(buttonLeft);
 		root.addComponent(buttonRight);

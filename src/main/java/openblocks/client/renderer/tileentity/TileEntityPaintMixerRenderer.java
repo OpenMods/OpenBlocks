@@ -50,7 +50,10 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 				GL11.glTranslated(0, Math.random() * 0.2, 0);
 			}
 			int secondPass = mixer.getCanColor();
-			if (mixer.isEnabled()) secondPass = calculateColorFade(secondPass, mixer.getColor().get(), mixer.getProgress().getPercent());
+			if (mixer.isEnabled()) {
+				double progress = (double)mixer.getProgress().getValue() / TileEntityPaintMixer.PROGRESS_TICKS;
+				secondPass = calculateColorFade(secondPass, mixer.getColor().getValue(), progress);
+			}
 			// Render first pass
 			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES);
 			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, secondPass, TOP_FACE);

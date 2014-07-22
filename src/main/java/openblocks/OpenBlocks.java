@@ -29,6 +29,7 @@ import openblocks.events.ElevatorActionEvent;
 import openblocks.events.PlayerActionEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
+import openblocks.rpc.IColorChanger;
 import openblocks.rpc.IStencilCrafter;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
@@ -348,7 +349,8 @@ public class OpenBlocks {
 				.register(PlayerActionEvent.class);
 
 		RpcCallDispatcher.INSTANCE.startRegistration()
-				.registerInterface(IStencilCrafter.class);
+				.registerInterface(IStencilCrafter.class)
+				.registerInterface(IColorChanger.class);
 
 		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
 		features.collectFromBlocks(OpenBlocks.Blocks.class);

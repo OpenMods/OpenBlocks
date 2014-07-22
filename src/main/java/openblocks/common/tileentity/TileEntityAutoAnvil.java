@@ -15,8 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.container.ContainerAutoAnvil;
@@ -35,15 +35,13 @@ import openmods.sync.SyncableDirs;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.EnchantmentUtils;
-import openmods.utils.InventoryUtils;
-import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.*;
 import openmods.utils.bitmap.*;
 
 public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable, IConfigurableGuiSlots<AutoSlots> {
 
 	protected static final int TOTAL_COOLDOWN = 40;
-	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
+	public static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
 
 	protected int cooldown = 0;
 
@@ -157,6 +155,10 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	@Override
 	public Object getClientGui(EntityPlayer player) {
 		return new GuiAutoAnvil(new ContainerAutoAnvil(player.inventory, this));
+	}
+
+	public IValueProvider<FluidStack> getFluidProvider() {
+		return tank;
 	}
 
 	/**
@@ -416,10 +418,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		return false;
 	}
 
-	public IFluidTank getTank() {
-		return tank;
-	}
-
 	@Override
 	public IInventory getInventory() {
 		return slotSides;
@@ -448,7 +446,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 			case xp:
 				return xpSides;
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 		}
 	}
 

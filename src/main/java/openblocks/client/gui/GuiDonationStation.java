@@ -31,7 +31,7 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 				.setText("Donate to the author")
 				.setName("btnDonate"));
 
-		root.addListener(new IMouseDownListener() {
+		root.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				URI uri = URI.create(getContainer().getOwner().getDonateUrl());

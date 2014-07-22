@@ -10,8 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.IFluidTank;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
@@ -28,14 +28,12 @@ import openmods.include.IncludeOverride;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.EnchantmentUtils;
-import openmods.utils.InventoryUtils;
-import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.*;
 import openmods.utils.bitmap.*;
 
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots> {
 
-	protected static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
+	public static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
 
 	public static enum Slots {
 		input,
@@ -263,7 +261,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		return false;
 	}
 
-	public IFluidTank getTank() {
+	public IValueProvider<FluidStack> getFluidProvider() {
 		return tank;
 	}
 
@@ -293,7 +291,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 			case xp:
 				return xpSides;
 			default:
-				throw new IllegalArgumentException(slot.toString());
+				throw MiscUtils.unhandledEnum(slot);
 		}
 	}
 
