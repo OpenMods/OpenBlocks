@@ -65,7 +65,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 
 		{
 			GuiComponentTextButton buttonMix = new GuiComponentTextButton(125, 57, 30, 13, 0xFFFFFF);
-			buttonMix.setText("Mix").setName("btnMix")
+			buttonMix.setText("Mix")
 					.setListener(new IMouseDownListener() {
 						@Override
 						public void componentMouseDown(BaseComponent component, int x, int y, int button) {

@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -9,24 +11,14 @@ import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
-import openmods.Mods;
 import openmods.api.IHasGui;
-import openmods.api.IInventoryCallback;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
-import openmods.sync.SyncableString;
 import openmods.tileentity.OpenTileEntity;
-
-import com.google.common.base.Joiner;
-
+import openmods.utils.ModIdentifier;
 import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.ModMetadata;
 
-public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IInventoryCallback, IExtendable, IInventoryProvider {
-
-	private SyncableString modName = new SyncableString();
-	private SyncableString authors = new SyncableString();
-	private String donateUrl;
+public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IExtendable, IInventoryProvider {
 
 	public enum Slots {
 		input
@@ -34,46 +26,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 
 	private final GenericInventory inventory = new GenericInventory("donationstation", true, 1);
 
-	public TileEntityDonationStation() {
-		inventory.addCallback(this);
-	}
-
-	@Override
-	public void initialize() {
-		findModNameForInventoryItem();
-	}
-
-	@Override
-	public void onInventoryChanged(IInventory inventory, int slotNumber) {
-		findModNameForInventoryItem();
-	}
-
-	public String getDonateUrl() {
-		return donateUrl;
-	}
-
-	public SyncableString getAuthors() {
-		return authors;
-	}
-
-	private void findModNameForInventoryItem() {
-		ItemStack stack = inventory.getStackInSlot(Slots.input);
-		modName.setValue("Love an item?");
-		authors.clear();
-		donateUrl = null;
-		if (stack != null) {
-			modName.setValue("Vanilla / Unknown");
-			ModContainer container = Mods.getModForItemStack(stack);
-			if (container != null) {
-				ModMetadata meta = container.getMetadata();
-				if (meta != null && meta.authorList != null) {
-					authors.setValue(Joiner.on(", ").join(meta.authorList));
-				}
-				donateUrl = DonationUrlManager.instance().getUrl(container.getModId());
-				modName.setValue(container.getName());
-			}
-		}
-	}
+	public TileEntityDonationStation() {}
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {
@@ -88,14 +41,6 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	@Override
 	public boolean canOpenGui(EntityPlayer player) {
 		return true;
-	}
-
-	public SyncableString getModName() {
-		return modName;
-	}
-
-	public void showSomeLove() {
-		// TODO: Impl.
 	}
 
 	@Override
@@ -114,5 +59,31 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	private ModContainer identifyDonationItem() {
+		ItemStack stack = inventory.getStackInSlot(Slots.input);
+		if (stack == null) return null;
+
+		return ModIdentifier.INSTANCE.getModItemStack(stack);
+	}
+
+	public boolean hasItem() {
+		return inventory.getStackInSlot(Slots.input) != null;
+	}
+
+	public String getDonationUrl() {
+		ModContainer container = identifyDonationItem();
+		return container != null? DonationUrlManager.instance().getUrl(container.getModId()) : null;
+	}
+
+	public String getModName() {
+		ModContainer container = identifyDonationItem();
+		return container != null? container.getName() : null;
+	}
+
+	public List<String> getModAuthors() {
+		ModContainer container = identifyDonationItem();
+		return container != null? container.getMetadata().authorList : null;
 	}
 }

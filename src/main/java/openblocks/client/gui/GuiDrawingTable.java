@@ -41,7 +41,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 			}
 		});
 		buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF);
-		buttonDraw.setText("Draw").setName("btnDraw").setListener(new IMouseDownListener() {
+		buttonDraw.setText("Draw").setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				IStencilCrafter rpcProxy = getContainer().getOwner().createRpcProxy(IStencilCrafter.class);

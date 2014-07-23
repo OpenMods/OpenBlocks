@@ -13,6 +13,6 @@ public class AdapterDonationStation implements IPeripheralAdapter {
 	@LuaMethod(onTick = true, returnType = LuaType.STRING, description = "Find the mod name and mod authors")
 	public IMultiReturn getItemAuthor(final TileEntityDonationStation station) {
 		if (station.getInventory().getStackInSlot(0) == null) return null;
-		return OpenPeripheralAPI.wrap(station.getModName().getValue(), station.getAuthors().getValue());
+		return OpenPeripheralAPI.wrap(station.getModName(), station.getModAuthors());
 	}
 }

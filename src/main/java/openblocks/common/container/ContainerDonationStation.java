@@ -11,5 +11,4 @@ public class ContainerDonationStation extends ContainerInventoryProvider<TileEnt
 		addInventoryGrid(30, 30, 1);
 		addPlayerInventorySlots(90);
 	}
-
 }
