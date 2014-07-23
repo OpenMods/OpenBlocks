@@ -25,7 +25,7 @@ public class GuiXPBottler extends GuiConfigurableSlots<TileEntityXPBottler, Cont
 	}
 
 	@Override
-	protected void addCustomizations(BaseComponent root) {
+	protected void addCustomizations(BaseComposite root) {
 		TileEntityXPBottler te = getContainer().getOwner();
 		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 18, 17, 37, TileEntityXPBottler.TANK_CAPACITY);
 		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));

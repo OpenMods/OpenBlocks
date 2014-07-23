@@ -85,7 +85,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 			final GuiComponentSlider slider = new GuiComponentSlider(10, 75, 100, 0, 255, 0, false);
 			root.addComponent(slider);
 
-			final GuiComponentColorBox colorBox = new GuiComponentColorBox(10, 90, 45, 10, 0xFFFFFF);
+			final GuiComponentRect colorBox = new GuiComponentRect(10, 90, 45, 10, 0xFFFFFF);
 			root.addComponent(colorBox);
 
 			textbox.setListener(new IValueChangedListener<String>() {

@@ -20,10 +20,10 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 	}
 
 	@Override
-	protected BaseComponent createRoot() {
+	protected BaseComposite createRoot() {
 		final TileEntityVacuumHopper te = getContainer().getOwner();
 
-		BaseComponent main = super.createRoot();
+		BaseComposite main = super.createRoot();
 		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 18, 17, 37, TileEntityVacuumHopper.TANK_CAPACITY);
 		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));
 		main.addComponent(tankLevel);

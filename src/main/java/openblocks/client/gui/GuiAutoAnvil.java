@@ -22,7 +22,7 @@ public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, Cont
 	}
 
 	@Override
-	protected void addCustomizations(BaseComponent main) {
+	protected void addCustomizations(BaseComposite main) {
 		TileEntityAutoAnvil te = getContainer().getOwner();
 		main.addComponent(new GuiComponentSprite(80, 34, GuiComponentSprite.Sprites.hammer, BaseComponent.TEXTURE_SHEET));
 		main.addComponent(new GuiComponentSprite(36, 41, GuiComponentSprite.Sprites.plus, BaseComponent.TEXTURE_SHEET));

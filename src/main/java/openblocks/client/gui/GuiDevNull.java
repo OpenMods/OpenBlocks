@@ -2,7 +2,7 @@ package openblocks.client.gui;
 
 import openblocks.common.container.ContainerDevNull;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.BaseComponent;
+import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentPanel;
 
 public class GuiDevNull extends BaseGuiContainer<ContainerDevNull> {
@@ -12,7 +12,7 @@ public class GuiDevNull extends BaseGuiContainer<ContainerDevNull> {
 	}
 
 	@Override
-	protected BaseComponent createRoot() {
+	protected BaseComposite createRoot() {
 		GuiComponentPanel panel = new GuiComponentPanel(0, 0, xSize, ySize, getContainer());
 		panel.setSlotRenderer(0, GuiComponentPanel.bigSlot);
 		return panel;

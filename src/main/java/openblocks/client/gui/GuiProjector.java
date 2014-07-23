@@ -8,9 +8,7 @@ import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.BaseComponent;
-import openmods.gui.component.DummyComponent;
-import openmods.gui.component.GuiComponentIconButton;
+import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.misc.Trackball.TrackballWrapper;
 import openmods.utils.MathUtils;
@@ -48,8 +46,8 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 	}
 
 	@Override
-	protected BaseComponent createRoot() {
-		return new DummyComponent(0, 0, xSize, ySize);
+	protected BaseComposite createRoot() {
+		return new EmptyComposite(0, 0, xSize, ySize);
 	}
 
 	private boolean isInitialized;
@@ -129,6 +127,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 		GL11.glPushMatrix();
 		GL11.glTranslated(guiLeft, guiTop, 0);
 		drawTexturedModalRect(0, 0, 0, 0, xSize, ySize);
+
 		root.render(mc, 0, 0, mouseX - guiLeft, mouseY - guiTop);
 		GL11.glPopMatrix();
 	}

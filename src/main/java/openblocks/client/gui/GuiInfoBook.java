@@ -6,10 +6,13 @@ import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
-import openblocks.client.gui.pages.*;
+import openblocks.client.gui.page.IntroPage;
 import openblocks.common.item.MetasGeneric;
 import openmods.gui.ComponentGui;
 import openmods.gui.component.*;
+import openmods.gui.component.page.PageBase;
+import openmods.gui.component.page.SectionPage;
+import openmods.gui.component.page.TitledPage;
 import openmods.gui.listener.IMouseDownListener;
 
 import org.lwjgl.opengl.GL11;
@@ -34,9 +37,9 @@ public class GuiInfoBook extends ComponentGui {
 	}
 
 	@Override
-	protected BaseComponent createRoot() {
+	protected BaseComposite createRoot() {
 		final GuiComponentBook book = new GuiComponentBook();
-		BlankPage contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
+		PageBase contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 
 		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, 90, "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
 		lblBlocks.setListener(new IMouseDownListener() {
@@ -67,12 +70,12 @@ public class GuiInfoBook extends ComponentGui {
 		contentsPage.addComponent(lblItems);
 		contentsPage.addComponent(lblMisc);
 
-		book.addPage(new BlankPage());
+		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new IntroPage());
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 		book.addPage(contentsPage);
 		blocksIndex = book.getNumberOfPages();
-		book.addPage(new BlankPage());
+		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new SectionPage("openblocks.gui.blocks"));
 		book.addStandardRecipePage(MODID, "elevator", Blocks.elevator);
 		book.addStandardRecipePage(MODID, "sprinkler", Blocks.sprinkler);
@@ -107,10 +110,10 @@ public class GuiInfoBook extends ComponentGui {
 
 		itemsIndex = book.getNumberOfPages();
 		if (itemsIndex % 2 == 1) {
-			book.addPage(new BlankPage());
+			book.addPage(PageBase.BLANK_PAGE);
 			itemsIndex++;
 		}
-		book.addPage(new BlankPage());
+		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new SectionPage("openblocks.gui.items"));
 		book.addStandardRecipePage(MODID, "luggage", Items.luggage);
 		book.addStandardRecipePage(MODID, "sonicglasses", Items.sonicGlasses);
@@ -135,10 +138,10 @@ public class GuiInfoBook extends ComponentGui {
 
 		miscIndex = book.getNumberOfPages();
 		if (miscIndex % 2 == 1) {
-			book.addPage(new BlankPage());
+			book.addPage(PageBase.BLANK_PAGE);
 			miscIndex++;
 		}
-		book.addPage(new BlankPage());
+		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new SectionPage("openblocks.gui.misc"));
 		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
 		book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));

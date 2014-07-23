@@ -26,7 +26,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 	}
 
 	@Override
-	protected void addCustomizations(BaseComponent root) {
+	protected void addCustomizations(BaseComposite root) {
 		TileEntityAutoEnchantmentTable te = getContainer().getOwner();
 		root.addComponent(new GuiComponentSlider(44, 39, 45, 1, 30, 0));
 
