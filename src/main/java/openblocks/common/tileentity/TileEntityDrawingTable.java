@@ -13,28 +13,22 @@ import openblocks.rpc.IStencilCrafter;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
-import openmods.api.IInventoryCallback;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryCallback, IExtendable, IInventoryProvider, IStencilCrafter {
+public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IExtendable, IInventoryProvider, IStencilCrafter {
 
-	private final GenericInventory inventory = new GenericInventory("drawingtable", true, 1) {
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("drawingtable", true, 1) {
 
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return i == 0 && (itemstack == null || MetasGeneric.unpreparedStencil.isA(itemstack));
 		}
 
-	};
+	});
 
-	public TileEntityDrawingTable() {
-		inventory.addCallback(this);
-	}
-
-	@Override
-	public void onInventoryChanged(IInventory inventory, int slotNumber) {}
+	public TileEntityDrawingTable() {}
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {

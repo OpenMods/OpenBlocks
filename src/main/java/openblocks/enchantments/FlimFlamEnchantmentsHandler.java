@@ -136,7 +136,7 @@ public class FlimFlamEnchantmentsHandler {
 	}
 
 	private static int rollD20() {
-		return RANDOM.nextInt(21);
+		return RANDOM.nextInt(20) + 1;
 	}
 
 	public static void deliverKarma(EntityPlayerMP player) {

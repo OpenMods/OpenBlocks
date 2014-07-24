@@ -81,6 +81,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {
 		if (worldObj.isRemote) return;
 		updateURL(inventory.getStackInSlot(0));
+		markUpdated();
 	}
 
 	@Override

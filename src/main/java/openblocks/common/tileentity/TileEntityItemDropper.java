@@ -25,7 +25,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 
 	private boolean _redstoneSignal;
 
-	private GenericInventory inventory = new GenericInventory("itemDropper", false, 9);
+	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("itemDropper", false, 9));
 
 	public TileEntityItemDropper() {}
 
@@ -41,23 +41,22 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	private void dropItem() {
 		if (!(worldObj instanceof WorldServer)) return;
 
-		for (int i = 0, l = inventory.getSizeInventory(); i < l; i++) {
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null || stack.stackSize == 0) continue;
+			if (stack == null || stack.stackSize <= 0) continue;
 
 			final ItemStack dropped = stack.splitStack(1);
-			if (stack.stackSize <= 0) {
-				inventory.setInventorySlotContents(i, null);
-			} else {
-				FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
-					@Override
-					public void usePlayer(OpenModsFakePlayer fakePlayer) {
-						fakePlayer.dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
-					}
-				});
-			}
 
-			return;
+			if (stack.stackSize <= 0) inventory.setInventorySlotContents(i, null);
+
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
+				@Override
+				public void usePlayer(OpenModsFakePlayer fakePlayer) {
+					fakePlayer.dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
+				}
+			});
+
+			break;
 		}
 	}
 

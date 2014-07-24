@@ -53,13 +53,13 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private SyncableInt targetLevel;
 	private SyncableFlags automaticSlots;
 
-	private final GenericInventory inventory = new GenericInventory("autoenchant", true, 2) {
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("autoenchant", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			if (i == Slots.input.ordinal()) { return !itemstack.isItemEnchanted(); }
 			return i == Slots.input.ordinal();
 		}
-	};
+	});
 
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);

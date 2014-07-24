@@ -32,7 +32,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	public boolean onSoil = true;
 	private int ticksSinceLastSound = 0;
 
-	private GenericInventory inventory = new GenericInventory("grave", false, 100);
+	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 100));
 
 	public TileEntityGrave() {}
 

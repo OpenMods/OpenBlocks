@@ -74,14 +74,14 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private SyncableTank tank;
 	private SyncableFlags automaticSlots;
 
-	private final GenericInventory inventory = new GenericInventory("autoanvil", true, 3) {
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("autoanvil", true, 3) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Items.enchanted_book)) { return false; }
 			if (i == 2) { return false; }
 			return super.isItemValidForSlot(i, itemstack);
 		}
-	};
+	});
 
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);

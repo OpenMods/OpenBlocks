@@ -35,7 +35,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	private SyncableFlags flags;
 
-	private final GenericInventory inventory = new GenericInventory("bigbutton", true, 1);
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("bigbutton", true, 1));
 
 	public TileEntityBigButton() {
 		syncMap.addUpdateListener(createRenderUpdateListener());

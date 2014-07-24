@@ -24,7 +24,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 		input
 	}
 
-	private final GenericInventory inventory = new GenericInventory("donationstation", true, 1);
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("donationstation", true, 1));
 
 	public TileEntityDonationStation() {}
 

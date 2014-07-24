@@ -49,7 +49,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public SyncableDirs itemOutputs;
 	public SyncableBoolean vacuumDisabled;
 
-	private final GenericInventory inventory = new GenericInventory("vacuumhopper", true, 10);
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("vacuumhopper", true, 10));
 
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);
