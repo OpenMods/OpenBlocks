@@ -30,6 +30,7 @@ import openblocks.events.PlayerActionEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
 import openblocks.rpc.IColorChanger;
+import openblocks.rpc.IRotatable;
 import openblocks.rpc.IStencilCrafter;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
@@ -340,18 +341,6 @@ public class OpenBlocks {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
-		NetworkEventManager.INSTANCE
-				.startRegistration()
-				.register(MapDataManager.MapDataRequestEvent.class)
-				.register(MapDataManager.MapDataResponseEvent.class)
-				.register(MapDataManager.MapUpdatesEvent.class)
-				.register(ElevatorActionEvent.class)
-				.register(PlayerActionEvent.class);
-
-		RpcCallDispatcher.INSTANCE.startRegistration()
-				.registerInterface(IStencilCrafter.class)
-				.registerInterface(IColorChanger.class);
-
 		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
 		features.collectFromBlocks(OpenBlocks.Blocks.class);
 		features.collectFromItems(OpenBlocks.Items.class);
@@ -391,6 +380,19 @@ public class OpenBlocks {
 
 		gameConfig.registerBlocks(OpenBlocks.Blocks.class);
 		gameConfig.registerItems(OpenBlocks.Items.class);
+
+		NetworkEventManager.INSTANCE
+				.startRegistration()
+				.register(MapDataManager.MapDataRequestEvent.class)
+				.register(MapDataManager.MapDataResponseEvent.class)
+				.register(MapDataManager.MapUpdatesEvent.class)
+				.register(ElevatorActionEvent.class)
+				.register(PlayerActionEvent.class);
+
+		RpcCallDispatcher.INSTANCE.startRegistration()
+				.registerInterface(IRotatable.class)
+				.registerInterface(IStencilCrafter.class)
+				.registerInterface(IColorChanger.class);
 
 		RadioManager.readConfigs();
 		Config.register();

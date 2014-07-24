@@ -7,6 +7,7 @@ import openblocks.client.renderer.HeightMapRenderer;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
+import openblocks.rpc.IRotatable;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
@@ -25,23 +26,25 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 	private static final int VIEW_WIDTH = 160;
 	private TrackballWrapper trackball = new TrackballWrapper(1, 150);
 
-	private IMouseDownListener createRotationListener(final int rotation) {
+	private static IMouseDownListener createRotationListener(final IRotatable proxy, final int direction) {
 		return new IMouseDownListener() {
 			@Override
-			public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
-				// TODO getContainer().rotate(rotation);
+			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
+				proxy.rotate(direction);
 			}
 		};
 	}
 
 	public GuiProjector(ContainerProjector container) {
 		super(container, 176, 234, "");
-		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(7, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176, 0, 13, 13), texture);
-		buttonLeft.setListener(createRotationListener(-1));
-		GuiComponentIconButton buttonRight = new GuiComponentIconButton(152, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176 + 13, 0, -13, 13), texture);
-		buttonRight.setListener(createRotationListener(+1));
+		IRotatable proxy = getContainer().getOwner().createRpcProxy(IRotatable.class);
 
+		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(7, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176, 0, 13, 13), texture);
+		buttonLeft.setListener(createRotationListener(proxy, -1));
 		root.addComponent(buttonLeft);
+
+		GuiComponentIconButton buttonRight = new GuiComponentIconButton(152, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176 + 13, 0, -13, 13), texture);
+		buttonRight.setListener(createRotationListener(proxy, +1));
 		root.addComponent(buttonRight);
 	}
 

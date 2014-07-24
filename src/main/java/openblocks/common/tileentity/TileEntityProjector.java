@@ -14,6 +14,7 @@ import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
+import openblocks.rpc.IRotatable;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
@@ -24,7 +25,7 @@ import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable, ISyncListener {
+public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable, ISyncListener, IRotatable {
 
 	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
 		@Override
@@ -129,6 +130,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 		}
 	}
 
+	@Override
 	public void rotate(int delta) {
 		int value = rotation.get() + delta;
 		rotation.set((byte)(value & 0x3));
