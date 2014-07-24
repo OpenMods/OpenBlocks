@@ -120,7 +120,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		return true;
 	}
 
-	public String getUsername() {
+	public String getOwner() {
 		return owner;
 	}
 

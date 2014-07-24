@@ -147,7 +147,7 @@ public class ModelBearTrap extends ModelBase {
 		float rot = 1.4F;
 
 		if (!shut) {
-			rot = Math.max(0.0f, 1.4f - (ticksSinceOpened / TileEntityBearTrap.OPENING_ANIMATION_TIME));
+			rot = Math.max(0.0f, 1.4f - ((float)ticksSinceOpened / TileEntityBearTrap.OPENING_ANIMATION_TIME));
 		}
 
 		leftnearside.rotateAngleZ = -rot;

@@ -9,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import openblocks.client.radio.RadioManager;
 import openblocks.client.radio.RadioManager.RadioException;
 import openblocks.common.item.ItemTunedCrystal;
@@ -46,7 +47,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 
 	public TileEntityRadio() {
 		inventory.addCallback(this);
-		syncMap.addSyncListener(this);
+		syncMap.addUpdateListener(this);
 	}
 
 	@Override
@@ -112,7 +113,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 			sound = RadioManager.instance.startPlaying(urlValue, xCoord + 0.5f, yCoord + 0.5f, zCoord + 0.5f, 0.5f * volume.get());
 			OpenMods.proxy.setNowPlayingTitle(streamName.getValue());
 		} catch (RadioException e) {
-			Minecraft.getMinecraft().thePlayer.sendChatMessage(e.getMessage());
+			Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentTranslation(e.getMessage()));
 			sound = null;
 		}
 	}

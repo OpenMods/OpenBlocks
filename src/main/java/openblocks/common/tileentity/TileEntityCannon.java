@@ -56,6 +56,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	public void updateEntity() {
 		super.updateEntity();
 
+		double prevPitch = currentPitch;
+		double prevYaw = currentYaw;
 		// ugly, need to clean
 		currentPitch = currentPitch - ((currentPitch - targetPitch.get()) / 20);
 		currentYaw = GeometryUtils.normalizeAngle(currentYaw);
@@ -69,6 +71,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.get()) / 20);
 
+		if (Math.abs(prevYaw - currentYaw) > 0.01 || Math.abs(prevPitch - currentPitch) > 0.01) recalcMotionFromAngles();
+
 		if (!worldObj.isRemote) {
 			if (worldObj.getWorldTime() % 20 == 0) {
 				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
@@ -77,7 +81,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 						if (inventory != null) {
 							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
 							if (stack != null) {
-								recalcMotionFromAngles();
 								new TileEntityMessageEventPacket(this).sendToWatchers();
 								EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 								item.delayBeforeCanPickup = 20;

@@ -25,7 +25,7 @@ public class BlockCanvas extends OpenBlock {
 	public IIcon wallpaper;
 
 	public BlockCanvas() {
-		super(Material.rock);
+		this(Material.rock);
 	}
 
 	public BlockCanvas(Material material) {
@@ -34,12 +34,10 @@ public class BlockCanvas extends OpenBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister registry) {
-		baseIcon = registry.registerIcon("openblocks:canvas");
+		blockIcon = baseIcon = registry.registerIcon("openblocks:canvas");
 		wallpaper = registry.registerIcon("openblocks:wallpaper");
-		for (Stencil stencil : Stencil.values()) {
+		for (Stencil stencil : Stencil.values())
 			stencil.registerBlockIcons(registry);
-		}
-		super.registerBlockIcons(registry);
 	}
 
 	@Override

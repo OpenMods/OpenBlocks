@@ -23,18 +23,20 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glTranslatef(0.5f, 1.0f, 0.5f);
+
 		GL11.glPushMatrix();
 		GL11.glRotated(180 - cannon.currentYaw, 0, 1, 0);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		bindTexture(texture);
 		model.render(tileentity, f);
 		GL11.glPopMatrix();
+
 		if (cannon.renderLine && playerHasCursor()) {
 			GL11.glTranslatef(0, -0.5F, 0);
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glColor3f(0, 0, 0);
 			GL11.glBegin(GL11.GL_LINE_STRIP);
-			GL11.glColor4f(0, 0, 0, 1f);
 			double motionX = cannon.motionX * cannon.currentSpeed;
 			double motionY = cannon.motionY * cannon.currentSpeed;
 			double motionZ = cannon.motionZ * cannon.currentSpeed;
@@ -54,7 +56,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 			GL11.glEnd();
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
-		}
+		} else cannon.renderLine = true;
 		GL11.glPopMatrix();
 	}
 

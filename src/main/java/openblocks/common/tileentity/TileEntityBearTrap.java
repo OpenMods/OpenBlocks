@@ -14,7 +14,7 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile {
 
-	public static final int OPENING_ANIMATION_TIME = 20;
+	public static final int OPENING_ANIMATION_TIME = 15;
 
 	public enum Flags {
 		isShut

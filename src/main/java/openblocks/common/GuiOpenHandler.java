@@ -20,6 +20,5 @@ public class GuiOpenHandler {
 				event.setResult(Result.ALLOW);
 			}
 		}
-		// System.out.println("Opened GUI " + event.entityPlayer.openContainer);
 	}
 }

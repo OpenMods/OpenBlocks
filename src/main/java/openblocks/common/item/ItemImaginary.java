@@ -237,6 +237,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	private IIcon iconCrayonBackground;
 	private IIcon iconCrayonColor;
 	private IIcon iconPencil;
+	private IIcon iconBlank;
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -244,15 +245,18 @@ public class ItemImaginary extends ItemOpenBlock {
 		iconCrayonBackground = registry.registerIcon("openblocks:crayon_1");
 		iconCrayonColor = registry.registerIcon("openblocks:crayon_2");
 		iconPencil = registry.registerIcon("openblocks:pencil");
+		iconBlank = registry.registerIcon("openblocks:blank");
 
 		for (PlacementMode mode : PlacementMode.VALUES)
 			mode.overlay = registry.registerIcon(mode.overlayName);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public final IIcon getIcon(ItemStack stack, int pass) {
-		if (!isCrayon(stack)) return pass == 1? getMode(stack).overlay : iconPencil;
+	private IIcon getOverlayIcon(ItemStack stack, boolean inGui) {
+		return inGui? getMode(stack).overlay : iconBlank;
+	}
+
+	private IIcon getIcon(ItemStack stack, int pass, boolean inGui) {
+		if (!isCrayon(stack)) return pass == 1? getOverlayIcon(stack, inGui) : iconPencil;
 
 		switch (pass) {
 			case 0:
@@ -260,10 +264,22 @@ public class ItemImaginary extends ItemOpenBlock {
 			case 1:
 				return iconCrayonColor;
 			case 2:
-				return getMode(stack).overlay;
+				return getOverlayIcon(stack, inGui);
 		}
 
 		throw new IllegalArgumentException("Invalid pass: " + pass);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public final IIcon getIcon(ItemStack stack, int pass) {
+		return getIcon(stack, pass, true);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(ItemStack stack, int pass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+		return getIcon(stack, pass, false);
 	}
 
 	@Override
@@ -299,7 +315,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	public ItemStack getContainerItem(ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		float uses = getUses(tag) - CRAFTING_COST;
-		if (uses < 0) return null;
+		if (uses <= 0) return null;
 
 		ItemStack copy = stack.copy();
 		NBTTagCompound copyTag = ItemUtils.getItemTag(copy);

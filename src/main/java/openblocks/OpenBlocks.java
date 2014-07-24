@@ -192,7 +192,8 @@ public class OpenBlocks {
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
 
-		@RegisterBlock(name = "radio", tileEntity = TileEntityRadio.class)
+		// @RegisterBlock(name = "radio", tileEntity = TileEntityRadio.class)
+		@IgnoreFeature
 		public static BlockRadio radio;
 
 		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class)

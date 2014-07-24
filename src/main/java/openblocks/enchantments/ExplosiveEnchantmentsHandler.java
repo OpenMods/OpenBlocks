@@ -166,19 +166,16 @@ public class ExplosiveEnchantmentsHandler {
 			if (level == null) return;
 			JumpInfo boost = new JumpInfo(level, evt.distance);
 			level.createJumpExplosion(player);
-
 			if (OpenMods.proxy.isClientPlayer(player)) {
 				// And Now, Ladies and Gentlemen!
 				// Logic Defying...
 				// Loved By Everyone...
 				// Possibly Buggy
 				// TEEERRRRRIIIIBLE HAAAAAACK!
-				// TODO: maybe this version?
 				KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), true);
 				// no, seriously, can't find better way to make jump
 				jumpBoosts.put(player, boost);
-			} else return;
-
+			}
 			evt.setCanceled(true);
 		}
 	}

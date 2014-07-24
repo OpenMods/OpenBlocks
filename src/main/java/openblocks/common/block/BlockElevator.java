@@ -59,8 +59,6 @@ public class BlockElevator extends OpenBlock {
 				if (dmg == 15) dmg = 0;
 				else if (dmg == 0) dmg = 15;
 				world.setBlockMetadataWithNotify(x, y, z, dmg, BlockNotifyFlags.ALL);
-				// TODO: verify in needed
-				// world.markBlockForRenderUpdate(x, y, z);
 				return true;
 			}
 		}

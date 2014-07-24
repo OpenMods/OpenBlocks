@@ -248,13 +248,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setString("owner", owner);
+		nbt.setString("OwnerUuid", owner);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		owner = nbt.getString("owner");
+		owner = nbt.getString("OwnerUuid");
 	}
 
 	@Override
@@ -264,7 +264,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (player != null) owner = player.getDisplayName();
+		if (player != null) owner = player.getGameProfile().getId();
 	}
 
 	@Override

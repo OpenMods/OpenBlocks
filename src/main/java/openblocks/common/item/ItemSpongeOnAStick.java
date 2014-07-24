@@ -51,7 +51,6 @@ public class ItemSpongeOnAStick extends Item {
 						Material material = block.getMaterial();
 						if (material.isLiquid()) {
 							hitLava |= material == Material.lava;
-							// TODO: check
 							world.setBlockToAir(xCoord + x, yCoord + y, zCoord + z);
 							if (++damage >= getMaxDamage()) break;
 						}

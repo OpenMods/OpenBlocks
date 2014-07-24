@@ -266,7 +266,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			}
 
 			needsSync = true;
-			worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+			markDirty();
 		} else {
 			flowTimer += 0.1f;
 		}

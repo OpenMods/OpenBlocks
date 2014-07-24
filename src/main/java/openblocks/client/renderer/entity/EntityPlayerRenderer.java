@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 
 public class EntityPlayerRenderer extends RenderPlayer {
 
-	// TODO: check rotatePlayer -> rotateCorpse
 	@Override
 	protected void rotateCorpse(AbstractClientPlayer player, float par2, float par3, float par4) {
 		super.rotateCorpse(player, par2, par3, par4);

@@ -23,9 +23,8 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-
-		if (!pathFinder.noPath()) return false;
 		if (minime.getPickupCooldown() > 0) return false;
+		if (!pathFinder.noPath()) return false;
 
 		if (!minime.worldObj.isRemote) {
 			List<EntityPlayer> players = WorldUtils.getEntitiesWithinAABB(minime.worldObj, EntityPlayer.class, minime.boundingBox.expand(10, 10, 10));
@@ -72,7 +71,7 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 
 	private boolean canRidePlayer(EntityPlayer player) {
 		return player != null &&
-				player.getDisplayName() != minime.getUsername() &&
+				player.getGameProfile().getId().equals(minime.getOwner()) &&
 				player.ridingEntity == null;
 	}
 }

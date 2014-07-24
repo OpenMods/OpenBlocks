@@ -47,7 +47,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public SyncableBlockLayers[] allSides;
 
 	public TileEntityCanvas() {
-		syncMap.addSyncListener(createRenderUpdateListener());
+		syncMap.addUpdateListener(createRenderUpdateListener());
 	}
 
 	public SyncableIntArray getBaseColors() {

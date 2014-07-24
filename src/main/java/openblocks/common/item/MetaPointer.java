@@ -36,7 +36,6 @@ public class MetaPointer extends MetaGeneric {
 			Vec3 lookVec = player.getLook(1.0f);
 			Vec3 targetVec = posVec.addVector(lookVec.xCoord * 10f, lookVec.yCoord * 10f, lookVec.zCoord * 10f);
 
-			// TODO: verify
 			MovingObjectPosition movingObject = world.rayTraceBlocks(posVec, targetVec);
 			NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
 

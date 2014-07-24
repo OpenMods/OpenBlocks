@@ -22,6 +22,7 @@ import openmods.GenericInventory;
 import openmods.Log;
 
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -52,7 +53,6 @@ public class PlayerInventoryStore {
 		}
 	}
 
-	// TODO: check player.getDisplayName() (multiple instances)
 	public File storePlayerInventory(EntityPlayer player) {
 		InventoryPlayer inv = player.inventory;
 		GenericInventory copy = new GenericInventory("tmp", false, inv.getSizeInventory());
@@ -60,7 +60,9 @@ public class PlayerInventoryStore {
 
 		Date now = new Date();
 
-		Matcher matcher = SAFE_CHARS.matcher(player.getDisplayName());
+		GameProfile profile = player.getGameProfile();
+		String name = profile.getName();
+		Matcher matcher = SAFE_CHARS.matcher(name);
 		String playerName = matcher.replaceAll("_");
 		File dumpFile = getNewDumpFile(now, playerName, player.worldObj);
 
@@ -70,7 +72,9 @@ public class PlayerInventoryStore {
 		NBTTagCompound root = new NBTTagCompound();
 		root.setTag(TAG_INVENTORY, invData);
 		root.setLong("Created", now.getTime());
-		root.setString("Player", player.getDisplayName());
+
+		root.setString("PlayerName", name);
+		root.setString("PlayerUUID", profile.getId());
 
 		try {
 			OutputStream stream = new FileOutputStream(dumpFile);

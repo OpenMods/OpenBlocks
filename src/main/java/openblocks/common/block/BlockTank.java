@@ -44,7 +44,7 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return true;
 	}
 
