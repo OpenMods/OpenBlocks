@@ -36,7 +36,7 @@ public class BlockPath extends OpenBlock {
 
 	protected boolean isValidLocation(World world, int x, int y, int z) {
 		Block below = world.getBlock(x, y - 1, z);
-		return below != null? below.isSideSolid(world, x, y - 1, z, ForgeDirection.UP) : null;
+		return below.isSideSolid(world, x, y - 1, z, ForgeDirection.UP);
 	}
 
 	@Override
