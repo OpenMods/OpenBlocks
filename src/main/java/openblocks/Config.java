@@ -172,17 +172,7 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
-	public static String[] radioStations = new String[] {
-			"http://idobiradio.idobi.com;idobi Radio (idobi.com);Blue",
-			"http://192.184.9.79:8006;CINEMIX;Blue",
-			"http://radiorivendell.de:80/;Radio Rivendell;Blue",
-			"http://205.164.62.15:10052;1.fm Love Classics;Blue",
-			"http://theradio.cc:8000/trcc-stream.mp3;TheRadioCC;Red",
-			"http://streaming202.radionomy.com:80/abacusfm-vintage-jazz;Vintage Jazz;Red",
-			"http://s1.stream-experts.net:8032/;Nature sounds;Red",
-			"http://91.121.166.38:7016/;British Comedy;Red",
-			"http://50.7.173.162:8010;Audiophile Baroque;Red"
-	};
+	public static String[] radioStations = new String[0];
 
 	@ConfigProperty(category = "radio", name = "replaceList", comment = "List of URLs that need to be updated (url, whitespace, replacement")
 	public static String[] derpList = new String[] {
