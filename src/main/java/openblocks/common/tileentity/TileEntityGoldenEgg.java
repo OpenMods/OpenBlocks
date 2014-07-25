@@ -2,22 +2,26 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
+import openmods.Log;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +30,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	private static final float SPEED_CHANGE_RATE = 0.1f;
 	private static final Random RANDOM = new Random();
-	private static final String MR_GLITCH = "Mikeemoo";
 	private static final int STAGE_CHANGE_TICK = 100;
 	private static final int RISING_TIME = 400;
 	private static final int FALLING_TIME = 10;
@@ -162,7 +165,8 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private List<EntityBlock> blocks = Lists.newArrayList();
 	private SyncableInt stage;
 
-	private String owner = "";
+	private UUID ownerUUID;
+	private String ownerSkin;
 
 	public float getRotation(float partialTickTime) {
 		return rotation + rotationSpeed * partialTickTime;
@@ -210,8 +214,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private void explode() {
 		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 		worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
-		if (Strings.isNullOrEmpty(owner)) owner = MR_GLITCH;
-		EntityMiniMe miniMe = new EntityMiniMe(worldObj, owner);
+		EntityMiniMe miniMe = new EntityMiniMe(worldObj, ownerUUID, ownerSkin);
 		miniMe.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 0, 0);
 		worldObj.spawnEntityInWorld(miniMe);
 	}
@@ -248,13 +251,30 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setString("OwnerUuid", owner);
+
+		if (ownerUUID != null) nbt.setString("OwnerUuid", ownerUUID.toString());
+		nbt.setString("OwnerSkin", ownerSkin);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		owner = nbt.getString("OwnerUuid");
+
+		String uuidString;
+		if (nbt.hasKey("owner", Constants.NBT.TAG_STRING)) {
+			String ownerName = nbt.getString("owner");
+			uuidString = PreYggdrasilConverter.func_152719_a(ownerName);
+			ownerSkin = ownerName;
+		} else {
+			uuidString = nbt.getString("OwnerUUID");
+			ownerSkin = nbt.getString("OwnerSkin");
+		}
+
+		try {
+			ownerUUID = UUID.fromString(uuidString);
+		} catch (IllegalArgumentException e) {
+			Log.warn(e, "Failed to parse UUID: %s", uuidString);
+		}
 	}
 
 	@Override
@@ -264,7 +284,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (player != null) owner = player.getGameProfile().getId();
+		if (player != null) {
+			final GameProfile gameProfile = player.getGameProfile();
+			ownerUUID = gameProfile.getId();
+			ownerSkin = gameProfile.getName();
+		}
 	}
 
 	@Override

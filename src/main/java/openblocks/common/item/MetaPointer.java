@@ -32,7 +32,7 @@ public class MetaPointer extends MetaGeneric {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, EntityPlayer player, World world) {
 		if (!world.isRemote) {
-			Vec3 posVec = player.worldObj.getWorldVec3Pool().getVecFromPool(player.posX, player.posY + 1.62F, player.posZ);
+			Vec3 posVec = Vec3.createVectorHelper(player.posX, player.posY + 1.62F, player.posZ);
 			Vec3 lookVec = player.getLook(1.0f);
 			Vec3 targetVec = posVec.addVector(lookVec.xCoord * 10f, lookVec.yCoord * 10f, lookVec.zCoord * 10f);
 

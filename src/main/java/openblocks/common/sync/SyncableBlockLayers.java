@@ -1,8 +1,6 @@
 package openblocks.common.sync;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -116,7 +114,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	public SyncableBlockLayers() {}
 
 	@Override
-	public void readFromStream(DataInput stream) throws IOException {
+	public void readFromStream(DataInputStream stream) throws IOException {
 		int size = stream.readByte();
 		layers.clear();
 		for (byte i = 0; i < size; i++) {
@@ -125,7 +123,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	@Override
-	public void writeToStream(DataOutput stream, boolean fullData)
+	public void writeToStream(DataOutputStream stream, boolean fullData)
 			throws IOException {
 		stream.writeByte(layers.size());
 		for (Layer layer : layers) {

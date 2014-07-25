@@ -71,7 +71,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 		} else if (isOn.get()) {
 
-			Vec3 vec = worldObj.getWorldVec3Pool().getVecFromPool(
+			Vec3 vec = Vec3.createVectorHelper(
 					(worldObj.rand.nextDouble() - 0.5) * 0.05,
 					0,
 					(worldObj.rand.nextDouble() - 0.5) * 0.05);

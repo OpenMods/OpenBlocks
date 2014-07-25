@@ -116,30 +116,21 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 				float offset = (i - 2.5f) / 5f;
 				ForgeDirection rotation = getRotation();
 
-				Vec3 vec = worldObj.getWorldVec3Pool().getVecFromPool(0, 0, 0);
-
 				float pitch = getSprayPitch();
 
-				double sinPitch = Math.sin(pitch);
-				double cosPitch = Math.cos(pitch);
+				double sinPitch = Math.sin(pitch) * ((rotation.offsetZ == 0)? 1 : -1);
+				double cosPitch = Math.abs(Math.cos(pitch));
 
-				if (rotation.offsetZ == 0) {
-					vec.yCoord = Math.abs(cosPitch);
-					vec.zCoord = sinPitch * rotation.offsetX;
-					vec.xCoord = (worldObj.rand.nextDouble() - 0.5) * 2 * offset;
-				} else {
-					vec.yCoord = Math.abs(cosPitch);
-					vec.xCoord = -sinPitch * rotation.offsetZ;
-					vec.zCoord = (worldObj.rand.nextDouble() - 0.5) * 2 * offset;
-				}
+				Vec3 vec = Vec3.createVectorHelper(
+						cosPitch / 2.0,
+						sinPitch * rotation.offsetX / 2.0,
+						(worldObj.rand.nextDouble() - 0.5) * 2 * offset / 2.0);
 
-				vec.xCoord /= 2;
-				vec.yCoord /= 2;
-				vec.zCoord /= 2;
-
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(), xCoord + 0.5
-						+ (offset * 0.6 * rotation.offsetX), yCoord, zCoord + 0.5
-						+ (offset * 0.6 * rotation.offsetZ), 0.3f, 0.7f, vec);
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
+						xCoord + 0.5 + (offset * 0.6 * rotation.offsetX),
+						yCoord,
+						zCoord + 0.5 + (offset * 0.6 * rotation.offsetZ),
+						0.3f, 0.7f, vec);
 			}
 		}
 	}

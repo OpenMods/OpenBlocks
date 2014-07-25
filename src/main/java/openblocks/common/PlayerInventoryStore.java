@@ -74,7 +74,7 @@ public class PlayerInventoryStore {
 		root.setLong("Created", now.getTime());
 
 		root.setString("PlayerName", name);
-		root.setString("PlayerUUID", profile.getId());
+		root.setString("PlayerUUID", profile.getId().toString());
 
 		try {
 			OutputStream stream = new FileOutputStream(dumpFile);

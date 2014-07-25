@@ -1,5 +1,6 @@
 package openblocks.client.gui;
 
+import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.StatCollector;
@@ -17,7 +18,7 @@ import openmods.gui.listener.IMouseDownListener;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiInfoBook extends ComponentGui {
+public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 
 	private static final String MODID = "openblocks";
 
@@ -164,13 +165,5 @@ public class GuiInfoBook extends ComponentGui {
 		root.renderOverlay(this.mc, this.guiLeft, this.guiTop, par1 - this.guiLeft, par2 - this.guiTop);
 		GL11.glPopMatrix();
 		restoreRenderState();
-	}
-
-	@Override
-	public void confirmClicked(boolean result, int action) {
-		if (action == 0 && result) {
-			GuiComponentYouTube.openURI(GuiComponentYouTube.youtubeUrl);
-		}
-		this.mc.displayGuiScreen(this);
 	}
 }

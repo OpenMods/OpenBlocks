@@ -6,8 +6,8 @@
 //================================================
 // Variables
 ext.mod_version = '1.3'
-ext.mc_ver = '1.7.2'
-ext.forge_ver = '10.12.2.1126'
+ext.mc_ver = '1.7.10'
+ext.forge_ver = '10.13.0.1180'
 
 //================================================
 // Pre-execute
@@ -111,7 +111,7 @@ ext.gitManifest = manifest {
 // Setup Forge plugin
 minecraft {
     version = mc_ver + "-" + forge_ver
-    assetDir = 'run/assets'
+    assetDir = "eclipse/assets"
 
     replaceIn "openblocks/OpenBlocks.java"
     replace "@VERSION@", rootProject.mod_version

@@ -97,13 +97,6 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	@Override
-	public void initialize() {
-		if (!worldObj.isRemote) {
-			sync();
-		}
-	}
-
-	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {

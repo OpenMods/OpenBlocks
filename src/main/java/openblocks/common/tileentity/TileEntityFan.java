@@ -39,13 +39,14 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
 		if (entities.isEmpty()) return;
 
-		final Vec3 blockPos = getConeApex();
-		final Vec3 basePos = getConeBaseCenter();
-		final Vec3 coneAxis = worldObj.getWorldVec3Pool().getVecFromPool(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
+		double angle = Math.toRadians(getAngle() - 90);
+		final Vec3 blockPos = getConeApex(angle);
+		final Vec3 basePos = getConeBaseCenter(angle);
+		final Vec3 coneAxis = Vec3.createVectorHelper(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
 
 		for (Entity entity : entities) {
 			if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) continue;
-			Vec3 directionVec = worldObj.getWorldVec3Pool().getVecFromPool(
+			Vec3 directionVec = Vec3.createVectorHelper(
 					entity.posX - blockPos.xCoord,
 					entity.posY - blockPos.yCoord,
 					entity.posZ - blockPos.zCoord);
@@ -61,17 +62,15 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 		}
 	}
 
-	private Vec3 getConeBaseCenter() {
-		double angle = Math.toRadians(getAngle() - 90);
-		return worldObj.getWorldVec3Pool().getVecFromPool(
+	private Vec3 getConeBaseCenter(double angle) {
+		return Vec3.createVectorHelper(
 				xCoord + (Math.cos(angle) * Config.fanRange),
 				yCoord + 0.5,
 				zCoord + (Math.sin(angle) * Config.fanRange));
 	}
 
-	private Vec3 getConeApex() {
-		double angle = Math.toRadians(getAngle() - 90);
-		return worldObj.getWorldVec3Pool().getVecFromPool(xCoord + 0.5 - Math.cos(angle) * 1.1, yCoord + 0.5, zCoord + 0.5 - Math.sin(angle) * 1.1);
+	private Vec3 getConeApex(double angle) {
+		return Vec3.createVectorHelper(xCoord + 0.5 - Math.cos(angle) * 1.1, yCoord + 0.5, zCoord + 0.5 - Math.sin(angle) * 1.1);
 	}
 
 	private AxisAlignedBB getEntitySearchBoundingBox() {
@@ -87,7 +86,6 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		angle.set(player.rotationYawHead);
-		sync();
 	}
 
 	public float getAngle() {

@@ -10,6 +10,8 @@ import openblocks.common.entity.EntityLuggage;
 
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.base.Strings;
+
 public class EntityLuggageRenderer extends RenderLiving {
 
 	private static ModelBase luggageModel = new ModelLuggage();
@@ -22,10 +24,10 @@ public class EntityLuggageRenderer extends RenderLiving {
 		super(luggageModel, 0.5F);
 	}
 
-	private int renderSpecial(EntityLuggage luggage, int p, float m) {
-		if (luggage.isSpecial() && luggage.getOwnerName() != null) {
-			if (p == 1) {
-				float f1 = luggage.ticksExisted + m;
+	private int renderSpecial(EntityLuggage luggage, int pass, float partialTickTime) {
+		if (luggage.isSpecial() && !Strings.isNullOrEmpty(luggage.func_152113_b())) {
+			if (pass == 1) {
+				float f1 = luggage.ticksExisted + partialTickTime;
 				bindTexture(creeperEffect);
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
@@ -41,7 +43,7 @@ public class EntityLuggageRenderer extends RenderLiving {
 				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 				return 1;
 			}
-			if (p == 2) {
+			if (pass == 2) {
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
 				GL11.glLoadIdentity();
 				GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -67,8 +69,8 @@ public class EntityLuggageRenderer extends RenderLiving {
 	}
 
 	@Override
-	protected int shouldRenderPass(EntityLivingBase entity, int par2, float par3) {
-		return renderSpecial((EntityLuggage)entity, par2, par3);
+	protected int shouldRenderPass(EntityLivingBase entity, int pass, float partialTickTime) {
+		return renderSpecial((EntityLuggage)entity, pass, partialTickTime);
 	}
 
 	@Override

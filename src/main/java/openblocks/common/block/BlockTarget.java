@@ -6,7 +6,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
-import net.minecraft.util.Vec3Pool;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -41,7 +40,7 @@ public class BlockTarget extends OpenBlock {
 				return;
 			}
 			lastEntityHit = entity.getEntityId();
-			onTargetHit(world, x, y, z, world.getWorldVec3Pool().getVecFromPool(entity.posX, entity.posY, entity.posZ));
+			onTargetHit(world, x, y, z, Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ));
 		}
 	}
 
@@ -79,9 +78,7 @@ public class BlockTarget extends OpenBlock {
 			entityPosition.xCoord = centerX;
 		}
 
-		Vec3Pool pool = world.getWorldVec3Pool();
-
-		Vec3 bullseye = pool.getVecFromPool(centerX, centerY, centerZ);
+		Vec3 bullseye = Vec3.createVectorHelper(centerX, centerY, centerZ);
 
 		double distance = entityPosition.distanceTo(bullseye);
 

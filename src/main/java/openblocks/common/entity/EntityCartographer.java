@@ -1,7 +1,7 @@
 package openblocks.common.entity;
 
-import java.io.DataInput;
-import java.io.DataOutput;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
@@ -51,13 +51,13 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		}
 
 		@Override
-		public void readFromStream(DataInput input) throws IOException {
+		public void readFromStream(DataInputStream input) throws IOException {
 			size = ByteUtils.readVLI(input);
 			bits.readFromStream(input);
 		}
 
 		@Override
-		public void writeToStream(DataOutput output, boolean fullData) throws IOException {
+		public void writeToStream(DataOutputStream output, boolean fullData) throws IOException {
 			ByteUtils.writeVLI(output, size);
 			bits.writeToStream(output);
 		}
