@@ -68,8 +68,8 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	@Override
-	public int getDisplayDamage(ItemStack stack) {
-		return FULL_CAN_SIZE - getAmountFromStack(stack);
+	public double getDurabilityForDisplay(ItemStack stack) {
+		return 1 - (double)getAmountFromStack(stack) / FULL_CAN_SIZE;
 	}
 
 	@Override

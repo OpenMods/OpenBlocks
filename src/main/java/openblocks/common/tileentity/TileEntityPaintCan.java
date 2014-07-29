@@ -38,7 +38,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 				heldStack.setItemDamage(0);
 				amount.modify(-1);
 				sync();
-				worldObj.playSoundAtEntity(player, "liquid.swim", 0.1F, 1.2F);
+				worldObj.playSoundAtEntity(player, "game.neutral.swim.splash", 0.1F, 1.2F);
 			}
 		}
 

@@ -78,7 +78,7 @@ public class RadioManager implements IVillageTradeHandler {
 		public static final String RESOURCE_PACK_ID = "OpenBlocks-Radio";
 
 		@Override
-		public InputStream getInputStream(ResourceLocation location) throws IOException {
+		public InputStream getInputStream(ResourceLocation location) {
 			String url = locationToUrl.get(location);
 
 			if (url == null) return null;
@@ -103,12 +103,12 @@ public class RadioManager implements IVillageTradeHandler {
 		}
 
 		@Override
-		public IMetadataSection getPackMetadata(IMetadataSerializer var1, String var2) throws IOException {
+		public IMetadataSection getPackMetadata(IMetadataSerializer var1, String var2) {
 			return null;
 		}
 
 		@Override
-		public BufferedImage getPackImage() throws IOException {
+		public BufferedImage getPackImage() {
 			return null;
 		}
 

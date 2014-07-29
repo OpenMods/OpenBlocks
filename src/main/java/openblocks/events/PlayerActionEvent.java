@@ -2,7 +2,6 @@ package openblocks.events;
 
 import java.io.DataInput;
 import java.io.DataOutput;
-import java.io.IOException;
 
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
@@ -24,13 +23,13 @@ public class PlayerActionEvent extends NetworkEvent {
 	}
 
 	@Override
-	protected void readFromStream(DataInput input) throws IOException {
+	protected void readFromStream(DataInput input) {
 		int typeId = ByteUtils.readVLI(input);
 		type = Type.values()[typeId];
 	}
 
 	@Override
-	protected void writeToStream(DataOutput output) throws IOException {
+	protected void writeToStream(DataOutput output) {
 		ByteUtils.writeVLI(output, type.ordinal());
 	}
 
