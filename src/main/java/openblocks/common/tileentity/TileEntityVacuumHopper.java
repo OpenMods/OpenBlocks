@@ -47,7 +47,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	private SyncableTank tank;
 	public SyncableDirs xpOutputs;
 	public SyncableDirs itemOutputs;
-	public SyncableBoolean vacuumDisabled;
+	public SyncableBoolean redstoneDisabled;
+	public SyncableBoolean userDisabled;
 
 	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("vacuumhopper", true, 10));
 
@@ -62,7 +63,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 		xpOutputs = new SyncableDirs();
 		itemOutputs = new SyncableDirs();
-		vacuumDisabled = new SyncableBoolean();
+		redstoneDisabled = new SyncableBoolean();
+		userDisabled = new SyncableBoolean();
 	}
 
 	public TileEntityVacuumHopper() {
@@ -105,11 +107,17 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		return false;
 	}
 
+	private boolean isPowered() {
+		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+	}
+	
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
 
-		if (vacuumDisabled.get()) return;
+		redstoneDisabled.set(isPowered());
+		
+		if (redstoneDisabled.get() || userDisabled.get()) return;
 
 		if (worldObj.isRemote) {
 			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
@@ -189,7 +197,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			if (player.inventory.getStackInSlot(player.inventory.currentItem) == null) {
-				vacuumDisabled.toggle();
+				userDisabled.toggle();
 				return true;
 			}
 		}
