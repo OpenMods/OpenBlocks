@@ -21,6 +21,7 @@ import openmods.GenericInventory;
 import openmods.IInventoryProvider;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
+import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
@@ -29,7 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile {
 
 	private SyncableString perishedUsername;
-	public boolean onSoil = true;
+	public SyncableBoolean onSoil;
 	private int ticksSinceLastSound = 0;
 
 	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 100));
@@ -39,6 +40,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	protected void createSyncedFields() {
 		perishedUsername = new SyncableString();
+		onSoil = new SyncableBoolean();
 	}
 
 	@Override
@@ -80,7 +82,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	public boolean isOnSoil() {
-		return onSoil;
+		return onSoil.get();
 	}
 
 	@Override
@@ -111,7 +113,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 
 	protected void updateBlockBelow() {
 		Block block = worldObj.getBlock(xCoord, yCoord - 1, zCoord);
-		onSoil = (block == Blocks.dirt || block == Blocks.grass);
+		onSoil.set(block == Blocks.dirt || block == Blocks.grass);
 	}
 
 	@Override
@@ -122,6 +124,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	public void onNeighbourChanged() {
 		updateBlockBelow();
+		sync();
 	}
 
 	@Override

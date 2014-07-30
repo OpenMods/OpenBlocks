@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 public class BlockGrave extends OpenBlock {
 
 	public BlockGrave() {
-		super(Material.anvil);
+		super(Material.ground);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0, 0, 0, 1f, 0.2f, 1f);
 		setCreativeTab(null);
