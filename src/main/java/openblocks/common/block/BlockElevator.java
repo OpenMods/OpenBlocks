@@ -49,6 +49,14 @@ public class BlockElevator extends OpenBlock {
 		return colors[world.getBlockMetadata(x, y, z)];
 	}
 
+	private String getLocalisedDirection(ForgeDirection direction) {
+		if (direction == ForgeDirection.UNKNOWN) {
+			return "openblocks.misc.default";
+		} else {
+			return "openblocks.misc.side." + direction.name().toLowerCase();
+		}
+	}
+	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem();
@@ -70,7 +78,7 @@ public class BlockElevator extends OpenBlock {
 			TileEntityElevator te = getTileEntity(world, x, y, z, TileEntityElevator.class);
 			if (te != null) {
 				te.setNextDirection();
-				player.addChatMessage(new ChatComponentTranslation("Depart facing: " + (te.getDirection() == ForgeDirection.UNKNOWN ? "Default" : te.getDirection()), te.getDirection()));
+				player.addChatMessage(new ChatComponentTranslation("openblocks.misc.direction").appendSibling(new ChatComponentTranslation(getLocalisedDirection(te.getDirection()))));
 			}
 		}
 		return false;
