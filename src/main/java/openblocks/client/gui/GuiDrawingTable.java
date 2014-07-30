@@ -1,6 +1,8 @@
 package openblocks.client.gui;
 
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.rpc.IStencilCrafter;
@@ -60,6 +62,8 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		iconDisplay.setEnabled(inventorySlots.getSlot(0).getStack() != null && inventorySlots.getSlot(0).isItemValid(inventorySlots.getSlot(0).getStack()));
+		final Slot slot = inventorySlots.getSlot(0);
+		final ItemStack stack = slot.getStack();
+		iconDisplay.setEnabled(stack != null && slot.isItemValid(stack));
 	}
 }

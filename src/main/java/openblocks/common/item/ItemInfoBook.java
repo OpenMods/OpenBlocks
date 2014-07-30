@@ -24,9 +24,7 @@ public class ItemInfoBook extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (world.isRemote) {
-			player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.infoBook.ordinal(), player.worldObj, 0, 0, 0);
-		}
+		if (!world.isRemote) player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.infoBook.ordinal(), player.worldObj, 0, 0, 0);
 
 		return stack;
 	}
