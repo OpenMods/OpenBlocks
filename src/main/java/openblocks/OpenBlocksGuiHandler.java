@@ -10,6 +10,7 @@ import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
 import openmods.Log;
 import openmods.PlayerItemInventory;
+import openmods.gui.DummyContainer;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class OpenBlocksGuiHandler implements IGuiHandler {
@@ -22,6 +23,14 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		public static final GuiId[] VALUES = GuiId.values();
 	}
 
+	private static ContainerDevNull createDevNullContainer(EntityPlayer player) {
+		return new ContainerDevNull(player.inventory, new PlayerItemInventory(player, 1));
+	}
+
+	private static ContainerLuggage createLuggageContainer(EntityPlayer player, World world, int x) {
+		return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x));
+	}
+
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		final GuiId guiId = getGuiId(id);
@@ -29,10 +38,12 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 
 		switch (guiId) {
 			case luggage:
-				return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x));
+				return createLuggageContainer(player, world, x);
 			case devNull:
 				if (player.inventory.getCurrentItem() == null) return null;
-				return new ContainerDevNull(player.inventory, new PlayerItemInventory(player, 1));
+				return createDevNullContainer(player);
+			case infoBook:
+				return new DummyContainer();
 			default:
 				return null;
 		}
@@ -45,11 +56,11 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 
 		switch (guiId) {
 			case luggage:
-				return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)));
+				return new GuiLuggage(createLuggageContainer(player, world, x));
 			case infoBook:
 				return new GuiInfoBook();
 			case devNull:
-				return new GuiDevNull((ContainerDevNull)getServerGuiElement(id, player, world, x, y, z));
+				return new GuiDevNull(createDevNullContainer(player));
 			default:
 				return null;
 		}

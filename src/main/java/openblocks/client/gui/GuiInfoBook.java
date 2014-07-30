@@ -1,8 +1,6 @@
 package openblocks.client.gui;
 
 import net.minecraft.client.gui.GuiYesNoCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
@@ -10,6 +8,7 @@ import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.page.IntroPage;
 import openblocks.common.item.MetasGeneric;
 import openmods.gui.ComponentGui;
+import openmods.gui.DummyContainer;
 import openmods.gui.component.*;
 import openmods.gui.component.page.PageBase;
 import openmods.gui.component.page.SectionPage;
@@ -25,13 +24,6 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 	private int itemsIndex;
 	private int miscIndex;
 	private int blocksIndex;
-
-	private static class DummyContainer extends Container {
-		@Override
-		public boolean canInteractWith(EntityPlayer var1) {
-			return false;
-		}
-	}
 
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
