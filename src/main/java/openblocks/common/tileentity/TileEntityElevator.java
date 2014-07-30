@@ -2,8 +2,10 @@ package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -17,6 +19,44 @@ import com.google.common.base.Preconditions;
 
 public class TileEntityElevator extends OpenTileEntity {
 
+	private ForgeDirection direction = ForgeDirection.UNKNOWN;
+	
+	public ForgeDirection getDirection() {
+		return this.direction;
+	}
+	
+	public void setNextDirection() {
+		switch(direction) {
+			case UNKNOWN:
+				direction = ForgeDirection.NORTH;
+				break;
+			case NORTH:
+				direction = ForgeDirection.EAST;
+				break;
+			case EAST:
+				direction = ForgeDirection.SOUTH;
+				break;
+			case SOUTH:
+				direction = ForgeDirection.WEST;
+				break;
+			case WEST:
+				direction = ForgeDirection.UNKNOWN;
+				break;
+			default: 
+				direction = ForgeDirection.UNKNOWN;
+				break;
+		}
+	}
+	
+	private ForgeDirection getRecievingElevator(int x, int y, int z) {
+		TileEntity te = worldObj.getTileEntity(x, y, z);
+		if (te instanceof TileEntityElevator && te != null) {
+			return ((TileEntityElevator) te).getDirection();
+		} else {
+			return ForgeDirection.UNKNOWN;
+		}
+	}
+	
 	private boolean canTeleportPlayer(int x, int y, int z) {
 		Block block = worldObj.getBlock(x, y, z);
 		if (block == null || block.isAir(worldObj, x, y, z)) return true;
@@ -87,6 +127,22 @@ public class TileEntityElevator extends OpenTileEntity {
 				doTeleport = true;
 			}
 			if (doTeleport) {
+				switch(getRecievingElevator(xCoord, level, zCoord)) {
+					case NORTH:
+						player.rotationYaw = 180;
+						break;
+					case EAST:
+						player.rotationYaw = 270;
+						break;
+					case SOUTH:
+						player.rotationYaw = 0;
+						break;
+					case WEST:
+						player.rotationYaw = 90;
+						break;
+					default:
+						break;
+				}
 				player.setPositionAndUpdate(xCoord + 0.5, level + 1.1, zCoord + 0.5);
 				worldObj.playSoundAtEntity(player, "openblocks:elevator.activate", 1F, 1F);
 			}
@@ -107,4 +163,19 @@ public class TileEntityElevator extends OpenTileEntity {
 			}
 		}
 	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+		this.direction = ForgeDirection.valueOf(nbt.getString("direction"));
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+		nbt.setString("direction", direction.name());
+	}
+
 }
