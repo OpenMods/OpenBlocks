@@ -29,9 +29,7 @@ import openblocks.events.ElevatorActionEvent;
 import openblocks.events.PlayerActionEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
-import openblocks.rpc.IColorChanger;
-import openblocks.rpc.IRotatable;
-import openblocks.rpc.IStencilCrafter;
+import openblocks.rpc.*;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
@@ -393,7 +391,8 @@ public class OpenBlocks {
 		RpcCallDispatcher.INSTANCE.startRegistration()
 				.registerInterface(IRotatable.class)
 				.registerInterface(IStencilCrafter.class)
-				.registerInterface(IColorChanger.class);
+				.registerInterface(IColorChanger.class)
+				.registerInterface(ILevelChanger.class);
 
 		RadioManager.readConfigs();
 		Config.register();

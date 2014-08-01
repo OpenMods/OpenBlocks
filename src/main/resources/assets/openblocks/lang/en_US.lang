@@ -31,6 +31,7 @@ openblocks.gui.digitalfuse=Digital Fuse
 openblocks.gui.xp_outputs=XP Outputs
 openblocks.gui.item_outputs=Item Outputs
 openblocks.gui.watch_video=Watch video
+openblocks.gui.max_level=Max. Level: %d
 
 openblocks.gui.welcome.title=Welcome!
 openblocks.gui.welcome.content=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more!

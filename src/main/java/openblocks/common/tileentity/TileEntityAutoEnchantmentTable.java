@@ -16,11 +16,10 @@ import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
+import openblocks.rpc.ILevelChanger;
 import openmods.GenericInventory;
 import openmods.IInventoryProvider;
-import openmods.api.IHasGui;
-import openmods.api.IValueProvider;
-import openmods.api.IValueReceiver;
+import openmods.api.*;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
@@ -31,7 +30,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.*;
 import openmods.utils.bitmap.*;
 
-public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots> {
+public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback {
 
 	public static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
 
@@ -52,14 +51,15 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private SyncableDirs xpSides;
 	private SyncableInt targetLevel;
 	private SyncableFlags automaticSlots;
+	private SyncableInt maxLevel;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("autoenchant", true, 2) {
+	private final GenericInventory inventory = new GenericInventory("autoenchant", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			if (i == Slots.input.ordinal()) { return !itemstack.isItemEnchanted(); }
 			return i == Slots.input.ordinal();
 		}
-	});
+	};
 
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
@@ -85,6 +85,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public TileEntityAutoEnchantmentTable() {
 		slotSides.registerSlot(Slots.input, inputSides, true, false);
 		slotSides.registerSlot(Slots.output, outputSides, false, true);
+		inventory.addCallback(this);
 	}
 
 	@Override
@@ -94,6 +95,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		outputSides = new SyncableDirs();
 		xpSides = new SyncableDirs();
 		targetLevel = new SyncableInt(1);
+		maxLevel = new SyncableInt();
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
 
@@ -121,7 +123,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 					&& !hasStack(Slots.output)) {
 				int xpRequired = EnchantmentUtils.getLiquidForLevel(targetLevel.get());
 				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
-					double power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
+					float power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
 					int enchantability = EnchantmentUtils.calcEnchantability(getStack(Slots.input), (int)power, true);
 					if (enchantability >= targetLevel.get()) {
 						ItemStack inputStack = getStack(Slots.input);
@@ -229,10 +231,6 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		return getStack(slot) != null;
 	}
 
-	public SyncableInt getTargetLevel() {
-		return targetLevel;
-	}
-
 	public void setStack(Enum<?> slot, ItemStack stack) {
 		inventory.setInventorySlotContents(slot.ordinal(), stack);
 	}
@@ -315,6 +313,33 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public IValueReceiver<Boolean> createAutoSlotReceiver(AutoSlots slot) {
 		IRpcIntBitMap bits = createRpcProxy(automaticSlots, IRpcIntBitMap.class);
 		return BitMapUtils.singleBitReceiver(bits, slot.ordinal());
+	}
+
+	@Override
+	public void changeLevel(int level) {
+		targetLevel.set(level);
+		sync();
+	}
+
+	public IValueProvider<Integer> getLevelProvider() {
+		return targetLevel;
+	}
+
+	public IValueProvider<Integer> getMaxLevelProvider() {
+		return maxLevel;
+	}
+
+	@Override
+	public void onInventoryChanged(IInventory inventory, int slotNumber) {
+		float power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
+		ItemStack stack = getStack(Slots.input);
+
+		int enchantability = stack == null? 30 : stack.getItem().getItemEnchantability();
+		int maxLevel = EnchantmentUtils.calcEnchantability(enchantability, (int)power, true);
+
+		this.maxLevel.set(maxLevel);
+
+		markUpdated();
 	}
 
 }
