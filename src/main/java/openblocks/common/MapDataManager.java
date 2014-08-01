@@ -82,7 +82,7 @@ public class MapDataManager {
 				if (map.isValid()) {
 					ByteUtils.writeVLI(output, e.getKey());
 					map.writeToStream(output);
-				} else Log.warn("Trying to propagate invalid map data %d", e.getKey());
+				} else Log.debug("Trying to propagate invalid map data %d", e.getKey());
 			}
 		}
 	}
