@@ -1,27 +1,56 @@
-achievement.openblocks.droppedBrick=Zoinks!
+achievement.openblocks.droppedBrick=Упс!
 achievement.openblocks.droppedBrick.desc=К сожалению, это только что произошло...
 stat.openblocks.bricksDropped=Кирпичи сброшены
 
-openblocks.keybind.drop_brick=Be silly
+openblocks.keybind.drop_brick=Будьте глупым
 
-enchantment.openblocks.explosive=Неустойчивость
+enchantment.openblocks.explosive=Нестабильность
+enchantment.openblocks.laststand=Последний рубеж
+enchantment.openblocks.flimflam=«Флим Флам»
 
 openblocks.gui.luggage=Багаж
 openblocks.gui.sprinkler=Разбрызгиватель
-openblocks.gui.vacuumhopper=Вакуумная загрузочная воронка
+openblocks.gui.vacuumhopper=Вакуумная воронка
 openblocks.gui.bigbutton=Большая кнопка
-openblocks.gui.xpbottler=Разливочная машина опыта
-openblocks.gui.autoanvil=Автоматическая наковальня
-openblocks.gui.autoeject=Auto eject
-openblocks.gui.autoextract=Auto extract
-openblocks.gui.autodrink=Auto drink
-openblocks.gui.autoenchantmenttable=Автоматический стол зачаровывания
+openblocks.gui.xpbottler=Разливщик опыта
+openblocks.gui.autoanvil=Авто-наковальня
+openblocks.gui.autoeject=Авто-выброс
+openblocks.gui.autoextract=Авто-извлечение
+openblocks.gui.autodrink=Авто-выпивание
+openblocks.gui.autoenchantmenttable=Авто-стол зачаровывания
 openblocks.gui.donationstation=Станция пожертвований
 openblocks.gui.itemdropper=Выбрасыватель предметов
 openblocks.gui.blockplacer=Разместитель блоков
 openblocks.gui.paintmixer=Смеситель краски
 openblocks.gui.drawingtable=Стол для рисования
+openblocks.gui.blocks=Блоки
+openblocks.gui.items=Предметы
+openblocks.gui.misc=Разное
+openblocks.gui.digitalfuse=Цифровой запал
 
+openblocks.gui.welcome.title=Добро пожаловать!
+openblocks.gui.welcome.content=OpenBlocks - это новая модификация с открытым исходным кодом, которая внедряет множество идей в Minecraft. В том числе дельтапланы, лифты, резервуары, могилы, краски, краны, жидкий опыт, картографы, трофеи и многое другое!
+
+openblocks.gui.credits.title=Авторы
+openblocks.gui.credits.content=§LBoq, Mikee и NeverCast§R - ведущие разработчики OpenBlocks (Можем ли Мы написать про себя?)\n\n§LSinZ и Yoshi2§R - члены команды OpenMods с самого начала.\n\n§LVexatos и crafteverywhere§R - регулярно переводят модификации.\n\nВсе остальные, кто внёс свой вклад в код за последний год.\n\n§LDirewolf20 и остальная часть ForgeCraft§R - за нахождение багов и вылетов перед обновлениями.\n\nВсе кто делал обзоры, "летсплеи" и в целом поддержал мод, когда мы начинали!
+
+openblocks.gui.config.title=Лёгкое редактирование конфигурации
+openblocks.gui.config.content=OpenMods позволяет клиенту и серверу изменять настройки конфигурации через команды чата. Некоторые даже не требуют перезапуск!\n\nСерверные настройки конфигурации могут быть изменены с помощью '§L/om_config_s§R' (Нужен Оп), а настройки конфигурации клиента могут быть изменены с помощью '§L/om_config_c§R'\n\nНапример:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nДля получения полного списка команд напишите: §L/help om_config_s§R или §L/help om_config_c§R
+
+openblocks.gui.bkey.title=Кнопка 'B' с плохой репутацией
+openblocks.gui.bkey.content=Кнопка 'B' очень особенная в OpenBlocks.\n\nВключение опции конфигурации 'weAreSeriousPeople' в категории 'tomfoolery' клиента И сервера, даст Вам Вашу собственную пищеварительную систему.\n\nПопробуйте съесть немного этой вкусной глины и нажмите 'B', чтобы переварить её!
+
+openblocks.gui.unstable.title=Зачарование «Нестабильность»
+openblocks.gui.unstable.content=У нас есть неподтверждённые сообщения, что это зачарование заставляет любой порох, который Вы несёте, становиться нестабильным, когда Вы атакованы или когда Вы перепрыгиваете что-то.\n\nИспользуйте на свой страх и риск!
+
+openblocks.gui.flimflam.title=Зачарование «Флим Флам»
+openblocks.gui.flimflam.content=Учёным ещё предстоит открыть свойства этого зачарования.
+
+openblocks.gui.laststand.title=Зачарование «Последний рубеж»
+openblocks.gui.laststand.content=Зачарование «Последний рубеж» использует Ваш опыт в качестве последней защиты от смерти.\n\nКогда Ваше здоровье опускается до 0.5 сердца, игра будет брать Ваш опыт всякий раз, когда Вы получаете урон, вместо того, чтобы убить Вас. Чем выше число зачарования, тем дешевле стоимость опыта.
+
+openblocks.changelog.title=Что нового в OpenBlocks %s
+openblocks.misc.url=Ссылка: %s
 openblocks.misc.type=Тип: %s
 openblocks.misc.uses=Использований: %.2f
 openblocks.misc.color=Цвет: %06X
@@ -36,47 +65,228 @@ openblocks.misc.mode.inverted_half_panel=Инвертированная пане
 openblocks.misc.mode.inverted_stairs=Инвертированные ступеньки
 openblocks.misc.structure_pos=Отладка: найдена структура %s на (%d,%d,%d)
 openblocks.misc.locked=Locked
+openblocks.misc.selected_cannon=Выбрана пушка для прицеливания
+openblocks.misc.pointed_cannon=Пушка направлена на %s, %s, %s
+openblocks.misc.change_mode=Изменение режима на %s
+openblocks.misc.change_size=Изменение размера на %sx%sx%s
+openblocks.misc.total_blocks=Общее количество блоков: %d
+openblocks.misc.get_witched=Get witched!
+
+openblocks.misc.cant_restore=Не удалось восстановить инвентарь для игрока %s
+openblocks.misc.cant_store=Не удалось сохранить инвентарь игрока %s
+openblocks.misc.stored_inventory=Инвентарь игрока сохранён в %s
+openblocks.misc.restored_inventory=Восстановлен инвентарь для игрока %s
+
+openblocks.misc.pedometer.tracking_reset=Отслеживание сброшено
+openblocks.misc.pedometer.tracking_started=Отслеживание начато
+
+openblocks.misc.pedometer.start_point=Стартовая точка: %s
+openblocks.misc.pedometer.speed=Скорость: %s
+openblocks.misc.pedometer.avg_speed=Средняя скорость: %s
+openblocks.misc.pedometer.total_distance=Общее расстояние: %s
+
+openblocks.misc.pedometer.straght_line_distance=Расстояние прямой линии: %s
+openblocks.misc.pedometer.straigh_line_speed=Скорость по прямой: %s
+
+openblocks.misc.pedometer.last_check_distance=Расстояние от последней проверки: %s
+openblocks.misc.pedometer.last_check_speed=Скорость на последней проверке: %s
+openblocks.misc.pedometer.last_check_time=Время от последней проверки %d тиков
+
+openblocks.misc.pedometer.total_time=Общее время: %d тиков
+
+openblocks.misc.shape.sphere=Сфера
+openblocks.misc.shape.cylinder=Цилиндр
+openblocks.misc.shape.cuboid=Куб
+openblocks.misc.shape.dome=Купол
+openblocks.misc.shape.triangle=Треугольник
+openblocks.misc.shape.pentagon=Пятиугольник
+openblocks.misc.shape.hexagon=Шестиугольник
+openblocks.misc.shape.octagon=Восьмиугольник
+
+openblocks.misc.radio.too_many=Слишком много радио уже работают
+openblocks.misc.radio.invalid_stream=Недействительный стрим
+openblocks.misc.radio.invalid_url=Недействительная ссылка
+openblocks.misc.radio.url_not_found=Ссылка не найдена
+openblocks.misc.radio.unknown_stream_type=Неизвестный тип стрима
+openblocks.misc.radio.malformed_data=Плохо составленные данные в стриме
+openblocks.misc.radio.not_ready=Стрим не готов, попробуйте позже
+openblocks.misc.radio.cant_connect=Не удаётся подключиться
+openblocks.misc.radio.unknown_error=Неизвестная ошибка
+openblocks.misc.radio.muted=Звуки приглушены!
+
+openblocks.misc.side.east=Восточная сторона
+openblocks.misc.side.west=Западная сторона
+openblocks.misc.side.north=Северная сторона
+openblocks.misc.side.south=Южная сторона
+openblocks.misc.side.up=Верхняя сторона
+openblocks.misc.side.down=Нижняя сторона
+
+openblocks.misc.command.invalid=Недопустимые аргументы команды
+openblocks.misc.command.no_flim_flam=Invalid flim-flam name
+openblocks.misc.command.flim_flam_source=Player %s had been successfully flim-flammed with %s
+openblocks.misc.command.flim_flam_target=Кто-то не любит Вас. Кто-то, у кого есть сила
+openblocks.misc.command.flim_flam_failed=Flim-flamming failed!
+openblocks.misc.command.luck_added=Удача изменена для игрока %s, текущая: %d
+openblocks.misc.command.luck_current=Удача: %d игрока %s
+openblocks.flim_flammed=Что-то странное происходит вокруг Вас
 
 openblocks.turtle.magnet=Магнит
 
 tile.openblocks.elevator.name=Лифт
+tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color.
+tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
+
 tile.openblocks.heal.name=Исцелитель
+tile.openblocks.heal.description=Исцеляющий блок - это блок только для творческого режима, который даёт небольшой лечебный эффект с течением времени.
+
 tile.openblocks.guide.name=Руководитель по строительству
+tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
+tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
+
 tile.openblocks.ladder.name=Лестница-люк
-tile.openblocks.tank.name=Бак
-tile.openblocks.target.name=Мишень
-tile.openblocks.grave.name=Кладбище
+tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
+tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
+
+tile.openblocks.tank.name=Резервуар
+tile.openblocks.tank.description=Tanks can hold liquids. If you place tanks next to each other and they'll distribute their liquid between the tanks. You can place liquid into the tanks using buckets. If the tank contains XP Juice you can click on them with an empty hand to give yourself some of the XP. When broken tanks will retain their liquid.
+tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
+
 tile.openblocks.flag.name=Флаг
-tile.openblocks.trophy.name=Кубок
+tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color.
+
 tile.openblocks.beartrap.name=Медвежий капкан
-tile.openblocks.sprinkler.name=Разбрызгиватель
-tile.openblocks.vacuumhopper.name=Вакуумная загрузочная воронка
-tile.openblocks.sponge.name=Мочалка
+tile.openblocks.beartrap.description=Поставьте медвежий капкан и нажмите на него, чтобы открыть его. Когда моб наступит на ловушку, он не сможет двигаться!
+
+tile.openblocks.sponge.name=Губка
+tile.openblocks.sponge.description=The sponge is a replacement for the vanilla sponge. Perfect for removing small pockets of lava or water. Be careful when using it on large areas of liquid though as it'll start to get quite messy.
+
+item.openblocks.spongeonastick.name=Губка на палочке
+item.openblocks.spongeonastick.description=Губка на палочке - это инструмент для очистки жидкостей. Работает, как простая губка, но более мобильна за счёт изнашивания.
+
 tile.openblocks.cannon.name=Предметная пушка
-tile.openblocks.bigbutton.name=Большая кнопка
-tile.openblocks.fan.name=Вентилятор
-tile.openblocks.xpbottler.name=Разливочная машина опыта
-tile.openblocks.village_highlighter.name=Подсвечиватель деревни
-tile.openblocks.path.name=Путь
-tile.openblocks.autoanvil.name=Автоматическая наковальня
-tile.openblocks.autoenchantmenttable.name=Автоматический стол зачаровывания
-tile.openblocks.xpdrain.name=Отток опыта
+tile.openblocks.cannon.description=When given a redstone signal, the item cannon will shoot items that it finds in an adjacent inventory. Use the 'pointer' item to aim the cannon.
+
 tile.openblocks.ropeladder.name=Верёвочная лестница
-tile.openblocks.donationStation.name=Станция пожертвований
-tile.openblocks.blockbreaker.name=Разрушитель блоков
-tile.openblocks.blockPlacer.name=Разместитель блоков
-tile.openblocks.itemDropper.name=Выбрасыватель предметов
-tile.openblocks.canvas.name=Холст
-tile.openblocks.canvasglass.name=Glass Canvas
+tile.openblocks.ropeladder.description=Когда Вы размещаете верёвочную лестницу, она разворачивается на всё расстояние до земли.
+
+tile.openblocks.sprinkler.name=Разбрызгиватель
+tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simply place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block!
+
 tile.openblocks.paintmixer.name=Смеситель краски
-tile.openblocks.paintcan.name=Банка краски
-tile.openblocks.projector.name=Height Map Projector
+tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
+tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.canvas.name=Холст
+tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints.
+tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.fan.name=Вентилятор
+tile.openblocks.fan.description=Вентилятор будет дуть на игроков, мобов или сущностей, в направлении, куда он смотрит.
+
+tile.openblocks.target.name=Мишень
+tile.openblocks.target.description=The target will give out a redstone signal of a strength relative to the accuracy of the players aim. Give the target a redstone signal to make it pop up!
+
+tile.openblocks.path.name=Путь
+tile.openblocks.path.description=Путь ничего не делает. Он просто выглядит красиво!
+
+tile.openblocks.itemDropper.name=Выбрасыватель предметов
+tile.openblocks.itemDropper.description=The item dropper is similar to the vanilla dropper, except it drops items directly down in a straight line.
+
+tile.openblocks.bigbutton.name=Большая кнопка
+tile.openblocks.bigbutton.description=The big button is a large button that can be placed on walls. If you shift-click on the button with an empty hand it will bring up an inventory with a single slot. You can put items into this slot to increase the length of time the button is pressed - one item increases the button press by one tick.
+
+tile.openblocks.xpdrain.name=Всасыватель опыта
+tile.openblocks.xpdrain.description=Place the XP drain above an OpenBlocks tank and stand on it. Your XP will drain into the tank, which can then be used for blocks such as the auto enchantment table or the auto anvil.
+
+tile.openblocks.vacuumhopper.name=Вакуумная воронка
+tile.openblocks.vacuumhopper.description=The vacuum hopper will suck up items and XP orbs around it. You can use the tabs on the right of the interface to select which sides to output to.
+
+tile.openblocks.village_highlighter.name=Подсвечиватель деревни
+tile.openblocks.village_highlighter.description=Drop the village highlighter down in a village and give it a redstone signal. It will outline the perimeter of the village and draw a box in the iron golem spawning area. Useful if you want to make sure villages don't merge into each other or you're making an iron farm!
+
+tile.openblocks.donationStation.name=Станция пожертвований
+tile.openblocks.donationStation.description=Love a block or item and want to show the mod developer some appreciation? Drop it into the donation station and if we know the authors donation page we'll give you a link.
+
+tile.openblocks.blockPlacer.name=Разместитель блоков
+tile.openblocks.blockPlacer.description=When given a redstone pulse the block placer will place an item in the direction it's facing.
+
+tile.openblocks.blockbreaker.name=Разрушитель блоков
+tile.openblocks.blockbreaker.description=When given a redstone pulse the block breaker will break the block it's facing.
+
+tile.openblocks.projector.name=Прожектор карты высот
+tile.openblocks.projector.description=I'll let you write this one boq!
+
+tile.openblocks.autoenchantmenttable.name=Автоматический стол зачаровывания
+tile.openblocks.autoenchantmenttable.description=The auto enchantment table works in a similar way to the vanilla enchantment table except it runs off XP juice. Use the tabs on the right side of the interface to select where items or xp can be pulled from. Just like with the vanilla table bookshelves are required for higher levels.
+
+tile.openblocks.xpbottler.name=Разливщик опыта
+tile.openblocks.xpbottler.description=Разливщик опыта будет брать жидкий опыт и заливать его в стеклянные бутылки, создавая тем самым зелье опыта.
+
+tile.openblocks.autoanvil.name=Автоматическая наковальня
+tile.openblocks.autoanvil.description=The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.\n\nUse the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted. Right click and drag the anvil in the tab to spin it around and select other sides!
+
 tile.openblocks.drawingtable.name=Стол для рисования
+tile.openblocks.drawingtable.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want!
+tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.grave.name=Могила
+tile.openblocks.trophy.name=Трофей
+tile.openblocks.canvasglass.name=Стеклянный холст
+tile.openblocks.paintcan.name=Банка краски
+
+tile.openblocks.sky.normal.name=Небесный блок
+tile.openblocks.sky.normal.description=Bring the outside inside with the new Sky block! Just apply a redstone signal. We also offer an inverted version.
+tile.openblocks.sky.inverted.name=Инвертированный небесный блок
+
+tile.openblocks.radio.name=Радио
+tile.openblocks.radio.description=The radio allows you to stream internet radio! First, you need some tuned crystals which you can find in dungeon chests or from a special villager. Place the crystal in the radio and supply it with a redstone signal to turn it on.  The redstone strength controls the volume.\n\nYou can configure which radio stations are available in the servers config file.
+tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
+
+tile.openblocks.xpshower.name=Насадка для потока опыта
+tile.openblocks.xpshower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer.
+
+tile.openblocks.goldenegg.name=Золотое яйцо
+
+tile.openblocks.digitalfuse.name=Цифровой запал
+item.openblocks.cursor.name=Курсор
+item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
+item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
+
+item.openblocks.devnull.name=/dev/null
+item.openblocks.devnull.description=Click using /dev/null to open the inventory. There's a single inventory slot - put an item in there - dirt, for example. As you gather dirt from the ground this slot will fill up. Once it's full, any more dirt you pick up will be automatically discarded. You can shift-click with the item in your hand as though you were placing the block!
+
+item.openblocks.slimalyzer.name=Слаймлизёр
+item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.
 
 item.openblocks.hangglider.name=Дельтаплан
+item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
+item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
+
 item.openblocks.gliderwing.name=Крыло дельтаплана
+
+item.openblocks.sleepingbag.name=Спальной мешок
+item.openblocks.sleepingbag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back.
+
 item.openblocks.luggage.name=Багаж
+item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items!
+item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
+
 item.openblocks.sonicglasses.name=Звуковые очки
+item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear!
+
+item.openblocks.squeegee.name=Резиновая швабра
+item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
+item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.paintbrush.name=Кисточка
+item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil!
+item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.unprepared_stencil.name=Неподготовленный трафарет
+item.openblocks.unprepared_stencil.description="What are these pesky stencils I keep finding in chests?"\n\nStencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
+item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.stencil.name=Трафарет
 item.openblocks.crayon.name=Магический цветной карандаш
 item.openblocks.pencil.name=Магический карандаш
 item.openblocks.glasses.pencil.name=Обычные очки
@@ -90,26 +300,28 @@ item.openblocks.crane_magnet.name=Крановый магнит
 item.openblocks.beam.name=Балка
 item.openblocks.line.name=Шнур
 item.openblocks.miracle_magnet.name=§5Чудо магнит§r
-item.openblocks.slimalyzer.name=Слаймлизёр
+item.openblocks.info_book.name=Мировое господство с OpenBlocks
 item.openblocks.xpbucket.name=Ведро опыта
-item.openblocks.sleepingbag.name=Спальный мешок
-item.openblocks.paintbrush.name=Кисточка
-item.openblocks.stencil.name=Трафарет
-item.openblocks.height_map.name=Height Map
+item.openblocks.height_map.name=Карта высот
 item.openblocks.empty_map.name=Пустая карта
-item.openblocks.map_controller.name=Map Controller Module
-item.openblocks.map_memory.name=Map Memory Module
+item.openblocks.map_controller.name=Модуль «Контроллер карты»
+item.openblocks.map_memory.name=Модуль «Память карты»
 item.openblocks.cartographer.name=Картограф
-item.openblocks.assistant_base.name=Assistant's base
-item.openblocks.cursor.name=Указатель
-item.openblocks.squeegee.name=Резиновая швабра
-item.openblocks.unprepared_stencil.name=Неподготовленный трафарет
+item.openblocks.assistant_base.name=Основание помощника
 item.openblocks.sketching_pencil.name=Карандаш для рисования
 item.openblocks.tasty_clay.name=Вкусный клей
 item.openblocks.golden_eye.name=Золотой глаз
+item.openblocks.pointer.name=Указатель
+item.openblocks.tuned_crystal.name=Tuned Crystal
+item.openblocks.pedometer.name=Шагомер
+
+item.openblocks.wallpaper.name=Обои
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
 entity.OpenBlocks.Luggage.name=Багаж
 entity.OpenBlocks.Cartographer.name=Картограф
 entity.OpenBlocks.Block.name=Парящий блок
+entity.OpenBlocks.MiniMe.name=Мини-Мы
+
+fluid.OpenBlocks.xpjuice=Жидкий опыт
