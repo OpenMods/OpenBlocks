@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class BlockPath extends OpenBlock {
 
 	public BlockPath() {
-		super(Material.plants);
+		super(Material.ground);
 		setBlockBounds(0, 0, 0, 1f, 0.1f, 1f);
 	}
 
