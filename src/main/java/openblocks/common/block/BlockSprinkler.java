@@ -53,4 +53,9 @@ public class BlockSprinkler extends OpenBlock {
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return isOnTopOfSolidBlock(world, x, y, z, side);
 	}
+	
+	@Override
+	public boolean isReplaceable(IBlockAccess arg0, int arg1, int arg2, int arg3) {
+		return false;
+	}
 }
