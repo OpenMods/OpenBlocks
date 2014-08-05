@@ -33,6 +33,8 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	public SyncableBoolean onSoil;
 	private int ticksSinceLastSound = 0;
 
+    public Entity killer;
+
 	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 100));
 
 	public TileEntityGrave() {}
@@ -80,6 +82,8 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	public void setLoot(IInventory invent) {
 		inventory.copyFrom(invent);
 	}
+
+    public void setKiller(Entity entity) { this.killer = entity; }
 
 	public boolean isOnSoil() {
 		return onSoil.get();

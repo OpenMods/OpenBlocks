@@ -3,11 +3,13 @@ package openblocks.common;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -44,11 +46,15 @@ public class PlayerDeathHandler {
 		int y = MathHelper.floor_double(player.posY);
 		int z = MathHelper.floor_double(player.posZ);
 
+        Entity blacklisted = null;
+        if(event.source.isExplosion() && event.source instanceof EntityDamageSource)
+            blacklisted = ((EntityDamageSource)event.source).getEntity();
+
 		for (int distance = 0; distance < 5; distance++)
 			for (int checkX = x - distance; checkX <= x + distance; checkX++)
 				for (int checkY = y - distance; checkY <= y + distance; checkY++)
 					for (int checkZ = z - distance; checkZ <= z + distance; checkZ++)
-						if (tryPlaceGrave(world, checkX, checkY, checkZ, player, drops)) {
+						if (tryPlaceGrave(world, checkX, checkY, checkZ, player, drops, blacklisted)) {
 							Log.debug("Placing grave for player '%s' @ (%d,%d,%d) with %d items", player.getGameProfile(), checkX, checkY, checkZ, drops.size());
 							if (Config.debugGraves) dumpDebugInfo(event);
 							drops.clear();
@@ -86,7 +92,7 @@ public class PlayerDeathHandler {
 		} catch (ArrayIndexOutOfBoundsException terribleLoopExitCondition) {}
 	}
 
-	private static boolean tryPlaceGrave(World world, int x, int y, int z, EntityPlayer stiff, List<EntityItem> drops) {
+	private static boolean tryPlaceGrave(World world, int x, int y, int z, EntityPlayer stiff, List<EntityItem> drops, Entity blacklisted) {
 		if (!canPlaceGrave(world, x, y, z)) return false;
 
 		world.setBlock(x, y, z, OpenBlocks.Blocks.grave, 0, 2);
@@ -103,6 +109,7 @@ public class PlayerDeathHandler {
 
 		grave.setUsername(stiff.getGameProfile().getName());
 		grave.setLoot(invent);
+        grave.setKiller(blacklisted);
 		return true;
 	}
 
