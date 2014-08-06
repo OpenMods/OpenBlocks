@@ -147,6 +147,10 @@ public class Config {
 	@ConfigProperty(category = "debug", name = "gravesDebug", comment = "Dump extra amount of data, every time grave is created")
 	public static boolean debugGraves = false;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "destructiveGraves", comment = "Try to overwrite blocks with graves if no suitable place is found on first try")
+	public static boolean destructiveGraves;
+
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
 
