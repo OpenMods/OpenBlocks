@@ -122,7 +122,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		updateBlockBelow();
 		sync();
 	}

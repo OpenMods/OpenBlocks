@@ -156,7 +156,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}

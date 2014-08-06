@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
@@ -127,7 +128,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			int redstoneLevel = worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord);
 			boolean isLocked = redstoneLevel > 0;

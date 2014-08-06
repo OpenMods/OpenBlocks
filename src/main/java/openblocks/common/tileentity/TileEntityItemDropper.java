@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -61,7 +62,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}

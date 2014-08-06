@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,7 +63,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	@Override
 	protected void initialize() {
 		if (worldObj.isRemote) return;
-		onNeighbourChanged();
+		onNeighbourChanged(null);
 	}
 
 	private void updateURL(ItemStack stack) {
@@ -132,7 +133,7 @@ public class TileEntityRadio extends SyncedTileEntity implements IActivateAwareT
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			this.isPowered.set(isPowered);

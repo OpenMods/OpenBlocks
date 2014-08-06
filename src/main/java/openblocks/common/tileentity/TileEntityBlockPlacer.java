@@ -78,7 +78,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}

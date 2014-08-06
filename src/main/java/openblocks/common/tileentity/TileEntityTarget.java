@@ -137,7 +137,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		onRedstoneChanged();
 	}
 }

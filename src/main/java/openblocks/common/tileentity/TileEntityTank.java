@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -152,7 +153,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		forceUpdate = true;
 	}
 
