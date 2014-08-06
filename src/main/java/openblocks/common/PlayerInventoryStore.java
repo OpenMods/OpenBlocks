@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import openblocks.Config;
-import openmods.GenericInventory;
 import openmods.Log;
+import openmods.inventory.GenericInventory;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;

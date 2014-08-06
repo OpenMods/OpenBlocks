@@ -9,8 +9,8 @@ import openblocks.common.container.ContainerDevNull;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
 import openmods.Log;
-import openmods.PlayerItemInventory;
 import openmods.gui.DummyContainer;
+import openmods.inventory.PlayerItemInventory;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class OpenBlocksGuiHandler implements IGuiHandler {

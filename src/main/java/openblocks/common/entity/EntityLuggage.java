@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 

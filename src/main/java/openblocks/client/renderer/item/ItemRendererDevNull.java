@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.item.ItemDevNull.Icons;
-import openmods.ItemInventory;
+import openmods.inventory.ItemInventory;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.TextureUtils;
 import openmods.utils.render.RenderUtils;

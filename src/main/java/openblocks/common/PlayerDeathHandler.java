@@ -15,8 +15,8 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGrave;
-import openmods.GenericInventory;
 import openmods.Log;
+import openmods.inventory.GenericInventory;
 import openmods.utils.InventoryUtils;
 
 import org.apache.logging.log4j.Level;

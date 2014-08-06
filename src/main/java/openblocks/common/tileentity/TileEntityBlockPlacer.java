@@ -10,8 +10,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
@@ -19,6 +17,8 @@ import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 
