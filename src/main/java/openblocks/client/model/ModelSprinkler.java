@@ -73,7 +73,7 @@ public class ModelSprinkler extends ModelBase {
 	public void setRotationAngles(TileEntity te, float f) {
 		TileEntitySprinkler sprinkler = (TileEntitySprinkler)te;
 
-		sprayer.rotateAngleZ = sprinkler.getSprayAngle();
+		sprayer.rotateAngleZ = sprinkler.getSprayDirection();
 	}
 
 }

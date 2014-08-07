@@ -2,6 +2,8 @@ package openblocks.common.tileentity;
 
 import java.util.Random;
 
+import org.lwjgl.util.vector.Matrix4f;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -112,24 +114,25 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	private void sprayParticles() {
 		if (tank.getFluidAmount() > 0) {
-			for (int i = 0; i < 6; i++) {
-				float offset = (i - 2.5f) / 5f;
-				ForgeDirection rotation = getRotation();
+			for (int sprinklerOutletIndex = 0; sprinklerOutletIndex < 6; sprinklerOutletIndex++) {
+				float outletPosition = (sprinklerOutletIndex - 2.5f) / 5f;
+				ForgeDirection blockYawRotation = getRotation();
 
-				float pitch = getSprayPitch();
-
-				double sinPitch = Math.sin(pitch) * ((rotation.offsetZ == 0)? 1 : -1);
-				double cosPitch = Math.abs(Math.cos(pitch));
-
+				float sprayDirection = getSprayDirection();
+				
+				double sprayRoll = Math.sin( Math.toRadians( sprayDirection * 30f )); 
+				double sprayPitchScatter = Math.sin( Math.toRadians( 6 * (RANDOM.nextDouble() - 0.5)) );
 				Vec3 vec = Vec3.createVectorHelper(
-						cosPitch / 2.0,
-						sinPitch * rotation.offsetX / 2.0,
-						(worldObj.rand.nextDouble() - 0.5) * 2 * offset / 2.0);
+						sprayRoll * blockYawRotation.offsetZ / -2f
+						+ sprayPitchScatter * blockYawRotation.offsetX,
+						0.4f,
+						sprayRoll * blockYawRotation.offsetX / 2f
+						+ sprayPitchScatter * blockYawRotation.offsetZ);
 
 				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
-						xCoord + 0.5 + (offset * 0.6 * rotation.offsetX),
-						yCoord,
-						zCoord + 0.5 + (offset * 0.6 * rotation.offsetZ),
+						xCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetX),
+						yCoord+0.2,
+						zCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetZ),
 						0.3f, 0.7f, vec);
 			}
 		}
@@ -185,12 +188,12 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		}
 	}
 
-	public float getSprayPitch() {
-		return (float)(getSprayAngle() * Math.PI);
-	}
-
-	public float getSprayAngle() {
-		if (isEnabled()) { return MathHelper.sin(ticks * 0.02f) * (float)Math.PI * 0.035f; }
+	/**
+	 * Get spray direction of Sprinkler particles
+	 * @return float from -1f to 1f indicating the direction, left to right of the particles
+	 */
+	public float getSprayDirection() {
+		if (isEnabled()) { return MathHelper.sin(ticks * 0.02f); }
 		return 0;
 	}
 
