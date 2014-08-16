@@ -2,8 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.Random;
 
-import org.lwjgl.util.vector.Matrix4f;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -119,19 +117,19 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 				ForgeDirection blockYawRotation = getRotation();
 
 				float sprayDirection = getSprayDirection();
-				
-				double sprayRoll = Math.sin( Math.toRadians( sprayDirection * 30f )); 
-				double sprayPitchScatter = Math.sin( Math.toRadians( 6 * (RANDOM.nextDouble() - 0.5)) );
+
+				double sprayRoll = Math.sin(Math.toRadians(sprayDirection * 30f));
+				double sprayPitchScatter = Math.sin(Math.toRadians(6 * (RANDOM.nextDouble() - 0.5)));
 				Vec3 vec = Vec3.createVectorHelper(
 						sprayRoll * blockYawRotation.offsetZ / -2f
-						+ sprayPitchScatter * blockYawRotation.offsetX,
+								+ sprayPitchScatter * blockYawRotation.offsetX,
 						0.4f,
 						sprayRoll * blockYawRotation.offsetX / 2f
-						+ sprayPitchScatter * blockYawRotation.offsetZ);
+								+ sprayPitchScatter * blockYawRotation.offsetZ);
 
 				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
 						xCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetX),
-						yCoord+0.2,
+						yCoord + 0.2,
 						zCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetZ),
 						0.3f, 0.7f, vec);
 			}
@@ -190,6 +188,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	/**
 	 * Get spray direction of Sprinkler particles
+	 *
 	 * @return float from -1f to 1f indicating the direction, left to right of the particles
 	 */
 	public float getSprayDirection() {
