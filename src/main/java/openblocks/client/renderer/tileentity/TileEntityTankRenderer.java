@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -69,10 +70,17 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 			final Fluid fluid = fluidStack.getFluid();
 
-			final IIcon texture = fluid.getStillIcon();
-			final int color = fluid.getColor(fluidStack);
+			IIcon texture = fluid.getStillIcon();
+			final int color;
 
-			bindTexture(getFluidSheet(fluid));
+			if (texture != null) {
+				bindTexture(getFluidSheet(fluid));
+				color = fluid.getColor(fluidStack);
+			} else {
+				bindTexture(TextureMap.locationBlocksTexture);
+				texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("missingno");
+				color = 0xFFFFFFFF;
+			}
 
 			Tessellator t = Tessellator.instance;
 
