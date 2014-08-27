@@ -68,6 +68,27 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 	}
 
+	private class RenderUpdateListeners implements ISyncListener {
+
+		private FluidStack prevFluid;
+
+		private boolean isSameFluid(FluidStack currentFluid) {
+			if (currentFluid == null) return prevFluid == null;
+			return currentFluid.isFluidEqual(prevFluid);
+		}
+
+		@Override
+		public void onSync(Set<ISyncableObject> changes) {
+			if (changes.contains(tank)) {
+				final FluidStack fluidStack = tank.getFluid();
+				if (!isSameFluid(fluidStack)) {
+					worldObj.func_147451_t(xCoord, yCoord, zCoord);
+					prevFluid = fluidStack;
+				}
+			}
+		}
+	}
+
 	private static final int SYNC_THRESHOLD = 8;
 	private static final int UPDATE_THRESHOLD = 20;
 
@@ -96,7 +117,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			}
 		});
 
-		syncMap.addUpdateListener(createRenderUpdateListener(tank));
+		syncMap.addUpdateListener(new RenderUpdateListeners());
 	}
 
 	@Override
