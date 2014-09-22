@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
@@ -28,11 +29,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	public double currentPitch = 45;
 	public double currentYaw = 0;
-	public double currentSpeed = 1.4;
+	private double currentSpeed = 1.4;
 
-	public double motionX = 0;
-	public double motionY = 0;
-	public double motionZ = 0;
+	public Vec3 motion;
 
 	public boolean renderLine = true;
 
@@ -56,8 +55,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	public void updateEntity() {
 		super.updateEntity();
 
-		double prevPitch = currentPitch;
-		double prevYaw = currentYaw;
 		// ugly, need to clean
 		currentPitch = currentPitch - ((currentPitch - targetPitch.get()) / 20);
 		currentYaw = GeometryUtils.normalizeAngle(currentYaw);
@@ -71,29 +68,13 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.get()) / 20);
 
-		if (Math.abs(prevYaw - currentYaw) > 0.01 || Math.abs(prevPitch - currentPitch) > 0.01) recalcMotionFromAngles();
+		invalidateMotion();
 
 		if (!worldObj.isRemote) {
 			if (worldObj.getWorldTime() % 20 == 0) {
 				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
-					for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-						IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, direction);
-						if (inventory != null) {
-							ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
-							if (stack != null) {
-								new TileEntityMessageEventPacket(this).sendToWatchers();
-								EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
-								item.delayBeforeCanPickup = 20;
-								item.motionX = motionX * currentSpeed;
-								item.motionY = motionY * currentSpeed;
-								item.motionZ = motionZ * currentSpeed;
-								worldObj.spawnEntityInWorld(item);
-								worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:cannon.activate", 0.2f, 1.0f);
-								break;
-							}
-						}
-					}
-
+					ItemStack stack = findStack();
+					if (stack != null) fireStack(stack);
 				}
 			}
 		} else {
@@ -101,6 +82,31 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 				ticksSinceLastFire++;
 			}
 		}
+	}
+
+	private ItemStack findStack() {
+		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+			IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, direction);
+			if (inventory != null) {
+				ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
+				if (stack != null) return stack;
+			}
+		}
+
+		return null;
+	}
+
+	private void fireStack(ItemStack stack) {
+		new TileEntityMessageEventPacket(this).sendToWatchers();
+		EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
+		item.delayBeforeCanPickup = 20;
+
+		Vec3 motion = getMotion();
+		item.motionX = motion.xCoord;
+		item.motionY = motion.yCoord;
+		item.motionZ = motion.zCoord;
+		worldObj.spawnEntityInWorld(item);
+		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:cannon.activate", 0.2f, 1.0f);
 	}
 
 	@Override
@@ -125,7 +131,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		return box.expand(32.0, 32.0, 32.0);
 	}
 
-	private void recalcMotionFromAngles() {
+	private Vec3 calcMotionFromAngles() {
 		double p = Math.toRadians(currentPitch);
 		double y = Math.toRadians(180 - currentYaw);
 		double sinPitch = Math.sin(p);
@@ -133,9 +139,18 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		double sinYaw = Math.sin(y);
 		double cosYaw = Math.cos(y);
 
-		motionX = -cosPitch * sinYaw;
-		motionY = sinPitch;
-		motionZ = -cosPitch * cosYaw;
+		return Vec3.createVectorHelper(-cosPitch * sinYaw * currentSpeed,
+				sinPitch * currentSpeed,
+				-cosPitch * cosYaw * currentSpeed);
+	}
+
+	private void invalidateMotion() {
+		motion = null;
+	}
+
+	public Vec3 getMotion() {
+		if (motion == null) motion = calcMotionFromAngles();
+		return motion;
 	}
 
 	public void setTarget(int x, int y, int z) {

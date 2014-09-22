@@ -188,7 +188,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	/**
 	 * Get spray direction of Sprinkler particles
-	 *
+	 * 
 	 * @return float from -1f to 1f indicating the direction, left to right of the particles
 	 */
 	public float getSprayDirection() {
