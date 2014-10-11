@@ -137,6 +137,8 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 								setStack(Slots.input, null);
 							}
 							setStack(Slots.output, resultingStack);
+
+							sync();
 						}
 					}
 				}
@@ -227,7 +229,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		return automaticSlots.get(AutoSlots.output);
 	}
 
-	public boolean hasStack(Enum<?> slot) {
+	private boolean hasStack(Enum<?> slot) {
 		return getStack(slot) != null;
 	}
 
@@ -235,7 +237,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		inventory.setInventorySlotContents(slot.ordinal(), stack);
 	}
 
-	public ItemStack getStack(Enum<?> slot) {
+	private ItemStack getStack(Enum<?> slot) {
 		return inventory.getStackInSlot(slot);
 	}
 
@@ -331,6 +333,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	@Override
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {
+		if (worldObj.isRemote) return;
 		float power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
 		ItemStack stack = getStack(Slots.input);
 
@@ -339,7 +342,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 		this.maxLevel.set(maxLevel);
 
-		markUpdated();
+		sync();
 	}
 
 }
