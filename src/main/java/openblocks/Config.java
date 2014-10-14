@@ -14,6 +14,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Enchantments;
@@ -300,6 +301,7 @@ public class Config {
 			}
 
 			recipeList.add(new CrayonMixingRecipe());
+			RecipeSorter.register("openblocks:crayon_mix", CrayonMixingRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 		}
 
 		if (OpenBlocks.Blocks.fan != null) {
@@ -414,6 +416,8 @@ public class Config {
 
 			if (OpenBlocks.Items.crayonGlasses != null) {
 				recipeList.add(new CrayonGlassesRecipe());
+				// must be after pencil
+				RecipeSorter.register("openblocks:crayon_glasses", CrayonGlassesRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			}
 
 			if (OpenBlocks.Items.technicolorGlasses != null) {
@@ -473,9 +477,11 @@ public class Config {
 		if (OpenBlocks.Items.emptyMap != null) {
 			if (OpenBlocks.Items.heightMap != null) {
 				recipeList.add(new MapCloneRecipe());
+				RecipeSorter.register("openblocks:map_clone", MapCloneRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			}
 
 			recipeList.add(new MapResizeRecipe());
+			RecipeSorter.register("openblocks:map_resize", MapResizeRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 
 			ItemStack memory = MetasGeneric.mapMemory.newItemStack(2);
 			ItemStack cpu = MetasGeneric.mapController.newItemStack(1);
@@ -489,6 +495,7 @@ public class Config {
 
 		if (OpenBlocks.Items.goldenEye != null) {
 			recipeList.add(new GoldenEyeRechargeRecipe());
+			RecipeSorter.register("openblocks:golden_eye_recharge", GoldenEyeRechargeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', Items.gold_nugget, 'e', Items.ender_eye));
 		}
 
