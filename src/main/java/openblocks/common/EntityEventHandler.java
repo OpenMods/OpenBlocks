@@ -73,7 +73,7 @@ public class EntityEventHandler {
 		 * If the player hasn't been given a manual, we'll give him one! (or
 		 * throw it on the floor..)
 		 */
-		if (!event.world.isRemote && entity instanceof EntityPlayer) {
+		if (Config.spamInfoBook && !event.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)entity;
 			NBTTagCompound persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
 

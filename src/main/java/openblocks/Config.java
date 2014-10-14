@@ -179,7 +179,7 @@ public class Config {
 			"Natura:Cloud"
 	};
 
-	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Tuned crystals merchant id (-1 to disable)")
+	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Music merchant id (-1 to disable)")
 	public static int radioVillagerId = 6156;
 
 	@OnLineModifiable
@@ -228,6 +228,10 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "loot", name = "paintBrush")
 	public static boolean paintBrushLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "features", name = "infoBook", comment = "Should every player get info book on first login")
+	public static boolean spamInfoBook = true;
 
 	public static void register() {
 		@SuppressWarnings("unchecked")
