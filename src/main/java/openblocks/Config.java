@@ -209,6 +209,26 @@ public class Config {
 	@ConfigProperty(category = "sponge", name = "spongeRange", comment = "Sponge block range (distance from center)")
 	public static int spongeStickRange = 3;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "donationStation")
+	public static boolean donationStationLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "sonicGlasses")
+	public static boolean sonicGlassesLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "technicolorGlasses")
+	public static boolean technicolorGlassesLoot = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "stencil")
+	public static boolean stencilLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "paintBrush")
+	public static boolean paintBrushLoot = false;
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
@@ -331,8 +351,11 @@ public class Config {
 
 		if (OpenBlocks.Blocks.donationStation != null) {
 			WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Blocks.donationStation), 1, 1, 2);
-			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-			ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+
+			if (donationStationLoot) {
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			}
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.donationStation, "ppp", "pcp", "ppp", 'p', Items.porkchop, 'c', Blocks.chest));
 		}
 
@@ -381,8 +404,11 @@ public class Config {
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Items.iron_helmet, 'o', Blocks.obsidian, 'i', Items.iron_ingot));
 			ItemStack stack = new ItemStack(OpenBlocks.Items.sonicGlasses);
-			WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
-			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+
+			if (sonicGlassesLoot) {
+				WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+			}
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
@@ -398,7 +424,7 @@ public class Config {
 				RecipeSorter.register("openblocks:crayon_glasses", CrayonGlassesRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			}
 
-			if (OpenBlocks.Items.technicolorGlasses != null) {
+			if (technicolorGlassesLoot && OpenBlocks.Items.technicolorGlasses != null) {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.technicolorGlasses), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
@@ -425,22 +451,27 @@ public class Config {
 
 		if (OpenBlocks.Items.paintBrush != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Blocks.wool, 's', "stickWood"));
-			int[] colors = new int[] { 0xFF0000, 0x00FF00, 0x0000FF };
-			for (int color : colors) {
-				ItemStack stack = ItemPaintBrush.createStackWithColor(color);
-				WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
-				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+
+			if (paintBrushLoot)
+			{
+				for (int color : new int[] { 0xFF0000, 0x00FF00, 0x0000FF }) {
+					ItemStack stack = ItemPaintBrush.createStackWithColor(color);
+					WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
+					ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+				}
 			}
 		}
 
 		if (OpenBlocks.Items.stencil != null) {
-			for (Stencil stencil : Stencil.values()) {
-				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
-				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			if (stencilLoot) {
+				for (Stencil stencil : Stencil.values()) {
+					WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
+					ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+				}
 			}
 		}
 
