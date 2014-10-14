@@ -19,8 +19,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.asm.EntityPlayerVisitor;
-import openblocks.client.radio.RadioManager;
-import openblocks.client.radio.RadioManager.RadioStation;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.item.*;
@@ -176,22 +174,10 @@ public class Config {
 	public static boolean dumpStiffsStuff = true;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
-	public static String[] radioStations = new String[0];
-
-	@ConfigProperty(category = "radio", name = "replaceList", comment = "List of URLs that need to be updated (url, whitespace, replacement")
-	public static String[] derpList = new String[] {
-			"http://69.46.75.101:80 http://idobiradio.idobi.com"
-	};
-
-	@OnLineModifiable
 	@ConfigProperty(category = "cartographer", name = "blockBlacklist", comment = "List of blocks that should be invisible to cartographer. Example: id:3,  OpenBlocks:openblocks_radio (case sensitive)")
 	public static String[] mapBlacklist = new String[] {
 			"Natura:Cloud"
 	};
-
-	@ConfigProperty(category = "radio", name = "enableChestLoot", comment = "Add tuned crystals as loot in chests")
-	public static boolean radioChests = true;
 
 	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Tuned crystals merchant id (-1 to disable)")
 	public static int radioVillagerId = 6156;
@@ -199,10 +185,6 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioVillagerSellsRecords", comment = "Should tuned crystals sell records too")
 	public static boolean radioVillagerRecords = true;
-
-	@OnLineModifiable
-	@ConfigProperty(category = "radio", name = "maxSources", comment = "Maximum number of sources playing at one time")
-	public static int maxRadioSources = 3;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "fan", name = "fanForce", comment = "Maximum force applied every tick to entities nearby (linear decay)")
@@ -384,10 +366,6 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', "plankWood", 'c', Blocks.crafting_table, 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
 		}
 
-		if (OpenBlocks.Blocks.radio != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.radio, "pbp", "prp", "pgp", 'p', "plankWood", 'b', Blocks.iron_bars, 'r', Items.redstone, 'g', Items.gold_ingot));
-		}
-
 		if (OpenBlocks.Blocks.xpShower != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Items.iron_ingot, 'o', Blocks.obsidian));
 		}
@@ -507,14 +485,6 @@ public class Config {
 		if (OpenBlocks.Items.cursor != null) {
 			final ItemStack whiteWool = ColorUtils.createDyedWool(ColorUtils.WHITE);
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.cursor, "w  ", "www", "www", 'w', whiteWool));
-		}
-
-		if (OpenBlocks.Items.tunedCrystal != null) {
-			for (RadioStation station : RadioManager.instance.getRadioStations()) {
-				WeightedRandomChestContent drop = new WeightedRandomChestContent(station.getStack().copy(), 1, 1, 2);
-				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
-			}
 		}
 
 		if (OpenBlocks.Items.infoBook != null) {

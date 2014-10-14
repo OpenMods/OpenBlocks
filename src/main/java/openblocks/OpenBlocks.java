@@ -17,7 +17,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.api.FlimFlamRegistry;
-import openblocks.client.radio.RadioManager;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
@@ -34,7 +33,6 @@ import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
 import openblocks.utils.ChangelogBuilder;
-import openmods.Log;
 import openmods.Mods;
 import openmods.OpenMods;
 import openmods.config.BlockInstances;
@@ -190,10 +188,6 @@ public class OpenBlocks {
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
 
-		// @RegisterBlock(name = "radio", tileEntity = TileEntityRadio.class)
-		@IgnoreFeature
-		public static BlockRadio radio;
-
 		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class)
 		public static BlockSky sky;
 
@@ -274,9 +268,6 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "cursor")
 		public static ItemCursor cursor;
-
-		@RegisterItem(name = "tunedCrystal", unlocalizedName = "tuned_crystal")
-		public static ItemTunedCrystal tunedCrystal;
 
 		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
 		public static ItemInfoBook infoBook;
@@ -394,7 +385,6 @@ public class OpenBlocks {
 				.registerInterface(IColorChanger.class)
 				.registerInterface(ILevelChanger.class);
 
-		RadioManager.readConfigs();
 		Config.register();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
@@ -437,7 +427,7 @@ public class OpenBlocks {
 
 		if (Config.radioVillagerId > 0) {
 			VillagerRegistry.instance().registerVillagerId(Config.radioVillagerId);
-			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, RadioManager.instance);
+			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, new RadioVillagerTradeManager());
 		}
 
 		FMLInterModComms.sendMessage("NotEnoughCodecs", "listCodecs", "");
@@ -492,11 +482,6 @@ public class OpenBlocks {
 		for (FMLInterModComms.IMCMessage m : event.getMessages()) {
 			if (m.isStringMessage() && "donateUrl".equalsIgnoreCase(m.key)) {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
-			}
-
-			if (m.isNBTMessage() && "knownCodecs".equalsIgnoreCase(m.key)) {
-				Log.info("Updating codec list with message from %s", m.getSender());
-				RadioManager.addCodecsInfo(m.getNBTValue());
 			}
 		}
 	}

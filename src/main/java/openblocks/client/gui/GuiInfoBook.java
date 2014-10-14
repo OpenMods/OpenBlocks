@@ -72,7 +72,6 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 		book.addPage(new SectionPage("openblocks.gui.blocks"));
 		book.addStandardRecipePage(MODID, "elevator", Blocks.elevator);
 		book.addStandardRecipePage(MODID, "sprinkler", Blocks.sprinkler);
-		book.addStandardRecipePage(MODID, "radio", Blocks.radio);
 		book.addStandardRecipePage(MODID, "paintmixer", Blocks.paintMixer);
 		book.addStandardRecipePage(MODID, "beartrap", Blocks.bearTrap);
 		book.addStandardRecipePage(MODID, "guide", Blocks.guide);

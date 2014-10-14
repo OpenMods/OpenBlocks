@@ -19,7 +19,6 @@ import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
-import openblocks.client.radio.RadioManager;
 import openblocks.client.renderer.BlockRenderingHandler;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.item.*;
@@ -157,10 +156,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.goldenEye != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());
-		}
-
-		if (OpenBlocks.Blocks.radio != null) {
-			RadioManager.instance.init();
 		}
 
 		if (OpenBlocks.Blocks.elevator != null) {
