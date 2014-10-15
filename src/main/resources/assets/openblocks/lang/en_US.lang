@@ -9,6 +9,15 @@ enchantment.openblocks.explosive=Unstable
 enchantment.openblocks.laststand=Last Stand
 enchantment.openblocks.flimflam=Flim Flam
 
+openblocks.gui.blocks=Blocks
+openblocks.gui.items=Items
+openblocks.gui.misc=Misc
+openblocks.gui.changelogs=Changelogs
+
+openblocks.gui.features=Features
+openblocks.gui.bugfixes=Bugfixes
+openblocks.gui.tweaks=Tweaks
+
 openblocks.gui.luggage=Luggage
 openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
@@ -24,9 +33,6 @@ openblocks.gui.itemdropper=Item Dropper
 openblocks.gui.blockplacer=Block Placer
 openblocks.gui.paintmixer=Paint Mixer
 openblocks.gui.drawingtable=Drawing Table
-openblocks.gui.blocks=Blocks
-openblocks.gui.items=Items
-openblocks.gui.misc=Misc
 openblocks.gui.digitalfuse=Digital Fuse
 openblocks.gui.xp_outputs=XP Outputs
 openblocks.gui.item_outputs=Item Outputs

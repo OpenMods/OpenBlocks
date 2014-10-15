@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
@@ -32,7 +31,6 @@ import openblocks.rpc.*;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
-import openblocks.utils.ChangelogBuilder;
 import openmods.Mods;
 import openmods.OpenMods;
 import openmods.config.BlockInstances;
@@ -325,8 +323,6 @@ public class OpenBlocks {
 			new ChatComponentTranslation("stat.openblocks.bricksDropped"),
 			StatBase.simpleStatType).registerStat();
 
-	public static ItemStack changeLog;
-
 	private GameConfigProvider gameConfig;
 
 	@EventHandler
@@ -449,8 +445,6 @@ public class OpenBlocks {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
-
-		if (Config.enableChangelogBooks) changeLog = ChangelogBuilder.createChangeLog(VERSION);
 
 		if (Loader.isModLoaded(Mods.FLANSMOD)) {
 			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");

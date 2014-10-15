@@ -1,59 +1,52 @@
 package openblocks.utils;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.StatCollector;
-import openblocks.OpenBlocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.util.ResourceLocation;
 import openmods.Log;
-import openmods.utils.ItemUtils;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class ChangelogBuilder {
 
-	public static ItemStack createChangeLog(String version) {
+	private static final ResourceLocation CHANGELOG = new ResourceLocation("openblocks", "changelog.json");
 
-		String filename = String.format("/openblocks/changelogs/%s", version);
-		InputStream input = OpenBlocks.class.getResourceAsStream(filename);
+	private static final Type LIST_TYPE = new TypeToken<ArrayList<Changelog>>() {}.getType();
 
-		if (input != null) {
-
-			ItemStack book = new ItemStack(Items.written_book);
-
-			NBTTagCompound bookTag = ItemUtils.getItemTag(book);
-
-			bookTag.setString("title", StatCollector.translateToLocalFormatted("openblocks.changelog.title", version));
-			bookTag.setString("author", "The OpenMods team");
-
-			NBTTagList bookPages = new NBTTagList();
-			bookTag.setTag("pages", bookPages);
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(input));
-			try {
-
-				StringBuilder pageInfo = new StringBuilder();
-				String line = null;
-
-				while ((line = in.readLine()) != null) {
-					if (line.equals("EOP")) {
-						bookPages.appendTag(new NBTTagString(pageInfo.toString()));
-						pageInfo = new StringBuilder();
-					} else {
-						pageInfo.append(line);
-						pageInfo.append("\n");
-					}
-				}
-			} catch (IOException e) {
-				Log.warn(e, "Failed to read changelog");
-			}
-
-			return book;
-		}
-
-		return null;
+	public static class ChangelogSection {
+		public String title;
+		public List<String> lines = Lists.newArrayList();
 	}
 
+	public static class Changelog {
+		public String version;
+		public List<ChangelogSection> sections = Lists.newArrayList();
+	}
+
+	public static List<Changelog> readChangeLogs() {
+		try {
+			IResource resource = Minecraft.getMinecraft().getResourceManager().getResource(CHANGELOG);
+			InputStream resourceStream = resource.getInputStream();
+			try {
+				Reader reader = new InputStreamReader(resourceStream);
+				Gson gson = new Gson();
+				return gson.fromJson(reader, LIST_TYPE);
+			} finally {
+				resourceStream.close();
+			}
+		} catch (Exception e) {
+			Log.severe(e, "Failed to read changelog");
+		}
+		return ImmutableList.of();
+	}
 }

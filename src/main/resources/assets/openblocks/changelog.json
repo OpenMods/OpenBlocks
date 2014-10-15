@@ -1,0 +1,139 @@
+[
+    { 
+        version : "1.2.8",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "/dev/null",
+                    "Most block can now be rotated with tools",
+                    "Very simple pedometer",
+                    "on_inventory command to store and restore players inventory",
+                    "Using dye on guide block now changes markers color",
+                    "Sponge-on-a-stick",
+                    "Tiny People"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Trophy drops now enchantment sensitive, don't drop from non-player kill",
+                    "Reduced tank lag",
+                    "Yet another XP duplication bug",
+                    "Cartographer now ignores Natura clouds"
+                ]
+            }
+        ]
+    },
+    { 
+        version : "1.2.7",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "XP Shower"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Skyblock render glitches",
+                    "Last Stand ballancing"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                    "Graves now have obsidian-level blast resistance"
+                ]
+            }
+        ]
+    },
+    { 
+        version : "1.2.6",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "Added the new 'sky' block",
+                    "Added the 'flim flam' enchantment",
+                    "Added the 'last stand' enchantment"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Block placers and breakers were sometimes derping. Now underped",
+                    "Cartographers were on strike. We've increased their salary and service has resumed"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                    "Radio volume can now be controlled via redstone",
+                    "Fan strength can now be controlled via redstone",
+                    "Radio now accepts with URLs pointing to PLS and M3U files and understands HTTP redirections",
+                    "Removed the 'raspberry ripple' from the building guide",
+                    "Target now registers shots from flans guns"
+                ]
+            }
+        ]
+    },
+    { 
+        version : "1.2.5",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "Almighty Book!",
+                    "Radios and radio villagers added!",
+                    "Middle clicking on tank with any liquid gives item with full amount",
+                    "Proper building guide localization",
+                    "Other mods block breakers now pick all dropped items",
+                    "Cannon pointer no longer resets after single click",
+                    "Blacklist for blocks that should be ignored by cartographer",
+                    "disableMobs blacklist now accepts mod names too",
+                    "Way to specify special block rules for elevator"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Target dropping arrow shot by infinity bow",
+                    "Squids spawning water in nether",
+                    "Sprinkler animation sometimes halts",
+                    "Missing drops from canvas",
+                    "Trophy resetting type after breaking with any block breaker",
+                    "Invalid sponge step sound",
+                    "Cannon not able to target in certain directions",
+                    "Luggage trying to pick item even with full inventory",
+                    "Block placer using whole stack instead of single item",
+                    "Elevator not working when high level jump boost/other jump helpers are used",
+                    "Color formatting in paint mixer GUI",
+                    "Trophy flickering when placed in creative"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                    "Enderman trophies now shoot enderpearls instead of teleporting directly"
+                ]
+            }
+        ]
+    }
+]

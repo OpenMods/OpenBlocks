@@ -1,5 +1,7 @@
 package openblocks.client.gui;
 
+import java.util.List;
+
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
@@ -7,67 +9,74 @@ import openblocks.OpenBlocks.Blocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.gui.page.IntroPage;
 import openblocks.common.item.MetasGeneric;
+import openblocks.utils.ChangelogBuilder;
+import openblocks.utils.ChangelogBuilder.Changelog;
+import openblocks.utils.ChangelogBuilder.ChangelogSection;
 import openmods.gui.ComponentGui;
 import openmods.gui.DummyContainer;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComposite;
+import openmods.gui.component.GuiComponentBook;
+import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.page.PageBase;
 import openmods.gui.component.page.SectionPage;
 import openmods.gui.component.page.TitledPage;
-import openmods.gui.listener.IMouseDownListener;
 
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
 
 public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 
 	private static final String MODID = "openblocks";
 
-	private int itemsIndex;
-	private int miscIndex;
-	private int blocksIndex;
-
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
 	}
 
+	private static void setupBookmark(GuiComponentLabel label, GuiComponentBook book, int index) {
+		label.setListener(book.createBookmarkListener(index));
+	}
+
+	private static int alignToEven(final GuiComponentBook book) {
+		int index = book.getNumberOfPages();
+		if (index % 2 == 1) {
+			book.addPage(PageBase.BLANK_PAGE);
+			index++;
+		}
+		return index;
+	}
+
+	private static int tocLine(int index) {
+		final int tocStartHeight = 80;
+		final int tocLineHeight = 15;
+		return tocStartHeight + index * tocLineHeight;
+	}
+
 	@Override
 	protected BaseComposite createRoot() {
+
 		final GuiComponentBook book = new GuiComponentBook();
 		PageBase contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 
-		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, 90, "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
-		lblBlocks.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				book.gotoIndex(blocksIndex);
-				book.enablePages();
-			}
-		});
-		GuiComponentLabel lblItems = new GuiComponentLabel(27, 105, "- " + StatCollector.translateToLocal("openblocks.gui.items"));
-		lblItems.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				book.gotoIndex(itemsIndex);
-				book.enablePages();
-			}
-		});
-		GuiComponentLabel lblMisc = new GuiComponentLabel(27, 120, "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
-		lblMisc.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				book.gotoIndex(miscIndex);
-				book.enablePages();
-			}
-		});
-
+		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, tocLine(0), "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
 		contentsPage.addComponent(lblBlocks);
+
+		GuiComponentLabel lblItems = new GuiComponentLabel(27, tocLine(1), "- " + StatCollector.translateToLocal("openblocks.gui.items"));
 		contentsPage.addComponent(lblItems);
+
+		GuiComponentLabel lblMisc = new GuiComponentLabel(27, tocLine(2), "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
 		contentsPage.addComponent(lblMisc);
+
+		GuiComponentLabel lblChangelogs = new GuiComponentLabel(27, tocLine(3), "- " + StatCollector.translateToLocal("openblocks.gui.changelogs"));
+		contentsPage.addComponent(lblChangelogs);
 
 		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new IntroPage());
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 		book.addPage(contentsPage);
-		blocksIndex = book.getNumberOfPages();
+
+		setupBookmark(lblBlocks, book, book.getNumberOfPages());
+
 		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new SectionPage("openblocks.gui.blocks"));
 		book.addStandardRecipePage(MODID, "elevator", Blocks.elevator);
@@ -100,11 +109,9 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 		book.addStandardRecipePage(MODID, "sky.normal", Blocks.sky);
 		book.addStandardRecipePage(MODID, "xpshower", Blocks.xpShower);
 
-		itemsIndex = book.getNumberOfPages();
-		if (itemsIndex % 2 == 1) {
-			book.addPage(PageBase.BLANK_PAGE);
-			itemsIndex++;
-		}
+		int itemsIndex = alignToEven(book);
+		setupBookmark(lblItems, book, itemsIndex);
+
 		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new SectionPage("openblocks.gui.items"));
 		book.addStandardRecipePage(MODID, "luggage", Items.luggage);
@@ -128,11 +135,8 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 		book.addStandardRecipePage(MODID, "slimalyzer", Items.slimalyzer);
 		book.addStandardRecipePage(MODID, "spongeonastick", Items.spongeonastick);
 
-		miscIndex = book.getNumberOfPages();
-		if (miscIndex % 2 == 1) {
-			book.addPage(PageBase.BLANK_PAGE);
-			miscIndex++;
-		}
+		int miscIndex = alignToEven(book);
+		setupBookmark(lblMisc, book, miscIndex);
 		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new SectionPage("openblocks.gui.misc"));
 		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
@@ -141,11 +145,53 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 		if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
 		if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
 		if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
+
+		int changelogsIndex = alignToEven(book);
+		book.addPage(PageBase.BLANK_PAGE);
+		setupBookmark(lblChangelogs, book, changelogsIndex);
+		book.addPage(new SectionPage("openblocks.gui.changelogs"));
+
+		createChangelogPages(book);
+
 		book.enablePages();
 
 		xSize = book.getWidth();
 		ySize = book.getHeight();
+
 		return book;
+	}
+
+	private static void createChangelogPages(final GuiComponentBook book) {
+		String prevVersion = null;
+		int prevIndex = 0;
+		List<ChangelogPage> prevPages = Lists.newArrayList();
+
+		final List<Changelog> changelogs = ChangelogBuilder.readChangeLogs();
+		for (int i = 0; i < changelogs.size(); i++) {
+			Changelog changelog = changelogs.get(i);
+			final String currentVersion = changelog.version;
+			int currentPage = book.getNumberOfPages();
+
+			for (ChangelogPage prevPage : prevPages)
+				prevPage.addNextVersionBookmark(book, currentVersion, currentPage);
+
+			prevPages.clear();
+
+			for (ChangelogSection section : changelog.sections) {
+				ChangelogPage page = new ChangelogPage(currentVersion, section.title, section.lines);
+				book.addPage(page);
+				prevPages.add(page);
+
+				if (i > 0) {
+					page.addPrevVersionBookmark(book, prevVersion, prevIndex);
+				}
+			}
+
+			alignToEven(book);
+
+			prevVersion = currentVersion;
+			prevIndex = currentPage;
+		}
 	}
 
 	@Override
