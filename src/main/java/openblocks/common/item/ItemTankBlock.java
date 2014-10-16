@@ -45,43 +45,72 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 	}
 
 	private static void saveTank(ItemStack container, FluidTank tank) {
-		NBTTagCompound itemTag = ItemUtils.getItemTag(container);
+		if (tank.getFluidAmount() > 0) {
+			NBTTagCompound itemTag = ItemUtils.getItemTag(container);
 
-		NBTTagCompound tankTag = new NBTTagCompound();
-		tank.writeToNBT(tankTag);
-		itemTag.setTag(TANK_TAG, tankTag);
+			NBTTagCompound tankTag = new NBTTagCompound();
+			tank.writeToNBT(tankTag);
+			itemTag.setTag(TANK_TAG, tankTag);
+		} else {
+			container.stackTagCompound = null;
+		}
 	}
 
 	@Override
 	public FluidStack getFluid(ItemStack container) {
 		FluidTank tank = readTank(container);
-		return tank != null? tank.getFluid() : null;
+		if (tank == null) return null;
+		FluidStack result = tank.getFluid();
+		if (result != null) result.amount *= container.stackSize;
+		return result;
 	}
 
 	@Override
 	public int getCapacity(ItemStack container) {
 		FluidTank tank = readTank(container);
-		return tank != null? tank.getCapacity() : 0;
+		return tank != null? tank.getCapacity() * container.stackSize : 0;
 	}
 
 	@Override
 	public int fill(ItemStack container, FluidStack resource, boolean doFill) {
+		if (resource == null) return 0;
+
 		FluidTank tank = readTank(container);
 		if (tank == null) return 0;
 
-		int result = tank.fill(resource, doFill);
+		final int count = container.stackSize;
+		if (count == 0) return 0;
+
+		final int amountPerTank = resource.amount / count;
+		if (amountPerTank == 0) return 0;
+
+		FluidStack resourcePerTank = resource.copy();
+		resourcePerTank.amount = amountPerTank;
+
+		int filledPerTank = tank.fill(resourcePerTank, doFill);
 		if (doFill) saveTank(container, tank);
-		return result;
+		return filledPerTank * count;
 	}
 
 	@Override
 	public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain) {
+		if (maxDrain <= 0) return null;
+
 		FluidTank tank = readTank(container);
 		if (tank == null) return null;
 
-		FluidStack result = tank.drain(maxDrain, doDrain);
+		final int count = container.stackSize;
+		if (count == 0) return null;
+
+		final int amountPerTank = maxDrain / count;
+		if (amountPerTank == 0) return null;
+
+		FluidStack drained = tank.drain(amountPerTank, doDrain);
 		if (doDrain) saveTank(container, tank);
-		return result;
+
+		if (drained != null) drained.amount *= count;
+
+		return drained;
 	}
 
 }

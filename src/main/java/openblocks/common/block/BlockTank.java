@@ -53,7 +53,7 @@ public class BlockTank extends OpenBlock {
 		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
 		if (!(te instanceof TileEntityTank)) return;
 		TileEntityTank tank = (TileEntityTank)te;
-		if (tank.getTank().getFluidAmount() > 10) {
+		if (tank.getTank().getFluidAmount() > 0) {
 			NBTTagCompound tankTag = tank.getItemNBT();
 
 			NBTTagCompound itemTag = ItemUtils.getItemTag(stack);
