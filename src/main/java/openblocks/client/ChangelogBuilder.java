@@ -1,4 +1,4 @@
-package openblocks.utils;
+package openblocks.client;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
