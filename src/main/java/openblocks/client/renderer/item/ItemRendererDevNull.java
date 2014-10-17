@@ -74,7 +74,6 @@ public class ItemRendererDevNull implements IItemRenderer {
 			tes.draw();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glFrontFace(GL11.GL_CCW);
-			GL11.glDisable(GL11.GL_CULL_FACE);
 		}
 	};
 
