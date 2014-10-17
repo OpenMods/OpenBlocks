@@ -143,6 +143,8 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 					}
 				}
 			}
+
+			if (tank.isDirty()) sync();
 		}
 	}
 
