@@ -3,7 +3,6 @@ package openblocks.common.item;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer.EnumStatus;
@@ -11,20 +10,28 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
 import openmods.utils.BlockUtils;
+import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSleepingBag extends ItemArmor {
 
-	private static final int ARMOR_CHESTPIECE = 1;
+	private static final String TAG_SPAWN_Z = "spawnz";
+	private static final String TAG_SPAWN_Y = "spawny";
+	private static final String TAG_SPAWN_X = "spawnx";
+	private static final String TAG_SLEEPING = "sleeping";
+	private static final int ARMOR_CHESTPIECE_TYPE = 1;
+	private static final int ARMOR_CHESTPIECE_SLOT = 2;
+
 	public static final String TEXTURE_SLEEPINGBAG = "openblocks:textures/models/sleepingbag.png";
 
 	public ItemSleepingBag() {
-		super(ArmorMaterial.IRON, 2, ARMOR_CHESTPIECE);
+		super(ArmorMaterial.IRON, 2, ARMOR_CHESTPIECE_TYPE);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
@@ -42,95 +49,94 @@ public class ItemSleepingBag extends ItemArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-		return armorSlot == ARMOR_CHESTPIECE? ModelSleepingBag.instance : null;
+		return armorSlot == ARMOR_CHESTPIECE_TYPE? ModelSleepingBag.instance : null;
 	}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack sleepingBagStack, World world, EntityPlayer player) {
-		if (world.isRemote) { return sleepingBagStack; }
-		ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
-		EnumStatus status = player.sleepInBedAt((int)player.posX, (int)player.posY, (int)player.posZ);
-		if (status == EnumStatus.OK) {
-			int i = EntityLiving.getArmorPosition(sleepingBagStack) - 1;
-			ItemStack currentArmor = player.getCurrentArmor(i);
-			if (currentArmor != null) {
-				currentArmor = currentArmor.copy();
-			}
-			saveOriginalSpawn(spawn, sleepingBagStack);
-			player.setCurrentItemOrArmor(i + 1, sleepingBagStack.copy());
-			if (currentArmor != null) { return currentArmor; }
-			sleepingBagStack.stackSize--;
-			return sleepingBagStack;
+		if (!world.isRemote) {
+			ItemStack currentArmor = player.getCurrentArmor(ARMOR_CHESTPIECE_SLOT);
+			if (currentArmor != null) currentArmor = currentArmor.copy();
+			setChestPieceSlot(player, sleepingBagStack.copy());
+			if (currentArmor != null) return currentArmor;
+			sleepingBagStack.stackSize = 0;
 		}
 		return sleepingBagStack;
 	}
 
 	@Override
 	public boolean isValidArmor(ItemStack stack, int armorType, Entity entity) {
-		return armorType == ARMOR_CHESTPIECE;
+		return armorType == ARMOR_CHESTPIECE_TYPE;
 	}
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if (!world.isRemote) {
-			NBTTagCompound tag = getOrCreateTag(itemStack);
-			if (!player.isPlayerSleeping()) {
-				if (tag != null && tag.hasKey("sleeping") && tag.getBoolean("sleeping")) {
-					ejectSleepingBagFromPlayer(player, itemStack);
-				} else {
-					ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
-					EnumStatus status = player.sleepInBedAt((int)player.posX, (int)player.posY, (int)player.posZ);
-					if (status == EnumStatus.OK) {
-						saveOriginalSpawn(spawn, itemStack);
-					} else {
-						ejectSleepingBagFromPlayer(player, itemStack);
-					}
-				}
+		if (world.isRemote) return;
+		if (player.isPlayerSleeping()) return;
+
+		NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
+		if (tag.getBoolean(TAG_SLEEPING)) {
+			// player just woke up
+			revertSpawnFromTag(player, tag);
+			tag.removeTag(TAG_SLEEPING);
+			ejectSleepingBagFromPlayer(player);
+		} else {
+			// player just put in on
+			EnumStatus status = player.sleepInBedAt(
+					MathHelper.floor_double(player.posX),
+					MathHelper.floor_double(player.posY),
+					MathHelper.floor_double(player.posZ));
+			if (status == EnumStatus.OK) {
+				ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
+				saveOriginalSpawn(spawn, tag);
+				tag.setBoolean(TAG_SLEEPING, true);
 			} else {
-				tag.setBoolean("sleeping", true);
+				ejectSleepingBagFromPlayer(player);
 			}
 		}
+
 	}
 
-	private static void ejectSleepingBagFromPlayer(EntityPlayer player, ItemStack itemStack) {
-		NBTTagCompound tag = getOrCreateTag(itemStack);
-		player.setCurrentItemOrArmor(3, null);
-		revertSpawnFromItem(player, itemStack);
-		tag.setBoolean("sleeping", false);
-		BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, itemStack);
-	}
-
-	private static NBTTagCompound getOrCreateTag(ItemStack itemStack) {
-		NBTTagCompound tag = itemStack.getTagCompound();
-		if (tag == null) {
-			tag = new NBTTagCompound();
-			itemStack.setTagCompound(tag);
-		}
-		return tag;
-	}
-
-	private static void revertSpawnFromItem(EntityPlayer player, ItemStack itemStack) {
-		NBTTagCompound tag = itemStack.getTagCompound();
-		if (tag != null) {
-			if (tag.hasKey("spawnx") && tag.hasKey("spawny")
-					&& tag.hasKey("spawnz")) {
-				ChunkCoordinates coords = new ChunkCoordinates(tag.getInteger("spawnx"), tag.getInteger("spawny"), tag.getInteger("spawnz"));
-				player.setSpawnChunk(coords, false, player.worldObj.provider.dimensionId);
-			}
+	private static void ejectSleepingBagFromPlayer(EntityPlayer player) {
+		ItemStack stack = getChestpieceSlot(player);
+		if (isSleepingBag(stack)) {
+			setChestPieceSlot(player, null);
+			BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, stack);
 		}
 	}
 
-	private static void saveOriginalSpawn(ChunkCoordinates spawn, ItemStack stack) {
+	private static void revertSpawnFromTag(EntityPlayer player, NBTTagCompound tag) {
+		if (tag.hasKey(TAG_SPAWN_X) && tag.hasKey(TAG_SPAWN_Y) && tag.hasKey(TAG_SPAWN_Z)) {
+			ChunkCoordinates coords = new ChunkCoordinates(tag.getInteger(TAG_SPAWN_X), tag.getInteger(TAG_SPAWN_Y), tag.getInteger(TAG_SPAWN_Z));
+			player.setSpawnChunk(coords, false, player.worldObj.provider.dimensionId);
+			tag.removeTag(TAG_SPAWN_X);
+			tag.removeTag(TAG_SPAWN_Y);
+			tag.removeTag(TAG_SPAWN_Z);
+		}
+	}
+
+	private static void saveOriginalSpawn(ChunkCoordinates spawn, NBTTagCompound tag) {
 		if (spawn != null) {
-			NBTTagCompound tag = getOrCreateTag(stack);
-			tag.setInteger("spawnx", spawn.posX);
-			tag.setInteger("spawny", spawn.posY);
-			tag.setInteger("spawnz", spawn.posZ);
+			tag.setInteger(TAG_SPAWN_X, spawn.posX);
+			tag.setInteger(TAG_SPAWN_Y, spawn.posY);
+			tag.setInteger(TAG_SPAWN_Z, spawn.posZ);
 		}
 	}
 
 	public static boolean isWearingSleepingBag(EntityPlayer player) {
-		ItemStack armor = player.getCurrentArmor(2);
+		ItemStack armor = getChestpieceSlot(player);
+		return isSleepingBag(armor);
+	}
+
+	private static boolean isSleepingBag(ItemStack armor) {
 		return armor != null && armor.getItem() instanceof ItemSleepingBag;
+	}
+
+	private static ItemStack setChestPieceSlot(EntityPlayer player, ItemStack chestpiece) {
+		return player.inventory.armorInventory[ARMOR_CHESTPIECE_SLOT] = chestpiece;
+	}
+
+	private static ItemStack getChestpieceSlot(EntityPlayer player) {
+		return player.inventory.armorInventory[ARMOR_CHESTPIECE_SLOT];
 	}
 }
