@@ -229,6 +229,9 @@ public class Config {
 	@ConfigProperty(category = "features", name = "infoBook", comment = "Should every player get info book on first login")
 	public static boolean spamInfoBook = true;
 
+	@ConfigProperty(category = "features", name = "xpFluidId", comment = "Id of liquid XP fluid (WARNING: only for users who know what they are doing - changing this id can break worlds")
+	public static String xpFluidId = "xpjuice";
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
@@ -537,8 +540,8 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Items.redstone, 'c', Items.clock));
 		}
 
-		OpenBlocks.Fluids.xpJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
-		FluidRegistry.registerFluid(OpenBlocks.Fluids.xpJuice);
+		OpenBlocks.Fluids.xpJuice = new Fluid(xpFluidId).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		if (!FluidRegistry.registerFluid(OpenBlocks.Fluids.xpJuice)) throw new IllegalStateException(String.format("Can't register fluid '%s', config change may be needed", xpFluidId));
 
 		if (OpenBlocks.Items.filledBucket != null) {
 			MetasBucket.registerItems();
