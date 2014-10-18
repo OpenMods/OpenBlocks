@@ -194,7 +194,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 		if (block != null) {
 			block.setHasAirResistance(false);
 			block.setHasGravity(false);
-			block.setShouldDrop(false);
 			block.motionY = 0.1;
 			blocks.add(block);
 			worldObj.spawnEntityInWorld(block);
@@ -203,7 +202,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	private void dropBlocks() {
 		for (EntityBlock block : blocks) {
-			block.setShouldDrop(true);
 			block.motionY = -0.9;
 			block.setHasGravity(true);
 		}
