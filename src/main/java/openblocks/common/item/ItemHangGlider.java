@@ -3,7 +3,6 @@ package openblocks.common.item;
 import java.util.Map;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,7 +10,11 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 
+import com.google.common.collect.MapMaker;
+
 public class ItemHangGlider extends Item {
+
+	private static Map<EntityPlayer, EntityHangGlider> spawnedGlidersMap = new MapMaker().weakKeys().weakValues().makeMap();
 
 	public ItemHangGlider() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
@@ -24,28 +27,23 @@ public class ItemHangGlider extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		Map<EntityPlayer, Integer> map = EntityHangGlider.getMapForSide(world.isRemote);
-		if (map.containsKey(player)) {
-			int entityId = map.get(player);
-			Entity entity = world.getEntityByID(entityId);
-			if (!(entity instanceof EntityHangGlider)) { return itemStack; }
-			EntityHangGlider glider = (EntityHangGlider)entity;
-			glider.despawnGlider();
-		} else {
-			spawnGlider(world, player);
+		if (!world.isRemote) {
+			EntityHangGlider glider = spawnedGlidersMap.get(player);
+			if (glider != null) despawnGlider(player, glider);
+			else spawnGlider(player);
 		}
 		return itemStack;
 	}
 
-	private void spawnGlider(World world, EntityPlayer player) {
-		if (!world.isRemote) {
-			ItemStack heldStack = player.getHeldItem();
-			if (heldStack != null && heldStack.getItem() == this) {
-				EntityHangGlider glider = new EntityHangGlider(world, player);
-				glider.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationPitch, player.rotationYaw);
-				glider.onUpdate();
-				world.spawnEntityInWorld(glider);
-			}
-		}
+	private static void despawnGlider(EntityPlayer player, EntityHangGlider glider) {
+		glider.setDead();
+		spawnedGlidersMap.remove(player);
+	}
+
+	private static void spawnGlider(EntityPlayer player) {
+		EntityHangGlider glider = new EntityHangGlider(player.worldObj, player);
+		glider.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationPitch, player.rotationYaw);
+		player.worldObj.spawnEntityInWorld(glider);
+		spawnedGlidersMap.put(player, glider);
 	}
 }
