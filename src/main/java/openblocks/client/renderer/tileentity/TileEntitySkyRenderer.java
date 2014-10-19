@@ -14,7 +14,6 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 
-	private boolean disableStencil;
 	private boolean initialized;
 
 	private int displayListBase;
@@ -22,8 +21,6 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTickTime) {
-		if (disableStencil) return;
-
 		int meta = te.getBlockMetadata();
 		if (!BlockSky.isActive(meta)) return;
 
@@ -44,22 +41,19 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 	}
 
 	protected void intialize() {
+		displayListBase = GL11.glGenLists(2);
+		GL11.glNewList(displayListBase, GL11.GL_COMPILE);
+		renderCube();
+		GL11.glEndList();
+
 		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
+		final int mask = 1 << stencilBit;
 
-		if (stencilBit >= 0) {
-			final int mask = 1 << stencilBit;
+		GL11.glNewList(displayListBase + 1, GL11.GL_COMPILE);
+		if (stencilBit >= 0) cutHoleInWorld(mask);
+		GL11.glEndList();
 
-			displayListBase = GL11.glGenLists(2);
-			GL11.glNewList(displayListBase, GL11.GL_COMPILE);
-			renderCube();
-			GL11.glEndList();
-
-			GL11.glNewList(displayListBase + 1, GL11.GL_COMPILE);
-			cutHoleInWorld(mask);
-			GL11.glEndList();
-
-			handler = new StencilSkyRenderer(mask);
-		} else disableStencil = true;
+		handler = stencilBit >= 0? new StencilSkyRenderer(mask) : StencilRendererHandler.DUMMY;
 	}
 
 	private static void renderCube() {
