@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer.EnumStatus;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -82,16 +83,23 @@ public class ItemSleepingBag extends ItemArmor {
 			ejectSleepingBagFromPlayer(player);
 		} else {
 			// player just put in on
-			EnumStatus status = player.sleepInBedAt(
-					MathHelper.floor_double(player.posX),
-					MathHelper.floor_double(player.posY),
-					MathHelper.floor_double(player.posZ));
-			if (status == EnumStatus.OK) {
-				ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
-				saveOriginalSpawn(spawn, tag);
-				tag.setBoolean(TAG_SLEEPING, true);
-			} else {
+			final int posX = MathHelper.floor_double(player.posX);
+			final int posY = MathHelper.floor_double(player.posY + 1);
+			final int posZ = MathHelper.floor_double(player.posZ);
+
+			if (!world.getBlock(posX, posY + 1, posZ).isAir(world, posX, posY, posZ)) {
+				player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.oh_no_ceiling"));
 				ejectSleepingBagFromPlayer(player);
+			} else {
+				EnumStatus status = player.sleepInBedAt(posX, posY, posZ);
+				if (status == EnumStatus.OK) {
+					ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
+					player.setPosition(player.posX, player.posY, player.posZ);
+					saveOriginalSpawn(spawn, tag);
+					tag.setBoolean(TAG_SLEEPING, true);
+				} else {
+					ejectSleepingBagFromPlayer(player);
+				}
 			}
 		}
 
