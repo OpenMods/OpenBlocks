@@ -31,7 +31,7 @@ public abstract class MagnetControlAdapterBase implements IUpdateHandler, IWorld
 			target.zCoord = z;
 		}
 
-		public Vec3 getTarget(Vec3 pos, ForgeDirection side) {
+		public synchronized Vec3 getTarget(Vec3 pos, ForgeDirection side) {
 			pos.yCoord += target.yCoord;
 			switch (side) {
 				case NORTH:
