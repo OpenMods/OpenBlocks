@@ -11,12 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.Config;
 import openblocks.shapes.GuideShape;
 import openmods.api.IActivateAwareTile;
+import openmods.api.INeighbourAwareTile;
 import openmods.shapes.IShapeable;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableInt;
+import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
@@ -26,7 +26,7 @@ import com.google.common.collect.Sets;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IActivateAwareTile, ISyncListener {
+public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IActivateAwareTile, ISyncListener, INeighbourAwareTile {
 
 	private Set<Coord> shape;
 	private Set<Coord> previousShape;
@@ -37,6 +37,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	protected SyncableInt depth;
 	protected SyncableInt mode;
 	protected SyncableInt color;
+	protected SyncableBoolean active;
 
 	public TileEntityGuide() {
 		syncMap.addUpdateListener(this);
@@ -49,6 +50,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		depth = new SyncableInt(8);
 		mode = new SyncableInt(0);
 		color = new SyncableInt(0xFFFFFF);
+		active = new SyncableBoolean();
 	}
 
 	public int getWidth() {
@@ -83,6 +85,10 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		return GuideShape.values()[mode.get()];
 	}
 
+	public boolean shouldRender() {
+		return Config.guideRedstone == 0 || ((Config.guideRedstone < 0) ^ active.get());
+	}
+
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote) {
@@ -100,7 +106,6 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		previousShape = shape;
 		shape = Sets.newHashSet();
 		getCurrentMode().generator.generateShape(getWidth(), getHeight(), getDepth(), this);
-		timeSinceChange = 0;
 	}
 
 	@Override
@@ -205,7 +210,10 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 
 	@Override
 	public void onSync(Set<ISyncableObject> changes) {
-		recreateShape();
+		if (changes.contains(depth) || changes.contains(height) || changes.contains(width) || changes.contains(mode)) {
+			recreateShape();
+			timeSinceChange = 0;
+		}
 	}
 
 	@Override
@@ -262,5 +270,14 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		if (Config.guideRedstone != 0) {
+			boolean redstoneState = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+			active.set(redstoneState);
+			sync();
+		}
 	}
 }

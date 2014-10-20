@@ -39,14 +39,16 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide)tileentity;
 
-		GL11.glPushMatrix();
-		GL11.glTranslated(x, y, z);
-		float scaleDelta = guide.getTimeSinceChange();
-		renderShape(guide.getShape(), guide.getColor(), scaleDelta);
-		if (scaleDelta < 1.0) {
-			renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
+		if (guide.shouldRender()) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y, z);
+			float scaleDelta = guide.getTimeSinceChange();
+			renderShape(guide.getShape(), guide.getColor(), scaleDelta);
+			if (scaleDelta < 1.0) {
+				renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
+			}
+			GL11.glPopMatrix();
 		}
-		GL11.glPopMatrix();
 	}
 
 	private void renderShape(Collection<Coord> shape, int color, float scale) {

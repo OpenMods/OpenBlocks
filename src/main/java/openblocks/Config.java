@@ -232,6 +232,10 @@ public class Config {
 	@ConfigProperty(category = "features", name = "xpFluidId", comment = "Id of liquid XP fluid (WARNING: only for users who know what they are doing - changing this id can break worlds")
 	public static String xpFluidId = "xpjuice";
 
+	@OnLineModifiable
+	@ConfigProperty(category = "guide", name = "redstoneSensitivity", comment = "How builder guide should react to redstone. 0 - not sensitive, 1 - powered == on, -1 - inverted")
+	public static int guideRedstone = 1;
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
