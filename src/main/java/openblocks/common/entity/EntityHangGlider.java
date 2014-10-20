@@ -34,7 +34,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	}
 
 	private static boolean isGliderValid(EntityPlayer player, EntityHangGlider glider) {
-		if (player == null || player.isDead || glider == null | glider.isDead) return false;
+		if (player == null || player.isDead || glider == null || glider.isDead) return false;
 
 		ItemStack held = player.getHeldItem();
 		if (held == null || !(held.getItem() instanceof ItemHangGlider)) return false;
