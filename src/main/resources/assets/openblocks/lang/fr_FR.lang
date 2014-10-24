@@ -312,7 +312,19 @@ item.openblocks.crane_engine.name=Crane Engine
 item.openblocks.crane_magnet.name=Crane Magnet
 item.openblocks.beam.name=Beam
 item.openblocks.line.name=Line
-
+item.openblocks.miracle_magnet.name=§5Aimant de Miracle§r
+item.openblocks.info_book.name=Domination du monde avec OpenBlocks
+item.openblocks.xpbucket.name=XP Seau
+item.openblocks.height_map.name=Hauteur Carte
+item.openblocks.empty_map.name=Vide Carte
+item.openblocks.map_controller.name=Crate Contrôleur Module
+item.openblocks.map_memory.name=Carte Mémoire Module
+item.openblocks.cartographer.name=Cartographe
+item.openblocks.assistant_base.name=Base De l'adjoint
+item.openblocks.sketching_pencil.name=Esquisse Crayon
+item.openblocks.tasty_clay.name=Savoureux Argile
+item.openblocks.golden_eye.name=D'or œil
+item.openblocks.pointer.name=Aiguille
 item.openblocks.tuned_crystal.name=Tuned Crystal
 item.openblocks.pedometer.name=Pedometer
 
