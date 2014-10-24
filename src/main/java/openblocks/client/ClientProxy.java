@@ -1,9 +1,6 @@
 package openblocks.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -117,12 +114,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.hangGlider != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
-
-			ItemRendererHangGlider hangGliderRenderer = new ItemRendererHangGlider();
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider, hangGliderRenderer);
-			MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
-
-			attachPlayerRenderer();
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider, new ItemRendererHangGlider());
+			MinecraftForge.EVENT_BUS.register(new GliderPlayerRenderHandler());
 		}
 
 		if (OpenBlocks.Items.sonicGlasses != null) {
@@ -160,19 +153,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.elevator != null) {
 			MinecraftForge.EVENT_BUS.register(new ElevatorMovementHandler());
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void attachPlayerRenderer() {
-		if (Config.tryHookPlayerRenderer) {
-			// Get current renderer and check that it's Mojangs
-			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
-			if (render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)) {
-				EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
-				playerRenderer.setRenderManager(RenderManager.instance);
-				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
-			}
 		}
 	}
 

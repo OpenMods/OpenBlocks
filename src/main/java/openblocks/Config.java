@@ -58,9 +58,6 @@ public class Config {
 	@ConfigProperty(category = "tanks", name = "tankTicks", comment = "Should tanks try to balance liquid amounts with neighbours")
 	public static boolean shouldTanksUpdate = true;
 
-	@ConfigProperty(category = "hacks", name = "tryHookPlayerRenderer", comment = "Allow OpenBlocks to hook the player renderer to apply special effects")
-	public static boolean tryHookPlayerRenderer = true;
-
 	@OnLineModifiable
 	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000")
 	public static double trophyDropChance = 0.001;
