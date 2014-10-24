@@ -1,24 +1,24 @@
 achievement.openblocks.droppedBrick=Zoinks!
-achievement.openblocks.droppedBrick.desc=Sorry, it just happened...
-stat.openblocks.bricksDropped=Bricks dropped
+achievement.openblocks.droppedBrick.desc=Désolé, il vient de se passer...
+stat.openblocks.bricksDropped=Briques abandonnées
 
 openblocks.keybind.category=OpenBlocks
-openblocks.keybind.drop_brick=Be silly
+openblocks.keybind.drop_brick=Soyez stupide
 
-enchantment.openblocks.explosive=Unstable
-enchantment.openblocks.laststand=Last Stand
+enchantment.openblocks.explosive=Instable
+enchantment.openblocks.laststand=Dernier Combat
 enchantment.openblocks.flimflam=Flim Flam
 
-openblocks.gui.blocks=Blocks
-openblocks.gui.items=Items
+openblocks.gui.blocks=Blocs
+openblocks.gui.items=Articles
 openblocks.gui.misc=Misc
-openblocks.gui.changelogs=Changelogs
+openblocks.gui.changelogs=Modifier les journaux
 
-openblocks.gui.features=Features
-openblocks.gui.bugfixes=Bugfixes
-openblocks.gui.tweaks=Tweaks
+openblocks.gui.features=Traits
+openblocks.gui.bugfixes=Correction de bugs
+openblocks.gui.tweaks=Pincers
 
-openblocks.gui.luggage=Luggage
+openblocks.gui.luggage=Bagage
 openblocks.gui.sprinkler=Sprinkler
 openblocks.gui.vacuumhopper=Vacuum Hopper
 openblocks.gui.bigbutton=Big Button
