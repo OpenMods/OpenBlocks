@@ -21,11 +21,6 @@ public class BlockXPBottler extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
 	public void registerBlockIcons(IIconRegister registry) {
 		Icons.front = registry.registerIcon("openblocks:xpbottler_front");
 		Icons.top = registry.registerIcon("openblocks:xpbottler_top");

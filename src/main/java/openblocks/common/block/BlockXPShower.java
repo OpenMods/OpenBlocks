@@ -15,11 +15,7 @@ public class BlockXPShower extends OpenBlock {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override

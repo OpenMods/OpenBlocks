@@ -14,10 +14,4 @@ public class BlockXPDrain extends OpenBlock {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
 }

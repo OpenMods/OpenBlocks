@@ -33,11 +33,6 @@ public class BlockProjector extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
 		sideIcon = registry.registerIcon("stone_slab_side");

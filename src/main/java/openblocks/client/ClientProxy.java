@@ -24,6 +24,7 @@ import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
+import openmods.renderer.BlockRenderingValidator;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -154,6 +155,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.elevator != null) {
 			MinecraftForge.EVENT_BUS.register(new ElevatorMovementHandler());
 		}
+
+		new BlockRenderingValidator().verifyBlocks(OpenBlocks.Blocks.class);
 	}
 
 	@Override

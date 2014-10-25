@@ -17,11 +17,6 @@ public class BlockItemDropper extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
 		super.registerBlockIcons(registry);

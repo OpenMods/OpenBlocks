@@ -13,11 +13,7 @@ public class BlockBearTrap extends OpenBlock {
 	public BlockBearTrap() {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override

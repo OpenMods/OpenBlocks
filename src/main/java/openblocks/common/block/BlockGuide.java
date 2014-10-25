@@ -24,16 +24,6 @@ public class BlockGuide extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean useTESRForInventory() {
-		return false;
-	}
-
-	@Override
 	public void registerBlockIcons(IIconRegister registry) {
 		Icons.marker = registry.registerIcon("openblocks:guide");
 		Icons.ends = registry.registerIcon("openblocks:guide_top");

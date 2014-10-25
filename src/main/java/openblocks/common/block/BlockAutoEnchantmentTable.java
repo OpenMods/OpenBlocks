@@ -16,16 +16,12 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	public BlockAutoEnchantmentTable() {
 		super(Material.rock);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
+		setRenderMode(RenderMode.BOTH);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
 	}
 
 	@Override

@@ -9,12 +9,8 @@ public class BlockFan extends OpenBlock {
 	public BlockFan() {
 		super(Material.circuits);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 1.0f, 0.8f);
+		setRenderMode(RenderMode.TESR_ONLY);
 		/* No rotation, handled by TE */
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
 	}
 
 	@Override

@@ -25,11 +25,6 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		clearupLiquid(world, x, y, z);
 	}

@@ -8,16 +8,11 @@ public class BlockPaintMixer extends OpenBlock {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0.125f, 0f, 0.125f, 0.875f, 1f, 0.875f);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
-	}
-
 }

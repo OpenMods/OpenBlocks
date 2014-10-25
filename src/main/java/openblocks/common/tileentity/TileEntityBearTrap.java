@@ -25,13 +25,14 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	// can't be added as new flag, since animation depends on it
 	private SyncableBoolean isLocked;
 	private SyncableInt trappedEntityId;
-	private int ticksSinceChange;
+	private int tickSinceOpened;
 
 	public TileEntityBearTrap() {
 		syncMap.addUpdateListener(new ISyncListener() {
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {
-				ticksSinceChange = 0;
+				if (changes.contains(flags) && !isShut())
+				tickSinceOpened = 0;
 			}
 		});
 	}
@@ -47,7 +48,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		ticksSinceChange++;
+		tickSinceOpened++;
 		final int entityId = trappedEntityId.get();
 		if (entityId != 0) immobilizeEntity(entityId);
 		if (!worldObj.isRemote) sync();
@@ -75,7 +76,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (entity instanceof EntityCreature && !isLocked.get() && ticksSinceChange > OPENING_ANIMATION_TIME) {
+			if (entity instanceof EntityCreature && !isLocked.get() && tickSinceOpened > OPENING_ANIMATION_TIME) {
 				close(entity);
 			}
 		}
@@ -94,8 +95,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 		return e.myEntitySize.ordinal() + 1;
 	}
 
-	public int tickSinceChange() {
-		return ticksSinceChange;
+	public int ticksSinceOpened() {
+		return tickSinceOpened;
 	}
 
 	@Override

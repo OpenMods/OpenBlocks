@@ -69,11 +69,6 @@ public class BlockCanvas extends OpenBlock {
 		return false;
 	}
 
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
 	public void setLayerForRender(int layer) {
 		this.layer = layer;
 	}

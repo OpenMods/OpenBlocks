@@ -73,11 +73,6 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
 		if (renderPass == 0 && side == 1) {
 			return false;

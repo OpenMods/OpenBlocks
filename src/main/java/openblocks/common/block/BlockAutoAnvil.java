@@ -11,6 +11,7 @@ public class BlockAutoAnvil extends OpenBlock {
 		setStepSound(soundTypeAnvil);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setInventoryRenderRotation(ForgeDirection.NORTH);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -22,10 +23,4 @@ public class BlockAutoAnvil extends OpenBlock {
 	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
 		return false;
 	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
-	}
-
 }

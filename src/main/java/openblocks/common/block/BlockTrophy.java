@@ -17,16 +17,12 @@ public class BlockTrophy extends OpenBlock {
 		super(Material.rock);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 0.2f, 0.8f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRenderMode(RenderMode.BOTH);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
 	}
 
 	protected ItemStack getDroppedBlock(TileEntityTrophy te) {

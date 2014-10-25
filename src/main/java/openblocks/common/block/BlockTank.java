@@ -21,6 +21,7 @@ public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
 		super(Material.rock);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -35,11 +36,6 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 

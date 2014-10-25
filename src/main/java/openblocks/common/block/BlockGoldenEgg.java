@@ -9,17 +9,13 @@ public class BlockGoldenEgg extends OpenBlock {
 
 	public BlockGoldenEgg() {
 		super(Material.ground);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
 		blockIcon = registry.registerIcon("openblocks:egg");
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
 	}
 
 	@Override

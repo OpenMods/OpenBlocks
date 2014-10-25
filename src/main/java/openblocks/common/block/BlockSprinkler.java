@@ -12,15 +12,11 @@ public class BlockSprinkler extends OpenBlock {
 	public BlockSprinkler() {
 		super(Material.water);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 

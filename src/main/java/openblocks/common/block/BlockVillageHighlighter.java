@@ -9,15 +9,11 @@ public class BlockVillageHighlighter extends OpenBlock {
 	public BlockVillageHighlighter() {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 

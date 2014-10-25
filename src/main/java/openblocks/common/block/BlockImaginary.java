@@ -41,6 +41,7 @@ public class BlockImaginary extends OpenBlock {
 		super(Material.glass);
 		setHardness(0.3f);
 		stepSound = drawingSounds;
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -110,11 +111,6 @@ public class BlockImaginary extends OpenBlock {
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 

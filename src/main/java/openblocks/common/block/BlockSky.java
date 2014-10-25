@@ -17,16 +17,6 @@ public class BlockSky extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean useTESRForInventory() {
-		return false;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
 		blockIcon = registry.registerIcon("openblocks:sky_inactive");

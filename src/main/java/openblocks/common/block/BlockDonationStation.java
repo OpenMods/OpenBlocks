@@ -9,6 +9,7 @@ public class BlockDonationStation extends OpenBlock {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0.2f, 0.25f, 0.2f, 0.8f, 0.85f, 0.8f);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -20,10 +21,4 @@ public class BlockDonationStation extends OpenBlock {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
-	}
-
 }

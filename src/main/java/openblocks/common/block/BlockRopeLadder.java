@@ -23,6 +23,7 @@ public class BlockRopeLadder extends OpenBlock {
 		setStepSound(soundTypeLadder);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -37,11 +38,6 @@ public class BlockRopeLadder extends OpenBlock {
 	@Override
 	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
 	}
 
 	@Override

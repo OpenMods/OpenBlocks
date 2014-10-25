@@ -46,15 +46,11 @@ public class BlockFlag extends OpenBlock {
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 		setInventoryRenderRotation(ForgeDirection.DOWN);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 
