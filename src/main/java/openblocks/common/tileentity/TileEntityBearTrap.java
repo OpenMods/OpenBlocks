@@ -31,8 +31,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 		syncMap.addUpdateListener(new ISyncListener() {
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {
-				if (changes.contains(flags) && !isShut())
-				tickSinceOpened = 0;
+				if (changes.contains(flags) && !isShut()) tickSinceOpened = 0;
 			}
 		});
 	}

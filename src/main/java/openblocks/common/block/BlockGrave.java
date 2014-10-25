@@ -3,6 +3,7 @@ package openblocks.common.block;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import openmods.block.BlockRotationMode;
 
 public class BlockGrave extends OpenBlock {
 

@@ -1,6 +1,7 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import openmods.block.BlockRotationMode;
 
 public class BlockPaintMixer extends OpenBlock {
 

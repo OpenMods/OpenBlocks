@@ -6,12 +6,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntitySprinkler;
+import openmods.block.BlockRotationMode;
 
 public class BlockSprinkler extends OpenBlock {
 
 	public BlockSprinkler() {
 		super(Material.water);
-		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRotationMode(BlockRotationMode.TWO_DIRECTIONS);
 		setRenderMode(RenderMode.TESR_ONLY);
 	}
 

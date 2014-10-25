@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmods.block.BlockRotationMode;
 
 public class BlockXPBottler extends OpenBlock {
 

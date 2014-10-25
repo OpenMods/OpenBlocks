@@ -3,6 +3,7 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
+import openmods.block.BlockRotationMode;
 
 public class BlockVillageHighlighter extends OpenBlock {
 

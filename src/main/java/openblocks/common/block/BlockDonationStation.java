@@ -2,6 +2,7 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import openmods.block.BlockRotationMode;
 
 public class BlockDonationStation extends OpenBlock {
 

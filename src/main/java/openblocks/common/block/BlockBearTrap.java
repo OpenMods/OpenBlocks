@@ -7,12 +7,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityBearTrap;
+import openmods.block.BlockRotationMode;
 
 public class BlockBearTrap extends OpenBlock {
 
 	public BlockBearTrap() {
 		super(Material.rock);
-		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRotationMode(BlockRotationMode.TWO_DIRECTIONS);
 		setRenderMode(RenderMode.TESR_ONLY);
 	}
 

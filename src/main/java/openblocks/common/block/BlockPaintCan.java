@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.item.ItemPaintCan;
 import openblocks.common.tileentity.TileEntityPaintCan;
+import openmods.block.BlockRotationMode;
 
 public class BlockPaintCan extends OpenBlock {
 

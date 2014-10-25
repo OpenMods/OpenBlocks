@@ -10,6 +10,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
+import openmods.block.BlockRotationMode;
 
 public class BlockTrophy extends OpenBlock {
 
