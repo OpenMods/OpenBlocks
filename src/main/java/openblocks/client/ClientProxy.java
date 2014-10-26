@@ -137,7 +137,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.devNull, new ItemRendererDevNull());
 		}
 
-		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());
+		if (OpenBlocks.Items.sleepingBag != null) {
+			MinecraftForge.EVENT_BUS.register(new SleepingBagRenderHandler());
+		}
+
 		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
 
 		if (OpenBlocks.Items.cartographer != null) {

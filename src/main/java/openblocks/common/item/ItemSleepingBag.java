@@ -98,6 +98,12 @@ public class ItemSleepingBag extends ItemArmor {
 					saveOriginalSpawn(spawn, tag);
 					tag.setBoolean(TAG_SLEEPING, true);
 				} else {
+					if (status == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW) {
+						player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep"));
+					} else if (status == EntityPlayer.EnumStatus.NOT_SAFE) {
+						player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe"));
+					}
+
 					ejectSleepingBagFromPlayer(player);
 				}
 			}
