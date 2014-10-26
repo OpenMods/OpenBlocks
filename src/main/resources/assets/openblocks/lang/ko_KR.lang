@@ -1,0 +1,340 @@
+achievement.openblocks.droppedBrick=Zoinks!
+achievement.openblocks.droppedBrick.desc=Sorry, it just happened...
+stat.openblocks.bricksDropped=Bricks dropped
+
+openblocks.keybind.category=오픈블럭
+openblocks.keybind.drop_brick=바보
+
+enchantment.openblocks.explosive=불안정
+enchantment.openblocks.laststand=최후의안정
+enchantment.openblocks.flimflam=허튼소리
+
+openblocks.gui.blocks=블럭
+openblocks.gui.items=아이템
+openblocks.gui.misc=기타
+openblocks.gui.changelogs=변경사항
+
+openblocks.gui.features=특징
+openblocks.gui.bugfixes=버그수정
+openblocks.gui.tweaks=수정
+
+openblocks.gui.luggage=여행가방
+openblocks.gui.sprinkler=스프링쿨러
+openblocks.gui.vacuumhopper=진공 깔때기
+openblocks.gui.bigbutton=큰 버튼
+openblocks.gui.xpbottler=경험치병 제조기
+openblocks.gui.autoanvil=자동 모루
+openblocks.gui.autoeject=자동 입출력
+openblocks.gui.autoextract=자동 추출
+openblocks.gui.autodrink=자동 입력
+openblocks.gui.autoenchantmenttable=자동 인첸트테이블
+openblocks.gui.donationstation=Donation Station
+openblocks.gui.itemdropper=Item Dropper
+openblocks.gui.blockplacer=블럭 설치기
+openblocks.gui.paintmixer=페인트 믹서
+openblocks.gui.drawingtable=Drawing Table
+openblocks.gui.digitalfuse=Digital Fuse
+openblocks.gui.xp_outputs=경험치 추출
+openblocks.gui.item_outputs=아이템 추출
+openblocks.gui.watch_video=비디오 보기
+openblocks.gui.max_level=최대 레벨: %d
+
+openblocks.gui.welcome.title=어서오세요!
+openblocks.gui.welcome.content=OpenBlocks는 행글라이더, 엘리베이터, 탱크, 무덤, 페인트, 크레인, 액체 XP, 지도, 트로피 등외에도 많은것들을 추가하는 오픈 소스 모드입니다!
+
+openblocks.gui.credits.title=제작자
+openblocks.gui.credits.content=§LBoq, Mikee and NeverCast§R - 오픈블럭 매인개발자 (are we allowed to credit ourselves?)\n\n§LSinZ and Yoshi2§R - 오픈블럭 초창기멤버.\n\n§LVexatos and crafteverywhere§R - 정기적으로 모드를 번역.\n\n지난 한해동안 도움을 준 사람들. \n\n§LDirewolf20과 ForgeCraft§R - 출시전 크래쉬와 버그 발견\n\n누구던지 우리의 모드를 소개할 수 있습니다.\n\n§LTeamMMKP§R - 오픈블럭 한국어 번역자
+
+openblocks.gui.config.title=쉬운 설정 변경
+openblocks.gui.config.content=OpenMods커맨드로 설정을 재로드 할수 있으며 마인크래프트를 재실행할 필요가 없습니다!\n\n서버 설정은 '§L/om_config_s§R'에서 할 수 있습니다 (op권한 필요) 클라이언트 설정은 '§L/om_config_c§R'에서 하실 수 있습니다.\n\n예제:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFor a full list of commands type: §L/help om_config_s§R or §L/help om_config_c§R
+
+openblocks.gui.bkey.title=특수키 'B(ㅠ)'
+openblocks.gui.bkey.content=오픈블럭에서 'B(ㅠ)'키는 정말 특별한 키입니다.\n\n모든 서버/클라이언트 설정파일의 'weAreSeriousPeople' 부분의 옵션을 'tomfoolery' 로 설정하실경우 자신에게 소화시스템을 제공합니다.\n\n점토를 먹은후 'B(ㅠ)'키를 눌러보세요!
+
+openblocks.gui.unstable.title=불안정한 마법부여
+openblocks.gui.unstable.content=We've had unconfirmed reports that this enchantment causes any gunpowder you're carrying to become unstable when you're attacked or when you jump off something.\n\n위급할때 사용하세요!
+
+openblocks.gui.flimflam.title=허튼소리 마법부여
+openblocks.gui.flimflam.content=과학자들은 마법부여의 속성을 발견하지 못하고있어요
+
+openblocks.gui.laststand.title=최후의안정 마법부여
+openblocks.gui.laststand.content최후의안정 마법부여는 당신의 죽지 않도록 도와줍니다. 체력이 0.5하트이하 일때 당신의 XP를 사용하여 채력을 회복합니다.
+
+openblocks.changelog.title=새로운 오픈블럭에는 무엇이 있을까? %s
+openblocks.misc.url=URL: %s
+openblocks.misc.type=방식: %s
+openblocks.misc.uses=사용: %.2f
+openblocks.misc.color=색깔: %06X
+openblocks.misc.mode=설치 모드: %s
+openblocks.misc.mode.block=블럭
+openblocks.misc.mode.panel=패널
+openblocks.misc.mode.half_panel=반블럭 패널
+openblocks.misc.mode.stairs=계단
+openblocks.misc.mode.inverted_block=반전 블럭
+openblocks.misc.mode.inverted_panel=반전 패널
+openblocks.misc.mode.inverted_half_panel=반전 반블럭 패널
+openblocks.misc.mode.inverted_stairs=반전 계단
+openblocks.misc.structure_pos=디버그: 구조발견 %s(%d,%d,%d)
+openblocks.misc.locked=잠겨있음
+openblocks.misc.selected_cannon=대포가 쏠 위치를 결정
+openblocks.misc.pointed_cannon=대포의 발사위치 %s, %s, %s
+openblocks.misc.change_mode=%s 모드로 변경
+openblocks.misc.change_size=%sx%sx%s크기로 변경
+openblocks.misc.total_blocks=총 블럭 갯수: %d
+openblocks.misc.get_witched=마녀를 얻었다!
+openblocks.misc.page=%d 중 %d 페이지
+openblocks.misc.oh_no_ceiling=이곳에서 잠들 수 없습니다. 윗부분의 블럭이 방해합니다.
+
+openblocks.misc.cant_restore=플레이어의 인벤토리를 복원할 수 없습니다. : %s
+openblocks.misc.cant_store=%s플레이어의 인벤토리를 복원할 수 없습니다.
+openblocks.misc.stored_inventory=플레이어의 인벤토리를 복원했습니다. : %s
+openblocks.misc.restored_inventory=%s플레이어의 인벤토리를 복원했습니다.
+
+openblocks.misc.pedometer.tracking_reset=추적 리셋
+openblocks.misc.pedometer.tracking_started=추적 시작
+
+openblocks.misc.pedometer.start_point=시작지점: %s
+openblocks.misc.pedometer.speed=속도: %s
+openblocks.misc.pedometer.avg_speed=평균속도: %s
+openblocks.misc.pedometer.total_distance=총 거리: %s
+
+openblocks.misc.pedometer.straght_line_distance=직진 거리: %s
+openblocks.misc.pedometer.straigh_line_speed=직진 속도: %s
+
+openblocks.misc.pedometer.last_check_distance=마지막 확인 속도: %s
+openblocks.misc.pedometer.last_check_speed=마지막 확인 속도: %s
+openblocks.misc.pedometer.last_check_time=%d틱 전에 마지막으로 속도를 확인했습니다.
+
+openblocks.misc.pedometer.total_time=총 시간: %d 틱
+
+openblocks.misc.shape.sphere=구체
+openblocks.misc.shape.cylinder=실린더
+openblocks.misc.shape.cuboid=큐브
+openblocks.misc.shape.dome=돔
+openblocks.misc.shape.triangle=삼각형
+openblocks.misc.shape.pentagon=오각형
+openblocks.misc.shape.hexagon=육각형
+openblocks.misc.shape.octagon=8각형
+
+openblocks.misc.radio.too_many=Too many radios already playing
+openblocks.misc.radio.invalid_stream=잘못된 스트림
+openblocks.misc.radio.invalid_url=잘못된 URL
+openblocks.misc.radio.url_not_found=URL을 찾을 수 없습니다
+openblocks.misc.radio.unknown_stream_type=알수없는 스트림 종류
+openblocks.misc.radio.malformed_data=Malformed data in stream
+openblocks.misc.radio.not_ready=잠시후 다시 시도해 보세요
+openblocks.misc.radio.cant_connect=연결 실패
+openblocks.misc.radio.unknown_error=알수없는 에러
+openblocks.misc.radio.muted=Sounds are muted!
+
+openblocks.misc.side.east=동쪽
+openblocks.misc.side.west=서쪽
+openblocks.misc.side.north=북쪽
+openblocks.misc.side.south=남쪽
+openblocks.misc.side.up=위
+openblocks.misc.side.down=아래
+
+openblocks.misc.command.invalid=Invalid command arguments
+openblocks.misc.command.no_flim_flam=Invalid flim-flam name
+openblocks.misc.command.flim_flam_source=Player %s had been successfully flim-flammed with %s
+openblocks.misc.command.flim_flam_target=Someone doesn't like you. Someone with power
+openblocks.misc.command.flim_flam_failed=Flim-flamming failed!
+openblocks.misc.command.luck_added=Luck changed for player %s, current: %d
+openblocks.misc.command.luck_current=Player %s luck: %d
+openblocks.flim_flammed=Something weird happens around you
+
+openblocks.turtle.magnet=자석
+
+tile.openblocks.elevator.name=엘레베이터
+tile.openblocks.elevator.description=엘레베이터를 놓은 자리에서 위에 1블럭 아래1블럭이 없고 2블럭 이상(이하)에 엘레베이터 블럭이 있는경우 그곳으로 이동 할 수 있습니다. 올라가기위해선 '점프' 내려가기 위해선 '웅크리기'를 하시면 됩니다.
+tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
+
+tile.openblocks.heal.name=힐러
+tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.
+
+tile.openblocks.guide.name=건축 가이드
+tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
+tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
+
+tile.openblocks.ladder.name=물린 사다리
+tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
+tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
+
+tile.openblocks.tank.name=탱크
+tile.openblocks.tank.description=Tanks can hold liquids. If you place tanks next to each other and they'll distribute their liquid between the tanks. You can place liquid into the tanks using buckets. If the tank contains XP Juice you can click on them with an empty hand to give yourself some of the XP. When broken tanks will retain their liquid.
+tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
+
+tile.openblocks.flag.name=깃발
+tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color.
+
+tile.openblocks.beartrap.name=곰 덫
+tile.openblocks.beartrap.description=Place a bear trap and click on it to open it up. When a mob walks over the trap they'll be unable to move!
+
+tile.openblocks.sponge.name=스폰지
+tile.openblocks.sponge.description=The sponge is a replacement for the vanilla sponge. Perfect for removing small pockets of lava or water. Be careful when using it on large areas of liquid though as it'll start to get quite messy.
+
+item.openblocks.spongeonastick.name=스폰지
+item.openblocks.spongeonastick.description=The sponge on a stick is a tool for cleaning up liquids. Works just like the sponge, but is more mobile at the expense of wearing out.
+
+tile.openblocks.cannon.name=아이템 대포
+tile.openblocks.cannon.description=When given a redstone signal, the item cannon will shoot items that it finds in an adjacent inventory. Use the 'pointer' item to aim the cannon.
+
+tile.openblocks.ropeladder.name=로프 사다리
+tile.openblocks.ropeladder.description=When you place a rope ladder it'll roll out all the way to the ground.
+
+tile.openblocks.sprinkler.name=스프링쿨러
+tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simply place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block!
+
+tile.openblocks.paintmixer.name=패인트 믹서
+tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
+tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.canvas.name=캔버스
+tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints.
+tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.fan.name=선풍기
+tile.openblocks.fan.description=The fan will blow players, mobs or entities in the direction it's facing.
+
+tile.openblocks.target.name=Target
+tile.openblocks.target.description=The target will give out a redstone signal of a strength relative to the accuracy of the players aim. Give the target a redstone signal to make it pop up!
+
+tile.openblocks.path.name=Path
+tile.openblocks.path.description=The path doesn't do anything. It just looks nice!
+
+tile.openblocks.itemDropper.name=Item Dropper
+tile.openblocks.itemDropper.description=The item dropper is similar to the vanilla dropper, except it drops items directly down in a straight line.
+
+tile.openblocks.bigbutton.name=큰 버튼
+tile.openblocks.bigbutton.description=The big button is a large button that can be placed on walls. If you shift-click on the button with an empty hand it will bring up an inventory with a single slot. You can put items into this slot to increase the length of time the button is pressed - one item increases the button press by one tick.
+
+tile.openblocks.xpdrain.name=XP 흡수기
+tile.openblocks.xpdrain.description=Place the XP drain above an OpenBlocks tank and stand on it. Your XP will drain into the tank, which can then be used for blocks such as the auto enchantment table or the auto anvil.
+
+tile.openblocks.vacuumhopper.name=진공 깔때기
+tile.openblocks.vacuumhopper.description=The vacuum hopper will suck up items and XP orbs around it. You can use the tabs on the right of the interface to select which sides to output to.
+
+tile.openblocks.village_highlighter.name=마을 표시기
+tile.openblocks.village_highlighter.description=Drop the village highlighter down in a village and give it a redstone signal. It will outline the perimeter of the village and draw a box in the iron golem spawning area. Useful if you want to make sure villages don't merge into each other or you're making an iron farm!
+
+tile.openblocks.donationStation.name=Donation Station
+tile.openblocks.donationStation.description=Love a block or item and want to show the mod developer some appreciation? Drop it into the donation station and if we know the authors donation page we'll give you a link.
+
+tile.openblocks.blockPlacer.name=블럭 설치기
+tile.openblocks.blockPlacer.description=When given a redstone pulse the block placer will place an item in the direction it's facing.
+
+tile.openblocks.blockbreaker.name=블럭 파괴기
+tile.openblocks.blockbreaker.description=When given a redstone pulse the block breaker will break the block it's facing.
+
+tile.openblocks.projector.name=Height Map Projector
+tile.openblocks.projector.description=I'll let you write this one boq!
+
+tile.openblocks.autoenchantmenttable.name=자동 인첸트테이블
+tile.openblocks.autoenchantmenttable.description=The auto enchantment table works in a similar way to the vanilla enchantment table except it runs off XP juice. Use the tabs on the right side of the interface to select where items or xp can be pulled from. Just like with the vanilla table bookshelves are required for higher levels.
+
+tile.openblocks.xpbottler.name=경험치병 제조기
+tile.openblocks.xpbottler.description=The XP bottler will take XP juice and bottle it up into glass bottles to create bottles o' enchanting.
+
+tile.openblocks.autoanvil.name=자동 모루
+tile.openblocks.autoanvil.description=The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.\n\nUse the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted. Right click and drag the anvil in the tab to spin it around and select other sides!
+
+tile.openblocks.drawingtable.name=제도용 책상
+tile.openblocks.drawingtable.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want!
+tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+tile.openblocks.grave.name=묘지
+tile.openblocks.trophy.name=트로피
+tile.openblocks.canvasglass.name=유리 캔버스
+tile.openblocks.paintcan.name=패인트 통
+
+tile.openblocks.sky.normal.name=하늘 블럭
+tile.openblocks.sky.normal.description=Bring the outside inside with the new Sky block! Just apply a redstone signal. We also offer an inverted version.
+tile.openblocks.sky.inverted.name=Inverted Sky Block
+
+tile.openblocks.radio.name=라디오
+tile.openblocks.radio.description=The radio allows you to stream internet radio! First, you need some tuned crystals which you can find in dungeon chests or from a special villager. Place the crystal in the radio and supply it with a redstone signal to turn it on.  The redstone strength controls the volume.\n\nYou can configure which radio stations are available in the servers config file.
+tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
+
+tile.openblocks.xpshower.name=XP 샤워기
+tile.openblocks.xpshower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer.
+
+tile.openblocks.goldenegg.name=금 알
+
+tile.openblocks.digitalfuse.name=Digital Fuse
+item.openblocks.cursor.name=커서
+item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
+item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
+
+item.openblocks.devnull.name=/dev/null
+item.openblocks.devnull.description=Click using /dev/null to open the inventory. There's a single inventory slot - put an item in there - dirt, for example. As you gather dirt from the ground this slot will fill up. Once it's full, any more dirt you pick up will be automatically discarded. You can shift-click with the item in your hand as though you were placing the block!
+
+item.openblocks.slimalyzer.name=슬라임 탐지기
+item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.
+
+item.openblocks.hangglider.name=행글라이더
+item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
+item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
+
+item.openblocks.gliderwing.name=행글라이더 날개
+
+item.openblocks.sleepingbag.name=침낭
+item.openblocks.sleepingbag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back.
+
+item.openblocks.luggage.name=여행용 짐가방
+item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items!
+item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
+
+item.openblocks.sonicglasses.name=Sonic Glasses
+item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear!
+
+item.openblocks.squeegee.name=Squeegee
+item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
+item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.paintbrush.name=패인트 붓
+item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil!
+item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.unprepared_stencil.name=Unprepared Stencil
+item.openblocks.unprepared_stencil.description="What are these pesky stencils I keep finding in chests?"\n\nStencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
+item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
+
+item.openblocks.stencil.name=형판
+item.openblocks.crayon.name=마법의 크래용
+item.openblocks.pencil.name=마법의 연필
+item.openblocks.glasses.pencil.name=연필 안경
+item.openblocks.glasses.crayon.name=크래용 안경
+item.openblocks.glasses.technicolor.name=Amazing Technicolor Glasses
+item.openblocks.glasses.admin.name=Badass Glasses
+item.openblocks.crane_backpack.name=크레인 가방
+item.openblocks.crane_control.name=크레인 조작기
+item.openblocks.crane_engine.name=크레인 엔진
+item.openblocks.crane_magnet.name=크레인 자석
+item.openblocks.beam.name=Beam
+item.openblocks.line.name=Line
+item.openblocks.miracle_magnet.name=§5기적의 자석§r
+item.openblocks.info_book.name=Openblocks는 세계를 지배한다!!
+item.openblocks.xpbucket.name=XP 양동이
+item.openblocks.height_map.name=Height Map
+item.openblocks.empty_map.name=비어있는 맵
+item.openblocks.map_controller.name=맵 조작 모듈
+item.openblocks.map_memory.name=맵 메모리 모듈
+item.openblocks.cartographer.name=제작자
+item.openblocks.assistant_base.name=Assistant's base
+item.openblocks.sketching_pencil.name=Sketching Pencil
+item.openblocks.tasty_clay.name=맛있는 점토
+item.openblocks.golden_eye.name=금눈
+item.openblocks.pointer.name=포인터
+item.openblocks.tuned_crystal.name=Tuned Crystal
+item.openblocks.pedometer.name=Pedometer
+
+item.openblocks.wallpaper.name=달력
+
+itemGroup.tabOpenBlocks=오픈블럭[OpenBlocks]
+
+entity.OpenBlocks.Luggage.name=여행용 가방
+entity.OpenBlocks.Cartographer.name=제작자
+entity.OpenBlocks.Block.name=떨어지는 블럭
+entity.OpenBlocks.MiniMe.name=미니미
+
+fluid.OpenBlocks.xpjuice=액체 경험치
