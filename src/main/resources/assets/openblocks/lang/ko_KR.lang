@@ -43,7 +43,7 @@ openblocks.gui.welcome.title=어서오세요!
 openblocks.gui.welcome.content=OpenBlocks는 행글라이더, 엘리베이터, 탱크, 무덤, 페인트, 크레인, 액체 XP, 지도, 트로피 등외에도 많은것들을 추가하는 오픈 소스 모드입니다!
 
 openblocks.gui.credits.title=제작자
-openblocks.gui.credits.content=§LBoq, Mikee and NeverCast§R - 오픈블럭 매인개발자 (are we allowed to credit ourselves?)\n\n§LSinZ and Yoshi2§R - 오픈블럭 초창기멤버.\n\n§LVexatos and crafteverywhere§R - 정기적으로 모드를 번역.\n\n지난 한해동안 도움을 준 사람들. \n\n§LDirewolf20과 ForgeCraft§R - 출시전 크래쉬와 버그 발견\n\n누구던지 우리의 모드를 소개할 수 있습니다.\n\n§LTeamMMKP§R - 오픈블럭 한국어 번역자
+openblocks.gui.credits.content=§LBoq, Mikee and NeverCast§R - 오픈블럭 매인개발자 (우리는 우리 마음대로 우리의 스스로 저작권을 인정해 줄 수 있습니까?)\n\n§LSinZ and Yoshi2§R - 오픈블럭 초창기멤버.\n\n§LVexatos and crafteverywhere§R - 정기적으로 모드를 번역.\n\n지난 한해동안 도움을 준 사람들. \n\n§LDirewolf20과 ForgeCraft§R - 출시전 크래쉬와 버그 발견\n\n누구던지 우리의 모드를 소개할 수 있습니다.\n\n§LTeamMMKP§R - 오픈블럭 한국어 번역자
 
 openblocks.gui.config.title=쉬운 설정 변경
 openblocks.gui.config.content=OpenMods커맨드로 설정을 재로드 할수 있으며 마인크래프트를 재실행할 필요가 없습니다!\n\n서버 설정은 '§L/om_config_s§R'에서 할 수 있습니다 (op권한 필요) 클라이언트 설정은 '§L/om_config_c§R'에서 하실 수 있습니다.\n\n예제:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFor a full list of commands type: §L/help om_config_s§R or §L/help om_config_c§R
