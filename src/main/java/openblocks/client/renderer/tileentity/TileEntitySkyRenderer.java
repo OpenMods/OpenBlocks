@@ -7,6 +7,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.client.StencilSkyRenderer;
 import openblocks.common.block.BlockSky;
 import openmods.renderer.StencilRendererHandler;
+import openmods.stencil.StencilBitAllocation;
+import openmods.stencil.StencilPoolManager;
 import openmods.utils.ColorUtils.RGB;
 import openmods.utils.render.RenderUtils;
 
@@ -46,14 +48,13 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		renderCube();
 		GL11.glEndList();
 
-		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
-		final int mask = 1 << stencilBit;
+		StencilBitAllocation bit = StencilPoolManager.pool().acquire();
 
 		GL11.glNewList(displayListBase + 1, GL11.GL_COMPILE);
-		if (stencilBit >= 0) cutHoleInWorld(mask);
+		if (bit != null) cutHoleInWorld(bit.mask);
 		GL11.glEndList();
 
-		handler = stencilBit >= 0? new StencilSkyRenderer(mask) : StencilRendererHandler.DUMMY;
+		handler = bit != null? new StencilSkyRenderer(bit.mask) : StencilRendererHandler.DUMMY;
 	}
 
 	private static void renderCube() {

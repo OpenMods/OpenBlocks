@@ -12,9 +12,9 @@ public class SleepingBagRenderHandler {
 	public void onPrePlayerRender(RenderPlayerEvent.Pre event) {
 		final EntityPlayer entityPlayer = event.entityPlayer;
 		if (entityPlayer instanceof EntityOtherPlayerMP) {
-				if (entityPlayer.isPlayerSleeping() && ItemSleepingBag.isWearingSleepingBag(entityPlayer)) {
-						event.entityPlayer.yOffset = 1.7f;
-				}
+			if (entityPlayer.isPlayerSleeping() && ItemSleepingBag.isWearingSleepingBag(entityPlayer)) {
+				event.entityPlayer.yOffset = 1.7f;
+			}
 		}
 
 	}
