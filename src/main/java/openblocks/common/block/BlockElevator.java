@@ -5,9 +5,14 @@ import java.util.Set;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import openmods.utils.*;
+import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.common.tileentity.TileEntityElevator;
+import openmods.utils.BlockNotifyFlags;
+import openmods.utils.CollectionUtils;
+import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
 
 public class BlockElevator extends OpenBlock {
@@ -39,6 +44,14 @@ public class BlockElevator extends OpenBlock {
 		return colors[world.getBlockMetadata(x, y, z)];
 	}
 
+	private String getLocalisedDirection(ForgeDirection direction) {
+		if (direction == ForgeDirection.UNKNOWN) {
+			return "openblocks.misc.default";
+		} else {
+			return "openblocks.misc.side." + direction.name().toLowerCase();
+		}
+	}
+	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem();
@@ -55,6 +68,12 @@ public class BlockElevator extends OpenBlock {
 				else if (dmg == 0) dmg = 15;
 				world.setBlockMetadataWithNotify(x, y, z, dmg, BlockNotifyFlags.ALL);
 				return true;
+			}
+		} else if (!world.isRemote) {
+			TileEntityElevator te = getTileEntity(world, x, y, z, TileEntityElevator.class);
+			if (te != null) {
+				te.setNextDirection();
+				player.addChatMessage(new ChatComponentTranslation("openblocks.misc.direction").appendSibling(new ChatComponentTranslation(getLocalisedDirection(te.getDirection()))));
 			}
 		}
 		return false;
