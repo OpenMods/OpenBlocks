@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -47,7 +47,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		for (Map.Entry<EntityPlayer, EntityHangGlider> e : gliderMap.entrySet()) {
 			EntityPlayer player = e.getKey();
 			EntityHangGlider glider = e.getValue();
-			if (isGliderValid(player, glider)) glider.fixPositions(player);
+			if (isGliderValid(player, glider)) glider.fixPositions(player, player instanceof EntityPlayerSP);
 			else glider.setDead();
 		}
 	}
@@ -104,6 +104,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 		if (!worldObj.isRemote) {
 			this.dataWatcher.updateObject(PROPERTY_ON_GROUND, (byte)(player.onGround? 1 : 0));
+			fixPositions(player, false);
 		}
 
 		double horizontalSpeed = 0.03;
@@ -134,7 +135,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		gliderMap.remove(player);
 	}
 
-	private void fixPositions(EntityPlayer thePlayer) {
+	private void fixPositions(EntityPlayer thePlayer, boolean localPlayer) {
 		this.lastTickPosX = prevPosX = player.prevPosX;
 		this.lastTickPosY = prevPosY = player.prevPosY;
 		this.lastTickPosZ = prevPosZ = player.prevPosZ;
@@ -150,7 +151,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		this.prevRotationPitch = player.prevRotationPitch;
 		this.rotationPitch = player.rotationPitch;
 
-		if (player != Minecraft.getMinecraft().thePlayer) {
+		if (!localPlayer) {
 			this.posY += 1.2;
 			this.prevPosY += 1.2;
 			this.lastTickPosY += 1.2;
