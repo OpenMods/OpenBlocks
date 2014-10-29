@@ -155,14 +155,14 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	private void removeModifiers(int modifierCost) {
-		if (modifierCost == -1) {
-			inventory.setInventorySlotContents(Slots.modifier.ordinal(), null);
-		} else {
+		if (modifierCost > 0) {
 			ItemStack modifierStack = inventory.getStackInSlot(Slots.modifier);
 			if (modifierStack != null) {
 				modifierStack.stackSize -= modifierCost;
 				if (modifierStack.stackSize <= 0) inventory.setInventorySlotContents(Slots.modifier.ordinal(), null);
 			}
+		} else {
+			inventory.setInventorySlotContents(Slots.modifier.ordinal(), null);
 		}
 	}
 
