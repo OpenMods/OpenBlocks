@@ -9,6 +9,15 @@ enchantment.openblocks.explosive=震荡不定
 enchantment.openblocks.laststand=屹立不倒
 enchantment.openblocks.flimflam=尔虞我诈
 
+openblocks.gui.blocks=方块
+openblocks.gui.items=物品
+openblocks.gui.misc=杂项
+openblocks.gui.changelogs=更新日志
+
+openblocks.gui.features=特性更新
+openblocks.gui.bugfixes=Bug修复
+openblocks.gui.tweaks=调整优化
+
 openblocks.gui.luggage=行李箱
 openblocks.gui.sprinkler=洒水器
 openblocks.gui.vacuumhopper=虚空漏斗
@@ -24,9 +33,6 @@ openblocks.gui.itemdropper=物品投掷器
 openblocks.gui.blockplacer=方块放置器
 openblocks.gui.paintmixer=调色器
 openblocks.gui.drawingtable=绘图桌
-openblocks.gui.blocks=方块
-openblocks.gui.items=物品
-openblocks.gui.misc=杂项
 openblocks.gui.digitalfuse=游标
 openblocks.gui.xp_outputs=输出经验
 openblocks.gui.item_outputs=输出物品
@@ -77,6 +83,7 @@ openblocks.misc.change_size=改变规模至%sx%sx%s
 openblocks.misc.total_blocks=搭建共需要:%d个方块
 openblocks.misc.get_witched=为之沉迷!
 openblocks.misc.page=%d  /%d页
+openblocks.misc.oh_no_ceiling=你睡意全无,头顶空空荡荡,房子徒有四壁,令你坐立难安...
 
 openblocks.misc.cant_restore=无法还原玩家%s的物品栏
 openblocks.misc.cant_store=无法储存玩家%s的物品栏
