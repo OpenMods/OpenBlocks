@@ -31,7 +31,7 @@ public class TileEntityElevator extends OpenTileEntity {
 		Preconditions.checkArgument(direction == ForgeDirection.UP
 				|| direction == ForgeDirection.DOWN, "Must be either up or down... for now");
 
-		final int thisColor = getMetadata();
+		final int thisColor = getBlockMetadata();
 		int blocksInTheWay = 0;
 		final int delta = direction.offsetY;
 		for (int i = 0, y = yCoord; i < Config.elevatorTravelDistance; i++) {
