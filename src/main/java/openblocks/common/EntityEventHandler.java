@@ -65,6 +65,7 @@ public class EntityEventHandler {
 			Set<Class<?>> blacklist = getBlacklist();
 			if (blacklist.contains(entity.getClass())) {
 				entity.setDead();
+				event.setCanceled(true);
 				return;
 			}
 		}
