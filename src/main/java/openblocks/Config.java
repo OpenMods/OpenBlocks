@@ -513,12 +513,12 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.tastyClay != null) {
-			final ItemStack cocoa = new ItemStack(Items.dye, 1, ColorUtils.BROWN);
+			final ItemStack cocoa = ColorMeta.BROWN.createStack(Items.dye, 1);
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Items.clay_ball, Items.milk_bucket, cocoa));
 		}
 
 		if (OpenBlocks.Items.cursor != null) {
-			final ItemStack whiteWool = ColorUtils.createDyedWool(ColorUtils.WHITE);
+			final ItemStack whiteWool = ColorMeta.WHITE.createStack(Blocks.wool, 1);
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.cursor, "w  ", "www", "www", 'w', whiteWool));
 		}
 

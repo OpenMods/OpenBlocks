@@ -1,18 +1,19 @@
 package openblocks.common.item;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openmods.item.IMetaItem;
-import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 
 public enum MetasGenericUnstackable {
 	pointer {
 		@Override
 		protected IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			final ItemStack whiteWool = ColorUtils.createDyedWool(ColorUtils.WHITE);
+			final ItemStack whiteWool = ColorMeta.WHITE.createStack(Blocks.wool, 1);
 			return new MetaPointer("pointer", new ShapedOreRecipe(result, "w  ", "ww ", "w  ", 'w', whiteWool));
 		}
 	};
