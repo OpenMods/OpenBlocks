@@ -11,11 +11,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.common.GameRuleManager.GameRule;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
@@ -143,7 +145,11 @@ public class PlayerDeathHandler {
 
 		EntityPlayer player = (EntityPlayer)entity;
 		World world = player.worldObj;
-		if (world.isRemote || world.getGameRules().getGameRuleBooleanValue("keepInventory")) return;
+		if (world.isRemote) return;
+
+		final GameRules gameRules = world.getGameRules();
+		if (gameRules.getGameRuleBooleanValue("keepInventory") ||
+				!gameRules.getGameRuleBooleanValue(GameRule.SPAWN_GRAVES)) return;
 
 		Log.debug("Scheduling grave placement for player '%s' with %d items", player.getGameProfile(), drops.size());
 		if (Config.debugGraves) dumpDebugInfo(event);

@@ -432,6 +432,8 @@ public class OpenBlocks {
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
+		MinecraftForge.EVENT_BUS.register(new GameRuleManager());
+
 		proxy.preInit();
 	}
 
