@@ -61,7 +61,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class OpenBlocks {
 	public static final String ID = "OpenBlocks";
 	public static final String NAME = "OpenBlocks";
-	public static final String VERSION = "1.3";
+	public static final String VERSION = "@VERSION@";
 	public static final String PROXY_SERVER = "openblocks.common.ServerProxy";
 	public static final String PROXY_CLIENT = "openblocks.client.ClientProxy";
 	public static final String DEPENDENCIES = "required-after:OpenMods@[0.6,];after:OpenPeripheral;after:NotEnoughCodecs";
