@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
@@ -426,7 +427,10 @@ public class OpenBlocks {
 			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, new RadioVillagerTradeManager());
 		}
 
-		FMLInterModComms.sendMessage("NotEnoughCodecs", "listCodecs", "");
+		{
+			String luggageName = (String)EntityList.classToStringMapping.get(EntityLuggage.class);
+			FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", luggageName);
+		}
 
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
 
