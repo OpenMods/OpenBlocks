@@ -36,10 +36,12 @@ public class BlockSky extends OpenBlock {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		int meta = world.getBlockMetadata(x, y, z);
-		int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
-		int isInverted = meta & 1;
-		world.setBlockMetadataWithNotify(x, y, z, isPowered | isInverted, BlockNotifyFlags.ALL);
+		if (!world.isRemote) {
+			int meta = world.getBlockMetadata(x, y, z);
+			int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
+			int isInverted = meta & 1;
+			world.setBlockMetadataWithNotify(x, y, z, isPowered | isInverted, BlockNotifyFlags.ALL);
+		}
 	}
 
 	public static boolean isActive(int meta) {

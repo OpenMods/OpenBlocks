@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,31 +10,36 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
+import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
+import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
+public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, INeighbourAwareTile {
 
 	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
 	private SyncableFloat angle;
+	private SyncableByte power;
 	private float bladeRotation;
-	private float bladeRotationSpeed;
+	private float bladeSpeed;
 
 	public TileEntityFan() {}
 
 	@Override
 	protected void createSyncedFields() {
-		angle = new SyncableFloat(0.0f);
+		angle = new SyncableFloat();
+		power = new SyncableByte();
 	}
 
 	@Override
 	public void updateEntity() {
-		int redstonePower = Config.redstoneActivatedFan? worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) : 15;
-		bladeRotationSpeed = (redstonePower / 15.0f);
-		bladeRotation += bladeRotationSpeed;
+		float redstonePower = power.get() / 15.0f;
 
-		final double maxForce = Config.fanForce * (redstonePower / 15.0);
+		bladeSpeed = redstonePower;
+		bladeRotation += redstonePower;
+
+		final double maxForce = Config.fanForce * redstonePower;
 		if (maxForce <= 0) return;
 		@SuppressWarnings("unchecked")
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
@@ -93,6 +99,15 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile {
 	}
 
 	public float getBladeRotation(float partialTickTime) {
-		return bladeRotation + bladeRotationSpeed * partialTickTime;
+		return bladeRotation + bladeSpeed * partialTickTime;
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		if (!worldObj.isRemote) {
+			int power = Config.redstoneActivatedFan? worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) : 15;
+			this.power.set((byte)power);
+			sync();
+		}
 	}
 }
