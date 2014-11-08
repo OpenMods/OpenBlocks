@@ -32,8 +32,6 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 		/***
 		 * If the layer has a cover on it, return white.
 		 * Otherwise we render on the stored color
-		 * 
-		 * @return
 		 */
 		public int getColorForRender() {
 			return hasStencilCover()? 0xFFFFFF : getColor();

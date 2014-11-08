@@ -185,47 +185,22 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		return tank;
 	}
 
-	/**
-	 * Returns true if we should auto-pull the modifier
-	 * 
-	 * @return
-	 */
 	private boolean shouldAutoInputModifier() {
 		return automaticSlots.get(AutoSlots.modifier);
 	}
 
-	/**
-	 * Should the anvil auto output the resulting item?
-	 * 
-	 * @return
-	 */
 	public boolean shouldAutoOutput() {
 		return automaticSlots.get(AutoSlots.output);
 	}
 
-	/**
-	 * Checks if there is a stack in the input slot
-	 * 
-	 * @return
-	 */
 	private boolean hasTool() {
 		return inventory.getStackInSlot(0) != null;
 	}
 
-	/**
-	 * Should the anvil auto input the tool into slot 0?
-	 * 
-	 * @return
-	 */
 	private boolean shouldAutoInputTool() {
 		return automaticSlots.get(AutoSlots.tool);
 	}
 
-	/**
-	 * Does the anvil have something in slot [2]?
-	 * 
-	 * @return
-	 */
 	private boolean hasOutput() {
 		return inventory.getStackInSlot(2) != null;
 	}
