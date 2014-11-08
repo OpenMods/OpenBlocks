@@ -432,6 +432,10 @@ public class OpenBlocks {
 			FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", luggageName);
 		}
 
+		if (Items.luggage != null) {
+			MinecraftForge.EVENT_BUS.register(new LuggageDropHandler());
+		}
+
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
