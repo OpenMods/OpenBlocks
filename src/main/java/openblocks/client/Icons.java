@@ -115,38 +115,6 @@ public class Icons {
 		}
 	}
 
-	public static class DisplayListWrapper implements IDrawableIcon {
-
-		private final IDrawableIcon wrappedIcon;
-		private Integer displayList;
-
-		public DisplayListWrapper(IDrawableIcon wrappedIcon) {
-			this.wrappedIcon = wrappedIcon;
-		}
-
-		@Override
-		public void draw(TextureManager tex, double alpha, double scale) {
-			if (displayList == null) {
-				displayList = GL11.glGenLists(1);
-				GL11.glNewList(displayList, GL11.GL_COMPILE);
-				wrappedIcon.draw(tex, alpha, scale);
-				GL11.glEndList();
-			}
-
-			GL11.glCallList(displayList);
-		}
-
-		@Override
-		public void registerIcons(int type, IIconRegister registry) {
-			wrappedIcon.registerIcons(type, registry);
-		}
-
-		@Override
-		protected void finalize() throws Throwable {
-			if (displayList != null) GL11.glDeleteLists(displayList, 1);
-		}
-	}
-
 	public static IDrawableIcon itemIcon(String iconId, int color) {
 		return new LoadableSingleIcon(iconId, color, ICON_TYPE_ITEM);
 	}
