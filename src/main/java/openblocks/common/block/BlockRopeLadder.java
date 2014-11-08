@@ -28,15 +28,6 @@ public class BlockRopeLadder extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return side != ForgeDirection.UP && side != ForgeDirection.DOWN;// &&
-																		// isNeighborBlockSolid(world,
-																		// x, y,
-																		// z,
-																		// side);
-	}
-
-	@Override
 	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}

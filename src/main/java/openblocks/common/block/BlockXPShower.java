@@ -60,7 +60,6 @@ public class BlockXPShower extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-
 		TileEntityXPShower tile = getTileEntity(world, x, y, z, TileEntityXPShower.class);
 		if (tile != null) {
 			ForgeDirection direction = tile.getRotation();

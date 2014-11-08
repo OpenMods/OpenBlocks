@@ -35,7 +35,7 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, float hitX, float hitY, float hitZ, int meta) {
+	public void afterBlockPlaced(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, ForgeDirection blockSide, float hitX, float hitY, float hitZ, int meta) {
 		clearupLiquid(world, x, y, z);
 		world.scheduleBlockUpdate(x, y, z, this, TICK_RATE + RANDOM.nextInt(5));
 	}
