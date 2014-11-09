@@ -6,7 +6,7 @@ import java.util.Map;
 import net.minecraft.village.Village;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openperipheral.api.IPeripheralAdapter;
-import openperipheral.api.LuaMethod;
+import openperipheral.api.LuaCallable;
 import openperipheral.api.LuaType;
 
 import com.google.common.collect.Maps;
@@ -19,7 +19,7 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	@LuaMethod(onTick = true, returnType = LuaType.TABLE, description = "Get information about the villages this block is inside")
+	@LuaCallable(returnTypes = LuaType.TABLE, description = "Get information about the villages this block is inside")
 	public Map<?, ?> getVillages(TileEntityVillageHighlighter vh) {
 		Map<Integer, Object> map = Maps.newHashMap();
 		int i = 1;

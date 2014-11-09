@@ -5,8 +5,9 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
+import openperipheral.api.ApiAccess;
+import openperipheral.api.IAdapterFactory;
 import openperipheral.api.IUpdateHandler;
-import openperipheral.api.cc16.ComputerCraftWrappers;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
@@ -36,7 +37,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
 	@Override
 	public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-		return ComputerCraftWrappers.createPeripheral(new MagnetControlAdapter(turtle, side));
+		return ApiAccess.getApi(IAdapterFactory.class).createPeripheral(new MagnetControlAdapter(turtle, side));
 	}
 
 	@Override

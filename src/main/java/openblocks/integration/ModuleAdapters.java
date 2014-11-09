@@ -3,7 +3,8 @@ package openblocks.integration;
 import static openmods.integration.Conditions.modLoaded;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
-import openperipheral.api.OpenPeripheralAPI;
+import openperipheral.api.ApiAccess;
+import openperipheral.api.IAdapterRegistry;
 
 public class ModuleAdapters extends IntegrationModule {
 
@@ -23,10 +24,11 @@ public class ModuleAdapters extends IntegrationModule {
 
 	private static class LoadHack {
 		private static void load() {
-			OpenPeripheralAPI.register(new AdapterVillageHighlighter());
-			OpenPeripheralAPI.register(new AdapterDonationStation());
-			OpenPeripheralAPI.register(new AdapterCannon());
-			OpenPeripheralAPI.register(new AdapterProjector());
+			final IAdapterRegistry registry = ApiAccess.getApi(IAdapterRegistry.class);
+			registry.register(new AdapterVillageHighlighter());
+			registry.register(new AdapterDonationStation());
+			registry.register(new AdapterCannon());
+			registry.register(new AdapterProjector());
 		}
 	}
 }

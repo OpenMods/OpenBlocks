@@ -1,4 +1,4 @@
-package openperipheral.api.cc16;
+package openperipheral.api;
 
 import dan200.computercraft.api.peripheral.IComputerAccess;
 
