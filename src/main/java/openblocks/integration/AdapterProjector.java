@@ -130,7 +130,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaType.NUMBER, description = "Get height and color of point on map")
+	@LuaCallable(description = "Get height and color of point on map")
 	public void setPoint(TileEntityProjector projector,
 			@Arg(name = "row", description = "Map row (0..63)", type = LuaType.NUMBER) int row,
 			@Arg(name = "column", description = "Map column (0..63)", type = LuaType.NUMBER) int column,

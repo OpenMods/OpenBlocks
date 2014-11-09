@@ -15,6 +15,7 @@ public class BlockProjector extends OpenBlock {
 	public BlockProjector() {
 		super(Material.iron);
 		setBlockBounds(0, 0, 0, 1, 0.5f, 1);
+		setRenderMode(RenderMode.BOTH);
 	}
 
 	@Override
