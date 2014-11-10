@@ -4,7 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -135,24 +134,37 @@ public class PlayerDeathHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onPlayerDrops(PlayerDropsEvent event) {
-		if (OpenBlocks.Blocks.grave == null) return;
+		World world = event.entityPlayer.worldObj;
+		if (world.isRemote) return;
+
+		if (Config.debugGraves) dumpDebugInfo(event);
+
+		final EntityPlayer player = event.entityPlayer;
+
+		if (OpenBlocks.Blocks.grave == null) {
+			Log.debug("Graves disabled, not placing (player '%s')", player);
+			return;
+		}
+		
+		if (player instanceof FakePlayer) {
+			Log.debug("'%s' (%s) is a fake player, ignoring", player, player.getClass());
+			return;
+		}
 
 		final List<EntityItem> drops = event.drops;
-		if (drops.isEmpty()) return;
-
-		final EntityLivingBase entity = event.entityLiving;
-		if (!(entity instanceof EntityPlayer) || entity instanceof FakePlayer) return;
-
-		EntityPlayer player = (EntityPlayer)entity;
-		World world = player.worldObj;
-		if (world.isRemote) return;
+		if (drops.isEmpty()) {
+			Log.debug("No drops from player '%s'", player);
+			return;
+		}
 
 		final GameRules gameRules = world.getGameRules();
 		if (gameRules.getGameRuleBooleanValue("keepInventory") ||
-				!gameRules.getGameRuleBooleanValue(GameRule.SPAWN_GRAVES)) return;
+				!gameRules.getGameRuleBooleanValue(GameRule.SPAWN_GRAVES)) {
+			Log.debug("Graves disabled by gamerule (player '%s')", player);
+			return;
+		}
 
-		Log.debug("Scheduling grave placement for player '%s' with %d items", player.getGameProfile(), drops.size());
-		if (Config.debugGraves) dumpDebugInfo(event);
+		Log.debug("Scheduling grave placement for player '%s':'%s' with %d items", player, player.getGameProfile(), drops.size());
 
 		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, drops));
 		drops.clear();
@@ -160,6 +172,8 @@ public class PlayerDeathHandler {
 	}
 
 	private static void dumpDebugInfo(PlayerDropsEvent event) {
+		Log.debug("Trying to spawn grave for player '%s':'%s'", event.entityPlayer, event.entityPlayer.getGameProfile());
+
 		int i = 0;
 		for (EntityItem e : event.drops)
 			Log.debug("\tGrave drop %d: %s -> %s", i++, e.getClass(), e.getEntityItem());
@@ -172,8 +186,9 @@ public class PlayerDeathHandler {
 				for (IEventListener listener : listeners.getListeners(busId)) {
 					if (listener instanceof ASMEventHandler) {
 						try {
-							Object o = ReflectionHelper.getPrivateValue(ASMEventHandler.class, (ASMEventHandler)listener, "handler");
-							Log.debug("\t%s", o.getClass());
+							final ASMEventHandler handler = (ASMEventHandler)listener;
+							Object o = ReflectionHelper.getPrivateValue(ASMEventHandler.class, handler, "handler");
+							Log.debug("\t'%s' (handler %s, priority: %s)", handler, o.getClass(), handler.getPriority());
 							continue;
 						} catch (Throwable e) {
 							Log.log(Level.DEBUG, e, "Exception while getting field");
