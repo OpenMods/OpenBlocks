@@ -30,7 +30,7 @@ public @interface Arg {
 	 * Hint about type of value, displayed by documentation program.
 	 * This value is not used for validation, but please keep it correct
 	 */
-	LuaType type();
+	LuaArgType type() default LuaArgType.AUTO;
 
 	/**
 	 * If this value is true, argument accepts {@code null} values ({@code nil} on Lua side).

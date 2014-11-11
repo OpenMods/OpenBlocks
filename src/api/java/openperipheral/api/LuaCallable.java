@@ -25,7 +25,7 @@ public @interface LuaCallable {
 	/**
 	 * List of types expected to be returned from call. Empty list marks no results. Using {@link LuaType#VOID} in this list will cause error
 	 */
-	LuaType[] returnTypes() default {};
+	LuaReturnType[] returnTypes() default {};
 
 	/**
 	 * Should return values be validated using types from {@link #returnTypes()}

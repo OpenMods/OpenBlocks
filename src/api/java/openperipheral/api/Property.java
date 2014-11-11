@@ -15,7 +15,7 @@ public @interface Property {
 	/**
 	 * Type of setter parameter and getter result. Used only for documentation
 	 */
-	public LuaType type() default LuaType.OBJECT;
+	public LuaArgType type() default LuaArgType.AUTO;
 
 	/**
 	 * Field name used for naming get/set methods. If empty, original field name will be used.

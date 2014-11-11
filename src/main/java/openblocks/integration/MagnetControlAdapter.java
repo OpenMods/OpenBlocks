@@ -142,15 +142,15 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 	}
 
 	@LuaCallable(description = "Set target for magnet")
-	public void setTarget(@Arg(name = "x", type = LuaType.NUMBER) double x,
-			@Arg(name = "x", type = LuaType.NUMBER) double y,
-			@Arg(name = "x", type = LuaType.NUMBER) double z) {
+	public void setTarget(@Arg(name = "x") double x,
+			@Arg(name = "y") double y,
+			@Arg(name = "z") double z) {
 		Preconditions.checkNotNull(magnetOwner, "Magnet not active");
 		Preconditions.checkArgument(checkTargetRange(x, y, z), "Target out of range");
 		magnetOwner.setTarget(x, y, z);
 	}
 
-	@LuaCallable(returnTypes = { LuaType.NUMBER, LuaType.NUMBER, LuaType.NUMBER },
+	@LuaCallable(returnTypes = { LuaReturnType.NUMBER, LuaReturnType.NUMBER, LuaReturnType.NUMBER },
 			description = "Get turtle position")
 	public IMultiReturn getPosition() {
 		EntityMagnet magnet = getMagnet();
@@ -158,24 +158,24 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 		return MultiReturn.wrap(rotated.xCoord, rotated.yCoord, rotated.zCoord);
 	}
 
-	@LuaCallable(returnTypes = LuaType.BOOLEAN, description = "Is magnet above grabbable entity")
+	@LuaCallable(returnTypes = LuaReturnType.BOOLEAN, description = "Is magnet above grabbable entity")
 	public boolean isAboveEntity() {
 		return getMagnet().isAboveTarget();
 	}
 
 	@Alias("toggle")
-	@LuaCallable(returnTypes = LuaType.BOOLEAN, description = "Grab or release entity/block under magnet")
+	@LuaCallable(returnTypes = LuaReturnType.BOOLEAN, description = "Grab or release entity/block under magnet")
 	public boolean toggleMagnet() {
 		return getMagnet().toggleMagnet();
 	}
 
-	@LuaCallable(returnTypes = LuaType.BOOLEAN, description = "Is magnet currently grabbing block or entity")
+	@LuaCallable(returnTypes = LuaReturnType.BOOLEAN, description = "Is magnet currently grabbing block or entity")
 	public boolean isGrabbing() {
 		return getMagnet().isLocked();
 	}
 
 	@Alias("distance")
-	@LuaCallable(returnTypes = { LuaType.NUMBER, LuaType.NUMBER, LuaType.NUMBER })
+	@LuaCallable(returnTypes = { LuaReturnType.NUMBER, LuaReturnType.NUMBER, LuaReturnType.NUMBER })
 	public IMultiReturn getDistanceToTarget() {
 		EntityMagnet magnet = getMagnet();
 		Vec3 current = getRelativeDistance(magnet);
