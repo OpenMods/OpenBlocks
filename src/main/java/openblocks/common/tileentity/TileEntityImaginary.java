@@ -263,7 +263,7 @@ public class TileEntityImaginary extends SimpleNetTileEntity {
 
 		if (item instanceof ItemImaginationGlasses) return ((ItemImaginationGlasses)item).checkBlock(what, helmet, this);
 
-		return false;
+		return isInverted();
 	}
 
 	public boolean is(EntityPlayer player) {
