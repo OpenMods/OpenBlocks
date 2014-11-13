@@ -32,7 +32,7 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 
 		{
 			GuiComponentTab itemTab = new GuiComponentTab(StandardPalette.lightblue.getColor(), new ItemStack(Blocks.chest), 100, 100);
-			final GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(30, 30, 40.0, null, 0, te, false);
+			final GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(15, 15, 40.0, null, 0, te, false);
 			wireSideSelector(sideSelector, te.getReadableItemOutputs(), te.getWriteableItemOutputs());
 
 			itemTab.addComponent(new GuiComponentLabel(24, 10, StatCollector.translateToLocal("openblocks.gui.item_outputs")));
@@ -42,7 +42,7 @@ public class GuiVacuumHopper extends SyncedGuiContainer<ContainerVacuumHopper> {
 
 		{
 			GuiComponentTab xpTab = new GuiComponentTab(StandardPalette.blue.getColor(), new ItemStack(Items.experience_bottle, 1), 100, 100);
-			GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(30, 30, 40.0, null, 0, te, false);
+			GuiComponentSideSelector sideSelector = new GuiComponentSideSelector(15, 15, 40.0, null, 0, te, false);
 			wireSideSelector(sideSelector, te.getReadableXpOutputs(), te.getWriteableXpOutputs());
 			xpTab.addComponent(sideSelector);
 			xpTab.addComponent(new GuiComponentLabel(24, 10, StatCollector.translateToLocal("openblocks.gui.xp_outputs")));
