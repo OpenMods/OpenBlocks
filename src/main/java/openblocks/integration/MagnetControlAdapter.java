@@ -18,6 +18,7 @@ import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 
 @Freeform
+@PeripheralTypeId("openblocks_magnet")
 public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 
 	public class Owner implements IOwner {

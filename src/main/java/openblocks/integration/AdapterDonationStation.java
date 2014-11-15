@@ -10,6 +10,11 @@ public class AdapterDonationStation implements IPeripheralAdapter {
 		return TileEntityDonationStation.class;
 	}
 
+	@Override
+	public String getSourceId() {
+		return "openblocks_donation";
+	}
+
 	@LuaCallable(returnTypes = LuaReturnType.STRING, description = "Find the mod name and mod authors")
 	public IMultiReturn getItemAuthor(final TileEntityDonationStation station) {
 		if (station.getInventory().getStackInSlot(0) == null) return null;

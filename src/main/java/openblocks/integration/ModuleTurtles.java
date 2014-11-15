@@ -21,7 +21,7 @@ public class ModuleTurtles extends IntegrationModule {
 
 	@Override
 	public String name() {
-		return "OpenBlocks turtles for CC1.6";
+		return "OpenBlocks turtles";
 	}
 
 	@Override

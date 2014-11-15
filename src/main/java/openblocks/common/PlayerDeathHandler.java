@@ -145,7 +145,7 @@ public class PlayerDeathHandler {
 			Log.debug("Graves disabled, not placing (player '%s')", player);
 			return;
 		}
-		
+
 		if (player instanceof FakePlayer) {
 			Log.debug("'%s' (%s) is a fake player, ignoring", player, player.getClass());
 			return;

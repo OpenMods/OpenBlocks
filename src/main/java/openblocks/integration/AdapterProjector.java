@@ -16,13 +16,9 @@ import com.google.common.primitives.UnsignedBytes;
 
 public class AdapterProjector implements IPeripheralAdapter {
 
-	private static IMultiReturn wrap(final Object... values) {
-		return new IMultiReturn() {
-			@Override
-			public Object[] getObjects() {
-				return values;
-			}
-		};
+	@Override
+	public String getSourceId() {
+		return "openblocks_projector";
 	}
 
 	private static int toInt(Object object) {
@@ -63,7 +59,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@LuaCallable(description = "Set current map info")
-	public void setMapInfo(TileEntityProjector projector, @Arg(name = "properties", description = "Map of properties") Map<String, Object> args) {
+	public void setMapInfo(TileEntityProjector projector, @Arg(name = "properties", description = "Map of properties", type = LuaArgType.TABLE) Map<String, Object> args) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
 
@@ -126,7 +122,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 		Preconditions.checkElementIndex(layer, data.layers.length, "layer");
 		int index = 64 * row + column;
 		LayerData layerData = data.layers[layer];
-		return wrap(UnsignedBytes.toInt(layerData.heightMap[index]), layerData.colorMap[index]);
+		return MultiReturn.wrap(UnsignedBytes.toInt(layerData.heightMap[index]), layerData.colorMap[index]);
 	}
 
 	@Asynchronous

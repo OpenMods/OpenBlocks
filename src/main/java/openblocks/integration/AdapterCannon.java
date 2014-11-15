@@ -1,13 +1,20 @@
 package openblocks.integration;
 
 import openblocks.common.tileentity.TileEntityCannon;
-import openperipheral.api.*;
+import openperipheral.api.Arg;
+import openperipheral.api.IPeripheralAdapter;
+import openperipheral.api.LuaCallable;
 
 public class AdapterCannon implements IPeripheralAdapter {
 
 	@Override
 	public Class<?> getTargetClass() {
 		return TileEntityCannon.class;
+	}
+
+	@Override
+	public String getSourceId() {
+		return "openblocks_cannon";
 	}
 
 	@LuaCallable(description = "Set the pitch of the cannon")
@@ -24,5 +31,4 @@ public class AdapterCannon implements IPeripheralAdapter {
 	public void setSpeed(TileEntityCannon cannon, @Arg(name = "speed", description = "Set the speed") double speed) {
 		cannon.setSpeed(speed);
 	}
-
 }

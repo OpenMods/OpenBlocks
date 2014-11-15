@@ -18,6 +18,11 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 		return TileEntityVillageHighlighter.class;
 	}
 
+	@Override
+	public String getSourceId() {
+		return "openblocks_village";
+	}
+
 	@SuppressWarnings({ "unchecked" })
 	@LuaCallable(returnTypes = LuaReturnType.TABLE, description = "Get information about the villages this block is inside")
 	public Map<?, ?> getVillages(TileEntityVillageHighlighter vh) {
