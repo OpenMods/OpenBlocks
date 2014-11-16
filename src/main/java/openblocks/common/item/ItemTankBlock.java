@@ -6,9 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.*;
+import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
@@ -30,6 +29,17 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 			float percent = Math.max(100.0f / fakeTank.getCapacity() * liquid.amount, 1);
 			list.add(String.format("%d mB (%.0f%%)", liquid.amount, percent));
 		}
+	}
+
+	public static ItemStack createFilledTank(Fluid fluid) {
+		final int tankCapacity = TileEntityTank.getTankCapacity();
+		FluidStack stack = new FluidStack(fluid, tankCapacity);
+		FluidTank tank = new FluidTank(tankCapacity);
+		tank.setFluid(stack);
+
+		ItemStack item = new ItemStack(OpenBlocks.Blocks.tank);
+		saveTank(item, tank);
+		return item;
 	}
 
 	private static FluidTank readTank(ItemStack stack) {
