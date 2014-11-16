@@ -1,9 +1,9 @@
 package openperipheral.api;
 
 /**
- * 
+ *
  * Interface for registering external adapters for Lua object wrappers.
- * 
+ *
  * @see OpenPeripheralAPI#register(IObjectAdapter)
  * @see IPeripheralAdapter
  */

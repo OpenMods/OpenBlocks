@@ -5,9 +5,9 @@ package openperipheral.api;
  * be individually passed through the type converters into a lua friendly
  * format
  * e.g. local x, y, z = p.getLocation()
- * 
+ *
  * @author mikeef
- * 
+ *
  */
 public interface IMultiReturn {
 	public Object[] getObjects();

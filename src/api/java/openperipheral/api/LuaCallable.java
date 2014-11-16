@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * Used to mark methods that should be visible in Lua.
- * 
+ *
  * @see OnTick
  * @see Arg
  * @see Freeform

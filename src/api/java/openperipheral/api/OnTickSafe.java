@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 import net.minecraft.world.WorldProvider;
 
 /**
- * Suppresses warning about unavailable world instance (needed for synchronized {@link OnTick} methods).
+ * Suppresses warning about unavailable world instance (needed for synchronized methods).
  * If target type does not provide World (is not TileEntity or {@link WorldProvider}, method won't be called (exception will be thrown)
  */
 @Retention(RetentionPolicy.RUNTIME)

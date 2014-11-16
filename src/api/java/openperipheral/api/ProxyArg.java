@@ -3,7 +3,7 @@ package openperipheral.api;
 import java.lang.annotation.*;
 
 /**
- * 
+ *
  * Methods marked with this annotation will get instance of {@link IMethodProxy} in one of names Java arguments.
  * Proxy will point to method of target class that is named with one of values from {@link #argName()} and has argument types {@link #args()}.
  */

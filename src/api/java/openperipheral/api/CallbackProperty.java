@@ -6,7 +6,7 @@ import java.lang.annotation.*;
  * This annotation is used to mark class fields that should be exposed in Lua as get/set accessors.
  * Class that uses this annotation must implement {@link IPropertyCallback}, otherwise registration will fail.
  * Every call to accessors will be passed to callback
- * 
+ *
  * @see Property
  */
 @Retention(RetentionPolicy.RUNTIME)

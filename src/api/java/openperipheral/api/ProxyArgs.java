@@ -3,7 +3,7 @@ package openperipheral.api;
 import java.lang.annotation.*;
 
 /**
- * 
+ *
  * @see ProxyArg
  */
 @Retention(RetentionPolicy.RUNTIME)
