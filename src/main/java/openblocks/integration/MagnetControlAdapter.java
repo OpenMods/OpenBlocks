@@ -262,7 +262,7 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 	}
 
 	private static boolean canOperateOnMagnet(Vec3 magnetPos, Vec3 turtlePos) {
-		return magnetPos.squareDistanceTo(turtlePos) <= 1.5 * 1.5;
+		return magnetPos.squareDistanceTo(turtlePos) <= Config.turtleMagnetRangeDeactivate * Config.turtleMagnetRangeDeactivate;
 	}
 
 	@Override

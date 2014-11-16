@@ -104,8 +104,13 @@ public class Config {
 	@ConfigProperty(category = "crane", name = "boringMode", comment = "Use shift to control crane direction (otherwise, toggle every time)")
 	public static boolean craneShiftControl = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "crane", name = "turtleMagnetRange", comment = "Range of magnet CC peripheral")
-	public static double turtleMagnetRange = 4;
+	public static double turtleMagnetRange = 32;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "crane", name = "turtleMagnetDeactivateRange", comment = "Maximal distance from turtle to magnet when deactivating")
+	public static double turtleMagnetRangeDeactivate = 3;
 
 	@ConfigProperty(category = "crane", name = "addTurtles", comment = "Enable magnet turtles")
 	public static boolean enableCraneTurtles = true;
