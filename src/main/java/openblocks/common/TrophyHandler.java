@@ -19,8 +19,8 @@ import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.*;
 import openmods.Log;
+import openmods.reflection.ReflectionHelper;
 import openmods.utils.ItemUtils;
-import openmods.utils.ReflectionHelper;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;

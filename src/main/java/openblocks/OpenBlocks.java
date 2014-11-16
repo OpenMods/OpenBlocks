@@ -42,8 +42,8 @@ import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.RpcCallDispatcher;
+import openmods.reflection.ReflectionHelper;
 import openmods.utils.EnchantmentUtils;
-import openmods.utils.ReflectionHelper;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
