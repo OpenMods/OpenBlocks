@@ -6,11 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
+
+import com.google.common.base.Strings;
 
 public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem {
 
@@ -24,10 +27,30 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		FluidTank fakeTank = readTank(stack);
-		FluidStack liquid = fakeTank.getFluid();
-		if (liquid != null && liquid.amount > 0) {
-			float percent = Math.max(100.0f / fakeTank.getCapacity() * liquid.amount, 1);
-			list.add(String.format("%d mB (%.0f%%)", liquid.amount, percent));
+		FluidStack fluidStack = fakeTank.getFluid();
+		if (fluidStack != null && fluidStack.amount > 0) {
+			float percent = Math.max(100.0f / fakeTank.getCapacity() * fluidStack.amount, 1);
+			list.add(String.format("%d mB (%.0f%%)", fluidStack.amount, percent));
+		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		String baseName = super.getItemStackDisplayName(stack);
+
+		final FluidTank fakeTank = readTank(stack);
+		final FluidStack fluidStack = fakeTank.getFluid();
+		if (fluidStack != null && fluidStack.amount > 0) return getFluidName(fluidStack) + " " + baseName;
+		else return baseName;
+	}
+
+	private static String getFluidName(FluidStack fluidStack) {
+		final Fluid fluid = fluidStack.getFluid();
+		String localizedName = fluid.getLocalizedName(fluidStack);
+		if (!Strings.isNullOrEmpty(localizedName) && !localizedName.equals(fluid.getUnlocalizedName())) {
+			return fluid.getRarity(fluidStack).rarityColor.toString() + localizedName;
+		} else {
+			return EnumChatFormatting.OBFUSCATED.toString() + "LOLNOPE";
 		}
 	}
 
