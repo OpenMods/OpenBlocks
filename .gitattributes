@@ -5,6 +5,7 @@
 *.mcmeta text
 *.md    text
 *.txt   text
+*.properties text
 
 *.png   -text
 *.ogg   -text
