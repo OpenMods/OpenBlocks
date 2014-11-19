@@ -1,9 +1,5 @@
 package openperipheral.api;
 
-import java.lang.reflect.Method;
-
-import com.google.common.base.Throwables;
-
 /**
  * This class is used to get implementation of API interfaces (subclasses of {@link IApiInterface}.
  *
@@ -17,19 +13,24 @@ import com.google.common.base.Throwables;
  * </ul>
  */
 public class ApiAccess {
-	private static Method providerMethod;
+	public static final String API_VERSION = "2.1";
 
-	@SuppressWarnings("unchecked")
+	public interface ApiProvider {
+		public <T extends IApiInterface> T getApi(Class<T> cls);
+	}
+
+	private ApiAccess() {}
+
+	private static ApiProvider provider;
+
+	// OpenPeripheralCore will use this method to provide actual implementation
+	public static void init(ApiProvider provider) {
+		if (ApiAccess.provider != null) throw new IllegalStateException("API already initialized");
+		ApiAccess.provider = provider;
+	}
+
 	public static <T extends IApiInterface> T getApi(Class<T> cls) {
-		try {
-			if (providerMethod == null) {
-				Class<?> providerCls = Class.forName("openperipheral.ApiProvider");
-				providerMethod = providerCls.getMethod("provideImplementation", Class.class);
-			}
-
-			return (T)providerMethod.invoke(null, cls);
-		} catch (Throwable e) {
-			throw Throwables.propagate(e);
-		}
+		if (provider == null) throw new IllegalStateException("API not initialized");
+		return provider.getApi(cls);
 	}
 }

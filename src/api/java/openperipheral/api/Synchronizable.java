@@ -10,6 +10,6 @@ import net.minecraft.world.WorldProvider;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE })
-public @interface OnTickSafe {
+public @interface Synchronizable {
 	public boolean value() default true;
 }

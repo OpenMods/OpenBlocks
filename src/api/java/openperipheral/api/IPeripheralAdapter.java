@@ -11,11 +11,4 @@ package openperipheral.api;
  *
  */
 
-public interface IPeripheralAdapter extends IAdapterBase {
-
-	/**
-	 * Return target class for this adapter. It will be used to determine, if other methods in implementing class are applicable to object.
-	 * Should be either interface or TileEntity subclass.
-	 */
-	public Class<?> getTargetClass();
-}
+public interface IPeripheralAdapter extends IAdapter {}

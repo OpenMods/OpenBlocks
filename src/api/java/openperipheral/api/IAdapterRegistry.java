@@ -5,9 +5,9 @@ package openperipheral.api;
  *
  */
 public interface IAdapterRegistry extends IApiInterface {
-	public void register(IPeripheralAdapter adapter);
+	public boolean register(IPeripheralAdapter adapter);
 
-	public void register(IObjectAdapter adapter);
+	public boolean register(IObjectAdapter adapter);
 
 	public void registerInline(Class<?> cls);
 }

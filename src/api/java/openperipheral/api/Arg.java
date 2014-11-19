@@ -10,15 +10,12 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface Arg {
-	public static final String DEFAULT_NAME = "[none set]";
-
 	/**
 	 * This name will be visible in documentation program or in .listMethods() result.
-	 * No special action is defined when default value is used - information about argument names is unreachable in
-	 * runtime.
+	 * Value is mandatory, since information about argument name is not visible in runtime.
 	 * This value has no effects in Java part
 	 */
-	String name() default DEFAULT_NAME;
+	String name();
 
 	/**
 	 * Short description, displayed by documentation program.

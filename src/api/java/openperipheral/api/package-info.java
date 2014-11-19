@@ -43,7 +43,7 @@
  * <li>Converted Lua arguments - must be marked with {@link openperipheral.api.Arg} annotation</li>
  * </ol>
  *
- * During call Java arguments are filled with values depending on it's names. Arguments can be names with either {@link openperipheral.api.Named} or {@link openperipheral.api.Prefixed} annotations.
+ * During call Java arguments are filled with values depending on it's names. Arguments can be names with either {@link openperipheral.api.Env} or {@link openperipheral.api.Prefixed} annotations.
  * Predefined names:
  * <ul>
  * <li>{@code target} - used in external adapter to mark argument that will be filled with target object (for peripheral adapters it will be TileEntity instance). Type must be supertype or interface of target class</li>
@@ -52,7 +52,7 @@
  * </ul>
  */
 
-@API(apiVersion = "2.0", owner = "OpenPeripheralCore", provides = "OpenPeripheralApi")
+@API(apiVersion = openperipheral.api.ApiAccess.API_VERSION, owner = "OpenPeripheralCore", provides = "OpenPeripheralApi")
 package openperipheral.api;
 
 import cpw.mods.fml.common.API;
