@@ -1,8 +1,10 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
@@ -14,19 +16,20 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
-import openblocks.OpenBlocks.ClassReferences;
 import openmods.Log;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
 import openmods.fakeplayer.OpenModsFakePlayer;
+import openmods.reflection.SafeClassLoad;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 import openmods.utils.EntityUtils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,11 +41,25 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 
 	private SyncableBoolean active;
 
-	private final static List<Class<?>> predictedProjectileClasses = Lists.newArrayList();
+	private final static SafeClassLoad FLANS_BULLET = SafeClassLoad.create("com.flansmod.common.guns.EntityBullet");
+
+	public final static Set<Class<?>> EXTRA_PROJECTILE_CLASSES = Sets.newHashSet();
+
+	private static void addClass(SafeClassLoad cls) {
+		if (cls.tryLoad()) EXTRA_PROJECTILE_CLASSES.add(cls.get());
+		else Log.info("Failed to load class %s, no target path prediction", cls.clsName);
+	}
 
 	static {
-		predictedProjectileClasses.add(ClassReferences.flansmodsEntityBullet);
+		addClass(FLANS_BULLET);
 	}
+
+	private final static IEntitySelector PROJECTILE_SELECTOR = new IEntitySelector() {
+		@Override
+		public boolean isEntityApplicable(Entity p_82704_1_) {
+			return EXTRA_PROJECTILE_CLASSES.contains(p_82704_1_.getClass());
+		}
+	};
 
 	public TileEntityTarget() {}
 
@@ -54,8 +71,9 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+		if (!worldObj.isRemote) predictOtherProjectiles();
+
 		tickCounter--;
-		predictOtherProjectiles();
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
@@ -64,17 +82,13 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	private void predictOtherProjectiles() {
-		if (!worldObj.isRemote) {
-			for (Class<?> klazz : predictedProjectileClasses) {
-				if (klazz == null) continue;
-				@SuppressWarnings("unchecked")
-				List<Entity> projectiles = worldObj.getEntitiesWithinAABB(klazz, getBB().expand(20, 20, 20));
-				for (Entity projectile : projectiles) {
-					MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);
-					if (BlockUtils.isBlockHit(hit, this)) {
-						Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
-					}
-				}
+		@SuppressWarnings("unchecked")
+		List<Entity> projectiles = worldObj.selectEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
+
+		for (Entity projectile : projectiles) {
+			MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);
+			if (BlockUtils.isBlockHit(hit, this)) {
+				Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
 			}
 		}
 	}

@@ -42,7 +42,6 @@ import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.RpcCallDispatcher;
-import openmods.reflection.ReflectionHelper;
 import openmods.utils.EnchantmentUtils;
 
 import com.google.common.base.Objects;
@@ -281,10 +280,6 @@ public class OpenBlocks {
 		public static ItemPedometer pedometer;
 	}
 
-	public static class ClassReferences {
-		public static Class<?> flansmodsEntityBullet;
-	}
-
 	public static class Fluids {
 		public static Fluid xpJuice;
 	}
@@ -456,9 +451,6 @@ public class OpenBlocks {
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
 
-		if (Loader.isModLoaded(Mods.FLANSMOD)) {
-			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
-		}
 		if (Enchantments.flimFlam != null) {
 			FlimFlamRegistry.registerFlimFlam("inventory-shuffle", -50, 100, new InventoryShuffleFlimFlam()).markSafe();
 			FlimFlamRegistry.registerFlimFlam("useless-tool", -125, 50, new UselessToolFlimFlam()).markSafe();
