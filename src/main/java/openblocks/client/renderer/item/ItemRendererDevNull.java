@@ -12,6 +12,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.item.ItemDevNull.Icons;
 import openmods.inventory.ItemInventory;
 import openmods.renderer.DisplayListWrapper;
@@ -20,6 +22,8 @@ import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemRendererDevNull implements IItemRenderer {
 
@@ -76,6 +80,15 @@ public class ItemRendererDevNull implements IItemRenderer {
 			GL11.glFrontFace(GL11.GL_CCW);
 		}
 	};
+
+	public ItemRendererDevNull() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void onTextuteChange(TextureStitchEvent evt) {
+		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_ITEMS) cube.reset();
+	}
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {

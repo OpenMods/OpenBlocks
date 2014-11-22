@@ -3,8 +3,8 @@ package openblocks.integration;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
+import openmods.utils.TextureUtils;
 import openperipheral.api.ApiAccess;
 import openperipheral.api.IAdapterFactory;
 import openperipheral.api.IUpdateHandler;
@@ -52,7 +52,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent evt) {
-		if (evt.map.getTextureType() == Icons.ICON_TYPE_BLOCK) icon = evt.map.registerIcon("openblocks:magnet_upgrade");
+		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_BLOCKS) icon = evt.map.registerIcon("openblocks:magnet_upgrade");
 	}
 
 	@Override

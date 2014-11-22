@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockGuide.Icons;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -14,6 +16,8 @@ import openmods.utils.Coord;
 import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
@@ -34,6 +38,15 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 			t.draw();
 		}
 	};
+
+	public TileEntityGuideRenderer() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void onTextuteChange(TextureStitchEvent evt) {
+		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_BLOCKS) wrapper.reset();
+	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {

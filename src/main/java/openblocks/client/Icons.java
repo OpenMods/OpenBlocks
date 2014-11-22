@@ -3,32 +3,15 @@ package openblocks.client;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import openmods.Log;
+import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Preconditions;
 
 public class Icons {
-	public final static int ICON_TYPE_BLOCK = 0;
-	public final static int ICON_TYPE_ITEM = 1;
-
-	private static void bindIconSheet(TextureManager tex, int type) {
-		switch (type) {
-			case ICON_TYPE_BLOCK:
-				tex.bindTexture(TextureMap.locationBlocksTexture);
-				break;
-			case ICON_TYPE_ITEM:
-				tex.bindTexture(TextureMap.locationItemsTexture);
-				break;
-			default:
-				Log.warn("Unknown icon sheet: %d", type);
-				break;
-		}
-	}
 
 	public static void renderQuad(Tessellator tes, double scale, IIcon icon) {
 		tes.addVertexWithUV(scale, scale, 0, icon.getMinU(), icon.getMinV());
@@ -61,7 +44,7 @@ public class Icons {
 		@Override
 		public void draw(TextureManager tex, double alpha, double scale) {
 			Preconditions.checkNotNull(icon);
-			bindIconSheet(tex, type);
+			TextureUtils.bindIconSheet(tex, type);
 			final Tessellator tes = Tessellator.instance;
 			tes.startDrawingQuads();
 			tes.setTranslation(0, 0, 0);
@@ -116,7 +99,7 @@ public class Icons {
 	}
 
 	public static IDrawableIcon itemIcon(String iconId, int color) {
-		return new LoadableSingleIcon(iconId, color, ICON_TYPE_ITEM);
+		return new LoadableSingleIcon(iconId, color, TextureUtils.TEXTURE_MAP_ITEMS);
 	}
 
 	public static IDrawableIcon itemIcon(String iconId) {
@@ -124,7 +107,7 @@ public class Icons {
 	}
 
 	public static IDrawableIcon blockIcon(String iconId, int color) {
-		return new LoadableSingleIcon(iconId, color, ICON_TYPE_BLOCK);
+		return new LoadableSingleIcon(iconId, color, TextureUtils.TEXTURE_MAP_BLOCKS);
 	}
 
 	public static IDrawableIcon blockIcon(String iconId) {
