@@ -16,7 +16,7 @@ import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
-import openblocks.client.renderer.BlockRenderingHandler;
+import openblocks.client.renderer.block.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.item.*;
 import openblocks.client.renderer.tileentity.*;
@@ -24,6 +24,7 @@ import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
+import openmods.renderer.BlockRenderingHandler;
 import openmods.renderer.BlockRenderingValidator;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -76,8 +77,28 @@ public class ClientProxy implements IOpenBlocksProxy {
 	@Override
 	public void registerRenderInformation() {
 
-		OpenBlocks.renderId = RenderingRegistry.getNextAvailableRenderId();
-		RenderingRegistry.registerBlockHandler(new BlockRenderingHandler());
+		{
+			OpenBlocks.renderIdFull = RenderingRegistry.getNextAvailableRenderId();
+			final BlockRenderingHandler blockRenderingHandler = new BlockRenderingHandler(OpenBlocks.renderIdFull, true);
+
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.path, new BlockPathRenderer());
+			BlockCanvasRenderer canvasRenderer = new BlockCanvasRenderer();
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvas, canvasRenderer);
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
+
+			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
+		}
+
+		{
+			OpenBlocks.renderIdFlat = RenderingRegistry.getNextAvailableRenderId();
+			final BlockRenderingHandler blockRenderingHandler = new BlockRenderingHandler(OpenBlocks.renderIdFlat, false);
+
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.ropeLadder, new BlockRopeLadderRenderer());
+
+			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
+		}
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
@@ -94,7 +115,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoAnvil.class, new TileEntityAutoAnvilRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRopeLadder.class, new TileEntityRopeLadderRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, new TileEntityDonationStationRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());

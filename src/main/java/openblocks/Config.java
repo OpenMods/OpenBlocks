@@ -355,7 +355,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.ropeLadder != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.ropeLadder, "sts", "sts", "sts", 't', "stickWood", 's', Items.string));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.ropeLadder, 8), "sts", "sts", "sts", 't', "stickWood", 's', Items.string));
 		}
 
 		if (OpenBlocks.Blocks.donationStation != null) {

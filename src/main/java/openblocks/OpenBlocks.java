@@ -162,7 +162,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "itemDropper", tileEntity = TileEntityItemDropper.class)
 		public static BlockItemDropper itemDropper;
 
-		@RegisterBlock(name = "ropeladder", tileEntity = TileEntityRopeLadder.class)
+		@RegisterBlock(name = "ropeladder")
 		public static BlockRopeLadder ropeLadder;
 
 		@RegisterBlock(name = "donationStation", tileEntity = TileEntityDonationStation.class)
@@ -311,7 +311,9 @@ public class OpenBlocks {
 
 	};
 
-	public static int renderId;
+	public static int renderIdFull;
+
+	public static int renderIdFlat;
 
 	public static final Achievement brickAchievement = new Achievement("openblocks.oops", "openblocks.droppedBrick", 13, 13, net.minecraft.init.Items.brick, null).registerStat();
 
