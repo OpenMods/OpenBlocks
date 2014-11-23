@@ -18,7 +18,7 @@ import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 
 @PeripheralTypeId("openblocks_magnet")
-public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
+public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider {
 
 	public class Owner implements IOwner {
 
@@ -186,7 +186,7 @@ public class MagnetControlAdapter implements IUpdateHandler, IWorldProvider {
 	}
 
 	@Override
-	public void onPeripheralUpdate() {
+	public void onPeripheralTick() {
 		EntityMagnet magnet = this.magnet.get();
 		if (magnet != null && !magnet.isDead) {
 			if (++fuelTick >= 20) {

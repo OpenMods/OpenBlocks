@@ -7,7 +7,6 @@ import openblocks.common.item.MetasGeneric;
 import openmods.utils.TextureUtils;
 import openperipheral.api.ApiAccess;
 import openperipheral.api.IAdapterFactory;
-import openperipheral.api.IUpdateHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
@@ -58,7 +57,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	@Override
 	public void update(ITurtleAccess turtle, TurtleSide side) {
 		IPeripheral peripheral = turtle.getPeripheral(side);
-		if (peripheral instanceof IUpdateHandler) ((IUpdateHandler)peripheral).onPeripheralUpdate();
+		if (peripheral instanceof ITickingTurtle) ((ITickingTurtle)peripheral).onPeripheralTick();
 	}
 
 }

@@ -34,6 +34,7 @@
  * <li>{@link openperipheral.api.Ignore} annotation on TileEntity class</li>
  * <li>Any field called {@code OPENPERIPHERAL_IGNORE} in TileEntity class</li>
  * <li>IMC message with id {@code ignoreTileEntity} and full class name as value</li>
+ * <li>Explicit registration via {@link openperipheral.api.IPeripheralBlacklist#addToBlacklist(Class)}
  * </ul>
  *
  * <h3>Method arguments</h3>
