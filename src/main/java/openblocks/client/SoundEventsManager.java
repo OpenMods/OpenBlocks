@@ -87,25 +87,30 @@ public class SoundEventsManager {
 		return isEntityWearingGlasses(e);
 	}
 
-	private void addEvent(float x, float y, float z, String soundId, double size, double time) {
-		IDrawableIcon icon = icons.getIcon(soundId);
-		events.add(new SoundEvent(x, y, z, icon, size, time));
+	private void addEvent(float x, float y, float z, ResourceLocation sound, double size, double time) {
+		IDrawableIcon icon = icons.getIcon(sound);
+
+		synchronized (events) {
+			events.add(new SoundEvent(x, y, z, icon, size, time));
+		}
 	}
 
 	@SubscribeEvent
 	public void onSoundEvent(PlaySoundEvent17 evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
 			ISound sound = evt.sound;
-			addEvent(sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), evt.name, Math.log(sound.getVolume() + 1), 5 * sound.getPitch());
+			addEvent(sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), sound.getPositionedSoundLocation(), Math.log(sound.getVolume() + 1), 5 * sound.getPitch());
 		}
 	}
 
 	public void tickUpdate() {
-		Iterator<SoundEvent> it = events.iterator();
-		while (it.hasNext()) {
-			SoundEvent evt = it.next();
-			evt.update();
-			if (!evt.isAlive()) it.remove();
+		synchronized (events) {
+			Iterator<SoundEvent> it = events.iterator();
+			while (it.hasNext()) {
+				SoundEvent evt = it.next();
+				evt.update();
+				if (!evt.isAlive()) it.remove();
+			}
 		}
 	}
 
@@ -210,16 +215,18 @@ public class SoundEventsManager {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		for (SoundEvent snd : events) {
-			final double px = snd.x - interpX;
-			final double py = snd.y - interpY;
-			final double pz = snd.z - interpZ;
+		synchronized (events) {
+			for (SoundEvent snd : events) {
+				final double px = snd.x - interpX;
+				final double py = snd.y - interpY;
+				final double pz = snd.z - interpZ;
 
-			GL11.glPushMatrix();
-			GL11.glTranslated(px, py, pz);
-			RenderUtils.setupBillboard(rve);
-			snd.icon.draw(tex, snd.getTime(evt.partialTicks), snd.size);
-			GL11.glPopMatrix();
+				GL11.glPushMatrix();
+				GL11.glTranslated(px, py, pz);
+				RenderUtils.setupBillboard(rve);
+				snd.icon.draw(tex, snd.getTime(evt.partialTicks), snd.size);
+				GL11.glPopMatrix();
+			}
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);

@@ -32,6 +32,11 @@ public class BlockImaginary extends OpenBlock {
 
 	public static final SoundType drawingSounds = new SoundType("cloth", 0.5f, 1.0f) {
 		@Override
+		public String getBreakSound() {
+			return "openblocks:crayon.place";
+		}
+
+		@Override
 		public String func_150496_b() {
 			return "openblocks:crayon.place";
 		}
