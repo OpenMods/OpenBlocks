@@ -17,6 +17,7 @@ import openblocks.client.model.ModelCartographer;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectionRenderer;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityCartographer.MapJobs;
+import openmods.renderer.DisplayListWrapper;
 import openmods.utils.BlockUtils;
 import openmods.utils.render.RenderUtils;
 
@@ -24,25 +25,57 @@ import org.lwjgl.opengl.GL11;
 
 public class EntityCartographerRenderer extends Render {
 
-	private final static ResourceLocation texture = new ResourceLocation("openblocks:textures/models/cartographer.png");
+	private static final double Z_FIGHTER = 0.0001;
 
-	private static ModelCartographer model = new ModelCartographer();
+	private static final double CONE_START = 0.075;
+	private static final double CONE_END = 0.3;
+	private static final double BASE_SIZE = 0.125;
+	private static final double MAP_SIZE = 0.08;
+
+	private static final double INTERSECTION_DIST = 2.5 / 16.0;
+	private static final double INTERSECTION_SIZE = BASE_SIZE * (INTERSECTION_DIST - CONE_START) / (CONE_END - CONE_START);
+
+	private final static ResourceLocation TEXTURE = new ResourceLocation("openblocks:textures/models/cartographer.png");
+
+	private static final ModelCartographer MODEL = new ModelCartographer();
+
+	private static final DisplayListWrapper CONE_DISPLAY = new DisplayListWrapper() {
+		@Override
+		public void compile() {
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glColor4d(1, 1, 1, 1);
+			GL11.glVertex3d(-INTERSECTION_SIZE, -INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
+			GL11.glVertex3d(-INTERSECTION_SIZE, +INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
+			GL11.glVertex3d(+INTERSECTION_SIZE, +INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
+			GL11.glVertex3d(+INTERSECTION_SIZE, -INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
+			GL11.glEnd();
+
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glDisable(GL11.GL_CULL_FACE);
+
+			GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+			GL11.glColor4d(0, 1, 1, 0.125);
+			GL11.glVertex3d(0, 0, -CONE_START);
+			GL11.glVertex3d(-BASE_SIZE, -BASE_SIZE, -CONE_END);
+			GL11.glVertex3d(+BASE_SIZE, -BASE_SIZE, -CONE_END);
+			GL11.glVertex3d(+BASE_SIZE, +BASE_SIZE, -CONE_END);
+			GL11.glVertex3d(-BASE_SIZE, +BASE_SIZE, -CONE_END);
+			GL11.glVertex3d(-BASE_SIZE, -BASE_SIZE, -CONE_END);
+			GL11.glEnd();
+
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+		}
+	};
 
 	public static class Selection implements ISelectionRenderer<EntityCartographer> {
 
-		private static final double Z_FIGHTER = 0.0001;
-
-		private static final double CONE_START = 0.075;
-		private static final double CONE_END = 0.3;
-		private static final double BASE_SIZE = 0.125;
-		private static final double MAP_SIZE = 0.08;
-
-		private static final double INTERSECTION_DIST = 2.5 / 16.0;
-		private static final double INTERSECTION_SIZE = BASE_SIZE * (INTERSECTION_DIST - CONE_START) / (CONE_END - CONE_START);
-
 		private static final Random RANDOM = new Random();
 
-		private Integer coneDisplay;
 		private DynamicTexture mapTextureData;
 		private ResourceLocation mapTextureLocation;
 
@@ -73,7 +106,7 @@ public class EntityCartographerRenderer extends Render {
 			}
 
 			GL11.glTranslated(0, -0.03, 0);
-			compileCone();
+			CONE_DISPLAY.render();
 
 			GL11.glColor4f(1, 1, 1, 1);
 
@@ -84,7 +117,7 @@ public class EntityCartographerRenderer extends Render {
 				bindMapTexture(textureManager);
 				renderProgressMap(e.jobs);
 			} else {
-				textureManager.bindTexture(texture);
+				textureManager.bindTexture(TEXTURE);
 				drawBase();
 				GL11.glTranslated(+BASE_SIZE, +BASE_SIZE, -CONE_END - Z_FIGHTER);
 				renderText(e, context);
@@ -162,51 +195,6 @@ public class EntityCartographerRenderer extends Render {
 
 			manager.bindTexture(mapTextureLocation);
 		}
-
-		@Override
-		protected void finalize() throws Throwable {
-			if (coneDisplay != null) GL11.glDeleteLists(coneDisplay, 1);
-		}
-
-		private void compileCone() {
-			if (coneDisplay == null) {
-				coneDisplay = GL11.glGenLists(1);
-				GL11.glNewList(coneDisplay, GL11.GL_COMPILE);
-				renderCone();
-				GL11.glEndList();
-			}
-
-			GL11.glCallList(coneDisplay);
-		}
-
-		private static void renderCone() {
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor4d(1, 1, 1, 1);
-			GL11.glVertex3d(-INTERSECTION_SIZE, -INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
-			GL11.glVertex3d(-INTERSECTION_SIZE, +INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
-			GL11.glVertex3d(+INTERSECTION_SIZE, +INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
-			GL11.glVertex3d(+INTERSECTION_SIZE, -INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
-			GL11.glEnd();
-
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_CULL_FACE);
-
-			GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-			GL11.glColor4d(0, 1, 1, 0.125);
-			GL11.glVertex3d(0, 0, -CONE_START);
-			GL11.glVertex3d(-BASE_SIZE, -BASE_SIZE, -CONE_END);
-			GL11.glVertex3d(+BASE_SIZE, -BASE_SIZE, -CONE_END);
-			GL11.glVertex3d(+BASE_SIZE, +BASE_SIZE, -CONE_END);
-			GL11.glVertex3d(-BASE_SIZE, +BASE_SIZE, -CONE_END);
-			GL11.glVertex3d(-BASE_SIZE, -BASE_SIZE, -CONE_END);
-			GL11.glEnd();
-
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-		}
 	}
 
 	@Override
@@ -215,11 +203,11 @@ public class EntityCartographerRenderer extends Render {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glColor3f(1, 1, 1);
-		bindTexture(texture);
-		model.renderBase(cartographer.eyeYaw);
+		bindTexture(TEXTURE);
+		MODEL.renderBase(cartographer.eyeYaw);
 
 		bindTexture(TextureMap.locationItemsTexture);
-		model.renderEye(cartographer.eyeYaw, cartographer.eyePitch);
+		MODEL.renderEye(cartographer.eyeYaw, cartographer.eyePitch);
 		cartographer.updateEye();
 
 		GL11.glPopMatrix();
@@ -227,6 +215,6 @@ public class EntityCartographerRenderer extends Render {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return texture;
+		return TEXTURE;
 	}
 }

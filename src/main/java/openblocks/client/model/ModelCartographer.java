@@ -6,15 +6,45 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Items;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import openmods.renderer.DisplayListWrapper;
+import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ModelCartographer extends ModelBase {
 	private static final float SCALE = 1.0f / 16.0f;
 	private final ModelRenderer body;
 	private final ModelRenderer base;
 
-	private Integer eyeList;
+	private final DisplayListWrapper eyeList = new DisplayListWrapper() {
+
+		@Override
+		public void compile() {
+			GL11.glColor3d(1, 1, 1);
+			GL11.glScalef(SCALE * 3, SCALE * 3, SCALE);
+
+			Tessellator tes = new Tessellator();
+			tes.setTranslation(-0.5, -0.5, 0);
+
+			final IIcon icon = Items.ender_eye.getIconFromDamage(0);
+			ItemRenderer.renderItemIn2D(
+					tes,
+					icon.getInterpolatedU(15), icon.getInterpolatedV(2),
+					icon.getInterpolatedU(2), icon.getInterpolatedV(15),
+					13, 13,
+					0.5f
+					);
+		}
+	};
+
+	@SubscribeEvent
+	public void onTextureChange(TextureStitchEvent evt) {
+		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_ITEMS) eyeList.reset();
+	}
 
 	public ModelCartographer() {
 		textureWidth = 32;
@@ -34,41 +64,17 @@ public class ModelCartographer extends ModelBase {
 
 		base.setTextureOffset(4, 11);
 		base.addBox(-0.5f, 0.5f, 1.5f, 1, 4, 1);
+
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	public void renderEye(float baseRotation, float eyeRotation) {
-
-		if (eyeList == null) {
-			eyeList = GL11.glGenLists(1);
-			GL11.glNewList(eyeList, GL11.GL_COMPILE);
-			GL11.glColor3d(1, 1, 1);
-			GL11.glScalef(SCALE * 3, SCALE * 3, SCALE);
-
-			Tessellator tes = new Tessellator();
-			tes.setTranslation(-0.5, 0.25, -0.5);
-
-			final IIcon icon = Items.ender_eye.getIconFromDamage(0);
-			ItemRenderer.renderItemIn2D(
-					tes,
-					icon.getInterpolatedU(15), icon.getInterpolatedV(2),
-					icon.getInterpolatedU(2), icon.getInterpolatedV(15),
-					13, 13,
-					0.5f
-					);
-			GL11.glEndList();
-		}
-
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0, 0.25f, 0);
 		GL11.glRotated(Math.toDegrees(baseRotation) + 90, 0, 1, 0);
 		GL11.glRotated(Math.toDegrees(eyeRotation), 1, 0, 0);
-		GL11.glCallList(eyeList);
+		eyeList.render();
 		GL11.glPopMatrix();
-	}
-
-	@Override
-	protected void finalize() {
-		if (eyeList != null) GL11.glDeleteLists(eyeList, 1);
 	}
 
 	public void renderBase(float baseRotation) {

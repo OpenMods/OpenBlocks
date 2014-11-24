@@ -79,14 +79,16 @@ public class MapDataBuilder {
 					}
 
 					if (blockSolid != null) {
+						int meta = chunk.getBlockMetadata(x, heightSolid, z);
 						groundHeightSum += heightSolid;
-						int color = blockSolid.getMaterial().getMaterialMapColor().colorIndex;
+						int color = blockSolid.getMapColor(meta).colorIndex;
 						groundColors[color]++;
 					}
 
 					if (blockLiquid != null) {
+						int meta = chunk.getBlockMetadata(x, heightLiquid, z);
 						liquidHeightSum += heightLiquid;
-						int color = blockLiquid.getMaterial().getMaterialMapColor().colorIndex;
+						int color = blockLiquid.getMapColor(meta).colorIndex;
 						liquidColors[color]++;
 						liquidCount++;
 					}
