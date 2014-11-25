@@ -21,6 +21,8 @@ import openblocks.Config;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
@@ -53,6 +55,10 @@ public class PlayerInventoryStore {
 		}
 	}
 
+	private static String stripFilename(String name) {
+		return StringUtils.removeEndIgnoreCase(StringUtils.removeStartIgnoreCase(name, PREFIX), ".dat");
+	}
+
 	public File storePlayerInventory(EntityPlayer player) {
 		InventoryPlayer inv = player.inventory;
 		GenericInventory copy = new GenericInventory("tmp", false, inv.getSizeInventory());
@@ -71,10 +77,16 @@ public class PlayerInventoryStore {
 
 		NBTTagCompound root = new NBTTagCompound();
 		root.setTag(TAG_INVENTORY, invData);
-		root.setLong("Created", now.getTime());
 
+		root.setLong("Created", now.getTime());
 		root.setString("PlayerName", name);
 		root.setString("PlayerUUID", profile.getId().toString());
+
+		NBTTagCompound location = new NBTTagCompound();
+		location.setDouble("X", player.posX);
+		location.setDouble("Y", player.posY);
+		location.setDouble("Z", player.posZ);
+		root.setTag("Location", location);
 
 		try {
 			OutputStream stream = new FileOutputStream(dumpFile);
@@ -84,13 +96,13 @@ public class PlayerInventoryStore {
 				stream.close();
 			}
 		} catch (IOException e) {
-			Log.warn("Failed to dump data for player %s, file %s", player.getDisplayName(), dumpFile.getAbsoluteFile());
+			Log.warn("Failed to dump data for player %s, file %s", name, dumpFile.getAbsoluteFile());
 		}
 
 		return dumpFile;
 	}
 
-	public IInventory loadInventory(World world, String fileId) {
+	private static IInventory loadInventory(World world, String fileId) {
 		File file = world.getSaveHandler().getMapFileFromName(PREFIX + fileId);
 
 		NBTTagCompound tag;
@@ -117,7 +129,7 @@ public class PlayerInventoryStore {
 	public List<String> getMatchedDumps(World world, String prefix) {
 		File dummy = world.getSaveHandler().getMapFileFromName("dummy");
 		File saveFolder = dummy.getParentFile();
-		final String actualPrefix = PREFIX + prefix;
+		final String actualPrefix = StringUtils.startsWithIgnoreCase(prefix, PREFIX)? prefix : PREFIX + prefix;
 		File[] files = saveFolder.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -137,6 +149,8 @@ public class PlayerInventoryStore {
 	}
 
 	public boolean restoreInventory(EntityPlayer player, String fileId) {
+		fileId = stripFilename(fileId);
+
 		IInventory restored = loadInventory(player.worldObj, fileId);
 		if (restored == null) return false;
 
@@ -156,12 +170,14 @@ public class PlayerInventoryStore {
 	public void onPlayerDeath(LivingDeathEvent event) {
 		if (Config.dumpStiffsStuff && (event.entity instanceof EntityPlayerMP) && !(event.entity instanceof FakePlayer)) {
 			EntityPlayer player = (EntityPlayer)event.entity;
+			final String playerName = player.getDisplayName();
 			try {
 
 				File file = storePlayerInventory(player);
-				Log.info("Storing post-mortem inventory of player %s into %s", player.getDisplayName(), file.getAbsolutePath());
+				Log.info("Storing post-mortem inventory into %s. It can be restored with command '/ob_inventory restore %s %s'",
+						file.getAbsolutePath(), playerName, stripFilename(file.getName()));
 			} catch (Exception e) {
-				Log.severe(e, "Failed to store inventory for player %s", player.getDisplayName());
+				Log.severe(e, "Failed to store inventory for player %s", playerName);
 			}
 		}
 	}

@@ -37,7 +37,7 @@ public class CommandInventory implements ICommand {
 	@Override
 	public String getCommandUsage(ICommandSender icommandsender) {
 		return NAME + " store <player> OR " +
-				NAME + " restore <player> <file>";
+				NAME + " restore <player> <file without 'inventory-' and '.dat'>";
 	}
 
 	@Override
