@@ -13,15 +13,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.api.FlimFlamRegistry;
 import openblocks.api.IFlimFlamEffect;
 import openmods.Log;
-import openmods.config.properties.ConfigurationChange;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -34,26 +31,6 @@ public class FlimFlamEnchantmentsHandler {
 	public static final int EFFECT_DELAY = 20 * 15; // 15s cooldown
 
 	private static final Random RANDOM = new Random();
-
-	private static Set<String> blacklist;
-
-	private static Set<String> getBlacklist() {
-		if (blacklist == null) {
-			blacklist = Sets.newHashSet();
-			Set<String> validNames = Sets.newHashSet(FlimFlamRegistry.getAllFlimFlamsNames());
-			for (String s : Config.flimFlamBlacklist) {
-				if (validNames.contains(s)) blacklist.add(s);
-				else Log.warn("Trying to blacklist unknown flimflam name '%s'", s);
-			}
-		}
-
-		return blacklist;
-	}
-
-	@SubscribeEvent
-	public void onReconfig(ConfigurationChange.Post evt) {
-		if (evt.check("tomfoolery", "flimFlamBlacklist")) blacklist = null;
-	}
 
 	private static class Luck implements IExtendedEntityProperties {
 
@@ -147,9 +124,8 @@ public class FlimFlamEnchantmentsHandler {
 
 		int totalWeight = 0;
 		List<IFlimFlamEffect> selectedEffects = Lists.newArrayList();
-		Set<String> blacklist = getBlacklist();
 		for (IFlimFlamEffect effectMeta : FlimFlamRegistry.getFlimFlams())
-			if (effectMeta.canApply(luck) && (!Config.safeFlimFlams || effectMeta.isSafe()) && !blacklist.contains(effectMeta.name())) {
+			if (effectMeta.canApply(luck) && !FlimFlamRegistry.BLACKLIST.isBlacklisted(effectMeta)) {
 				selectedEffects.add(effectMeta);
 				totalWeight += effectMeta.weight();
 			}

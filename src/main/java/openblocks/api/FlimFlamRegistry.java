@@ -1,20 +1,55 @@
 package openblocks.api;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import net.minecraftforge.common.MinecraftForge;
+import openblocks.Config;
+import openmods.Log;
+import openmods.config.properties.ConfigurationChange;
+
+import com.google.common.collect.*;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class FlimFlamRegistry {
 
-	private static final List<IFlimFlamEffect> flimFlams = Lists.newArrayList();
+	private static final List<IFlimFlamEffect> FLIM_FLAMS = Lists.newArrayList();
 
-	private static final List<IFlimFlamEffect> unmodifiableView = Collections.unmodifiableList(flimFlams);
+	private static final List<IFlimFlamEffect> UNMODIFIABLE_VIEW = Collections.unmodifiableList(FLIM_FLAMS);
 
-	private static final Map<String, IFlimFlamEffect> flimFlamsByName = Maps.newHashMap();
+	private static final Map<String, IFlimFlamEffect> FLIM_FLAMS_BY_NAME = Maps.newHashMap();
+
+	public static final Blacklist BLACKLIST = new Blacklist();
+
+	public static class Blacklist {
+		private Set<String> blacklist;
+
+		private void loadBlacklist() {
+			blacklist = Sets.newHashSet();
+			Set<String> validNames = Sets.newHashSet(FlimFlamRegistry.getAllFlimFlamsNames());
+			for (String s : Config.flimFlamBlacklist) {
+				if (validNames.contains(s)) {
+					blacklist.add(s);
+					Log.info("Blacklisting flim-flam %s", s);
+				} else Log.warn("Trying to blacklist unknown flimflam name '%s'", s);
+			}
+		}
+
+		public boolean isBlacklisted(IFlimFlamEffect effect) {
+			if (blacklist == null) loadBlacklist();
+			return (Config.safeFlimFlams && !effect.isSafe()) || blacklist.contains(effect.name());
+		}
+
+		@SubscribeEvent
+		public void onReconfig(ConfigurationChange.Post evt) {
+			if (evt.check("tomfoolery", "flimFlamBlacklist")) blacklist = null;
+		}
+
+		public void init() {
+			loadBlacklist();
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+	}
 
 	public static class FlimFlamMeta implements IFlimFlamEffect {
 		private boolean isSilent;
@@ -99,21 +134,21 @@ public class FlimFlamRegistry {
 	}
 
 	protected static IFlimFlamEffect registerFlimFlam(String name, IFlimFlamEffect meta) {
-		flimFlams.add(meta);
-		flimFlamsByName.put(name, meta);
+		FLIM_FLAMS.add(meta);
+		FLIM_FLAMS_BY_NAME.put(name, meta);
 		return meta;
 	}
 
 	public static List<IFlimFlamEffect> getFlimFlams() {
-		return unmodifiableView;
+		return UNMODIFIABLE_VIEW;
 	}
 
 	public static IFlimFlamEffect getFlimFlamByName(String name) {
-		return flimFlamsByName.get(name);
+		return FLIM_FLAMS_BY_NAME.get(name);
 	}
 
 	public static List<String> getAllFlimFlamsNames() {
-		return ImmutableList.copyOf(flimFlamsByName.keySet());
+		return ImmutableList.copyOf(FLIM_FLAMS_BY_NAME.keySet());
 	}
 
 }

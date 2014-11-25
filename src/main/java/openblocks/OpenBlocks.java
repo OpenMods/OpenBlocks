@@ -472,6 +472,8 @@ public class OpenBlocks {
 			FlimFlamRegistry.registerFlimFlam("disarm", -50, 50, new ItemDropFlimFlam());
 			FlimFlamRegistry.registerFlimFlam("effect", -75, 75, new EffectFlimFlam());
 			FlimFlamRegistry.registerFlimFlam("skyblock", -100, 150, new SkyblockFlimFlam()).setRange(Integer.MIN_VALUE, -400);
+
+			FlimFlamRegistry.BLACKLIST.init();
 		}
 	}
 
