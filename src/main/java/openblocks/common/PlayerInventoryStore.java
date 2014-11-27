@@ -120,8 +120,8 @@ public class PlayerInventoryStore {
 		return dumpFile;
 	}
 
-	private static IInventory loadInventory(World world, String fileId) {
-		File file = world.getSaveHandler().getMapFileFromName(PREFIX + fileId);
+	public static IInventory loadInventory(World world, String fileId) {
+		File file = world.getSaveHandler().getMapFileFromName(PREFIX + stripFilename(fileId));
 
 		NBTTagCompound tag;
 		try {
@@ -167,10 +167,7 @@ public class PlayerInventoryStore {
 	}
 
 	public boolean restoreInventory(EntityPlayer player, String fileId) {
-		fileId = stripFilename(fileId);
-
 		IInventory restored = loadInventory(player.worldObj, fileId);
-		if (restored == null) return false;
 
 		InventoryPlayer current = player.inventory;
 		if (current.getSizeInventory() < restored.getSizeInventory()) {

@@ -151,7 +151,7 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "graves", name = "spawnRange", comment = "Size of cube searched for spaces suitable for grave spawning")
 	public static int graveSpawnRange = 10;
-	
+
 	@OnLineModifiable
 	@ConfigProperty(category = "graves", name = "storeContents", comment = "Store contents of spawned graves into separate NBT files (can later be restored with ob_inventory command)")
 	public static boolean backupGraves = true;
