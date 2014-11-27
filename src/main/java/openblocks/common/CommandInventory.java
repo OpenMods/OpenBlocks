@@ -67,7 +67,7 @@ public class CommandInventory implements ICommand {
 			}
 		} else if (subCommand.equalsIgnoreCase(COMMAND_STORE)) {
 			try {
-				File result = PlayerInventoryStore.instance.storePlayerInventory(player);
+				File result = PlayerInventoryStore.instance.storePlayerInventory(player, "command");
 				sender.addChatMessage(new ChatComponentTranslation(
 						"openblocks.misc.stored_inventory",
 						result.getAbsolutePath()));

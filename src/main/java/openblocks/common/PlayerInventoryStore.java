@@ -43,12 +43,16 @@ public class PlayerInventoryStore {
 
 	public static final PlayerInventoryStore instance = new PlayerInventoryStore();
 
-	private static File getNewDumpFile(Date date, String player, World world) {
+	public interface ExtrasFiller {
+		public void addExtras(NBTTagCompound meta);
+	}
+
+	private static File getNewDumpFile(Date date, String player, World world, String type) {
 		String dateStr = FORMATTER.format(date);
 
 		int id = 0;
 		while (true) {
-			String filename = String.format(PREFIX + "%s-%s-%d", player, dateStr, id);
+			String filename = String.format(PREFIX + "%s-%s-%s-%d", player, dateStr, type, id);
 			File file = world.getSaveHandler().getMapFileFromName(filename);
 			if (!file.exists()) return file;
 			id++;
@@ -59,18 +63,38 @@ public class PlayerInventoryStore {
 		return StringUtils.removeEndIgnoreCase(StringUtils.removeStartIgnoreCase(name, PREFIX), ".dat");
 	}
 
-	public File storePlayerInventory(EntityPlayer player) {
-		InventoryPlayer inv = player.inventory;
-		GenericInventory copy = new GenericInventory("tmp", false, inv.getSizeInventory());
-		copy.copyFrom(inv);
+	public static ExtrasFiller createDefaultExtrasFiller(final GameProfile profile, final double x, final double y, final double z) {
+		return new ExtrasFiller() {
+			@Override
+			public void addExtras(NBTTagCompound meta) {
+				meta.setString("PlayerName", profile.getName());
+				meta.setString("PlayerUUID", profile.getId().toString());
+
+				NBTTagCompound location = new NBTTagCompound();
+				location.setDouble("X", x);
+				location.setDouble("Y", y);
+				location.setDouble("Z", z);
+				meta.setTag("Location", location);
+			}
+		};
+	}
+
+	public File storePlayerInventory(final EntityPlayer player, String type) {
+		final GameProfile profile = player.getGameProfile();
+		return storeInventory(player.inventory, profile.getName(), type, player.worldObj,
+				createDefaultExtrasFiller(profile, player.posX, player.posY, player.posZ));
+
+	}
+
+	public File storeInventory(IInventory inventory, String name, String type, World world, ExtrasFiller filler) {
+		GenericInventory copy = new GenericInventory("tmp", false, inventory.getSizeInventory());
+		copy.copyFrom(inventory);
 
 		Date now = new Date();
 
-		GameProfile profile = player.getGameProfile();
-		String name = profile.getName();
 		Matcher matcher = SAFE_CHARS.matcher(name);
 		String playerName = matcher.replaceAll("_");
-		File dumpFile = getNewDumpFile(now, playerName, player.worldObj);
+		File dumpFile = getNewDumpFile(now, playerName, world, type);
 
 		NBTTagCompound invData = new NBTTagCompound();
 		copy.writeToNBT(invData);
@@ -79,14 +103,8 @@ public class PlayerInventoryStore {
 		root.setTag(TAG_INVENTORY, invData);
 
 		root.setLong("Created", now.getTime());
-		root.setString("PlayerName", name);
-		root.setString("PlayerUUID", profile.getId().toString());
-
-		NBTTagCompound location = new NBTTagCompound();
-		location.setDouble("X", player.posX);
-		location.setDouble("Y", player.posY);
-		location.setDouble("Z", player.posZ);
-		root.setTag("Location", location);
+		root.setString("Type", type);
+		filler.addExtras(root);
 
 		try {
 			OutputStream stream = new FileOutputStream(dumpFile);
@@ -173,7 +191,7 @@ public class PlayerInventoryStore {
 			final String playerName = player.getDisplayName();
 			try {
 
-				File file = storePlayerInventory(player);
+				File file = storePlayerInventory(player, "death");
 				Log.info("Storing post-mortem inventory into %s. It can be restored with command '/ob_inventory restore %s %s'",
 						file.getAbsolutePath(), playerName, stripFilename(file.getName()));
 			} catch (Exception e) {

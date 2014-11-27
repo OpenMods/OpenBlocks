@@ -146,7 +146,15 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "graves", name = "destructiveGraves", comment = "Try to overwrite blocks with graves if no suitable place is found on first try")
-	public static boolean destructiveGraves;
+	public static boolean destructiveGraves = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "spawnRange", comment = "Size of cube searched for spaces suitable for grave spawning")
+	public static int graveSpawnRange = 10;
+	
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "storeContents", comment = "Store contents of spawned graves into separate NBT files (can later be restored with ob_inventory command)")
+	public static boolean backupGraves = true;
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
@@ -168,7 +176,7 @@ public class Config {
 	public static String[] disableMobNames = new String[0];
 
 	@OnLineModifiable
-	@ConfigProperty(category = "additional", name = "dumpDeadPlayersInventories", comment = "Should player inventories be stored after death (can later be restored with command)")
+	@ConfigProperty(category = "additional", name = "dumpDeadPlayersInventories", comment = "Should player inventories be stored after death (can be later restored with ob_inventory command)")
 	public static boolean dumpStiffsStuff = true;
 
 	@OnLineModifiable

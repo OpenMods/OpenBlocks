@@ -1,5 +1,6 @@
 package openblocks.common;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.GameRules;
@@ -17,6 +19,7 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.GameRuleManager.GameRule;
+import openblocks.common.PlayerInventoryStore.ExtrasFiller;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
@@ -27,6 +30,7 @@ import openmods.world.DelayedActionTickHandler;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.eventhandler.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -57,9 +61,17 @@ public class PlayerDeathHandler {
 		}
 	};
 
+	private static NBTTagCompound createLocationTag(double x, double y, double z) {
+		NBTTagCompound location = new NBTTagCompound();
+		location.setDouble("X", x);
+		location.setDouble("Y", y);
+		location.setDouble("Z", z);
+		return location;
+	}
+
 	private static class GraveCallable implements Runnable {
 
-		private final String stiffName;
+		private final GameProfile stiffId;
 
 		private final int posX, posY, posZ;
 
@@ -68,18 +80,18 @@ public class PlayerDeathHandler {
 		private final WeakReference<World> world;
 
 		public GraveCallable(World world, EntityPlayer exPlayer, List<EntityItem> loot) {
-			stiffName = exPlayer.getCommandSenderName();
+			this.stiffId = exPlayer.getGameProfile();
 
-			posX = MathHelper.floor_double(exPlayer.posX);
-			posY = MathHelper.floor_double(exPlayer.posY);
-			posZ = MathHelper.floor_double(exPlayer.posZ);
+			this.posX = MathHelper.floor_double(exPlayer.posX);
+			this.posY = MathHelper.floor_double(exPlayer.posY);
+			this.posZ = MathHelper.floor_double(exPlayer.posZ);
 
 			this.world = new WeakReference<World>(world);
 
 			this.loot = ImmutableList.copyOf(loot);
 		}
 
-		private boolean tryPlaceGrave(World world, int x, int y, int z) {
+		private boolean tryPlaceGrave(World world, final int x, final int y, final int z) {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.grave, 0, BlockNotifyFlags.ALL);
 			TileEntity tile = world.getTileEntity(x, y, z);
 			if (tile == null || !(tile instanceof TileEntityGrave)) return false;
@@ -92,19 +104,38 @@ public class PlayerDeathHandler {
 				if (stack != null) InventoryUtils.insertItemIntoInventory(loot, stack.copy());
 			}
 
-			grave.setUsername(stiffName);
+			if (Config.backupGraves) {
+				try {
+					File backup = PlayerInventoryStore.instance.storeInventory(loot, stiffId.getName(), "grave", world,
+							new ExtrasFiller() {
+								@Override
+								public void addExtras(NBTTagCompound meta) {
+									meta.setString("PlayerName", stiffId.getName());
+									meta.setString("PlayerUUID", stiffId.getId().toString());
+									meta.setTag("GraveLocation", createLocationTag(x, y, z));
+									meta.setTag("PlayerLocation", createLocationTag(posX, posY, posZ));
+								}
+							});
+
+					Log.info("Grave backup for player %s saved to %s", stiffId, backup);
+				} catch (Throwable t) {
+					Log.warn("Failed to store grave backup for player %s", stiffId);
+				}
+			}
+
+			grave.setUsername(stiffId.getName());
 			grave.setLoot(loot);
 			return true;
 		}
 
 		private boolean tryPlaceGrave(World world, IGravePlacementChecker checker) {
-			for (int distance = 0; distance < 5; distance++)
+			for (int distance = 0; distance < Config.graveSpawnRange; distance++)
 				for (int checkX = posX - distance; checkX <= posX + distance; checkX++)
 					for (int checkY = posY - distance; checkY <= posY + distance; checkY++)
 						for (int checkZ = posZ - distance; checkZ <= posZ + distance; checkZ++)
 							if (checker.canPlaceGrave(world, checkX, checkY, checkZ) &&
 									tryPlaceGrave(world, checkX, checkY, checkZ)) {
-								Log.debug("Placing grave for player '%s' @ (%d,%d,%d)", stiffName, checkX, checkY, checkZ);
+								Log.debug("Placing grave for player '%s' @ (%d,%d,%d)", stiffId, checkX, checkY, checkZ);
 								return true;
 							}
 
@@ -115,14 +146,14 @@ public class PlayerDeathHandler {
 		public void run() {
 			World world = this.world.get();
 			if (world == null) {
-				Log.warn("Lost world while placing player %s grave", stiffName);
+				Log.warn("Lost world while placing player %s grave", stiffId);
 				return;
 			}
 
 			if (tryPlaceGrave(world, POLITE)) return;
 
 			if (Config.destructiveGraves) {
-				Log.warn("Failed to place grave for player %s, going berserk", stiffName);
+				Log.warn("Failed to place grave for player %s, going berserk", stiffId);
 				if (tryPlaceGrave(world, BRUTAL)) return;
 			}
 
