@@ -1,20 +1,27 @@
 package openblocks.common.item;
 
+import java.util.List;
+
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayer.EnumStatus;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
+import net.minecraft.network.play.server.S0APacketUseBed;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
+import openmods.reflection.FieldAccess;
 import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -28,6 +35,10 @@ public class ItemSleepingBag extends ItemArmor {
 	private static final String TAG_SLEEPING = "sleeping";
 	private static final int ARMOR_CHESTPIECE_TYPE = 1;
 	private static final int ARMOR_CHESTPIECE_SLOT = 2;
+
+	private static final FieldAccess<Boolean> IS_SLEEPING = FieldAccess.create(EntityPlayer.class, "sleeping", "field_71083_bS");
+
+	private static final FieldAccess<Integer> SLEEPING_TIMER = FieldAccess.create(EntityPlayer.class, "sleepTimer", "field_71076_b");
 
 	public static final String TEXTURE_SLEEPINGBAG = "openblocks:textures/models/sleepingbag.png";
 
@@ -72,7 +83,7 @@ public class ItemSleepingBag extends ItemArmor {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if (world.isRemote) return;
+		if (!(player instanceof EntityPlayerMP)) return;
 		if (player.isPlayerSleeping()) return;
 
 		NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
@@ -84,17 +95,19 @@ public class ItemSleepingBag extends ItemArmor {
 		} else {
 			// player just put in on
 			final int posX = MathHelper.floor_double(player.posX);
-			final int posY = MathHelper.floor_double(player.posY + 1);
+			final int posY = MathHelper.floor_double(player.posY + 0.99);
 			final int posZ = MathHelper.floor_double(player.posZ);
 
-			if (!world.getBlock(posX, posY + 1, posZ).isAir(world, posX, posY, posZ)) {
-				player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.oh_no_ceiling"));
+			final int sleepY = posY;
+			final int groundY = posY - 1;
+
+			if (!checkGroundCollision(world, posX, groundY, posZ)) {
+				player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.oh_no_ground"));
 				ejectSleepingBagFromPlayer(player);
 			} else {
-				EnumStatus status = player.sleepInBedAt(posX, posY, posZ);
+				EnumStatus status = sleepSafe((EntityPlayerMP)player, world, posX, sleepY, posZ);
 				if (status == EnumStatus.OK) {
 					ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
-					player.setPosition(player.posX, player.posY, player.posZ);
 					saveOriginalSpawn(spawn, tag);
 					tag.setBoolean(TAG_SLEEPING, true);
 				} else {
@@ -108,7 +121,45 @@ public class ItemSleepingBag extends ItemArmor {
 				}
 			}
 		}
+	}
 
+	private static EntityPlayer.EnumStatus sleepSafe(EntityPlayerMP player, World world, int x, int y, int z) {
+		PlayerSleepInBedEvent event = new PlayerSleepInBedEvent(player, x, y, z);
+		MinecraftForge.EVENT_BUS.post(event);
+		if (event.result != null) return event.result;
+
+		if (player.isPlayerSleeping() || !player.isEntityAlive()) return EntityPlayer.EnumStatus.OTHER_PROBLEM;
+		if (!world.provider.isSurfaceWorld()) return EntityPlayer.EnumStatus.NOT_POSSIBLE_HERE;
+		if (world.isDaytime()) return EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW;
+
+		List<?> list = world.getEntitiesWithinAABB(EntityMob.class, AxisAlignedBB.getBoundingBox(x - 8, y - 5, z - 8, x + 8, y + 5, z + 8));
+		if (!list.isEmpty()) return EntityPlayer.EnumStatus.NOT_SAFE;
+
+		if (player.isRiding()) player.mountEntity(null);
+
+		IS_SLEEPING.set(player, true);
+		SLEEPING_TIMER.set(player, 0);
+
+		player.motionX = player.motionZ = player.motionY = 0.0D;
+		world.updateAllPlayersSleepingFlag();
+
+		S0APacketUseBed sleepPacket = new S0APacketUseBed(player, x, y, z);
+		player.getServerForPlayer().getEntityTracker().func_151247_a(player, sleepPacket);
+		player.playerNetServerHandler.sendPacket(sleepPacket);
+
+		return EntityPlayer.EnumStatus.OK;
+	}
+
+	private static boolean checkGroundCollision(World world, int x, int y, int z) {
+		Block block = world.getBlock(x, y, z);
+		AxisAlignedBB aabb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
+		if (aabb == null) return true;
+
+		double dx = aabb.maxX - aabb.minX;
+		double dy = aabb.maxY - aabb.minY;
+		double dz = aabb.maxZ - aabb.minZ;
+
+		return (dx >= 0.5) && (dy >= 0.5) && (dz >= 0.5);
 	}
 
 	private static void ejectSleepingBagFromPlayer(EntityPlayer player) {

@@ -84,6 +84,7 @@ openblocks.misc.total_blocks=Total block count: %d
 openblocks.misc.get_witched=Get witched!
 openblocks.misc.page=Page %d of %d
 openblocks.misc.oh_no_ceiling=You can't fall asleep here. Ceiling disturbs you too much...
+openblocks.misc.oh_no_ground=You want to sleep on THAT!?
 
 openblocks.misc.cant_restore=Can't restore inventory for player %s
 openblocks.misc.cant_store=Can't store player %s inventory
