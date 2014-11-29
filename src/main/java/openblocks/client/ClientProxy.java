@@ -175,10 +175,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());
 		}
 
-		if (OpenBlocks.Blocks.elevator != null) {
-			MinecraftForge.EVENT_BUS.register(new ElevatorMovementHandler());
-		}
-
 		new BlockRenderingValidator().verifyBlocks(OpenBlocks.Blocks.class);
 	}
 

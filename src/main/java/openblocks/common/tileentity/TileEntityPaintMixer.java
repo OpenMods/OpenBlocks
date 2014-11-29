@@ -330,6 +330,6 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	public IColorChanger createRpcProxy() {
-		return createRpcProxy(IColorChanger.class);
+		return createClientRpcProxy(IColorChanger.class);
 	}
 }

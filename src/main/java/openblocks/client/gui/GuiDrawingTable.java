@@ -21,7 +21,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
-		final IStencilCrafter rpcProxy = getContainer().getOwner().createRpcProxy(IStencilCrafter.class);
+		final IStencilCrafter rpcProxy = getContainer().getOwner().createClientRpcProxy(IStencilCrafter.class);
 
 		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), BaseComponent.TEXTURE_SHEET);
 		buttonLeft.setListener(new IMouseDownListener() {

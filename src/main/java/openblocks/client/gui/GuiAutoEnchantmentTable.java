@@ -32,7 +32,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 	protected void addCustomizations(BaseComposite root) {
 		TileEntityAutoEnchantmentTable te = getContainer().getOwner();
 
-		final ILevelChanger rpc = te.createRpcProxy(ILevelChanger.class);
+		final ILevelChanger rpc = te.createClientRpcProxy(ILevelChanger.class);
 
 		final GuiComponentSlider slider = new GuiComponentSlider(44, 39, 45, 1, 30, 0);
 		slider.setListener(new IValueChangedListener<Integer>() {

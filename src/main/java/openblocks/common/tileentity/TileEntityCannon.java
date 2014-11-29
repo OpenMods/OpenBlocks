@@ -11,8 +11,8 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
+import openblocks.rpc.ICannon;
 import openmods.api.ISurfaceAttachment;
-import openmods.events.network.TileEntityMessageEventPacket;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.InventoryUtils;
@@ -20,7 +20,7 @@ import openmods.utils.render.GeometryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment {
+public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ICannon {
 
 	private static final int YAW_CHANGE_SPEED = 3;
 	public SyncableDouble targetPitch;
@@ -97,7 +97,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	private void fireStack(ItemStack stack) {
-		new TileEntityMessageEventPacket(this).sendToWatchers();
+		final ICannon rpc = createServerRpcProxy(ICannon.class);
+		rpc.fireCannon();
+
 		EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 		item.delayBeforeCanPickup = 20;
 
@@ -110,7 +112,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	@Override
-	public void onEvent(TileEntityMessageEventPacket event) {
+	public void fireCannon() {
 		ticksSinceLastFire = 0;
 		double pitchRad = Math.toRadians(currentYaw - 90);
 		double x = -0.5 * Math.cos(pitchRad);

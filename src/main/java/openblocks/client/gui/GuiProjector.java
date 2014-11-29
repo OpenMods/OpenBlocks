@@ -37,7 +37,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 
 	public GuiProjector(ContainerProjector container) {
 		super(container, 176, 234, "");
-		IRotatable proxy = getContainer().getOwner().createRpcProxy(IRotatable.class);
+		IRotatable proxy = getContainer().getOwner().createClientRpcProxy(IRotatable.class);
 
 		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(7, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176, 0, 13, 13), texture);
 		buttonLeft.setListener(createRotationListener(proxy, -1));

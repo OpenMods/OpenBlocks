@@ -90,7 +90,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class)
 		public static BlockGuide guide;
 
-		@RegisterBlock(name = "elevator", tileEntity = TileEntityElevator.class, itemBlock = ItemElevator.class)
+		@RegisterBlock(name = "elevator", itemBlock = ItemElevator.class)
 		public static BlockElevator elevator;
 
 		@RegisterBlock(name = "heal", tileEntity = TileEntityHealBlock.class)
@@ -377,7 +377,8 @@ public class OpenBlocks {
 				.registerInterface(IRotatable.class)
 				.registerInterface(IStencilCrafter.class)
 				.registerInterface(IColorChanger.class)
-				.registerInterface(ILevelChanger.class);
+				.registerInterface(ILevelChanger.class)
+				.registerInterface(ICannon.class);
 
 		Config.register();
 
@@ -431,6 +432,10 @@ public class OpenBlocks {
 
 		if (Items.luggage != null) {
 			MinecraftForge.EVENT_BUS.register(new LuggageDropHandler());
+		}
+
+		if (Blocks.elevator != null) {
+			MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
 		}
 
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
