@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import openblocks.Config;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
+import openmods.utils.TagUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -70,11 +71,7 @@ public class PlayerInventoryStore {
 				meta.setString("PlayerName", profile.getName());
 				meta.setString("PlayerUUID", profile.getId().toString());
 
-				NBTTagCompound location = new NBTTagCompound();
-				location.setDouble("X", x);
-				location.setDouble("Y", y);
-				location.setDouble("Z", z);
-				meta.setTag("Location", location);
+				meta.setTag("Location", TagUtils.store(x, y, z));
 			}
 		};
 	}

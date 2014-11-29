@@ -24,15 +24,15 @@ import openblocks.client.model.ModelSleepingBag;
 import openmods.reflection.FieldAccess;
 import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
+import openmods.utils.TagUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSleepingBag extends ItemArmor {
 
-	private static final String TAG_SPAWN_Z = "spawnz";
-	private static final String TAG_SPAWN_Y = "spawny";
-	private static final String TAG_SPAWN_X = "spawnx";
-	private static final String TAG_SLEEPING = "sleeping";
+	private static final String TAG_SPAWN = "Spawn";
+	private static final String TAG_POSITION = "Position";
+	private static final String TAG_SLEEPING = "Sleeping";
 	private static final int ARMOR_CHESTPIECE_TYPE = 1;
 	private static final int ARMOR_CHESTPIECE_SLOT = 2;
 
@@ -89,9 +89,9 @@ public class ItemSleepingBag extends ItemArmor {
 		NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
 		if (tag.getBoolean(TAG_SLEEPING)) {
 			// player just woke up
-			revertSpawnFromTag(player, tag);
+			restoreOriginalSpawn(player, tag);
+			restoreOriginalPosition(player, tag);
 			tag.removeTag(TAG_SLEEPING);
-			ejectSleepingBagFromPlayer(player);
 		} else {
 			// player just put in on
 			final int posX = MathHelper.floor_double(player.posX);
@@ -107,8 +107,8 @@ public class ItemSleepingBag extends ItemArmor {
 			} else {
 				EnumStatus status = sleepSafe((EntityPlayerMP)player, world, posX, sleepY, posZ);
 				if (status == EnumStatus.OK) {
-					ChunkCoordinates spawn = player.getBedLocation(world.provider.dimensionId);
-					saveOriginalSpawn(spawn, tag);
+					storeOriginalSpawn(player, tag);
+					storeOriginalPosition(player, tag);
 					tag.setBoolean(TAG_SLEEPING, true);
 				} else {
 					if (status == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW) {
@@ -139,6 +139,7 @@ public class ItemSleepingBag extends ItemArmor {
 
 		IS_SLEEPING.set(player, true);
 		SLEEPING_TIMER.set(player, 0);
+		player.playerLocation = new ChunkCoordinates(x, y, z);
 
 		player.motionX = player.motionZ = player.motionY = 0.0D;
 		world.updateAllPlayersSleepingFlag();
@@ -170,21 +171,28 @@ public class ItemSleepingBag extends ItemArmor {
 		}
 	}
 
-	private static void revertSpawnFromTag(EntityPlayer player, NBTTagCompound tag) {
-		if (tag.hasKey(TAG_SPAWN_X) && tag.hasKey(TAG_SPAWN_Y) && tag.hasKey(TAG_SPAWN_Z)) {
-			ChunkCoordinates coords = new ChunkCoordinates(tag.getInteger(TAG_SPAWN_X), tag.getInteger(TAG_SPAWN_Y), tag.getInteger(TAG_SPAWN_Z));
+	private static void storeOriginalSpawn(EntityPlayer player, NBTTagCompound tag) {
+		ChunkCoordinates spawn = player.getBedLocation(player.worldObj.provider.dimensionId);
+		if (spawn != null) tag.setTag(TAG_SPAWN, TagUtils.store(spawn));
+	}
+
+	private static void restoreOriginalSpawn(EntityPlayer player, NBTTagCompound tag) {
+		if (tag.hasKey(TAG_SPAWN)) {
+			ChunkCoordinates coords = TagUtils.readCoord(tag.getCompoundTag(TAG_SPAWN)).asChunkCoordinate();
 			player.setSpawnChunk(coords, false, player.worldObj.provider.dimensionId);
-			tag.removeTag(TAG_SPAWN_X);
-			tag.removeTag(TAG_SPAWN_Y);
-			tag.removeTag(TAG_SPAWN_Z);
+			tag.removeTag(TAG_SPAWN);
 		}
 	}
 
-	private static void saveOriginalSpawn(ChunkCoordinates spawn, NBTTagCompound tag) {
-		if (spawn != null) {
-			tag.setInteger(TAG_SPAWN_X, spawn.posX);
-			tag.setInteger(TAG_SPAWN_Y, spawn.posY);
-			tag.setInteger(TAG_SPAWN_Z, spawn.posZ);
+	private static void storeOriginalPosition(Entity e, NBTTagCompound tag) {
+		tag.setTag(TAG_POSITION, TagUtils.store(e.posX, e.posY, e.posZ));
+	}
+
+	private static void restoreOriginalPosition(Entity e, NBTTagCompound tag) {
+		if (tag.hasKey(TAG_POSITION)) {
+			Vec3 position = TagUtils.readVec(tag.getCompoundTag(TAG_POSITION));
+			e.setPosition(position.xCoord, position.yCoord, position.zCoord);
+			tag.removeTag(TAG_POSITION);
 		}
 	}
 

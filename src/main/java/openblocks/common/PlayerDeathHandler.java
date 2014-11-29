@@ -25,6 +25,7 @@ import openmods.Log;
 import openmods.inventory.GenericInventory;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.InventoryUtils;
+import openmods.utils.TagUtils;
 import openmods.world.DelayedActionTickHandler;
 
 import org.apache.logging.log4j.Level;
@@ -60,14 +61,6 @@ public class PlayerDeathHandler {
 			return block.getBlockHardness(world, x, y, z) >= 0 && world.getTileEntity(x, y, z) == null;
 		}
 	};
-
-	private static NBTTagCompound createLocationTag(double x, double y, double z) {
-		NBTTagCompound location = new NBTTagCompound();
-		location.setDouble("X", x);
-		location.setDouble("Y", y);
-		location.setDouble("Z", z);
-		return location;
-	}
 
 	private static class GraveCallable implements Runnable {
 
@@ -112,8 +105,8 @@ public class PlayerDeathHandler {
 								public void addExtras(NBTTagCompound meta) {
 									meta.setString("PlayerName", stiffId.getName());
 									meta.setString("PlayerUUID", stiffId.getId().toString());
-									meta.setTag("GraveLocation", createLocationTag(x, y, z));
-									meta.setTag("PlayerLocation", createLocationTag(posX, posY, posZ));
+									meta.setTag("GraveLocation", TagUtils.store(x, y, z));
+									meta.setTag("PlayerLocation", TagUtils.store(posX, posY, posZ));
 								}
 							});
 
