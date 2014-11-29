@@ -10,7 +10,6 @@ import java.util.Random;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -30,6 +29,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData, IEntitySelector {
 
+	private static final float MAGNET_HEIGHT = 0.5f;
+	private static final float MAGNET_WIDTH = 0.5f;
 	private static final Random RANDOM = new Random();
 
 	public interface IOwner {
@@ -58,14 +59,11 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			EntityPlayer player = owner.get();
 			if (player == null) return null;
 
-			double posX = player.posX
-					+ CraneRegistry.ARM_RADIUS
-					* MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI
-							/ 180);
+			double posX = player.posX + CraneRegistry.ARM_RADIUS
+					* MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
 			double posZ = player.posZ
 					+ CraneRegistry.ARM_RADIUS
-					* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI
-							/ 180);
+					* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
 
 			double posY = player.posY + player.height
 					- CraneRegistry.instance.getCraneMagnetDistance(player);
@@ -167,11 +165,16 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 	@Override
 	public void onUpdate() {
+		fixSize();
+		
 		if (!worldObj.isRemote) {
 			if (owner == null || !owner.isValid(this)) {
 				setDead();
 				return;
-			} else if (owner != null) smoother.setTarget(owner.getTarget());
+			} else if (owner != null) {
+				final Vec3 target = owner.getTarget().addVector(0, -height, 0);
+				smoother.setTarget(target);
+			}
 		}
 
 		updatePrevPosition();
@@ -183,6 +186,16 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle("portal", posX
 				+ RANDOM.nextDouble() * 0.1, posY - RANDOM.nextDouble() * 0.2, posZ
 				+ RANDOM.nextDouble() * 0.1, RANDOM.nextGaussian(), -Math.abs(RANDOM.nextGaussian()), RANDOM.nextGaussian());
+	}
+
+	protected void fixSize() {
+		if (riddenByEntity != null) {
+			float width = Math.max(MAGNET_WIDTH, riddenByEntity.width);
+			float height = MAGNET_HEIGHT + riddenByEntity.height;
+			setSize(width, height);
+		} else {
+			setSize(MAGNET_WIDTH, MAGNET_HEIGHT);
+		}
 	}
 
 	@Override
@@ -213,10 +226,8 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	private static double getMountedYOffset(Entity rider) {
-		if (rider instanceof EntityItem) // yeah, hack
-		return -0.5;
-		double tmp = -Math.max(rider.getMountedYOffset(), rider.height);
-		return tmp;
+		if (rider instanceof EntityPlayer) return 0.5f;
+		return 0;
 	}
 
 	public boolean toggleMagnet() {
@@ -278,6 +289,21 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		}
 
 		return result;
+	}
+
+	@Override
+	public boolean shouldRiderSit() {
+		return false;
+	}
+
+	@Override
+	public boolean shouldDismountInWater(Entity rider) {
+		return false;
+	}
+
+	@Override
+	public boolean canRiderInteract() {
+		return false;
 	}
 
 	public boolean isAboveTarget() {
