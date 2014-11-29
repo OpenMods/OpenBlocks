@@ -30,7 +30,18 @@ public class ElevatorActionHandler {
 		return aabb == null || aabb.getAverageEdgeLength() < 0.7;
 	}
 
-	private static int findLevel(World world, int x, int y, int z, ForgeDirection direction) {
+	private static boolean canTeleportPlayer(EntityPlayer entity, World world, int x, int y, int z) {
+		final AxisAlignedBB aabb = entity.boundingBox;
+		double height = Math.abs(aabb.maxY - aabb.minY);
+		int blockHeight = Math.max(1, MathHelper.ceiling_double_int(height));
+
+		for (int dy = 0; dy < blockHeight; dy++)
+			if (!canTeleportPlayer(world, x, y + dy, z)) return false;
+
+		return true;
+	}
+
+	private static int findLevel(EntityPlayer player, World world, int x, int y, int z, ForgeDirection direction) {
 		Preconditions.checkArgument(direction == ForgeDirection.UP
 				|| direction == ForgeDirection.DOWN, "Must be either up or down... for now");
 
@@ -46,9 +57,7 @@ public class ElevatorActionHandler {
 
 			if (block == OpenBlocks.Blocks.elevator) {
 				final int otherColor = world.getBlockMetadata(x, y, z);
-				if (otherColor == thisColor &&
-						canTeleportPlayer(world, x, y + 1, z) &&
-						canTeleportPlayer(world, x, y + 2, z)) return y;
+				if (otherColor == thisColor && canTeleportPlayer(player, world, x, y + 1, z)) return y;
 			}
 
 			ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
@@ -68,8 +77,8 @@ public class ElevatorActionHandler {
 		return -1;
 	}
 
-	private static void activate(World world, int x, int y, int z, EntityPlayer player, ForgeDirection dir) {
-		int level = findLevel(world, x, y, z, dir);
+	private static void activate(EntityPlayer player, World world, int x, int y, int z, ForgeDirection dir) {
+		int level = findLevel(player, world, x, y, z, dir);
 		if (level >= 0) {
 			int distance = (int)Math.abs(player.posY - level);
 			boolean drainXP = Config.elevatorDrainsXP && !player.capabilities.isCreativeMode;
@@ -99,13 +108,17 @@ public class ElevatorActionHandler {
 
 		if (world.getBlock(x, y, z) != OpenBlocks.Blocks.elevator) return;
 
-		if (evt.sender != null) switch (evt.type) {
-			case JUMP:
-				activate(world, x, y, z, evt.sender, ForgeDirection.UP);
-				break;
-			case SNEAK:
-				activate(world, x, y, z, evt.sender, ForgeDirection.DOWN);
-				break;
+		if (evt.sender != null) {
+			if (evt.sender.ridingEntity != null) return;
+
+			switch (evt.type) {
+				case JUMP:
+					activate(evt.sender, world, x, y, z, ForgeDirection.UP);
+					break;
+				case SNEAK:
+					activate(evt.sender, world, x, y, z, ForgeDirection.DOWN);
+					break;
+			}
 		}
 	}
 
