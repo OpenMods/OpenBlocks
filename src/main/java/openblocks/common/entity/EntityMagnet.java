@@ -166,7 +166,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	@Override
 	public void onUpdate() {
 		fixSize();
-		
+
 		if (!worldObj.isRemote) {
 			if (owner == null || !owner.isValid(this)) {
 				setDead();

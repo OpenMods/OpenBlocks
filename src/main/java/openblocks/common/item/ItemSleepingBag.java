@@ -91,6 +91,7 @@ public class ItemSleepingBag extends ItemArmor {
 			// player just woke up
 			restoreOriginalSpawn(player, tag);
 			restoreOriginalPosition(player, tag);
+			ejectSleepingBagFromPlayer(player);
 			tag.removeTag(TAG_SLEEPING);
 		} else {
 			// player just put in on
