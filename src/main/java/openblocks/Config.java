@@ -59,6 +59,10 @@ public class Config {
 	public static boolean shouldTanksUpdate = true;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "tank", name = "displayAllFluids", comment = "Should filled tanks be searchable with creative menu")
+	public static boolean displayAllFilledTanks = true;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000")
 	public static double trophyDropChance = 0.001;
 

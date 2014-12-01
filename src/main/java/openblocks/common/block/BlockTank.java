@@ -114,7 +114,7 @@ public class BlockTank extends OpenBlock {
 	public void getSubBlocks(Item item, CreativeTabs tab, List result) {
 		result.add(new ItemStack(item));
 
-		if (tab == null) {
+		if (tab == null && Config.displayAllFilledTanks) {
 			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())
 				result.add(ItemTankBlock.createFilledTank(fluid));
 		}
