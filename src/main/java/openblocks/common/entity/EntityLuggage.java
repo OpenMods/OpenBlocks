@@ -16,7 +16,6 @@ import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
-import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
 
 import com.google.common.base.Strings;
@@ -100,8 +99,7 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 				String nameTag = getCustomNameTag();
 				if (!Strings.isNullOrEmpty(nameTag)) luggageItem.setStackDisplayName(nameTag);
 
-				BlockUtils.dropItemStackInWorld(worldObj, posX, posY, posZ, luggageItem);
-				setDead();
+				if (player.inventory.addItemStackToInventory(luggageItem)) setDead();
 			} else {
 				player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, getEntityId(), 0, 0);
 			}
