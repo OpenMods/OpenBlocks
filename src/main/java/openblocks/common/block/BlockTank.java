@@ -116,7 +116,13 @@ public class BlockTank extends OpenBlock {
 
 		if (tab == null && Config.displayAllFilledTanks) {
 			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())
-				result.add(ItemTankBlock.createFilledTank(fluid));
+				try {
+					result.add(ItemTankBlock.createFilledTank(fluid));
+				} catch (Throwable t) {
+					throw new RuntimeException(String.format("Failed to create item for fluid '%s'. Report this to mod author. " +
+							"Until this is fixed, you can bypass this code with config option 'tanks.displayAllFluids'",
+							fluid.getName()), t);
+				}
 		}
 	}
 

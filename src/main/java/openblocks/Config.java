@@ -59,7 +59,7 @@ public class Config {
 	public static boolean shouldTanksUpdate = true;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "tank", name = "displayAllFluids", comment = "Should filled tanks be searchable with creative menu")
+	@ConfigProperty(category = "tanks", name = "displayAllFluids", comment = "Should filled tanks be searchable with creative menu")
 	public static boolean displayAllFilledTanks = true;
 
 	@OnLineModifiable
