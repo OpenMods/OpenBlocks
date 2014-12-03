@@ -1,5 +1,6 @@
 package openblocks;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import openblocks.client.gui.GuiDevNull;
@@ -27,8 +28,12 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		return new ContainerDevNull(player.inventory, new PlayerItemInventory(player, 1));
 	}
 
-	private static ContainerLuggage createLuggageContainer(EntityPlayer player, World world, int x) {
-		return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x));
+	private static ContainerLuggage createLuggageContainer(EntityPlayer player, World world, int entityId) {
+		final Entity entity = world.getEntityByID(entityId);
+		if (entity instanceof EntityLuggage) return new ContainerLuggage(player.inventory, (EntityLuggage)entity);
+
+		Log.warn("Trying to open luggage container for invalid entity %d:%s", entityId, entity);
+		return null;
 	}
 
 	@Override
@@ -55,8 +60,10 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		if (guiId == null) return null;
 
 		switch (guiId) {
-			case luggage:
-				return new GuiLuggage(createLuggageContainer(player, world, x));
+			case luggage: {
+				final ContainerLuggage container = createLuggageContainer(player, world, x);
+				return container != null? new GuiLuggage(container) : null;
+			}
 			case infoBook:
 				return new GuiInfoBook();
 			case devNull:
