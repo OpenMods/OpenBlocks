@@ -27,7 +27,7 @@ public class ItemHangGlider extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		if (!world.isRemote) {
+		if (!world.isRemote && player != null) {
 			EntityHangGlider glider = spawnedGlidersMap.get(player);
 			if (glider != null) despawnGlider(player, glider);
 			else spawnGlider(player);

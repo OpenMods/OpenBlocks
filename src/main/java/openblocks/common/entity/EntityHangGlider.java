@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.common.item.ItemHangGlider;
+import openmods.Log;
 
 import com.google.common.collect.MapMaker;
 
@@ -79,7 +80,12 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		data.writeInt(player.getEntityId());
+		if (player == null) {
+			Log.warn("Got glider without player id (%s)", this);
+			data.writeInt(-42);
+		} else {
+			data.writeInt(player.getEntityId());
+		}
 	}
 
 	@Override
@@ -160,7 +166,6 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		this.motionX = this.posX - this.prevPosX;
 		this.motionY = this.posY - this.prevPosY;
 		this.motionZ = this.posZ - this.prevPosZ;
-
 	}
 
 	@Override
@@ -168,5 +173,10 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
+
+	@Override
+	public boolean writeToNBTOptional(NBTTagCompound p_70039_1_) {
+		return false;
+	}
 
 }
