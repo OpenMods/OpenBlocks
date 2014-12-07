@@ -20,6 +20,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
+import openmods.Log;
 import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -117,9 +118,12 @@ public class BlockTank extends OpenBlock {
 		if (tab == null && Config.displayAllFilledTanks) {
 			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())
 				try {
-					result.add(ItemTankBlock.createFilledTank(fluid));
+					final ItemStack tankStack = ItemTankBlock.createFilledTank(fluid);
+
+					if (tankStack != null) result.add(tankStack);
+					else Log.debug("Failed to create filled tank stack for fluid '%s'. Not registered?", fluid.getName());
 				} catch (Throwable t) {
-					throw new RuntimeException(String.format("Failed to create item for fluid '%s'. Report this to mod author. " +
+					throw new RuntimeException(String.format("Failed to create item for fluid '%s'" +
 							"Until this is fixed, you can bypass this code with config option 'tanks.displayAllFluids'",
 							fluid.getName()), t);
 				}

@@ -50,13 +50,15 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 		if (!Strings.isNullOrEmpty(localizedName) && !localizedName.equals(fluid.getUnlocalizedName())) {
 			return fluid.getRarity(fluidStack).rarityColor.toString() + localizedName;
 		} else {
-			return EnumChatFormatting.OBFUSCATED.toString() + "LOLNOPE";
+			return EnumChatFormatting.OBFUSCATED + "LOLNOPE" + EnumChatFormatting.RESET;
 		}
 	}
 
 	public static ItemStack createFilledTank(Fluid fluid) {
 		final int tankCapacity = TileEntityTank.getTankCapacity();
-		FluidStack stack = new FluidStack(fluid, tankCapacity);
+		FluidStack stack = FluidRegistry.getFluidStack(fluid.getName(), tankCapacity);
+		if (stack == null) return null;
+
 		FluidTank tank = new FluidTank(tankCapacity);
 		tank.setFluid(stack);
 
