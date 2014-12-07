@@ -20,6 +20,7 @@ import openmods.entity.EntityBlock;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
@@ -35,6 +36,8 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private static final int FALLING_TIME = 10;
 	public static final int MAX_HEIGHT = 5;
 	private static final double STAGE_CHANGE_CHANCE = 0.8;
+	private static final String MR_GLITCH_NAME = "Mikeemoo";
+	private static final UUID MR_GLITCH_UUID = UUID.fromString("d4d119aa-d410-488a-8734-0053577d4a1a");
 
 	public static enum State {
 		INERT(0, 0, false) {
@@ -168,6 +171,16 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private UUID ownerUUID;
 	private String ownerSkin;
 
+	private UUID getUUID() {
+		if (ownerUUID == null) ownerUUID = MR_GLITCH_UUID;
+		return ownerUUID;
+	}
+
+	private String getSkin() {
+		if (Strings.isNullOrEmpty(ownerSkin)) ownerSkin = MR_GLITCH_NAME;
+		return ownerSkin;
+	}
+
 	public float getRotation(float partialTickTime) {
 		return rotation + rotationSpeed * partialTickTime;
 	}
@@ -212,7 +225,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private void explode() {
 		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 		worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
-		EntityMiniMe miniMe = new EntityMiniMe(worldObj, ownerUUID, ownerSkin);
+		EntityMiniMe miniMe = new EntityMiniMe(worldObj, getUUID(), getSkin());
 		miniMe.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 0, 0);
 		worldObj.spawnEntityInWorld(miniMe);
 	}
@@ -250,8 +263,8 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
-		if (ownerUUID != null) nbt.setString("OwnerUuid", ownerUUID.toString());
-		nbt.setString("OwnerSkin", ownerSkin);
+		nbt.setString("OwnerUuid", getUUID().toString());
+		nbt.setString("OwnerSkin", getSkin());
 	}
 
 	@Override
