@@ -19,8 +19,8 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.InventoryUtils;
 import openmods.tileentity.OpenTileEntity;
-import openmods.utils.InventoryUtils;
 
 public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IHasGui, IExtendable, IInventoryProvider {
 

@@ -23,8 +23,9 @@ import openblocks.common.PlayerInventoryStore.ExtrasFiller;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
+import openmods.inventory.transfer.SinkFactory;
+import openmods.inventory.transfer.sinks.IItemStackSink;
 import openmods.utils.BlockNotifyFlags;
-import openmods.utils.InventoryUtils;
 import openmods.utils.TagUtils;
 import openmods.world.DelayedActionTickHandler;
 
@@ -92,10 +93,13 @@ public class PlayerDeathHandler {
 			TileEntityGrave grave = (TileEntityGrave)tile;
 
 			IInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
+			IItemStackSink lootSink = SinkFactory.wrap(loot);
 			for (EntityItem entityItem : this.loot) {
 				ItemStack stack = entityItem.getEntityItem();
-				if (stack != null) InventoryUtils.insertItemIntoInventory(loot, stack.copy());
+				lootSink.accept(stack);
 			}
+			
+			lootSink.commit();
 
 			if (Config.backupGraves) {
 				try {

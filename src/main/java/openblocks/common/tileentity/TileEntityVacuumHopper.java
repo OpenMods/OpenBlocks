@@ -28,13 +28,13 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.InventoryUtils;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableDirs;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
-import openmods.utils.InventoryUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 

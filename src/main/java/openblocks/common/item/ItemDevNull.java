@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
+import openmods.inventory.InventoryUtils;
 import openmods.inventory.ItemInventory;
 import openmods.inventory.PlayerItemInventory;
-import openmods.utils.InventoryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -70,10 +70,10 @@ public class ItemDevNull extends Item {
 				ItemInventory inventory = new ItemInventory(stack, 1);
 				ItemStack containedStack = inventory.getStackInSlot(0);
 				if (containedStack != null) {
-					boolean isMatching = InventoryUtils.areItemAndTagEqual(pickedStack, containedStack);
+					boolean isMatching = InventoryUtils.STACK_EQUALITY_TESTER.isEqual(pickedStack, containedStack);
 					if (isMatching) {
+						pickedStack.stackSize = InventoryUtils.addItems(containedStack, pickedStack.stackSize);
 						foundMatchingContainer = true;
-						InventoryUtils.tryInsertStack(inventory, 0, pickedStack, true);
 					}
 				}
 			}

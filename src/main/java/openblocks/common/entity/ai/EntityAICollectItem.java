@@ -9,7 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.common.entity.EntityLuggage;
-import openmods.utils.InventoryUtils;
+import openmods.inventory.transfer.SinkFactory;
+import openmods.inventory.transfer.sinks.IItemStackSink;
 
 public class EntityAICollectItem extends EntityAIBase {
 
@@ -77,18 +78,21 @@ public class EntityAICollectItem extends EntityAIBase {
 		if (!luggage.worldObj.isRemote) {
 			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
-				int preEatSize = stack.stackSize;
-				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
-				// Check that the size changed
-				if (preEatSize != stack.stackSize) {
+
+				IItemStackSink sink = SinkFactory.wrap(luggage.getInventory());
+				final int accepted = sink.accept(stack);
+
+				if (accepted > 0) {
+					sink.commit();
+
+					stack.stackSize -= accepted;
+					if (stack.stackSize <= 0) targetItem.setDead();
+
 					if (luggage.lastSound > 15) {
 						boolean isFood = stack.getItem() instanceof ItemFood;
 						luggage.playSound(isFood? "openblocks:luggage.eat.food" : "openblocks:luggage.eat.item",
 								0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						luggage.lastSound = 0;
-					}
-					if (stack.stackSize == 0) {
-						targetItem.setDead();
 					}
 				}
 			}

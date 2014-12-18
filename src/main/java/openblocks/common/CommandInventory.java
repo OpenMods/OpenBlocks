@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChunkCoordinates;
 import openmods.Log;
+import openmods.inventory.InventoryUtils;
 import openmods.utils.BlockUtils;
-import openmods.utils.InventoryUtils;
 
 import com.google.common.collect.Lists;
 
