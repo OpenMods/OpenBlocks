@@ -13,6 +13,7 @@ import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
 import openblocks.rpc.ICannon;
 import openmods.api.ISurfaceAttachment;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.InventoryUtils;
@@ -88,7 +89,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 			IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, direction);
 			if (inventory != null) {
-				ItemStack stack = InventoryUtils.removeNextItemStack(inventory);
+				ItemStack stack = ItemDistribution.removeFromFirstNonEmptySlot(inventory);
 				if (stack != null) return stack;
 			}
 		}

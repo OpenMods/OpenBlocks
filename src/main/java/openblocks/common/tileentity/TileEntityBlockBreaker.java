@@ -23,10 +23,10 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
-import openmods.utils.InventoryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -146,7 +146,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 			if (targetInventory != null) {
 				// try push the item out into a pipe or inventory
 				inventory.setInventorySlotContents(SLOT_BUFFER, stack);
-				int amount = InventoryUtils.moveItemInto(inventory, SLOT_BUFFER, targetInventory, -1, 64, direction, true);
+				int amount = ItemDistribution.moveItemInto(inventory, SLOT_BUFFER, targetInventory, direction, 64, true);
 				inventory.setInventorySlotContents(SLOT_BUFFER, null);
 				stack.stackSize -= amount;
 			}

@@ -16,7 +16,7 @@ import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
-import openmods.utils.InventoryUtils;
+import openmods.inventory.legacy.ItemDistribution;
 
 import com.google.common.base.Strings;
 
@@ -108,7 +108,7 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	}
 
 	public boolean canConsumeStackPartially(ItemStack stack) {
-		return InventoryUtils.testInventoryInsertion(inventory, stack) > 0;
+		return ItemDistribution.testInventoryInsertion(inventory, stack) > 0;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.inventory.ItemInventory;
 import openmods.inventory.PlayerItemInventory;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.utils.InventoryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -73,7 +74,7 @@ public class ItemDevNull extends Item {
 					boolean isMatching = InventoryUtils.areItemAndTagEqual(pickedStack, containedStack);
 					if (isMatching) {
 						foundMatchingContainer = true;
-						InventoryUtils.tryInsertStack(inventory, 0, pickedStack, true);
+						ItemDistribution.tryInsertStack(inventory, 0, pickedStack, true);
 					}
 				}
 			}

@@ -23,8 +23,8 @@ import openblocks.common.PlayerInventoryStore.ExtrasFiller;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.utils.BlockNotifyFlags;
-import openmods.utils.InventoryUtils;
 import openmods.utils.TagUtils;
 import openmods.world.DelayedActionTickHandler;
 
@@ -94,7 +94,7 @@ public class PlayerDeathHandler {
 			IInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
 			for (EntityItem entityItem : this.loot) {
 				ItemStack stack = entityItem.getEntityItem();
-				if (stack != null) InventoryUtils.insertItemIntoInventory(loot, stack.copy());
+				if (stack != null) ItemDistribution.insertItemIntoInventory(loot, stack.copy());
 			}
 
 			if (Config.backupGraves) {

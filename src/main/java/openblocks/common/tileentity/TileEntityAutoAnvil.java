@@ -25,6 +25,7 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.SyncableDirs;
 import openmods.sync.SyncableFlags;
@@ -111,17 +112,17 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 			}
 
 			if (shouldAutoOutput() && hasOutput()) {
-				InventoryUtils.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue());
+				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue(), true);
 			}
 
 			// if we should auto input the tool and we don't currently have one
 			if (shouldAutoInputTool() && !hasTool()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, inventory, 1, Slots.tool.ordinal(), toolSides.getValue());
+				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.tool.ordinal(), toolSides.getValue(), true);
 			}
 
 			// if we should auto input the modifier
 			if (shouldAutoInputModifier()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, inventory, 1, Slots.modifier.ordinal(), modifierSides.getValue());
+				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.modifier.ordinal(), modifierSides.getValue(), true);
 			}
 
 			if (cooldown-- < 0) {

@@ -28,12 +28,12 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.GenericFluidHandler;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
-import openmods.utils.InventoryUtils;
 
 public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IExtendable, IHasGui {
 
@@ -148,7 +148,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			// if there's nothing to drain, disable it
 
 			if (ticks % 1200 == 0) {
-				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, BONEMEAL);
+				hasBonemeal = ItemDistribution.consumeFirstInventoryItem(inventory, BONEMEAL);
 			}
 			if (ticks % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);

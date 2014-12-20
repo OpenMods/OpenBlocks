@@ -28,10 +28,13 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.*;
+import openmods.utils.EnchantmentUtils;
+import openmods.utils.MiscUtils;
+import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
 public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots> {
@@ -106,12 +109,12 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			// if they've ticked auto output, and we have something to output
 			if (shouldAutoOutput() && hasOutputStack()) {
-				InventoryUtils.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, xpBottleSides.getValue());
+				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, xpBottleSides.getValue(), true);
 			}
 
 			// if we should auto input and we don't have any glass in the slot
 			if (shouldAutoInput() && !hasGlassInInput()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, inventory, GLASS_BOTTLE, 1, Slots.input.ordinal(), glassSides.getValue());
+				ItemDistribution.moveItemsFromOneOfSides(this, inventory, GLASS_BOTTLE, 1, Slots.input.ordinal(), glassSides.getValue(), true);
 			}
 
 			logic.checkWorkCondition(hasSpaceInOutput() && hasGlassInInput() && isTankFull());

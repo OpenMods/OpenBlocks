@@ -24,10 +24,13 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.*;
+import openmods.utils.EnchantmentUtils;
+import openmods.utils.MiscUtils;
+import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback {
@@ -110,12 +113,12 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 			}
 
 			if (shouldAutoOutput() && hasStack(Slots.output)) {
-				InventoryUtils.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue());
+				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue(), true);
 			}
 
 			// if we should auto input the tool and we don't currently have one
 			if (shouldAutoInput() && !hasStack(Slots.input)) {
-				InventoryUtils.moveItemsFromOneOfSides(this, inventory, 1, Slots.input.ordinal(), inputSides.getValue());
+				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.input.ordinal(), inputSides.getValue(), true);
 			}
 
 			if (hasStack(Slots.input)

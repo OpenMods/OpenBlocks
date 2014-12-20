@@ -28,13 +28,13 @@ import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableDirs;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
-import openmods.utils.InventoryUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
@@ -97,7 +97,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 		if (entity instanceof EntityItem) {
 			ItemStack stack = ((EntityItem)entity).getEntityItem();
-			return InventoryUtils.testInventoryInsertion(inventory, stack) > 0;
+			return ItemDistribution.testInventoryInsertion(inventory, stack) > 0;
 		}
 
 		if (entity instanceof EntityXPOrb) return tank.getSpace() > 0;
@@ -163,7 +163,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 		for (ForgeDirection output : outputSides) {
 			TileEntity tileOnSurface = getTileInDirection(output);
-			if (InventoryUtils.moveItemInto(inventory, firstUsedSlot, tileOnSurface, -1, 64, output, true) > 0) {
+			if (ItemDistribution.moveItemInto(inventory, firstUsedSlot, tileOnSurface, output, 64, true) > 0) {
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				break;
 			}
@@ -201,7 +201,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 			if (entity instanceof EntityItem && !entity.isDead) {
 				EntityItem item = (EntityItem)entity;
 				ItemStack stack = item.getEntityItem().copy();
-				InventoryUtils.insertItemIntoInventory(inventory, stack);
+				ItemDistribution.insertItemIntoInventory(inventory, stack);
 				if (stack.stackSize == 0) {
 					item.setDead();
 				} else {
