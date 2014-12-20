@@ -6,7 +6,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openmods.infobook.ICustomBookEntryProvider;
 import openmods.item.IMetaItem;
+
+import com.google.common.collect.ImmutableList;
+
 import cpw.mods.fml.common.Loader;
 
 public enum MetasGeneric {
@@ -157,5 +161,14 @@ public enum MetasGeneric {
 	public static void registerItems() {
 		for (MetasGeneric m : values())
 			if (m.isEnabled()) OpenBlocks.Items.generic.registerItem(m.ordinal(), m.createMetaItem());
+	}
+
+	public static class DocProvider implements ICustomBookEntryProvider {
+
+		@Override
+		public Iterable<Entry> getBookEntries() {
+			return ImmutableList.of(new ICustomBookEntryProvider.Entry("unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack()));
+		}
+
 	}
 }

@@ -15,11 +15,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockRopeLadder extends OpenBlock {
 
 	public static final float RENDER_THICKNESS = 1.0f / 64.0f;

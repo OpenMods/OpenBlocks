@@ -4,7 +4,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockAutoAnvil extends OpenBlock {
 
 	public BlockAutoAnvil() {

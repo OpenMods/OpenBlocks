@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
+import openmods.infobook.BookDocumentation;
 import openmods.inventory.ItemInventory;
 import openmods.inventory.PlayerItemInventory;
 import openmods.inventory.legacy.ItemDistribution;
@@ -18,6 +19,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class ItemDevNull extends Item {
 
 	public static class Icons {

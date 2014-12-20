@@ -10,8 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockNotifyFlags;
 
+@BookDocumentation
 public class BlockSponge extends OpenBlock {
 
 	private static final int TICK_RATE = 20 * 5;

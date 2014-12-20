@@ -7,7 +7,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockSprinkler extends OpenBlock {
 
 	public BlockSprinkler() {

@@ -4,7 +4,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockVillageHighlighter extends OpenBlock {
 
 	public BlockVillageHighlighter() {

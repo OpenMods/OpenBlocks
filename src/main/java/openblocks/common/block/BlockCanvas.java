@@ -16,7 +16,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockCanvas extends OpenBlock {
 
 	private int layer = 0;

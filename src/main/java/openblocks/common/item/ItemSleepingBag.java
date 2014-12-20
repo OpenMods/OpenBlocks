@@ -23,6 +23,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
+import openmods.infobook.BookDocumentation;
 import openmods.reflection.FieldAccess;
 import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
@@ -30,6 +31,7 @@ import openmods.utils.TagUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation(customName = "sleepingbag")
 public class ItemSleepingBag extends ItemArmor {
 
 	private static final String TAG_SPAWN = "Spawn";

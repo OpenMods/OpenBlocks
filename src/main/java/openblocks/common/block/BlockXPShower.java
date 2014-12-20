@@ -7,9 +7,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityXPShower;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockXPShower extends OpenBlock {
 
 	public BlockXPShower() {

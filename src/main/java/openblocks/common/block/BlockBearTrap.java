@@ -8,7 +8,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockBearTrap extends OpenBlock {
 
 	public BlockBearTrap() {

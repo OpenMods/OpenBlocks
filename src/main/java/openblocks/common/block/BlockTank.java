@@ -21,10 +21,12 @@ import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.Log;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockTank extends OpenBlock {
 
 	public BlockTank() {

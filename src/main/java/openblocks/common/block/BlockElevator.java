@@ -8,11 +8,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockElevator extends OpenBlock {
 
 	public BlockElevator() {

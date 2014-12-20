@@ -9,9 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
+import openmods.infobook.BookDocumentation;
 
 import com.google.common.collect.MapMaker;
 
+@BookDocumentation
 public class ItemHangGlider extends Item {
 
 	private static Map<EntityPlayer, EntityHangGlider> spawnedGlidersMap = new MapMaker().weakKeys().weakValues().makeMap();

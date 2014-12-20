@@ -5,7 +5,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockXPBottler extends OpenBlock {
 
 	public static class Icons {

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
@@ -21,6 +22,7 @@ import openmods.utils.render.PaintUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation(customName = "paintbrush")
 public class ItemPaintBrush extends Item {
 
 	private static final String TAG_COLOR = "color";

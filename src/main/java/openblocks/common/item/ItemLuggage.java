@@ -8,7 +8,9 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class ItemLuggage extends Item {
 
 	public ItemLuggage() {

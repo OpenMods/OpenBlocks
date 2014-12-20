@@ -2,7 +2,9 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockPaintMixer extends OpenBlock {
 
 	public BlockPaintMixer() {

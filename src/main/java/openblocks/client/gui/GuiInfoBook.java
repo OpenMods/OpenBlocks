@@ -5,13 +5,10 @@ import java.util.List;
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.util.StatCollector;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Blocks;
-import openblocks.OpenBlocks.Items;
 import openblocks.client.ChangelogBuilder;
 import openblocks.client.ChangelogBuilder.Changelog;
 import openblocks.client.ChangelogBuilder.ChangelogSection;
 import openblocks.client.gui.page.IntroPage;
-import openblocks.common.item.MetasGeneric;
 import openmods.gui.ComponentGui;
 import openmods.gui.DummyContainer;
 import openmods.gui.component.BaseComposite;
@@ -20,6 +17,7 @@ import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.page.PageBase;
 import openmods.gui.component.page.SectionPage;
 import openmods.gui.component.page.TitledPage;
+import openmods.infobook.PageBuilder;
 
 import org.lwjgl.opengl.GL11;
 
@@ -27,7 +25,7 @@ import com.google.common.collect.Lists;
 
 public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 
-	private static final String MODID = "openblocks";
+	private static final String MODID = "OpenBlocks";
 
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
@@ -75,72 +73,34 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 		book.addPage(contentsPage);
 
-		setupBookmark(lblBlocks, book, book.getNumberOfPages());
+		PageBuilder builder = new PageBuilder();
 
-		book.addPage(PageBase.BLANK_PAGE);
-		book.addPage(new SectionPage("openblocks.gui.blocks"));
-		book.addStandardRecipePage(MODID, "elevator", Blocks.elevator);
-		book.addStandardRecipePage(MODID, "sprinkler", Blocks.sprinkler);
-		book.addStandardRecipePage(MODID, "paintmixer", Blocks.paintMixer);
-		book.addStandardRecipePage(MODID, "beartrap", Blocks.bearTrap);
-		book.addStandardRecipePage(MODID, "guide", Blocks.guide);
-		book.addStandardRecipePage(MODID, "canvas", Blocks.canvas);
-		/**
-		 * leaving for boq
-		 * book.addStandardRecipePage("openblocks", "projector",
-		 * Blocks.projector);
-		 **/
-		book.addStandardRecipePage(MODID, "vacuumhopper", Blocks.vacuumHopper);
-		book.addStandardRecipePage(MODID, "tank", Blocks.tank);
-		book.addStandardRecipePage(MODID, "path", Blocks.path);
-		book.addStandardRecipePage(MODID, "fan", Blocks.fan);
-		book.addStandardRecipePage(MODID, "blockbreaker", Blocks.blockBreaker);
-		book.addStandardRecipePage(MODID, "blockPlacer", Blocks.blockPlacer);
-		book.addStandardRecipePage(MODID, "itemDropper", Blocks.itemDropper);
-		book.addStandardRecipePage(MODID, "bigbutton", Blocks.bigButton);
-		book.addStandardRecipePage(MODID, "autoanvil", Blocks.autoAnvil);
-		book.addStandardRecipePage(MODID, "autoenchantmenttable", Blocks.autoEnchantmentTable);
-		book.addStandardRecipePage(MODID, "sponge", Blocks.sponge);
-		book.addStandardRecipePage(MODID, "ropeladder", Blocks.ropeLadder);
-		book.addStandardRecipePage(MODID, "village_highlighter", Blocks.villageHighlighter);
-		book.addStandardRecipePage(MODID, "xpbottler", Blocks.xpBottler);
-		book.addStandardRecipePage(MODID, "xpdrain", Blocks.xpDrain);
-		book.addStandardRecipePage(MODID, "drawingtable", Blocks.drawingTable);
-		book.addStandardRecipePage(MODID, "sky.normal", Blocks.sky);
-		book.addStandardRecipePage(MODID, "xpshower", Blocks.xpShower);
+		{
+			int blocksIndex = alignToEven(book);
+			setupBookmark(lblBlocks, book, blocksIndex);
+			book.addPage(PageBase.BLANK_PAGE);
+			book.addPage(new SectionPage("openblocks.gui.blocks"));
+			builder.addBlockPages(MODID);
+			builder.addPages(book);
+		}
 
-		int itemsIndex = alignToEven(book);
-		setupBookmark(lblItems, book, itemsIndex);
+		{
+			int itemsIndex = alignToEven(book);
+			setupBookmark(lblItems, book, itemsIndex);
+			book.addPage(PageBase.BLANK_PAGE);
+			book.addPage(new SectionPage("openblocks.gui.items"));
+			builder.addItemPages(MODID);
+			builder.addPages(book);
+		}
 
-		book.addPage(PageBase.BLANK_PAGE);
-		book.addPage(new SectionPage("openblocks.gui.items"));
-		book.addStandardRecipePage(MODID, "luggage", Items.luggage);
-		book.addStandardRecipePage(MODID, "sonicglasses", Items.sonicGlasses);
-		book.addStandardRecipePage(MODID, "hangglider", Items.hangGlider);
-		book.addStandardRecipePage(MODID, "cursor", Items.cursor);
-		book.addStandardRecipePage(MODID, "unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack());
-		book.addStandardRecipePage(MODID, "sleepingbag", Items.sleepingBag);
-		book.addStandardRecipePage(MODID, "devnull", Items.devNull);
-		/**
-		 * leaving for boq
-		 * book.addStandardRecipePage("openblocks", "cartographer",
-		 * Items.cartographer);
-		 * book.addStandardRecipePage("openblocks", "golden_eye",
-		 * Items.goldenEye);
-		 * book.addStandardRecipePage("openblocks", "tasty_clay",
-		 * Items.tastyClay);
-		 **/
-		book.addStandardRecipePage(MODID, "paintbrush", Items.paintBrush);
-		book.addStandardRecipePage(MODID, "squeegee", Items.squeegee);
-		book.addStandardRecipePage(MODID, "slimalyzer", Items.slimalyzer);
-		book.addStandardRecipePage(MODID, "spongeonastick", Items.spongeonastick);
-
-		int miscIndex = alignToEven(book);
-		setupBookmark(lblMisc, book, miscIndex);
-		book.addPage(PageBase.BLANK_PAGE);
-		book.addPage(new SectionPage("openblocks.gui.misc"));
-		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
-		book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
+		{
+			int miscIndex = alignToEven(book);
+			setupBookmark(lblMisc, book, miscIndex);
+			book.addPage(PageBase.BLANK_PAGE);
+			book.addPage(new SectionPage("openblocks.gui.misc"));
+			book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
+			book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
+		}
 
 		if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
 		if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));

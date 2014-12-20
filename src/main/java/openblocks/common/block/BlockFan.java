@@ -3,7 +3,9 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockFan extends OpenBlock {
 
 	public BlockFan() {

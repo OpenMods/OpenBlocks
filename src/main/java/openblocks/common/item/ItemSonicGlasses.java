@@ -9,9 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSonicGlasses;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class ItemSonicGlasses extends ItemArmor {
 
 	private static final int ARMOR_HELMET = 0;
