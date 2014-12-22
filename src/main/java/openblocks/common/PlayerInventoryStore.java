@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -167,13 +168,14 @@ public class PlayerInventoryStore {
 		IInventory restored = loadInventory(player.worldObj, fileId);
 
 		InventoryPlayer current = player.inventory;
-		if (current.getSizeInventory() < restored.getSizeInventory()) {
-			Log.info("Target inventory too small, %d < %d", current.getSizeInventory(), restored.getSizeInventory());
-			return false;
-		}
+		final int targetInventorySize = current.getSizeInventory();
+		final int sourceInventorySize = restored.getSizeInventory();
 
-		for (int i = 0; i < restored.getSizeInventory(); i++)
-			current.setInventorySlotContents(i, restored.getStackInSlot(i));
+		for (int i = 0; i < sourceInventorySize; i++) {
+			final ItemStack stack = restored.getStackInSlot(i);
+			if (i < targetInventorySize) current.setInventorySlotContents(i, stack);
+			else player.dropPlayerItemWithRandomChoice(stack, false);
+		}
 
 		return true;
 	}
