@@ -17,7 +17,6 @@ import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.api.IValueProvider;
 import openmods.gamelogic.WorkerLogic;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -32,7 +31,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.Maps;
 
-public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IExtendable, IColorChanger {
+public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger {
 
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.milk_bucket);

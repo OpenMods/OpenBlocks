@@ -16,7 +16,6 @@ import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.rpc.IRotatable;
 import openmods.api.IHasGui;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -25,7 +24,7 @@ import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable, ISyncListener, IRotatable {
+public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
 
 	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
 		@Override

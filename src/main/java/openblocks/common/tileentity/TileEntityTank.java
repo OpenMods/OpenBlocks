@@ -17,7 +17,6 @@ import openblocks.common.item.ItemTankBlock;
 import openmods.api.IActivateAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.GenericFluidHandler;
@@ -31,7 +30,7 @@ import openmods.utils.ItemUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile, IExtendable {
+public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile {
 
 	public class RenderContext {
 		public EnumMap<ForgeDirection, TileEntityTank> neighbors = Maps.newEnumMap(ForgeDirection.class);

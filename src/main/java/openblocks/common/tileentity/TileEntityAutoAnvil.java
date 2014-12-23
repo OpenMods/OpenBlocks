@@ -20,7 +20,6 @@ import openmods.api.IHasGui;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
 import openmods.gui.misc.IConfigurableGuiSlots;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
@@ -34,7 +33,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.*;
 import openmods.utils.bitmap.*;
 
-public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable, IConfigurableGuiSlots<AutoSlots> {
+public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots> {
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	public static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);

@@ -14,14 +14,13 @@ import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 
-public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventoryProvider, IExtendable, IHasGui {
+public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventoryProvider, IHasGui {
 	static final int BUFFER_SIZE = 9;
 
 	private boolean _redstoneSignal;

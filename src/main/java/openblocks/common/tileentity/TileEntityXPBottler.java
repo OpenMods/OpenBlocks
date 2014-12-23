@@ -23,7 +23,6 @@ import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
 import openmods.gamelogic.WorkerLogic;
 import openmods.gui.misc.IConfigurableGuiSlots;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
@@ -37,7 +36,7 @@ import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots> {
+public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots> {
 
 	public static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
 	public static final int PROGRESS_TICKS = 40;

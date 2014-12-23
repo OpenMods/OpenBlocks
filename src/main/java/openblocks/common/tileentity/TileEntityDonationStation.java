@@ -10,7 +10,6 @@ import openblocks.client.gui.GuiDonationStation;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.container.ContainerDonationStation;
 import openmods.api.IHasGui;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -18,7 +17,7 @@ import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ModIdentifier;
 import cpw.mods.fml.common.ModContainer;
 
-public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IExtendable, IInventoryProvider {
+public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IInventoryProvider {
 
 	public enum Slots {
 		input

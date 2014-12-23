@@ -15,14 +15,13 @@ import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 
-public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IHasGui, IExtendable, IInventoryProvider {
+public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IHasGui, IInventoryProvider {
 
 	static final int BUFFER_SIZE = 9;
 

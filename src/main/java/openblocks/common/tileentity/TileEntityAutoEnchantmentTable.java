@@ -19,7 +19,6 @@ import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
 import openmods.api.*;
 import openmods.gui.misc.IConfigurableGuiSlots;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
@@ -33,7 +32,7 @@ import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback {
+public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback {
 
 	public static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
 
@@ -59,8 +58,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private final GenericInventory inventory = new GenericInventory("autoenchant", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			if (i == Slots.input.ordinal()) { return !itemstack.isItemEnchanted(); }
-			return i == Slots.input.ordinal();
+			return (i == Slots.input.ordinal()) && !itemstack.isItemEnchanted();
 		}
 	};
 

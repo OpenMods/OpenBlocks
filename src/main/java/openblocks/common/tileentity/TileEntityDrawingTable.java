@@ -11,13 +11,12 @@ import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.MetasGeneric;
 import openblocks.rpc.IStencilCrafter;
 import openmods.api.IHasGui;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IExtendable, IInventoryProvider, IStencilCrafter {
+public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryProvider, IStencilCrafter {
 
 	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("drawingtable", true, 1) {
 

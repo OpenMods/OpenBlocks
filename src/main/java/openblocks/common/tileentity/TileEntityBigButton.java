@@ -14,7 +14,6 @@ import openblocks.common.container.ContainerBigButton;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -25,7 +24,7 @@ import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IExtendable, IInventoryProvider, ISyncListener {
+public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IInventoryProvider, ISyncListener {
 
 	private int tickCounter = 0;
 

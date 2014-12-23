@@ -23,7 +23,6 @@ import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
@@ -35,7 +34,7 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IExtendable, IHasGui {
+public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui {
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);

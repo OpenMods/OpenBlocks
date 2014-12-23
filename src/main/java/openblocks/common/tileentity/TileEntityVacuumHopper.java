@@ -24,7 +24,6 @@ import openmods.OpenMods;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.IValueProvider;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -40,7 +39,7 @@ import openmods.utils.bitmap.*;
 
 import com.google.common.collect.Lists;
 
-public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, IExtendable, IEntitySelector {
+public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, IEntitySelector {
 
 	public static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 

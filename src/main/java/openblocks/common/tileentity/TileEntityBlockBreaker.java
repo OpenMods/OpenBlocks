@@ -19,7 +19,6 @@ import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -30,7 +29,7 @@ import openmods.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile, IExtendable, IInventoryProvider {
+public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile, IInventoryProvider {
 
 	private static final int SLOT_BUFFER = 0;
 
