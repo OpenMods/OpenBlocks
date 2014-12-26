@@ -7,7 +7,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -17,7 +16,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidTank;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.Log;
@@ -32,6 +30,11 @@ public class BlockTank extends OpenBlock {
 	public BlockTank() {
 		super(Material.rock);
 		setRenderMode(RenderMode.TESR_ONLY);
+	}
+
+	@Override
+	public boolean shouldOverrideHarvestWithTeLogic() {
+		return true;
 	}
 
 	@Override
@@ -52,25 +55,6 @@ public class BlockTank extends OpenBlock {
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return true;
-	}
-
-	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
-		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
-		if (!(te instanceof TileEntityTank)) return;
-		TileEntityTank tank = (TileEntityTank)te;
-		if (tank.getTank().getFluidAmount() > 0) {
-			NBTTagCompound tankTag = tank.getItemNBT();
-
-			NBTTagCompound itemTag = ItemUtils.getItemTag(stack);
-			itemTag.setTag("tank", tankTag);
-		}
-		result.add(stack);
-	}
-
-	@Override
-	protected boolean hasNormalDrops() {
-		return false;
 	}
 
 	@Override

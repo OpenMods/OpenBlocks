@@ -14,6 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
 import openmods.api.INeighbourAwareTile;
+import openmods.context.ContextManager;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
@@ -95,6 +96,8 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 0, 0));
 
 				CaptureContext dropsCapturer = DropCapture.instance.start(x, y, z);
+
+				ContextManager.push(); // providing same environment as ItemInWorldManager
 				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, metadata, fakePlayer);
 				if (MinecraftForge.EVENT_BUS.post(event)) return;
 
@@ -108,6 +111,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 					if (canHarvest) block.harvestBlock(worldObj, fakePlayer, x, y, z, metadata);
 					worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
 				}
+				ContextManager.pop();
 
 				List<EntityItem> drops = dropsCapturer.stop();
 

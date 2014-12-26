@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -7,12 +9,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
 import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
 import openmods.api.IPlaceAwareTile;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
+public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops {
 
 	private SyncableInt color;
 	private SyncableInt amount;
@@ -60,6 +63,16 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 
 	public void setAmount(int amt) {
 		amount.set(amt);
+	}
+
+	@Override
+	public boolean suppressNormalHarvestDrops() {
+		return true;
+	}
+
+	@Override
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+		drops.add(ItemPaintCan.createStack(getColor(), getAmount()));
 	}
 
 }

@@ -1,11 +1,8 @@
 package openblocks.common.block;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -37,16 +34,8 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
-		if (te instanceof TileEntityPaintCan) {
-			TileEntityPaintCan can = (TileEntityPaintCan)te;
-			result.add(ItemPaintCan.createStack(can.getColor(), can.getAmount()));
-		}
-	}
-
-	@Override
-	protected boolean hasNormalDrops() {
-		return false;
+	public boolean shouldOverrideHarvestWithTeLogic() {
+		return true;
 	}
 
 	private static ItemStack createStackForBlock(World world, int x, int y, int z) {

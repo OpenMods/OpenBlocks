@@ -1,5 +1,7 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -7,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
 import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
 import openmods.api.IPlaceAwareTile;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
@@ -16,7 +19,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
+public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 	private int cooldown = 0;
@@ -97,6 +100,17 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 		Preconditions.checkElementIndex(metadata, Trophy.VALUES.length);
 		super.prepareForInventoryRender(block, metadata);
 		trophyIndex.set(metadata);
+	}
+
+	@Override
+	public boolean suppressNormalHarvestDrops() {
+		return true;
+	}
+
+	@Override
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+		final Trophy trophy = getTrophy();
+		if (trophy != null) drops.add(trophy.getItemStack());
 	}
 
 }

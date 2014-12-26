@@ -1,14 +1,8 @@
 package openblocks.common.block;
 
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -27,11 +21,16 @@ public class BlockCanvas extends OpenBlock {
 	public IIcon wallpaper;
 
 	public BlockCanvas() {
-		this(Material.rock);
+		this(Material.sponge);
 	}
 
 	public BlockCanvas(Material material) {
 		super(material);
+	}
+
+	@Override
+	public boolean shouldOverrideHarvestWithTeLogic() {
+		return true;
 	}
 
 	@Override
@@ -40,35 +39,6 @@ public class BlockCanvas extends OpenBlock {
 		wallpaper = registry.registerIcon("openblocks:wallpaper");
 		for (Stencil stencil : Stencil.values())
 			stencil.registerBlockIcons(registry);
-	}
-
-	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
-		if (!(te instanceof TileEntityCanvas)) return;
-
-		TileEntityCanvas tile = (TileEntityCanvas)te;
-		if (tile.paintedBlock.containsValidBlock()) {
-			Block paintedBlock = tile.paintedBlock.getValue();
-			int paintedBlockMeta = tile.paintedBlockMeta.get();
-
-			final Random rand = te.getWorldObj().rand;
-
-			int count = paintedBlock.quantityDropped(paintedBlockMeta, fortune, rand);
-			int damageDropped = paintedBlock.damageDropped(paintedBlockMeta);
-
-			for (int i = 0; i < count; i++) {
-				Item item = paintedBlock.getItemDropped(paintedBlockMeta, rand, fortune);
-				if (item != null) result.add(new ItemStack(item, 1, damageDropped));
-
-			}
-		} else {
-			result.add(new ItemStack(this));
-		}
-	}
-
-	@Override
-	protected boolean hasNormalDrops() {
-		return false;
 	}
 
 	public void setLayerForRender(int layer) {
@@ -108,7 +78,6 @@ public class BlockCanvas extends OpenBlock {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.canvas);
 		}
 		TileEntityCanvas tile = (TileEntityCanvas)world.getTileEntity(x, y, z);
-		tile.paintedBlock.setValue(block);
-		tile.paintedBlockMeta.set(meta);
+		tile.setPaintedBlockBlock(block, meta);
 	}
 }

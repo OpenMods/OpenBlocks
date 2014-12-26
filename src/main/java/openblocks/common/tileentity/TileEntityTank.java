@@ -14,9 +14,7 @@ import net.minecraftforge.fluids.*;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTankBlock;
-import openmods.api.IActivateAwareTile;
-import openmods.api.INeighbourAwareTile;
-import openmods.api.IPlaceAwareTile;
+import openmods.api.*;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.GenericFluidHandler;
@@ -30,7 +28,7 @@ import openmods.utils.ItemUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile {
+public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile, ICustomHarvestDrops {
 
 	public class RenderContext {
 		public EnumMap<ForgeDirection, TileEntityTank> neighbors = Maps.newEnumMap(ForgeDirection.class);
@@ -444,5 +442,23 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		fillColumn(copy, doFill);
 
 		return resource.amount - copy.amount;
+	}
+
+	@Override
+	public boolean suppressNormalHarvestDrops() {
+		return true;
+	}
+
+	@Override
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
+
+		if (tank.getFluidAmount() > 0) {
+			NBTTagCompound tankTag = getItemNBT();
+			NBTTagCompound itemTag = ItemUtils.getItemTag(stack);
+			itemTag.setTag("tank", tankTag);
+		}
+
+		drops.add(stack);
 	}
 }

@@ -1,10 +1,7 @@
 package openblocks.common.block;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -22,6 +19,11 @@ public class BlockTrophy extends OpenBlock {
 	}
 
 	@Override
+	public boolean shouldOverrideHarvestWithTeLogic() {
+		return true;
+	}
+
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
@@ -33,17 +35,6 @@ public class BlockTrophy extends OpenBlock {
 		}
 
 		return new ItemStack(this, 1, 0);
-	}
-
-	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
-		TileEntityTrophy trophy = (te instanceof TileEntityTrophy)? (TileEntityTrophy)te : null;
-		result.add(getDroppedBlock(trophy));
-	}
-
-	@Override
-	protected boolean hasNormalDrops() {
-		return false;
 	}
 
 	@Override

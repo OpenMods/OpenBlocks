@@ -1,8 +1,10 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -17,7 +19,8 @@ import openblocks.common.item.ItemStencil;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
-import openmods.api.ISpecialDrops;
+import openmods.api.ICustomBreakDrops;
+import openmods.api.ICustomHarvestDrops;
 import openmods.sync.SyncableBlock;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
@@ -25,26 +28,26 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
-public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ISpecialDrops {
+public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ICustomBreakDrops, ICustomHarvestDrops {
 
 	private static final int BASE_LAYER = -1;
 
 	public static final int[] ALL_SIDES = { 0, 1, 2, 3, 4, 5 };
 
 	/* Used for painting other blocks */
-	public SyncableBlock paintedBlock;
-	public SyncableInt paintedBlockMeta;
+	private SyncableBlock paintedBlock;
+	private SyncableInt paintedBlockMeta;
 
 	private SyncableIntArray baseColors;
 
-	public SyncableBlockLayers stencilsUp;
-	public SyncableBlockLayers stencilsDown;
-	public SyncableBlockLayers stencilsEast;
-	public SyncableBlockLayers stencilsWest;
-	public SyncableBlockLayers stencilsNorth;
-	public SyncableBlockLayers stencilsSouth;
+	private SyncableBlockLayers stencilsUp;
+	private SyncableBlockLayers stencilsDown;
+	private SyncableBlockLayers stencilsEast;
+	private SyncableBlockLayers stencilsWest;
+	private SyncableBlockLayers stencilsNorth;
+	private SyncableBlockLayers stencilsSouth;
 
-	public SyncableBlockLayers[] allSides;
+	private SyncableBlockLayers[] allSides;
 
 	public TileEntityCanvas() {
 		syncMap.addUpdateListener(createRenderUpdateListener());
@@ -205,12 +208,42 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void addDrops(List<ItemStack> drops, int fortune) {
+	public void addDrops(List<ItemStack> drops) {
 		for (SyncableBlockLayers sideLayers : allSides) {
 			if (sideLayers.isLastLayerStencil()) {
 				Stencil stencil = sideLayers.getTopStencil();
 				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
 			}
 		}
+	}
+
+	@Override
+	public boolean suppressNormalHarvestDrops() {
+		return paintedBlock.containsValidBlock();
+	}
+
+	@Override
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+		if (paintedBlock.containsValidBlock()) {
+			final Block paintedBlock = this.paintedBlock.getValue();
+			final int paintedBlockMeta = this.paintedBlockMeta.get();
+
+			final Random rand = worldObj.rand;
+
+			int fortune = player != null? EnchantmentHelper.getFortuneModifier(player) : 0;
+			int count = paintedBlock.quantityDropped(paintedBlockMeta, fortune, rand);
+			int damageDropped = paintedBlock.damageDropped(paintedBlockMeta);
+
+			for (int i = 0; i < count; i++) {
+				Item item = paintedBlock.getItemDropped(paintedBlockMeta, rand, fortune);
+				if (item != null) drops.add(new ItemStack(item, 1, damageDropped));
+
+			}
+		}
+	}
+
+	public void setPaintedBlockBlock(Block block, int meta) {
+		paintedBlock.setValue(block);
+		paintedBlockMeta.set(meta);
 	}
 }
