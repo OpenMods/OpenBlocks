@@ -143,8 +143,7 @@ public class PlayerInventoryStore {
 	}
 
 	public List<String> getMatchedDumps(World world, String prefix) {
-		File dummy = world.getSaveHandler().getMapFileFromName("dummy");
-		File saveFolder = dummy.getParentFile();
+		File saveFolder = getSaveFolder(world);
 		final String actualPrefix = StringUtils.startsWithIgnoreCase(prefix, PREFIX)? prefix : PREFIX + prefix;
 		File[] files = saveFolder.listFiles(new FilenameFilter() {
 			@Override
@@ -162,6 +161,11 @@ public class PlayerInventoryStore {
 		}
 
 		return result;
+	}
+
+	public static File getSaveFolder(World world) {
+		File dummy = world.getSaveHandler().getMapFileFromName("dummy");
+		return dummy.getParentFile();
 	}
 
 	public boolean restoreInventory(EntityPlayer player, String fileId) {

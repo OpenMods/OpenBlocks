@@ -1,22 +1,27 @@
 package openblocks.client.gui;
 
+import java.io.File;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiYesNoCallback;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.client.ChangelogBuilder;
 import openblocks.client.ChangelogBuilder.Changelog;
 import openblocks.client.ChangelogBuilder.ChangelogSection;
 import openblocks.client.gui.page.IntroPage;
+import openblocks.common.PlayerInventoryStore;
+import openmods.Log;
 import openmods.gui.ComponentGui;
 import openmods.gui.DummyContainer;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentBook;
 import openmods.gui.component.GuiComponentLabel;
-import openmods.gui.component.page.PageBase;
-import openmods.gui.component.page.SectionPage;
-import openmods.gui.component.page.TitledPage;
+import openmods.gui.component.page.*;
+import openmods.gui.component.page.PageBase.ActionIcon;
 import openmods.infobook.PageBuilder;
 
 import org.lwjgl.opengl.GL11;
@@ -99,12 +104,15 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 			book.addPage(PageBase.BLANK_PAGE);
 			book.addPage(new SectionPage("openblocks.gui.misc"));
 			book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
+			book.addPage(new TitledPage("openblocks.gui.restore_inv.title", "openblocks.gui.restore_inv.content")
+					.addActionButton(25, 146, getSavePath(), ActionIcon.FOLDER.icon, "openblocks.gui.save_folder"));
 			book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
-		}
 
-		if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
-		if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
-		if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
+			if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
+			if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
+			if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
+
+		}
 
 		int changelogsIndex = alignToEven(book);
 		book.addPage(PageBase.BLANK_PAGE);
@@ -119,6 +127,28 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 		ySize = book.getHeight();
 
 		return book;
+	}
+
+	private static File getSavePath() {
+		try {
+			MinecraftServer server = MinecraftServer.getServer();
+
+			if (server != null) {
+				World world = server.worldServerForDimension(0);
+				File saveFolder = PlayerInventoryStore.getSaveFolder(world);
+				return saveFolder;
+			}
+		} catch (Throwable t) {
+			Log.warn(t, "Failed to get save folder from local server");
+		}
+
+		try {
+			return Minecraft.getMinecraft().mcDataDir;
+		} catch (Throwable t) {
+			Log.warn(t, "Failed to get save folder from MC data dir");
+		}
+
+		return new File("invalid.path");
 	}
 
 	private static void createChangelogPages(final GuiComponentBook book) {
