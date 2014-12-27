@@ -3,6 +3,8 @@ package openblocks.common.block;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.IBlockAccess;
 import openmods.block.BlockRotationMode;
 
 public class BlockGrave extends OpenBlock {
@@ -30,4 +32,10 @@ public class BlockGrave extends OpenBlock {
 	public boolean canRotateWithTool() {
 		return false;
 	}
+
+	@Override
+	public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
+		return false;
+	}
+
 }
