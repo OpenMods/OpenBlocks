@@ -1,6 +1,6 @@
 achievement.openblocks.droppedBrick=Упс!
 achievement.openblocks.droppedBrick.desc=К сожалению, это только что произошло...
-stat.openblocks.bricksDropped=Кирпичи сброшены
+stat.openblocks.bricksDropped=Кирпичей сброшено
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Будьте глупым
@@ -38,6 +38,7 @@ openblocks.gui.xp_outputs=Выходы опыта
 openblocks.gui.item_outputs=Выходы предметов
 openblocks.gui.watch_video=Смотреть видео
 openblocks.gui.max_level=Макс. уровень: %d
+openblocks.gui.save_folder=Сохранить папку
 
 openblocks.gui.welcome.title=Добро пожаловать!
 openblocks.gui.welcome.content=OpenBlocks - это новая модификация с открытым исходным кодом, которая внедряет множество идей в Minecraft. В числе этих идей: Дельтапланы, лифты, резервуары, могилы, краски, краны, жидкий опыт, картографы, трофеи и многое другое!
@@ -47,6 +48,9 @@ openblocks.gui.credits.content=§LBoq, Mikee и NeverCast§R - Ведущие р
 
 openblocks.gui.config.title=Лёгкое редактирование конфигурации
 openblocks.gui.config.content=OpenMods позволяет клиенту и серверу изменять настройки конфигурации через команды чата. Некоторые даже не требуют перезапуск!\n\nСерверные настройки конфигурации могут быть изменены с помощью '§L/om_config_s§R' (Нужен Оп), а настройки конфигурации клиента могут быть изменены с помощью '§L/om_config_c§R'\n\nНапример:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nДля получения полного списка команд напишите: §L/help om_config_s§R или §L/help om_config_c§R
+
+openblocks.gui.restore_inv.title=Резервное копирование инвентаря
+openblocks.gui.restore_inv.content=Все совершают ошибки. Но с командой §L/ob_inventory§R Вы можете исправить некоторые ошибки. Эта команда может восстановить инвентарь. Резервная копия создаётся когда:\n - игрок умирает\n - могила появляется \n - игрок вводить команду §L/ob_inventory store§R\n\nЧтобы восстановить инвентарь, Вам нужно имя резервной копии. Перейдите в папку ниже или в папку "saves" сервера и поищите файлы с названием §Linventory-*.dat§R. Потом восстановите инвентарь командой §L/ob_inventory restore <игрок> <id>§R - где id или полное название файла или часть названия, без §Linventory-§R и §L.dat§R. Вы также можете использовать автозаполнение. Резервные копии - это просто NBT файлы и могут быть открыты любым редактором.
 
 openblocks.gui.bkey.title=Кнопка 'B' с плохой репутацией
 openblocks.gui.bkey.content=Кнопка 'B' очень особенная в OpenBlocks.\n\nВключение опции конфигурации 'weAreSeriousPeople' в категории 'tomfoolery' клиента И сервера, даст Вам Вашу собственную пищеварительную систему.\n\nПопробуйте съесть немного этой вкусной глины и нажмите 'B', чтобы переварить её!
@@ -83,11 +87,17 @@ openblocks.misc.change_size=Изменение размера на %sx%sx%s
 openblocks.misc.total_blocks=Общее количество блоков: %d
 openblocks.misc.get_witched=Get witched!
 openblocks.misc.page=Страница %d из %d
+openblocks.misc.oh_no_ceiling=Вы не можете спать здесь. Вас беспокоит потолок...
+openblocks.misc.oh_no_ground=Вы хотите спать на ЭТОМ!?
+openblocks.misc.sleeping_bag_broken=Предмет недоступен из-за неудавшейся инициализации
 
-openblocks.misc.cant_restore=Не удалось восстановить инвентарь для игрока %s
+openblocks.misc.cant_restore_player=Не удалось восстановить инвентарь для игрока %s
+openblocks.misc.cant_restore_inventory=Не удалось восстановить инвентарь
 openblocks.misc.cant_store=Не удалось сохранить инвентарь игрока %s
 openblocks.misc.stored_inventory=Инвентарь игрока сохранён в %s
 openblocks.misc.restored_inventory=Восстановлен инвентарь для игрока %s
+openblocks.misc.invalid_index=Неверный индекс
+openblocks.misc.empty_slot=Нет предмета в слоте
 
 openblocks.misc.pedometer.tracking_reset=Отслеживание сброшено
 openblocks.misc.pedometer.tracking_started=Отслеживание начато
@@ -179,7 +189,7 @@ tile.openblocks.cannon.name=Предметная пушка
 tile.openblocks.cannon.description=Когда подан сигнал красного камня, предметная пушка будет выстреливать предметы, которые она найдёт в соседнем инвентаре. Используйте 'указатель', чтобы направить пушку.
 
 tile.openblocks.ropeladder.name=Верёвочная лестница
-tile.openblocks.ropeladder.description=Когда Вы размещаете верёвочную лестницу, она разворачивается на всё расстояние до земли.
+tile.openblocks.ropeladder.description=Когда Вы размещаете верёвочную лестницу, она разворачивается на всё расстояние до земли. Каждый созданный лестничный блок будет использовать один предмет из стака.
 
 tile.openblocks.sprinkler.name=Разбрызгиватель
 tile.openblocks.sprinkler.description=Разбрызгиватель поможет удобрять культуры вблизи четырёх блоков, со всех сторон. Просто поместите его над резервуаром OpenBlocks, заполненным водой! Вы также можете добавить костную муку для ещё большего ускорения роста культур.\nОн также считается источником воды!
