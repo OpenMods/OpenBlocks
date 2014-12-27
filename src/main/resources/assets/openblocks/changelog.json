@@ -1,4 +1,35 @@
 [
+    {
+        version : "1.3.0",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "Port to Minecraft 1.7.10",
+                    "Elevators are now plain blocks",
+                    "Tanks distribute liquids when filled as item",
+                    "Filled tanks available in creative inventory search",
+                    "Bear traps can now be opened with redstone",
+                    "Grave contents are now stored and can be restored with /ob_inventory",
+                    "Building guide is now controlled by redstone"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Graves not spawning after explosion",
+                    "Added luggage to MFR autospawner blacklist",
+                    "This book can now be disabled",
+                    "Sleeping bags sometimes dropping player through blocks",
+                    "Block breaker now correctly captures all drops",
+                    "Objects picked by magnets now have proper collision boxes"
+                ]
+            }
+        ]
+    },
     { 
         version : "1.2.8",
         sections :
