@@ -30,8 +30,6 @@ import com.google.common.collect.Lists;
 
 public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 
-	private static final String MODID = "OpenBlocks";
-
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
 	}
@@ -85,7 +83,7 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 			setupBookmark(lblBlocks, book, blocksIndex);
 			book.addPage(PageBase.BLANK_PAGE);
 			book.addPage(new SectionPage("openblocks.gui.blocks"));
-			builder.addBlockPages(MODID);
+			builder.addBlockPages(OpenBlocks.MODID);
 			builder.addPages(book);
 		}
 
@@ -94,7 +92,7 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 			setupBookmark(lblItems, book, itemsIndex);
 			book.addPage(PageBase.BLANK_PAGE);
 			book.addPage(new SectionPage("openblocks.gui.items"));
-			builder.addItemPages(MODID);
+			builder.addItemPages(OpenBlocks.MODID);
 			builder.addPages(book);
 		}
 

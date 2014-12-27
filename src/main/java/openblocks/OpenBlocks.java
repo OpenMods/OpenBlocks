@@ -57,9 +57,9 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = OpenBlocks.ID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES)
+@Mod(modid = OpenBlocks.MODID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES)
 public class OpenBlocks {
-	public static final String ID = "OpenBlocks";
+	public static final String MODID = "OpenBlocks";
 	public static final String NAME = "OpenBlocks";
 	public static final String VERSION = "$VERSION$";
 	public static final String PROXY_SERVER = "openblocks.common.ServerProxy";
@@ -77,7 +77,7 @@ public class OpenBlocks {
 	private static final int ENTITY_XP_ID = 709;
 	private static final int ENTITY_MINIME_ID = 710;
 
-	@Instance(value = OpenBlocks.ID)
+	@Instance(MODID)
 	public static OpenBlocks instance;
 
 	@SidedProxy(clientSide = OpenBlocks.PROXY_CLIENT, serverSide = OpenBlocks.PROXY_SERVER)
