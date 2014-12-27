@@ -18,7 +18,6 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Enchantments;
-import openblocks.asm.EntityPlayerVisitor;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.item.*;
@@ -466,7 +465,7 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Items.iron_ingot, 'g', Blocks.glass_pane, 's', Items.slime_ball, 'r', Items.redstone));
 		}
 
-		if (OpenBlocks.Items.sleepingBag != null && EntityPlayerVisitor.IsInBedHookSuccess) {
+		if (OpenBlocks.Items.sleepingBag != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Blocks.carpet, 'w', Blocks.wool));
 		}
 

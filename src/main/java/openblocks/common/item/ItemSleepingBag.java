@@ -22,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import openblocks.OpenBlocks;
+import openblocks.asm.EntityPlayerVisitor;
 import openblocks.client.model.ModelSleepingBag;
 import openmods.infobook.BookDocumentation;
 import openmods.reflection.FieldAccess;
@@ -97,7 +98,10 @@ public class ItemSleepingBag extends ItemArmor {
 		if (player.isPlayerSleeping()) return;
 
 		NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
-		if (tag.getBoolean(TAG_SLEEPING)) {
+		if (!EntityPlayerVisitor.IsInBedHookSuccess) {
+			player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.sleeping_bag_broken"));
+			getOutOfSleepingBag(player);
+		} else if (tag.getBoolean(TAG_SLEEPING)) {
 			// player just woke up
 			restoreOriginalSpawn(player, tag);
 			restoreOriginalPosition(player, tag);

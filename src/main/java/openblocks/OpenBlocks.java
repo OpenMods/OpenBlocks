@@ -326,6 +326,7 @@ public class OpenBlocks {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
+
 		features.collectFromBlocks(OpenBlocks.Blocks.class);
 		features.collectFromItems(OpenBlocks.Items.class);
 
