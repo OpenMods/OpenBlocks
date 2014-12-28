@@ -14,11 +14,13 @@ import openperipheral.api.*;
 
 import com.google.common.base.Preconditions;
 
+import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 
 @PeripheralTypeId("openblocks_magnet")
-public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider {
+@ExposeInterface({ ITickingTurtle.class, IAttachable.class })
+public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAttachable {
 
 	public class Owner implements IOwner {
 
@@ -62,7 +64,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider {
 
 		@Override
 		public boolean isValid(EntityMagnet magnet) {
-			return turtle != null && turtle.getWorld() != null;
+			return turtle != null && turtle.getWorld() != null && isAttached;
 		}
 
 		@Override
@@ -74,6 +76,8 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider {
 	private final TurtleSide side;
 
 	private final ITurtleAccess turtle;
+
+	private boolean isAttached;
 
 	private WeakReference<EntityMagnet> magnet = new WeakReference<EntityMagnet>(null);
 	private Owner magnetOwner;
@@ -188,7 +192,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider {
 	@Override
 	public void onPeripheralTick() {
 		EntityMagnet magnet = this.magnet.get();
-		if (magnet != null && !magnet.isDead) {
+		if (magnet != null && !magnet.isDead && isAttached) {
 			if (++fuelTick >= 20) {
 				fuelTick = 0;
 				int fuel = magnet.isLocked()? 2 : 1;
@@ -266,7 +270,16 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider {
 
 	@Override
 	public boolean isValid() {
-		EntityMagnet magnet = this.magnet.get();
-		return magnet != null && magnet.addedToChunk;
+		return turtle != null && turtle.getWorld() != null && isAttached;
+	}
+
+	@Override
+	public void addComputer(IComputerAccess computer) {
+		isAttached = true;
+	}
+
+	@Override
+	public void removeComputer(IComputerAccess computer) {
+		isAttached = false;
 	}
 }
