@@ -42,9 +42,15 @@ public class ItemDevNull extends Item {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
 		PlayerItemInventory inventory = new PlayerItemInventory(player, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
-		if (containedStack != null) {
+		if (containedStack != null && !intersectingPlayer) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
+                int playerX = MathHelper.floor_double(player.posX);
+                int playerY = MathHelper.floor_double(player.posY - (double) player.yOffset);
+                int playerZ = MathHelper.floor_double(player.posZ);
+                if ((x == playerX) && (y > playerY && y < (playerY + 2)) && (z == playerZ)) { // There may be a better way to check if the block will end up in the player. If there is, it should probably be implemented at some point here.
+                    return false;
+                }
 				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, par7, par8, par9, par10);
 				if (containedStack.stackSize == 0) {
 					inventory.setInventorySlotContents(0, null);
