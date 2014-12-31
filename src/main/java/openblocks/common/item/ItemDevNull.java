@@ -45,7 +45,7 @@ public class ItemDevNull extends Item {
 		if (containedStack != null && !intersectingPlayer) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
-                boolean intersecting = player.boundingBox.isVecInside(Vec3.createVectorHelper((double) x, (double) y, (double) z);
+                boolean intersecting = player.boundingBox.isVecInside(Vec3.createVectorHelper((double) x, (double) y, (double) z));
                 if (intersecting) {
                     return false;
                 }
