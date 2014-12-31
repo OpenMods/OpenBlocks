@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import openblocks.OpenBlocks;
@@ -39,17 +40,38 @@ public class ItemDevNull extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float par8, float par9, float par10) {
 		PlayerItemInventory inventory = new PlayerItemInventory(player, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
-		if (containedStack != null && !intersectingPlayer) {
+		if (containedStack != null) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
-                boolean intersecting = player.boundingBox.isVecInside(Vec3.createVectorHelper((double) x, (double) y, (double) z));
+                int placeX = x;
+                int placeY = y;
+                int placeZ = z;
+                switch (side) {
+                    case 0: placeY = y - 1;
+                            break;
+                    case 1: placeY = y + 1;
+                            break;
+                    case 2: placeZ = z - 1;
+                            break;
+                    case 3: placeZ = z + 1;
+                            break;
+                    case 4: placeX = x - 1;
+                            break;
+                    case 5: placeX = x + 1;
+                }
+                boolean intersecting = Math.floor(player.boundingBox.minX) <= (placeX);
+                intersecting = intersecting && (Math.floor(player.boundingBox.minY) <= placeY);
+                intersecting = intersecting && (Math.floor(player.boundingBox.minZ) <= (placeZ));
+                intersecting = intersecting && (Math.ceil(player.boundingBox.maxX) > placeX);
+                intersecting = intersecting && (Math.ceil(player.boundingBox.maxY) > placeY);
+                intersecting = intersecting && (Math.ceil(player.boundingBox.maxZ) > placeZ);
                 if (intersecting) {
                     return false;
                 }
-				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, par7, par8, par9, par10);
+				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, side, par8, par9, par10);
 				if (containedStack.stackSize == 0) {
 					inventory.setInventorySlotContents(0, null);
 				}
