@@ -45,10 +45,8 @@ public class ItemDevNull extends Item {
 		if (containedStack != null && !intersectingPlayer) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
-                int playerX = MathHelper.floor_double(player.posX);
-                int playerY = MathHelper.floor_double(player.posY - (double) player.yOffset);
-                int playerZ = MathHelper.floor_double(player.posZ);
-                if ((x == playerX) && (y > playerY && y < (playerY + 2)) && (z == playerZ)) { // There may be a better way to check if the block will end up in the player. If there is, it should probably be implemented at some point here.
+                boolean intersecting = player.boundingBox.isVecInside(Vec3.createVectorHelper((double) x, (double) y, (double) z);
+                if (intersecting) {
                     return false;
                 }
 				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, par7, par8, par9, par10);
