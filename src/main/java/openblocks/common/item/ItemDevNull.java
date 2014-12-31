@@ -46,31 +46,31 @@ public class ItemDevNull extends Item {
 		if (containedStack != null) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
-                int placeX = x;
-                int placeY = y;
-                int placeZ = z;
-                switch (side) {
-                    case 0: placeY = y - 1;
-                            break;
-                    case 1: placeY = y + 1;
-                            break;
-                    case 2: placeZ = z - 1;
-                            break;
-                    case 3: placeZ = z + 1;
-                            break;
-                    case 4: placeX = x - 1;
-                            break;
-                    case 5: placeX = x + 1;
-                }
-                boolean intersecting = Math.floor(player.boundingBox.minX) <= (placeX);
-                intersecting = intersecting && (Math.floor(player.boundingBox.minY) <= placeY);
-                intersecting = intersecting && (Math.floor(player.boundingBox.minZ) <= (placeZ));
-                intersecting = intersecting && (Math.ceil(player.boundingBox.maxX) > placeX);
-                intersecting = intersecting && (Math.ceil(player.boundingBox.maxY) > placeY);
-                intersecting = intersecting && (Math.ceil(player.boundingBox.maxZ) > placeZ);
-                if (intersecting) {
-                    return false;
-                }
+				int placeX = x;
+				int placeY = y;
+				int placeZ = z;
+				switch (side) {
+					case 0: placeY = y - 1;
+						break;
+					case 1: placeY = y + 1;
+						break;
+					case 2: placeZ = z - 1;
+						break;
+					case 3: placeZ = z + 1;
+						break;
+					case 4: placeX = x - 1;
+						break;
+					case 5: placeX = x + 1;
+				}
+				boolean intersecting = Math.floor(player.boundingBox.minX) <= (placeX);
+				intersecting = intersecting && (Math.floor(player.boundingBox.minY) <= placeY);
+				intersecting = intersecting && (Math.floor(player.boundingBox.minZ) <= (placeZ));
+				intersecting = intersecting && (Math.ceil(player.boundingBox.maxX) > placeX);
+				intersecting = intersecting && (Math.ceil(player.boundingBox.maxY) > placeY);
+				intersecting = intersecting && (Math.ceil(player.boundingBox.maxZ) > placeZ);
+				if (intersecting) {
+					return false;
+				}
 				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, side, par8, par9, par10);
 				if (containedStack.stackSize == 0) {
 					inventory.setInventorySlotContents(0, null);
