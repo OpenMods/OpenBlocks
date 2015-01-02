@@ -128,6 +128,12 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		return box.expand(getWidth(), getHeight(), getDepth());
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return Config.guideRenderRangeSq;
+	}
+
 	private void switchMode(EntityPlayer player) {
 		switchMode();
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
