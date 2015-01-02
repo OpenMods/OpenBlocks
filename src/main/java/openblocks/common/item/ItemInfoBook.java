@@ -6,7 +6,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocksGuiHandler;
+import openblocks.client.gui.GuiInfoBook;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,8 +25,7 @@ public class ItemInfoBook extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (!world.isRemote) player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.infoBook.ordinal(), player.worldObj, 0, 0, 0);
-
+		if (world.isRemote) FMLCommonHandler.instance().showGuiScreen(new GuiInfoBook());
 		return stack;
 	}
 }

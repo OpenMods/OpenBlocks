@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -28,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
-public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
+public class GuiInfoBook extends ComponentGui {
 
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
@@ -36,6 +35,14 @@ public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
 
 	private static void setupBookmark(GuiComponentLabel label, GuiComponentBook book, int index) {
 		label.setListener(book.createBookmarkListener(index));
+	}
+
+	@Override
+	public void initGui() {
+		// Nothing can change this value, otherwise client will crash when player picks item
+		// this.mc.thePlayer.openContainer = this.inventorySlots;
+		this.guiLeft = (this.width - this.xSize) / 2;
+		this.guiTop = (this.height - this.ySize) / 2;
 	}
 
 	private static int alignToEven(final GuiComponentBook book) {
