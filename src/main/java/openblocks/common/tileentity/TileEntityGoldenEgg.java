@@ -17,7 +17,7 @@ import openmods.Log;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
-import openmods.sync.SyncableInt;
+import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 
 import com.google.common.base.Strings;
@@ -153,8 +153,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			this.progressSpeed = riseSpeed;
 			this.specialEffects = specialEffects;
 		}
-
-		private static final State[] STATES = values();
 	}
 
 	public int tickCounter;
@@ -166,7 +164,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private float progressSpeed;
 
 	private List<EntityBlock> blocks = Lists.newArrayList();
-	private SyncableInt stage;
+	private SyncableEnum<State> stage;
 
 	private UUID ownerUUID;
 	private String ownerSkin;
@@ -199,7 +197,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	protected void createSyncedFields() {
-		stage = new SyncableInt(State.INERT.ordinal());
+		stage = SyncableEnum.create(State.INERT);
 	}
 
 	private void pickUpBlock(int x, int y, int z) {
@@ -231,9 +229,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	public State getState() {
-		int stateId = stage.get();
-		if (stateId < 0 || stateId >= State.STATES.length) return State.INERT;
-		return State.STATES[stateId];
+		return stage.get();
 	}
 
 	@Override
@@ -252,7 +248,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 			State nextState = state.getNextState(this);
 			if (nextState != null) {
-				stage.set(nextState.ordinal());
+				stage.set(nextState);
 				nextState.onEntry(this);
 				sync();
 			}

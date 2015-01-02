@@ -73,8 +73,8 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 
 		if (!worldObj.isRemote) {
 			if (!set) {
-				int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
-				debugTrophy = Trophy.values()[next];
+				int next = (debugTrophy.ordinal() + 1) % Trophy.VALUES.length;
+				debugTrophy = Trophy.VALUES[next];
 				trophyIndex.set(debugTrophy.ordinal());
 			}
 

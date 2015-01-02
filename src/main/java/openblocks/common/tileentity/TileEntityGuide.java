@@ -35,7 +35,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	protected SyncableInt width;
 	protected SyncableInt height;
 	protected SyncableInt depth;
-	protected SyncableInt mode;
+	protected SyncableEnum<GuideShape> mode;
 	protected SyncableInt color;
 	protected SyncableBoolean active;
 
@@ -48,7 +48,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		width = new SyncableInt(8);
 		height = new SyncableInt(8);
 		depth = new SyncableInt(8);
-		mode = new SyncableInt(0);
+		mode = SyncableEnum.create(GuideShape.Sphere);
 		color = new SyncableInt(0xFFFFFF);
 		active = new SyncableBoolean();
 	}
@@ -82,7 +82,7 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	}
 
 	public GuideShape getCurrentMode() {
-		return GuideShape.values()[mode.get()];
+		return mode.get();
 	}
 
 	public boolean shouldRender() {
@@ -135,12 +135,9 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	}
 
 	private void switchMode() {
-		int nextMode = mode.get() + 1;
-		if (nextMode >= GuideShape.values().length) {
-			nextMode = 0;
-		}
-		mode.set(nextMode);
-		if (getCurrentMode().fixedRatio) {
+		final GuideShape shape = mode.increment();
+
+		if (shape.fixedRatio) {
 			setHeight(getWidth());
 			setDepth(getWidth());
 		}
