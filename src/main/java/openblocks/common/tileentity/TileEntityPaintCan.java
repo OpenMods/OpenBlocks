@@ -1,35 +1,28 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
 import openmods.api.IActivateAwareTile;
-import openmods.api.ICustomHarvestDrops;
-import openmods.api.IPlaceAwareTile;
 import openmods.sync.SyncableInt;
-import openmods.tileentity.SyncedTileEntity;
+import openmods.sync.drops.DroppableTileEntity;
+import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.BlockUtils;
 
-public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops {
+public class TileEntityPaintCan extends DroppableTileEntity implements IActivateAwareTile {
 
+	@StoreOnDrop(name = ItemPaintCan.TAG_COLOR)
 	private SyncableInt color;
+
+	@StoreOnDrop(name = ItemPaintCan.TAG_AMOUNT)
 	private SyncableInt amount;
 
 	@Override
 	protected void createSyncedFields() {
 		color = new SyncableInt();
 		amount = new SyncableInt();
-	}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		color.set(ItemPaintCan.getColorFromStack(stack));
-		amount.set(ItemPaintCan.getAmountFromStack(stack));
 	}
 
 	@Override
@@ -64,15 +57,4 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 	public void setAmount(int amt) {
 		amount.set(amt);
 	}
-
-	@Override
-	public boolean suppressNormalHarvestDrops() {
-		return true;
-	}
-
-	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
-		drops.add(ItemPaintCan.createStack(getColor(), getAmount()));
-	}
-
 }

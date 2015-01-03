@@ -16,8 +16,8 @@ import openmods.utils.ItemUtils;
 
 public class ItemPaintCan extends ItemOpenBlock {
 
-	private static final String TAG_AMOUNT = "amount";
-	private static final String TAG_COLOR = "color";
+	public static final String TAG_AMOUNT = "amount";
+	public static final String TAG_COLOR = "color";
 	public static final int FULL_CAN_SIZE = 30;
 
 	public ItemPaintCan(Block block) {

@@ -12,12 +12,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
+import openblocks.common.item.ItemGuide;
 import openblocks.shapes.GuideShape;
 import openmods.api.IActivateAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.shapes.IShapeable;
 import openmods.sync.*;
-import openmods.tileentity.SyncedTileEntity;
+import openmods.sync.drops.DroppableTileEntity;
+import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
 
@@ -26,17 +28,27 @@ import com.google.common.collect.Sets;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IActivateAwareTile, ISyncListener, INeighbourAwareTile {
+public class TileEntityGuide extends DroppableTileEntity implements IShapeable, IActivateAwareTile, ISyncListener, INeighbourAwareTile {
 
 	private Set<Coord> shape;
 	private Set<Coord> previousShape;
 	private float timeSinceChange = 0;
 
+	@StoreOnDrop(name = ItemGuide.TAG_WIDTH)
 	protected SyncableInt width;
+
+	@StoreOnDrop(name = ItemGuide.TAG_HEIGHT)
 	protected SyncableInt height;
+
+	@StoreOnDrop(name = ItemGuide.TAG_DEPTH)
 	protected SyncableInt depth;
+
+	@StoreOnDrop(name = ItemGuide.TAG_SHAPE)
 	protected SyncableEnum<GuideShape> mode;
+
+	@StoreOnDrop(name = ItemGuide.TAG_COLOR)
 	protected SyncableInt color;
+
 	protected SyncableBoolean active;
 
 	public TileEntityGuide() {

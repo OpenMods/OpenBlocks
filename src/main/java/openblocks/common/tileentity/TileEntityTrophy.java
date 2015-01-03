@@ -8,9 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
-import openmods.api.IActivateAwareTile;
-import openmods.api.ICustomHarvestDrops;
-import openmods.api.IPlaceAwareTile;
+import openmods.api.*;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 
@@ -19,7 +17,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops {
+public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
 
 	public static Trophy debugTrophy = Trophy.Wolf;
 	private int cooldown = 0;
@@ -111,6 +109,12 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
 		final Trophy trophy = getTrophy();
 		if (trophy != null) drops.add(trophy.getItemStack());
+	}
+
+	@Override
+	public ItemStack getPickBlock() {
+		final Trophy trophy = getTrophy();
+		return trophy != null? trophy.getItemStack() : null;
 	}
 
 }

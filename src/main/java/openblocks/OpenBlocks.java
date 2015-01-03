@@ -87,7 +87,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "ladder")
 		public static BlockLadder ladder;
 
-		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class)
+		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class, itemBlock = ItemGuide.class)
 		public static BlockGuide guide;
 
 		@RegisterBlock(name = "elevator", itemBlock = ItemElevator.class)

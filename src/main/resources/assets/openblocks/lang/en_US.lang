@@ -116,6 +116,7 @@ openblocks.misc.pedometer.last_check_time=Time from last check %d ticks
 
 openblocks.misc.pedometer.total_time=Total time: %d ticks
 
+openblocks.misc.shape=Shape: %s
 openblocks.misc.shape.sphere=Sphere
 openblocks.misc.shape.cylinder=Cylinder
 openblocks.misc.shape.cuboid=Cuboid
@@ -124,6 +125,10 @@ openblocks.misc.shape.triangle=Triangle
 openblocks.misc.shape.pentagon=Pentagon
 openblocks.misc.shape.hexagon=Hexagon
 openblocks.misc.shape.octagon=Octagon
+
+openblocks.misc.width=Width: %d
+openblocks.misc.height=Height: %d
+openblocks.misc.depth=Depth: %d
 
 openblocks.misc.radio.too_many=Too many radios already playing
 openblocks.misc.radio.invalid_stream=Invalid stream

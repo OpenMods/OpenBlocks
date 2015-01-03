@@ -29,11 +29,6 @@ public class BlockCanvas extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldOverrideHarvestWithTeLogic() {
-		return true;
-	}
-
-	@Override
 	public void registerBlockIcons(IIconRegister registry) {
 		blockIcon = baseIcon = registry.registerIcon("openblocks:canvas");
 		wallpaper = registry.registerIcon("openblocks:wallpaper");

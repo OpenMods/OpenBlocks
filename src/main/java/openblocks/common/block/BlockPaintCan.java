@@ -2,13 +2,9 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import openblocks.common.item.ItemPaintCan;
 import openblocks.common.tileentity.TileEntityPaintCan;
 import openmods.block.BlockRotationMode;
 
@@ -31,17 +27,6 @@ public class BlockPaintCan extends OpenBlock {
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 		setBlockBounds(0.25f, 0f, 0.25f, 0.7f, 0.6875f, 0.75f);
-	}
-
-	@Override
-	public boolean shouldOverrideHarvestWithTeLogic() {
-		return true;
-	}
-
-	private static ItemStack createStackForBlock(World world, int x, int y, int z) {
-		TileEntityPaintCan tile = getTileEntity(world, x, y, z, TileEntityPaintCan.class);
-		if (tile == null) return null;
-		return ItemPaintCan.createStack(tile.getColor(), tile.getAmount());
 	}
 
 	@Override
@@ -84,8 +69,7 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		return createStackForBlock(world, x, y, z);
+	protected boolean suppressPickBlock() {
+		return true;
 	}
-
 }

@@ -9,8 +9,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openmods.OpenMods;
+import openmods.api.ICustomPickItem;
 import openmods.tileentity.SimpleNetTileEntity;
 
 import com.google.common.base.Preconditions;
@@ -18,7 +20,7 @@ import com.google.common.base.Preconditions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityImaginary extends SimpleNetTileEntity {
+public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomPickItem {
 
 	public static final double PANEL_HEIGHT = 0.1;
 
@@ -289,5 +291,11 @@ public class TileEntityImaginary extends SimpleNetTileEntity {
 
 	public AxisAlignedBB getBlockBounds() {
 		return collisionData.getBlockBounds();
+	}
+
+	@Override
+	public ItemStack getPickBlock() {
+		int dmg = isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
+		return ItemImaginary.setupValues(color, new ItemStack(getBlockType(), 1, dmg));
 	}
 }
