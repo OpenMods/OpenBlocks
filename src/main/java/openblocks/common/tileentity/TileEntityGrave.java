@@ -88,8 +88,10 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote && !(player instanceof FakePlayer)) {
-			setUsername(player.getGameProfile().getName());
+			if (stack.hasDisplayName()) setUsername(stack.getDisplayName());
+			else setUsername(player.getGameProfile().getName());
 			if (player.capabilities.isCreativeMode) setLoot(player.inventory);
+			updateBlockBelow();
 			sync();
 		}
 	}
