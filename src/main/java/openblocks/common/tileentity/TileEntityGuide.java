@@ -22,7 +22,9 @@ import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
+import openperipheral.api.*;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 import cpw.mods.fml.relauncher.Side;
@@ -65,36 +67,103 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		active = new SyncableBoolean();
 	}
 
+	@Asynchronous
+	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
 	public int getWidth() {
 		return width.get();
 	}
 
+	@Asynchronous
+	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
 	public int getHeight() {
 		return height.get();
 	}
 
+	@Asynchronous
+	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
 	public int getDepth() {
 		return depth.get();
 	}
 
+	@Asynchronous
+	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
 	public int getColor() {
-		return color.get();
+		return color.get() & 0x00FFFFFF;
 	}
 
-	public void setWidth(int w) {
-		width.set(w);
+	@Asynchronous
+	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
+	public int getCount() {
+		if (shape == null) recreateShape();
+		return shape.size();
 	}
 
-	public void setDepth(int d) {
-		depth.set(d);
-	}
-
-	public void setHeight(int h) {
-		height.set(h);
-	}
-
+	@Asynchronous
+	@LuaCallable(returnTypes = LuaReturnType.STRING, name = "getShape")
 	public GuideShape getCurrentMode() {
 		return mode.get();
+	}
+
+	@LuaCallable
+	public void setWidth(@Arg(name = "width") int w) {
+		Preconditions.checkArgument(w > 0, "Width must be > 0");
+		width.set(w);
+
+		if (mode.getValue().fixedRatio) {
+			height.set(w);
+			depth.set(w);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@LuaCallable
+	public void setDepth(@Arg(name = "depth") int d) {
+		Preconditions.checkArgument(d > 0, "Depth must be > 0");
+		depth.set(d);
+
+		if (mode.getValue().fixedRatio) {
+			width.set(d);
+			depth.set(d);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@LuaCallable
+	public void setHeight(@Arg(name = "height") int h) {
+		Preconditions.checkArgument(h > 0, "Height must be > 0");
+		height.set(h);
+
+		if (mode.getValue().fixedRatio) {
+			width.set(h);
+			depth.set(h);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@LuaCallable
+	public void setShape(@Arg(name = "shape") GuideShape shape) {
+		mode.set(shape);
+
+		if (mode.getValue().fixedRatio) {
+			final int width = getWidth();
+			height.set(width);
+			depth.set(width);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@LuaCallable
+	public void setColor(@Arg(name = "color") int color) {
+		this.color.set(color & 0x00FFFFFF);
+		sync();
 	}
 
 	public boolean shouldRender() {
@@ -152,15 +221,19 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
-	private void switchMode() {
+	@LuaCallable(returnTypes = LuaReturnType.STRING, name = "cycleShape")
+	public GuideShape switchMode() {
 		final GuideShape shape = mode.increment();
 
 		if (shape.fixedRatio) {
-			setHeight(getWidth());
-			setDepth(getWidth());
+			final int width = getWidth();
+			height.set(width);
+			depth.set(width);
 		}
+
 		recreateShape();
 		if (!worldObj.isRemote) sync();
+		return shape;
 	}
 
 	private void changeDimensions(EntityPlayer player, ForgeDirection orientation) {
@@ -209,8 +282,8 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 			int w = getWidth();
 			int d = getDepth();
 			if (w != h && w != d) {
-				setHeight(w);
-				setDepth(w);
+				height.set(w);
+				depth.set(w);
 			} else if (h != w && h != d) {
 				depth.set(h);
 				width.set(h);
@@ -256,7 +329,8 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		Set<ColorMeta> colors = ColorUtils.stackToColor(heldStack);
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);
-			changeColor(selected.rgb);
+			color.set(selected.rgb);
+			if (!worldObj.isRemote) sync();
 			return true;
 		}
 
@@ -271,11 +345,6 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		final int blockMeta = itemBlock.getMetadata(heldStack.getItemDamage());
 		for (Coord coord : shape)
 			worldObj.setBlock(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z, block, blockMeta, BlockNotifyFlags.ALL);
-	}
-
-	protected void changeColor(int color) {
-		this.color.set(color);
-		if (!worldObj.isRemote) sync();
 	}
 
 	private boolean isInFillMode() {
