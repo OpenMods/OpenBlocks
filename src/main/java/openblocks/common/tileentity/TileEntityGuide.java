@@ -309,7 +309,7 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 			worldObj.setBlock(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z, block, blockMeta, BlockNotifyFlags.ALL);
 	}
 
-	protected void changeColor(int color) {
+	public void changeColor(int color) {
 		this.color.set(color);
 		if (!worldObj.isRemote) sync();
 	}
