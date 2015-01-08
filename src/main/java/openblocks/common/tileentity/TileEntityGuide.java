@@ -152,8 +152,22 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
-	private void switchMode() {
+	public void switchMode() {
 		final GuideShape shape = mode.increment();
+
+		if (shape.fixedRatio) {
+			setHeight(getWidth());
+			setDepth(getWidth());
+		}
+		recreateShape();
+		if (!worldObj.isRemote) sync();
+	}
+
+	public void switchMode(GuideShape shape) {
+		if(shape == mode.get()) {
+			return;
+		}
+		mode.set(shape);
 
 		if (shape.fixedRatio) {
 			setHeight(getWidth());
@@ -170,14 +184,18 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 	}
 
 	private static void inc(SyncableInt v) {
-		v.modify(+1);
+		change(v, +1);
 	}
 
 	private static void dec(SyncableInt v) {
-		if (v.get() > 0) v.modify(-1);
+		change(v, -1);
 	}
 
-	private void changeDimensions(ForgeDirection orientation) {
+	private static void change(SyncableInt v, int amount) {
+		if (v.get() + amount >= 0) v.modify(-1);
+	}
+
+	public void changeDimensions(ForgeDirection orientation) {
 		switch (orientation) {
 			case EAST:
 				dec(width);
@@ -203,7 +221,25 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 			default:
 				return;
 		}
+		updateDimensions();
+	}
 
+	public void changeWidth(int amount) {
+		change(width, amount);
+		updateDimensions();
+	}
+
+	public void changeHeight(int amount) {
+		change(height, amount);
+		updateDimensions();
+	}
+
+	public void changeDepth(int amount) {
+		change(depth, amount);
+		updateDimensions();
+	}
+
+	private void updateDimensions() {
 		if (getCurrentMode().fixedRatio) {
 			int h = getHeight();
 			int w = getWidth();
@@ -273,7 +309,7 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 			worldObj.setBlock(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z, block, blockMeta, BlockNotifyFlags.ALL);
 	}
 
-	protected void changeColor(int color) {
+	public void changeColor(int color) {
 		this.color.set(color);
 		if (!worldObj.isRemote) sync();
 	}
