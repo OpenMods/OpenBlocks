@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -30,48 +30,143 @@ import com.google.common.collect.Maps;
 
 public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile, ICustomHarvestDrops {
 
-	public class RenderContext {
-		public EnumMap<ForgeDirection, TileEntityTank> neighbors = Maps.newEnumMap(ForgeDirection.class);
+	public static final int DIR_NORTH = 1;
+	public static final int DIR_SOUTH = 2;
 
-		public RenderContext() {
-			FluidStack ownFluid = tank.getFluid();
+	public static final int DIR_WEST = 4;
+	public static final int DIR_EAST = 8;
 
-			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-				TileEntityTank tank = getTankInDirection(dir);
-				if (tank != null && tank.accepts(ownFluid)) neighbors.put(dir, tank);
+	public static final int DIR_UP = 16;
+	public static final int DIR_DOWN = 32;
+
+	public interface IFluidHeightCalculator {
+		public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB);
+	}
+
+	private static IFluidHeightCalculator createConstantCalculator(final double value) {
+		return new IFluidHeightCalculator() {
+			@Override
+			public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
+				return value;
+			}
+		};
+	}
+
+	private class FullHeightCalculator implements IFluidHeightCalculator {
+		private final double ownAmount;
+		private final Map<ForgeDirection, Double> neighbors = Maps.newEnumMap(ForgeDirection.class);
+
+		public FullHeightCalculator(FluidStack ownFluid, double ownHeight) {
+			ownAmount = ownHeight + getFlowOffset();
+
+			updateValue(ownFluid, ForgeDirection.EAST);
+			updateValue(ownFluid, ForgeDirection.WEST);
+			updateValue(ownFluid, ForgeDirection.NORTH);
+			updateValue(ownFluid, ForgeDirection.SOUTH);
+		}
+
+		private void updateValue(FluidStack fluid, ForgeDirection dir) {
+			TileEntityTank tank = getTankInDirection(dir);
+			if (tank != null && tank.accepts(fluid)) {
+				double amount = tank.getFluidRatio() + tank.getFlowOffset();
+				neighbors.put(dir, amount);
 			}
 		}
 
-		public double getLiquidHeightForSide(ForgeDirection... sides) {
-			double renderHeight = getFluidRatio();
-			if (renderHeight <= 0.02) return 0.02;
-			if (renderHeight > 0.98) return 1.0;
+		@Override
+		public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
+			double sum = ownAmount;
 
-			double fullness = renderHeight + getFlowOffset();
 			int count = 1;
-			final FluidStack fluid = tank.getFluid();
-			for (ForgeDirection side : sides) {
-				TileEntityTank sideTank = neighbors.get(side);
-				if (sideTank != null && sideTank.accepts(fluid)) {
-					fullness += sideTank.getFluidRatio() + sideTank.getFlowOffset();
-					count++;
-				}
+
+			Double heightA = neighbors.get(sideA);
+			if (heightA != null) {
+				count++;
+				sum += heightA;
 			}
-			return Math.max(0, Math.min(1, fullness / count));
+
+			Double heightB = neighbors.get(sideB);
+			if (heightB != null) {
+				count++;
+				sum += heightB;
+			}
+
+			return Math.max(MIN_FLUID_HEIGHT, Math.min(1, sum / count));
+		}
+	}
+
+	public interface IRenderNeighbours {
+		public boolean hasDirectNeighbour(int direction);
+
+		public boolean hasDiagonalNeighbour(int direction1, int direction2);
+	}
+
+	public static final IRenderNeighbours NO_NEIGHBOURS = new IRenderNeighbours() {
+		@Override
+		public boolean hasDirectNeighbour(int dir) {
+			return false;
 		}
 
-		public boolean hasNeighbor(ForgeDirection side) {
-			return neighbors.containsKey(side);
+		@Override
+		public boolean hasDiagonalNeighbour(int direction1, int direction2) {
+			return false;
+		}
+	};
+
+	private class NeighbourProvider implements IRenderNeighbours {
+		public boolean[] neighbors = new boolean[64];
+
+		private void testNeighbour(FluidStack ownFluid, int dx, int dy, int dz, int flag) {
+			TileEntityTank tank = getTankInDirection(dx, dy, dz);
+			if (tank != null && tank.accepts(ownFluid)) neighbors[flag] = true;
+		}
+
+		public NeighbourProvider() {
+			final FluidStack fluid = tank.getFluid();
+
+			testNeighbour(fluid, 0, 1, 0, DIR_UP);
+			testNeighbour(fluid, 0, -1, 0, DIR_DOWN);
+			testNeighbour(fluid, +1, 0, 0, DIR_EAST);
+			testNeighbour(fluid, -1, 0, 0, DIR_WEST);
+			testNeighbour(fluid, 0, 0, +1, DIR_SOUTH);
+			testNeighbour(fluid, 0, 0, -1, DIR_NORTH);
+
+			testNeighbour(fluid, +1, 1, 0, DIR_UP | DIR_EAST);
+			testNeighbour(fluid, -1, 1, 0, DIR_UP | DIR_WEST);
+			testNeighbour(fluid, 0, 1, +1, DIR_UP | DIR_SOUTH);
+			testNeighbour(fluid, 0, 1, -1, DIR_UP | DIR_NORTH);
+
+			testNeighbour(fluid, +1, -1, 0, DIR_DOWN | DIR_EAST);
+			testNeighbour(fluid, -1, -1, 0, DIR_DOWN | DIR_WEST);
+			testNeighbour(fluid, 0, -1, +1, DIR_DOWN | DIR_SOUTH);
+			testNeighbour(fluid, 0, -1, -1, DIR_DOWN | DIR_NORTH);
+
+			testNeighbour(fluid, -1, 0, -1, DIR_WEST | DIR_NORTH);
+			testNeighbour(fluid, -1, 0, +1, DIR_WEST | DIR_SOUTH);
+			testNeighbour(fluid, +1, 0, +1, DIR_EAST | DIR_SOUTH);
+			testNeighbour(fluid, +1, 0, -1, DIR_EAST | DIR_NORTH);
+		}
+
+		@Override
+		public boolean hasDirectNeighbour(int direction) {
+			return neighbors[direction];
+		}
+
+		@Override
+		public boolean hasDiagonalNeighbour(int direction1, int direction2) {
+			return neighbors[direction1 | direction2];
 		}
 	}
 
 	private class RenderUpdateListeners implements ISyncListener {
 
-		private FluidStack prevFluid;
+		private FluidStack prevFluidStack;
+
+		private int prevLuminosity;
 
 		private boolean isSameFluid(FluidStack currentFluid) {
-			if (currentFluid == null) return prevFluid == null;
-			return currentFluid.isFluidEqual(prevFluid);
+			if (currentFluid == null) return prevFluidStack == null;
+			return currentFluid.isFluidEqual(prevFluidStack);
 		}
 
 		@Override
@@ -79,13 +174,20 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			if (changes.contains(tank)) {
 				final FluidStack fluidStack = tank.getFluid();
 				if (!isSameFluid(fluidStack)) {
-					worldObj.func_147451_t(xCoord, yCoord, zCoord);
-					prevFluid = fluidStack;
+					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+					prevFluidStack = fluidStack;
+
+					int luminosity = fluidStack != null? fluidStack.getFluid().getLuminosity(fluidStack) : 0;
+					if (luminosity != prevLuminosity) {
+						worldObj.func_147451_t(xCoord, yCoord, zCoord);
+						prevLuminosity = luminosity;
+					}
 				}
 			}
 		}
 	}
 
+	private static final double MIN_FLUID_HEIGHT = 0.02;
 	private static final int SYNC_THRESHOLD = 8;
 	private static final int UPDATE_THRESHOLD = 20;
 
@@ -144,8 +246,18 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return 0;
 	}
 
-	public RenderContext createRenderContext() {
-		return new RenderContext();
+	public IFluidHeightCalculator getRenderFluidHeights() {
+		FluidStack fluid = tank.getFluid();
+		if (fluid == null || fluid.amount <= 0) return createConstantCalculator(0);
+
+		final double renderHeight = getFluidRatio();
+		if (renderHeight <= MIN_FLUID_HEIGHT) return createConstantCalculator(MIN_FLUID_HEIGHT);
+		if (renderHeight > 0.98) return createConstantCalculator(1.0);
+		return new FullHeightCalculator(fluid, renderHeight);
+	}
+
+	public IRenderNeighbours getRenderConnections() {
+		return new NeighbourProvider();
 	}
 
 	private boolean accepts(FluidStack liquid) {
@@ -184,10 +296,18 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 	}
 
+	private static TileEntityTank getValidTank(final TileEntity neighbor) {
+		return (neighbor instanceof TileEntityTank && !neighbor.isInvalid())? (TileEntityTank)neighbor : null;
+	}
+
 	private TileEntityTank getTankInDirection(ForgeDirection direction) {
-		TileEntity neighbor = getTileInDirection(direction);
-		if (neighbor instanceof TileEntityTank && !neighbor.isInvalid()) return (TileEntityTank)neighbor;
-		return null;
+		final TileEntity neighbor = getTileInDirection(direction);
+		return getValidTank(neighbor);
+	}
+
+	private TileEntityTank getTankInDirection(int dx, int dy, int dz) {
+		final TileEntity neighbor = getNeighbour(dx, dy, dz);
+		return getValidTank(neighbor);
 	}
 
 	@Override

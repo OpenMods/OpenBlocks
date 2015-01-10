@@ -29,7 +29,7 @@ public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
 		super(Material.rock);
-		setRenderMode(RenderMode.TESR_ONLY);
+		setRenderMode(RenderMode.BOTH);
 	}
 
 	@Override

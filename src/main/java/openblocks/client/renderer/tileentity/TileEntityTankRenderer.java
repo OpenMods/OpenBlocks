@@ -12,10 +12,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTank.RenderContext;
-import openmods.tileentity.renderer.OpenRenderHelper;
+import openblocks.common.tileentity.TileEntityTank.IFluidHeightCalculator;
+import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -25,137 +24,96 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		bindTexture(TextureMap.locationBlocksTexture);
 		TileEntityTank tankTile = (TileEntityTank)tileentity;
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-
-		RenderContext context = tankTile.createRenderContext();
-		boolean tankInEast = context.hasNeighbor(ForgeDirection.EAST);
-		boolean tankInWest = context.hasNeighbor(ForgeDirection.WEST);
-		boolean tankInNorth = context.hasNeighbor(ForgeDirection.NORTH);
-		boolean tankInSouth = context.hasNeighbor(ForgeDirection.SOUTH);
-		boolean tankUp = context.hasNeighbor(ForgeDirection.UP);
-		boolean tankDown = context.hasNeighbor(ForgeDirection.DOWN);
-
-		if (!tankInEast) {
-			if (!tankInNorth) OpenRenderHelper.renderCube(0.475, -0.501, -0.501, 0.501, 0.501, -0.475, OpenBlocks.Blocks.tank, null);
-			if (!tankInSouth) OpenRenderHelper.renderCube(0.475, -0.501, 0.475, 0.501, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
-			if (!tankDown) OpenRenderHelper.renderCube(0.475, -0.501, -0.501, 0.501, -0.475, 0.501, OpenBlocks.Blocks.tank, null);
-			if (!tankUp) OpenRenderHelper.renderCube(0.475, 0.475, -0.501, 0.501, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
-		}
-		if (!tankInWest) {
-			if (!tankInNorth) OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, -0.475, 0.501, -0.475, OpenBlocks.Blocks.tank, null);
-			if (!tankInSouth) OpenRenderHelper.renderCube(-0.501, -0.501, 0.475, -0.475, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
-			if (!tankDown) OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, -0.475, -0.475, 0.501, OpenBlocks.Blocks.tank, null);
-			if (!tankUp) OpenRenderHelper.renderCube(-0.501, 0.475, -0.501, -0.475, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
-
-		}
-		if (!tankInNorth) {
-			if (!tankUp) OpenRenderHelper.renderCube(-0.501, 0.475, -0.501, 0.501, 0.501, -0.475, OpenBlocks.Blocks.tank, null);
-			if (!tankDown) OpenRenderHelper.renderCube(-0.501, -0.501, -0.501, 0.501, -0.475, -0.475, OpenBlocks.Blocks.tank, null);
-		}
-
-		if (!tankInSouth) {
-			if (!tankUp) OpenRenderHelper.renderCube(-0.501, 0.475, 0.475, 0.501, 0.501, 0.501, OpenBlocks.Blocks.tank, null);
-			if (!tankDown) OpenRenderHelper.renderCube(-0.501, -0.501, 0.475, 0.501, -0.475, 0.501, OpenBlocks.Blocks.tank, null);
-		}
+		final IFluidHeightCalculator context = tankTile.getRenderFluidHeights();
 
 		IFluidTank internalTank = tankTile.getTank();
 
 		FluidStack fluidStack = internalTank.getFluid();
 
 		if (fluidStack != null) {
-			GL11.glDisable(GL11.GL_LIGHTING);
+			bindTexture(TextureMap.locationBlocksTexture);
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y, z);
+			renderFluid(context, fluidStack);
+			GL11.glPopMatrix();
+		}
+	}
 
-			final Fluid fluid = fluidStack.getFluid();
+	public static void renderFluid(IFluidHeightCalculator height, FluidStack fluidStack) {
+		GL11.glDisable(GL11.GL_LIGHTING);
 
-			IIcon texture = fluid.getStillIcon();
-			final int color;
+		final Fluid fluid = fluidStack.getFluid();
 
-			if (texture != null) {
-				bindTexture(getFluidSheet(fluid));
-				color = fluid.getColor(fluidStack);
-			} else {
-				bindTexture(TextureMap.locationBlocksTexture);
-				texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("missingno");
-				color = 0xFFFFFFFF;
-			}
+		IIcon texture = fluid.getStillIcon();
+		final int color;
 
-			Tessellator t = Tessellator.instance;
-
-			final double ySouthEast = context.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.EAST);
-			final double yNorthEast = context.getLiquidHeightForSide(ForgeDirection.NORTH, ForgeDirection.EAST);
-			final double ySouthWest = context.getLiquidHeightForSide(ForgeDirection.SOUTH, ForgeDirection.WEST);
-			final double yNorthWest = context.getLiquidHeightForSide(ForgeDirection.NORTH, ForgeDirection.WEST);
-
-			final double uMin = texture.getInterpolatedU(0.0);
-			final double uMax = texture.getInterpolatedU(16.0);
-			final double vMin = texture.getInterpolatedV(0.0);
-			final double vMax = texture.getInterpolatedV(16.0);
-
-			final double vHeight = vMax - vMin;
-
-			final float r = (color >> 16 & 0xFF) / 255.0F;
-			final float g = (color >> 8 & 0xFF) / 255.0F;
-			final float b = (color & 0xFF) / 255.0F;
-
-			// north side
-			t.startDrawingQuads();
-			t.setColorOpaque_F(r, g, b);
-			t.addVertexWithUV(0.5, -0.5, -0.5, uMax, vMin); // bottom
-			t.addVertexWithUV(-0.5, -0.5, -0.5, uMin, vMin); // bottom
-			// top north/west
-			t.addVertexWithUV(-0.5, -0.5 + yNorthWest, -0.5, uMin, vMin + (vHeight * yNorthWest));
-			// top north/east
-			t.addVertexWithUV(0.5, -0.5 + yNorthEast, -0.5, uMax, vMin + (vHeight * yNorthEast));
-
-			// south side
-			t.addVertexWithUV(0.5, -0.5, 0.5, uMin, vMin);
-			// top south east
-			t.addVertexWithUV(0.5, -0.5 + ySouthEast, 0.5, uMin, vMin + (vHeight * ySouthEast));
-			// top south west
-			t.addVertexWithUV(-0.5, -0.5 + ySouthWest, 0.5, uMax, vMin + (vHeight * ySouthWest));
-			t.addVertexWithUV(-0.5, -0.5, 0.5, uMax, vMin);
-
-			// east side
-			t.addVertexWithUV(0.5, -0.5, -0.5, uMin, vMin);
-			// top north/east
-			t.addVertexWithUV(0.5, -0.5 + yNorthEast, -0.5, uMin, vMin + (vHeight * yNorthEast));
-			// top south/east
-			t.addVertexWithUV(0.5, -0.5 + ySouthEast, 0.5, uMax, vMin + (vHeight * ySouthEast));
-			t.addVertexWithUV(0.5, -0.5, 0.5, uMax, vMin);
-
-			// west side
-			t.addVertexWithUV(-0.5, -0.5, 0.5, uMin, vMin);
-			// top south/west
-			t.addVertexWithUV(-0.5, -0.5 + ySouthWest, 0.5, uMin, vMin + (vHeight * ySouthWest));
-			// top north/west
-			t.addVertexWithUV(-0.5, -0.5 + yNorthWest, -0.5, uMax, vMin + (vHeight * yNorthWest));
-			t.addVertexWithUV(-0.5, -0.5, -0.5, uMax, vMin);
-
-			// top
-			// south east
-			t.addVertexWithUV(0.5, -0.5 + ySouthEast, 0.5, uMax, vMin);
-			// north east
-			t.addVertexWithUV(0.5, -0.5 + yNorthEast, -0.5, uMin, vMin);
-			// north west
-			t.addVertexWithUV(-0.5, -0.5 + yNorthWest, -0.5, uMin, vMax);
-			// south west
-			t.addVertexWithUV(-0.5, -0.5 + ySouthWest, 0.5, uMax, vMax);
-
-			// bottom
-			t.addVertexWithUV(0.5, -0.5, -0.5, uMax, vMin);
-			t.addVertexWithUV(0.5, -0.5, 0.5, uMin, vMin);
-			t.addVertexWithUV(-0.5, -0.5, 0.5, uMin, vMax);
-			t.addVertexWithUV(-0.5, -0.5, -0.5, uMax, vMax);
-			t.draw();
-			GL11.glEnable(GL11.GL_LIGHTING);
+		if (texture != null) {
+			TextureUtils.bindTextureToClient(getFluidSheet(fluid));
+			color = fluid.getColor(fluidStack);
+		} else {
+			TextureUtils.bindDefaultTerrainTexture();
+			texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("missingno");
+			color = 0xFFFFFFFF;
 		}
 
-		// may be disabled by other procedures
-		GL11.glPopMatrix();
+		Tessellator t = Tessellator.instance;
 
+		final double se = height.calculateHeight(ForgeDirection.SOUTH, ForgeDirection.EAST);
+		final double ne = height.calculateHeight(ForgeDirection.NORTH, ForgeDirection.EAST);
+		final double sw = height.calculateHeight(ForgeDirection.SOUTH, ForgeDirection.WEST);
+		final double nw = height.calculateHeight(ForgeDirection.NORTH, ForgeDirection.WEST);
+
+		final double uMin = texture.getMinU();
+		final double uMax = texture.getMaxU();
+		final double vMin = texture.getMinV();
+		final double vMax = texture.getMaxV();
+
+		final double vHeight = vMax - vMin;
+
+		final float r = (color >> 16 & 0xFF) / 255.0F;
+		final float g = (color >> 8 & 0xFF) / 255.0F;
+		final float b = (color & 0xFF) / 255.0F;
+
+		t.startDrawingQuads();
+		t.setColorOpaque_F(r, g, b);
+		// north
+		t.addVertexWithUV(1, 0, 0, uMax, vMin);
+		t.addVertexWithUV(0, 0, 0, uMin, vMin);
+		t.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
+		t.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
+
+		// south
+		t.addVertexWithUV(1, 0, 1, uMin, vMin);
+		t.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
+		t.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
+		t.addVertexWithUV(0, 0, 1, uMax, vMin);
+
+		// east
+		t.addVertexWithUV(1, 0, 0, uMin, vMin);
+		t.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
+		t.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
+		t.addVertexWithUV(1, 0, 1, uMax, vMin);
+
+		// west
+		t.addVertexWithUV(0, 0, 1, uMin, vMin);
+		t.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
+		t.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
+		t.addVertexWithUV(0, 0, 0, uMax, vMin);
+
+		// top
+		t.addVertexWithUV(1, se, 1, uMax, vMin);
+		t.addVertexWithUV(1, ne, 0, uMin, vMin);
+		t.addVertexWithUV(0, nw, 0, uMin, vMax);
+		t.addVertexWithUV(0, sw, 1, uMax, vMax);
+
+		// bottom
+		t.addVertexWithUV(1, 0, 0, uMax, vMin);
+		t.addVertexWithUV(1, 0, 1, uMin, vMin);
+		t.addVertexWithUV(0, 0, 1, uMin, vMax);
+		t.addVertexWithUV(0, 0, 0, uMax, vMax);
+		t.draw();
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	public static ResourceLocation getFluidSheet(FluidStack liquid) {

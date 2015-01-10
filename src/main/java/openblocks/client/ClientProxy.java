@@ -87,6 +87,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.tank, new BlockTankRenderer());
 
 			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
 		}
