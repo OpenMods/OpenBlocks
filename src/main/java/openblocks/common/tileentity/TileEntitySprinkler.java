@@ -27,6 +27,7 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.GenericFluidHandler;
 import openmods.sync.SyncableFlags;
@@ -52,7 +53,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	public int ticks;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("sprinkler", true, 9) {
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "sprinkler", true, 9) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return itemstack != null && itemstack.isItemEqual(BONEMEAL);

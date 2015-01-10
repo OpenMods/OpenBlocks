@@ -20,6 +20,7 @@ import openmods.gamelogic.WorkerLogic;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableFloat;
 import openmods.sync.SyncableInt;
@@ -92,7 +93,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	@StoreOnDrop
 	public SyncableFloat lvlBlack;
 
-	private GenericInventory inventory = new GenericInventory("paintmixer", true, 6) {
+	private GenericInventory inventory = new TileEntityInventory(this, "paintmixer", true, 6) {
 		@Override
 		public boolean isItemValidForSlot(int slotId, ItemStack stack) {
 			Slots[] values = Slots.values();

@@ -17,6 +17,7 @@ import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 
@@ -25,7 +26,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 
 	private boolean _redstoneSignal;
 
-	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("itemDropper", false, 9));
+	private GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "itemDropper", false, 9));
 
 	public TileEntityItemDropper() {}
 

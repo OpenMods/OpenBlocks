@@ -27,6 +27,7 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
@@ -57,7 +58,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		xp
 	}
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("xpbottler", true, 2) {
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "xpbottler", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 			if (slot != Slots.input.ordinal()) return false;

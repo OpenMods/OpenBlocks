@@ -13,6 +13,7 @@ import openmods.api.IHasGui;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ModIdentifier;
 import cpw.mods.fml.common.ModContainer;
@@ -23,7 +24,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 		input
 	}
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("donationstation", true, 1));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "donationstation", true, 1));
 
 	public TileEntityDonationStation() {}
 

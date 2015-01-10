@@ -23,6 +23,7 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
@@ -55,7 +56,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private SyncableFlags automaticSlots;
 	private SyncableInt maxLevel;
 
-	private final GenericInventory inventory = new GenericInventory("autoenchant", true, 2) {
+	private final GenericInventory inventory = new TileEntityInventory(this, "autoenchant", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return (i == Slots.input.ordinal()) && !itemstack.isItemEnchanted();

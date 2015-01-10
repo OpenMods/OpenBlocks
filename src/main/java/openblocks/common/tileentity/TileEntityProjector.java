@@ -19,6 +19,7 @@ import openmods.api.IHasGui;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
@@ -26,7 +27,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
 
-	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
+	private GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack stack) {
 			if (stack == null) return false;

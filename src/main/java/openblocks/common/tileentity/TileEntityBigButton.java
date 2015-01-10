@@ -17,6 +17,7 @@ import openmods.api.ISurfaceAttachment;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
@@ -34,7 +35,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	private SyncableFlags flags;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("bigbutton", true, 1));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "bigbutton", true, 1));
 
 	public TileEntityBigButton() {
 		syncMap.addUpdateListener(createRenderUpdateListener());

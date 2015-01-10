@@ -14,11 +14,12 @@ import openmods.api.IHasGui;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 
 public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryProvider, IStencilCrafter {
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("drawingtable", true, 1) {
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "drawingtable", true, 1) {
 
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {

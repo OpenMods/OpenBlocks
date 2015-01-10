@@ -27,6 +27,7 @@ import openmods.api.IValueProvider;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.SyncableBoolean;
@@ -48,7 +49,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public SyncableDirs itemOutputs;
 	public SyncableBoolean vacuumDisabled;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("vacuumhopper", true, 10));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "vacuumhopper", true, 10));
 
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);

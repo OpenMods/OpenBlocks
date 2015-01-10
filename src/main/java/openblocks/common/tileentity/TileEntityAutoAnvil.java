@@ -24,6 +24,7 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.SyncableDirs;
@@ -69,7 +70,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private SyncableTank tank;
 	private SyncableFlags automaticSlots;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("autoanvil", true, 3) {
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "autoanvil", true, 3) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Items.enchanted_book)) { return false; }
