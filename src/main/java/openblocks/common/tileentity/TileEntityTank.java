@@ -374,9 +374,9 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		ForgeDirection direction = ForgeDirection.getOrientation(side);
-
 		ItemStack usedItem = player.inventory.getCurrentItem();
-		if (usedItem != null) return tryUseFluidContainer(player, direction, usedItem);
+		if (usedItem != null) return tryEmptyItem(player, direction, usedItem);
+		if (worldObj.isRemote) return false;
 
 		return tryDrainXp(player, direction);
 	}
@@ -405,30 +405,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	protected boolean tryUseFluidContainer(EntityPlayer player, ForgeDirection direction, ItemStack current) {
-		return tryEmptyItem(player, direction, current) || tryFillItem(player, direction, current);
-	}
-
-	protected boolean tryFillItem(EntityPlayer player, ForgeDirection direction, ItemStack current) {
-		FluidStack available = tank.getFluid();
-		if (available == null || available.amount <= 0) return false;
-		if (worldObj.isRemote) return true;
-
-		ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
-		FluidStack containedFluid = FluidContainerRegistry.getFluidForFilledItem(filled);
-		if (containedFluid != null) {
-			if (!player.capabilities.isCreativeMode) {
-				if (current.stackSize > 1) {
-					if (!player.inventory.addItemStackToInventory(filled)) return false;
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
-				} else {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
-				}
-			}
-			drain(direction, containedFluid.amount, true);
-			return true;
-		}
-
-		return false;
+		return tryEmptyItem(player, direction, current);
 	}
 
 	protected boolean tryEmptyItem(EntityPlayer player, ForgeDirection direction, ItemStack current) {

@@ -40,6 +40,7 @@ import openmods.config.game.*;
 import openmods.config.properties.ConfigProcessing;
 import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
+import openmods.liquids.BucketFillHandler;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.RpcCallDispatcher;
 import openmods.utils.EnchantmentUtils;
@@ -437,6 +438,10 @@ public class OpenBlocks {
 
 		if (Blocks.elevator != null) {
 			MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
+		}
+
+		if (Blocks.tank != null) {
+			BucketFillHandler.instance.addToWhitelist(TileEntityTank.class);
 		}
 
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
