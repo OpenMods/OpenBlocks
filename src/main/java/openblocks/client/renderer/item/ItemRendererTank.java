@@ -45,6 +45,11 @@ public class ItemRendererTank implements IItemRenderer {
 					public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
 						return height;
 					}
+
+					@Override
+					public boolean shouldRenderFluidWall(ForgeDirection side) {
+						return false;
+					}
 				}, stack);
 			}
 		}

@@ -1,8 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,35 +39,94 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	public interface IFluidHeightCalculator {
 		public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB);
+
+		public boolean shouldRenderFluidWall(ForgeDirection side);
 	}
 
-	private static IFluidHeightCalculator createConstantCalculator(final double value) {
-		return new IFluidHeightCalculator() {
-			@Override
-			public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
-				return value;
+	private abstract class HeightCalculatorBase implements IFluidHeightCalculator {
+		protected final Set<ForgeDirection> renderedWalls = EnumSet.noneOf(ForgeDirection.class);
+
+		protected boolean hasCommonTopWall(FluidStack fluid) {
+			if (isFull()) {
+				TileEntityTank topNeighbour = getTankInDirection(ForgeDirection.UP);
+				if (topNeighbour != null) {
+					FluidStack otherFluid = topNeighbour.tank.getFluid();
+					return fluid.isFluidEqual(otherFluid);
+				}
 			}
-		};
+
+			return false;
+		}
+
+		protected boolean hasCommonBottomWall(FluidStack fluid) {
+			TileEntityTank bottomNeighbour = getTankInDirection(ForgeDirection.DOWN);
+			if (bottomNeighbour != null && bottomNeighbour.isFull()) {
+				FluidStack otherFluid = bottomNeighbour.tank.getFluid();
+				return fluid.isFluidEqual(otherFluid);
+			}
+
+			return false;
+		}
+
+		protected void updateTopBottomNeighbours(FluidStack fluid) {
+			if (fluid != null) {
+				if (hasCommonTopWall(fluid)) renderedWalls.add(ForgeDirection.UP);
+				if (hasCommonBottomWall(fluid)) renderedWalls.add(ForgeDirection.DOWN);
+			}
+		}
+
+		@Override
+		public boolean shouldRenderFluidWall(ForgeDirection side) {
+			return renderedWalls.contains(side);
+		}
 	}
 
-	private class FullHeightCalculator implements IFluidHeightCalculator {
-		private final double ownAmount;
-		private final Map<ForgeDirection, Double> neighbors = Maps.newEnumMap(ForgeDirection.class);
+	private class ConstantHeightCalculator extends HeightCalculatorBase {
+		private final double height;
 
-		public FullHeightCalculator(FluidStack ownFluid, double ownHeight) {
+		public ConstantHeightCalculator(FluidStack fluid, double height) {
+			this.height = height;
+
+			updateValue(fluid, ForgeDirection.EAST);
+			updateValue(fluid, ForgeDirection.WEST);
+			updateValue(fluid, ForgeDirection.NORTH);
+			updateValue(fluid, ForgeDirection.SOUTH);
+
+			updateTopBottomNeighbours(fluid);
+		}
+
+		private void updateValue(FluidStack fluid, ForgeDirection dir) {
+			TileEntityTank tank = getTankInDirection(dir);
+			if (tank != null && tank.accepts(fluid)) renderedWalls.add(dir);
+		}
+
+		@Override
+		public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
+			return height;
+		}
+	}
+
+	private class AveragingHeightCalculator extends HeightCalculatorBase {
+		private final double ownAmount;
+		private final Map<ForgeDirection, Double> neighbours = Maps.newEnumMap(ForgeDirection.class);
+
+		public AveragingHeightCalculator(FluidStack ownFluid, double ownHeight) {
 			ownAmount = ownHeight + getFlowOffset();
 
 			updateValue(ownFluid, ForgeDirection.EAST);
 			updateValue(ownFluid, ForgeDirection.WEST);
 			updateValue(ownFluid, ForgeDirection.NORTH);
 			updateValue(ownFluid, ForgeDirection.SOUTH);
+
+			updateTopBottomNeighbours(ownFluid);
 		}
 
 		private void updateValue(FluidStack fluid, ForgeDirection dir) {
 			TileEntityTank tank = getTankInDirection(dir);
 			if (tank != null && tank.accepts(fluid)) {
 				double amount = tank.getFluidRatio() + tank.getFlowOffset();
-				neighbors.put(dir, amount);
+				neighbours.put(dir, amount);
+				renderedWalls.add(dir);
 			}
 		}
 
@@ -79,13 +136,13 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 			int count = 1;
 
-			Double heightA = neighbors.get(sideA);
+			Double heightA = neighbours.get(sideA);
 			if (heightA != null) {
 				count++;
 				sum += heightA;
 			}
 
-			Double heightB = neighbors.get(sideB);
+			Double heightB = neighbours.get(sideB);
 			if (heightB != null) {
 				count++;
 				sum += heightB;
@@ -248,12 +305,12 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	public IFluidHeightCalculator getRenderFluidHeights() {
 		FluidStack fluid = tank.getFluid();
-		if (fluid == null || fluid.amount <= 0) return createConstantCalculator(0);
+		if (fluid == null || fluid.amount <= 0) return new ConstantHeightCalculator(fluid, 0);
 
 		final double renderHeight = getFluidRatio();
-		if (renderHeight <= MIN_FLUID_HEIGHT) return createConstantCalculator(MIN_FLUID_HEIGHT);
-		if (renderHeight > 0.98) return createConstantCalculator(1.0);
-		return new FullHeightCalculator(fluid, renderHeight);
+		if (renderHeight <= MIN_FLUID_HEIGHT) return new ConstantHeightCalculator(fluid, MIN_FLUID_HEIGHT);
+		if (renderHeight > 0.98) return new ConstantHeightCalculator(fluid, 1.0);
+		return new AveragingHeightCalculator(fluid, renderHeight);
 	}
 
 	public IRenderNeighbours getRenderConnections() {
@@ -274,6 +331,10 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	public IFluidTank getTank() {
 		return tank;
+	}
+
+	private boolean isFull() {
+		return tank.getSpace() == 0;
 	}
 
 	public NBTTagCompound getItemNBT() {

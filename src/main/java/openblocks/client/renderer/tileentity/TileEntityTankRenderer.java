@@ -35,6 +35,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			bindTexture(TextureMap.locationBlocksTexture);
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
+			GL11.glEnable(GL11.GL_BLEND);
 			renderFluid(context, fluidStack);
 			GL11.glPopMatrix();
 		}
@@ -42,7 +43,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 	public static void renderFluid(IFluidHeightCalculator height, FluidStack fluidStack) {
 		GL11.glDisable(GL11.GL_LIGHTING);
-
+		GL11.glColor4f(1, 1, 1, 1);
 		final Fluid fluid = fluidStack.getFluid();
 
 		IIcon texture = fluid.getStillIcon();
@@ -77,41 +78,48 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		t.startDrawingQuads();
 		t.setColorOpaque_F(r, g, b);
-		// north
-		t.addVertexWithUV(1, 0, 0, uMax, vMin);
-		t.addVertexWithUV(0, 0, 0, uMin, vMin);
-		t.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
-		t.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
 
-		// south
-		t.addVertexWithUV(1, 0, 1, uMin, vMin);
-		t.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
-		t.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
-		t.addVertexWithUV(0, 0, 1, uMax, vMin);
+		if (!height.shouldRenderFluidWall(ForgeDirection.NORTH)) {
+			t.addVertexWithUV(1, 0, 0, uMax, vMin);
+			t.addVertexWithUV(0, 0, 0, uMin, vMin);
+			t.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
+			t.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
+		}
 
-		// east
-		t.addVertexWithUV(1, 0, 0, uMin, vMin);
-		t.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
-		t.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
-		t.addVertexWithUV(1, 0, 1, uMax, vMin);
+		if (!height.shouldRenderFluidWall(ForgeDirection.SOUTH)) {
+			t.addVertexWithUV(1, 0, 1, uMin, vMin);
+			t.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
+			t.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
+			t.addVertexWithUV(0, 0, 1, uMax, vMin);
+		}
 
-		// west
-		t.addVertexWithUV(0, 0, 1, uMin, vMin);
-		t.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
-		t.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
-		t.addVertexWithUV(0, 0, 0, uMax, vMin);
+		if (!height.shouldRenderFluidWall(ForgeDirection.EAST)) {
+			t.addVertexWithUV(1, 0, 0, uMin, vMin);
+			t.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
+			t.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
+			t.addVertexWithUV(1, 0, 1, uMax, vMin);
+		}
 
-		// top
-		t.addVertexWithUV(1, se, 1, uMax, vMin);
-		t.addVertexWithUV(1, ne, 0, uMin, vMin);
-		t.addVertexWithUV(0, nw, 0, uMin, vMax);
-		t.addVertexWithUV(0, sw, 1, uMax, vMax);
+		if (!height.shouldRenderFluidWall(ForgeDirection.WEST)) {
+			t.addVertexWithUV(0, 0, 1, uMin, vMin);
+			t.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
+			t.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
+			t.addVertexWithUV(0, 0, 0, uMax, vMin);
+		}
 
-		// bottom
-		t.addVertexWithUV(1, 0, 0, uMax, vMin);
-		t.addVertexWithUV(1, 0, 1, uMin, vMin);
-		t.addVertexWithUV(0, 0, 1, uMin, vMax);
-		t.addVertexWithUV(0, 0, 0, uMax, vMax);
+		if (!height.shouldRenderFluidWall(ForgeDirection.UP)) {
+			t.addVertexWithUV(1, se, 1, uMax, vMin);
+			t.addVertexWithUV(1, ne, 0, uMin, vMin);
+			t.addVertexWithUV(0, nw, 0, uMin, vMax);
+			t.addVertexWithUV(0, sw, 1, uMax, vMax);
+		}
+
+		if (!height.shouldRenderFluidWall(ForgeDirection.DOWN)) {
+			t.addVertexWithUV(1, 0, 0, uMax, vMin);
+			t.addVertexWithUV(1, 0, 1, uMin, vMin);
+			t.addVertexWithUV(0, 0, 1, uMin, vMax);
+			t.addVertexWithUV(0, 0, 0, uMax, vMax);
+		}
 		t.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
