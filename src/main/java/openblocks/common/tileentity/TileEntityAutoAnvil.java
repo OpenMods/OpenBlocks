@@ -124,7 +124,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.modifier.ordinal(), modifierSides.getValue(), true);
 			}
 
-			if (cooldown-- < 0) {
+			if (cooldown-- < 0 && !hasOutput()) {
 				repairItem();
 				cooldown = TOTAL_COOLDOWN;
 			}
