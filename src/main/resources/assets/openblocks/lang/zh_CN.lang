@@ -40,19 +40,22 @@ openblocks.gui.watch_video=观看教学视频
 openblocks.gui.max_level=最高附魔等级:%d
 
 openblocks.gui.welcome.title=欢迎!
-openblocks.gui.welcome.content=开放式方块上一个新的开源模组,它将大量创意引入到minecraft世界中,包括并不限于滑翔翼,电梯,蓄水槽,墓碑,颜料刷,起重机,液态经验,制图机器人,纪念雕像!
+openblocks.gui.welcome.content=开放式方块是一个全新的开源模组,它将大量创意引入minecraft世界,包括并不限于滑翔翼,电梯,蓄水槽,墓碑,颜料刷,起重机,液态经验,制图机器人,纪念雕像等!
 
 openblocks.gui.credits.title=致谢表
-openblocks.gui.credits.content=§LBoq,Mikee以及NeverCast§R - 开放式方块的主要开发者 (我们应该可以把自己列入名单吧?)\n\n§LSinZ以及Yoshi2§R - 开放式方块团队的元老成员.\n\n§LVexatos以及crafteverywhere§R - 日常翻译人员.\n\n还有那些在过去的一年中对模组代码做出贡献的人们.\n\n§LDirewolf20和ForgeCraft 的其他成员§R - 感谢他们在模组发布前为我们测试Bug以及稳定性.\n\n还有那些制作模组解说,实况视频和最初起就一直支持我们的朋友!
+openblocks.gui.credits.content=§LBoq,Mikee以及NeverCast§R - 开放式方块的主要开发者(应该允许我们把自己也列入名单吧?)\n\n§LSinZ以及Yoshi2§R - 开放式方块团队的元老成员.\n\n§LVexatos以及crafteverywhere§R - 日常翻译人员.\n\n还有所有那些过去两年来对模组代码有所贡献的人们.\n\n§LDirewolf20和ForgeCraft 的其他成员§R - 感谢他们在模组发布前为我们测试Bug以及稳定性.\n\n还有那些制作模组解说,实况视频和最初起就一直支持我们的朋友!
 
 openblocks.gui.config.title=便捷的配置文件
 openblocks.gui.config.content=开放式方块允许玩家通过在对话框中键入指令来修改客户端或服务端的配置文件.一些修改甚至都不需要重启游戏!\n\n修改服务器的配置文件可以键入指令'§L/om_config_s§R'(需要op权限)修改客户端的配置文件可以键入指令 '§L/om_config_c§R'\n\n例如:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\n若想查看所有的修改指令可以键入:§L/help om_config_s§R 或 §L/help om_config_c§R
+
+openblocks.gui.restore_inv.title=物品栏备份
+openblocks.gui.restore_inv.content=孰能无过.有了§L/ob_inventory§R这条命令你就能弥补些许遗憾.这条命令可以用来恢复物品栏状态.备份会在下列情况下创建:\n - 玩家死亡\n - 墓碑生成时\n - 玩家运行§L/ob_inventory store§R命令时\n\n要恢复物品栏你需要相应备份的名称.前往根目录或服务器的存档文件夹下寻找名称格式为§Linventory-*.dat§R的文件,然后就可以以§L/ob_inventory restore <player> <id>§R的格式来运行恢复命令.命令中的id部分既可以使用备份文件全名,也可以只使用中间部分,即去掉§Linventory-§R和§L.dat§R的部分.你也可以使用tab键来尝试自动补全功能.备份文件是普通的nbt数据文件,能够使用任意编辑器打开.
 
 openblocks.gui.bkey.title=臭名昭著的'B'键
 openblocks.gui.bkey.content='B' 键在开放式方块中是一个特殊的快捷键.\n\n启用配置文件中'tomfoolery'分类下的'weAreSeriousPeople'选项后,你会获得独有的消化系统,这项配置对客户端和服务端都有效.\n\n试着吃一些美味粘土,接着按'B'键消化!
 
 openblocks.gui.unstable.title=附魔:震荡不定
-openblocks.gui.unstable.content=我们收到一份未经证实的报告,当你越过某个方块或受到攻击时,你身上携带的火药将会变得极其不稳定.\n\n对此可能造成的任何损失我们恕不负责!
+openblocks.gui.unstable.content=我们收到一份未经证实的报告,当越过某个方块或受到攻击时,你身上携带的火药将会变得极其不稳定.\n\n对此可能造成的任何损失我们恕不负责!
 
 openblocks.gui.flimflam.title=附魔:尔虞我诈
 openblocks.gui.flimflam.content=科学家尚未研究出这个附魔的用途.
@@ -84,11 +87,15 @@ openblocks.misc.total_blocks=搭建共需要:%d个方块
 openblocks.misc.get_witched=为之沉迷!
 openblocks.misc.page=%d  /%d页
 openblocks.misc.oh_no_ceiling=你睡意全无,头顶空空荡荡,房子徒有四壁,令你坐立难安...
+openblocks.misc.oh_no_ground=你居然还想要睡在那上面!?
 
-openblocks.misc.cant_restore=无法还原玩家%s的物品栏
+openblocks.misc.cant_restore_player=无法恢复玩家%s的物品栏
+openblocks.misc.cant_restore_inventory=无法恢复物品栏
 openblocks.misc.cant_store=无法储存玩家%s的物品栏
 openblocks.misc.stored_inventory=已储存玩家%s的物品栏
 openblocks.misc.restored_inventory=已还原玩家%s的物品栏
+openblocks.misc.invalid_index=无效索引
+openblocks.misc.empty_slot=对应格子无物品
 
 openblocks.misc.pedometer.tracking_reset=重新计步
 openblocks.misc.pedometer.tracking_started=开始计步
@@ -180,7 +187,7 @@ tile.openblocks.cannon.name=投掷加农炮
 tile.openblocks.cannon.description=当投掷加农炮接收到红石信号时,投掷加农炮会向指定目标投掷出相邻容器内的物品.你可以使用 '指针' 工具来给加农炮定位投掷的目标.
 
 tile.openblocks.ropeladder.name=绳梯
-tile.openblocks.ropeladder.description=当你放置绳梯后,它会垂直落到地面.
+tile.openblocks.ropeladder.description=当你放置绳梯后,它会垂直落到地面.创建一处绳梯只从堆叠中消耗一个物品.
 
 tile.openblocks.sprinkler.name=洒水器
 tile.openblocks.sprinkler.description=洒水器可以催生4x4格范围内的作物.只需要将它放置在装有水的容器上方即可开始洒水! 你可以放入骨粉来加快它对作物的催生速度.\n洒水器也可以作为水源供给方块使用!
@@ -335,6 +342,6 @@ itemGroup.tabOpenBlocks=OpenBlocks
 entity.OpenBlocks.Luggage.name=行李箱
 entity.OpenBlocks.Cartographer.name=制图机器人
 entity.OpenBlocks.Block.name=悬浮方块
-entity.OpenBlocks.MiniMe.name=迷你的我
+entity.OpenBlocks.MiniMe.name=迷你替身
 
 fluid.OpenBlocks.xpjuice=液态经验
