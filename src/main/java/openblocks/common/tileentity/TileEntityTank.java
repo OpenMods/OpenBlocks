@@ -619,4 +619,9 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 		drops.add(stack);
 	}
+
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
+	}
 }

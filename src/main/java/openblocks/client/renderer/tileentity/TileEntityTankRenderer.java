@@ -1,6 +1,7 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -36,7 +37,9 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
 			GL11.glEnable(GL11.GL_BLEND);
+			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			renderFluid(context, fluidStack);
+			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
 	}

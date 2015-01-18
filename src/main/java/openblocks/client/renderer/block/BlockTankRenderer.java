@@ -4,6 +4,7 @@ import static openblocks.common.tileentity.TileEntityTank.*;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.block.BlockTank;
 import openblocks.common.tileentity.TileEntityTank;
@@ -28,6 +29,7 @@ public class BlockTankRenderer implements IBlockRenderer<BlockTank> {
 			Tessellator tes = new Tessellator();
 			tes.startDrawingQuads();
 			tes.setColorOpaque(0, 0, 0);
+			tes.setTextureUV(0, 0);
 			BlockTankRenderer.render(tes, NO_NEIGHBOURS, 0, 0, 0);
 			tes.draw();
 
@@ -55,8 +57,6 @@ public class BlockTankRenderer implements IBlockRenderer<BlockTank> {
 	}
 
 	private static void render(Tessellator tes, IRenderNeighbours connections, double x, double y, double z) {
-		tes.setColorOpaque(0, 0, 0);
-		tes.setTextureUV(0, 0);
 		if (shouldRenderEdgeT(connections, DIR_SOUTH, DIR_DOWN)) RenderUtils.renderCube(tes, x - H + 0, y - H + 0, z - H + 1, x + H + 1, y + H + 0, z + H + 1);
 		if (shouldRenderEdgeT(connections, DIR_NORTH, DIR_DOWN)) RenderUtils.renderCube(tes, x - H + 0, y - H + 0, z - H + 0, x + H + 1, y + H + 0, z + H + 0);
 		if (shouldRenderEdgeB(connections, DIR_SOUTH, DIR_UP)) RenderUtils.renderCube(tes, x - H + 0, y - H + 1, z - H + 1, x + H + 1, y + H + 1, z + H + 1);
@@ -82,6 +82,9 @@ public class BlockTankRenderer implements IBlockRenderer<BlockTank> {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockTank block, int modelId, RenderBlocks renderer) {
 		TileEntity te = world.getTileEntity(x, y, z);
 		IRenderNeighbours connections = (te instanceof TileEntityTank)? ((TileEntityTank)te).getRenderConnections() : NO_NEIGHBOURS;
+		final IIcon icon = block.getIcon();
+		Tessellator.instance.setTextureUV(icon.getMinU(), icon.getMinV());
+		Tessellator.instance.setColorOpaque(255, 255, 255);
 		render(Tessellator.instance, connections, x, y, z);
 		return true;
 	}
