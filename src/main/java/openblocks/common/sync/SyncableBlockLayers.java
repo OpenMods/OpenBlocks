@@ -121,7 +121,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream, boolean fullData)
+	public void writeToStream(DataOutputStream stream)
 			throws IOException {
 		stream.writeByte(layers.size());
 		for (Layer layer : layers) {

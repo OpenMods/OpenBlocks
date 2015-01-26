@@ -71,9 +71,9 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	/** synced data objects **/
 	private SyncableInt progress;
-	private SyncableDirs glassSides;
-	private SyncableDirs xpBottleSides;
-	private SyncableDirs xpSides;
+	private SyncableSides glassSides;
+	private SyncableSides xpBottleSides;
+	private SyncableSides xpSides;
 	private SyncableFlags automaticSlots;
 	private SyncableTank tank;
 
@@ -85,9 +85,9 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	@Override
 	protected void createSyncedFields() {
 		progress = new SyncableInt();
-		glassSides = new SyncableDirs();
-		xpBottleSides = new SyncableDirs();
-		xpSides = new SyncableDirs();
+		glassSides = new SyncableSides();
+		xpBottleSides = new SyncableSides();
+		xpSides = new SyncableSides();
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 	}
@@ -213,7 +213,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		inventory.readFromNBT(tag);
 	}
 
-	private SyncableDirs selectSlotMap(AutoSlots slot) {
+	private SyncableSides selectSlotMap(AutoSlots slot) {
 		switch (slot) {
 			case input:
 				return glassSides;
@@ -233,7 +233,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	@Override
 	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
-		SyncableDirs dirs = selectSlotMap(slot);
+		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
 

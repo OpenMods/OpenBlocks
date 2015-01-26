@@ -27,7 +27,7 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.SyncableDirs;
+import openmods.sync.SyncableSides;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
@@ -63,10 +63,10 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	/**
 	 * The shared/syncable objects
 	 */
-	private SyncableDirs toolSides;
-	private SyncableDirs modifierSides;
-	private SyncableDirs outputSides;
-	private SyncableDirs xpSides;
+	private SyncableSides toolSides;
+	private SyncableSides modifierSides;
+	private SyncableSides outputSides;
+	private SyncableSides xpSides;
 	private SyncableTank tank;
 	private SyncableFlags automaticSlots;
 
@@ -93,10 +93,10 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 	@Override
 	protected void createSyncedFields() {
-		toolSides = new SyncableDirs();
-		modifierSides = new SyncableDirs();
-		outputSides = new SyncableDirs();
-		xpSides = new SyncableDirs();
+		toolSides = new SyncableSides();
+		modifierSides = new SyncableSides();
+		outputSides = new SyncableSides();
+		xpSides = new SyncableSides();
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
@@ -228,7 +228,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		inventory.readFromNBT(tag);
 	}
 
-	private SyncableDirs selectSlotMap(AutoSlots slot) {
+	private SyncableSides selectSlotMap(AutoSlots slot) {
 		switch (slot) {
 			case modifier:
 				return modifierSides;
@@ -250,7 +250,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 	@Override
 	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
-		SyncableDirs dirs = selectSlotMap(slot);
+		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
 

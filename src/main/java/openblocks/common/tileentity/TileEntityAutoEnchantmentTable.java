@@ -49,9 +49,9 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	private SyncableTank tank;
-	private SyncableDirs inputSides;
-	private SyncableDirs outputSides;
-	private SyncableDirs xpSides;
+	private SyncableSides inputSides;
+	private SyncableSides outputSides;
+	private SyncableSides xpSides;
 	private SyncableInt targetLevel;
 	private SyncableFlags automaticSlots;
 	private SyncableInt maxLevel;
@@ -93,9 +93,9 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	@Override
 	protected void createSyncedFields() {
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
-		inputSides = new SyncableDirs();
-		outputSides = new SyncableDirs();
-		xpSides = new SyncableDirs();
+		inputSides = new SyncableSides();
+		outputSides = new SyncableSides();
+		xpSides = new SyncableSides();
 		targetLevel = new SyncableInt(1);
 		maxLevel = new SyncableInt();
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
@@ -286,7 +286,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		inventory.readFromNBT(tag);
 	}
 
-	private SyncableDirs selectSlotMap(AutoSlots slot) {
+	private SyncableSides selectSlotMap(AutoSlots slot) {
 		switch (slot) {
 			case input:
 				return inputSides;
@@ -306,7 +306,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	@Override
 	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
-		SyncableDirs dirs = selectSlotMap(slot);
+		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
 
