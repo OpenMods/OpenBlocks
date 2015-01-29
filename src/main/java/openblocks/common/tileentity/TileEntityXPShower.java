@@ -98,11 +98,13 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
 		bufferTank.readFromNBT(nbt);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
 		bufferTank.writeToNBT(nbt);
 	}
 
