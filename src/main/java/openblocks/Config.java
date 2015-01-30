@@ -159,6 +159,14 @@ public class Config {
 	@ConfigProperty(category = "graves", name = "storeContents", comment = "Store contents of spawned graves into separate NBT files (can later be restored with ob_inventory command)")
 	public static boolean backupGraves = true;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "spawnSkeletons", comment = "Should grave randomly spawn skeletons")
+	public static boolean spawnSkeletons = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "skeletonSpawnRate", comment = "Spawn rate, range: 0..1, default: about 1 per 50s")
+	public static double skeletonSpawnRate = 0.002;
+
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
 

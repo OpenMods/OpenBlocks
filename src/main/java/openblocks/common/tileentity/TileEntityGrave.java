@@ -17,6 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.Config;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.inventory.GenericInventory;
@@ -55,7 +56,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		}
 
 		if (!worldObj.isRemote) {
-			if (worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < 0.002) {
+			if (Config.spawnSkeletons && worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < Config.skeletonSpawnRate) {
 				List<Entity> mobs = worldObj.getEntitiesWithinAABB(IMob.class, getBB().expand(7, 7, 7));
 				if (mobs.size() < 5) {
 					double chance = worldObj.rand.nextDouble();
