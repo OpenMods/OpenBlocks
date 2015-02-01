@@ -38,26 +38,28 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class PlayerDeathHandler {
 
-	private interface IGravePlacementChecker {
-		public boolean canPlaceGrave(World world, int x, int y, int z);
-	}
-
-	private static final IGravePlacementChecker POLITE = new IGravePlacementChecker() {
-		@Override
-		public boolean canPlaceGrave(World world, int x, int y, int z) {
+	private abstract static class GravePlacementChecker {
+		public boolean canPlaceGrave(World world, EntityPlayer player, int x, int y, int z) {
 			if (!world.blockExists(x, y, z)) return false;
+			if (!world.canMineBlock(player, x, y, z)) return false;
 
 			Block block = world.getBlock(x, y, z);
+			return checkBlock(world, x, y, z, block);
+		}
+
+		public abstract boolean checkBlock(World world, int x, int y, int z, Block block);
+	}
+
+	private static final GravePlacementChecker POLITE = new GravePlacementChecker() {
+		@Override
+		public boolean checkBlock(World world, int x, int y, int z, Block block) {
 			return (block.isAir(world, x, y, z) || block.isReplaceable(world, x, y, z));
 		}
 	};
 
-	private static final IGravePlacementChecker BRUTAL = new IGravePlacementChecker() {
+	private static final GravePlacementChecker BRUTAL = new GravePlacementChecker() {
 		@Override
-		public boolean canPlaceGrave(World world, int x, int y, int z) {
-			if (!world.blockExists(x, y, z)) return false;
-
-			Block block = world.getBlock(x, y, z);
+		public boolean checkBlock(World world, int x, int y, int z, Block block) {
 			return block.getBlockHardness(world, x, y, z) >= 0 && world.getTileEntity(x, y, z) == null;
 		}
 	};
@@ -72,14 +74,17 @@ public class PlayerDeathHandler {
 
 		private final WeakReference<World> world;
 
-		public GraveCallable(World world, EntityPlayer exPlayer, List<EntityItem> loot) {
-			this.stiffId = exPlayer.getGameProfile();
+		private final WeakReference<EntityPlayer> exPlayer;
 
+		public GraveCallable(World world, EntityPlayer exPlayer, List<EntityItem> loot) {
 			this.posX = MathHelper.floor_double(exPlayer.posX);
 			this.posY = MathHelper.floor_double(exPlayer.posY);
 			this.posZ = MathHelper.floor_double(exPlayer.posZ);
 
 			this.world = new WeakReference<World>(world);
+
+			this.exPlayer = new WeakReference<EntityPlayer>(exPlayer);
+			this.stiffId = exPlayer.getGameProfile();
 
 			this.loot = ImmutableList.copyOf(loot);
 		}
@@ -121,12 +126,12 @@ public class PlayerDeathHandler {
 			return true;
 		}
 
-		private boolean tryPlaceGrave(World world, IGravePlacementChecker checker) {
-			for (int distance = 0; distance < Config.graveSpawnRange; distance++)
+		private boolean tryPlaceGrave(World world, EntityPlayer player, GravePlacementChecker checker) {
+			for (int distance = 0; distance < Config.graveSpawnRange / 2; distance++)
 				for (int checkX = posX - distance; checkX <= posX + distance; checkX++)
 					for (int checkY = posY - distance; checkY <= posY + distance; checkY++)
 						for (int checkZ = posZ - distance; checkZ <= posZ + distance; checkZ++)
-							if (checker.canPlaceGrave(world, checkX, checkY, checkZ) &&
+							if (checker.canPlaceGrave(world, player, checkX, checkY, checkZ) &&
 									tryPlaceGrave(world, checkX, checkY, checkZ)) {
 								Log.debug("Placing grave for player '%s' @ (%d,%d,%d)", stiffId, checkX, checkY, checkZ);
 								return true;
@@ -137,17 +142,23 @@ public class PlayerDeathHandler {
 
 		@Override
 		public void run() {
+			EntityPlayer player = exPlayer.get();
+			if (player == null) {
+				Log.warn("Lost player while placing player %s grave", stiffId);
+				return;
+			}
+
 			World world = this.world.get();
 			if (world == null) {
 				Log.warn("Lost world while placing player %s grave", stiffId);
 				return;
 			}
 
-			if (tryPlaceGrave(world, POLITE)) return;
+			if (tryPlaceGrave(world, player, POLITE)) return;
 
 			if (Config.destructiveGraves) {
 				Log.warn("Failed to place grave for player %s, going berserk", stiffId);
-				if (tryPlaceGrave(world, BRUTAL)) return;
+				if (tryPlaceGrave(world, player, BRUTAL)) return;
 			}
 
 			for (EntityItem drop : loot)
