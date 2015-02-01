@@ -13,7 +13,6 @@ public class BlockGrave extends OpenBlock {
 		super(Material.ground);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setBlockBounds(0, 0, 0, 1f, 0.2f, 1f);
-		setCreativeTab(null);
 		setResistance(2000.0F);
 		setRenderMode(RenderMode.TESR_ONLY);
 	}

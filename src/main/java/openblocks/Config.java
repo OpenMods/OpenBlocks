@@ -167,6 +167,10 @@ public class Config {
 	@ConfigProperty(category = "graves", name = "skeletonSpawnRate", comment = "Spawn rate, range: 0..1, default: about 1 per 50s")
 	public static double skeletonSpawnRate = 0.002;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "specialActionFrequency", comment = "Frequency of special action on grave digging, 0..1")
+	public static double graveSpecialAction = 0.03;
+
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
 

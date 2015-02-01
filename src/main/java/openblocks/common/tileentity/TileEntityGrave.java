@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
@@ -27,6 +28,7 @@ import openmods.inventory.IInventoryProvider;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.BlockUtils;
 
 import com.google.common.base.Strings;
 
@@ -42,7 +44,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	private IChatComponent deathMessage;
 	private int ticksSinceLastSound = 0;
 
-	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 100));
+	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 1));
 
 	public TileEntityGrave() {}
 
@@ -91,6 +93,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	public void setLoot(IInventory invent) {
+		inventory.clearAndSetSlotCount(invent.getSizeInventory());
 		inventory.copyFrom(invent);
 	}
 
@@ -162,8 +165,43 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player.worldObj.isRemote) return false;
+		ItemStack held = player.getHeldItem();
+		if (held != null && held.getItem().getToolClasses(held).contains("shovel")) {
+			robGrave(player, held);
+			return true;
+		}
+
 		if (deathMessage != null) player.addChatMessage(deathMessage);
 		return true;
+	}
+
+	protected void robGrave(EntityPlayer player, ItemStack held) {
+		boolean dropped = false;
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			final ItemStack stack = inventory.getStackInSlot(i);
+			if (stack != null) {
+				dropped = true;
+				BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, stack);
+			}
+		}
+
+		inventory.clearAndSetSlotCount(0);
+
+		if (dropped) {
+			worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord, zCoord, Block.getIdFromBlock(Blocks.dirt));
+			if (worldObj.rand.nextDouble() < Config.graveSpecialAction) ohNoes(player);
+			held.damageItem(2, player);
+		}
+	}
+
+	private void ohNoes(EntityPlayer player) {
+		worldObj.playSoundAtEntity(player, "openblocks:grave.rob", 1, 1);
+
+		final WorldInfo worldInfo = worldObj.getWorldInfo();
+		worldInfo.setThunderTime(35 * 20);
+		worldInfo.setRainTime(35 * 20);
+		worldInfo.setThundering(true);
+		worldInfo.setRaining(true);
 	}
 
 }
