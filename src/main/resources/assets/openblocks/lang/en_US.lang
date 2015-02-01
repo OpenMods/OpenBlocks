@@ -91,6 +91,8 @@ openblocks.misc.oh_no_ceiling=You can't fall asleep here. Ceiling disturbs you t
 openblocks.misc.oh_no_ground=You want to sleep on THAT!?
 openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization
 
+openblocks.misc.grave_msg=%s (day: %.1f)
+
 openblocks.misc.cant_restore_player=Can't restore inventory for player %s
 openblocks.misc.cant_restore_inventory=Can't restore inventory
 openblocks.misc.cant_store=Can't store player %s inventory

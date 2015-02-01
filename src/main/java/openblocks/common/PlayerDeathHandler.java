@@ -11,7 +11,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -66,6 +66,8 @@ public class PlayerDeathHandler {
 
 	private static class GraveCallable implements Runnable {
 
+		private final IChatComponent cause;
+
 		private final GameProfile stiffId;
 
 		private final int posX, posY, posZ;
@@ -86,7 +88,19 @@ public class PlayerDeathHandler {
 			this.exPlayer = new WeakReference<EntityPlayer>(exPlayer);
 			this.stiffId = exPlayer.getGameProfile();
 
+			final IChatComponent day = formatDate(world);
+			final IChatComponent deathCause = exPlayer.func_110142_aN().func_151521_b();
+			this.cause = new ChatComponentTranslation("openblocks.misc.grave_msg", deathCause, day);
+
 			this.loot = ImmutableList.copyOf(loot);
+		}
+
+		private static IChatComponent formatDate(World world) {
+			final long time = world.getTotalWorldTime();
+			final String day = String.format("%.1f", time / 24000.0);
+			final IChatComponent dayComponent = new ChatComponentText(day);
+			dayComponent.getChatStyle().setColor(EnumChatFormatting.WHITE).setBold(true);
+			return dayComponent;
 		}
 
 		private boolean tryPlaceGrave(World world, final int x, final int y, final int z) {
@@ -123,6 +137,7 @@ public class PlayerDeathHandler {
 
 			grave.setUsername(stiffId.getName());
 			grave.setLoot(loot);
+			grave.setDeathMessage(cause);
 			return true;
 		}
 
