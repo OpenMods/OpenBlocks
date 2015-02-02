@@ -2,37 +2,30 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.item.ItemTrophyBlock;
 import openmods.api.*;
-import openmods.sync.SyncableInt;
+import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
-
-import com.google.common.base.Preconditions;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
 
-	public static Trophy debugTrophy = Trophy.Wolf;
 	private int cooldown = 0;
-	private SyncableInt trophyIndex;
+	private SyncableEnum<Trophy> trophyIndex;
 
 	public TileEntityTrophy() {}
 
 	@Override
 	protected void createSyncedFields() {
-		trophyIndex = new SyncableInt(-1);
+		trophyIndex = new SyncableEnum<Trophy>(Trophy.PigZombie);
 	}
 
 	public Trophy getTrophy() {
-		int trophyId = trophyIndex.get();
-		return trophyId >= 0? Trophy.VALUES[trophyId] : null;
+		return trophyIndex.get();
 	}
 
 	@Override
@@ -59,25 +52,8 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		boolean set = false;
-		if (stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
-			if (tag.hasKey("entity")) {
-				String entityKey = tag.getString("entity");
-				trophyIndex.set(Trophy.valueOf(entityKey).ordinal());
-				set = true;
-			}
-		}
-
-		if (!worldObj.isRemote) {
-			if (!set) {
-				int next = (debugTrophy.ordinal() + 1) % Trophy.VALUES.length;
-				debugTrophy = Trophy.VALUES[next];
-				trophyIndex.set(debugTrophy.ordinal());
-			}
-
-			sync();
-		}
+		Trophy trophy = ItemTrophyBlock.getTrophy(stack);
+		if (trophy != null) trophyIndex.set(trophy);
 	}
 
 	@Override
@@ -90,14 +66,6 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		tag.setInteger("cooldown", cooldown);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void prepareForInventoryRender(Block block, int metadata) {
-		Preconditions.checkElementIndex(metadata, Trophy.VALUES.length);
-		super.prepareForInventoryRender(block, metadata);
-		trophyIndex.set(metadata);
 	}
 
 	@Override

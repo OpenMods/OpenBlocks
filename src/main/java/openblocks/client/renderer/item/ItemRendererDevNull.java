@@ -132,7 +132,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 			GL11.glTranslated(0.5, 0.5, 0.5);
 			GL11.glScalef(0.8f, 0.8f, 0.8f);
 			Minecraft mc = Minecraft.getMinecraft();
-			RenderManager.instance.itemRenderer.renderItem(mc.thePlayer, containedStack, 0, type);
+			RenderManager.instance.itemRenderer.renderItem(mc.thePlayer, containedStack, 0, ItemRenderType.EQUIPPED);
 		}
 
 		GL11.glPopMatrix();

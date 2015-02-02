@@ -169,8 +169,9 @@ public class ClientProxy implements IOpenBlocksProxy {
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
-		// RenderingRegistry.registerEntityRenderingHandler(EntityMutant.class,
-		// new EntityMutantRenderer(new ModelMutant(), 0.7F));
+		if (OpenBlocks.Blocks.trophy != null) {
+			MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(OpenBlocks.Blocks.trophy), new ItemRendererTrophy());
+		}
 
 		if (OpenBlocks.Items.goldenEye != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());
