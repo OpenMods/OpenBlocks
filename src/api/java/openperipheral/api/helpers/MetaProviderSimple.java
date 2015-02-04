@@ -1,14 +1,16 @@
 package openperipheral.api.helpers;
 
-import openperipheral.api.IMetaProvider;
+import openperipheral.api.meta.IMetaProvider;
 
 import com.google.common.reflect.TypeToken;
 
 @SuppressWarnings("serial")
-public abstract class MetaProviderSimple<C> extends TypeToken<C> implements IMetaProvider<C> {
+public abstract class MetaProviderSimple<C> implements IMetaProvider<C> {
+	private final TypeToken<C> type = new TypeToken<C>(getClass()) {};
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public final Class<? extends C> getTargetClass() {
-		return (Class<? extends C>)getRawType();
+		return (Class<? extends C>)type.getRawType();
 	}
 }

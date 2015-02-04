@@ -6,7 +6,10 @@ import net.minecraft.block.material.MapColor;
 import openblocks.common.HeightMapData;
 import openblocks.common.HeightMapData.LayerData;
 import openblocks.common.tileentity.TileEntityProjector;
-import openperipheral.api.*;
+import openperipheral.api.adapter.Asynchronous;
+import openperipheral.api.adapter.IPeripheralAdapter;
+import openperipheral.api.adapter.method.*;
+import openperipheral.api.helpers.MultiReturn;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -30,13 +33,13 @@ public class AdapterProjector implements IPeripheralAdapter {
 		return TileEntityProjector.class;
 	}
 
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER, description = "Get current map id")
+	@ScriptCallable(returnTypes = ReturnType.NUMBER, description = "Get current map id")
 	public Integer getMapId(TileEntityProjector projector) {
 		int mapId = projector.mapId();
 		return (mapId >= 0)? mapId : null;
 	}
 
-	@LuaCallable(returnTypes = LuaReturnType.TABLE, description = "Get current map info")
+	@ScriptCallable(returnTypes = ReturnType.TABLE, description = "Get current map info")
 	public Map<String, Object> getMapInfo(final TileEntityProjector projector) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
@@ -58,8 +61,8 @@ public class AdapterProjector implements IPeripheralAdapter {
 		return result;
 	}
 
-	@LuaCallable(description = "Set current map info")
-	public void setMapInfo(TileEntityProjector projector, @Arg(name = "properties", description = "Map of properties", type = LuaArgType.TABLE) Map<String, Object> args) {
+	@ScriptCallable(description = "Set current map info")
+	public void setMapInfo(TileEntityProjector projector, @Arg(name = "properties", description = "Map of properties", type = ArgType.TABLE) Map<String, Object> args) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
 
@@ -96,19 +99,19 @@ public class AdapterProjector implements IPeripheralAdapter {
 		projector.markMapDirty();
 	}
 
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER, description = "Get displayed map rotation")
+	@ScriptCallable(returnTypes = ReturnType.NUMBER, description = "Get displayed map rotation")
 	public int getRotation(TileEntityProjector projector) {
 		return projector.rotation();
 	}
 
-	@LuaCallable(description = "Rotate displayed map rotation")
+	@ScriptCallable(description = "Rotate displayed map rotation")
 	public void rotate(TileEntityProjector projector,
 			@Arg(name = "delta", description = "Rotation delta (positive - CW, negative - CCW)") int delta) {
 		projector.rotate(delta);
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER, description = "Get height and color of point on map")
+	@ScriptCallable(returnTypes = ReturnType.NUMBER, description = "Get height and color of point on map")
 	public IMultiReturn getPoint(TileEntityProjector projector,
 			@Arg(name = "row", description = "Map row (0..63)") int row,
 			@Arg(name = "column", description = "Map column (0..63)") int column,
@@ -126,7 +129,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@Asynchronous
-	@LuaCallable(description = "Get height and color of point on map")
+	@ScriptCallable(description = "Get height and color of point on map")
 	public void setPoint(TileEntityProjector projector,
 			@Arg(name = "row", description = "Map row (0..63)") int row,
 			@Arg(name = "column", description = "Map column (0..63)") int column,
@@ -149,7 +152,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 		projector.markMapDirty();
 	}
 
-	@LuaCallable(description = "Clear map")
+	@ScriptCallable(description = "Clear map")
 	public void clearMap(TileEntityProjector projector) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");
@@ -157,7 +160,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 		projector.markMapDirty();
 	}
 
-	@LuaCallable(description = "Clear single layer")
+	@ScriptCallable(description = "Clear single layer")
 	public void clearLayer(TileEntityProjector projector,
 			@Arg(name = "layer", description = "Map layer") int layer) {
 		HeightMapData data = projector.getMap();
@@ -170,7 +173,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 		projector.markMapDirty();
 	}
 
-	@LuaCallable(description = "Append layer")
+	@ScriptCallable(description = "Append layer")
 	public void appendLayer(TileEntityProjector projector) {
 		HeightMapData data = projector.getMap();
 		Preconditions.checkState(data.isValid(), "Map not loaded");

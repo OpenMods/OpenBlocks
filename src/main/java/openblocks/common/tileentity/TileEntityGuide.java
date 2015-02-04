@@ -22,7 +22,10 @@ import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
-import openperipheral.api.*;
+import openperipheral.api.adapter.Asynchronous;
+import openperipheral.api.adapter.method.Arg;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
@@ -68,43 +71,43 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getWidth() {
 		return width.get();
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getHeight() {
 		return height.get();
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getDepth() {
 		return depth.get();
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getColor() {
 		return color.get() & 0x00FFFFFF;
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaReturnType.NUMBER)
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getCount() {
 		if (shape == null) recreateShape();
 		return shape.size();
 	}
 
 	@Asynchronous
-	@LuaCallable(returnTypes = LuaReturnType.STRING, name = "getShape")
+	@ScriptCallable(returnTypes = ReturnType.STRING, name = "getShape")
 	public GuideShape getCurrentMode() {
 		return mode.get();
 	}
 
-	@LuaCallable
+	@ScriptCallable
 	public void setWidth(@Arg(name = "width") int w) {
 		Preconditions.checkArgument(w > 0, "Width must be > 0");
 		width.set(w);
@@ -118,7 +121,7 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		sync();
 	}
 
-	@LuaCallable
+	@ScriptCallable
 	public void setDepth(@Arg(name = "depth") int d) {
 		Preconditions.checkArgument(d > 0, "Depth must be > 0");
 		depth.set(d);
@@ -132,7 +135,7 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		sync();
 	}
 
-	@LuaCallable
+	@ScriptCallable
 	public void setHeight(@Arg(name = "height") int h) {
 		Preconditions.checkArgument(h > 0, "Height must be > 0");
 		height.set(h);
@@ -146,7 +149,7 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		sync();
 	}
 
-	@LuaCallable
+	@ScriptCallable
 	public void setShape(@Arg(name = "shape") GuideShape shape) {
 		mode.set(shape);
 
@@ -160,7 +163,7 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		sync();
 	}
 
-	@LuaCallable
+	@ScriptCallable
 	public void setColor(@Arg(name = "color") int color) {
 		this.color.set(color & 0x00FFFFFF);
 		sync();
@@ -221,7 +224,7 @@ public class TileEntityGuide extends DroppableTileEntity implements IShapeable, 
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
-	@LuaCallable(returnTypes = LuaReturnType.STRING, name = "cycleShape")
+	@ScriptCallable(returnTypes = ReturnType.STRING, name = "cycleShape")
 	public GuideShape switchMode() {
 		final GuideShape shape = mode.increment();
 

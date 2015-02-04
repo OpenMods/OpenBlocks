@@ -10,11 +10,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMagnet.IOwner;
-import openperipheral.api.*;
+import openperipheral.api.adapter.IWorldProvider;
+import openperipheral.api.adapter.method.*;
+import openperipheral.api.architecture.IArchitectureAccess;
+import openperipheral.api.architecture.IAttachable;
+import openperipheral.api.helpers.MultiReturn;
+import openperipheral.api.peripheral.ExposeInterface;
+import openperipheral.api.peripheral.PeripheralTypeId;
 
 import com.google.common.base.Preconditions;
 
-import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.turtle.ITurtleAccess;
 import dan200.computercraft.api.turtle.TurtleSide;
 
@@ -122,7 +127,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		return Vec3.createVectorHelper(coord.posX, coord.posY, coord.posZ);
 	}
 
-	@LuaCallable(description = "Activate magnet")
+	@ScriptCallable(description = "Activate magnet")
 	public void activate() {
 		EntityMagnet magnet = this.magnet.get();
 		Preconditions.checkState(magnet == null || magnet.isDead, "Magnet already active");
@@ -140,12 +145,12 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		this.magnet = new WeakReference<EntityMagnet>(magnet);
 	}
 
-	@LuaCallable(description = "Deactive magnet")
+	@ScriptCallable(description = "Deactive magnet")
 	public void deactivate() {
 		despawnMagnet(true);
 	}
 
-	@LuaCallable(description = "Set target for magnet")
+	@ScriptCallable(description = "Set target for magnet")
 	public void setTarget(@Arg(name = "x") double x,
 			@Arg(name = "y") double y,
 			@Arg(name = "z") double z) {
@@ -154,7 +159,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		magnetOwner.setTarget(x, y, z);
 	}
 
-	@LuaCallable(returnTypes = { LuaReturnType.NUMBER, LuaReturnType.NUMBER, LuaReturnType.NUMBER },
+	@ScriptCallable(returnTypes = { ReturnType.NUMBER, ReturnType.NUMBER, ReturnType.NUMBER },
 			description = "Get turtle position")
 	public IMultiReturn getPosition() {
 		EntityMagnet magnet = getMagnet();
@@ -162,24 +167,24 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		return MultiReturn.wrap(rotated.xCoord, rotated.yCoord, rotated.zCoord);
 	}
 
-	@LuaCallable(returnTypes = LuaReturnType.BOOLEAN, description = "Is magnet above grabbable entity")
+	@ScriptCallable(returnTypes = ReturnType.BOOLEAN, description = "Is magnet above grabbable entity")
 	public boolean isAboveEntity() {
 		return getMagnet().isAboveTarget();
 	}
 
 	@Alias("toggle")
-	@LuaCallable(returnTypes = LuaReturnType.BOOLEAN, description = "Grab or release entity/block under magnet")
+	@ScriptCallable(returnTypes = ReturnType.BOOLEAN, description = "Grab or release entity/block under magnet")
 	public boolean toggleMagnet() {
 		return getMagnet().toggleMagnet();
 	}
 
-	@LuaCallable(returnTypes = LuaReturnType.BOOLEAN, description = "Is magnet currently grabbing block or entity")
+	@ScriptCallable(returnTypes = ReturnType.BOOLEAN, description = "Is magnet currently grabbing block or entity")
 	public boolean isGrabbing() {
 		return getMagnet().isLocked();
 	}
 
 	@Alias("distance")
-	@LuaCallable(returnTypes = { LuaReturnType.NUMBER, LuaReturnType.NUMBER, LuaReturnType.NUMBER })
+	@ScriptCallable(returnTypes = { ReturnType.NUMBER, ReturnType.NUMBER, ReturnType.NUMBER })
 	public IMultiReturn getDistanceToTarget() {
 		EntityMagnet magnet = getMagnet();
 		Vec3 current = getRelativeDistance(magnet);
@@ -274,12 +279,12 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 	}
 
 	@Override
-	public void addComputer(IComputerAccess computer) {
+	public void addComputer(IArchitectureAccess computer) {
 		isAttached = true;
 	}
 
 	@Override
-	public void removeComputer(IComputerAccess computer) {
+	public void removeComputer(IArchitectureAccess computer) {
 		isAttached = false;
 	}
 }

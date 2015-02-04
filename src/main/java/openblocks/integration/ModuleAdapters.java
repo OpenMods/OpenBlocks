@@ -5,7 +5,7 @@ import openblocks.common.tileentity.TileEntityGuide;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
 import openperipheral.api.ApiAccess;
-import openperipheral.api.IAdapterRegistry;
+import openperipheral.api.adapter.IPeripheralAdapterRegistry;
 
 public class ModuleAdapters extends IntegrationModule {
 
@@ -25,7 +25,7 @@ public class ModuleAdapters extends IntegrationModule {
 
 	private static class LoadHack {
 		private static void load() {
-			final IAdapterRegistry registry = ApiAccess.getApi(IAdapterRegistry.class);
+			final IPeripheralAdapterRegistry registry = ApiAccess.getApi(IPeripheralAdapterRegistry.class);
 			registry.register(new AdapterVillageHighlighter());
 			registry.register(new AdapterDonationStation());
 			registry.register(new AdapterCannon());
