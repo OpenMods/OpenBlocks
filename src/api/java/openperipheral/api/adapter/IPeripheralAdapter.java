@@ -7,7 +7,7 @@ import openperipheral.api.adapter.method.ScriptCallable;
  *
  * To create methods, simpily add methods to your IPeripheralAdapter and annotate them with {@link ScriptCallable}.
  *
- * @see OpenPeripheralAPI#register(IPeripheralAdapter)
+ * @see IPeripheralAdapterRegistry#register(IPeripheralAdapter)
  *
  * @author mikeef
  *

@@ -2,19 +2,12 @@ package openperipheral.api.converter;
 
 import java.lang.reflect.Type;
 
-public interface IConverter {
+public interface IConverter extends ITypeConverterRegistry {
 
-	public void register(IGenericTypeConverter converter);
+	public Object toJava(Object obj, Type expected);
 
-	public void register(ITypeConverter converter);
+	public <T> T toJava(Object obj, Class<? extends T> cls);
 
-	/**
-	 * Register type that should be left unconverted and passed to Lua
-	 */
-	public void registerIgnored(Class<?> ignored, boolean includeSubclasses);
-
-	public Object fromLua(Object obj, Type expected);
-
-	public Object toLua(Object obj);
+	public Object fromJava(Object obj);
 
 }
