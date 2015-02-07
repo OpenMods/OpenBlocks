@@ -23,11 +23,14 @@ import openmods.gui.component.page.*;
 import openmods.gui.component.page.PageBase.ActionIcon;
 import openmods.infobook.PageBuilder;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
 public class GuiInfoBook extends ComponentGui {
+
+	private GuiComponentBook book;
 
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
@@ -61,9 +64,30 @@ public class GuiInfoBook extends ComponentGui {
 	}
 
 	@Override
-	protected BaseComposite createRoot() {
+	public void handleKeyboardInput() {
+		super.handleKeyboardInput();
 
-		final GuiComponentBook book = new GuiComponentBook();
+		if (Keyboard.getEventKeyState()) {
+			switch (Keyboard.getEventKey()) {
+				case Keyboard.KEY_PRIOR:
+					book.prevPage();
+					break;
+				case Keyboard.KEY_NEXT:
+					book.nextPage();
+					break;
+				case Keyboard.KEY_HOME:
+					book.firstPage();
+					break;
+				case Keyboard.KEY_END:
+					book.lastPage();
+					break;
+			}
+		}
+	}
+
+	@Override
+	protected BaseComposite createRoot() {
+		book = new GuiComponentBook();
 		PageBase contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 
 		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, tocLine(0), "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
