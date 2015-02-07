@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.*;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
@@ -36,12 +37,16 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		String baseName = super.getItemStackDisplayName(stack);
-
 		final FluidTank fakeTank = readTank(stack);
 		final FluidStack fluidStack = fakeTank.getFluid();
-		if (fluidStack != null && fluidStack.amount > 0) return getFluidName(fluidStack) + " " + baseName;
-		else return baseName;
+		final String unlocalizedName = getUnlocalizedName();
+
+		if (fluidStack != null && fluidStack.amount > 0) {
+			final String fluidName = getFluidName(fluidStack);
+			return StatCollector.translateToLocalFormatted(unlocalizedName + ".filled.name", fluidName);
+		}
+
+		return super.getItemStackDisplayName(stack);
 	}
 
 	private static String getFluidName(FluidStack fluidStack) {

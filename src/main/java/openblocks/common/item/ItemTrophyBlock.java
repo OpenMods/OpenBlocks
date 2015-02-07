@@ -40,15 +40,13 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		String baseName = super.getItemStackDisplayName(stack);
-
 		Trophy trophyType = getTrophy(stack);
 		if (trophyType != null) {
 			final String name = StatCollector.translateToLocal("entity." + trophyType.name() + ".name");
-			return name + " " + baseName;
+			return StatCollector.translateToLocalFormatted(super.getUnlocalizedName() + ".entity.name", name);
 		}
 
-		return baseName;
+		return super.getItemStackDisplayName(stack);
 	}
 
 	@Override
