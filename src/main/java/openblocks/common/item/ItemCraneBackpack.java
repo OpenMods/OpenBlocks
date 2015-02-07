@@ -14,9 +14,11 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.common.CraneRegistry;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation(customName="crane_backpack")
 public class ItemCraneBackpack extends ItemArmor {
 
 	private static final int ARMOR_CHESTPIECE = 1;

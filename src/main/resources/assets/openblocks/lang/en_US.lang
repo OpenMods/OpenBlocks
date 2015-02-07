@@ -317,6 +317,14 @@ item.openblocks.unprepared_stencil.name=Unprepared Stencil
 item.openblocks.unprepared_stencil.description=Stencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
 item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
+item.openblocks.crane_backpack.name=Crane Backpack
+item.openblocks.crane_backpack.description=In Minecraft world "magnet" is ancient word for "how do this works?".\n\nThis particular piece of very equipment allows you to pick and carry mobs, players, items and blocks. Can be controlled with magnet control.
+item.openblocks.crane_backpack.video=http://www.youtube.com/watch?v=k6VwMINGbL8
+
+item.openblocks.crane_control.name=Crane Control
+item.openblocks.crane_control.description=This hi-tech wireless remote is used for controlling magnet backpacks.\n\nRight click to raise, Sneak + right click to lower, left click to pick/release.\nBlinking light signals something is under magnet.
+item.openblocks.crane_control.video=http://www.youtube.com/watch?v=k6VwMINGbL8
+
 item.openblocks.stencil.name=Stencil
 item.openblocks.crayon.name=Magic Crayon
 item.openblocks.pencil.name=Magic Pencil
@@ -324,8 +332,6 @@ item.openblocks.glasses.pencil.name=Pencil Glasses
 item.openblocks.glasses.crayon.name=Crayon Glasses
 item.openblocks.glasses.technicolor.name=Amazing Technicolor Glasses
 item.openblocks.glasses.admin.name=Badass Glasses
-item.openblocks.crane_backpack.name=Crane Backpack
-item.openblocks.crane_control.name=Crane Control
 item.openblocks.crane_engine.name=Crane Engine
 item.openblocks.crane_magnet.name=Crane Magnet
 item.openblocks.beam.name=Beam
