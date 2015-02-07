@@ -55,7 +55,7 @@ public class GuiInfoBook extends ComponentGui {
 	}
 
 	private static int tocLine(int index) {
-		final int tocStartHeight = 80;
+		final int tocStartHeight = 70;
 		final int tocLineHeight = 15;
 		return tocStartHeight + index * tocLineHeight;
 	}
@@ -83,15 +83,18 @@ public class GuiInfoBook extends ComponentGui {
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 		book.addPage(contentsPage);
 
-		PageBuilder builder = new PageBuilder();
-
 		{
 			int blocksIndex = alignToEven(book);
 			setupBookmark(lblBlocks, book, blocksIndex);
 			book.addPage(PageBase.BLANK_PAGE);
 			book.addPage(new SectionPage("openblocks.gui.blocks"));
-			builder.addBlockPages(OpenBlocks.MODID);
-			builder.addPages(book);
+
+			PageBuilder builder = new PageBuilder();
+			builder.includeModId(OpenBlocks.MODID);
+			builder.createBlockPages();
+			builder.insertTocPages(book, 4, 4, 1.5f);
+			alignToEven(book);
+			builder.insertPages(book);
 		}
 
 		{
@@ -99,8 +102,13 @@ public class GuiInfoBook extends ComponentGui {
 			setupBookmark(lblItems, book, itemsIndex);
 			book.addPage(PageBase.BLANK_PAGE);
 			book.addPage(new SectionPage("openblocks.gui.items"));
-			builder.addItemPages(OpenBlocks.MODID);
-			builder.addPages(book);
+
+			PageBuilder builder = new PageBuilder();
+			builder.includeModId(OpenBlocks.MODID);
+			builder.createItemPages();
+			builder.insertTocPages(book, 4, 4, 1.5f);
+			alignToEven(book);
+			builder.insertPages(book);
 		}
 
 		{
@@ -110,7 +118,7 @@ public class GuiInfoBook extends ComponentGui {
 			book.addPage(new SectionPage("openblocks.gui.misc"));
 			book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
 			book.addPage(new TitledPage("openblocks.gui.restore_inv.title", "openblocks.gui.restore_inv.content")
-					.addActionButton(25, 146, getSavePath(), ActionIcon.FOLDER.icon, "openblocks.gui.save_folder"));
+					.addActionButton(10, 133, getSavePath(), ActionIcon.FOLDER.icon, "openblocks.gui.save_folder"));
 			book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
 
 			if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));

@@ -11,7 +11,7 @@ enchantment.openblocks.flimflam=Flim Flam
 
 openblocks.gui.blocks=Blocks
 openblocks.gui.items=Items
-openblocks.gui.misc=Misc
+openblocks.gui.misc=Miscellanea
 openblocks.gui.changelogs=Changelogs
 
 openblocks.gui.features=Features
@@ -312,7 +312,7 @@ item.openblocks.paintbrush.description=Paint brushes let you paint blocks in wha
 item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=Unprepared Stencil
-item.openblocks.unprepared_stencil.description="What are these pesky stencils I keep finding in chests?"\n\nStencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
+item.openblocks.unprepared_stencil.description=Stencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
 item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.stencil.name=Stencil

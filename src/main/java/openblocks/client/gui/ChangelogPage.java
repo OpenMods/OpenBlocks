@@ -41,7 +41,7 @@ public class ChangelogPage extends PageBase {
 
 		String contents = Joiner.on('\n').join(Iterables.transform(lines, BULLET_TRANSFORMER));
 
-		final GuiComponentLabel lblContent = new GuiComponentLabel(27, 40, 300, 300, contents);
+		final GuiComponentLabel lblContent = new GuiComponentLabel(15, 40, getWidth() - 10, getHeight(), contents);
 		lblContent.setScale(0.5f);
 		lblContent.setAdditionalLineHeight(3);
 		addComponent(lblContent);
