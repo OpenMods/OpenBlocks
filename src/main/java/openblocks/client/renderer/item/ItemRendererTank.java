@@ -9,7 +9,8 @@ import net.minecraftforge.fluids.FluidTank;
 import openblocks.client.renderer.block.BlockTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTank.IFluidHeightCalculator;
+import openblocks.common.tileentity.TileEntityTank.ITankRenderData;
+import openmods.utils.Diagonal;
 
 import org.lwjgl.opengl.GL11;
 
@@ -39,18 +40,33 @@ public class ItemRendererTank implements IItemRenderer {
 		if (tag != null && tag.hasKey("tank")) {
 			final FluidStack stack = readFluid(tag);
 			if (stack != null) {
-				final double height = tank.getFluidAmount() / tank.getCapacity();
-				TileEntityTankRenderer.renderFluid(new IFluidHeightCalculator() {
+				final float height = tank.getFluidAmount() / tank.getCapacity();
+				TileEntityTankRenderer.renderFluid(new ITankRenderData() {
 					@Override
-					public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
+					public boolean shouldRenderFluidWall(ForgeDirection side) {
+						return true;
+					}
+
+					@Override
+					public boolean hasFluid() {
+						return true;
+					}
+
+					@Override
+					public FluidStack getFluid() {
+						return stack;
+					}
+
+					@Override
+					public float getCornerFluidLevel(Diagonal diagonal, float time) {
 						return height;
 					}
 
 					@Override
-					public boolean shouldRenderFluidWall(ForgeDirection side) {
-						return false;
+					public float getCenterFluidLevel(float time) {
+						return height;
 					}
-				}, stack);
+				}, 0);
 			}
 		}
 

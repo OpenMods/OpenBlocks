@@ -7,6 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import openblocks.Config;
@@ -20,6 +22,7 @@ import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.Diagonal;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
 
@@ -37,119 +40,22 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	public static final int DIR_UP = 16;
 	public static final int DIR_DOWN = 32;
 
-	public interface IFluidHeightCalculator {
-		public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB);
+	private static final float PHASE_PER_DISTANCE = 0.5f;
+
+	private static final float WAVE_AMPLITUDE = 0.01f;
+
+	private static final float WAVE_FREQUENCY = 0.1f;
+
+	public interface ITankRenderData {
+		public FluidStack getFluid();
+
+		public boolean hasFluid();
 
 		public boolean shouldRenderFluidWall(ForgeDirection side);
-	}
 
-	private abstract class HeightCalculatorBase implements IFluidHeightCalculator {
-		protected final Set<ForgeDirection> renderedWalls = EnumSet.noneOf(ForgeDirection.class);
+		public float getCornerFluidLevel(Diagonal diagonal, float time);
 
-		protected boolean hasCommonTopWall(FluidStack fluid) {
-			if (isFull()) {
-				TileEntityTank topNeighbour = getTankInDirection(ForgeDirection.UP);
-				if (topNeighbour != null) {
-					FluidStack otherFluid = topNeighbour.tank.getFluid();
-					return fluid.isFluidEqual(otherFluid);
-				}
-			}
-
-			return false;
-		}
-
-		protected boolean hasCommonBottomWall(FluidStack fluid) {
-			TileEntityTank bottomNeighbour = getTankInDirection(ForgeDirection.DOWN);
-			if (bottomNeighbour != null && bottomNeighbour.isFull()) {
-				FluidStack otherFluid = bottomNeighbour.tank.getFluid();
-				return fluid.isFluidEqual(otherFluid);
-			}
-
-			return false;
-		}
-
-		protected void updateTopBottomNeighbours(FluidStack fluid) {
-			if (fluid != null) {
-				if (hasCommonTopWall(fluid)) renderedWalls.add(ForgeDirection.UP);
-				if (hasCommonBottomWall(fluid)) renderedWalls.add(ForgeDirection.DOWN);
-			}
-		}
-
-		@Override
-		public boolean shouldRenderFluidWall(ForgeDirection side) {
-			return renderedWalls.contains(side);
-		}
-	}
-
-	private class ConstantHeightCalculator extends HeightCalculatorBase {
-		private final double height;
-
-		public ConstantHeightCalculator(FluidStack fluid, double height) {
-			this.height = height;
-
-			updateValue(fluid, ForgeDirection.EAST);
-			updateValue(fluid, ForgeDirection.WEST);
-			updateValue(fluid, ForgeDirection.NORTH);
-			updateValue(fluid, ForgeDirection.SOUTH);
-
-			updateTopBottomNeighbours(fluid);
-		}
-
-		private void updateValue(FluidStack fluid, ForgeDirection dir) {
-			TileEntityTank tank = getTankInDirection(dir);
-			if (tank != null && tank.accepts(fluid)) renderedWalls.add(dir);
-		}
-
-		@Override
-		public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
-			return height;
-		}
-	}
-
-	private class AveragingHeightCalculator extends HeightCalculatorBase {
-		private final double ownAmount;
-		private final Map<ForgeDirection, Double> neighbours = Maps.newEnumMap(ForgeDirection.class);
-
-		public AveragingHeightCalculator(FluidStack ownFluid, double ownHeight) {
-			ownAmount = ownHeight + getFlowOffset();
-
-			updateValue(ownFluid, ForgeDirection.EAST);
-			updateValue(ownFluid, ForgeDirection.WEST);
-			updateValue(ownFluid, ForgeDirection.NORTH);
-			updateValue(ownFluid, ForgeDirection.SOUTH);
-
-			updateTopBottomNeighbours(ownFluid);
-		}
-
-		private void updateValue(FluidStack fluid, ForgeDirection dir) {
-			TileEntityTank tank = getTankInDirection(dir);
-			if (tank != null && tank.accepts(fluid)) {
-				double amount = tank.getFluidRatio() + tank.getFlowOffset();
-				neighbours.put(dir, amount);
-				renderedWalls.add(dir);
-			}
-		}
-
-		@Override
-		public double calculateHeight(ForgeDirection sideA, ForgeDirection sideB) {
-			double sum = ownAmount;
-
-			int count = 1;
-
-			Double heightA = neighbours.get(sideA);
-			if (heightA != null) {
-				count++;
-				sum += heightA;
-			}
-
-			Double heightB = neighbours.get(sideB);
-			if (heightB != null) {
-				count++;
-				sum += heightB;
-			}
-
-			return Math.max(MIN_FLUID_HEIGHT, Math.min(1, sum / count));
-		}
+		public float getCenterFluidLevel(float time);
 	}
 
 	public interface IRenderNeighbours {
@@ -240,17 +146,342 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 						prevLuminosity = luminosity;
 					}
 				}
+
+				for (Map.Entry<Diagonal, DiagonalConnection> e : diagonalConnections.entrySet())
+					e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
+
+				for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
+					e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
+
+				topConnection.updateBottomFluid(fluidStack, tank.getSpace() == 0);
+				bottomConnection.updateTopFluid(fluidStack);
 			}
 		}
 	}
 
-	private static final double MIN_FLUID_HEIGHT = 0.02;
+	private static class DiagonalConnection {
+
+		private static class Group {
+			private final FluidStack fluid;
+			private final Set<Diagonal> diagonals = EnumSet.noneOf(Diagonal.class);
+
+			private float sum;
+
+			public Group(FluidStack fluid) {
+				this.fluid = fluid;
+			}
+
+			public boolean match(FluidStack stack) {
+				return fluid.isFluidEqual(stack);
+			}
+
+			public void addDiagonal(Diagonal diagonal, FluidStack stack) {
+				diagonals.add(diagonal);
+				sum += stack.amount;
+			}
+
+			public void update(float[] height) {
+				final float average = clampLevel((sum / diagonals.size()) / getTankCapacity());
+
+				for (Diagonal d : diagonals)
+					height[d.ordinal()] = average;
+			}
+		}
+
+		private final float phase;
+
+		private final Map<Diagonal, FluidStack> fluids = Maps.newEnumMap(Diagonal.class);
+
+		private final float[] height = new float[4];
+
+		public DiagonalConnection(float phase) {
+			this.phase = phase;
+		}
+
+		public float getRenderHeight(Diagonal corner, float time) {
+			float h = height[corner.ordinal()];
+			if (h <= 0) return 0;
+
+			return clampLevel(calculateWaveAmplitude(time, phase) + h);
+		}
+
+		public void updateFluid(Diagonal corner, FluidStack stack) {
+			fluids.put(corner, safeCopy(stack));
+			recalculate();
+		}
+
+		public void clearFluid(Diagonal corner) {
+			fluids.remove(corner);
+			recalculate();
+		}
+
+		private static Group findGroup(List<Group> entries, FluidStack stack) {
+			for (Group group : entries)
+				if (group.match(stack)) return group;
+
+			Group newGroup = new Group(stack);
+			entries.add(newGroup);
+			return newGroup;
+		}
+
+		private void recalculate() {
+			forceZero();
+
+			List<Group> groups = Lists.newArrayList();
+			for (Diagonal diagonal : Diagonal.VALUES) {
+				if (!fluids.containsKey(diagonal)) continue;
+
+				FluidStack stack = fluids.get(diagonal);
+
+				if (stack == null || stack.amount <= 0) return;
+
+				Group e = findGroup(groups, stack);
+				e.addDiagonal(diagonal, stack);
+			}
+
+			for (Group group : groups)
+				group.update(height);
+		}
+
+		private void forceZero() {
+			height[0] = height[1] = height[2] = height[3] = 0;
+		}
+	}
+
+	private interface Connection {
+		public boolean isConnected();
+	}
+
+	private static class VerticalConnection implements Connection {
+
+		private FluidStack fluidTop;
+
+		private FluidStack fluidBottom;
+
+		private boolean bottomIsFull;
+
+		private boolean isConnected;
+
+		@Override
+		public boolean isConnected() {
+			return isConnected;
+		}
+
+		public void updateTopFluid(FluidStack stack) {
+			this.fluidTop = safeCopy(stack);
+			updateConnection();
+		}
+
+		public void clearTopFluid() {
+			this.fluidTop = null;
+			this.isConnected = false;
+		}
+
+		public void updateBottomFluid(FluidStack stack, boolean isFull) {
+			this.fluidBottom = safeCopy(stack);
+			this.bottomIsFull = isFull;
+			updateConnection();
+		}
+
+		public void clearBottomFluid() {
+			this.fluidBottom = null;
+			this.bottomIsFull = false;
+			this.isConnected = false;
+		}
+
+		private void updateConnection() {
+			boolean sameLiquid = fluidTop != null && fluidBottom != null && fluidTop.isFluidEqual(fluidBottom);
+			this.isConnected = sameLiquid && bottomIsFull;
+		}
+	}
+
+	private static class HorizontalConnection implements Connection {
+
+		private FluidStack fluidA;
+
+		private FluidStack fluidB;
+
+		private boolean isConnected;
+
+		@Override
+		public boolean isConnected() {
+			return isConnected;
+		}
+
+		public void updateFluid(ForgeDirection direction, FluidStack stack) {
+			if (direction == ForgeDirection.NORTH || direction == ForgeDirection.WEST) this.fluidA = safeCopy(stack);
+			else this.fluidB = safeCopy(stack);
+
+			this.isConnected = fluidA != null && fluidB != null && fluidA.isFluidEqual(fluidB);
+		}
+
+		public void clearFluid(ForgeDirection direction) {
+			if (direction == ForgeDirection.NORTH || direction == ForgeDirection.WEST) this.fluidA = null;
+			else this.fluidB = null;
+
+			this.isConnected = false;
+		}
+	}
+
+	private Map<Diagonal, DiagonalConnection> diagonalConnections = Maps.newEnumMap(Diagonal.class);
+
+	private Map<ForgeDirection, HorizontalConnection> horizontalConnections = Maps.newEnumMap(ForgeDirection.class);
+
+	private VerticalConnection topConnection;
+
+	private VerticalConnection bottomConnection;
+
+	private float phase;
+
+	private static FluidStack safeCopy(FluidStack stack) {
+		return stack != null? stack : null;
+	}
+
+	private static float clampLevel(float level) {
+		if (level <= 0.1f) return 0.1f;
+		if (level >= 0.9f) return 1.0f;
+		return level;
+	}
+
+	private boolean shouldRenderFluidWall(ForgeDirection side) {
+		switch (side) {
+			case DOWN:
+				return !bottomConnection.isConnected();
+			case UP:
+				return !topConnection.isConnected();
+			case EAST:
+			case WEST:
+			case NORTH:
+			case SOUTH: {
+				HorizontalConnection connection = horizontalConnections.get(side);
+				return !connection.isConnected();
+			}
+			default:
+				return true;
+		}
+	}
+
+	private float getCornerFluidLevel(Diagonal corner, float time) {
+		DiagonalConnection diagonal = diagonalConnections.get(corner);
+		return diagonal.getRenderHeight(corner.getOpposite(), time);
+	}
+
+	private float calculatePhase(Diagonal diagonal) {
+		float posX = xCoord + diagonal.offsetX / 2.0f;
+		float posY = yCoord + diagonal.offsetY / 2.0f;
+		float posZ = zCoord + diagonal.offsetZ / 2.0f;
+		return (posX + posY + posZ) * PHASE_PER_DISTANCE;
+	}
+
+	private static float calculateWaveAmplitude(float time, float phase) {
+		return MathHelper.sin(time * WAVE_FREQUENCY + phase) * WAVE_AMPLITUDE;
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+
+		if (worldObj.isRemote) {
+			final TileEntityTank tankN = getNeighbourTank(ForgeDirection.NORTH);
+			final TileEntityTank tankS = getNeighbourTank(ForgeDirection.SOUTH);
+			final TileEntityTank tankW = getNeighbourTank(ForgeDirection.WEST);
+			final TileEntityTank tankE = getNeighbourTank(ForgeDirection.EAST);
+
+			final TileEntityTank tankNE = getNeighbourTank(Diagonal.NE);
+			final TileEntityTank tankNW = getNeighbourTank(Diagonal.NW);
+			final TileEntityTank tankSE = getNeighbourTank(Diagonal.SE);
+			final TileEntityTank tankSW = getNeighbourTank(Diagonal.SW);
+
+			tryHorizontalConnection(tankN, ForgeDirection.NORTH);
+			tryHorizontalConnection(tankS, ForgeDirection.SOUTH);
+			tryHorizontalConnection(tankW, ForgeDirection.WEST);
+			tryHorizontalConnection(tankE, ForgeDirection.EAST);
+
+			tryCornerConnection(tankN, tankNW, tankW, Diagonal.NW);
+			tryCornerConnection(tankW, tankSW, tankS, Diagonal.SW);
+			tryCornerConnection(tankE, tankNE, tankN, Diagonal.NE);
+			tryCornerConnection(tankS, tankSE, tankE, Diagonal.SE);
+
+			final TileEntityTank tankT = getNeighbourTank(ForgeDirection.UP);
+			tryTopConnection(tankT);
+
+			final TileEntityTank tankB = getNeighbourTank(ForgeDirection.DOWN);
+			tryBottomConnection(tankB);
+
+			phase = (xCoord + yCoord + zCoord) * PHASE_PER_DISTANCE;
+		}
+	}
+
+	private void tryCornerConnection(TileEntityTank tankCW, TileEntityTank tankD, TileEntityTank tankCCW, Diagonal dir) {
+		DiagonalConnection connection = findConnection(tankCW, tankD, tankCCW, dir);
+		diagonalConnections.put(dir, connection);
+
+	}
+
+	private DiagonalConnection findConnection(TileEntityTank tankCW, TileEntityTank tankD, TileEntityTank tankCCW, Diagonal dir) {
+		Diagonal start = dir;
+
+		dir = dir.rotateCW();
+		if (tankCW != null) return tankCW.diagonalConnections.get(dir);
+
+		dir = dir.rotateCW();
+		if (tankD != null) return tankD.diagonalConnections.get(dir);
+
+		dir = dir.rotateCW();
+		if (tankCCW != null) return tankCCW.diagonalConnections.get(dir);
+
+		return new DiagonalConnection(calculatePhase(start));
+	}
+
+	protected void tryHorizontalConnection(TileEntityTank neighbour, ForgeDirection dir) {
+		HorizontalConnection connection = (neighbour != null)? neighbour.horizontalConnections.get(dir.getOpposite()) : new HorizontalConnection();
+		horizontalConnections.put(dir, connection);
+	}
+
+	protected void tryBottomConnection(TileEntityTank neighbour) {
+		bottomConnection = neighbour != null? neighbour.topConnection : new VerticalConnection();
+	}
+
+	protected void tryTopConnection(TileEntityTank neighbour) {
+		topConnection = neighbour != null? neighbour.bottomConnection : new VerticalConnection();
+	}
+
+	private TileEntityTank getNeighbourTank(ForgeDirection dir) {
+		return getNeighourTank(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+	}
+
+	private TileEntityTank getNeighbourTank(Diagonal dir) {
+		return getNeighourTank(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+	}
+
+	@Override
+	public void invalidate() {
+		if (worldObj.isRemote) {
+			for (Map.Entry<Diagonal, DiagonalConnection> e : diagonalConnections.entrySet())
+				e.getValue().clearFluid(e.getKey().getOpposite());
+			diagonalConnections.clear();
+
+			for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
+				e.getValue().clearFluid(e.getKey().getOpposite());
+			horizontalConnections.clear();
+
+			topConnection.clearBottomFluid();
+			bottomConnection.clearTopFluid();
+		}
+	}
+
+	protected TileEntityTank getNeighourTank(final int x, final int y, final int z) {
+		if (!worldObj.blockExists(x, y, z)) return null;
+
+		Chunk chunk = worldObj.getChunkFromBlockCoords(x, z);
+		TileEntity te = chunk.getTileEntityUnsafe(x & 0xF, y, z & 0xF);
+		return (te instanceof TileEntityTank)? (TileEntityTank)te : null;
+	}
+
 	private static final int SYNC_THRESHOLD = 8;
 	private static final int UPDATE_THRESHOLD = 20;
 
 	private SyncableTank tank;
-
-	private double flowTimer = Math.random() * 100;
 
 	private boolean forceUpdate = true;
 
@@ -264,6 +495,35 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@IncludeInterface(IFluidHandler.class)
 	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
+
+	private final ITankRenderData renderData = new ITankRenderData() {
+		@Override
+		public boolean hasFluid() {
+			return tank.getFluidAmount() > 0;
+		}
+
+		@Override
+		public FluidStack getFluid() {
+			return tank.getFluid();
+		}
+
+		@Override
+		public boolean shouldRenderFluidWall(ForgeDirection side) {
+			return TileEntityTank.this.shouldRenderFluidWall(side);
+		}
+
+		@Override
+		public float getCornerFluidLevel(Diagonal diagonal, float time) {
+			return TileEntityTank.this.getCornerFluidLevel(diagonal, time);
+		}
+
+		@Override
+		public float getCenterFluidLevel(float time) {
+			final float raw = (float)tank.getFluidAmount() / tank.getCapacity();
+			final float waving = calculateWaveAmplitude(time, phase) + raw;
+			return clampLevel(waving);
+		}
+	};
 
 	public TileEntityTank() {
 		syncMap.addSyncListener(new ISyncListener() {
@@ -285,10 +545,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return (double)tank.getFluidAmount() / (double)tank.getCapacity();
 	}
 
-	private double getFlowOffset() {
-		return Math.sin(flowTimer) / 35;
-	}
-
 	public static int getTankCapacity() {
 		return FluidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank;
 	}
@@ -301,16 +557,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 
 		return 0;
-	}
-
-	public IFluidHeightCalculator getRenderFluidHeights() {
-		FluidStack fluid = tank.getFluid();
-		if (fluid == null || fluid.amount <= 0) return new ConstantHeightCalculator(fluid, 0);
-
-		final double renderHeight = getFluidRatio();
-		if (renderHeight <= MIN_FLUID_HEIGHT) return new ConstantHeightCalculator(fluid, MIN_FLUID_HEIGHT);
-		if (renderHeight > 0.98) return new ConstantHeightCalculator(fluid, 1.0);
-		return new AveragingHeightCalculator(fluid, renderHeight);
 	}
 
 	public IRenderNeighbours getRenderConnections() {
@@ -331,10 +577,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	public IFluidTank getTank() {
 		return tank;
-	}
-
-	private boolean isFull() {
-		return tank.getSpace() == 0;
 	}
 
 	public NBTTagCompound getItemNBT() {
@@ -444,8 +686,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 			needsSync = true;
 			markUpdated();
-		} else {
-			flowTimer += 0.1f;
 		}
 
 		if (needsSync && !worldObj.isRemote && ticksSinceLastSync > SYNC_THRESHOLD) {
@@ -622,6 +862,10 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@Override
 	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
+		return pass == 0;
+	}
+
+	public ITankRenderData getRenderData() {
+		return renderData;
 	}
 }

@@ -1,7 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -12,9 +11,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTank.IFluidHeightCalculator;
+import openblocks.common.tileentity.TileEntityTank.ITankRenderData;
+import openmods.utils.Diagonal;
 import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
@@ -24,29 +23,29 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	RenderBlocks renderBlocks = new RenderBlocks();
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		TileEntityTank tankTile = (TileEntityTank)tileentity;
-		final IFluidHeightCalculator context = tankTile.getRenderFluidHeights();
+	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
+		TileEntityTank tankTile = (TileEntityTank)te;
 
-		IFluidTank internalTank = tankTile.getTank();
+		ITankRenderData data = tankTile.getRenderData();
 
-		FluidStack fluidStack = internalTank.getFluid();
-
-		if (fluidStack != null) {
+		if (data.hasFluid()) {
 			bindTexture(TextureMap.locationBlocksTexture);
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
-			GL11.glEnable(GL11.GL_BLEND);
-			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-			renderFluid(context, fluidStack);
-			GL11.glDisable(GL11.GL_BLEND);
+			// it just looks broken with blending
+			// GL11.glEnable(GL11.GL_BLEND);
+			// OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+			float time = te.getWorldObj().getTotalWorldTime() + f;
+			renderFluid(data, time);
+			// GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
 	}
 
-	public static void renderFluid(IFluidHeightCalculator height, FluidStack fluidStack) {
+	public static void renderFluid(ITankRenderData data, float time) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1, 1, 1, 1);
+		FluidStack fluidStack = data.getFluid();
 		final Fluid fluid = fluidStack.getFluid();
 
 		IIcon texture = fluid.getStillIcon();
@@ -63,10 +62,12 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		Tessellator t = Tessellator.instance;
 
-		final double se = height.calculateHeight(ForgeDirection.SOUTH, ForgeDirection.EAST);
-		final double ne = height.calculateHeight(ForgeDirection.NORTH, ForgeDirection.EAST);
-		final double sw = height.calculateHeight(ForgeDirection.SOUTH, ForgeDirection.WEST);
-		final double nw = height.calculateHeight(ForgeDirection.NORTH, ForgeDirection.WEST);
+		final double se = data.getCornerFluidLevel(Diagonal.SE, time);
+		final double ne = data.getCornerFluidLevel(Diagonal.NE, time);
+		final double sw = data.getCornerFluidLevel(Diagonal.SW, time);
+		final double nw = data.getCornerFluidLevel(Diagonal.NW, time);
+
+		final double center = data.getCenterFluidLevel(time);
 
 		final double uMin = texture.getMinU();
 		final double uMax = texture.getMaxU();
@@ -82,42 +83,60 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		t.startDrawingQuads();
 		t.setColorOpaque_F(r, g, b);
 
-		if (!height.shouldRenderFluidWall(ForgeDirection.NORTH)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.NORTH)) {
 			t.addVertexWithUV(1, 0, 0, uMax, vMin);
 			t.addVertexWithUV(0, 0, 0, uMin, vMin);
 			t.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
 			t.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
 		}
 
-		if (!height.shouldRenderFluidWall(ForgeDirection.SOUTH)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.SOUTH)) {
 			t.addVertexWithUV(1, 0, 1, uMin, vMin);
 			t.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
 			t.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
 			t.addVertexWithUV(0, 0, 1, uMax, vMin);
 		}
 
-		if (!height.shouldRenderFluidWall(ForgeDirection.EAST)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.EAST)) {
 			t.addVertexWithUV(1, 0, 0, uMin, vMin);
 			t.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
 			t.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
 			t.addVertexWithUV(1, 0, 1, uMax, vMin);
 		}
 
-		if (!height.shouldRenderFluidWall(ForgeDirection.WEST)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.WEST)) {
 			t.addVertexWithUV(0, 0, 1, uMin, vMin);
 			t.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
 			t.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
 			t.addVertexWithUV(0, 0, 0, uMax, vMin);
 		}
 
-		if (!height.shouldRenderFluidWall(ForgeDirection.UP)) {
-			t.addVertexWithUV(1, se, 1, uMax, vMin);
-			t.addVertexWithUV(1, ne, 0, uMin, vMin);
+		if (data.shouldRenderFluidWall(ForgeDirection.UP)) {
+			final double uMid = (uMax + uMin) / 2;
+			final double vMid = (vMax + vMin) / 2;
+
 			t.addVertexWithUV(0, nw, 0, uMin, vMax);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			t.addVertexWithUV(1, ne, 0, uMin, vMin);
+
+			t.addVertexWithUV(1, ne, 0, uMin, vMin);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			t.addVertexWithUV(1, se, 1, uMax, vMin);
+
+			t.addVertexWithUV(1, se, 1, uMax, vMin);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
 			t.addVertexWithUV(0, sw, 1, uMax, vMax);
+
+			t.addVertexWithUV(0, sw, 1, uMax, vMax);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			t.addVertexWithUV(0, nw, 0, uMin, vMax);
 		}
 
-		if (!height.shouldRenderFluidWall(ForgeDirection.DOWN)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.DOWN)) {
 			t.addVertexWithUV(1, 0, 0, uMax, vMin);
 			t.addVertexWithUV(1, 0, 1, uMin, vMin);
 			t.addVertexWithUV(0, 0, 1, uMin, vMax);

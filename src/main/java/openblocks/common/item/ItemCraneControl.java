@@ -24,7 +24,7 @@ import com.google.common.collect.MapMaker;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation(customName="crane_control")
+@BookDocumentation(customName = "crane_control")
 public class ItemCraneControl extends Item {
 
 	private IIcon iconDown;
