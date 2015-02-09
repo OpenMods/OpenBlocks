@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
@@ -95,30 +96,55 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	}
 
 	@Override
+	public ItemStack getPickedResult(MovingObjectPosition target) {
+		return convertToItem();
+	}
+
+	@Override
 	public EntityAgeable createChild(EntityAgeable entityageable) {
 		return null;
 	}
 
 	@Override
 	public boolean interact(EntityPlayer player) {
-		if (!worldObj.isRemote && !isDead) {
-			if (player.isSneaking()) {
-				ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
-				NBTTagCompound tag = new NBTTagCompound();
-				inventory.writeToNBT(tag);
-				luggageItem.setTagCompound(tag);
-
-				String nameTag = getCustomNameTag();
-				if (!Strings.isNullOrEmpty(nameTag)) luggageItem.setStackDisplayName(nameTag);
-
-				if (player.inventory.addItemStackToInventory(luggageItem)) setDead();
-				playSound("random.pop", 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
+		if (!isDead) {
+			if (worldObj.isRemote) {
+				if (player.isSneaking()) spawnPickupParticles();
 			} else {
-				playSound("random.chestopen", 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
-				player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, getEntityId(), 0, 0);
+				if (player.isSneaking()) {
+					ItemStack luggageItem = convertToItem();
+					if (player.inventory.addItemStackToInventory(luggageItem)) setDead();
+					playSound("random.pop", 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
+
+				} else {
+					playSound("random.chestopen", 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
+					player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, getEntityId(), 0, 0);
+				}
 			}
 		}
 		return true;
+	}
+
+	protected void spawnPickupParticles() {
+		final double py = this.posY + this.height;
+		for (int i = 0; i < 50; i++) {
+			double vx = rand.nextGaussian() * 0.02D;
+			double vz = rand.nextGaussian() * 0.02D;
+			double px = this.posX + this.width * this.rand.nextFloat();
+			double pz = this.posZ + this.width * this.rand.nextFloat();
+			this.worldObj.spawnParticle("portal", px, py, pz, vx, -1, vz);
+		}
+	}
+
+	protected ItemStack convertToItem() {
+		ItemStack luggageItem = new ItemStack(OpenBlocks.Items.luggage);
+		NBTTagCompound tag = new NBTTagCompound();
+		inventory.writeToNBT(tag);
+		luggageItem.setTagCompound(tag);
+
+		String nameTag = getCustomNameTag();
+		if (!Strings.isNullOrEmpty(nameTag)) luggageItem.setStackDisplayName(nameTag);
+		return luggageItem;
 	}
 
 	public boolean canConsumeStackPartially(ItemStack stack) {
