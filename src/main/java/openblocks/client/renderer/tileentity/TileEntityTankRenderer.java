@@ -83,28 +83,28 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		t.startDrawingQuads();
 		t.setColorOpaque_F(r, g, b);
 
-		if (data.shouldRenderFluidWall(ForgeDirection.NORTH)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.NORTH) && (nw > 0 || ne > 0)) {
 			t.addVertexWithUV(1, 0, 0, uMax, vMin);
 			t.addVertexWithUV(0, 0, 0, uMin, vMin);
 			t.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
 			t.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
 		}
 
-		if (data.shouldRenderFluidWall(ForgeDirection.SOUTH)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.SOUTH) && (se > 0 || sw > 0)) {
 			t.addVertexWithUV(1, 0, 1, uMin, vMin);
 			t.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
 			t.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
 			t.addVertexWithUV(0, 0, 1, uMax, vMin);
 		}
 
-		if (data.shouldRenderFluidWall(ForgeDirection.EAST)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.EAST) && (ne > 0 || se > 0)) {
 			t.addVertexWithUV(1, 0, 0, uMin, vMin);
 			t.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
 			t.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
 			t.addVertexWithUV(1, 0, 1, uMax, vMin);
 		}
 
-		if (data.shouldRenderFluidWall(ForgeDirection.WEST)) {
+		if (data.shouldRenderFluidWall(ForgeDirection.WEST) && (sw > 0 || nw > 0)) {
 			t.addVertexWithUV(0, 0, 1, uMin, vMin);
 			t.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
 			t.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
@@ -115,25 +115,16 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			final double uMid = (uMax + uMin) / 2;
 			final double vMid = (vMax + vMin) / 2;
 
-			t.addVertexWithUV(0, nw, 0, uMin, vMax);
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-			t.addVertexWithUV(1, ne, 0, uMin, vMin);
-
-			t.addVertexWithUV(1, ne, 0, uMin, vMin);
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
 			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
 			t.addVertexWithUV(1, se, 1, uMax, vMin);
+			t.addVertexWithUV(1, ne, 0, uMin, vMin);
+			t.addVertexWithUV(0, nw, 0, uMin, vMax);
 
+			t.addVertexWithUV(0, sw, 1, uMax, vMax);
 			t.addVertexWithUV(1, se, 1, uMax, vMin);
 			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-			t.addVertexWithUV(0, sw, 1, uMax, vMax);
-
-			t.addVertexWithUV(0, sw, 1, uMax, vMax);
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
 			t.addVertexWithUV(0, nw, 0, uMin, vMax);
+
 		}
 
 		if (data.shouldRenderFluidWall(ForgeDirection.DOWN)) {
