@@ -26,9 +26,9 @@ public class EntityHangGliderRenderer extends Render {
 		final Minecraft minecraft = Minecraft.getMinecraft();
 		final boolean isLocalPlayer = owner == minecraft.thePlayer;
 		final boolean isFpp = minecraft.gameSettings.thirdPersonView == 0;
-		final boolean playerOnGround = glider.isPlayerOnGround();
+		final boolean isDeployed = glider.isDeployed();
 
-		if (isLocalPlayer && isFpp && playerOnGround) return;
+		if (isLocalPlayer && isFpp && isDeployed) return;
 
 		final float rotation = interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);
 
@@ -38,7 +38,7 @@ public class EntityHangGliderRenderer extends Render {
 		GL11.glRotatef(180.0F - rotation, 0.0F, 1.0F, 0.0F);
 
 		if (isLocalPlayer) {
-			if (playerOnGround) {
+			if (isDeployed) {
 				// move up and closer to back
 				GL11.glTranslated(0, -0.2, +0.3);
 			} else {
@@ -51,7 +51,7 @@ public class EntityHangGliderRenderer extends Render {
 				}
 			}
 		} else {
-			if (playerOnGround) {
+			if (isDeployed) {
 				// move up little bit (other player center is lower)
 				GL11.glTranslated(0, +0.2, +0.3);
 			} else {
@@ -60,7 +60,7 @@ public class EntityHangGliderRenderer extends Render {
 			}
 		}
 
-		if (playerOnGround) {
+		if (isDeployed) {
 			GL11.glRotatef(ONGROUND_ROTATION, 1, 0, 0);
 			GL11.glScalef(0.4f, 1f, 0.4f);
 		}

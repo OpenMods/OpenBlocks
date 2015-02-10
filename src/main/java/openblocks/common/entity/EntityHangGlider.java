@@ -20,7 +20,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
-	private static final int PROPERTY_ON_GROUND = 17;
+	private static final int PROPERTY_DEPLOYED = 17;
 
 	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new MapMaker().weakKeys().weakValues().makeMap();
 
@@ -29,9 +29,9 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		return glider != null;
 	}
 
-	public static boolean isPlayerOnGround(Entity player) {
+	public static boolean isGliderDeployed(Entity player) {
 		EntityHangGlider glider = gliderMap.get(player);
-		return glider == null || glider.isPlayerOnGround();
+		return glider == null || glider.isDeployed();
 	}
 
 	private static boolean isGliderValid(EntityPlayer player, EntityHangGlider glider) {
@@ -90,11 +90,11 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(PROPERTY_ON_GROUND, (byte)1);
+		this.dataWatcher.addObject(PROPERTY_DEPLOYED, (byte)1);
 	}
 
-	public boolean isPlayerOnGround() {
-		return this.dataWatcher.getWatchableObjectByte(PROPERTY_ON_GROUND) == 1;
+	public boolean isDeployed() {
+		return this.dataWatcher.getWatchableObjectByte(PROPERTY_DEPLOYED) == 1;
 	}
 
 	@Override
@@ -108,18 +108,25 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			return;
 		}
 
+		boolean isDeployed = player.onGround || player.isInWater();
+
 		if (!worldObj.isRemote) {
-			this.dataWatcher.updateObject(PROPERTY_ON_GROUND, (byte)(player.onGround? 1 : 0));
+			this.dataWatcher.updateObject(PROPERTY_DEPLOYED, (byte)(isDeployed? 1 : 0));
 			fixPositions(player, false);
 		}
 
-		double horizontalSpeed = 0.03;
-		double verticalSpeed = 0.4;
-		if (player.isSneaking()) {
-			horizontalSpeed = 0.1;
-			verticalSpeed = 0.7;
-		}
-		if (!player.onGround && player.motionY < 0) {
+		if (!isDeployed && player.motionY < 0) {
+			final double horizontalSpeed;
+			final double verticalSpeed;
+
+			if (player.isSneaking()) {
+				horizontalSpeed = 0.1;
+				verticalSpeed = 0.7;
+			} else {
+				horizontalSpeed = 0.03;
+				verticalSpeed = 0.4;
+			}
+
 			player.motionY *= verticalSpeed;
 			motionY *= verticalSpeed;
 			double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
