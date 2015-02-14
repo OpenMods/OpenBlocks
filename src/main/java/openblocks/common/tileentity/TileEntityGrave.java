@@ -51,7 +51,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	protected void createSyncedFields() {
 		perishedUsername = new SyncableString();
-		onSoil = new SyncableBoolean();
+		onSoil = new SyncableBoolean(true);
 	}
 
 	@Override
