@@ -1,6 +1,5 @@
 package openblocks;
 
-import java.io.File;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -46,7 +45,6 @@ import openmods.network.rpc.RpcCallDispatcher;
 import openmods.utils.EnchantmentUtils;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -322,50 +320,45 @@ public class OpenBlocks {
 			new ChatComponentTranslation("stat.openblocks.bricksDropped"),
 			StatBase.simpleStatType).registerStat();
 
-	private GameConfigProvider gameConfig;
+	private final ModStartupHelper startupHelper = new ModStartupHelper("openblocks") {
+
+		@Override
+		protected void populateConfig(Configuration config) {
+			ConfigProcessing.processAnnotations("OpenBlocks", config, Config.class);
+		}
+
+		@Override
+		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
+			itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
+				@Override
+				public Item construct() {
+					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
+				}
+			});
+
+			itemFactory.registerFactory("technicolorGlasses", new FactoryRegistry.Factory<Item>() {
+				@Override
+				public Item construct() {
+					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
+				}
+			});
+
+			itemFactory.registerFactory("seriousGlasses", new FactoryRegistry.Factory<Item>() {
+				@Override
+				public Item construct() {
+					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
+				}
+			});
+		}
+
+	};
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
-		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
+		startupHelper.registerBlocksHolder(OpenBlocks.Blocks.class);
+		startupHelper.registerItemsHolder(OpenBlocks.Items.class);
 
-		features.collectFromBlocks(OpenBlocks.Blocks.class);
-		features.collectFromItems(OpenBlocks.Items.class);
-
-		final File configFile = evt.getSuggestedConfigurationFile();
-		Configuration config = new Configuration(configFile);
-
-		ConfigProcessing.processAnnotations(configFile, "OpenBlocks", config, Config.class);
-		features.loadFromConfiguration(config);
-
-		if (config.hasChanged()) config.save();
-
-		gameConfig = new GameConfigProvider("openblocks");
-		gameConfig.setFeatures(features);
-
-		final FactoryRegistry<Item> itemFactory = gameConfig.getItemFactory();
-		itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
-			}
-		});
-
-		itemFactory.registerFactory("technicolorGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
-			}
-		});
-
-		itemFactory.registerFactory("seriousGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
-			}
-		});
-
-		gameConfig.registerBlocks(OpenBlocks.Blocks.class);
-		gameConfig.registerItems(OpenBlocks.Items.class);
+		startupHelper.preInit(evt.getSuggestedConfigurationFile());
 
 		NetworkEventManager.INSTANCE
 				.startRegistration()
@@ -499,8 +492,7 @@ public class OpenBlocks {
 
 	@EventHandler
 	public void handleRenames(FMLMissingMappingsEvent event) {
-		Preconditions.checkNotNull(gameConfig, "What?");
-		gameConfig.handleRemaps(event.get());
+		startupHelper.handleRenames(event);
 	}
 
 	@EventHandler
