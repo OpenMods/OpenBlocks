@@ -36,6 +36,10 @@ repositories {
         name 'MinecraftS3'
         url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
     }
+    maven {
+        name "OpenMods"
+        url "http://xn--oxe.xn--jxe.net/artifactory/openmods"
+    }
 }
 
 apply plugin: 'forge'
@@ -45,6 +49,8 @@ apply plugin: 'forge'
 
 dependencies {
     compile project(":OpenModsLib") // Load OpenModsLib from submodule
+
+    compile "openperipheral:OpenPeripheralCore-API:3.0:dev"
 }
 
 //================================================
