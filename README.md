@@ -6,10 +6,10 @@ An open source random collection of blocks and miscellaneous cool stuff
 Current Version
 -
 
-**[v1.2.8](https://dl.dropboxusercontent.com/u/4295615/OpenBlocks-1.2.8.jar) for Minecraft 1.6.x**
-You'll also need [OpenModsLib](https://dl.dropboxusercontent.com/u/4295615/OpenModsLib-0.5.jar).
+**1.3.0 for Minecraft 1.7.10**
+You'll also need OpenModsLib 0.6.
 
-For stable release downloads, click [here](http://www.openmods.info/openblocks/downloads).  
+For stable release downloads, click [here](http://www.openmods.info/).  
 For snapshot versions, check the [Jenkins](http://www.openmods.info:8080/).
 
 FREQUENTLY ASKED QUESTIONS:
@@ -71,7 +71,7 @@ What does it contain?
   * A paint **brush** to paint white **canvases** and other blocks.
   * **Stencils** that are made using the **Drawing Table** to paint specific areas of blocks
   * A **Squeegee** that liquefies paint to clean it off of blocks
-* Listen to music among other things with the **radio**!
+* ~~Listen to music among other things with the **radio**!~~ *Killed!*
 * Exciting graphics and much more to come.
 
 Compiling
