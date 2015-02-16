@@ -79,6 +79,9 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		final float r = (color >> 16 & 0xFF) / 255.0F;
 		final float g = (color >> 8 & 0xFF) / 255.0F;
 		final float b = (color & 0xFF) / 255.0F;
+		
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		t.startDrawingQuads();
 		t.setColorOpaque_F(r, g, b);
@@ -134,6 +137,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			t.addVertexWithUV(0, 0, 0, uMax, vMax);
 		}
 		t.draw();
+		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
