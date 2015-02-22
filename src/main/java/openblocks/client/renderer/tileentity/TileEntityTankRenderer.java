@@ -26,6 +26,8 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
 		TileEntityTank tankTile = (TileEntityTank)te;
 
+		if (tankTile.isInvalid()) return;
+
 		ITankRenderData data = tankTile.getRenderData();
 
 		if (data.hasFluid()) {
