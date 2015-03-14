@@ -14,31 +14,44 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
+import openblocks.Config;
+import openmods.api.IActivateAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.BlockUtils;
+
+import com.google.common.base.Strings;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile {
+public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile {
 
+	private static final String TAG_MESSAGE = "Message";
 	private SyncableString perishedUsername;
-	public boolean onSoil = true;
+	public SyncableBoolean onSoil;
+
+	private IChatComponent deathMessage;
 	private int ticksSinceLastSound = 0;
 
-	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 100));
+	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 1));
 
 	public TileEntityGrave() {}
 
 	@Override
 	protected void createSyncedFields() {
 		perishedUsername = new SyncableString();
+		onSoil = new SyncableBoolean(true);
 	}
 
 	@Override
@@ -53,7 +66,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		}
 
 		if (!worldObj.isRemote) {
-			if (worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < 0.002) {
+			if (Config.spawnSkeletons && worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < Config.skeletonSpawnRate) {
 				List<Entity> mobs = worldObj.getEntitiesWithinAABB(IMob.class, getBB().expand(7, 7, 7));
 				if (mobs.size() < 5) {
 					double chance = worldObj.rand.nextDouble();
@@ -71,23 +84,30 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		return perishedUsername.getValue();
 	}
 
+	public void setDeathMessage(IChatComponent msg) {
+		deathMessage = msg.createCopy();
+	}
+
 	public void setUsername(String username) {
 		this.perishedUsername.setValue(username);
 	}
 
 	public void setLoot(IInventory invent) {
+		inventory.clearAndSetSlotCount(invent.getSizeInventory());
 		inventory.copyFrom(invent);
 	}
 
 	public boolean isOnSoil() {
-		return onSoil;
+		return onSoil.get();
 	}
 
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote && !(player instanceof FakePlayer)) {
-			setUsername(player.getGameProfile().getName());
+			if (stack.hasDisplayName()) setUsername(stack.getDisplayName());
+			else setUsername(player.getGameProfile().getName());
 			if (player.capabilities.isCreativeMode) setLoot(player.inventory);
+			updateBlockBelow();
 			sync();
 		}
 	}
@@ -96,12 +116,23 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+
+		if (deathMessage != null) {
+			String serialized = IChatComponent.Serializer.func_150696_a(deathMessage);
+			tag.setString(TAG_MESSAGE, serialized);
+		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+
+		String serializedMsg = tag.getString(TAG_MESSAGE);
+
+		if (!Strings.isNullOrEmpty(serializedMsg)) {
+			deathMessage = IChatComponent.Serializer.func_150699_a(serializedMsg);
+		}
 	}
 
 	@Override
@@ -111,7 +142,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 
 	protected void updateBlockBelow() {
 		Block block = worldObj.getBlock(xCoord, yCoord - 1, zCoord);
-		onSoil = (block == Blocks.dirt || block == Blocks.grass);
+		onSoil.set(block == Blocks.dirt || block == Blocks.grass);
 	}
 
 	@Override
@@ -120,14 +151,57 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		updateBlockBelow();
+		sync();
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
+	}
+
+	@Override
+	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (player.worldObj.isRemote) return false;
+		ItemStack held = player.getHeldItem();
+		if (held != null && held.getItem().getToolClasses(held).contains("shovel")) {
+			robGrave(player, held);
+			return true;
+		}
+
+		if (deathMessage != null) player.addChatMessage(deathMessage);
+		return true;
+	}
+
+	protected void robGrave(EntityPlayer player, ItemStack held) {
+		boolean dropped = false;
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			final ItemStack stack = inventory.getStackInSlot(i);
+			if (stack != null) {
+				dropped = true;
+				BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, stack);
+			}
+		}
+
+		inventory.clearAndSetSlotCount(0);
+
+		if (dropped) {
+			worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord, zCoord, Block.getIdFromBlock(Blocks.dirt));
+			if (worldObj.rand.nextDouble() < Config.graveSpecialAction) ohNoes(player);
+			held.damageItem(2, player);
+		}
+	}
+
+	private void ohNoes(EntityPlayer player) {
+		worldObj.playSoundAtEntity(player, "openblocks:grave.rob", 1, 1);
+
+		final WorldInfo worldInfo = worldObj.getWorldInfo();
+		worldInfo.setThunderTime(35 * 20);
+		worldInfo.setRainTime(35 * 20);
+		worldInfo.setThundering(true);
+		worldInfo.setRaining(true);
 	}
 
 }

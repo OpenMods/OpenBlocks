@@ -6,20 +6,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityXPShower;
+import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockXPShower extends OpenBlock {
 
 	public BlockXPShower() {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return false;
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -63,7 +62,6 @@ public class BlockXPShower extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-
 		TileEntityXPShower tile = getTileEntity(world, x, y, z, TileEntityXPShower.class);
 		if (tile != null) {
 			ForgeDirection direction = tile.getRotation();

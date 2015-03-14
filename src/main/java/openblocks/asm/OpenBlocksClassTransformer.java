@@ -15,9 +15,9 @@ public class OpenBlocksClassTransformer implements IClassTransformer {
 	public byte[] transform(final String name, String transformedName, byte[] bytes) {
 		if (bytes == null) return bytes;
 
-		if (transformedName.equals("net.minecraft.entity.player.EntityPlayer")) return VisitorHelper.apply(bytes, ClassWriter.COMPUTE_FRAMES, new TransformProvider() {
+		if (transformedName.equals("net.minecraft.entity.player.EntityPlayer")) return VisitorHelper.apply(bytes, name, new TransformProvider(ClassWriter.COMPUTE_FRAMES) {
 			@Override
-			public ClassVisitor createVisitor(ClassVisitor cv) {
+			public ClassVisitor createVisitor(String name, ClassVisitor cv) {
 				FMLRelaunchLog.info("[OpenBlocks] Trying to patch EntityPlayer.isInBed (class: %s)", name);
 				return new EntityPlayerVisitor(name, cv);
 			}

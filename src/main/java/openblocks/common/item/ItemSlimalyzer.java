@@ -9,9 +9,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import openblocks.OpenBlocks;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class ItemSlimalyzer extends Item {
 
 	public IIcon on;

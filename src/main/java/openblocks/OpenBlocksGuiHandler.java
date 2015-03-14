@@ -1,25 +1,36 @@
 package openblocks;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import openblocks.client.gui.GuiDevNull;
-import openblocks.client.gui.GuiInfoBook;
 import openblocks.client.gui.GuiLuggage;
 import openblocks.common.container.ContainerDevNull;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
 import openmods.Log;
-import openmods.PlayerItemInventory;
+import openmods.inventory.PlayerItemInventory;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class OpenBlocksGuiHandler implements IGuiHandler {
 
 	public static enum GuiId {
 		luggage,
-		infoBook,
 		devNull;
 
 		public static final GuiId[] VALUES = GuiId.values();
+	}
+
+	private static ContainerDevNull createDevNullContainer(EntityPlayer player) {
+		return new ContainerDevNull(player.inventory, new PlayerItemInventory(player, 1));
+	}
+
+	private static ContainerLuggage createLuggageContainer(EntityPlayer player, World world, int entityId) {
+		final Entity entity = world.getEntityByID(entityId);
+		if (entity instanceof EntityLuggage) return new ContainerLuggage(player.inventory, (EntityLuggage)entity);
+
+		Log.warn("Trying to open luggage container for invalid entity %d:%s", entityId, entity);
+		return null;
 	}
 
 	@Override
@@ -29,10 +40,10 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 
 		switch (guiId) {
 			case luggage:
-				return new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x));
+				return createLuggageContainer(player, world, x);
 			case devNull:
 				if (player.inventory.getCurrentItem() == null) return null;
-				return new ContainerDevNull(player.inventory, new PlayerItemInventory(player, 1));
+				return createDevNullContainer(player);
 			default:
 				return null;
 		}
@@ -44,12 +55,12 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		if (guiId == null) return null;
 
 		switch (guiId) {
-			case luggage:
-				return new GuiLuggage(new ContainerLuggage(player.inventory, (EntityLuggage)world.getEntityByID(x)));
-			case infoBook:
-				return new GuiInfoBook();
+			case luggage: {
+				final ContainerLuggage container = createLuggageContainer(player, world, x);
+				return container != null? new GuiLuggage(container) : null;
+			}
 			case devNull:
-				return new GuiDevNull((ContainerDevNull)getServerGuiElement(id, player, world, x, y, z));
+				return new GuiDevNull(createDevNullContainer(player));
 			default:
 				return null;
 		}

@@ -1,160 +1,224 @@
 package openblocks.client.gui;
 
-import net.minecraft.client.gui.GuiYesNoCallback;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.util.StatCollector;
-import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Blocks;
-import openblocks.OpenBlocks.Items;
-import openblocks.client.gui.page.IntroPage;
-import openblocks.common.item.MetasGeneric;
-import openmods.gui.ComponentGui;
-import openmods.gui.component.*;
-import openmods.gui.component.page.PageBase;
-import openmods.gui.component.page.SectionPage;
-import openmods.gui.component.page.TitledPage;
-import openmods.gui.listener.IMouseDownListener;
+import java.io.File;
+import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import openblocks.OpenBlocks;
+import openblocks.client.ChangelogBuilder;
+import openblocks.client.ChangelogBuilder.Changelog;
+import openblocks.client.ChangelogBuilder.ChangelogSection;
+import openblocks.client.gui.page.IntroPage;
+import openblocks.common.PlayerInventoryStore;
+import openmods.Log;
+import openmods.gui.ComponentGui;
+import openmods.gui.DummyContainer;
+import openmods.gui.component.BaseComposite;
+import openmods.gui.component.GuiComponentBook;
+import openmods.gui.component.GuiComponentLabel;
+import openmods.gui.component.page.*;
+import openmods.gui.component.page.PageBase.ActionIcon;
+import openmods.infobook.PageBuilder;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-public class GuiInfoBook extends ComponentGui implements GuiYesNoCallback {
+import com.google.common.collect.Lists;
 
-	private static final String MODID = "openblocks";
+public class GuiInfoBook extends ComponentGui {
 
-	private int itemsIndex;
-	private int miscIndex;
-	private int blocksIndex;
-
-	private static class DummyContainer extends Container {
-		@Override
-		public boolean canInteractWith(EntityPlayer var1) {
-			return false;
-		}
-	}
+	private GuiComponentBook book;
 
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
 	}
 
+	private static void setupBookmark(GuiComponentLabel label, GuiComponentBook book, int index) {
+		label.setListener(book.createBookmarkListener(index));
+	}
+
+	@Override
+	public void initGui() {
+		// Nothing can change this value, otherwise client will crash when player picks item
+		// this.mc.thePlayer.openContainer = this.inventorySlots;
+		this.guiLeft = (this.width - this.xSize) / 2;
+		this.guiTop = (this.height - this.ySize) / 2;
+	}
+
+	private static int alignToEven(final GuiComponentBook book) {
+		int index = book.getNumberOfPages();
+		if (index % 2 == 1) {
+			book.addPage(PageBase.BLANK_PAGE);
+			index++;
+		}
+		return index;
+	}
+
+	private static int tocLine(int index) {
+		final int tocStartHeight = 70;
+		final int tocLineHeight = 15;
+		return tocStartHeight + index * tocLineHeight;
+	}
+
+	@Override
+	public void handleKeyboardInput() {
+		super.handleKeyboardInput();
+
+		if (Keyboard.getEventKeyState()) {
+			switch (Keyboard.getEventKey()) {
+				case Keyboard.KEY_PRIOR:
+					book.prevPage();
+					break;
+				case Keyboard.KEY_NEXT:
+					book.nextPage();
+					break;
+				case Keyboard.KEY_HOME:
+					book.firstPage();
+					break;
+				case Keyboard.KEY_END:
+					book.lastPage();
+					break;
+			}
+		}
+	}
+
 	@Override
 	protected BaseComposite createRoot() {
-		final GuiComponentBook book = new GuiComponentBook();
+		book = new GuiComponentBook();
 		PageBase contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 
-		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, 90, "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
-		lblBlocks.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				book.gotoIndex(blocksIndex);
-				book.enablePages();
-			}
-		});
-		GuiComponentLabel lblItems = new GuiComponentLabel(27, 105, "- " + StatCollector.translateToLocal("openblocks.gui.items"));
-		lblItems.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				book.gotoIndex(itemsIndex);
-				book.enablePages();
-			}
-		});
-		GuiComponentLabel lblMisc = new GuiComponentLabel(27, 120, "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
-		lblMisc.setListener(new IMouseDownListener() {
-			@Override
-			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
-				book.gotoIndex(miscIndex);
-				book.enablePages();
-			}
-		});
-
+		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, tocLine(0), "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
 		contentsPage.addComponent(lblBlocks);
+
+		GuiComponentLabel lblItems = new GuiComponentLabel(27, tocLine(1), "- " + StatCollector.translateToLocal("openblocks.gui.items"));
 		contentsPage.addComponent(lblItems);
+
+		GuiComponentLabel lblMisc = new GuiComponentLabel(27, tocLine(2), "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
 		contentsPage.addComponent(lblMisc);
+
+		GuiComponentLabel lblChangelogs = new GuiComponentLabel(27, tocLine(3), "- " + StatCollector.translateToLocal("openblocks.gui.changelogs"));
+		contentsPage.addComponent(lblChangelogs);
 
 		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new IntroPage());
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 		book.addPage(contentsPage);
-		blocksIndex = book.getNumberOfPages();
-		book.addPage(PageBase.BLANK_PAGE);
-		book.addPage(new SectionPage("openblocks.gui.blocks"));
-		book.addStandardRecipePage(MODID, "elevator", Blocks.elevator);
-		book.addStandardRecipePage(MODID, "sprinkler", Blocks.sprinkler);
-		book.addStandardRecipePage(MODID, "radio", Blocks.radio);
-		book.addStandardRecipePage(MODID, "paintmixer", Blocks.paintMixer);
-		book.addStandardRecipePage(MODID, "beartrap", Blocks.bearTrap);
-		book.addStandardRecipePage(MODID, "guide", Blocks.guide);
-		book.addStandardRecipePage(MODID, "canvas", Blocks.canvas);
-		/**
-		 * leaving for boq
-		 * book.addStandardRecipePage("openblocks", "projector",
-		 * Blocks.projector);
-		 **/
-		book.addStandardRecipePage(MODID, "vacuumhopper", Blocks.vacuumHopper);
-		book.addStandardRecipePage(MODID, "tank", Blocks.tank);
-		book.addStandardRecipePage(MODID, "path", Blocks.path);
-		book.addStandardRecipePage(MODID, "fan", Blocks.fan);
-		book.addStandardRecipePage(MODID, "blockbreaker", Blocks.blockBreaker);
-		book.addStandardRecipePage(MODID, "blockPlacer", Blocks.blockPlacer);
-		book.addStandardRecipePage(MODID, "itemDropper", Blocks.itemDropper);
-		book.addStandardRecipePage(MODID, "bigbutton", Blocks.bigButton);
-		book.addStandardRecipePage(MODID, "autoanvil", Blocks.autoAnvil);
-		book.addStandardRecipePage(MODID, "autoenchantmenttable", Blocks.autoEnchantmentTable);
-		book.addStandardRecipePage(MODID, "sponge", Blocks.sponge);
-		book.addStandardRecipePage(MODID, "ropeladder", Blocks.ropeLadder);
-		book.addStandardRecipePage(MODID, "village_highlighter", Blocks.villageHighlighter);
-		book.addStandardRecipePage(MODID, "xpbottler", Blocks.xpBottler);
-		book.addStandardRecipePage(MODID, "xpdrain", Blocks.xpDrain);
-		book.addStandardRecipePage(MODID, "drawingtable", Blocks.drawingTable);
-		book.addStandardRecipePage(MODID, "sky.normal", Blocks.sky);
-		book.addStandardRecipePage(MODID, "xpshower", Blocks.xpShower);
 
-		itemsIndex = book.getNumberOfPages();
-		if (itemsIndex % 2 == 1) {
+		{
+			int blocksIndex = alignToEven(book);
+			setupBookmark(lblBlocks, book, blocksIndex);
 			book.addPage(PageBase.BLANK_PAGE);
-			itemsIndex++;
-		}
-		book.addPage(PageBase.BLANK_PAGE);
-		book.addPage(new SectionPage("openblocks.gui.items"));
-		book.addStandardRecipePage(MODID, "luggage", Items.luggage);
-		book.addStandardRecipePage(MODID, "sonicglasses", Items.sonicGlasses);
-		book.addStandardRecipePage(MODID, "hangglider", Items.hangGlider);
-		book.addStandardRecipePage(MODID, "cursor", Items.cursor);
-		book.addStandardRecipePage(MODID, "unprepared_stencil", MetasGeneric.unpreparedStencil.newItemStack());
-		book.addStandardRecipePage(MODID, "sleepingbag", Items.sleepingBag);
-		book.addStandardRecipePage(MODID, "devnull", Items.devNull);
-		/**
-		 * leaving for boq
-		 * book.addStandardRecipePage("openblocks", "cartographer",
-		 * Items.cartographer);
-		 * book.addStandardRecipePage("openblocks", "golden_eye",
-		 * Items.goldenEye);
-		 * book.addStandardRecipePage("openblocks", "tasty_clay",
-		 * Items.tastyClay);
-		 **/
-		book.addStandardRecipePage(MODID, "paintbrush", Items.paintBrush);
-		book.addStandardRecipePage(MODID, "squeegee", Items.squeegee);
-		book.addStandardRecipePage(MODID, "slimalyzer", Items.slimalyzer);
-		book.addStandardRecipePage(MODID, "spongeonastick", Items.spongeonastick);
+			book.addPage(new SectionPage("openblocks.gui.blocks"));
 
-		miscIndex = book.getNumberOfPages();
-		if (miscIndex % 2 == 1) {
+			PageBuilder builder = new PageBuilder();
+			builder.includeModId(OpenBlocks.MODID);
+			builder.createBlockPages();
+			builder.insertTocPages(book, 4, 4, 1.5f);
+			alignToEven(book);
+			builder.insertPages(book);
+		}
+
+		{
+			int itemsIndex = alignToEven(book);
+			setupBookmark(lblItems, book, itemsIndex);
 			book.addPage(PageBase.BLANK_PAGE);
-			miscIndex++;
-		}
-		book.addPage(PageBase.BLANK_PAGE);
-		book.addPage(new SectionPage("openblocks.gui.misc"));
-		book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
-		book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
+			book.addPage(new SectionPage("openblocks.gui.items"));
 
-		if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
-		if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
-		if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
+			PageBuilder builder = new PageBuilder();
+			builder.includeModId(OpenBlocks.MODID);
+			builder.createItemPages();
+			builder.insertTocPages(book, 4, 4, 1.5f);
+			alignToEven(book);
+			builder.insertPages(book);
+		}
+
+		{
+			int miscIndex = alignToEven(book);
+			setupBookmark(lblMisc, book, miscIndex);
+			book.addPage(PageBase.BLANK_PAGE);
+			book.addPage(new SectionPage("openblocks.gui.misc"));
+			book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
+			book.addPage(new TitledPage("openblocks.gui.restore_inv.title", "openblocks.gui.restore_inv.content")
+					.addActionButton(10, 133, getSavePath(), ActionIcon.FOLDER.icon, "openblocks.gui.save_folder"));
+			book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
+
+			if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
+			if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
+			if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
+
+		}
+
+		int changelogsIndex = alignToEven(book);
+		book.addPage(PageBase.BLANK_PAGE);
+		setupBookmark(lblChangelogs, book, changelogsIndex);
+		book.addPage(new SectionPage("openblocks.gui.changelogs"));
+
+		createChangelogPages(book);
+
 		book.enablePages();
 
 		xSize = book.getWidth();
 		ySize = book.getHeight();
+
 		return book;
+	}
+
+	private static File getSavePath() {
+		try {
+			MinecraftServer server = MinecraftServer.getServer();
+
+			if (server != null) {
+				World world = server.worldServerForDimension(0);
+				File saveFolder = PlayerInventoryStore.getSaveFolder(world);
+				return saveFolder;
+			}
+		} catch (Throwable t) {
+			Log.warn(t, "Failed to get save folder from local server");
+		}
+
+		try {
+			return Minecraft.getMinecraft().mcDataDir;
+		} catch (Throwable t) {
+			Log.warn(t, "Failed to get save folder from MC data dir");
+		}
+
+		return new File("invalid.path");
+	}
+
+	private static void createChangelogPages(final GuiComponentBook book) {
+		String prevVersion = null;
+		int prevIndex = 0;
+		List<ChangelogPage> prevPages = Lists.newArrayList();
+
+		final List<Changelog> changelogs = ChangelogBuilder.readChangeLogs();
+		for (int i = 0; i < changelogs.size(); i++) {
+			Changelog changelog = changelogs.get(i);
+			final String currentVersion = changelog.version;
+			int currentPage = book.getNumberOfPages();
+
+			for (ChangelogPage prevPage : prevPages)
+				prevPage.addNextVersionBookmark(book, currentVersion, currentPage);
+
+			prevPages.clear();
+
+			for (ChangelogSection section : changelog.sections) {
+				ChangelogPage page = new ChangelogPage(currentVersion, section.title, section.lines);
+				book.addPage(page);
+				prevPages.add(page);
+
+				if (i > 0) {
+					page.addPrevVersionBookmark(book, prevVersion, prevIndex);
+				}
+			}
+
+			alignToEven(book);
+
+			prevVersion = currentVersion;
+			prevIndex = currentPage;
+		}
 	}
 
 	@Override

@@ -1,9 +1,6 @@
 package openblocks.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -19,8 +16,7 @@ import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
-import openblocks.client.radio.RadioManager;
-import openblocks.client.renderer.BlockRenderingHandler;
+import openblocks.client.renderer.block.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.item.*;
 import openblocks.client.renderer.tileentity.*;
@@ -28,6 +24,8 @@ import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
+import openmods.renderer.BlockRenderingHandler;
+import openmods.renderer.BlockRenderingValidator;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -79,8 +77,29 @@ public class ClientProxy implements IOpenBlocksProxy {
 	@Override
 	public void registerRenderInformation() {
 
-		OpenBlocks.renderId = RenderingRegistry.getNextAvailableRenderId();
-		RenderingRegistry.registerBlockHandler(new BlockRenderingHandler());
+		{
+			OpenBlocks.renderIdFull = RenderingRegistry.getNextAvailableRenderId();
+			final BlockRenderingHandler blockRenderingHandler = new BlockRenderingHandler(OpenBlocks.renderIdFull, true);
+
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.path, new BlockPathRenderer());
+			BlockCanvasRenderer canvasRenderer = new BlockCanvasRenderer();
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvas, canvasRenderer);
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.tank, new BlockTankRenderer());
+
+			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
+		}
+
+		{
+			OpenBlocks.renderIdFlat = RenderingRegistry.getNextAvailableRenderId();
+			final BlockRenderingHandler blockRenderingHandler = new BlockRenderingHandler(OpenBlocks.renderIdFlat, false);
+
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.ropeLadder, new BlockRopeLadderRenderer());
+
+			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
+		}
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
@@ -97,7 +116,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoAnvil.class, new TileEntityAutoAnvilRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRopeLadder.class, new TileEntityRopeLadderRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, new TileEntityDonationStationRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());
@@ -118,12 +136,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.hangGlider != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
-
-			ItemRendererHangGlider hangGliderRenderer = new ItemRendererHangGlider();
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider, hangGliderRenderer);
-			MinecraftForge.EVENT_BUS.register(hangGliderRenderer);
-
-			attachPlayerRenderer();
+			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider, new ItemRendererHangGlider());
+			MinecraftForge.EVENT_BUS.register(new GliderPlayerRenderHandler());
 		}
 
 		if (OpenBlocks.Items.sonicGlasses != null) {
@@ -144,7 +158,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.devNull, new ItemRendererDevNull());
 		}
 
-		MinecraftForge.EVENT_BUS.register(new PlayerRenderEventHandler());
+		if (OpenBlocks.Items.sleepingBag != null) {
+			MinecraftForge.EVENT_BUS.register(new SleepingBagRenderHandler());
+		}
+
 		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
 
 		if (OpenBlocks.Items.cartographer != null) {
@@ -152,33 +169,15 @@ public class ClientProxy implements IOpenBlocksProxy {
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
-		// RenderingRegistry.registerEntityRenderingHandler(EntityMutant.class,
-		// new EntityMutantRenderer(new ModelMutant(), 0.7F));
+		if (OpenBlocks.Blocks.trophy != null) {
+			MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(OpenBlocks.Blocks.trophy), new ItemRendererTrophy());
+		}
 
 		if (OpenBlocks.Items.goldenEye != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());
 		}
 
-		if (OpenBlocks.Blocks.radio != null) {
-			RadioManager.instance.init();
-		}
-
-		if (OpenBlocks.Blocks.elevator != null) {
-			MinecraftForge.EVENT_BUS.register(new ElevatorMovementHandler());
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void attachPlayerRenderer() {
-		if (Config.tryHookPlayerRenderer) {
-			// Get current renderer and check that it's Mojangs
-			Render render = (Render)RenderManager.instance.entityRenderMap.get(EntityPlayer.class);
-			if (render.getClass().equals(net.minecraft.client.renderer.entity.RenderPlayer.class)) {
-				EntityPlayerRenderer playerRenderer = new EntityPlayerRenderer();
-				playerRenderer.setRenderManager(RenderManager.instance);
-				RenderManager.instance.entityRenderMap.put(EntityPlayer.class, playerRenderer);
-			}
-		}
+		new BlockRenderingValidator().verifyBlocks(OpenBlocks.Blocks.class);
 	}
 
 	@Override

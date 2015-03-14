@@ -26,4 +26,6 @@ public enum GuideShape {
 	public String getLocalizedName() {
 		return StatCollector.translateToLocal(unlocalizedName);
 	}
+
+	public static final GuideShape[] VALUES = values();
 }

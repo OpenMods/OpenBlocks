@@ -6,6 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
@@ -58,7 +59,8 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack != null && stack.getItem() instanceof ItemImaginary) {
-				Integer color = ItemUtils.getInt(stack, ItemImaginary.TAG_COLOR);
+				NBTTagCompound tag = ItemUtils.getItemTag(stack);
+				int color = tag.getInteger(ItemImaginary.TAG_COLOR);
 				return OpenBlocks.Items.crayonGlasses.createCrayonGlasses(color);
 			}
 		}

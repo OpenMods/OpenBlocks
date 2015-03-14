@@ -1,7 +1,11 @@
 package openblocks.integration;
 
 import openblocks.common.tileentity.TileEntityDonationStation;
-import openperipheral.api.*;
+import openperipheral.api.adapter.IPeripheralAdapter;
+import openperipheral.api.adapter.method.IMultiReturn;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
+import openperipheral.api.helpers.MultiReturn;
 
 public class AdapterDonationStation implements IPeripheralAdapter {
 
@@ -10,9 +14,14 @@ public class AdapterDonationStation implements IPeripheralAdapter {
 		return TileEntityDonationStation.class;
 	}
 
-	@LuaMethod(onTick = true, returnType = LuaType.STRING, description = "Find the mod name and mod authors")
+	@Override
+	public String getSourceId() {
+		return "openblocks_donation";
+	}
+
+	@ScriptCallable(returnTypes = ReturnType.STRING, description = "Find the mod name and mod authors")
 	public IMultiReturn getItemAuthor(final TileEntityDonationStation station) {
 		if (station.getInventory().getStackInSlot(0) == null) return null;
-		return OpenPeripheralAPI.wrap(station.getModName(), station.getModAuthors());
+		return MultiReturn.wrap(station.getModName(), station.getModAuthors());
 	}
 }

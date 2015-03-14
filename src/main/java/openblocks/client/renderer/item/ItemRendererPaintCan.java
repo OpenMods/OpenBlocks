@@ -30,25 +30,20 @@ public class ItemRendererPaintCan implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack itemstack, Object... data) {
-		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-
-		if (type != ItemRenderType.INVENTORY) {
-			GL11.glTranslated(0.5, 0.5, -0.5);
-		}
-		RenderBlocks renderer = null;
 		if (data.length > 0 && data[0] instanceof RenderBlocks) {
-			renderer = (RenderBlocks)data[0];
+			if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) GL11.glTranslated(+0.5, +0.5, +0.5);
+
+			RenderBlocks renderer = (RenderBlocks)data[0];
 			int color = ItemPaintCan.getColorFromStack(itemstack);
+
 			OpenBlocks.Blocks.paintCan.renderPass = 0;
-			GL11.glPushMatrix();
 			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF);
-			GL11.glPopMatrix();
+
 			OpenBlocks.Blocks.paintCan.renderPass = 1;
-			GL11.glPushMatrix();
 			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, color, secondPassEnabledSides);
-			GL11.glPopMatrix();
+
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 
 }

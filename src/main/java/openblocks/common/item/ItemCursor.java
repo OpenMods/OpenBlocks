@@ -9,11 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class ItemCursor extends Item {
 
 	public ItemCursor() {

@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockGuide.Icons;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -14,6 +16,8 @@ import openmods.utils.Coord;
 import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 
@@ -35,18 +39,29 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		}
 	};
 
+	public TileEntityGuideRenderer() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void onTextuteChange(TextureStitchEvent evt) {
+		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_BLOCKS) wrapper.reset();
+	}
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide)tileentity;
 
-		GL11.glPushMatrix();
-		GL11.glTranslated(x, y, z);
-		float scaleDelta = guide.getTimeSinceChange();
-		renderShape(guide.getShape(), guide.getColor(), scaleDelta);
-		if (scaleDelta < 1.0) {
-			renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
+		if (guide.shouldRender()) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y, z);
+			float scaleDelta = guide.getTimeSinceChange();
+			renderShape(guide.getShape(), guide.getColor(), scaleDelta);
+			if (scaleDelta < 1.0) {
+				renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
+			}
+			GL11.glPopMatrix();
 		}
-		GL11.glPopMatrix();
 	}
 
 	private void renderShape(Collection<Coord> shape, int color, float scale) {

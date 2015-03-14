@@ -10,25 +10,25 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 
-public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IHasGui, IExtendable, IInventoryProvider {
+public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourAwareTile, IHasGui, IInventoryProvider {
 
 	static final int BUFFER_SIZE = 9;
 
 	private boolean _redstoneSignal;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockPlacer", false, BUFFER_SIZE));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "blockPlacer", false, BUFFER_SIZE));
 
 	public void setRedstoneSignal(boolean redstoneSignal) {
 		if (redstoneSignal != _redstoneSignal) {
@@ -78,7 +78,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}

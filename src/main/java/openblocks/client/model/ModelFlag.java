@@ -2,7 +2,6 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 
 public class ModelFlag extends ModelBase {
 	// fields
@@ -20,13 +19,8 @@ public class ModelFlag extends ModelBase {
 		setRotation(pole, 0F, 0F, 0F);
 	}
 
-	/**
-	 * @param te
-	 * @param f
-	 */
-	public void render(TileEntity te, float f) {
-		float f5 = 0.0625F;
-		pole.render(f5);
+	public void render(float f) {
+		pole.render(0.0625F);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

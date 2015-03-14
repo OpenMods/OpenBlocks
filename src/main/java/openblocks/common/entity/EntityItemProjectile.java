@@ -15,7 +15,7 @@ import net.minecraftforge.event.entity.item.ItemExpireEvent;
 /**
  * Ugly EntityItem holder thingy with no air resistance. Because physics is hard
  * enough as it is
- * 
+ *
  */
 public class EntityItemProjectile extends EntityItem {
 

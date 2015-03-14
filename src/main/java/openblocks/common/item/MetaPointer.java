@@ -14,9 +14,9 @@ import openmods.utils.ItemUtils;
 
 /**
  * Pointer item is used for.. pointing
- * 
+ *
  * @author Mikee
- * 
+ *
  */
 public class MetaPointer extends MetaGeneric {
 

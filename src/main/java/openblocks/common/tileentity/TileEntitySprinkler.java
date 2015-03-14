@@ -17,25 +17,25 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.GenericFluidHandler;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
-import openmods.utils.InventoryUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IExtendable, IHasGui {
+public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui {
 
 	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
@@ -53,7 +53,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	public int ticks;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("sprinkler", true, 9) {
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "sprinkler", true, 9) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return itemstack != null && itemstack.isItemEqual(BONEMEAL);
@@ -110,27 +110,37 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		return true;
 	}
 
+	private static final double SPRAY_SIDE_SCATTER = Math.toRadians(25);
+
 	private void sprayParticles() {
 		if (tank.getFluidAmount() > 0) {
+			final ForgeDirection blockYawRotation = getRotation();
+			final double nozzleAngle = getSprayDirection();
+			final double sprayForwardVelocity = Math.sin(Math.toRadians(nozzleAngle * 25));
+
+			final double forwardVelocityX = sprayForwardVelocity * blockYawRotation.offsetZ / -2;
+			final double forwardVelocityZ = sprayForwardVelocity * blockYawRotation.offsetX / 2;
+
+			double outletPosition = -0.5;
+
 			for (int i = 0; i < 6; i++) {
-				float offset = (i - 2.5f) / 5f;
-				ForgeDirection rotation = getRotation();
+				final double spraySideVelocity = Math.sin(SPRAY_SIDE_SCATTER * (RANDOM.nextDouble() - 0.5));
 
-				float pitch = getSprayPitch();
-
-				double sinPitch = Math.sin(pitch) * ((rotation.offsetZ == 0)? 1 : -1);
-				double cosPitch = Math.abs(Math.cos(pitch));
+				final double sideVelocityX = spraySideVelocity * blockYawRotation.offsetX;
+				final double sideVelocityZ = spraySideVelocity * blockYawRotation.offsetZ;
 
 				Vec3 vec = Vec3.createVectorHelper(
-						cosPitch / 2.0,
-						sinPitch * rotation.offsetX / 2.0,
-						(worldObj.rand.nextDouble() - 0.5) * 2 * offset / 2.0);
+						forwardVelocityX + sideVelocityX,
+						0.35,
+						forwardVelocityZ + sideVelocityZ);
 
 				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
-						xCoord + 0.5 + (offset * 0.6 * rotation.offsetX),
-						yCoord,
-						zCoord + 0.5 + (offset * 0.6 * rotation.offsetZ),
+						xCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetX),
+						yCoord + 0.2,
+						zCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetZ),
 						0.3f, 0.7f, vec);
+
+				outletPosition += 0.2;
 			}
 		}
 	}
@@ -147,7 +157,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			// if there's nothing to drain, disable it
 
 			if (ticks % 1200 == 0) {
-				hasBonemeal = InventoryUtils.consumeInventoryItem(inventory, BONEMEAL);
+				hasBonemeal = ItemDistribution.consumeFirstInventoryItem(inventory, BONEMEAL);
 			}
 			if (ticks % 60 == 0) {
 				setEnabled(tank.drain(1, true) != null);
@@ -185,12 +195,13 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		}
 	}
 
-	public float getSprayPitch() {
-		return (float)(getSprayAngle() * Math.PI);
-	}
-
-	public float getSprayAngle() {
-		if (isEnabled()) { return MathHelper.sin(ticks * 0.02f) * (float)Math.PI * 0.035f; }
+	/**
+	 * Get spray direction of Sprinkler particles
+	 *
+	 * @return float from -1f to 1f indicating the direction, left to right of the particles
+	 */
+	public float getSprayDirection() {
+		if (isEnabled()) { return MathHelper.sin(ticks * 0.02f); }
 		return 0;
 	}
 

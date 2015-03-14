@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityLuggage;
+import openmods.utils.LazyValue;
 import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
@@ -13,7 +14,12 @@ import org.lwjgl.opengl.GL12;
 
 public class ItemRendererLuggage implements IItemRenderer {
 
-	private EntityLuggage luggage = new EntityLuggage(null);
+	private final LazyValue<EntityLuggage> luggage = new LazyValue<EntityLuggage>() {
+		@Override
+		protected EntityLuggage initialize() {
+			return new EntityLuggage(null);
+		}
+	};
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -30,6 +36,7 @@ public class ItemRendererLuggage implements IItemRenderer {
 		if (Minecraft.getMinecraft().theWorld != null) {
 			GL11.glPushMatrix();
 
+			EntityLuggage luggage = this.luggage.get();
 			luggage.worldObj = Minecraft.getMinecraft().theWorld;
 
 			GL11.glTranslatef(0.5f, 0, 0.5f);

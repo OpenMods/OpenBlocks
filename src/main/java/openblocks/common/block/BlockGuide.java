@@ -5,7 +5,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockGuide extends OpenBlock {
 
 	public static class Icons {
@@ -21,16 +23,6 @@ public class BlockGuide extends OpenBlock {
 	@Override
 	public boolean isOpaqueCube() {
 		return true;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean useTESRForInventory() {
-		return false;
 	}
 
 	@Override

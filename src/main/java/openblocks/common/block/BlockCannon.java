@@ -10,16 +10,12 @@ public class BlockCannon extends OpenBlock {
 	public BlockCannon() {
 		super(Material.rock);
 		setBlockBounds(0.3f, 0, 0.3f, 0.6f, 0.7f, 0.7f);
+		setRenderMode(RenderMode.TESR_ONLY);
 		/* I don't think this should rotate */
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 

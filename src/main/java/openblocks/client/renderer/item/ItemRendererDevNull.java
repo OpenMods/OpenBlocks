@@ -12,14 +12,18 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.item.ItemDevNull.Icons;
-import openmods.ItemInventory;
+import openmods.inventory.ItemInventory;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.TextureUtils;
 import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemRendererDevNull implements IItemRenderer {
 
@@ -74,9 +78,17 @@ public class ItemRendererDevNull implements IItemRenderer {
 			tes.draw();
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glFrontFace(GL11.GL_CCW);
-			GL11.glDisable(GL11.GL_CULL_FACE);
 		}
 	};
+
+	public ItemRendererDevNull() {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void onTextuteChange(TextureStitchEvent evt) {
+		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_ITEMS) cube.reset();
+	}
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -120,7 +132,7 @@ public class ItemRendererDevNull implements IItemRenderer {
 			GL11.glTranslated(0.5, 0.5, 0.5);
 			GL11.glScalef(0.8f, 0.8f, 0.8f);
 			Minecraft mc = Minecraft.getMinecraft();
-			RenderManager.instance.itemRenderer.renderItem(mc.thePlayer, containedStack, 0, type);
+			RenderManager.instance.itemRenderer.renderItem(mc.thePlayer, containedStack, 0, ItemRenderType.EQUIPPED);
 		}
 
 		GL11.glPopMatrix();

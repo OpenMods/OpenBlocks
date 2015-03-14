@@ -65,6 +65,7 @@ public class EntityEventHandler {
 			Set<Class<?>> blacklist = getBlacklist();
 			if (blacklist.contains(entity.getClass())) {
 				entity.setDead();
+				event.setCanceled(true);
 				return;
 			}
 		}
@@ -73,7 +74,7 @@ public class EntityEventHandler {
 		 * If the player hasn't been given a manual, we'll give him one! (or
 		 * throw it on the floor..)
 		 */
-		if (!event.world.isRemote && entity instanceof EntityPlayer) {
+		if (Config.spamInfoBook && !event.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)entity;
 			NBTTagCompound persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
 
@@ -84,14 +85,6 @@ public class EntityEventHandler {
 					BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, manual);
 				}
 				persistTag.setBoolean(GIVEN_MANUAL_TAG, true);
-			}
-			boolean shouldGiveChangelog = OpenBlocks.changeLog != null && !persistTag.getString(LATEST_CHANGELOG_TAG).equals(OpenBlocks.VERSION);
-			if (shouldGiveChangelog) {
-				ItemStack changeLog = OpenBlocks.changeLog.copy();
-				if (!player.inventory.addItemStackToInventory(changeLog)) {
-					BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, changeLog);
-				}
-				persistTag.setString(LATEST_CHANGELOG_TAG, OpenBlocks.VERSION);
 			}
 		}
 	}

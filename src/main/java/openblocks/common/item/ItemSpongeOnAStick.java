@@ -9,9 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class ItemSpongeOnAStick extends Item {
 
 	public ItemSpongeOnAStick() {

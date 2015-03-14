@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import openblocks.common.item.ItemImaginary;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 
@@ -32,6 +31,11 @@ public class BlockImaginary extends OpenBlock {
 
 	public static final SoundType drawingSounds = new SoundType("cloth", 0.5f, 1.0f) {
 		@Override
+		public String getBreakSound() {
+			return "openblocks:crayon.place";
+		}
+
+		@Override
 		public String func_150496_b() {
 			return "openblocks:crayon.place";
 		}
@@ -41,6 +45,7 @@ public class BlockImaginary extends OpenBlock {
 		super(Material.glass);
 		setHardness(0.3f);
 		stepSound = drawingSounds;
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -114,22 +119,12 @@ public class BlockImaginary extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return false;
-	}
-
-	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		return Lists.newArrayList();
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
-		if (te != null) {
-			int dmg = te.isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
-			return ItemImaginary.setupValues(te.color, new ItemStack(this, 1, dmg));
-		}
-		return null;
+	protected boolean suppressPickBlock() {
+		return true;
 	}
 }

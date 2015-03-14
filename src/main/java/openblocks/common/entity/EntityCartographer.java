@@ -57,7 +57,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		}
 
 		@Override
-		public void writeToStream(DataOutputStream output, boolean fullData) throws IOException {
+		public void writeToStream(DataOutputStream output) throws IOException {
 			ByteUtils.writeVLI(output, size);
 			bits.writeToStream(output);
 		}

@@ -1,22 +1,29 @@
 package openblocks.common.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
-import openmods.ItemInventory;
-import openmods.PlayerItemInventory;
+import openmods.infobook.BookDocumentation;
+import openmods.inventory.ItemInventory;
+import openmods.inventory.PlayerItemInventory;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.utils.InventoryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class ItemDevNull extends Item {
 
 	public static class Icons {
@@ -33,6 +40,32 @@ public class ItemDevNull extends Item {
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if (!world.isRemote) player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
 		return stack;
+	}
+
+	@Override
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int sideId, float hitX, float hitY, float hitZ) {
+		IInventory inventory = new ItemInventory(stack, 1);
+		ItemStack containedStack = inventory.getStackInSlot(0);
+		if (containedStack != null) {
+			Item item = containedStack.getItem();
+			if (item instanceof ItemBlock) {
+				Block placedBlock = ((ItemBlock)item).field_150939_a;
+				// logic based on ItemBlock.func_150936_a, so don't blame me for hardcoding
+				Block clickedBlock = world.getBlock(x, y, z);
+
+				if (clickedBlock == Blocks.snow_layer) sideId = 1; // UP
+				else if (!clickedBlock.isReplaceable(world, x, y, z)) {
+					ForgeDirection side = ForgeDirection.getOrientation(sideId);
+					x += side.offsetX;
+					y += side.offsetY;
+					z += side.offsetZ;
+				}
+
+				return !world.canPlaceEntityOnSide(placedBlock, x, y, z, false, sideId, null, stack);
+			}
+		}
+
+		return false;
 	}
 
 	@Override
@@ -73,7 +106,7 @@ public class ItemDevNull extends Item {
 					boolean isMatching = InventoryUtils.areItemAndTagEqual(pickedStack, containedStack);
 					if (isMatching) {
 						foundMatchingContainer = true;
-						InventoryUtils.tryInsertStack(inventory, 0, pickedStack, true);
+						ItemDistribution.tryInsertStack(inventory, 0, pickedStack, true);
 					}
 				}
 			}

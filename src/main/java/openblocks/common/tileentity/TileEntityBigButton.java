@@ -11,13 +11,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.container.ContainerBigButton;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
@@ -25,7 +25,7 @@ import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IExtendable, IInventoryProvider, ISyncListener {
+public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IInventoryProvider, ISyncListener {
 
 	private int tickCounter = 0;
 
@@ -35,7 +35,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	private SyncableFlags flags;
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("bigbutton", true, 1));
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "bigbutton", true, 1));
 
 	public TileEntityBigButton() {
 		syncMap.addUpdateListener(createRenderUpdateListener());

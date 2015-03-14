@@ -48,7 +48,7 @@ public class EntityMagnetRenderer extends Render {
 		GL11.glColor3f(1, 1, 1);
 		GL11.glPushMatrix();
 		GL11.glRotatef(yaw, 0, 1, 0);
-		GL11.glTranslated(x, y, z);
+		GL11.glTranslated(x, y + entity.height - 0.4f, z);
 		model.render(magnet, 0, 0, 0, 0, 0, 1.0f / 8.0f);
 		GL11.glPopMatrix();
 	}

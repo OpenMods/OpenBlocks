@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -8,24 +9,24 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.InventoryUtils;
 
-public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventoryProvider, IExtendable, IHasGui {
+public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventoryProvider, IHasGui {
 	static final int BUFFER_SIZE = 9;
 
 	private boolean _redstoneSignal;
 
-	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("itemDropper", false, 9));
+	private GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "itemDropper", false, 9));
 
 	public TileEntityItemDropper() {}
 
@@ -61,7 +62,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}

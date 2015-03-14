@@ -127,7 +127,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		armZ += armLength * MathHelper.sin(head);
 
 		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick) - RenderManager.renderPosX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick) - RenderManager.renderPosY + 0.35;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick) - RenderManager.renderPosY + magnet.height - 0.1;
 		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick) - RenderManager.renderPosZ;
 
 		GL11.glLineWidth(2);
@@ -162,7 +162,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		final double centerZ = interpolatePos(player.posZ, player.lastTickPosZ, partialTickTime);
 
 		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, partialTickTime) - centerX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialTickTime) - centerY + 0.35;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialTickTime) - centerY + magnet.height - 0.05;
 		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialTickTime) - centerZ;
 
 		drawLine(magnetX, magnetY, magnetZ, posX, 0.6, posZ);

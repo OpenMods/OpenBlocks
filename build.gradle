@@ -4,12 +4,6 @@
  */
 
 //================================================
-// Variables
-ext.mod_version = '1.3'
-ext.mc_ver = '1.7.10'
-ext.forge_ver = '10.13.0.1180'
-
-//================================================
 // Pre-execute
 
 buildscript {
@@ -42,6 +36,10 @@ repositories {
         name 'MinecraftS3'
         url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
     }
+    maven {
+        name "OpenMods"
+        url "http://repo.openmods.info/artifactory/openmods"
+    }
 }
 
 apply plugin: 'forge'
@@ -51,6 +49,8 @@ apply plugin: 'forge'
 
 dependencies {
     compile project(":OpenModsLib") // Load OpenModsLib from submodule
+
+    compile "openperipheral:OpenPeripheralCore-API:3.1:dev"
 }
 
 //================================================
@@ -111,10 +111,11 @@ ext.gitManifest = manifest {
 // Setup Forge plugin
 minecraft {
     version = mc_ver + "-" + forge_ver
-    assetDir = "eclipse/assets"
+    runDir = "eclipse/assets"
 
-    replaceIn "openblocks/OpenBlocks.java"
-    replace "@VERSION@", rootProject.mod_version
+    replaceIn 'openblocks/OpenBlocks.java'
+    replace '$VERSION$', mod_version
+    replace '$LIB-VERSION$', project(':OpenModsLib').mod_version
 }
 
 processResources {

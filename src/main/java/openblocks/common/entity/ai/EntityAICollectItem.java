@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
 import openblocks.common.entity.EntityLuggage;
-import openmods.utils.InventoryUtils;
+import openmods.inventory.legacy.ItemDistribution;
 
 public class EntityAICollectItem extends EntityAIBase {
 
@@ -78,7 +78,7 @@ public class EntityAICollectItem extends EntityAIBase {
 			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
 				int preEatSize = stack.stackSize;
-				InventoryUtils.insertItemIntoInventory(luggage.getInventory(), stack);
+				ItemDistribution.insertItemIntoInventory(luggage.getInventory(), stack);
 				// Check that the size changed
 				if (preEatSize != stack.stackSize) {
 					if (luggage.lastSound > 15) {

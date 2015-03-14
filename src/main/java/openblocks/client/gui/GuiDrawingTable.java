@@ -1,6 +1,8 @@
 package openblocks.client.gui;
 
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.rpc.IStencilCrafter;
@@ -19,7 +21,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
-		final IStencilCrafter rpcProxy = getContainer().getOwner().createRpcProxy(IStencilCrafter.class);
+		final IStencilCrafter rpcProxy = getContainer().getOwner().createClientRpcProxy(IStencilCrafter.class);
 
 		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), BaseComponent.TEXTURE_SHEET);
 		buttonLeft.setListener(new IMouseDownListener() {
@@ -60,6 +62,8 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		iconDisplay.setEnabled(inventorySlots.getSlot(0).getStack() != null && inventorySlots.getSlot(0).isItemValid(inventorySlots.getSlot(0).getStack()));
+		final Slot slot = inventorySlots.getSlot(0);
+		final ItemStack stack = slot.getStack();
+		iconDisplay.setEnabled(stack != null && slot.isItemValid(stack));
 	}
 }

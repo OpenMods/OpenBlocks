@@ -10,6 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityTarget;
+import openmods.block.BlockRotationMode;
 
 public class BlockTarget extends OpenBlock {
 
@@ -19,15 +20,11 @@ public class BlockTarget extends OpenBlock {
 		super(Material.rock);
 		setLightLevel(0.3f);
 		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 
@@ -46,11 +43,10 @@ public class BlockTarget extends OpenBlock {
 
 	public void onTargetHit(World world, int x, int y, int z, Vec3 entityPosition) {
 
-		if (world.isRemote) { return; }
+		if (world.isRemote) return;
 
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
+		final TileEntityTarget target = getTileEntity(world, x, y, z, TileEntityTarget.class);
+		if (target == null) return;
 
 		/**
 		 * onEntityCollidedWithBlock is called twice when the arrow is hit
@@ -59,9 +55,7 @@ public class BlockTarget extends OpenBlock {
 		 * care about the second one
 		 */
 
-		TileEntityTarget target = (TileEntityTarget)tile;
-
-		if (!target.isEnabled()) { return; }
+		if (!target.isEnabled()) return;
 
 		ForgeDirection rotation = target.getRotation();
 		ForgeDirection opposite = rotation.getOpposite();
@@ -70,19 +64,25 @@ public class BlockTarget extends OpenBlock {
 		double centerY = y + 0.55 + (opposite.offsetY * 0.45);
 		double centerZ = z + 0.5 + (opposite.offsetZ * 0.5);
 
-		if (opposite == ForgeDirection.NORTH
-				|| opposite == ForgeDirection.SOUTH) {
-			entityPosition.zCoord = centerZ;
-		} else if (opposite == ForgeDirection.EAST
-				|| opposite == ForgeDirection.WEST) {
-			entityPosition.xCoord = centerX;
+		switch (opposite) {
+			case NORTH:
+			case SOUTH:
+				entityPosition.zCoord = centerZ;
+				break;
+			case EAST:
+			case WEST:
+				entityPosition.xCoord = centerX;
+				break;
+			default:
+				break;
+
 		}
 
 		Vec3 bullseye = Vec3.createVectorHelper(centerX, centerY, centerZ);
 
 		double distance = entityPosition.distanceTo(bullseye);
 
-		target.setStrength(15 - ((int)Math.min(15, Math.max(0, Math.round(distance * 32)))));
+		target.setStrength(15 - Math.min(15, Math.max(0, (int)(distance * 32))));
 
 	}
 

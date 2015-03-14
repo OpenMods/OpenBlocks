@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,13 +25,13 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	// can't be added as new flag, since animation depends on it
 	private SyncableBoolean isLocked;
 	private SyncableInt trappedEntityId;
-	private int ticksSinceChange;
+	private int tickSinceOpened;
 
 	public TileEntityBearTrap() {
 		syncMap.addUpdateListener(new ISyncListener() {
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {
-				ticksSinceChange = 0;
+				if (changes.contains(flags) && !isShut()) tickSinceOpened = 0;
 			}
 		});
 	}
@@ -46,7 +47,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		ticksSinceChange++;
+		tickSinceOpened++;
 		final int entityId = trappedEntityId.get();
 		if (entityId != 0) immobilizeEntity(entityId);
 		if (!worldObj.isRemote) sync();
@@ -74,7 +75,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	public void onEntityCollided(Entity entity) {
 		if (!worldObj.isRemote) {
-			if (entity instanceof EntityCreature && !isLocked.get() && ticksSinceChange > OPENING_ANIMATION_TIME) {
+			if (entity instanceof EntityCreature && !isLocked.get() && tickSinceOpened > OPENING_ANIMATION_TIME) {
 				close(entity);
 			}
 		}
@@ -93,8 +94,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 		return e.myEntitySize.ordinal() + 1;
 	}
 
-	public int tickSinceChange() {
-		return ticksSinceChange;
+	public int ticksSinceOpened() {
+		return tickSinceOpened;
 	}
 
 	@Override
@@ -127,13 +128,11 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
-			int redstoneLevel = worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord);
-			boolean isLocked = redstoneLevel > 0;
+			boolean isLocked = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			this.isLocked.set(isLocked);
 			if (isLocked) open();
 		}
 	}
-
 }

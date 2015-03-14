@@ -2,6 +2,7 @@ achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Sorry, das ist einfach so passiert...
 stat.openblocks.bricksDropped=Fallen gelassene Ziegel
 
+openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Sei albern
 
 enchantment.openblocks.explosive=Instabil
@@ -69,7 +70,30 @@ openblocks.misc.selected_cannon=Kanone zum Zielen ausgewählt
 openblocks.misc.pointed_cannon=Kanone zielt nun auf %s, %s, %s
 openblocks.misc.change_mode=Wechsle zu %s-Modus
 openblocks.misc.change_size=Ändere Größe zu %sx%sx%s
+openblocks.misc.total_blocks=Insgesamt gezählte Blöcke: %d
 openblocks.misc.get_witched=Werde verhext!
+
+openblocks.misc.cant_restore=Das Inventar von Spieler %s kann nicht wiederhergestellt werden
+openblocks.misc.cant_store=Das Inventar von Spieler %s kann nicht gespeichert werden
+openblocks.misc.stored_inventory=Inventar des Spielers gespeichert in %s
+openblocks.misc.restored_inventory=Inventar von Spieler %s wiederhergestellt
+
+openblocks.misc.pedometer.tracking_reset=Tracking zurückgesetzt
+openblocks.misc.pedometer.tracking_started=Tracking gestartet
+
+openblocks.misc.pedometer.start_point=Startpunkt: %s
+openblocks.misc.pedometer.speed=Geschwindigkeit: %s
+openblocks.misc.pedometer.avg_speed=Durchschnittsgeschw.: %s
+openblocks.misc.pedometer.total_distance=Gesamt-Distanz: %s
+
+openblocks.misc.pedometer.straght_line_distance=Distanz in Luftlinie: %s
+openblocks.misc.pedometer.straigh_line_speed=Geschw. in Luftlinie: %s
+
+openblocks.misc.pedometer.last_check_distance=Distanz von letzter Prüfung: %s
+openblocks.misc.pedometer.last_check_speed=Letzter Geschw.-Test: %s
+openblocks.misc.pedometer.last_check_time=Zeit seit dem letzen Check: %d ticks
+
+openblocks.misc.pedometer.total_time=Gesamtdauer: %d ticks
 
 openblocks.misc.shape.sphere=Kugel
 openblocks.misc.shape.cylinder=Zylinder
@@ -277,7 +301,6 @@ item.openblocks.crane_magnet.name=Kranmagnet
 item.openblocks.beam.name=Balken
 item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
-
 item.openblocks.info_book.name=Welteroberung mit OpenBlocks
 item.openblocks.xpbucket.name=XP-Eimer
 item.openblocks.height_map.name=Höhenkarte
@@ -291,6 +314,7 @@ item.openblocks.tasty_clay.name=Leckerer Lehm
 item.openblocks.golden_eye.name=Goldenes Auge
 item.openblocks.pointer.name=Zeiger
 item.openblocks.tuned_crystal.name=Wellenkristall
+item.openblocks.pedometer.name=Pedometer
 
 item.openblocks.wallpaper.name=Poster
 
@@ -299,6 +323,6 @@ itemGroup.tabOpenBlocks=OpenBlocks
 entity.OpenBlocks.Luggage.name=Reisegepäck
 entity.OpenBlocks.Cartographer.name=Kartograph
 entity.OpenBlocks.Block.name=Schwebender Block
-entity.OpenBlocks.MiniMe.name=Mini-Ich
+entity.OpenBlocks.MiniMe.name=Mini-Me
 
 fluid.OpenBlocks.xpjuice=Flüssige XP

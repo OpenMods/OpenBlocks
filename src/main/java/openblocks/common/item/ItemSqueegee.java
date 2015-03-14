@@ -8,9 +8,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class ItemSqueegee extends Item {
 
 	public ItemSqueegee() {

@@ -33,7 +33,7 @@ public class MapDataManager {
 		public List<Integer> mapIds = Lists.newArrayList();
 
 		@Override
-		protected void readFromStream(DataInput input) throws IOException {
+		protected void readFromStream(DataInput input) {
 			int length = ByteUtils.readVLI(input);
 			for (int i = 0; i < length; i++) {
 				int id = ByteUtils.readVLI(input);
@@ -42,7 +42,7 @@ public class MapDataManager {
 		}
 
 		@Override
-		protected void writeToStream(DataOutput output) throws IOException {
+		protected void writeToStream(DataOutput output) {
 			ByteUtils.writeVLI(output, mapIds.size());
 			for (Integer id : mapIds)
 				ByteUtils.writeVLI(output, id);
@@ -82,7 +82,7 @@ public class MapDataManager {
 				if (map.isValid()) {
 					ByteUtils.writeVLI(output, e.getKey());
 					map.writeToStream(output);
-				} else Log.warn("Trying to propagate invalid map data %d", e.getKey());
+				} else Log.debug("Trying to propagate invalid map data %d", e.getKey());
 			}
 		}
 	}

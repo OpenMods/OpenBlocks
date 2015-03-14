@@ -6,6 +6,7 @@ import org.objectweb.asm.*;
 
 import cpw.mods.fml.relauncher.FMLRelaunchLog;
 
+@SuppressWarnings("deprecation")
 public class EntityPlayerVisitor extends ClassVisitor {
 
 	public static boolean IsInBedHookSuccess = false;

@@ -17,12 +17,14 @@ import openblocks.OpenBlocks;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openmods.OpenMods;
+import openmods.infobook.BookDocumentation;
 
 import com.google.common.collect.MapMaker;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation(customName = "crane_control")
 public class ItemCraneControl extends Item {
 
 	private IIcon iconDown;

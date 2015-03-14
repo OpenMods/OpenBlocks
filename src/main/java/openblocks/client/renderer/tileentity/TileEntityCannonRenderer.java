@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import openblocks.client.model.ModelCannon;
 import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.tileentity.TileEntityCannon;
@@ -37,9 +38,11 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glColor3f(0, 0, 0);
 			GL11.glBegin(GL11.GL_LINE_STRIP);
-			double motionX = cannon.motionX * cannon.currentSpeed;
-			double motionY = cannon.motionY * cannon.currentSpeed;
-			double motionZ = cannon.motionZ * cannon.currentSpeed;
+
+			final Vec3 motion = cannon.getMotion();
+			double motionX = motion.xCoord;
+			double motionY = motion.yCoord;
+			double motionZ = motion.zCoord;
 			float posX = 0f;
 			float posY = 0f;
 			float posZ = 0f;
