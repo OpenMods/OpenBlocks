@@ -38,7 +38,7 @@ repositories {
     }
     maven {
         name "OpenMods"
-        url "http://xn--oxe.xn--jxe.net/artifactory/openmods"
+        url "http://repo.openmods.info/artifactory/openmods"
     }
 }
 
@@ -50,7 +50,7 @@ apply plugin: 'forge'
 dependencies {
     compile project(":OpenModsLib") // Load OpenModsLib from submodule
 
-    compile "openperipheral:OpenPeripheralCore-API:3.0:dev"
+    compile "openperipheral:OpenPeripheralCore-API:3.1:dev"
 }
 
 //================================================
