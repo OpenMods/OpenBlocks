@@ -110,28 +110,37 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		return true;
 	}
 
+	private static final double SPRAY_SIDE_SCATTER = Math.toRadians(25);
+
 	private void sprayParticles() {
 		if (tank.getFluidAmount() > 0) {
-			for (int sprinklerOutletIndex = 0; sprinklerOutletIndex < 6; sprinklerOutletIndex++) {
-				float outletPosition = (sprinklerOutletIndex - 2.5f) / 5f;
-				ForgeDirection blockYawRotation = getRotation();
+			final ForgeDirection blockYawRotation = getRotation();
+			final double nozzleAngle = getSprayDirection();
+			final double sprayForwardVelocity = Math.sin(Math.toRadians(nozzleAngle * 25));
 
-				float sprayDirection = getSprayDirection();
+			final double forwardVelocityX = sprayForwardVelocity * blockYawRotation.offsetZ / -2;
+			final double forwardVelocityZ = sprayForwardVelocity * blockYawRotation.offsetX / 2;
 
-				double sprayRoll = Math.sin(Math.toRadians(sprayDirection * 30f));
-				double sprayPitchScatter = Math.sin(Math.toRadians(6 * (RANDOM.nextDouble() - 0.5)));
+			double outletPosition = -0.5;
+
+			for (int i = 0; i < 6; i++) {
+				final double spraySideVelocity = Math.sin(SPRAY_SIDE_SCATTER * (RANDOM.nextDouble() - 0.5));
+
+				final double sideVelocityX = spraySideVelocity * blockYawRotation.offsetX;
+				final double sideVelocityZ = spraySideVelocity * blockYawRotation.offsetZ;
+
 				Vec3 vec = Vec3.createVectorHelper(
-						sprayRoll * blockYawRotation.offsetZ / -2f
-								+ sprayPitchScatter * blockYawRotation.offsetX,
-						0.4f,
-						sprayRoll * blockYawRotation.offsetX / 2f
-								+ sprayPitchScatter * blockYawRotation.offsetZ);
+						forwardVelocityX + sideVelocityX,
+						0.35,
+						forwardVelocityZ + sideVelocityZ);
 
 				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
 						xCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetX),
 						yCoord + 0.2,
 						zCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetZ),
 						0.3f, 0.7f, vec);
+
+				outletPosition += 0.2;
 			}
 		}
 	}
