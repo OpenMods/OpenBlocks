@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.client.StencilSkyRenderer;
 import openblocks.common.block.BlockSky;
+import openmods.Log;
 import openmods.renderer.StencilRendererHandler;
 import openmods.stencil.StencilBitAllocation;
 import openmods.stencil.StencilPoolManager;
@@ -51,7 +52,12 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		StencilBitAllocation bit = StencilPoolManager.pool().acquire();
 
 		GL11.glNewList(displayListBase + 1, GL11.GL_COMPILE);
-		if (bit != null) cutHoleInWorld(bit.mask);
+		if (bit != null) {
+			Log.debug("Stencil bit %d allocated for skyblock rendering", bit.bit);
+			cutHoleInWorld(bit.mask);
+		} else {
+			Log.info("Failed to allocate stencil bit for skyblock rendering");
+		}
 		GL11.glEndList();
 
 		handler = bit != null? new StencilSkyRenderer(bit.mask) : StencilRendererHandler.DUMMY;
