@@ -2,11 +2,12 @@ package openblocks.common;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.List;
+import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,10 +15,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.api.GraveSpawnEvent;
 import openblocks.common.GameRuleManager.GameRule;
 import openblocks.common.PlayerInventoryStore.ExtrasFiller;
 import openblocks.common.tileentity.TileEntityGrave;
@@ -25,12 +28,14 @@ import openmods.Log;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.utils.BlockNotifyFlags;
+import openmods.utils.Coord;
 import openmods.utils.TagUtils;
 import openmods.world.DelayedActionTickHandler;
 
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.eventhandler.*;
@@ -38,8 +43,62 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class PlayerDeathHandler {
 
+	private static final Comparator<Coord> SEARCH_COMPARATOR = new Comparator<Coord>() {
+
+		private int coordSum(Coord c) {
+			return Math.abs(c.x) + Math.abs(c.y) + Math.abs(c.z);
+		}
+
+		private int coordMax(Coord c) {
+			return Math.max(Math.max(Math.abs(c.x), Math.abs(c.y)), Math.abs(c.z));
+		}
+
+		@Override
+		public int compare(Coord a, Coord b) {
+			// first order by Manhattan distance
+			int diff = coordSum(a) - coordSum(b);
+			if (diff != 0) return diff;
+
+			// then by distance from axis
+			return coordMax(b) - coordMax(a);
+		}
+	};
+
+	private static class SearchOrder implements Iterable<Coord> {
+		public final int size;
+
+		private final List<Coord> coords;
+
+		public SearchOrder(int size) {
+			this.size = size;
+
+			List<Coord> coords = Lists.newArrayList();
+
+			for (int x = -size; x <= size; x++)
+				for (int y = -size; y <= size; y++)
+					for (int z = -size; z <= size; z++)
+						coords.add(new Coord(x, y, z));
+
+			Collections.sort(coords, SEARCH_COMPARATOR);
+
+			this.coords = ImmutableList.copyOf(coords);
+		}
+
+		@Override
+		public Iterator<Coord> iterator() {
+			return coords.iterator();
+		}
+	}
+
+	private static SearchOrder searchOrder;
+
+	private static Iterable<Coord> getSearchOrder(int size) {
+		if (searchOrder == null || searchOrder.size != size) searchOrder = new SearchOrder(size);
+		return searchOrder;
+	}
+
 	private abstract static class GravePlacementChecker {
-		public boolean canPlaceGrave(World world, EntityPlayer player, int x, int y, int z) {
+		public boolean canPlace(World world, EntityPlayer player, int x, int y, int z) {
 			if (!world.blockExists(x, y, z)) return false;
 			if (!world.canMineBlock(player, x, y, z)) return false;
 
@@ -106,7 +165,10 @@ public class PlayerDeathHandler {
 		private boolean tryPlaceGrave(World world, final int x, final int y, final int z) {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.grave, 0, BlockNotifyFlags.ALL);
 			TileEntity tile = world.getTileEntity(x, y, z);
-			if (tile == null || !(tile instanceof TileEntityGrave)) return false;
+			if (tile == null || !(tile instanceof TileEntityGrave)) {
+				Log.warn("Failed to place grave @ %d,%d,%d: invalid tile entity: %s(%s)", x, y, z, tile, tile != null? tile.getClass() : "?");
+				return false;
+			}
 
 			TileEntityGrave grave = (TileEntityGrave)tile;
 
@@ -141,18 +203,57 @@ public class PlayerDeathHandler {
 			return true;
 		}
 
-		private boolean tryPlaceGrave(World world, EntityPlayer player, GravePlacementChecker checker) {
-			for (int distance = 0; distance < Config.graveSpawnRange / 2; distance++)
-				for (int checkX = posX - distance; checkX <= posX + distance; checkX++)
-					for (int checkY = posY - distance; checkY <= posY + distance; checkY++)
-						for (int checkZ = posZ - distance; checkZ <= posZ + distance; checkZ++)
-							if (checker.canPlaceGrave(world, player, checkX, checkY, checkZ) &&
-									tryPlaceGrave(world, checkX, checkY, checkZ)) {
-								Log.debug("Placing grave for player '%s' @ (%d,%d,%d)", stiffId, checkX, checkY, checkZ);
-								return true;
-							}
+		private boolean trySpawnGrave(EntityPlayer player, World world) {
+			final Coord location = findLocation(world, player);
 
-			return false;
+			GraveSpawnEvent evt = location == null
+					? new GraveSpawnEvent(player, loot, cause)
+					: new GraveSpawnEvent(player, location.x, location.y, location.z, loot, cause);
+
+			if (MinecraftForge.EVENT_BUS.post(evt) || !evt.hasLocation()) return false;
+
+			final int x = evt.getX();
+			final int y = evt.getY();
+			final int z = evt.getZ();
+
+			if (Config.graveBase && canSpawnBase(world, player, x, y - 1, z)) {
+				world.setBlock(x, y - 1, z, Blocks.dirt);
+			}
+
+			return tryPlaceGrave(world, evt.getX(), evt.getY(), evt.getZ());
+		}
+
+		private static boolean canSpawnBase(World world, EntityPlayer player, int x, int y, int z) {
+			return world.blockExists(x, y, z)
+					&& world.getBlock(x, y, z).isAir(world, x, y, z)
+					&& world.canMineBlock(player, x, y, z);
+		}
+
+		private Coord findLocation(World world, EntityPlayer player, GravePlacementChecker checker) {
+			final int correctedY = Config.voidGraves? Math.max(posY, 1) : posY;
+
+			final int searchSize = Config.graveSpawnRange / 2;
+
+			for (Coord c : getSearchOrder(searchSize)) {
+				final int x = posX + c.x;
+				final int y = correctedY + c.y;
+				final int z = posZ + c.z;
+				if (checker.canPlace(world, player, x, y, z)) return new Coord(x, y, z);
+			}
+
+			return null;
+		}
+
+		private Coord findLocation(World world, EntityPlayer player) {
+			Coord location = findLocation(world, player, POLITE);
+			if (location != null) return location;
+
+			if (Config.destructiveGraves) {
+				Log.warn("Failed to place grave for player %s, going berserk", stiffId);
+				return findLocation(world, player, BRUTAL);
+			}
+
+			return null;
 		}
 
 		@Override
@@ -169,15 +270,10 @@ public class PlayerDeathHandler {
 				return;
 			}
 
-			if (tryPlaceGrave(world, player, POLITE)) return;
-
-			if (Config.destructiveGraves) {
-				Log.warn("Failed to place grave for player %s, going berserk", stiffId);
-				if (tryPlaceGrave(world, player, BRUTAL)) return;
+			if (!trySpawnGrave(player, world)) {
+				for (EntityItem drop : loot)
+					world.spawnEntityInWorld(drop);
 			}
-
-			for (EntityItem drop : loot)
-				world.spawnEntityInWorld(drop);
 		}
 
 	}

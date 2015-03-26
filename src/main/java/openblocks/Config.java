@@ -171,6 +171,14 @@ public class Config {
 	@ConfigProperty(category = "graves", name = "specialActionFrequency", comment = "Frequency of special action on grave digging, 0..1")
 	public static double graveSpecialAction = 0.03;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "canSpawnBase", comment = "Can grave spawn single block of dirt when it has no block under?")
+	public static boolean graveBase = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "voidFix", comment = "Should grave try to spawn when player died by falling into void? (false -> legacy behaviour)")
+	public static boolean voidGraves = true;
+
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
 
