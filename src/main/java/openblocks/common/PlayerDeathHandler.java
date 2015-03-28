@@ -162,7 +162,7 @@ public class PlayerDeathHandler {
 			return dayComponent;
 		}
 
-		private boolean tryPlaceGrave(World world, final int x, final int y, final int z) {
+		private boolean tryPlaceGrave(World world, final int x, final int y, final int z, String gravestoneText, IChatComponent deathMessage) {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.grave, 0, BlockNotifyFlags.ALL);
 			TileEntity tile = world.getTileEntity(x, y, z);
 			if (tile == null || !(tile instanceof TileEntityGrave)) {
@@ -197,18 +197,19 @@ public class PlayerDeathHandler {
 				}
 			}
 
-			grave.setUsername(stiffId.getName());
+			grave.setUsername(gravestoneText);
 			grave.setLoot(loot);
-			grave.setDeathMessage(cause);
+			grave.setDeathMessage(deathMessage);
 			return true;
 		}
 
 		private boolean trySpawnGrave(EntityPlayer player, World world) {
 			final Coord location = findLocation(world, player);
 
+			String gravestoneText = stiffId.getName();
 			GraveSpawnEvent evt = location == null
-					? new GraveSpawnEvent(player, loot, cause)
-					: new GraveSpawnEvent(player, location.x, location.y, location.z, loot, cause);
+					? new GraveSpawnEvent(player, loot, gravestoneText, cause)
+					: new GraveSpawnEvent(player, location.x, location.y, location.z, loot, gravestoneText, cause);
 
 			if (MinecraftForge.EVENT_BUS.post(evt) || !evt.hasLocation()) return false;
 
@@ -220,7 +221,7 @@ public class PlayerDeathHandler {
 				world.setBlock(x, y - 1, z, Blocks.dirt);
 			}
 
-			return tryPlaceGrave(world, evt.getX(), evt.getY(), evt.getZ());
+			return tryPlaceGrave(world, evt.getX(), evt.getY(), evt.getZ(), evt.gravestoneText, evt.clickText);
 		}
 
 		private static boolean canSpawnBase(World world, EntityPlayer player, int x, int y, int z) {

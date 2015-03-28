@@ -13,7 +13,9 @@ public class GraveSpawnEvent extends PlayerEvent {
 
 	public List<EntityItem> loot;
 
-	public IChatComponent deathMessage;
+	public IChatComponent clickText;
+
+	public String gravestoneText;
 
 	private int x;
 
@@ -23,10 +25,11 @@ public class GraveSpawnEvent extends PlayerEvent {
 
 	private boolean hasLocation;
 
-	public GraveSpawnEvent(EntityPlayer player, int x, int y, int z, List<EntityItem> loot, IChatComponent deathMessage) {
+	public GraveSpawnEvent(EntityPlayer player, int x, int y, int z, List<EntityItem> loot, String gravestoneText, IChatComponent clickText) {
 		super(player);
 		this.loot = loot;
-		this.deathMessage = deathMessage;
+		this.gravestoneText = gravestoneText;
+		this.clickText = clickText;
 
 		this.hasLocation = true;
 		this.x = x;
@@ -34,10 +37,11 @@ public class GraveSpawnEvent extends PlayerEvent {
 		this.z = z;
 	}
 
-	public GraveSpawnEvent(EntityPlayer player, List<EntityItem> loot, IChatComponent deathMessage) {
+	public GraveSpawnEvent(EntityPlayer player, List<EntityItem> loot, String gravestoneText, IChatComponent clickText) {
 		super(player);
 		this.loot = loot;
-		this.deathMessage = deathMessage;
+		this.gravestoneText = gravestoneText;
+		this.clickText = clickText;
 
 		this.hasLocation = false;
 	}
