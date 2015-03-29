@@ -155,7 +155,7 @@ public class ItemSleepingBag extends ItemArmor {
 	}
 
 	private static boolean canPlayerSleep(EntityPlayer player, World world, int x, int y, int z) {
-		if (!world.isAirBlock(x, y, z) || !checkGroundCollision(world, x, y - 1, z)) {
+		if (!isNotSuffocating(world, x, y, z) || !isSolidEnough(world, x, y - 1, z)) {
 			player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.oh_no_ground"));
 			return false;
 		}
@@ -178,10 +178,14 @@ public class ItemSleepingBag extends ItemArmor {
 		return false;
 	}
 
-	private static boolean checkGroundCollision(World world, int x, int y, int z) {
+	private static boolean isNotSuffocating(World world, int x, int y, int z) {
+		return world.getBlock(x, y, z).getCollisionBoundingBoxFromPool(world, x, y, z) == null || world.isAirBlock(x, y, z);
+	}
+
+	private static boolean isSolidEnough(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 		AxisAlignedBB aabb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
-		if (aabb == null) return true;
+		if (aabb == null) return false;
 
 		double dx = aabb.maxX - aabb.minX;
 		double dy = aabb.maxY - aabb.minY;
