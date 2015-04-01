@@ -72,7 +72,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		invalidateMotion();
 
 		if (!worldObj.isRemote) {
-			if (worldObj.getWorldTime() % 20 == 0) {
+			if (worldObj.getTotalWorldTime() % 20 == 0) {
 				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
 					ItemStack stack = findStack();
 					if (stack != null) fireStack(stack);
