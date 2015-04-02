@@ -1,5 +1,42 @@
 [
     {
+        version : "1.4.0",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "Few blocks (guide, paint mixer) now store settings as items",
+                    "Graves now replay death cause when right clicked",
+                    "Graves can now spawn dirt block when in air",
+                    "Graves can be named as items",
+                    "Right clicking grave with shovel drops items without destroying",
+                    "This book now have keyboard controls"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Tanks should render much faster now",
+                    "This book crashing in some weird configurations",
+                    "Graves not spawning after player died in void",
+                    "Sprinklers visual glitches",
+                    "Objects picked by magnets now have proper collision boxes"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                    "Sleeping bags don't prevent players from sleeping in tall grass",
+                    "Graves are not available in creative inventory"
+                ]
+            }
+        ]
+    },
+    {
         version : "1.3.0",
         sections :
         [
