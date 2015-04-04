@@ -184,8 +184,8 @@ public class PlayerDeathHandler {
 							new ExtrasFiller() {
 								@Override
 								public void addExtras(NBTTagCompound meta) {
-									meta.setString("PlayerName", stiffId.getName());
-									meta.setString("PlayerUUID", stiffId.getId().toString());
+									meta.setString(PlayerInventoryStore.TAG_PLAYER_NAME, stiffId.getName());
+									meta.setString(PlayerInventoryStore.TAG_PLAYER_UUID, stiffId.getId().toString());
 									meta.setTag("GraveLocation", TagUtils.store(x, y, z));
 									meta.setTag("PlayerLocation", TagUtils.store(posX, posY, posZ));
 								}

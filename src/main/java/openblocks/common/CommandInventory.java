@@ -13,6 +13,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChunkCoordinates;
+import openblocks.api.InventoryEvent.SubInventory;
+import openblocks.common.PlayerInventoryStore.LoadedInventories;
 import openmods.Log;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
@@ -28,6 +30,8 @@ public class CommandInventory implements ICommand {
 	private static final String COMMAND_STORE = "store";
 
 	private static final String NAME = "ob_inventory";
+
+	private static final String ID_MAIN_INVENTORY = "main";
 
 	private static final List<String> SUB_COMMANDS = Lists.newArrayList(COMMAND_STORE, COMMAND_RESTORE, COMMAND_SPAWN);
 
@@ -45,8 +49,8 @@ public class CommandInventory implements ICommand {
 	public String getCommandUsage(ICommandSender icommandsender) {
 		return NAME + " store <player> OR " +
 				NAME + " restore <player> <file without 'inventory-' and '.dat'> OR" +
-				NAME + " spawn <file without 'inventory-' and '.dat'> OR " +
-				NAME + " spawn <file without 'inventory-' and '.dat'> <index of item>";
+				NAME + " spawn <file without 'inventory-' and '.dat'> [<sub_inventory OR '" + ID_MAIN_INVENTORY + "'>,  [<index of item>]]" +
+				NAME + " info <file without 'inventory-' and '.dat'>";
 	}
 
 	@Override
@@ -92,35 +96,40 @@ public class CommandInventory implements ICommand {
 				throw new CommandException("openblocks.misc.cant_store", playerName);
 			}
 		} else if (subCommand.equalsIgnoreCase(COMMAND_SPAWN)) {
-			if (args.length != 2 && args.length != 3) throw new SyntaxErrorException();
-			String id = args[1];
+			if (args.length != 2 && args.length != 3 && args.length != 4) throw new SyntaxErrorException();
+			final String id = args[1];
 
-			final IInventory inventory;
+			final String target = (args.length > 1)? args[2] : ID_MAIN_INVENTORY;
 
-			try {
-				inventory = PlayerInventoryStore.loadInventory(sender.getEntityWorld(), id);
-			} catch (Exception e) {
-				Log.warn(e, "Failed to restore inventory, file %s", id);
-				throw new CommandException("openblocks.misc.cant_restore_inventory");
-			}
-
-			if (inventory == null) throw new CommandException("openblocks.misc.cant_restore_inventory");
+			LoadedInventories loadedInventories = loadInventories(sender, id);
+			if (loadedInventories == null) throw new CommandException("openblocks.misc.cant_restore_inventory");
 
 			final List<ItemStack> toRestore;
-			if (args.length == 3) {
-				String item = args[2];
-				final ItemStack stack;
-				try {
-					int itemId = Integer.parseInt(item);
-					stack = inventory.getStackInSlot(itemId);
-				} catch (Exception t) {
-					throw new CommandException("openblocks.misc.invalid_index");
-				}
 
-				if (stack == null) throw new CommandException("openblocks.misc.empty_slot");
-				toRestore = Lists.newArrayList(stack);
+			if (ID_MAIN_INVENTORY.equals(target)) {
+				final IInventory inventory = loadedInventories.mainInventory;
+				if (inventory == null) throw new CommandException("openblocks.misc.cant_restore_inventory");
+
+				if (args.length == 4) {
+					final int item = getSlotId(args[3]);
+					final ItemStack stack = inventory.getStackInSlot(item);
+					if (stack == null) throw new CommandException("openblocks.misc.empty_slot");
+					toRestore = Lists.newArrayList(stack);
+				} else {
+					toRestore = InventoryUtils.getInventoryContents(inventory);
+				}
 			} else {
-				toRestore = InventoryUtils.getInventoryContents(inventory);
+				SubInventory inventory = loadedInventories.subInventories.get(target);
+				if (inventory == null) throw new CommandException("openblocks.misc.invalid_sub_inventory", target);
+
+				if (args.length == 4) {
+					final int item = getSlotId(args[3]);
+					final ItemStack stack = inventory.getItemStack(item);
+					if (stack == null) throw new CommandException("openblocks.misc.empty_slot");
+					toRestore = Lists.newArrayList(stack);
+				} else {
+					toRestore = Lists.newArrayList(inventory.asMap().values());
+				}
 			}
 
 			final ChunkCoordinates coords = sender.getPlayerCoordinates();
@@ -128,6 +137,23 @@ public class CommandInventory implements ICommand {
 				if (stack != null) BlockUtils.dropItemStackInWorld(sender.getEntityWorld(), coords.posX, coords.posY, coords.posZ, stack);
 
 		} else throw new SyntaxErrorException();
+	}
+
+	private static LoadedInventories loadInventories(ICommandSender sender, String id) {
+		try {
+			return PlayerInventoryStore.instance.loadInventories(sender.getEntityWorld(), id);
+		} catch (Exception e) {
+			Log.warn(e, "Failed to restore inventory, file %s", id);
+			throw new CommandException("openblocks.misc.cant_restore_inventory");
+		}
+	}
+
+	private static int getSlotId(String item) {
+		try {
+			return Integer.parseInt(item);
+		} catch (Exception t) {
+			throw new CommandException("openblocks.misc.invalid_index");
+		}
 	}
 
 	@Override
@@ -145,6 +171,19 @@ public class CommandInventory implements ICommand {
 
 		if (subCommand.equals(COMMAND_SPAWN)) {
 			if (args.length == 2) return PlayerInventoryStore.instance.getMatchedDumps(sender.getEntityWorld(), args[1]);
+
+			if (args.length == 3) {
+				final String fileId = args[1];
+				try {
+					LoadedInventories inventories = PlayerInventoryStore.instance.loadInventories(sender.getEntityWorld(), fileId);
+					if (inventories == null) return null;
+					List<String> result = Lists.newArrayList(ID_MAIN_INVENTORY);
+					result.addAll(inventories.subInventories.keySet());
+					return filterPrefixes(args[2], result);
+				} catch (Exception e) {
+					// just ignore, don't spam
+				}
+			}
 		} else {
 			if (args.length == 2) return fiterPlayerNames(args[1]);
 
