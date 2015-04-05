@@ -162,6 +162,13 @@ public class PlayerDeathHandler {
 			return dayComponent;
 		}
 
+		private void setCommonStoreInfo(NBTTagCompound meta, boolean placed) {
+			meta.setString(PlayerInventoryStore.TAG_PLAYER_NAME, stiffId.getName());
+			meta.setString(PlayerInventoryStore.TAG_PLAYER_UUID, stiffId.getId().toString());
+			meta.setTag("PlayerLocation", TagUtils.store(posX, posY, posZ));
+			meta.setBoolean("Placed", placed);
+		}
+
 		private boolean tryPlaceGrave(World world, final int x, final int y, final int z, String gravestoneText, IChatComponent deathMessage) {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.grave, 0, BlockNotifyFlags.ALL);
 			TileEntity tile = world.getTileEntity(x, y, z);
@@ -172,35 +179,30 @@ public class PlayerDeathHandler {
 
 			TileEntityGrave grave = (TileEntityGrave)tile;
 
-			IInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
-			for (EntityItem entityItem : this.loot) {
-				ItemStack stack = entityItem.getEntityItem();
-				if (stack != null) ItemDistribution.insertItemIntoInventory(loot, stack.copy());
-			}
+			IInventory loot = getLoot();
 
-			if (Config.backupGraves) {
-				try {
-					File backup = PlayerInventoryStore.instance.storeInventory(loot, stiffId.getName(), "grave", world,
-							new ExtrasFiller() {
-								@Override
-								public void addExtras(NBTTagCompound meta) {
-									meta.setString(PlayerInventoryStore.TAG_PLAYER_NAME, stiffId.getName());
-									meta.setString(PlayerInventoryStore.TAG_PLAYER_UUID, stiffId.getId().toString());
-									meta.setTag("GraveLocation", TagUtils.store(x, y, z));
-									meta.setTag("PlayerLocation", TagUtils.store(posX, posY, posZ));
-								}
-							});
+			if (Config.backupGraves) backupGrave(world, loot, new ExtrasFiller() {
+				@Override
+				public void addExtras(NBTTagCompound meta) {
+					setCommonStoreInfo(meta, true);
+					meta.setTag("GraveLocation", TagUtils.store(x, y, z));
 
-					Log.info("Grave backup for player %s saved to %s", stiffId, backup);
-				} catch (Throwable t) {
-					Log.warn("Failed to store grave backup for player %s", stiffId);
 				}
-			}
+			});
 
 			grave.setUsername(gravestoneText);
 			grave.setLoot(loot);
 			grave.setDeathMessage(deathMessage);
 			return true;
+		}
+
+		protected IInventory getLoot() {
+			IInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
+			for (EntityItem entityItem : this.loot) {
+				ItemStack stack = entityItem.getEntityItem();
+				if (stack != null) ItemDistribution.insertItemIntoInventory(loot, stack.copy());
+			}
+			return loot;
 		}
 
 		private boolean trySpawnGrave(EntityPlayer player, World world) {
@@ -211,11 +213,21 @@ public class PlayerDeathHandler {
 					? new GraveSpawnEvent(player, loot, gravestoneText, cause)
 					: new GraveSpawnEvent(player, location.x, location.y, location.z, loot, gravestoneText, cause);
 
-			if (MinecraftForge.EVENT_BUS.post(evt) || !evt.hasLocation()) return false;
+			if (MinecraftForge.EVENT_BUS.post(evt)) {
+				Log.info("Grave event for player %s cancelled, no grave will spawn", stiffId);
+				return false;
+			}
+
+			if (!evt.hasLocation()) {
+				Log.warn("No location for grave found, no grave will spawn", stiffId);
+				return false;
+			}
 
 			final int x = evt.getX();
 			final int y = evt.getY();
 			final int z = evt.getZ();
+
+			Log.debug("Grave for %s will be spawned at (%d,%d,%d)", stiffId, x, y, z);
 
 			if (Config.graveBase && canSpawnBase(world, player, x, y - 1, z)) {
 				world.setBlock(x, y - 1, z, Blocks.dirt);
@@ -257,6 +269,15 @@ public class PlayerDeathHandler {
 			return null;
 		}
 
+		private void backupGrave(World world, IInventory loot, ExtrasFiller filler) {
+			try {
+				File backup = PlayerInventoryStore.instance.storeInventory(loot, stiffId.getName(), "grave", world, filler);
+				Log.debug("Grave backup for player %s saved to %s", stiffId, backup);
+			} catch (Throwable t) {
+				Log.warn("Failed to store grave backup for player %s", stiffId);
+			}
+		}
+
 		@Override
 		public void run() {
 			EntityPlayer player = exPlayer.get();
@@ -272,14 +293,23 @@ public class PlayerDeathHandler {
 			}
 
 			if (!trySpawnGrave(player, world)) {
+				if (Config.backupGraves) {
+					IInventory loot = getLoot();
+					backupGrave(world, loot, new ExtrasFiller() {
+						@Override
+						public void addExtras(NBTTagCompound meta) {
+							setCommonStoreInfo(meta, false);
+						}
+					});
+				}
+
 				for (EntityItem drop : loot)
 					world.spawnEntityInWorld(drop);
 			}
 		}
-
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOW)
+	@SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
 	public void onPlayerDrops(PlayerDropsEvent event) {
 		World world = event.entityPlayer.worldObj;
 		if (world.isRemote) return;
@@ -294,13 +324,18 @@ public class PlayerDeathHandler {
 		}
 
 		if (player instanceof FakePlayer) {
-			Log.debug("'%s' (%s) is a fake player, ignoring", player, player.getClass());
+			Log.debug("'%s' (%s) is a fake player, grave will not be spawned", player, player.getClass());
+			return;
+		}
+
+		if (event.isCanceled()) {
+			Log.warn("Event for player '%s' cancelled, grave will not be spawned", player);
 			return;
 		}
 
 		final List<EntityItem> drops = event.drops;
 		if (drops.isEmpty()) {
-			Log.debug("No drops from player '%s'", player);
+			Log.warn("No drops from player '%s, grave will not be spawned'", player);
 			return;
 		}
 
@@ -311,7 +346,7 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		Log.debug("Scheduling grave placement for player '%s':'%s' with %d items", player, player.getGameProfile(), drops.size());
+		Log.debug("Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), drops.size());
 
 		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, drops));
 		drops.clear();
