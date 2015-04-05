@@ -111,7 +111,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	}
 
 	@Asynchronous
-	@ScriptCallable(returnTypes = ReturnType.NUMBER, description = "Get height and color of point on map")
+	@ScriptCallable(returnTypes = { ReturnType.NUMBER, ReturnType.NUMBER }, description = "Get height and color of point on map")
 	public IMultiReturn getPoint(TileEntityProjector projector,
 			@Arg(name = "row", description = "Map row (0..63)") int row,
 			@Arg(name = "column", description = "Map column (0..63)") int column,

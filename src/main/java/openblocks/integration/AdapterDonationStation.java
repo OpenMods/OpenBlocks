@@ -19,7 +19,7 @@ public class AdapterDonationStation implements IPeripheralAdapter {
 		return "openblocks_donation";
 	}
 
-	@ScriptCallable(returnTypes = ReturnType.STRING, description = "Find the mod name and mod authors")
+	@ScriptCallable(returnTypes = { ReturnType.STRING, ReturnType.STRING }, description = "Find the mod name and mod authors")
 	public IMultiReturn getItemAuthor(final TileEntityDonationStation station) {
 		if (station.getInventory().getStackInSlot(0) == null) return null;
 		return MultiReturn.wrap(station.getModName(), station.getModAuthors());
