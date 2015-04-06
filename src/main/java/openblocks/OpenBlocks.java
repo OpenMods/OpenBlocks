@@ -316,6 +316,8 @@ public class OpenBlocks {
 
 	public static final Achievement brickAchievement = new Achievement("openblocks.oops", "openblocks.droppedBrick", 13, 13, net.minecraft.init.Items.brick, null).registerStat();
 
+	public static final Achievement stackAchievement = new Achievement("openblocks.tma2", "openblocks.stackOverflow", -13, 13, net.minecraft.init.Items.nether_star, null).registerStat();
+
 	public static final StatBase brickStat = new StatBasic("openblocks.dropped",
 			new ChatComponentTranslation("stat.openblocks.bricksDropped"),
 			StatBase.simpleStatType).registerStat();

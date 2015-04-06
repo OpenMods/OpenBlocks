@@ -1,6 +1,8 @@
 achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Sorry, it just happened...
 stat.openblocks.bricksDropped=Bricks dropped
+achievement.openblocks.stackOverflow=Stack Overflow
+achievement.openblocks.stackOverflow.desc=It's full of stars!
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Be silly

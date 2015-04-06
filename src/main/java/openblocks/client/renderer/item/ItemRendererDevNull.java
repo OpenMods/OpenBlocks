@@ -14,6 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import openblocks.common.item.ItemDevNull;
 import openblocks.common.item.ItemDevNull.Icons;
 import openmods.inventory.ItemInventory;
 import openmods.renderer.DisplayListWrapper;
@@ -28,6 +29,25 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 public class ItemRendererDevNull implements IItemRenderer {
 
 	protected static RenderItem itemRenderer = new RenderItem();
+
+	private static class Counter {
+		private int value;
+
+		public int enter() {
+			return ++value;
+		}
+
+		public void exit() {
+			--value;
+		}
+	}
+
+	private final ThreadLocal<Counter> counter = new ThreadLocal<Counter>() {
+		@Override
+		protected Counter initialValue() {
+			return new Counter();
+		}
+	};
 
 	private DisplayListWrapper cube = new DisplayListWrapper() {
 
@@ -104,12 +124,26 @@ public class ItemRendererDevNull implements IItemRenderer {
 	public void renderItem(ItemRenderType type, ItemStack containerStack, Object... data) {
 		if (data.length == 0 || !(data[0] instanceof RenderBlocks)) { return; }
 
-		ItemInventory inv = new ItemInventory(containerStack, 1);
-		ItemStack containedStack = inv.getStackInSlot(0);
+		final Counter counter = this.counter.get();
+		if (counter.enter() < ItemDevNull.STACK_LIMIT) {
+			ItemInventory inv = new ItemInventory(containerStack, 1);
+			ItemStack containedStack = inv.getStackInSlot(0);
 
-		if (type == ItemRenderType.INVENTORY) renderInventoryStack(containerStack, containedStack);
-		else renderInHandStack(type, containerStack, containedStack);
+			if (type == ItemRenderType.INVENTORY) renderInventoryStack(containerStack, containedStack);
+			else renderInHandStack(type, containerStack, containedStack);
+		} else {
+			if (type == ItemRenderType.INVENTORY) renderOverload();
+		}
 
+		counter.exit();
+	}
+
+	private static void renderOverload() {
+		RenderUtils.disableLightmap();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		TextureUtils.bindDefaultItemsTexture();
+		itemRenderer.renderIcon(0, 0, Icons.iconOverload, 16, 16);
 	}
 
 	protected void renderInHandStack(ItemRenderType type, ItemStack containerStack, ItemStack containedStack) {
@@ -143,14 +177,12 @@ public class ItemRendererDevNull implements IItemRenderer {
 		TextureManager textureManager = mc.getTextureManager();
 		FontRenderer fontRenderer = RenderManager.instance.getFontRenderer();
 
-		GL11.glPushMatrix();
 		RenderUtils.disableLightmap();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 
-		IIcon backgroundIcon = Icons.iconTransparent;
 		TextureUtils.bindDefaultItemsTexture();
-		itemRenderer.renderIcon(0, 0, backgroundIcon, 16, 16);
+		itemRenderer.renderIcon(0, 0, Icons.iconTransparent, 16, 16);
 
 		if (fontRenderer != null && containedStack != null) {
 			GL11.glPushMatrix();
@@ -161,7 +193,5 @@ public class ItemRendererDevNull implements IItemRenderer {
 			final String sizeToRender = (containedStack.stackSize > 1)? Integer.toString(containedStack.stackSize) : "";
 			itemRenderer.renderItemOverlayIntoGUI(fontRenderer, textureManager, containedStack, 0, 0, sizeToRender);
 		}
-
-		GL11.glPopMatrix();
 	}
 }

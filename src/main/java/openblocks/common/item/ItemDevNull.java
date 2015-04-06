@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
+import openmods.Log;
 import openmods.infobook.BookDocumentation;
 import openmods.inventory.ItemInventory;
 import openmods.inventory.PlayerItemInventory;
@@ -29,6 +30,40 @@ public class ItemDevNull extends Item {
 	public static class Icons {
 		public static IIcon iconFull;
 		public static IIcon iconTransparent;
+		public static IIcon iconOverload;
+	}
+
+	public static final int STACK_LIMIT = 5;
+
+	public static class DevNullInventory extends PlayerItemInventory {
+
+		private final EntityPlayer player;
+
+		public DevNullInventory(EntityPlayer player) {
+			super(player, 1);
+			this.player = player;
+		}
+
+		@Override
+		public void onInventoryChanged(int slotNumber) {
+			super.onInventoryChanged(slotNumber);
+			if (!player.worldObj.isRemote && slotNumber == 0) {
+				ItemStack stack = getStackInSlot(0);
+				checkStack(stack, 1);
+			}
+		}
+
+		private void checkStack(ItemStack stack, int count) {
+			if (stack == null) return;
+			Log.info("%s", count);
+			if (++count > STACK_LIMIT) {
+				Log.info("WOW");
+				player.triggerAchievement(OpenBlocks.stackAchievement);
+			} else if (stack.getItem() instanceof ItemDevNull) {
+				final ItemStack innerStack = new ItemInventory(stack, 1).getStackInSlot(0);
+				checkStack(innerStack, count);
+			}
+		}
 	}
 
 	public ItemDevNull() {
@@ -120,5 +155,6 @@ public class ItemDevNull extends Item {
 	public void registerIcons(IIconRegister register) {
 		Icons.iconTransparent = itemIcon = register.registerIcon("openblocks:devnull");
 		Icons.iconFull = register.registerIcon("openblocks:devfull");
+		Icons.iconOverload = register.registerIcon("openblocks:devzerooverzero");
 	}
 }

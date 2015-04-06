@@ -8,8 +8,8 @@ import openblocks.client.gui.GuiLuggage;
 import openblocks.common.container.ContainerDevNull;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
+import openblocks.common.item.ItemDevNull;
 import openmods.Log;
-import openmods.inventory.PlayerItemInventory;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class OpenBlocksGuiHandler implements IGuiHandler {
@@ -22,7 +22,7 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 	}
 
 	private static ContainerDevNull createDevNullContainer(EntityPlayer player) {
-		return new ContainerDevNull(player.inventory, new PlayerItemInventory(player, 1));
+		return new ContainerDevNull(player.inventory, new ItemDevNull.DevNullInventory(player));
 	}
 
 	private static ContainerLuggage createLuggageContainer(EntityPlayer player, World world, int entityId) {
