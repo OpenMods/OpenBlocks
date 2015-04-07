@@ -1,5 +1,7 @@
 package openblocks.common.block;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -39,11 +41,19 @@ public class BlockSky extends OpenBlock {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		if (!world.isRemote) {
-			int meta = world.getBlockMetadata(x, y, z);
-			int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
-			int isInverted = meta & 1;
-			world.setBlockMetadataWithNotify(x, y, z, isPowered | isInverted, BlockNotifyFlags.ALL);
+			final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
+			final int isActive = world.getBlockMetadata(x, y, z) & 2;
+
+			if (isPowered != isActive) world.scheduleBlockUpdate(x, y, z, this, 1);
 		}
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random random) {
+		final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
+		final int isInverted = world.getBlockMetadata(x, y, z) & 1;
+
+		world.setBlockMetadataWithNotify(x, y, z, isPowered | isInverted, BlockNotifyFlags.ALL);
 	}
 
 	public static boolean isActive(int meta) {
