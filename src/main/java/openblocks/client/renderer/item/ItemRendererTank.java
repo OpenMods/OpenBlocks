@@ -8,8 +8,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import openblocks.client.renderer.block.BlockTankRenderer;
 import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
+import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
 import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTank.ITankRenderData;
 import openmods.utils.Diagonal;
 
 import org.lwjgl.opengl.GL11;
@@ -40,8 +40,8 @@ public class ItemRendererTank implements IItemRenderer {
 		if (tag != null && tag.hasKey("tank")) {
 			final FluidStack stack = readFluid(tag);
 			if (stack != null) {
-				final float height = tank.getFluidAmount() / tank.getCapacity();
-				TileEntityTankRenderer.renderFluid(new ITankRenderData() {
+				final float height = (float)tank.getFluidAmount() / tank.getCapacity();
+				TileEntityTankRenderer.renderFluid(new ITankRenderFluidData() {
 					@Override
 					public boolean shouldRenderFluidWall(ForgeDirection side) {
 						return true;

@@ -11,8 +11,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
 import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTank.ITankRenderData;
 import openmods.utils.Diagonal;
 import openmods.utils.TextureUtils;
 
@@ -28,7 +28,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		if (tankTile.isInvalid()) return;
 
-		ITankRenderData data = tankTile.getRenderData();
+		ITankRenderFluidData data = tankTile.getRenderFluidData();
 
 		if (data.hasFluid()) {
 			bindTexture(TextureMap.locationBlocksTexture);
@@ -44,7 +44,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		}
 	}
 
-	public static void renderFluid(ITankRenderData data, float time) {
+	public static void renderFluid(ITankRenderFluidData data, float time) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glColor4f(1, 1, 1, 1);
 		FluidStack fluidStack = data.getFluid();
