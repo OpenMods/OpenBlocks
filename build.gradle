@@ -116,6 +116,7 @@ minecraft {
     replaceIn 'openblocks/OpenBlocks.java'
     replace '$VERSION$', mod_version
     replace '$LIB-VERSION$', project(':OpenModsLib').mod_version
+    replace '$NEXT-LIB-VERSION$', project(':OpenModsLib').next_mod_version
 }
 
 processResources {
