@@ -35,11 +35,15 @@ public class Config {
 	public static int elevatorTravelDistance = 20;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "dropblock", name = "ignoreAllBlocks", comment = "Disable limit of blocks between elevators (equivalent to maxPassThrough = infinity)")
+	public static boolean elevatorIgnoreBlocks = false;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "ignoreHalfBlocks", comment = "The elevator will ignore half blocks when counting the blocks it can pass through")
 	public static boolean elevatorIgnoreHalfBlocks = false;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "dropblock", name = "maxPassThrough", comment = "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this")
+	@ConfigProperty(category = "dropblock", name = "maxPassThrough", comment = "The maximum amount of blocks the elevator can pass through before the teleport fails")
 	public static int elevatorMaxBlockPassCount = 4;
 
 	@OnLineModifiable

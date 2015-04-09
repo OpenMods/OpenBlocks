@@ -60,18 +60,20 @@ public class ElevatorActionHandler {
 				if (otherColor == thisColor && canTeleportPlayer(player, world, x, y + 1, z)) return y;
 			}
 
-			ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
-			switch (action) {
-				case ABORT:
-					return -1;
-				case IGNORE:
-					continue;
-				case INCREMENT:
-				default:
-					break;
-			}
+			if (!Config.elevatorIgnoreBlocks) {
+				ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
+				switch (action) {
+					case ABORT:
+						return -1;
+					case IGNORE:
+						continue;
+					case INCREMENT:
+					default:
+						break;
+				}
 
-			if (++blocksInTheWay > Config.elevatorMaxBlockPassCount) break;
+				if (++blocksInTheWay > Config.elevatorMaxBlockPassCount) break;
+			}
 		}
 
 		return -1;
