@@ -37,6 +37,8 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			// it just looks broken with blending
 			// GL11.glEnable(GL11.GL_BLEND);
 			// OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+			// I just can't get it right
+			GL11.glDisable(GL11.GL_BLEND);
 			float time = te.getWorldObj().getTotalWorldTime() + f;
 			renderFluid(data, time);
 			// GL11.glDisable(GL11.GL_BLEND);
