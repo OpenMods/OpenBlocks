@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
 import openmods.api.IHasGui;
@@ -32,14 +33,13 @@ import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.EnchantmentUtils;
 import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
 public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots> {
 
-	public static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
+	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(LiquidXpUtils.XP_PER_BOTTLE);
 	public static final int PROGRESS_TICKS = 40;
 
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);

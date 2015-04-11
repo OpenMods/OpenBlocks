@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityItemProjectile;
 import openmods.OpenMods;
@@ -42,7 +43,7 @@ import com.google.common.collect.Lists;
 
 public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, IEntitySelector {
 
-	public static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
+	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
 	private SyncableTank tank;
 	public SyncableSides xpOutputs;
@@ -209,7 +210,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 				}
 			} else if (entity instanceof EntityXPOrb) {
 				if (tank.getSpace() > 0) {
-					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, EnchantmentUtils.XPToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
+					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, LiquidXpUtils.xpToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
 					tank.fill(newFluid, true);
 					entity.setDead();
 				}

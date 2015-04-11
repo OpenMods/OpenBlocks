@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
 import openmods.api.IHasGui;
@@ -37,7 +38,7 @@ import openmods.utils.bitmap.*;
 public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots> {
 
 	protected static final int TOTAL_COOLDOWN = 40;
-	public static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(45);
+	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(45);
 
 	protected int cooldown = 0;
 
@@ -141,7 +142,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		if (output != null) {
 			int levelCost = helper.getLevelCost();
 			int xpCost = EnchantmentUtils.getExperienceForLevel(levelCost);
-			int liquidXpCost = EnchantmentUtils.XPToLiquidRatio(xpCost);
+			int liquidXpCost = LiquidXpUtils.xpToLiquidRatio(xpCost);
 
 			FluidStack drained = tank.drain(liquidXpCost, false);
 

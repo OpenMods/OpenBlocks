@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.*;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.tank.*;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.item.ItemTankBlock;
 import openmods.api.*;
 import openmods.include.IncludeInterface;
@@ -215,13 +216,13 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			int nextLevelXP = EnchantmentUtils.getExperienceForLevel(player.experienceLevel + 1);
 			int requiredXP = nextLevelXP - currentXP;
 
-			int requiredXPJuice = EnchantmentUtils.XPToLiquidRatio(requiredXP);
+			int requiredXPJuice = LiquidXpUtils.xpToLiquidRatio(requiredXP);
 
 			FluidStack drained = drain(direction, requiredXPJuice, false);
 			if (drained != null) {
-				int xp = EnchantmentUtils.liquidToXPRatio(drained.amount);
+				int xp = LiquidXpUtils.liquidToXpRatio(drained.amount);
 				if (xp > 0) {
-					int actualDrain = EnchantmentUtils.XPToLiquidRatio(xp);
+					int actualDrain = LiquidXpUtils.xpToLiquidRatio(xp);
 					EnchantmentUtils.addPlayerXP(player, xp);
 					drain(direction, actualDrain, true);
 					return true;

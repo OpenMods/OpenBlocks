@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
@@ -35,7 +36,7 @@ import openmods.utils.bitmap.*;
 
 public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback {
 
-	public static final int TANK_CAPACITY = EnchantmentUtils.getLiquidForLevel(30);
+	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(30);
 
 	public static enum Slots {
 		input,
@@ -123,7 +124,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 			if (hasStack(Slots.input)
 					&& inventory.isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input))
 					&& !hasStack(Slots.output)) {
-				int xpRequired = EnchantmentUtils.getLiquidForLevel(targetLevel.get());
+				int xpRequired = LiquidXpUtils.getLiquidForLevel(targetLevel.get());
 				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
 					float power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
 					int enchantability = EnchantmentUtils.calcEnchantability(getStack(Slots.input), (int)power, true);

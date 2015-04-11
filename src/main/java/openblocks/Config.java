@@ -23,6 +23,7 @@ import openblocks.common.TrophyHandler;
 import openblocks.common.item.*;
 import openblocks.common.recipe.*;
 import openblocks.enchantments.*;
+import openmods.Log;
 import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
 import openmods.utils.ColorUtils;
@@ -268,6 +269,9 @@ public class Config {
 
 	@ConfigProperty(category = "features", name = "xpFluidId", comment = "Id of liquid XP fluid (WARNING: only for users who know what they are doing - changing this id can break worlds")
 	public static String xpFluidId = "xpjuice";
+
+	@ConfigProperty(category = "features", name = "xpToLiquidRatio", comment = "Storage in mB needed to store single XP point")
+	public static int xpToLiquidRatio = 20;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "guide", name = "redstoneSensitivity", comment = "How builder guide should react to redstone. 0 - not sensitive, 1 - powered == on, -1 - inverted")
@@ -585,8 +589,10 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Items.redstone, 'c', Items.clock));
 		}
 
-		OpenBlocks.Fluids.xpJuice = new Fluid(xpFluidId).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
-		if (!FluidRegistry.registerFluid(OpenBlocks.Fluids.xpJuice)) throw new IllegalStateException(String.format("Can't register fluid '%s', config change may be needed", xpFluidId));
+		Fluid liquidXp = new Fluid(xpFluidId).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		if (!FluidRegistry.registerFluid(liquidXp)) Log.info("Other mod registered '%s' fluid, OpenBlocks will use that", xpFluidId);
+
+		OpenBlocks.Fluids.xpJuice = FluidRegistry.getFluid(xpFluidId);
 
 		if (OpenBlocks.Items.filledBucket != null) {
 			MetasBucket.registerItems();

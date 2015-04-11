@@ -8,13 +8,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import openblocks.OpenBlocks;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.entity.EntityXPOrbNoFly;
 import openmods.OpenMods;
 import openmods.api.INeighbourAwareTile;
 import openmods.liquids.GenericTank;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.EnchantmentUtils;
 
 public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile {
 
@@ -49,8 +49,8 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 				if (amountInTank > 0) {
 
-					int xpInTank = EnchantmentUtils.liquidToXPRatio(amountInTank);
-					int drainable = EnchantmentUtils.XPToLiquidRatio(xpInTank);
+					int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
+					int drainable = LiquidXpUtils.xpToLiquidRatio(xpInTank);
 
 					if (drainable > 0) {
 
