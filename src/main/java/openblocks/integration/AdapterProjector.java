@@ -64,7 +64,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 	@ScriptCallable(description = "Set current map info")
 	public void setMapInfo(TileEntityProjector projector, @Arg(name = "properties", description = "Map of properties", type = ArgType.TABLE) Map<String, Object> args) {
 		HeightMapData data = projector.getMap();
-		Preconditions.checkState(data.isValid(), "Map not loaded");
+		Preconditions.checkState(data != null && data.isValid(), "Map not loaded");
 
 		{
 			Object value = args.get("center_x");
@@ -120,7 +120,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 		Preconditions.checkElementIndex(column, 64, "column");
 
 		HeightMapData data = projector.getMap();
-		Preconditions.checkState(data.isValid(), "Map not loaded");
+		Preconditions.checkState(data != null && data.isValid(), "Map not loaded");
 
 		Preconditions.checkElementIndex(layer, data.layers.length, "layer");
 		int index = 64 * row + column;
@@ -142,7 +142,7 @@ public class AdapterProjector implements IPeripheralAdapter {
 		Preconditions.checkElementIndex(color, MapColor.mapColorArray.length, "color");
 
 		HeightMapData data = projector.getMap();
-		Preconditions.checkState(data.isValid(), "Map not loaded");
+		Preconditions.checkState(data != null && data.isValid(), "Map not loaded");
 
 		Preconditions.checkElementIndex(layer, data.layers.length, "layer");
 		int index = 64 * row + column;

@@ -47,7 +47,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 
 	private static void addClass(SafeClassLoad cls) {
 		if (cls.tryLoad()) EXTRA_PROJECTILE_CLASSES.add(cls.get());
-		else Log.debug("Class %s not found, skipping target path prediction", cls.clsName);
+		else Log.debug("Class %s not found, skipping target path prediction from FlansMod", cls.clsName);
 	}
 
 	static {
