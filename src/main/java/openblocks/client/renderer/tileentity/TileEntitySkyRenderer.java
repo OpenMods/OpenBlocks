@@ -56,7 +56,7 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 			Log.debug("Stencil bit %d allocated for skyblock rendering", bit.bit);
 			cutHoleInWorld(bit.mask);
 		} else {
-			Log.info("Failed to allocate stencil bit for skyblock rendering");
+			Log.warn("Failed to allocate stencil bit for skyblock rendering");
 		}
 		GL11.glEndList();
 

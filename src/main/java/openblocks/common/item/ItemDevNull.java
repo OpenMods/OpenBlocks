@@ -14,7 +14,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
-import openmods.Log;
 import openmods.infobook.BookDocumentation;
 import openmods.inventory.ItemInventory;
 import openmods.inventory.PlayerItemInventory;
@@ -55,9 +54,7 @@ public class ItemDevNull extends Item {
 
 		private void checkStack(ItemStack stack, int count) {
 			if (stack == null) return;
-			Log.info("%s", count);
 			if (++count > STACK_LIMIT) {
-				Log.info("WOW");
 				player.triggerAchievement(OpenBlocks.stackAchievement);
 			} else if (stack.getItem() instanceof ItemDevNull) {
 				final ItemStack innerStack = new ItemInventory(stack, 1).getStackInSlot(0);

@@ -125,7 +125,8 @@ public class MapDataManager {
 			if (map != null) {
 				response.maps.put(mapId, map);
 			} else {
-				Log.info("Player %s asked for non-existent map %d", evt.sender, mapId);
+				if (mapId < 16) Log.debug("Player %s asked for non-existent map %d, possible NEI interaction (this is mostly harmless)", evt.sender, mapId);
+				else Log.info("Player %s asked for non-existent map %d", evt.sender, mapId);
 			}
 		}
 
@@ -199,7 +200,7 @@ public class MapDataManager {
 					Block block = GameRegistry.findBlock(modId, blockName);
 
 					if (block != Blocks.air) blockBlacklist.add(block);
-					else Log.info("Can't find block %s", entry);
+					else Log.warn("Can't find block %s", entry);
 				} catch (Throwable t) {
 					Log.warn(t, "Invalid entry in map blacklist: %s", entry);
 				}
