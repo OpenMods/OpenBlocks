@@ -1,5 +1,31 @@
 [
     {
+        version : "1.4.1",
+        sections :
+        [
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                   "Tank crash during breaking",
+                   "Fluid level not rendered properly in tank item",
+                   "Crash when updating huge surfaces made of skyblocks",
+                   "Rendering glitch caused by stacking /dev/null/",
+                   "Some methods in OpenPeripheral adapters for donation station and projector not working",
+                    "Should not crash when other mod registers liquid XP"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                    "XP <-> fluid conversion rates are now configurable",
+                    "Added separate option to ignore blocks between elevators"
+                ]
+            }
+        ]
+    },
+    {
         version : "1.4.0",
         sections :
         [
