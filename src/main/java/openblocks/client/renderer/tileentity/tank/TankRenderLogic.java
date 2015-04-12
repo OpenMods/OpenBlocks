@@ -146,10 +146,15 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 
 		horizontalConnections.clear();
 
-		topConnection.clearBottomFluid();
-		topConnection = null;
-		bottomConnection.clearTopFluid();
-		bottomConnection = null;
+		if (topConnection != null) {
+			topConnection.clearBottomFluid();
+			topConnection = null;
+		}
+
+		if (bottomConnection != null) {
+			bottomConnection.clearTopFluid();
+			bottomConnection = null;
+		}
 	}
 
 	private boolean checkConnection(RenderConnection connection, ForgeDirection dir) {
