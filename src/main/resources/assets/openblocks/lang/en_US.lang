@@ -279,6 +279,9 @@ tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
 tile.openblocks.xpshower.name=XP Shower
 tile.openblocks.xpshower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer.
 
+tile.openblocks.scaffolding.name=Scaffolding
+tile.openblocks.scaffolding.description=Have you ever wanted to pillar up somewhere without leaving an ugly tower behind? Well, now you can! Simply build with scaffolding blocks and they will automatically despawn when you are done.
+
 tile.openblocks.goldenegg.name=Golden Egg
 
 tile.openblocks.digitalfuse.name=Digital Fuse

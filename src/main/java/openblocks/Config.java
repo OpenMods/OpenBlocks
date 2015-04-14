@@ -281,6 +281,9 @@ public class Config {
 	@ConfigProperty(category = "guide", name = "renderDistanceSq", comment = "Square of guide maximum render distance")
 	public static double guideRenderRangeSq = 256 * 256;
 
+	@ConfigProperty(category = "scaffolding", name = "despawnRate", comment = "The rate at which scaffolding should break. 0 - fastest")
+	public static int scaffoldingDespawnRate = 4;
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
@@ -443,6 +446,11 @@ public class Config {
 
 		if (OpenBlocks.Blocks.xpShower != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Items.iron_ingot, 'o', Blocks.obsidian));
+		}
+
+		if (OpenBlocks.Blocks.scaffolding != null) {
+			ItemStack stack = new ItemStack(OpenBlocks.Blocks.scaffolding, 16);
+			recipeList.add(new ShapedOreRecipe(stack, "sss", "s s", "sss", 's', "stickWood"));
 		}
 
 		if (OpenBlocks.Items.hangGlider != null) {
