@@ -193,6 +193,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
 		public static BlockGoldenEgg goldenEgg;
+
+		@RegisterBlock(name = "scaffolding")
+		public static BlockScaffolding scaffolding;
 	}
 
 	public static class Items implements ItemInstances {
