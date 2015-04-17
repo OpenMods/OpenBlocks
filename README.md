@@ -109,7 +109,9 @@ git submodule init
 git submodule update
 ```
 
-In **OSX**, git is typically supplied. Otherwise it can be installed through the apps thingy that OSX has (Obviously I know very little about OSX but you want the dev tools stuff). 
+In **OSX**, git is typically supplied. Otherwise it can be installed through the apps thingy that OSX has (Obviously I know very little about OSX but you want the dev tools stuff).
+
+**(To install git and other command line tools on OS X, tun `xcode-select --install` in the terminal (/Applications/Utilities/Terminal.app))**
 
 The linux git can be fetched from any package manager. If you're on a Debian based machine (This includes **Ubuntu**) you likely have aptitude, so the command would be ```sudo apt-get install git```. 
 
