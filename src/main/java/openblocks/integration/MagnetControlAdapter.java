@@ -6,10 +6,16 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
+import openblocks.common.entity.EntityMagnet.IEntityBlockFactory;
 import openblocks.common.entity.EntityMagnet.IOwner;
+import openmods.entity.EntityBlock;
+import openmods.fakeplayer.FakePlayerPool;
+import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
+import openmods.fakeplayer.OpenModsFakePlayer;
 import openperipheral.api.adapter.IWorldProvider;
 import openperipheral.api.adapter.method.*;
 import openperipheral.api.architecture.IArchitectureAccess;
@@ -75,6 +81,19 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		@Override
 		public Vec3 getTarget() {
 			return getTarget(getTurtlePosition(), getTurtleFacing());
+		}
+
+		@Override
+		public EntityBlock createByPlayer(final IEntityBlockFactory factory) {
+			World world = turtle.getWorld();
+
+			if (world instanceof WorldServer) return FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new PlayerUserReturning<EntityBlock>() {
+				@Override
+				public EntityBlock usePlayer(OpenModsFakePlayer fakePlayer) {
+					return factory.create(fakePlayer);
+				}
+			});
+			return null;
 		}
 	}
 

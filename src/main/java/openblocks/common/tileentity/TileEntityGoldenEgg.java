@@ -9,14 +9,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.Config;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.Log;
 import openmods.api.IBreakAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
+import openmods.fakeplayer.FakePlayerPool;
+import openmods.fakeplayer.FakePlayerPool.PlayerUser;
+import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 
@@ -47,7 +52,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -58,7 +63,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -69,7 +74,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -80,7 +85,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -91,15 +96,15 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter--;
-				if (RANDOM.nextInt(6) != 0) return;
-
-				int posX = target.xCoord + RANDOM.nextInt(20) - 10;
-				int posY = target.yCoord + RANDOM.nextInt(2) - 1;
-				int posZ = target.zCoord + RANDOM.nextInt(20) - 10;
-				boolean canMove = MagnetWhitelists.instance.testBlock(target.worldObj, posX, posY, posZ);
-				if (canMove) target.pickUpBlock(posX, posY, posZ);
+				if (Config.eggCanPickBlocks && RANDOM.nextInt(6) == 0) {
+					int posX = target.xCoord + RANDOM.nextInt(20) - 10;
+					int posY = target.yCoord + RANDOM.nextInt(2) - 1;
+					int posZ = target.zCoord + RANDOM.nextInt(20) - 10;
+					boolean canMove = MagnetWhitelists.instance.testBlock(target.worldObj, posX, posY, posZ);
+					if (canMove) target.pickUpBlock(world, posX, posY, posZ);
+				}
 			}
 
 			@Override
@@ -115,7 +120,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter--;
 			}
 
@@ -144,7 +149,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 		public void onEntry(TileEntityGoldenEgg target) {}
 
-		public void onServerTick(TileEntityGoldenEgg target) {}
+		public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {}
 
 		public abstract State getNextState(TileEntityGoldenEgg target);
 
@@ -200,15 +205,22 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 		stage = SyncableEnum.create(State.INERT);
 	}
 
-	private void pickUpBlock(int x, int y, int z) {
-		EntityBlock block = EntityBlock.create(worldObj, x, y, z);
-		if (block != null) {
-			block.setHasAirResistance(false);
-			block.setHasGravity(false);
-			block.motionY = 0.1;
-			blocks.add(block);
-			worldObj.spawnEntityInWorld(block);
-		}
+	private void pickUpBlock(final WorldServer world, final int x, final int y, final int z) {
+		FakePlayerPool.instance.executeOnPlayer(world, new PlayerUser() {
+
+			@Override
+			public void usePlayer(OpenModsFakePlayer fakePlayer) {
+				EntityBlock block = EntityBlock.create(fakePlayer, worldObj, x, y, z);
+				if (block != null) {
+					block.setHasAirResistance(false);
+					block.setHasGravity(false);
+					block.motionY = 0.1;
+					blocks.add(block);
+					world.spawnEntityInWorld(block);
+				}
+			}
+		});
+
 	}
 
 	private void dropBlocks() {
@@ -244,7 +256,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			progressSpeed = (1 - SPEED_CHANGE_RATE) * progressSpeed + SPEED_CHANGE_RATE * state.progressSpeed;
 			progress += progressSpeed;
 		} else {
-			state.onServerTick(this);
+			if (worldObj instanceof WorldServer) state.onServerTick(this, (WorldServer)worldObj);
 
 			State nextState = state.getNextState(this);
 			if (nextState != null) {

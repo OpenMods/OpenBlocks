@@ -16,6 +16,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import openblocks.Config;
 import openblocks.api.IMagnetAware;
 import openblocks.common.CraneRegistry;
 import openblocks.common.MagnetWhitelists;
@@ -33,10 +34,16 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	private static final float MAGNET_WIDTH = 0.5f;
 	private static final Random RANDOM = new Random();
 
+	public interface IEntityBlockFactory {
+		public EntityBlock create(EntityPlayer player);
+	}
+
 	public interface IOwner {
 		public boolean isValid(EntityMagnet magnet);
 
 		public Vec3 getTarget();
+
+		public EntityBlock createByPlayer(IEntityBlockFactory factory);
 	}
 
 	private static class EntityPlayerTarget implements IOwner {
@@ -69,6 +76,14 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 					- CraneRegistry.instance.getCraneMagnetDistance(player);
 
 			return Vec3.createVectorHelper(posX, posY, posZ);
+		}
+
+		@Override
+		public EntityBlock createByPlayer(IEntityBlockFactory factory) {
+			EntityPlayer player = owner.get();
+			if (player == null) return null;
+
+			return factory.create(player);
 		}
 	}
 
@@ -245,11 +260,9 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		} else if (!worldObj.isRemote) {
 			Entity target = null;
 
-			List<Entity> result = detectEntityTargets();
+			if (Config.canMagnetPickEntities) target = findEntityToPick();
 
-			Iterator<Entity> it = result.iterator();
-			if (it.hasNext()) target = it.next();
-			else target = getBlockEntity();
+			if (target == null && Config.canMagnetPickBlocks) target = createBlockEntity();
 
 			if (target != null) {
 				target.mountEntity(this);
@@ -258,6 +271,12 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		}
 
 		return false;
+	}
+
+	private Entity findEntityToPick() {
+		List<Entity> result = detectEntityTargets();
+		Iterator<Entity> it = result.iterator();
+		return it.hasNext()? it.next() : null;
 	}
 
 	@Override
@@ -272,16 +291,24 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		return worldObj.getEntitiesWithinAABBExcludingEntity(this, aabb, this);
 	}
 
-	private Entity getBlockEntity() {
-		int x = MathHelper.floor_double(posX);
-		int y = MathHelper.floor_double(posY - 0.5);
-		int z = MathHelper.floor_double(posZ);
+	private Entity createBlockEntity() {
+		final int x = MathHelper.floor_double(posX);
+		final int y = MathHelper.floor_double(posY - 0.5);
+		final int z = MathHelper.floor_double(posZ);
 
 		if (!worldObj.blockExists(x, y, z) || worldObj.isAirBlock(x, y, z)) return null;
 
 		Entity result = null;
 
-		if (MagnetWhitelists.instance.testBlock(worldObj, x, y, z)) result = EntityBlock.create(worldObj, x, y, z, EntityMountedBlock.class);
+		if (MagnetWhitelists.instance.testBlock(worldObj, x, y, z)) {
+			result = owner.createByPlayer(new IEntityBlockFactory() {
+
+				@Override
+				public EntityBlock create(EntityPlayer player) {
+					return EntityBlock.create(player, worldObj, x, y, z, EntityMountedBlock.class);
+				}
+			});
+		}
 
 		if (result != null) {
 			result.setPosition(posX, posY + getMountedYOffset(result), posZ);
@@ -307,7 +334,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	public boolean isAboveTarget() {
-		return isAboveTarget;
+		return isAboveTarget && Config.canMagnetPickEntities;
 	}
 
 	public boolean isLocked() {

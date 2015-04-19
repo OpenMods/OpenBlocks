@@ -37,7 +37,6 @@ import openmods.config.BlockInstances;
 import openmods.config.ItemInstances;
 import openmods.config.game.*;
 import openmods.config.properties.ConfigProcessing;
-import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
 import openmods.liquids.BucketFillHandler;
 import openmods.network.event.NetworkEventManager;
@@ -396,7 +395,7 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(EntityXPOrbNoFly.class, "XPOrbNoFly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityBlock.class, "Block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityMountedBlock.class, "MountedBlock", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "Player-Magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);

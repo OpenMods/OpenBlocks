@@ -285,6 +285,18 @@ public class Config {
 	@ConfigProperty(category = "scaffolding", name = "despawnRate", comment = "The rate at which scaffolding should break. 0 - fastest")
 	public static int scaffoldingDespawnRate = 4;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "egg", name = "pickBlocks", comment = "Can golden egg pick blocks while hatching (may lead to glitches)")
+	public static boolean eggCanPickBlocks = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "magnet", name = "pickEntities", comment = "Can crane magnet pick entities?")
+	public static boolean canMagnetPickEntities = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "magnet", name = "pickBlocks", comment = "Can crane magnet pick block?")
+	public static boolean canMagnetPickBlocks = true;
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
