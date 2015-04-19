@@ -111,6 +111,9 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 				CaptureContext dropsCapturer = DropCapture.instance.start(x, y, z);
 
 				ContextManager.push(); // providing same environment as ItemInWorldManager
+
+				if (!worldObj.canMineBlock(fakePlayer, x, y, z)) return;
+
 				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, metadata, fakePlayer);
 				if (MinecraftForge.EVENT_BUS.post(event)) return;
 
