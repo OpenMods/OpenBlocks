@@ -83,12 +83,12 @@ public class ElevatorActionHandler {
 		int level = findLevel(player, world, x, y, z, dir);
 		if (level >= 0) {
 			int distance = (int)Math.abs(player.posY - level);
-			boolean drainXP = Config.elevatorDrainsXP && !player.capabilities.isCreativeMode;
 			boolean doTeleport = false;
-			if (drainXP) {
+			if (Config.elevatorXpDrainRatio != 0 && !player.capabilities.isCreativeMode) {
 				int playerXP = EnchantmentUtils.getPlayerXP(player);
-				if (playerXP >= distance) {
-					EnchantmentUtils.addPlayerXP(player, -distance);
+				int neededXP = MathHelper.ceiling_double_int(Config.elevatorXpDrainRatio * distance);
+				if (playerXP >= neededXP) {
+					EnchantmentUtils.addPlayerXP(player, -neededXP);
 					doTeleport = true;
 				}
 			} else {

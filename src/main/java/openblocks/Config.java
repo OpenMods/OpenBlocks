@@ -52,8 +52,8 @@ public class Config {
 	public static String[] elevatorRules = new String[0];
 
 	@OnLineModifiable
-	@ConfigProperty(category = "dropblock", name = "elevatorDrainsXP", comment = "Does the elevator drain player XP when used?")
-	public static boolean elevatorDrainsXP = true;
+	@ConfigProperty(category = "dropblock", name = "elevatorXpDrainRatio", comment = "XP consumed by elevator (total amount = ratio * distance)")
+	public static float elevatorXpDrainRatio = 0;
 
 	@ConfigProperty(category = "tanks", name = "bucketsPerTank", comment = "The amount of buckets each tank can hold")
 	public static int bucketsPerTank = 16;
