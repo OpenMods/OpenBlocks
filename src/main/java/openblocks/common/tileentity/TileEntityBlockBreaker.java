@@ -6,7 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,6 +19,8 @@ import openmods.context.ContextManager;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
+import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
@@ -26,6 +30,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile {
+
+	// DON'T remove this object, even though it's unused. Without it Builcraft pipes won't connect. -B
+	@IncludeInterface(IInventory.class)
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockbreaker", true, 1) {
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+			return false;
+		}
+	});
+
 	private int redstoneAnimTimer;
 	private SyncableBoolean activated;
 
@@ -136,5 +150,18 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		inventory.writeToNBT(tag);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		inventory.readFromNBT(tag);
+
 	}
 }
