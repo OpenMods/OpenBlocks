@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.utils.WorldUtils;
 
+import com.mojang.authlib.GameProfile;
+
 public class EntityAIPickupPlayer extends EntityAIBase {
 
 	private EntityMiniMe minime;
@@ -70,8 +72,9 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 	}
 
 	private boolean canRidePlayer(EntityPlayer player) {
-		return player != null &&
-				player.getGameProfile().getId().equals(minime.getOwner()) &&
+		final GameProfile owner = minime.getOwner();
+		return owner != null && player != null &&
+				player.getGameProfile().getId().equals(owner.getId()) &&
 				player.ridingEntity == null;
 	}
 }

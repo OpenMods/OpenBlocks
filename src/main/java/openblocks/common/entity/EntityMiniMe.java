@@ -1,26 +1,38 @@
 package openblocks.common.entity;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
 import openmods.Log;
+import openmods.utils.io.GameProfileSerializer;
 
-import com.google.common.base.Strings;
+import com.google.common.base.Objects;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import com.mojang.authlib.properties.Property;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -30,18 +42,15 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	@SideOnly(Side.CLIENT)
 	private ResourceLocation locationSkin;
 
-	private UUID owner;
-	private String ownerSkin = "";
-	private String loadedSkin;
+	private GameProfile owner;
 
 	private int pickupCooldown = 0;
 
 	private boolean wasRidden = false;
 
-	public EntityMiniMe(World world, UUID owner, String ownerSkin) {
+	public EntityMiniMe(World world, GameProfile owner) {
 		this(world);
-		this.owner = owner;
-		this.ownerSkin = Strings.emptyToNull(ownerSkin);
+		this.owner = owner != null? fetchFullProfile(owner) : null;
 	}
 
 	public EntityMiniMe(World world) {
@@ -92,18 +101,35 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getLocationSkin() {
-		String newSkin = getPlayerSkin();
-
-		if (locationSkin == null || !newSkin.equals(loadedSkin)) {
-			locationSkin = AbstractClientPlayer.getLocationSkin(newSkin);
-			AbstractClientPlayer.getDownloadImageSkin(locationSkin, newSkin);
-		}
-		loadedSkin = newSkin;
-		return locationSkin;
+		return Objects.firstNonNull(getResourceLocation(), AbstractClientPlayer.locationStevePng);
 	}
 
-	public String getPlayerSkin() {
-		return hasCustomNameTag()? getCustomNameTag() : ownerSkin;
+	@Override
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		if (owner == null || !owner.getName().equalsIgnoreCase(name)) {
+			final GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
+			this.owner = profile != null? fetchFullProfile(profile) : null;
+		}
+	}
+
+	private ResourceLocation getResourceLocation() {
+		if (owner != null) {
+			Minecraft minecraft = Minecraft.getMinecraft();
+			Map<?, ?> map = minecraft.func_152342_ad().func_152788_a(owner);
+
+			if (map.containsKey(Type.SKIN)) {
+				final MinecraftProfileTexture skin = (MinecraftProfileTexture)map.get(Type.SKIN);
+				return minecraft.func_152342_ad().func_152792_a(skin, Type.SKIN);
+			}
+		}
+
+		return null;
+	}
+
+	private static GameProfile fetchFullProfile(GameProfile profile) {
+		final Property property = Iterables.getFirst(profile.getProperties().get("textures"), null);
+		return property != null? profile : MinecraftServer.getServer().func_147130_as().fillProfileProperties(profile, true);
 	}
 
 	@Override
@@ -121,49 +147,72 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		return true;
 	}
 
-	public UUID getOwner() {
+	public GameProfile getOwner() {
 		return owner;
 	}
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		ByteBufUtils.writeUTF8String(data, Strings.nullToEmpty(ownerSkin));
+		if (owner != null) {
+			data.writeBoolean(true);
+			try {
+				GameProfileSerializer.write(owner, new ByteBufOutputStream(data));
+			} catch (IOException e) {
+				throw Throwables.propagate(e);
+			}
+		} else data.writeBoolean(false);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		ownerSkin = ByteBufUtils.readUTF8String(data);
+		if (data.readBoolean()) {
+			try {
+				this.owner = GameProfileSerializer.read(new ByteBufInputStream(data));
+			} catch (IOException e) {
+				throw Throwables.propagate(e);
+			}
+		}
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
 
-		if (owner != null) tag.setString("OwnerUUID", owner.toString());
-		tag.setString("OwnerSkin", ownerSkin);
+		if (owner != null) {
+			NBTTagCompound ownerTag = new NBTTagCompound();
+			NBTUtil.func_152460_a(ownerTag, owner);
+			tag.setTag("Owner", ownerTag);
+		}
+
 		tag.setInteger("pickupCooldown", pickupCooldown);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
+		GameProfile profile = readOwner(tag);
+		this.owner = profile != null? fetchFullProfile(profile) : null;
+
+		// switched order, to prevent needless profile fetch in setCustomName
 		super.readEntityFromNBT(tag);
 
-		String uuidString;
+		this.pickupCooldown = tag.getInteger("pickupCooldown");
+	}
+
+	private static GameProfile readOwner(NBTTagCompound tag) {
 		if (tag.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = tag.getString("owner");
-			uuidString = PreYggdrasilConverter.func_152719_a(ownerName);
-			ownerSkin = ownerName;
-		} else {
-			uuidString = tag.getString("OwnerUUID");
-			ownerSkin = tag.getString("OwnerSkin");
-		}
+			return MinecraftServer.getServer().func_152358_ax().func_152655_a(ownerName);
+		} else if (tag.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
+			final String uuidStr = tag.getString("OwnerUUID");
+			try {
+				UUID uuid = UUID.fromString(uuidStr);
+				return new GameProfile(uuid, null);
+			} catch (IllegalArgumentException e) {
+				Log.warn(e, "Failed to parse UUID: %s", uuidStr);
+			}
+		} else if (tag.hasKey("Owner", Constants.NBT.TAG_COMPOUND)) { return NBTUtil.func_152459_a(tag.getCompoundTag("Owner")); }
 
-		try {
-			owner = UUID.fromString(uuidString);
-		} catch (IllegalArgumentException e) {
-			Log.warn(e, "Failed to parse UUID: %s", uuidString);
-		}
-		if (tag.hasKey("pickupCooldown")) pickupCooldown = tag.getInteger("pickupCooldown");
+		return null;
 	}
 
 }
