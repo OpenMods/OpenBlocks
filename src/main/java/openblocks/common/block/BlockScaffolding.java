@@ -16,6 +16,7 @@ public class BlockScaffolding extends OpenBlock {
 	public BlockScaffolding() {
 		super(Material.wood);
 		setTickRandomly(true);
+		setHardness(0.1F);
 	}
 
 	@Override
