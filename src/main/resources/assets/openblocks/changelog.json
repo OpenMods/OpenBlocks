@@ -1,5 +1,34 @@
 [
     {
+        version : "1.4.2",
+        sections :
+        [
+             {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "Scaffolding - will decay after some time",
+                    "Option to disable picking blocks and/or mobs with magnet"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                   "Magnets tries to check if block can be removed/placed",
+                   "Block breaker can now push to BC pipes"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                    "Elevators don't drain XP by default, amount can be configured"
+                ]
+            }
+        ]
+    },
+    {
         version : "1.4.1",
         sections :
         [
