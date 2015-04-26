@@ -4,12 +4,15 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
@@ -23,6 +26,8 @@ import net.minecraftforge.common.util.Constants;
 import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
 import openmods.Log;
+import openmods.network.event.*;
+import openmods.utils.ByteUtils;
 import openmods.utils.io.GameProfileSerializer;
 
 import com.google.common.base.Objects;
@@ -33,11 +38,59 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.authlib.properties.Property;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpawnData {
+
+	@NetworkEventMeta(direction = EventDirection.S2C, compressed = true)
+	public static class OwnerChangeEvent extends NetworkEvent {
+
+		private GameProfile profile;
+
+		private int entityId;
+
+		public OwnerChangeEvent(int entityId, GameProfile profile) {
+			this.profile = profile;
+			this.entityId = entityId;
+		}
+
+		@Override
+		protected void readFromStream(DataInput input) throws IOException {
+			this.entityId = ByteUtils.readVLI(input);
+			if (input.readBoolean()) {
+				profile = GameProfileSerializer.read(input);
+			}
+		}
+
+		@Override
+		protected void writeToStream(DataOutput output) throws IOException {
+			ByteUtils.writeVLI(output, entityId);
+
+			if (profile != null) {
+				output.writeBoolean(true);
+				GameProfileSerializer.write(profile, output);
+			} else {
+				output.writeBoolean(false);
+			}
+		}
+
+	}
+
+	public static class OwnerChangeHandler {
+		@SubscribeEvent
+		public void onProfileChange(OwnerChangeEvent evt) {
+			final World world = evt.sender.worldObj;
+
+			Entity e = world.getEntityByID(evt.entityId);
+
+			if (e instanceof EntityMiniMe) {
+				((EntityMiniMe)e).owner = evt.profile;
+			}
+		}
+	}
 
 	@SideOnly(Side.CLIENT)
 	private ResourceLocation locationSkin;
@@ -107,10 +160,22 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	@Override
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
-		if (owner == null || !owner.getName().equalsIgnoreCase(name)) {
-			final GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
-			this.owner = profile != null? fetchFullProfile(profile) : null;
+
+		if (!worldObj.isRemote && MinecraftServer.getServer() != null) {
+			if (owner == null || !owner.getName().equalsIgnoreCase(name)) {
+				try {
+					final GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
+					this.owner = profile != null? fetchFullProfile(profile) : null;
+					propagateOwnerChange();
+				} catch (Exception e) {
+					Log.warn(e, "Failed to change skin to %s", name);
+				}
+			}
 		}
+	}
+
+	private void propagateOwnerChange() {
+		NetworkEventManager.INSTANCE.dispatcher().senders.entity.sendMessage(new OwnerChangeEvent(getEntityId(), owner), this);
 	}
 
 	private ResourceLocation getResourceLocation() {
@@ -189,8 +254,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
-		GameProfile profile = readOwner(tag);
-		this.owner = profile != null? fetchFullProfile(profile) : null;
+		this.owner = readOwner(tag);
 
 		// switched order, to prevent needless profile fetch in setCustomName
 		super.readEntityFromNBT(tag);

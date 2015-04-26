@@ -370,7 +370,8 @@ public class OpenBlocks {
 				.register(MapDataManager.MapDataResponseEvent.class)
 				.register(MapDataManager.MapUpdatesEvent.class)
 				.register(ElevatorActionEvent.class)
-				.register(PlayerActionEvent.class);
+				.register(PlayerActionEvent.class)
+				.register(EntityMiniMe.OwnerChangeEvent.class);
 
 		RpcCallDispatcher.INSTANCE.startRegistration()
 				.registerInterface(IRotatable.class)

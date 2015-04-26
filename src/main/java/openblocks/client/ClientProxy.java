@@ -67,6 +67,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 	public void init() {
 		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(new EntityMiniMe.OwnerChangeHandler());
 	}
 
 	@Override
