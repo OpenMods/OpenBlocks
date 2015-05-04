@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import openmods.utils.ItemUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -35,15 +36,14 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	protected void readEntityFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey("SpawningItem")) {
 			NBTTagCompound item = tag.getCompoundTag("SpawningItem");
-			spawningStack = ItemStack.loadItemStackFromNBT(item);
+			spawningStack = ItemUtils.readStack(item);
 		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tag) {
 		if (spawningStack != null) {
-			NBTTagCompound item = new NBTTagCompound();
-			spawningStack.writeToNBT(item);
+			NBTTagCompound item = ItemUtils.writeStack(spawningStack);
 			tag.setTag("SpawningItem", item);
 		}
 	}

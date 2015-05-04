@@ -25,6 +25,7 @@ import openblocks.api.InventoryEvent;
 import openblocks.api.InventoryEvent.SubInventory;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
+import openmods.utils.ItemUtils;
 import openmods.utils.TagUtils;
 
 import org.apache.commons.lang3.StringUtils;
@@ -119,9 +120,8 @@ public class PlayerInventoryStore {
 					for (Map.Entry<Integer, ItemStack> ie : e.getValue().asMap().entrySet()) {
 						ItemStack stack = ie.getValue();
 						if (stack != null) {
-							NBTTagCompound stacktag = new NBTTagCompound();
+							NBTTagCompound stacktag = ItemUtils.writeStack(stack);
 							stacktag.setInteger(TAG_SLOT, ie.getKey());
-							stack.writeToNBT(stacktag);
 							subInventory.appendTag(stacktag);
 						}
 					}
@@ -187,8 +187,8 @@ public class PlayerInventoryStore {
 
 			if (!itemTag.hasNoTags()) {
 				int slot = itemTag.getInteger(TAG_SLOT);
-				ItemStack stack = ItemStack.loadItemStackFromNBT(itemTag);
-				result.addItemStack(slot, stack);
+				ItemStack stack = ItemUtils.readStack(itemTag);
+				if (stack != null) result.addItemStack(slot, stack);
 			}
 		}
 

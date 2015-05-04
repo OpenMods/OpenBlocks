@@ -198,9 +198,9 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 		if (tag.hasKey("MapItem")) {
 			NBTTagCompound mapItem = tag.getCompoundTag("MapItem");
-			this.mapItem = ItemStack.loadItemStackFromNBT(mapItem);
+			this.mapItem = ItemUtils.readStack(mapItem);
 
-			if (isMapping.get()) {
+			if (this.mapItem != null && isMapping.get()) {
 				int mapId = this.mapItem.getItemDamage();
 				jobs.resumeMapping(worldObj, mapId);
 			}
@@ -218,8 +218,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		syncMap.writeToNBT(tag);
 
 		if (mapItem != null) {
-			NBTTagCompound mapItem = new NBTTagCompound();
-			this.mapItem.writeToNBT(mapItem);
+			NBTTagCompound mapItem = ItemUtils.writeStack(this.mapItem);
 			tag.setTag("MapItem", mapItem);
 			tag.setInteger("Dimension", mappingDimension);
 		}
