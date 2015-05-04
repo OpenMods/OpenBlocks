@@ -8,13 +8,13 @@ import cpw.mods.fml.common.eventhandler.Event.HasResult;
 
 /**
  * Event triggered before player uses sleeping bag.
- * Use {@link Event#setResult(Result)} to override ({@link Event.Result.ALLOW} to allow even if original algorithm forbids it, {@link Event.Result.DENY} to block otherwise allowed action).
+ * Use {@link Event#setResult(Result)} to override: {@link Event.Result.ALLOW} to allow even if original algorithm forbids it, {@link Event.Result.DENY} to block normally allowed action.
  */
 @HasResult
 public class SleepingBagUseEvent extends PlayerEvent {
 
 	/**
-	 * Text displayed to player is action was denied
+	 * Text displayed to player if action was denied
 	 */
 	public IChatComponent playerChat;
 
