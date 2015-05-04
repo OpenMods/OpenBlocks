@@ -22,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import openblocks.OpenBlocks;
+import openblocks.api.SleepingBagUseEvent;
 import openblocks.asm.EntityPlayerVisitor;
 import openblocks.client.model.ModelSleepingBag;
 import openmods.infobook.BookDocumentation;
@@ -122,7 +123,7 @@ public class ItemSleepingBag extends ItemArmor {
 		}
 	}
 
-	private static EntityPlayer.EnumStatus sleepSafe(EntityPlayerMP player, World world, int x, int y, int z) {
+	private static void sleepSafe(EntityPlayerMP player, World world, int x, int y, int z) {
 		if (player.isRiding()) player.mountEntity(null);
 
 		IS_SLEEPING.set(player, true);
@@ -135,8 +136,6 @@ public class ItemSleepingBag extends ItemArmor {
 		S0APacketUseBed sleepPacket = new S0APacketUseBed(player, x, y, z);
 		player.getServerForPlayer().getEntityTracker().func_151247_a(player, sleepPacket);
 		player.playerNetServerHandler.sendPacket(sleepPacket);
-
-		return EntityPlayer.EnumStatus.OK;
 	}
 
 	private static EnumStatus vanillaCanSleep(EntityPlayer player, World world, int x, int y, int z) {
@@ -144,7 +143,6 @@ public class ItemSleepingBag extends ItemArmor {
 		MinecraftForge.EVENT_BUS.post(event);
 		if (event.result != null) return event.result;
 
-		if (player.isPlayerSleeping() || !player.isEntityAlive()) return EntityPlayer.EnumStatus.OTHER_PROBLEM;
 		if (!world.provider.isSurfaceWorld()) return EntityPlayer.EnumStatus.NOT_POSSIBLE_HERE;
 		if (world.isDaytime()) return EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW;
 
@@ -155,27 +153,40 @@ public class ItemSleepingBag extends ItemArmor {
 	}
 
 	private static boolean canPlayerSleep(EntityPlayer player, World world, int x, int y, int z) {
+		if (player.isPlayerSleeping() || !player.isEntityAlive()) return false;
+
 		if (!isNotSuffocating(world, x, y, z) || !isSolidEnough(world, x, y - 1, z)) {
 			player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.oh_no_ground"));
 			return false;
 		}
 
-		EnumStatus status = vanillaCanSleep(player, world, x, y, z);
-		if (status == EnumStatus.OK) return true;
+		final EnumStatus status = vanillaCanSleep(player, world, x, y, z);
+		final SleepingBagUseEvent evt = new SleepingBagUseEvent(player, status);
+		evt.playerChat = findDefaultChatComponent(status);
+		MinecraftForge.EVENT_BUS.post(evt);
 
+		switch (evt.getResult()) {
+			case ALLOW:
+				return true;
+			case DEFAULT:
+				if (evt.playerChat != null) player.addChatComponentMessage(evt.playerChat);
+				return evt.defaultCanSleep();
+			case DENY:
+			default:
+				if (evt.playerChat != null) player.addChatComponentMessage(evt.playerChat);
+				return false;
+		}
+	}
+
+	private static IChatComponent findDefaultChatComponent(EnumStatus status) {
 		switch (status) {
 			case NOT_POSSIBLE_NOW:
-				player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep"));
-				break;
+				return new ChatComponentTranslation("tile.bed.noSleep");
 			case NOT_SAFE:
-				player.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe"));
-				break;
+				return new ChatComponentTranslation("tile.bed.notSafe");
 			default:
-				break;
-
+				return null;
 		}
-
-		return false;
 	}
 
 	private static boolean isNotSuffocating(World world, int x, int y, int z) {
