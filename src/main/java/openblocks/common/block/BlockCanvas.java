@@ -3,17 +3,19 @@ package openblocks.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.api.IPaintableBlock;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
-public class BlockCanvas extends OpenBlock {
+public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	private int layer = 0;
 	private int renderSide = 0;
@@ -74,5 +76,11 @@ public class BlockCanvas extends OpenBlock {
 		}
 		TileEntityCanvas tile = (TileEntityCanvas)world.getTileEntity(x, y, z);
 		tile.setPaintedBlockBlock(block, meta);
+	}
+
+	@Override
+	public boolean recolourBlockRGB(World world, int x, int y, int z, ForgeDirection side, int color) {
+		final TileEntity te = world.getTileEntity(x, y, z);
+		return (te instanceof TileEntityCanvas)? ((TileEntityCanvas)te).applyPaint(color, side) : false;
 	}
 }

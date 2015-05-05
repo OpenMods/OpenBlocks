@@ -61,8 +61,13 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			this.stencil = st;
 		}
 
-		public void setColor(int color) {
-			this.color = color;
+		public boolean setColor(int color) {
+			if (this.color != color) {
+				this.color = color;
+				return true;
+			}
+
+			return false;
 		}
 
 		public static Layer createFromStream(DataInput stream) {
@@ -169,8 +174,8 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 
 	public void setLastLayerColor(int color) {
 		Layer last = getOrCreateLastLayer();
-		last.setColor(color);
-		markDirty();
+		final boolean hasChanged = last.setColor(color);
+		if (hasChanged) markDirty();
 	}
 
 	public void setLastLayerStencil(Stencil stencil) {
@@ -236,8 +241,10 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	public void clear() {
-		layers.clear();
-		markDirty();
+		if (!layers.isEmpty()) {
+			layers.clear();
+			markDirty();
+		}
 	}
 
 	public boolean isEmpty() {

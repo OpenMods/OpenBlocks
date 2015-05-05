@@ -114,21 +114,28 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return true;
 	}
 
-	public void applyPaint(int color, int... sides) {
-		for (int side : sides) {
-			SyncableBlockLayers layer = getLayersForSide(side);
-			if (layer.isLastLayerStencil()) {
-				layer.setLastLayerColor(color);
-				layer.moveStencilToNextLayer();
+	public boolean applyPaint(int color, ForgeDirection... sides) {
+		boolean hasChanged = false;
+
+		for (ForgeDirection side : sides) {
+			final int sideId = side.ordinal();
+			SyncableBlockLayers layers = getLayersForSide(sideId);
+			if (layers.isLastLayerStencil()) {
+				layers.setLastLayerColor(color);
+				layers.moveStencilToNextLayer();
 			} else {
-				// collapse all layers, since they will be fully covered by
-				// paint
-				layer.clear();
-				baseColors.setValue(side, color);
+				// collapse all layers, since they will be fully covered by paint
+				layers.clear();
+				baseColors.setValue(sideId, color);
 			}
+
+			hasChanged |= layers.isDirty();
 		}
 
+		hasChanged |= baseColors.isDirty();
+
 		if (!worldObj.isRemote) sync();
+		return hasChanged;
 	}
 
 	private void dropStackFromSide(ItemStack stack, int side) {
