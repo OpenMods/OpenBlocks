@@ -14,9 +14,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.oredict.*;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
@@ -525,8 +523,13 @@ public class Config {
 		if (OpenBlocks.Items.paintBrush != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Blocks.wool, 's', "stickWood"));
 
-			if (paintBrushLoot)
-			{
+			final ItemStack template = new ItemStack(OpenBlocks.Items.paintBrush, 1, OreDictionary.WILDCARD_VALUE);
+			for (ColorMeta color : ColorUtils.getAllColors()) {
+				ItemStack brush = ItemPaintBrush.createStackWithColor(color.rgb);
+				recipeList.add(new ShapelessOreRecipe(brush, template, color.oreName));
+			}
+
+			if (paintBrushLoot) {
 				for (int color : new int[] { 0xFF0000, 0x00FF00, 0x0000FF }) {
 					ItemStack stack = ItemPaintBrush.createStackWithColor(color);
 					WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);

@@ -37,7 +37,8 @@ public class ItemPaintBrush extends Item {
 	public ItemPaintBrush() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
-		setMaxDamage(MAX_USES); // Damage dealt in Canvas block
+		setMaxDamage(MAX_USES);
+		setNoRepair();
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class ItemPaintBrush extends Item {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		Integer color = getColorFromStack(stack);
-		if (stack.getItemDamage() >= MAX_USES || color == null) return true;
+		if (stack.getItemDamage() > getMaxDamage() || color == null) return true;
 
 		if (PaintUtils.instance.isAllowedToReplace(world, x, y, z)) {
 			BlockCanvas.replaceBlock(world, x, y, z);
@@ -92,7 +93,14 @@ public class ItemPaintBrush extends Item {
 
 		if (changed) {
 			world.playSoundAtEntity(player, "mob.slime.small", 0.1F, 0.8F);
-			stack.damageItem(1, player);
+
+			if (!player.capabilities.isCreativeMode) {
+				if (stack.attemptDamageItem(1, player.getRNG())) {
+					final NBTTagCompound tag = ItemUtils.getItemTag(stack);
+					tag.removeTag(TAG_COLOR);
+					stack.setItemDamage(0);
+				}
+			}
 		}
 
 		return true;
