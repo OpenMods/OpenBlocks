@@ -13,6 +13,8 @@ import openblocks.api.IPaintableBlock;
 import openblocks.common.Stencil;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.infobook.BookDocumentation;
+import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 
 @BookDocumentation
 public class BlockCanvas extends OpenBlock implements IPaintableBlock {
@@ -83,4 +85,11 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 		final TileEntity te = world.getTileEntity(x, y, z);
 		return (te instanceof TileEntityCanvas)? ((TileEntityCanvas)te).applyPaint(color, side) : false;
 	}
+
+	@Override
+	public boolean recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
+		ColorMeta color = ColorUtils.vanillaBlockToColor(colour);
+		return recolourBlockRGB(world, x, y, z, side, color.rgb);
+	}
+
 }
