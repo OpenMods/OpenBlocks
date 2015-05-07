@@ -158,6 +158,33 @@ task deobfJar(type: Jar) {
     }
 }
 
+task apiJar(type: Jar) {
+    classifier 'api'
+
+    from sourceSets.main.output
+    from sourceSets.main.java
+
+    include 'openblocks/api/**'
+
+    manifest {
+        from jenkinsManifest, gitManifest
+    }
+}
+
+task apiSrcJar(type: Zip) {
+    classifier 'api-src'
+
+    from sourceSets.main.java
+
+    include 'openblocks/api/**'
+
+    manifest {
+        from jenkinsManifest, gitManifest
+    }
+}
+
 artifacts {
     archives deobfJar
+    archives apiJar
+    archives apiSrcJar
 }

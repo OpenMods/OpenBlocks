@@ -14,8 +14,8 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import openblocks.OpenBlocks.Enchantments;
-import openblocks.api.FlimFlamRegistry;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamDescription;
+import openblocks.enchantments.flimflams.FlimFlamRegistry;
 import openmods.Log;
 
 import com.google.common.collect.Lists;
@@ -123,8 +123,8 @@ public class FlimFlamEnchantmentsHandler {
 		final int luck = property.luck;
 
 		int totalWeight = 0;
-		List<IFlimFlamEffect> selectedEffects = Lists.newArrayList();
-		for (IFlimFlamEffect effectMeta : FlimFlamRegistry.getFlimFlams())
+		List<IFlimFlamDescription> selectedEffects = Lists.newArrayList();
+		for (IFlimFlamDescription effectMeta : FlimFlamRegistry.instance.getFlimFlams())
 			if (effectMeta.canApply(luck) && !FlimFlamRegistry.BLACKLIST.isBlacklisted(effectMeta)) {
 				selectedEffects.add(effectMeta);
 				totalWeight += effectMeta.weight();
@@ -137,10 +137,10 @@ public class FlimFlamEnchantmentsHandler {
 		while (!selectedEffects.isEmpty()) {
 			final int selectedWeight = RANDOM.nextInt(totalWeight);
 			int currentWeight = 0;
-			Iterator<IFlimFlamEffect> it = selectedEffects.iterator();
+			Iterator<IFlimFlamDescription> it = selectedEffects.iterator();
 
 			while (it.hasNext()) {
-				final IFlimFlamEffect effectMeta = it.next();
+				final IFlimFlamDescription effectMeta = it.next();
 				currentWeight += effectMeta.weight();
 				if (selectedWeight <= currentWeight) {
 					try {

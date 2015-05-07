@@ -1,6 +1,6 @@
 package openblocks.api;
 
-public interface IFlimFlamEffect {
+public interface IFlimFlamDescription {
 
 	public String name();
 
