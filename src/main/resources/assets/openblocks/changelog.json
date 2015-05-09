@@ -1,4 +1,28 @@
 [
+	{
+        version : "1.4.3",
+        sections :
+        [
+             {
+                title : "openblocks.gui.features",
+                lines :
+                [
+					"Paintbrush can now dye vanilla blocks (like wool)",
+					"Paintbrush can now be dyed in crafting inventory",
+					"Paintbrushes from few other mods should now work with canvas blocks",
+					"Added vanilla color selector to paint mixer"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+               		"Decreased lag when using canvas, imaginary, sky blocks, etc.",
+					"Change blocks breaker timing to prevent item duplicating"
+                ]
+            }
+        ]
+    },
     {
         version : "1.4.2",
         sections :
