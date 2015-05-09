@@ -74,7 +74,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	private void setRedstoneSignal(boolean redstoneSignal) {
 		if (worldObj.isRemote) return;
 
-		if (redstoneSignal && !activated.get()) {
+		if (redstoneSignal) {
 			redstoneAnimTimer = 5;
 			activated.set(true);
 			sync();
