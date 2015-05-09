@@ -31,7 +31,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile {
 
-	// DON'T remove this object, even though it's unused. Without it Builcraft pipes won't connect. -B
+	private static final int EVENT_ACTIVATE = 3;
+
+	// DON'T remove this object, even though it seems unused. Without it Builcraft pipes won't connect. -B
 	@IncludeInterface(IInventory.class)
 	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockbreaker", true, 1) {
 		@Override
@@ -76,13 +78,15 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 			redstoneAnimTimer = 5;
 			activated.set(true);
 			sync();
-			breakBlock();
+			triggerBreakBlock();
 		}
 	}
 
-	private void breakBlock() {
-		if (worldObj.isRemote) return;
+	private boolean canBreakBlock(final Block block, final int x, final int y, final int z) {
+		return !block.isAir(worldObj, x, y, z) && block != Blocks.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F;
+	}
 
+	private void triggerBreakBlock() {
 		final ForgeDirection direction = getRotation();
 		final int x = xCoord + direction.offsetX;
 		final int y = yCoord + direction.offsetY;
@@ -90,46 +94,68 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 
 		if (worldObj.blockExists(x, y, z)) {
 			final Block block = worldObj.getBlock(x, y, z);
-			if (block != null) {
-				final int metadata = worldObj.getBlockMetadata(x, y, z);
-				if (block != Blocks.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
-					breakBlock(direction, x, y, z, block, metadata);
-				}
+			if (canBreakBlock(block, x, y, z)) {
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), EVENT_ACTIVATE, 0);
 			}
-			worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 		}
+
+		worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 	}
 
-	private void breakBlock(final ForgeDirection direction, final int x, final int y, final int z, final Block block, final int metadata) {
+	@Override
+	public boolean receiveClientEvent(int event, int param) {
+		if (event == EVENT_ACTIVATE) {
+			breakBlock();
+			return true;
+		}
+
+		return false;
+	}
+
+	public void breakBlock() {
 		if (!(worldObj instanceof WorldServer)) return;
+
+		final ForgeDirection direction = getRotation();
+		final int x = xCoord + direction.offsetX;
+		final int y = yCoord + direction.offsetY;
+		final int z = zCoord + direction.offsetZ;
+
+		if (!worldObj.blockExists(x, y, z)) return;
+
+		final Block block = worldObj.getBlock(x, y, z);
+		final int metadata = worldObj.getBlockMetadata(x, y, z);
+		if (!canBreakBlock(block, x, y, z)) return;
+
 		FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
 			@Override
 			public void usePlayer(OpenModsFakePlayer fakePlayer) {
 				fakePlayer.inventory.currentItem = 0;
 				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 0, 0));
 
-				CaptureContext dropsCapturer = DropCapture.instance.start(x, y, z);
-
-				ContextManager.push(); // providing same environment as ItemInWorldManager
-
 				if (!worldObj.canMineBlock(fakePlayer, x, y, z)) return;
 
-				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, metadata, fakePlayer);
-				if (MinecraftForge.EVENT_BUS.post(event)) return;
+				CaptureContext dropsCapturer = DropCapture.instance.start(x, y, z);
+				ContextManager.push(); // providing same environment as ItemInWorldManager
 
-				boolean canHarvest = block.canHarvestBlock(fakePlayer, metadata);
+				final List<EntityItem> drops;
+				try {
+					BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, metadata, fakePlayer);
+					if (MinecraftForge.EVENT_BUS.post(event)) return;
 
-				block.onBlockHarvested(worldObj, x, y, z, metadata, fakePlayer);
-				boolean canRemove = block.removedByPlayer(worldObj, fakePlayer, x, y, z, canHarvest);
+					boolean canHarvest = block.canHarvestBlock(fakePlayer, metadata);
 
-				if (canRemove) {
-					block.onBlockDestroyedByPlayer(worldObj, x, y, z, metadata);
-					if (canHarvest) block.harvestBlock(worldObj, fakePlayer, x, y, z, metadata);
-					worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
+					block.onBlockHarvested(worldObj, x, y, z, metadata, fakePlayer);
+					boolean canRemove = block.removedByPlayer(worldObj, fakePlayer, x, y, z, canHarvest);
+
+					if (canRemove) {
+						block.onBlockDestroyedByPlayer(worldObj, x, y, z, metadata);
+						if (canHarvest) block.harvestBlock(worldObj, fakePlayer, x, y, z, metadata);
+						worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
+					}
+				} finally {
+					ContextManager.pop();
+					drops = dropsCapturer.stop();
 				}
-				ContextManager.pop();
-
-				List<EntityItem> drops = dropsCapturer.stop();
 
 				if (!drops.isEmpty()) tryInjectItems(drops, direction.getOpposite());
 			}
