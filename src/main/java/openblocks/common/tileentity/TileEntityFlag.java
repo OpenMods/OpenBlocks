@@ -32,7 +32,9 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 	}
 
 	@Override
-	protected void initialize() {}
+	public boolean canUpdate() {
+		return false;
+	}
 
 	public IIcon getIcon() {
 		return OpenBlocks.Blocks.flag.getIcon(0, 0);

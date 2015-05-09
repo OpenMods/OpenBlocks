@@ -57,4 +57,9 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 	public void setAmount(int amt) {
 		amount.set(amt);
 	}
+
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 }

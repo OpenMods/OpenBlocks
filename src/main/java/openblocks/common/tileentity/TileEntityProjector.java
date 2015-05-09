@@ -167,4 +167,9 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	public IInventory getInventory() {
 		return inventory;
 	}
+
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 }

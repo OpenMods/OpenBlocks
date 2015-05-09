@@ -242,6 +242,11 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 	}
 
 	@Override
+	public boolean canUpdate() {
+		return false;
+	}
+
+	@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
 	}

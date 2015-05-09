@@ -100,4 +100,9 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
 	}
+
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 }

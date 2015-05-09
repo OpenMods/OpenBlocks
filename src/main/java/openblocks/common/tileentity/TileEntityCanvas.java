@@ -107,6 +107,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return block.getIcon(side, paintedBlockMeta.get());
 	}
 
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
+
 	private boolean isBlockUnpainted() {
 		for (int i = 0; i < allSides.length; i++) {
 			if (!allSides[i].isEmpty() || baseColors.getValue(i) != 0xFFFFFF) return false;
