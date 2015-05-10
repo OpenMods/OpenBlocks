@@ -2,17 +2,17 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.item.ItemTrophyBlock;
 import openmods.api.*;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
+public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
 
 	private int cooldown = 0;
 	private SyncableEnum<Trophy> trophyIndex;
@@ -51,7 +51,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
 		Trophy trophy = ItemTrophyBlock.getTrophy(stack);
 		if (trophy != null) trophyIndex.set(trophy);
 	}

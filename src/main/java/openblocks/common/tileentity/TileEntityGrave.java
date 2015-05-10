@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityBat;
@@ -18,11 +19,10 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openmods.api.IActivateAwareTile;
 import openmods.api.INeighbourAwareTile;
-import openmods.api.IPlaceAwareTile;
+import openmods.api.IPlacerAwareTile;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.sync.SyncableBoolean;
@@ -35,7 +35,7 @@ import com.google.common.base.Strings;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile {
+public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile {
 
 	private static final String TAG_MESSAGE = "Message";
 	private SyncableString perishedUsername;
@@ -102,13 +102,17 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && !(player instanceof FakePlayer)) {
-			if (stack.hasDisplayName()) setUsername(stack.getDisplayName());
-			else setUsername(player.getGameProfile().getName());
-			if (player.capabilities.isCreativeMode) setLoot(player.inventory);
-			updateBlockBelow();
-			sync();
+	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+		if (!worldObj.isRemote) {
+			if ((placer instanceof EntityPlayer) && !(placer instanceof FakePlayer)) {
+				EntityPlayer player = (EntityPlayer)placer;
+
+				if (stack.hasDisplayName()) setUsername(stack.getDisplayName());
+				else setUsername(player.getGameProfile().getName());
+				if (player.capabilities.isCreativeMode) setLoot(player.inventory);
+				updateBlockBelow();
+				sync();
+			}
 		}
 	}
 

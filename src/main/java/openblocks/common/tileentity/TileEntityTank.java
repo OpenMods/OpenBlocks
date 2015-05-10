@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +30,7 @@ import openmods.utils.ItemUtils;
 
 import com.google.common.collect.Lists;
 
-public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile, ICustomHarvestDrops {
+public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlacerAwareTile, INeighbourAwareTile, ICustomHarvestDrops {
 
 	private class RenderUpdateListeners implements ISyncListener {
 
@@ -178,7 +179,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
+	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
 		NBTTagCompound itemTag = stack.getTagCompound();
 
 		if (itemTag != null && itemTag.hasKey(ItemTankBlock.TANK_TAG)) {

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,13 +13,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.Log;
 import openmods.api.IBreakAwareTile;
-import openmods.api.IPlaceAwareTile;
+import openmods.api.IPlacerAwareTile;
 import openmods.entity.EntityBlock;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
@@ -33,7 +33,7 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile, IBreakAwareTile {
+public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwareTile, IBreakAwareTile {
 
 	private static final float SPEED_CHANGE_RATE = 0.1f;
 	private static final Random RANDOM = new Random();
@@ -294,9 +294,9 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (player != null) {
-			this.owner = player.getGameProfile();
+	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+		if (!worldObj.isRemote && placer instanceof EntityPlayer) {
+			this.owner = ((EntityPlayer)placer).getGameProfile();
 		}
 	}
 

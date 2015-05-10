@@ -4,19 +4,19 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openmods.api.INeighbourAwareTile;
-import openmods.api.IPlaceAwareTile;
+import openmods.api.IPlacerAwareTile;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, INeighbourAwareTile {
+public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile, INeighbourAwareTile {
 
 	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
 	private SyncableFloat angle;
@@ -90,8 +90,8 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		angle.set(player.rotationYawHead);
+	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+		angle.set(placer.rotationYawHead);
 	}
 
 	public float getAngle() {
@@ -110,4 +110,5 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 			sync();
 		}
 	}
+
 }
