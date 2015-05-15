@@ -11,8 +11,11 @@ import openblocks.common.item.ItemTrophyBlock;
 import openmods.api.*;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.ItemUtils;
 
 public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
+
+	private final String TAG_COOLDOWN = "cooldown";
 
 	private int cooldown = 0;
 	private SyncableEnum<Trophy> trophyIndex;
@@ -54,12 +57,17 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTi
 	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
 		Trophy trophy = ItemTrophyBlock.getTrophy(stack);
 		if (trophy != null) trophyIndex.set(trophy);
+
+		if (stack.hasTagCompound()) {
+			NBTTagCompound tag = stack.getTagCompound();
+			this.cooldown = tag.getInteger(TAG_COOLDOWN);
+		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		cooldown = tag.getInteger("cooldown");
+		this.cooldown = tag.getInteger(TAG_COOLDOWN);
 	}
 
 	@Override
@@ -73,10 +81,22 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTi
 		return true;
 	}
 
+	private ItemStack getAsItem() {
+		final Trophy trophy = getTrophy();
+		if (trophy != null) {
+			ItemStack stack = trophy.getItemStack();
+			NBTTagCompound tag = ItemUtils.getItemTag(stack);
+			tag.setInteger(TAG_COOLDOWN, cooldown);
+			return stack;
+		}
+
+		return null;
+	}
+
 	@Override
 	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
-		final Trophy trophy = getTrophy();
-		if (trophy != null) drops.add(trophy.getItemStack());
+		ItemStack stack = getAsItem();
+		if (stack != null) drops.add(stack);
 	}
 
 	@Override
