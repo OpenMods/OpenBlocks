@@ -7,6 +7,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.StatCollector;
 import openmods.gui.component.GuiComponentBook;
 import openmods.gui.component.GuiComponentLabel;
+import openmods.gui.component.page.BookScaleConfig;
 import openmods.gui.component.page.PageBase;
 
 import com.google.common.base.Function;
@@ -29,10 +30,10 @@ public class ChangelogPage extends PageBase {
 	}
 
 	public ChangelogPage(String currentVersion, String section, List<String> lines) {
-		float scaleTitle = Float.parseFloat(StatCollector.translateToLocal("openmodslib.locale.scale.title"));
-		float scaleContent = Float.parseFloat(StatCollector.translateToLocal("openmodslib.locale.scale.content"));
-		int lineSpace = Integer.parseInt(StatCollector.translateToLocal("openmodslib.locale.lineSpace.titledPage"));
-		
+		final float scaleTitle = BookScaleConfig.getPageTitleScale();
+		final float scaleContent = BookScaleConfig.getPageContentScale();
+		final int lineSpace = BookScaleConfig.getTitlePageSeparator();
+
 		section = StatCollector.translateToLocal(section);
 
 		FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
