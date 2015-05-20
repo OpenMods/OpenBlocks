@@ -57,17 +57,15 @@ public class ChangelogPage extends PageBase {
 		FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
 		int leftSize = renderer.getStringWidth(name) / 2;
 		GuiComponentLabel bookmark = new GuiComponentLabel(centerTitle.getX() - 7 - leftSize, 14, "\u00a77" + name);
-		float scaleContent = Float.parseFloat(StatCollector.translateToLocal("openmodslib.locale.scale.content"));
 		bookmark.setListener(book.createBookmarkListener(page));
-		bookmark.setScale(scaleContent);
+		bookmark.setScale(BookScaleConfig.getPageContentScale());
 		addComponent(bookmark);
 	}
 
 	void addNextVersionBookmark(final GuiComponentBook book, String name, int page) {
 		GuiComponentLabel bookmark = new GuiComponentLabel(centerTitle.getX() + centerTitle.getWidth() + 7, 14, "\u00a77" + name);
-		float scaleContent = Float.parseFloat(StatCollector.translateToLocal("openmodslib.locale.scale.content"));
 		bookmark.setListener(book.createBookmarkListener(page));
-		bookmark.setScale(scaleContent);
+		bookmark.setScale(BookScaleConfig.getPageContentScale());
 		addComponent(bookmark);
 	}
 }
