@@ -135,8 +135,12 @@ public class Config {
 	public static boolean fartTypying = false;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "tomfoolery", name = "flimFlamBlacklist", comment = "Blacklist for effects used by flim-flam enchantment")
-	public static String[] flimFlamBlacklist = new String[0];
+	@ConfigProperty(category = "tomfoolery", name = "flimFlamBlacklist", comment = "Blacklist/Whitelist for effects used by flim-flam enchantment")
+	public static String[] flimFlamList = new String[0];
+
+	@OnLineModifiable
+	@ConfigProperty(category = "tomfoolery", name = "reverseBlacklist", comment = "If true, flim-flam blacklist will become whitelist")
+	public static boolean flimFlamWhitelist = false;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "tomfoolery", name = "safeOnly", comment = "Allow only flimflams that don't cause death (or at least very rarely)")

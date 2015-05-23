@@ -24,34 +24,38 @@ public class FlimFlamRegistry implements IFlimFlamRegistry {
 
 	private static final Map<String, IFlimFlamDescription> FLIM_FLAMS_BY_NAME = Maps.newHashMap();
 
-	public static final Blacklist BLACKLIST = new Blacklist();
+	public static final FlimFlamChecker BLACKLIST = new FlimFlamChecker();
 
-	public static class Blacklist {
-		private Set<String> blacklist;
+	public static class FlimFlamChecker {
+		private Set<String> flimFlamList;
 
-		private void loadBlacklist() {
-			blacklist = Sets.newHashSet();
+		private void loadList() {
+			flimFlamList = Sets.newHashSet();
 			Set<String> validNames = Sets.newHashSet(FlimFlamRegistry.instance.getAllFlimFlamsNames());
-			for (String s : Config.flimFlamBlacklist) {
+			for (String s : Config.flimFlamList) {
 				if (validNames.contains(s)) {
-					blacklist.add(s);
-					Log.info("Blacklisting flim-flam %s", s);
+					flimFlamList.add(s);
 				} else Log.warn("Trying to blacklist unknown flimflam name '%s'", s);
 			}
+
+			Log.debug("Blacklisting/Whitelisting flim-flams %s", flimFlamList);
 		}
 
 		public boolean isBlacklisted(IFlimFlamDescription effect) {
-			if (blacklist == null) loadBlacklist();
-			return (Config.safeFlimFlams && !effect.isSafe()) || blacklist.contains(effect.name());
+			if (Config.safeFlimFlams && !effect.isSafe()) return true;
+
+			if (flimFlamList == null) loadList();
+			final boolean onList = flimFlamList.contains(effect.name());
+			return Config.flimFlamWhitelist ^ onList;
 		}
 
 		@SubscribeEvent
 		public void onReconfig(ConfigurationChange.Post evt) {
-			if (evt.check("tomfoolery", "flimFlamBlacklist")) blacklist = null;
+			if (evt.check("tomfoolery", "flimFlamBlacklist")) flimFlamList = null;
 		}
 
 		public void init() {
-			loadBlacklist();
+			loadList();
 			MinecraftForge.EVENT_BUS.register(this);
 		}
 	}
