@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @BookDocumentation
 public class BlockScaffolding extends OpenBlock {
 	public BlockScaffolding() {
-		super(Material.wood);
+		super(Material.cloth);
 		setTickRandomly(true);
 		setHardness(0.1F);
 	}

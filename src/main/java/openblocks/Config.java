@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -26,6 +27,9 @@ import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.RegistryDelegate;
 
 public class Config {
 
@@ -464,8 +468,15 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.scaffolding != null) {
-			ItemStack stack = new ItemStack(OpenBlocks.Blocks.scaffolding, 16);
-			recipeList.add(new ShapedOreRecipe(stack, "sss", "s s", "sss", 's', "stickWood"));
+			final ItemStack result = new ItemStack(OpenBlocks.Blocks.scaffolding, 8);
+			recipeList.add(new ShapedOreRecipe(result, "sss", "s s", "sss", 's', "stickWood"));
+			final RegistryDelegate<Item> itemDelegate = result.getItem().delegate;
+			GameRegistry.registerFuelHandler(new IFuelHandler() {
+				@Override
+				public int getBurnTime(ItemStack fuel) {
+					return fuel.getItem() == itemDelegate.get()? 100 : 0;
+				}
+			});
 		}
 
 		if (OpenBlocks.Items.hangGlider != null) {
