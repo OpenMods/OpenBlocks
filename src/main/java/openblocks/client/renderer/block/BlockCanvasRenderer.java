@@ -30,8 +30,18 @@ public class BlockCanvasRenderer implements IBlockRenderer<BlockCanvas> {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockCanvas block, int modelId, RenderBlocks renderer) {
+		if (renderer.hasOverrideBlockTexture()) {
+			// breaking animation handling
+			renderer.setRenderBoundsFromBlock(block);
+			block.setLayerForRender(BlockCanvas.NO_LAYER);
+			block.setSideForRender(BlockCanvas.RENDER_ALL_SIDES);
+			renderer.renderStandardBlock(block, x, y, z);
+			return true;
+		}
+
 		renderBlocks.setWorld(world);
 		renderBlocks.setRenderBoundsFromBlock(block);
+
 		boolean visible = false;
 		TileEntity tile = world.getTileEntity(x, y, z);
 		if (tile instanceof TileEntityCanvas) {

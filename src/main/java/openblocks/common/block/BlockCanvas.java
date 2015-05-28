@@ -19,6 +19,10 @@ import openmods.utils.ColorUtils.ColorMeta;
 @BookDocumentation
 public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
+	public static final int RENDER_ALL_SIDES = -1;
+
+	public static final int NO_LAYER = -1;
+
 	private int layer = 0;
 	private int renderSide = 0;
 	public IIcon baseIcon;
@@ -50,13 +54,17 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-		return side == renderSide && super.shouldSideBeRendered(world, x, y, z, side);
+		return (renderSide == RENDER_ALL_SIDES || side == renderSide) && super.shouldSideBeRendered(world, x, y, z, side);
 	}
 
 	@Override
 	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		return tile != null? tile.getColorForRender(renderSide, layer) : 0xFFFFFFFF;
+		if (layer != NO_LAYER) {
+			TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
+			if (tile != null) return tile.getColorForRender(renderSide, layer);
+		}
+
+		return 0xFFFFFFFF;
 	}
 
 	@Override
