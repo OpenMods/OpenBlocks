@@ -162,7 +162,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		super.setCustomNameTag(name);
 
 		if (!worldObj.isRemote && MinecraftServer.getServer() != null) {
-			if (owner == null || !owner.getName().equalsIgnoreCase(name)) {
+			if (name != null && (owner == null || !name.equalsIgnoreCase(owner.getName()))) {
 				try {
 					final GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
 					this.owner = profile != null? fetchFullProfile(profile) : null;
