@@ -21,7 +21,9 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	public static final int RENDER_ALL_SIDES = -1;
 
-	public static final int NO_LAYER = -1;
+	public static final int BASE_LAYER = -1;
+
+	public static final int NO_LAYER = -2;
 
 	private int layer = 0;
 	private int renderSide = 0;
@@ -69,8 +71,11 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	@Override
 	public IIcon getUnrotatedTexture(ForgeDirection direction, IBlockAccess world, int x, int y, int z) {
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile != null) { return tile.getTextureForRender(renderSide, layer); }
+		if (layer != NO_LAYER) {
+			TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
+			if (tile != null) return tile.getTextureForRender(renderSide, layer);
+		}
+
 		return super.getUnrotatedTexture(direction, world, x, y, z);
 
 	}

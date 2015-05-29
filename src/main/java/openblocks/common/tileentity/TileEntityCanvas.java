@@ -13,6 +13,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
+import openblocks.common.block.BlockCanvas;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
 import openblocks.common.item.ItemStencil;
@@ -29,8 +30,6 @@ import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ICustomBreakDrops, ICustomHarvestDrops {
-
-	private static final int BASE_LAYER = -1;
 
 	public static final int[] ALL_SIDES = { 0, 1, 2, 3, 4, 5 };
 
@@ -78,20 +77,18 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	public Layer getLayerForSide(int renderSide, int layerId) {
-		SyncableBlockLayers layers = getLayersForSide(renderSide);
-		if (layers != null) { return layers.getLayer(layerId); }
-		return null;
+		final SyncableBlockLayers layers = getLayersForSide(renderSide);
+		return layers != null? layers.getLayer(layerId) : null;
 	}
 
 	public int getColorForRender(int renderSide, int layerId) {
-		if (layerId == BASE_LAYER) { return baseColors.getValue(renderSide); }
-		Layer layer = getLayerForSide(renderSide, layerId);
-		if (layer != null) { return layer.getColorForRender(); }
-		return 0xCCCCCC;
+		if (layerId == BlockCanvas.BASE_LAYER) return baseColors.getValue(renderSide);
+		final Layer layer = getLayerForSide(renderSide, layerId);
+		return layer != null? layer.getColorForRender() : 0xCCCCCC;
 	}
 
 	public IIcon getTextureForRender(int renderSide, int layerId) {
-		if (layerId > BASE_LAYER) {
+		if (layerId > BlockCanvas.BASE_LAYER) {
 			Layer layer = getLayerForSide(renderSide, layerId);
 			if (layer != null) {
 				Stencil stencil = layer.getStencil();
