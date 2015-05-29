@@ -88,7 +88,7 @@ public class BlockBigButton extends OpenBlock {
 	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side) {
 		ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
 		TileEntityBigButton button = getTileEntity(world, x, y, z, TileEntityBigButton.class);
-		return (direction == button.getRotation() && button.isButtonActive())? 15 : 0;
+		return (button != null && direction == button.getRotation() && button.isButtonActive())? 15 : 0;
 	}
 
 	@Override
