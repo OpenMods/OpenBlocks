@@ -5,27 +5,20 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.event.world.BlockEvent;
 import openmods.api.INeighbourAwareTile;
-import openmods.context.ContextManager;
+import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUser;
-import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.world.DropCapture;
-import openmods.world.DropCapture.CaptureContext;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -82,7 +75,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		}
 	}
 
-	private boolean canBreakBlock(final Block block, final int x, final int y, final int z) {
+	private boolean canBreakBlock(Block block, int x, int y, int z) {
 		return !block.isAir(worldObj, x, y, z) && block != Blocks.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F;
 	}
 
@@ -123,43 +116,10 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		if (!worldObj.blockExists(x, y, z)) return;
 
 		final Block block = worldObj.getBlock(x, y, z);
-		final int metadata = worldObj.getBlockMetadata(x, y, z);
 		if (!canBreakBlock(block, x, y, z)) return;
 
-		FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
-			@Override
-			public void usePlayer(OpenModsFakePlayer fakePlayer) {
-				fakePlayer.inventory.currentItem = 0;
-				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 0, 0));
-
-				if (!worldObj.canMineBlock(fakePlayer, x, y, z)) return;
-
-				CaptureContext dropsCapturer = DropCapture.instance.start(x, y, z);
-				ContextManager.push(); // providing same environment as ItemInWorldManager
-
-				final List<EntityItem> drops;
-				try {
-					BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, metadata, fakePlayer);
-					if (MinecraftForge.EVENT_BUS.post(event)) return;
-
-					boolean canHarvest = block.canHarvestBlock(fakePlayer, metadata);
-
-					block.onBlockHarvested(worldObj, x, y, z, metadata, fakePlayer);
-					boolean canRemove = block.removedByPlayer(worldObj, fakePlayer, x, y, z, canHarvest);
-
-					if (canRemove) {
-						block.onBlockDestroyedByPlayer(worldObj, x, y, z, metadata);
-						if (canHarvest) block.harvestBlock(worldObj, fakePlayer, x, y, z, metadata);
-						worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
-					}
-				} finally {
-					ContextManager.pop();
-					drops = dropsCapturer.stop();
-				}
-
-				if (!drops.isEmpty()) tryInjectItems(drops, direction.getOpposite());
-			}
-		});
+		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new BreakBlockAction(worldObj, x, y, z));
+		tryInjectItems(drops, direction.getOpposite());
 	}
 
 	private void tryInjectItems(List<EntityItem> drops, ForgeDirection direction) {
