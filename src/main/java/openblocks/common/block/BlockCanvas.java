@@ -566,22 +566,6 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 	
 	@Override
-	public void updateTick(World world, int x, int y, int z, java.util.Random A){
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile == null){
-			super.updateTick(world, x, y, z, A);
-			return;
-		}
-		Block block = tile.getPaintedBlock();
-		if (block == Blocks.air){
-			super.updateTick(world, x, y, z, A);
-			return;
-		}
-		block.updateTick(world, x, y, z, A);
-		return;
-	}
-	
-	@Override
 	public int getLightOpacity(IBlockAccess world, int x, int y, int z){
 		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
 		if (tile == null)
