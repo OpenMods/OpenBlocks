@@ -82,7 +82,7 @@ public class ItemPaintBrush extends Item {
 		Integer color = getColorFromStack(stack);
 		if (stack.getItemDamage() > getMaxDamage() || color == null) return true;
 
-		if (PaintUtils.instance.isAllowedToReplace(world, x, y, z)) {
+		if (PaintUtils.instance.isAllowedToReplace(world, x, y, z) && world.getBlock(x, y, z) != OpenBlocks.Blocks.canvasGlass && world.getBlock(x, y, z) != OpenBlocks.Blocks.canvas) {
 			BlockCanvas.replaceBlock(world, x, y, z);
 		}
 

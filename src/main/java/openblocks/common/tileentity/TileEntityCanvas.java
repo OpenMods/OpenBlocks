@@ -29,6 +29,8 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
+import net.minecraft.world.IBlockAccess;
+
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ICustomBreakDrops, ICustomHarvestDrops {
 
 	public static final int[] ALL_SIDES = { 0, 1, 2, 3, 4, 5 };
@@ -80,11 +82,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		final SyncableBlockLayers layers = getLayersForSide(renderSide);
 		return layers != null? layers.getLayer(layerId) : null;
 	}
+	
+	public void setDefaultColors(int defaultColor){
+	}
 
 	public int getColorForRender(int renderSide, int layerId) {
 		if (layerId == BlockCanvas.BASE_LAYER) return baseColors.getValue(renderSide);
 		final Layer layer = getLayerForSide(renderSide, layerId);
-		return layer != null? layer.getColorForRender() : 0xCCCCCC;
+		return layer != null? layer.getColorForRender() : 0xFEFEFE;
 	}
 
 	public IIcon getTextureForRender(int renderSide, int layerId) {
@@ -102,6 +107,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		Block block = paintedBlock.getValue();
 		if (block == Blocks.air) return OpenBlocks.Blocks.canvas.baseIcon;
 		return block.getIcon(side, paintedBlockMeta.get());
+	}
+	
+	public Block getPaintedBlock() {
+		return paintedBlock.getValue();
+	}
+	
+	public int getPaintedBlockMeta() {
+		return paintedBlockMeta.get();
 	}
 
 	@Override
@@ -251,8 +264,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 	}
 
-	public void setPaintedBlockBlock(Block block, int meta) {
+	public void setPaintedBlockBlock(Block block, int meta, int color) {
 		paintedBlock.setValue(block);
 		paintedBlockMeta.set(meta);
+		for(int i = 0; i < 6; i++){
+			baseColors.setValue(i, color);
+		}
 	}
 }
