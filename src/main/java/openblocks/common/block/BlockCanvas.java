@@ -454,22 +454,6 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block A, int B){
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile == null){
-			super.breakBlock(world, x, y, z, A, B);
-			return;
-		}
-		Block block = tile.getPaintedBlock();
-		if (block == Blocks.air){
-			super.breakBlock(world, x, y, z, A, B);
-			return;
-		}
-		block.breakBlock(world, x, y, z, A, B);
-		return;
-	}
-
-	@Override
 	public void fillWithRain(World world, int x, int y, int z){
 		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
 		if (tile == null){
@@ -482,22 +466,6 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 			return;
 		}
 		block.fillWithRain(world, x, y, z);
-		return;
-	}
-
-	@Override
-	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer A){
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile == null){
-			super.onBlockClicked(world, x, y, z, A);
-			return;
-		}
-		Block block = tile.getPaintedBlock();
-		if (block == Blocks.air){
-			super.onBlockClicked(world, x, y, z, A);
-			return;
-		}
-		block.onBlockClicked(world, x, y, z, A);
 		return;
 	}
 
@@ -546,38 +514,6 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 			return;
 		}
 		block.onFallenUpon(world, x, y, z, A, B);
-		return;
-	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block A){
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile == null){
-			super.onNeighborBlockChange(world, x, y, z, A);
-			return;
-		}
-		Block block = tile.getPaintedBlock();
-		if (block == Blocks.air){
-			super.onNeighborBlockChange(world, x, y, z, A);
-			return;
-		}
-		block.onNeighborBlockChange(world, x, y, z, A);
-		return;
-	}
-
-	@Override
-	public void onNeighborChange(IBlockAccess world, int x, int y, int z, int A, int B, int C){
-		TileEntityCanvas tile = getTileEntity(world, x, y, z, TileEntityCanvas.class);
-		if (tile == null){
-			super.onNeighborChange(world, x, y, z, A, B, C);
-			return;
-		}
-		Block block = tile.getPaintedBlock();
-		if (block == Blocks.air){
-			super.onNeighborChange(world, x, y, z, A, B, C);
-			return;
-		}
-		block.onNeighborChange(world, x, y, z, A, B, C);
 		return;
 	}
 
