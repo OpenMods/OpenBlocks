@@ -30,6 +30,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.IPlantable;
 import net.minecraft.entity.player.EntityPlayer;
+import openmods.Log;
 
 @BookDocumentation
 public class BlockCanvas extends OpenBlock implements IPaintableBlock {
@@ -641,6 +642,14 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	public static void replaceBlock(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		
+		int origColor = 0xFFFFFF;
+		
+		try{
+			origColor = block.colorMultiplier(world, x, y, z);  
+		}catch(NoSuchMethodError e){
+			e.printStackTrace();
+		}
 
 		if (block.getMaterial() == Material.glass) {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.canvasGlass);
@@ -648,7 +657,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 			world.setBlock(x, y, z, OpenBlocks.Blocks.canvas);
 		}
 		TileEntityCanvas tile = (TileEntityCanvas)world.getTileEntity(x, y, z);
-		tile.setPaintedBlockBlock(block, meta, block.colorMultiplier(world, x, y, z));
+		tile.setPaintedBlockBlock(block, meta, origColor);  
 	}
 
 	@Override
