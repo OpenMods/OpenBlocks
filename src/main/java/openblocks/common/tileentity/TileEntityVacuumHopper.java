@@ -119,6 +119,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		@SuppressWarnings("unchecked")
 		List<Entity> interestingItems = worldObj.selectEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3), this);
 
+		boolean needsSync = false;
+
 		for (Entity entity : interestingItems) {
 			double x = (xCoord + 0.5D - entity.posX);
 			double y = (yCoord + 0.5D - entity.posY);
@@ -126,7 +128,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 			double distance = Math.sqrt(x * x + y * y + z * z);
 			if (distance < 1.1) {
-				onEntityCollidedWithBlock(entity);
+				needsSync |= onEntityCollidedWithBlock(entity);
 			} else {
 				double var11 = 1.0 - distance / 15.0;
 
@@ -140,34 +142,38 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 		}
 
-		if (!worldObj.isRemote) outputToNeighbors();
+		if (!worldObj.isRemote) {
+			needsSync |= outputToNeighbors();
+			if (needsSync) sync();
+		}
 	}
 
-	private void outputToNeighbors() {
-		tank.distributeToSides(50, worldObj, getPosition(), xpOutputs.getValue());
-		if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) autoInventoryOutput();
+	private boolean outputToNeighbors() {
+		if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
+			tank.distributeToSides(50, worldObj, getPosition(), xpOutputs.getValue());
+			autoInventoryOutput();
+			return true;
+		}
+
+		return false;
 	}
 
 	private void autoInventoryOutput() {
-		int firstUsedSlot = -1;
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (inventory.getStackInSlot(i) != null) {
-				firstUsedSlot = i;
+				getItemOutOfSlot(i);
 				break;
 			}
 		}
+	}
 
-		if (firstUsedSlot < 0) return;
-
-		List<ForgeDirection> outputSides = Lists.newArrayList(itemOutputs.getValue());
+	private void getItemOutOfSlot(int slot) {
+		final List<ForgeDirection> outputSides = Lists.newArrayList(itemOutputs.getValue());
 		Collections.shuffle(outputSides);
 
 		for (ForgeDirection output : outputSides) {
 			TileEntity tileOnSurface = getTileInDirection(output);
-			if (ItemDistribution.moveItemInto(inventory, firstUsedSlot, tileOnSurface, output, 64, true) > 0) {
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-				break;
-			}
+			if (ItemDistribution.moveItemInto(inventory, slot, tileOnSurface, output, 64, true) > 0) return;
 		}
 	}
 
@@ -197,7 +203,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		return false;
 	}
 
-	public void onEntityCollidedWithBlock(Entity entity) {
+	public boolean onEntityCollidedWithBlock(Entity entity) {
 		if (!worldObj.isRemote) {
 			if (entity instanceof EntityItem && !entity.isDead) {
 				EntityItem item = (EntityItem)entity;
@@ -208,14 +214,18 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 				} else {
 					item.setEntityItemStack(stack);
 				}
+				return true;
 			} else if (entity instanceof EntityXPOrb) {
 				if (tank.getSpace() > 0) {
 					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, LiquidXpUtils.xpToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
 					tank.fill(newFluid, true);
 					entity.setDead();
+					return true;
 				}
 			}
 		}
+
+		return false;
 	}
 
 	@Override
