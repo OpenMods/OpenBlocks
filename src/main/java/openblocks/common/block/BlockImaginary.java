@@ -3,6 +3,7 @@ package openblocks.common.block;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -29,6 +30,8 @@ public class BlockImaginary extends OpenBlock {
 	public IIcon texturePencilHalfPanel;
 	public IIcon textureCrayonHalfPanel;
 
+	private static final Material imaginaryMaterial = new Material(MapColor.airColor);
+
 	public static final SoundType drawingSounds = new SoundType("cloth", 0.5f, 1.0f) {
 		@Override
 		public String getBreakSound() {
@@ -42,7 +45,7 @@ public class BlockImaginary extends OpenBlock {
 	};
 
 	public BlockImaginary() {
-		super(Material.glass);
+		super(imaginaryMaterial);
 		setHardness(0.3f);
 		stepSound = drawingSounds;
 		setRenderMode(RenderMode.TESR_ONLY);
