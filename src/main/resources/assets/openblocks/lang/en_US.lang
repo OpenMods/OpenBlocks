@@ -112,12 +112,14 @@ openblocks.misc.pedometer.speed=Speed: %s
 openblocks.misc.pedometer.avg_speed=Average speed: %s
 openblocks.misc.pedometer.total_distance=Total distance: %s
 
-openblocks.misc.pedometer.straght_line_distance=Staight line distance: %s
+#openblocks.misc.pedometer.straght_line_distance=Staight line distance: %s //TYPO :(
+openblocks.misc.pedometer.straght_line_distance=Straight line distance: %s
 openblocks.misc.pedometer.straigh_line_speed=Straight line speed: %s
 
 openblocks.misc.pedometer.last_check_distance=Distance from last check: %s
 openblocks.misc.pedometer.last_check_speed=Last check speed: %s
-openblocks.misc.pedometer.last_check_time=Time from last check %d ticks
+#openblocks.misc.pedometer.last_check_time=Time from last check %d ticks //MISSING :
+openblocks.misc.pedometer.last_check_time=Time from last check: %d ticks
 
 openblocks.misc.pedometer.total_time=Total time: %d ticks
 
@@ -217,7 +219,8 @@ tile.openblocks.fan.name=Fan
 tile.openblocks.fan.description=The fan will blow players, mobs or entities in the direction it's facing.
 
 tile.openblocks.target.name=Target
-tile.openblocks.target.description=The target will give out a redstone signal of a strength relative to the accuracy of the players aim. Give the target a redstone signal to make it pop up!
+#tile.openblocks.target.description=The target will give out a redstone signal of a strength relative to the accuracy of the players aim. Give the target a redstone signal to make it pop up! // MISSING ' --> player(')s aim
+tile.openblocks.target.description=The target will give out a redstone signal of a strength relative to the accuracy of the player's aim. Give the target a redstone signal to make it pop up!
 
 tile.openblocks.path.name=Path
 tile.openblocks.path.description=The path doesn't do anything. It just looks nice!

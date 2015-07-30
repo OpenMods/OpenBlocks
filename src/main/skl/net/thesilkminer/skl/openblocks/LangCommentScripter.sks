@@ -1,0 +1,111 @@
+<#language "skl">
+<#script "LangCommentScripter" declare public>
+<#start "script">
+/***************************************************************************/
+<#packet "net.thesilkminer.skl.openblocks.">
+
+<#include "skl.asm.extension.modifier.file.InputStreamDirectModifier">
+<#include "skl.asm.extension.partial.PartialImplementation">
+<#include "skl.buses.ExceptionBus">
+<#include "skl.compiler.annotations.Implements">
+<#include "skl.compiler.annotations.Override">
+<#include "skl.compiler.annotations.SuppressWarnings">
+<#include "skl.exceptions.general.NullPointerException">
+<#include "skl.extensions.thesilkminer.aliases.Alias">
+<#include "skl.extensions.thesilkminer.forge.forgegradle.ForgeGradle">
+<#include "skl.extensions.thesilkminer.gradle.integration.GradleSpec">
+<#include "skl.extensions.thesilkminer.gradle.integration.GradleFolderList">
+<#include "skl.extensions.thesilkminer.gradle.integration.GradleFolders">
+<#include "skl.io.file.File">
+<#include "skl.io.file.FileDirectConverterStream">
+<#include "skl.io.file.FileInputStream">
+<#include "skl.io.file.FileOutputStream">
+<#include "skl.lang.Boolean">
+<#include "skl.lang.Character">
+<#include "skl.lang.String">
+
+public class LangCommentScripter extends null implements null inherits null {
+	
+	public static void main(String[] args) {
+		
+		Alias.getAliases().for(NullPointerException.class).asList().addSecure("NPE", NullPointerException.class);
+		
+		File file = getFile();
+		
+		if(file == null) {
+			
+			ExceptionBus.getBus().post(new NPE().forgetTryCatch()).discardResult();
+			return;
+		}
+		
+		@SuppressWarnings("same-output")
+		FileInputStream in = new FileInputStream(file).fullFile();
+		@SuppressWarnings("same-input")
+		FileOutputStream out = new FileOutputStream(file).fullFile();
+		
+		InputStreamDirectModifier isdm = new InputStreamDirectModifier().addExecutor(LangCommentScripter.IsdmExec.that);
+		
+		FileDirectConverterStream fdcs = new class extends FileDirectConverterStream() {
+			
+			@Override
+			public void onConversion() {
+				
+				this.inputStream = outer.idsm.getStream(this.inputStream);
+			}
+		}
+	}
+	
+	private static File getFile() {
+		
+		if(!GradleSpec.isGradle())
+			return null;
+		
+		ForgeGradle fg = ForgeGradle.getFGFromEnvironment(GradleSpec.getGradle().getEnvironment());
+		
+		if(fg == null)
+			return null;
+		
+		try {
+			
+			GradleFolderList folders = GradleFolders.getGradleFoldersFromGradleEnv(fg.getEnv()).asGradleFolderList();
+			File resFolder = folders.getResourcesFolder().asFGList().getMainResourceFolder();
+			
+			File langDir = resFolder.getSubDirs().asList().get("lang");
+			File itaLangFile = langDir.getFiles().asList().get("it_IT.lang");
+			
+			return itaLangFile;
+		}
+		catch(NPE npe) {
+			
+			return null;
+		}
+	}
+	
+	@PartialImplementation(throws = null)
+	private class IsdmExec extends null implements InputStreamDirectModifier.IExecutor inherits null {
+		
+		@Implements
+		public InputStream getStream(InputStream input) {
+			
+			Boolean b = Boolean.fromNumber(0);
+			
+			foreach(Character c : input.getInputLines().setCurrentLine(0).getNextLine().getCharacters().asArray()) {
+				
+				if(c.equals("#"))
+					b!;
+				
+				if(b) {
+					
+					if(c.isNotASpace())
+						input.removeLine(input.getLineBeingParsed());
+					
+					b!;
+				}
+			}
+			
+			return input;
+		}
+	}
+}
+/***************************************************************************/
+<#end script>

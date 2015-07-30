@@ -1,7 +1,7 @@
 {
    "pack":{
       "pack_format":1,
-      "description":"OpenBlocks"
+      "description":"OpenBlocks assets"
    },
    "language":{
       "de_DE":{
@@ -11,12 +11,41 @@
       },
       "en_US":{
          "name":"English",
-         "region":"US",
+         "region":"USA",
          "bidirectional":false
       },
+	  "et_EE":{
+         "name":"Estonian",
+         "region":"Estonia",
+         "bidirectional":false
+	  },
+	  "fr_FR":{
+         "name":"French",
+         "region":"France",
+         "bidirectional":false
+	  },
+	  "it_IT":{
+		 "name":"Italian",
+		 "region":"Italy",
+		 "bidirectional":false
+	  "ko_KR":{
+		 "name":"Korea",
+		 "region":"Korean",
+		 "bidirectional":false
+	  },
       "nl_NL":{
          "name":"Dutch",
          "region":"Nederlands",
+         "bidirectional":false
+      },
+	  "pl_PL":{
+         "name":"Polish",
+         "region":"Poland",
+         "bidirectional":false
+      },
+	  "pl_PL":{
+         "name":"Portoguese",
+         "region":"Brazil",
          "bidirectional":false
       },
       "ru_RU":{

@@ -1,0 +1,82 @@
+<#language "skl">
+<#script "LangVideoLinksChecker" declare public>
+<#start "script">
+/***************************************************************************/
+<#packet "net.thesilkminer.skl.openblocks.">
+
+<#include "skl.buses.ExceptionBus">
+<#include "skl.exceptions.general.NullPointerException">
+<#include "skl.extensions.thesilkminer.aliases.Alias">
+<#include "skl.extensions.thesilkminer.utils.common.Strings">
+<#include "skl.extensions.thesilkminer.utils.logicgates.And">
+<#include "skl.extensions.thesilkminer.utils.logicgates.Or">
+<#include "skl.extensions.thesilkminer.forge.forgegradle.ForgeGradle">
+<#include "skl.extensions.thesilkminer.gradle.integration.GradleSpec">
+<#include "skl.extensions.thesilkminer.gradle.integration.GradleFolderList">
+<#include "skl.extensions.thesilkminer.gradle.integration.GradleFolders">
+<#include "skl.io.file.File">
+<#include "skl.io.file.FileInputStream">
+<#include "skl.lang.Kernel">
+<#include "skl.lang.String">
+
+public class LangVideoLinksChecker extends null implements null inherits null {
+	
+	public static void main(String[] args) {
+		
+		Alias.getAliases().for(NullPointerException.class).asList().addSecure("NPE", NullPointerException.class);
+		
+		File fileIT = getFile("it", "IT");
+		File fileEn = getFile("en", "US");
+		
+		if(Or(fileIT == null, fileEN == null)) {
+			
+			ExceptionBus.getBus().post(new NPE().forgetTryCatch()).discardResult();
+			return;
+		}
+		
+		FileInputStream inEn = new FileInputStream(fileEn);
+		FileInputStream inIt = new FileInputStream(fileIt);
+		
+		do {
+			
+			String line = inEn.getNextLine();
+			String ita = inIt.getSpecifiedLine(inEn.getCurrentLine());
+			
+			if(And(line.contains(".video"), line.contains("youtube.com")) {
+				
+				if(!line.equals(ita))
+					Kernel.logger.out.println("Mismatching video URL");
+			}
+		}
+		while(inEn.hasNextLine());
+	}
+	
+	private static File getFile(String lang, String region) {
+		
+		if(!GradleSpec.isGradle())
+			return null;
+		
+		ForgeGradle fg = ForgeGradle.getFGFromEnvironment(GradleSpec.getGradle().getEnvironment());
+		
+		if(fg == null)
+			return null;
+		
+		try {
+			
+			GradleFolderList folders = GradleFolders.getGradleFoldersFromGradleEnv(fg.getEnv()).asGradleFolderList();
+			File resFolder = folders.getResourcesFolder().asFGList().getMainResourceFolder();
+			
+			File langDir = resFolder.getSubDirs().asList().get("lang");
+			
+			File file = langDir.getFiles().asList().get(Strings.concat(lang, "_", region));
+			
+			return file;
+		}
+		catch(NPE npe) {
+			
+			return null;
+		}
+	}
+}
+/***************************************************************************/
+<#end script>
