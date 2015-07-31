@@ -1,5 +1,29 @@
 [
-	{
+    {
+        version : "1.4.4",
+        sections :
+        [
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Crayon block not cannot be broken in adventure mode",
+                    "Vacuum hopper fluid bar not updating",
+                    "Bear trap holds entities between restarts",
+                    "Luggages keep their enchantments",
+                    "Flim-flam now has blacklist/whitelist switch"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                   "Flim-flam now has blacklist/whitelist switch"
+                ]
+            }
+        ]
+    },
+    {
         version : "1.4.3",
         sections :
         [
@@ -7,18 +31,18 @@
                 title : "openblocks.gui.features",
                 lines :
                 [
-					"Paintbrush can now dye vanilla blocks (like wool)",
-					"Paintbrush can now be dyed in crafting inventory",
-					"Paintbrushes from few other mods should now work with canvas blocks",
-					"Added vanilla color selector to paint mixer"
+                    "Paintbrush can now dye vanilla blocks (like wool)",
+                    "Paintbrush can now be dyed in crafting inventory",
+                    "Paintbrushes from few other mods should now work with canvas blocks",
+                    "Added vanilla color selector to paint mixer"
                 ]
             },
             {
                 title : "openblocks.gui.bugfixes",
                 lines :
                 [
-               		"Decreased lag when using canvas, imaginary, sky blocks, etc.",
-					"Change blocks breaker timing to prevent item duplicating"
+                       "Decreased lag when using canvas, imaginary, sky blocks, etc.",
+                    "Change blocks breaker timing to prevent item duplicating"
                 ]
             }
         ]
@@ -146,7 +170,7 @@
             }
         ]
     },
-    { 
+    {
         version : "1.2.8",
         sections :
         [
@@ -175,7 +199,7 @@
             }
         ]
     },
-    { 
+    {
         version : "1.2.7",
         sections :
         [
@@ -203,7 +227,7 @@
             }
         ]
     },
-    { 
+    {
         version : "1.2.6",
         sections :
         [
@@ -237,7 +261,7 @@
             }
         ]
     },
-    { 
+    {
         version : "1.2.5",
         sections :
         [
