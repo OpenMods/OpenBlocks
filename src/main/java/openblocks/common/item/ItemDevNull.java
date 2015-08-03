@@ -48,24 +48,37 @@ public class ItemDevNull extends Item {
 			super.onInventoryChanged(slotNumber);
 			if (!player.worldObj.isRemote && slotNumber == 0) {
 				ItemStack stack = getStackInSlot(0);
-				checkStack(stack, 1);
+				checkStack(stack);
 			}
 		}
 
-		private void checkStack(ItemStack stack, int count) {
-			if (stack == null) return;
-			if (++count > STACK_LIMIT) {
-				player.triggerAchievement(OpenBlocks.stackAchievement);
-			} else if (stack.getItem() instanceof ItemDevNull) {
-				final ItemStack innerStack = new ItemInventory(stack, 1).getStackInSlot(0);
-				checkStack(innerStack, count);
-			}
+		@Override
+		public boolean isItemValidForSlot(int i, ItemStack stack) {
+			return calculateDepth(stack) < STACK_LIMIT + 2;
+		}
+
+		private void checkStack(ItemStack stack) {
+			if (calculateDepth(stack) > STACK_LIMIT) player.triggerAchievement(OpenBlocks.stackAchievement);
 		}
 	}
 
 	public ItemDevNull() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
+	}
+
+	private static int calculateDepth(ItemStack stack) {
+		return calculateDepth(stack, 1);
+	}
+
+	private static int calculateDepth(ItemStack stack, int count) {
+		if (stack == null) return count;
+		if (stack.getItem() instanceof ItemDevNull) {
+			final ItemStack innerStack = new ItemInventory(stack, 1).getStackInSlot(0);
+			return calculateDepth(innerStack, count + 1);
+		}
+
+		return count;
 	}
 
 	@Override
