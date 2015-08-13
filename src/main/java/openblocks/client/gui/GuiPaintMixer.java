@@ -1,5 +1,8 @@
 package openblocks.client.gui;
 
+import java.util.List;
+
+import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer.DyeSlot;
@@ -7,12 +10,16 @@ import openblocks.rpc.IColorChanger;
 import openmods.api.IValueProvider;
 import openmods.gui.SyncedGuiContainer;
 import openmods.gui.component.*;
+import openmods.gui.component.GuiComponentPalettePicker.PaletteEntry;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.IValueUpdateAction;
 import openmods.gui.logic.ValueCopyAction;
+import openmods.utils.ColorUtils;
+import openmods.utils.ColorUtils.ColorMeta;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 
@@ -87,6 +94,32 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 
 			final GuiComponentRect colorBox = new GuiComponentRect(10, 90, 45, 10, 0xFFFFFF);
 			root.addComponent(colorBox);
+
+			final GuiComponentPalettePicker palettePicker = new GuiComponentPalettePicker(112, 25);
+			palettePicker.setAreaSize(5);
+			palettePicker.setDrawTooltip(true);
+			root.addComponent(palettePicker);
+
+			{
+				final List<PaletteEntry> vanillaPalette = Lists.newArrayList();
+				for (ColorMeta color : ColorUtils.getAllColors()) {
+					vanillaPalette.add(new PaletteEntry(color.vanillaBlockId, color.rgb, StatCollector.translateToLocal(color.unlocalizedName)));
+				}
+				palettePicker.setPalette(vanillaPalette);
+			}
+
+			palettePicker.setListener(new IValueChangedListener<PaletteEntry>() {
+				@Override
+				public void valueChanged(PaletteEntry value) {
+					final int rgb = value.rgb;
+					selectedColor = rgb;
+
+					textbox.setValue(String.format("%06X", rgb));
+					colorBox.setValue(rgb);
+					colorPicker.setValue(rgb);
+					slider.setValue(colorPicker.tone);
+				}
+			});
 
 			textbox.setListener(new IValueChangedListener<String>() {
 				@Override

@@ -1,18 +1,12 @@
 package openblocks.common.block;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import openblocks.common.item.ItemPaintCan;
 import openblocks.common.tileentity.TileEntityPaintCan;
+import openmods.block.BlockRotationMode;
 
 public class BlockPaintCan extends OpenBlock {
 
@@ -36,25 +30,6 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
-		if (te instanceof TileEntityPaintCan) {
-			TileEntityPaintCan can = (TileEntityPaintCan)te;
-			result.add(ItemPaintCan.createStack(can.getColor(), can.getAmount()));
-		}
-	}
-
-	@Override
-	protected boolean hasNormalDrops() {
-		return false;
-	}
-
-	private static ItemStack createStackForBlock(World world, int x, int y, int z) {
-		TileEntityPaintCan tile = getTileEntity(world, x, y, z, TileEntityPaintCan.class);
-		if (tile == null) return null;
-		return ItemPaintCan.createStack(tile.getColor(), tile.getAmount());
-	}
-
-	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		Icons.back = register.registerIcon("openblocks:paintcan_side");
 		Icons.front = register.registerIcon("openblocks:paintcan_front");
@@ -70,11 +45,6 @@ public class BlockPaintCan extends OpenBlock {
 		setTexture(ForgeDirection.UP, Icons.top);
 		setTexture(ForgeDirection.DOWN, Icons.bottom);
 		setDefaultTexture(Icons.back);
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
 	}
 
 	@Override
@@ -99,8 +69,7 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-		return createStackForBlock(world, x, y, z);
+	protected boolean suppressPickBlock() {
+		return true;
 	}
-
 }

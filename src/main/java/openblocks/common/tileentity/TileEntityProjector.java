@@ -15,19 +15,19 @@ import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.rpc.IRotatable;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, IExtendable, ISyncListener, IRotatable {
+public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
 
-	private GenericInventory inventory = new GenericInventory("openblocks.projector", false, 1) {
+	private GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack stack) {
 			if (stack == null) return false;
@@ -166,5 +166,10 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
+	}
+
+	@Override
+	public boolean canUpdate() {
+		return false;
 	}
 }

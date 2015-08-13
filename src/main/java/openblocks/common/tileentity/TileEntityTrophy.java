@@ -1,37 +1,34 @@
 package openblocks.common.tileentity;
 
-import net.minecraft.block.Block;
+import java.util.List;
+
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
-import openmods.api.IActivateAwareTile;
-import openmods.api.IPlaceAwareTile;
-import openmods.sync.SyncableInt;
+import openblocks.common.item.ItemTrophyBlock;
+import openmods.api.*;
+import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.ItemUtils;
 
-import com.google.common.base.Preconditions;
+public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+	private final String TAG_COOLDOWN = "cooldown";
 
-public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
-
-	public static Trophy debugTrophy = Trophy.Wolf;
 	private int cooldown = 0;
-	private SyncableInt trophyIndex;
+	private SyncableEnum<Trophy> trophyIndex;
 
 	public TileEntityTrophy() {}
 
 	@Override
 	protected void createSyncedFields() {
-		trophyIndex = new SyncableInt(-1);
+		trophyIndex = new SyncableEnum<Trophy>(Trophy.PigZombie);
 	}
 
 	public Trophy getTrophy() {
-		int trophyId = trophyIndex.get();
-		return trophyId >= 0? Trophy.VALUES[trophyId] : null;
+		return trophyIndex.get();
 	}
 
 	@Override
@@ -57,32 +54,20 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		boolean set = false;
+	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+		Trophy trophy = ItemTrophyBlock.getTrophy(stack);
+		if (trophy != null) trophyIndex.set(trophy);
+
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
-			if (tag.hasKey("entity")) {
-				String entityKey = tag.getString("entity");
-				trophyIndex.set(Trophy.valueOf(entityKey).ordinal());
-				set = true;
-			}
-		}
-
-		if (!worldObj.isRemote) {
-			if (!set) {
-				int next = (debugTrophy.ordinal() + 1) % Trophy.values().length;
-				debugTrophy = Trophy.values()[next];
-				trophyIndex.set(debugTrophy.ordinal());
-			}
-
-			sync();
+			this.cooldown = tag.getInteger(TAG_COOLDOWN);
 		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		cooldown = tag.getInteger("cooldown");
+		this.cooldown = tag.getInteger(TAG_COOLDOWN);
 	}
 
 	@Override
@@ -92,11 +77,32 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void prepareForInventoryRender(Block block, int metadata) {
-		Preconditions.checkElementIndex(metadata, Trophy.VALUES.length);
-		super.prepareForInventoryRender(block, metadata);
-		trophyIndex.set(metadata);
+	public boolean suppressNormalHarvestDrops() {
+		return true;
+	}
+
+	private ItemStack getAsItem() {
+		final Trophy trophy = getTrophy();
+		if (trophy != null) {
+			ItemStack stack = trophy.getItemStack();
+			NBTTagCompound tag = ItemUtils.getItemTag(stack);
+			tag.setInteger(TAG_COOLDOWN, cooldown);
+			return stack;
+		}
+
+		return null;
+	}
+
+	@Override
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+		ItemStack stack = getAsItem();
+		if (stack != null) drops.add(stack);
+	}
+
+	@Override
+	public ItemStack getPickBlock() {
+		final Trophy trophy = getTrophy();
+		return trophy != null? trophy.getItemStack() : null;
 	}
 
 }

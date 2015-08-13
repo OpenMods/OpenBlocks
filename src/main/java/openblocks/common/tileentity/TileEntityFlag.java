@@ -10,34 +10,37 @@ import openblocks.common.block.BlockFlag;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
 import openmods.api.ISurfaceAttachment;
+import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
-import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
+import openmods.utils.ColorUtils.RGB;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachment, IPlaceAwareTile, IActivateAwareTile {
 
 	private SyncableFloat angle;
-	private SyncableInt colorIndex;
+	private SyncableByte colorIndex;
 
 	public TileEntityFlag() {}
 
 	@Override
 	protected void createSyncedFields() {
-		angle = new SyncableFloat(0.0f);
-		colorIndex = new SyncableInt(0);
+		angle = new SyncableFloat();
+		colorIndex = new SyncableByte();
 	}
 
 	@Override
-	protected void initialize() {}
+	public boolean canUpdate() {
+		return false;
+	}
 
 	public IIcon getIcon() {
 		return OpenBlocks.Blocks.flag.getIcon(0, 0);
 	}
 
-	public void setColorIndex(int index) {
+	public void setColorIndex(byte index) {
 		colorIndex.set(index);
 	}
 
@@ -45,9 +48,8 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 		angle.set(ang);
 	}
 
-	public int getColor() {
-		if (colorIndex.get() >= BlockFlag.COLORS.length) colorIndex.set(0);
-		return BlockFlag.COLORS[colorIndex.get()];
+	public RGB getColor() {
+		return BlockFlag.COLORS[colorIndex.get() & 0xF];
 	}
 
 	@Override
@@ -80,13 +82,13 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 			ang = -BlockUtils.getRotationFromDirection(side.getOpposite());
 		}
 		setAngle(ang);
-		setColorIndex(stack.getItemDamage());
+		setColorIndex((byte)(stack.getItemDamage() & 0xF));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void prepareForInventoryRender(Block block, int metadata) {
 		super.prepareForInventoryRender(block, metadata);
-		setColorIndex(metadata);
+		setColorIndex((byte)metadata);
 	}
 }

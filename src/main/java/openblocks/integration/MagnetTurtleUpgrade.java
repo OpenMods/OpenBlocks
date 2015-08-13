@@ -3,10 +3,10 @@ package openblocks.integration;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import openblocks.client.Icons;
 import openblocks.common.item.MetasGeneric;
-import openperipheral.api.IUpdateHandler;
-import openperipheral.api.cc16.ComputerCraftWrappers;
+import openmods.utils.TextureUtils;
+import openperipheral.api.ApiAccess;
+import openperipheral.api.architecture.cc.IComputerCraftObjectsFactory;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
@@ -36,7 +36,7 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
 	@Override
 	public IPeripheral createPeripheral(ITurtleAccess turtle, TurtleSide side) {
-		return ComputerCraftWrappers.createPeripheral(new MagnetControlAdapter(turtle, side));
+		return ApiAccess.getApi(IComputerCraftObjectsFactory.class).createPeripheral(new MagnetControlAdapter(turtle, side));
 	}
 
 	@Override
@@ -51,13 +51,13 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent evt) {
-		if (evt.map.getTextureType() == Icons.ICON_TYPE_BLOCK) icon = evt.map.registerIcon("openblocks:magnet_upgrade");
+		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_BLOCKS) icon = evt.map.registerIcon("openblocks:magnet_upgrade");
 	}
 
 	@Override
 	public void update(ITurtleAccess turtle, TurtleSide side) {
 		IPeripheral peripheral = turtle.getPeripheral(side);
-		if (peripheral instanceof IUpdateHandler) ((IUpdateHandler)peripheral).onPeripheralUpdate();
+		if (peripheral instanceof ITickingTurtle) ((ITickingTurtle)peripheral).onPeripheralTick();
 	}
 
 }

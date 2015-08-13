@@ -7,8 +7,11 @@ import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
+import openblocks.rpc.ILevelChanger;
+import openmods.api.IValueReceiver;
 import openmods.gui.GuiConfigurableSlots;
 import openmods.gui.component.*;
+import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.MiscUtils;
 
@@ -28,7 +31,28 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 	@Override
 	protected void addCustomizations(BaseComposite root) {
 		TileEntityAutoEnchantmentTable te = getContainer().getOwner();
-		root.addComponent(new GuiComponentSlider(44, 39, 45, 1, 30, 0));
+
+		final ILevelChanger rpc = te.createClientRpcProxy(ILevelChanger.class);
+
+		final GuiComponentSlider slider = new GuiComponentSlider(44, 39, 45, 1, 30, 0);
+		slider.setListener(new IValueChangedListener<Integer>() {
+			@Override
+			public void valueChanged(Integer value) {
+				rpc.changeLevel(value);
+			}
+		});
+		addSyncUpdateListener(ValueCopyAction.create(te.getLevelProvider(), slider));
+		root.addComponent(slider);
+
+		final GuiComponentLabel maxLevel = new GuiComponentLabel(40, 25, "0");
+		maxLevel.setMaxWidth(100);
+		addSyncUpdateListener(ValueCopyAction.create(te.getMaxLevelProvider(), new IValueReceiver<Integer>() {
+			@Override
+			public void setValue(Integer value) {
+				maxLevel.setText(StatCollector.translateToLocalFormatted("openblocks.gui.max_level", value));
+			}
+		}));
+		root.addComponent(maxLevel);
 
 		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoEnchantmentTable.TANK_CAPACITY);
 		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));

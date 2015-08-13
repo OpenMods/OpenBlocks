@@ -3,30 +3,26 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
 import openmods.api.IActivateAwareTile;
-import openmods.api.IPlaceAwareTile;
 import openmods.sync.SyncableInt;
-import openmods.tileentity.SyncedTileEntity;
+import openmods.sync.drops.DroppableTileEntity;
+import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.BlockUtils;
 
-public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
+public class TileEntityPaintCan extends DroppableTileEntity implements IActivateAwareTile {
 
+	@StoreOnDrop(name = ItemPaintCan.TAG_COLOR)
 	private SyncableInt color;
+
+	@StoreOnDrop(name = ItemPaintCan.TAG_AMOUNT)
 	private SyncableInt amount;
 
 	@Override
 	protected void createSyncedFields() {
 		color = new SyncableInt();
 		amount = new SyncableInt();
-	}
-
-	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		color.set(ItemPaintCan.getColorFromStack(stack));
-		amount.set(ItemPaintCan.getAmountFromStack(stack));
 	}
 
 	@Override
@@ -38,7 +34,7 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 				heldStack.setItemDamage(0);
 				amount.modify(-1);
 				sync();
-				worldObj.playSoundAtEntity(player, "liquid.swim", 0.1F, 1.2F);
+				worldObj.playSoundAtEntity(player, "game.neutral.swim.splash", 0.1F, 1.2F);
 			}
 		}
 
@@ -62,4 +58,8 @@ public class TileEntityPaintCan extends SyncedTileEntity implements IPlaceAwareT
 		amount.set(amt);
 	}
 
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 }

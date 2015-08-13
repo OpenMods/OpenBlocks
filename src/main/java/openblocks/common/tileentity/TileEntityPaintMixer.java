@@ -13,18 +13,19 @@ import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.item.ItemPaintCan;
 import openblocks.rpc.IColorChanger;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.api.IValueProvider;
 import openmods.gamelogic.WorkerLogic;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableFloat;
 import openmods.sync.SyncableInt;
-import openmods.tileentity.SyncedTileEntity;
+import openmods.sync.drops.DroppableTileEntity;
+import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.ColorUtils;
 import openmods.utils.MiscUtils;
 
@@ -32,7 +33,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.Maps;
 
-public class TileEntityPaintMixer extends SyncedTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IExtendable, IColorChanger {
+public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger {
 
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.milk_bucket);
@@ -68,6 +69,8 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	private SyncableInt canColor;
+
+	@StoreOnDrop
 	private SyncableInt color;
 	private SyncableInt progress;
 	private SyncableFlags flags;
@@ -78,9 +81,19 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	// Levels should be 0-2, so that if there is 0.3 left, 1 can be consumed and
 	// not overflow ;)
 
-	public SyncableFloat lvlCyan, lvlMagenta, lvlYellow, lvlBlack;
+	@StoreOnDrop
+	public SyncableFloat lvlCyan;
 
-	private GenericInventory inventory = new GenericInventory("paintmixer", true, 6) {
+	@StoreOnDrop
+	public SyncableFloat lvlMagenta;
+
+	@StoreOnDrop
+	public SyncableFloat lvlYellow;
+
+	@StoreOnDrop
+	public SyncableFloat lvlBlack;
+
+	private GenericInventory inventory = new TileEntityInventory(this, "paintmixer", true, 6) {
 		@Override
 		public boolean isItemValidForSlot(int slotId, ItemStack stack) {
 			Slots[] values = Slots.values();
@@ -330,6 +343,12 @@ public class TileEntityPaintMixer extends SyncedTileEntity implements IInventory
 	}
 
 	public IColorChanger createRpcProxy() {
-		return createRpcProxy(IColorChanger.class);
+		return createClientRpcProxy(IColorChanger.class);
 	}
+
+	@Override
+	public ItemStack getPickBlock() {
+		return getRawDrop();
+	}
+
 }

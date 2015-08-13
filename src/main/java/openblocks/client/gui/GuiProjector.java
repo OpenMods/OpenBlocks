@@ -37,7 +37,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 
 	public GuiProjector(ContainerProjector container) {
 		super(container, 176, 234, "");
-		IRotatable proxy = getContainer().getOwner().createRpcProxy(IRotatable.class);
+		IRotatable proxy = getContainer().getOwner().createClientRpcProxy(IRotatable.class);
 
 		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(7, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176, 0, 13, 13), texture);
 		buttonLeft.setListener(createRotationListener(proxy, -1));
@@ -58,31 +58,6 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 	private double mapHeight = 2;
 
 	@Override
-	public void drawDefaultBackground() {
-		GL11.glStencilMask(1);
-		GL11.glClearStencil(0);
-		GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-		GL11.glEnable(GL11.GL_STENCIL_TEST);
-
-		GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
-		GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 1);
-
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		int left = (width - xSize) / 2;
-		int top = (height - ySize) / 2;
-		drawRect(left + 8, top + 8, left + 8 + VIEW_WIDTH, top + 8 + VIEW_HEIGHT, 0xFF000000);
-
-		GL11.glStencilOp(GL11.GL_ZERO, GL11.GL_ZERO, GL11.GL_ZERO);
-		mc.renderEngine.bindTexture(texture);
-		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-
-		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-		GL11.glStencilFunc(GL11.GL_NOTEQUAL, 1, 1);
-		super.drawDefaultBackground();
-	}
-
-	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int mouseX, int mouseY) {
 		if (isInitialized == false || Mouse.isButtonDown(2)) {
 			trackball.setTransform(MathUtils.createEntityRotateMatrix(Minecraft.getMinecraft().renderViewEntity));
@@ -96,6 +71,23 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int left = (width - xSize) / 2;
 		int top = (height - ySize) / 2;
+
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glPushMatrix();
+		GL11.glColorMask(false, false, false, false);
+		GL11.glTranslatef(0, 0, +999);
+		// raise whole screen ...
+		drawRect(0, 0, width, height, 0xFF000000);
+		GL11.glColorMask(true, true, true, true);
+		GL11.glTranslatef(0, 0, -999 * 2);
+
+		GL11.glDepthFunc(GL11.GL_GREATER);
+		// ... and dig hole for map
+		drawRect(left + 8, top + 8, left + 8 + VIEW_WIDTH, top + 8 + VIEW_HEIGHT, 0xFF000000);
+		GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glPopMatrix();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
 		ContainerProjector container = getContainer();
 		Integer mapId = container.getMapId();
 
@@ -103,9 +95,8 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 			World world = container.getOwner().getWorldObj();
 			HeightMapData data = MapDataManager.getMapData(world, mapId);
 			if (data.isValid()) {
-				GL11.glStencilFunc(GL11.GL_EQUAL, 1, 1);
 				GL11.glPushMatrix();
-				GL11.glColor3f(1, 1, 1);
+				GL11.glColor4f(1, 1, 1, 1);
 				int viewMiddleX = left + 8 + VIEW_WIDTH / 2;
 				int viewMiddleY = top + 8 + VIEW_HEIGHT / 2;
 				GL11.glTranslatef(viewMiddleX, viewMiddleY, 50);
@@ -117,12 +108,13 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 				GL11.glTranslated(-0.5, -mapHeight, -0.5);
 				HeightMapRenderer.instance.render(mapId, data);
 				GL11.glDisable(GL11.GL_LIGHTING);
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				drawLevels();
 				GL11.glPopMatrix();
 			}
 		}
 
-		GL11.glDisable(GL11.GL_STENCIL_TEST);
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(texture);

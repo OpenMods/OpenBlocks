@@ -5,22 +5,19 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockPath extends OpenBlock {
 
 	public BlockPath() {
-		super(Material.plants);
+		super(Material.ground);
 		setBlockBounds(0, 0, 0, 1f, 0.1f, 1f);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
 	}
 
 	@Override

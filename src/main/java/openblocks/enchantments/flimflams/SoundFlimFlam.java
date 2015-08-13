@@ -12,11 +12,11 @@ import com.google.common.collect.ImmutableList;
 public class SoundFlimFlam implements IFlimFlamAction {
 
 	private static final List<String> sounds = ImmutableList.of(
-			"openblocks:mosquito",
-			"openblocks:alarmclock",
-			"openblocks:vibrate",
-			"openblocks:fart",
-			"random.fuse",
+			"openblocks:annoying.mosquito",
+			"openblocks:annoying.alarmclock",
+			"openblocks:annoying.vibrate",
+			"openblocks:best.feature.ever.fart",
+			"game.tnt.primed",
 			"random.explode",
 			"random.break",
 			"mob.blaze.breathe",

@@ -1,11 +1,11 @@
 package openblocks.asm;
 
+import openmods.Log;
 import openmods.asm.MethodMatcher;
 
 import org.objectweb.asm.*;
 
-import cpw.mods.fml.relauncher.FMLRelaunchLog;
-
+@SuppressWarnings("deprecation")
 public class EntityPlayerVisitor extends ClassVisitor {
 
 	public static boolean IsInBedHookSuccess = false;
@@ -26,7 +26,7 @@ public class EntityPlayerVisitor extends ClassVisitor {
 			mv.visitInsn(Opcodes.IRETURN);
 			mv.visitLabel(skipReturn);
 			IsInBedHookSuccess = true;
-			FMLRelaunchLog.info("[OpenBlocks] isInBed patch applied. Enabling sleeping bags");
+			Log.debug("isInBed patch applied. Enabling sleeping bags");
 		}
 	}
 

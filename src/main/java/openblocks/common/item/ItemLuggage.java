@@ -8,7 +8,9 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class ItemLuggage extends Item {
 
 	public ItemLuggage() {
@@ -31,14 +33,7 @@ public class ItemLuggage extends Item {
 			EntityLuggage luggage = new EntityLuggage(world);
 			luggage.setPositionAndRotation(0.5 + vec32.xCoord, vec3.yCoord, 0.5 + vec32.zCoord, 0, 0);
 			luggage.func_152115_b(player.getGameProfile().getId().toString());
-			if (itemStack.hasTagCompound()) {
-				luggage.getInventory().readFromNBT(itemStack.getTagCompound());
-				if (luggage.getInventory().getSizeInventory() > 27) {
-					luggage.setSpecial();
-				}
-			}
-
-			if (itemStack.hasDisplayName()) luggage.setCustomNameTag(itemStack.getDisplayName());
+			luggage.restoreFromStack(itemStack);
 
 			world.spawnEntityInWorld(luggage);
 			itemStack.stackSize--;

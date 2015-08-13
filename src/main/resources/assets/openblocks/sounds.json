@@ -128,5 +128,11 @@
         "sounds": [
             "mortar"
         ]
+    },
+    "grave.rob": {
+        "category": "block",
+        "sounds": [
+            "BWV565"
+        ]
     }
 }

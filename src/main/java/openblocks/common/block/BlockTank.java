@@ -3,24 +3,39 @@ package openblocks.common.block;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidTank;
 import openblocks.Config;
-import openblocks.OpenBlocks;
+import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
+import openmods.Log;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.ItemUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
 		super(Material.rock);
+		setRenderMode(RenderMode.BOTH);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon() {
+		return blockIcon;
 	}
 
 	@Override
@@ -39,32 +54,8 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return false;
-	}
-
-	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return true;
-	}
-
-	@Override
-	protected void getCustomTileEntityDrops(TileEntity te, List<ItemStack> result, int fortune) {
-		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
-		if (!(te instanceof TileEntityTank)) return;
-		TileEntityTank tank = (TileEntityTank)te;
-		if (tank.getTank().getFluidAmount() > 10) {
-			NBTTagCompound tankTag = tank.getItemNBT();
-
-			NBTTagCompound itemTag = ItemUtils.getItemTag(stack);
-			itemTag.setTag("tank", tankTag);
-		}
-		result.add(stack);
-	}
-
-	@Override
-	protected boolean hasNormalDrops() {
-		return false;
 	}
 
 	@Override
@@ -103,6 +94,27 @@ public class BlockTank extends OpenBlock {
 		if (value == 0) return 0;
 		int trunc = MathHelper.floor_double(value);
 		return Math.max(trunc, 1);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void getSubBlocks(Item item, CreativeTabs tab, List result) {
+		result.add(new ItemStack(item));
+
+		if (tab == null && Config.displayAllFilledTanks) {
+			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())
+				try {
+					final ItemStack tankStack = ItemTankBlock.createFilledTank(fluid);
+
+					if (tankStack != null) result.add(tankStack);
+					else Log.debug("Failed to create filled tank stack for fluid '%s'. Not registered?", fluid.getName());
+				} catch (Throwable t) {
+					throw new RuntimeException(String.format("Failed to create item for fluid '%s'" +
+							"Until this is fixed, you can bypass this code with config option 'tanks.displayAllFluids'",
+							fluid.getName()), t);
+				}
+		}
 	}
 
 }

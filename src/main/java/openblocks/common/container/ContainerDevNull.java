@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import openmods.container.ContainerBase;
 
 public class ContainerDevNull extends ContainerBase<Void> {
@@ -15,6 +16,12 @@ public class ContainerDevNull extends ContainerBase<Void> {
 		this.playerInventory = (InventoryPlayer)playerInventory;
 		addInventoryGrid(80, 22, 1);
 		addPlayerInventorySlots(55);
+	}
+
+	@Override
+	public ItemStack slotClick(int slotId, int key, int modifier, EntityPlayer player) {
+		if (modifier == 2 && key == player.inventory.currentItem) return null;
+		return super.slotClick(slotId, key, modifier, player);
 	}
 
 	@Override

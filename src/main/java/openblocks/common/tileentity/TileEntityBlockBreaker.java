@@ -3,46 +3,40 @@ package openblocks.common.tileentity;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.event.world.BlockEvent;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.INeighbourAwareTile;
+import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUser;
-import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.BlockUtils;
-import openmods.utils.InventoryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile, IExtendable, IInventoryProvider {
+public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile {
 
-	private static final int SLOT_BUFFER = 0;
+	private static final int EVENT_ACTIVATE = 3;
 
-	private int redstoneAnimTimer;
-	private SyncableBoolean activated;
-
+	// DON'T remove this object, even though it seems unused. Without it Builcraft pipes won't connect. -B
+	@IncludeInterface(IInventory.class)
 	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockbreaker", true, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return false;
 		}
 	});
+
+	private int redstoneAnimTimer;
+	private SyncableBoolean activated;
 
 	public TileEntityBlockBreaker() {
 		syncMap.addUpdateListener(createRenderUpdateListener());
@@ -73,17 +67,19 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	private void setRedstoneSignal(boolean redstoneSignal) {
 		if (worldObj.isRemote) return;
 
-		if (redstoneSignal && !activated.get()) {
+		if (redstoneSignal) {
 			redstoneAnimTimer = 5;
 			activated.set(true);
 			sync();
-			breakBlock();
+			triggerBreakBlock();
 		}
 	}
 
-	private void breakBlock() {
-		if (worldObj.isRemote) return;
+	private boolean canBreakBlock(Block block, int x, int y, int z) {
+		return !block.isAir(worldObj, x, y, z) && block != Blocks.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F;
+	}
 
+	private void triggerBreakBlock() {
 		final ForgeDirection direction = getRotation();
 		final int x = xCoord + direction.offsetX;
 		final int y = yCoord + direction.offsetY;
@@ -91,81 +87,58 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 
 		if (worldObj.blockExists(x, y, z)) {
 			final Block block = worldObj.getBlock(x, y, z);
-			if (block != null) {
-				final int metadata = worldObj.getBlockMetadata(x, y, z);
-				if (block != Blocks.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F) {
-					breakBlock(direction, x, y, z, block, metadata);
-				}
+			if (canBreakBlock(block, x, y, z)) {
+				worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), EVENT_ACTIVATE, 0);
 			}
-			worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 		}
+
+		worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 	}
 
-	private void breakBlock(final ForgeDirection direction, final int x, final int y, final int z, final Block block, final int metadata) {
+	@Override
+	public boolean receiveClientEvent(int event, int param) {
+		if (event == EVENT_ACTIVATE) {
+			breakBlock();
+			return true;
+		}
+
+		return false;
+	}
+
+	public void breakBlock() {
 		if (!(worldObj instanceof WorldServer)) return;
-		FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
-			@Override
-			public void usePlayer(OpenModsFakePlayer fakePlayer) {
-				fakePlayer.inventory.currentItem = 0;
-				fakePlayer.inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 0, 0));
 
-				BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, block, blockMetadata, fakePlayer);
-				if (MinecraftForge.EVENT_BUS.post(event)) return;
+		final ForgeDirection direction = getRotation();
+		final int x = xCoord + direction.offsetX;
+		final int y = yCoord + direction.offsetY;
+		final int z = zCoord + direction.offsetZ;
 
-				if (ForgeHooks.canHarvestBlock(block, fakePlayer, metadata)) {
-					worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
-					worldObj.setBlockToAir(x, y, z);
+		if (!worldObj.blockExists(x, y, z)) return;
 
-					List<ItemStack> items = block.getDrops(worldObj, x, y, z, metadata, 0);
-					if (items != null) {
-						ForgeDirection back = direction.getOpposite();
-						ejectAt(worldObj,
-								xCoord + back.offsetX,
-								yCoord + back.offsetY,
-								zCoord + back.offsetZ,
-								back, items);
-					}
-				}
-			}
-		});
+		final Block block = worldObj.getBlock(x, y, z);
+		if (!canBreakBlock(block, x, y, z)) return;
+
+		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new BreakBlockAction(worldObj, x, y, z));
+		tryInjectItems(drops, direction.getOpposite());
 	}
 
-	private void ejectAt(World world, int x, int y, int z, ForgeDirection direction, List<ItemStack> itemStacks) {
+	private void tryInjectItems(List<EntityItem> drops, ForgeDirection direction) {
 		TileEntity targetInventory = getTileInDirection(direction);
+		if (targetInventory == null) return;
 
-		// if there's any stack in our buffer slot, eject it. Why is it
-		// there?
-		ItemStack currentStack = inventory.getStackInSlot(SLOT_BUFFER);
-		if (currentStack != null) {
-			BlockUtils.ejectItemInDirection(world, x, y, z, direction, currentStack);
-		}
+		for (EntityItem drop : drops) {
+			ItemStack stack = drop.getEntityItem();
+			ItemDistribution.insertItemInto(stack, targetInventory, direction, true);
 
-		for (ItemStack stack : itemStacks) {
-			if (stack == null) continue;
-
-			if (targetInventory != null) {
-				// try push the item out into a pipe or inventory
-				inventory.setInventorySlotContents(SLOT_BUFFER, stack);
-				int amount = InventoryUtils.moveItemInto(inventory, SLOT_BUFFER, targetInventory, -1, 64, direction, true);
-				inventory.setInventorySlotContents(SLOT_BUFFER, null);
-				stack.stackSize -= amount;
-			}
-
-			if (stack.stackSize > 0) BlockUtils.ejectItemInDirection(world, x, y, z, direction, stack);
+			if (stack.stackSize <= 0) drop.setDead();
 		}
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
 			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
 		}
-	}
-
-	@Override
-	@IncludeInterface
-	public IInventory getInventory() {
-		return inventory;
 	}
 
 	@Override
@@ -178,6 +151,6 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
-	}
 
+	}
 }

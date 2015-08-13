@@ -8,11 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.utils.EnchantmentUtils;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class LastStandEnchantmentsHandler {
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onHurt(LivingHurtEvent e) {
 
 		if (e.entityLiving instanceof EntityPlayer) {
@@ -40,6 +41,7 @@ public class LastStandEnchantmentsHandler {
 						player.setHealth(1f);
 						EnchantmentUtils.addPlayerXP(player, -(int)xpRequired);
 						e.ammount = 0;
+						e.setCanceled(true);
 					}
 				}
 			}

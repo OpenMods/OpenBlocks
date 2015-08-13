@@ -18,4 +18,9 @@ public class TileEntitySky extends OpenTileEntity {
 	public double getMaxRenderDistanceSquared() {
 		return 256 * 256;
 	}
+
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 }

@@ -16,27 +16,30 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
 import openmods.gamelogic.WorkerLogic;
 import openmods.gui.misc.IConfigurableGuiSlots;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
+import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.*;
+import openmods.utils.MiscUtils;
+import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IExtendable, IConfigurableGuiSlots<AutoSlots> {
+public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots> {
 
-	public static final int TANK_CAPACITY = EnchantmentUtils.XPToLiquidRatio(EnchantmentUtils.XP_PER_BOTTLE);
+	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(LiquidXpUtils.XP_PER_BOTTLE);
 	public static final int PROGRESS_TICKS = 40;
 
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
@@ -55,7 +58,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		xp
 	}
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("xpbottler", true, 2) {
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "xpbottler", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 			if (slot != Slots.input.ordinal()) return false;
@@ -68,9 +71,9 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	/** synced data objects **/
 	private SyncableInt progress;
-	private SyncableDirs glassSides;
-	private SyncableDirs xpBottleSides;
-	private SyncableDirs xpSides;
+	private SyncableSides glassSides;
+	private SyncableSides xpBottleSides;
+	private SyncableSides xpSides;
 	private SyncableFlags automaticSlots;
 	private SyncableTank tank;
 
@@ -82,9 +85,9 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	@Override
 	protected void createSyncedFields() {
 		progress = new SyncableInt();
-		glassSides = new SyncableDirs();
-		xpBottleSides = new SyncableDirs();
-		xpSides = new SyncableDirs();
+		glassSides = new SyncableSides();
+		xpBottleSides = new SyncableSides();
+		xpSides = new SyncableSides();
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
 	}
@@ -106,12 +109,12 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			// if they've ticked auto output, and we have something to output
 			if (shouldAutoOutput() && hasOutputStack()) {
-				InventoryUtils.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, xpBottleSides.getValue());
+				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, xpBottleSides.getValue(), true);
 			}
 
 			// if we should auto input and we don't have any glass in the slot
 			if (shouldAutoInput() && !hasGlassInInput()) {
-				InventoryUtils.moveItemsFromOneOfSides(this, inventory, GLASS_BOTTLE, 1, Slots.input.ordinal(), glassSides.getValue());
+				ItemDistribution.moveItemsFromOneOfSides(this, inventory, GLASS_BOTTLE, 1, Slots.input.ordinal(), glassSides.getValue(), true);
 			}
 
 			logic.checkWorkCondition(hasSpaceInOutput() && hasGlassInInput() && isTankFull());
@@ -210,7 +213,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		inventory.readFromNBT(tag);
 	}
 
-	private SyncableDirs selectSlotMap(AutoSlots slot) {
+	private SyncableSides selectSlotMap(AutoSlots slot) {
 		switch (slot) {
 			case input:
 				return glassSides;
@@ -230,7 +233,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	@Override
 	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
-		SyncableDirs dirs = selectSlotMap(slot);
+		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
 

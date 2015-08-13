@@ -4,9 +4,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockBlockPlacer extends OpenBlock {
 
 	public static class Icons {
@@ -19,11 +22,6 @@ public class BlockBlockPlacer extends OpenBlock {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setInventoryRenderRotation(ForgeDirection.EAST);
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
 	}
 
 	@Override

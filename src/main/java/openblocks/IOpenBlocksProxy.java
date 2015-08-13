@@ -6,5 +6,5 @@ import net.minecraftforge.fluids.FluidStack;
 import openmods.api.IProxy;
 
 public interface IOpenBlocksProxy extends IProxy {
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, float scale, float gravity, Vec3 vec);
+	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, float scale, float gravity, Vec3 velocityVector);
 }

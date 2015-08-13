@@ -6,11 +6,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockVacuumHopper extends OpenBlock {
 
 	public BlockVacuumHopper() {
 		super(Material.rock);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -33,11 +36,6 @@ public class BlockVacuumHopper extends OpenBlock {
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 

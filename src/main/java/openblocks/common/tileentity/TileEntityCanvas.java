@@ -1,8 +1,10 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -11,13 +13,15 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
+import openblocks.common.block.BlockCanvas;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
 import openblocks.common.item.ItemStencil;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
-import openmods.api.ISpecialDrops;
+import openmods.api.ICustomBreakDrops;
+import openmods.api.ICustomHarvestDrops;
 import openmods.sync.SyncableBlock;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
@@ -25,26 +29,24 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
-public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ISpecialDrops {
-
-	private static final int BASE_LAYER = -1;
+public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ICustomBreakDrops, ICustomHarvestDrops {
 
 	public static final int[] ALL_SIDES = { 0, 1, 2, 3, 4, 5 };
 
 	/* Used for painting other blocks */
-	public SyncableBlock paintedBlock;
-	public SyncableInt paintedBlockMeta;
+	private SyncableBlock paintedBlock;
+	private SyncableInt paintedBlockMeta;
 
 	private SyncableIntArray baseColors;
 
-	public SyncableBlockLayers stencilsUp;
-	public SyncableBlockLayers stencilsDown;
-	public SyncableBlockLayers stencilsEast;
-	public SyncableBlockLayers stencilsWest;
-	public SyncableBlockLayers stencilsNorth;
-	public SyncableBlockLayers stencilsSouth;
+	private SyncableBlockLayers stencilsUp;
+	private SyncableBlockLayers stencilsDown;
+	private SyncableBlockLayers stencilsEast;
+	private SyncableBlockLayers stencilsWest;
+	private SyncableBlockLayers stencilsNorth;
+	private SyncableBlockLayers stencilsSouth;
 
-	public SyncableBlockLayers[] allSides;
+	private SyncableBlockLayers[] allSides;
 
 	public TileEntityCanvas() {
 		syncMap.addUpdateListener(createRenderUpdateListener());
@@ -75,20 +77,18 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	public Layer getLayerForSide(int renderSide, int layerId) {
-		SyncableBlockLayers layers = getLayersForSide(renderSide);
-		if (layers != null) { return layers.getLayer(layerId); }
-		return null;
+		final SyncableBlockLayers layers = getLayersForSide(renderSide);
+		return layers != null? layers.getLayer(layerId) : null;
 	}
 
 	public int getColorForRender(int renderSide, int layerId) {
-		if (layerId == BASE_LAYER) { return baseColors.getValue(renderSide); }
-		Layer layer = getLayerForSide(renderSide, layerId);
-		if (layer != null) { return layer.getColorForRender(); }
-		return 0xCCCCCC;
+		if (layerId == BlockCanvas.BASE_LAYER) return baseColors.getValue(renderSide);
+		final Layer layer = getLayerForSide(renderSide, layerId);
+		return layer != null? layer.getColorForRender() : 0xCCCCCC;
 	}
 
 	public IIcon getTextureForRender(int renderSide, int layerId) {
-		if (layerId > BASE_LAYER) {
+		if (layerId > BlockCanvas.BASE_LAYER) {
 			Layer layer = getLayerForSide(renderSide, layerId);
 			if (layer != null) {
 				Stencil stencil = layer.getStencil();
@@ -104,6 +104,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return block.getIcon(side, paintedBlockMeta.get());
 	}
 
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
+
 	private boolean isBlockUnpainted() {
 		for (int i = 0; i < allSides.length; i++) {
 			if (!allSides[i].isEmpty() || baseColors.getValue(i) != 0xFFFFFF) return false;
@@ -111,21 +116,28 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return true;
 	}
 
-	public void applyPaint(int color, int... sides) {
-		for (int side : sides) {
-			SyncableBlockLayers layer = getLayersForSide(side);
-			if (layer.isLastLayerStencil()) {
-				layer.setLastLayerColor(color);
-				layer.moveStencilToNextLayer();
+	public boolean applyPaint(int color, ForgeDirection... sides) {
+		boolean hasChanged = false;
+
+		for (ForgeDirection side : sides) {
+			final int sideId = side.ordinal();
+			SyncableBlockLayers layers = getLayersForSide(sideId);
+			if (layers.isLastLayerStencil()) {
+				layers.setLastLayerColor(color);
+				layers.moveStencilToNextLayer();
 			} else {
-				// collapse all layers, since they will be fully covered by
-				// paint
-				layer.clear();
-				baseColors.setValue(side, color);
+				// collapse all layers, since they will be fully covered by paint
+				layers.clear();
+				baseColors.setValue(sideId, color);
 			}
+
+			hasChanged |= layers.isDirty();
 		}
 
+		hasChanged |= baseColors.isDirty();
+
 		if (!worldObj.isRemote) sync();
+		return hasChanged;
 	}
 
 	private void dropStackFromSide(ItemStack stack, int side) {
@@ -205,12 +217,42 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void addDrops(List<ItemStack> drops, int fortune) {
+	public void addDrops(List<ItemStack> drops) {
 		for (SyncableBlockLayers sideLayers : allSides) {
 			if (sideLayers.isLastLayerStencil()) {
 				Stencil stencil = sideLayers.getTopStencil();
 				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
 			}
 		}
+	}
+
+	@Override
+	public boolean suppressNormalHarvestDrops() {
+		return paintedBlock.containsValidBlock();
+	}
+
+	@Override
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+		if (paintedBlock.containsValidBlock()) {
+			final Block paintedBlock = this.paintedBlock.getValue();
+			final int paintedBlockMeta = this.paintedBlockMeta.get();
+
+			final Random rand = worldObj.rand;
+
+			int fortune = player != null? EnchantmentHelper.getFortuneModifier(player) : 0;
+			int count = paintedBlock.quantityDropped(paintedBlockMeta, fortune, rand);
+			int damageDropped = paintedBlock.damageDropped(paintedBlockMeta);
+
+			for (int i = 0; i < count; i++) {
+				Item item = paintedBlock.getItemDropped(paintedBlockMeta, rand, fortune);
+				if (item != null) drops.add(new ItemStack(item, 1, damageDropped));
+
+			}
+		}
+	}
+
+	public void setPaintedBlockBlock(Block block, int meta) {
+		paintedBlock.setValue(block);
+		paintedBlockMeta.set(meta);
 	}
 }

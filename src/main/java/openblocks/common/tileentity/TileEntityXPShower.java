@@ -2,18 +2,19 @@ package openblocks.common.tileentity;
 
 import java.util.EnumSet;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import openblocks.OpenBlocks;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.entity.EntityXPOrbNoFly;
 import openmods.OpenMods;
 import openmods.api.INeighbourAwareTile;
 import openmods.liquids.GenericTank;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.EnchantmentUtils;
 
 public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile {
 
@@ -48,8 +49,8 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 				if (amountInTank > 0) {
 
-					int xpInTank = EnchantmentUtils.liquidToXPRatio(amountInTank);
-					int drainable = EnchantmentUtils.XPToLiquidRatio(xpInTank);
+					int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
+					int drainable = LiquidXpUtils.xpToLiquidRatio(xpInTank);
 
 					if (drainable > 0) {
 
@@ -87,7 +88,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	@Override
-	public void onNeighbourChanged() {
+	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) updateState();
 	}
 
@@ -97,11 +98,13 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
 		bufferTank.readFromNBT(nbt);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
 		bufferTank.writeToNBT(nbt);
 	}
 

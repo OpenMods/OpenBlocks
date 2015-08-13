@@ -33,7 +33,7 @@ public class MapDataManager {
 		public List<Integer> mapIds = Lists.newArrayList();
 
 		@Override
-		protected void readFromStream(DataInput input) throws IOException {
+		protected void readFromStream(DataInput input) {
 			int length = ByteUtils.readVLI(input);
 			for (int i = 0; i < length; i++) {
 				int id = ByteUtils.readVLI(input);
@@ -42,7 +42,7 @@ public class MapDataManager {
 		}
 
 		@Override
-		protected void writeToStream(DataOutput output) throws IOException {
+		protected void writeToStream(DataOutput output) {
 			ByteUtils.writeVLI(output, mapIds.size());
 			for (Integer id : mapIds)
 				ByteUtils.writeVLI(output, id);
@@ -82,7 +82,7 @@ public class MapDataManager {
 				if (map.isValid()) {
 					ByteUtils.writeVLI(output, e.getKey());
 					map.writeToStream(output);
-				} else Log.warn("Trying to propagate invalid map data %d", e.getKey());
+				} else Log.debug("Trying to propagate invalid map data %d", e.getKey());
 			}
 		}
 	}
@@ -125,7 +125,8 @@ public class MapDataManager {
 			if (map != null) {
 				response.maps.put(mapId, map);
 			} else {
-				Log.info("Player %s asked for non-existent map %d", evt.sender, mapId);
+				if (mapId < 16) Log.debug("Player %s asked for non-existent map %d, possible NEI interaction (this is mostly harmless)", evt.sender, mapId);
+				else Log.info("Player %s asked for non-existent map %d", evt.sender, mapId);
 			}
 		}
 
@@ -199,7 +200,7 @@ public class MapDataManager {
 					Block block = GameRegistry.findBlock(modId, blockName);
 
 					if (block != Blocks.air) blockBlacklist.add(block);
-					else Log.info("Can't find block %s", entry);
+					else Log.warn("Can't find block %s", entry);
 				} catch (Throwable t) {
 					Log.warn(t, "Invalid entry in map blacklist: %s", entry);
 				}

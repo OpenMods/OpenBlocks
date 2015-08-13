@@ -2,18 +2,20 @@ package openblocks.common.item;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
+import openblocks.api.IPaintableBlock;
 import openblocks.common.block.BlockCanvas;
-import openblocks.common.tileentity.TileEntityCanvas;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
@@ -21,7 +23,10 @@ import openmods.utils.render.PaintUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation(customName = "paintbrush")
 public class ItemPaintBrush extends Item {
+
+	private static final int SINGLE_COLOR_THRESHOLD = 16;
 
 	private static final String TAG_COLOR = "color";
 
@@ -32,7 +37,8 @@ public class ItemPaintBrush extends Item {
 	public ItemPaintBrush() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
-		setMaxDamage(MAX_USES); // Damage dealt in Canvas block
+		setMaxDamage(MAX_USES);
+		setNoRepair();
 	}
 
 	@Override
@@ -74,25 +80,59 @@ public class ItemPaintBrush extends Item {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		Integer color = getColorFromStack(stack);
-		if (stack.getItemDamage() >= MAX_USES || color == null) return true;
+		if (stack.getItemDamage() > getMaxDamage() || color == null) return true;
 
 		if (PaintUtils.instance.isAllowedToReplace(world, x, y, z)) {
 			BlockCanvas.replaceBlock(world, x, y, z);
 		}
 
-		TileEntity te = world.getTileEntity(x, y, z);
+		final boolean changed;
 
-		if (te instanceof TileEntityCanvas) {
-			TileEntityCanvas canvas = (TileEntityCanvas)te;
+		if (player.isSneaking()) changed = tryRecolorBlock(world, x, y, z, color, ForgeDirection.VALID_DIRECTIONS);
+		else changed = tryRecolorBlock(world, x, y, z, color, ForgeDirection.getOrientation(side));
 
-			if (player.isSneaking()) canvas.applyPaint(color, TileEntityCanvas.ALL_SIDES);
-			else canvas.applyPaint(color, side);
-
+		if (changed) {
 			world.playSoundAtEntity(player, "mob.slime.small", 0.1F, 0.8F);
-			stack.damageItem(1, player);
 
+			if (!player.capabilities.isCreativeMode) {
+				if (stack.attemptDamageItem(1, player.getRNG())) {
+					final NBTTagCompound tag = ItemUtils.getItemTag(stack);
+					tag.removeTag(TAG_COLOR);
+					stack.setItemDamage(0);
+				}
+			}
 		}
+
 		return true;
+	}
+
+	private static boolean tryRecolorBlock(World world, int x, int y, int z, int rgb, ForgeDirection... sides) {
+		Block block = world.getBlock(x, y, z);
+
+		// first try RGB color...
+		if (block instanceof IPaintableBlock) {
+			IPaintableBlock canvas = (IPaintableBlock)block;
+
+			boolean result = false;
+			for (ForgeDirection dir : sides)
+				result |= canvas.recolourBlockRGB(world, x, y, z, dir, rgb);
+
+			return result;
+		}
+
+		// ...then try finding nearest vanilla one
+		final ColorMeta nearest = ColorUtils.findNearestColor(new ColorUtils.RGB(rgb), SINGLE_COLOR_THRESHOLD);
+		if (nearest != null) {
+			final int vanillaColorId = nearest.vanillaBlockId;
+
+			boolean result = false;
+			for (ForgeDirection dir : sides)
+				result |= block.recolourBlock(world, x, y, z, dir, vanillaColorId);
+
+			return result;
+		}
+
+		return false;
 	}
 
 	@Override

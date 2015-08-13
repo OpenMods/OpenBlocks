@@ -1,29 +1,23 @@
 package openblocks.common.block;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.render.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation(customName = "sky.normal")
 public class BlockSky extends OpenBlock {
 
 	public BlockSky() {
 		super(Material.iron);
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean useTESRForInventory() {
-		return false;
 	}
 
 	@Override
@@ -46,9 +40,19 @@ public class BlockSky extends OpenBlock {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		int meta = world.getBlockMetadata(x, y, z);
-		int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
-		int isInverted = meta & 1;
+		if (!world.isRemote) {
+			final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
+			final int isActive = world.getBlockMetadata(x, y, z) & 2;
+
+			if (isPowered != isActive) world.scheduleBlockUpdate(x, y, z, this, 1);
+		}
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random random) {
+		final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
+		final int isInverted = world.getBlockMetadata(x, y, z) & 1;
+
 		world.setBlockMetadataWithNotify(x, y, z, isPowered | isInverted, BlockNotifyFlags.ALL);
 	}
 

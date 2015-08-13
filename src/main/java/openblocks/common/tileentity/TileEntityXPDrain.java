@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
+import openblocks.common.LiquidXpUtils;
 import openmods.OpenMods;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.EnchantmentUtils;
@@ -54,12 +55,12 @@ public class TileEntityXPDrain extends OpenTileEntity {
 		int maxDrainedXp = Math.min(4, playerXP);
 
 		FluidStack liquid = OpenBlocks.XP_FLUID.copy();
-		liquid.amount = EnchantmentUtils.XPToLiquidRatio(maxDrainedXp);
+		liquid.amount = LiquidXpUtils.xpToLiquidRatio(maxDrainedXp);
 		int maxAcceptedLiquid = tank.fill(ForgeDirection.UP, liquid, false);
 
 		// rounding down, so we only use as much as we can
-		int acceptedXP = EnchantmentUtils.liquidToXPRatio(maxAcceptedLiquid);
-		int acceptedLiquid = EnchantmentUtils.XPToLiquidRatio(acceptedXP);
+		int acceptedXP = LiquidXpUtils.liquidToXpRatio(maxAcceptedLiquid);
+		int acceptedLiquid = LiquidXpUtils.xpToLiquidRatio(acceptedXP);
 
 		liquid.amount = acceptedLiquid;
 		int finallyAcceptedLiquid = tank.fill(ForgeDirection.UP, liquid, true);
@@ -76,7 +77,7 @@ public class TileEntityXPDrain extends OpenTileEntity {
 	protected void tryConsumeOrb(IFluidHandler tank, EntityXPOrb orb) {
 		if (!orb.isDead) {
 			FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
-			xpStack.amount = EnchantmentUtils.XPToLiquidRatio(orb.getXpValue());
+			xpStack.amount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
 			int filled = tank.fill(ForgeDirection.UP, xpStack, false);
 			if (filled == xpStack.amount) {
 				tank.fill(ForgeDirection.UP, xpStack, true);

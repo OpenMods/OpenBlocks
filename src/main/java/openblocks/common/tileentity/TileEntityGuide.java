@@ -11,32 +11,50 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.Config;
+import openblocks.common.item.ItemGuide;
 import openblocks.shapes.GuideShape;
 import openmods.api.IActivateAwareTile;
+import openmods.api.INeighbourAwareTile;
 import openmods.shapes.IShapeable;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableInt;
-import openmods.tileentity.SyncedTileEntity;
+import openmods.sync.*;
+import openmods.sync.drops.DroppableTileEntity;
+import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
+import openperipheral.api.adapter.Asynchronous;
+import openperipheral.api.adapter.method.Arg;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IActivateAwareTile, ISyncListener {
+public class TileEntityGuide extends DroppableTileEntity implements IShapeable, IActivateAwareTile, ISyncListener, INeighbourAwareTile {
 
 	private Set<Coord> shape;
 	private Set<Coord> previousShape;
 	private float timeSinceChange = 0;
 
+	@StoreOnDrop(name = ItemGuide.TAG_WIDTH)
 	protected SyncableInt width;
+
+	@StoreOnDrop(name = ItemGuide.TAG_HEIGHT)
 	protected SyncableInt height;
+
+	@StoreOnDrop(name = ItemGuide.TAG_DEPTH)
 	protected SyncableInt depth;
-	protected SyncableInt mode;
+
+	@StoreOnDrop(name = ItemGuide.TAG_SHAPE)
+	protected SyncableEnum<GuideShape> mode;
+
+	@StoreOnDrop(name = ItemGuide.TAG_COLOR)
 	protected SyncableInt color;
+
+	protected SyncableBoolean active;
 
 	public TileEntityGuide() {
 		syncMap.addUpdateListener(this);
@@ -47,40 +65,112 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		width = new SyncableInt(8);
 		height = new SyncableInt(8);
 		depth = new SyncableInt(8);
-		mode = new SyncableInt(0);
+		mode = SyncableEnum.create(GuideShape.Sphere);
 		color = new SyncableInt(0xFFFFFF);
+		active = new SyncableBoolean();
 	}
 
+	@Asynchronous
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getWidth() {
 		return width.get();
 	}
 
+	@Asynchronous
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getHeight() {
 		return height.get();
 	}
 
+	@Asynchronous
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getDepth() {
 		return depth.get();
 	}
 
+	@Asynchronous
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
 	public int getColor() {
-		return color.get();
+		return color.get() & 0x00FFFFFF;
 	}
 
-	public void setWidth(int w) {
-		width.set(w);
+	@Asynchronous
+	@ScriptCallable(returnTypes = ReturnType.NUMBER)
+	public int getCount() {
+		if (shape == null) recreateShape();
+		return shape.size();
 	}
 
-	public void setDepth(int d) {
-		depth.set(d);
-	}
-
-	public void setHeight(int h) {
-		height.set(h);
-	}
-
+	@Asynchronous
+	@ScriptCallable(returnTypes = ReturnType.STRING, name = "getShape")
 	public GuideShape getCurrentMode() {
-		return GuideShape.values()[mode.get()];
+		return mode.get();
+	}
+
+	@ScriptCallable
+	public void setWidth(@Arg(name = "width") int w) {
+		Preconditions.checkArgument(w > 0, "Width must be > 0");
+		width.set(w);
+
+		if (mode.getValue().fixedRatio) {
+			height.set(w);
+			depth.set(w);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@ScriptCallable
+	public void setDepth(@Arg(name = "depth") int d) {
+		Preconditions.checkArgument(d > 0, "Depth must be > 0");
+		depth.set(d);
+
+		if (mode.getValue().fixedRatio) {
+			width.set(d);
+			depth.set(d);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@ScriptCallable
+	public void setHeight(@Arg(name = "height") int h) {
+		Preconditions.checkArgument(h > 0, "Height must be > 0");
+		height.set(h);
+
+		if (mode.getValue().fixedRatio) {
+			width.set(h);
+			depth.set(h);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@ScriptCallable
+	public void setShape(@Arg(name = "shape") GuideShape shape) {
+		mode.set(shape);
+
+		if (mode.getValue().fixedRatio) {
+			final int width = getWidth();
+			height.set(width);
+			depth.set(width);
+		}
+
+		recreateShape();
+		sync();
+	}
+
+	@ScriptCallable
+	public void setColor(@Arg(name = "color") int color) {
+		this.color.set(color & 0x00FFFFFF);
+		sync();
+	}
+
+	public boolean shouldRender() {
+		return Config.guideRedstone == 0 || ((Config.guideRedstone < 0) ^ active.get());
 	}
 
 	@Override
@@ -100,7 +190,6 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		previousShape = shape;
 		shape = Sets.newHashSet();
 		getCurrentMode().generator.generateShape(getWidth(), getHeight(), getDepth(), this);
-		timeSinceChange = 0;
 	}
 
 	@Override
@@ -123,24 +212,31 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		return box.expand(getWidth(), getHeight(), getDepth());
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return Config.guideRenderRangeSq;
+	}
+
 	private void switchMode(EntityPlayer player) {
 		switchMode();
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
-	private void switchMode() {
-		int nextMode = mode.get() + 1;
-		if (nextMode >= GuideShape.values().length) {
-			nextMode = 0;
+	@ScriptCallable(returnTypes = ReturnType.STRING, name = "cycleShape")
+	public GuideShape switchMode() {
+		final GuideShape shape = mode.increment();
+
+		if (shape.fixedRatio) {
+			final int width = getWidth();
+			height.set(width);
+			depth.set(width);
 		}
-		mode.set(nextMode);
-		if (getCurrentMode().fixedRatio) {
-			setHeight(getWidth());
-			setDepth(getWidth());
-		}
+
 		recreateShape();
 		if (!worldObj.isRemote) sync();
+		return shape;
 	}
 
 	private void changeDimensions(EntityPlayer player, ForgeDirection orientation) {
@@ -189,8 +285,8 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 			int w = getWidth();
 			int d = getDepth();
 			if (w != h && w != d) {
-				setHeight(w);
-				setDepth(w);
+				height.set(w);
+				depth.set(w);
 			} else if (h != w && h != d) {
 				depth.set(h);
 				width.set(h);
@@ -205,7 +301,10 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 
 	@Override
 	public void onSync(Set<ISyncableObject> changes) {
-		recreateShape();
+		if (changes.contains(depth) || changes.contains(height) || changes.contains(width) || changes.contains(mode)) {
+			recreateShape();
+			timeSinceChange = 0;
+		}
 	}
 
 	@Override
@@ -233,7 +332,8 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 		Set<ColorMeta> colors = ColorUtils.stackToColor(heldStack);
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);
-			changeColor(selected.rgb);
+			color.set(selected.rgb);
+			if (!worldObj.isRemote) sync();
 			return true;
 		}
 
@@ -250,11 +350,6 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 			worldObj.setBlock(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z, block, blockMeta, BlockNotifyFlags.ALL);
 	}
 
-	protected void changeColor(int color) {
-		this.color.set(color);
-		if (!worldObj.isRemote) sync();
-	}
-
 	private boolean isInFillMode() {
 		return worldObj.getBlock(xCoord, yCoord + 1, zCoord) == Blocks.obsidian;
 	}
@@ -262,5 +357,14 @@ public class TileEntityGuide extends SyncedTileEntity implements IShapeable, IAc
 	@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		if (Config.guideRedstone != 0) {
+			boolean redstoneState = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+			active.set(redstoneState);
+			sync();
+		}
 	}
 }

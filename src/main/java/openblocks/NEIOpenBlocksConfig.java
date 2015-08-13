@@ -19,7 +19,6 @@ public class NEIOpenBlocksConfig implements IConfigureNEI {
 			Method hide = cls.getMethod("hideItem", ItemStack.class);
 
 			if (Items.heightMap != null) hide.invoke(null, new ItemStack(Items.heightMap, 1, OreDictionary.WILDCARD_VALUE));
-			if (Items.tunedCrystal != null) hide.invoke(null, new ItemStack(Items.tunedCrystal, 1, OreDictionary.WILDCARD_VALUE));
 		} catch (Throwable t) {
 			Throwables.propagate(t);
 		}

@@ -4,9 +4,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
+import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@BookDocumentation
 public class BlockItemDropper extends OpenBlock {
 	@SideOnly(Side.CLIENT)
 	private IIcon downIcon;
@@ -14,11 +17,6 @@ public class BlockItemDropper extends OpenBlock {
 	public BlockItemDropper() {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.NONE);
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
-		return true;
 	}
 
 	@Override

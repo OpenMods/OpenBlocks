@@ -11,18 +11,18 @@ import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.trophy.*;
 import openmods.Log;
-import openmods.utils.ItemUtils;
-import openmods.utils.ReflectionHelper;
+import openmods.reflection.ReflectionHelper;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -31,13 +31,19 @@ public class TrophyHandler {
 
 	private static final Random DROP_RAND = new Random();
 
-	private static final Map<Trophy, Entity> entityCache = Maps.newHashMap();
+	private static final Map<Trophy, Entity> ENTITY_CACHE = Maps.newHashMap();
 
 	public static Entity getEntityFromCache(Trophy trophy) {
-		Entity entity = entityCache.get(trophy);
+		Entity entity = ENTITY_CACHE.get(trophy);
 		if (entity == null) {
-			entity = trophy.createEntity();
-			entityCache.put(trophy, entity);
+			if (!ENTITY_CACHE.containsKey(trophy)) {
+				try {
+					entity = trophy.createEntity();
+				} catch (Throwable t) {
+					Log.severe(t, "Failed to create dummy entity for trophy %s", trophy);
+				}
+			}
+			ENTITY_CACHE.put(trophy, entity);
 		}
 		return entity;
 	}
@@ -86,7 +92,7 @@ public class TrophyHandler {
 				return setSlimeSize(super.createEntity(), 1);
 			}
 		},
-		Ghast(0.1, 0.2),
+		Ghast(0.1, 0.3),
 		Enderman(0.3, new EndermanBehavior()),
 		LavaSlime(0.6) {
 			@Override
@@ -142,10 +148,7 @@ public class TrophyHandler {
 		}
 
 		public ItemStack getItemStack() {
-			ItemStack stack = new ItemStack(OpenBlocks.Blocks.trophy, 1, ordinal());
-			NBTTagCompound tag = ItemUtils.getItemTag(stack);
-			tag.setString("entity", toString());
-			return stack;
+			return ItemTrophyBlock.putMetadata(new ItemStack(OpenBlocks.Blocks.trophy), this);
 		}
 
 		public void playSound(World world, double x, double y, double z) {
@@ -178,12 +181,17 @@ public class TrophyHandler {
 			return EntityList.createEntityByName(toString(), null);
 		}
 
-		private final static Map<String, Trophy> TYPES = Maps.newHashMap();
-
 		static {
+
+			ImmutableMap.Builder<String, Trophy> builder = ImmutableMap.builder();
+
 			for (Trophy t : values())
-				TYPES.put(t.name(), t);
+				builder.put(t.name(), t);
+
+			TYPES = builder.build();
 		}
+
+		public final static Map<String, Trophy> TYPES;
 
 		public final static Trophy[] VALUES = values();
 	}

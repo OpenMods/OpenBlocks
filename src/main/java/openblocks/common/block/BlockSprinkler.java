@@ -6,21 +6,20 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntitySprinkler;
+import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockSprinkler extends OpenBlock {
 
 	public BlockSprinkler() {
 		super(Material.water);
-		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
+		setRotationMode(BlockRotationMode.TWO_DIRECTIONS);
+		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean shouldRenderBlock() {
 		return false;
 	}
 
@@ -52,5 +51,10 @@ public class BlockSprinkler extends OpenBlock {
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
 		return isOnTopOfSolidBlock(world, x, y, z, side);
+	}
+
+	@Override
+	public boolean isReplaceable(IBlockAccess arg0, int arg1, int arg2, int arg3) {
+		return false;
 	}
 }

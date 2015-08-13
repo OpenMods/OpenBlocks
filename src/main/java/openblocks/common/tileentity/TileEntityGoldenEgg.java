@@ -4,29 +4,36 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.Config;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.Log;
 import openmods.api.IBreakAwareTile;
-import openmods.api.IPlaceAwareTile;
+import openmods.api.IPlacerAwareTile;
 import openmods.entity.EntityBlock;
-import openmods.sync.SyncableInt;
+import openmods.fakeplayer.FakePlayerPool;
+import openmods.fakeplayer.FakePlayerPool.PlayerUser;
+import openmods.fakeplayer.OpenModsFakePlayer;
+import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile, IBreakAwareTile {
+public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwareTile, IBreakAwareTile {
 
 	private static final float SPEED_CHANGE_RATE = 0.1f;
 	private static final Random RANDOM = new Random();
@@ -35,6 +42,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private static final int FALLING_TIME = 10;
 	public static final int MAX_HEIGHT = 5;
 	private static final double STAGE_CHANGE_CHANCE = 0.8;
+	private static final GameProfile MR_GLITCH = new GameProfile(UUID.fromString("d4d119aa-d410-488a-8734-0053577d4a1a"), null);
 
 	public static enum State {
 		INERT(0, 0, false) {
@@ -44,7 +52,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -55,7 +63,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -66,7 +74,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -77,7 +85,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter++;
 			}
 		},
@@ -88,15 +96,15 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter--;
-				if (RANDOM.nextInt(6) != 0) return;
-
-				int posX = target.xCoord + RANDOM.nextInt(20) - 10;
-				int posY = target.yCoord + RANDOM.nextInt(2) - 1;
-				int posZ = target.zCoord + RANDOM.nextInt(20) - 10;
-				boolean canMove = MagnetWhitelists.instance.testBlock(target.worldObj, posX, posY, posZ);
-				if (canMove) target.pickUpBlock(posX, posY, posZ);
+				if (Config.eggCanPickBlocks && RANDOM.nextInt(6) == 0) {
+					int posX = target.xCoord + RANDOM.nextInt(20) - 10;
+					int posY = target.yCoord + RANDOM.nextInt(2) - 1;
+					int posZ = target.zCoord + RANDOM.nextInt(20) - 10;
+					boolean canMove = MagnetWhitelists.instance.testBlock(target.worldObj, posX, posY, posZ);
+					if (canMove) target.pickUpBlock(world, posX, posY, posZ);
+				}
 			}
 
 			@Override
@@ -112,7 +120,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			}
 
 			@Override
-			public void onServerTick(TileEntityGoldenEgg target) {
+			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter--;
 			}
 
@@ -141,7 +149,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 		public void onEntry(TileEntityGoldenEgg target) {}
 
-		public void onServerTick(TileEntityGoldenEgg target) {}
+		public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {}
 
 		public abstract State getNextState(TileEntityGoldenEgg target);
 
@@ -150,8 +158,6 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			this.progressSpeed = riseSpeed;
 			this.specialEffects = specialEffects;
 		}
-
-		private static final State[] STATES = values();
 	}
 
 	public int tickCounter;
@@ -163,10 +169,9 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private float progressSpeed;
 
 	private List<EntityBlock> blocks = Lists.newArrayList();
-	private SyncableInt stage;
+	private SyncableEnum<State> stage;
 
-	private UUID ownerUUID;
-	private String ownerSkin;
+	private GameProfile owner;
 
 	public float getRotation(float partialTickTime) {
 		return rotation + rotationSpeed * partialTickTime;
@@ -186,24 +191,29 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	protected void createSyncedFields() {
-		stage = new SyncableInt(State.INERT.ordinal());
+		stage = SyncableEnum.create(State.INERT);
 	}
 
-	private void pickUpBlock(int x, int y, int z) {
-		EntityBlock block = EntityBlock.create(worldObj, x, y, z);
-		if (block != null) {
-			block.setHasAirResistance(false);
-			block.setHasGravity(false);
-			block.setShouldDrop(false);
-			block.motionY = 0.1;
-			blocks.add(block);
-			worldObj.spawnEntityInWorld(block);
-		}
+	private void pickUpBlock(final WorldServer world, final int x, final int y, final int z) {
+		FakePlayerPool.instance.executeOnPlayer(world, new PlayerUser() {
+
+			@Override
+			public void usePlayer(OpenModsFakePlayer fakePlayer) {
+				EntityBlock block = EntityBlock.create(fakePlayer, worldObj, x, y, z);
+				if (block != null) {
+					block.setHasAirResistance(false);
+					block.setHasGravity(false);
+					block.motionY = 0.1;
+					blocks.add(block);
+					world.spawnEntityInWorld(block);
+				}
+			}
+		});
+
 	}
 
 	private void dropBlocks() {
 		for (EntityBlock block : blocks) {
-			block.setShouldDrop(true);
 			block.motionY = -0.9;
 			block.setHasGravity(true);
 		}
@@ -214,15 +224,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	private void explode() {
 		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
 		worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
-		EntityMiniMe miniMe = new EntityMiniMe(worldObj, ownerUUID, ownerSkin);
+		EntityMiniMe miniMe = new EntityMiniMe(worldObj, Objects.firstNonNull(owner, MR_GLITCH));
 		miniMe.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 0, 0);
 		worldObj.spawnEntityInWorld(miniMe);
 	}
 
 	public State getState() {
-		int stateId = stage.get();
-		if (stateId < 0 || stateId >= State.STATES.length) return State.INERT;
-		return State.STATES[stateId];
+		return stage.get();
 	}
 
 	@Override
@@ -237,11 +245,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 			progressSpeed = (1 - SPEED_CHANGE_RATE) * progressSpeed + SPEED_CHANGE_RATE * state.progressSpeed;
 			progress += progressSpeed;
 		} else {
-			state.onServerTick(this);
+			if (worldObj instanceof WorldServer) state.onServerTick(this, (WorldServer)worldObj);
 
 			State nextState = state.getNextState(this);
 			if (nextState != null) {
-				stage.set(nextState.ordinal());
+				stage.set(nextState);
 				nextState.onEntry(this);
 				sync();
 			}
@@ -252,29 +260,32 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
-		if (ownerUUID != null) nbt.setString("OwnerUuid", ownerUUID.toString());
-		nbt.setString("OwnerSkin", ownerSkin);
+		if (owner != null) {
+			NBTTagCompound ownerTag = new NBTTagCompound();
+			NBTUtil.func_152460_a(ownerTag, owner);
+			nbt.setTag("Owner", ownerTag);
+		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 
-		String uuidString;
 		if (nbt.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = nbt.getString("owner");
-			uuidString = PreYggdrasilConverter.func_152719_a(ownerName);
-			ownerSkin = ownerName;
-		} else {
-			uuidString = nbt.getString("OwnerUUID");
-			ownerSkin = nbt.getString("OwnerSkin");
+			this.owner = MinecraftServer.getServer().func_152358_ax().func_152655_a(ownerName);
+		} else if (nbt.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
+			final String uuidStr = nbt.getString("OwnerUUID");
+			try {
+				UUID uuid = UUID.fromString(uuidStr);
+				this.owner = new GameProfile(uuid, null);
+			} catch (IllegalArgumentException e) {
+				Log.warn(e, "Failed to parse UUID: %s", uuidStr);
+			}
+		} else if (nbt.hasKey("Owner", Constants.NBT.TAG_COMPOUND)) {
+			this.owner = NBTUtil.func_152459_a(nbt.getCompoundTag("Owner"));
 		}
 
-		try {
-			ownerUUID = UUID.fromString(uuidString);
-		} catch (IllegalArgumentException e) {
-			Log.warn(e, "Failed to parse UUID: %s", uuidString);
-		}
 	}
 
 	@Override
@@ -283,11 +294,9 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		if (player != null) {
-			final GameProfile gameProfile = player.getGameProfile();
-			ownerUUID = gameProfile.getId();
-			ownerSkin = gameProfile.getName();
+	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+		if (!worldObj.isRemote && placer instanceof EntityPlayer) {
+			this.owner = ((EntityPlayer)placer).getGameProfile();
 		}
 	}
 

@@ -13,7 +13,7 @@ public class IntroPage extends PageBase {
 	public static IIcon iconImage = new FakeIcon(0, 0.7421875f, 0, 0.546875f, 95, 70);
 
 	public IntroPage() {
-		image = new GuiComponentSprite(52, 48, iconImage, texture);
+		image = new GuiComponentSprite((getWidth() - iconImage.getIconWidth()) / 2, (getHeight() - iconImage.getIconHeight()) / 2, iconImage, texture);
 		addComponent(image);
 	}
 

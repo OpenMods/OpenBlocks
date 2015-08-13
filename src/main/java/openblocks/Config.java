@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -14,21 +15,21 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.oredict.*;
 import openblocks.OpenBlocks.Enchantments;
-import openblocks.asm.EntityPlayerVisitor;
-import openblocks.client.radio.RadioManager;
-import openblocks.client.radio.RadioManager.RadioStation;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.item.*;
 import openblocks.common.recipe.*;
 import openblocks.enchantments.*;
+import openmods.Log;
 import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.RegistryDelegate;
 
 public class Config {
 
@@ -37,11 +38,15 @@ public class Config {
 	public static int elevatorTravelDistance = 20;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "dropblock", name = "ignoreAllBlocks", comment = "Disable limit of blocks between elevators (equivalent to maxPassThrough = infinity)")
+	public static boolean elevatorIgnoreBlocks = false;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "ignoreHalfBlocks", comment = "The elevator will ignore half blocks when counting the blocks it can pass through")
 	public static boolean elevatorIgnoreHalfBlocks = false;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "dropblock", name = "maxPassThrough", comment = "The maximum amount of blocks the elevator can pass through before the teleport fails. -1 disables this")
+	@ConfigProperty(category = "dropblock", name = "maxPassThrough", comment = "The maximum amount of blocks the elevator can pass through before the teleport fails")
 	public static int elevatorMaxBlockPassCount = 4;
 
 	@OnLineModifiable
@@ -49,8 +54,8 @@ public class Config {
 	public static String[] elevatorRules = new String[0];
 
 	@OnLineModifiable
-	@ConfigProperty(category = "dropblock", name = "elevatorDrainsXP", comment = "Does the elevator drain player XP when used?")
-	public static boolean elevatorDrainsXP = true;
+	@ConfigProperty(category = "dropblock", name = "elevatorXpDrainRatio", comment = "XP consumed by elevator (total amount = ratio * distance)")
+	public static float elevatorXpDrainRatio = 0;
 
 	@ConfigProperty(category = "tanks", name = "bucketsPerTank", comment = "The amount of buckets each tank can hold")
 	public static int bucketsPerTank = 16;
@@ -59,8 +64,9 @@ public class Config {
 	@ConfigProperty(category = "tanks", name = "tankTicks", comment = "Should tanks try to balance liquid amounts with neighbours")
 	public static boolean shouldTanksUpdate = true;
 
-	@ConfigProperty(category = "hacks", name = "tryHookPlayerRenderer", comment = "Allow OpenBlocks to hook the player renderer to apply special effects")
-	public static boolean tryHookPlayerRenderer = true;
+	@OnLineModifiable
+	@ConfigProperty(category = "tanks", name = "displayAllFluids", comment = "Should filled tanks be searchable with creative menu")
+	public static boolean displayAllFilledTanks = true;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000")
@@ -108,8 +114,13 @@ public class Config {
 	@ConfigProperty(category = "crane", name = "boringMode", comment = "Use shift to control crane direction (otherwise, toggle every time)")
 	public static boolean craneShiftControl = true;
 
+	@OnLineModifiable
 	@ConfigProperty(category = "crane", name = "turtleMagnetRange", comment = "Range of magnet CC peripheral")
-	public static double turtleMagnetRange = 4;
+	public static double turtleMagnetRange = 32;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "crane", name = "turtleMagnetDeactivateRange", comment = "Maximal distance from turtle to magnet when deactivating")
+	public static double turtleMagnetRangeDeactivate = 3;
 
 	@ConfigProperty(category = "crane", name = "addTurtles", comment = "Enable magnet turtles")
 	public static boolean enableCraneTurtles = true;
@@ -128,8 +139,12 @@ public class Config {
 	public static boolean fartTypying = false;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "tomfoolery", name = "flimFlamBlacklist", comment = "Blacklist for effects used by flim-flam enchantment")
-	public static String[] flimFlamBlacklist = new String[0];
+	@ConfigProperty(category = "tomfoolery", name = "flimFlamBlacklist", comment = "Blacklist/Whitelist for effects used by flim-flam enchantment")
+	public static String[] flimFlamList = new String[0];
+
+	@OnLineModifiable
+	@ConfigProperty(category = "tomfoolery", name = "reverseBlacklist", comment = "If true, flim-flam blacklist will become whitelist")
+	public static boolean flimFlamWhitelist = false;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "tomfoolery", name = "safeOnly", comment = "Allow only flimflams that don't cause death (or at least very rarely)")
@@ -140,12 +155,40 @@ public class Config {
 	public static boolean eyeDebug = false;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "debug", name = "enableChangelogBooks", comment = "Enable the changelog books")
-	public static boolean enableChangelogBooks = true;
-
-	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "gravesDebug", comment = "Dump extra amount of data, every time grave is created")
 	public static boolean debugGraves = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "destructiveGraves", comment = "Try to overwrite blocks with graves if no suitable place is found on first try")
+	public static boolean destructiveGraves = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "spawnRange", comment = "Size of cube searched for spaces suitable for grave spawning")
+	public static int graveSpawnRange = 10;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "storeContents", comment = "Store contents of spawned graves into separate NBT files (can later be restored with ob_inventory command)")
+	public static boolean backupGraves = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "spawnSkeletons", comment = "Should grave randomly spawn skeletons")
+	public static boolean spawnSkeletons = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "skeletonSpawnRate", comment = "Spawn rate, range: 0..1, default: about 1 per 50s")
+	public static double skeletonSpawnRate = 0.002;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "specialActionFrequency", comment = "Frequency of special action on grave digging, 0..1")
+	public static double graveSpecialAction = 0.03;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "canSpawnBase", comment = "Can grave spawn single block of dirt when it has no block under?")
+	public static boolean graveBase = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "voidFix", comment = "Should grave try to spawn when player died by falling into void? (false -> legacy behaviour)")
+	public static boolean voidGraves = true;
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
@@ -167,17 +210,8 @@ public class Config {
 	public static String[] disableMobNames = new String[0];
 
 	@OnLineModifiable
-	@ConfigProperty(category = "additional", name = "dumpDeadPlayersInventories", comment = "Should player inventories be stored after death (can later be restored with command)")
+	@ConfigProperty(category = "additional", name = "dumpDeadPlayersInventories", comment = "Should player inventories be stored after death (can be later restored with ob_inventory command)")
 	public static boolean dumpStiffsStuff = true;
-
-	@OnLineModifiable
-	@ConfigProperty(category = "radio", name = "radioStations", comment = "List any radio stations you want")
-	public static String[] radioStations = new String[0];
-
-	@ConfigProperty(category = "radio", name = "replaceList", comment = "List of URLs that need to be updated (url, whitespace, replacement")
-	public static String[] derpList = new String[] {
-			"http://69.46.75.101:80 http://idobiradio.idobi.com"
-	};
 
 	@OnLineModifiable
 	@ConfigProperty(category = "cartographer", name = "blockBlacklist", comment = "List of blocks that should be invisible to cartographer. Example: id:3,  OpenBlocks:openblocks_radio (case sensitive)")
@@ -185,19 +219,12 @@ public class Config {
 			"Natura:Cloud"
 	};
 
-	@ConfigProperty(category = "radio", name = "enableChestLoot", comment = "Add tuned crystals as loot in chests")
-	public static boolean radioChests = true;
-
-	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Tuned crystals merchant id (-1 to disable)")
+	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Music merchant id (-1 to disable)")
 	public static int radioVillagerId = 6156;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "radio", name = "radioVillagerSellsRecords", comment = "Should tuned crystals sell records too")
 	public static boolean radioVillagerRecords = true;
-
-	@OnLineModifiable
-	@ConfigProperty(category = "radio", name = "maxSources", comment = "Maximum number of sources playing at one time")
-	public static int maxRadioSources = 3;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "fan", name = "fanForce", comment = "Maximum force applied every tick to entities nearby (linear decay)")
@@ -221,6 +248,60 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "sponge", name = "spongeRange", comment = "Sponge block range (distance from center)")
 	public static int spongeStickRange = 3;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "donationStation")
+	public static boolean donationStationLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "sonicGlasses")
+	public static boolean sonicGlassesLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "technicolorGlasses")
+	public static boolean technicolorGlassesLoot = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "stencil")
+	public static boolean stencilLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "loot", name = "paintBrush")
+	public static boolean paintBrushLoot = false;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "features", name = "infoBook", comment = "Should every player get info book on first login")
+	public static boolean spamInfoBook = true;
+
+	@ConfigProperty(category = "features", name = "xpFluidId", comment = "Id of liquid XP fluid (WARNING: only for users who know what they are doing - changing this id can break worlds")
+	public static String xpFluidId = "xpjuice";
+
+	@ConfigProperty(category = "features", name = "xpToLiquidRatio", comment = "Storage in mB needed to store single XP point")
+	public static int xpToLiquidRatio = 20;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "guide", name = "redstoneSensitivity", comment = "How builder guide should react to redstone. 0 - not sensitive, 1 - powered == on, -1 - inverted")
+	public static int guideRedstone = 1;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "guide", name = "renderDistanceSq", comment = "Square of guide maximum render distance")
+	public static double guideRenderRangeSq = 256 * 256;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "scaffolding", name = "despawnRate", comment = "The rate at which scaffolding should break. 0 - fastest")
+	public static int scaffoldingDespawnRate = 4;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "egg", name = "pickBlocks", comment = "Can golden egg pick blocks while hatching (may lead to glitches)")
+	public static boolean eggCanPickBlocks = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "magnet", name = "pickEntities", comment = "Can crane magnet pick entities?")
+	public static boolean canMagnetPickEntities = true;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "magnet", name = "pickBlocks", comment = "Can crane magnet pick block?")
+	public static boolean canMagnetPickBlocks = true;
 
 	public static void register() {
 		@SuppressWarnings("unchecked")
@@ -296,6 +377,7 @@ public class Config {
 			}
 
 			recipeList.add(new CrayonMixingRecipe());
+			RecipeSorter.register("openblocks:crayon_mix", CrayonMixingRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 		}
 
 		if (OpenBlocks.Blocks.fan != null) {
@@ -338,13 +420,16 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.ropeLadder != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.ropeLadder, "sts", "sts", "sts", 't', "stickWood", 's', Items.string));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.ropeLadder, 8), "sts", "sts", "sts", 't', "stickWood", 's', Items.string));
 		}
 
 		if (OpenBlocks.Blocks.donationStation != null) {
 			WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Blocks.donationStation), 1, 1, 2);
-			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-			ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+
+			if (donationStationLoot) {
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			}
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.donationStation, "ppp", "pcp", "ppp", 'p', Items.porkchop, 'c', Blocks.chest));
 		}
 
@@ -378,12 +463,20 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', "plankWood", 'c', Blocks.crafting_table, 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
 		}
 
-		if (OpenBlocks.Blocks.radio != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.radio, "pbp", "prp", "pgp", 'p', "plankWood", 'b', Blocks.iron_bars, 'r', Items.redstone, 'g', Items.gold_ingot));
-		}
-
 		if (OpenBlocks.Blocks.xpShower != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Items.iron_ingot, 'o', Blocks.obsidian));
+		}
+
+		if (OpenBlocks.Blocks.scaffolding != null) {
+			final ItemStack result = new ItemStack(OpenBlocks.Blocks.scaffolding, 8);
+			recipeList.add(new ShapedOreRecipe(result, "sss", "s s", "sss", 's', "stickWood"));
+			final RegistryDelegate<Item> itemDelegate = result.getItem().delegate;
+			GameRegistry.registerFuelHandler(new IFuelHandler() {
+				@Override
+				public int getBurnTime(ItemStack fuel) {
+					return fuel.getItem() == itemDelegate.get()? 100 : 0;
+				}
+			});
 		}
 
 		if (OpenBlocks.Items.hangGlider != null) {
@@ -397,8 +490,11 @@ public class Config {
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Items.iron_helmet, 'o', Blocks.obsidian, 'i', Items.iron_ingot));
 			ItemStack stack = new ItemStack(OpenBlocks.Items.sonicGlasses);
-			WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
-			ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+
+			if (sonicGlassesLoot) {
+				WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
+				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+			}
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
@@ -410,9 +506,11 @@ public class Config {
 
 			if (OpenBlocks.Items.crayonGlasses != null) {
 				recipeList.add(new CrayonGlassesRecipe());
+				// must be after pencil
+				RecipeSorter.register("openblocks:crayon_glasses", CrayonGlassesRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			}
 
-			if (OpenBlocks.Items.technicolorGlasses != null) {
+			if (technicolorGlassesLoot && OpenBlocks.Items.technicolorGlasses != null) {
 				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.technicolorGlasses), 1, 1, 2);
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
@@ -433,28 +531,38 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Items.iron_ingot, 'g', Blocks.glass_pane, 's', Items.slime_ball, 'r', Items.redstone));
 		}
 
-		if (OpenBlocks.Items.sleepingBag != null && EntityPlayerVisitor.IsInBedHookSuccess) {
+		if (OpenBlocks.Items.sleepingBag != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sleepingBag, "cc ", "www", "ccw", 'c', Blocks.carpet, 'w', Blocks.wool));
 		}
 
 		if (OpenBlocks.Items.paintBrush != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Blocks.wool, 's', "stickWood"));
-			int[] colors = new int[] { 0xFF0000, 0x00FF00, 0x0000FF };
-			for (int color : colors) {
-				ItemStack stack = ItemPaintBrush.createStackWithColor(color);
-				WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
-				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+
+			final ItemStack template = new ItemStack(OpenBlocks.Items.paintBrush, 1, OreDictionary.WILDCARD_VALUE);
+			for (ColorMeta color : ColorUtils.getAllColors()) {
+				ItemStack brush = ItemPaintBrush.createStackWithColor(color.rgb);
+				recipeList.add(new ShapelessOreRecipe(brush, template, color.oreName));
+			}
+
+			if (paintBrushLoot) {
+				for (int color : new int[] { 0xFF0000, 0x00FF00, 0x0000FF }) {
+					ItemStack stack = ItemPaintBrush.createStackWithColor(color);
+					WeightedRandomChestContent drop = new WeightedRandomChestContent(stack, 1, 1, 2);
+					ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+				}
 			}
 		}
 
 		if (OpenBlocks.Items.stencil != null) {
-			for (Stencil stencil : Stencil.values()) {
-				WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
-				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+			if (stencilLoot) {
+				for (Stencil stencil : Stencil.values()) {
+					WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);
+					ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
+					ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
+				}
 			}
 		}
 
@@ -469,9 +577,11 @@ public class Config {
 		if (OpenBlocks.Items.emptyMap != null) {
 			if (OpenBlocks.Items.heightMap != null) {
 				recipeList.add(new MapCloneRecipe());
+				RecipeSorter.register("openblocks:map_clone", MapCloneRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			}
 
 			recipeList.add(new MapResizeRecipe());
+			RecipeSorter.register("openblocks:map_resize", MapResizeRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 
 			ItemStack memory = MetasGeneric.mapMemory.newItemStack(2);
 			ItemStack cpu = MetasGeneric.mapController.newItemStack(1);
@@ -485,25 +595,18 @@ public class Config {
 
 		if (OpenBlocks.Items.goldenEye != null) {
 			recipeList.add(new GoldenEyeRechargeRecipe());
+			RecipeSorter.register("openblocks:golden_eye_recharge", GoldenEyeRechargeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', Items.gold_nugget, 'e', Items.ender_eye));
 		}
 
 		if (OpenBlocks.Items.tastyClay != null) {
-			final ItemStack cocoa = new ItemStack(Items.dye, 1, ColorUtils.BROWN);
+			final ItemStack cocoa = ColorMeta.BROWN.createStack(Items.dye, 1);
 			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.tastyClay, 2), Items.clay_ball, Items.milk_bucket, cocoa));
 		}
 
 		if (OpenBlocks.Items.cursor != null) {
-			final ItemStack whiteWool = ColorUtils.createDyedWool(ColorUtils.WHITE);
+			final ItemStack whiteWool = ColorMeta.WHITE.createStack(Blocks.wool, 1);
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.cursor, "w  ", "www", "www", 'w', whiteWool));
-		}
-
-		if (OpenBlocks.Items.tunedCrystal != null) {
-			for (RadioStation station : RadioManager.instance.getRadioStations()) {
-				WeightedRandomChestContent drop = new WeightedRandomChestContent(station.getStack().copy(), 1, 1, 2);
-				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
-				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
-			}
 		}
 
 		if (OpenBlocks.Items.infoBook != null) {
@@ -525,8 +628,10 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Items.redstone, 'c', Items.clock));
 		}
 
-		OpenBlocks.Fluids.xpJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
-		FluidRegistry.registerFluid(OpenBlocks.Fluids.xpJuice);
+		Fluid liquidXp = new Fluid(xpFluidId).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		if (!FluidRegistry.registerFluid(liquidXp)) Log.info("Other mod registered '%s' fluid, OpenBlocks will use that", xpFluidId);
+
+		OpenBlocks.Fluids.xpJuice = FluidRegistry.getFluid(xpFluidId);
 
 		if (OpenBlocks.Items.filledBucket != null) {
 			MetasBucket.registerItems();

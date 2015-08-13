@@ -1,9 +1,11 @@
 package openblocks.integration;
 
 import static openmods.integration.Conditions.modLoaded;
+import openblocks.common.tileentity.TileEntityGuide;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
-import openperipheral.api.OpenPeripheralAPI;
+import openperipheral.api.ApiAccess;
+import openperipheral.api.adapter.IPeripheralAdapterRegistry;
 
 public class ModuleAdapters extends IntegrationModule {
 
@@ -23,10 +25,12 @@ public class ModuleAdapters extends IntegrationModule {
 
 	private static class LoadHack {
 		private static void load() {
-			OpenPeripheralAPI.register(new AdapterVillageHighlighter());
-			OpenPeripheralAPI.register(new AdapterDonationStation());
-			OpenPeripheralAPI.register(new AdapterCannon());
-			OpenPeripheralAPI.register(new AdapterProjector());
+			final IPeripheralAdapterRegistry registry = ApiAccess.getApi(IPeripheralAdapterRegistry.class);
+			registry.register(new AdapterVillageHighlighter());
+			registry.register(new AdapterDonationStation());
+			registry.register(new AdapterCannon());
+			registry.register(new AdapterProjector());
+			registry.registerInline(TileEntityGuide.class);
 		}
 	}
 }

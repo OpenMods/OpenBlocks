@@ -1,11 +1,16 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityBigButton;
+import openmods.block.BlockRotationMode;
+import openmods.infobook.BookDocumentation;
 
+@BookDocumentation
 public class BlockBigButton extends OpenBlock {
 
 	public BlockBigButton() {
@@ -15,14 +20,8 @@ public class BlockBigButton extends OpenBlock {
 	}
 
 	@Override
-	public boolean shouldRenderBlock() {
-		return true;
-	}
-
-	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return (side != ForgeDirection.UP && side != ForgeDirection.DOWN)
-				&& isNeighborBlockSolid(world, x, y, z, side);
+	public boolean canPlaceBlock(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection sideDir, ForgeDirection blockDirection, float hitX, float hitY, float hitZ, int newMeta) {
+		return super.canPlaceBlock(world, player, stack, x, y, z, sideDir, blockDirection, hitX, hitY, hitZ, newMeta) && isNeighborBlockSolid(world, x, y, z, blockDirection);
 	}
 
 	@Override
@@ -89,7 +88,7 @@ public class BlockBigButton extends OpenBlock {
 	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side) {
 		ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
 		TileEntityBigButton button = getTileEntity(world, x, y, z, TileEntityBigButton.class);
-		return (direction == button.getRotation() && button.isButtonActive())? 15 : 0;
+		return (button != null && direction == button.getRotation() && button.isButtonActive())? 15 : 0;
 	}
 
 	@Override

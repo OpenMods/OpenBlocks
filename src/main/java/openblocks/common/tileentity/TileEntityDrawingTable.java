@@ -10,16 +10,16 @@ import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.common.item.MetasGeneric;
 import openblocks.rpc.IStencilCrafter;
-import openmods.GenericInventory;
-import openmods.IInventoryProvider;
 import openmods.api.IHasGui;
-import openmods.include.IExtendable;
 import openmods.include.IncludeInterface;
+import openmods.inventory.GenericInventory;
+import openmods.inventory.IInventoryProvider;
+import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IExtendable, IInventoryProvider, IStencilCrafter {
+public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryProvider, IStencilCrafter {
 
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("drawingtable", true, 1) {
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "drawingtable", true, 1) {
 
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -43,6 +43,11 @@ public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, I
 	@Override
 	public boolean canOpenGui(EntityPlayer player) {
 		return true;
+	}
+
+	@Override
+	public boolean canUpdate() {
+		return false;
 	}
 
 	@Override

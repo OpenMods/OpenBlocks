@@ -1,13 +1,12 @@
 package openblocks;
 
-import java.io.File;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
@@ -16,8 +15,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import openblocks.api.FlimFlamRegistry;
-import openblocks.client.radio.RadioManager;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
@@ -29,29 +26,23 @@ import openblocks.events.ElevatorActionEvent;
 import openblocks.events.PlayerActionEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
-import openblocks.rpc.IColorChanger;
-import openblocks.rpc.IRotatable;
-import openblocks.rpc.IStencilCrafter;
+import openblocks.rpc.*;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
-import openblocks.utils.ChangelogBuilder;
-import openmods.Log;
 import openmods.Mods;
 import openmods.OpenMods;
 import openmods.config.BlockInstances;
 import openmods.config.ItemInstances;
 import openmods.config.game.*;
 import openmods.config.properties.ConfigProcessing;
-import openmods.entity.EntityBlock;
 import openmods.integration.Integration;
+import openmods.liquids.BucketFillHandler;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.RpcCallDispatcher;
 import openmods.utils.EnchantmentUtils;
-import openmods.utils.ReflectionHelper;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -63,14 +54,14 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = OpenBlocks.ID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES)
+@Mod(modid = OpenBlocks.MODID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES)
 public class OpenBlocks {
-	public static final String ID = "OpenBlocks";
+	public static final String MODID = "OpenBlocks";
 	public static final String NAME = "OpenBlocks";
-	public static final String VERSION = "@VERSION@";
+	public static final String VERSION = "$VERSION$";
 	public static final String PROXY_SERVER = "openblocks.common.ServerProxy";
 	public static final String PROXY_CLIENT = "openblocks.client.ClientProxy";
-	public static final String DEPENDENCIES = "required-after:OpenMods@[0.6,];after:OpenPeripheral;after:NotEnoughCodecs";
+	public static final String DEPENDENCIES = "required-after:OpenMods@[$LIB-VERSION$,$NEXT-LIB-VERSION$)";
 
 	private static final int ENTITY_HANGGLIDER_ID = 701;
 	private static final int ENTITY_LUGGAGE_ID = 702;
@@ -83,7 +74,7 @@ public class OpenBlocks {
 	private static final int ENTITY_XP_ID = 709;
 	private static final int ENTITY_MINIME_ID = 710;
 
-	@Instance(value = OpenBlocks.ID)
+	@Instance(MODID)
 	public static OpenBlocks instance;
 
 	@SidedProxy(clientSide = OpenBlocks.PROXY_CLIENT, serverSide = OpenBlocks.PROXY_SERVER)
@@ -93,10 +84,10 @@ public class OpenBlocks {
 		@RegisterBlock(name = "ladder")
 		public static BlockLadder ladder;
 
-		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class)
+		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class, itemBlock = ItemGuide.class)
 		public static BlockGuide guide;
 
-		@RegisterBlock(name = "elevator", tileEntity = TileEntityElevator.class)
+		@RegisterBlock(name = "elevator", itemBlock = ItemElevator.class)
 		public static BlockElevator elevator;
 
 		@RegisterBlock(name = "heal", tileEntity = TileEntityHealBlock.class)
@@ -168,7 +159,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "itemDropper", tileEntity = TileEntityItemDropper.class)
 		public static BlockItemDropper itemDropper;
 
-		@RegisterBlock(name = "ropeladder", tileEntity = TileEntityRopeLadder.class)
+		@RegisterBlock(name = "ropeladder")
 		public static BlockRopeLadder ropeLadder;
 
 		@RegisterBlock(name = "donationStation", tileEntity = TileEntityDonationStation.class)
@@ -192,10 +183,6 @@ public class OpenBlocks {
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
 
-		// @RegisterBlock(name = "radio", tileEntity = TileEntityRadio.class)
-		@IgnoreFeature
-		public static BlockRadio radio;
-
 		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class)
 		public static BlockSky sky;
 
@@ -204,6 +191,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
 		public static BlockGoldenEgg goldenEgg;
+
+		@RegisterBlock(name = "scaffolding")
+		public static BlockScaffolding scaffolding;
 	}
 
 	public static class Items implements ItemInstances {
@@ -277,9 +267,6 @@ public class OpenBlocks {
 		@RegisterItem(name = "cursor")
 		public static ItemCursor cursor;
 
-		@RegisterItem(name = "tunedCrystal", unlocalizedName = "tuned_crystal")
-		public static ItemTunedCrystal tunedCrystal;
-
 		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
 		public static ItemInfoBook infoBook;
 
@@ -291,10 +278,6 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "pedometer")
 		public static ItemPedometer pedometer;
-	}
-
-	public static class ClassReferences {
-		public static Class<?> flansmodsEntityBullet;
 	}
 
 	public static class Fluids {
@@ -328,59 +311,62 @@ public class OpenBlocks {
 
 	};
 
-	public static int renderId;
+	public static int renderIdFull;
+
+	public static int renderIdFlat;
 
 	public static final Achievement brickAchievement = new Achievement("openblocks.oops", "openblocks.droppedBrick", 13, 13, net.minecraft.init.Items.brick, null).registerStat();
+
+	public static final Achievement stackAchievement = new Achievement("openblocks.tma2", "openblocks.stackOverflow", -13, 13, net.minecraft.init.Items.nether_star, null).registerStat();
 
 	public static final StatBase brickStat = new StatBasic("openblocks.dropped",
 			new ChatComponentTranslation("stat.openblocks.bricksDropped"),
 			StatBase.simpleStatType).registerStat();
 
-	public static ItemStack changeLog;
+	private final ModStartupHelper startupHelper = new ModStartupHelper("openblocks") {
 
-	private GameConfigProvider gameConfig;
+		@Override
+		protected void populateConfig(Configuration config) {
+			ConfigProcessing.processAnnotations("OpenBlocks", config, Config.class);
+		}
+
+		@Override
+		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
+			itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
+				@Override
+				public Item construct() {
+					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
+				}
+			});
+
+			itemFactory.registerFactory("technicolorGlasses", new FactoryRegistry.Factory<Item>() {
+				@Override
+				public Item construct() {
+					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
+				}
+			});
+
+			itemFactory.registerFactory("seriousGlasses", new FactoryRegistry.Factory<Item>() {
+				@Override
+				public Item construct() {
+					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
+				}
+			});
+		}
+
+	};
+
+	@EventHandler
+	public void construct(FMLConstructionEvent evt) {
+		ApiProvider.setupApi();
+	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
-		ConfigurableFeatureManager features = new ConfigurableFeatureManager();
-		features.collectFromBlocks(OpenBlocks.Blocks.class);
-		features.collectFromItems(OpenBlocks.Items.class);
+		startupHelper.registerBlocksHolder(OpenBlocks.Blocks.class);
+		startupHelper.registerItemsHolder(OpenBlocks.Items.class);
 
-		final File configFile = evt.getSuggestedConfigurationFile();
-		Configuration config = new Configuration(configFile);
-
-		ConfigProcessing.processAnnotations(configFile, "OpenBlocks", config, Config.class);
-		features.loadFromConfiguration(config);
-
-		if (config.hasChanged()) config.save();
-
-		gameConfig = new GameConfigProvider("openblocks");
-		gameConfig.setFeatures(features);
-
-		final FactoryRegistry<Item> itemFactory = gameConfig.getItemFactory();
-		itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
-			}
-		});
-
-		itemFactory.registerFactory("technicolorGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
-			}
-		});
-
-		itemFactory.registerFactory("seriousGlasses", new FactoryRegistry.Factory<Item>() {
-			@Override
-			public Item construct() {
-				return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
-			}
-		});
-
-		gameConfig.registerBlocks(OpenBlocks.Blocks.class);
-		gameConfig.registerItems(OpenBlocks.Items.class);
+		startupHelper.preInit(evt.getSuggestedConfigurationFile());
 
 		NetworkEventManager.INSTANCE
 				.startRegistration()
@@ -388,14 +374,16 @@ public class OpenBlocks {
 				.register(MapDataManager.MapDataResponseEvent.class)
 				.register(MapDataManager.MapUpdatesEvent.class)
 				.register(ElevatorActionEvent.class)
-				.register(PlayerActionEvent.class);
+				.register(PlayerActionEvent.class)
+				.register(EntityMiniMe.OwnerChangeEvent.class);
 
 		RpcCallDispatcher.INSTANCE.startRegistration()
 				.registerInterface(IRotatable.class)
 				.registerInterface(IStencilCrafter.class)
-				.registerInterface(IColorChanger.class);
+				.registerInterface(IColorChanger.class)
+				.registerInterface(ILevelChanger.class)
+				.registerInterface(ICannon.class);
 
-		RadioManager.readConfigs();
 		Config.register();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
@@ -412,7 +400,7 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(EntityXPOrbNoFly.class, "XPOrbNoFly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityBlock.class, "Block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityMountedBlock.class, "MountedBlock", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "Player-Magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
@@ -438,14 +426,31 @@ public class OpenBlocks {
 
 		if (Config.radioVillagerId > 0) {
 			VillagerRegistry.instance().registerVillagerId(Config.radioVillagerId);
-			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, RadioManager.instance);
+			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, new RadioVillagerTradeManager());
 		}
 
-		FMLInterModComms.sendMessage("NotEnoughCodecs", "listCodecs", "");
+		{
+			String luggageName = (String)EntityList.classToStringMapping.get(EntityLuggage.class);
+			FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", luggageName);
+		}
+
+		if (Items.luggage != null) {
+			MinecraftForge.EVENT_BUS.register(new LuggageDropHandler());
+		}
+
+		if (Blocks.elevator != null) {
+			MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
+		}
+
+		if (Blocks.tank != null) {
+			BucketFillHandler.instance.addToWhitelist(TileEntityTank.class);
+		}
 
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
+
+		MinecraftForge.EVENT_BUS.register(new GameRuleManager());
 
 		proxy.preInit();
 	}
@@ -461,30 +466,27 @@ public class OpenBlocks {
 	public void postInit(FMLPostInitializationEvent evt) {
 		proxy.postInit();
 
-		if (Config.enableChangelogBooks) changeLog = ChangelogBuilder.createChangeLog(VERSION);
-
-		if (Loader.isModLoaded(Mods.FLANSMOD)) {
-			ClassReferences.flansmodsEntityBullet = ReflectionHelper.getClass("co.uk.flansmods.common.guns.EntityBullet");
-		}
 		if (Enchantments.flimFlam != null) {
-			FlimFlamRegistry.registerFlimFlam("inventory-shuffle", -50, 100, new InventoryShuffleFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("useless-tool", -125, 50, new UselessToolFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("bane", -125, 100, new BaneFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("epic-lore", -10, 100, new LoreFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("living-rename", -10, 100, new RenameFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("squid", -75, 50, new SquidFilmFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("sheep-dye", -5, 50, new SheepDyeFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("invisible-mobs", -25, 10, new InvisibleMobsFlimFlam()).markSafe();
-			FlimFlamRegistry.registerFlimFlam("sound", -5, 150, new SoundFlimFlam()).markSilent().markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("inventory-shuffle", -50, 100, new InventoryShuffleFlimFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("useless-tool", -125, 50, new UselessToolFlimFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("bane", -125, 100, new BaneFlimFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("epic-lore", -10, 100, new LoreFlimFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("living-rename", -10, 100, new RenameFlimFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("squid", -75, 50, new SquidFilmFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("sheep-dye", -5, 50, new SheepDyeFlimFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("invisible-mobs", -25, 10, new InvisibleMobsFlimFlam()).markSafe();
+			FlimFlamRegistry.instance.registerFlimFlam("sound", -5, 150, new SoundFlimFlam()).markSilent().markSafe();
 
-			FlimFlamRegistry.registerFlimFlam("snowballs", -50, 50, new SnowballsFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("teleport", -100, 30, new TeleportFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("mount", -150, 25, new MountFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("encase", -50, 50, new EncaseFlimFlam()).setRange(Integer.MIN_VALUE, -300);
-			FlimFlamRegistry.registerFlimFlam("creepers", -60, 50, new DummyCreepersFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("disarm", -50, 50, new ItemDropFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("effect", -75, 75, new EffectFlimFlam());
-			FlimFlamRegistry.registerFlimFlam("skyblock", -100, 150, new SkyblockFlimFlam()).setRange(Integer.MIN_VALUE, -400);
+			FlimFlamRegistry.instance.registerFlimFlam("snowballs", -50, 50, new SnowballsFlimFlam());
+			FlimFlamRegistry.instance.registerFlimFlam("teleport", -100, 30, new TeleportFlimFlam());
+			FlimFlamRegistry.instance.registerFlimFlam("mount", -150, 25, new MountFlimFlam());
+			FlimFlamRegistry.instance.registerFlimFlam("encase", -50, 50, new EncaseFlimFlam()).setRange(Integer.MIN_VALUE, -300);
+			FlimFlamRegistry.instance.registerFlimFlam("creepers", -60, 50, new DummyCreepersFlimFlam());
+			FlimFlamRegistry.instance.registerFlimFlam("disarm", -50, 50, new ItemDropFlimFlam());
+			FlimFlamRegistry.instance.registerFlimFlam("effect", -75, 75, new EffectFlimFlam());
+			FlimFlamRegistry.instance.registerFlimFlam("skyblock", -100, 150, new SkyblockFlimFlam()).setRange(Integer.MIN_VALUE, -400);
+
+			FlimFlamRegistry.BLACKLIST.init();
 		}
 	}
 
@@ -494,18 +496,12 @@ public class OpenBlocks {
 			if (m.isStringMessage() && "donateUrl".equalsIgnoreCase(m.key)) {
 				DonationUrlManager.instance().addUrl(m.getSender(), m.getStringValue());
 			}
-
-			if (m.isNBTMessage() && "knownCodecs".equalsIgnoreCase(m.key)) {
-				Log.info("Updating codec list with message from %s", m.getSender());
-				RadioManager.addCodecsInfo(m.getNBTValue());
-			}
 		}
 	}
 
 	@EventHandler
 	public void handleRenames(FMLMissingMappingsEvent event) {
-		Preconditions.checkNotNull(gameConfig, "What?");
-		gameConfig.handleRemaps(event.get());
+		startupHelper.handleRenames(event);
 	}
 
 	@EventHandler

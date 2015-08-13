@@ -7,8 +7,8 @@ import java.util.List;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import openblocks.api.FlimFlamRegistry;
-import openblocks.api.IFlimFlamEffect;
+import openblocks.api.IFlimFlamDescription;
+import openblocks.enchantments.flimflams.FlimFlamRegistry;
 import openmods.utils.CollectionUtils;
 
 import com.google.common.collect.Lists;
@@ -47,12 +47,12 @@ public class CommandFlimFlam implements ICommand {
 
 		String effectName = (params.length > 1)? params[1] : null;
 
-		IFlimFlamEffect meta;
+		IFlimFlamDescription meta;
 		if (effectName == null) {
-			meta = CollectionUtils.getRandom(FlimFlamRegistry.getFlimFlams());
+			meta = CollectionUtils.getRandom(FlimFlamRegistry.instance.getFlimFlams());
 			effectName = meta.name();
 		} else {
-			meta = FlimFlamRegistry.getFlimFlamByName(effectName);
+			meta = FlimFlamRegistry.instance.getFlimFlamByName(effectName);
 			if (meta == null) throw error("openblocks.misc.command.no_flim_flam");
 		}
 
@@ -77,7 +77,7 @@ public class CommandFlimFlam implements ICommand {
 
 		if (params.length == 2) {
 			String effectPrefix = params[1];
-			return filterPrefixes(effectPrefix, FlimFlamRegistry.getAllFlimFlamsNames());
+			return filterPrefixes(effectPrefix, FlimFlamRegistry.instance.getAllFlimFlamsNames());
 		}
 
 		return Lists.newArrayList();
