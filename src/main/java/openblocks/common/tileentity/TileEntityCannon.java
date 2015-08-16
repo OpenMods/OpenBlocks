@@ -195,11 +195,13 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
         final Vec3 origin = Vec3.createVectorHelper(xCoord + 0.5, yCoord, zCoord + 0.5);
         final Vec3 target = Vec3.createVectorHelper(x + 0.5, y + 1, z + 0.5);
         final Vec3 gravity = Vec3.createVectorHelper(0, -TileEntityCannonLogic.PHYS_PARTIAL_WORLD_GRAVITY, 0);
-        final double dim2Distance =
+        final double dim2Distance = Math.sqrt(
                 Math.pow(target.xCoord - origin.xCoord, 2)
-                + Math.pow(target.zCoord - origin.zCoord, 2);
+                + Math.pow(target.zCoord - origin.zCoord, 2));
 
-        final float lobScale = (float)Math.max(20, 5 + Math.sqrt(dim2Distance));
+        final double verticalLobScale = Math.min(20, Math.max(0, target.yCoord - origin.yCoord) * 4);
+
+        final float lobScale = (float)Math.max(20, 5 + dim2Distance + verticalLobScale);
 
         final Vec3 velocity = TileEntityCannonLogic.calculateTrajectory(origin, target, gravity, lobScale);
 
