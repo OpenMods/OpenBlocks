@@ -224,13 +224,63 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		 * that thinks they can make this work better. Regards -NC
 		 */
 
-		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 10;
+		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 13;
 
-		public static final double CANNON_VELOCITY = 8 * 0.05; // 8
-																// meters/second
-		public static final double WORLD_GRAVITY = -0.8 * 0.05; // World Gravity
-																// in
-																// meters/second/second
+        /**
+         * 20 physics ticks per second (on a good day)
+         */
+        private static final double PHYS_STEPS_PER_SECOND = 20D;
+
+        /**
+         * Physics calculation time in partial seconds
+         */
+        private static final double PHYS_PARTIAL_TIME = 1D / PHYS_STEPS_PER_SECOND;
+
+        /**
+         * Minecraft known gravity in meters/second/second
+         */
+        private static final double PHYS_WORLD_GRAVITY = 0.8D;
+
+        /**
+         * Amount of gravity acceleration per physics tick.
+         */
+        private static final double PHYS_PARTIAL_WORLD_GRAVITY = PHYS_WORLD_GRAVITY * PHYS_PARTIAL_TIME;
+
+        public static Vec3 calculateTrajectory(Vec3 startPosition, Vec3 targetPosition, Vec3 gravity, float scale) {
+            final double physicsTimestep = PHYS_PARTIAL_TIME;
+            final double physicsTimestepSquare = physicsTimestep * physicsTimestep;
+            final double timestepPerSecond = PHYS_STEPS_PER_SECOND;
+            final double n = scale * timestepPerSecond;
+
+            final Vec3 a = Vec3.createVectorHelper(
+                    gravity.xCoord * physicsTimestepSquare,
+                    gravity.yCoord * physicsTimestepSquare,
+                    gravity.zCoord * physicsTimestepSquare
+            );
+
+            final Vec3 p = targetPosition;
+            final Vec3 s = startPosition;
+
+            final double nSquare = n * n;
+            final double nModifier = 0.5 * nSquare + n; // ( /2f )
+            final Vec3 scaledAcceleration = Vec3.createVectorHelper(
+                    a.xCoord * nModifier,
+                    a.yCoord * nModifier,
+                    a.zCoord * nModifier
+            );
+
+            final double inverseNegN = -1.0 / n;
+            final double finalMultiplier = inverseNegN * timestepPerSecond; // ( Same as /physicsTimestep)
+
+            final Vec3 velocity = Vec3.createVectorHelper(
+                    (s.xCoord + scaledAcceleration.xCoord - p.xCoord) * finalMultiplier,
+                    (s.yCoord + scaledAcceleration.yCoord - p.yCoord) * finalMultiplier,
+                    (s.zCoord + scaledAcceleration.zCoord - p.zCoord) * finalMultiplier
+            );
+
+            return velocity;
+        }
+
 
 		public static double[] getThetaByAngle(double deltaX, double deltaY, double deltaZ, double v) {
 			v += 0.5;
