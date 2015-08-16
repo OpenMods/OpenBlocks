@@ -23,7 +23,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ICannon {
 
-	private static final int YAW_CHANGE_SPEED = 3;
+    /*
+     * Blocks and Entities have a right-angle offset
+     */
+    private static final int YAW_OFFSET_DEGREES = -90;
+	private static final int KNOB_YAW_CHANGE_SPEED = 3;
+    private static final int KNOB_PITCH_CHANGE_SPEED = 20;
+    private static final int KNOB_VEL_CHANGE_SPEED = 20;
+    private static final int KNOB_LOB_MINIMUM_VALUE = 20;
+    private static final int KNOB_LOB_MAXIMUM_VALUE = 75;
+    private static final int KNOB_LOB_VERTICAL_MUL = 4;
+    private static final int KNOB_LOB_HORIZONTAL_MUL = 1;
+    private static final int KNOB_LOB_BONUS = 5;
+
 	public SyncableDouble targetPitch;
 	public SyncableDouble targetYaw;
 	public SyncableDouble targetSpeed;
@@ -35,8 +47,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	public Vec3 motion;
 
 	public boolean renderLine = true;
-
 	private int ticksSinceLastFire = Integer.MAX_VALUE;
+
+    private Vec3 projectileOrigin = null;
 
 	@Override
 	protected void createSyncedFields() {
@@ -54,20 +67,33 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	@Override
 	public void updateEntity() {
+
+        checkOrigin();
+
+        if(Double.isNaN(currentPitch)) {
+            System.out.println("Pitch was NaN");
+            currentPitch = 45;
+            targetPitch.set(currentPitch);
+        }
+        if(Double.isNaN(currentYaw)) {
+            System.out.println("Yaw was NaN");
+            currentYaw = 0;
+        }
+
 		super.updateEntity();
 
 		// ugly, need to clean
-		currentPitch = currentPitch - ((currentPitch - targetPitch.get()) / 20);
+		currentPitch = currentPitch - ((currentPitch - targetPitch.get()) / KNOB_PITCH_CHANGE_SPEED);
 		currentYaw = GeometryUtils.normalizeAngle(currentYaw);
 
 		final double targetYaw = GeometryUtils.normalizeAngle(this.targetYaw.get());
-		if (Math.abs(currentYaw - targetYaw) < YAW_CHANGE_SPEED) currentYaw = targetYaw;
+		if (Math.abs(currentYaw - targetYaw) < KNOB_YAW_CHANGE_SPEED) currentYaw = targetYaw;
 		else {
 			double dist = GeometryUtils.getAngleDistance(currentYaw, targetYaw);
-			currentYaw += YAW_CHANGE_SPEED * Math.signum(dist);
+			currentYaw += KNOB_YAW_CHANGE_SPEED * Math.signum(dist);
 		}
 
-		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.get()) / 20);
+		currentSpeed = currentSpeed - ((currentSpeed - targetSpeed.get()) / KNOB_VEL_CHANGE_SPEED);
 
 		invalidateMotion();
 
@@ -101,9 +127,11 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		final ICannon rpc = createServerRpcProxy(ICannon.class);
 		rpc.fireCannon();
 
+        // projectileOrigin is not used here, it's used for the calculations below.
 		EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 		item.delayBeforeCanPickup = 20;
 
+        // Now that we generate vectors instead of eular angles, this should be revised.
 		Vec3 motion = getMotion();
 		item.motionX = motion.xCoord;
 		item.motionY = motion.yCoord;
@@ -143,8 +171,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		double cosYaw = Math.cos(y);
 
 		return Vec3.createVectorHelper(-cosPitch * sinYaw * currentSpeed,
-				sinPitch * currentSpeed,
-				-cosPitch * cosYaw * currentSpeed);
+                sinPitch * currentSpeed,
+                -cosPitch * cosYaw * currentSpeed);
 	}
 
 	private void invalidateMotion() {
@@ -156,30 +184,51 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		return motion;
 	}
 
+    private void checkOrigin() {
+        if(projectileOrigin == null) {
+            projectileOrigin = Vec3.createVectorHelper(xCoord + 0.5, yCoord, zCoord + 0.5);
+        }
+    }
+
 	public void setTarget(int x, int y, int z) {
+        checkOrigin();
+        // We target the middle of the block, at the very top.
+        final Vec3 target = Vec3.createVectorHelper(x + 0.5, y + 1, z + 0.5);
 
-		// right, first we get the distance
-		double dX = (xCoord + 0.5) - (x + 0.5);
-		double dY = -(yCoord - y);
-		double dZ = (zCoord + 0.5) - (z + 0.5);
+        // Horizontal distance between the origin and target
+        final double distHorizontal = KNOB_LOB_HORIZONTAL_MUL * Math.sqrt(
+                Math.pow(target.xCoord - projectileOrigin.xCoord, 2)
+                        + Math.pow(target.zCoord - projectileOrigin.zCoord, 2));
 
-		final double atan2 = Math.atan2(dZ, dX);
-		double yawDegrees = Math.toDegrees(atan2) + 90;
-		System.out.println(String.format("%f %f %f %f", dX, dY, dZ, yawDegrees));
-		targetYaw.set(yawDegrees);
+        // No vertical multiplier is applied for decline slopes.
+        final double distVertical = Math.max((target.yCoord - projectileOrigin.yCoord) * KNOB_LOB_VERTICAL_MUL, 0);
+
+        // Calculate the arc of the trajectory
+        final float lobScale = (float)
+                        Math.min(KNOB_LOB_MAXIMUM_VALUE,
+                                Math.max(KNOB_LOB_MINIMUM_VALUE,
+                                        KNOB_LOB_BONUS + distHorizontal + distVertical));
+
+        // Calculate the velocity of the projectile
+        final Vec3 velocity = TileEntityCannonLogic.calculateTrajectory(projectileOrigin, target, lobScale);
+
+        // m/s applied to item.
+        final double speed = velocity.lengthVector();
+        targetSpeed.set(speed);
+
+        // reverse the vector to angles for cannon model
+        final Vec3 direction = velocity.normalize();
+        final double pitch = Math.asin(direction.yCoord);
+        final double yaw = Math.atan2(direction.zCoord, direction.xCoord);
+
+        // Set yaw and pitch
+		targetYaw.set(Math.toDegrees(yaw) + YAW_OFFSET_DEGREES);
+        targetPitch.set(Math.toDegrees(pitch));
+
 		currentYaw = targetYaw.get();
-
-		double[] calc = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
-		double theta = Math.max(calc[0], calc[1]);
-		targetPitch.set(Math.toDegrees(theta));
 		currentPitch = targetPitch.get();
 
-		// We have selected what we feel to be the best angle
-		// But the velocity suggested doesn't scale on all 3 axis
-		// So we have to change that a bit
-		double d = Math.sqrt(dX * dX + dZ * dZ);
-		double v = Math.sqrt((d * -TileEntityCannonLogic.WORLD_GRAVITY) / Math.sin(2 * theta));
-		targetSpeed.set(v);
+        // Sync targets
 		sync();
 	}
 
@@ -218,64 +267,73 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		/*
 		 * Hello, If you think you can improve the code below to work better,
 		 * all power to you! But please, if you give up and revert your changes.
-		 * Please
-		 * increment the counter below as an increasing warning to the next
-		 * sorry soul
-		 * that thinks they can make this work better. Regards -NC
+		 * Increment the counter below as an increasing warning to the next
+		 * sorry soul that thinks they can make this work better.
+		 * Regards -NC
 		 */
 
-		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 10;
+		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 14;
 
-		public static final double CANNON_VELOCITY = 8 * 0.05; // 8
-																// meters/second
-		public static final double WORLD_GRAVITY = -0.8 * 0.05; // World Gravity
-																// in
-																// meters/second/second
+        /**
+         * 20 physics ticks per second (on a good day)
+         */
+        private static final double PHYS_STEPS_PER_SECOND = 20D;
 
-		public static double[] getThetaByAngle(double deltaX, double deltaY, double deltaZ, double v) {
-			v += 0.5;
-			double r = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-			double e = Math.atan2(deltaY, r);
-			double g = WORLD_GRAVITY;
-			double c1 = Math.sqrt(Math.pow(v, 4) - g * (g * r * r * Math.pow(Math.cos(e), 2) + 2 * (v * v) * r * Math.sin(e)));
-			double c2 = g * r * Math.cos(e);
-			return new double[] {
-					Math.atan(v * v + c1 / c2),
-					Math.atan(v * v - c1 * c2)
-			};
-		}
+        /**
+         * Physics calculation time in partial seconds
+         */
+        private static final double PHYS_PARTIAL_TIME = 1D / PHYS_STEPS_PER_SECOND;
 
-		public static double[] getVariableVelocityTheta(double deltaX, double deltaY, double deltaZ) {
-			double velocity = CANNON_VELOCITY;
-			double[] theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
-			int iterations = 100;
-			while (Double.isNaN(theta[0]) && Double.isNaN(theta[1]) && --iterations > 0) {
-				velocity += 0.025;
-				theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
-			}
-			double[] result = new double[3];
-			result[0] = theta[0];
-			result[1] = theta[1];
-			result[2] = velocity;
-			return result;
-		}
+        /**
+         * Minecraft known gravity in meters/second/second
+         */
+        private static final double PHYS_WORLD_GRAVITY = 0.8D;
 
-		public static double[] getThetaToPoint(double deltaX, double deltaY, double deltaZ, double velocity) {
-			double x = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-			double y = deltaY + 0.4;
-			double v = velocity;
-			double g = WORLD_GRAVITY;
-			double[] theta = new double[2];
-			double mComponent = (v * v * v * v) - g * (g * (x * x) + 2 * (y * (v * v)));
-			if (mComponent < 0) return new double[] { Double.NaN, Double.NaN };
-			mComponent *= 100;
-			mComponent = Math.sqrt(mComponent);
-			mComponent /= 10;
-			mComponent /= (g * x);
-			theta[0] = Math.atan(v * v + mComponent);
-			theta[1] = Math.atan(v * v - mComponent);
-			return theta;
-		}
+        /**
+         * Amount of gravity acceleration per physics tick.
+         */
+        private static final double PHYS_PARTIAL_WORLD_GRAVITY = PHYS_WORLD_GRAVITY * PHYS_PARTIAL_TIME;
+
+        /**
+         * Squared timestep for acceleration
+         */
+        private static final double PHYS_PARTIAL_TIME_SQUARE = PHYS_PARTIAL_TIME * PHYS_PARTIAL_TIME;
+
+        /**
+         * Physics gravity vector in partial time squared for acceleration calculation
+         */
+        private static final Vec3 PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL
+                = Vec3.createVectorHelper(0, PHYS_PARTIAL_TIME_SQUARE * -PHYS_PARTIAL_WORLD_GRAVITY, 0);
+
+
+        /**
+         * The actual work for calculating trajectory. Which is much simpler now.
+         * @param start The origin of the projectile to be fired
+         * @param target The target location of the projectile
+         * @param scale The arcing size of the trajectory
+         * @return Vector to achieve trajectory
+         */
+        public static Vec3 calculateTrajectory(Vec3 start, Vec3 target, float scale) {
+            final double n = scale * PHYS_STEPS_PER_SECOND;
+            final double accelerationMultiplier = 0.5 * n * n + n; // (n^2+n)/2
+
+            final Vec3 scaledAcceleration = Vec3.createVectorHelper(
+                    PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.xCoord * accelerationMultiplier,
+                    PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.yCoord * accelerationMultiplier,
+                    PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.zCoord * accelerationMultiplier
+            );
+
+            // -1 /n * Phys = -Phys / n
+            final double velocityMultiplier = -PHYS_STEPS_PER_SECOND / n;
+
+            final Vec3 velocity = Vec3.createVectorHelper(
+                    (start.xCoord + scaledAcceleration.xCoord - target.xCoord) * velocityMultiplier,
+                    (start.yCoord + scaledAcceleration.yCoord - target.yCoord) * velocityMultiplier,
+                    (start.zCoord + scaledAcceleration.zCoord - target.zCoord) * velocityMultiplier
+            );
+
+            return velocity;
+        }
 	}
 
 	@Override
