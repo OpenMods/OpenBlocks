@@ -1,22 +1,37 @@
-*.DS_Store
-.idea/
-Thumbs.db
-ForgeModLoader-client*
+# OpenMods Java Project .gitignore file
+# Last Authored: 20150816
 
+# Runtime output
 *.class
+*.log
+*.pid
 
-# Package Files #
+# Package Files
 *.jar
 *.war
 *.ear
 
 # Gradle
-/.gradle
-/build/
-/run/
-/bin/
+.gradle/
+build/
+run/
+bin/
 
 # Eclipse
 .classpath
 .project
 .settings/
+
+# IntelliJ IDEA
+*.iml
+*.iws
+*.ipr
+.idea/
+
+# OS Garbage
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Misc
+download/
