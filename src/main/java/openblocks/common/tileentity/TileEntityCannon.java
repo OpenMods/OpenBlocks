@@ -54,6 +54,20 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	@Override
 	public void updateEntity() {
+        if(Double.isNaN(currentPitch)) {
+            System.out.println("Pitch was NaN");
+            currentPitch = 45;
+            targetPitch.set(currentPitch);
+        }
+        if(Double.isNaN(currentYaw)) {
+            System.out.println("Yaw was NaN");
+            currentYaw = 0;
+        }
+
+        currentPitch = targetPitch.get();
+        currentYaw = targetYaw.get();
+        currentSpeed = targetSpeed.get();
+
 		super.updateEntity();
 
 		// ugly, need to clean
@@ -143,8 +157,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		double cosYaw = Math.cos(y);
 
 		return Vec3.createVectorHelper(-cosPitch * sinYaw * currentSpeed,
-				sinPitch * currentSpeed,
-				-cosPitch * cosYaw * currentSpeed);
+                sinPitch * currentSpeed,
+                -cosPitch * cosYaw * currentSpeed);
 	}
 
 	private void invalidateMotion() {
@@ -156,31 +170,65 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		return motion;
 	}
 
+    // Copied from Bukkit Forums, adjusts for Block/Entity rotations having different north.
+    public static float getLookAtYaw(Vec3 motion) {
+        double dx = motion.xCoord;
+        double dz = motion.yCoord;
+        double yaw = 0;
+        // Set yaw
+        if (dx != 0) {
+            // Set yaw start value based on dx
+            if (dx < 0) {
+                yaw = 1.5 * Math.PI;
+            } else {
+                yaw = 0.5 * Math.PI;
+            }
+            yaw -= Math.atan(dz / dx);
+        } else if (dz < 0) {
+            yaw = Math.PI;
+        }
+        return (float) (-yaw * 180 / Math.PI - 90); // -90 because Minecraft.
+    }
+
 	public void setTarget(int x, int y, int z) {
 
-		// right, first we get the distance
-		double dX = (xCoord + 0.5) - (x + 0.5);
-		double dY = -(yCoord - y);
-		double dZ = (zCoord + 0.5) - (z + 0.5);
+        final Vec3 origin = Vec3.createVectorHelper(xCoord + 0.5, yCoord, zCoord + 0.5);
+        final Vec3 target = Vec3.createVectorHelper(x + 0.5, y + 1, z + 0.5);
+        final Vec3 gravity = Vec3.createVectorHelper(0, -TileEntityCannonLogic.PHYS_PARTIAL_WORLD_GRAVITY, 0);
+        final double dim2Distance =
+                Math.pow(target.xCoord - origin.xCoord, 2)
+                + Math.pow(target.zCoord - origin.zCoord, 2);
 
-		final double atan2 = Math.atan2(dZ, dX);
-		double yawDegrees = Math.toDegrees(atan2) + 90;
-		System.out.println(String.format("%f %f %f %f", dX, dY, dZ, yawDegrees));
+        final float lobScale = (float)Math.max(20, 5 + Math.sqrt(dim2Distance));
+
+        final Vec3 velocity = TileEntityCannonLogic.calculateTrajectory(origin, target, gravity, lobScale);
+
+        System.out.println(velocity);
+
+        final Vec3 direction = velocity.normalize();
+        final double force = velocity.lengthVector();
+
+        final double pitch = Math.asin(direction.yCoord);
+
+        // Reverse our velocity and force in to angles for the cannon model.
+
+        // Probably right, use other method for the moment
+		final double atan2 = Math.atan2(direction.zCoord, direction.xCoord);
+		final double yawDegrees = Math.toDegrees(atan2) - 90;
 		targetYaw.set(yawDegrees);
 		currentYaw = targetYaw.get();
 
-		double[] calc = TileEntityCannonLogic.getVariableVelocityTheta(dX, dY, dZ);
-		double theta = Math.max(calc[0], calc[1]);
-		targetPitch.set(Math.toDegrees(theta));
+
+		targetPitch.set(Math.toDegrees(pitch));
 		currentPitch = targetPitch.get();
 
 		// We have selected what we feel to be the best angle
 		// But the velocity suggested doesn't scale on all 3 axis
 		// So we have to change that a bit
-		double d = Math.sqrt(dX * dX + dZ * dZ);
-		double v = Math.sqrt((d * -TileEntityCannonLogic.WORLD_GRAVITY) / Math.sin(2 * theta));
-		targetSpeed.set(v);
+		targetSpeed.set(force);
 		sync();
+
+        System.out.println(getMotion());
 	}
 
 	public void disableLineRender() {
@@ -280,52 +328,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
             return velocity;
         }
-
-
-		public static double[] getThetaByAngle(double deltaX, double deltaY, double deltaZ, double v) {
-			v += 0.5;
-			double r = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-			double e = Math.atan2(deltaY, r);
-			double g = WORLD_GRAVITY;
-			double c1 = Math.sqrt(Math.pow(v, 4) - g * (g * r * r * Math.pow(Math.cos(e), 2) + 2 * (v * v) * r * Math.sin(e)));
-			double c2 = g * r * Math.cos(e);
-			return new double[] {
-					Math.atan(v * v + c1 / c2),
-					Math.atan(v * v - c1 * c2)
-			};
-		}
-
-		public static double[] getVariableVelocityTheta(double deltaX, double deltaY, double deltaZ) {
-			double velocity = CANNON_VELOCITY;
-			double[] theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
-			int iterations = 100;
-			while (Double.isNaN(theta[0]) && Double.isNaN(theta[1]) && --iterations > 0) {
-				velocity += 0.025;
-				theta = getThetaToPoint(deltaX, deltaY, deltaZ, velocity);
-			}
-			double[] result = new double[3];
-			result[0] = theta[0];
-			result[1] = theta[1];
-			result[2] = velocity;
-			return result;
-		}
-
-		public static double[] getThetaToPoint(double deltaX, double deltaY, double deltaZ, double velocity) {
-			double x = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-			double y = deltaY + 0.4;
-			double v = velocity;
-			double g = WORLD_GRAVITY;
-			double[] theta = new double[2];
-			double mComponent = (v * v * v * v) - g * (g * (x * x) + 2 * (y * (v * v)));
-			if (mComponent < 0) return new double[] { Double.NaN, Double.NaN };
-			mComponent *= 100;
-			mComponent = Math.sqrt(mComponent);
-			mComponent /= 10;
-			mComponent /= (g * x);
-			theta[0] = Math.atan(v * v + mComponent);
-			theta[1] = Math.atan(v * v - mComponent);
-			return theta;
-		}
 	}
 
 	@Override
