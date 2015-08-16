@@ -198,7 +198,7 @@ public class EntityCartographerRenderer extends Render {
 	}
 
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float partialTickTime, float scale) {
+	public void doRender(Entity entity, double x, double y, double z, float scale, float partialTickTime) {
 		EntityCartographer cartographer = (EntityCartographer)entity;
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
