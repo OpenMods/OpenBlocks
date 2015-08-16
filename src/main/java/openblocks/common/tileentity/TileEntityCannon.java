@@ -80,10 +80,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
             currentYaw = 0;
         }
 
-        currentPitch = targetPitch.get();
-        currentYaw = targetYaw.get();
-        currentSpeed = targetSpeed.get();
-
 		super.updateEntity();
 
 		// ugly, need to clean
