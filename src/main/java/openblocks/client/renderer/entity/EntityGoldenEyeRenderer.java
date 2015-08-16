@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL11;
 public class EntityGoldenEyeRenderer extends Render {
 
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float _, float partialTickTime) {
+	public void doRender(Entity entity, double x, double y, double z, float f1, float partialTickTime) {
 		bindEntityTexture(entity);
 		GL11.glPushMatrix();
 		float yaw = RenderUtils.interpolateYaw(entity, partialTickTime);
