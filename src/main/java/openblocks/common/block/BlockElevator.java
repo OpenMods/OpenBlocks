@@ -5,9 +5,13 @@ import java.util.Set;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.common.tileentity.TileEntityElevator;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
@@ -57,6 +61,19 @@ public class BlockElevator extends OpenBlock {
 				ColorMeta meta = CollectionUtils.getRandom(metas);
 				world.setBlockMetadataWithNotify(x, y, z, meta.vanillaBlockId, BlockNotifyFlags.ALL);
 				return true;
+			} 
+		} else if(!world.isRemote) {
+			TileEntity entity = world.getTileEntity(x, y, z);
+			if(entity instanceof TileEntityElevator) {
+				TileEntityElevator elevator = (TileEntityElevator) entity;
+				elevator.nextDirection();
+				ChatComponentTranslation directionTranslation;
+				if(elevator.getDirection() == ForgeDirection.UNKNOWN) {
+					directionTranslation = new ChatComponentTranslation("openblocks.misc.elevator.direction.none");
+				} else {
+					directionTranslation = new ChatComponentTranslation("openblocks.misc.side." + elevator.getDirection().name().toLowerCase());
+				}
+				player.addChatMessage(new ChatComponentTranslation("openblocks.misc.elevator.direction", directionTranslation));
 			}
 		}
 		return false;

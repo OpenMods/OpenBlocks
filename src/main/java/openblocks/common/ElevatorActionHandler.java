@@ -2,12 +2,14 @@ package openblocks.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.common.tileentity.TileEntityElevator;
 import openblocks.events.ElevatorActionEvent;
 import openmods.movement.PlayerMovementEvent;
 import openmods.utils.EnchantmentUtils;
@@ -95,6 +97,26 @@ public class ElevatorActionHandler {
 				doTeleport = true;
 			}
 			if (doTeleport) {
+				TileEntity te = world.getTileEntity(x, level, z);
+				if(te instanceof TileEntityElevator) {
+					TileEntityElevator elevator = (TileEntityElevator) te;
+					switch(elevator.getDirection()) {
+						case NORTH:
+							player.setPositionAndRotation(x + 0.5, level + 1.1, z + 0.5, 180, player.rotationPitch);
+							break;
+						case EAST:
+							player.setPositionAndRotation(x + 0.5, level + 1.1, z + 0.5, 270, player.rotationPitch);
+							break;
+						case SOUTH:
+							player.setPositionAndRotation(x + 0.5, level + 1.1, z + 0.5, 0, player.rotationPitch);
+							break;
+						case WEST:
+							player.setPositionAndRotation(x + 0.5, level + 1.1, z + 0.5, 90, player.rotationPitch);
+							break;
+						default:
+							break;
+					}
+				}
 				player.setPositionAndUpdate(x + 0.5, level + 1.1, z + 0.5);
 				world.playSoundAtEntity(player, "openblocks:elevator.activate", 1, 1);
 			}
