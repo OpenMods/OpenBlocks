@@ -104,6 +104,9 @@ openblocks.misc.restored_inventory=Restored inventory for player %s
 openblocks.misc.invalid_index=Invalid index
 openblocks.misc.empty_slot=No item in slot
 
+openblocks.misc.elevator.direction=Depart facing: %s
+openblocks.misc.elevator.direction.none=None
+
 openblocks.misc.pedometer.tracking_reset=Tracking reset
 openblocks.misc.pedometer.tracking_started=Tracking started
 
@@ -165,7 +168,7 @@ openblocks.flim_flammed=Something weird happens around you
 openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Elevator
-tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color.
+tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color. The depart direction can be set by right clicking on the Elevator with an empty hand.
 tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
 tile.openblocks.heal.name=Healer
