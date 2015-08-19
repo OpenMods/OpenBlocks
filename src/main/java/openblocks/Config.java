@@ -321,7 +321,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.guide != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "ggg", "gtg", "ggg", 'g', Blocks.glass, 't', Blocks.torch));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "ggg", "gtg", "ggg", 'g', "blockGlass", 't', Blocks.torch));
 		}
 
 		if (OpenBlocks.Blocks.elevator != null) {
@@ -329,10 +329,10 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.elevatorRotating != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.elevatorRotating, "wiw", "wew", "wiw", 'w', Blocks.wool, 'e', Items.ender_pearl, 'i', Items.iron_ingot));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.elevatorRotating, "wiw", "wew", "wiw", 'w', Blocks.wool, 'e', Items.ender_pearl, 'i', "ingotIron"));
 
 			if (OpenBlocks.Blocks.elevatorRotating != null) {
-				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.elevatorRotating, OpenBlocks.Blocks.elevator, Items.iron_ingot, Items.iron_ingot));
+				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.elevatorRotating, OpenBlocks.Blocks.elevator, "ingotIron", "ingotIron"));
 			}
 		}
 
@@ -344,21 +344,21 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.flag, 3), "scc", "sc ", "s  ", 'c', Blocks.carpet, 's', "stickWood"));
 		}
 		if (OpenBlocks.Blocks.tank != null) {
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), "ogo", "ggg", "ogo", 'g', Blocks.glass_pane, 'o', Blocks.obsidian));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.tank, 2), "ogo", "ggg", "ogo", 'g', "paneGlass", 'o', Blocks.obsidian));
 		}
 		if (OpenBlocks.Blocks.trophy != null) {
 			MinecraftForge.EVENT_BUS.register(new TrophyHandler());
 		}
 		if (OpenBlocks.Blocks.bearTrap != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.bearTrap, "fif", "fif", "fif", 'f', Blocks.iron_bars, 'i', Items.iron_ingot));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.bearTrap, "fif", "fif", "fif", 'f', Blocks.iron_bars, 'i', "ingotIron"));
 		}
 
 		if (OpenBlocks.Blocks.sprinkler != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.sprinkler, "ifi", "iri", "ifi", 'i', Items.iron_ingot, 'r', Blocks.redstone_torch, 'f', Blocks.iron_bars));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.sprinkler, "ifi", "iri", "ifi", 'i', "ingotIron", 'r', Blocks.redstone_torch, 'f', Blocks.iron_bars));
 		}
 
 		if (OpenBlocks.Blocks.cannon != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.cannon, " d ", " f ", "iri", 'd', Blocks.dispenser, 'f', Blocks.iron_bars, 'i', Items.iron_ingot, 'r', Blocks.redstone_block));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.cannon, " d ", " f ", "iri", 'd', Blocks.dispenser, 'f', Blocks.iron_bars, 'i', "ingotIron", 'r', Blocks.redstone_block));
 		}
 
 		if (OpenBlocks.Blocks.vacuumHopper != null) {
@@ -366,7 +366,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.sponge != null) {
-			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.sponge, Blocks.wool, Items.slime_ball));
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.sponge, Blocks.wool, "slimeball"));
 		}
 
 		if (OpenBlocks.Blocks.bigButton != null) {
@@ -376,12 +376,12 @@ public class Config {
 		if (OpenBlocks.Blocks.imaginary != null) {
 			{
 				ItemStack pencil = ItemImaginary.setupValues(null, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_PENCIL));
-				recipeList.add(new ShapelessOreRecipe(pencil, Items.coal, "stickWood", Items.ender_eye, Items.slime_ball));
+				recipeList.add(new ShapelessOreRecipe(pencil, Items.coal, "stickWood", Items.ender_eye, "slimeball"));
 			}
 
 			for (ColorMeta color : ColorUtils.getAllColors()) {
 				ItemStack crayon = ItemImaginary.setupValues(color.rgb, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON));
-				recipeList.add(new ShapelessOreRecipe(crayon, color.oreName, Items.paper, Items.ender_eye, Items.slime_ball));
+				recipeList.add(new ShapelessOreRecipe(crayon, color.oreName, Items.paper, Items.ender_eye, "slimeball"));
 			}
 
 			recipeList.add(new CrayonMixingRecipe());
@@ -389,15 +389,15 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.fan != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.fan, "f", "i", "s", 'f', Blocks.iron_bars, 'i', Items.iron_ingot, 's', Blocks.stone_slab));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.fan, "f", "i", "s", 'f', Blocks.iron_bars, 'i', "ingotIron", 's', Blocks.stone_slab));
 		}
 
 		if (OpenBlocks.Blocks.xpBottler != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpBottler, "iii", "ibi", "iii", 'i', Items.iron_ingot, 'b', Items.glass_bottle));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpBottler, "iii", "ibi", "iii", 'i', "ingotIron", 'b', Items.glass_bottle));
 		}
 
 		if (OpenBlocks.Blocks.villageHighlighter != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.villageHighlighter, "www", "wew", "ccc", 'w', "plankWood", 'e', Items.emerald, 'c', Blocks.cobblestone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.villageHighlighter, "www", "wew", "ccc", 'w', "plankWood", 'e', "gemEmerald", 'c', "cobblestone"));
 		}
 
 		if (OpenBlocks.Blocks.path != null) {
@@ -405,26 +405,26 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.autoAnvil != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoAnvil, "iii", "iai", "rrr", 'i', Items.iron_ingot, 'a', Blocks.anvil, 'r', Items.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoAnvil, "iii", "iai", "rrr", 'i', "ingotIron", 'a', Blocks.anvil, 'r', "dustRedstone"));
 		}
 
 		if (OpenBlocks.Blocks.autoEnchantmentTable != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoEnchantmentTable, "iii", "iei", "rrr", 'i', Items.iron_ingot, 'e', Blocks.enchanting_table, 'r', Items.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.autoEnchantmentTable, "iii", "iei", "rrr", 'i', "ingotIron", 'e', Blocks.enchanting_table, 'r', "dustRedstone"));
 		}
 
 		if (OpenBlocks.Blocks.xpDrain != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpDrain, "iii", "iii", "iii", 'i', Blocks.iron_bars));
 		}
 		if (OpenBlocks.Blocks.blockBreaker != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockBreaker, "icc", "src", "icc", 'i', Items.iron_ingot, 'c', Blocks.cobblestone, 'r', Items.redstone, 's', Items.diamond_pickaxe));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockBreaker, "icc", "src", "icc", 'i', "ingotIron", 'c', "cobblestone", 'r', "dustRedstone", 's', Items.diamond_pickaxe));
 		}
 
 		if (OpenBlocks.Blocks.blockPlacer != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockPlacer, "icc", "src", "icc", 'i', Items.iron_ingot, 'c', Blocks.cobblestone, 'r', Items.redstone, 's', Blocks.piston));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.blockPlacer, "icc", "src", "icc", 'i', "ingotIron", 'c', "cobblestone", 'r', "dustRedstone", 's', Blocks.piston));
 		}
 
 		if (OpenBlocks.Blocks.itemDropper != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.itemDropper, "icc", "src", "icc", 'i', Items.iron_ingot, 'c', Blocks.cobblestone, 'r', Items.redstone, 's', Blocks.hopper));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.itemDropper, "icc", "src", "icc", 'i', "ingotIron", 'c', "cobblestone", 'r', "dustRedstone", 's', Blocks.hopper));
 		}
 
 		if (OpenBlocks.Blocks.ropeLadder != null) {
@@ -442,7 +442,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.paintMixer != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.paintMixer, "ooo", "i i", "iii", 'o', Blocks.obsidian, 'i', Items.iron_ingot));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.paintMixer, "ooo", "i i", "iii", 'o', Blocks.obsidian, 'i', "ingotIron"));
 		}
 
 		if (OpenBlocks.Blocks.canvas != null) {
@@ -450,19 +450,19 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.projector != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', "gemLapis"));
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Blocks.stone_slab, 'r', Items.redstone, 'g', Items.glowstone_dust, 'i', Items.iron_ingot, 'l', "gemLapis"));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "grl", "iri", "srs", 's', Blocks.stone_slab, 'r', "dustRedstone", 'g', "dustGlowstone", 'i', "ingotIron", 'l', "gemLapis"));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.projector, "lrg", "iri", "srs", 's', Blocks.stone_slab, 'r', "dustRedstone", 'g', "dustGlowstone", 'i', "ingotIron", 'l', "gemLapis"));
 		}
 
 		if (OpenBlocks.Blocks.goldenEgg != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg, "ggg", "geg", "ggg", 'g', Items.gold_ingot, 'e', Items.egg));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.goldenEgg, "ggg", "geg", "ggg", 'g', "ingotGold", 'e', Items.egg));
 		}
 
 		if (OpenBlocks.Blocks.sky != null) {
 			final ItemStack normal6 = new ItemStack(OpenBlocks.Blocks.sky, 6, 0);
 			final ItemStack normal = new ItemStack(OpenBlocks.Blocks.sky, 1, 1);
 			final ItemStack inverted = new ItemStack(OpenBlocks.Blocks.sky, 1, 0);
-			recipeList.add(new ShapedOreRecipe(normal6, "geg", "gsg", "geg", 'g', Blocks.glass, 'e', Items.ender_eye, 's', Blocks.end_stone));
+			recipeList.add(new ShapedOreRecipe(normal6, "geg", "gsg", "geg", 'g', "blockGlassColorless", 'e', Items.ender_eye, 's', Blocks.end_stone));
 			recipeList.add(new ShapelessOreRecipe(inverted, normal, Blocks.redstone_torch));
 			recipeList.add(new ShapelessOreRecipe(normal, inverted, Blocks.redstone_torch));
 		}
@@ -472,7 +472,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.xpShower != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', Items.iron_ingot, 'o', Blocks.obsidian));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.xpShower, "iii", "  o", 'i', "ingotIron", 'o', Blocks.obsidian));
 		}
 
 		if (OpenBlocks.Blocks.scaffolding != null) {
@@ -492,11 +492,11 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.luggage != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.luggage, "sds", "scs", "sss", 's', "stickWood", 'd', Items.diamond, 'c', Blocks.chest));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.luggage, "sds", "scs", "sss", 's', "stickWood", 'd', "gemDiamond", 'c', Blocks.chest));
 		}
 
 		if (OpenBlocks.Items.sonicGlasses != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Items.iron_helmet, 'o', Blocks.obsidian, 'i', Items.iron_ingot));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Items.iron_helmet, 'o', Blocks.obsidian, 'i', "ingotIron"));
 			ItemStack stack = new ItemStack(OpenBlocks.Items.sonicGlasses);
 
 			if (sonicGlassesLoot) {
@@ -526,7 +526,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.craneControl != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', Items.iron_ingot, 'g', Items.gold_nugget, 'l', Items.glowstone_dust, 'r', Items.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.craneControl, "ili", "grg", "iri", 'i', "ingotIron", 'g', "nuggetGold", 'l', "dustGlowstone", 'r', "dustRedstone"));
 		}
 
 		if (OpenBlocks.Items.craneBackpack != null) {
@@ -536,7 +536,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.slimalyzer != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', Items.iron_ingot, 'g', Blocks.glass_pane, 's', Items.slime_ball, 'r', Items.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.slimalyzer, "igi", "isi", "iri", 'i', "ingotIron", 'g', "paneGlass", 's', "slimeball", 'r', "dustRedstone"));
 		}
 
 		if (OpenBlocks.Items.sleepingBag != null) {
@@ -578,7 +578,7 @@ public class Config {
 			if (OpenBlocks.Blocks.sponge != null) {
 				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', OpenBlocks.Blocks.sponge, 'w', "stickWood"));
 			} else {
-				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', Items.slime_ball, 'w', "stickWood"));
+				recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.squeegee, "sss", " w ", " w ", 's', "slimeball", 'w', "stickWood"));
 			}
 		}
 
@@ -604,7 +604,7 @@ public class Config {
 		if (OpenBlocks.Items.goldenEye != null) {
 			recipeList.add(new GoldenEyeRechargeRecipe());
 			RecipeSorter.register("openblocks:golden_eye_recharge", GoldenEyeRechargeRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', Items.gold_nugget, 'e', Items.ender_eye));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), "ggg", "geg", "ggg", 'g', "nuggetGold", 'e', Items.ender_eye));
 		}
 
 		if (OpenBlocks.Items.tastyClay != null) {
@@ -623,7 +623,7 @@ public class Config {
 
 		if (OpenBlocks.Items.devNull != null) {
 			MinecraftForge.EVENT_BUS.register(OpenBlocks.Items.devNull);
-			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.devNull), Blocks.cobblestone, Items.apple));
+			recipeList.add(new ShapelessOreRecipe(new ItemStack(OpenBlocks.Items.devNull), "cobblestone", Items.apple));
 		}
 
 		if (OpenBlocks.Items.spongeonastick != null) {
@@ -633,7 +633,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.pedometer != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', Items.redstone, 'c', Items.clock));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', "dustRedstone", 'c', Items.clock));
 		}
 
 		Fluid liquidXp = new Fluid(xpFluidId).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
@@ -664,7 +664,7 @@ public class Config {
 				ItemStack result = Items.enchanted_book.getEnchantedItemStack(new EnchantmentData(Enchantments.flimFlam, i + 1));
 				Object recipe[] = new Object[emeraldCount + 1];
 				recipe[0] = Items.book;
-				Arrays.fill(recipe, 1, recipe.length, Items.emerald);
+				Arrays.fill(recipe, 1, recipe.length, "gemEmerald");
 				recipeList.add(new ShapelessOreRecipe(result, recipe));
 			}
 
