@@ -306,7 +306,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		/**
 		 * The actual work for calculating trajectory. Which is much simpler now.
-		 * 
+		 *
 		 * @param start
 		 *            The origin of the projectile to be fired
 		 * @param target

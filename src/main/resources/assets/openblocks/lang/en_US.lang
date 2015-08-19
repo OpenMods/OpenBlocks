@@ -168,6 +168,8 @@ tile.openblocks.elevator.name=Elevator
 tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color.
 tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
+tile.openblocks.elevator_rotating.name=Rotating Elevator
+
 tile.openblocks.heal.name=Healer
 tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.
 

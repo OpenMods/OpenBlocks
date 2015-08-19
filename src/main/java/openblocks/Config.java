@@ -328,6 +328,14 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.elevator, "www", "wew", "www", 'w', Blocks.wool, 'e', Items.ender_pearl));
 		}
 
+		if (OpenBlocks.Blocks.elevatorRotating != null) {
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.elevatorRotating, "wiw", "wew", "wiw", 'w', Blocks.wool, 'e', Items.ender_pearl, 'i', Items.iron_ingot));
+
+			if (OpenBlocks.Blocks.elevatorRotating != null) {
+				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.elevatorRotating, OpenBlocks.Blocks.elevator, Items.iron_ingot, Items.iron_ingot));
+			}
+		}
+
 		if (OpenBlocks.Blocks.target != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.target, "www", "www", "s s", 'w', Blocks.wool, 's', "stickWood"));
 		}

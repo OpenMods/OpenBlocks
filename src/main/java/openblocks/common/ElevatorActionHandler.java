@@ -7,7 +7,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
-import openblocks.OpenBlocks;
+import openblocks.api.IElevatorBlock;
+import openblocks.api.IElevatorBlock.PlayerRotation;
 import openblocks.events.ElevatorActionEvent;
 import openmods.movement.PlayerMovementEvent;
 import openmods.utils.EnchantmentUtils;
@@ -19,6 +20,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ElevatorActionHandler {
+
+	private static class SearchResult {
+		public final int level;
+
+		public final PlayerRotation rotation;
+
+		public SearchResult(int level, PlayerRotation rotation) {
+			this.level = level;
+			this.rotation = rotation;
+		}
+	}
 
 	private static boolean canTeleportPlayer(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
@@ -41,11 +53,13 @@ public class ElevatorActionHandler {
 		return true;
 	}
 
-	private static int findLevel(EntityPlayer player, World world, int x, int y, int z, ForgeDirection direction) {
+	private static SearchResult findLevel(EntityPlayer player, World world, int x, int y, int z, ForgeDirection direction) {
 		Preconditions.checkArgument(direction == ForgeDirection.UP
 				|| direction == ForgeDirection.DOWN, "Must be either up or down... for now");
 
-		final int thisColor = world.getBlockMetadata(x, y, z);
+		final IElevatorBlock thisElevatorBlock = (IElevatorBlock)world.getBlock(x, y, z);
+		final int thisColor = thisElevatorBlock.getColor(world, x, y, z);
+
 		int blocksInTheWay = 0;
 		final int delta = direction.offsetY;
 		for (int i = 0; i < Config.elevatorTravelDistance; i++) {
@@ -55,16 +69,20 @@ public class ElevatorActionHandler {
 
 			Block block = world.getBlock(x, y, z);
 
-			if (block == OpenBlocks.Blocks.elevator) {
-				final int otherColor = world.getBlockMetadata(x, y, z);
-				if (otherColor == thisColor && canTeleportPlayer(player, world, x, y + 1, z)) return y;
+			if (block instanceof IElevatorBlock) {
+				final IElevatorBlock otherElevatorBlock = (IElevatorBlock)block;
+				final int otherColor = otherElevatorBlock.getColor(world, x, y, z);
+				if (otherColor == thisColor && canTeleportPlayer(player, world, x, y + 1, z)) {
+					final PlayerRotation rotation = otherElevatorBlock.getRotation(world, x, y, z);
+					return new SearchResult(y, rotation);
+				}
 			}
 
 			if (!Config.elevatorIgnoreBlocks) {
 				ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
 				switch (action) {
 					case ABORT:
-						return -1;
+						return null;
 					case IGNORE:
 						continue;
 					case INCREMENT:
@@ -76,29 +94,49 @@ public class ElevatorActionHandler {
 			}
 		}
 
-		return -1;
+		return null;
 	}
 
 	private static void activate(EntityPlayer player, World world, int x, int y, int z, ForgeDirection dir) {
-		int level = findLevel(player, world, x, y, z, dir);
-		if (level >= 0) {
-			int distance = (int)Math.abs(player.posY - level);
-			boolean doTeleport = false;
-			if (Config.elevatorXpDrainRatio != 0 && !player.capabilities.isCreativeMode) {
-				int playerXP = EnchantmentUtils.getPlayerXP(player);
-				int neededXP = MathHelper.ceiling_double_int(Config.elevatorXpDrainRatio * distance);
-				if (playerXP >= neededXP) {
-					EnchantmentUtils.addPlayerXP(player, -neededXP);
-					doTeleport = true;
-				}
-			} else {
-				doTeleport = true;
-			}
+		SearchResult result = findLevel(player, world, x, y, z, dir);
+		if (result != null) {
+			boolean doTeleport = checkXpCost(player, result);
+
 			if (doTeleport) {
-				player.setPositionAndUpdate(x + 0.5, level + 1.1, z + 0.5);
+				if (result.rotation != PlayerRotation.NONE) player.rotationYaw = getYaw(result.rotation);
+				player.setPositionAndUpdate(x + 0.5, result.level + 1.1, z + 0.5);
 				world.playSoundAtEntity(player, "openblocks:elevator.activate", 1, 1);
 			}
 		}
+	}
+
+	private static float getYaw(PlayerRotation rotation) {
+		switch (rotation) {
+			case EAST:
+				return 90;
+			case NORTH:
+				return 0;
+			case SOUTH:
+				return 180;
+			case WEST:
+				return -90;
+			default:
+				return 0;
+		}
+	}
+
+	protected static boolean checkXpCost(EntityPlayer player, SearchResult result) {
+		int distance = (int)Math.abs(player.posY - result.level);
+		if (Config.elevatorXpDrainRatio == 0 || player.capabilities.isCreativeMode) return true;
+
+		int playerXP = EnchantmentUtils.getPlayerXP(player);
+		int neededXP = MathHelper.ceiling_double_int(Config.elevatorXpDrainRatio * distance);
+		if (playerXP >= neededXP) {
+			EnchantmentUtils.addPlayerXP(player, -neededXP);
+			return true;
+		}
+
+		return false;
 	}
 
 	@SubscribeEvent
@@ -108,7 +146,7 @@ public class ElevatorActionHandler {
 		final int y = evt.yCoord;
 		final int z = evt.zCoord;
 
-		if (world.getBlock(x, y, z) != OpenBlocks.Blocks.elevator) return;
+		if (!(world.getBlock(x, y, z) instanceof IElevatorBlock)) return;
 
 		if (evt.sender != null) {
 			if (evt.sender.ridingEntity != null) return;
@@ -138,7 +176,7 @@ public class ElevatorActionHandler {
 		final int z = MathHelper.floor_double(player.posZ);
 		Block block = world.getBlock(x, y, z);
 
-		if (block == OpenBlocks.Blocks.elevator) new ElevatorActionEvent(world.provider.dimensionId, x, y, z, evt.type).sendToServer();
+		if (block instanceof IElevatorBlock) new ElevatorActionEvent(world.provider.dimensionId, x, y, z, evt.type).sendToServer();
 
 	}
 }

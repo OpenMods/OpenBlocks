@@ -90,6 +90,9 @@ public class OpenBlocks {
 		@RegisterBlock(name = "elevator", itemBlock = ItemElevator.class)
 		public static BlockElevator elevator;
 
+		@RegisterBlock(name = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class)
+		public static BlockElevatorRotating elevatorRotating;
+
 		@RegisterBlock(name = "heal", tileEntity = TileEntityHealBlock.class)
 		public static BlockHeal heal;
 
@@ -420,7 +423,7 @@ public class OpenBlocks {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
 		}
 
-		if (OpenBlocks.Blocks.elevator != null) {
+		if (OpenBlocks.Blocks.elevator != null || OpenBlocks.Blocks.elevatorRotating != null) {
 			MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
 		}
 
