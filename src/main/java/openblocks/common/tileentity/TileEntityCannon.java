@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
 import openblocks.rpc.ICannon;
+import openmods.Log;
 import openmods.api.ISurfaceAttachment;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableDouble;
@@ -23,18 +24,18 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ICannon {
 
-    /*
-     * Blocks and Entities have a right-angle offset
-     */
-    private static final int YAW_OFFSET_DEGREES = -90;
+	/*
+	 * Blocks and Entities have a right-angle offset
+	 */
+	private static final int YAW_OFFSET_DEGREES = -90;
 	private static final int KNOB_YAW_CHANGE_SPEED = 3;
-    private static final int KNOB_PITCH_CHANGE_SPEED = 20;
-    private static final int KNOB_VEL_CHANGE_SPEED = 20;
-    private static final int KNOB_LOB_MINIMUM_VALUE = 20;
-    private static final int KNOB_LOB_MAXIMUM_VALUE = 75;
-    private static final int KNOB_LOB_VERTICAL_MUL = 4;
-    private static final int KNOB_LOB_HORIZONTAL_MUL = 1;
-    private static final int KNOB_LOB_BONUS = 5;
+	private static final int KNOB_PITCH_CHANGE_SPEED = 20;
+	private static final int KNOB_VEL_CHANGE_SPEED = 20;
+	private static final int KNOB_LOB_MINIMUM_VALUE = 20;
+	private static final int KNOB_LOB_MAXIMUM_VALUE = 75;
+	private static final int KNOB_LOB_VERTICAL_MUL = 4;
+	private static final int KNOB_LOB_HORIZONTAL_MUL = 1;
+	private static final int KNOB_LOB_BONUS = 5;
 
 	public SyncableDouble targetPitch;
 	public SyncableDouble targetYaw;
@@ -49,7 +50,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	public boolean renderLine = true;
 	private int ticksSinceLastFire = Integer.MAX_VALUE;
 
-    private Vec3 projectileOrigin = null;
+	private Vec3 projectileOrigin = null;
 
 	@Override
 	protected void createSyncedFields() {
@@ -67,18 +68,17 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	@Override
 	public void updateEntity() {
+		checkOrigin();
 
-        checkOrigin();
-
-        if(Double.isNaN(currentPitch)) {
-            System.out.println("Pitch was NaN");
-            currentPitch = 45;
-            targetPitch.set(currentPitch);
-        }
-        if(Double.isNaN(currentYaw)) {
-            System.out.println("Yaw was NaN");
-            currentYaw = 0;
-        }
+		if (Double.isNaN(currentPitch)) {
+			Log.warn("Pitch was NaN");
+			currentPitch = 45;
+			targetPitch.set(currentPitch);
+		}
+		if (Double.isNaN(currentYaw)) {
+			Log.warn("Yaw was NaN");
+			currentYaw = 0;
+		}
 
 		super.updateEntity();
 
@@ -127,11 +127,11 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		final ICannon rpc = createServerRpcProxy(ICannon.class);
 		rpc.fireCannon();
 
-        // projectileOrigin is not used here, it's used for the calculations below.
+		// projectileOrigin is not used here, it's used for the calculations below.
 		EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
 		item.delayBeforeCanPickup = 20;
 
-        // Now that we generate vectors instead of eular angles, this should be revised.
+		// Now that we generate vectors instead of eular angles, this should be revised.
 		Vec3 motion = getMotion();
 		item.motionX = motion.xCoord;
 		item.motionY = motion.yCoord;
@@ -171,8 +171,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		double cosYaw = Math.cos(y);
 
 		return Vec3.createVectorHelper(-cosPitch * sinYaw * currentSpeed,
-                sinPitch * currentSpeed,
-                -cosPitch * cosYaw * currentSpeed);
+				sinPitch * currentSpeed,
+				-cosPitch * cosYaw * currentSpeed);
 	}
 
 	private void invalidateMotion() {
@@ -184,51 +184,51 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		return motion;
 	}
 
-    private void checkOrigin() {
-        if(projectileOrigin == null) {
-            projectileOrigin = Vec3.createVectorHelper(xCoord + 0.5, yCoord, zCoord + 0.5);
-        }
-    }
+	private void checkOrigin() {
+		if (projectileOrigin == null) {
+			projectileOrigin = Vec3.createVectorHelper(xCoord + 0.5, yCoord, zCoord + 0.5);
+		}
+	}
 
 	public void setTarget(int x, int y, int z) {
-        checkOrigin();
-        // We target the middle of the block, at the very top.
-        final Vec3 target = Vec3.createVectorHelper(x + 0.5, y + 1, z + 0.5);
+		checkOrigin();
+		// We target the middle of the block, at the very top.
+		final Vec3 target = Vec3.createVectorHelper(x + 0.5, y + 1, z + 0.5);
 
-        // Horizontal distance between the origin and target
-        final double distHorizontal = KNOB_LOB_HORIZONTAL_MUL * Math.sqrt(
-                Math.pow(target.xCoord - projectileOrigin.xCoord, 2)
-                        + Math.pow(target.zCoord - projectileOrigin.zCoord, 2));
+		// Horizontal distance between the origin and target
+		final double distHorizontal = KNOB_LOB_HORIZONTAL_MUL * Math.sqrt(
+				Math.pow(target.xCoord - projectileOrigin.xCoord, 2)
+						+ Math.pow(target.zCoord - projectileOrigin.zCoord, 2));
 
-        // No vertical multiplier is applied for decline slopes.
-        final double distVertical = Math.max((target.yCoord - projectileOrigin.yCoord) * KNOB_LOB_VERTICAL_MUL, 0);
+		// No vertical multiplier is applied for decline slopes.
+		final double distVertical = Math.max((target.yCoord - projectileOrigin.yCoord) * KNOB_LOB_VERTICAL_MUL, 0);
 
-        // Calculate the arc of the trajectory
-        final float lobScale = (float)
-                        Math.min(KNOB_LOB_MAXIMUM_VALUE,
-                                Math.max(KNOB_LOB_MINIMUM_VALUE,
-                                        KNOB_LOB_BONUS + distHorizontal + distVertical));
+		// Calculate the arc of the trajectory
+		final float lobScale = (float)
+				Math.min(KNOB_LOB_MAXIMUM_VALUE,
+						Math.max(KNOB_LOB_MINIMUM_VALUE,
+								KNOB_LOB_BONUS + distHorizontal + distVertical));
 
-        // Calculate the velocity of the projectile
-        final Vec3 velocity = TileEntityCannonLogic.calculateTrajectory(projectileOrigin, target, lobScale);
+		// Calculate the velocity of the projectile
+		final Vec3 velocity = TileEntityCannonLogic.calculateTrajectory(projectileOrigin, target, lobScale);
 
-        // m/s applied to item.
-        final double speed = velocity.lengthVector();
-        targetSpeed.set(speed);
+		// m/s applied to item.
+		final double speed = velocity.lengthVector();
+		targetSpeed.set(speed);
 
-        // reverse the vector to angles for cannon model
-        final Vec3 direction = velocity.normalize();
-        final double pitch = Math.asin(direction.yCoord);
-        final double yaw = Math.atan2(direction.zCoord, direction.xCoord);
+		// reverse the vector to angles for cannon model
+		final Vec3 direction = velocity.normalize();
+		final double pitch = Math.asin(direction.yCoord);
+		final double yaw = Math.atan2(direction.zCoord, direction.xCoord);
 
-        // Set yaw and pitch
+		// Set yaw and pitch
 		targetYaw.set(Math.toDegrees(yaw) + YAW_OFFSET_DEGREES);
-        targetPitch.set(Math.toDegrees(pitch));
+		targetPitch.set(Math.toDegrees(pitch));
 
 		currentYaw = targetYaw.get();
 		currentPitch = targetPitch.get();
 
-        // Sync targets
+		// Sync targets
 		sync();
 	}
 
@@ -274,66 +274,68 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		public static final int HOURS_WASTED_ON_CANNON_LOGIC = 14;
 
-        /**
-         * 20 physics ticks per second (on a good day)
-         */
-        private static final double PHYS_STEPS_PER_SECOND = 20D;
+		/**
+		 * 20 physics ticks per second (on a good day)
+		 */
+		private static final double PHYS_STEPS_PER_SECOND = 20D;
 
-        /**
-         * Physics calculation time in partial seconds
-         */
-        private static final double PHYS_PARTIAL_TIME = 1D / PHYS_STEPS_PER_SECOND;
+		/**
+		 * Physics calculation time in partial seconds
+		 */
+		private static final double PHYS_PARTIAL_TIME = 1D / PHYS_STEPS_PER_SECOND;
 
-        /**
-         * Minecraft known gravity in meters/second/second
-         */
-        private static final double PHYS_WORLD_GRAVITY = 0.8D;
+		/**
+		 * Minecraft known gravity in meters/second/second
+		 */
+		private static final double PHYS_WORLD_GRAVITY = 0.8D;
 
-        /**
-         * Amount of gravity acceleration per physics tick.
-         */
-        private static final double PHYS_PARTIAL_WORLD_GRAVITY = PHYS_WORLD_GRAVITY * PHYS_PARTIAL_TIME;
+		/**
+		 * Amount of gravity acceleration per physics tick.
+		 */
+		private static final double PHYS_PARTIAL_WORLD_GRAVITY = PHYS_WORLD_GRAVITY * PHYS_PARTIAL_TIME;
 
-        /**
-         * Squared timestep for acceleration
-         */
-        private static final double PHYS_PARTIAL_TIME_SQUARE = PHYS_PARTIAL_TIME * PHYS_PARTIAL_TIME;
+		/**
+		 * Squared timestep for acceleration
+		 */
+		private static final double PHYS_PARTIAL_TIME_SQUARE = PHYS_PARTIAL_TIME * PHYS_PARTIAL_TIME;
 
-        /**
-         * Physics gravity vector in partial time squared for acceleration calculation
-         */
-        private static final Vec3 PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL
-                = Vec3.createVectorHelper(0, PHYS_PARTIAL_TIME_SQUARE * -PHYS_PARTIAL_WORLD_GRAVITY, 0);
+		/**
+		 * Physics gravity vector in partial time squared for acceleration calculation
+		 */
+		private static final Vec3 PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL = Vec3.createVectorHelper(0, PHYS_PARTIAL_TIME_SQUARE * -PHYS_PARTIAL_WORLD_GRAVITY, 0);
 
+		/**
+		 * The actual work for calculating trajectory. Which is much simpler now.
+		 * 
+		 * @param start
+		 *            The origin of the projectile to be fired
+		 * @param target
+		 *            The target location of the projectile
+		 * @param scale
+		 *            The arcing size of the trajectory
+		 * @return Vector to achieve trajectory
+		 */
+		public static Vec3 calculateTrajectory(Vec3 start, Vec3 target, float scale) {
+			final double n = scale * PHYS_STEPS_PER_SECOND;
+			final double accelerationMultiplier = 0.5 * n * n + n; // (n^2+n)/2
 
-        /**
-         * The actual work for calculating trajectory. Which is much simpler now.
-         * @param start The origin of the projectile to be fired
-         * @param target The target location of the projectile
-         * @param scale The arcing size of the trajectory
-         * @return Vector to achieve trajectory
-         */
-        public static Vec3 calculateTrajectory(Vec3 start, Vec3 target, float scale) {
-            final double n = scale * PHYS_STEPS_PER_SECOND;
-            final double accelerationMultiplier = 0.5 * n * n + n; // (n^2+n)/2
+			final Vec3 scaledAcceleration = Vec3.createVectorHelper(
+					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.xCoord * accelerationMultiplier,
+					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.yCoord * accelerationMultiplier,
+					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.zCoord * accelerationMultiplier
+					);
 
-            final Vec3 scaledAcceleration = Vec3.createVectorHelper(
-                    PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.xCoord * accelerationMultiplier,
-                    PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.yCoord * accelerationMultiplier,
-                    PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.zCoord * accelerationMultiplier
-            );
+			// -1 /n * Phys = -Phys / n
+			final double velocityMultiplier = -PHYS_STEPS_PER_SECOND / n;
 
-            // -1 /n * Phys = -Phys / n
-            final double velocityMultiplier = -PHYS_STEPS_PER_SECOND / n;
+			final Vec3 velocity = Vec3.createVectorHelper(
+					(start.xCoord + scaledAcceleration.xCoord - target.xCoord) * velocityMultiplier,
+					(start.yCoord + scaledAcceleration.yCoord - target.yCoord) * velocityMultiplier,
+					(start.zCoord + scaledAcceleration.zCoord - target.zCoord) * velocityMultiplier
+					);
 
-            final Vec3 velocity = Vec3.createVectorHelper(
-                    (start.xCoord + scaledAcceleration.xCoord - target.xCoord) * velocityMultiplier,
-                    (start.yCoord + scaledAcceleration.yCoord - target.yCoord) * velocityMultiplier,
-                    (start.zCoord + scaledAcceleration.zCoord - target.zCoord) * velocityMultiplier
-            );
-
-            return velocity;
-        }
+			return velocity;
+		}
 	}
 
 	@Override
