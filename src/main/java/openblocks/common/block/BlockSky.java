@@ -1,12 +1,15 @@
 package openblocks.common.block;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.render.RenderUtils;
@@ -71,4 +74,10 @@ public class BlockSky extends OpenBlock {
 		return isActive(meta)? AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0) : super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> arr = new ArrayList<ItemStack>();
+		arr.add(new ItemStack(OpenBlocks.Blocks.sky, 1, metadata == 0 || metadata == 2 ? 0 : 1));
+		return arr;
+	}
 }
