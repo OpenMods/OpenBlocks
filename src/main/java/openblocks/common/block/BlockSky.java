@@ -16,6 +16,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @BookDocumentation(customName = "sky.normal")
 public class BlockSky extends OpenBlock {
 
+	private static final int MASK_INVERTED = 1 << 0;
+	private static final int MASK_POWERED = 1 << 1;
+
 	public BlockSky() {
 		super(Material.iron);
 	}
@@ -28,7 +31,7 @@ public class BlockSky extends OpenBlock {
 
 	@Override
 	public int damageDropped(int meta) {
-		return meta;
+		return meta & MASK_INVERTED;
 	}
 
 	@Override
@@ -41,8 +44,8 @@ public class BlockSky extends OpenBlock {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		if (!world.isRemote) {
-			final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
-			final int isActive = world.getBlockMetadata(x, y, z) & 2;
+			final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? MASK_POWERED : 0;
+			final int isActive = world.getBlockMetadata(x, y, z) & MASK_POWERED;
 
 			if (isPowered != isActive) world.scheduleBlockUpdate(x, y, z, this, 1);
 		}
@@ -50,15 +53,15 @@ public class BlockSky extends OpenBlock {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
-		final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? 2 : 0;
-		final int isInverted = world.getBlockMetadata(x, y, z) & 1;
+		final int isPowered = world.isBlockIndirectlyGettingPowered(x, y, z)? MASK_POWERED : 0;
+		final int isInverted = world.getBlockMetadata(x, y, z) & MASK_INVERTED;
 
 		world.setBlockMetadataWithNotify(x, y, z, isPowered | isInverted, BlockNotifyFlags.ALL);
 	}
 
 	public static boolean isActive(int meta) {
-		boolean isPowered = (meta & 2) != 0;
-		boolean isInverted = (meta & 1) != 0;
+		boolean isPowered = (meta & MASK_POWERED) != 0;
+		boolean isInverted = (meta & MASK_INVERTED) != 0;
 		return isPowered ^ isInverted;
 	}
 
