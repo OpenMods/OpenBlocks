@@ -9,7 +9,7 @@ openblocks.keybind.drop_brick=Essere sciocchi
 
 enchantment.openblocks.explosive=Instabile
 enchantment.openblocks.laststand=Ultimo in Piedi
-enchantment.openblocks.flimflam=Schiocchezza
+enchantment.openblocks.flimflam=Sciocchezza
 
 openblocks.gui.blocks=Blocchi
 openblocks.gui.items=Oggetti
@@ -43,7 +43,7 @@ openblocks.gui.max_level=Livello massimo: %d
 openblocks.gui.save_folder=Cartella di salvataggio
 
 openblocks.gui.welcome.title=Benvenuto!
-openblocks.gui.welcome.content=OpenBlocks è una nuova mod "open source" che introduce una varietà di idee in Minecraft, tra cui deltaplani, ascensori, taniche, tombe, dipinti, gru, punti esperienza liquidi, cartogrfi, trofei e altro!
+openblocks.gui.welcome.content=OpenBlocks è una nuova mod "open source" che introduce una varietà di idee in Minecraft, tra cui deltaplani, ascensori, taniche, tombe, dipinti, gru, punti esperienza liquidi, cartografi, trofei e altro!
 
 openblocks.gui.credits.title=Riconoscimenti
 openblocks.gui.credits.content=§lBoq, Mikee e NeverCast§r - Capi sviluppatori di OpenBlocks (possiamo "riconoscerci" da soli?)\n\n§lSinZ e Yoshi2§r - membri del gruppo OpenMods dall'inizio.\n\n§lVexatos e crafteverywhere§r - Traduttori regolari delle mod.\n\nTutti gli altri che hanno contribuito al codice per i passati due anni.\n\n§lDirewolf20 e il resto di ForgeCraft§r - per aver fronteggiato i bug e i crash prima dei rilasci.\n\nOgnuno che ha fatto degli "spotlight", "let's play" e ha in generale supportato la mod da quando abbiamo iniziato!
@@ -55,16 +55,16 @@ openblocks.gui.restore_inv.title=Backup dell'Inventario
 openblocks.gui.restore_inv.content=Ognuno può fare degli errori. Ma con il comando §l/ob_inventory§r si può rimediare ad alcuni. Questo comando può essere usato per ripristinare l'inventario. Il backup viene creato quando:\n - un giocatore muore\n - una tomba appare \n\ - un giocatore esegue il comando §l/ob_inventory store§r\n\nPer ripristinare l'inventario si ha bisogno del nome del backup. Vai nella cartella sotto o nella cartella dei salvataggi sul server e cerca dei file chiamati §linventory-*.dat§r. Poi ripristina l'inventario con §l/ob_inventory restore <player> <id>§r - dove id è o il nome del file completo o solo la parte centrale, senza §linventory-§r e §l.dat§r. Si può anche usare il completamento automatico (TAB). I backup sono dei normali file NBT e possono essere aperti con ogni editor.
 
 openblocks.gui.bkey.title=L'infamante tasto 'B'
-openblocks.gui.bkey.content=Il tasto 'B' è un tasto molto speciale in OpebBlocks.\n\nL'abilitazione dell'opzione di configurazione 'weAreSeriousPeople' nella categoria 'tomfoolery' sia nel file di configurazione del client sia in quello del server ti darà il tuo personale sistema digestivo.\n\nProva a mangiare un po' di quella gustosa argilla e poi premi 'B' per digerire!
+openblocks.gui.bkey.content=Il tasto 'B' è un tasto molto speciale in OpenBlocks.\n\nL'abilitazione dell'opzione di configurazione 'weAreSeriousPeople' nella categoria 'tomfoolery' sia nel file di configurazione del client sia in quello del server ti darà il tuo personale sistema digestivo.\n\nProva a mangiare un po' di quella gustosa argilla e poi premi 'B' per digerire!
 
 openblocks.gui.unstable.title=Incantamento "Instabile"
 openblocks.gui.unstable.content=Abbiamo ricevuto una serie di rapporti non confermati che dicono che questo incantamento rende instabile ogni polvere da sparo che stai trasportando quando vieni attaccato o quando salti da qualcosa.\n\nUsalo a tuo rischio!
 
-openblocks.gui.flimflam.title=Incantamento "Schiocchezza"
+openblocks.gui.flimflam.title=Incantamento "Sciocchezza"
 openblocks.gui.flimflam.content=Gli scienziati devono ancora scoprire le proprietà di questo incantamento.
 
 openblocks.gui.laststand.title=Incantamento "Ultimo in Piedi"
-openblocks.gui.laststand.content=L'incantamento "Ultimo in Piedi" usa la tua barra dell'esperienza come protezione finale contro la morte.\n\nQuando raggiungi il mezzo cuore, il gioco prenderà punti esperienza ogni volta che riceverai fanno invece di ucciderti. Maggiore il numero di incantamenti posseduti, minore sarà il numero dei punti esperienza sottratti.
+openblocks.gui.laststand.content=L'incantamento "Ultimo in Piedi" usa la tua barra dell'esperienza come protezione finale contro la morte.\n\nQuando raggiungi il mezzo cuore, il gioco prenderà punti esperienza ogni volta che riceverai danno invece di ucciderti. Maggiore il numero di incantamenti posseduti, minore sarà il numero dei punti esperienza sottratti.
 
 openblocks.changelog.title=Cosa c'è di nuovo in OpenBlocks %s
 openblocks.misc.url=URL: %s
@@ -154,10 +154,10 @@ openblocks.misc.side.up=Lato Superiore
 openblocks.misc.side.down=Lato inferiore
 
 openblocks.misc.command.invalid=Argomenti del comando non validi
-openblocks.misc.command.no_flim_flam=Nome schiocchezza invalido
-openblocks.misc.command.flim_flam_source=Il giocatore %s ha subito con successo la schiocchezza %s
+openblocks.misc.command.no_flim_flam=Nome sciocchezza invalido
+openblocks.misc.command.flim_flam_source=Il giocatore %s ha subito con successo la sciocchezza %s
 openblocks.misc.command.flim_flam_target=A qualcuno non piaci. A qualcuno che ha il potere
-openblocks.misc.command.flim_flam_failed=Applicazione della schiocchezza fallita!
+openblocks.misc.command.flim_flam_failed=Applicazione della sciocchezza fallita!
 openblocks.misc.command.luck_added=Fortuna modificata per il giocatore %s, corrente: %d
 openblocks.misc.command.luck_current=La fortuna del giocatore %s è: %d
 openblocks.flim_flammed=Qualcosa di strano accade intorno a te...
@@ -168,11 +168,13 @@ tile.openblocks.elevator.name=Ascensore
 tile.openblocks.elevator.description=Piazza un ascensore direttamente tre o quattro blocchi sopra un altro senza altri blocchi fra i due e tu potrai sia 'saltare' per salire sia 'accovacciarti' per scendere. Gli ascensori possono essere colorati cliccando su di essi con della tintura. Puoi teletrasportarti solo tra ascensori dello stesso colore, però.
 tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
+tile.openblocks.elevator_rotating.name=Ascensore Rotante
+
 tile.openblocks.heal.name=Curatore
 tile.openblocks.heal.description=Il blocco curatore è un blocco solo per la modalità creativa che rilascia un leggero effetto curatore man mano che passa il tempo.
 
 tile.openblocks.guide.name=Guida di Costruzione
-tile.openblocks.guide.description=La Guida di Costruzione mostrerà una "linea-guida" formata da blocchi fantasma di forme e dimensioni diverse che ti aiuterà a pianificare le varie stanze.\nPuoi fare shift-click sulla guida per modificare la forma o puoi cliccare i vari lati per aumentare o diminuire la dimesnione.\nMentre sei in modalità creativa, puoi piazzare un blocco di ossidiana sopra alla gudia, poi colpire la guida di costruzione con ogni blocco che vuoi per creare automaticamente la forma.
+tile.openblocks.guide.description=La Guida di Costruzione mostrerà una "linea-guida" formata da blocchi fantasma di forme e dimensioni diverse che ti aiuterà a pianificare le varie stanze.\nPuoi fare shift-click sulla guida per modificare la forma o puoi cliccare i vari lati per aumentare o diminuire la dimensione.\nMentre sei in modalità creativa, puoi piazzare un blocco di ossidiana sopra alla guida, poi colpire la guida di costruzione con ogni blocco che vuoi per creare automaticamente la forma.
 tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
 tile.openblocks.ladder.name=Scala a Pioli Impassibile
@@ -188,10 +190,10 @@ tile.openblocks.flag.name=Bandiera
 tile.openblocks.flag.description=Le bandiere possono essere usate come decorazione o per segnare la via per uscire da una caverna in cui sei entrato. La bandiera punterà nella direzione in cui viene piazzata, oppure può essere messa sui muri. Se si fa shift-click con una bandiera nelle mani, essa cambierà colore.
 
 tile.openblocks.beartrap.name=Trappola per Orsi
-tile.openblocks.beartrap.description=Piazza una trappola per orsi e cliccala per aprirla. Quando un mob cammina sulla trappola, loro non potranno più muoversi!
+tile.openblocks.beartrap.description=Piazza una trappola per orsi e cliccala per aprirla. Quando un mob cammina sulla trappola, non potrà più muoversi!
 
 tile.openblocks.sponge.name=Spugna
-tile.openblocks.sponge.description=La spugan è un rimpiazzamento per la spugna Vanilla. È perfetta per rimuovere piccole sacche di lava o acqua. Stai attento quando la usi su larghe aree di un liquido, però, perchè inizierà ad essere abbastanza confusionario.
+tile.openblocks.sponge.description=La spugna è un rimpiazzamento per la spugna Vanilla. È perfetta per rimuovere piccole sacche di lava o acqua. Stai attento quando la usi su larghe aree di un liquido, però, perché inizierà ad essere abbastanza confusionario.
 
 item.openblocks.spongeonastick.name=Spugna
 item.openblocks.spongeonastick.description=La spugna su un bastone è uno strumento per pulire liquidi. Funziona esattamente come la spugna, ma è molto più mobile alle spese di esaurirsi.
@@ -223,13 +225,13 @@ tile.openblocks.path.name=Percorso
 tile.openblocks.path.description=Il percorso non serve a niente. Ha solo una funzione estetica!
 
 tile.openblocks.itemDropper.name=Gettatore di Oggetti
-tile.openblocks.itemDropper.description=Il gettatore di oggeti è similare al gettatore Vanilla, eccetto che getta gli oggetti direttamente verso il basso in linea retta.
+tile.openblocks.itemDropper.description=Il gettatore di oggetti è similare al gettatore Vanilla, eccetto che getta gli oggetti direttamente verso il basso in linea retta.
 
 tile.openblocks.bigbutton.name=Grande Pulsante
 tile.openblocks.bigbutton.description=Il grande pulsante è un pulsante largo che può essere piazzato sui muri. Se si fa shift-click sul bottone con una mano vuota, si aprirà un inventario con uno spazio singolo. Si possono inserire degli oggetti in questo spazio per aumentare la durata per la quale il bottone rimane premuto - un oggetto aumenta la durata di un tick.
 
 tile.openblocks.xpdrain.name=Drenatore di Punti Esperienza
-tile.openblocks.xpdrain.description=Piazza il drenatore di punti esperienza su una tanica degli OpenBlocks e salici sopra. I tuoi punti esperienza saranno drenati nella tanica, che poi potrà essere usata per blcchi tipo il tavolo da incantamento automatica o l'incudine automatica.
+tile.openblocks.xpdrain.description=Piazza il drenatore di punti esperienza su una tanica degli OpenBlocks e salici sopra. I tuoi punti esperienza saranno drenati nella tanica, che poi potrà essere usata per blocchi tipo il tavolo da incantamento automatica o l'incudine automatica.
 
 tile.openblocks.vacuumhopper.name=Tramoggia a Vuoto
 tile.openblocks.vacuumhopper.description=La tramoggia a vuoto risucchia tutti gli oggetti e le sfere d'esperienza attorno a lui. Si possono usare le schede sulla destra dell'interfaccia per selezionare su quali lati si devono emettere gli oggetti risucchiati.
@@ -250,7 +252,7 @@ tile.openblocks.projector.name=Proiettore della Mappa di Altitudine
 tile.openblocks.projector.description=Ti lascio scrivere questa, boq!
 
 tile.openblocks.autoenchantmenttable.name=Tavolo da Incantamento Automatico
-tile.openblocks.autoenchantmenttable.description=Il tavolo da incantamento automatico funziona in una maniera simila al tavolo da incantamento Vanilla, eccetto che funziona con l'Esperienza Liquida. Usa le schede sul lato destro dell'interfaccia per selezionare dove gli oggetti o i punti esperienza verranno presi. Esattamente come il tavolo da incantamento Vanilla, sono richieste le librerie per avere livelli di incantamento magggiori.
+tile.openblocks.autoenchantmenttable.description=Il tavolo da incantamento automatico funziona in una maniera simile al tavolo da incantamento Vanilla, eccetto che funziona con l'Esperienza Liquida. Usa le schede sul lato destro dell'interfaccia per selezionare dove gli oggetti o i punti esperienza verranno presi. Esattamente come il tavolo da incantamento Vanilla, sono richieste le librerie per avere livelli di incantamento maggiori.
 
 tile.openblocks.xpbottler.name=Imbottigliatore di Punti Esperienza
 tile.openblocks.xpbottler.description=L'imbottigliatore di punti esperienza aspira esperienza liquida e poi la imbottiglia nelle bottiglie di vetro per ottenere delle bottiglie de' incantagione.
@@ -305,7 +307,7 @@ item.openblocks.sleepingbag.name=Sacco a Pelo
 item.openblocks.sleepingbag.description=Il sacco a pelo permette di dormire nella natura senza dover ripristinare il proprio punto di apparizione. Per dormire, si indossa semplicemente sulla propria schiena.
 
 item.openblocks.luggage.name=Valigia
-item.openblocks.luggage.description=Valigia è il tuo nuovo amico. Lei ti seguirà dovunque andrai, raccogliendo ogni oggetto che trova sul pavimento. Gnam gnam gnam!\nPer smontarla, fai semplicemente shift-click su di lei e immediatamente lei tornerà ad essere un oggetto che puoi trasportare.\nSemmai lei dovesse essere colpitam da una saetta, sarà in grado di trasportare ancora più oggetti!
+item.openblocks.luggage.description=Valigia è il tuo nuovo amico. Lei ti seguirà dovunque andrai, raccogliendo ogni oggetto che trova sul pavimento. Gnam gnam gnam!\nPer smontarla, fai semplicemente shift-click su di lei e immediatamente lei tornerà ad essere un oggetto che puoi trasportare.\nSemmai lei dovesse essere colpita da una saetta, sarà in grado di trasportare ancora più oggetti!
 item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
 
 item.openblocks.sonicglasses.name=Occhiali Sonici
@@ -328,7 +330,7 @@ item.openblocks.crane_backpack.description=Nel mondo di Minecraft, "magnete" è 
 item.openblocks.crane_backpack.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.crane_control.name=Controllore della Gru
-item.openblocks.crane_control.description=Questo telecomando wireless ad alta tecnologia è usato per contollare gli zaini magnetici.\n\nFai clic destro per alzare la gru, accovacciati poi fai clic destro per abbassarla, tasto sinistro per prendere e rilasciare.\nUn segnale lampeggiante indica che qualcosa è sotto al magnete.
+item.openblocks.crane_control.description=Questo telecomando wireless ad alta tecnologia è usato per controllare gli zaini magnetici.\n\nFai clic destro per alzare la gru, accovacciati poi fai clic destro per abbassarla, tasto sinistro per prendere e rilasciare.\nUn segnale lampeggiante indica che qualcosa è sotto al magnete.
 item.openblocks.crane_control.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.stencil.name=Stampo
