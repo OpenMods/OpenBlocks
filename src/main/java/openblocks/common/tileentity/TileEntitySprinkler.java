@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -41,6 +42,9 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
 
 	private static final Random RANDOM = new Random();
+
+	private static final double[] SPRINKER_DELTA = new double[] { 0.2, 0.25, 0.5 };
+	private static final int[] SPRINKER_MOD = new int[] { 1, 5, 20 };
 
 	private boolean hasBonemeal = false;
 
@@ -114,6 +118,13 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 
 	private void sprayParticles() {
 		if (tank.getFluidAmount() > 0) {
+			// 0 = All, 1 = Decreased, 2 = Minimal
+			final int particleSetting = Minecraft.getMinecraft().gameSettings.particleSetting;
+			if (particleSetting > 2) return;
+
+			final int fillFactor = SPRINKER_MOD[particleSetting];
+
+			if ((ticks % fillFactor) != 0) return;
 			final ForgeDirection blockYawRotation = getRotation();
 			final double nozzleAngle = getSprayDirection();
 			final double sprayForwardVelocity = Math.sin(Math.toRadians(nozzleAngle * 25));
@@ -121,9 +132,10 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			final double forwardVelocityX = sprayForwardVelocity * blockYawRotation.offsetZ / -2;
 			final double forwardVelocityZ = sprayForwardVelocity * blockYawRotation.offsetX / 2;
 
+			final double sprinklerDelta = SPRINKER_DELTA[particleSetting];
 			double outletPosition = -0.5;
 
-			for (int i = 0; i < 6; i++) {
+			while (outletPosition <= 0.5) {
 				final double spraySideVelocity = Math.sin(SPRAY_SIDE_SCATTER * (RANDOM.nextDouble() - 0.5));
 
 				final double sideVelocityX = spraySideVelocity * blockYawRotation.offsetX;
@@ -140,7 +152,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 						zCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetZ),
 						0.3f, 0.7f, vec);
 
-				outletPosition += 0.2;
+				outletPosition += sprinklerDelta;
 			}
 		}
 	}
