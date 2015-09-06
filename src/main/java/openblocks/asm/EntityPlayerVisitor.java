@@ -5,21 +5,20 @@ import openmods.asm.MethodMatcher;
 
 import org.objectweb.asm.*;
 
-@SuppressWarnings("deprecation")
 public class EntityPlayerVisitor extends ClassVisitor {
 
 	public static boolean IsInBedHookSuccess = false;
 
 	private static class HookMethodVisitor extends MethodVisitor {
 		public HookMethodVisitor(MethodVisitor mv) {
-			super(Opcodes.ASM4, mv);
+			super(Opcodes.ASM5, mv);
 		}
 
 		@Override
 		public void visitCode() {
 			mv.visitCode();
 			mv.visitVarInsn(Opcodes.ALOAD, 0); // EntityPlayer this
-			mv.visitMethodInsn(Opcodes.INVOKESTATIC, "openblocks/Hooks", "isInBed", "(Lnet/minecraft/entity/player/EntityPlayer;)Z");
+			mv.visitMethodInsn(Opcodes.INVOKESTATIC, "openblocks/Hooks", "isInBed", "(Lnet/minecraft/entity/player/EntityPlayer;)Z", false);
 			Label skipReturn = new Label();
 			mv.visitJumpInsn(Opcodes.IFEQ, skipReturn);
 			mv.visitInsn(Opcodes.ICONST_1);
@@ -33,7 +32,7 @@ public class EntityPlayerVisitor extends ClassVisitor {
 	private final MethodMatcher isInBedMatcher;
 
 	public EntityPlayerVisitor(String obfClassName, ClassVisitor cv) {
-		super(Opcodes.ASM4, cv);
+		super(Opcodes.ASM5, cv);
 		isInBedMatcher = new MethodMatcher(obfClassName, "()Z", "isInBed", "func_71065_l");
 	}
 
