@@ -331,7 +331,7 @@ public class Config {
 		if (OpenBlocks.Blocks.elevatorRotating != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.elevatorRotating, "wiw", "wew", "wiw", 'w', Blocks.wool, 'e', Items.ender_pearl, 'i', "ingotIron"));
 
-			if (OpenBlocks.Blocks.elevatorRotating != null) {
+			if (OpenBlocks.Blocks.elevator != null) {
 				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Blocks.elevatorRotating, OpenBlocks.Blocks.elevator, "ingotIron", "ingotIron"));
 			}
 		}
