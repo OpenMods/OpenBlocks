@@ -27,7 +27,7 @@ public class ModelCartographer extends ModelBase {
 			GL11.glColor3d(1, 1, 1);
 			GL11.glScalef(SCALE * 3, SCALE * 3, SCALE);
 
-			Tessellator tes = new Tessellator();
+			final Tessellator tes = new Tessellator();
 			tes.setTranslation(-0.5, -0.5, 0);
 
 			final IIcon icon = Items.ender_eye.getIconFromDamage(0);

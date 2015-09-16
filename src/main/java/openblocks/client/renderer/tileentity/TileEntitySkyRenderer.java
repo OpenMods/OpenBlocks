@@ -45,8 +45,10 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 
 	protected void intialize() {
 		displayListBase = GL11.glGenLists(2);
+
+		final Tessellator tes = new Tessellator();
 		GL11.glNewList(displayListBase, GL11.GL_COMPILE);
-		renderCube();
+		renderCube(tes);
 		GL11.glEndList();
 
 		StencilBitAllocation bit = StencilPoolManager.pool().acquire();
@@ -54,7 +56,7 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		GL11.glNewList(displayListBase + 1, GL11.GL_COMPILE);
 		if (bit != null) {
 			Log.debug("Stencil bit %d allocated for skyblock rendering", bit.bit);
-			cutHoleInWorld(bit.mask);
+			cutHoleInWorld(tes, bit.mask);
 		} else {
 			Log.warn("Failed to allocate stencil bit for skyblock rendering");
 		}
@@ -63,8 +65,8 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		handler = bit != null? new StencilSkyRenderer(bit.mask) : StencilRendererHandler.DUMMY;
 	}
 
-	private static void renderCube() {
-		final Tessellator tes = new Tessellator();
+	private static void renderCube(Tessellator tes) {
+
 		tes.startDrawingQuads();
 
 		tes.addVertex(0, 0, 0);
@@ -106,13 +108,13 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	private static void cutHoleInWorld(int stencilMask) {
+	private static void cutHoleInWorld(Tessellator tes, int stencilMask) {
 		GL11.glStencilMask(stencilMask);
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
 		GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
 		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
 		GL11.glColorMask(false, false, false, false);
-		renderCube();
+		renderCube(tes);
 		GL11.glColorMask(true, true, true, true);
 		GL11.glStencilMask(0);
 		GL11.glDisable(GL11.GL_STENCIL_TEST);

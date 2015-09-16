@@ -26,7 +26,7 @@ public class BlockTankRenderer implements IBlockRenderer<BlockTank> {
 			GL11.glColor3f(1, 1, 1);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-			Tessellator tes = new Tessellator();
+			final Tessellator tes = new Tessellator();
 			tes.startDrawingQuads();
 			tes.setColorOpaque(0, 0, 0);
 			tes.setTextureUV(0, 0);

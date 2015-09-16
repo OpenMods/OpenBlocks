@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 	RenderBlocks renderBlocks = new RenderBlocks();
+	private static Tessellator tes = new Tessellator();
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
@@ -64,8 +65,6 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			color = 0xFFFFFFFF;
 		}
 
-		Tessellator t = Tessellator.instance;
-
 		final double se = data.getCornerFluidLevel(Diagonal.SE, time);
 		final double ne = data.getCornerFluidLevel(Diagonal.NE, time);
 		final double sw = data.getCornerFluidLevel(Diagonal.SW, time);
@@ -84,60 +83,60 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		final float g = (color >> 8 & 0xFF) / 255.0F;
 		final float b = (color & 0xFF) / 255.0F;
 
-		t.startDrawingQuads();
-		t.setColorOpaque_F(r, g, b);
+		tes.startDrawingQuads();
+		tes.setColorOpaque_F(r, g, b);
 
 		if (data.shouldRenderFluidWall(ForgeDirection.NORTH) && (nw > 0 || ne > 0)) {
-			t.addVertexWithUV(1, 0, 0, uMax, vMin);
-			t.addVertexWithUV(0, 0, 0, uMin, vMin);
-			t.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
-			t.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
+			tes.addVertexWithUV(1, 0, 0, uMax, vMin);
+			tes.addVertexWithUV(0, 0, 0, uMin, vMin);
+			tes.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
+			tes.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
 		}
 
 		if (data.shouldRenderFluidWall(ForgeDirection.SOUTH) && (se > 0 || sw > 0)) {
-			t.addVertexWithUV(1, 0, 1, uMin, vMin);
-			t.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
-			t.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
-			t.addVertexWithUV(0, 0, 1, uMax, vMin);
+			tes.addVertexWithUV(1, 0, 1, uMin, vMin);
+			tes.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
+			tes.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
+			tes.addVertexWithUV(0, 0, 1, uMax, vMin);
 		}
 
 		if (data.shouldRenderFluidWall(ForgeDirection.EAST) && (ne > 0 || se > 0)) {
-			t.addVertexWithUV(1, 0, 0, uMin, vMin);
-			t.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
-			t.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
-			t.addVertexWithUV(1, 0, 1, uMax, vMin);
+			tes.addVertexWithUV(1, 0, 0, uMin, vMin);
+			tes.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
+			tes.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
+			tes.addVertexWithUV(1, 0, 1, uMax, vMin);
 		}
 
 		if (data.shouldRenderFluidWall(ForgeDirection.WEST) && (sw > 0 || nw > 0)) {
-			t.addVertexWithUV(0, 0, 1, uMin, vMin);
-			t.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
-			t.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
-			t.addVertexWithUV(0, 0, 0, uMax, vMin);
+			tes.addVertexWithUV(0, 0, 1, uMin, vMin);
+			tes.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
+			tes.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
+			tes.addVertexWithUV(0, 0, 0, uMax, vMin);
 		}
 
 		if (data.shouldRenderFluidWall(ForgeDirection.UP)) {
 			final double uMid = (uMax + uMin) / 2;
 			final double vMid = (vMax + vMin) / 2;
 
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-			t.addVertexWithUV(1, se, 1, uMax, vMin);
-			t.addVertexWithUV(1, ne, 0, uMin, vMin);
-			t.addVertexWithUV(0, nw, 0, uMin, vMax);
+			tes.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			tes.addVertexWithUV(1, se, 1, uMax, vMin);
+			tes.addVertexWithUV(1, ne, 0, uMin, vMin);
+			tes.addVertexWithUV(0, nw, 0, uMin, vMax);
 
-			t.addVertexWithUV(0, sw, 1, uMax, vMax);
-			t.addVertexWithUV(1, se, 1, uMax, vMin);
-			t.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-			t.addVertexWithUV(0, nw, 0, uMin, vMax);
+			tes.addVertexWithUV(0, sw, 1, uMax, vMax);
+			tes.addVertexWithUV(1, se, 1, uMax, vMin);
+			tes.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
+			tes.addVertexWithUV(0, nw, 0, uMin, vMax);
 
 		}
 
 		if (data.shouldRenderFluidWall(ForgeDirection.DOWN)) {
-			t.addVertexWithUV(1, 0, 0, uMax, vMin);
-			t.addVertexWithUV(1, 0, 1, uMin, vMin);
-			t.addVertexWithUV(0, 0, 1, uMin, vMax);
-			t.addVertexWithUV(0, 0, 0, uMax, vMax);
+			tes.addVertexWithUV(1, 0, 0, uMax, vMin);
+			tes.addVertexWithUV(1, 0, 1, uMin, vMin);
+			tes.addVertexWithUV(0, 0, 1, uMin, vMax);
+			tes.addVertexWithUV(0, 0, 0, uMax, vMax);
 		}
-		t.draw();
+		tes.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 

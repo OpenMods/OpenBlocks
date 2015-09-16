@@ -115,7 +115,7 @@ public class HeightMapRenderer {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glEnable(GL11.GL_BLEND);
 
-			Tessellator tes = new Tessellator();
+			final Tessellator tes = new Tessellator();
 			tes.startDrawingQuads();
 			tes.setColorOpaque(255, 255, 255);
 

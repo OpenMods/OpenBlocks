@@ -14,6 +14,8 @@ import org.lwjgl.opengl.GL11;
 
 public class EntityGoldenEyeRenderer extends Render {
 
+	private Tessellator tes = new Tessellator();
+
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float f1, float partialTickTime) {
 		bindEntityTexture(entity);
@@ -27,7 +29,6 @@ public class EntityGoldenEyeRenderer extends Render {
 		final IIcon icon = Items.goldenEye.getIconFromDamage(0);
 
 		GL11.glScaled(1.0 / 6.0, 1.0 / 6.0, 1.0 / 6.0);
-		Tessellator tes = new Tessellator();
 		tes.setTranslation(-0.5, -0.5, 0);
 		ItemRenderer.renderItemIn2D(
 				tes,
