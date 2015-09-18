@@ -98,7 +98,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		modifierSides = new SyncableSides();
 		outputSides = new SyncableSides();
 		xpSides = new SyncableSides();
-		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
 

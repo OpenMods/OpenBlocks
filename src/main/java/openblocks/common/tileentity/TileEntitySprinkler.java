@@ -38,7 +38,6 @@ import openmods.utils.BlockUtils;
 
 public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui {
 
-	private static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, 1);
 	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
 
 	private static final Random RANDOM = new Random();
@@ -70,7 +69,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	@Override
 	protected void createSyncedFields() {
 		flags = SyncableFlags.create(Flags.values().length);
-		tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, WATER, OpenBlocks.XP_FLUID);
+		tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.WATER, OpenBlocks.Fluids.xpJuice);
 	}
 
 	private static int selectFromRange(int range) {
@@ -146,7 +145,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 						0.35,
 						forwardVelocityZ + sideVelocityZ);
 
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid().getFluid(),
 						xCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetX),
 						yCoord + 0.2,
 						zCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetZ),

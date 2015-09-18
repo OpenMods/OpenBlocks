@@ -1,6 +1,7 @@
 package openblocks.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -9,7 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.Fluid;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
@@ -48,9 +49,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (event.map.getTextureType() == 0) {
 			Icons.xpJuiceFlowing = event.map.registerIcon("openblocks:xpjuiceflowing");
 			Icons.xpJuiceStill = event.map.registerIcon("openblocks:xpjuicestill");
-			if (OpenBlocks.Fluids.xpJuice != null) {
-				OpenBlocks.Fluids.xpJuice.setIcons(Icons.xpJuiceStill, Icons.xpJuiceFlowing);
-			}
+
+			OpenBlocks.Fluids.xpJuice.setIcons(Icons.xpJuiceStill, Icons.xpJuiceFlowing);
 		}
 	}
 
@@ -181,9 +181,17 @@ public class ClientProxy implements IOpenBlocksProxy {
 		new BlockRenderingValidator().verifyBlocks(OpenBlocks.Blocks.class);
 	}
 
-	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, float scale, float gravity, Vec3 vec) {
-		FXLiquidSpray spray = new FXLiquidSpray(worldObj, water, x, y, z, scale, gravity, vec);
+	private static void spawnParticle(EntityFX spray) {
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
+	}
+
+	@Override
+	public void spawnLiquidSpray(World worldObj, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
+		spawnParticle(new FXLiquidSpray(worldObj, fluid, x, y, z, scale, gravity, velocity));
+	}
+
+	@Override
+	public void spawnParticleSpray(World worldObj, IIcon icon, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
+		if (icon != null) spawnParticle(new FXLiquidSpray(worldObj, icon, x, y, z, scale, gravity, velocity));
 	}
 }

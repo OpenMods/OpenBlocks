@@ -1,26 +1,20 @@
 package openblocks.common.item;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Fluids;
 import openblocks.OpenBlocks.Items;
 import openmods.item.IMetaItem;
 
 public enum MetasBucket {
-	xpbucket(new FluidStack(Fluids.xpJuice, FluidContainerRegistry.BUCKET_VOLUME)) {
+	xpbucket {
 		@Override
 		public IMetaItem createMetaItem() {
 			return new MetaGeneric("xpbucket");
 		}
 	};
-
-	private final FluidStack liquid;
-
-	private MetasBucket(FluidStack liquid) {
-		this.liquid = liquid;
-	}
 
 	public ItemStack newItemStack(int size) {
 		return new ItemStack(OpenBlocks.Items.filledBucket, size, ordinal());
@@ -40,11 +34,18 @@ public enum MetasBucket {
 		return true;
 	}
 
+	public void registerAsBucketFor(Fluid fluid) {
+		registerAsContainerFor(new FluidStack(fluid, FluidContainerRegistry.BUCKET_VOLUME), FluidContainerRegistry.EMPTY_BUCKET);
+	}
+
+	public void registerAsContainerFor(FluidStack fluid, ItemStack emptyContainer) {
+		FluidContainerRegistry.registerFluidContainer(fluid.copy(), newItemStack(), emptyContainer);
+	}
+
 	public static void registerItems() {
 		for (MetasBucket m : values())
 			if (m.isEnabled()) {
 				Items.filledBucket.registerItem(m.ordinal(), m.createMetaItem());
-				FluidContainerRegistry.registerFluidContainer(m.liquid.copy(), m.newItemStack(), FluidContainerRegistry.EMPTY_BUCKET);
 			}
 	}
 }

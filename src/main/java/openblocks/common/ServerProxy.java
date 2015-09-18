@@ -1,8 +1,9 @@
 package openblocks.common;
 
+import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.Fluid;
 import openblocks.IOpenBlocksProxy;
 
 public class ServerProxy implements IOpenBlocksProxy {
@@ -20,6 +21,9 @@ public class ServerProxy implements IOpenBlocksProxy {
 	public void registerRenderInformation() {}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack water, double x, double y, double z, float scale, float gravity, Vec3 vec) {}
+	public void spawnLiquidSpray(World worldObj, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {}
+
+	@Override
+	public void spawnParticleSpray(World worldObj, IIcon icon, double x, double y, double z, float scale, float gravity, Vec3 velocity) {}
 
 }

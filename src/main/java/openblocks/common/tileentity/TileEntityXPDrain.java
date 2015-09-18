@@ -54,16 +54,17 @@ public class TileEntityXPDrain extends OpenTileEntity {
 
 		int maxDrainedXp = Math.min(4, playerXP);
 
-		FluidStack liquid = OpenBlocks.XP_FLUID.copy();
-		liquid.amount = LiquidXpUtils.xpToLiquidRatio(maxDrainedXp);
-		int maxAcceptedLiquid = tank.fill(ForgeDirection.UP, liquid, false);
+		int xpAmount = LiquidXpUtils.xpToLiquidRatio(maxDrainedXp);
+		FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
+
+		int maxAcceptedLiquid = tank.fill(ForgeDirection.UP, xpStack, false);
 
 		// rounding down, so we only use as much as we can
 		int acceptedXP = LiquidXpUtils.liquidToXpRatio(maxAcceptedLiquid);
 		int acceptedLiquid = LiquidXpUtils.xpToLiquidRatio(acceptedXP);
 
-		liquid.amount = acceptedLiquid;
-		int finallyAcceptedLiquid = tank.fill(ForgeDirection.UP, liquid, true);
+		xpStack.amount = acceptedLiquid;
+		int finallyAcceptedLiquid = tank.fill(ForgeDirection.UP, xpStack, true);
 
 		if (finallyAcceptedLiquid <= 0) return;
 
@@ -76,8 +77,8 @@ public class TileEntityXPDrain extends OpenTileEntity {
 
 	protected void tryConsumeOrb(IFluidHandler tank, EntityXPOrb orb) {
 		if (!orb.isDead) {
-			FluidStack xpStack = OpenBlocks.XP_FLUID.copy();
-			xpStack.amount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
+			int xpAmount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
+			FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 			int filled = tank.fill(ForgeDirection.UP, xpStack, false);
 			if (filled == xpStack.amount) {
 				tank.fill(ForgeDirection.UP, xpStack, true);

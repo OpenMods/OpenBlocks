@@ -89,7 +89,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		xpBottleSides = new SyncableSides();
 		xpSides = new SyncableSides();
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
-		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
 	}
 
 	public TileEntityXPBottler() {

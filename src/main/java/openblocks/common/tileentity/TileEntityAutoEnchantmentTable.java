@@ -93,7 +93,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	@Override
 	protected void createSyncedFields() {
-		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
 		inputSides = new SyncableSides();
 		outputSides = new SyncableSides();
 		xpSides = new SyncableSides();

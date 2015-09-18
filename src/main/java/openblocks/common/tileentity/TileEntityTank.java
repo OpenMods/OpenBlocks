@@ -212,7 +212,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	protected boolean tryDrainXp(EntityPlayer player, ForgeDirection direction) {
-		if (tank.getFluid() != null && tank.getFluid().isFluidEqual(OpenBlocks.XP_FLUID)) {
+		final FluidStack fluid = tank.getFluid();
+		if (fluid != null && fluid.isFluidEqual(new FluidStack(OpenBlocks.Fluids.xpJuice, 0))) {
 			int currentXP = EnchantmentUtils.getPlayerXP(player);
 			int nextLevelXP = EnchantmentUtils.getExperienceForLevel(player.experienceLevel + 1);
 			int requiredXP = nextLevelXP - currentXP;

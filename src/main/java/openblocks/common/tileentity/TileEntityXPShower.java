@@ -20,10 +20,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	private static final int DRAIN_PER_CYCLE = 50;
 
-	private GenericTank bufferTank = new GenericTank(
-			FluidContainerRegistry.BUCKET_VOLUME,
-			OpenBlocks.XP_FLUID
-			);
+	private GenericTank bufferTank = new GenericTank(FluidContainerRegistry.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
 
 	private int drainedCountdown = 0;
 	private SyncableBoolean isOn;
@@ -71,12 +68,11 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 			sync();
 
 		} else if (isOn.get()) {
-
 			Vec3 vec = Vec3.createVectorHelper(
 					(worldObj.rand.nextDouble() - 0.5) * 0.05,
 					0,
 					(worldObj.rand.nextDouble() - 0.5) * 0.05);
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, OpenBlocks.XP_FLUID, xCoord + 0.5d, yCoord + 0.4d, zCoord + 0.5d, 0.4f, 0.7f, vec);
+			OpenBlocks.proxy.spawnLiquidSpray(worldObj, OpenBlocks.Fluids.xpJuice, xCoord + 0.5d, yCoord + 0.4d, zCoord + 0.5d, 0.4f, 0.7f, vec);
 
 		}
 

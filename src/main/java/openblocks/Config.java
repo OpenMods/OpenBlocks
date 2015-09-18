@@ -13,8 +13,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.*;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.common.Stencil;
@@ -22,7 +20,6 @@ import openblocks.common.TrophyHandler;
 import openblocks.common.item.*;
 import openblocks.common.recipe.*;
 import openblocks.enchantments.*;
-import openmods.Log;
 import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
 import openmods.utils.ColorUtils;
@@ -272,9 +269,6 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "features", name = "infoBook", comment = "Should every player get info book on first login")
 	public static boolean spamInfoBook = true;
-
-	@ConfigProperty(category = "features", name = "xpFluidId", comment = "Id of liquid XP fluid (WARNING: only for users who know what they are doing - changing this id can break worlds")
-	public static String xpFluidId = "xpjuice";
 
 	@ConfigProperty(category = "features", name = "xpToLiquidRatio", comment = "Storage in mB needed to store single XP point")
 	public static int xpToLiquidRatio = 20;
@@ -636,13 +630,9 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', "dustRedstone", 'c', Items.clock));
 		}
 
-		Fluid liquidXp = new Fluid(xpFluidId).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
-		if (!FluidRegistry.registerFluid(liquidXp)) Log.info("Other mod registered '%s' fluid, OpenBlocks will use that", xpFluidId);
-
-		OpenBlocks.Fluids.xpJuice = FluidRegistry.getFluid(xpFluidId);
-
 		if (OpenBlocks.Items.filledBucket != null) {
 			MetasBucket.registerItems();
+			MetasBucket.xpbucket.registerAsBucketFor(OpenBlocks.Fluids.xpJuice);
 		}
 
 		if (explosiveEnchantmentId > 0) {

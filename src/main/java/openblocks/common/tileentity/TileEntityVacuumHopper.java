@@ -60,7 +60,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	@Override
 	protected void createSyncedFields() {
-		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.XP_FLUID);
+		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
 		xpOutputs = new SyncableSides();
 		itemOutputs = new SyncableSides();
 		vacuumDisabled = new SyncableBoolean();
@@ -217,7 +217,9 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 				return true;
 			} else if (entity instanceof EntityXPOrb) {
 				if (tank.getSpace() > 0) {
-					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, LiquidXpUtils.xpToLiquidRatio(((EntityXPOrb)entity).getXpValue()));
+					EntityXPOrb orb = (EntityXPOrb)entity;
+					int xpAmount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
+					FluidStack newFluid = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 					tank.fill(newFluid, true);
 					entity.setDead();
 					return true;

@@ -14,7 +14,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
@@ -284,7 +284,12 @@ public class OpenBlocks {
 	}
 
 	public static class Fluids {
-		public static Fluid xpJuice;
+		/**
+		 * Instance of fluid that is added to fluid registry.
+		 * It may not be used as default fluid, so don't compare directly with other fluids.
+		 * FluidStacks created with this fluid should always be valid.
+		 */
+		public static final Fluid xpJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
 	}
 
 	public static class Enchantments {
@@ -292,8 +297,6 @@ public class OpenBlocks {
 		public static Enchantment lastStand;
 		public static Enchantment flimFlam;
 	}
-
-	public static FluidStack XP_FLUID = null;
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
@@ -366,6 +369,9 @@ public class OpenBlocks {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
+		// needed first, to properly initialize delegates
+		FluidRegistry.registerFluid(Fluids.xpJuice);
+
 		startupHelper.registerBlocksHolder(OpenBlocks.Blocks.class);
 		startupHelper.registerItemsHolder(OpenBlocks.Items.class);
 
@@ -409,8 +415,6 @@ public class OpenBlocks {
 		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
 		EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
 		EntityRegistry.registerModEntity(EntityMiniMe.class, "MiniMe", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
-
-		XP_FLUID = new FluidStack(OpenBlocks.Fluids.xpJuice, 1);
 
 		MagnetWhitelists.instance.initTesters();
 
