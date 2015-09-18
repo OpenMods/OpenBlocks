@@ -1,5 +1,6 @@
 package openblocks.common;
 
+import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
@@ -31,7 +32,7 @@ public class ElevatorBlockRules {
 	static {
 		ImmutableMap.Builder<String, Action> builder = ImmutableMap.builder();
 		for (Action a : Action.values())
-			builder.put(a.name().toLowerCase(), a);
+			builder.put(a.name().toLowerCase(Locale.ENGLISH), a);
 		ACTIONS = builder.build();
 	}
 
@@ -58,7 +59,7 @@ public class ElevatorBlockRules {
 		Preconditions.checkState(parts.length == 3, "Each entry must have exactly 3 colon-separated fields");
 		final String modId = parts[0];
 		final String blockName = parts[1];
-		final String actionName = parts[2].toLowerCase();
+		final String actionName = parts[2].toLowerCase(Locale.ENGLISH);
 		final Action action = ACTIONS.get(actionName);
 
 		Preconditions.checkNotNull(action, "Unknown action: %s", actionName);
