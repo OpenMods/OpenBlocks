@@ -44,7 +44,7 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	}
 
 	@SubscribeEvent
-	public void onTextuteChange(TextureStitchEvent evt) {
+	public void onTextureChange(TextureStitchEvent evt) {
 		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_BLOCKS) wrapper.reset();
 	}
 
@@ -52,16 +52,14 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 		TileEntityGuide guide = (TileEntityGuide)tileentity;
 
-		if (guide.shouldRender()) {
-			GL11.glPushMatrix();
-			GL11.glTranslated(x, y, z);
-			float scaleDelta = guide.getTimeSinceChange();
-			renderShape(guide.getShape(), guide.getColor(), scaleDelta);
-			if (scaleDelta < 1.0) {
-				renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
-			}
-			GL11.glPopMatrix();
+		GL11.glPushMatrix();
+		GL11.glTranslated(x, y, z);
+		float scaleDelta = guide.getTimeSinceChange();
+		renderShape(guide.getShape(), guide.getColor(), scaleDelta);
+		if (scaleDelta < 1.0) {
+			renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
 		}
+		GL11.glPopMatrix();
 	}
 
 	private void renderShape(Collection<Coord> shape, int color, float scale) {
@@ -75,13 +73,13 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 
 		for (Coord coord : shape)
-			renderAt(coord.x, coord.y, coord.z, scale);
+			renderMarkerAt(coord.x, coord.y, coord.z, scale);
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
-	private void renderAt(double x, double y, double z, float scale) {
+	private void renderMarkerAt(double x, double y, double z, float scale) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5F, y, z + 0.5F);
 		GL11.glScalef(scale, scale, scale);

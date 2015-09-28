@@ -177,6 +177,8 @@ tile.openblocks.guide.name=Building Guide
 tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\nWhen in creative mode you can place an obsidian block above, then hit the building guide with any block you like to automatically create the shape.
 tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
+tile.openblocks.builder_guide.name=Enhanced Building Guide
+
 tile.openblocks.ladder.name=Jaded Ladder
 tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
 tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY

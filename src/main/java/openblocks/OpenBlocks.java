@@ -87,6 +87,9 @@ public class OpenBlocks {
 		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class, itemBlock = ItemGuide.class)
 		public static BlockGuide guide;
 
+		@RegisterBlock(name = "builder_guide", tileEntity = TileEntityBuilderGuide.class, itemBlock = ItemGuide.class)
+		public static BlockBuilderGuide builderGuide;
+
 		@RegisterBlock(name = "elevator", itemBlock = ItemElevator.class)
 		public static BlockElevator elevator;
 
@@ -391,7 +394,8 @@ public class OpenBlocks {
 				.registerInterface(IStencilCrafter.class)
 				.registerInterface(IColorChanger.class)
 				.registerInterface(ILevelChanger.class)
-				.registerInterface(ICannon.class);
+				.registerInterface(ITriggerable.class)
+				.registerInterface(IGuideAnimationTrigger.class);
 
 		Config.register();
 

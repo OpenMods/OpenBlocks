@@ -89,6 +89,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.tank, new BlockTankRenderer());
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.guide, new BlockGuideRenderer());
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.builderGuide, new BlockGuideRenderer());
 
 			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
 		}
@@ -103,6 +105,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());

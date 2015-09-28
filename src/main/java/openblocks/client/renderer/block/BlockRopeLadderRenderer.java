@@ -12,8 +12,7 @@ public class BlockRopeLadderRenderer implements IBlockRenderer<BlockRopeLadder> 
 
 	@Override
 	public void renderInventoryBlock(BlockRopeLadder block, int metadata, int modelID, RenderBlocks renderer) {
-		// TODO Auto-generated method stub
-
+		// nothing, renders as 2d item
 	}
 
 	@Override

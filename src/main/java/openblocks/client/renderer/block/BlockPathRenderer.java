@@ -7,7 +7,6 @@ import java.util.Set;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
-import openblocks.OpenBlocks;
 import openblocks.common.block.BlockPath;
 import openmods.renderer.IBlockRenderer;
 import openmods.tileentity.renderer.OpenRenderHelper;
@@ -21,7 +20,7 @@ public class BlockPathRenderer implements IBlockRenderer<BlockPath> {
 	@Override
 	public void renderInventoryBlock(BlockPath block, int metadata, int modelID, RenderBlocks renderer) {
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		renderWorldBlock(null, 0, 0, 0, OpenBlocks.Blocks.path, -1, renderer);
+		renderWorldBlock(null, 0, 0, 0, block, -1, renderer);
 	}
 
 	@Override

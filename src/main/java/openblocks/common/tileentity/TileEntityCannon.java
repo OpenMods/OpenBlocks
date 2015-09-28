@@ -11,7 +11,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
-import openblocks.rpc.ICannon;
+import openblocks.rpc.ITriggerable;
 import openmods.Log;
 import openmods.api.ISurfaceAttachment;
 import openmods.inventory.legacy.ItemDistribution;
@@ -22,7 +22,7 @@ import openmods.utils.render.GeometryUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ICannon {
+public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ITriggerable {
 
 	/*
 	 * Blocks and Entities have a right-angle offset
@@ -124,8 +124,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	private void fireStack(ItemStack stack) {
-		final ICannon rpc = createServerRpcProxy(ICannon.class);
-		rpc.fireCannon();
+		final ITriggerable rpc = createServerRpcProxy(ITriggerable.class);
+		rpc.trigger();
 
 		// projectileOrigin is not used here, it's used for the calculations below.
 		EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
@@ -141,7 +141,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	@Override
-	public void fireCannon() {
+	public void trigger() {
 		ticksSinceLastFire = 0;
 		double pitchRad = Math.toRadians(currentYaw - 90);
 		double x = -0.5 * Math.cos(pitchRad);
