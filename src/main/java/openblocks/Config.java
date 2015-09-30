@@ -315,7 +315,11 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.guide != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "ggg", "gtg", "ggg", 'g', "blockGlass", 't', Blocks.torch));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "grg", "gtg", "grg", 'g', "blockGlass", 't', Blocks.torch, 'r', Items.redstone));
+		}
+
+		if (OpenBlocks.Blocks.builderGuide != null) {
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.builderGuide, "grg", "ete", "grg", 'g', "blockGlass", 't', Blocks.torch, 'r', Items.redstone, 'e', Items.ender_pearl));
 		}
 
 		if (OpenBlocks.Blocks.elevator != null) {

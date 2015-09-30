@@ -174,10 +174,12 @@ tile.openblocks.heal.name=Healer
 tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.
 
 tile.openblocks.guide.name=Building Guide
-tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\nWhen in creative mode you can place an obsidian block above, then hit the building guide with any block you like to automatically create the shape.
-tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
+tile.openblocks.guide.description=The building guide, once powered with redstone, will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nUse touch-buttons on block to change outline dimensions and shapes.\nColor of markers can be changed by using dye on central block.
+tile.openblocks.guide.video=http://www.youtube.com/watch?v=IxSZ-mOFHX0
 
 tile.openblocks.builder_guide.name=Enhanced Building Guide
+tile.openblocks.builder_guide.description=This enhanced version of building guide not only displays ghost blocks to make building easier, but also allows you to place actual blocks. Just click central block with any block stack!\nWhen in creative mode you can place an obsidian block above, then hit the building guide with any block you like to automatically create the shape.
+tile.openblocks.builder_guide.video=http://www.youtube.com/watch?v=jymwA3X3ZtY
 
 tile.openblocks.ladder.name=Jaded Ladder
 tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
