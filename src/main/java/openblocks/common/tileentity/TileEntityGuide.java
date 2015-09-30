@@ -13,6 +13,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
 import openblocks.shapes.GuideShape;
+import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.shapes.IShapeGenerator;
 import openmods.shapes.IShapeable;
@@ -35,7 +36,7 @@ import com.google.common.primitives.Ints;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile {
+public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile {
 
 	public interface ShapeManipulator {
 		public boolean activate(EntityPlayerMP player, TileEntityGuide te);
@@ -395,13 +396,22 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return pass == 1 && shouldRender();
 	}
 
-	@Override
-	public void onNeighbourChanged(Block block) {
+	private void updateRedstone() {
 		if (Config.guideRedstone != 0) {
 			boolean redstoneState = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			active.set(redstoneState);
 			sync();
 		}
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		updateRedstone();
+	}
+
+	@Override
+	public void onAdded() {
+		updateRedstone();
 	}
 
 	protected List<Coord> getShapeSafe() {

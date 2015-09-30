@@ -20,9 +20,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
 import openblocks.Config;
-import openmods.api.IActivateAwareTile;
-import openmods.api.INeighbourAwareTile;
-import openmods.api.IPlacerAwareTile;
+import openmods.api.*;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.sync.SyncableBoolean;
@@ -35,14 +33,13 @@ import com.google.common.base.Strings;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile {
+public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile, IAddAwareTile {
 
 	private static final String TAG_MESSAGE = "Message";
 	private SyncableString perishedUsername;
 	public SyncableBoolean onSoil;
 
 	private IChatComponent deathMessage;
-	private int ticksSinceLastSound = 0;
 
 	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 1));
 
@@ -58,12 +55,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 	@SuppressWarnings("unchecked")
 	public void updateEntity() {
 		super.updateEntity();
-
-		if (worldObj.isRemote) {
-			if (ticksSinceLastSound++ > 100) {
-				ticksSinceLastSound = 0;
-			}
-		}
 
 		if (!worldObj.isRemote) {
 			if (Config.spawnSkeletons && worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < Config.skeletonSpawnRate) {
@@ -150,7 +141,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 	}
 
 	@Override
-	public void initialize() {
+	public void onAdded() {
 		updateBlockBelow();
 	}
 

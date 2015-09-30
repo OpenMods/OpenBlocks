@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openmods.Log;
+import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
@@ -34,7 +35,7 @@ import com.google.common.collect.Sets;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttachment, INeighbourAwareTile {
+public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile {
 
 	private int strength = 0;
 	private int tickCounter = -1;
@@ -129,19 +130,28 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 
 	@Override
 	public void onNeighbourChanged(Block block) {
+		updateRedstone();
+	}
+
+	@Override
+	public void onAdded() {
+		updateRedstone();
+	}
+
+	private void updateRedstone() {
 		if (!(worldObj instanceof WorldServer)) return;
 		WorldServer world = (WorldServer)worldObj;
 
 		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 
-		if (isPowered == isEnabled()) return;
+		if (isPowered != isEnabled()) {
+			dropArrowsAsItems(world);
+			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks:target.open" : "openblocks:target.close", 0.5f, 1.0f);
 
-		dropArrowsAsItems(world);
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks:target.open" : "openblocks:target.close", 0.5f, 1.0f);
+			setEnabled(isPowered);
 
-		setEnabled(isPowered);
-
-		sync();
+			sync();
+		}
 	}
 
 	private void dropArrowsAsItems(WorldServer world) {

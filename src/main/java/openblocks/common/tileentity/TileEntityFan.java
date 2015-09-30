@@ -10,13 +10,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import openblocks.Config;
+import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlacerAwareTile;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile, INeighbourAwareTile {
+public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile, INeighbourAwareTile, IAddAwareTile {
 
 	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
 	private SyncableFloat angle;
@@ -104,6 +105,15 @@ public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile,
 
 	@Override
 	public void onNeighbourChanged(Block block) {
+		updateRedstone();
+	}
+
+	@Override
+	public void onAdded() {
+		updateRedstone();
+	}
+
+	private void updateRedstone() {
 		if (!worldObj.isRemote) {
 			int power = Config.redstoneActivatedFan? worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) : 15;
 			this.power.set((byte)power);

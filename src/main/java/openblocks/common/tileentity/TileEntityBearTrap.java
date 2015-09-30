@@ -9,13 +9,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmods.api.IActivateAwareTile;
-import openmods.api.INeighbourAwareTile;
-import openmods.api.ISurfaceAttachment;
+import openmods.api.*;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile {
+public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile {
 
 	public static final int OPENING_ANIMATION_TIME = 15;
 
@@ -151,6 +149,15 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	@Override
 	public void onNeighbourChanged(Block block) {
+		updateRedstone();
+	}
+
+	@Override
+	public void onAdded() {
+		updateRedstone();
+	}
+
+	private void updateRedstone() {
 		if (!worldObj.isRemote) {
 			boolean isLocked = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 			this.isLocked.set(isLocked);

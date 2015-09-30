@@ -6,17 +6,20 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import openblocks.OpenBlocks;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.entity.EntityXPOrbNoFly;
 import openmods.OpenMods;
+import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
+import openmods.api.ISurfaceAttachment;
 import openmods.liquids.GenericTank;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile {
+public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile, IAddAwareTile, ISurfaceAttachment {
 
 	private static final int DRAIN_PER_CYCLE = 50;
 
@@ -33,7 +36,6 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	@Override
 	public void updateEntity() {
-
 		super.updateEntity();
 
 		if (!worldObj.isRemote) {
@@ -79,7 +81,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	@Override
-	protected void initialize() {
+	public void onAdded() {
 		if (!worldObj.isRemote) updateState();
 	}
 
@@ -102,6 +104,11 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		bufferTank.writeToNBT(nbt);
+	}
+
+	@Override
+	public ForgeDirection getSurfaceDirection() {
+		return getRotation();
 	}
 
 }

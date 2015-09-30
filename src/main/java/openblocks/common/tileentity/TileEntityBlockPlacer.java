@@ -47,7 +47,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			final ItemStack stack = inventory.getStackInSlot(i);
 			if (stack != null && stack.stackSize > 0) {
-				worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), EVENT_ACTIVATE, i);
+				sendBlockEvent(EVENT_ACTIVATE, i);
 				break;
 			}
 		}

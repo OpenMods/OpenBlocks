@@ -87,9 +87,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 
 		if (worldObj.blockExists(x, y, z)) {
 			final Block block = worldObj.getBlock(x, y, z);
-			if (canBreakBlock(block, x, y, z)) {
-				worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), EVENT_ACTIVATE, 0);
-			}
+			if (canBreakBlock(block, x, y, z)) sendBlockEvent(EVENT_ACTIVATE, 0);
 		}
 
 		worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
