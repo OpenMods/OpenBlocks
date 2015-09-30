@@ -135,22 +135,18 @@ openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.elevator.description=Platziere einen Fahrstuhl drei oder mehr Blöcke oberhalb eines anderen ohne Blöcke dazwischen und du wirst fähig sein, entweder zu 'springen', um dich aufwärts zu bewegen oder zu 'kriechen', um dich abwärts zu bewegen. Fahrstühle können gefärbt werden, indem man mit einem Farbstoff in der Hand rechtsklickt, jedoch kannst du dich nur zwischen Fahrstühlen in der selben Farbe teleportieren.
-tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
 tile.openblocks.heal.name=Heiler
 tile.openblocks.heal.description=Der Heil-Block ist ein Block für den Kreativ-Modus, der nach und nach einen kleinen Heilungs-Effekt bringt.
 
 tile.openblocks.guide.name=Bau-Hilfe
 tile.openblocks.guide.description=Die Bau-Hilfe wird dir eine Schablone aus unechten Blöcken geben, in unterschiedlichen Formen und Größen, um dir zu helfen, deine Bauten zu planen.\nDu kannst den Block Shift-rechtsklicken, um die Form zu verändern, oder du kannst verschiedene Seiten anklicken, um die Schablone zu vergößern bzw. zu verkleinern.\nIm Kreativ-Modus kannst du einen Obsidian-Block oberhalb der Bau-Hilfe platzieren und diese dann mit irgendeinem Block rechtsklicken, um die Schablone automatisch mit diesem Block auszufüllen.
-tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
 tile.openblocks.ladder.name=Jaded-Leiter
 tile.openblocks.ladder.description=Die Jaded-Leiter löst das nervige Problem, über eine Falltür an der Spitze einer Leiter springen zu müssen. Die Jaded-Leiter funktioniert zeitgleich wie eine Falltür und wie eine Leiter.
-tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
 
 tile.openblocks.tank.name=Tank
 tile.openblocks.tank.description=Tanks können Flüssigkeiten halten. Wenn du Tanks nebeneinander platzierst, werden sie ihre Flüssigkeit untereinander aufteilen. Du kannst Flüssigkeiten mit Eimern in Tanks füllen. Wenn der Tank Flüssige XP enthält, kannst du mit einer leeren Hand rechtsklicken, um dir ein wenig dieser XP zu geben. Wenn abgebaut, behalten Tanks ihren Inhalt.
-tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
 
 tile.openblocks.flag.name=Flagge
 tile.openblocks.flag.description=Flaggen können als Dekoration verwendet werden oder, um den Weg aus einer Höhle zu markieren, die du gerade erforscht hast. Die Flagge zeigt in die Richtung, in der du sie platzierst, du kannst sie aber auch an die Wand hängen. Wenn du mit der Flagge in der Hand Shift-klickst, ändert sie ihre Farbe.
@@ -175,11 +171,9 @@ tile.openblocks.sprinkler.description=Der Rasensprenger hilft dir, Pflanzen bis 
 
 tile.openblocks.paintmixer.name=Farbmixer
 tile.openblocks.paintmixer.description=Der Farbmixer kann jede Farbe, die du willst, zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Türkisen, Magentafarbenen, Gelben und Schwarzen Farbstoff in die anderen vier Slots und klicke auf Mixen!
-tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.canvas.name=Leinwand
 tile.openblocks.canvas.description=Die Leinwand ist ein perfekt weißer Block, der perfekt zum Streichen ist. Siehe die Farbmixer-Information für die Herstellung von Farbe.
-tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.fan.name=Ventilator
 tile.openblocks.fan.description=Der Ventilator bläst Spieler, NPCs und andere Objekte in die Richtung, in die er zeigt.
@@ -228,7 +222,6 @@ tile.openblocks.autoanvil.description=Der Auto-Amboss funktioniert ähnlich wie 
 
 tile.openblocks.drawingtable.name=Zeichentisch
 tile.openblocks.drawingtable.description=Der Zeichentisch wird gebraucht, um Schablonen herzustellen, die zum Zeichnen gebraucht werden. Gib eine unbearbeitete Schablone in den Zeichentisch und benutze die Pfeile, um die gewünschte Schablone auszuwählen!
-tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
@@ -241,7 +234,6 @@ tile.openblocks.sky.inverted.name=Invertierter Himmelsblock
 
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=Das Radio erlaubt es dir, Internetradio zu spielen! Zunächst brauchst du Wellenkristalle, die du in Dungeon-Truhen findest oder von einem bestimmten Dorfbewohner bekommst. Platziere den Kristall ins Radio und gib diesem ein Redstone-Signal, um es anzuschalten.  Die Stärke des Redstone-Signals bestimmt die Lautstärke.\n\nIn der Konfigurations-Datei des Servers kannst du konfigurieren, welche Radiosender verfügbar sind.
-tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
 
 tile.openblocks.xpshower.name=XP-Dusche
 tile.openblocks.xpshower.description=Bringe eine XP-Dusche an einen Tank voller XP-Saft an und sie wird XP-Orbs ausschütten. Diese Orbs können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.

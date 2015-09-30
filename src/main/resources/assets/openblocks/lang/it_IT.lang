@@ -166,7 +166,6 @@ openblocks.turtle.magnet=Magnete
 
 tile.openblocks.elevator.name=Ascensore
 tile.openblocks.elevator.description=Piazza un ascensore direttamente tre o quattro blocchi sopra un altro senza altri blocchi fra i due e tu potrai sia 'saltare' per salire sia 'accovacciarti' per scendere. Gli ascensori possono essere colorati cliccando su di essi con della tintura. Puoi teletrasportarti solo tra ascensori dello stesso colore, però.
-tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
 tile.openblocks.elevator_rotating.name=Ascensore Rotante
 
@@ -175,16 +174,13 @@ tile.openblocks.heal.description=Il blocco curatore è un blocco solo per la mod
 
 tile.openblocks.guide.name=Guida di Costruzione
 tile.openblocks.guide.description=La Guida di Costruzione mostrerà una "linea-guida" formata da blocchi fantasma di forme e dimensioni diverse che ti aiuterà a pianificare le varie stanze.\nPuoi fare shift-click sulla guida per modificare la forma o puoi cliccare i vari lati per aumentare o diminuire la dimensione.\nMentre sei in modalità creativa, puoi piazzare un blocco di ossidiana sopra alla guida, poi colpire la guida di costruzione con ogni blocco che vuoi per creare automaticamente la forma.
-tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
 tile.openblocks.ladder.name=Scala a Pioli Impassibile
 tile.openblocks.ladder.description=La scala a pioli impassibile risolve quello scocciante problema di dover saltare fuori da una botola in cima ad una scala a pioli. La scala a pioli impassibile funge sia da botola sia da scala a pioli allo stesso momento.
-tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
 
 tile.openblocks.tank.filled.name=Tanica di %s
 tile.openblocks.tank.name=Tanica
 tile.openblocks.tank.description=Le taniche possono contenere liquidi. Se si piazzano delle taniche una vicino all'altra, esse distribuiranno i loro liquidi tra le taniche. Si possono piazzare liquidi nelle taniche usando dei secchi. Se la tanica contiene Esperienza Liquida, puoi fare clic su di essa con una mano vuota per ottenere parte dei punti esperienza. Quando vengono rotte, le taniche mantengono i loro liquidi.
-tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
 
 tile.openblocks.flag.name=Bandiera
 tile.openblocks.flag.description=Le bandiere possono essere usate come decorazione o per segnare la via per uscire da una caverna in cui sei entrato. La bandiera punterà nella direzione in cui viene piazzata, oppure può essere messa sui muri. Se si fa shift-click con una bandiera nelle mani, essa cambierà colore.
@@ -209,11 +205,9 @@ tile.openblocks.sprinkler.description=L'irrigatore aiuterà a fertilizzare le co
 
 tile.openblocks.paintmixer.name=Miscelatore di Pittura
 tile.openblocks.paintmixer.description=Il miscelatore di pittura può mescere fra loro tutti i colori di tempera che vuoi! Getta o un secchio di tempera esistente o un secchio di latte nello spazio superiore, poi della tintura ciano, magenta, gialla o nera negli altri quattro spazi e clicca su mescola!
-tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.canvas.name=Tela
 tile.openblocks.canvas.description=La tela è un blocco perfettamente bianco che è perfetto per pitturare. Controlla anche il Miscelatore di Pittura per ottenere alcune informazioni sul creare tempere.
-tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.fan.name=Ventola
 tile.openblocks.fan.description=La ventola spingerà giocatori, mob o entità nella direzione in cui è rivolta.
@@ -262,7 +256,6 @@ tile.openblocks.autoanvil.description=L'incudine automatica funziona esattamente
 
 tile.openblocks.drawingtable.name=Tavolo da Disegno
 tile.openblocks.drawingtable.description=Il tavolo da disegno è usato per creare stampi che possono essere usati mentre si dipinge. Inserisci uno Stampo Non Preparato nel tavolo da disegno, poi usa le frecce per selezionare quale stampo vuoi creare!
-tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.grave.name=Tomba
 tile.openblocks.trophy.name=Trofeo
@@ -276,7 +269,6 @@ tile.openblocks.sky.inverted.name=Blocco di Cielo Invertito
 
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=La radio ti permette di trasmettere in streaming la tua internet radio! Prima, hai bisogno di alcuni cristalli sintonizzati che puoi trovare nelle casse dei dungeon o da un villico speciale. Metti il cristallo nella radio e forniscile un segnale di pietrarossa per accenderlo. La potenza del segnale controlla il volume.\n\nPuoi configurare quali stazioni radio sono disponibili nel file di configurazione del server.
-tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
 
 tile.openblocks.xpshower.name=Doccia di Punti Esperienza
 tile.openblocks.xpshower.description=Attacca una doccia di punti esperienza ad una tanica di esperienza liquida ed essa emetterà sfere di esperienza. Queste sfere possono essere raccolte da un drenatore di punti esperienza o da un Collettore della MFR.

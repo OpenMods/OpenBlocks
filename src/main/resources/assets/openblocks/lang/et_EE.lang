@@ -111,22 +111,18 @@ openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Lift
 tile.openblocks.elevator.description=Place one elevator directly three or more blocks above another with no blocks inbetween and you'll be able to either 'jump' to move up, or 'crouch' to move down. Elevators can be dyed by clicking on them with dye, however, you can only teleport between elevators of the same color.
-tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
 tile.openblocks.heal.name=Tervendaja
 tile.openblocks.heal.description=The healing block is a creative-mode only block that gives off a slight healing effect over time.
 
 tile.openblocks.guide.name=Ehitaja Juhend
 tile.openblocks.guide.description=The building guide will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.\nYou can shift-click the guide to change the shape, or you can whack the different sides to increase or decrease the size.\nWhen in creative mode you can place an obsdian block above, then hit the building guide with any block you like to automatically create the shape.
-tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
 tile.openblocks.ladder.name=Jaded Ladder
 tile.openblocks.ladder.description=The jaded ladder solves that annoying problem of jumping out of a trapdoor at the top of a ladder. The jaded ladder acts as both a trap door and a ladder at the same time.
-tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
 
 tile.openblocks.tank.name=Paak
 tile.openblocks.tank.description=Tanks can hold liquids. If you place tanks next to each other and they'll distribute their liquid between the tanks. You can place liquid into the tanks using buckets. If the tank contains XP Juice you can click on them with an empty hand to give yourself some of the XP. When broken tanks will retain their liquid.
-tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
 
 tile.openblocks.flag.name=Lipp
 tile.openblocks.flag.description=Flags can be used for decoration or for marking the way back out of a cave you've ventured in to. The flag will point in the direction that you placed it, or you can put it on walls. If you shift-click with a flag in your hand it will change color.
@@ -151,11 +147,9 @@ tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up
 
 tile.openblocks.paintmixer.name=Värvi Segaja
 tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix!
-tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.canvas.name=Lõuend
 tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints.
-tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.fan.name=Ventilaator
 tile.openblocks.fan.description=The fan will blow players, mobs or entities in the direction it's facing.
@@ -204,7 +198,6 @@ tile.openblocks.autoanvil.description=The auto anvil works just like the vanilla
 
 tile.openblocks.drawingtable.name=Joonistus Laud
 tile.openblocks.drawingtable.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want!
-tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.grave.name=Haud
 tile.openblocks.trophy.name=Trofee
@@ -217,7 +210,6 @@ tile.openblocks.sky.inverted.name=Inverted Sky Block
 
 tile.openblocks.radio.name=Raadio
 tile.openblocks.radio.description=The radio allows you to stream internet radio! First, you need some tuned crystals which you can find in dungeon chests or from a special villager. Place the crystal in the radio and supply it with a redstone signal to turn it on.  The redstone strength controls the volume.\n\nYou can configure which radio stations are available in the servers config file.
-tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
 
 tile.openblocks.xpshower.name=XP Shower
 tile.openblocks.xpshower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer.

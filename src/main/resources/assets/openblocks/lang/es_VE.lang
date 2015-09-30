@@ -169,23 +169,19 @@ openblocks.turtle.magnet=Imán
 
 tile.openblocks.elevator.name=Ascensor
 tile.openblocks.elevator.description=Coloca un ascensor justo arriba de 3 o más bloques arriba de otro sin ningún bloque entremedias y podrás saltar hacia arriba o agacharte para ir hacia abajo. Los ascensores pueden tintarse haciendo clic con un tinte, sin embargo, solo puedes teletransportarte entre ascensores del mismo color.
-tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
 tile.openblocks.heal.name=Curador
 tile.openblocks.heal.description=El bloque curativo es un bloque creativo que proporciona un leve efecto de curación a través del tiempo.
 
 tile.openblocks.guide.name=Guía de Construcción
 tile.openblocks.guide.description=La guía de construcción te dará un contorno de bloques fantasma de diferentes formas y tamaños que te ayudará a planear tus habitaciones.\nPuedes hacer shift+clic para cambiar el forma, o puedes darle a loas diferentes cara para aumentar o disminuir el tamaño.\nCuando estás en modo creativo puedes colocar un bloque de obsidiana encima, y entonces golpear la guía de construcción con cualquier bloque que quieras para crear una forma automáticamente.
-tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
 tile.openblocks.ladder.name=Escalera Cansina
 tile.openblocks.ladder.description=La escalera cansina soluciona ese irritante problema de saltar a través de una trampilla al final de la escalera. La escalera cansina actúa como una trampilla y una escalera al mismo tiempo.
-tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
 
 tile.openblocks.tank.filled.name=Tanque %s
 tile.openblocks.tank.name=Tanque
 tile.openblocks.tank.description=Los tanques pueden almacenar líquidos. Si colocas tanques uno al lado del otro, distribuirán el líquido entre los tanques. Puedes introducir líquido al tanque mediante cubos. Si el tanque contiene XP líquida, puedes hacer clic en él con la mano vacía para darte XP a ti mismo. Cuando se rompan, los tanques mantendrán sus líquidos.
-tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
 
 tile.openblocks.flag.name=Bandera
 tile.openblocks.flag.description=Las banderas se pueden usar como decoración o para marcar el camino de vuelta cuando te aventuras dentro de una cueva. La bandera señalará la dirección en la que la has colocado, o puedes ponerla en las paredes. Si haces shift+clic con una bandera en la mano, esta cambiará de color.
@@ -210,11 +206,9 @@ tile.openblocks.sprinkler.description=El aspersor ayudará a fertilizar todas la
 
 tile.openblocks.paintmixer.name=Mezclador de Pintura
 tile.openblocks.paintmixer.description=¡El mezclador de pintura puede mezclar cualquier colo de pintura que quieras! ¡Coloca un cubo de pintura ya existente o un cubo de leche en la ranura superior, después tinte cian, magenta, amarillo y negro en las otras cuatro ranuras y haz clic para mezclar!
-tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.canvas.name=Lienzo
 tile.openblocks.canvas.description=El lienzo es un bloque blanco perfecto para pintar. Consulta la Máquina de Pintar para información sobre la creación de pinturas.
-tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.fan.name=Ventilador
 tile.openblocks.fan.description=El ventilador moverá jugadores, criaturas o entidades hacia la dirección en la que esté mirando.
@@ -263,7 +257,6 @@ tile.openblocks.autoanvil.description=El yunque automático funciona como el yun
 
 tile.openblocks.drawingtable.name=Mesa de Dibujo
 tile.openblocks.drawingtable.description=La mesa de dibujo se usa para crear plantillas que se pueden utilizar mientras se pinta. Introduce una plantilla en blanco y después usa las flechas para seleccionar que plantilla quieres.
-tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.grave.name=Tumba
 tile.openblocks.trophy.name=Trofeo
@@ -277,7 +270,6 @@ tile.openblocks.sky.inverted.name=Bloque de Cielo Invertido
 
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=¡La radio te permite retransmitir una radio de Internet! Primero, necesitas cristales sintonizados que puedes encontrar en cofres de mazmorras o en aldeano especial. Coloca el cristal en la radio y aplícale una señal de redstone para encenderla. La fuerza de la señal de redstone controla el volumen.\n\nPuedes configurar que estaciones de radio están disponibles en el archivo de configuración del server.
-tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
 
 tile.openblocks.xpshower.name=Ducha de XP
 tile.openblocks.xpshower.description=Adjunta una ducha de XP a un tanque de XP líquida y verterá orbes de experiencia. Estos orbes se pueden recolectar con un drenador de XP o un alcantarillado MFR.

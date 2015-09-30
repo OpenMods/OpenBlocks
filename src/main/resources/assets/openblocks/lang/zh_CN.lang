@@ -166,23 +166,19 @@ openblocks.turtle.magnet=磁铁
 
 tile.openblocks.elevator.name=电梯
 tile.openblocks.elevator.description=将一个电梯方块在另一个电梯方块正上方三格或以上的位置,中间不能有障碍物.玩家在电梯上跳跃时就会向上传送,蹲下时就向下传送.电梯可以用染料右键染色,相同颜色的电梯才能互相传送玩家.
-tile.openblocks.elevator.video=http://www.youtube.com/watch?v=bCfhJCkox5g
 
 tile.openblocks.heal.name=治愈方块
 tile.openblocks.heal.description=只有在创造模式下才能得到治愈方块,它会为站在上方的玩家提供轻微的治疗效果.
 
 tile.openblocks.guide.name=建筑指导仪
 tile.openblocks.guide.description=提供红石信号,建筑指导仪便会投影出方块轮廓.你可以通过Shift+右键它来改变形状,或者右键它的不同面来增大或减小轮廓.\n创造模式下将黑曜石放在建筑指导仪上,再拿着任何方块右键它,则会自动完成搭建.
-tile.openblocks.guide.video=http://www.youtube.com/watch?v=XAKxfQhdLRA
 
 tile.openblocks.ladder.name=梯子活板门
 tile.openblocks.ladder.description=爬梯子遇上活板门时必须跳出去是件麻烦事,但梯子活板门解决了这个问题.梯子活板门可以在打开时起到梯子的作用,让玩家顺着活板门爬上去.
-tile.openblocks.ladder.video=http://www.youtube.com/watch?v=PSNeU6kAigY
 
 tile.openblocks.tank.filled.name=%s蓄水槽
 tile.openblocks.tank.name=蓄水槽
 tile.openblocks.tank.description=蓄水槽可以存储液体.它能将存储的液体自动输出或导入到相邻的其它水槽中.\n你可以用桶灌入或取出液体,液态经验则可以直接被右键取出.蓄水槽在拆下后,仍然会保留其中存储的液体
-tile.openblocks.tank.video=http://www.youtube.com/watch?v=NBcneEthjn0
 
 tile.openblocks.flag.name=旗子
 tile.openblocks.flag.description=旗子可以用作装饰品,或是在复杂的洞穴中竖立一个归途的标记.旗子在被放置后会朝向你放置时面对的方向,你还可以把它挂到墙上.当你Shift右键旗子时它会改变颜色.
@@ -207,11 +203,9 @@ tile.openblocks.sprinkler.description=洒水器可以催生4x4格范围内的作
 
 tile.openblocks.paintmixer.name=调色器
 tile.openblocks.paintmixer.description=调色器可以调出任何你想要的颜色.\n在调色器最上方的格子中放入牛奶桶或任意颜料桶,在下方的四格中分别放入青色,品红色,黄色和黑色染料,然后点击按钮调色吧!
-tile.openblocks.paintmixer.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.canvas.name=画布
 tile.openblocks.canvas.description=画布是一种纯白色的方块,适合用作绘画.翻阅调色器的相关介绍来了解如何制作绘画所需的颜料桶.
-tile.openblocks.canvas.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.fan.name=风扇
 tile.openblocks.fan.description=风扇会把正对方向的玩家,生物以及实体全都吹走.
@@ -260,7 +254,6 @@ tile.openblocks.autoanvil.description=自动铁砧的使用方法类似于普通
 
 tile.openblocks.drawingtable.name=绘图桌
 tile.openblocks.drawingtable.description=绘图桌可以制作绘图时需要用到的模板.将空白模板放入绘图桌后通过箭头来选择你想要的模板.
-tile.openblocks.drawingtable.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 tile.openblocks.grave.name=墓碑
 tile.openblocks.trophy.name=纪念雕像
@@ -274,7 +267,6 @@ tile.openblocks.sky.inverted.name=反相天空方块
 
 tile.openblocks.radio.name=收音机
 tile.openblocks.radio.description=收音机可以让你连接网络收音机.首先,你需要把调台水晶(搜索地牢箱子或与村民交易)放在收音机里,并用红石信号启动.红石强度可以控制收音机的音量.在服务端的配置文件中可以设置可接收的电台.
-tile.openblocks.radio.video=http://www.youtube.com/watch?v=qvIg8VodnqU
 
 tile.openblocks.xpshower.name=经验莲蓬头
 tile.openblocks.xpshower.description=将经验莲蓬头放置在存储液态经验的水槽上,它就能从中抽出经验并喷出经验球.这些喷出的经验球可以被经验地漏或MFR的排污机吸取.
