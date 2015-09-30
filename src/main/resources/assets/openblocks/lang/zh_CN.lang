@@ -279,7 +279,6 @@ tile.openblocks.goldenegg.name=金蛋
 tile.openblocks.digitalfuse.name=游标
 item.openblocks.cursor.name=游标
 item.openblocks.cursor.description=游标可以让你远程控制方块.手持游标Shift右键一个方块就可以建立连接,之后用游标右键空气就控制连接的方块.\n默认设置下,使用游标与方块远程互动会消耗你的经验,距离越远,消耗越多.
-item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
 
 item.openblocks.devnull.name=/dev/null
 item.openblocks.devnull.description=手持/dev/null可以打开它的操作界面.你可以向里面放入一种物品,比如泥土.这样一来,当你从地面上捡到到泥土后就会被传送到这个格子,溢出的泥土则会自动销毁.你可以直接手持/dev/null来放置其存储的方块.
@@ -289,7 +288,6 @@ item.openblocks.slimalyzer.description=带着史莱姆区块探测器到处跑,�
 
 item.openblocks.hangglider.name=滑翔翼
 item.openblocks.hangglider.description=滑翔翼的用途不言而喻.手持滑翔翼右键就可以穿上.现在,大胆跳吧!\n你可以在滑翔时通过按Shift来提升速度,但是小心点,因为这会加快你下坠速度!
-item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
 
 item.openblocks.gliderwing.name=滑翔翼
 
@@ -298,30 +296,24 @@ item.openblocks.sleepingbag.description=在户外使用睡袋可以快速的度�
 
 item.openblocks.luggage.name=行李箱
 item.openblocks.luggage.description=行李箱是你的新伙伴.无论你去哪它都会跟着你,并收集地面上的掉落物.嗷!嗷!嗷!\n只需要Shift右键它就可以让它变为物品形式,这样你就可以更方便的携带它.如果行李箱被闪电劈中,那么它将可以存储更多物品!
-item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
 
 item.openblocks.sonicglasses.name=音波眼镜
 item.openblocks.sonicglasses.description=请允许我向你们介绍炫酷的音波眼镜!\n由开放式方块公司研发出的高科技产品,戴上它后你能看见你所听到的一切东西!
 
 item.openblocks.squeegee.name=刮刀
 item.openblocks.squeegee.description=刮刀可以从画布上刮除颜料.用它右键画布的任何一面即可刮除该面上的颜料颜料,或用它Shift右键画布来刮除所有面上的颜料颜料!
-item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.paintbrush.name=颜料刷
 item.openblocks.paintbrush.description=颜料刷可以让你在方块上涂刷任何你想要的颜色.将颜料刷在颜料桶内沾上一些颜料,就可以对方块右键来刷上颜料.\n画布是最理想的涂刷方块,你也可以向原版,甚至是其它模组中的一些方块涂刷颜料.
-item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=空白模板
 item.openblocks.unprepared_stencil.description="我在地牢箱子中找到了这些无聊的模板,它们能干什么?"这些模板能放上方块,配合颜料刷来对其进行涂色,空手右键模板可以旋转.\n通过将一块空白模板放入绘图桌内,能制作出不同图案的模板.
-item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.crane_backpack.name=起重机背包
 item.openblocks.crane_backpack.description=在Minecraft的世界里,磁铁是一个只在远古时代才存在的词汇.\n这件十分有用的装备能让你拾取并搬运生物,玩家,物品或是方块.\n背包由起重机控制器的控制.
-item.openblocks.crane_backpack.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.crane_control.name=起重机控制器
 item.openblocks.crane_control.description=这个高科技的无线遥控工具,能用来控制起重机背包.\n右键升起,Shift+右键降低,左键拾取/释放.\n当有光在闪烁时,表示物体正受到磁力影响.
-item.openblocks.crane_control.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.stencil.name=模板
 item.openblocks.crayon.name=魔法蜡笔

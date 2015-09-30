@@ -281,7 +281,6 @@ tile.openblocks.goldenegg.name=Uovo Dorato
 tile.openblocks.digitalfuse.name=Innesco Digitale
 item.openblocks.cursor.name=Cursore
 item.openblocks.cursor.description=Il cursore ti permetterà di cliccare su vari blocchi da remoto.\nFai semplicemente shift-click su un blocco per collegarlo al cursore, poi usa il cursore dovunque vuoi per cliccare sul blocco selezionato. Attenzione, in quanto secondo le impostazioni predefinite il cursore usa una quantità dei tuoi punti esperienza pari alla distanza dal blocco su cui stai "cliccando".
-item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
 
 item.openblocks.devnull.name=/dev/null
 item.openblocks.devnull.description=Clicca usando /dev/null per aprire il suo inventario. C'è un unico spazio nell'inventario - metti un oggetto lì dentro - terra, per esempio. Mentre raccogli terra dal terreno, quello spazio si riempirà. Una volta pieno, ogni altro blocco di terra che raccoglierai sarà automaticamente eliminato. Puoi fare shift-click con l'oggetto in mano per piazzare il blocco contenuto!
@@ -291,7 +290,6 @@ item.openblocks.slimalyzer.description=Cammina attorno con lo slime-alizzatore n
 
 item.openblocks.hangglider.name=Deltaplano
 item.openblocks.hangglider.description=Il deltaplano si spiega da solo. Tienilo in mano e clicca per piazzarlo sulla tua schiena. Ora salta!\nPer aumentare la tua velocità puoi premere Shift mentre stai planando, ma attento, perderai altitudine più velocemente!
-item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
 
 item.openblocks.gliderwing.name=Ala del Deltaplano
 
@@ -300,30 +298,24 @@ item.openblocks.sleepingbag.description=Il sacco a pelo permette di dormire nell
 
 item.openblocks.luggage.name=Valigia
 item.openblocks.luggage.description=Valigia è il tuo nuovo amico. Lei ti seguirà dovunque andrai, raccogliendo ogni oggetto che trova sul pavimento. Gnam gnam gnam!\nPer smontarla, fai semplicemente shift-click su di lei e immediatamente lei tornerà ad essere un oggetto che puoi trasportare.\nSemmai lei dovesse essere colpita da una saetta, sarà in grado di trasportare ancora più oggetti!
-item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
 
 item.openblocks.sonicglasses.name=Occhiali Sonici
 item.openblocks.sonicglasses.description=Ecco a voi i nuovi e fantastici Occhiali Sonici!\n Questa nuova ed eccitante tecnologia dalla OpenMods Inc ti permetterà di vedere quello che senti!
 
 item.openblocks.squeegee.name=Lavavetri
 item.openblocks.squeegee.description=Il lavavetri rimuove la pittura da ogni blocco dipinto. Clicca semplicemente sul lato del blocco da cui vuoi rimuovere la pittura, o alternativamente fai shift-click sul blocco per rimuovere la pittura da tutti i lati!
-item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.paintbrush.name=Pennello
 item.openblocks.paintbrush.description=I pennelli ti permettono di dipingere i blocchi con ogni colore che vuoi!\n\nPicchietta il tuo pennello su una Lattina di Pittura fatta nel Miscelatore di Pittura, poi clicca su un blocco per dipingerlo.\n\nI blocchi di Tela sono perfetti per dipingere, ma puoi anche dipingere un bel po' di blocchi Vanilla e anche alcuni blocchi di altre mod. Puoi anche piazzare degli stampi sui blocchi e poi dipingere sullo stampo!
-item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=Stampo non Preparato
 item.openblocks.unprepared_stencil.description=Gli stampi possono essere piazzati sui blocchi e poi dipinti sui blocchi usando i pennello!\n\nPuoi dipingere un blocco usando stampi multipli e puoi cliccare su di essi con una mano vuota per ruotarli.\b\bPiazza uno Stampo non Preparato in un Tavolo da Disegno per creare diversi motivi.
-item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.crane_backpack.name=Zaino della Gru
 item.openblocks.crane_backpack.description=Nel mondo di Minecraft, "magnete" è un'antica parola per "questo come funzionano?".\n\nQuesto particolare pezzo di vero equipaggiamento ti permette di prendere e trasportare mob, giocatori, oggetti e blocchi. Può essere controllato con il controllore del magnete.
-item.openblocks.crane_backpack.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.crane_control.name=Controllore della Gru
 item.openblocks.crane_control.description=Questo telecomando wireless ad alta tecnologia è usato per controllare gli zaini magnetici.\n\nFai clic destro per alzare la gru, accovacciati poi fai clic destro per abbassarla, tasto sinistro per prendere e rilasciare.\nUn segnale lampeggiante indica che qualcosa è sotto al magnete.
-item.openblocks.crane_control.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.stencil.name=Stampo
 item.openblocks.crayon.name=Pastello Magico

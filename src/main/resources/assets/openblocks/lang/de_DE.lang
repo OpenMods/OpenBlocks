@@ -243,7 +243,6 @@ tile.openblocks.goldenegg.name=Goldenes Ei
 tile.openblocks.digitalfuse.name=Digitalzünder
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
-item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
 
 item.openblocks.devnull.name=/dev/null
 item.openblocks.devnull.description=Klicke mit /dev/null, um das Inventar zu öffnen. Es gibt einen einzigen Inventar-Slot - dort legst du ein Item hinein, Erde zum Beispiel. Wenn du nun Erde abbaust, wird sich dieser Slot auffüllen. Sobald er voll ist, wird jegliche weitere Erde, die du einsammelst, automatisch weggeworfen. Du kannst das Item in deiner Hand Shift-klicken, als wenn du den Block platzieren würdest!
@@ -253,7 +252,6 @@ item.openblocks.slimalyzer.description=Renne mit einem Schleimalysierer in deine
 
 item.openblocks.hangglider.name=Gleitschirm
 item.openblocks.hangglider.description=Der Gleitschirm ist selbsterklärend. Halte ihn in deiner Hand und klicke, um ihn auf deinem Rücken zu platzieren. Und jetzt spring!\nUm deine Geschwindigkeit zu erhöhen, kannst du Shift drücken, während du gleitest, aber pass auf, du wirst schneller sinken!
-item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
 
 item.openblocks.gliderwing.name=Gleitschirmflügel
 
@@ -262,22 +260,18 @@ item.openblocks.sleepingbag.description=Mit dem Schlafsack kannst du in der Wild
 
 item.openblocks.luggage.name=Reisegepäck
 item.openblocks.luggage.description=Das Reisegepäck ist dein neuer Freund. Es folgt dir überall hin und sammelt alle Items, die es am Boden findet, ein. Nom nom nom!\nUm es aufzuheben, Shift-klicke einfach auf es und es verwandelt sich zurück in ein Item, das du umhertragen kannst.\nWenn es jemals von einem Blitz getroffen werden sollte, wird es noch mehr Items tragen können!
-item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
 
 item.openblocks.sonicglasses.name=Schallbrille
 item.openblocks.sonicglasses.description=Wir stellen vor: Die fabelhafte neue Schallbrille!\nDiese neue und spannende Technologie der OpenMods GmbH erlaubt dir zu sehen, was du hörst!
 
 item.openblocks.squeegee.name=Scheibenwischer
 item.openblocks.squeegee.description=Der Scheibenwischer entfernt jegliche Farbe von gefärbten Blöcken. Klicke einfach auf die Seite eines Blockes, von der du die Farbe entfernen möchtest, oder Shift-klicke, um die Farbe von allen Seiten zu entfernen!
-item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.paintbrush.name=Pinsel
 item.openblocks.paintbrush.description=Pinsel lassen dich Blöcke in der Farbe deiner Wahl färben!\n\nTauche deinen Pinsel in einen Farbeimer, den du im Farbmixer erstellt hast, und dann auf einen Block, um diesen zu färben.\n\nLeinwand-Blöcke sind perfekt zum anmalen, du kannst aber auch einige Vanilla- und sogar manche Mod-Blöcke färben. Du kannst auch Schablonen auf Blöcken platzieren und dann über die Schablone zeichnen!
-item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=Unbearbeitete Schablone
 item.openblocks.unprepared_stencil.description="Was sind diese nervigen Schablonen, die ich dauernd in Truhen finde?"\n\nSchablonen können auf Blöcken platziert werden und dann mit einem Pinsel übermalt werden!\n\nDu kannst einen Block mit mehreren Schablonen bemalen und du kannst mit einer leeren Hand auf sie klicken, um sie zu drehen.\n\nPlatziere eine unbearbeitete Schablone in einen Zeichentisch, um verschiedene Formen zu erstellen.
-item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.stencil.name=Schablone
 item.openblocks.crayon.name=Magischer Buntstift

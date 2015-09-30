@@ -255,7 +255,6 @@ tile.openblocks.goldenegg.name=Golden Egg
 tile.openblocks.digitalfuse.name=Digital Fuse
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking.
-item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
 
 item.openblocks.devnull.name=/dev/null
 item.openblocks.devnull.description=Click using /dev/null to open the inventory. There's a single inventory slot - put an item in there - dirt, for example. As you gather dirt from the ground this slot will fill up. Once it's full, any more dirt you pick up will be automatically discarded. You can shift-click with the item in your hand as though you were placing the block!
@@ -265,7 +264,6 @@ item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your h
 
 item.openblocks.hangglider.name=Hang Glider
 item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
-item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
 
 item.openblocks.gliderwing.name=Glider Wing
 
@@ -274,22 +272,18 @@ item.openblocks.sleepingbag.description=The sleeping bag lets you sleep out in t
 
 item.openblocks.luggage.name=Luggage
 item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items!
-item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
 
 item.openblocks.sonicglasses.name=Sonic Glasses
 item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear!
 
 item.openblocks.squeegee.name=Squeegee
 item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides!
-item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.paintbrush.name=Paint Brush
 item.openblocks.paintbrush.description=Paint brushes let you paint blocks in whatever color you like!\n\nDab your paint brush in a Paint Can made in the Paint Mixer then click on a block to paint it.\n\nCanvas blocks are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods. You can also place stencils on blocks and then paint over the stencil!
-item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=Unprepared Stencil
 item.openblocks.unprepared_stencil.description="What are these pesky stencils I keep finding in chests?"\n\nStencils can be placed onto blocks and then painted over using paint brushes!\n\nYou can paint a block using multiple stencils and you can click on them with an empty hand to rotate them.\n\nPlace an Unprepared Stencil in a Drawing table to create different patterns.
-item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.stencil.name=Stencil
 item.openblocks.crayon.name=Magic Crayon

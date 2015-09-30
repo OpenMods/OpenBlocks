@@ -282,7 +282,6 @@ tile.openblocks.goldenegg.name=Huevo Dorado
 tile.openblocks.digitalfuse.name=Detonador Digital
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=El cursor te permitirá hacer clic en bloques de forma remota.\nHaz shift+clic en un bloque para enlazarlo al cursor y luego usa el cursor donde quieras para acceder al bloque. Ve con cuidado, por defecto el cursor usa tu XP en relación a cuan lejos estás del bloque enlazado.
-item.openblocks.cursor.video=http://www.youtube.com/watch?v=bhl1adRz1wo
 
 item.openblocks.devnull.name=/dev/null
 item.openblocks.devnull.description=Haz clic con el /dev/null para abrir el inventario. Solo hay un ranura de inventario. Pon un objeto ahí; tierra, por ejemplo. Mientras que recoges tierra del suelo esta ranura se irá llenando. Unaz vez esté lleno, cualquier bloque de tierra que recoges se descartará automáticamente. ¡Puedes hacer shift+clic con el objeto en la mano y actuará como si estuvieses colocando el bloque!
@@ -292,7 +291,6 @@ item.openblocks.slimalyzer.description=Anda por ahí con el slimalizador en la m
 
 item.openblocks.hangglider.name=Ala Delta
 item.openblocks.hangglider.description=El ala delta no necesita explicación. Ponla en la mano y haz clic para colocártela en la espalda. ¡Ahora salta!\nPara aumentar tu velocidad, puedes pulsar shift mientras planeas, pero ten cuidado, perderás altitud más rápido.
-item.openblocks.hangglider.video=http://www.youtube.com/watch?v=SfX4jM7XrRY
 
 item.openblocks.gliderwing.name=Ala de ala delta
 
@@ -301,30 +299,24 @@ item.openblocks.sleepingbag.description=El saco de dormir te permite dormir fuer
 
 item.openblocks.luggage.name=Equipaje
 item.openblocks.luggage.description=El equipaje es tu nuevo amigo. Te seguirá allá donde vayas recogiendo cualquier objeto que encuentre en el suelo. ¡Nom nom nom!\nPara desmantelarlo, haz shift+clic en él y se convertirá en un objeto que podrás llevarte por ahí.\nSi por lo que sea le cae un rayo, podrá recoger aun más objetos.
-item.openblocks.luggage.video=http://www.youtube.com/watch?v=hEWvvVrD14Q
 
 item.openblocks.sonicglasses.name=Gafas Sónicas
 item.openblocks.sonicglasses.description=Presentamos las nuevas y superguays gafas sónicas!\n¡Esta nueva y emocionante tecnología de OpenMods Inc. te permite ver lo que oyes!
 
 item.openblocks.squeegee.name=Escobilla de Goma
 item.openblocks.squeegee.description=La escobilla de goma elimina cualquier pintura de un bloque pintado. Haz clic en la cara del bloque que quieres limpiar la pintura, o haz shift+clic para eliminar la pintura de todas las caras del bloque.
-item.openblocks.squeegee.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.paintbrush.name=Brocha
 item.openblocks.paintbrush.description=Las brochas de permiten pintar los bloques en cualquier color que quieras!\n\nUnta tu brocha en una lata de pintura hecha en el mezclador de pinturas y luego haz clic en un bloque para pintarlo.\n\nLos bloques de lienzo son perfectos para pintar, pero también puedes pintar unos cuantos bloques corrientes e incluso algunos de otros mods. También puedes colocar plantillas en los bloques y pintar sobre ellas.
-item.openblocks.paintbrush.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.unprepared_stencil.name=Plantilla en Blanco
 item.openblocks.unprepared_stencil.description=Las plantillas pueden colocarse sobre los bloques para luego pintarlas con una brocha!\n\nSe puede pintar un bloque usando múltiples plantillas y también puedes girarlas haciendo clic con la mano vacía.\n\nColoca una plantilla en blanco en una mesa de dibujo para crear diferentes estampados.
-item.openblocks.unprepared_stencil.video=http://www.youtube.com/watch?v=M8LVLw-d100
 
 item.openblocks.crane_backpack.name=Grúa Portatil
 item.openblocks.crane_backpack.description=En el mundo Minecraft "imán" es una palabra antigua para "¿Cómo funciona esto?".\n\nEsta particular pieza de gran equipamiento te permite coger y arrastrar monstruos, jugadores, objetos y bloques. Se puede controlar con control magnético.
-item.openblocks.crane_backpack.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.crane_control.name=Control de Grúa
 item.openblocks.crane_control.description=Este mando inalámbrico de alta tecnología se usa para controlar las grúas portatiles.\n\nClic derecho para subir, shift+clic-derecho para bajar y clic izquierdo para coger o soltar.\nLuces intermitentes señalan que algo está en el imán.
-item.openblocks.crane_control.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
 item.openblocks.stencil.name=Plantilla
 item.openblocks.crayon.name=Cera Mágica
