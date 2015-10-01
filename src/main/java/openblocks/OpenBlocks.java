@@ -7,6 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
@@ -15,6 +16,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import openblocks.common.*;
 import openblocks.common.block.*;
 import openblocks.common.entity.*;
@@ -471,6 +473,7 @@ public class OpenBlocks {
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
 		proxy.init();
 		proxy.registerRenderInformation();
+		registerOreDictionary();
 	}
 
 	@EventHandler
@@ -524,5 +527,10 @@ public class OpenBlocks {
 
 	public static String getModId() {
 		return OpenBlocks.class.getAnnotation(Mod.class).modid();
+	}
+
+	private static void registerOreDictionary() {
+		OreDictionary.registerOre("craftingTableWood", new ItemStack(net.minecraft.init.Blocks.crafting_table));
+		OreDictionary.registerOre("chestWood", new ItemStack(net.minecraft.init.Blocks.chest));
 	}
 }
