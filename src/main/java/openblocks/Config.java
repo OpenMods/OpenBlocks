@@ -315,11 +315,11 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.guide != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "grg", "gtg", "grg", 'g', "blockGlass", 't', Blocks.torch, 'r', Items.redstone));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.guide, "grg", "gtg", "grg", 'g', "blockGlass", 't', Blocks.torch, 'r', "dustRedstone"));
 		}
 
 		if (OpenBlocks.Blocks.builderGuide != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.builderGuide, "grg", "ete", "grg", 'g', "blockGlass", 't', Blocks.torch, 'r', Items.redstone, 'e', Items.ender_pearl));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.builderGuide, "grg", "ete", "grg", 'g', "blockGlass", 't', Blocks.torch, 'r', "dustRedstone", 'e', Items.ender_pearl));
 		}
 
 		if (OpenBlocks.Blocks.elevator != null) {
@@ -356,7 +356,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.cannon != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.cannon, " d ", " f ", "iri", 'd', Blocks.dispenser, 'f', Blocks.iron_bars, 'i', "ingotIron", 'r', Blocks.redstone_block));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.cannon, " d ", " f ", "iri", 'd', Blocks.dispenser, 'f', Blocks.iron_bars, 'i', "ingotIron", 'r', "blockRedstone"));
 		}
 
 		if (OpenBlocks.Blocks.vacuumHopper != null) {
@@ -436,7 +436,7 @@ public class Config {
 				ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(drop);
 				ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(drop);
 			}
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.donationStation, "ppp", "pcp", "ppp", 'p', Items.porkchop, 'c', Blocks.chest));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.donationStation, "ppp", "pcp", "ppp", 'p', Items.porkchop, 'c', "chestWood"));
 		}
 
 		if (OpenBlocks.Blocks.paintMixer != null) {
@@ -466,7 +466,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.drawingTable != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', "plankWood", 'c', Blocks.crafting_table, 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.drawingTable, "sks", "pcp", "ppp", 'p', "plankWood", 'c', "craftingTableWood", 's', MetasGeneric.unpreparedStencil.newItemStack(), 'k', MetasGeneric.sketchingPencil.newItemStack()));
 		}
 
 		if (OpenBlocks.Blocks.xpShower != null) {
@@ -490,7 +490,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.luggage != null) {
-			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.luggage, "sds", "scs", "sss", 's', "stickWood", 'd', "gemDiamond", 'c', Blocks.chest));
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.luggage, "sds", "scs", "sss", 's', "stickWood", 'd', "gemDiamond", 'c', "chestWood"));
 		}
 
 		if (OpenBlocks.Items.sonicGlasses != null) {
