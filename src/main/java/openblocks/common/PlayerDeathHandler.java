@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.api.GraveDropsEvent;
 import openblocks.api.GraveSpawnEvent;
 import openblocks.common.GameRuleManager.GameRule;
 import openblocks.common.PlayerInventoryStore.ExtrasFiller;
@@ -209,7 +210,7 @@ public class PlayerDeathHandler {
 			final Coord location = findLocation(world, player);
 
 			String gravestoneText = stiffId.getName();
-			GraveSpawnEvent evt = location == null
+			final GraveSpawnEvent evt = location == null
 					? new GraveSpawnEvent(player, loot, gravestoneText, cause)
 					: new GraveSpawnEvent(player, location.x, location.y, location.z, loot, gravestoneText, cause);
 
@@ -335,7 +336,7 @@ public class PlayerDeathHandler {
 
 		final List<EntityItem> drops = event.drops;
 		if (drops.isEmpty()) {
-			Log.warn("No drops from player '%s, grave will not be spawned'", player);
+			Log.warn("No drops from player '%s', grave will not be spawned'", player);
 			return;
 		}
 
@@ -346,11 +347,41 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		Log.debug("Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), drops.size());
+		final GraveDropsEvent dropsEvent = new GraveDropsEvent(player);
+		for (EntityItem drop : drops)
+			dropsEvent.addItem(drop);
 
-		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, drops));
+		if (MinecraftForge.EVENT_BUS.post(dropsEvent)) {
+			Log.warn("Grave drops event for player '%s' cancelled, grave will not be spawned'", player);
+			return;
+		}
+
 		drops.clear();
-		event.setCanceled(true);
+
+		final List<EntityItem> graveLoot = Lists.newArrayList();
+
+		for (GraveDropsEvent.ItemAction entry : dropsEvent.drops) {
+			switch (entry.action) {
+				case DELETE:
+					if (Config.debugGraves) Log.debug("Item %s is going to be deleted", entry.item);
+					break;
+				case DROP:
+					if (Config.debugGraves) Log.debug("Item %s is going to be dropped", entry.item);
+					drops.add(entry.item);
+					break;
+				default:
+				case STORE:
+					graveLoot.add(entry.item);
+			}
+		}
+
+		if (graveLoot.isEmpty()) {
+			Log.warn("No grave drops left for player '%s' cancelled, grave will not be spawned'", player);
+			return;
+		}
+
+		Log.debug("Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), graveLoot.size());
+		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, graveLoot));
 	}
 
 	private static void dumpDebugInfo(PlayerDropsEvent event) {
