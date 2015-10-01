@@ -1,6 +1,8 @@
 achievement.openblocks.droppedBrick=Упс!
 achievement.openblocks.droppedBrick.desc=К сожалению, это только что произошло...
 stat.openblocks.bricksDropped=Кирпичей сброшено
+achievement.openblocks.stackOverflow=Переполнение стека
+achievement.openblocks.stackOverflow.desc=Оно забито звёздами!
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Будьте глупым
@@ -96,6 +98,7 @@ openblocks.misc.grave_msg=%s (день: %.1f)
 openblocks.misc.cant_restore_player=Не удалось восстановить инвентарь для игрока %s
 openblocks.misc.cant_restore_inventory=Не удалось восстановить инвентарь
 openblocks.misc.cant_store=Не удалось сохранить инвентарь игрока %s
+openblocks.misc.invalid_sub_inventory=Не удалось восстановить под-инвентарь %s
 openblocks.misc.stored_inventory=Инвентарь игрока сохранён в %s
 openblocks.misc.restored_inventory=Восстановлен инвентарь для игрока %s
 openblocks.misc.invalid_index=Неверный индекс
@@ -114,7 +117,7 @@ openblocks.misc.pedometer.straigh_line_speed=Скорость по прямой:
 
 openblocks.misc.pedometer.last_check_distance=Расстояние от последней проверки: %s
 openblocks.misc.pedometer.last_check_speed=Скорость на последней проверке: %s
-openblocks.misc.pedometer.last_check_time=Время от последней проверки %d тиков
+openblocks.misc.pedometer.last_check_time=Время от последней проверки: %d тиков
 
 openblocks.misc.pedometer.total_time=Общее время: %d тиков
 
@@ -164,11 +167,16 @@ openblocks.turtle.magnet=Магнит
 tile.openblocks.elevator.name=Лифт
 tile.openblocks.elevator.description=Поставьте первый лифт, а через три или более блоков в высоту другой, между ними должно быть пустое пространство, и Вы сможете либо 'прыгнуть', чтобы подняться, либо 'присесть', чтобы спуститься. Лифты могут быть покрашены нажатием по ним красителем, однако, Вы можете телепортироваться только между лифтами одинакового цвета.
 
+tile.openblocks.elevator_rotating.name=Вращающийся лифт
+
 tile.openblocks.heal.name=Исцелитель
 tile.openblocks.heal.description=Исцеляющий блок - это блок только для творческого режима, который даёт небольшой лечебный эффект с течением времени.
 
 tile.openblocks.guide.name=Руководитель по строительству
-tile.openblocks.guide.description=Руководитель по строительству покажет Вам схему из призрачных блоков различных форм и размеров, что поможет Вам распланировать комнаты.\nВы можете нажать shift-ПКМ по нему, чтобы изменить форму, или Вы можете постукать по разным сторонам, чтобы увеличить или уменьшить размер.\nЕсли Вы в творческом режим, Вы можете поставить обсидиановый блок над ним, затем ударить его любим блоком, чтобы автоматически создать комнату нужного размера и формы.
+tile.openblocks.guide.description=Руководитель по строительству, как только получит сигнал красного камня, покажет Вам схему из призрачных блоков различных форм и размеров, что поможет Вам распланировать комнаты.\nИспользуйте кнопки для смены размеров и форм.\nЦвет маркеров может быть изменён путём применения красителя на центральный блок.
+
+tile.openblocks.builder_guide.name=Улучшенный руководитель по строительству
+tile.openblocks.builder_guide.description=Эта улучшенная версия руководителя по строительству не только отображает призрачные блоки, что делает строительство проще, но также позволяет разместить эти блоки. Просто нажмите по центральному блоку любым блоком!\nВ творческом режиме Вы можете поставить сверху блок обсидиана, затем ударьте по руководителю любым блоком, чтобы автоматически создать структуру по форме.
 
 tile.openblocks.ladder.name=Люк-лестница
 tile.openblocks.ladder.description=Люк-лестница исправляет эту досадную ошибку, когда Вы не можете до конца подняться по лестнице, если сверху люк. Люк-лестница действует, как люк и лестница, одновременно.
@@ -267,6 +275,9 @@ tile.openblocks.radio.description=Радио позволяет проигрыв
 
 tile.openblocks.xpshower.name=Насадка для потока опыта
 tile.openblocks.xpshower.description=Прикрепите её к резервуару с жидким опытом и она зальёт Вас опытом. Этот опыт может быть собран всасывателем опыта или коллектором MFR.
+
+tile.openblocks.scaffolding.name=Строительные леса
+tile.openblocks.scaffolding.description=Вы когда-нибудь хотели подниматься вверх, не оставляя некрасивые башни после себя? Ну, теперь Вы можете! Просто постройте башню из строительных лесов и она исчезнет автоматически, когда Вы закончите постройку.
 
 tile.openblocks.goldenegg.name=Золотое яйцо
 
