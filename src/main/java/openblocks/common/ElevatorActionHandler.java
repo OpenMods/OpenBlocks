@@ -104,7 +104,8 @@ public class ElevatorActionHandler {
 
 			if (doTeleport) {
 				if (result.rotation != PlayerRotation.NONE) player.rotationYaw = getYaw(result.rotation);
-				player.setPositionAndUpdate(x + 0.5, result.level + 1.1, z + 0.5);
+				if (Config.elevatorCenter) player.setPositionAndUpdate(x + 0.5, result.level + 1.1, z + 0.5);
+				else player.setPositionAndUpdate(player.posX, result.level + 1.1, player.posZ);
 				world.playSoundAtEntity(player, "openblocks:elevator.activate", 1, 1);
 			}
 		}
