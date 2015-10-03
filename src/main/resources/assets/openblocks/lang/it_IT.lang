@@ -125,6 +125,7 @@ openblocks.misc.shape=Forma: %s
 openblocks.misc.shape.sphere=Sfera
 openblocks.misc.shape.cylinder=Cilindro
 openblocks.misc.shape.cuboid=Cuboide
+openblocks.misc.shape.full_cuboid=Cuboide Intero
 openblocks.misc.shape.dome=Cupola
 openblocks.misc.shape.triangle=Triangolo
 openblocks.misc.shape.pentagon=Pentagono
@@ -173,7 +174,10 @@ tile.openblocks.heal.name=Curatore
 tile.openblocks.heal.description=Il blocco curatore è un blocco solo per la modalità creativa che rilascia un leggero effetto curatore man mano che passa il tempo.
 
 tile.openblocks.guide.name=Guida di Costruzione
-tile.openblocks.guide.description=La Guida di Costruzione mostrerà una "linea-guida" formata da blocchi fantasma di forme e dimensioni diverse che ti aiuterà a pianificare le varie stanze.\nPuoi fare shift-click sulla guida per modificare la forma o puoi cliccare i vari lati per aumentare o diminuire la dimensione.\nMentre sei in modalità creativa, puoi piazzare un blocco di ossidiana sopra alla guida, poi colpire la guida di costruzione con ogni blocco che vuoi per creare automaticamente la forma.
+tile.openblocks.guide.description=La Guida di Costruzione, una volta attivata con della pietrarossa, mosterà una "linea-guida" di blocchi fantasma di differenti forme e dimensioni che ti aiuteranno a pianificare il design delle stanze.\nUsa i pulsanti sensibili al tocco presenti sul blocco per modificare le dimensioni e le forme della "linea-guida".\nI colori degli indicatori possono essere modificati utilizzando della tintura sul blocco centrale.
+
+tile.openblocks.builder_guide.name=Guida di Costruzione Potenziata
+tile.openblocks.builder_guide.description=Questa versione potenziata della Guida di Costruzione non mostra solo dei blocchi fantasma per rendere la costruzione più facile, ma ti permette anche di piazzare veri e propri blocchi. Clicca semplicemente il blocco centrale con ogni gruppo di blocchi necessario!\nQuando sei nella modalità creative, puoi posizionare un blocco di ossidiana su di essa, poi colpire la guida di costruzione con ogni blocco che tu voglia per creare automaticamente la forma desiderata.
 
 tile.openblocks.ladder.name=Scala a Pioli Impassibile
 tile.openblocks.ladder.description=La scala a pioli impassibile risolve quello scocciante problema di dover saltare fuori da una botola in cima ad una scala a pioli. La scala a pioli impassibile funge sia da botola sia da scala a pioli allo stesso momento.
