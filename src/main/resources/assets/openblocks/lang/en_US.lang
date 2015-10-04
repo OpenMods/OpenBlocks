@@ -125,6 +125,7 @@ openblocks.misc.shape=Shape: %s
 openblocks.misc.shape.sphere=Sphere
 openblocks.misc.shape.cylinder=Cylinder
 openblocks.misc.shape.cuboid=Cuboid
+openblocks.misc.shape.full_cuboid=Full Cuboid
 openblocks.misc.shape.dome=Dome
 openblocks.misc.shape.triangle=Triangle
 openblocks.misc.shape.pentagon=Pentagon
