@@ -201,11 +201,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		Preconditions.checkArgument(w > 0, "Width must be > 0");
 		width.set(w);
 
-		if (mode.getValue().fixedRatio) {
-			height.set(w);
-			depth.set(w);
-		}
-
 		recreateShape();
 		sync();
 	}
@@ -214,11 +209,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public void setDepth(@Arg(name = "depth") int d) {
 		Preconditions.checkArgument(d > 0, "Depth must be > 0");
 		depth.set(d);
-
-		if (mode.getValue().fixedRatio) {
-			width.set(d);
-			depth.set(d);
-		}
 
 		recreateShape();
 		sync();
@@ -229,11 +219,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		Preconditions.checkArgument(h > 0, "Height must be > 0");
 		height.set(h);
 
-		if (mode.getValue().fixedRatio) {
-			width.set(h);
-			depth.set(h);
-		}
-
 		recreateShape();
 		sync();
 	}
@@ -241,12 +226,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	@ScriptCallable
 	public void setShape(@Arg(name = "shape") GuideShape shape) {
 		mode.set(shape);
-
-		if (mode.getValue().fixedRatio) {
-			final int width = getWidth();
-			height.set(width);
-			depth.set(width);
-		}
 
 		recreateShape();
 		sync();
@@ -318,12 +297,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public GuideShape switchMode() {
 		final GuideShape shape = mode.increment();
 
-		if (shape.fixedRatio) {
-			final int width = getWidth();
-			height.set(width);
-			depth.set(width);
-		}
-
 		recreateShape();
 		sync();
 		return shape;
@@ -336,31 +309,12 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
-	private void ensureFixedRatio() {
-		if (getCurrentMode().fixedRatio) {
-			int h = getHeight();
-			int w = getWidth();
-			int d = getDepth();
-			if (w != h && w != d) {
-				height.set(w);
-				depth.set(w);
-			} else if (h != w && h != d) {
-				depth.set(h);
-				width.set(h);
-			} else if (d != w && d != h) {
-				width.set(d);
-				height.set(d);
-			}
-		}
-	}
-
 	protected void notifyPlayer(EntityPlayer player) {
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_size", width.get(), height.get(), depth.get()));
 		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
 	private void afterDimensionsChange(EntityPlayer player) {
-		ensureFixedRatio();
 		recreateShape();
 
 		sync();

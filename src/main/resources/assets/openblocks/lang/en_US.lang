@@ -131,6 +131,8 @@ openblocks.misc.shape.triangle=Triangle
 openblocks.misc.shape.pentagon=Pentagon
 openblocks.misc.shape.hexagon=Hexagon
 openblocks.misc.shape.octagon=Octagon
+openblocks.misc.shape.axes=Axes
+openblocks.misc.shape.planes=Planes
 
 openblocks.misc.width=Width: %d
 openblocks.misc.height=Height: %d
