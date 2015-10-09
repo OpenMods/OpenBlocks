@@ -220,6 +220,10 @@ public class Config {
 			"Natura:Cloud"
 	};
 
+	@OnLineModifiable
+	@ConfigProperty(category = "cartographer", name = "reportInvalidRequest", comment = "Should invalid height map request be always reported")
+	public static boolean alwaysReportInvalidMapRequests = false;
+
 	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Music merchant id (-1 to disable)")
 	public static int radioVillagerId = 6156;
 

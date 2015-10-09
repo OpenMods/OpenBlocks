@@ -1,5 +1,9 @@
 package openblocks.common;
 
+import gnu.trove.procedure.TIntProcedure;
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -13,6 +17,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openmods.Log;
+import openmods.Mods;
 import openmods.config.properties.ConfigurationChange;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
@@ -24,6 +29,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -119,18 +125,27 @@ public class MapDataManager {
 	public void onMapDataRequest(MapDataRequestEvent evt) {
 		World world = evt.sender.worldObj;
 
-		MapDataResponseEvent response = new MapDataResponseEvent();
+		final MapDataResponseEvent response = new MapDataResponseEvent();
+		final TIntSet missingMaps = new TIntHashSet();
 		for (Integer mapId : evt.mapIds) {
-			HeightMapData map = getMapData(world, mapId);
-			if (map != null) {
-				response.maps.put(mapId, map);
-			} else {
-				if (mapId < 16) Log.debug("Player %s asked for non-existent map %d, possible NEI interaction (this is mostly harmless)", evt.sender, mapId);
-				else Log.info("Player %s asked for non-existent map %d", evt.sender, mapId);
-			}
+			final HeightMapData map = getMapData(world, mapId);
+			if (map != null && !map.isEmpty()) response.maps.put(mapId, map);
+			else missingMaps.add(mapId);
 		}
 
-		evt.reply(response);
+		if (!missingMaps.isEmpty()) {
+			boolean lessThan16 = missingMaps.forEach(new TIntProcedure() {
+				@Override
+				public boolean execute(int value) {
+					return value < 16;
+				}
+			});
+
+			// NEI asks for items with damage 0..15 and I can't block it via API
+			if (Config.alwaysReportInvalidMapRequests || !lessThan16 || !Loader.isModLoaded(Mods.NOTENOUGHITEMS)) Log.info("Player %s asked for non-existent maps %s", evt.sender, missingMaps.toString());
+		}
+
+		if (!evt.mapIds.isEmpty()) evt.reply(response);
 	}
 
 	@SubscribeEvent
