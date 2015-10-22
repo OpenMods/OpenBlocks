@@ -1,7 +1,5 @@
 package openblocks.common.block;
 
-import static openblocks.common.tileentity.TileEntityGuide.ShapeManipulator.*;
-
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -19,11 +17,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityGuide;
-import openblocks.common.tileentity.TileEntityGuide.ShapeManipulator;
 import openmods.api.ISelectionAware;
-import openmods.geometry.AabbUtils;
-import openmods.geometry.BlockTextureTransform;
-import openmods.geometry.BoundingBoxMap;
+import openmods.block.BlockRotationMode;
+import openmods.geometry.*;
 import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -37,40 +33,123 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	private static final double SELECTION_BOX_DEPTH = 0.01;
 
-	private static void addButton(BlockTextureTransform transform, BoundingBoxMap<ShapeManipulator> output, int left, int top, int right, int bottom, ShapeManipulator action) {
-		final BlockTextureTransform.WorldCoords min = transform.textureCoordsToWorldVec(left * P, top * P, -SELECTION_BOX_DEPTH);
-		final BlockTextureTransform.WorldCoords max = transform.textureCoordsToWorldVec(right * P, bottom * P, SELECTION_BOX_DEPTH);
-		output.addBox(AabbUtils.createAabb(min.x, min.y, min.z, max.x, max.y, max.z), action);
+	private interface IShapeManipulator {
+		public boolean activate(TileEntityGuide te, EntityPlayerMP player);
 	}
 
-	private static void createSide(BoundingBoxMap<BoundingBoxMap<ShapeManipulator>> output, ForgeDirection face, ShapeManipulator middleClick, ShapeManipulator horMinClick, ShapeManipulator horPlusClick, ShapeManipulator vertMinClick, ShapeManipulator vertPlusClick) {
-		final BlockTextureTransform transform = new BlockTextureTransform(face);
+	private static IShapeManipulator createHalfAxisIncrementer(ForgeDirection dir) {
+		final HalfAxis halfAxis = HalfAxis.fromDirection(dir);
 
-		final BoundingBoxMap<ShapeManipulator> subBoxes = BoundingBoxMap.create();
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				return te.incrementHalfAxis(halfAxis, player);
+			}
+		};
+	}
 
-		addButton(transform, subBoxes, 1, 6, 5, 10, horPlusClick);
-		addButton(transform, subBoxes, 6, 1, 10, 5, vertMinClick);
-		addButton(transform, subBoxes, 11, 6, 15, 10, horMinClick);
-		addButton(transform, subBoxes, 6, 11, 10, 15, vertPlusClick);
+	private static IShapeManipulator createHalfAxisDecrementer(ForgeDirection dir) {
+		final HalfAxis halfAxis = HalfAxis.fromDirection(dir);
 
-		addButton(transform, subBoxes, 6, 6, 10, 10, middleClick);
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				return te.decrementHalfAxis(halfAxis, player);
+			}
+		};
+	}
 
-		final BlockTextureTransform.WorldCoords overboxMin = transform.textureCoordsToWorldVec(P, P, -SELECTION_BOX_DEPTH);
-		final BlockTextureTransform.WorldCoords overboxMax = transform.textureCoordsToWorldVec(1 - P, 1 - P, SELECTION_BOX_DEPTH);
+	private static IShapeManipulator createRotationManipulator(ForgeDirection dir) {
+		if (dir == ForgeDirection.UP) {
+			return new IShapeManipulator() {
+				@Override
+				public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+					te.rotateCCW();
+					return true;
+				}
+			};
+		} else {
+			return new IShapeManipulator() {
+				@Override
+				public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+					te.rotateCW();
+					return true;
+				}
+			};
+		}
+	}
+
+	private static AxisAlignedBB addButton(ForgeDirection side, BlockTextureTransform transform, int left, int top, int width, int height) {
+		final BlockTextureTransform.WorldCoords min = transform.textureCoordsToWorldVec(side, left * P, top * P, -SELECTION_BOX_DEPTH);
+		final BlockTextureTransform.WorldCoords max = transform.textureCoordsToWorldVec(side, (left + width) * P, (top + height) * P, SELECTION_BOX_DEPTH);
+		return AabbUtils.createAabb(min.x, min.y, min.z, max.x, max.y, max.z);
+	}
+
+	private void createNSWESide(BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> output, ForgeDirection face) {
+		final BlockTextureTransform transform = getRotationMode().textureTransform;
+
+		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
+
+		final ForgeDirection right = face.getRotation(ForgeDirection.DOWN);
+		final ForgeDirection left = right.getOpposite();
+
+		final ForgeDirection top = ForgeDirection.UP;
+		final ForgeDirection bottom = ForgeDirection.DOWN;
+
+		subBoxes.addBox(addButton(face, transform, 4, 1, 3, 3), createHalfAxisDecrementer(top));
+		subBoxes.addBox(addButton(face, transform, 9, 1, 3, 3), createHalfAxisIncrementer(top));
+
+		subBoxes.addBox(addButton(face, transform, 12, 4, 3, 3), createHalfAxisDecrementer(right));
+		subBoxes.addBox(addButton(face, transform, 12, 9, 3, 3), createHalfAxisIncrementer(right));
+
+		subBoxes.addBox(addButton(face, transform, 9, 12, 3, 3), createHalfAxisDecrementer(bottom));
+		subBoxes.addBox(addButton(face, transform, 4, 12, 3, 3), createHalfAxisIncrementer(bottom));
+
+		subBoxes.addBox(addButton(face, transform, 1, 9, 3, 3), createHalfAxisDecrementer(left));
+		subBoxes.addBox(addButton(face, transform, 1, 4, 3, 3), createHalfAxisIncrementer(left));
+
+		final BlockTextureTransform.WorldCoords overboxMin = transform.textureCoordsToWorldVec(face, P, P, -SELECTION_BOX_DEPTH);
+		final BlockTextureTransform.WorldCoords overboxMax = transform.textureCoordsToWorldVec(face, 1 - P, 1 - P, SELECTION_BOX_DEPTH);
 		output.addBox(AabbUtils.createAabb(overboxMin.x, overboxMin.y, overboxMin.z, overboxMax.x, overboxMax.y, overboxMax.z), subBoxes);
-
 	}
 
-	private BoundingBoxMap<BoundingBoxMap<ShapeManipulator>> buttons = BoundingBoxMap.create();
+	private void createTopBottomSide(BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> output, ForgeDirection face) {
+		final BlockTextureTransform transform = getRotationMode().textureTransform;
+
+		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
+
+		subBoxes.addBox(addButton(face, transform, 1, 3, 4, 11), createRotationManipulator(face));
+		subBoxes.addBox(addButton(face, transform, 11, 3, 4, 11), createRotationManipulator(face.getOpposite()));
+
+		subBoxes.addBox(addButton(face, transform, 5, 3, 6, 3), new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				te.decrementMode(player);
+				return true;
+			}
+		});
+
+		subBoxes.addBox(addButton(face, transform, 5, 10, 6, 3), new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				te.incrementMode(player);
+				return true;
+			}
+		});
+
+		final BlockTextureTransform.WorldCoords overboxMin = transform.textureCoordsToWorldVec(face, P, P, -SELECTION_BOX_DEPTH);
+		final BlockTextureTransform.WorldCoords overboxMax = transform.textureCoordsToWorldVec(face, 1 - P, 1 - P, SELECTION_BOX_DEPTH);
+		output.addBox(AabbUtils.createAabb(overboxMin.x, overboxMin.y, overboxMin.z, overboxMax.x, overboxMax.y, overboxMax.z), subBoxes);
+	}
+
+	private BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> buttons = BoundingBoxMap.create();
 	{
-		createSide(buttons, ForgeDirection.NORTH, MIDDLE, X_MINUS, X_PLUS, Y_MINUS, Y_PLUS);
-		createSide(buttons, ForgeDirection.SOUTH, MIDDLE, X_MINUS, X_PLUS, Y_MINUS, Y_PLUS);
-
-		createSide(buttons, ForgeDirection.EAST, MIDDLE, Z_MINUS, Z_PLUS, Y_MINUS, Y_PLUS);
-		createSide(buttons, ForgeDirection.WEST, MIDDLE, Z_MINUS, Z_PLUS, Y_MINUS, Y_PLUS);
-
-		createSide(buttons, ForgeDirection.UP, MIDDLE, X_MINUS, X_PLUS, Z_MINUS, Z_PLUS);
-		createSide(buttons, ForgeDirection.DOWN, MIDDLE, X_MINUS, X_PLUS, Z_MINUS, Z_PLUS);
+		createTopBottomSide(buttons, ForgeDirection.UP);
+		createNSWESide(buttons, ForgeDirection.NORTH);
+		createNSWESide(buttons, ForgeDirection.SOUTH);
+		createNSWESide(buttons, ForgeDirection.EAST);
+		createNSWESide(buttons, ForgeDirection.WEST);
+		createTopBottomSide(buttons, ForgeDirection.DOWN);
 	}
 
 	public static class Icons {
@@ -80,6 +159,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	public BlockGuide() {
 		super(Material.rock);
 		setLightLevel(0.6f);
+		setRotationMode(BlockRotationMode.THREE_DIRECTIONS);
+		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
 	@Override
@@ -97,8 +178,14 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	@Override
 	public void registerBlockIcons(IIconRegister registry) {
 		Icons.marker = registry.registerIcon("openblocks:guide");
-		this.blockIcon = registry.registerIcon("openblocks:guide_new");
 		this.centerIcon = registry.registerIcon("openblocks:guide_center_normal");
+		setupCommonTextures(registry);
+	}
+
+	protected void setupCommonTextures(IIconRegister registry) {
+		setTextures(registry.registerIcon("openblocks:guide_top_new"), ForgeDirection.UP, ForgeDirection.DOWN);
+		setTextures(registry.registerIcon("openblocks:guide_side_new"), ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST);
+		setDefaultTexture(Icons.marker);
 	}
 
 	public IIcon getCenterTexture() {
@@ -126,10 +213,10 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		return selection != null? selection : super.getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
 
-	private Map.Entry<AxisAlignedBB, ShapeManipulator> findClickBox(Vec3 pos) {
-		final Entry<AxisAlignedBB, BoundingBoxMap<ShapeManipulator>> sideBox = buttons.findEntryContainingPoint(pos);
+	private Map.Entry<AxisAlignedBB, IShapeManipulator> findClickBox(Vec3 pos) {
+		final Entry<AxisAlignedBB, BoundingBoxMap<IShapeManipulator>> sideBox = buttons.findEntryContainingPoint(pos);
 		if (sideBox != null) {
-			final Entry<AxisAlignedBB, ShapeManipulator> subSideBox = sideBox.getValue().findEntryContainingPoint(pos);
+			final Entry<AxisAlignedBB, IShapeManipulator> subSideBox = sideBox.getValue().findEntryContainingPoint(pos);
 			if (subSideBox != null) return subSideBox;
 		}
 
@@ -148,10 +235,14 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	public boolean onSelected(World world, int x, int y, int z, DrawBlockHighlightEvent evt) {
 		if (areButtonsActive(evt.player)) {
 			final Vec3 hitVec = evt.target.hitVec;
-			final Vec3 relPos = hitVec.addVector(-x, -y, -z);
 
-			final Entry<AxisAlignedBB, ShapeManipulator> clickBox = findClickBox(relPos);
-			selection = clickBox != null? clickBox.getKey().getOffsetBoundingBox(x, y, z) : null;
+			final int metadata = world.getBlockMetadata(x, y, z);
+			final BlockRotationMode rotationMode = getRotationMode();
+			final ForgeDirection rotation = rotationMode.fromValue(metadata);
+			final Orientation orientation = rotationMode.getBlockOrientation(rotation);
+			final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.xCoord - x, hitVec.yCoord - y, hitVec.zCoord - z);
+			final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
+			selection = clickBox != null? BlockSpaceTransform.instance.mapBlockToWorld(orientation, clickBox.getKey()).offset(x, y, z) : null;
 		} else selection = null;
 
 		return false;
@@ -166,9 +257,13 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 				final EntityPlayerMP playerMP = (EntityPlayerMP)player;
 
 				if (areButtonsActive(playerMP)) {
-					final Vec3 relPos = Vec3.createVectorHelper(hitX, hitY, hitZ);
-					final Entry<AxisAlignedBB, ShapeManipulator> clickBox = findClickBox(relPos);
-					if (clickBox != null) return clickBox.getValue().activate(playerMP, guide);
+					final int metadata = world.getBlockMetadata(x, y, z);
+					final BlockRotationMode rotationMode = getRotationMode();
+					final ForgeDirection rotation = rotationMode.fromValue(metadata);
+					final Orientation orientation = rotationMode.getBlockOrientation(rotation);
+					final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitX, hitY, hitZ);
+					final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
+					if (clickBox != null) return clickBox.getValue().activate(guide, playerMP);
 				}
 
 				final ItemStack heldStack = playerMP.getHeldItem();

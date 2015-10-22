@@ -24,13 +24,17 @@ public class BlockGuideRenderer implements IBlockRenderer<BlockGuide> {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockGuide block, int modelId, RenderBlocks renderer) {
-		renderer.renderStandardBlock(block, x, y, z);
+		final boolean result = renderer.renderStandardBlock(block, x, y, z);
 
-		renderer.setOverrideBlockTexture(block.getCenterTexture());
-		renderer.setRenderBounds(6 * UNIT, 6 * UNIT, 6 * UNIT, 10 * UNIT, 10 * UNIT, 10 * UNIT);
-		renderer.renderStandardBlock(block, x, y, z);
+		if (result) {
+			renderer.setOverrideBlockTexture(block.getCenterTexture());
+			renderer.renderAllFaces = true;
+			renderer.setRenderBounds(6 * UNIT, 6 * UNIT, 6 * UNIT, 10 * UNIT, 10 * UNIT, 10 * UNIT);
+			renderer.renderStandardBlock(block, x, y, z);
+			renderer.renderAllFaces = false;
+			renderer.clearOverrideBlockTexture();
+		}
 
-		renderer.clearOverrideBlockTexture();
-		return true;
+		return result;
 	}
 }

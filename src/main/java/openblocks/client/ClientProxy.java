@@ -21,12 +21,12 @@ import openblocks.client.renderer.block.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.item.*;
 import openblocks.client.renderer.tileentity.*;
+import openblocks.common.block.BlockGuide;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
-import openmods.renderer.BlockRenderingHandler;
-import openmods.renderer.BlockRenderingValidator;
+import openmods.renderer.*;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -89,8 +89,12 @@ public class ClientProxy implements IOpenBlocksProxy {
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.tank, new BlockTankRenderer());
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.guide, new BlockGuideRenderer());
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.builderGuide, new BlockGuideRenderer());
+
+			{
+				final IBlockRenderer<BlockGuide> guideBlockRenderer = RotatedBlockRenderer.wrap(new BlockGuideRenderer());
+				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.guide, guideBlockRenderer);
+				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.builderGuide, guideBlockRenderer);
+			}
 
 			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
 		}

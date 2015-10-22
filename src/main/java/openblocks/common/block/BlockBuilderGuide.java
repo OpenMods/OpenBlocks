@@ -22,6 +22,7 @@ public class BlockBuilderGuide extends BlockGuide {
 	public void registerBlockIcons(IIconRegister registry) {
 		this.blockIcon = registry.registerIcon("openblocks:guide_new");
 		this.centerIcon = registry.registerIcon("openblocks:guide_center_ender");
+		setupCommonTextures(registry);
 	}
 
 	@Override

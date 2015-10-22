@@ -1,8 +1,6 @@
 package openblocks.common.tileentity;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,11 +8,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
 import openblocks.shapes.GuideShape;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
+import openmods.geometry.HalfAxis;
 import openmods.shapes.IShapeGenerator;
 import openmods.shapes.IShapeable;
 import openmods.sync.*;
@@ -23,13 +23,12 @@ import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.*;
 import openmods.utils.ColorUtils.ColorMeta;
 import openperipheral.api.adapter.Asynchronous;
-import openperipheral.api.adapter.method.Arg;
-import openperipheral.api.adapter.method.ReturnType;
-import openperipheral.api.adapter.method.ScriptCallable;
+import openperipheral.api.adapter.method.*;
+import openperipheral.api.struct.ScriptStruct;
+import openperipheral.api.struct.StructField;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
 
@@ -37,61 +36,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile {
-
-	public interface ShapeManipulator {
-		public boolean activate(EntityPlayerMP player, TileEntityGuide te);
-
-		public static final ShapeManipulator MIDDLE = new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player, TileEntityGuide te) {
-				te.switchMode(player);
-				return true;
-			}
-		};
-
-		public static final ShapeManipulator X_PLUS = new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player, TileEntityGuide te) {
-				return te.inc(player, te.width);
-			}
-		};
-
-		public static final ShapeManipulator X_MINUS = new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player, TileEntityGuide te) {
-				return te.dec(player, te.width);
-			}
-		};
-
-		public static final ShapeManipulator Y_PLUS = new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player, TileEntityGuide te) {
-				return te.inc(player, te.height);
-			}
-		};
-
-		public static final ShapeManipulator Y_MINUS = new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player, TileEntityGuide te) {
-				return te.dec(player, te.height);
-
-			}
-		};
-
-		public static final ShapeManipulator Z_PLUS = new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player, TileEntityGuide te) {
-				return te.inc(player, te.depth);
-			}
-		};
-
-		public static final ShapeManipulator Z_MINUS = new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player, TileEntityGuide te) {
-				return te.dec(player, te.depth);
-			}
-		};
-	}
 
 	private static final Comparator<Coord> COORD_COMPARATOR = new Comparator<Coord>() {
 		@Override
@@ -111,6 +55,15 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 				if (result != 0) return result;
 			}
 
+			{
+				// then sort by distance, far ones first
+				final double length1 = MathUtils.lengthSq(o1.x, o1.z);
+				final double length2 = MathUtils.lengthSq(o2.x, o2.z);
+
+				int result = Doubles.compare(length2, length1);
+				if (result != 0) return result;
+			}
+
 			// then sort by x and z to make all unique coordinates are included
 			{
 				int result = Ints.compare(o1.x, o2.x);
@@ -127,15 +80,25 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	private List<Coord> shape;
 	private List<Coord> previousShape;
 	private float timeSinceChange = 0;
+	private AxisAlignedBB renderAABB;
 
-	@StoreOnDrop(name = ItemGuide.TAG_WIDTH)
-	protected SyncableInt width;
+	@StoreOnDrop(name = ItemGuide.TAG_POS_X)
+	protected SyncableInt posX;
 
-	@StoreOnDrop(name = ItemGuide.TAG_HEIGHT)
-	protected SyncableInt height;
+	@StoreOnDrop(name = ItemGuide.TAG_POS_Y)
+	protected SyncableInt posY;
 
-	@StoreOnDrop(name = ItemGuide.TAG_DEPTH)
-	protected SyncableInt depth;
+	@StoreOnDrop(name = ItemGuide.TAG_POS_Z)
+	protected SyncableInt posZ;
+
+	@StoreOnDrop(name = ItemGuide.TAG_NEG_X)
+	protected SyncableInt negX;
+
+	@StoreOnDrop(name = ItemGuide.TAG_NEG_Y)
+	protected SyncableInt negY;
+
+	@StoreOnDrop(name = ItemGuide.TAG_NEG_Z)
+	protected SyncableInt negZ;
 
 	@StoreOnDrop(name = ItemGuide.TAG_SHAPE)
 	protected SyncableEnum<GuideShape> mode;
@@ -145,36 +108,125 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	protected SyncableBoolean active;
 
+	private enum Rotation {
+		R0, R90, R180, R270;
+	}
+
+	protected SyncableEnum<Rotation> rotation;
+
+	private interface ShapeManipulator {
+		public boolean activate(EntityPlayerMP player);
+	}
+
+	private final Map<HalfAxis, ShapeManipulator> axisIncrementers = Maps.newEnumMap(HalfAxis.class);
+
+	private final Map<HalfAxis, ShapeManipulator> axisDecrementers = Maps.newEnumMap(HalfAxis.class);
+
+	private void setupAxisManipulators(HalfAxis halfAxis, final SyncableInt v) {
+		axisIncrementers.put(halfAxis, new ShapeManipulator() {
+			@Override
+			public boolean activate(EntityPlayerMP player) {
+				v.modify(+1);
+				afterDimensionsChange(player);
+				return true;
+			}
+		});
+
+		axisDecrementers.put(halfAxis, new ShapeManipulator() {
+			@Override
+			public boolean activate(EntityPlayerMP player) {
+				if (v.get() > 0) {
+					v.modify(-1);
+					afterDimensionsChange(player);
+					return true;
+				}
+				return false;
+			}
+		});
+	}
+
 	public TileEntityGuide() {
 		syncMap.addUpdateListener(this);
+
+		setupAxisManipulators(HalfAxis.NEG_X, negX);
+		setupAxisManipulators(HalfAxis.NEG_Y, negY);
+		setupAxisManipulators(HalfAxis.NEG_Z, negZ);
+
+		setupAxisManipulators(HalfAxis.POS_X, posX);
+		setupAxisManipulators(HalfAxis.POS_Y, posY);
+		setupAxisManipulators(HalfAxis.POS_Z, posZ);
 	}
 
 	@Override
 	protected void createSyncedFields() {
-		width = new SyncableInt(8);
-		height = new SyncableInt(8);
-		depth = new SyncableInt(8);
+		posX = new SyncableInt(8);
+		posY = new SyncableInt(8);
+		posZ = new SyncableInt(8);
+
+		negX = new SyncableInt(8);
+		negY = new SyncableInt(8);
+		negZ = new SyncableInt(8);
+
+		rotation = SyncableEnum.create(Rotation.R0);
+
 		mode = SyncableEnum.create(GuideShape.Sphere);
 		color = new SyncableInt(0xFFFFFF);
 		active = new SyncableBoolean();
 	}
 
-	@Asynchronous
-	@ScriptCallable(returnTypes = ReturnType.NUMBER)
-	public int getWidth() {
-		return width.get();
+	@ScriptStruct
+	public static class ShapeSize {
+		@StructField
+		public int negX;
+		@StructField
+		public int negY;
+		@StructField
+		public int negZ;
+
+		@StructField
+		public int posX;
+		@StructField
+		public int posY;
+		@StructField
+		public int posZ;
 	}
 
 	@Asynchronous
-	@ScriptCallable(returnTypes = ReturnType.NUMBER)
-	public int getHeight() {
-		return height.get();
+	@ScriptCallable(returnTypes = ReturnType.TABLE)
+	public ShapeSize getSize() {
+		ShapeSize result = new ShapeSize();
+		result.negX = negX.get();
+		result.negY = negY.get();
+		result.negZ = negZ.get();
+
+		result.posX = posX.get();
+		result.posY = posY.get();
+		result.posZ = posZ.get();
+		return result;
 	}
 
-	@Asynchronous
-	@ScriptCallable(returnTypes = ReturnType.NUMBER)
-	public int getDepth() {
-		return depth.get();
+	@ScriptCallable
+	public void setSize(ShapeSize size) {
+		Preconditions.checkArgument(size.negX > 0, "NegX must be > 0");
+		negX.set(size.negX);
+
+		Preconditions.checkArgument(size.negY > 0, "NegY must be > 0");
+		negY.set(size.negY);
+
+		Preconditions.checkArgument(size.negZ > 0, "NegZ must be > 0");
+		negZ.set(size.negZ);
+
+		Preconditions.checkArgument(size.posX > 0, "PosX must be > 0");
+		posX.set(size.posX);
+
+		Preconditions.checkArgument(size.negY > 0, "PosY must be > 0");
+		posY.set(size.posY);
+
+		Preconditions.checkArgument(size.negZ > 0, "PosZ must be > 0");
+		posZ.set(size.posZ);
+
+		recreateShape();
+		sync();
 	}
 
 	@Asynchronous
@@ -197,33 +249,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	@ScriptCallable
-	public void setWidth(@Arg(name = "width") int w) {
-		Preconditions.checkArgument(w > 0, "Width must be > 0");
-		width.set(w);
-
-		recreateShape();
-		sync();
-	}
-
-	@ScriptCallable
-	public void setDepth(@Arg(name = "depth") int d) {
-		Preconditions.checkArgument(d > 0, "Depth must be > 0");
-		depth.set(d);
-
-		recreateShape();
-		sync();
-	}
-
-	@ScriptCallable
-	public void setHeight(@Arg(name = "height") int h) {
-		Preconditions.checkArgument(h > 0, "Height must be > 0");
-		height.set(h);
-
-		recreateShape();
-		sync();
-	}
-
-	@ScriptCallable
 	public void setShape(@Arg(name = "shape") GuideShape shape) {
 		mode.set(shape);
 
@@ -235,6 +260,50 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public void setColor(@Arg(name = "color") int color) {
 		this.color.set(color & 0x00FFFFFF);
 		sync();
+	}
+
+	public boolean incrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
+		final ShapeManipulator manipulator = axisIncrementers.get(axis);
+		return manipulator.activate(player);
+	}
+
+	public boolean decrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
+		final ShapeManipulator manipulator = axisDecrementers.get(axis);
+		return manipulator.activate(player);
+	}
+
+	public void rotateCW() {
+		rotation.decrement();
+		recreateShape();
+		sync();
+	}
+
+	public void rotateCCW() {
+		rotation.increment();
+		recreateShape();
+		sync();
+	}
+
+	public void incrementMode(EntityPlayer player) {
+		incrementMode();
+
+		displayModeChange(player);
+		displayBlockCount(player);
+	}
+
+	public void decrementMode(EntityPlayer player) {
+		decrementMode();
+
+		displayModeChange(player);
+		displayBlockCount(player);
+	}
+
+	private void displayModeChange(EntityPlayer player) {
+		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
+	}
+
+	private void displayBlockCount(EntityPlayer player) {
+		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
 	public boolean shouldRender() {
@@ -256,20 +325,87 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	private void recreateShape() {
 		previousShape = shape;
-		shape = generateShape(getCurrentMode().generator, getWidth(), getHeight(), getDepth());
+		shape = generateShape();
+		renderAABB = null;
 	}
 
-	private static List<Coord> generateShape(IShapeGenerator generator, int width, int height, int depth) {
-		final Set<Coord> result = Sets.newTreeSet(COORD_COMPARATOR);
+	private List<Coord> generateShape() {
+		final IShapeGenerator generator = getCurrentMode().generator;
 
-		generator.generateShape(width, height, depth, new IShapeable() {
+		final Set<Coord> uniqueResults = Sets.newHashSet();
+		final IShapeable collector = new IShapeable() {
 			@Override
 			public void setBlock(int x, int y, int z) {
-				result.add(new Coord(x, y, z));
+				uniqueResults.add(new Coord(x, y, z));
 			}
-		});
+		};
+		generator.generateShape(-negX.get(), -negY.get(), -negZ.get(), posX.get(), posY.get(), posZ.get(), collector);
 
-		return ImmutableList.copyOf(result);
+		final List<Coord> sortedResults = Lists.newArrayList(uniqueResults);
+		Collections.sort(sortedResults, COORD_COMPARATOR);
+
+		final ForgeDirection y = getRotation();
+		final ForgeDirection x = getXDirection(y, rotation.get());
+		if (x == null) return ImmutableList.copyOf(sortedResults);
+
+		final ForgeDirection z = y.getRotation(x);
+
+		final List<Coord> rotatedResult = Lists.newArrayList();
+
+		for (Coord c : sortedResults) {
+			final int tx = x.offsetX * c.x + y.offsetX * c.y + z.offsetX * c.z;
+			final int ty = x.offsetY * c.x + y.offsetY * c.y + z.offsetY * c.z;
+			final int tz = x.offsetZ * c.x + y.offsetZ * c.y + z.offsetZ * c.z;
+
+			rotatedResult.add(new Coord(tx, ty, tz));
+		}
+
+		return ImmutableList.copyOf(rotatedResult);
+	}
+
+	private static ForgeDirection getXDirection(ForgeDirection y, Rotation rotation) {
+		switch (y) {
+			case DOWN:
+			case UP:
+				switch (rotation) {
+					case R0:
+						return ForgeDirection.WEST;
+					case R90:
+						return ForgeDirection.NORTH;
+					case R180:
+						return ForgeDirection.EAST;
+					case R270:
+						return ForgeDirection.SOUTH;
+				}
+			case EAST:
+			case WEST:
+				switch (rotation) {
+					case R0:
+						return ForgeDirection.DOWN;
+					case R90:
+						return ForgeDirection.NORTH;
+					case R180:
+						return ForgeDirection.UP;
+					case R270:
+						return ForgeDirection.SOUTH;
+				}
+			case NORTH:
+			case SOUTH:
+				switch (rotation) {
+					case R0:
+						return ForgeDirection.UP;
+					case R90:
+						return ForgeDirection.WEST;
+					case R180:
+						return ForgeDirection.DOWN;
+					case R270:
+						return ForgeDirection.EAST;
+				}
+			default:
+				break;
+		}
+
+		return null;
 	}
 
 	public List<Coord> getShape() {
@@ -281,10 +417,36 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	@Override
+	public void updateContainingBlockInfo() {
+		super.updateContainingBlockInfo();
+		// remote world will be updated by desctiption packet from block rotate
+		if (!worldObj.isRemote) recreateShape();
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		AxisAlignedBB box = super.getRenderBoundingBox();
-		return box.expand(getWidth(), getHeight(), getDepth());
+		if (renderAABB == null) renderAABB = createRenderAABB();
+		return renderAABB.copy();
+	}
+
+	private AxisAlignedBB createRenderAABB() {
+		final AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+
+		if (shape != null) {
+			for (Coord c : shape) {
+				if (box.maxX < c.x) box.maxX = c.x;
+				if (box.maxY < c.y) box.maxY = c.y;
+				if (box.maxZ < c.z) box.maxZ = c.z;
+
+				if (box.minX > c.x) box.minX = c.x;
+				if (box.minY > c.y) box.minY = c.y;
+				if (box.minZ > c.z) box.minZ = c.z;
+			}
+
+		}
+
+		return box.offset(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -293,8 +455,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return Config.guideRenderRangeSq;
 	}
 
-	@ScriptCallable(returnTypes = ReturnType.STRING, name = "cycleShape")
-	public GuideShape switchMode() {
+	@Alias("cycleShape")
+	@ScriptCallable(returnTypes = ReturnType.STRING)
+	public GuideShape incrementMode() {
 		final GuideShape shape = mode.increment();
 
 		recreateShape();
@@ -302,16 +465,20 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return shape;
 	}
 
-	private void switchMode(EntityPlayer player) {
-		switchMode();
+	@ScriptCallable(returnTypes = ReturnType.STRING)
+	public GuideShape decrementMode() {
+		final GuideShape shape = mode.decrement();
 
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
+		recreateShape();
+		sync();
+		return shape;
 	}
 
-	protected void notifyPlayer(EntityPlayer player) {
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_size", width.get(), height.get(), depth.get()));
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
+	private void notifyPlayer(EntityPlayer player) {
+		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_box_size",
+				-negX.get(), -negY.get(), -negZ.get(),
+				+posX.get(), +posY.get(), +posZ.get()));
+		displayBlockCount(player);
 	}
 
 	private void afterDimensionsChange(EntityPlayer player) {
@@ -321,25 +488,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		notifyPlayer(player);
 	}
 
-	private boolean inc(EntityPlayer player, SyncableInt v) {
-		v.modify(+1);
-		afterDimensionsChange(player);
-		return true;
-	}
-
-	private boolean dec(EntityPlayer player, SyncableInt v) {
-		if (v.get() > 0) {
-			v.modify(-1);
-			afterDimensionsChange(player);
-			return true;
-		}
-
-		return false;
-	}
-
 	@Override
 	public void onSync(Set<ISyncableObject> changes) {
-		if (changes.contains(depth) || changes.contains(height) || changes.contains(width) || changes.contains(mode)) {
+		if (changes.contains(negX) || changes.contains(negY) || changes.contains(negZ) ||
+				changes.contains(posX) || changes.contains(posY) || changes.contains(posZ) ||
+				changes.contains(mode) || changes.contains(rotation)) {
 			recreateShape();
 			timeSinceChange = 0;
 		}

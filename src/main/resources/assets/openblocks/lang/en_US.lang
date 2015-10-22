@@ -86,6 +86,7 @@ openblocks.misc.selected_cannon=Selected cannon for targeting
 openblocks.misc.pointed_cannon=Pointed cannon at %s, %s, %s
 openblocks.misc.change_mode=Changing to %s mode
 openblocks.misc.change_size=Changing size to %sx%sx%s
+openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d)
 openblocks.misc.total_blocks=Total block count: %d
 openblocks.misc.get_witched=Get witched!
 openblocks.misc.page=Page %d of %d
@@ -134,6 +135,7 @@ openblocks.misc.shape.octagon=Octagon
 openblocks.misc.shape.axes=Axes
 openblocks.misc.shape.planes=Planes
 
+openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d)
 openblocks.misc.width=Width: %d
 openblocks.misc.height=Height: %d
 openblocks.misc.depth=Depth: %d
