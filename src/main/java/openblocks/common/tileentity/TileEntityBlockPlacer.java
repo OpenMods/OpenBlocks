@@ -69,7 +69,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		final ItemStack stack = inventory.getStackInSlot(slotId);
 		if (stack == null || stack.stackSize <= 0) return;
 
-		final ForgeDirection direction = getRotation();
+		final ForgeDirection direction = getOrientation().up();
 		final int x = xCoord + direction.offsetX;
 		final int y = yCoord + direction.offsetY;
 		final int z = zCoord + direction.offsetZ;

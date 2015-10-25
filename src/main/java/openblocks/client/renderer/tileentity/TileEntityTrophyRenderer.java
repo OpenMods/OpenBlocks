@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openmods.utils.BlockUtils;
@@ -22,8 +21,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 
 		Trophy type = trophy.getTrophy();
 		if (type != null) {
-			ForgeDirection rotation = trophy.getRotation();
-			float angle = BlockUtils.getRotationFromDirection(rotation);
+			float angle = BlockUtils.getRotationFromOrientation(trophy.getOrientation());
 			renderTrophy(type, x + 0.5, y, z + 0.5, angle);
 		}
 	}

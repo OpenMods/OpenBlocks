@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.BlockSpaceTransform;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
@@ -60,9 +62,9 @@ public class BlockRopeLadder extends OpenBlock {
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List list, Entity entity) {
 		if (entity instanceof EntityLivingBase) {
 			int meta = world.getBlockMetadata(x, y, z);
-			ForgeDirection rotation = getRotation(meta);
+			Orientation orientation = getOrientation(meta);
 			ForgeDirection playerRotation = BlockUtils.get2dOrientation((EntityLivingBase)entity);
-			if (rotation == playerRotation) {
+			if (orientation.south() == playerRotation) {
 				super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
 			}
 		} else {
@@ -89,27 +91,11 @@ public class BlockRopeLadder extends OpenBlock {
 	}
 
 	private void getBlockBounds(IBlockAccess world, int x, int y, int z, float thickness) {
-		int meta = world.getBlockMetadata(x, y, z);
-
-		ForgeDirection direction = getRotation(meta);
-
-		switch (direction) {
-			case EAST:
-				setBlockBounds(1 - thickness, 0, 0, 1, 1, 1);
-				break;
-			case WEST:
-				setBlockBounds(0, 0, 0, thickness, 1, 1);
-				break;
-			case NORTH:
-				setBlockBounds(0, 0, 0, 1, 1, thickness);
-				break;
-			case SOUTH:
-				setBlockBounds(0, 0, 1 - thickness, 1, 1, 1);
-				break;
-			default:
-				setBlockBounds(0, 0, 1 - thickness, 1, 1, 1);
-				break;
-		}
+		final int meta = world.getBlockMetadata(x, y, z);
+		final Orientation orientation = getOrientation(meta);
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0, 0.0, 1.0 - thickness, 1.0, 1.0, 1.0);
+		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
+		setBlockBounds(rotatedAabb);
 	}
 
 	@Override
@@ -119,8 +105,8 @@ public class BlockRopeLadder extends OpenBlock {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
-		int meta = world.getBlockMetadata(x, y, z);
-		ForgeDirection dir = getRotation(meta);
+		final int meta = world.getBlockMetadata(x, y, z);
+		final ForgeDirection dir = getOrientation(meta).south();
 
 		if (world.isAirBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)) {
 			if (world.getBlock(x, y + 1, z) != this) world.setBlockToAir(x, y, z);
@@ -138,11 +124,11 @@ public class BlockRopeLadder extends OpenBlock {
 	}
 
 	@Override
-	public void afterBlockPlaced(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, ForgeDirection blockDir, float hitX, float hitY, float hitZ, int itemMeta) {
-		super.afterBlockPlaced(world, player, stack, x, y, z, side, blockDir, hitX, hitY, hitZ, itemMeta);
-		final int blockMeta = blockRotationMode.toValue(blockDir);
+	public void afterBlockPlaced(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, Orientation orientation, float hitX, float hitY, float hitZ, int itemMeta) {
+		super.afterBlockPlaced(world, player, stack, x, y, z, side, orientation, hitX, hitY, hitZ, itemMeta);
+		final int blockMeta = blockRotationMode.toValue(orientation);
 		while (--y > 0 && stack.stackSize > 1) {
-			if (world.isAirBlock(x, y, z) && canPlaceBlockOnSide(world, x, y, z, blockDir)) {
+			if (world.isAirBlock(x, y, z)) {
 				world.setBlock(x, y, z, this, blockMeta, BlockNotifyFlags.ALL);
 				stack.stackSize--;
 			}

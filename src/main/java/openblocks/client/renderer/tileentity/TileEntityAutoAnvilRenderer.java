@@ -20,7 +20,7 @@ public class TileEntityAutoAnvilRenderer extends TileEntitySpecialRenderer {
 		TileEntityAutoAnvil autoanvil = (TileEntityAutoAnvil)tileentity;
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(-BlockUtils.getRotationFromDirection(autoanvil.getRotation()), 0, 1, 0);
+		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(autoanvil.getOrientation()), 0, 1, 0);
 		GL11.glPushMatrix();
 		bindTexture(texture);
 		model.render();

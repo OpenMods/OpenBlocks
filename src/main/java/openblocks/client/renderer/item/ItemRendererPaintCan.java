@@ -37,10 +37,10 @@ public class ItemRendererPaintCan implements IItemRenderer {
 			int color = ItemPaintCan.getColorFromStack(itemstack);
 
 			OpenBlocks.Blocks.paintCan.renderPass = 0;
-			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, 0, 0xFFFFFF);
 
 			OpenBlocks.Blocks.paintCan.renderPass = 1;
-			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, color, secondPassEnabledSides);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, 0, color, secondPassEnabledSides);
 
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}

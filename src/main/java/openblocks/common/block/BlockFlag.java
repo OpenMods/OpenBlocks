@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.Orientation;
 import openmods.utils.ColorUtils.RGB;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,7 +43,7 @@ public class BlockFlag extends OpenBlock {
 		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
-		setInventoryRenderRotation(ForgeDirection.DOWN);
+		setInventoryRenderOrientation(Orientation.XN_YN);
 		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
@@ -65,7 +66,7 @@ public class BlockFlag extends OpenBlock {
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		TileEntityFlag flag = getTileEntity(world, x, y, z, TileEntityFlag.class);
 		if (flag != null) {
-			ForgeDirection onSurface = flag.getSurfaceDirection();
+			ForgeDirection onSurface = flag.getOrientation().down();
 			if (onSurface == ForgeDirection.DOWN) {
 				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
 			} else if (onSurface == ForgeDirection.EAST || onSurface == ForgeDirection.WEST) {
@@ -77,20 +78,33 @@ public class BlockFlag extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlock(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection sideDir, ForgeDirection blockDirection, float hitX, float hitY, float hitZ, int newMeta) {
-		if (blockDirection == ForgeDirection.UP) return false;
-		if (blockDirection == ForgeDirection.DOWN) {
+	public boolean canPlaceBlock(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection sideDir, Orientation orientation, float hitX, float hitY, float hitZ, int newMeta) {
+		return checkBlock(world, x, y, z, orientation);
+	}
+
+	private boolean checkBlock(World world, int x, int y, int z, Orientation orientation) {
+		if (orientation == Orientation.XN_YN) return false;
+		if (orientation == Orientation.XP_YP) {
 			Block belowBlock = world.getBlock(x, y - 1, z);
 			if (belowBlock != null) {
 				if (belowBlock == Blocks.fence) return true;
 				if (belowBlock == this) {
 					TileEntityFlag flag = getTileEntity(world, x, y - 1, z, TileEntityFlag.class);
-					if (flag != null && flag.getSurfaceDirection().equals(ForgeDirection.DOWN)) return true;
+					if (flag != null && flag.getOrientation().down() == ForgeDirection.DOWN) return true;
 				}
 			}
 		}
 
-		return isNeighborBlockSolid(world, x, y, z, blockDirection);
+		return isNeighborBlockSolid(world, x, y, z, orientation.down());
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
+		super.onNeighborBlockChange(world, x, y, z, neighbour);
+
+		final int metadata = world.getBlockMetadata(x, y, z);
+		final Orientation orientation = getOrientation(metadata);
+		if (!checkBlock(world, x, y, z, orientation)) world.func_147480_a(x, y, z, true);
 	}
 
 	@Override

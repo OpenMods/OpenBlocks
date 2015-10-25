@@ -3,11 +3,14 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityBigButton;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.BlockSpaceTransform;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -20,8 +23,8 @@ public class BlockBigButton extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlock(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection sideDir, ForgeDirection blockDirection, float hitX, float hitY, float hitZ, int newMeta) {
-		return super.canPlaceBlock(world, player, stack, x, y, z, sideDir, blockDirection, hitX, hitY, hitZ, newMeta) && isNeighborBlockSolid(world, x, y, z, blockDirection);
+	public boolean canPlaceBlock(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection sideDir, Orientation blockDirection, float hitX, float hitY, float hitZ, int newMeta) {
+		return super.canPlaceBlock(world, player, stack, x, y, z, sideDir, blockDirection, hitX, hitY, hitZ, newMeta) && isNeighborBlockSolid(world, x, y, z, blockDirection.south());
 	}
 
 	@Override
@@ -46,26 +49,12 @@ public class BlockBigButton extends OpenBlock {
 
 		if (tile == null) { return; }
 
-		ForgeDirection direction = tile.getRotation();
-
 		boolean pressed = tile.isButtonActive();
+		final Orientation orientation = tile.getOrientation();
 
-		switch (direction) {
-			case EAST:
-				setBlockBounds(pressed? 0.9375f : 0.875f, 0.0625f, 0.0625f, 1.0f, 0.9375f, 0.9375f);
-				break;
-			case WEST:
-				setBlockBounds(0, 0.0625f, 0.0625f, pressed? 0.0625f : 0.125f, 0.9375f, 0.9375f);
-				break;
-			case NORTH:
-				setBlockBounds(0.0625f, 0.0625f, 0, 0.9375f, 0.9375f, pressed? 0.0625f : 0.125f);
-				break;
-			case SOUTH:
-				setBlockBounds(0.0625f, 0.0625f, pressed? 0.9375f : 0.875f, 0.9375f, 0.9375f, 1f);
-				break;
-			default:
-				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		}
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0625, 0.0625, pressed? 0.9375 : 0.8750, 0.9375, 0.9375, 1.0);
+		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
+		setBlockBounds(rotatedAabb);
 	}
 
 	@Override
@@ -88,7 +77,7 @@ public class BlockBigButton extends OpenBlock {
 	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side) {
 		ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
 		TileEntityBigButton button = getTileEntity(world, x, y, z, TileEntityBigButton.class);
-		return (button != null && direction == button.getRotation() && button.isButtonActive())? 15 : 0;
+		return (button != null && direction == button.getOrientation().south() && button.isButtonActive())? 15 : 0;
 	}
 
 	@Override

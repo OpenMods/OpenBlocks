@@ -2,8 +2,8 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -13,7 +13,7 @@ public class BlockAutoAnvil extends OpenBlock {
 		super(Material.anvil);
 		setStepSound(soundTypeAnvil);
 		setRotationMode(BlockRotationMode.TWO_DIRECTIONS);
-		setInventoryRenderRotation(ForgeDirection.NORTH);
+		setInventoryRenderOrientation(Orientation.ZN_YP);
 		setRenderMode(RenderMode.TESR_ONLY);
 	}
 

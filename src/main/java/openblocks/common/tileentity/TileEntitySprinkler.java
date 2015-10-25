@@ -124,7 +124,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			final int fillFactor = SPRINKER_MOD[particleSetting];
 
 			if ((ticks % fillFactor) != 0) return;
-			final ForgeDirection blockYawRotation = getRotation();
+			final ForgeDirection blockYawRotation = getOrientation().north();
 			final double nozzleAngle = getSprayDirection();
 			final double sprayForwardVelocity = Math.sin(Math.toRadians(nozzleAngle * 25));
 

@@ -9,7 +9,6 @@ import openblocks.OpenBlocks;
 import openblocks.common.block.BlockFlag;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
-import openmods.api.ISurfaceAttachment;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
@@ -18,7 +17,7 @@ import openmods.utils.ColorUtils.RGB;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachment, IPlaceAwareTile, IActivateAwareTile {
+public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
 
 	private SyncableFloat angle;
 	private SyncableByte colorIndex;
@@ -52,11 +51,6 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 		return BlockFlag.COLORS[colorIndex.get() & 0xF];
 	}
 
-	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return getRotation();
-	}
-
 	public float getAngle() {
 		return angle.get();
 	}
@@ -65,7 +59,7 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (player != null && player.isSneaking()) { return true; }
 		if (!worldObj.isRemote) {
-			if (getSurfaceDirection() == ForgeDirection.DOWN) {
+			if (getOrientation().down() == ForgeDirection.DOWN) {
 				angle.set(angle.get() + 10f);
 				sync();
 				return false;
@@ -77,7 +71,7 @@ public class TileEntityFlag extends SyncedTileEntity implements ISurfaceAttachme
 	@Override
 	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
 		float ang = player.rotationYawHead;
-		ForgeDirection rotation = getRotation();
+		ForgeDirection rotation = getOrientation().up();
 		if (rotation != ForgeDirection.DOWN) {
 			ang = -BlockUtils.getRotationFromDirection(side.getOpposite());
 		}

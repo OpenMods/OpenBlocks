@@ -69,7 +69,7 @@ public class BlockElevatorRotating extends OpenBlock implements IElevatorBlock {
 	@Override
 	public PlayerRotation getRotation(World world, int x, int y, int z) {
 		final int meta = world.getBlockMetadata(x, y, z);
-		final ForgeDirection rot = getRotation(meta);
+		final ForgeDirection rot = getOrientation(meta).north();
 		switch (rot) {
 			case NORTH:
 				return PlayerRotation.NORTH;

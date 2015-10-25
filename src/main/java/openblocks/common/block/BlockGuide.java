@@ -238,8 +238,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 			final int metadata = world.getBlockMetadata(x, y, z);
 			final BlockRotationMode rotationMode = getRotationMode();
-			final ForgeDirection rotation = rotationMode.fromValue(metadata);
-			final Orientation orientation = rotationMode.getBlockOrientation(rotation);
+			final Orientation orientation = rotationMode.fromValue(metadata);
 			final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.xCoord - x, hitVec.yCoord - y, hitVec.zCoord - z);
 			final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
 			selection = clickBox != null? BlockSpaceTransform.instance.mapBlockToWorld(orientation, clickBox.getKey()).offset(x, y, z) : null;
@@ -259,8 +258,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 				if (areButtonsActive(playerMP)) {
 					final int metadata = world.getBlockMetadata(x, y, z);
 					final BlockRotationMode rotationMode = getRotationMode();
-					final ForgeDirection rotation = rotationMode.fromValue(metadata);
-					final Orientation orientation = rotationMode.getBlockOrientation(rotation);
+					final Orientation orientation = rotationMode.fromValue(metadata);
 					final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitX, hitY, hitZ);
 					final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
 					if (clickBox != null) return clickBox.getValue().activate(guide, playerMP);

@@ -29,7 +29,7 @@ public class BlockRopeLadderRenderer implements IBlockRenderer<BlockRopeLadder> 
 		final double vp = icon.getMaxV();
 
 		int meta = world.getBlockMetadata(x, y, z);
-		ForgeDirection dir = block.getRotation(meta);
+		ForgeDirection dir = block.getOrientation(meta).south();
 
 		float d = BlockRopeLadder.RENDER_THICKNESS;
 		switch (dir) {

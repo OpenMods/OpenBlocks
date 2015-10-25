@@ -2,7 +2,6 @@ package openblocks.client.renderer.block;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.block.BlockGuide;
 import openmods.renderer.IBlockRenderer;
 import openmods.utils.render.RenderUtils;
@@ -15,11 +14,11 @@ public class BlockGuideRenderer implements IBlockRenderer<BlockGuide> {
 	public void renderInventoryBlock(BlockGuide block, int metadata, int modelID, RenderBlocks renderer) {
 		renderer.setOverrideBlockTexture(block.getCenterTexture());
 		renderer.setRenderBounds(6 * UNIT, 6 * UNIT, 6 * UNIT, 10 * UNIT, 10 * UNIT, 10 * UNIT);
-		RenderUtils.renderInventoryBlockNoBounds(renderer, block, ForgeDirection.SOUTH);
+		RenderUtils.renderInventoryBlockNoBounds(renderer, block, 0);
 
 		renderer.clearOverrideBlockTexture();
 
-		RenderUtils.renderInventoryBlock(renderer, block, ForgeDirection.SOUTH);
+		RenderUtils.renderInventoryBlock(renderer, block, 0);
 	}
 
 	@Override

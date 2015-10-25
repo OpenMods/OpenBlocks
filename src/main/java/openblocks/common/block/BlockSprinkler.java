@@ -7,6 +7,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.BlockSpaceTransform;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -39,12 +41,10 @@ public class BlockSprinkler extends OpenBlock {
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		TileEntitySprinkler sprinkler = getTileEntity(world, x, y, z, TileEntitySprinkler.class);
 		if (sprinkler != null) {
-			if (sprinkler.getRotation() == ForgeDirection.EAST
-					|| sprinkler.getRotation() == ForgeDirection.WEST) {
-				setBlockBounds(0, 0, 0.3f, 1f, 0.3f, 0.7f);
-			} else {
-				setBlockBounds(0.3f, 0, 0, 0.7f, 0.3f, 1f);
-			}
+			final Orientation orientation = sprinkler.getOrientation();
+			final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.3, 0.0, 0.0, 0.7, 0.3, 1.0);
+			final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
+			setBlockBounds(rotatedAabb);
 		}
 	}
 

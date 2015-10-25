@@ -4,9 +4,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityXPShower;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.BlockSpaceTransform;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,32 +41,18 @@ public class BlockXPShower extends OpenBlock {
 	}
 
 	@Override
-	public void setBoundsBasedOnRotation(ForgeDirection direction) {
-		float min = 0.4375f;
-		float max = 0.5625f;
-		switch (direction) {
-			case EAST:
-				setBlockBounds(min, min, min, 1f, max, max);
-				break;
-			case WEST:
-				setBlockBounds(0f, min, min, max, max, max);
-				break;
-			case NORTH:
-				setBlockBounds(min, min, 0f, max, max, max);
-				break;
-			default:
-			case SOUTH:
-				setBlockBounds(min, min, min, max, max, 1f);
-				break;
-		}
+	public void setBoundsBasedOnOrientation(Orientation orientation) {
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(7.0 / 16.0, 7.0 / 16.0, 7.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0, 16.0 / 16.0);
+		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
+		setBlockBounds(rotatedAabb);
 	}
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		TileEntityXPShower tile = getTileEntity(world, x, y, z, TileEntityXPShower.class);
 		if (tile != null) {
-			ForgeDirection direction = tile.getRotation();
-			setBoundsBasedOnRotation(direction);
+			Orientation orientation = tile.getOrientation();
+			setBoundsBasedOnOrientation(orientation);
 		}
 
 	}

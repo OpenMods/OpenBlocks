@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
@@ -25,7 +24,7 @@ public class BlockCanvasRenderer implements IBlockRenderer<BlockCanvas> {
 	public void renderInventoryBlock(BlockCanvas block, int metadata, int modelID, RenderBlocks renderer) {
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-		RenderUtils.renderInventoryBlock(renderer, block, ForgeDirection.EAST);
+		RenderUtils.renderInventoryBlock(renderer, block, 0);
 	}
 
 	@Override

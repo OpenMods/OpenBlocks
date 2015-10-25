@@ -344,7 +344,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		final List<Coord> sortedResults = Lists.newArrayList(uniqueResults);
 		Collections.sort(sortedResults, COORD_COMPARATOR);
 
-		final ForgeDirection y = getRotation();
+		final ForgeDirection y = getOrientation().north();
 		final ForgeDirection x = getXDirection(y, rotation.get());
 		if (x == null) return ImmutableList.copyOf(sortedResults);
 

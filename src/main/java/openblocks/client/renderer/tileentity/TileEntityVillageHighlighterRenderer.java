@@ -73,7 +73,7 @@ public class TileEntityVillageHighlighterRenderer extends
 		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(-BlockUtils.getRotationFromDirection(villagehighlighter.getRotation()), 0, 1, 0);
+		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(villagehighlighter.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render(villagehighlighter, f);
 		GL11.glPopMatrix();

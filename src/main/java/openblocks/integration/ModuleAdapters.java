@@ -1,7 +1,6 @@
 package openblocks.integration;
 
 import static openmods.integration.Conditions.modLoaded;
-import openblocks.common.tileentity.TileEntityGuide;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
 import openperipheral.api.ApiAccess;
@@ -30,7 +29,6 @@ public class ModuleAdapters extends IntegrationModule {
 			registry.register(new AdapterDonationStation());
 			registry.register(new AdapterCannon());
 			registry.register(new AdapterProjector());
-			registry.registerInline(TileEntityGuide.class);
 		}
 	}
 }

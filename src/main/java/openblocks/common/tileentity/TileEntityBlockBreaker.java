@@ -80,7 +80,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	}
 
 	private void triggerBreakBlock() {
-		final ForgeDirection direction = getRotation();
+		final ForgeDirection direction = getOrientation().up();
 		final int x = xCoord + direction.offsetX;
 		final int y = yCoord + direction.offsetY;
 		final int z = zCoord + direction.offsetZ;
@@ -106,7 +106,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	public void breakBlock() {
 		if (!(worldObj instanceof WorldServer)) return;
 
-		final ForgeDirection direction = getRotation();
+		final ForgeDirection direction = getOrientation().up();
 		final int x = xCoord + direction.offsetX;
 		final int y = yCoord + direction.offsetY;
 		final int z = zCoord + direction.offsetZ;

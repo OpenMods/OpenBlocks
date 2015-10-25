@@ -22,7 +22,7 @@ public class TileEntityBearTrapRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0F, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		TileEntityBearTrap tile = (TileEntityBearTrap)tileentity;
-		GL11.glRotatef(-BlockUtils.getRotationFromDirection(tile.getRotation()), 0, 1, 0);
+		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(tile.getOrientation()), 0, 1, 0);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		if (tile.isRenderedInInventory()) model.renderAll(false, 15);
 		else model.renderAll(tile.isShut(), tile.ticksSinceOpened());

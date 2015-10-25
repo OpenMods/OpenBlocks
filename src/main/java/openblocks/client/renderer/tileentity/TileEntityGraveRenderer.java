@@ -26,7 +26,7 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
-		GL11.glRotatef(-BlockUtils.getRotationFromDirection(target.getRotation()), 0, 1, 0);
+		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(target.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render(tileentity, f);
 		String username = target.getUsername();

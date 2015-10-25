@@ -99,7 +99,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {
-		return getRotation();
+		return getOrientation().south();
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	@Override
 	public void onSync(Set<ISyncableObject> changes) {
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton);
-		ForgeDirection rot = getRotation();
+		final ForgeDirection rot = getOrientation().south();
 		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton);
 	}
 }

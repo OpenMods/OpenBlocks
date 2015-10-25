@@ -33,7 +33,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
-		GL11.glRotatef(-BlockUtils.getRotationFromDirection(mixer.getRotation()), 0, 1, 0);
+		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(mixer.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render(mixer, f);
 		GL11.glPushMatrix();
@@ -55,8 +55,8 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 				secondPass = calculateColorFade(secondPass, mixer.getColor().getValue(), progress);
 			}
 			// Render first pass
-			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, 0xFFFFFF, SIDES);
-			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, ForgeDirection.EAST, secondPass, TOP_FACE);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, 0, 0xFFFFFF, SIDES);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, 0, secondPass, TOP_FACE);
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();

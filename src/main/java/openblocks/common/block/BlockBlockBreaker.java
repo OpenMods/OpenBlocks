@@ -7,6 +7,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityBlockBreaker;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +27,7 @@ public class BlockBlockBreaker extends OpenBlock {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
-		setInventoryRenderRotation(ForgeDirection.EAST);
+		setInventoryRenderOrientation(Orientation.YN_XP);
 	}
 
 	@Override

@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityTarget;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.BlockSpaceTransform;
+import openmods.geometry.Orientation;
 
 public class BlockTarget extends OpenBlock {
 
@@ -57,7 +59,7 @@ public class BlockTarget extends OpenBlock {
 
 		if (!target.isEnabled()) return;
 
-		ForgeDirection rotation = target.getRotation();
+		ForgeDirection rotation = target.getOrientation().south();
 		ForgeDirection opposite = rotation.getOpposite();
 
 		double centerX = x + 0.5 + (opposite.offsetX * 0.5);
@@ -88,9 +90,8 @@ public class BlockTarget extends OpenBlock {
 
 	@Override
 	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int m) {
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if ((tile != null) && ((tile instanceof TileEntityTarget))) { return ((TileEntityTarget)tile).getStrength(); }
-		return 0;
+		final TileEntityTarget tile = getTileEntity(world, x, y, z, TileEntityTarget.class);
+		return tile != null? tile.getStrength() : 0;
 	}
 
 	@Override
@@ -124,24 +125,11 @@ public class BlockTarget extends OpenBlock {
 			return;
 		}
 
-		ForgeDirection direction = target.getRotation();
+		final Orientation orientation = target.getOrientation();
 
-		switch (direction) {
-			case EAST:
-				setBlockBounds(0, 0, 0, 0.1f, 1f, 1f);
-				break;
-			case WEST:
-				setBlockBounds(0.9f, 0, 0, 1f, 1f, 1f);
-				break;
-			case NORTH:
-				setBlockBounds(0, 0, 0.9f, 1f, 1f, 1f);
-				break;
-			case SOUTH:
-				setBlockBounds(0, 0, 0f, 1f, 1f, 0.1f);
-				break;
-			default:
-				setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		}
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 1.0, 0.1);
+		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
+		setBlockBounds(rotatedAabb);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmods.block.BlockRotationMode;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -21,7 +22,7 @@ public class BlockBlockPlacer extends OpenBlock {
 	public BlockBlockPlacer() {
 		super(Material.rock);
 		setRotationMode(BlockRotationMode.SIX_DIRECTIONS);
-		setInventoryRenderRotation(ForgeDirection.EAST);
+		setInventoryRenderOrientation(Orientation.YN_XP);
 	}
 
 	@Override

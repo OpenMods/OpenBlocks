@@ -20,11 +20,9 @@ public class TileEntityXPShowerRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glPushMatrix();
-		GL11.glRotatef(-BlockUtils.getRotationFromDirection(shower.getRotation()), 0, 1, 0);
+		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(shower.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render(shower, f);
-		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 

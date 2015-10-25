@@ -2,7 +2,6 @@ package openblocks.client.renderer.block;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.block.BlockSky;
 import openmods.renderer.IBlockRenderer;
 import openmods.utils.render.RenderUtils;
@@ -11,7 +10,7 @@ public class BlockSkyRenderer implements IBlockRenderer<BlockSky> {
 
 	@Override
 	public void renderInventoryBlock(BlockSky block, int metadata, int modelID, RenderBlocks renderer) {
-		RenderUtils.renderInventoryBlock(renderer, block, ForgeDirection.EAST);
+		RenderUtils.renderInventoryBlock(renderer, block, 0);
 	}
 
 	@Override

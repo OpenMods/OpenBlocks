@@ -3,7 +3,6 @@ package openblocks.client.renderer.item;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.common.TrophyHandler.Trophy;
@@ -32,11 +31,11 @@ public class ItemRendererTrophy implements IItemRenderer {
 			if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) GL11.glTranslated(+0.5, +0.7, +0.5);
 			else if (type == ItemRenderType.INVENTORY) GL11.glTranslated(0, -0.1, 0);
 
-			final ForgeDirection direction = ForgeDirection.EAST;
-			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.trophy, direction, 0xFFFFFF);
+			final int meta = OpenBlocks.Blocks.trophy.getInventoryRenderMetadata(0);
+			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.trophy, meta, 0xFFFFFF);
 
 			Trophy trophy = ItemTrophyBlock.getTrophy(item);
-			if (trophy != null) TileEntityTrophyRenderer.renderTrophy(trophy, 0, -0.5, 0, 90);
+			if (trophy != null) TileEntityTrophyRenderer.renderTrophy(trophy, 0, -0.5, 0, 270);
 		}
 	}
 
