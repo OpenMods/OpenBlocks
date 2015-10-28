@@ -59,24 +59,13 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		};
 	}
 
-	private static IShapeManipulator createRotationManipulator(ForgeDirection dir) {
-		if (dir == ForgeDirection.UP) {
-			return new IShapeManipulator() {
-				@Override
-				public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-					te.rotateCCW();
-					return true;
-				}
-			};
-		} else {
-			return new IShapeManipulator() {
-				@Override
-				public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-					te.rotateCW();
-					return true;
-				}
-			};
-		}
+	private IShapeManipulator createRotationManipulator(final HalfAxis ha) {
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				return createRotationHelper(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord).rotateAroundAxis(ha);
+			}
+		};
 	}
 
 	private static AxisAlignedBB addButton(ForgeDirection side, BlockTextureTransform transform, int left, int top, int width, int height) {
@@ -118,8 +107,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
 
-		subBoxes.addBox(addButton(face, transform, 1, 3, 4, 11), createRotationManipulator(face));
-		subBoxes.addBox(addButton(face, transform, 11, 3, 4, 11), createRotationManipulator(face.getOpposite()));
+		subBoxes.addBox(addButton(face, transform, 1, 3, 4, 11), createRotationManipulator(HalfAxis.NEG_Y));
+		subBoxes.addBox(addButton(face, transform, 11, 3, 4, 11), createRotationManipulator(HalfAxis.POS_Y));
 
 		subBoxes.addBox(addButton(face, transform, 5, 3, 6, 3), new IShapeManipulator() {
 			@Override
@@ -159,7 +148,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	public BlockGuide() {
 		super(Material.rock);
 		setLightLevel(0.6f);
-		setRotationMode(BlockRotationMode.THREE_DIRECTIONS);
+		setRotationMode(BlockRotationMode.THREE_FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 

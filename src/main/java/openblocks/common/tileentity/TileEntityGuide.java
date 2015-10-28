@@ -8,13 +8,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
 import openblocks.shapes.GuideShape;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.geometry.HalfAxis;
+import openmods.geometry.Orientation;
 import openmods.shapes.IShapeGenerator;
 import openmods.shapes.IShapeable;
 import openmods.sync.*;
@@ -108,12 +108,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	protected SyncableBoolean active;
 
-	private enum Rotation {
-		R0, R90, R180, R270;
-	}
-
-	protected SyncableEnum<Rotation> rotation;
-
 	private interface ShapeManipulator {
 		public boolean activate(EntityPlayerMP player);
 	}
@@ -166,8 +160,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		negX = new SyncableInt(8);
 		negY = new SyncableInt(8);
 		negZ = new SyncableInt(8);
-
-		rotation = SyncableEnum.create(Rotation.R0);
 
 		mode = SyncableEnum.create(GuideShape.Sphere);
 		color = new SyncableInt(0xFFFFFF);
@@ -272,18 +264,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return manipulator.activate(player);
 	}
 
-	public void rotateCW() {
-		rotation.decrement();
-		recreateShape();
-		sync();
-	}
-
-	public void rotateCCW() {
-		rotation.increment();
-		recreateShape();
-		sync();
-	}
-
 	public void incrementMode(EntityPlayer player) {
 		incrementMode();
 
@@ -344,68 +324,18 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		final List<Coord> sortedResults = Lists.newArrayList(uniqueResults);
 		Collections.sort(sortedResults, COORD_COMPARATOR);
 
-		final ForgeDirection y = getOrientation().north();
-		final ForgeDirection x = getXDirection(y, rotation.get());
-		if (x == null) return ImmutableList.copyOf(sortedResults);
-
-		final ForgeDirection z = y.getRotation(x);
-
 		final List<Coord> rotatedResult = Lists.newArrayList();
+		final Orientation orientation = getOrientation();
 
 		for (Coord c : sortedResults) {
-			final int tx = x.offsetX * c.x + y.offsetX * c.y + z.offsetX * c.z;
-			final int ty = x.offsetY * c.x + y.offsetY * c.y + z.offsetY * c.z;
-			final int tz = x.offsetZ * c.x + y.offsetZ * c.y + z.offsetZ * c.z;
+			final int tx = orientation.transformX(c.x, c.y, c.z);
+			final int ty = orientation.transformY(c.x, c.y, c.z);
+			final int tz = orientation.transformZ(c.x, c.y, c.z);
 
 			rotatedResult.add(new Coord(tx, ty, tz));
 		}
 
 		return ImmutableList.copyOf(rotatedResult);
-	}
-
-	private static ForgeDirection getXDirection(ForgeDirection y, Rotation rotation) {
-		switch (y) {
-			case DOWN:
-			case UP:
-				switch (rotation) {
-					case R0:
-						return ForgeDirection.WEST;
-					case R90:
-						return ForgeDirection.NORTH;
-					case R180:
-						return ForgeDirection.EAST;
-					case R270:
-						return ForgeDirection.SOUTH;
-				}
-			case EAST:
-			case WEST:
-				switch (rotation) {
-					case R0:
-						return ForgeDirection.DOWN;
-					case R90:
-						return ForgeDirection.NORTH;
-					case R180:
-						return ForgeDirection.UP;
-					case R270:
-						return ForgeDirection.SOUTH;
-				}
-			case NORTH:
-			case SOUTH:
-				switch (rotation) {
-					case R0:
-						return ForgeDirection.UP;
-					case R90:
-						return ForgeDirection.WEST;
-					case R180:
-						return ForgeDirection.DOWN;
-					case R270:
-						return ForgeDirection.EAST;
-				}
-			default:
-				break;
-		}
-
-		return null;
 	}
 
 	public List<Coord> getShape() {
@@ -492,7 +422,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public void onSync(Set<ISyncableObject> changes) {
 		if (changes.contains(negX) || changes.contains(negY) || changes.contains(negZ) ||
 				changes.contains(posX) || changes.contains(posY) || changes.contains(posZ) ||
-				changes.contains(mode) || changes.contains(rotation)) {
+				changes.contains(mode)) {
 			recreateShape();
 			timeSinceChange = 0;
 		}
