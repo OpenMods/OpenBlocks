@@ -83,22 +83,22 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	private AxisAlignedBB renderAABB;
 
 	@StoreOnDrop(name = ItemGuide.TAG_POS_X)
-	protected SyncableInt posX;
+	protected SyncableUnsignedByte posX;
 
 	@StoreOnDrop(name = ItemGuide.TAG_POS_Y)
-	protected SyncableInt posY;
+	protected SyncableUnsignedByte posY;
 
 	@StoreOnDrop(name = ItemGuide.TAG_POS_Z)
-	protected SyncableInt posZ;
+	protected SyncableUnsignedByte posZ;
 
 	@StoreOnDrop(name = ItemGuide.TAG_NEG_X)
-	protected SyncableInt negX;
+	protected SyncableUnsignedByte negX;
 
 	@StoreOnDrop(name = ItemGuide.TAG_NEG_Y)
-	protected SyncableInt negY;
+	protected SyncableUnsignedByte negY;
 
 	@StoreOnDrop(name = ItemGuide.TAG_NEG_Z)
-	protected SyncableInt negZ;
+	protected SyncableUnsignedByte negZ;
 
 	@StoreOnDrop(name = ItemGuide.TAG_SHAPE)
 	protected SyncableEnum<GuideShape> mode;
@@ -108,58 +108,29 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	protected SyncableBoolean active;
 
-	private interface ShapeManipulator {
-		public boolean activate(EntityPlayerMP player);
-	}
-
-	private final Map<HalfAxis, ShapeManipulator> axisIncrementers = Maps.newEnumMap(HalfAxis.class);
-
-	private final Map<HalfAxis, ShapeManipulator> axisDecrementers = Maps.newEnumMap(HalfAxis.class);
-
-	private void setupAxisManipulators(HalfAxis halfAxis, final SyncableInt v) {
-		axisIncrementers.put(halfAxis, new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player) {
-				v.modify(+1);
-				afterDimensionsChange(player);
-				return true;
-			}
-		});
-
-		axisDecrementers.put(halfAxis, new ShapeManipulator() {
-			@Override
-			public boolean activate(EntityPlayerMP player) {
-				if (v.get() > 0) {
-					v.modify(-1);
-					afterDimensionsChange(player);
-					return true;
-				}
-				return false;
-			}
-		});
-	}
+	private final Map<HalfAxis, SyncableUnsignedByte> axisDimensions = Maps.newEnumMap(HalfAxis.class);
 
 	public TileEntityGuide() {
 		syncMap.addUpdateListener(this);
 
-		setupAxisManipulators(HalfAxis.NEG_X, negX);
-		setupAxisManipulators(HalfAxis.NEG_Y, negY);
-		setupAxisManipulators(HalfAxis.NEG_Z, negZ);
+		axisDimensions.put(HalfAxis.NEG_X, negX);
+		axisDimensions.put(HalfAxis.NEG_Y, negY);
+		axisDimensions.put(HalfAxis.NEG_Z, negZ);
 
-		setupAxisManipulators(HalfAxis.POS_X, posX);
-		setupAxisManipulators(HalfAxis.POS_Y, posY);
-		setupAxisManipulators(HalfAxis.POS_Z, posZ);
+		axisDimensions.put(HalfAxis.POS_X, posX);
+		axisDimensions.put(HalfAxis.POS_Y, posY);
+		axisDimensions.put(HalfAxis.POS_Z, posZ);
 	}
 
 	@Override
 	protected void createSyncedFields() {
-		posX = new SyncableInt(8);
-		posY = new SyncableInt(8);
-		posZ = new SyncableInt(8);
+		posX = new SyncableUnsignedByte(8);
+		posY = new SyncableUnsignedByte(8);
+		posZ = new SyncableUnsignedByte(8);
 
-		negX = new SyncableInt(8);
-		negY = new SyncableInt(8);
-		negZ = new SyncableInt(8);
+		negX = new SyncableUnsignedByte(8);
+		negY = new SyncableUnsignedByte(8);
+		negZ = new SyncableUnsignedByte(8);
 
 		mode = SyncableEnum.create(GuideShape.Sphere);
 		color = new SyncableInt(0xFFFFFF);
@@ -255,13 +226,29 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	public boolean incrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
-		final ShapeManipulator manipulator = axisIncrementers.get(axis);
-		return manipulator.activate(player);
+		final SyncableUnsignedByte v = axisDimensions.get(axis);
+		v.modify(+1);
+		afterDimensionsChange(player);
+		return true;
+
 	}
 
 	public boolean decrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
-		final ShapeManipulator manipulator = axisDecrementers.get(axis);
-		return manipulator.activate(player);
+		final SyncableUnsignedByte v = axisDimensions.get(axis);
+		if (v.get() > 0) {
+			v.modify(-1);
+			afterDimensionsChange(player);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean copyHalfAxis(HalfAxis from, HalfAxis to, EntityPlayerMP player) {
+		final SyncableUnsignedByte fromV = axisDimensions.get(from);
+		final SyncableUnsignedByte toV = axisDimensions.get(to);
+		toV.set(fromV.get());
+		afterDimensionsChange(player);
+		return true;
 	}
 
 	public void incrementMode(EntityPlayer player) {

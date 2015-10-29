@@ -59,6 +59,17 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		};
 	}
 
+	private static IShapeManipulator createHalfAxisCopier(ForgeDirection dir) {
+		final HalfAxis halfAxis = HalfAxis.fromDirection(dir);
+
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				return te.copyHalfAxis(halfAxis, halfAxis.negate(), player);
+			}
+		};
+	}
+
 	private IShapeManipulator createRotationManipulator(final HalfAxis ha) {
 		return new IShapeManipulator() {
 			@Override
@@ -87,15 +98,19 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 		subBoxes.addBox(addButton(face, transform, 4, 1, 3, 3), createHalfAxisDecrementer(top));
 		subBoxes.addBox(addButton(face, transform, 9, 1, 3, 3), createHalfAxisIncrementer(top));
+		subBoxes.addBox(addButton(face, transform, 6, 4, 4, 2), createHalfAxisCopier(top));
 
 		subBoxes.addBox(addButton(face, transform, 12, 4, 3, 3), createHalfAxisDecrementer(right));
 		subBoxes.addBox(addButton(face, transform, 12, 9, 3, 3), createHalfAxisIncrementer(right));
+		subBoxes.addBox(addButton(face, transform, 10, 6, 2, 4), createHalfAxisCopier(right));
 
 		subBoxes.addBox(addButton(face, transform, 9, 12, 3, 3), createHalfAxisDecrementer(bottom));
 		subBoxes.addBox(addButton(face, transform, 4, 12, 3, 3), createHalfAxisIncrementer(bottom));
+		subBoxes.addBox(addButton(face, transform, 6, 10, 4, 2), createHalfAxisCopier(bottom));
 
 		subBoxes.addBox(addButton(face, transform, 1, 9, 3, 3), createHalfAxisDecrementer(left));
 		subBoxes.addBox(addButton(face, transform, 1, 4, 3, 3), createHalfAxisIncrementer(left));
+		subBoxes.addBox(addButton(face, transform, 4, 6, 2, 4), createHalfAxisCopier(left));
 
 		final BlockTextureTransform.WorldCoords overboxMin = transform.textureCoordsToWorldVec(face, P, P, -SELECTION_BOX_DEPTH);
 		final BlockTextureTransform.WorldCoords overboxMax = transform.textureCoordsToWorldVec(face, 1 - P, 1 - P, SELECTION_BOX_DEPTH);
@@ -107,21 +122,21 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
 
-		subBoxes.addBox(addButton(face, transform, 1, 3, 4, 11), createRotationManipulator(HalfAxis.NEG_Y));
-		subBoxes.addBox(addButton(face, transform, 11, 3, 4, 11), createRotationManipulator(HalfAxis.POS_Y));
+		subBoxes.addBox(addButton(face, transform, 1, 7, 4, 7), createRotationManipulator(HalfAxis.NEG_Y));
+		subBoxes.addBox(addButton(face, transform, 11, 7, 4, 7), createRotationManipulator(HalfAxis.POS_Y));
 
-		subBoxes.addBox(addButton(face, transform, 5, 3, 6, 3), new IShapeManipulator() {
+		subBoxes.addBox(addButton(face, transform, 5, 2, 6, 3), new IShapeManipulator() {
 			@Override
 			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				te.decrementMode(player);
+				te.incrementMode(player);
 				return true;
 			}
 		});
 
-		subBoxes.addBox(addButton(face, transform, 5, 10, 6, 3), new IShapeManipulator() {
+		subBoxes.addBox(addButton(face, transform, 5, 8, 6, 3), new IShapeManipulator() {
 			@Override
 			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				te.incrementMode(player);
+				te.decrementMode(player);
 				return true;
 			}
 		});
