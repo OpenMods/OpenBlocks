@@ -303,7 +303,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		final IShapeable collector = new IShapeable() {
 			@Override
 			public void setBlock(int x, int y, int z) {
-				uniqueResults.add(new Coord(x, y, z));
+				if (canAddCoord(x, y, z)) uniqueResults.add(new Coord(x, y, z));
 			}
 		};
 		generator.generateShape(-negX.get(), -negY.get(), -negZ.get(), posX.get(), posY.get(), posZ.get(), collector);
@@ -323,6 +323,10 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		}
 
 		return ImmutableList.copyOf(rotatedResult);
+	}
+
+	protected boolean canAddCoord(int x, int y, int z) {
+		return true;
 	}
 
 	public List<Coord> getShape() {

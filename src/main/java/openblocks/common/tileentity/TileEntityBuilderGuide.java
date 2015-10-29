@@ -58,6 +58,12 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 			worldObj.setBlock(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z, block, blockMeta, BlockNotifyFlags.ALL);
 	}
 
+	@Override
+	protected boolean canAddCoord(int x, int y, int z) {
+		// create safe space around builder, so it's always accesible
+		return Math.abs(x) > 1 || Math.abs(y) > 1 || Math.abs(z) > 1;
+	}
+
 	private boolean survivalPlaceBlocks(EntityPlayerMP player, ItemStack heldItem, Block block, int blockMeta, int side, float hitX, float hitY, float hitZ) {
 		for (Coord relCoord : getShapeSafe()) {
 			final int absX = relCoord.x + xCoord;
