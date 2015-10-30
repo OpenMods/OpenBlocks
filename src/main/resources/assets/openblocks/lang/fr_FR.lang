@@ -1,6 +1,8 @@
 achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Désolé, il vient de se passer...
 stat.openblocks.bricksDropped=Briques abandonnées
+achievement.openblocks.stackOverflow=Débordement de piles
+achievement.openblocks.stackOverflow.desc=C'est plein d'étoiles !
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Soyez stupide
@@ -11,39 +13,40 @@ enchantment.openblocks.flimflam=Flim Flam
 
 openblocks.gui.blocks=Blocs
 openblocks.gui.items=Articles
-openblocks.gui.misc=Misc
+openblocks.gui.misc=Divers
 openblocks.gui.changelogs=Modifier les journaux
 
-openblocks.gui.features=Traits
+openblocks.gui.features=Fonctionnalités
 openblocks.gui.bugfixes=Correction de bugs
-openblocks.gui.tweaks=Pincers
+openblocks.gui.tweaks=Ajustements
 
 openblocks.gui.luggage=Bagage
-openblocks.gui.sprinkler=Sprinkler
-openblocks.gui.vacuumhopper=Vacuum Hopper
-openblocks.gui.bigbutton=Big Button
-openblocks.gui.xpbottler=XP Bottler
-openblocks.gui.autoanvil=Auto Anvil
-openblocks.gui.autoeject=Auto eject
-openblocks.gui.autoextract=Auto extract
-openblocks.gui.autodrink=Auto drink
-openblocks.gui.autoenchantmenttable=Auto Enchantment Table
+openblocks.gui.sprinkler=Arroseur
+openblocks.gui.vacuumhopper=Entonnoir à vide
+openblocks.gui.bigbutton=Gros bouton
+openblocks.gui.xpbottler=Embouteilleur d'XP
+openblocks.gui.autoanvil=Enclume auto
+openblocks.gui.autoeject=Éjection auto
+openblocks.gui.autoextract=Extraction auto
+openblocks.gui.autodrink=Boisson auto
+openblocks.gui.autoenchantmenttable=Table d'enchantement auto
 openblocks.gui.donationstation=Donation Station
-openblocks.gui.itemdropper=Item Dropper
-openblocks.gui.blockplacer=Block Placer
-openblocks.gui.paintmixer=Paint Mixer
-openblocks.gui.drawingtable=Drawing Table
-openblocks.gui.digitalfuse=Digital Fuse
-openblocks.gui.xp_outputs=XP Outputs
-openblocks.gui.item_outputs=Item Outputs
-openblocks.gui.watch_video=Watch video
-openblocks.gui.max_level=Max. Level: %d
+openblocks.gui.itemdropper=Lanceur d'élément
+openblocks.gui.blockplacer=Placeur de bloc
+openblocks.gui.paintmixer=Agitateur de peinture
+openblocks.gui.drawingtable=Table à dessin
+openblocks.gui.digitalfuse=Fusible numérique
+openblocks.gui.xp_outputs=Sorties d'XP
+openblocks.gui.item_outputs=Sorties d'élément
+openblocks.gui.watch_video=Regardez la vidéo
+openblocks.gui.max_level=Niveau maxi. : %d
+openblocks.gui.save_folder=Dossier de sauvegarde
 
-openblocks.gui.welcome.title=Welcome!
-openblocks.gui.welcome.content=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more!
+openblocks.gui.welcome.title=Bienvenu !
+openblocks.gui.welcome.content=OpenBlocks est un nouveau mod open source qui introduit une variété d'idées dans Minecraft, dont les planneurs, les ascenceurs, les réservoir, les tombes, les paintures, Les grues, l'XP liquide, les cartographes, les trophées et plus !
 
-openblocks.gui.credits.title=Credits
-openblocks.gui.credits.content=§LBoq, Mikee and NeverCast§R - Leading developers of OpenBlocks (are we allowed to credit ourselves?)\n\n§LSinZ and Yoshi2§R - members of the OpenMods team from the start.\n\n§LVexatos and crafteverywhere§R - Regularly translating the mods.\n\nEveryone else who has contributed to the code over the past year.\n\n§LDirewolf20 and the rest of ForgeCraft§R - for putting up with the bugs and crashes before we release.\n\nEveryone who's done spotlights, lets plays and generally supported the mod since we started!
+openblocks.gui.credits.title=Crédits
+openblocks.gui.credits.content=§LBoq, Mikee et NeverCast§R - Développeur principaux d'OpenBlocks (Nous nous permet-on ?)\n\n§LSinZ et Yoshi2§R - membres de OpenMods team depuis le début.\n\n§LVexatos et crafteverywhere§R - Traducteur réguliers du mod.\n\nTous les autres qui ont contribué au code au cours de l'année passée.\n\n§LDirewolf20 et le reste de ForgeCraft§R - Pour supporter les bogues et les accidents avant que nous ne sortions.\n\Tout le monde qui met en lumière, fait des présentation et, généralement, supporte le mod depuis que nous avons commencé !
 
 openblocks.gui.config.title=Easy Config Editing
 openblocks.gui.config.content=OpenMods allow for both client and server config options to be changed from chat commands. Some don't even require restart!\n\nServer config settings can be changed using '§L/om_config_s§R' (op needed) and client config settings can be changed using '§L/om_config_c§R'\n\nFor example:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFor a full list of commands type: §L/help om_config_s§R or §L/help om_config_c§R
