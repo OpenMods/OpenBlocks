@@ -83,22 +83,22 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	private AxisAlignedBB renderAABB;
 
 	@StoreOnDrop(name = ItemGuide.TAG_POS_X)
-	protected SyncableUnsignedByte posX;
+	protected SyncableVarInt posX;
 
 	@StoreOnDrop(name = ItemGuide.TAG_POS_Y)
-	protected SyncableUnsignedByte posY;
+	protected SyncableVarInt posY;
 
 	@StoreOnDrop(name = ItemGuide.TAG_POS_Z)
-	protected SyncableUnsignedByte posZ;
+	protected SyncableVarInt posZ;
 
 	@StoreOnDrop(name = ItemGuide.TAG_NEG_X)
-	protected SyncableUnsignedByte negX;
+	protected SyncableVarInt negX;
 
 	@StoreOnDrop(name = ItemGuide.TAG_NEG_Y)
-	protected SyncableUnsignedByte negY;
+	protected SyncableVarInt negY;
 
 	@StoreOnDrop(name = ItemGuide.TAG_NEG_Z)
-	protected SyncableUnsignedByte negZ;
+	protected SyncableVarInt negZ;
 
 	@StoreOnDrop(name = ItemGuide.TAG_SHAPE)
 	protected SyncableEnum<GuideShape> mode;
@@ -108,7 +108,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	protected SyncableBoolean active;
 
-	private final Map<HalfAxis, SyncableUnsignedByte> axisDimensions = Maps.newEnumMap(HalfAxis.class);
+	private final Map<HalfAxis, SyncableVarInt> axisDimensions = Maps.newEnumMap(HalfAxis.class);
 
 	public TileEntityGuide() {
 		syncMap.addUpdateListener(this);
@@ -124,13 +124,13 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	@Override
 	protected void createSyncedFields() {
-		posX = new SyncableUnsignedByte(8);
-		posY = new SyncableUnsignedByte(8);
-		posZ = new SyncableUnsignedByte(8);
+		posX = new SyncableVarInt(8);
+		posY = new SyncableVarInt(8);
+		posZ = new SyncableVarInt(8);
 
-		negX = new SyncableUnsignedByte(8);
-		negY = new SyncableUnsignedByte(8);
-		negZ = new SyncableUnsignedByte(8);
+		negX = new SyncableVarInt(8);
+		negY = new SyncableVarInt(8);
+		negZ = new SyncableVarInt(8);
 
 		mode = SyncableEnum.create(GuideShape.Sphere);
 		color = new SyncableInt(0xFFFFFF);
@@ -226,7 +226,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	public boolean incrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
-		final SyncableUnsignedByte v = axisDimensions.get(axis);
+		final SyncableVarInt v = axisDimensions.get(axis);
 		v.modify(+1);
 		afterDimensionsChange(player);
 		return true;
@@ -234,7 +234,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	public boolean decrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
-		final SyncableUnsignedByte v = axisDimensions.get(axis);
+		final SyncableVarInt v = axisDimensions.get(axis);
 		if (v.get() > 0) {
 			v.modify(-1);
 			afterDimensionsChange(player);
@@ -244,8 +244,8 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	public boolean copyHalfAxis(HalfAxis from, HalfAxis to, EntityPlayerMP player) {
-		final SyncableUnsignedByte fromV = axisDimensions.get(from);
-		final SyncableUnsignedByte toV = axisDimensions.get(to);
+		final SyncableVarInt fromV = axisDimensions.get(from);
+		final SyncableVarInt toV = axisDimensions.get(to);
 		toV.set(fromV.get());
 		afterDimensionsChange(player);
 		return true;
