@@ -1,12 +1,12 @@
 package openblocks.client.renderer.entity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import openblocks.common.entity.EntityHangGlider;
+import openmods.renderer.DisplayListWrapper;
 
 import org.lwjgl.opengl.GL11;
 
@@ -15,7 +15,32 @@ public class EntityHangGliderRenderer extends Render {
 	private static final float QUAD_HALF_SIZE = 2.4f;
 	private static final float ONGROUND_ROTATION = 90f;
 
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/hangglider.png");
+	private final DisplayListWrapper gliderRender = new DisplayListWrapper() {
+		@Override
+		public void compile() {
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			GL11.glBegin(GL11.GL_QUADS);
+
+			GL11.glTexCoord2f(1, 1);
+			GL11.glVertex3f(QUAD_HALF_SIZE, 0, QUAD_HALF_SIZE);
+
+			GL11.glTexCoord2f(0, 1);
+			GL11.glVertex3f(-QUAD_HALF_SIZE, 0, QUAD_HALF_SIZE);
+
+			GL11.glTexCoord2f(0, 0);
+			GL11.glVertex3f(-QUAD_HALF_SIZE, 0, -QUAD_HALF_SIZE);
+
+			GL11.glTexCoord2f(1, 0);
+			GL11.glVertex3f(QUAD_HALF_SIZE, 0, -QUAD_HALF_SIZE);
+
+			GL11.glEnd();
+			GL11.glEnable(GL11.GL_CULL_FACE);
+
+		}
+	};
+
+	private final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/hangglider.png");
 
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float f, float f1) {
@@ -66,22 +91,8 @@ public class EntityHangGliderRenderer extends Render {
 		}
 
 		bindTexture(texture);
-		renderGlider();
-
+		gliderRender.render();
 		GL11.glPopMatrix();
-	}
-
-	private static void renderGlider() {
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		Tessellator t = Tessellator.instance;
-		t.startDrawingQuads();
-		t.setColorRGBA(255, 255, 255, 255);
-		t.addVertexWithUV(QUAD_HALF_SIZE, 0, QUAD_HALF_SIZE, 1, 1);
-		t.addVertexWithUV(-QUAD_HALF_SIZE, 0, QUAD_HALF_SIZE, 0, 1);
-		t.addVertexWithUV(-QUAD_HALF_SIZE, 0, -QUAD_HALF_SIZE, 0, 0);
-		t.addVertexWithUV(QUAD_HALF_SIZE, 0, -QUAD_HALF_SIZE, 1, 0);
-		t.draw();
-		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 
 	/* Interpolate rotation */
