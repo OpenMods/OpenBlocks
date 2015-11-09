@@ -13,12 +13,13 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.block.BlockRotationMode;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
-import openmods.utils.BlockNotifyFlags;
+import openmods.utils.BlockManipulator;
 import openmods.utils.BlockUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -49,7 +50,7 @@ public class BlockRopeLadder extends OpenBlock {
 
 	@Override
 	public int quantityDropped(Random random) {
-		return 0;
+		return Config.infiniteLadder? 0 : 1;
 	}
 
 	@Override
@@ -119,18 +120,22 @@ public class BlockRopeLadder extends OpenBlock {
 
 		if (y > 0) {
 			Block bottomBlock = world.getBlock(x, y, z);
-			if (bottomBlock == block) world.setBlockToAir(x, y, z);
+			if (bottomBlock == block) {
+				dropBlockAsItem(world, x, y, z, meta, 0);
+				world.setBlockToAir(x, y, z);
+			}
 		}
 	}
 
 	@Override
 	public void afterBlockPlaced(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, Orientation orientation, float hitX, float hitY, float hitZ, int itemMeta) {
 		super.afterBlockPlaced(world, player, stack, x, y, z, side, orientation, hitX, hitY, hitZ, itemMeta);
-		final int blockMeta = blockRotationMode.toValue(orientation);
-		while (--y > 0 && stack.stackSize > 1) {
-			if (world.isAirBlock(x, y, z)) {
-				world.setBlock(x, y, z, this, blockMeta, BlockNotifyFlags.ALL);
-				stack.stackSize--;
+
+		final int blockMeta = getRotationMode().toValue(orientation);
+		while (--y > 0 && (Config.infiniteLadder || stack.stackSize > 1)) {
+			final BlockManipulator manipulator = new BlockManipulator(world, player, x, y, z);
+			if (world.isAirBlock(x, y, z) && manipulator.place(this, blockMeta)) {
+				if (!Config.infiniteLadder) stack.stackSize--;
 			}
 			else return;
 		}

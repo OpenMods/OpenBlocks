@@ -305,6 +305,10 @@ public class Config {
 	@ConfigProperty(category = "magnet", name = "pickBlocks", comment = "Can crane magnet pick block?")
 	public static boolean canMagnetPickBlocks = true;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "ladder", name = "infiniteMode", comment = "If true, ladders will behave in old way: single item will place ladder all the way down, but it will not drop when broken")
+	public static boolean infiniteLadder = false;
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
