@@ -403,9 +403,7 @@ public class OpenBlocks {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
 
-		if (OpenBlocks.Blocks.grave != null) {
-			MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
-		}
+		MinecraftForge.EVENT_BUS.register(new PlayerDeathHandler());
 
 		if (OpenBlocks.Items.cursor != null) {
 			MinecraftForge.EVENT_BUS.register(new GuiOpenHandler());

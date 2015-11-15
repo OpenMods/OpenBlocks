@@ -191,6 +191,8 @@ public class PlayerDeathHandler {
 				}
 			});
 
+			Log.info("Grave for (%s,%s) was spawned at (%d,%d,%d)", stiffId.getId(), stiffId.getName(), x, y, z);
+
 			grave.setUsername(gravestoneText);
 			grave.setLoot(loot);
 			grave.setDeathMessage(deathMessage);
@@ -215,7 +217,7 @@ public class PlayerDeathHandler {
 					: new GraveSpawnEvent(player, location.x, location.y, location.z, loot, gravestoneText, cause);
 
 			if (MinecraftForge.EVENT_BUS.post(evt)) {
-				Log.info("Grave event for player %s cancelled, no grave will spawn", stiffId);
+				Log.warn("Grave event for player %s cancelled, no grave will spawn", stiffId);
 				return false;
 			}
 
@@ -228,7 +230,7 @@ public class PlayerDeathHandler {
 			final int y = evt.getY();
 			final int z = evt.getZ();
 
-			Log.debug("Grave for %s will be spawned at (%d,%d,%d)", stiffId, x, y, z);
+			Log.log(debugLevel(), "Grave for %s will be spawned at (%d,%d,%d)", stiffId, x, y, z);
 
 			if (Config.graveBase && canSpawnBase(world, player, x, y - 1, z)) {
 				world.setBlock(x, y - 1, z, Blocks.dirt);
@@ -273,7 +275,7 @@ public class PlayerDeathHandler {
 		private void backupGrave(World world, IInventory loot, ExtrasFiller filler) {
 			try {
 				File backup = PlayerInventoryStore.instance.storeInventory(loot, stiffId.getName(), "grave", world, filler);
-				Log.debug("Grave backup for player %s saved to %s", stiffId, backup);
+				Log.log(debugLevel(), "Grave backup for player %s saved to %s", stiffId, backup);
 			} catch (Throwable t) {
 				Log.warn("Failed to store grave backup for player %s", stiffId);
 			}
@@ -310,6 +312,10 @@ public class PlayerDeathHandler {
 		}
 	}
 
+	private static Level debugLevel() {
+		return Config.debugGraves? Level.INFO : Level.DEBUG;
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
 	public void onPlayerDrops(PlayerDropsEvent event) {
 		World world = event.entityPlayer.worldObj;
@@ -320,7 +326,7 @@ public class PlayerDeathHandler {
 		final EntityPlayer player = event.entityPlayer;
 
 		if (OpenBlocks.Blocks.grave == null) {
-			Log.debug("Graves disabled, not placing (player '%s')", player);
+			Log.log(debugLevel(), "OpenBlocks graves disabled, not placing (player '%s')", player);
 			return;
 		}
 
@@ -336,14 +342,14 @@ public class PlayerDeathHandler {
 
 		final List<EntityItem> drops = event.drops;
 		if (drops.isEmpty()) {
-			Log.warn("No drops from player '%s', grave will not be spawned'", player);
+			Log.log(debugLevel(), "No drops from player '%s', grave will not be spawned'", player);
 			return;
 		}
 
 		final GameRules gameRules = world.getGameRules();
 		if (gameRules.getGameRuleBooleanValue("keepInventory") ||
 				!gameRules.getGameRuleBooleanValue(GameRule.SPAWN_GRAVES)) {
-			Log.debug("Graves disabled by gamerule (player '%s')", player);
+			Log.log(debugLevel(), "Graves disabled by gamerule (player '%s')", player);
 			return;
 		}
 
@@ -363,10 +369,10 @@ public class PlayerDeathHandler {
 		for (GraveDropsEvent.ItemAction entry : dropsEvent.drops) {
 			switch (entry.action) {
 				case DELETE:
-					if (Config.debugGraves) Log.debug("Item %s is going to be deleted", entry.item);
+					if (Config.debugGraves) Log.info("Item %s is going to be deleted", entry.item);
 					break;
 				case DROP:
-					if (Config.debugGraves) Log.debug("Item %s is going to be dropped", entry.item);
+					if (Config.debugGraves) Log.info("Item %s is going to be dropped", entry.item);
 					drops.add(entry.item);
 					break;
 				default:
@@ -376,39 +382,39 @@ public class PlayerDeathHandler {
 		}
 
 		if (graveLoot.isEmpty()) {
-			Log.warn("No grave drops left for player '%s' cancelled, grave will not be spawned'", player);
+			Log.log(debugLevel(), "No grave drops left for player '%s' after event filtering, grave will not be spawned'", player);
 			return;
 		}
 
-		Log.debug("Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), graveLoot.size());
+		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), graveLoot.size());
 		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, graveLoot));
 	}
 
 	private static void dumpDebugInfo(PlayerDropsEvent event) {
-		Log.debug("Trying to spawn grave for player '%s':'%s'", event.entityPlayer, event.entityPlayer.getGameProfile());
+		Log.info("Trying to spawn grave for player '%s':'%s'", event.entityPlayer, event.entityPlayer.getGameProfile());
 
 		int i = 0;
 		for (EntityItem e : event.drops)
-			Log.debug("\tGrave drop %d: %s -> %s", i++, e.getClass(), e.getEntityItem());
+			Log.info("\tGrave drop %d: %s -> %s", i++, e.getClass(), e.getEntityItem());
 
-		ListenerList listeners = event.getListenerList();
+		final ListenerList listeners = event.getListenerList();
 		try {
 			int busId = 0;
 			while (true) {
-				Log.debug("Dumping event %s listeners on bus %d", event.getClass(), busId);
+				Log.info("Dumping event %s listeners on bus %d", event.getClass(), busId);
 				for (IEventListener listener : listeners.getListeners(busId)) {
 					if (listener instanceof ASMEventHandler) {
 						try {
 							final ASMEventHandler handler = (ASMEventHandler)listener;
 							Object o = ReflectionHelper.getPrivateValue(ASMEventHandler.class, handler, "handler");
-							Log.debug("\t'%s' (handler %s, priority: %s)", handler, o.getClass(), handler.getPriority());
+							Log.info("\t'%s' (handler %s, priority: %s)", handler, o.getClass(), handler.getPriority());
 							continue;
 						} catch (Throwable e) {
-							Log.log(Level.DEBUG, e, "Exception while getting field");
+							Log.log(Level.INFO, e, "Exception while getting field");
 						}
 					}
 
-					Log.debug("\t%s", listener.getClass());
+					Log.info("\t%s", listener.getClass());
 				}
 				busId++;
 			}
