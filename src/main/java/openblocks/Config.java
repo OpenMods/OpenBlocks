@@ -309,6 +309,10 @@ public class Config {
 	@ConfigProperty(category = "ladder", name = "infiniteMode", comment = "If true, ladders will behave in old way: single item will place ladder all the way down, but it will not drop when broken")
 	public static boolean infiniteLadder = false;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "devnull", name = "sneakClickToGui", comment = "If true, /dev/null will require sneaking in addition to clicking air to open gui")
+	public static boolean devNullSneakGui = true;
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
