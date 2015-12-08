@@ -1,0 +1,14 @@
+[crafting{200,15,key=block/openblocks.scaffolding}]
+
+
+
+
+
+
+
+
+
+
+
+Have you ever wanted to pillar up somewhere without leaving an ugly tower behind? Well, now you can!
+Simply build with scaffolding blocks and they will automatically despawn when you are done.

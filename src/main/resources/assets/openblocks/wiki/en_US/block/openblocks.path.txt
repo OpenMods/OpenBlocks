@@ -1,0 +1,13 @@
+[crafting{200,15,key=block/openblocks.path}]
+
+
+
+
+
+
+
+
+
+
+
+The path doesn't do anything. It just looks nice!

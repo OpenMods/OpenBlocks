@@ -1,0 +1,14 @@
+[crafting{200,15,key=block/openblocks.paintmixer}]
+
+
+
+
+
+
+
+
+
+
+
+The paint mixer can mix any colour of paint you want!
+Drop either an existing [link{openblocks.paintCan}]paint bucket [link{}]or a [link{item/milk}]bucket of milk [link{}]into the top slot, then [link{item/dyePowder}]cyan, magenta, yellow and black dyes [link{}]into the other four slots and click mix!

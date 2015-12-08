@@ -1,0 +1,13 @@
+[crafting{200,15,key=block/openblocks.xpbottler}]
+
+
+
+
+
+
+
+
+
+
+
+The XP bottler will take [link{block/openblocks.xp_juice}]XP juice [link{}] and bottle it up into [link{item/glassBottle}]glass bottles [link{}]to create [link{item/expBottle}]bottles o' enchanting [link{}].

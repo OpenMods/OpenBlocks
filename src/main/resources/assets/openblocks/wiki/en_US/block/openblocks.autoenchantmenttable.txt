@@ -1,0 +1,16 @@
+[crafting{200,15,key=block/openblocks.autoenchantmenttable}]
+
+
+
+
+
+
+
+
+
+
+
+The auto enchantment table works in a similar way to [link{item/enchantmentTable}]the vanilla enchantment table [link{}]except it runs off [link{block/openblocks.xp_juice}]XP juice [link{}].
+Use the tabs on the right side of the interface to select where items or xp can be pulled from.
+
+Just like with the vanilla table [link{block/bookshelf}]bookshelves [link{}]are required for higher levels.

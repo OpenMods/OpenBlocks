@@ -1,0 +1,15 @@
+[crafting{200,15,key=block/openblocks.elevator_rotating}]
+
+
+
+
+
+
+
+
+
+
+
+Place one elevator directly three or more blocks above another with no blocks in between and you'll be able to either 'jump' to move up, or 'crouch' to move down.
+Elevators can be dyed by clicking on them with [link{item/dyePoweder}]dye [link{}], however, you can only teleport between elevators of the same color.
+On teleport, these types of elevator also rotate the player. To disable this functionality, you need to use a [link{block/openblocks.elevator}]Normal Elevator [link{}].

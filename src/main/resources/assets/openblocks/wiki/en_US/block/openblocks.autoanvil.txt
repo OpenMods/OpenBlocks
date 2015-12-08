@@ -1,0 +1,16 @@
+[crafting{200,15,key=block/openblocks.autoanvil}]
+
+
+
+
+
+
+
+
+
+
+
+The auto anvil works just like [link{item/anvil.intact}]the vanilla anvil, [link{}]except it runs from [link{block/openblocks.xp_juice}]XP juice [link{}]and can be fully automated.
+
+Use the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted.
+Right click and drag the anvil in the tab to spin it around and select other sides!

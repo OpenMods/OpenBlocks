@@ -1,0 +1,13 @@
+[crafting{200,15,key=block/openblocks.vacuumhopper}]
+
+
+
+
+
+
+
+
+
+
+
+The vacuum hopper will suck up items and XP orbs around it. You can use the tabs on the right of the interface to select which sides to output to.

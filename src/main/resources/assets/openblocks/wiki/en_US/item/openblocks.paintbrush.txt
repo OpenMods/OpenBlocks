@@ -1,0 +1,17 @@
+[crafting{200,15,key=item/openblocks.paintbrush}]
+
+
+
+
+
+
+
+
+
+
+
+Paint brushes let you paint blocks in whatever color you like!
+
+Dab your paint brush in a [link{block/openblocks.paintcan}]Paint Can [link{}]made in the [link{block/openblocks.paintmixer}]Paint Mixer [link{}]then click on a block to paint it.
+[link{block/openblocks.canvas}]Canvas blocks [link{}]are perfect for painting, but you can also paint quite a few vanilla blocks and even some blocks from other mods.
+You can also place [link{item/openblocks.stencil}]stencils [link{}]on blocks and then paint over the stencil!

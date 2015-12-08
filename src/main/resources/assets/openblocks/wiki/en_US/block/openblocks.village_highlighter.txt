@@ -1,0 +1,16 @@
+[crafting{200,15,key=block/openblocks.village_highlighter}]
+
+
+
+
+
+
+
+
+
+
+
+Drop the village highlighter down in a village and give it a [link{item/redstone}]redstone [link{}]signal.
+It will outline the perimeter of the village and draw a box in the [link{entities/VillagerGolem}]iron golem [link{}]spawning area.
+
+Useful if you want to make sure villages don't merge into each other or you're making an iron farm!

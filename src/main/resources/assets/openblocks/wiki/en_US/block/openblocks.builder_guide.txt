@@ -1,0 +1,16 @@
+[crafting{200,15,key=block/openblocks.builder_guide}]
+
+
+
+
+
+
+
+
+
+
+
+This enhanced version of [link{block/openblocks.guide}]building guide [link{}]not only displays ghost blocks to make building easier, but also allows you to place actual blocks.
+Just click central block with any block stack!
+
+When in creative mode you can place an [link{block/obsidian}]obsidian [link{}]block above, then hit the building guide with any block you like to automatically create the shape.

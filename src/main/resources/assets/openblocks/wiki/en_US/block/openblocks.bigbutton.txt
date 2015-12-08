@@ -1,0 +1,15 @@
+[crafting{200,15,key=block/openblocks.bigbutton}]
+
+
+
+
+
+
+
+
+
+
+
+The big button is a large [link{block/button}]button [link{}]that can be placed on walls.
+If you shift-click on the button with an empty hand it will bring up an inventory with a single slot.
+You can put items into this slot to increase the length of time the button is pressed - one item increases the button press by one tick.

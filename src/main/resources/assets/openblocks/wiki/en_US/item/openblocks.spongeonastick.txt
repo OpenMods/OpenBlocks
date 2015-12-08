@@ -1,0 +1,13 @@
+[crafting{200,15,key=item/openblocks.spongeonastick}]
+
+
+
+
+
+
+
+
+
+
+
+The sponge on a stick is a tool for cleaning up liquids. Works just like the [link{block/openblocks.sponge}]sponge [link{}], but is more mobile at the expense of wearing out.

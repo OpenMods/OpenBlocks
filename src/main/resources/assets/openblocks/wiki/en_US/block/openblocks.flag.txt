@@ -1,0 +1,16 @@
+[crafting{200,15,key=block/openblocks.flag}]
+
+
+
+
+
+
+
+
+
+
+
+Flags can be used for decoration or for marking the way back out of a cave you've ventured in to.
+The flag will point in the direction that you placed it, or you can put it on walls.
+
+If you shift-click with a flag in your hand it will change color.

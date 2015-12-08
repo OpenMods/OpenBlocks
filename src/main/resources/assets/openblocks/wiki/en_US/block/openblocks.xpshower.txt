@@ -1,0 +1,14 @@
+[crafting{200,15,key=block/openblocks.xpshower}]
+
+
+
+
+
+
+
+
+
+
+
+Attach an XP shower to a [link{block/openblocks.tank}]tank [link{}]of [link{block/openblocks.xp_juice}]XP juice [link{}] and it'll pour out XP orbs.
+These orbs can be collected by an [link{block/openblocks.xpdrain}]XP Drain [link{}]or an [link{block/minefactoryreloaded.mfr.machine.sewer}]MFR Sewer [link{}].

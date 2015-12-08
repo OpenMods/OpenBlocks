@@ -1,0 +1,14 @@
+[crafting{200,15,key=item/openblocks.hangglider}]
+
+
+
+
+
+
+
+
+
+
+
+The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!
+To increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!

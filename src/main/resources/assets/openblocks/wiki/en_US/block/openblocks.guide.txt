@@ -1,0 +1,15 @@
+[crafting{200,15,key=block/openblocks.guide}]
+
+
+
+
+
+
+
+
+
+
+
+The building guide, once powered with [link{item/redstone}]redstone [link{}], will give you an outline of ghost blocks in different shapes and sizes that'll help you plan out rooms.
+Use touch-buttons on block to change outline dimensions and shapes.
+Color of markers can be changed by using [link{item/dyePowder}]dye [link{}]on central block.

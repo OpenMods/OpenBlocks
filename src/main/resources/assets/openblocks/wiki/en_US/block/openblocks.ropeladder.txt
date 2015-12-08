@@ -1,0 +1,13 @@
+[crafting{200,15,key=block/openblocks.ropeladder}]
+
+
+
+
+
+
+
+
+
+
+
+When you place a rope ladder it'll roll out all the way to the ground. For every created ladder block it will use one item from stack.

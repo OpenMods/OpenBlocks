@@ -1,0 +1,14 @@
+[crafting{200,15,key=item/openblocks.sonicglasses}]
+
+
+
+
+
+
+
+
+
+
+
+Introducing the fantabulous new Sonic Glasses!
+This new and exciting technology from OpenMods Inc allow you see what you hear!
