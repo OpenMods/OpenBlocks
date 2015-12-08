@@ -16,10 +16,9 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.infobook.BookDocumentation;
-import openmods.inventory.ItemInventory;
-import openmods.inventory.PlayerItemInventory;
+import openmods.inventory.*;
+import openmods.inventory.StackEqualityTesterBuilder.IEqualityTester;
 import openmods.inventory.legacy.ItemDistribution;
-import openmods.utils.InventoryUtils;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -132,6 +131,8 @@ public class ItemDevNull extends Item {
 		return true;
 	}
 
+	private static final IEqualityTester tester = new StackEqualityTesterBuilder().useItem().useDamage().useNBT().build();
+
 	@SubscribeEvent
 	public void onItemPickUp(EntityItemPickupEvent evt) {
 
@@ -143,16 +144,17 @@ public class ItemDevNull extends Item {
 		boolean foundMatchingContainer = false;
 
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-			ItemStack stack = player.inventory.getStackInSlot(i);
+			final ItemStack stack = player.inventory.getStackInSlot(i);
 
 			if (stack != null && stack.getItem() == this) {
-				ItemInventory inventory = new ItemInventory(stack, 1);
-				ItemStack containedStack = inventory.getStackInSlot(0);
+				final ItemInventory inventory = new ItemInventory(stack, 1);
+				final ItemStack containedStack = inventory.getStackInSlot(0);
 				if (containedStack != null) {
-					boolean isMatching = InventoryUtils.areItemAndTagEqual(pickedStack, containedStack);
+					final boolean isMatching = tester.isEqual(pickedStack, containedStack);
 					if (isMatching) {
-						foundMatchingContainer = true;
 						ItemDistribution.tryInsertStack(inventory, 0, pickedStack, true);
+						if (pickedStack.stackSize == 0) return;
+						foundMatchingContainer = true;
 					}
 				}
 			}
