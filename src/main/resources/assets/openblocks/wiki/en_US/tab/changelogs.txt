@@ -1,0 +1,3 @@
+[color{FF0000}]Changelogs are currently not implemented.
+
+Use the [link{item/openblocks.info_book}]Info Book [link{}]for more information at the moment.

@@ -1,0 +1,17 @@
+[prefix{l}]Unstable Enchantment [prefix{}]
+
+We've had unconfirmed reports that this enchantment causes any [link{item/sulphur}]gunpowder [link{}]you're carrying to become unstable when you're attacked or when you jump off something.
+
+Use at your own risk!
+
+
+[prefix{l}]Flim Flam Enchantment [prefix{}]
+
+Scientists have yet to discover the properties of this enchantment.
+
+
+[prefix{l}]Last Stand Enchantment [prefix{}]
+
+The last stand enchantment uses your XP bar as a final protection against dying.
+
+When you reach 0.5 hearts, the game will take XP from you whenever you're damaged instead of killing you. The higher number of enchantments you have the cheaper the XP cost will be.

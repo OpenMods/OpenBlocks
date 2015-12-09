@@ -1,0 +1,27 @@
+[prefix{l}]Easy Config Editing [prefix{}]
+
+OpenMods allow for both client and server config options to be changed from chat commands. Some don't even require restart!
+
+Server config settings can be changed using '[prefix{4}]/om_config_s [prefix{}]' (op needed) and client config settings can be changed using '[prefix{4}]/om_config_c [prefix{}]'
+
+For example:
+
+[prefix{4}]/om_config_s set OpenBlocks dropblock elevatorDrainsXP false [prefix{}]
+[prefix{4}]/om_config_s save [prefix{}]
+
+For a full list of commands type: [prefix{4}]/help om_config_s [prefix{}] or [prefix{4}]/help om_config_c [prefix{}]
+
+
+[prefix{l}]Inventory backup [prefix{}]
+
+Everyone can make mistake. But with [prefix{4}]/ob_inventory [prefix{}] command you can fix some of them. This command can be used to restore inventory.
+Backup is created when:
+ - player dies
+ - grave is spawned
+ - player issued command [prefix{4}]/ob_inventory store [prefix{}]
+ 
+To restore inventory you need backup name. Go to folder below or to saves folder on server and look for files named [prefix{4}]inventory-*.dat [prefix{}].
+Then restore inventory with [prefix{4}]/ob_inventory restore <player> <id> [prefix{}] - where id is either full filename or just middle part, without [prefix{4}]inventory- [prefix{}] and [prefix{4}].dat [prefix{}].
+You can also use tab completion. Backups are normal NBT files and can be opened with any editor.
+
+Saves folder is the [prefix{4}]data [prefix{}] folder inside your world's saving folder.

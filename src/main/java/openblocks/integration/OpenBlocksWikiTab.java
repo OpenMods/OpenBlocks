@@ -354,6 +354,6 @@ public final class OpenBlocksWikiTab implements IWikiTab {
      */
     private String getPageLocation(String page){
     	
-        return "openblocks:wikitab/" + page;
+        return "openblocks:tab/" + page;
     }
 }

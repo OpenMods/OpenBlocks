@@ -33,6 +33,8 @@ public final class ModuleWiki extends IntegrationModule {
 		super(all(
 				modLoaded(Mods.IGW),
 				new IsClient()));
+		// Need to add IGW to openmods.Mods
+		// public static final String IGW = "IGWMod";
 	}
 
 	/**
