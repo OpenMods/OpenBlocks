@@ -28,6 +28,7 @@ import openblocks.events.ElevatorActionEvent;
 import openblocks.events.PlayerActionEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
+import openblocks.integration.ModuleWiki;
 import openblocks.rpc.*;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
@@ -432,6 +433,7 @@ public class OpenBlocks {
 
 		Integration.addModule(new ModuleAdapters());
 		Integration.addModule(new ModuleTurtles());
+		Integration.addModule(new ModuleWiki());
 
 		if (!Config.soSerious) {
 			MinecraftForge.EVENT_BUS.register(new BrickManager());
