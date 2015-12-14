@@ -1,6 +1,8 @@
 achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Sorry, das ist einfach so passiert...
 stat.openblocks.bricksDropped=Fallen gelassene Ziegel
+achievement.openblocks.stackOverflow=Stack Overflow
+achievement.openblocks.stackOverflow.desc=Es ist voller Sterne!
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Sei albern
@@ -8,6 +10,15 @@ openblocks.keybind.drop_brick=Sei albern
 enchantment.openblocks.explosive=Instabil
 enchantment.openblocks.laststand=Letzte Rettung
 enchantment.openblocks.flimflam=Blödsinn
+
+openblocks.gui.blocks=Blöcke
+openblocks.gui.items=Items
+openblocks.gui.misc=Verschiedenes
+openblocks.gui.changelogs=Changelogs
+
+openblocks.gui.features=Features
+openblocks.gui.bugfixes=Bugfixes
+openblocks.gui.tweaks=Tweaks
 
 openblocks.gui.luggage=Reisegepäck
 openblocks.gui.sprinkler=Rasensprenger
@@ -24,19 +35,23 @@ openblocks.gui.itemdropper=Itemspender
 openblocks.gui.blockplacer=Blockplatzierer
 openblocks.gui.paintmixer=Farbmixer
 openblocks.gui.drawingtable=Zeichentisch
-openblocks.gui.blocks=Blöcke
-openblocks.gui.items=Items
-openblocks.gui.misc=Misc
 openblocks.gui.digitalfuse=Digitalzünder
+openblocks.gui.xp_outputs=XP-Abgabe
+openblocks.gui.item_outputs=Itemabgabe
+openblocks.gui.max_level=Max. Level: %d
+openblocks.gui.save_folder=Sichere Ordner
 
 openblocks.gui.welcome.title=Willkommen!
 openblocks.gui.welcome.content=OpenBlocks ist eine neue Open-Source-Mod, die verschiedene Ideen in Minecraft einbringt, inklusive Gleitschirme, Aufzüge, Tanks, Gräber, Farben, Kräne, flüssige XP, Kartographen, Trophäen und mehr!
 
-openblocks.gui.credits_title=Credits
-openblocks.gui.credits=§LBoq, Mikee und NeverCast§R - Führende Entwickler von OpenBlocks (Dürfen wir uns selbst hier nennen?)\n\n§LSinZ und Yoshi2§R - Von Anfang an Mitglieder des OpenMods-Teams.\n\n§LVexatos und crafteverywhere§R - Arbeitsame Übersetzer.\n\nJeder, der innerhalb des letzten Jahres zum Code beigetragen hat.\n\n*Direwolf20 and the rest of ForgeCraft* - Für das Entdecken von Bugs und Crashes vor der Veröffentlichung einer Version.\n\nJeder, der ein Spotlight oder Let's Play machte sowie generell die Modifikation untertützt hat, seit wir begannen!
+openblocks.gui.credits.title=Credits
+openblocks.gui.credits.content=§LBoq, Mikee und NeverCast§R - Führende Entwickler von OpenBlocks (Dürfen wir uns selbst hier nennen?)\n\n§LSinZ und Yoshi2§R - Von Anfang an Mitglieder des OpenMods-Teams.\n\n§LVexatos und crafteverywhere§R - Arbeitsame Übersetzer.\n\nJeder, der innerhalb des letzten Jahres zum Code beigetragen hat.\n\n*Direwolf20 and the rest of ForgeCraft* - Für das Entdecken von Bugs und Crashes vor der Veröffentlichung einer Version.\n\nJeder, der ein Spotlight oder Let's Play machte sowie generell die Modifikation untertützt hat, seit wir begannen!
 
 openblocks.gui.config.title=Einfache Config-Bearbeitung
 openblocks.gui.config.content=OpenMods erlaubt, sowohl Client- als auch Serverkonfigurationen über den Chat zu ändern. Manche brauchen nicht mal einen Neustart!\n\nServerkonfigurationen können mit '§L/om_config_s§R' (setzt Operator-Rechte vorraus) und Clientkonfigurationen mit '§L/om_config_c§R' geändert werden.\n\nZum Beispiel:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFür eine Liste aller verfügbaren Kommandos benutze: §L/help om_config_s§R oder §L/help om_config_c§R
+
+openblocks.gui.restore_inv.title=Inventar-Backup
+openblocks.gui.restore_inv.content=Jeder kann einen Fehler machen, aber mit dem §L/ob_inventory§R-Befehl kannst du einige von ihnen wieder beheben. Dieser Befehl kann zum Wiederherstellen des Inventars genutzt werden. Ein Backup wird erstellt wenn:\n - der Spieler stirbt\n - ein Grabstein gespawnt wird \n - der Spieler den Befehl §L/ob_inventory store§R eingibt\n\nTo restore an inventory you need the name of the backup. Gehen in den unten genannten Ordner oder den saves-Ordner bei Servern und such nach Dateien mit dem Namen §Linventory-*.dat§R. Dann stelle das Inventar wieder her mit §L/ob_inventory restore <player> <id>§R - wobei id der volle Dateiname ist, oder nur der mittlere Teil ohne §Linventory-§R and §L.dat§R. Du kannst Tabvervollständigung benutzen. Backups sind normal NBT-Dateien und können mit einem entsprechenden Editor geöffnet werden.
 
 openblocks.gui.bkey.title=Die berüchtigte 'B'-Taste
 openblocks.gui.bkey.content=Die 'B'-Taste ist eine sehr spezielle Taste in OpenBlocks.\n\nAktivieren der Option 'weAreSeriousPeople' im Abschnitt 'tomfoolery' sowohl in der Client- als auch in der Serverkonfiguration gibt dir dein eigenes Verdauungssystem.\n\nVersuche etwas von diesem Leckeren Lehm zu essen und drücke 'B', um ihn zu verdauen!
@@ -70,13 +85,24 @@ openblocks.misc.selected_cannon=Kanone zum Zielen ausgewählt
 openblocks.misc.pointed_cannon=Kanone zielt nun auf %s, %s, %s
 openblocks.misc.change_mode=Wechsle zu %s-Modus
 openblocks.misc.change_size=Ändere Größe zu %sx%sx%s
+openblocks.misc.change_box_size=Ändere Größe zu (%d,%d,%d):(%d,%d,%d)
 openblocks.misc.total_blocks=Insgesamt gezählte Blöcke: %d
 openblocks.misc.get_witched=Werde verhext!
+openblocks.misc.page=Seite %d von %d
+openblocks.misc.oh_no_ceiling=Du kannst hier nicht schlafen. Die Decke beunruhigt dich zu sehr...
+openblocks.misc.oh_no_ground=Auf DEM Ding willst du schlafen?!
+openblocks.misc.sleeping_bag_broken=Item inaktiv wegen fehlerhafter Initialisierung
 
-openblocks.misc.cant_restore=Das Inventar von Spieler %s kann nicht wiederhergestellt werden
-openblocks.misc.cant_store=Das Inventar von Spieler %s kann nicht gespeichert werden
-openblocks.misc.stored_inventory=Inventar des Spielers gespeichert in %s
+openblocks.misc.grave_msg=%s (Tag: %.1f)
+
+openblocks.misc.cant_restore_player=Kann Inventar für %s nicht wiederherstellen
+openblocks.misc.cant_restore_inventory=Kann Inventar nicht wiederherstellen
+openblocks.misc.cant_store=Das Inventar für %s kann nicht gespeichert werden
+openblocks.misc.invalid_sub_inventory=Kann Unterinventar %s nicht widerherstellen
+openblocks.misc.stored_inventory=Spielerinventar gespeichert in %s
 openblocks.misc.restored_inventory=Inventar von Spieler %s wiederhergestellt
+openblocks.misc.invalid_index=Fehlerhafter index
+openblocks.misc.empty_slot=Kein Item im Slot
 
 openblocks.misc.pedometer.tracking_reset=Tracking zurückgesetzt
 openblocks.misc.pedometer.tracking_started=Tracking gestartet
@@ -95,14 +121,23 @@ openblocks.misc.pedometer.last_check_time=Zeit seit dem letzen Check: %d ticks
 
 openblocks.misc.pedometer.total_time=Gesamtdauer: %d ticks
 
+openblocks.misc.shape=Form: %
 openblocks.misc.shape.sphere=Kugel
 openblocks.misc.shape.cylinder=Zylinder
 openblocks.misc.shape.cuboid=Quader
+openblocks.misc.shape.full_cuboid=Voller Quader
 openblocks.misc.shape.dome=Kuppel
 openblocks.misc.shape.triangle=Dreieck
 openblocks.misc.shape.pentagon=Fünfeck
 openblocks.misc.shape.hexagon=Sechseck
 openblocks.misc.shape.octagon=Achteck
+openblocks.misc.shape.axes=Achsen
+openblocks.misc.shape.planes=Ebenen
+
+openblocks.misc.box=Maße: (%d,%d,%d):(%d,%d,%d)
+openblocks.misc.width=Breite: %d
+openblocks.misc.height=Höhe: %d
+openblocks.misc.depth=Tiefe: %d
 
 openblocks.misc.radio.too_many=Es laufen bereits zu viele Radios
 openblocks.misc.radio.invalid_stream=Ungültiger Stream
@@ -136,15 +171,21 @@ openblocks.turtle.magnet=Magnet
 tile.openblocks.elevator.name=Fahrstuhl
 tile.openblocks.elevator.description=Platziere einen Fahrstuhl drei oder mehr Blöcke oberhalb eines anderen ohne Blöcke dazwischen und du wirst fähig sein, entweder zu 'springen', um dich aufwärts zu bewegen oder zu 'kriechen', um dich abwärts zu bewegen. Fahrstühle können gefärbt werden, indem man mit einem Farbstoff in der Hand rechtsklickt, jedoch kannst du dich nur zwischen Fahrstühlen in der selben Farbe teleportieren.
 
+tile.openblocks.elevator_rotating.name=Rotierender Fahrstuhl
+
 tile.openblocks.heal.name=Heiler
 tile.openblocks.heal.description=Der Heil-Block ist ein Block für den Kreativ-Modus, der nach und nach einen kleinen Heilungs-Effekt bringt.
 
 tile.openblocks.guide.name=Bau-Hilfe
 tile.openblocks.guide.description=Die Bau-Hilfe wird dir eine Schablone aus unechten Blöcken geben, in unterschiedlichen Formen und Größen, um dir zu helfen, deine Bauten zu planen.\nDu kannst den Block Shift-rechtsklicken, um die Form zu verändern, oder du kannst verschiedene Seiten anklicken, um die Schablone zu vergößern bzw. zu verkleinern.\nIm Kreativ-Modus kannst du einen Obsidian-Block oberhalb der Bau-Hilfe platzieren und diese dann mit irgendeinem Block rechtsklicken, um die Schablone automatisch mit diesem Block auszufüllen.
 
-tile.openblocks.ladder.name=Jaded-Leiter
-tile.openblocks.ladder.description=Die Jaded-Leiter löst das nervige Problem, über eine Falltür an der Spitze einer Leiter springen zu müssen. Die Jaded-Leiter funktioniert zeitgleich wie eine Falltür und wie eine Leiter.
+tile.openblocks.builder_guide.name=Verbesserte Bau-Hilfe
+tile.openblocks.builder_guide.description=Die verbesserte Form der Bau-Hilfe zeigt nicht nur Phantomblöcken zum einfacheren Bauen, sondern erlaubt auch das Setzen der eigentlichen Blöcke. Klicke dazu einfach auf den zentralen Block mit einem beliebigen Stapel!\nIm Kreativmodus kannst du einen Obisidanblock darüber platzieren und dann die Bau-Hilfe mit einem beliebigen Block hauen um das Gebäude zu bauen.
 
+tile.openblocks.ladder.name=Strickleiter
+tile.openblocks.ladder.description=Die Strickleiter löst das nervige Problem, über eine Falltür an der Spitze einer Leiter springen zu müssen. Die Strickleiter funktioniert zeitgleich wie eine Falltür und wie eine Leiter.
+
+tile.openblocks.tank.filled.name=%s Tank
 tile.openblocks.tank.name=Tank
 tile.openblocks.tank.description=Tanks können Flüssigkeiten halten. Wenn du Tanks nebeneinander platzierst, werden sie ihre Flüssigkeit untereinander aufteilen. Du kannst Flüssigkeiten mit Eimern in Tanks füllen. Wenn der Tank Flüssige XP enthält, kannst du mit einer leeren Hand rechtsklicken, um dir ein wenig dieser XP zu geben. Wenn abgebaut, behalten Tanks ihren Inhalt.
 
@@ -225,6 +266,7 @@ tile.openblocks.drawingtable.description=Der Zeichentisch wird gebraucht, um Sch
 
 tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
+tile.openblocks.trophy.entity.name=%s Trophäe
 tile.openblocks.canvasglass.name=Glasleinwand
 tile.openblocks.paintcan.name=Farbeimer
 
@@ -237,6 +279,9 @@ tile.openblocks.radio.description=Das Radio erlaubt es dir, Internetradio zu spi
 
 tile.openblocks.xpshower.name=XP-Dusche
 tile.openblocks.xpshower.description=Bringe eine XP-Dusche an einen Tank voller XP-Saft an und sie wird XP-Orbs ausschütten. Diese Orbs können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.
+
+tile.openblocks.scaffolding.name=Gerüst
+tile.openblocks.scaffolding.description=Wolltest du jemals irgendwo hochbauen, ohne einen häslichen Turm zu hinterlassen? Jetzt kannst du! Baue mit Gerüstblöcken und sie verschwinden wenn du fertig bist mit bauen.
 
 tile.openblocks.goldenegg.name=Goldenes Ei
 
@@ -273,6 +318,12 @@ item.openblocks.paintbrush.description=Pinsel lassen dich Blöcke in der Farbe d
 item.openblocks.unprepared_stencil.name=Unbearbeitete Schablone
 item.openblocks.unprepared_stencil.description="Was sind diese nervigen Schablonen, die ich dauernd in Truhen finde?"\n\nSchablonen können auf Blöcken platziert werden und dann mit einem Pinsel übermalt werden!\n\nDu kannst einen Block mit mehreren Schablonen bemalen und du kannst mit einer leeren Hand auf sie klicken, um sie zu drehen.\n\nPlatziere eine unbearbeitete Schablone in einen Zeichentisch, um verschiedene Formen zu erstellen.
 
+item.openblocks.crane_backpack.name=Kranrucksack
+item.openblocks.crane_backpack.description="Magnet" in der Minecraftwelt ist ein antikes Wort für "Wie funktioniert das?".\n\nDieser spezielle Ausrüstungsgegenstand erlaubt es Mobs, Spieler, Items und Blöcke aufzuheben. Kann durch Krankontrolle beeinflusst werden.
+
+item.openblocks.crane_control.name=Krankontrolle
+item.openblocks.crane_control.description=Dise drahtlose Hi-Tech-Fernbedienung wird für die Steuerung des Kranrucksacks verwendet.\n\nRechtsklick zum Anheben, Shift-Rechtsklick zum Absenken, Linksklick zum Aufheben/Fallenlassen.\nEine blinkende Leuchte signalisiert, das etwas unter dem Magneten ist.
+
 item.openblocks.stencil.name=Schablone
 item.openblocks.crayon.name=Magischer Buntstift
 item.openblocks.pencil.name=Magischer Bleistift
@@ -280,8 +331,6 @@ item.openblocks.glasses.pencil.name=Bleistiftbrille
 item.openblocks.glasses.crayon.name=Buntstiftbrille
 item.openblocks.glasses.technicolor.name=Erstaunliche Technicolor-Brille
 item.openblocks.glasses.admin.name=Badass-Brille
-item.openblocks.crane_backpack.name=Kranrucksack
-item.openblocks.crane_control.name=Krankontrolle
 item.openblocks.crane_engine.name=Kranmotor
 item.openblocks.crane_magnet.name=Kranmagnet
 item.openblocks.beam.name=Balken
