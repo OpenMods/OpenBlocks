@@ -286,6 +286,9 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "pedometer")
 		public static ItemPedometer pedometer;
+
+		@RegisterItem(name = "epicEraser", unlocalizedName = "epic_eraser")
+		public static ItemEpicEraser epicEraser;
 	}
 
 	public static class Fluids {

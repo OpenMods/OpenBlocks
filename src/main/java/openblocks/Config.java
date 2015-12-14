@@ -654,6 +654,12 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.pedometer, "www", "rcr", "www", 'w', "plankWood", 'r', "dustRedstone", 'c', Items.clock));
 		}
 
+		if (OpenBlocks.Items.epicEraser != null) {
+			recipeList.add(new EpicEraserRecipe());
+			RecipeSorter.register("openblocks:epic_eraser", EpicEraserRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.epicEraser, "gemLapis", "slimeball", Blocks.wool));
+		}
+
 		if (OpenBlocks.Items.filledBucket != null) {
 			MetasBucket.registerItems();
 			MetasBucket.xpbucket.registerAsBucketFor(OpenBlocks.Fluids.xpJuice);

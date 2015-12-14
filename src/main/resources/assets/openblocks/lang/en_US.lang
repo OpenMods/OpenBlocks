@@ -209,6 +209,9 @@ tile.openblocks.sponge.description=The sponge is a replacement for the vanilla s
 item.openblocks.spongeonastick.name=Sponge
 item.openblocks.spongeonastick.description=The sponge on a stick is a tool for cleaning up liquids. Works just like the sponge, but is more mobile at the expense of wearing out.
 
+item.openblocks.epic_eraser.name=Epic Eraser
+item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence.
+
 tile.openblocks.cannon.name=Item Cannon
 tile.openblocks.cannon.description=When given a redstone signal, the item cannon will shoot items that it finds in an adjacent inventory. Use the 'pointer' item to aim the cannon.
 
