@@ -24,6 +24,7 @@ import openblocks.client.renderer.tileentity.*;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
+import openblocks.enchantments.flimflams.LoreFlimFlam;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import openmods.renderer.*;
@@ -60,6 +61,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (Config.radioVillagerId > 0) {
 			VillagerRegistry.instance().registerVillagerSkin(Config.radioVillagerId, RADIO_VILLAGER_TEXTURE);
+		}
+
+		if (Config.flimFlamEnchantmentId > 0) {
+			MinecraftForge.EVENT_BUS.register(new LoreFlimFlam.DisplayHandler());
 		}
 	}
 

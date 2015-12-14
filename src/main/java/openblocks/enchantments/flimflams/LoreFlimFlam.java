@@ -9,15 +9,55 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import openblocks.Config;
 import openblocks.api.IFlimFlamAction;
 import openblocks.rubbish.LoreGenerator;
 import openmods.utils.ItemUtils;
+
+import org.lwjgl.input.Keyboard;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 public class LoreFlimFlam implements IFlimFlamAction {
+
+	public static final String TAG_NAME = "SillyLore";
+
+	public static final String LORE_FORMAT = EnumChatFormatting.GREEN + "" + EnumChatFormatting.ITALIC;
+
+	public static class DisplayHandler {
+		@SubscribeEvent
+		public void onItemTooltip(ItemTooltipEvent evt) {
+			if (Config.loreDisplay > 0) {
+				final NBTTagCompound itemTag = evt.itemStack.getTagCompound();
+				if (itemTag != null) {
+					if (itemTag.hasKey("display", Constants.NBT.TAG_COMPOUND)) {
+						final NBTTagCompound displayTag = itemTag.getCompoundTag("display");
+						if (displayTag.hasKey(TAG_NAME, Constants.NBT.TAG_LIST) &&
+								!displayTag.hasKey("Lore", Constants.NBT.TAG_LIST)) {
+							final NBTTagList sillyLore = displayTag.getTagList(TAG_NAME, Constants.NBT.TAG_STRING);
+
+							if ((Config.loreDisplay > 1) ||
+									Keyboard.isKeyDown(Keyboard.KEY_LMENU) ||
+									Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
+								for (int i = 0; i < sillyLore.tagCount(); i++)
+									evt.toolTip.add(LORE_FORMAT + sillyLore.getStringTagAt(i));
+							} else {
+								evt.toolTip.add(StatCollector.translateToLocal("openblocks.misc.hidden_lore"));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
@@ -31,25 +71,25 @@ public class LoreFlimFlam implements IFlimFlamAction {
 	}
 
 	private static boolean tryAddLore(EntityPlayer target, int slot) {
-		ItemStack item;
+		final ItemStack item;
 
 		if (slot == 4) item = target.getHeldItem();
 		else item = target.inventory.armorInventory[slot];
 
 		if (item == null) return false;
 
-		NBTTagCompound tag = ItemUtils.getItemTag(item);
+		final NBTTagCompound tag = ItemUtils.getItemTag(item);
 
-		NBTTagCompound display = tag.getCompoundTag("display");
-		if (!tag.hasKey("display")) tag.setTag("display", display);
+		final NBTTagCompound display = tag.getCompoundTag("display");
+		if (!tag.hasKey("display", Constants.NBT.TAG_COMPOUND)) tag.setTag("display", display);
 
-		String lore = LoreGenerator.generateLore(target.getCommandSenderName(), identityType(item));
+		final String lore = LoreGenerator.generateLore(target.getCommandSenderName(), identityType(item));
 
-		NBTTagList loreList = new NBTTagList();
+		final NBTTagList loreList = new NBTTagList();
 		for (String line : splitText(lore, 30))
 			loreList.appendTag(new NBTTagString(line));
 
-		display.setTag("Lore", loreList);
+		display.setTag(TAG_NAME, loreList);
 		return true;
 	}
 

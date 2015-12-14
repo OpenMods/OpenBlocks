@@ -152,6 +152,10 @@ public class Config {
 	public static boolean safeFlimFlams = false;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "tomfoolery", name = "sillyLoreDisplay", comment = "0 - lore hidden, 1 - visible only with pressed ALT, 2 - always visible")
+	public static int loreDisplay = 1;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "debug", name = "goldenEyeDebug", comment = "Show structures found by golden eye")
 	public static boolean eyeDebug = false;
 
