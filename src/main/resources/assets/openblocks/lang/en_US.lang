@@ -347,6 +347,9 @@ item.openblocks.crane_control.name=Crane Control
 item.openblocks.crane_control.description=This hi-tech wireless remote is used for controlling magnet backpacks.\n\nRight click to raise, Sneak + right click to lower, left click to pick/release.\nBlinking light signals something is under magnet.
 item.openblocks.crane_control.video=http://www.youtube.com/watch?v=k6VwMINGbL8
 
+item.openblocks.wrench.name=Big Metal Bar
+item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok?
+
 item.openblocks.stencil.name=Stencil
 item.openblocks.crayon.name=Magic Crayon
 item.openblocks.pencil.name=Magic Pencil

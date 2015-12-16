@@ -289,6 +289,9 @@ public class OpenBlocks {
 
 		@RegisterItem(name = "epicEraser", unlocalizedName = "epic_eraser")
 		public static ItemEpicEraser epicEraser;
+
+		@RegisterItem(name = "wrench")
+		public static ItemWrench wrench;
 	}
 
 	public static class Fluids {

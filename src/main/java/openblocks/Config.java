@@ -665,6 +665,10 @@ public class Config {
 			MetasBucket.xpbucket.registerAsBucketFor(OpenBlocks.Fluids.xpJuice);
 		}
 
+		if (OpenBlocks.Items.wrench != null) {
+			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.wrench, "iii", "iii", 'i', "ingotIron"));
+		}
+
 		if (explosiveEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new ExplosiveEnchantmentsHandler());
 			Enchantments.explosive = new EnchantmentExplosive(explosiveEnchantmentId);
