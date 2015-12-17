@@ -5,10 +5,12 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
@@ -41,34 +43,38 @@ public class SoundEventsManager {
 	public final SoundIconRegistry icons = new SoundIconRegistry();
 
 	private static class SoundEvent {
-		public final float x, y, z;
 		public final IDrawableIcon icon;
 		public final double size;
 
-		private double time;
-		private final double timeDeltaPerTick;
+		public final ISound sound;
 
-		private SoundEvent(float x, float y, float z, IDrawableIcon icon, double size, double TTL) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
+		private boolean isPlaying = true;
+
+		private int ticks;
+		private final int TTL;
+
+		private SoundEvent(ISound sound, IDrawableIcon icon, double size, double TTL) {
+			this.sound = sound;
 			this.icon = icon;
 			this.size = size;
 
-			time = 1;
-			timeDeltaPerTick = 1 / (TTL * 20);
+			this.TTL = MathHelper.floor_double(20 * TTL);
 		}
 
-		public void update() {
-			time -= timeDeltaPerTick;
+		public void update(SoundHandler handler) {
+			if (isPlaying) {
+				isPlaying = handler.isSoundPlaying(sound);
+			} else {
+				ticks++;
+			}
 		}
 
 		public boolean isAlive() {
-			return time >= 0;
+			return ticks <= TTL;
 		}
 
-		public double getTime(double partialTick) {
-			return time - timeDeltaPerTick * partialTick;
+		public double getAlpha(double partialTick) {
+			return 1 - (ticks + partialTick) / TTL;
 		}
 	}
 
@@ -89,19 +95,15 @@ public class SoundEventsManager {
 		return isEntityWearingGlasses(e);
 	}
 
-	private void addEvent(float x, float y, float z, ResourceLocation sound, double size, double time) {
-		IDrawableIcon icon = icons.getIcon(sound);
-
-		synchronized (events) {
-			events.add(new SoundEvent(x, y, z, icon, size, time));
-		}
-	}
-
 	@SubscribeEvent
 	public void onSoundEvent(PlaySoundEvent17 evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
-			ISound sound = evt.sound;
-			addEvent(sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), sound.getPositionedSoundLocation(), Math.log(sound.getVolume() + 1), 5 * sound.getPitch());
+			final ISound sound = evt.sound;
+			final IDrawableIcon icon = icons.getIcon(sound.getPositionedSoundLocation());
+
+			synchronized (events) {
+				events.add(new SoundEvent(sound, icon, Math.log(sound.getVolume() + 1), sound.getPitch()));
+			}
 		}
 	}
 
@@ -112,10 +114,12 @@ public class SoundEventsManager {
 
 	public void tickUpdate() {
 		synchronized (events) {
+			final SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			Iterator<SoundEvent> it = events.iterator();
+
 			while (it.hasNext()) {
 				SoundEvent evt = it.next();
-				evt.update();
+				evt.update(handler);
 				if (!evt.isAlive()) it.remove();
 			}
 		}
@@ -223,14 +227,14 @@ public class SoundEventsManager {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		synchronized (events) {
 			for (SoundEvent snd : events) {
-				final double px = snd.x - interpX;
-				final double py = snd.y - interpY;
-				final double pz = snd.z - interpZ;
+				final double px = snd.sound.getXPosF() - interpX;
+				final double py = snd.sound.getYPosF() - interpY;
+				final double pz = snd.sound.getZPosF() - interpZ;
 
 				GL11.glPushMatrix();
 				GL11.glTranslated(px, py, pz);
 				RenderUtils.setupBillboard(rve);
-				snd.icon.draw(tex, snd.getTime(evt.partialTicks), snd.size);
+				snd.icon.draw(tex, snd.getAlpha(evt.partialTicks), snd.size);
 				GL11.glPopMatrix();
 			}
 		}
