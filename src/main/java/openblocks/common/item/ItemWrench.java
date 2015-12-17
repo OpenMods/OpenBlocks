@@ -19,6 +19,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @BookDocumentation
 public class ItemWrench extends Item {
 
@@ -46,6 +49,12 @@ public class ItemWrench extends Item {
 				return input.isInstance(block);
 			}
 		});
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean isFull3D() {
+		return true;
 	}
 
 	@Override
