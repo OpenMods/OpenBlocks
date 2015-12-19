@@ -1,16 +1,459 @@
-[crafting{200,15,key=block/openblocks.autoanvil}]
+[prefix{l}][prefix{1}]AUTO ANVIL [prefix{}] [prefix{}]
 
+"[prefix{o}]The Auto Anvil and [link{block/openblocks.autoenchantmenttable}]Auto Enchantment Table [link{}], imported fresh from OpenXP. Uses liquid XP to perform their function automatically.[prefix{}]"
+- The feature mentioned in the README on OpenBlocks's Github page
 
+The Auto Anvil, much like its [link{item/anvil.intact}]vanilla counterpart [link{}], can be used to repair items, as well as to combine enchantments.
+The only difference is that it runs from [link{block/openblocks.xp_juice}]XP juice [link{}] and can be completely automated.
 
-
-
-
-
-
-
-
-
-The auto anvil works just like [link{item/anvil.intact}]the vanilla anvil, [link{}]except it runs from [link{block/openblocks.xp_juice}]XP juice [link{}]and can be fully automated.
+[prefix{l}]Info-Book description [prefix{}]
+[prefix{o}]
+The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.
 
 Use the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted.
 Right click and drag the anvil in the tab to spin it around and select other sides!
+[prefix{}]
+
+[prefix{l}]Technical information [prefix{}]
+[prefix{2}]Type: [prefix{}]Solid Block
+[prefix{2}]Physics: [prefix{}]No
+[prefix{2}]Transparency: [prefix{}]Yes
+[prefix{2}]Luminance: [prefix{}]No
+[prefix{2}]Blast resistance: [prefix{}]5.0
+[prefix{2}]Hardness: [prefix{}]1.0
+[prefix{2}]Tool: [prefix{}] [link{item/pickaxeWood}]Wooden Pickaxe [link{}]
+[prefix{2}]Stackable: [prefix{}]Yes, up to 64
+[prefix{2}]Flammable: [prefix{}]No
+[prefix{2}]Drops: [prefix{}]Itself
+[prefix{2}]Name: [prefix{}]openblocks:autoanvil
+
+[prefix{l}]Obtaining [prefix{}]
+[prefix{2}]Mining [prefix{}]
+The Auto Anvil can be mined with any type of pickaxe. If mined without a pickaxe, it drops nothing.
+
+[prefix{5}]Breaking times [prefix{}]
+[prefix{o}]Hand or other non-pickaxe tool: [prefix{}]5 seconds
+[prefix{o}]Wooden pickaxe: [prefix{}]1.10 seconds
+[prefix{o}]Stone pickaxe: [prefix{}]0.84 seconds
+[prefix{o}]Iron pickaxe: [prefix{}]0.70 seconds
+[prefix{o}]Diamond pickaxe: [prefix{}]0.44 seconds
+[prefix{o}]Gold pickaxe: [prefix{}]0.26 seconds
+
+[prefix{2}]Crafting [prefix{}]
+
+[crafting{200,565,key=block/openblocks.autoanvil}]
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{l}]Usage [prefix{}]
+Auto Anvils, much like the normal Anvils, can be used to repair items or to combine enchantments.
+All their work costs experience points, which are stored in the anvil in the form of [link{block/openblocks.xp_juice}]XP juice [link{}].
+
+Differently from their vanilla counterpart, Auto Anvils do not fall when no block is under them.
+
+[prefix{2}]Repairing [prefix{}]
+[prefix{o}]See also: Repair on "minecraft.gamepedia.com" [prefix{}]
+
+Repairing with materials works for the most part, but not with all items.
+As a rule of thumb, it works for items with their material in the default name, like [prefix{o}]iron [prefix{}]pickaxe, so it can be done with various tools except for bows and shears.
+As a special case, chain armor can be repaired with iron ingots.
+The repair does not need to be complete, since one material will only repair 1⁄4 of the item's maximum durability.
+
+Repairing with a matching item works for any item with durability including bows, shears and so on.
+The items must match in type; you cannot combine a golden pickaxe with an iron one, for example.
+
+Note that in both cases the resulting durability will be limited to the item's maximum, and there is no discount for "over-repair".
+
+As a subset of repairing one item with another, the anvil can transfer enchantments from the sacrifice to the target.
+This can have a synergistic effect when both items share identical enchantments, or simply add to each other when they do not.
+Two Sharpness II swords can be combined to make a Sharpness III sword, for example, or a pickaxe with Efficiency can be combined with one that has Unbreaking.
+This can produce enchantments and combinations that could not be made by using an enchanting table.
+But even so, some enchantments cannot be combined if they are similar, or contradicting, in context of what it does.
+If the target is damaged, you will pay for the repair as well as the transfer.
+
+Transferring high-level enchantments is more expensive.
+Differently, from the vanilla anvil, the automatic version does not have any level limit.
+In exchange, the amount of XP juice stored in the anvil represents the limit of experience after which the anvil will not repair any further.
+Since the automatic version, performs the operation as soon as enough XP Juice is stored, without checking the player's game mode, the limit is present even in creative mode.
+
+[prefix{l}]GUI [prefix{}]
+[image{200, 1325, openblocks:wiki/worldwide/images/block/autoanvil/gui.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The GUI can be divided into three zones: the top one, the right one and the bottom one.
+
+[prefix{2}]Top zone [prefix{}]
+[image{200, 1618, openblocks:wiki/worldwide/images/block/autoanvil/gui_top.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+On this part of the GUI you can find four slots, as you can see in the above image.
+
+The first slot, rounded of red in the above image, is the place where the tool which needs repairing must be placed.
+Exactly like the vanilla anvil, you can also place an enchanted book in this slot, in order to combine enchantments.
+
+The second slot, rounded of yellow, is the place where the material which will be used to repair needs to be placed.
+This slot also accepts other tools, which will be sacrificed in order to repair the one placed in the first slot.
+If this tools have enchantments, they will be transferred to the repaired tool.
+[prefix{o}]See also: Repairing in the previous sections [prefix{}]
+
+The third slot, rounded of blue, is the slot where the repaired tool or the new enchanted book will appear.
+Differently from the vanilla Anvil, the repair process will start as soon as the previous two slots are filled, not when the user picks up the result from the output slot.
+
+The last slot, rounded of green, is simply an indicator of how much XP Juice is contained in that moment in the Auto Anvil.
+It is a sort of buffer where the juice is kept, waiting to be used.
+
+[prefix{2}]Right zone [prefix{}]
+[image{200, 2070, openblocks:wiki/worldwide/images/block/autoanvil/gui_right.png}]
+
+This part of the GUI, also known as the "tab" part, is the place where all the aspects of the Auto Anvil can be configured.
+
+The first tab controls the tool input, the second the modifier input and the third controls the Juice input.
+The last tab controls the repaired tool output.
+
+Every tab has the same structure: in the middle there is the Auto Anvil, where you can choose the side where the specified item should be extracted or ejected.
+Holding right-click on the image and then moving the mouse in a specific direction will rotate the anvil in that same direction, while selecting a side with left-click will mark it as the side to use.
+Every time the tab is opened, the Auto Anvil will be rotated to the same position as you would see it without the GUI.
+
+Down the bottom line of the tab, there is a check-box which allows you to enable the automatic features of the Auto Anvil.
+In particular, it is possible to allow or disallow the automatic extraction of the tool or the modifier, the automatic drink of XP Juice and the automatic ejection of the repaired item.
+[prefix{o}]See also: Gallery [prefix{}]
+
+[prefix{2}]Bottom zone [prefix{}]
+It simply holds the inventory of the player.
+
+[prefix{l}]Setup [prefix{}]
+First of all, you need to place down the Auto Anvil.
+After that, you need some [link{block/openblocks.tank}]OpenBlocks tanks [link{}] full of XP Juice.
+Place them down either on the side of the auto anvil, on the top or on the bottom of it. Then select the side from where to input XP Juice in the XP tab.
+As a suggestion, you could also tick Auto Drink to always have XP in the buffer.
+
+If you want to automate everything, you can also place three [link{block/chest}]chests [link{}]around the Auto Anvil and then set those sides as auto extract or auto eject.
+
+The following is an image of a completely automated setup, as a suggestion:
+[image{200, 2574, openblocks:wiki/worldwide/images/block/autoanvil/setup_suggestion.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{l}]Configuration options [prefix{}]
+[prefix{2}]"blocks" category [prefix{}]
+[prefix{5}]B:autoanvil [prefix{}]
+Allows to enable (true) or disable (false) the Auto Anvil.
+[prefix{o}]Default value: [prefix{}] true
+
+[prefix{l}]Tutorials [prefix{}]
+No Tutorial is available for this block.
+
+[prefix{l}]Useful structures [prefix{}]
+[prefix{2}]Classic automation [prefix{}]
+A really useful structure is represented in the above image, here reported for reference.
+[image{200, 2868, openblocks:wiki/worldwide/images/block/autoanvil/setup_suggestion.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This is a structure which we like to call "Classic Automation".
+It allows for a completely automated process of repairing and/or enchanting.
+It consists of a tank running down the bottom of the anvil, and terminating with some [link{block/openblocks.xpdrain}]XP Drains [link{}].
+The Anvil is then surrounded by chests, with the left one being either the tool input or output and the right one the opposite of the left.
+The one behind the anvil, which can be placed on the top of the anvil, too, is the modifier input.
+
+[prefix{l}]Data values [prefix{}]
+[prefix{o}]0: [prefix{}] Auto Anvil (North/South)
+[prefix{o}]1: [prefix{}] Auto Anvil (East/West)
+[prefix{o}]2: [prefix{}] Auto Anvil (South/North)
+[prefix{o}]3: [prefix{}] Auto Anvil (West/East)
+
+The data values from [prefix{o}]4 [prefix{}]to [prefix{o}]15 [prefix{}]are simply repetitions of the first four, so they are not listed here.
+
+[prefix{l}]History [prefix{}]
+[prefix{2}]1.2.2: [prefix{}]Auto Anvil added.
+
+[prefix{l}]Trivia [prefix{}]
+- All the inputs and outputs operation can be mapped to be done on the same side.
+
+[prefix{l}]Gallery [prefix{}]
+[image{200, 3300, openblocks:wiki/worldwide/images/block/autoanvil/gallery_tool_tab.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{o}]The Tool Tab in the GUI, just right after its opening. [prefix{}]
+
+[image{200, 3530, openblocks:wiki/worldwide/images/block/autoanvil/gallery_modifier_tab.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{o}]The Modifier Tab in the GUI. Notice the selected side on the right and the check-box. [prefix{}]
+
+[image{200, 3770, openblocks:wiki/worldwide/images/block/autoanvil/gallery_xp_tab.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{o}]The XP Juice Tab in the GUI. Notice how the Auto Anvil has been rotated to reach the bottom side of it. [prefix{}]
+
+[image{200, 4013, openblocks:wiki/worldwide/images/block/autoanvil/gallery_output_tab.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{o}]The Output Tab in the GUI. Notice how the check-box is ticked, but no side is selected. [prefix{}]
+
+[image{200, 4251, openblocks:wiki/worldwide/images/block/autoanvil/gallery_repair_step_pickInSlot.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{o}]A series of screen-shots which show the repairing process of an item. Notice in the last the diminished XP Level. [prefix{}]
+
+[image{200, 4523, openblocks:wiki/worldwide/images/block/autoanvil/gallery_repair_step_pickToolTip.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[image{200, 4762, openblocks:wiki/worldwide/images/block/autoanvil/gallery_repair_step_pickAlmostInSecondSlot.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[image{200, 5000, openblocks:wiki/worldwide/images/block/autoanvil/gallery_repair_step_pickRepaired.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[image{200, 5246, openblocks:wiki/worldwide/images/block/autoanvil/gallery_comparison.png}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[prefix{o}]The vanilla anvil, on the left, and the automatic version, on the right. [prefix{}]
+
+[prefix{l}]Related features [prefix{}]
+[link{block/openblocks.autoenchantmenttable}]Auto Enchantment Table [link{}]
+[link{block/openblocks.xp_juice}]XP Juice [link{}]
+[link{block/openblocks.xpdrain}}]XP Drain [link{}]
