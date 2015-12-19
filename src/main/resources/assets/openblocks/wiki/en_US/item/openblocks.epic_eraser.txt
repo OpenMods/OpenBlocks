@@ -1,0 +1,16 @@
+[crafting{200,15,key=item/openblocks.epic_eraser}]
+
+
+
+
+
+
+
+
+
+
+
+Every item has its own history...
+
+Don't you hate it?
+With this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence.

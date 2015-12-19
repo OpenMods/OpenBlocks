@@ -1,0 +1,18 @@
+[crafting{200,15,key=item/openblocks.wrench}]
+
+
+
+
+
+
+
+
+
+
+
+This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.
+
+
+Or just big, dumb piece of metal you can use to rotate cubes and stuff.
+
+So yeah, it's yet another wrench. I'm just trying to be original here, ok?
