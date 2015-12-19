@@ -62,6 +62,10 @@ public final class OpenBlocksWikiTab implements IWikiTab {
 		pages.add("bKey");
 		pages.add("enchantments");
 		pages.add("changelogs");
+		// Maybe substitute changelogs with
+		// contacts until we add changelog
+		// parsing?
+		//pages.add("credits)";
 	}
 
 	public static ItemStack withFallBack(Block blockToCheck, Block fallback) {
