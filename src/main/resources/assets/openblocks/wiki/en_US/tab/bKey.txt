@@ -1,0 +1,7 @@
+[prefix{l}]The infamous 'B' key [prefix{}]
+
+The '[prefix{4}]B [prefix{}]' key is a very special key in OpenBlocks.
+
+Enabling the '[prefix{4}]weAreSeriousPeople [prefix{}]' config option in the '[prefix{4}]tomfoolery [prefix{}]' category of both the client and server config files will give you your very own digestive system.
+
+Try eating some of that tasty clay and press '[prefix{4}]B [prefix{}]' to digest!

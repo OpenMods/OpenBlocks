@@ -1,0 +1,60 @@
+[prefix{l}][prefix{1}]~~~ [prefix{}] [prefix{}]
+
+"[prefix{o}]~~~CITATION~~~ [prefix{}]"
+- ~~~
+
+~~~SUMMARY~~~
+
+[prefix{l}]Info-Book description [prefix{}]
+[prefix{o}]
+~~~
+[prefix{}]
+
+[prefix{l}]Technical information [prefix{}]
+[prefix{4}]Type: [prefix{}]~~~
+[prefix{4}]Physics: [prefix{}]~~~
+[prefix{4}]Transparency: [prefix{}]~~~
+[prefix{4}]Luminance: [prefix{}]~~~
+[prefix{4}]Blast resistance: [prefix{}]~~~
+[prefix{4}]Hardness: [prefix{}]~~~
+[prefix{4}]Tool: [prefix{}]~~~
+[prefix{4}]Stackable: [prefix{}]~~~
+[prefix{4}]Flammable: [prefix{}]~~~
+[prefix{4}]Drops: [prefix{}]~~~
+[prefix{4}]Name: [prefix{}]~~~
+
+[prefix{l}]Obtaining [prefix{}]
+~~~
+
+[prefix{l}]Usage [prefix{}]
+~~~
+
+[prefix{l}]GUI [prefix{}]
+~~~
+
+[prefix{l}]Setup [prefix{}]
+~~~
+
+[prefix{l}]Configuration options [prefix{}]
+~~~
+
+[prefix{l}]Tutorials [prefix{}]
+~~~
+
+[prefix{l}]Useful structures [prefix{}]
+~~~
+
+[prefix{l}]Data values [prefix{}]
+~~~
+
+[prefix{l}]History [prefix{}]
+~~~
+
+[prefix{l}]Trivia [prefix{}]
+~~~
+
+[prefix{l}]Gallery [prefix{}]
+~~~
+
+[prefix{l}]Related features [prefix{}]
+~~~

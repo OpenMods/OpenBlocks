@@ -1,0 +1,13 @@
+[crafting{200,15,key=block/openblocks.blockPlacer}]
+
+
+
+
+
+
+
+
+
+
+
+When given a [link{item/redstone}]redstone pulse [link{}]the block placer will place an item in the direction it's facing.

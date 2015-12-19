@@ -1,0 +1,16 @@
+[crafting{200,15,key=item/openblocks.unprepared_stencil}]
+
+
+
+
+
+
+
+
+
+
+
+Stencils can be placed onto blocks and then painted over using [link{item/openblocks.paintbrush}]paint brushes [link{}]!
+
+You can paint a block using multiple [link{item/openblocks.stencil}]stencils [link{}]and you can click on them with an empty hand to rotate them.
+Place an Unprepared Stencil in a [link{block/openblocks.drawingtable}]Drawing table [link{}]to create different patterns.

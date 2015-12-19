@@ -1,0 +1,14 @@
+[crafting{200,15,key=block/openblocks.ladder}]
+
+
+
+
+
+
+
+
+
+
+
+The jaded ladder solves that annoying problem of jumping out of a [link{block/trapdoor}]trapdoor [link{}]at the top of a [link{block/ladder}]ladder [link{}].
+The jaded ladder acts as both a [link{block/trapdoor}]trapdoor [link{}]and a [link{block/ladder}]ladder [link{}]at the same time.

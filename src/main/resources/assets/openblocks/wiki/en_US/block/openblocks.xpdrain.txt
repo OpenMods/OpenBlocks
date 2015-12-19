@@ -1,0 +1,14 @@
+[crafting{200,15,key=block/openblocks.xpdrain}]
+
+
+
+
+
+
+
+
+
+
+
+Place the XP drain above an [link{block/openblocks.tank}]OpenBlocks tank [link{}]and stand on it.
+Your XP will drain into the tank, which can then be used for blocks such as the [link{block/openblocks.autoenchantmenttable}]auto enchantment table [link{}]or the [link{block/openblocks.autoanvil}]auto anvil [link{}].

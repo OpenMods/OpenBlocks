@@ -1,0 +1,16 @@
+[crafting{200,15,key=item/openblocks.crane_backpack}]
+
+
+
+
+
+
+
+
+
+
+
+In Minecraft world "magnet" is ancient word for "how do this works?".
+
+This particular piece of very equipment allows you to pick and carry mobs, players, items and blocks.
+Can be controlled with [link{item/openblocks.crane_control}]magnet control [link{}].

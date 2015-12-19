@@ -1,0 +1,16 @@
+[crafting{200,15,key=item/openblocks.devnull}]
+
+
+
+
+
+
+
+
+
+
+
+Click using /dev/null to open the inventory.
+There's a single inventory slot - put an item in there - [link{block/dirt}]dirt [link{}], for example. As you gather dirt from the ground this slot will fill up.
+Once it's full, any more dirt you pick up will be automatically discarded.
+You can shift-click with the item in your hand as though you were placing the block!

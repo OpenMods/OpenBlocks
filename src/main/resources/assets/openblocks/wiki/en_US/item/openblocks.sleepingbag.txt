@@ -1,0 +1,13 @@
+[crafting{200,15,key=item/openblocks.sleepingbag}]
+
+
+
+
+
+
+
+
+
+
+
+The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back.

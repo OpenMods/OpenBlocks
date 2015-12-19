@@ -1,0 +1,13 @@
+[prefix{l}]Credits [prefix{}]
+
+[prefix{4}]Boq, Mikee and NeverCast [prefix{}] - Leading developers of OpenBlocks (are we allowed to credit ourselves?)
+
+[prefix{4}]SinZ and Yoshi2 [prefix{}] - members of the OpenMods team from the start.
+
+[prefix{4}]Vexatos and crafteverywhere [prefix{}] - Regularly translating the mods.
+
+Everyone else who has contributed to the code over the past two years.
+
+[prefix{4}]Direwolf20 and the rest of ForgeCraft [prefix{}] - for putting up with the bugs and crashes before we release.
+
+Everyone who's done spotlights, lets plays and generally supported the mod since we started!

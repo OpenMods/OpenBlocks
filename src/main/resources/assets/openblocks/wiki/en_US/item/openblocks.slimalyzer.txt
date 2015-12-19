@@ -1,0 +1,13 @@
+[crafting{200,15,key=item/openblocks.slimalyzer}]
+
+
+
+
+
+
+
+
+
+
+
+Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.

@@ -1,0 +1,14 @@
+[crafting{200,15,key=block/openblocks.cannon}]
+
+
+
+
+
+
+
+
+
+
+
+When given a [link{item/redstone}]redstone [link{}]signal, the item cannon will shoot items that it finds in an adjacent inventory.
+Use the '[link{item/openblocks.pointer}]pointer [link{}]' item to aim the cannon.

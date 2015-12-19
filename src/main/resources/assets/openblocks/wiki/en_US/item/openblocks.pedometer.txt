@@ -1,0 +1,13 @@
+[crafting{200,15,key=item/openblocks.pedometer}]
+
+
+
+
+
+
+
+
+
+
+
+[color{FF0000}] Missing data on Info-Book

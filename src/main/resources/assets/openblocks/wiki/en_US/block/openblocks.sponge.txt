@@ -1,0 +1,13 @@
+[crafting{200,15,key=block/openblocks.sponge}]
+
+
+
+
+
+
+
+
+
+
+
+The sponge is a replacement for the [link{block/sponge}]vanilla sponge [link{}]. Perfect for removing small pockets of [link{block/lava}]lava [link{}]or [link{block/water}]water [link{}]. Be careful when using it on large areas of liquid though as it'll start to get quite messy.

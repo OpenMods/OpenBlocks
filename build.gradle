@@ -1,5 +1,5 @@
 /*
- * OpenModsLib build file.
+ * OpenBlocks build file.
  * @author Arkan <arkan@emberwalker.cc>
  */
 
@@ -40,6 +40,10 @@ repositories {
         name "OpenMods"
         url "http://repo.openmods.info/artifactory/openmods"
     }
+	maven {
+		name "IGW"
+		url "http://maven.k-4u.nl/"
+	}
 }
 
 apply plugin: 'forge'
@@ -51,6 +55,8 @@ dependencies {
     compile project(":OpenModsLib") // Load OpenModsLib from submodule
 
     compile "openperipheral:OpenPeripheralCore-API:3.3.1"
+	
+	compile "igwmod:IGW-Mod-1.7.10:1.1.9-29:userdev"
 }
 
 //================================================
