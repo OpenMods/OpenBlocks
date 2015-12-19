@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.Constants;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
+import openmods.api.VisibleForDocumentation;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.legacy.ItemDistribution;
@@ -25,6 +26,7 @@ import com.google.common.base.Strings;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
+@VisibleForDocumentation
 public class EntityLuggage extends EntityTameable implements IInventoryProvider, IEntityAdditionalSpawnData {
 
 	private static final int SIZE_SPECIAL = 54;

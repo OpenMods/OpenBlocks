@@ -21,6 +21,7 @@ import openblocks.common.item.ItemCartographer;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.Log;
+import openmods.api.VisibleForDocumentation;
 import openmods.sync.*;
 import openmods.utils.BitSet;
 import openmods.utils.ByteUtils;
@@ -31,6 +32,7 @@ import com.google.common.collect.ImmutableSet;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@VisibleForDocumentation
 public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncMapProvider {
 
 	private static final int MAP_JOB_DELAY = 5;

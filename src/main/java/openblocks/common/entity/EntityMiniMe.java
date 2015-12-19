@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.Constants;
 import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
 import openmods.Log;
+import openmods.api.VisibleForDocumentation;
 import openmods.network.event.*;
 import openmods.utils.ByteUtils;
 import openmods.utils.io.GameProfileSerializer;
@@ -43,6 +44,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+@VisibleForDocumentation
 public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpawnData {
 
 	@NetworkEventMeta(direction = EventDirection.S2C, compressed = true)
