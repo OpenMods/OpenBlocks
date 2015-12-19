@@ -50,7 +50,7 @@ public class GuiInfoBook extends ComponentGui {
 
 	private static int alignToEven(final GuiComponentBook book) {
 		int index = book.getNumberOfPages();
-		if (index % 2 == 1) {
+		if ((index & 1) == 1) {
 			book.addPage(PageBase.BLANK_PAGE);
 			index++;
 		}

@@ -51,7 +51,7 @@ public class PlayerInventoryStore {
 
 	private static final String TAG_SLOT = "Slot";
 
-	private static final DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+	private final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 
 	private static final Pattern SAFE_CHARS = Pattern.compile("[^A-Za-z0-9_-]");
 
@@ -77,8 +77,8 @@ public class PlayerInventoryStore {
 		}
 	}
 
-	private static File getNewDumpFile(Date date, String player, World world, String type) {
-		String dateStr = FORMATTER.format(date);
+	private synchronized File getNewDumpFile(Date date, String player, World world, String type) {
+		String dateStr = formatter.format(date);
 
 		int id = 0;
 		while (true) {

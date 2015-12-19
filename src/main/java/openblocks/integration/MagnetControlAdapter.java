@@ -41,7 +41,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 			this.target = Vec3.createVectorHelper(0, 0, 0);
 		}
 
-		public synchronized void setTarget(double x, double y, double z) {
+		public synchronized void setTargetPosition(double x, double y, double z) {
 			target.xCoord = x;
 			target.yCoord = y;
 			target.zCoord = z;
@@ -175,7 +175,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 			@Arg(name = "z") double z) {
 		Preconditions.checkNotNull(magnetOwner, "Magnet not active");
 		Preconditions.checkArgument(checkTargetRange(x, y, z), "Target out of range");
-		magnetOwner.setTarget(x, y, z);
+		magnetOwner.setTargetPosition(x, y, z);
 	}
 
 	@ScriptCallable(returnTypes = { ReturnType.NUMBER, ReturnType.NUMBER, ReturnType.NUMBER },
