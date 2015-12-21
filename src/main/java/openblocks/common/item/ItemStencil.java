@@ -2,7 +2,6 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -37,12 +36,6 @@ public class ItemStencil extends Item {
 	@Override
 	public IIcon getIconFromDamage(int dmg) {
 		return Objects.firstNonNull(Stencil.values()[dmg].getCoverBlockIcon(), itemIcon);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:stencilcover_full");
 	}
 
 	@Override

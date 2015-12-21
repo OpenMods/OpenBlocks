@@ -30,7 +30,6 @@ public class ItemWrench extends Item {
 	public ItemWrench() {
 		setMaxStackSize(1);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setTextureName("openblocks:wrench");
 
 		sneakOnly.add(BlockLever.class);
 		sneakOnly.add(BlockButton.class);

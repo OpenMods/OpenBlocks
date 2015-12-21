@@ -57,7 +57,7 @@ public class ItemPaintBrush extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:paintbrush");
+		super.registerIcons(registry);
 		paintIcon = registry.registerIcon("openblocks:paintbrush_paint");
 	}
 

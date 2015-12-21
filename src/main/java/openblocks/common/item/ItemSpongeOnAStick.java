@@ -2,7 +2,6 @@ package openblocks.common.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,8 +9,6 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class ItemSpongeOnAStick extends Item {
@@ -20,12 +17,6 @@ public class ItemSpongeOnAStick extends Item {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 		setMaxDamage(Config.spongeMaxDamage);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:spongeonastick");
 	}
 
 	@Override

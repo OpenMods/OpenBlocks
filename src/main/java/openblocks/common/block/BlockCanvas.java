@@ -15,6 +15,8 @@ import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class BlockCanvas extends OpenBlock implements IPaintableBlock {
@@ -39,8 +41,10 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
-		blockIcon = baseIcon = registry.registerIcon("openblocks:canvas");
+		super.registerBlockIcons(registry);
+		baseIcon = registry.registerIcon("openblocks:canvas");
 		wallpaper = registry.registerIcon("openblocks:wallpaper");
 		for (Stencil stencil : Stencil.values())
 			stencil.registerBlockIcons(registry);

@@ -28,15 +28,17 @@ public class BlockBlockPlacer extends OpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
+		super.registerBlockIcons(registry);
+
 		Icons.top = registry.registerIcon("openblocks:blockPlacer");
 		Icons.sides = registry.registerIcon("openblocks:blockPlacer_side");
 		Icons.bottom = registry.registerIcon("openblocks:blockPlacer_bottom");
+
 		setTexture(ForgeDirection.UP, Icons.top);
 		setTexture(ForgeDirection.EAST, Icons.sides);
 		setTexture(ForgeDirection.WEST, Icons.sides);
 		setTexture(ForgeDirection.NORTH, Icons.sides);
 		setTexture(ForgeDirection.SOUTH, Icons.sides);
 		setTexture(ForgeDirection.DOWN, Icons.bottom);
-		setDefaultTexture(Icons.top);
 	}
 }

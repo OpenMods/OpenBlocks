@@ -3,7 +3,6 @@ package openblocks.common.item;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -112,12 +111,6 @@ public class ItemGoldenEye extends Item {
 	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		result.add(new ItemStack(item, 1, 0));
 		result.add(new ItemStack(item, 1, getMaxDamage()));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:golden_eye");
 	}
 
 	@Override

@@ -166,7 +166,8 @@ public class ItemDevNull extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
-		Icons.iconTransparent = itemIcon = register.registerIcon("openblocks:devnull");
+		super.registerIcons(register);
+		Icons.iconTransparent = register.registerIcon("openblocks:devnull");
 		Icons.iconFull = register.registerIcon("openblocks:devfull");
 		Icons.iconOverload = register.registerIcon("openblocks:devzerooverzero");
 	}

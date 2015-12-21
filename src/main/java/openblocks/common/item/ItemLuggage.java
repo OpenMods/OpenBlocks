@@ -1,6 +1,5 @@
 package openblocks.common.item;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,11 +15,6 @@ public class ItemLuggage extends Item {
 	public ItemLuggage() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
-	}
-
-	@Override
-	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:luggage");
 	}
 
 	@Override

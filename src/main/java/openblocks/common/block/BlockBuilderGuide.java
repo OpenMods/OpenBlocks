@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -19,10 +18,8 @@ public class BlockBuilderGuide extends BlockGuide {
 	public BlockBuilderGuide() {}
 
 	@Override
-	public void registerBlockIcons(IIconRegister registry) {
-		this.blockIcon = registry.registerIcon("openblocks:guide_new");
-		this.centerIcon = registry.registerIcon("openblocks:guide_center_ender");
-		setupCommonTextures(registry);
+	protected String getCenterIconName() {
+		return "openblocks:guide_center_ender";
 	}
 
 	@Override

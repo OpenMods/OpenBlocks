@@ -12,11 +12,10 @@ public class ItemEpicEraser extends Item {
 		setMaxStackSize(1);
 		setMaxDamage(15);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-		setTextureName("openblocks:epic_eraser");
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack p_77636_1_) {
+	public boolean hasEffect(ItemStack p_77636_1_, int pass) {
 		return true;
 	}
 

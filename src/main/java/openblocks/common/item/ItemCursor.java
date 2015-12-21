@@ -1,7 +1,6 @@
 package openblocks.common.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -12,8 +11,6 @@ import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class ItemCursor extends Item {
@@ -21,12 +18,6 @@ public class ItemCursor extends Item {
 	public ItemCursor() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:cursor");
 	}
 
 	@Override

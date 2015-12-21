@@ -62,6 +62,7 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
 		super.registerBlockIcons(registry);
 		setTexture(ForgeDirection.UP, registry.registerIcon("openblocks:autoenchantmenttable_top"));

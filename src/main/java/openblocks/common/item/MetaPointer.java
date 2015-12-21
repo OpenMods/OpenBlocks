@@ -11,6 +11,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import openblocks.api.IPointable;
 import openmods.utils.ItemUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Pointer item is used for.. pointing
@@ -25,6 +27,7 @@ public class MetaPointer extends MetaGeneric {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
 		registerIcon(register, "pointer");
 	}

@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import openblocks.Config;
 import openblocks.integration.TurtleIds;
 import openblocks.integration.TurtleUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class MetaMiracleMagnet extends MetaGeneric {
 	public MetaMiracleMagnet(String name, Object... recipes) {
@@ -15,6 +17,7 @@ public class MetaMiracleMagnet extends MetaGeneric {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
 		registerIcon(register, "crane_magnet"); // reuse!
 	}

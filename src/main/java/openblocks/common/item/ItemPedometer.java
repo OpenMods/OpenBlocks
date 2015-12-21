@@ -31,8 +31,9 @@ public class ItemPedometer extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister registry) {
+		super.registerIcons(registry);
 		pedometerMoving = registry.registerIcon("openblocks:pedometer_moving");
-		itemIcon = pedometerStill = registry.registerIcon("openblocks:pedometer_still");
+		pedometerStill = registry.registerIcon("openblocks:pedometer_still");
 	}
 
 	private static void send(EntityPlayer player, String format, Object... args) {

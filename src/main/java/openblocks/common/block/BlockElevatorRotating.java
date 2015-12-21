@@ -22,8 +22,9 @@ public class BlockElevatorRotating extends OpenBlock implements IElevatorBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
-		this.blockIcon = registry.registerIcon("openblocks:elevator");
+		super.registerBlockIcons(registry);
 		setTexture(ForgeDirection.UP, registry.registerIcon("openblocks:elevator_rot"));
 	}
 

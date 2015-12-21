@@ -2,7 +2,6 @@ package openblocks.common.block;
 
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -21,11 +20,6 @@ public class BlockLadder extends BlockTrapDoor {
 		setStepSound(soundTypeWood);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);
-	}
-
-	@Override
-	public void registerBlockIcons(IIconRegister registry) {
-		blockIcon = registry.registerIcon("openblocks:ladder");
 	}
 
 	@Override

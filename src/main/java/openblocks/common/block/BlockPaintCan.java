@@ -7,6 +7,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityPaintCan;
 import openmods.block.BlockRotationMode;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockPaintCan extends OpenBlock {
 
@@ -30,7 +32,10 @@ public class BlockPaintCan extends OpenBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
+		super.registerBlockIcons(register);
+
 		Icons.back = register.registerIcon("openblocks:paintcan_side");
 		Icons.front = register.registerIcon("openblocks:paintcan_front");
 		Icons.left = register.registerIcon("openblocks:paintcan_left");
@@ -44,7 +49,6 @@ public class BlockPaintCan extends OpenBlock {
 		setTexture(ForgeDirection.SOUTH, Icons.front);
 		setTexture(ForgeDirection.UP, Icons.top);
 		setTexture(ForgeDirection.DOWN, Icons.bottom);
-		setDefaultTexture(Icons.back);
 	}
 
 	@Override

@@ -24,7 +24,10 @@ public class ItemSlimalyzer extends Item {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
+		super.registerIcons(register);
+
 		off = register.registerIcon("openblocks:slimeoff");
 		on = register.registerIcon("openblocks:slimeon");
 	}

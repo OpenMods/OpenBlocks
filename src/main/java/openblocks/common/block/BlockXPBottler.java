@@ -6,6 +6,8 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import openmods.block.BlockRotationMode;
 import openmods.infobook.BookDocumentation;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class BlockXPBottler extends OpenBlock {
@@ -24,7 +26,9 @@ public class BlockXPBottler extends OpenBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
+		super.registerBlockIcons(registry);
 		Icons.front = registry.registerIcon("openblocks:xpbottler_front");
 		Icons.top = registry.registerIcon("openblocks:xpbottler_top");
 		Icons.side = registry.registerIcon("openblocks:xpbottler_sides");
@@ -37,6 +41,5 @@ public class BlockXPBottler extends OpenBlock {
 		setTexture(ForgeDirection.NORTH, Icons.back);
 		setTexture(ForgeDirection.UP, Icons.top);
 		setTexture(ForgeDirection.DOWN, Icons.bottom);
-		setDefaultTexture(Icons.front);
 	}
 }

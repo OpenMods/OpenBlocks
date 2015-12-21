@@ -32,6 +32,5 @@ public class BlockDrawingTable extends OpenBlock {
 		setTexture(ForgeDirection.WEST, blockIcon);
 		setTexture(ForgeDirection.NORTH, blockIcon);
 		setTexture(ForgeDirection.SOUTH, frontIcon);
-		setDefaultTexture(blockIcon);
 	}
 }

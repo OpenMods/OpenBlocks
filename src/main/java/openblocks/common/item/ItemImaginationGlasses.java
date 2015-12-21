@@ -2,7 +2,6 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -87,6 +86,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		this.type = type;
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
+		setTextureName(type.iconName);
 	}
 
 	public enum Type {
@@ -129,12 +129,6 @@ public class ItemImaginationGlasses extends ItemArmor {
 		protected abstract boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te);
 
 		public static final Type[] VALUES = values();
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon(type.iconName);
 	}
 
 	@Override

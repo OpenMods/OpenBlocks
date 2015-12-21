@@ -95,7 +95,7 @@ public class ItemCraneControl extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:manipulator_idle");
+		super.registerIcons(registry);
 		iconLocked = registry.registerIcon("openblocks:manipulator_locked");
 		iconDetected = registry.registerIcon("openblocks:manipulator_detected");
 		iconDown = registry.registerIcon("openblocks:manipulator_down");

@@ -1,7 +1,6 @@
 package openblocks.common.item;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemArmor;
@@ -26,11 +25,6 @@ public class ItemSonicGlasses extends ItemArmor {
 	@Override
 	public boolean isValidArmor(ItemStack stack, int armorType, Entity entity) {
 		return armorType == ARMOR_HELMET;
-	}
-
-	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = register.registerIcon("openblocks:sonicglasses");
 	}
 
 	@Override

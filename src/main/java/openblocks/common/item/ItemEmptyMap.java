@@ -2,7 +2,6 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -54,11 +53,5 @@ public class ItemEmptyMap extends Item {
 		int newMapId = MapDataManager.createNewMap(world, scale);
 
 		return new ItemStack(Items.heightMap, 1, newMapId);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		itemIcon = registry.registerIcon("openblocks:empty_map");
 	}
 }

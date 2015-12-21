@@ -180,16 +180,18 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	protected IIcon centerIcon;
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
+		super.registerBlockIcons(registry);
 		Icons.marker = registry.registerIcon("openblocks:guide");
-		this.centerIcon = registry.registerIcon("openblocks:guide_center_normal");
-		setupCommonTextures(registry);
-	}
+		this.centerIcon = registry.registerIcon(getCenterIconName());
 
-	protected void setupCommonTextures(IIconRegister registry) {
 		setTextures(registry.registerIcon("openblocks:guide_top_new"), ForgeDirection.UP, ForgeDirection.DOWN);
 		setTextures(registry.registerIcon("openblocks:guide_side_new"), ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST);
-		setDefaultTexture(Icons.marker);
+	}
+
+	protected String getCenterIconName() {
+		return "openblocks:guide_center_normal";
 	}
 
 	public IIcon getCenterTexture() {

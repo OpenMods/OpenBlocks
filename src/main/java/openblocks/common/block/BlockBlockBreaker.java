@@ -33,6 +33,7 @@ public class BlockBlockBreaker extends OpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
+		super.registerBlockIcons(registry);
 
 		Icons.top = registry.registerIcon("openblocks:blockBreaker");
 		Icons.top_active = registry.registerIcon("openblocks:blockBreaker_active");
@@ -45,7 +46,6 @@ public class BlockBlockBreaker extends OpenBlock {
 		setTexture(ForgeDirection.WEST, Icons.side);
 		setTexture(ForgeDirection.NORTH, Icons.side);
 		setTexture(ForgeDirection.SOUTH, Icons.side);
-		setDefaultTexture(Icons.side);
 	}
 
 	@Override

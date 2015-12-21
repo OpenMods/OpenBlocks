@@ -101,7 +101,8 @@ public class BlockImaginary extends OpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister registry) {
-		blockIcon = texturePencilBlock = registry.registerIcon("openblocks:pencilBlock");
+		super.registerBlockIcons(registry);
+		texturePencilBlock = registry.registerIcon("openblocks:pencilBlock");
 		textureCrayonBlock = registry.registerIcon("openblocks:crayonBlock");
 
 		texturePencilPanel = registry.registerIcon("openblocks:pencilPanel");

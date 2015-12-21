@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import openmods.infobook.BookDocumentation;
@@ -21,12 +20,6 @@ public class BlockSky extends OpenBlock {
 
 	public BlockSky() {
 		super(Material.iron);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister registry) {
-		blockIcon = registry.registerIcon("openblocks:sky_inactive");
 	}
 
 	@Override
