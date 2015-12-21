@@ -80,6 +80,13 @@ public class BlockTankRenderer implements IBlockRenderer<BlockTank> {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockTank block, int modelId, RenderBlocks renderer) {
+		if (renderer.hasOverrideBlockTexture()) {
+			// breaking animation handling
+			renderer.setRenderBoundsFromBlock(block);
+			renderer.renderStandardBlock(block, x, y, z);
+			return true;
+		}
+
 		TileEntity te = world.getTileEntity(x, y, z);
 		INeighbourMap connections = (te instanceof TileEntityTank)? ((TileEntityTank)te).getRenderNeigbourMap() : INeighbourMap.NO_NEIGHBOURS;
 		final IIcon icon = block.getIcon();

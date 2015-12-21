@@ -17,8 +17,8 @@ public class BlockRopeLadderRenderer implements IBlockRenderer<BlockRopeLadder> 
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, BlockRopeLadder block, int modelId, RenderBlocks renderer) {
-		Tessellator tessellator = Tessellator.instance;
-		IIcon icon = block.getIcon(0, 0);
+		final Tessellator tessellator = Tessellator.instance;
+		final IIcon icon = renderer.hasOverrideBlockTexture()? renderer.overrideBlockTexture : block.getIcon(0, 0);
 
 		tessellator.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
 		tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
