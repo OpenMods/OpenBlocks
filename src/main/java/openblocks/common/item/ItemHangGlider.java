@@ -12,7 +12,7 @@ import openmods.infobook.BookDocumentation;
 
 import com.google.common.collect.MapMaker;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class ItemHangGlider extends Item {
 
 	private static Map<EntityPlayer, EntityHangGlider> spawnedGlidersMap = new MapMaker().weakKeys().weakValues().makeMap();

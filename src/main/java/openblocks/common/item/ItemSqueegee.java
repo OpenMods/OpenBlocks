@@ -9,7 +9,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.infobook.BookDocumentation;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class ItemSqueegee extends Item {
 
 	public ItemSqueegee() {

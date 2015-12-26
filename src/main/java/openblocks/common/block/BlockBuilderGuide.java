@@ -12,7 +12,7 @@ import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class BlockBuilderGuide extends BlockGuide {
 
 	public BlockBuilderGuide() {}

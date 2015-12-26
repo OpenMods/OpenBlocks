@@ -4,7 +4,7 @@ import net.minecraft.block.material.Material;
 import openmods.block.BlockRotationMode;
 import openmods.infobook.BookDocumentation;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class BlockPaintMixer extends OpenBlock {
 
 	public BlockPaintMixer() {

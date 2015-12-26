@@ -15,7 +15,7 @@ import openmods.utils.ColorUtils.ColorMeta;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class BlockElevator extends OpenBlock implements IElevatorBlock {
 
 	public BlockElevator() {

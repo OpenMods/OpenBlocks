@@ -9,7 +9,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
 import openmods.infobook.BookDocumentation;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class ItemLuggage extends Item {
 
 	public ItemLuggage() {

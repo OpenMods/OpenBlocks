@@ -12,7 +12,7 @@ import openmods.infobook.BookDocumentation;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class ItemCursor extends Item {
 
 	public ItemCursor() {

@@ -23,7 +23,7 @@ import openmods.utils.render.PaintUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation(customName = "paintbrush")
+@BookDocumentation(customName = "paintbrush", hasVideo = true)
 public class ItemPaintBrush extends Item {
 
 	private static final int SINGLE_COLOR_THRESHOLD = 16;

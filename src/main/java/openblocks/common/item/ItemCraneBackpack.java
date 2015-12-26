@@ -17,7 +17,7 @@ import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation(customName = "crane_backpack")
+@BookDocumentation(customName = "crane_backpack", hasVideo = true)
 public class ItemCraneBackpack extends ItemArmor {
 
 	private static final int ARMOR_CHESTPIECE = 1;

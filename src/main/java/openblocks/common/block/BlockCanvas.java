@@ -18,7 +18,7 @@ import openmods.utils.ColorUtils.ColorMeta;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	public static final int RENDER_ALL_SIDES = -1;

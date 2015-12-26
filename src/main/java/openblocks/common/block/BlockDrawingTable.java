@@ -9,7 +9,7 @@ import openmods.infobook.BookDocumentation;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation
+@BookDocumentation(hasVideo = true)
 public class BlockDrawingTable extends OpenBlock {
 
 	private IIcon topIcon;
