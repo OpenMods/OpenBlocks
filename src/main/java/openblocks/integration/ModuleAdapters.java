@@ -3,10 +3,13 @@ package openblocks.integration;
 import static openmods.integration.Conditions.modLoaded;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
-import openperipheral.api.ApiAccess;
+import openperipheral.api.ApiHolder;
 import openperipheral.api.adapter.IPeripheralAdapterRegistry;
 
 public class ModuleAdapters extends IntegrationModule {
+
+	@ApiHolder
+	private static IPeripheralAdapterRegistry adapterRegistry;
 
 	public ModuleAdapters() {
 		super(modLoaded(Mods.OPENPERIPHERALCORE));
@@ -24,11 +27,10 @@ public class ModuleAdapters extends IntegrationModule {
 
 	private static class LoadHack {
 		private static void load() {
-			final IPeripheralAdapterRegistry registry = ApiAccess.getApi(IPeripheralAdapterRegistry.class);
-			registry.register(new AdapterVillageHighlighter());
-			registry.register(new AdapterDonationStation());
-			registry.register(new AdapterCannon());
-			registry.register(new AdapterProjector());
+			adapterRegistry.register(new AdapterVillageHighlighter());
+			adapterRegistry.register(new AdapterDonationStation());
+			adapterRegistry.register(new AdapterCannon());
+			adapterRegistry.register(new AdapterProjector());
 		}
 	}
 }
