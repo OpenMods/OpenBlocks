@@ -118,6 +118,9 @@ minecraft {
     replace '$OP-API-VERSION$', opc_api_version
     replace '$LIB-VERSION$', project(':OpenModsLib').mod_version
     replace '$NEXT-LIB-VERSION$', project(':OpenModsLib').next_mod_version
+
+    replaceIn "openblocks/api/package-info.java"
+    replace '$API-VERSION$', api_version
 }
 
 processResources {
@@ -159,11 +162,14 @@ task deobfJar(type: Jar) {
     }
 }
 
+ext.sourcesPath = new File(new File(buildDir, "sources"), "java")
+
 task apiJar(type: Jar) {
-    classifier 'api'
+    baseName "OpenBlocks-API"
+    version api_version
 
     from sourceSets.main.output
-    from sourceSets.main.java
+    from sourcesPath
 
     include 'openblocks/api/**'
 
@@ -172,10 +178,12 @@ task apiJar(type: Jar) {
     }
 }
 
-task apiSrcJar(type: Zip) {
-    classifier 'api-src'
+task apiSrcJar(type: Jar) {
+    baseName "OpenBlocks-API"
+    version api_version
+    classifier 'sources'
 
-    from sourceSets.main.java
+    from sourcesPath
 
     include 'openblocks/api/**'
 

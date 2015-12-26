@@ -82,6 +82,8 @@ public class OpenBlocks {
 	@SidedProxy(clientSide = OpenBlocks.PROXY_CLIENT, serverSide = OpenBlocks.PROXY_SERVER)
 	public static IOpenBlocksProxy proxy;
 
+	private final ApiSetup apiSetup = new ApiSetup();
+
 	public static class Blocks implements BlockInstances {
 		@RegisterBlock(name = "ladder")
 		public static BlockLadder ladder;
@@ -375,7 +377,7 @@ public class OpenBlocks {
 
 	@EventHandler
 	public void construct(FMLConstructionEvent evt) {
-		ApiProvider.setupApi();
+		apiSetup.injectProvider();
 	}
 
 	@EventHandler
@@ -406,6 +408,9 @@ public class OpenBlocks {
 				.registerInterface(IGuideAnimationTrigger.class);
 
 		Config.register();
+
+		apiSetup.setupApis();
+		apiSetup.installHolderAccess(evt.getAsmData());
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, OpenMods.proxy.wrapHandler(new OpenBlocksGuiHandler()));
 
