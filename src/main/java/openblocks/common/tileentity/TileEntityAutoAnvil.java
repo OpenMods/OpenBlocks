@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -17,9 +18,7 @@ import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
-import openmods.api.IHasGui;
-import openmods.api.IValueProvider;
-import openmods.api.IValueReceiver;
+import openmods.api.*;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
@@ -35,7 +34,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.*;
 import openmods.utils.bitmap.*;
 
-public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots> {
+public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile {
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(45);
@@ -264,5 +263,10 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	public IValueReceiver<Boolean> createAutoSlotReceiver(AutoSlots slot) {
 		IRpcIntBitMap bits = createRpcProxy(automaticSlots, IRpcIntBitMap.class);
 		return BitMapUtils.singleBitReceiver(bits, slot.ordinal());
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		tank.updateNeighbours(worldObj, getPosition());
 	}
 }

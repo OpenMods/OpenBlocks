@@ -93,6 +93,17 @@ public class Config {
 	@ConfigProperty(category = "sprinkler", name = "effectiveRange", comment = "The range in each cardinal direction that crops will be affected.")
 	public static int sprinklerEffectiveRange = 4;
 
+	@ConfigProperty(category = "sprinkler", name = "internalTankCapacity", comment = "Capacity (in mB) of internal tank.")
+	public static int sprinklerInternalTank = 50;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "sprinkler", name = "bonemealConsumeRate", comment = "Consume rate of bonemeal (ticks/item).")
+	public static int sprinklerBonemealConsumeRate = 600;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "sprinkler", name = "waterConsumeRate", comment = "Consume rate of sprinkler (ticks/mB).")
+	public static int sprinklerWaterConsumeRate = 20;
+
 	@OnLineModifiable
 	@ConfigProperty(category = "glasses", name = "opacity", comment = "0.0 - no visible change to world, 1.0 - world fully obscured")
 	public static double sonicGlassesOpacity = 0.95;

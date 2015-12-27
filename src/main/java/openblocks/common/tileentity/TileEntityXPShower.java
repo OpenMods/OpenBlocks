@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.EnumSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,8 +39,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 		if (!worldObj.isRemote) {
 
 			if (!isPowered && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
-
-				bufferTank.fillFromSides(DRAIN_PER_CYCLE, worldObj, getPosition(), EnumSet.of(getOrientation().north()));
+				bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, getPosition(), getOrientation().north());
 
 				int amountInTank = bufferTank.getFluidAmount();
 

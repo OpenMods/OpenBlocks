@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -34,7 +35,7 @@ import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback {
+public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback, INeighbourAwareTile {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(30);
 
@@ -348,6 +349,11 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		this.maxLevel.set(maxLevel);
 
 		sync();
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		tank.updateNeighbours(worldObj, getPosition());
 	}
 
 }

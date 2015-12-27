@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -22,9 +23,7 @@ import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityItemProjectile;
 import openmods.OpenMods;
-import openmods.api.IActivateAwareTile;
-import openmods.api.IHasGui;
-import openmods.api.IValueProvider;
+import openmods.api.*;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -41,7 +40,7 @@ import openmods.utils.bitmap.*;
 
 import com.google.common.collect.Lists;
 
-public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, IEntitySelector {
+public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, IEntitySelector, INeighbourAwareTile {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
@@ -245,5 +244,10 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		tank.updateNeighbours(worldObj, getPosition());
 	}
 }

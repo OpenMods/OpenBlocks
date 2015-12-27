@@ -13,7 +13,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
@@ -69,7 +71,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	@Override
 	protected void createSyncedFields() {
 		flags = SyncableFlags.create(Flags.values().length);
-		tank = new SyncableTank(FluidContainerRegistry.BUCKET_VOLUME, FluidRegistry.WATER, OpenBlocks.Fluids.xpJuice);
+		tank = new SyncableTank(Config.sprinklerInternalTank, FluidRegistry.WATER, OpenBlocks.Fluids.xpJuice);
 	}
 
 	private static int selectFromRange(int range) {
@@ -159,25 +161,22 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		ticks++;
+
 		if (!worldObj.isRemote) {
+			if (tank.getFluidAmount() <= 0) tank.fillFromSide(worldObj, getPosition(), ForgeDirection.DOWN);
 
-			tank.fillFromSides(3, worldObj, getPosition());
-
-			// every 60 ticks drain from the tank
-			// if there's nothing to drain, disable it
-
-			if (ticks % 1200 == 0) {
+			if (ticks % Config.sprinklerBonemealConsumeRate == 0) {
 				hasBonemeal = ItemDistribution.consumeFirstInventoryItem(inventory, BONEMEAL);
 			}
-			if (ticks % 60 == 0) {
+
+			if (ticks % Config.sprinklerWaterConsumeRate == 0) {
 				setEnabled(tank.drain(1, true) != null);
 				sync();
 			}
-
-			// if it's enabled..
-
 		}
+
+		ticks++;
+
 		// simplified this action because only one of these will execute
 		// depending on worldObj.isRemote
 		if (isEnabled()) {

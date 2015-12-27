@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -19,9 +20,7 @@ import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
-import openmods.api.IHasGui;
-import openmods.api.IValueProvider;
-import openmods.api.IValueReceiver;
+import openmods.api.*;
 import openmods.gamelogic.WorkerLogic;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
@@ -37,7 +36,7 @@ import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots> {
+public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(LiquidXpUtils.XP_PER_BOTTLE);
 	public static final int PROGRESS_TICKS = 40;
@@ -246,5 +245,10 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	public IValueReceiver<Boolean> createAutoSlotReceiver(AutoSlots slot) {
 		IRpcIntBitMap bits = createRpcProxy(automaticSlots, IRpcIntBitMap.class);
 		return BitMapUtils.singleBitReceiver(bits, slot.ordinal());
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		tank.updateNeighbours(worldObj, getPosition());
 	}
 }
