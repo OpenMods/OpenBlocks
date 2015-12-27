@@ -24,7 +24,7 @@ public class BlockBigButton extends OpenBlock {
 
 	@Override
 	public boolean canPlaceBlock(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection sideDir, Orientation blockDirection, float hitX, float hitY, float hitZ, int newMeta) {
-		return super.canPlaceBlock(world, player, stack, x, y, z, sideDir, blockDirection, hitX, hitY, hitZ, newMeta) && isNeighborBlockSolid(world, x, y, z, blockDirection.south());
+		return super.canPlaceBlock(world, player, stack, x, y, z, sideDir, blockDirection, hitX, hitY, hitZ, newMeta) && isNeighborBlockSolid(world, x, y, z, blockDirection.north());
 	}
 
 	@Override
@@ -44,7 +44,6 @@ public class BlockBigButton extends OpenBlock {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-
 		TileEntityBigButton tile = getTileEntity(world, x, y, z, TileEntityBigButton.class);
 
 		if (tile == null) { return; }
@@ -52,7 +51,7 @@ public class BlockBigButton extends OpenBlock {
 		boolean pressed = tile.isButtonActive();
 		final Orientation orientation = tile.getOrientation();
 
-		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0625, 0.0625, pressed? 0.9375 : 0.8750, 0.9375, 0.9375, 1.0);
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0625, 0.0625, 0, 0.9375, 0.9375, pressed? 0.0625 : 0.125);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}
@@ -77,7 +76,7 @@ public class BlockBigButton extends OpenBlock {
 	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side) {
 		ForgeDirection direction = ForgeDirection.getOrientation(side).getOpposite();
 		TileEntityBigButton button = getTileEntity(world, x, y, z, TileEntityBigButton.class);
-		return (button != null && direction == button.getOrientation().south() && button.isButtonActive())? 15 : 0;
+		return (button != null && direction == button.getOrientation().north() && button.isButtonActive())? 15 : 0;
 	}
 
 	@Override

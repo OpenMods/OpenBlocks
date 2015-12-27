@@ -42,7 +42,7 @@ public class BlockXPShower extends OpenBlock {
 
 	@Override
 	public void setBoundsBasedOnOrientation(Orientation orientation) {
-		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(7.0 / 16.0, 7.0 / 16.0, 7.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0, 16.0 / 16.0);
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(7.0 / 16.0, 7.0 / 16.0, 0.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}

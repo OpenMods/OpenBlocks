@@ -42,7 +42,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 			if (!isPowered && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
 
-				bufferTank.fillFromSides(DRAIN_PER_CYCLE, worldObj, getPosition(), EnumSet.of(getOrientation().south()));
+				bufferTank.fillFromSides(DRAIN_PER_CYCLE, worldObj, getPosition(), EnumSet.of(getOrientation().north()));
 
 				int amountInTank = bufferTank.getFluidAmount();
 
@@ -108,7 +108,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	@Override
 	public ForgeDirection getSurfaceDirection() {
-		return getOrientation().south();
+		return getOrientation().north();
 	}
 
 }

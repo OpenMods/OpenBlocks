@@ -59,8 +59,7 @@ public class BlockTarget extends OpenBlock {
 
 		if (!target.isEnabled()) return;
 
-		ForgeDirection rotation = target.getOrientation().south();
-		ForgeDirection opposite = rotation.getOpposite();
+		ForgeDirection opposite = target.getOrientation().south();
 
 		double centerX = x + 0.5 + (opposite.offsetX * 0.5);
 		double centerY = y + 0.55 + (opposite.offsetY * 0.45);
@@ -127,7 +126,7 @@ public class BlockTarget extends OpenBlock {
 
 		final Orientation orientation = target.getOrientation();
 
-		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 1.0, 0.1);
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.9, 1.0, 1.0, 1.0);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}

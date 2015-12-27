@@ -65,7 +65,7 @@ public class BlockRopeLadder extends OpenBlock {
 			int meta = world.getBlockMetadata(x, y, z);
 			Orientation orientation = getOrientation(meta);
 			ForgeDirection playerRotation = BlockUtils.get2dOrientation((EntityLivingBase)entity);
-			if (orientation.south() == playerRotation) {
+			if (orientation.north() == playerRotation) {
 				super.addCollisionBoxesToList(world, x, y, z, bb, list, entity);
 			}
 		} else {
@@ -94,7 +94,7 @@ public class BlockRopeLadder extends OpenBlock {
 	private void getBlockBounds(IBlockAccess world, int x, int y, int z, float thickness) {
 		final int meta = world.getBlockMetadata(x, y, z);
 		final Orientation orientation = getOrientation(meta);
-		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0, 0.0, 1.0 - thickness, 1.0, 1.0, 1.0);
+		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.0, 1.0, 1.0, thickness);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}
@@ -107,7 +107,7 @@ public class BlockRopeLadder extends OpenBlock {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
 		final int meta = world.getBlockMetadata(x, y, z);
-		final ForgeDirection dir = getOrientation(meta).south();
+		final ForgeDirection dir = getOrientation(meta).north();
 
 		if (world.isAirBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)) {
 			if (world.getBlock(x, y + 1, z) != this) world.setBlockToAir(x, y, z);
