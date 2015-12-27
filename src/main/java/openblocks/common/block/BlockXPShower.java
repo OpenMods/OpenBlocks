@@ -28,6 +28,11 @@ public class BlockXPShower extends OpenBlock {
 	}
 
 	@Override
+	public boolean canRotateWithTool() {
+		return false;
+	}
+
+	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
 		setBlockBoundsBasedOnState(par1World, par2, par3, par4);
 		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
