@@ -78,9 +78,4 @@ public class BlockBigButton extends OpenBlock {
 		TileEntityBigButton button = getTileEntity(world, x, y, z, TileEntityBigButton.class);
 		return (button != null && direction == button.getOrientation().north() && button.isButtonActive())? 15 : 0;
 	}
-
-	@Override
-	public boolean canRotateWithTool() {
-		return false;
-	}
 }
