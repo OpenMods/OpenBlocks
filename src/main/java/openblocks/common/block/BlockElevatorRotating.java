@@ -8,12 +8,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.api.IElevatorBlock;
 import openblocks.common.tileentity.TileEntityElevatorRotating;
 import openmods.block.BlockRotationMode;
-import openmods.infobook.BookDocumentation;
 import openmods.utils.ColorUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@BookDocumentation
 public class BlockElevatorRotating extends OpenBlock implements IElevatorBlock {
 
 	public BlockElevatorRotating() {

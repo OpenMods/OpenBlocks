@@ -4,9 +4,12 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+import openblocks.common.block.BlockSky;
 import openmods.utils.render.RenderUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,8 +41,10 @@ public class ItemSkyBlock extends ItemBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return (stack.getItemDamage() == 1)? "tile.openblocks.sky.inverted" : "tile.openblocks.sky.normal";
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void addInformation(ItemStack stack, EntityPlayer player, List result, boolean expanded) {
+		super.addInformation(stack, player, result, expanded);
+		if (BlockSky.isInverted(stack.getItemDamage())) result.add(StatCollector.translateToLocal("openblocks.misc.inverted"));
 	}
 
 }

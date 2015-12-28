@@ -22,6 +22,10 @@ public class BlockSky extends OpenBlock {
 		super(Material.iron);
 	}
 
+	public static boolean isInverted(int meta) {
+		return (meta & MASK_INVERTED) != 0;
+	}
+
 	@Override
 	public int damageDropped(int meta) {
 		return meta & MASK_INVERTED;

@@ -92,6 +92,7 @@ openblocks.misc.page=Page %d of %d
 openblocks.misc.oh_no_ceiling=You can't fall asleep here. Ceiling disturbs you too much...
 openblocks.misc.oh_no_ground=You want to sleep on THAT!?
 openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization
+openblocks.misc.inverted=Inverted
 
 openblocks.misc.grave_msg=%s (day: %.1f)
 

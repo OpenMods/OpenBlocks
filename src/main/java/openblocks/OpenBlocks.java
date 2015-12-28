@@ -193,7 +193,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
 
-		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, textureName = "sky_inactive")
+		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, textureName = "sky_inactive", unlocalizedName = "sky.normal")
 		public static BlockSky sky;
 
 		@RegisterBlock(name = "xpshower", tileEntity = TileEntityXPShower.class)
