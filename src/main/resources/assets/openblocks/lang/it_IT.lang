@@ -83,9 +83,10 @@ openblocks.misc.mode.inverted_stairs=Scale Invertite
 openblocks.misc.structure_pos=Debug: trovata struttura %s a (%d,%d,%d)
 openblocks.misc.locked=Bloccato
 openblocks.misc.selected_cannon=Cannone selezionato per il puntamento
-openblocks.misc.pointed_cannon=Cannone puntato a %s, %s, %s
+openblocks.misc.pointed_cannon=Cannone puntato su %s, %s, %s
 openblocks.misc.change_mode=Cambiando modalità a %s
-openblocks.misc.change_size=Cambiando dimensione a %sx%sx%s
+openblocks.misc.change_size=Modificando dimensione in %sx%sx%s
+openblocks.misc.change_box_size=Modificando dimensione in (%d,%d,%d):(%d,%d,%d)
 openblocks.misc.total_blocks=Conto totale blocchi: %d
 openblocks.misc.get_witched=Diventa stregato!
 openblocks.misc.page=Pagina %d di %d
@@ -131,7 +132,10 @@ openblocks.misc.shape.triangle=Triangolo
 openblocks.misc.shape.pentagon=Pentagono
 openblocks.misc.shape.hexagon=Esagono
 openblocks.misc.shape.octagon=Ottagono
+openblocks.misc.shape.axes=Assi
+openblocks.misc.shape.planes=Piani
 
+openblocks.misc.box=Dimensioni: (%d,%d,%d):(%d,%d,%d)
 openblocks.misc.width=Larghezza: %d
 openblocks.misc.height=Altezza: %d
 openblocks.misc.depth=Profondità: %d
@@ -161,6 +165,8 @@ openblocks.misc.command.flim_flam_target=A qualcuno non piaci. A qualcuno che ha
 openblocks.misc.command.flim_flam_failed=Applicazione della sciocchezza fallita!
 openblocks.misc.command.luck_added=Fortuna modificata per il giocatore %s, corrente: %d
 openblocks.misc.command.luck_current=La fortuna del giocatore %s è: %d
+
+openblocks.misc.hidden_lore=§a§oTieni premuto ALT per vedere la cronologia§r
 openblocks.flim_flammed=Qualcosa di strano accade intorno a te...
 
 openblocks.turtle.magnet=Magnete
@@ -193,10 +199,13 @@ tile.openblocks.beartrap.name=Trappola per Orsi
 tile.openblocks.beartrap.description=Piazza una trappola per orsi e cliccala per aprirla. Quando un mob cammina sulla trappola, non potrà più muoversi!
 
 tile.openblocks.sponge.name=Spugna
-tile.openblocks.sponge.description=La spugna è un rimpiazzamento per la spugna Vanilla. È perfetta per rimuovere piccole sacche di lava o acqua. Stai attento quando la usi su larghe aree di un liquido, però, perché inizierà ad essere abbastanza confusionario.
+tile.openblocks.sponge.description=La spugna è un rimpiazzo per la spugna Vanilla. È perfetta per rimuovere piccole sacche di lava o acqua. Stai attento quando la usi su larghe aree di un liquido, però, perché inizierà ad essere abbastanza confusionario.
 
 item.openblocks.spongeonastick.name=Spugna
 item.openblocks.spongeonastick.description=La spugna su un bastone è uno strumento per pulire liquidi. Funziona esattamente come la spugna, ma è molto più mobile alle spese di esaurirsi.
+
+item.openblocks.epic_eraser.name=Gomma Epica
+item.openblocks.epic_eraser.description=Ogni oggetto ha la sua storia...\n\nNon ti dà fastidio?\nCon questo oggetto puoi eliminare tutte le tracce delle epiche frasi che il tuo bottino ha collezionato negli anni e poi rivenderlo al mercato nero senza preoccuparti di aver lasciato prove.
 
 tile.openblocks.cannon.name=Cannone di Oggetti
 tile.openblocks.cannon.description=Quando gli viene applicato un segnale di pietrarossa, il cannone di oggetti sparerà tutti gli oggetti che trova in un inventario adiacente. Usa l'oggetto 'Puntatore' per mirare con il cannone.
@@ -283,6 +292,7 @@ tile.openblocks.scaffolding.description=Hai mai desiderato di creare un pilastro
 tile.openblocks.goldenegg.name=Uovo Dorato
 
 tile.openblocks.digitalfuse.name=Innesco Digitale
+
 item.openblocks.cursor.name=Cursore
 item.openblocks.cursor.description=Il cursore ti permetterà di cliccare su vari blocchi da remoto.\nFai semplicemente shift-click su un blocco per collegarlo al cursore, poi usa il cursore dovunque vuoi per cliccare sul blocco selezionato. Attenzione, in quanto secondo le impostazioni predefinite il cursore usa una quantità dei tuoi punti esperienza pari alla distanza dal blocco su cui stai "cliccando".
 
@@ -320,6 +330,10 @@ item.openblocks.crane_backpack.description=Nel mondo di Minecraft, "magnete" è 
 
 item.openblocks.crane_control.name=Controllore della Gru
 item.openblocks.crane_control.description=Questo telecomando wireless ad alta tecnologia è usato per controllare gli zaini magnetici.\n\nFai clic destro per alzare la gru, accovacciati poi fai clic destro per abbassarla, tasto sinistro per prendere e rilasciare.\nUn segnale lampeggiante indica che qualcosa è sotto al magnete.
+
+item.openblocks.wrench.name=Grande Barra di Metallo
+item.openblocks.wrench.description=Questo strumento estremamente sofisticato è usato per trasformare oggetti con simmetria ottaedra.\n\n\nO semplicemente un grande e stupido pezzo di metallo che puoi usare per ruotare cubi e altre cose.\n\nQuinfi sì, è semplicemente un'altra chiave inglese. Sto solo cercando di essere originale, ok?
+
 
 item.openblocks.stencil.name=Stampo
 item.openblocks.crayon.name=Pastello Magico
