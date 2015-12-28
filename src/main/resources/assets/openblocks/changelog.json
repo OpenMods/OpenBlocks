@@ -1,5 +1,39 @@
 [
     {
+        version : "1.5",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "Improve building guide",
+                    "Add building guide that can place blocks",
+                    "Rotating elevator",
+                    "Way to remove lore from items",
+                    "Wrench-thingie for rotating blocks"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Cannon aiming fixed",
+                    "Rope ladders now drops items",
+                    "Blocks check redstone state after placing"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                   "/dev/null/ GUI opens only when player is sneaking",
+                   "elevators no longer centers players"
+                ]
+            }
+        ]
+    },
+    {
         version : "1.4.4",
         sections :
         [
