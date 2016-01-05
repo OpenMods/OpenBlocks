@@ -1,11 +1,12 @@
 package openblocks.common;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.api.IElevatorBlock;
@@ -18,60 +19,60 @@ import com.google.common.base.Preconditions;
 
 public class ElevatorActionHandler {
 
-	private static class SearchResult {
-		public final int level;
-
+	private static class SearchResult extends BlockPos {
 		public final PlayerRotation rotation;
 
-		public SearchResult(int level, PlayerRotation rotation) {
-			this.level = level;
+		public SearchResult(Vec3i other, PlayerRotation rotation) {
+			super(other);
 			this.rotation = rotation;
 		}
 	}
 
-	private static boolean canTeleportPlayer(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
-		if (block == null || block.isAir(world, x, y, z)) return true;
+	private static boolean canTeleportPlayer(World world, BlockPos pos) {
+		if (world.isAirBlock(pos)) return true;
 
 		if (!Config.irregularBlocksArePassable) return false;
+		final IBlockState blockState = world.getBlockState(pos);
+		final Block block = blockState.getBlock();
 
-		final AxisAlignedBB aabb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
+		final AxisAlignedBB aabb = block.getCollisionBoundingBox(world, pos, blockState);
 		return aabb == null || aabb.getAverageEdgeLength() < 0.7;
 	}
 
-	private static boolean canTeleportPlayer(EntityPlayer entity, World world, int x, int y, int z) {
-		final AxisAlignedBB aabb = entity.boundingBox;
+	private static boolean canTeleportPlayer(EntityPlayer entity, World world, BlockPos pos) {
+		final AxisAlignedBB aabb = entity.getEntityBoundingBox();
 		double height = Math.abs(aabb.maxY - aabb.minY);
 		int blockHeight = Math.max(1, MathHelper.ceiling_double_int(height));
 
 		for (int dy = 0; dy < blockHeight; dy++)
-			if (!canTeleportPlayer(world, x, y + dy, z)) return false;
+			if (!canTeleportPlayer(world, pos.up(dy))) return false;
 
 		return true;
 	}
 
-	private static SearchResult findLevel(EntityPlayer player, World world, int x, int y, int z, ForgeDirection direction) {
-		Preconditions.checkArgument(direction == ForgeDirection.UP
-				|| direction == ForgeDirection.DOWN, "Must be either up or down... for now");
+	private static SearchResult findLevel(EntityPlayer player, World world, IBlockState thisBlockState, BlockPos pos, EnumFacing direction) {
+		Preconditions.checkArgument(direction == EnumFacing.UP
+				|| direction == EnumFacing.DOWN, "Must be either up or down... for now");
 
-		final IElevatorBlock thisElevatorBlock = (IElevatorBlock)world.getBlock(x, y, z);
-		final int thisColor = thisElevatorBlock.getColor(world, x, y, z);
+		final IElevatorBlock thisElevatorBlock = (IElevatorBlock)thisBlockState.getBlock();
+		final int thisColor = thisElevatorBlock.getColor(world, pos, thisBlockState);
 
 		int blocksInTheWay = 0;
-		final int delta = direction.offsetY;
+		BlockPos searchPos = pos;
 		for (int i = 0; i < Config.elevatorTravelDistance; i++) {
-			y += delta;
-			if (!world.blockExists(x, y, z)) break;
-			if (world.isAirBlock(x, y, z)) continue;
+			searchPos = searchPos.offset(direction);
+			if (!world.isBlockLoaded(searchPos)) break;
+			if (world.isAirBlock(searchPos)) continue;
 
-			Block block = world.getBlock(x, y, z);
+			final IBlockState blockState = world.getBlockState(searchPos);
+			final Block block = blockState.getBlock();
 
 			if (block instanceof IElevatorBlock) {
 				final IElevatorBlock otherElevatorBlock = (IElevatorBlock)block;
-				final int otherColor = otherElevatorBlock.getColor(world, x, y, z);
-				if (otherColor == thisColor && canTeleportPlayer(player, world, x, y + 1, z)) {
-					final PlayerRotation rotation = otherElevatorBlock.getRotation(world, x, y, z);
-					return new SearchResult(y, rotation);
+				final int otherColor = otherElevatorBlock.getColor(world, searchPos, blockState);
+				if (otherColor == thisColor && canTeleportPlayer(player, world, searchPos.up())) {
+					final PlayerRotation rotation = otherElevatorBlock.getRotation(world, searchPos, blockState);
+					return new SearchResult(searchPos, rotation);
 				}
 			}
 
@@ -94,15 +95,15 @@ public class ElevatorActionHandler {
 		return null;
 	}
 
-	private static void activate(EntityPlayer player, World world, int x, int y, int z, ForgeDirection dir) {
-		SearchResult result = findLevel(player, world, x, y, z, dir);
+	private static void activate(EntityPlayer player, World world, IBlockState state, BlockPos pos, EnumFacing dir) {
+		SearchResult result = findLevel(player, world, state, pos, dir);
 		if (result != null) {
 			boolean doTeleport = checkXpCost(player, result);
 
 			if (doTeleport) {
 				if (result.rotation != PlayerRotation.NONE) player.rotationYaw = getYaw(result.rotation);
-				if (Config.elevatorCenter) player.setPositionAndUpdate(x + 0.5, result.level + 1.1, z + 0.5);
-				else player.setPositionAndUpdate(player.posX, result.level + 1.1, player.posZ);
+				if (Config.elevatorCenter) player.setPositionAndUpdate(result.getX() + 0.5, result.getY() + 1.1, result.getZ() + 0.5);
+				else player.setPositionAndUpdate(player.posX, result.getY() + 1.1, player.posZ);
 				world.playSoundAtEntity(player, "openblocks:elevator.activate", 1, 1);
 			}
 		}
@@ -124,7 +125,7 @@ public class ElevatorActionHandler {
 	}
 
 	protected static boolean checkXpCost(EntityPlayer player, SearchResult result) {
-		int distance = (int)Math.abs(player.posY - result.level);
+		int distance = (int)Math.abs(player.posY - result.getY());
 		if (Config.elevatorXpDrainRatio == 0 || player.capabilities.isCreativeMode) return true;
 
 		int playerXP = EnchantmentUtils.getPlayerXP(player);
@@ -140,21 +141,19 @@ public class ElevatorActionHandler {
 	@SubscribeEvent
 	public void onElevatorEvent(ElevatorActionEvent evt) {
 		final World world = evt.getWorld();
-		final int x = evt.xCoord;
-		final int y = evt.yCoord;
-		final int z = evt.zCoord;
 
-		if (!(world.getBlock(x, y, z) instanceof IElevatorBlock)) return;
+		final IBlockState blockState = world.getBlockState(evt.blockPos);
+		if (!(blockState.getBlock() instanceof IElevatorBlock)) return;
 
 		if (evt.sender != null) {
 			if (evt.sender.ridingEntity != null) return;
 
 			switch (evt.type) {
 				case JUMP:
-					activate(evt.sender, world, x, y, z, ForgeDirection.UP);
+					activate(evt.sender, world, blockState, evt.blockPos, EnumFacing.UP);
 					break;
 				case SNEAK:
-					activate(evt.sender, world, x, y, z, ForgeDirection.DOWN);
+					activate(evt.sender, world, blockState, evt.blockPos, EnumFacing.DOWN);
 					break;
 			}
 		}
@@ -170,11 +169,12 @@ public class ElevatorActionHandler {
 		if (world == null) return;
 
 		final int x = MathHelper.floor_double(player.posX);
-		final int y = MathHelper.floor_double(player.boundingBox.minY) - 1;
+		final int y = MathHelper.floor_double(player.getEntityBoundingBox().minY) - 1;
 		final int z = MathHelper.floor_double(player.posZ);
-		Block block = world.getBlock(x, y, z);
+		final BlockPos pos = new BlockPos(x, y, z);
+		final Block block = world.getBlockState(pos).getBlock();
 
-		if (block instanceof IElevatorBlock) new ElevatorActionEvent(world.provider.dimensionId, x, y, z, evt.type).sendToServer();
+		if (block instanceof IElevatorBlock) new ElevatorActionEvent(world.provider.getDimensionId(), pos, evt.type).sendToServer();
 
 	}
 }

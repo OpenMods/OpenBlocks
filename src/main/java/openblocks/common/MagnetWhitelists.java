@@ -2,14 +2,18 @@ package openblocks.common;
 
 import net.minecraft.block.*;
 import net.minecraft.block.BlockJukebox.TileEntityJukebox;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.*;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import openmods.utils.*;
 import openmods.utils.ObjectTester.ClassNameTester;
 import openmods.utils.ObjectTester.ClassTester;
@@ -17,19 +21,16 @@ import openmods.utils.ObjectTester.ClassTester;
 public class MagnetWhitelists {
 	public final static MagnetWhitelists instance = new MagnetWhitelists();
 
-	public static class BlockCoords {
+	public static class BlockCoords extends BlockPos {
 		public final Block block;
+		public final IBlockState blockState;
 		public final World world;
-		public final int x;
-		public final int y;
-		public final int z;
 
-		public BlockCoords(Block block, World world, int x, int y, int z) {
+		BlockCoords(Block block, IBlockState blockState, World world, Vec3i pos) {
+			super(pos);
 			this.block = block;
+			this.blockState = blockState;
 			this.world = world;
-			this.x = x;
-			this.y = y;
-			this.z = z;
 		}
 	}
 
@@ -83,7 +84,7 @@ public class MagnetWhitelists {
 		return new ITester<BlockCoords>() {
 			@Override
 			public ITester.Result test(BlockCoords o) {
-				return (o.block == template)? Result.ACCEPT : Result.CONTINUE;
+				return (o.blockState == template)? Result.ACCEPT : Result.CONTINUE;
 			}
 		};
 	}
@@ -106,7 +107,7 @@ public class MagnetWhitelists {
 		blockWhitelist.addTester(new ITester<BlockCoords>() {
 			@Override
 			public Result test(BlockCoords o) {
-				float hardness = o.block.getBlockHardness(o.world, o.x, o.y, o.z);
+				float hardness = o.block.getBlockHardness(o.world, o);
 				return (hardness < 0)? Result.REJECT : Result.CONTINUE;
 			}
 		});
@@ -139,16 +140,17 @@ public class MagnetWhitelists {
 				.addTester(new ClassTester<TileEntity>(TileEntityJukebox.class));
 	}
 
-	public boolean testBlock(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+	public boolean testBlock(World world, BlockPos pos) {
+		final IBlockState blockState = world.getBlockState(pos);
+		final Block block = blockState.getBlock();
 
-		if (block.isAir(world, x, y, z)) return false;
+		if (block.isAir(world, pos)) return false;
 
 		if (block instanceof BlockContainer) {
-			TileEntity te = world.getTileEntity(x, y, z);
+			TileEntity te = world.getTileEntity(pos);
 			return (te != null)? tileEntityWhitelist.check(te) : false;
 		}
 
-		return blockWhitelist.check(new BlockCoords(block, world, x, y, z));
+		return blockWhitelist.check(new BlockCoords(block, blockState, world, pos));
 	}
 }

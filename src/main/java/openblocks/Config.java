@@ -24,7 +24,6 @@ import openblocks.common.item.*;
 import openblocks.common.recipe.*;
 import openblocks.enchantments.*;
 import openmods.colors.ColorMeta;
-import openmods.colors.ColorUtils;
 import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
 
@@ -408,7 +407,7 @@ public class Config {
 				recipeList.add(new ShapelessOreRecipe(pencil, Items.coal, "stickWood", Items.ender_eye, "slimeball"));
 			}
 
-			for (ColorMeta color : ColorUtils.getAllColors()) {
+			for (ColorMeta color : ColorMeta.getAllColors()) {
 				ItemStack crayon = ItemImaginary.setupValues(color.rgb, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON));
 				recipeList.add(new ShapelessOreRecipe(crayon, color.oreName, Items.paper, Items.ender_eye, "slimeball"));
 			}
@@ -475,7 +474,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.canvas != null) {
-			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Items.paper, 'f', Blocks.fence));
+			recipeList.add(new ShapedOreRecipe(new ItemStack(OpenBlocks.Blocks.canvas, 9), "ppp", "pfp", "ppp", 'p', Items.paper, 'f', Blocks.oak_fence)); // TODO OreDict?
 		}
 
 		if (OpenBlocks.Blocks.projector != null) {
@@ -576,7 +575,7 @@ public class Config {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.paintBrush, "w  ", " s ", "  s", 'w', Blocks.wool, 's', "stickWood"));
 
 			final ItemStack template = new ItemStack(OpenBlocks.Items.paintBrush, 1, OreDictionary.WILDCARD_VALUE);
-			for (ColorMeta color : ColorUtils.getAllColors()) {
+			for (ColorMeta color : ColorMeta.getAllColors()) {
 				ItemStack brush = ItemPaintBrush.createStackWithColor(color.rgb);
 				recipeList.add(new ShapelessOreRecipe(brush, template, color.oreName));
 			}

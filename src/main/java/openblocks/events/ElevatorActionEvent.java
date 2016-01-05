@@ -1,37 +1,34 @@
 package openblocks.events;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.BlockPos;
 import openmods.events.network.BlockEventPacket;
 import openmods.movement.PlayerMovementEvent;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEventMeta;
-import openmods.utils.ByteUtils;
 
 @NetworkEventMeta(direction = EventDirection.C2S)
 public class ElevatorActionEvent extends BlockEventPacket {
 
 	public ElevatorActionEvent() {}
 
-	public ElevatorActionEvent(int dimension, int xCoord, int yCoord, int zCoord, PlayerMovementEvent.Type type) {
-		super(dimension, xCoord, yCoord, zCoord);
+	public ElevatorActionEvent(int dimension, BlockPos pos, PlayerMovementEvent.Type type) {
+		super(dimension, pos);
 		this.type = type;
 	}
 
 	public PlayerMovementEvent.Type type;
 
 	@Override
-	protected void readFromStream(DataInput input) throws IOException {
+	protected void readFromStream(PacketBuffer input) {
 		super.readFromStream(input);
-		int typeId = ByteUtils.readVLI(input);
+		final int typeId = input.readVarIntFromBuffer();
 		type = PlayerMovementEvent.Type.VALUES[typeId];
 	}
 
 	@Override
-	protected void writeToStream(DataOutput output) throws IOException {
+	protected void writeToStream(PacketBuffer output) {
 		super.writeToStream(output);
-		ByteUtils.writeVLI(output, type.ordinal());
+		output.writeVarIntToBuffer(type.ordinal());
 	}
 }

@@ -2,6 +2,7 @@ package openblocks.common;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.OpenBlocks.Items;
 

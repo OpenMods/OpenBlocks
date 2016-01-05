@@ -204,7 +204,7 @@ public class TrophyHandler {
 				Trophy mobTrophy = Trophy.TYPES.get(entityName);
 				if (mobTrophy != null) {
 					EntityItem drop = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
-					drop.delayBeforeCanPickup = 10;
+					drop.setDefaultPickupDelay();
 					event.drops.add(drop);
 				}
 			}

@@ -3,7 +3,9 @@ package openblocks.common;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ import openblocks.api.InventoryEvent;
 import openblocks.api.InventoryEvent.SubInventory;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
-import openmods.utils.ItemUtils;
+import openmods.utils.NbtUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -108,7 +110,7 @@ public class PlayerInventoryStore {
 				meta.setString(TAG_PLAYER_NAME, profile.getName());
 				meta.setString(TAG_PLAYER_UUID, profile.getId().toString());
 
-				meta.setTag(TAG_LOCATION, TagUtils.store(x, y, z));
+				meta.setTag(TAG_LOCATION, NbtUtils.store(x, y, z));
 
 				NBTTagCompound subInventories = new NBTTagCompound();
 
@@ -118,7 +120,8 @@ public class PlayerInventoryStore {
 					for (Map.Entry<Integer, ItemStack> ie : e.getValue().asMap().entrySet()) {
 						ItemStack stack = ie.getValue();
 						if (stack != null) {
-							NBTTagCompound stacktag = ItemUtils.writeStack(stack);
+							NBTTagCompound stacktag = new NBTTagCompound();
+							stack.writeToNBT(stacktag);
 							stacktag.setInteger(TAG_SLOT, ie.getKey());
 							subInventory.appendTag(stacktag);
 						}
@@ -185,7 +188,7 @@ public class PlayerInventoryStore {
 
 			if (!itemTag.hasNoTags()) {
 				int slot = itemTag.getInteger(TAG_SLOT);
-				ItemStack stack = ItemUtils.readStack(itemTag);
+				ItemStack stack = ItemStack.loadItemStackFromNBT(itemTag);
 				if (stack != null) result.addItemStack(slot, stack);
 			}
 		}
@@ -196,9 +199,7 @@ public class PlayerInventoryStore {
 	private static Map<String, SubInventory> loadSubInventories(NBTTagCompound subsTag) {
 		Map<String, SubInventory> result = Maps.newHashMap();
 
-		@SuppressWarnings("unchecked")
-		final Set<String> keys = subsTag.func_150296_c();
-		for (String key : keys) {
+		for (String key : subsTag.getKeySet()) {
 			NBTTagList subTag = subsTag.getTagList(key, Constants.NBT.TAG_COMPOUND);
 			final SubInventory sub = loadSubInventory(subTag);
 			result.put(key, sub);
@@ -294,7 +295,7 @@ public class PlayerInventoryStore {
 	public void onPlayerDeath(LivingDeathEvent event) {
 		if (Config.dumpStiffsStuff && (event.entity instanceof EntityPlayerMP) && !(event.entity instanceof FakePlayer)) {
 			EntityPlayer player = (EntityPlayer)event.entity;
-			final String playerName = player.getDisplayName();
+			final String playerName = player.getName();
 			try {
 
 				File file = storePlayerInventory(player, "death");

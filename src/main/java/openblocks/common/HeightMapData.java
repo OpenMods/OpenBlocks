@@ -1,13 +1,9 @@
 package openblocks.common;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.WorldSavedData;
-import openmods.utils.ByteUtils;
 
 public class HeightMapData extends WorldSavedData {
 
@@ -28,16 +24,16 @@ public class HeightMapData extends WorldSavedData {
 			tag.setByteArray("Color", colorMap);
 		}
 
-		public void readFromStream(DataInput input) throws IOException {
+		public void readFromStream(PacketBuffer input) {
 			alpha = input.readByte();
-			input.readFully(heightMap);
-			input.readFully(colorMap);
+			input.readBytes(heightMap);
+			input.readBytes(colorMap);
 		}
 
-		public void writeToStream(DataOutput output) throws IOException {
+		public void writeToStream(PacketBuffer output) {
 			output.writeByte(alpha);
-			output.write(heightMap);
-			output.write(colorMap);
+			output.readBytes(heightMap);
+			output.readBytes(colorMap);
 		}
 	}
 
@@ -130,12 +126,12 @@ public class HeightMapData extends WorldSavedData {
 		tag.setTag("Layers", result);
 	}
 
-	public void readFromStream(DataInput input) throws IOException {
+	public void readFromStream(PacketBuffer input) {
 		dimension = input.readInt();
 		centerX = input.readInt();
 		centerZ = input.readInt();
 		scale = input.readByte();
-		int length = ByteUtils.readVLI(input);
+		final int length = input.readVarIntFromBuffer();
 		layers = new LayerData[length];
 		for (int i = 0; i < length; i++) {
 			LayerData layer = new LayerData();
@@ -144,12 +140,12 @@ public class HeightMapData extends WorldSavedData {
 		}
 	}
 
-	public void writeToStream(DataOutput output) throws IOException {
+	public void writeToStream(PacketBuffer output) {
 		output.writeInt(dimension);
 		output.writeInt(centerX);
 		output.writeInt(centerZ);
 		output.writeByte(scale);
-		ByteUtils.writeVLI(output, layers.length);
+		output.writeVarIntToBuffer(layers.length);
 		for (LayerData data : layers)
 			data.writeToStream(output);
 	}

@@ -4,17 +4,16 @@ import gnu.trove.procedure.TIntProcedure;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import openblocks.Config;
@@ -24,7 +23,6 @@ import openmods.config.properties.ConfigurationChange;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
 import openmods.network.event.NetworkEventMeta;
-import openmods.utils.ByteUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -37,19 +35,19 @@ public class MapDataManager {
 		public List<Integer> mapIds = Lists.newArrayList();
 
 		@Override
-		protected void readFromStream(DataInput input) {
-			int length = ByteUtils.readVLI(input);
+		protected void readFromStream(PacketBuffer input) {
+			final int length = input.readVarIntFromBuffer();
 			for (int i = 0; i < length; i++) {
-				int id = ByteUtils.readVLI(input);
+				final int id = input.readVarIntFromBuffer();
 				mapIds.add(id);
 			}
 		}
 
 		@Override
-		protected void writeToStream(DataOutput output) {
-			ByteUtils.writeVLI(output, mapIds.size());
+		protected void writeToStream(PacketBuffer output) {
+			output.writeVarIntToBuffer(mapIds.size());
 			for (Integer id : mapIds)
-				ByteUtils.writeVLI(output, id);
+				output.writeVarIntToBuffer(id);
 		}
 	}
 
@@ -64,10 +62,10 @@ public class MapDataManager {
 		public Map<Integer, HeightMapData> maps = Maps.newHashMap();
 
 		@Override
-		protected void readFromStream(DataInput input) throws IOException {
-			int length = ByteUtils.readVLI(input);
+		protected void readFromStream(PacketBuffer input) {
+			final int length = input.readVarIntFromBuffer();
 			for (int i = 0; i < length; i++) {
-				int id = ByteUtils.readVLI(input);
+				final int id = input.readVarIntFromBuffer();
 				HeightMapData data = new HeightMapData(id, false);
 				data.readFromStream(input);
 				maps.put(id, data);
@@ -75,16 +73,16 @@ public class MapDataManager {
 		}
 
 		@Override
-		protected void writeToStream(DataOutput output) throws IOException {
+		protected void writeToStream(PacketBuffer output) {
 			int size = 0;
 			for (HeightMapData data : maps.values())
 				if (data.isValid()) size++;
 
-			ByteUtils.writeVLI(output, size);
+			output.writeVarIntToBuffer(size);
 			for (Map.Entry<Integer, HeightMapData> e : maps.entrySet()) {
 				HeightMapData map = e.getValue();
 				if (map.isValid()) {
-					ByteUtils.writeVLI(output, e.getKey());
+					output.writeVarIntToBuffer(e.getKey());
 					map.writeToStream(output);
 				} else Log.debug("Trying to propagate invalid map data %d", e.getKey());
 			}

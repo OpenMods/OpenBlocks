@@ -21,8 +21,9 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.registry.*;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -90,13 +91,13 @@ public class OpenBlocks {
 		@RegisterBlock(name = "guide", tileEntity = TileEntityGuide.class, itemBlock = ItemGuide.class)
 		public static BlockGuide guide;
 
-		@RegisterBlock(name = "builder_guide", tileEntity = TileEntityBuilderGuide.class, itemBlock = ItemGuide.class, textureName = "guide")
+		@RegisterBlock(name = "builder_guide", tileEntity = TileEntityBuilderGuide.class, itemBlock = ItemGuide.class)
 		public static BlockBuilderGuide builderGuide;
 
 		@RegisterBlock(name = "elevator", itemBlock = ItemElevator.class)
 		public static BlockElevator elevator;
 
-		@RegisterBlock(name = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class, textureName = "elevator")
+		@RegisterBlock(name = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class)
 		public static BlockElevatorRotating elevatorRotating;
 
 		@RegisterBlock(name = "heal", tileEntity = TileEntityHealBlock.class)
@@ -108,7 +109,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "grave", tileEntity = TileEntityGrave.class)
 		public static BlockGrave grave;
 
-		@RegisterBlock(name = "flag", tileEntity = TileEntityFlag.class, itemBlock = ItemFlagBlock.class, textureName = RegisterBlock.NONE)
+		@RegisterBlock(name = "flag", tileEntity = TileEntityFlag.class, itemBlock = ItemFlagBlock.class)
 		public static BlockFlag flag;
 
 		@RegisterBlock(name = "tank", tileEntity = TileEntityTank.class, itemBlock = ItemTankBlock.class)
@@ -135,13 +136,13 @@ public class OpenBlocks {
 		@RegisterBlock(name = "bigbutton", tileEntity = TileEntityBigButton.class)
 		public static BlockBigButton bigButton;
 
-		@RegisterBlock(name = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class, textureName = "pencilBlock")
+		@RegisterBlock(name = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class)
 		public static BlockImaginary imaginary;
 
 		@RegisterBlock(name = "fan", tileEntity = TileEntityFan.class)
 		public static BlockFan fan;
 
-		@RegisterBlock(name = "xpbottler", tileEntity = TileEntityXPBottler.class, textureName = "xpbottler_front")
+		@RegisterBlock(name = "xpbottler", tileEntity = TileEntityXPBottler.class)
 		public static BlockXPBottler xpBottler;
 
 		@RegisterBlock(name = "village_highlighter", tileEntity = TileEntityVillageHighlighter.class)
@@ -159,7 +160,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "xpdrain", tileEntity = TileEntityXPDrain.class)
 		public static BlockXPDrain xpDrain;
 
-		@RegisterBlock(name = "blockbreaker", tileEntity = TileEntityBlockBreaker.class, textureName = "blockBreaker_side")
+		@RegisterBlock(name = "blockbreaker", tileEntity = TileEntityBlockBreaker.class)
 		public static BlockBlockBreaker blockBreaker;
 
 		@RegisterBlock(name = "blockPlacer", tileEntity = TileEntityBlockPlacer.class)
@@ -171,7 +172,7 @@ public class OpenBlocks {
 		@RegisterBlock(name = "ropeladder")
 		public static BlockRopeLadder ropeLadder;
 
-		@RegisterBlock(name = "donationStation", tileEntity = TileEntityDonationStation.class, textureName = "donationstation")
+		@RegisterBlock(name = "donationStation", tileEntity = TileEntityDonationStation.class)
 		public static BlockDonationStation donationStation;
 
 		@RegisterBlock(name = "paintmixer", tileEntity = TileEntityPaintMixer.class)
@@ -180,25 +181,25 @@ public class OpenBlocks {
 		@RegisterBlock(name = "canvas", tileEntity = TileEntityCanvas.class)
 		public static BlockCanvas canvas;
 
-		@RegisterBlock(name = "paintcan", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, textureName = "paintcan_side")
+		@RegisterBlock(name = "paintcan", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class)
 		public static BlockPaintCan paintCan;
 
 		@RegisterBlock(name = "canvasglass", tileEntity = TileEntityCanvas.class)
 		public static BlockCanvasGlass canvasGlass;
 
-		@RegisterBlock(name = "projector", tileEntity = TileEntityProjector.class, textureName = RegisterBlock.NONE)
+		@RegisterBlock(name = "projector", tileEntity = TileEntityProjector.class)
 		public static BlockProjector projector;
 
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;
 
-		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, textureName = "sky_inactive", unlocalizedName = "sky.normal")
+		@RegisterBlock(name = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, unlocalizedName = "sky.normal")
 		public static BlockSky sky;
 
 		@RegisterBlock(name = "xpshower", tileEntity = TileEntityXPShower.class)
 		public static BlockXPShower xpShower;
 
-		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class, textureName = "egg")
+		@RegisterBlock(name = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
 		public static BlockGoldenEgg goldenEgg;
 
 		@RegisterBlock(name = "scaffolding")
@@ -210,7 +211,7 @@ public class OpenBlocks {
 		@RegisterItem(name = "hangglider")
 		public static ItemHangGlider hangGlider;
 
-		@RegisterItem(name = "generic", isConfigurable = false, textureName = RegisterItem.NONE)
+		@RegisterItem(name = "generic", isConfigurable = false)
 		public static ItemOBGeneric generic;
 
 		@RegisterItem(name = "luggage")
@@ -219,64 +220,64 @@ public class OpenBlocks {
 		@RegisterItem(name = "sonicglasses")
 		public static ItemSonicGlasses sonicGlasses;
 
-		@RegisterItem(name = "pencilGlasses", unlocalizedName = "glasses.pencil", textureName = RegisterItem.NONE)
+		@RegisterItem(name = "pencilGlasses", unlocalizedName = "glasses.pencil")
 		public static ItemImaginationGlasses pencilGlasses;
 
-		@RegisterItem(name = "crayonGlasses", unlocalizedName = "glasses.crayon", textureName = RegisterItem.NONE)
+		@RegisterItem(name = "crayonGlasses", unlocalizedName = "glasses.crayon")
 		public static ItemCrayonGlasses crayonGlasses;
 
-		@RegisterItem(name = "technicolorGlasses", unlocalizedName = "glasses.technicolor", textureName = RegisterItem.NONE)
+		@RegisterItem(name = "technicolorGlasses", unlocalizedName = "glasses.technicolor")
 		public static ItemImaginationGlasses technicolorGlasses;
 
-		@RegisterItem(name = "seriousGlasses", unlocalizedName = "glasses.admin", textureName = RegisterItem.NONE)
+		@RegisterItem(name = "seriousGlasses", unlocalizedName = "glasses.admin")
 		public static ItemImaginationGlasses seriousGlasses;
 
-		@RegisterItem(name = "craneControl", unlocalizedName = "crane_control", textureName = "manipulator_idle")
+		@RegisterItem(name = "craneControl", unlocalizedName = "crane_control")
 		public static ItemCraneControl craneControl;
 
-		@RegisterItem(name = "craneBackpack", unlocalizedName = "crane_backpack", textureName = "crane_backpack")
+		@RegisterItem(name = "craneBackpack", unlocalizedName = "crane_backpack")
 		public static ItemCraneBackpack craneBackpack;
 
-		@RegisterItem(name = "slimalyzer", textureName = "slimeoff")
+		@RegisterItem(name = "slimalyzer")
 		public static ItemSlimalyzer slimalyzer;
 
-		@RegisterItem(name = "filledbucket", textureName = RegisterItem.NONE)
+		@RegisterItem(name = "filledbucket")
 		public static ItemFilledBucket filledBucket;
 
-		@RegisterItem(name = "sleepingBag", unlocalizedName = "sleepingbag", textureName = "sleepingbag")
+		@RegisterItem(name = "sleepingBag", unlocalizedName = "sleepingbag")
 		public static ItemSleepingBag sleepingBag;
 
-		@RegisterItem(name = "paintBrush", unlocalizedName = "paintbrush", textureName = "paintbrush")
+		@RegisterItem(name = "paintBrush", unlocalizedName = "paintbrush")
 		public static ItemPaintBrush paintBrush;
 
-		@RegisterItem(name = "stencil", textureName = "stencilcover_full")
+		@RegisterItem(name = "stencil")
 		public static ItemStencil stencil;
 
 		@RegisterItem(name = "squeegee")
 		public static ItemSqueegee squeegee;
 
-		@RegisterItem(name = "heightMap", unlocalizedName = "height_map", textureName = "height_map")
+		@RegisterItem(name = "heightMap", unlocalizedName = "height_map")
 		public static ItemHeightMap heightMap;
 
-		@RegisterItem(name = "emptyMap", unlocalizedName = "empty_map", textureName = "empty_map")
+		@RegisterItem(name = "emptyMap", unlocalizedName = "empty_map")
 		public static ItemEmptyMap emptyMap;
 
-		@RegisterItem(name = "cartographer", textureName = RegisterItem.NONE)
+		@RegisterItem(name = "cartographer")
 		public static ItemCartographer cartographer;
 
-		@RegisterItem(name = "tastyClay", unlocalizedName = "tasty_clay", textureName = "yum_yum")
+		@RegisterItem(name = "tastyClay", unlocalizedName = "tasty_clay")
 		public static ItemTastyClay tastyClay;
 
-		@RegisterItem(name = "goldenEye", unlocalizedName = "golden_eye", textureName = "golden_eye")
+		@RegisterItem(name = "goldenEye", unlocalizedName = "golden_eye")
 		public static ItemGoldenEye goldenEye;
 
-		@RegisterItem(name = "genericUnstackable", textureName = RegisterItem.NONE, isConfigurable = false)
+		@RegisterItem(name = "genericUnstackable", isConfigurable = false)
 		public static ItemOBGenericUnstackable genericUnstackable;
 
 		@RegisterItem(name = "cursor")
 		public static ItemCursor cursor;
 
-		@RegisterItem(name = "infoBook", unlocalizedName = "info_book", textureName = "info_book")
+		@RegisterItem(name = "infoBook", unlocalizedName = "info_book")
 		public static ItemInfoBook infoBook;
 
 		@RegisterItem(name = "devnull")
@@ -285,10 +286,10 @@ public class OpenBlocks {
 		@RegisterItem(name = "spongeonastick")
 		public static ItemSpongeOnAStick spongeonastick;
 
-		@RegisterItem(name = "pedometer", textureName = "pedometer_still")
+		@RegisterItem(name = "pedometer")
 		public static ItemPedometer pedometer;
 
-		@RegisterItem(name = "epicEraser", unlocalizedName = "epic_eraser", textureName = "epic_eraser")
+		@RegisterItem(name = "epicEraser", unlocalizedName = "epic_eraser")
 		public static ItemEpicEraser epicEraser;
 
 		@RegisterItem(name = "wrench")
@@ -301,7 +302,8 @@ public class OpenBlocks {
 		 * It may not be used as default fluid, so don't compare directly with other fluids.
 		 * FluidStacks created with this fluid should always be valid.
 		 */
-		public static final Fluid xpJuice = new Fluid("xpjuice").setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		// TODO: we require block now!
+		public static final Fluid xpJuice = new Fluid("xpjuice", null, null).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
 	}
 
 	public static class Enchantments {
@@ -446,12 +448,11 @@ public class OpenBlocks {
 		}
 
 		if (Config.radioVillagerId > 0) {
-			VillagerRegistry.instance().registerVillagerId(Config.radioVillagerId);
-			VillagerRegistry.instance().registerVillageTradeHandler(Config.radioVillagerId, new RadioVillagerTradeManager());
+			registerUselessVillager();
 		}
 
 		{
-			String luggageName = (String)EntityList.classToStringMapping.get(EntityLuggage.class);
+			String luggageName = EntityList.classToStringMapping.get(EntityLuggage.class);
 			FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", luggageName);
 		}
 
@@ -476,9 +477,19 @@ public class OpenBlocks {
 		proxy.preInit();
 	}
 
+	@SuppressWarnings({ "deprecation", "unused" })
+	protected void registerUselessVillager() {
+		VillagerRegistry.instance().registerVillagerId(Config.radioVillagerId);
+		final VillagerProfession prof = new VillagerProfession(
+				"openblocks:radio",
+				"openblocks:textures/models/king-ish.png");
+		VillagerRegistry.instance().register(prof);
+		new VillagerCareer(prof, "basic"); // TODO?
+	}
+
 	@EventHandler
 	public void init(FMLInitializationEvent evt) {
-		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
+		MinecraftForge.EVENT_BUS.register(new ServerTickHandler());
 		proxy.init();
 		proxy.registerRenderInformation();
 		registerOreDictionary();

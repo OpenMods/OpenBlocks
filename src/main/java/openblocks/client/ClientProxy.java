@@ -3,7 +3,6 @@ package openblocks.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -35,8 +34,6 @@ import openmods.entity.renderer.EntityBlockRenderer;
 public class ClientProxy implements IOpenBlocksProxy {
 
 	public ClientProxy() {}
-
-	private static final ResourceLocation RADIO_VILLAGER_TEXTURE = new ResourceLocation("openblocks", "textures/models/king-ish.png");
 
 	public static class Icons {
 		public static IIcon xpJuiceStill;

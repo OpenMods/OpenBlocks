@@ -11,14 +11,6 @@ public class PedometerHandler {
 
 	private static final String PROPERTY_PEDOMETER = "Pedometer";
 
-	public static Vec3 getEntityPosition(Entity entity) {
-		return Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ);
-	}
-
-	public static Vec3 subtract(Vec3 a, Vec3 b) {
-		return Vec3.createVectorHelper(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
-	}
-
 	public static class PedometerState implements IExtendedEntityProperties {
 		private double totalDistance;
 
@@ -58,14 +50,14 @@ public class PedometerHandler {
 
 		@Override
 		public void init(Entity entity, World world) {
-			lastCheckPos = prevTickPos = startPos = getEntityPosition(entity);
+			lastCheckPos = prevTickPos = startPos = entity.getPositionVector();
 			lastCheckTime = prevTickTime = startTicks = OpenMods.proxy.getTicks(world);
 			isRunning = true;
 		}
 
 		public void update(Entity entity) {
-			Vec3 currentPosition = getEntityPosition(entity);
-			Vec3 deltaSinceLastUpdate = subtract(currentPosition, prevTickPos);
+			Vec3 currentPosition = entity.getPositionVector();
+			Vec3 deltaSinceLastUpdate = currentPosition.subtract(prevTickPos);
 			prevTickPos = currentPosition;
 
 			long currentTime = OpenMods.proxy.getTicks(entity.worldObj);
@@ -76,13 +68,13 @@ public class PedometerHandler {
 			double currentSpeed = ticksSinceLastUpdate != 0? distanceSinceLastTick / ticksSinceLastUpdate : 0;
 			totalDistance += distanceSinceLastTick;
 
-			Vec3 deltaFromStart = subtract(currentPosition, startPos);
+			Vec3 deltaFromStart = currentPosition.subtract(startPos);
 			long ticksFromStart = currentTime - startTicks;
 
 			double distanceFromStart = deltaFromStart.lengthVector();
 
 			double distanceFromLastCheck = 0;
-			if (lastCheckPos != null) distanceFromLastCheck = subtract(currentPosition, lastCheckPos).lengthVector();
+			if (lastCheckPos != null) distanceFromLastCheck = currentPosition.subtract(lastCheckPos).lengthVector();
 
 			long timeFromLastCheck = currentTime - lastCheckTime;
 

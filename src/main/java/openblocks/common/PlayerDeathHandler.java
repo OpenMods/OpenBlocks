@@ -19,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.*;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.GraveDropsEvent;
@@ -29,8 +30,7 @@ import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
-import openmods.utils.BlockNotifyFlags;
-import openmods.utils.Coord;
+import openmods.utils.NbtUtils;
 import openmods.world.DelayedActionTickHandler;
 
 import org.apache.logging.log4j.Level;
@@ -41,18 +41,18 @@ import com.mojang.authlib.GameProfile;
 
 public class PlayerDeathHandler {
 
-	private static final Comparator<Coord> SEARCH_COMPARATOR = new Comparator<Coord>() {
+	private static final Comparator<BlockPos> SEARCH_COMPARATOR = new Comparator<BlockPos>() {
 
-		private int coordSum(Coord c) {
-			return Math.abs(c.x) + Math.abs(c.y) + Math.abs(c.z);
+		private int coordSum(BlockPos c) {
+			return Math.abs(c.getX()) + Math.abs(c.getY()) + Math.abs(c.getZ());
 		}
 
-		private int coordMax(Coord c) {
-			return Math.max(Math.max(Math.abs(c.x), Math.abs(c.y)), Math.abs(c.z));
+		private int coordMax(BlockPos c) {
+			return Math.max(Math.max(Math.abs(c.getX()), Math.abs(c.getY())), Math.abs(c.getZ()));
 		}
 
 		@Override
-		public int compare(Coord a, Coord b) {
+		public int compare(BlockPos a, BlockPos b) {
 			// first order by Manhattan distance
 			int diff = coordSum(a) - coordSum(b);
 			if (diff != 0) return diff;
@@ -62,20 +62,20 @@ public class PlayerDeathHandler {
 		}
 	};
 
-	private static class SearchOrder implements Iterable<Coord> {
+	private static class SearchOrder implements Iterable<BlockPos> {
 		public final int size;
 
-		private final List<Coord> coords;
+		private final List<BlockPos> coords;
 
 		public SearchOrder(int size) {
 			this.size = size;
 
-			List<Coord> coords = Lists.newArrayList();
+			List<BlockPos> coords = Lists.newArrayList();
 
 			for (int x = -size; x <= size; x++)
 				for (int y = -size; y <= size; y++)
 					for (int z = -size; z <= size; z++)
-						coords.add(new Coord(x, y, z));
+						coords.add(new BlockPos(x, y, z));
 
 			Collections.sort(coords, SEARCH_COMPARATOR);
 
@@ -83,41 +83,41 @@ public class PlayerDeathHandler {
 		}
 
 		@Override
-		public Iterator<Coord> iterator() {
+		public Iterator<BlockPos> iterator() {
 			return coords.iterator();
 		}
 	}
 
 	private static SearchOrder searchOrder;
 
-	private static Iterable<Coord> getSearchOrder(int size) {
+	private static Iterable<BlockPos> getSearchOrder(int size) {
 		if (searchOrder == null || searchOrder.size != size) searchOrder = new SearchOrder(size);
 		return searchOrder;
 	}
 
 	private abstract static class GravePlacementChecker {
-		public boolean canPlace(World world, EntityPlayer player, int x, int y, int z) {
-			if (!world.blockExists(x, y, z)) return false;
-			if (!world.canMineBlock(player, x, y, z)) return false;
+		public boolean canPlace(World world, EntityPlayer player, BlockPos pos) {
+			if (!world.isBlockLoaded(pos)) return false;
+			if (!world.isBlockModifiable(player, pos)) return false;
 
-			Block block = world.getBlock(x, y, z);
-			return checkBlock(world, x, y, z, block);
+			Block block = world.getBlockState(pos).getBlock();
+			return checkBlock(world, pos, block);
 		}
 
-		public abstract boolean checkBlock(World world, int x, int y, int z, Block block);
+		public abstract boolean checkBlock(World world, BlockPos pos, Block block);
 	}
 
 	private static final GravePlacementChecker POLITE = new GravePlacementChecker() {
 		@Override
-		public boolean checkBlock(World world, int x, int y, int z, Block block) {
-			return (block.isAir(world, x, y, z) || block.isReplaceable(world, x, y, z));
+		public boolean checkBlock(World world, BlockPos pos, Block block) {
+			return (block.isAir(world, pos) || block.isReplaceable(world, pos));
 		}
 	};
 
 	private static final GravePlacementChecker BRUTAL = new GravePlacementChecker() {
 		@Override
-		public boolean checkBlock(World world, int x, int y, int z, Block block) {
-			return block.getBlockHardness(world, x, y, z) >= 0 && world.getTileEntity(x, y, z) == null;
+		public boolean checkBlock(World world, BlockPos pos, Block block) {
+			return block.getBlockHardness(world, pos) >= 0 && world.getTileEntity(pos) == null;
 		}
 	};
 
@@ -127,7 +127,7 @@ public class PlayerDeathHandler {
 
 		private final GameProfile stiffId;
 
-		private final int posX, posY, posZ;
+		private final BlockPos playerPos;
 
 		private final List<EntityItem> loot;
 
@@ -136,9 +136,7 @@ public class PlayerDeathHandler {
 		private final WeakReference<EntityPlayer> exPlayer;
 
 		public GraveCallable(World world, EntityPlayer exPlayer, List<EntityItem> loot) {
-			this.posX = MathHelper.floor_double(exPlayer.posX);
-			this.posY = MathHelper.floor_double(exPlayer.posY);
-			this.posZ = MathHelper.floor_double(exPlayer.posZ);
+			this.playerPos = exPlayer.getPosition();
 
 			this.world = new WeakReference<World>(world);
 
@@ -146,7 +144,7 @@ public class PlayerDeathHandler {
 			this.stiffId = exPlayer.getGameProfile();
 
 			final IChatComponent day = formatDate(world);
-			final IChatComponent deathCause = exPlayer.func_110142_aN().func_151521_b();
+			final IChatComponent deathCause = exPlayer.getCombatTracker().getDeathMessage();
 			this.cause = new ChatComponentTranslation("openblocks.misc.grave_msg", deathCause, day);
 
 			this.loot = ImmutableList.copyOf(loot);
@@ -163,15 +161,15 @@ public class PlayerDeathHandler {
 		private void setCommonStoreInfo(NBTTagCompound meta, boolean placed) {
 			meta.setString(PlayerInventoryStore.TAG_PLAYER_NAME, stiffId.getName());
 			meta.setString(PlayerInventoryStore.TAG_PLAYER_UUID, stiffId.getId().toString());
-			meta.setTag("PlayerLocation", TagUtils.store(posX, posY, posZ));
+			meta.setTag("PlayerLocation", NbtUtils.store(playerPos));
 			meta.setBoolean("Placed", placed);
 		}
 
-		private boolean tryPlaceGrave(World world, final int x, final int y, final int z, String gravestoneText, IChatComponent deathMessage) {
-			world.setBlock(x, y, z, OpenBlocks.Blocks.grave, 0, BlockNotifyFlags.ALL);
-			TileEntity tile = world.getTileEntity(x, y, z);
+		private boolean tryPlaceGrave(World world, final BlockPos gravePos, String gravestoneText, IChatComponent deathMessage) {
+			world.setBlockState(gravePos, OpenBlocks.Blocks.grave.getDefaultState());
+			TileEntity tile = world.getTileEntity(gravePos);
 			if (tile == null || !(tile instanceof TileEntityGrave)) {
-				Log.warn("Failed to place grave @ %d,%d,%d: invalid tile entity: %s(%s)", x, y, z, tile, tile != null? tile.getClass() : "?");
+				Log.warn("Failed to place grave @ %s: invalid tile entity: %s(%s)", gravePos, tile, tile != null? tile.getClass() : "?");
 				return false;
 			}
 
@@ -183,12 +181,12 @@ public class PlayerDeathHandler {
 				@Override
 				public void addExtras(NBTTagCompound meta) {
 					setCommonStoreInfo(meta, true);
-					meta.setTag("GraveLocation", TagUtils.store(x, y, z));
+					meta.setTag("GraveLocation", NbtUtils.store(gravePos));
 
 				}
 			});
 
-			Log.info("Grave for (%s,%s) was spawned at (%d,%d,%d)", stiffId.getId(), stiffId.getName(), x, y, z);
+			Log.info("Grave for (%s,%s) was spawned at (%s)", stiffId.getId(), stiffId.getName(), playerPos);
 
 			grave.setUsername(gravestoneText);
 			grave.setLoot(loot);
@@ -206,59 +204,53 @@ public class PlayerDeathHandler {
 		}
 
 		private boolean trySpawnGrave(EntityPlayer player, World world) {
-			final Coord location = findLocation(world, player);
+			final BlockPos location = findLocation(world, player);
 
 			String gravestoneText = stiffId.getName();
-			final GraveSpawnEvent evt = location == null
-					? new GraveSpawnEvent(player, loot, gravestoneText, cause)
-					: new GraveSpawnEvent(player, location.x, location.y, location.z, loot, gravestoneText, cause);
+			final GraveSpawnEvent evt = new GraveSpawnEvent(player, location, loot, gravestoneText, cause);
 
 			if (MinecraftForge.EVENT_BUS.post(evt)) {
 				Log.warn("Grave event for player %s cancelled, no grave will spawn", stiffId);
 				return false;
 			}
 
-			if (!evt.hasLocation()) {
+			if (evt.location == null) {
 				Log.warn("No location for grave found, no grave will spawn", stiffId);
 				return false;
 			}
 
-			final int x = evt.getX();
-			final int y = evt.getY();
-			final int z = evt.getZ();
+			Log.log(debugLevel(), "Grave for %s will be spawned at (%s)", stiffId, evt.location);
 
-			Log.log(debugLevel(), "Grave for %s will be spawned at (%d,%d,%d)", stiffId, x, y, z);
-
-			if (Config.graveBase && canSpawnBase(world, player, x, y - 1, z)) {
-				world.setBlock(x, y - 1, z, Blocks.dirt);
+			final BlockPos under = evt.location.down();
+			if (Config.graveBase && canSpawnBase(world, player, under)) {
+				world.setBlockState(under, Blocks.dirt.getDefaultState());
 			}
 
-			return tryPlaceGrave(world, evt.getX(), evt.getY(), evt.getZ(), evt.gravestoneText, evt.clickText);
+			return tryPlaceGrave(world, evt.location, evt.gravestoneText, evt.clickText);
 		}
 
-		private static boolean canSpawnBase(World world, EntityPlayer player, int x, int y, int z) {
-			return world.blockExists(x, y, z)
-					&& world.getBlock(x, y, z).isAir(world, x, y, z)
-					&& world.canMineBlock(player, x, y, z);
+		private static boolean canSpawnBase(World world, EntityPlayer player, BlockPos pos) {
+			return world.isBlockLoaded(pos)
+					&& world.isAirBlock(pos)
+					&& world.isBlockModifiable(player, pos);
 		}
 
-		private Coord findLocation(World world, EntityPlayer player, GravePlacementChecker checker) {
-			final int correctedY = Config.voidGraves? Math.max(posY, 1) : posY;
+		private BlockPos findLocation(World world, EntityPlayer player, GravePlacementChecker checker) {
+			BlockPos searchPos = playerPos;
+			if (Config.voidGraves && searchPos.getY() == 0) searchPos = searchPos.up();
 
 			final int searchSize = Config.graveSpawnRange / 2;
 
-			for (Coord c : getSearchOrder(searchSize)) {
-				final int x = posX + c.x;
-				final int y = correctedY + c.y;
-				final int z = posZ + c.z;
-				if (checker.canPlace(world, player, x, y, z)) return new Coord(x, y, z);
+			for (BlockPos c : getSearchOrder(searchSize)) {
+				final BlockPos tryPos = searchPos.add(c);
+				if (checker.canPlace(world, player, tryPos)) return tryPos;
 			}
 
 			return null;
 		}
 
-		private Coord findLocation(World world, EntityPlayer player) {
-			Coord location = findLocation(world, player, POLITE);
+		private BlockPos findLocation(World world, EntityPlayer player) {
+			BlockPos location = findLocation(world, player, POLITE);
 			if (location != null) return location;
 
 			if (Config.destructiveGraves) {
@@ -344,8 +336,8 @@ public class PlayerDeathHandler {
 		}
 
 		final GameRules gameRules = world.getGameRules();
-		if (gameRules.getGameRuleBooleanValue("keepInventory") ||
-				!gameRules.getGameRuleBooleanValue(GameRule.SPAWN_GRAVES)) {
+		if (gameRules.getBoolean("keepInventory") ||
+				!gameRules.getBoolean(GameRule.SPAWN_GRAVES)) {
 			Log.log(debugLevel(), "Graves disabled by gamerule (player '%s')", player);
 			return;
 		}

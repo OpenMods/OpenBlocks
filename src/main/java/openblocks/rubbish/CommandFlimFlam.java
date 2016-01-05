@@ -2,24 +2,25 @@ package openblocks.rubbish;
 
 import static openmods.utils.CommandUtils.*;
 
+import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
 import openblocks.api.IFlimFlamDescription;
 import openblocks.enchantments.flimflams.FlimFlamRegistry;
 import openmods.utils.CollectionUtils;
-
-import com.google.common.collect.Lists;
 
 public class CommandFlimFlam implements ICommand {
 
 	private static final String NAME = "flimflam";
 
 	@Override
-	public int compareTo(Object o) {
-		return NAME.compareTo(((ICommand)o).getCommandName());
+	public int compareTo(ICommand o) {
+		return NAME.compareTo(o.getCommandName());
 	}
 
 	@Override
@@ -33,13 +34,12 @@ public class CommandFlimFlam implements ICommand {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List getCommandAliases() {
-		return null;
+	public List<String> getCommandAliases() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] params) {
+	public void processCommand(ICommandSender sender, String[] params) throws CommandException {
 		if (params.length != 1 && params.length != 2) throw error("openblocks.misc.command.invalid");
 
 		String playerName = params[0];
@@ -68,8 +68,7 @@ public class CommandFlimFlam implements ICommand {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List addTabCompletionOptions(ICommandSender sender, String[] params) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] params, BlockPos pos) {
 		if (params.length == 1) {
 			String playerPrefix = params[0];
 			return fiterPlayerNames(playerPrefix);
@@ -80,7 +79,7 @@ public class CommandFlimFlam implements ICommand {
 			return filterPrefixes(effectPrefix, FlimFlamRegistry.instance.getAllFlimFlamsNames());
 		}
 
-		return Lists.newArrayList();
+		return Collections.emptyList();
 	}
 
 	@Override

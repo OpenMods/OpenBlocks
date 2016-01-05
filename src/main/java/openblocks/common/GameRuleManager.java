@@ -11,7 +11,7 @@ public class GameRuleManager {
 	}
 
 	private static void addRule(GameRules rules, String name, String defaultValue) {
-		if (!rules.hasRule(name)) rules.addGameRule(name, defaultValue);
+		if (!rules.hasRule(name)) rules.addGameRule(name, defaultValue, GameRules.ValueType.BOOLEAN_VALUE);
 	}
 
 	@SubscribeEvent

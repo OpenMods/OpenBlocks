@@ -5,12 +5,14 @@ import static openmods.utils.CommandUtils.fiterPlayerNames;
 import static openmods.utils.CommandUtils.getPlayer;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import openblocks.api.InventoryEvent.SubInventory;
 import openblocks.common.PlayerInventoryStore.LoadedInventories;
@@ -35,8 +37,8 @@ public class CommandInventory implements ICommand {
 	private static final List<String> SUB_COMMANDS = Lists.newArrayList(COMMAND_STORE, COMMAND_RESTORE, COMMAND_SPAWN);
 
 	@Override
-	public int compareTo(Object o) {
-		return NAME.compareTo(((ICommand)o).getCommandName());
+	public int compareTo(ICommand o) {
+		return NAME.compareTo(o.getCommandName());
 	}
 
 	@Override
@@ -52,13 +54,12 @@ public class CommandInventory implements ICommand {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List getCommandAliases() {
-		return null;
+	public List<String> getCommandAliases() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 1) throw new SyntaxErrorException();
 
 		String subCommand = args[0];
@@ -130,14 +131,14 @@ public class CommandInventory implements ICommand {
 				}
 			}
 
-			final ChunkCoordinates coords = sender.getPlayerCoordinates();
+			final BlockPos coords = sender.getPosition();
 			for (ItemStack stack : toRestore)
-				if (stack != null) BlockUtils.dropItemStackInWorld(sender.getEntityWorld(), coords.posX, coords.posY, coords.posZ, stack);
+				if (stack != null) BlockUtils.dropItemStackInWorld(sender.getEntityWorld(), coords, stack);
 
 		} else throw new SyntaxErrorException();
 	}
 
-	private static LoadedInventories loadInventories(ICommandSender sender, String id) {
+	private static LoadedInventories loadInventories(ICommandSender sender, String id) throws CommandException {
 		try {
 			return PlayerInventoryStore.instance.loadInventories(sender.getEntityWorld(), id);
 		} catch (Exception e) {
@@ -146,7 +147,7 @@ public class CommandInventory implements ICommand {
 		}
 	}
 
-	private static int getSlotId(String item) {
+	private static int getSlotId(String item) throws CommandException {
 		try {
 			return Integer.parseInt(item);
 		} catch (Exception t) {
@@ -159,9 +160,8 @@ public class CommandInventory implements ICommand {
 		return sender.canCommandSenderUseCommand(4, NAME);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 		if (args.length == 0) return null;
 		if (args.length == 1) return filterPrefixes(args[0], SUB_COMMANDS);
 

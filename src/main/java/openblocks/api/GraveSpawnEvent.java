@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
@@ -17,71 +18,13 @@ public class GraveSpawnEvent extends PlayerEvent {
 
 	public String gravestoneText;
 
-	private int x;
+	public BlockPos location;
 
-	private int y;
-
-	private int z;
-
-	private boolean hasLocation;
-
-	public GraveSpawnEvent(EntityPlayer player, int x, int y, int z, List<EntityItem> loot, String gravestoneText, IChatComponent clickText) {
+	public GraveSpawnEvent(EntityPlayer player, BlockPos pos, List<EntityItem> loot, String gravestoneText, IChatComponent clickText) {
 		super(player);
 		this.loot = loot;
 		this.gravestoneText = gravestoneText;
 		this.clickText = clickText;
-
-		this.hasLocation = true;
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.location = pos;
 	}
-
-	public GraveSpawnEvent(EntityPlayer player, List<EntityItem> loot, String gravestoneText, IChatComponent clickText) {
-		super(player);
-		this.loot = loot;
-		this.gravestoneText = gravestoneText;
-		this.clickText = clickText;
-
-		this.hasLocation = false;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public int getZ() {
-		return z;
-	}
-
-	public boolean hasLocation() {
-		return hasLocation;
-	}
-
-	public void setPosition(int x, int y, int z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.hasLocation = true;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-		this.hasLocation = true;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-		this.hasLocation = true;
-	}
-
-	public void setZ(int z) {
-		this.z = z;
-		this.hasLocation = true;
-	}
-
 }

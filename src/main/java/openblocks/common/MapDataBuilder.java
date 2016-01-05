@@ -4,8 +4,10 @@ import java.util.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -35,15 +37,17 @@ public class MapDataBuilder {
 		public byte liquidColor;
 		public int liquidHeight;
 
-		private static Block getValidBlock(World world, Chunk chunk, int x, int y, int z) {
-			Block block = chunk.getBlock(x, y, z);
-			if (block.isAir(world, x, y, z)) return null;
+		private static IBlockState getValidBlock(World world, Chunk chunk, BlockPos pos) {
+			final IBlockState blockState = chunk.getBlockState(pos);
+			final Block block = blockState.getBlock();
 
-			if (block.getMaterial().getMaterialMapColor().colorIndex == 0) return null;
+			if (block.isAir(world, pos)) return null;
+
+			if (block.getMapColor(blockState) == MapColor.airColor) return null;
 
 			if (MapDataManager.instance.isBlockTransparent(block)) return null;
 
-			return block;
+			return blockState;
 		}
 
 		public void average(World world, Chunk chunk, int startX, int startZ, int size) {
@@ -56,40 +60,38 @@ public class MapDataBuilder {
 
 			for (int x = startX; x < startX + size; x++)
 				for (int z = startZ; z < startZ + size; z++) {
-					Block blockLiquid = null;
-					int heightLiquid = 0;
+					IBlockState blockLiquid = null;
+					BlockPos heightLiquid = null;
 
-					Block blockSolid = null;
-					int heightSolid = 0;
+					IBlockState blockSolid = null;
+					BlockPos heightSolid = null;
 
 					for (int y = 255; y >= 0; y--) {
-						Block block = getValidBlock(world, chunk, x, y, z);
-						if (block == null) continue;
+						final BlockPos pos = new BlockPos(x, y, z);
+						IBlockState blockState = getValidBlock(world, chunk, pos);
 
-						if (block.getMaterial().isLiquid()) {
+						if (blockState.getBlock().getMaterial().isLiquid()) {
 							if (blockLiquid == null) {
-								blockLiquid = block;
-								heightLiquid = y;
+								blockLiquid = blockState;
+								heightLiquid = pos;
 							}
 						} else {
-							blockSolid = block;
-							heightSolid = y;
+							blockSolid = blockState;
+							heightSolid = pos;
 							break;
 						}
 					}
 
-					if (blockSolid != null) {
-						int meta = chunk.getBlockMetadata(x, heightSolid, z);
-						groundHeightSum += heightSolid;
-						int color = blockSolid.getMapColor(meta).colorIndex;
-						groundColors[color]++;
+					if (blockSolid != null && heightSolid != null) {
+						groundHeightSum += heightSolid.getY();
+						MapColor color = blockSolid.getBlock().getMapColor(blockSolid);
+						groundColors[color.colorIndex]++;
 					}
 
-					if (blockLiquid != null) {
-						int meta = chunk.getBlockMetadata(x, heightLiquid, z);
-						liquidHeightSum += heightLiquid;
-						int color = blockLiquid.getMapColor(meta).colorIndex;
-						liquidColors[color]++;
+					if (blockLiquid != null && heightLiquid != null	) {
+						liquidHeightSum += heightLiquid.getY();
+						MapColor color = blockLiquid.getBlock().getMapColor(blockLiquid);
+						liquidColors[color.colorIndex]++;
 						liquidCount++;
 					}
 				}
@@ -173,7 +175,7 @@ public class MapDataBuilder {
 		this.data = MapDataManager.getMapData(world, mapId);
 		data.centerX = ((x >> 4) << 4);
 		data.centerZ = ((z >> 4) << 4);
-		data.dimension = world.provider.dimensionId;
+		data.dimension = world.provider.getDimensionId();
 
 		if (data.layers == null || data.layers.length != LAYER_COUNT) data.layers = new HeightMapData.LayerData[LAYER_COUNT];
 
@@ -253,7 +255,7 @@ public class MapDataBuilder {
 			ChunkCoordIntPair chunkCoord = job.chunk;
 
 			if (provider.chunkExists(chunkCoord.chunkXPos, chunkCoord.chunkZPos)) {
-				Chunk chunk = provider.loadChunk(chunkCoord.chunkXPos, chunkCoord.chunkZPos);
+				Chunk chunk = provider.provideChunk(chunkCoord.chunkXPos, chunkCoord.chunkZPos);
 				job.mapChunk(world, chunk);
 				return job;
 			}
