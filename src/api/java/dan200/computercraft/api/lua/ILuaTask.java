@@ -4,7 +4,9 @@
  * For help using the API, and posting your mods, visit the forums at computercraft.info.
  */
 
-@API( owner="ComputerCraft", provides="ComputerCraft|API|Peripheral", apiVersion="1.76" )
-package dan200.computercraft.api.peripheral;
+package dan200.computercraft.api.lua;
 
-import net.minecraftforge.fml.common.API;
+public interface ILuaTask
+{
+    public Object[] execute() throws LuaException;
+}
