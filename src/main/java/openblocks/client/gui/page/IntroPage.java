@@ -1,10 +1,8 @@
 package openblocks.client.gui.page;
 
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import openmods.gui.component.GuiComponentSprite;
 import openmods.gui.component.page.PageBase;
-import openmods.utils.render.FakeIcon;
 
 public class IntroPage extends PageBase {
 	private GuiComponentSprite image;

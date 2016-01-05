@@ -2,8 +2,6 @@ package openblocks.client.renderer.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import openblocks.client.renderer.block.BlockTankRenderer;

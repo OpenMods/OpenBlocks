@@ -5,7 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.api.IElevatorBlock;
 import openblocks.api.IElevatorBlock.PlayerRotation;
@@ -14,10 +15,6 @@ import openmods.movement.PlayerMovementEvent;
 import openmods.utils.EnchantmentUtils;
 
 import com.google.common.base.Preconditions;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ElevatorActionHandler {
 

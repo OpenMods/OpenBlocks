@@ -6,7 +6,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
 import openmods.api.IHasGui;

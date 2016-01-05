@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityBigButton;
 import openmods.block.BlockRotationMode;
 import openmods.geometry.BlockSpaceTransform;

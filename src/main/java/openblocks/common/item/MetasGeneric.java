@@ -11,8 +11,6 @@ import openmods.item.IMetaItem;
 
 import com.google.common.collect.ImmutableList;
 
-import cpw.mods.fml.common.Loader;
-
 public enum MetasGeneric {
 	gliderWing {
 		@Override

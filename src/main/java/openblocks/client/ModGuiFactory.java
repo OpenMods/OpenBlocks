@@ -4,12 +4,11 @@ import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.client.IModGuiFactory;
 import openblocks.OpenBlocks;
 import openmods.config.gui.OpenModsConfigScreen;
 
 import com.google.common.collect.ImmutableSet;
-
-import cpw.mods.fml.client.IModGuiFactory;
 
 public class ModGuiFactory implements IModGuiFactory {
 

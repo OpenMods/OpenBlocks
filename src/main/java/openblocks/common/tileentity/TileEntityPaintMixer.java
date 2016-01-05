@@ -16,6 +16,7 @@ import openblocks.rpc.IColorChanger;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.api.IValueProvider;
+import openmods.colors.ColorUtils;
 import openmods.gamelogic.WorkerLogic;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
@@ -26,7 +27,6 @@ import openmods.sync.SyncableFloat;
 import openmods.sync.SyncableInt;
 import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
-import openmods.utils.ColorUtils;
 import openmods.utils.MiscUtils;
 
 import org.apache.commons.lang3.ArrayUtils;

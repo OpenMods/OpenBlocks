@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
@@ -23,8 +24,6 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.legacy.ItemDistribution;
 
 import com.google.common.base.Strings;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 @VisibleForDocumentation
 public class EntityLuggage extends EntityTameable implements IInventoryProvider, IEntityAdditionalSpawnData {

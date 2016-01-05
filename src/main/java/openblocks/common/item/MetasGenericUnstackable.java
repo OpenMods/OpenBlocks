@@ -5,8 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
+import openmods.colors.ColorMeta;
 import openmods.item.IMetaItem;
-import openmods.utils.ColorUtils.ColorMeta;
 
 public enum MetasGenericUnstackable {
 	pointer {

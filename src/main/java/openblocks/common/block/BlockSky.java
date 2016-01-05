@@ -6,11 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.render.RenderUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(customName = "sky.normal")
 public class BlockSky extends OpenBlock {

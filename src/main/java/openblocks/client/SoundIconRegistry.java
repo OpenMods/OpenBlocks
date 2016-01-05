@@ -7,12 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.client.Icons.ComposedIcon;
 import openblocks.client.Icons.IDrawableIcon;
 import openmods.Log;
@@ -20,8 +20,6 @@ import openmods.Log;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SoundIconRegistry {
 

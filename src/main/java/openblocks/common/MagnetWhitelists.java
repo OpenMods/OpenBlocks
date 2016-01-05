@@ -13,7 +13,6 @@ import net.minecraftforge.common.MinecraftForge;
 import openmods.utils.*;
 import openmods.utils.ObjectTester.ClassNameTester;
 import openmods.utils.ObjectTester.ClassTester;
-import cpw.mods.fml.common.eventhandler.Event;
 
 public class MagnetWhitelists {
 	public final static MagnetWhitelists instance = new MagnetWhitelists();

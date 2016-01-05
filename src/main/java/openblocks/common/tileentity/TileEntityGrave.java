@@ -19,8 +19,11 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
-import openmods.api.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IAddAwareTile;
+import openmods.api.INeighbourAwareTile;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.sync.SyncableBoolean;
@@ -29,9 +32,6 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
 import com.google.common.base.Strings;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile, IAddAwareTile {
 

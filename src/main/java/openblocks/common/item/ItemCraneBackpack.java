@@ -9,13 +9,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.common.CraneRegistry;
 import openmods.infobook.BookDocumentation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(customName = "crane_backpack", hasVideo = true)
 public class ItemCraneBackpack extends ItemArmor {

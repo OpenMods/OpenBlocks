@@ -9,7 +9,6 @@ import openblocks.rpc.IStencilCrafter;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
-import openmods.utils.render.FakeIcon;
 
 public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 

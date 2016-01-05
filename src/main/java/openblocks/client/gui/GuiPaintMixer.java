@@ -8,6 +8,8 @@ import openblocks.common.tileentity.TileEntityPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer.DyeSlot;
 import openblocks.rpc.IColorChanger;
 import openmods.api.IValueProvider;
+import openmods.colors.ColorMeta;
+import openmods.colors.ColorUtils;
 import openmods.gui.SyncedGuiContainer;
 import openmods.gui.component.*;
 import openmods.gui.component.GuiComponentPalettePicker.PaletteEntry;
@@ -15,8 +17,6 @@ import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.IValueUpdateAction;
 import openmods.gui.logic.ValueCopyAction;
-import openmods.utils.ColorUtils;
-import openmods.utils.ColorUtils.ColorMeta;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;

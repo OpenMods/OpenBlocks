@@ -1,12 +1,8 @@
 package openblocks.client.renderer.block;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.block.BlockRopeLadder;
-import openmods.renderer.IBlockRenderer;
 
 public class BlockRopeLadderRenderer implements IBlockRenderer<BlockRopeLadder> {
 

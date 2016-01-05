@@ -10,11 +10,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.OpenBlocks;
 import openblocks.events.PlayerActionEvent;
 import openblocks.events.PlayerActionEvent.Type;
 import openmods.utils.ItemUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class BrickManager {
 

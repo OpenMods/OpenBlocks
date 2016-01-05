@@ -2,20 +2,17 @@ package openblocks.common.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.block.BlockRotationMode;
+import openmods.colors.RGB;
 import openmods.geometry.Orientation;
-import openmods.utils.ColorUtils.RGB;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFlag extends OpenBlock {
 

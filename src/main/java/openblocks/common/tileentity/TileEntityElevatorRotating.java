@@ -7,12 +7,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import openblocks.OpenBlocks.Blocks;
-import openmods.api.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
+import openmods.api.ICustomPickItem;
+import openmods.colors.ColorMeta;
+import openmods.colors.ColorUtils;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.CollectionUtils;
-import openmods.utils.ColorUtils;
-import openmods.utils.ColorUtils.ColorMeta;
 
 public class TileEntityElevatorRotating extends SyncedTileEntity implements IPlacerAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
 

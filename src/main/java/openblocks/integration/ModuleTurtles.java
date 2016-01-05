@@ -1,13 +1,10 @@
 package openblocks.integration;
 
 import static openmods.conditions.Conditions.all;
-import static openmods.integration.Conditions.classExists;
-import static openmods.integration.Conditions.modLoaded;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import dan200.computercraft.api.ComputerCraftAPI;
 
 public class ModuleTurtles extends IntegrationModule {

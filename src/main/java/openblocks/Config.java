@@ -13,6 +13,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.RegistryDelegate;
 import net.minecraftforge.oredict.*;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.common.Stencil;
@@ -20,13 +23,10 @@ import openblocks.common.TrophyHandler;
 import openblocks.common.item.*;
 import openblocks.common.recipe.*;
 import openblocks.enchantments.*;
+import openmods.colors.ColorMeta;
+import openmods.colors.ColorUtils;
 import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
-import openmods.utils.ColorUtils;
-import openmods.utils.ColorUtils.ColorMeta;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.RegistryDelegate;
 
 public class Config {
 

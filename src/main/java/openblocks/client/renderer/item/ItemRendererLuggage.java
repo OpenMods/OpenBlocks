@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityLuggage;
 import openmods.utils.LazyValue;
 import openmods.utils.render.RenderUtils;

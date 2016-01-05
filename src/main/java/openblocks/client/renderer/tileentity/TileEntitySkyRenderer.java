@@ -7,10 +7,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.client.StencilSkyRenderer;
 import openblocks.common.block.BlockSky;
 import openmods.Log;
+import openmods.colors.RGB;
 import openmods.renderer.StencilRendererHandler;
-import openmods.stencil.StencilBitAllocation;
-import openmods.stencil.StencilPoolManager;
-import openmods.utils.ColorUtils.RGB;
 import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;

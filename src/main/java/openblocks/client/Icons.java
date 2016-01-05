@@ -1,9 +1,7 @@
 package openblocks.client;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import openmods.utils.TextureUtils;
 

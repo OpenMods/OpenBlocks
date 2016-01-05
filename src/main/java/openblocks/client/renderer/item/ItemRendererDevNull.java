@@ -2,7 +2,6 @@ package openblocks.client.renderer.item;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -10,10 +9,9 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.common.item.ItemDevNull;
 import openblocks.common.item.ItemDevNull.Icons;
 import openmods.inventory.ItemInventory;
@@ -23,8 +21,6 @@ import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemRendererDevNull implements IItemRenderer {
 

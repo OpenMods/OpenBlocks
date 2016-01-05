@@ -3,7 +3,6 @@ package openblocks.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -11,6 +10,11 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
@@ -27,12 +31,6 @@ import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
-import openmods.renderer.*;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class ClientProxy implements IOpenBlocksProxy {
 

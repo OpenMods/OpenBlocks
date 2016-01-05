@@ -1,6 +1,5 @@
 package openblocks.client.renderer.tileentity.tank;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import openmods.utils.Diagonal;
 
 public interface ITankConnections {

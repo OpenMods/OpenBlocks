@@ -3,9 +3,9 @@ package openblocks;
 import java.util.Map;
 
 import net.minecraft.launchwrapper.Launch;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 import openmods.core.OpenModsCorePlugin;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 
 //must be higher than one in openmodslib
 @SortingIndex(32)

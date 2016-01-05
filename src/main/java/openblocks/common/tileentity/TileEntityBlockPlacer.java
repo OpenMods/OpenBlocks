@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
 import openmods.api.IHasGui;

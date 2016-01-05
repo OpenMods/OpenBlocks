@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
@@ -19,8 +19,6 @@ import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile {
 

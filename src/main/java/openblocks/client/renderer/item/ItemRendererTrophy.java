@@ -1,8 +1,6 @@
 package openblocks.client.renderer.item;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.common.TrophyHandler.Trophy;

@@ -1,9 +1,7 @@
 package openblocks.client.renderer.block;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.block.BlockGuide;
-import openmods.renderer.IBlockRenderer;
 import openmods.utils.render.RenderUtils;
 
 public class BlockGuideRenderer implements IBlockRenderer<BlockGuide> {

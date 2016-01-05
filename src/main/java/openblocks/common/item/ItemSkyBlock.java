@@ -9,10 +9,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.block.BlockSky;
 import openmods.utils.render.RenderUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSkyBlock extends ItemBlock {
 

@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.*;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.GraveDropsEvent;
@@ -30,7 +31,6 @@ import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.utils.BlockNotifyFlags;
 import openmods.utils.Coord;
-import openmods.utils.TagUtils;
 import openmods.world.DelayedActionTickHandler;
 
 import org.apache.logging.log4j.Level;
@@ -38,9 +38,6 @@ import org.apache.logging.log4j.Level;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.eventhandler.*;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class PlayerDeathHandler {
 

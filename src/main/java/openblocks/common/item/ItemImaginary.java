@@ -3,7 +3,6 @@ package openblocks.common.item;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -11,23 +10,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.NBTBase.NBTPrimitive;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.tileentity.*;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
+import openmods.colors.ColorMeta;
+import openmods.colors.ColorUtils;
 import openmods.item.ItemOpenBlock;
-import openmods.utils.*;
-import openmods.utils.ColorUtils.ColorMeta;
+import openmods.utils.BlockUtils;
+import openmods.utils.ItemUtils;
 
 import com.google.common.base.Objects;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemImaginary extends ItemOpenBlock {
 

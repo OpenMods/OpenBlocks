@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
@@ -13,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openmods.Log;
@@ -31,9 +30,6 @@ import openmods.utils.EntityUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile {
 

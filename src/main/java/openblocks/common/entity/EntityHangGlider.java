@@ -10,14 +10,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.item.ItemHangGlider;
 import openmods.Log;
 
 import com.google.common.collect.MapMaker;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
 	private static final int PROPERTY_DEPLOYED = 17;

@@ -13,7 +13,6 @@ import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.misc.Trackball.TrackballWrapper;
 import openmods.utils.MathUtils;
-import openmods.utils.render.FakeIcon;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;

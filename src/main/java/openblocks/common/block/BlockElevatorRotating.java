@@ -1,16 +1,13 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.api.IElevatorBlock;
 import openblocks.common.tileentity.TileEntityElevatorRotating;
 import openmods.block.BlockRotationMode;
-import openmods.utils.ColorUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import openmods.colors.ColorUtils;
 
 public class BlockElevatorRotating extends OpenBlock implements IElevatorBlock {
 

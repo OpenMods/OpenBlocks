@@ -12,7 +12,6 @@ import net.minecraft.util.Vec3;
 import openblocks.Config;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
-import openmods.api.IPlacerAwareTile;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;

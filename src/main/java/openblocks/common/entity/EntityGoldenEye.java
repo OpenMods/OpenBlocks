@@ -4,11 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.utils.ItemUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityGoldenEye extends EntitySmoothMove {
 

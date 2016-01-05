@@ -9,9 +9,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks;
+import openmods.colors.ColorMeta;
+import openmods.colors.ColorUtils;
 import openmods.item.ItemOpenBlock;
-import openmods.utils.ColorUtils;
-import openmods.utils.ColorUtils.ColorMeta;
 import openmods.utils.ItemUtils;
 
 public class ItemPaintCan extends ItemOpenBlock {

@@ -8,11 +8,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
 import openblocks.shapes.GuideShape;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
+import openmods.colors.ColorMeta;
+import openmods.colors.ColorUtils;
 import openmods.geometry.HalfAxis;
 import openmods.geometry.Orientation;
 import openmods.shapes.IShapeGenerator;
@@ -20,8 +23,9 @@ import openmods.shapes.IShapeable;
 import openmods.sync.*;
 import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
-import openmods.utils.*;
-import openmods.utils.ColorUtils.ColorMeta;
+import openmods.utils.CollectionUtils;
+import openmods.utils.Coord;
+import openmods.utils.MathUtils;
 import openperipheral.api.adapter.Asynchronous;
 import openperipheral.api.adapter.method.*;
 import openperipheral.api.struct.ScriptStruct;
@@ -31,9 +35,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile {
 

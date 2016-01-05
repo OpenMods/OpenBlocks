@@ -17,6 +17,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.OpenMods;
@@ -24,8 +25,6 @@ import openmods.OpenMods;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ExplosiveEnchantmentsHandler {
 

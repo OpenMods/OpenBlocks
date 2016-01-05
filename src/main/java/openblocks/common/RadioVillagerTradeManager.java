@@ -11,7 +11,6 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.Config;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 public class RadioVillagerTradeManager implements IVillageTradeHandler {
 

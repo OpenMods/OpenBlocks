@@ -8,9 +8,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.infobook.BookDocumentation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(hasVideo = true)
 public class BlockBuilderGuide extends BlockGuide {

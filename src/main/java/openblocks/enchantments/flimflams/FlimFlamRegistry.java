@@ -3,6 +3,7 @@ package openblocks.enchantments.flimflams;
 import java.util.*;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.api.*;
 import openmods.Log;
@@ -10,8 +11,6 @@ import openmods.access.ApiSingleton;
 import openmods.config.properties.ConfigurationChange;
 
 import com.google.common.collect.*;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @ApiSingleton
 public class FlimFlamRegistry implements IFlimFlamRegistry {

@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import openblocks.OpenBlocks;
 import openblocks.common.LiquidXpUtils;

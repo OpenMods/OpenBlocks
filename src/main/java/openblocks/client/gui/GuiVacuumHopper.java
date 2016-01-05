@@ -4,7 +4,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.gui.SyncedGuiContainer;

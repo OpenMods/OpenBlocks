@@ -1,8 +1,7 @@
 package openblocks.common.tileentity;
 
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.tileentity.OpenTileEntity;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntitySky extends OpenTileEntity {
 

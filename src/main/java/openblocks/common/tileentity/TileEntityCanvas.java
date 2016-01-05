@@ -9,8 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.block.BlockCanvas;

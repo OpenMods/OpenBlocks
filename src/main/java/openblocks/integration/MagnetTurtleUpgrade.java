@@ -1,13 +1,12 @@
 package openblocks.integration;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.common.item.MetasGeneric;
 import openmods.utils.TextureUtils;
 import openperipheral.api.ApiAccess;
 import openperipheral.api.architecture.cc.IComputerCraftObjectsFactory;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 

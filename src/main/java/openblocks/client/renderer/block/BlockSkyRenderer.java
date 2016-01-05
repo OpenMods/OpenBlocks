@@ -1,9 +1,7 @@
 package openblocks.client.renderer.block;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.block.BlockSky;
-import openmods.renderer.IBlockRenderer;
 import openmods.utils.render.RenderUtils;
 
 public class BlockSkyRenderer implements IBlockRenderer<BlockSky> {

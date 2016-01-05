@@ -1,9 +1,7 @@
 package openblocks.client.renderer.block;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.block.BlockPaintCan;
-import openmods.renderer.IBlockRenderer;
 
 public class BlockPaintCanRenderer implements IBlockRenderer<BlockPaintCan> {
 

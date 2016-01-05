@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChunkCoordinates;
 import openblocks.api.InventoryEvent.SubInventory;
 import openblocks.common.PlayerInventoryStore.LoadedInventories;
 import openmods.Log;

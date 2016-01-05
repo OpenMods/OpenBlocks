@@ -8,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.util.ForgeDirection;
 import openmods.api.*;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;

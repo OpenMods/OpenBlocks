@@ -1,6 +1,5 @@
 package openblocks.common;
 
-import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;

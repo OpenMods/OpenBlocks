@@ -1,7 +1,6 @@
 package openblocks.client.fx;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;

@@ -16,7 +16,6 @@ import openmods.OpenMods;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
-import openmods.utils.BlockProperties;
 import openmods.utils.Coord;
 
 public class EntityAIBreakBlock extends EntityAIBase {

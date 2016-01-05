@@ -4,7 +4,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.infobook.BookDocumentation;
 

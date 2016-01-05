@@ -13,8 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.client.Icons.IDrawableIcon;
 import openblocks.common.item.ItemSonicGlasses;
@@ -26,9 +27,6 @@ import openmods.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SoundEventsManager {
 

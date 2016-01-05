@@ -2,7 +2,6 @@ package openblocks.enchantments.flimflams;
 
 import java.util.List;
 
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;

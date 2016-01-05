@@ -8,12 +8,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Items;
 import openblocks.common.MapDataManager;
 import openmods.utils.ItemUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemEmptyMap extends Item {
 

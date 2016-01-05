@@ -9,16 +9,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
-import openmods.utils.ColorUtils;
-import openmods.utils.ColorUtils.ColorMeta;
+import openmods.colors.ColorMeta;
+import openmods.colors.ColorUtils;
 import openmods.utils.ItemUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemImaginationGlasses extends ItemArmor {
 

@@ -4,11 +4,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.client.model.ModelFlag;
 import openblocks.common.tileentity.TileEntityFlag;
+import openmods.colors.RGB;
 import openmods.renderer.DisplayListWrapper;
-import openmods.utils.ColorUtils.RGB;
 
 import org.lwjgl.opengl.GL11;
 

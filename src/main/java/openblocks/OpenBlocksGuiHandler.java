@@ -3,6 +3,7 @@ package openblocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import openblocks.client.gui.GuiDevNull;
 import openblocks.client.gui.GuiLuggage;
 import openblocks.common.container.ContainerDevNull;
@@ -10,7 +11,6 @@ import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.item.ItemDevNull;
 import openmods.Log;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 public class OpenBlocksGuiHandler implements IGuiHandler {
 

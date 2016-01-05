@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityGoldenEye;
@@ -22,9 +22,6 @@ import openmods.utils.ItemUtils;
 import openmods.world.StructureRegistry;
 
 import com.google.common.base.Strings;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemGoldenEye extends Item {
 

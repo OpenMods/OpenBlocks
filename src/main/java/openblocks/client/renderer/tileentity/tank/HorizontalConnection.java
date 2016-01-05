@@ -1,6 +1,5 @@
 package openblocks.client.renderer.tileentity.tank;
 
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 public class HorizontalConnection extends GridConnection {

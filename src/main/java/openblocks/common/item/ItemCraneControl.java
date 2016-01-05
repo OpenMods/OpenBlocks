@@ -3,15 +3,14 @@ package openblocks.common.item;
 import java.util.Map;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.CraneRegistry;
@@ -20,9 +19,6 @@ import openmods.OpenMods;
 import openmods.infobook.BookDocumentation;
 
 import com.google.common.collect.MapMaker;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(customName = "crane_control", hasVideo = true)
 public class ItemCraneControl extends Item {

@@ -5,13 +5,12 @@ import java.lang.reflect.Method;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import openmods.Log;
 import openmods.renderer.StencilRendererHandler;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class StencilSkyRenderer extends StencilRendererHandler {
 

@@ -4,6 +4,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import openblocks.Config;
 import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
@@ -11,9 +13,6 @@ import openmods.config.properties.ConfigurationChange;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ElevatorBlockRules {
 

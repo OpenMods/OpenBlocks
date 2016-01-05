@@ -2,12 +2,12 @@ package openblocks.client.renderer.tileentity;
 
 import java.util.Collection;
 
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockGuide.Icons;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -16,8 +16,6 @@ import openmods.utils.Coord;
 import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 

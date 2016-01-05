@@ -2,12 +2,10 @@ package openblocks.integration;
 
 import java.lang.ref.WeakReference;
 
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMagnet.IEntityBlockFactory;

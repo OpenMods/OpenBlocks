@@ -7,8 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.block.BlockCanvas;
@@ -16,9 +16,6 @@ import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.utils.render.PaintUtils;
 
 import com.google.common.base.Objects;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemStencil extends Item {
 
