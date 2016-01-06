@@ -8,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
@@ -448,7 +450,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return shape;
 	}
 
-	public boolean onItemUse(EntityPlayerMP player, ItemStack heldStack, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(EntityPlayerMP player, ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
 		Set<ColorMeta> colors = ColorUtils.stackToColor(heldStack);
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);

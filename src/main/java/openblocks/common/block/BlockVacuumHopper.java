@@ -1,10 +1,13 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -12,25 +15,26 @@ public class BlockVacuumHopper extends OpenBlock {
 
 	public BlockVacuumHopper() {
 		super(Material.rock);
-		setRenderMode(RenderMode.TESR_ONLY);
+	}
+
+	// TODO 1.8.9 hello states
+	@Override
+	public int getRenderType() {
+		return 2; // TESR only
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x + 0.01, y + 0.01, z + 0.01, x + 0.99, y + 0.99, z + 0.99);
+	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+		return AxisAlignedBB.fromBounds(pos.getX() + 0.01, pos.getY() + 0.01, pos.getZ() + 0.01,
+				pos.getX() + 0.99, pos.getY() + 0.99, pos.getZ() + 0.99);
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		TileEntityVacuumHopper te = getTileEntity(world, x, y, z, TileEntityVacuumHopper.class);
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
+		TileEntityVacuumHopper te = getTileEntity(world, pos, TileEntityVacuumHopper.class);
 		if (te != null) {
 			te.onEntityCollidedWithBlock(entity);
 		}
-	}
-
-	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return true;
 	}
 
 	@Override
@@ -39,8 +43,9 @@ public class BlockVacuumHopper extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x + 0.3, y + 0.3, z + 0.3, x + 0.7, y + 0.7, z + 0.7);
+	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+		return AxisAlignedBB.fromBounds(pos.getX() + 0.3, pos.getY() + 0.3, pos.getZ() + 0.3,
+				pos.getX() + 0.7, pos.getY() + 0.7, pos.getZ() + 0.7);
 	}
 
 }

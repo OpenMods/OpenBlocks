@@ -2,25 +2,29 @@ package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityBearTrap;
-import openmods.block.BlockRotationMode;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
-public class BlockBearTrap extends OpenBlock {
+public class BlockBearTrap extends OpenBlock.TwoDirections {
 
 	public BlockBearTrap() {
 		super(Material.rock);
-		setRotationMode(BlockRotationMode.TWO_DIRECTIONS);
-		setRenderMode(RenderMode.TESR_ONLY);
+		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 0.4f, 0.9f);
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		TileEntityBearTrap te = getTileEntity(world, x, y, z, TileEntityBearTrap.class);
+	public int getRenderType() {
+		return 2; // TESR only
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
+		TileEntityBearTrap te = getTileEntity(world, pos, TileEntityBearTrap.class);
 		if (te != null) te.onEntityCollided(entity);
 	}
 
@@ -30,23 +34,13 @@ public class BlockBearTrap extends OpenBlock {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean isFullCube() {
 		return false;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x, y, z, x + 1.0, y + 0.1, z + 1.0);
-	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 0.4f, 0.9f);
-	}
-
-	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return isOnTopOfSolidBlock(world, x, y, z, side);
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+		return isOnTopOfSolidBlock(world, pos, side);
 	}
 
 	@Override
@@ -55,8 +49,8 @@ public class BlockBearTrap extends OpenBlock {
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
-		TileEntityBearTrap tile = getTileEntity(world, x, y, z, TileEntityBearTrap.class);
+	public int getComparatorInputOverride(World world, BlockPos pos) {
+		TileEntityBearTrap tile = getTileEntity(world, pos, TileEntityBearTrap.class);
 		return tile != null? tile.getComparatorLevel() : 0;
 	}
 }

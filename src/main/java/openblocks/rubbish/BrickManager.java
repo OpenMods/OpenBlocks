@@ -87,7 +87,7 @@ public class BrickManager {
 
 			if (canDropBrick(player)) {
 				EntityItem drop = createBrick(player);
-				drop.delayBeforeCanPickup = 20;
+				drop.setDefaultPickupDelay();
 				player.worldObj.spawnEntityInWorld(drop);
 				player.triggerAchievement(OpenBlocks.brickAchievement);
 				player.addStat(OpenBlocks.brickStat, 1);

@@ -55,7 +55,7 @@ public class StencilSkyRenderer extends StencilRendererHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 
 		setupFog(partialTickTime);
-		context.renderSky(partialTickTime);
+		context.renderSky(partialTickTime, 0); // TODO 1.8.9 verify
 
 		GL11.glClearStencil(0);
 		GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);

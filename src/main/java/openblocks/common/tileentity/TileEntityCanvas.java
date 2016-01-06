@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.block.BlockCanvas;
@@ -114,10 +115,10 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return true;
 	}
 
-	public boolean applyPaint(int color, ForgeDirection... sides) {
+	public boolean applyPaint(int color, EnumFacing... sides) {
 		boolean hasChanged = false;
 
-		for (ForgeDirection side : sides) {
+		for (EnumFacing side : sides) {
 			final int sideId = side.ordinal();
 			SyncableBlockLayers layers = getLayersForSide(sideId);
 			if (layers.isLastLayerStencil()) {

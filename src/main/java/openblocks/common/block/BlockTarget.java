@@ -1,36 +1,36 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityTarget;
-import openmods.block.BlockRotationMode;
+import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
+t openmods.geometry.Orientation;
 
-public class BlockTarget extends OpenBlock {
+public class BlockTarget extends OpenBlock.FourDirections {
 
 	private int lastEntityHit = 0;
 
 	public BlockTarget() {
 		super(Material.rock);
 		setLightLevel(0.3f);
-		setRotationMode(BlockRotationMode.FOUR_DIRECTIONS);
-		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
+	// TODO 1.8.9 loooks like it
 	@Override
-	public boolean isOpaqueCube() {
-		return false;
+	public int getRenderType() {
+		return 2; // TESR only
 	}
 
+
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
 
 		if (!world.isRemote && entity != null && entity instanceof EntityArrow) {
 			if (lastEntityHit != entity.getEntityId()) {
@@ -38,15 +38,15 @@ public class BlockTarget extends OpenBlock {
 				return;
 			}
 			lastEntityHit = entity.getEntityId();
-			onTargetHit(world, x, y, z, Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ));
+			onTargetHit(world, pos, new Vec3(entity.posX, entity.posY, entity.posZ));
 		}
 	}
 
-	public void onTargetHit(World world, int x, int y, int z, Vec3 entityPosition) {
+	public void onTargetHit(World world, BlockPos pos, Vec3 entityPosition) {
 
 		if (world.isRemote) return;
 
-		final TileEntityTarget target = getTileEntity(world, x, y, z, TileEntityTarget.class);
+		final TileEntityTarget target = getTileEntity(world, pos, TileEntityTarget.class);
 		if (target == null) return;
 
 		/**
@@ -58,11 +58,11 @@ public class BlockTarget extends OpenBlock {
 
 		if (!target.isEnabled()) return;
 
-		ForgeDirection opposite = target.getOrientation().south();
+		EnumFacing opposite = target.getOrientation().south();
 
-		double centerX = x + 0.5 + (opposite.offsetX * 0.5);
-		double centerY = y + 0.55 + (opposite.offsetY * 0.45);
-		double centerZ = z + 0.5 + (opposite.offsetZ * 0.5);
+		double centerX = pos.getY() + 0.5 + (opposite.getFrontOffsetX() * 0.5);
+		double centerY = pos.getY() + 0.55 + (opposite.getFrontOffsetY() * 0.45);
+		double centerZ = pos.getZ() + 0.5 + (opposite.getFrontOffsetZ() * 0.5);
 
 		switch (opposite) {
 			case NORTH:
@@ -78,7 +78,7 @@ public class BlockTarget extends OpenBlock {
 
 		}
 
-		Vec3 bullseye = Vec3.createVectorHelper(centerX, centerY, centerZ);
+		final Vec3 bullseye = new Vec3(centerX, centerY, centerZ);
 
 		double distance = entityPosition.distanceTo(bullseye);
 
@@ -87,36 +87,21 @@ public class BlockTarget extends OpenBlock {
 	}
 
 	@Override
-	public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int m) {
-		final TileEntityTarget tile = getTileEntity(world, x, y, z, TileEntityTarget.class);
+	public int getWeakPower(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+		final TileEntityTarget tile = getTileEntity(world, pos, TileEntityTarget.class);
 		return tile != null? tile.getStrength() : 0;
 	}
 
 	@Override
-	public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int m) {
-		return isProvidingWeakPower(world, x, y, z, m);
+	public int getStrongPower(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+		// TODO Side-aware?
+		return getWeakPower(world, pos, state, side);
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		setBlockBoundsBasedOnState(world, x, y, z);
-		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
-	}
+	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
 
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		setBlockBoundsBasedOnState(world, x, y, z);
-		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
-	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		if (tile == null || !(tile instanceof TileEntityTarget)) { return; }
-
-		TileEntityTarget target = (TileEntityTarget)tile;
+		final TileEntityTarget target = getTileEntity(world, pos, TileEntityTarget.class);
 
 		if (!target.isEnabled()) {
 			setBlockBounds(0, 0, 0, 1.0f, 0.1f, 1.0f);
@@ -125,13 +110,14 @@ public class BlockTarget extends OpenBlock {
 
 		final Orientation orientation = target.getOrientation();
 
-		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0.0, 0.0, 0.9, 1.0, 1.0, 1.0);
+		final AxisAlignedBB aabb = AxisAlignedBB.fromBounds(0.0, 0.0, 0.9, 1.0, 1.0, 1.0);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return isOnTopOfSolidBlock(world, x, y, z, side);
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+		// TODO 1.8.9 verify
+		return isOnTopOfSolidBlock(world, pos, side);
 	}
 }

@@ -4,14 +4,16 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openmods.geometry.Orientation;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
-import openmods.utils.BlockNotifyFlags;
 
 @BookDocumentation
 public class BlockSponge extends OpenBlock {
@@ -27,58 +29,58 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		clearupLiquid(world, x, y, z);
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
+		clearupLiquid(world, pos);
 	}
 
 	@Override
-	public int tickRate(World par1World) {
+	public int tickRate(World world) {
 		return TICK_RATE;
 	}
 
 	@Override
-	public void afterBlockPlaced(World world, EntityPlayer player, ItemStack stack, int x, int y, int z, ForgeDirection side, Orientation orientation, float hitX, float hitY, float hitZ, int meta) {
-		clearupLiquid(world, x, y, z);
-		world.scheduleBlockUpdate(x, y, z, this, TICK_RATE + RANDOM.nextInt(5));
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		clearupLiquid(world, pos);
+		world.scheduleUpdate(pos, this, TICK_RATE + RANDOM.nextInt(5));
 	}
 
-	private void clearupLiquid(World world, int x, int y, int z) {
-		if (world.isRemote) { return; }
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+		clearupLiquid(world, pos);
+		world.scheduleUpdate(pos, this, TICK_RATE + RANDOM.nextInt(5));
+	}
+
+	private void clearupLiquid(World world, BlockPos pos) {
+		if (world.isRemote) return;
 		boolean hitLava = false;
 		for (int dx = -Config.spongeRange; dx <= Config.spongeRange; dx++) {
 			for (int dy = -Config.spongeRange; dy <= Config.spongeRange; dy++) {
 				for (int dz = -Config.spongeRange; dz <= Config.spongeRange; dz++) {
-					Block block = world.getBlock(x + dx, y + dy, z + dz);
+					final BlockPos workPos = pos.add(dx, dy, dz);
+					Block block = world.getBlockState(workPos).getBlock();
 					Material material = block.getMaterial();
 					if (material.isLiquid()) {
 						hitLava |= material == Material.lava;
-						world.setBlockToAir(x + dx, y + dy, z + dz);
+						world.setBlockToAir(pos);
 					}
 				}
 			}
 		}
-		if (hitLava) world.addBlockEvent(x, y, z, this, 0, 0);
+		if (hitLava) world.addBlockEvent(pos, this, 0, 0);
 	}
 
 	@Override
-	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventParam) {
+	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int eventId, int eventParam) {
 		if (world.isRemote) {
 			for (int i = 0; i < 20; i++) {
-				double px = x + RANDOM.nextDouble() * 0.1;
-				double py = y + 1.0 + RANDOM.nextDouble();
-				double pz = z + RANDOM.nextDouble();
-				world.spawnParticle("largesmoke", px, py, pz, 0.0D, 0.0D, 0.0D);
+				double px = pos.getX() + RANDOM.nextDouble() * 0.1;
+				double py = pos.getY() + 1.0 + RANDOM.nextDouble();
+				double pz = pos.getZ() + RANDOM.nextDouble();
+				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px, py, pz, 0.0D, 0.0D, 0.0D);
 			}
 		} else {
-			world.setBlock(x, y, z, Blocks.fire, 0, BlockNotifyFlags.ALL);
+			world.setBlockState(pos, Blocks.fire.getDefaultState());
 		}
 		return true;
 	}
-
-	@Override
-	public void updateTick(World world, int x, int y, int z, Random random) {
-		clearupLiquid(world, x, y, z);
-		world.scheduleBlockUpdate(x, y, z, this, TICK_RATE + RANDOM.nextInt(5));
-	}
-
 }

@@ -2,8 +2,12 @@ package openblocks.common.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -20,26 +24,19 @@ public class BlockPath extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos blockPos, IBlockState state) {
 		return null;
 	}
 
 	@Override
-	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return isValidLocation(world, x, y, z)
-				&& super.canPlaceBlockAt(world, x, y, z);
-	}
-
-	protected boolean isValidLocation(World world, int x, int y, int z) {
-		Block below = world.getBlock(x, y - 1, z);
-		return below.isSideSolid(world, x, y - 1, z, ForgeDirection.UP);
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
+		return isNeighborBlockSolid(world, pos, EnumFacing.DOWN) && super.canPlaceBlockAt(world, pos);
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		if (!world.isRemote && !isValidLocation(world, x, y, z)) {
-			dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-			world.setBlockToAir(x, y, z);
+	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
+		if (!world.isRemote && !isNeighborBlockSolid(world, pos, EnumFacing.DOWN)) {
+			world.destroyBlock(pos, true);
 		}
 	}
 

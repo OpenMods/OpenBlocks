@@ -2,7 +2,7 @@ package openblocks.common;
 
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import openblocks.IOpenBlocksProxy;
 
 public class ServerProxy implements IOpenBlocksProxy {
@@ -20,6 +20,6 @@ public class ServerProxy implements IOpenBlocksProxy {
 	public void registerRenderInformation() {}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {}
+	public void spawnLiquidSpray(World worldObj, FluidStack fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {}
 
 }

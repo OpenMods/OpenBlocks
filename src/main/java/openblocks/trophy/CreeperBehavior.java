@@ -1,13 +1,15 @@
 package openblocks.trophy;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class CreeperBehavior implements ITrophyBehavior {
 
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		tile.getWorldObj().createExplosion(player, tile.xCoord, tile.yCoord, tile.zCoord, 2, false);
+		final BlockPos pos = tile.getPos();
+		tile.getWorld().createExplosion(player, pos.getX(), pos.getY(), pos.getZ(), 2, false);
 		return 0;
 	}
 

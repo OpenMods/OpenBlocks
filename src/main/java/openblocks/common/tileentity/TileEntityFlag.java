@@ -1,10 +1,10 @@
 package openblocks.common.tileentity;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
+import net.minecraft.util.EnumFacing;
 import openblocks.common.block.BlockFlag;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
@@ -27,15 +27,6 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 		colorIndex = new SyncableByte();
 	}
 
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
-	public IIcon getIcon() {
-		return OpenBlocks.Blocks.flag.getIcon(0, 0);
-	}
-
 	public void setColorIndex(byte index) {
 		colorIndex.set(index);
 	}
@@ -53,10 +44,10 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player != null && player.isSneaking()) { return true; }
 		if (!worldObj.isRemote) {
-			if (getOrientation().down() == ForgeDirection.DOWN) {
+			if (getOrientation().down() == EnumFacing.DOWN) {
 				angle.set(angle.get() + 10f);
 				sync();
 				return false;
@@ -66,20 +57,13 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityPlayer player, ForgeDirection side, ItemStack stack, float hitX, float hitY, float hitZ) {
-		float ang = player.rotationYawHead;
-		ForgeDirection rotation = getOrientation().up();
-		if (rotation != ForgeDirection.DOWN) {
-			ang = -BlockUtils.getRotationFromDirection(side.getOpposite());
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		float ang = placer.rotationYawHead;
+		EnumFacing rotation = getOrientation().up();
+		if (rotation != EnumFacing.DOWN) {
+			ang = -BlockUtils.getRotationFromDirection(rotation);
 		}
 		setAngle(ang);
 		setColorIndex((byte)(stack.getItemDamage() & 0xF));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void prepareForInventoryRender(Block block, int metadata) {
-		super.prepareForInventoryRender(block, metadata);
-		setColorIndex((byte)metadata);
 	}
 }

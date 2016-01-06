@@ -2,10 +2,13 @@ package openblocks.common.block;
 
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
@@ -24,57 +27,52 @@ public class BlockLadder extends BlockTrapDoor {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-		setBlockBoundsBasedOnState(par1World, par2, par3, par4);
-		return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
+	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
+		setBlockBoundsBasedOnState(world, pos);
+		return super.getCollisionBoundingBox(world, pos, state);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-		setBlockBoundsBasedOnState(par1World, par2, par3, par4);
-		return super.getSelectedBoundingBoxFromPool(par1World, par2, par3, par4);
+	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+		setBlockBoundsBasedOnState(world, pos);
+		return super.getSelectedBoundingBox(world, pos);
 	}
 
 	@Override
-	public void func_150117_b(int metadata) {
+	public void setBounds(IBlockState state) {
 		float f = 0.125f;
-		final boolean isOpen = (metadata & 4) != 0;
+		final boolean isOpen = state.getValue(BlockTrapDoor.OPEN);
+		// TODO 1.8.9 verify
 		if (isOpen) {
-			switch (metadata & 3) {
-				case 0:
+			switch (state.getValue(BlockTrapDoor.FACING)) {
+				case NORTH:
 					setBlockBounds(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
 					break;
 
-				case 1:
+				case SOUTH:
 					setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
 					break;
 
-				case 2:
+				case WEST:
 					setBlockBounds(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 					break;
 
-				case 3:
+				case EAST:
 				default:
 					setBlockBounds(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
 					break;
 			}
 		} else {
-			boolean isOnTop = (metadata & 8) != 0;
-			if (isOnTop) setBlockBounds(0.0F, 1.0F - f, 0.0F, 1.0F, 1.0F, 1.0F);
+			final DoorHalf half = state.getValue(BlockTrapDoor.HALF);
+			if (half == BlockTrapDoor.DoorHalf.TOP) setBlockBounds(0.0F, 1.0F - f, 0.0F, 1.0F, 1.0F, 1.0F);
 			else setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, f, 1.0F);
 		}
 	}
 
 	@Override
-	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		return (metadata & 4) != 0;
+	public boolean isLadder(IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
+		return world.getBlockState(pos).getValue(BlockTrapDoor.OPEN);
 	}
 
 	@Override

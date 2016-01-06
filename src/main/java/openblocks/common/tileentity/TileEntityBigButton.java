@@ -2,12 +2,12 @@ package openblocks.common.tileentity;
 
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.container.ContainerBigButton;
@@ -23,7 +23,7 @@ import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableFlags;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IInventoryProvider, ISyncListener {
+public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IInventoryProvider, ISyncListener, ITickable {
 
 	private int tickCounter = 0;
 
@@ -46,8 +46,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote) {
 			if (tickCounter > 0) {
 				tickCounter--;
@@ -96,14 +95,8 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public ForgeDirection getSurfaceDirection() {
+	public EnumFacing getSurfaceDirection() {
 		return getOrientation().north();
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void prepareForInventoryRender(Block block, int metadata) {
-		super.prepareForInventoryRender(block, metadata);
 	}
 
 	public boolean isButtonActive() {

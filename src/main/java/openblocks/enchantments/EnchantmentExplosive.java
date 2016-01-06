@@ -2,10 +2,11 @@ package openblocks.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import openblocks.OpenBlocks;
 
 public final class EnchantmentExplosive extends Enchantment {
 	public EnchantmentExplosive(int id) {
-		super(id, 2, EnumEnchantmentType.armor);
+		super(id, OpenBlocks.location("explosive"), 2, EnumEnchantmentType.ARMOR);
 		setName("openblocks.explosive");
 	}
 

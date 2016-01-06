@@ -1,33 +1,22 @@
 package openblocks.common.block;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
+import openmods.block.OpenBlock;
 
 import com.google.common.collect.Lists;
 
 public class BlockImaginary extends OpenBlock {
-
-	public IIcon texturePencilBlock;
-	public IIcon textureCrayonBlock;
-
-	public IIcon texturePencilPanel;
-	public IIcon textureCrayonPanel;
-
-	public IIcon texturePencilHalfPanel;
-	public IIcon textureCrayonHalfPanel;
 
 	private static final Material imaginaryMaterial = new Material(MapColor.airColor);
 
@@ -38,7 +27,7 @@ public class BlockImaginary extends OpenBlock {
 		}
 
 		@Override
-		public String func_150496_b() {
+		public String getPlaceSound() {
 			return "openblocks:crayon.place";
 		}
 	};
@@ -47,34 +36,37 @@ public class BlockImaginary extends OpenBlock {
 		super(imaginaryMaterial);
 		setHardness(0.3f);
 		stepSound = drawingSounds;
-		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+	public int getRenderType() {
+		return 2; // TESR only
+	}
+
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
 		if (world.isRemote) {
-			TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
+			TileEntityImaginary te = getTileEntity(world, pos, TileEntityImaginary.class);
 			if (te != null && te.is(Property.SELECTABLE)) return te.getSelectionBox();
 		}
 
-		return AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+		return AxisAlignedBB.fromBounds(0, 0, 0, 0, 0, 0);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
 		return null;
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB region, List result, Entity entity) {
-		TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
-		if (te != null && te.is(Property.SOLID, entity)) te.addCollisions(region, result);
+	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> result, Entity entity) {
+		TileEntityImaginary te = getTileEntity(world, pos, TileEntityImaginary.class);
+		if (te != null && te.is(Property.SOLID, entity)) te.addCollisions(mask, result);
 	}
 
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess access, int x, int y, int z) {
-		TileEntityImaginary te = getTileEntity(access, x, y, z, TileEntityImaginary.class);
+	public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos) {
+		TileEntityImaginary te = getTileEntity(access, pos, TileEntityImaginary.class);
 		if (te != null && te.is(Property.SELECTABLE)) {
 			AxisAlignedBB aabb = te.getBlockBounds();
 			minX = aabb.minX;
@@ -88,32 +80,13 @@ public class BlockImaginary extends OpenBlock {
 	}
 
 	@Override
-	public MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 par5Vec3, Vec3 par6Vec3) {
+	public MovingObjectPosition collisionRayTrace(World world, BlockPos pos, Vec3 start, Vec3 end) {
 		if (world.isRemote) {
-			TileEntityImaginary te = getTileEntity(world, x, y, z, TileEntityImaginary.class);
+			TileEntityImaginary te = getTileEntity(world, pos, TileEntityImaginary.class);
 			if (te == null || !te.is(Property.SELECTABLE)) return null;
 		}
 
-		return super.collisionRayTrace(world, x, y, z, par5Vec3, par6Vec3);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister registry) {
-		super.registerBlockIcons(registry);
-		texturePencilBlock = registry.registerIcon("openblocks:pencilBlock");
-		textureCrayonBlock = registry.registerIcon("openblocks:crayonBlock");
-
-		texturePencilPanel = registry.registerIcon("openblocks:pencilPanel");
-		textureCrayonPanel = registry.registerIcon("openblocks:crayonPanel");
-
-		texturePencilHalfPanel = registry.registerIcon("openblocks:pencilHalfPanel");
-		textureCrayonHalfPanel = registry.registerIcon("openblocks:crayonHalfPanel");
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
+		return super.collisionRayTrace(world, pos, start, end);
 	}
 
 	@Override
@@ -122,7 +95,7 @@ public class BlockImaginary extends OpenBlock {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		return Lists.newArrayList();
 	}
 

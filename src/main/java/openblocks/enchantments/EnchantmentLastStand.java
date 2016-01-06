@@ -2,11 +2,12 @@ package openblocks.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import openblocks.OpenBlocks;
 
 public class EnchantmentLastStand extends Enchantment {
 
 	public EnchantmentLastStand(int id) {
-		super(id, 2, EnumEnchantmentType.armor);
+		super(id, OpenBlocks.location("laststand"), 2, EnumEnchantmentType.ARMOR);
 		setName("openblocks.laststand");
 	}
 

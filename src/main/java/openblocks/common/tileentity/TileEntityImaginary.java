@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
@@ -296,7 +297,7 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 	}
 
 	@Override
-	public ItemStack getPickBlock() {
+	public ItemStack getPickBlock(EntityPlayer player) {
 		int dmg = isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
 		return ItemImaginary.setupValues(color, new ItemStack(getBlockType(), 1, dmg));
 	}

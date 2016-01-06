@@ -1,22 +1,24 @@
 package openblocks.client.fx;
 
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import openmods.utils.TextureUtils;
 
 public class FXLiquidSpray extends EntityFX {
 
 	public FXLiquidSpray(World world, FluidStack fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
-		this(world, fluid.getFluid(), x, y, z, scale, gravity, velocity);
+		this(world, TextureUtils.getFluidTexture(fluid), x, y, z, scale, gravity, velocity);
 	}
 
 	public FXLiquidSpray(World world, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
-		this(world, fluid.getStillIcon(), x, y, z, scale, gravity, velocity);
+		this(world, TextureUtils.getFluidTexture(fluid), x, y, z, scale, gravity, velocity);
 	}
 
-	public FXLiquidSpray(World world, IIcon icon, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
+	public FXLiquidSpray(World world, TextureAtlasSprite icon, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
 		super(world, x, y, z, 0, 0, 0);
 
 		this.lastTickPosX = this.prevPosX = this.posX = x;

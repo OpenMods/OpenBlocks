@@ -12,6 +12,7 @@ import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
@@ -296,14 +297,17 @@ public class OpenBlocks {
 		public static ItemWrench wrench;
 	}
 
+	public static ResourceLocation location(String path) {
+		return new ResourceLocation("openblocks", path);
+	}
+
 	public static class Fluids {
 		/**
 		 * Instance of fluid that is added to fluid registry.
 		 * It may not be used as default fluid, so don't compare directly with other fluids.
 		 * FluidStacks created with this fluid should always be valid.
 		 */
-		// TODO: we require block now!
-		public static final Fluid xpJuice = new Fluid("xpjuice", null, null).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		public static final Fluid xpJuice = new Fluid("xpjuice", location("xpjuicestill"), location("xpjuiceflowing")).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
 	}
 
 	public static class Enchantments {
@@ -330,10 +334,6 @@ public class OpenBlocks {
 		}
 
 	};
-
-	public static int renderIdFull;
-
-	public static int renderIdFlat;
 
 	public static final Achievement brickAchievement = new Achievement("openblocks.oops", "openblocks.droppedBrick", 13, 13, net.minecraft.init.Items.brick, null).registerStat();
 

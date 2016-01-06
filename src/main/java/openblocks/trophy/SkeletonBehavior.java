@@ -2,19 +2,25 @@ package openblocks.trophy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class SkeletonBehavior implements ITrophyBehavior {
 
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		double midX = tile.xCoord + 0.5;
-		double midZ = tile.zCoord + 0.5;
-		EntityArrow entityarrow = new EntityArrow(tile.getWorldObj(), midX, tile.yCoord + 1, midZ);
+		final BlockPos pos = tile.getPos();
+		double pX = pos.getX() + 0.5;
+		final int pZ = pos.getY() + 1;
+		double pY = pos.getZ() + 0.5;
+		final World world = tile.getWorld();
+
+		EntityArrow entityarrow = new EntityArrow(world, pX, pZ, pY);
 		entityarrow.setDamage(0.1);
-		entityarrow.setThrowableHeading(tile.getWorldObj().rand.nextInt(10) - 5, 40, tile.getWorldObj().rand.nextInt(10) - 5, 1.0f, 6.0f);
-		player.playSound("random.bow", 1.0F, 1.0F / (tile.getWorldObj().rand.nextFloat() * 0.4F + 0.8F));
-		tile.getWorldObj().spawnEntityInWorld(entityarrow);
+		entityarrow.setThrowableHeading(world.rand.nextInt(10) - 5, 40, world.rand.nextInt(10) - 5, 1.0f, 6.0f);
+		player.playSound("random.bow", 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F));
+		world.spawnEntityInWorld(entityarrow);
 
 		return 0;
 	}

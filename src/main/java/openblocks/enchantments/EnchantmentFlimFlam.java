@@ -2,11 +2,12 @@ package openblocks.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import openblocks.OpenBlocks;
 
 public class EnchantmentFlimFlam extends Enchantment {
 
 	public EnchantmentFlimFlam(int id) {
-		super(id, 2, EnumEnchantmentType.all);
+		super(id, OpenBlocks.location("flimflam"), 2, EnumEnchantmentType.ALL);
 		setName("openblocks.flimflam");
 	}
 

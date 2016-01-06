@@ -4,10 +4,15 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -24,19 +29,22 @@ public class BlockScaffolding extends OpenBlock {
 	}
 
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random random) {
+	public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (Config.scaffoldingDespawnRate <= 0 || random.nextInt(Config.scaffoldingDespawnRate) == 0) {
-			dropBlockAsItem(world, x, y, z, 0, 0);
-			world.setBlockToAir(x, y, z);
+			world.destroyBlock(pos, true);
 		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockAccess blockAccess, int x, int y, int z, int side) {
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		// Code adapted from BlockBreakable
-		Block block = blockAccess.getBlock(x, y, z);
+		final IBlockState iblockstate = world.getBlockState(pos);
+		final Block block = iblockstate.getBlock();
 
-		return block != this && super.shouldSideBeRendered(blockAccess, x, y, z, side);
+		if (world.getBlockState(pos.offset(side.getOpposite())) != iblockstate) return true;
+
+		if (block == this) return false;
+		return super.shouldSideBeRendered(world, pos, side);
 	}
 }

@@ -4,9 +4,11 @@ import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -14,11 +16,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.Log;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.ItemUtils;
 
@@ -27,22 +31,6 @@ public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
 		super(Material.rock);
-		setRenderMode(RenderMode.BOTH);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return blockIcon;
-	}
-
-	@Override
-	public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
-		return false;
-	}
-
-	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
-		return false;
 	}
 
 	@Override
@@ -51,21 +39,16 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		return true;
-	}
-
-	@Override
-	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+	public int getLightValue(IBlockAccess world, BlockPos pos) {
 		if (!Config.tanksEmitLight) return 0;
-		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		return tile != null? tile.getFluidLightLevel() : 0;
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
 		ItemStack result = new ItemStack(this);
-		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		if (tile != null) {
 			IFluidTank tank = tile.getTank();
 			if (tank.getFluidAmount() > 0) {
@@ -85,8 +68,8 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
-		TileEntityTank tile = getTileEntity(world, x, y, z, TileEntityTank.class);
+	public int getComparatorInputOverride(World world, BlockPos pos) {
+		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		double value = tile.getFluidRatio() * 15;
 		if (value == 0) return 0;
 		int trunc = MathHelper.floor_double(value);

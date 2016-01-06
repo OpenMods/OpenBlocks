@@ -3,6 +3,7 @@ package openblocks.common;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -55,7 +56,7 @@ public class ElevatorActionHandler {
 				|| direction == EnumFacing.DOWN, "Must be either up or down... for now");
 
 		final IElevatorBlock thisElevatorBlock = (IElevatorBlock)thisBlockState.getBlock();
-		final int thisColor = thisElevatorBlock.getColor(world, pos, thisBlockState);
+		final EnumDyeColor thisColor = thisElevatorBlock.getColor(world, pos, thisBlockState);
 
 		int blocksInTheWay = 0;
 		BlockPos searchPos = pos;
@@ -69,7 +70,7 @@ public class ElevatorActionHandler {
 
 			if (block instanceof IElevatorBlock) {
 				final IElevatorBlock otherElevatorBlock = (IElevatorBlock)block;
-				final int otherColor = otherElevatorBlock.getColor(world, searchPos, blockState);
+				final EnumDyeColor otherColor = otherElevatorBlock.getColor(world, searchPos, blockState);
 				if (otherColor == thisColor && canTeleportPlayer(player, world, searchPos.up())) {
 					final PlayerRotation rotation = otherElevatorBlock.getRotation(world, searchPos, blockState);
 					return new SearchResult(searchPos, rotation);

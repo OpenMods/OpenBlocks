@@ -1,6 +1,7 @@
 package openblocks.client.gui;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,7 @@ import openblocks.common.PlayerInventoryStore;
 import openmods.Log;
 import openmods.gui.ComponentGui;
 import openmods.gui.DummyContainer;
+import openmods.gui.IComponentParent;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentBook;
 import openmods.gui.component.GuiComponentLabel;
@@ -24,7 +26,6 @@ import openmods.gui.component.page.PageBase.ActionIcon;
 import openmods.infobook.PageBuilder;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
@@ -32,8 +33,11 @@ public class GuiInfoBook extends ComponentGui {
 
 	private GuiComponentBook book;
 
+	private final PageBase blankPage;
+
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
+		this.blankPage = new PageBase(componentParent) {};
 	}
 
 	private static void setupBookmark(GuiComponentLabel label, GuiComponentBook book, int index) {
@@ -48,10 +52,10 @@ public class GuiInfoBook extends ComponentGui {
 		this.guiTop = (this.height - this.ySize) / 2;
 	}
 
-	private static int alignToEven(final GuiComponentBook book) {
+	private int alignToEven(GuiComponentBook book) {
 		int index = book.getNumberOfPages();
 		if ((index & 1) == 1) {
-			book.addPage(PageBase.BLANK_PAGE);
+			book.addPage(blankPage);
 			index++;
 		}
 		return index;
@@ -64,7 +68,7 @@ public class GuiInfoBook extends ComponentGui {
 	}
 
 	@Override
-	public void handleKeyboardInput() {
+	public void handleKeyboardInput() throws IOException {
 		super.handleKeyboardInput();
 
 		if (Keyboard.getEventKeyState()) {
@@ -86,32 +90,32 @@ public class GuiInfoBook extends ComponentGui {
 	}
 
 	@Override
-	protected BaseComposite createRoot() {
-		book = new GuiComponentBook();
-		PageBase contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
+	protected BaseComposite createRoot(IComponentParent parent) {
+		book = new GuiComponentBook(parent);
+		PageBase contentsPage = new TitledPage(parent, "openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 
-		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, tocLine(0), "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
+		GuiComponentLabel lblBlocks = new GuiComponentLabel(parent, 27, tocLine(0), "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
 		contentsPage.addComponent(lblBlocks);
 
-		GuiComponentLabel lblItems = new GuiComponentLabel(27, tocLine(1), "- " + StatCollector.translateToLocal("openblocks.gui.items"));
+		GuiComponentLabel lblItems = new GuiComponentLabel(parent, 27, tocLine(1), "- " + StatCollector.translateToLocal("openblocks.gui.items"));
 		contentsPage.addComponent(lblItems);
 
-		GuiComponentLabel lblMisc = new GuiComponentLabel(27, tocLine(2), "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
+		GuiComponentLabel lblMisc = new GuiComponentLabel(parent, 27, tocLine(2), "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
 		contentsPage.addComponent(lblMisc);
 
-		GuiComponentLabel lblChangelogs = new GuiComponentLabel(27, tocLine(3), "- " + StatCollector.translateToLocal("openblocks.gui.changelogs"));
+		GuiComponentLabel lblChangelogs = new GuiComponentLabel(parent, 27, tocLine(3), "- " + StatCollector.translateToLocal("openblocks.gui.changelogs"));
 		contentsPage.addComponent(lblChangelogs);
 
-		book.addPage(PageBase.BLANK_PAGE);
-		book.addPage(new IntroPage());
-		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
+		book.addPage(blankPage);
+		book.addPage(new IntroPage(parent));
+		book.addPage(new TitledPage(parent, "openblocks.gui.credits.title", "openblocks.gui.credits.content"));
 		book.addPage(contentsPage);
 
 		{
 			int blocksIndex = alignToEven(book);
 			setupBookmark(lblBlocks, book, blocksIndex);
-			book.addPage(PageBase.BLANK_PAGE);
-			book.addPage(new SectionPage("openblocks.gui.blocks"));
+			book.addPage(blankPage);
+			book.addPage(new SectionPage(parent, "openblocks.gui.blocks"));
 
 			PageBuilder builder = new PageBuilder();
 			builder.includeModId(OpenBlocks.MODID);
@@ -124,8 +128,8 @@ public class GuiInfoBook extends ComponentGui {
 		{
 			int itemsIndex = alignToEven(book);
 			setupBookmark(lblItems, book, itemsIndex);
-			book.addPage(PageBase.BLANK_PAGE);
-			book.addPage(new SectionPage("openblocks.gui.items"));
+			book.addPage(blankPage);
+			book.addPage(new SectionPage(parent, "openblocks.gui.items"));
 
 			PageBuilder builder = new PageBuilder();
 			builder.includeModId(OpenBlocks.MODID);
@@ -138,23 +142,23 @@ public class GuiInfoBook extends ComponentGui {
 		{
 			int miscIndex = alignToEven(book);
 			setupBookmark(lblMisc, book, miscIndex);
-			book.addPage(PageBase.BLANK_PAGE);
-			book.addPage(new SectionPage("openblocks.gui.misc"));
-			book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
-			book.addPage(new TitledPage("openblocks.gui.restore_inv.title", "openblocks.gui.restore_inv.content")
+			book.addPage(blankPage);
+			book.addPage(new SectionPage(parent, "openblocks.gui.misc"));
+			book.addPage(new TitledPage(parent, "openblocks.gui.config.title", "openblocks.gui.config.content"));
+			book.addPage(new TitledPage(parent, "openblocks.gui.restore_inv.title", "openblocks.gui.restore_inv.content")
 					.addActionButton(10, 133, getSavePath(), ActionIcon.FOLDER.icon, "openblocks.gui.save_folder"));
-			book.addPage(new TitledPage("openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
+			book.addPage(new TitledPage(parent, "openblocks.gui.bkey.title", "openblocks.gui.bkey.content"));
 
-			if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage("openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
-			if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage("openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
-			if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage("openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
+			if (OpenBlocks.Enchantments.explosive != null) book.addPage(new TitledPage(parent, "openblocks.gui.unstable.title", "openblocks.gui.unstable.content"));
+			if (OpenBlocks.Enchantments.lastStand != null) book.addPage(new TitledPage(parent, "openblocks.gui.laststand.title", "openblocks.gui.laststand.content"));
+			if (OpenBlocks.Enchantments.flimFlam != null) book.addPage(new TitledPage(parent, "openblocks.gui.flimflam.title", "openblocks.gui.flimflam.content"));
 
 		}
 
 		int changelogsIndex = alignToEven(book);
-		book.addPage(PageBase.BLANK_PAGE);
+		book.addPage(blankPage);
 		setupBookmark(lblChangelogs, book, changelogsIndex);
-		book.addPage(new SectionPage("openblocks.gui.changelogs"));
+		book.addPage(new SectionPage(parent, "openblocks.gui.changelogs"));
 
 		createChangelogPages(book);
 
@@ -188,7 +192,7 @@ public class GuiInfoBook extends ComponentGui {
 		return new File("invalid.path");
 	}
 
-	private static void createChangelogPages(final GuiComponentBook book) {
+	private void createChangelogPages(GuiComponentBook book) {
 		String prevVersion = null;
 		int prevIndex = 0;
 		List<ChangelogPage> prevPages = Lists.newArrayList();
@@ -219,15 +223,5 @@ public class GuiInfoBook extends ComponentGui {
 			prevVersion = currentVersion;
 			prevIndex = currentPage;
 		}
-	}
-
-	@Override
-	public void drawScreen(int par1, int par2, float par3) {
-		super.drawScreen(par1, par2, par3);
-		prepareRenderState();
-		GL11.glPushMatrix();
-		root.renderOverlay(this.mc, this.guiLeft, this.guiTop, par1 - this.guiLeft, par2 - this.guiTop);
-		GL11.glPopMatrix();
-		restoreRenderState();
 	}
 }

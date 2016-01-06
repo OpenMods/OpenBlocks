@@ -1,18 +1,18 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import openmods.block.BlockRotationMode;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
-public class BlockAutoAnvil extends OpenBlock {
+public class BlockAutoAnvil extends OpenBlock.TwoDirections {
 
 	public BlockAutoAnvil() {
 		super(Material.anvil);
 		setStepSound(soundTypeAnvil);
-		setRotationMode(BlockRotationMode.TWO_DIRECTIONS);
-		setRenderMode(RenderMode.TESR_ONLY);
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class BlockAutoAnvil extends OpenBlock {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
+	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 }

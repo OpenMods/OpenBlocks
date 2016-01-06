@@ -1,7 +1,10 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -10,8 +13,12 @@ public class BlockFan extends OpenBlock {
 	public BlockFan() {
 		super(Material.circuits);
 		setBlockBounds(0.2f, 0, 0.2f, 0.8f, 1.0f, 0.8f);
-		setRenderMode(RenderMode.TESR_ONLY);
-		/* No rotation, handled by TE */
+	}
+
+	// TODO 1.8.9 You know what
+	@Override
+	public int getRenderType() {
+		return 2; // TESR only
 	}
 
 	@Override
@@ -20,7 +27,7 @@ public class BlockFan extends OpenBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, ForgeDirection side) {
-		return isOnTopOfSolidBlock(world, x, y, z, side);
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+		return isOnTopOfSolidBlock(world, pos, side);
 	}
 }

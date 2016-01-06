@@ -5,23 +5,30 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.tileentity.TileEntityGuide;
 import openmods.api.ISelectionAware;
 import openmods.block.BlockRotationMode;
+import openmods.block.OpenBlock;
 import openmods.geometry.*;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(hasVideo = true)
 public class BlockGuide extends OpenBlock implements ISelectionAware {
+
+	@Override
+	public BlockRotationMode getRotationMode() {
+		return BlockRotationMode.THREE_FOUR_DIRECTIONS;
+	}
 
 	private AxisAlignedBB selection;
 
@@ -33,8 +40,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		public boolean activate(TileEntityGuide te, EntityPlayerMP player);
 	}
 
-	private static IShapeManipulator createHalfAxisIncrementer(ForgeDirection dir) {
-		final HalfAxis halfAxis = HalfAxis.fromDirection(dir);
+	private static IShapeManipulator createHalfAxisIncrementer(EnumFacing dir) {
+		final HalfAxis halfAxis = HalfAxis.fromEnumFacing(dir);
 
 		return new IShapeManipulator() {
 			@Override
@@ -44,8 +51,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		};
 	}
 
-	private static IShapeManipulator createHalfAxisDecrementer(ForgeDirection dir) {
-		final HalfAxis halfAxis = HalfAxis.fromDirection(dir);
+	private static IShapeManipulator createHalfAxisDecrementer(EnumFacing dir) {
+		final HalfAxis halfAxis = HalfAxis.fromEnumFacing(dir);
 
 		return new IShapeManipulator() {
 			@Override
@@ -55,8 +62,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		};
 	}
 
-	private static IShapeManipulator createHalfAxisCopier(ForgeDirection dir) {
-		final HalfAxis halfAxis = HalfAxis.fromDirection(dir);
+	private static IShapeManipulator createHalfAxisCopier(EnumFacing dir) {
+		final HalfAxis halfAxis = HalfAxis.fromEnumFacing(dir);
 
 		return new IShapeManipulator() {
 			@Override
@@ -70,27 +77,35 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		return new IShapeManipulator() {
 			@Override
 			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
-				return createRotationHelper(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord).rotateAroundAxis(ha);
+				final World world = te.getWorld();
+				final BlockPos pos = te.getPos();
+				final IBlockState state = world.getBlockState(pos);
+				final PropertyEnum<Orientation> orientationProperty = getRotationMode().property;
+				final Orientation orientation = state.getValue(orientationProperty);
+				final Orientation newOrientation = orientation.rotateAround(ha);
+				world.setBlockState(pos, state.withProperty(orientationProperty, newOrientation));
+				return true;
 			}
 		};
 	}
 
-	private static AxisAlignedBB addButton(ForgeDirection side, BlockTextureTransform transform, int left, int top, int width, int height) {
+	private static AxisAlignedBB addButton(EnumFacing side, BlockTextureTransform transform, int left, int top, int width, int height) {
 		final BlockTextureTransform.WorldCoords min = transform.textureCoordsToWorldVec(side, left * P, top * P, -SELECTION_BOX_DEPTH);
 		final BlockTextureTransform.WorldCoords max = transform.textureCoordsToWorldVec(side, (left + width) * P, (top + height) * P, SELECTION_BOX_DEPTH);
 		return AabbUtils.createAabb(min.x, min.y, min.z, max.x, max.y, max.z);
 	}
 
-	private void createNSWESide(BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> output, ForgeDirection face) {
+	private void createNSWESide(BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> output, EnumFacing face) {
 		final BlockTextureTransform transform = getRotationMode().textureTransform;
 
 		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
 
-		final ForgeDirection right = face.getRotation(ForgeDirection.DOWN);
-		final ForgeDirection left = right.getOpposite();
+		// TODO 1.8.9 verify
+		final EnumFacing right = face.rotateYCCW();
+		final EnumFacing left = right.getOpposite();
 
-		final ForgeDirection top = ForgeDirection.UP;
-		final ForgeDirection bottom = ForgeDirection.DOWN;
+		final EnumFacing top = EnumFacing.UP;
+		final EnumFacing bottom = EnumFacing.DOWN;
 
 		subBoxes.addBox(addButton(face, transform, 4, 1, 3, 3), createHalfAxisDecrementer(top));
 		subBoxes.addBox(addButton(face, transform, 9, 1, 3, 3), createHalfAxisIncrementer(top));
@@ -113,7 +128,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 		output.addBox(AabbUtils.createAabb(overboxMin.x, overboxMin.y, overboxMin.z, overboxMax.x, overboxMax.y, overboxMax.z), subBoxes);
 	}
 
-	private void createTopBottomSide(BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> output, ForgeDirection face) {
+	private void createTopBottomSide(BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> output, EnumFacing face) {
 		final BlockTextureTransform transform = getRotationMode().textureTransform;
 
 		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
@@ -144,22 +159,17 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	private BoundingBoxMap<BoundingBoxMap<IShapeManipulator>> buttons = BoundingBoxMap.create();
 	{
-		createTopBottomSide(buttons, ForgeDirection.UP);
-		createNSWESide(buttons, ForgeDirection.NORTH);
-		createNSWESide(buttons, ForgeDirection.SOUTH);
-		createNSWESide(buttons, ForgeDirection.EAST);
-		createNSWESide(buttons, ForgeDirection.WEST);
-		createTopBottomSide(buttons, ForgeDirection.DOWN);
-	}
-
-	public static class Icons {
-		public static IIcon marker;
+		createTopBottomSide(buttons, EnumFacing.UP);
+		createNSWESide(buttons, EnumFacing.NORTH);
+		createNSWESide(buttons, EnumFacing.SOUTH);
+		createNSWESide(buttons, EnumFacing.EAST);
+		createNSWESide(buttons, EnumFacing.WEST);
+		createTopBottomSide(buttons, EnumFacing.DOWN);
 	}
 
 	public BlockGuide() {
 		super(Material.rock);
 		setLightLevel(0.6f);
-		setRotationMode(BlockRotationMode.THREE_FOUR_DIRECTIONS);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
@@ -169,50 +179,19 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return true;
-	}
-
-	protected IIcon centerIcon;
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister registry) {
-		super.registerBlockIcons(registry);
-		Icons.marker = registry.registerIcon("openblocks:guide");
-		this.centerIcon = registry.registerIcon(getCenterIconName());
-
-		setTextures(registry.registerIcon("openblocks:guide_top_new"), ForgeDirection.UP, ForgeDirection.DOWN);
-		setTextures(registry.registerIcon("openblocks:guide_side_new"), ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST);
-	}
-
-	protected String getCenterIconName() {
-		return "openblocks:guide_center_normal";
-	}
-
-	public IIcon getCenterTexture() {
-		return centerIcon;
-	}
-
-	@Override
-	public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z) {
-		return false;
-	}
-
-	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	public boolean isFullCube() {
 		return false;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getRenderBlockPass() {
-		return 1;
+	public EnumWorldBlockLayer getBlockLayer() {
+		return EnumWorldBlockLayer.TRANSLUCENT;
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		return selection != null? selection : super.getSelectedBoundingBoxFromPool(world, x, y, z);
+	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
+		return selection != null? selection : super.getSelectedBoundingBox(world, pos);
 	}
 
 	private Map.Entry<AxisAlignedBB, IShapeManipulator> findClickBox(Vec3 pos) {
@@ -234,33 +213,29 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean onSelected(World world, int x, int y, int z, DrawBlockHighlightEvent evt) {
+	public boolean onSelected(World world, BlockPos pos, DrawBlockHighlightEvent evt) {
 		if (areButtonsActive(evt.player)) {
 			final Vec3 hitVec = evt.target.hitVec;
 
-			final int metadata = world.getBlockMetadata(x, y, z);
-			final BlockRotationMode rotationMode = getRotationMode();
-			final Orientation orientation = rotationMode.fromValue(metadata);
-			final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.xCoord - x, hitVec.yCoord - y, hitVec.zCoord - z);
+			final Orientation orientation = getOrientation(world, pos);
+			final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.xCoord - pos.getX(), hitVec.yCoord - pos.getY(), hitVec.zCoord - pos.getZ());
 			final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
-			selection = clickBox != null? BlockSpaceTransform.instance.mapBlockToWorld(orientation, clickBox.getKey()).offset(x, y, z) : null;
+			selection = clickBox != null? BlockSpaceTransform.instance.mapBlockToWorld(orientation, clickBox.getKey()).offset(pos.getX(), pos.getY(), pos.getZ()) : null;
 		} else selection = null;
 
 		return false;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
-			final TileEntityGuide guide = getTileEntity(world, x, y, z, TileEntityGuide.class);
+			final TileEntityGuide guide = getTileEntity(world, pos, TileEntityGuide.class);
 
 			if (guide != null) {
 				final EntityPlayerMP playerMP = (EntityPlayerMP)player;
 
 				if (areButtonsActive(playerMP)) {
-					final int metadata = world.getBlockMetadata(x, y, z);
-					final BlockRotationMode rotationMode = getRotationMode();
-					final Orientation orientation = rotationMode.fromValue(metadata);
+					final Orientation orientation = getOrientation(world, pos);
 					final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitX, hitY, hitZ);
 					final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
 					if (clickBox != null) return clickBox.getValue().activate(guide, playerMP);
@@ -278,8 +253,12 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, int x, int y, int z, Random random) {
-		world.spawnParticle("smoke", x + 0.5f, y + 0.7f, z + 0.5f, 0.0D, 0.0D, 0.0D);
-		world.spawnParticle("flame", x + 0.5f, y + 0.7f, z + 0.5f, 0.0D, 0.0D, 0.0D);
+	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random random) {
+		final float x = pos.getX() + 0.5f;
+		final float y = pos.getY() + 0.7f;
+		final float z = pos.getZ() + 0.5f;
+
+		world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0.0D, 0.0D, 0.0D);
+		world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
 	}
 }

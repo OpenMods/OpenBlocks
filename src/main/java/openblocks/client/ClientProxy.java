@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -193,12 +193,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 	}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
+	public void spawnLiquidSpray(World worldObj, FluidStack fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
 		spawnParticle(new FXLiquidSpray(worldObj, fluid, x, y, z, scale, gravity, velocity));
-	}
-
-	@Override
-	public void spawnParticleSpray(World worldObj, IIcon icon, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
-		if (icon != null) spawnParticle(new FXLiquidSpray(worldObj, icon, x, y, z, scale, gravity, velocity));
 	}
 }

@@ -2,12 +2,10 @@ package openblocks.common.block;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.item.ItemStack;
 
 public class BlockCanvasGlass extends BlockCanvas {
 
@@ -22,18 +20,10 @@ public class BlockCanvasGlass extends BlockCanvas {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean isFullBlock() {
 		return false;
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-		Block block = world.getBlock(x, y, z);
-		if (block == this || block == Blocks.glass) { return false; }
-		return super.shouldSideBeRendered(world, x, y, z, side);
-	}
-
-	@Override
-	@SuppressWarnings("rawtypes")
-	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List list) {}
+	public void getSubBlocks(Item item, CreativeTabs creativeTabs, List<ItemStack> list) {}
 }
