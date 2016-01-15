@@ -107,7 +107,6 @@ public class UselessToolFlimFlam implements IFlimFlamAction {
 	public boolean execute(EntityPlayerMP target) {
 		Item tool = selectTool();
 		ItemStack dropped = new ItemStack(tool);
-		@SuppressWarnings("unchecked")
 		Map<Integer, EnchantmentData> enchantments = EnchantmentHelper.mapEnchantmentData(30, dropped);
 		EnchantmentData data = CollectionUtils.getRandom(enchantments.values());
 		if (data == null) return false;

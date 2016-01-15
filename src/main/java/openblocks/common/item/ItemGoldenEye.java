@@ -102,16 +102,14 @@ public class ItemGoldenEye extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		result.add(new ItemStack(item, 1, 0));
 		result.add(new ItemStack(item, 1, getMaxDamage()));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addInformation(ItemStack stack, EntityPlayer player, List result, boolean expanded) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		if (tag.hasKey(TAG_STRUCTURE)) result.add(StatCollector.translateToLocal("openblocks.misc.locked"));
 	}

@@ -78,8 +78,7 @@ public class BlockTank extends OpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubBlocks(Item item, CreativeTabs tab, List result) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> result) {
 		result.add(new ItemStack(item));
 
 		if (tab == null && Config.displayAllFilledTanks) {

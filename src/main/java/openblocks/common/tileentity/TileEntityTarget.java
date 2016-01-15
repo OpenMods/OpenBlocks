@@ -77,7 +77,6 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	private void predictOtherProjectiles() {
-		@SuppressWarnings("unchecked")
 		List<Entity> projectiles = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
 
 		for (Entity projectile : projectiles) {

@@ -324,9 +324,8 @@ public class OpenBlocks {
 		}
 
 		@Override
-		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@SideOnly(Side.CLIENT)
-		public void displayAllReleventItems(List result) {
+		public void displayAllReleventItems(List<ItemStack> result) {
 			super.displayAllReleventItems(result);
 			if (Enchantments.explosive != null) EnchantmentUtils.addAllBooks(Enchantments.explosive, result);
 			if (Enchantments.lastStand != null) EnchantmentUtils.addAllBooks(Enchantments.lastStand, result);

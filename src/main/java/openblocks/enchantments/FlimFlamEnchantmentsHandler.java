@@ -198,7 +198,6 @@ public class FlimFlamEnchantmentsHandler {
 		return sum;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static int getFlimFlamLevel(ItemStack stack) {
 		if (stack == null) return 0;
 		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);

@@ -20,8 +20,7 @@ public class ItemHeightMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void addInformation(ItemStack item, EntityPlayer player, List result, boolean extended) {
+	public void addInformation(ItemStack item, EntityPlayer player, List<String> result, boolean extended) {
 		int mapId = item.getItemDamage();
 		HeightMapData data = MapDataManager.getMapData(player.worldObj, mapId);
 
@@ -36,7 +35,6 @@ public class ItemHeightMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("rawtypes")
-	public void getSubItems(Item item, CreativeTabs tab, List items) {}
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> items) {}
 
 }

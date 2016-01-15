@@ -46,8 +46,7 @@ public class ItemCartographer extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		for (AssistantType type : AssistantType.VALUES)
 			result.add(new ItemStack(this, 1, type.ordinal()));
 	}

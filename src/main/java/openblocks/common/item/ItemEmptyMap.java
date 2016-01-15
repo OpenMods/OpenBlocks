@@ -26,8 +26,7 @@ public class ItemEmptyMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void addInformation(ItemStack item, EntityPlayer player, List result, boolean extended) {
+	public void addInformation(ItemStack item, EntityPlayer player, List<String> result, boolean extended) {
 		NBTTagCompound tag = ItemUtils.getItemTag(item);
 		result.add(String.format("Scale: 1:%d", 1 << tag.getByte(TAG_SCALE)));
 	}
@@ -41,8 +40,7 @@ public class ItemEmptyMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
 			result.add(OpenBlocks.Items.emptyMap.createMap(scale));
 	}

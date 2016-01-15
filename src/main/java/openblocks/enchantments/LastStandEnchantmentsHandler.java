@@ -49,7 +49,6 @@ public class LastStandEnchantmentsHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static int countLastStandEnchantmentLevels(EntityPlayer player) {
 		if (player != null) {
 			int count = 0;

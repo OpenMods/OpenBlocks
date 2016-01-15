@@ -50,8 +50,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		for (Trophy trophy : Trophy.VALUES) {
 			result.add(putMetadata(new ItemStack(this), trophy));
 		}

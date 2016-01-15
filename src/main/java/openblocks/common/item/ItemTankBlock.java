@@ -24,9 +24,8 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 		super(block);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
 		FluidTank fakeTank = readTank(stack);
 		FluidStack fluidStack = fakeTank.getFluid();
 		if (fluidStack != null && fluidStack.amount > 0) {

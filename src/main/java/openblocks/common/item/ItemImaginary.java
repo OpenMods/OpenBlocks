@@ -199,8 +199,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void addInformation(ItemStack stack, EntityPlayer player, List result, boolean extended) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
 		result.add(StatCollector.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
@@ -214,8 +213,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		result.add(setupValues(null, new ItemStack(this, 1, DAMAGE_PENCIL)));
 		for (ColorMeta color : ColorMeta.getAllColors())
 			result.add(setupValues(color.rgb, new ItemStack(this, 1, DAMAGE_CRAYON)));

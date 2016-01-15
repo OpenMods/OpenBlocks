@@ -24,8 +24,7 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (Stencil stencil : Stencil.values()) {
 			list.add(new ItemStack(item, 1, stencil.ordinal()));
 		}

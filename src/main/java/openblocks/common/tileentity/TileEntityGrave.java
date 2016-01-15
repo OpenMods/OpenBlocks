@@ -60,7 +60,6 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void update() {
 		if (!worldObj.isRemote) {
 			if (Config.spawnSkeletons && worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < Config.skeletonSpawnRate) {

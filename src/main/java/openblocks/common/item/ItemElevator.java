@@ -19,8 +19,7 @@ public class ItemElevator extends ItemOpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		for (int i = 0; i < 16; i++)
 			result.add(new ItemStack(this, 1, i));
 	}

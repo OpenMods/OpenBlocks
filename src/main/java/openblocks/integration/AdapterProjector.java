@@ -84,9 +84,8 @@ public class AdapterProjector implements IPeripheralAdapter {
 		{
 			Object value = args.get("layers");
 			if (value != null) {
-				@SuppressWarnings("unchecked")
-				Map<Integer, Integer> layers = (Map<Integer, Integer>)value;
-				for (Map.Entry<Integer, Integer> e : layers.entrySet()) {
+				Map<?, ?> layers = (Map<?, ?>)value;
+				for (Map.Entry<?, ?> e : layers.entrySet()) {
 					int index = toInt(e.getKey());
 					Preconditions.checkElementIndex(index, data.layers.length, "layer index");
 

@@ -34,8 +34,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		}
 
 		@Override
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		public void getSubItems(Item item, CreativeTabs tab, List result) {
+		public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 			for (ColorMeta color : ColorMeta.getAllColors())
 				result.add(createCrayonGlasses(color.rgb));
 		}
@@ -62,8 +61,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		public void addInformation(ItemStack stack, EntityPlayer player, List result, boolean extended) {
+		public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
 			result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", getColor(stack)));
 		}
 
@@ -138,8 +136,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
 		result.add(new ItemStack(this));
 	}
 }
