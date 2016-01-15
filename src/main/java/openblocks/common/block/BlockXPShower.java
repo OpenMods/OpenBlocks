@@ -24,7 +24,7 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 	}
 
 	private void setBoundsBasedOnOrientation(Orientation orientation) {
-		final AxisAlignedBB aabb = AxisAlignedBB.fromBounds(7.0 / 16.0, 7.0 / 16.0, 0.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0);
+		final AxisAlignedBB aabb = new AxisAlignedBB(7.0 / 16.0, 7.0 / 16.0, 0.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0, 9.0 / 16.0);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}

@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +10,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -35,7 +36,9 @@ import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile {
+import com.google.common.collect.Lists;
+
+public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(LiquidXpUtils.XP_PER_BOTTLE);
 	public static final int PROGRESS_TICKS = 40;
@@ -43,7 +46,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Items.experience_bottle, 1);
 
-	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
+	public List<EnumFacing> surroundingTanks = Lists.newArrayList();
 
 	public static enum Slots {
 		input,
@@ -96,13 +99,12 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote) {
 
 			// if we should, we'll autofill the tank
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.fillFromSides(10, worldObj, getPosition(), xpSides.getValue());
+				tank.fillFromSides(10, worldObj, pos, xpSides.getValue());
 			}
 
 			// if they've ticked auto output, and we have something to output
@@ -119,7 +121,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			if (logic.update()) {
 				// this happens when the progress has completed
-				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:bottler.signal", .5f, .8f);
+				playSoundAtBlock("openblocks:bottler.signal", .5f, .8f);
 				inventory.decrStackSize(Slots.input.ordinal(), 1);
 				tank.setFluid(null);
 
@@ -190,7 +192,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@IncludeOverride
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return false;
 	}
 
@@ -225,12 +227,12 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@Override
-	public IValueProvider<Set<ForgeDirection>> createAllowedDirectionsProvider(AutoSlots slot) {
+	public IValueProvider<Set<EnumFacing>> createAllowedDirectionsProvider(AutoSlots slot) {
 		return selectSlotMap(slot);
 	}
 
 	@Override
-	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
+	public IWriteableBitMap<EnumFacing> createAllowedDirectionsReceiver(AutoSlots slot) {
 		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
@@ -248,6 +250,6 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, getPosition());
+		tank.updateNeighbours(worldObj, pos);
 	}
 }

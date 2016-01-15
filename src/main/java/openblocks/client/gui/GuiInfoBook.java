@@ -33,11 +33,8 @@ public class GuiInfoBook extends ComponentGui {
 
 	private GuiComponentBook book;
 
-	private final PageBase blankPage;
-
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
-		this.blankPage = new PageBase(componentParent) {};
 	}
 
 	private static void setupBookmark(GuiComponentLabel label, GuiComponentBook book, int index) {
@@ -52,7 +49,7 @@ public class GuiInfoBook extends ComponentGui {
 		this.guiTop = (this.height - this.ySize) / 2;
 	}
 
-	private int alignToEven(GuiComponentBook book) {
+	private static int alignToEven(GuiComponentBook book, PageBase blankPage) {
 		int index = book.getNumberOfPages();
 		if ((index & 1) == 1) {
 			book.addPage(blankPage);
@@ -92,6 +89,9 @@ public class GuiInfoBook extends ComponentGui {
 	@Override
 	protected BaseComposite createRoot(IComponentParent parent) {
 		book = new GuiComponentBook(parent);
+
+		final PageBase blankPage = new PageBase(componentParent) {};
+
 		PageBase contentsPage = new TitledPage(parent, "openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
 
 		GuiComponentLabel lblBlocks = new GuiComponentLabel(parent, 27, tocLine(0), "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
@@ -112,7 +112,7 @@ public class GuiInfoBook extends ComponentGui {
 		book.addPage(contentsPage);
 
 		{
-			int blocksIndex = alignToEven(book);
+			int blocksIndex = alignToEven(book, blankPage);
 			setupBookmark(lblBlocks, book, blocksIndex);
 			book.addPage(blankPage);
 			book.addPage(new SectionPage(parent, "openblocks.gui.blocks"));
@@ -121,12 +121,12 @@ public class GuiInfoBook extends ComponentGui {
 			builder.includeModId(OpenBlocks.MODID);
 			builder.createBlockPages();
 			builder.insertTocPages(book, 4, 4, 1.5f);
-			alignToEven(book);
+			alignToEven(book, blankPage);
 			builder.insertPages(book);
 		}
 
 		{
-			int itemsIndex = alignToEven(book);
+			int itemsIndex = alignToEven(book, blankPage);
 			setupBookmark(lblItems, book, itemsIndex);
 			book.addPage(blankPage);
 			book.addPage(new SectionPage(parent, "openblocks.gui.items"));
@@ -135,12 +135,12 @@ public class GuiInfoBook extends ComponentGui {
 			builder.includeModId(OpenBlocks.MODID);
 			builder.createItemPages();
 			builder.insertTocPages(book, 4, 4, 1.5f);
-			alignToEven(book);
+			alignToEven(book, blankPage);
 			builder.insertPages(book);
 		}
 
 		{
-			int miscIndex = alignToEven(book);
+			int miscIndex = alignToEven(book, blankPage);
 			setupBookmark(lblMisc, book, miscIndex);
 			book.addPage(blankPage);
 			book.addPage(new SectionPage(parent, "openblocks.gui.misc"));
@@ -155,12 +155,12 @@ public class GuiInfoBook extends ComponentGui {
 
 		}
 
-		int changelogsIndex = alignToEven(book);
+		int changelogsIndex = alignToEven(book, blankPage);
 		book.addPage(blankPage);
 		setupBookmark(lblChangelogs, book, changelogsIndex);
 		book.addPage(new SectionPage(parent, "openblocks.gui.changelogs"));
 
-		createChangelogPages(book);
+		createChangelogPages(parent, book, blankPage);
 
 		book.enablePages();
 
@@ -192,7 +192,7 @@ public class GuiInfoBook extends ComponentGui {
 		return new File("invalid.path");
 	}
 
-	private void createChangelogPages(GuiComponentBook book) {
+	private static void createChangelogPages(IComponentParent parent, GuiComponentBook book, PageBase blankPage) {
 		String prevVersion = null;
 		int prevIndex = 0;
 		List<ChangelogPage> prevPages = Lists.newArrayList();
@@ -209,7 +209,7 @@ public class GuiInfoBook extends ComponentGui {
 			prevPages.clear();
 
 			for (ChangelogSection section : changelog.sections) {
-				ChangelogPage page = new ChangelogPage(currentVersion, section.title, section.lines);
+				ChangelogPage page = new ChangelogPage(parent, currentVersion, section.title, section.lines);
 				book.addPage(page);
 				prevPages.add(page);
 
@@ -218,7 +218,7 @@ public class GuiInfoBook extends ComponentGui {
 				}
 			}
 
-			alignToEven(book);
+			alignToEven(book, blankPage);
 
 			prevVersion = currentVersion;
 			prevIndex = currentPage;

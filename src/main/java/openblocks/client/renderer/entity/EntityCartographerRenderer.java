@@ -6,23 +6,24 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCartographer;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectionRenderer;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityCartographer.MapJobs;
 import openmods.renderer.DisplayListWrapper;
-import openmods.utils.BlockUtils;
 import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class EntityCartographerRenderer extends Render {
+public class EntityCartographerRenderer extends Render<EntityCartographer> {
 
 	private static final double Z_FIGHTER = 0.0001;
 
@@ -34,7 +35,7 @@ public class EntityCartographerRenderer extends Render {
 	private static final double INTERSECTION_DIST = 2.5 / 16.0;
 	private static final double INTERSECTION_SIZE = BASE_SIZE * (INTERSECTION_DIST - CONE_START) / (CONE_END - CONE_START);
 
-	private final static ResourceLocation TEXTURE = new ResourceLocation("openblocks:textures/models/cartographer.png");
+	private final static ResourceLocation TEXTURE = OpenBlocks.location("textures/models/cartographer.png");
 
 	private static final ModelCartographer MODEL = new ModelCartographer();
 
@@ -85,7 +86,7 @@ public class EntityCartographerRenderer extends Render {
 
 			RenderUtils.translateToPlayer(e, partialTickTime);
 
-			ForgeDirection side = BlockUtils.get2dOrientation(player).getOpposite();
+			EnumFacing side = player.getHorizontalFacing().getOpposite();
 
 			switch (side) {
 				case EAST:
@@ -144,7 +145,7 @@ public class EntityCartographerRenderer extends Render {
 
 		private static void renderText(EntityCartographer e, RenderGlobal context) {
 			GL11.glScaled(2 * BASE_SIZE / 16.0, 2 * BASE_SIZE / 16.0, 1);
-			FontRenderer fonts = Minecraft.getMinecraft().fontRenderer;
+			FontRenderer fonts = Minecraft.getMinecraft().fontRendererObj;
 			String coords = String.format("%d,%d", e.getNewMapCenterX(), e.getNewMapCenterZ());
 			int len = fonts.getStringWidth(coords);
 			double scaleV = 4.0 / 8.0;
@@ -196,16 +197,19 @@ public class EntityCartographerRenderer extends Render {
 		}
 	}
 
+	public EntityCartographerRenderer(RenderManager renderManager) {
+		super(renderManager);
+	}
+
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float scale, float partialTickTime) {
-		EntityCartographer cartographer = (EntityCartographer)entity;
+	public void doRender(EntityCartographer cartographer, double x, double y, double z, float scale, float partialTickTime) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glColor3f(1, 1, 1);
 		bindTexture(TEXTURE);
 		MODEL.renderBase(cartographer.eyeYaw);
 
-		bindTexture(TextureMap.locationItemsTexture);
+		bindTexture(TextureMap.locationBlocksTexture);
 		MODEL.renderEye(cartographer.eyeYaw, cartographer.eyePitch);
 		cartographer.updateEye();
 
@@ -213,7 +217,7 @@ public class EntityCartographerRenderer extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
+	protected ResourceLocation getEntityTexture(EntityCartographer entity) {
 		return TEXTURE;
 	}
 }

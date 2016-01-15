@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
@@ -23,6 +24,7 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.sync.*;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.BlockUtils;
 
 public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
 
@@ -80,7 +82,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 5, zCoord + 1);
+		return BlockUtils.expandAround(pos, 1, 5, 1);
 	}
 
 	@Override
@@ -165,10 +167,5 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
-	}
-
-	@Override
-	public boolean canUpdate() {
-		return false;
 	}
 }

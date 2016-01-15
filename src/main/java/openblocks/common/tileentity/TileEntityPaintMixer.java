@@ -7,6 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
@@ -16,7 +17,8 @@ import openblocks.rpc.IColorChanger;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.api.IValueProvider;
-import openmods.colors.ColorUtils;
+import openmods.colors.CYMK;
+import openmods.colors.RGB;
 import openmods.gamelogic.WorkerLogic;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
@@ -33,7 +35,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.Maps;
 
-public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger {
+public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger, ITickable {
 
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.milk_bucket);
@@ -110,8 +112,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote) {
 
 			if (logic.isWorking()) {
@@ -155,7 +156,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	private void consumeInk() {
-		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.get()).toCYMK();
+		CYMK cymk = new RGB(color.get()).toCYMK();
 		lvlCyan.set(lvlCyan.get() - cymk.getCyan());
 		lvlBlack.set(lvlBlack.get() - cymk.getKey());
 		lvlYellow.set(lvlYellow.get() - cymk.getYellow());
@@ -163,7 +164,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	private boolean hasSufficientInk() {
-		ColorUtils.CYMK cymk = new ColorUtils.RGB(color.get()).toCYMK();
+		CYMK cymk = new RGB(color.get()).toCYMK();
 		if (cymk.getCyan() > lvlCyan.get()) {
 			if (tryUseInk(Slots.dyeCyan, 1)) {
 				lvlCyan.set(lvlCyan.get() + 1f);
@@ -347,7 +348,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	public ItemStack getPickBlock() {
+	public ItemStack getPickBlock(EntityPlayer player) {
 		return getRawDrop();
 	}
 

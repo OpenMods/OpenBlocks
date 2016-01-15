@@ -2,6 +2,7 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.util.EnumFacing;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.utils.bitmap.IReadableBitMap;
 
@@ -52,7 +53,7 @@ public class ModelVacuumHopper extends ModelBase {
 		setRotation(outputItems, 0F, 0F, 0F);
 	}
 
-	private void renderValve(IReadableBitMap<ForgeDirection> itemOutputs, IReadableBitMap<ForgeDirection> xpOutputs, ForgeDirection direction, float rotX, float rotZ, float f5) {
+	private void renderValve(IReadableBitMap<EnumFacing> itemOutputs, IReadableBitMap<EnumFacing> xpOutputs, EnumFacing direction, float rotX, float rotZ, float f5) {
 		boolean items = itemOutputs.get(direction);
 		boolean xp = xpOutputs.get(direction);
 
@@ -72,15 +73,15 @@ public class ModelVacuumHopper extends ModelBase {
 
 		float f5 = 0.0625F;
 		middle.render(f5);
-		final IReadableBitMap<ForgeDirection> itemOutputs = hopper.getReadableItemOutputs();
-		final IReadableBitMap<ForgeDirection> xpOutputs = hopper.getReadableXpOutputs();
+		final IReadableBitMap<EnumFacing> itemOutputs = hopper.getReadableItemOutputs();
+		final IReadableBitMap<EnumFacing> xpOutputs = hopper.getReadableXpOutputs();
 
-		renderValve(itemOutputs, xpOutputs, ForgeDirection.UP, 0, 0, f5);
-		renderValve(itemOutputs, xpOutputs, ForgeDirection.DOWN, (float)Math.toRadians(180), 0, f5);
-		renderValve(itemOutputs, xpOutputs, ForgeDirection.EAST, 0, (float)Math.toRadians(90), f5);
-		renderValve(itemOutputs, xpOutputs, ForgeDirection.WEST, 0, (float)Math.toRadians(-90), f5);
-		renderValve(itemOutputs, xpOutputs, ForgeDirection.NORTH, (float)Math.toRadians(-90), 0, f5);
-		renderValve(itemOutputs, xpOutputs, ForgeDirection.SOUTH, (float)Math.toRadians(90), 0, f5);
+		renderValve(itemOutputs, xpOutputs, EnumFacing.UP, 0, 0, f5);
+		renderValve(itemOutputs, xpOutputs, EnumFacing.DOWN, (float)Math.toRadians(180), 0, f5);
+		renderValve(itemOutputs, xpOutputs, EnumFacing.EAST, 0, (float)Math.toRadians(90), f5);
+		renderValve(itemOutputs, xpOutputs, EnumFacing.WEST, 0, (float)Math.toRadians(-90), f5);
+		renderValve(itemOutputs, xpOutputs, EnumFacing.NORTH, (float)Math.toRadians(-90), 0, f5);
+		renderValve(itemOutputs, xpOutputs, EnumFacing.SOUTH, (float)Math.toRadians(90), 0, f5);
 
 	}
 

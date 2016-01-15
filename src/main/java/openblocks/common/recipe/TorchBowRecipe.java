@@ -3,11 +3,11 @@ package openblocks.common.recipe;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import openmods.utils.CustomRecipeBase;
 
-public class TorchBowRecipe implements IRecipe {
+public class TorchBowRecipe extends CustomRecipeBase {
 
 	@Override
 	public boolean matches(InventoryCrafting inventorycrafting, World world) {

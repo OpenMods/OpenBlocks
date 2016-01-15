@@ -22,11 +22,15 @@ public class BlockSky extends OpenBlock {
 	private static final int MASK_INVERTED = 1 << 0;
 	private static final int MASK_POWERED = 1 << 1;
 
-	private static final AxisAlignedBB EMPTY = AxisAlignedBB.fromBounds(0, 0, 0, 0, 0, 0);
+	private static final AxisAlignedBB EMPTY = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
 	public static final PropertyBool INVERTED = PropertyBool.create("inverted");
 
 	public static final PropertyBool POWERED = PropertyBool.create("active");
+
+	public static boolean isInverted(int meta) {
+		return (meta & MASK_INVERTED) != 0;
+	}
 
 	public BlockSky() {
 		super(Material.iron);
@@ -35,7 +39,7 @@ public class BlockSky extends OpenBlock {
 
 	@Override
 	protected BlockState createBlockState() {
-		return new BlockState(this, getRotationMode().property, INVERTED, POWERED);
+		return new BlockState(this, getPropertyOrientation(), INVERTED, POWERED);
 	}
 
 	@Override

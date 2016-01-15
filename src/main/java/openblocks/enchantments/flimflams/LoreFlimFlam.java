@@ -82,7 +82,7 @@ public class LoreFlimFlam implements IFlimFlamAction {
 		final NBTTagCompound display = tag.getCompoundTag("display");
 		if (!tag.hasKey("display", Constants.NBT.TAG_COMPOUND)) tag.setTag("display", display);
 
-		final String lore = LoreGenerator.generateLore(target.getCommandSenderName(), identityType(item));
+		final String lore = LoreGenerator.generateLore(target.getName(), identityType(item));
 
 		final NBTTagList loreList = new NBTTagList();
 		for (String line : splitText(lore, 30))

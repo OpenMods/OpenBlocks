@@ -100,7 +100,7 @@ public class ExplosiveEnchantmentsHandler {
 
 	public static void createExplosionForEntity(Entity entity, float power, boolean isDestructive) {
 		if (!entity.worldObj.isRemote) {
-			entity.worldObj.createExplosion(entity, entity.posX, entity.boundingBox.minY, entity.posZ, power, isDestructive);
+			entity.worldObj.createExplosion(entity, entity.posX, entity.getEntityBoundingBox().minY, entity.posZ, power, isDestructive);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class ExplosiveEnchantmentsHandler {
 
 		ItemStack armor = inventory.armorInventory[armorSlot];
 		if (armor == null || !(armor.getItem() instanceof ItemArmor)) return null;
-		@SuppressWarnings("unchecked")
+
 		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(armor);
 		Integer ench = enchantments.get(Enchantments.explosive.effectId);
 		if (ench == null || ench >= LEVELS.length) return null;

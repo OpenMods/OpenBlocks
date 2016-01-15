@@ -13,8 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.client.Icons.IDrawableIcon;
@@ -89,15 +89,15 @@ public class SoundEventsManager {
 	}
 
 	public static boolean isPlayerWearingGlasses() {
-		final Entity e = FMLClientHandler.instance().getClient().renderViewEntity;
+		final Entity e = Minecraft.getMinecraft().getRenderViewEntity();
 		return isEntityWearingGlasses(e);
 	}
 
 	@SubscribeEvent
-	public void onSoundEvent(PlaySoundEvent17 evt) {
+	public void onSoundEvent(PlaySoundEvent evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
 			final ISound sound = evt.sound;
-			final IDrawableIcon icon = icons.getIcon(sound.getPositionedSoundLocation());
+			final IDrawableIcon icon = icons.getIcon(sound.getSoundLocation());
 
 			synchronized (events) {
 				events.add(new SoundEvent(sound, icon, Math.log(sound.getVolume() + 1), sound.getPitch()));
@@ -209,7 +209,7 @@ public class SoundEventsManager {
 
 		if (mc.gameSettings.thirdPersonView != 0) return;
 		final TextureManager tex = mc.renderEngine;
-		final Entity rve = mc.renderViewEntity;
+		final Entity rve = mc.getRenderViewEntity();
 		if (!isEntityWearingGlasses(rve)) return;
 
 		GL11.glDisable(GL11.GL_FOG);
@@ -232,7 +232,7 @@ public class SoundEventsManager {
 				GL11.glPushMatrix();
 				GL11.glTranslated(px, py, pz);
 				RenderUtils.setupBillboard(rve);
-				snd.icon.draw(tex, snd.getAlpha(evt.partialTicks), snd.size);
+				snd.icon.draw(snd.getAlpha(evt.partialTicks), snd.size);
 				GL11.glPopMatrix();
 			}
 		}

@@ -2,10 +2,8 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 
 public class ModelVillage extends ModelBase {
-	// fields
 	ModelRenderer main;
 	ModelRenderer step;
 	ModelRenderer roof;
@@ -34,10 +32,9 @@ public class ModelVillage extends ModelBase {
 		setRotation(roof, 0F, 0F, 0F);
 	}
 
-	public void render(TileEntity te, float f) {
+	public void render() {
 
 		float f5 = 0.0625F;
-		setRotationAngles(te, f);
 		main.render(f5);
 		step.render(f5);
 		roof.render(f5);
@@ -48,11 +45,5 @@ public class ModelVillage extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	/**
-	 * @param te
-	 * @param f
-	 */
-	public void setRotationAngles(TileEntity te, float f) {}
 
 }

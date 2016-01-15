@@ -1,9 +1,14 @@
 package openblocks.client;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.MathHelper;
-import openmods.utils.TextureUtils;
+import net.minecraft.util.ResourceLocation;
+import openmods.colors.RGB;
 
 import org.lwjgl.opengl.GL11;
 
@@ -11,61 +16,63 @@ import com.google.common.base.Preconditions;
 
 public class Icons {
 
-	public static void renderQuad(Tessellator tes, double scale, IIcon icon) {
-		tes.addVertexWithUV(scale, scale, 0, icon.getMinU(), icon.getMinV());
-		tes.addVertexWithUV(scale, -scale, 0, icon.getMinU(), icon.getMaxV());
-		tes.addVertexWithUV(-scale, -scale, 0, icon.getMaxU(), icon.getMaxV());
-		tes.addVertexWithUV(-scale, scale, 0, icon.getMaxU(), icon.getMinV());
+	private static void addVertexWithUV(WorldRenderer wr, double x, double y, double u, double v) {
+		wr.pos(x, y, 0).tex(u, v).endVertex();
 	}
 
 	public interface IDrawableIcon {
-		void draw(TextureManager tex, double alpha, double scale);
+		void draw(double alpha, double scale);
 
-		void registerIcons(int type, IIconRegister registry);
+		void registerIcons(TextureMap registry);
 	}
 
 	public static class SingleIcon implements IDrawableIcon {
-		protected IIcon icon;
-		public final int color;
-		public final int type;
+		protected TextureAtlasSprite icon;
+		public final float r;
+		public final float g;
+		public final float b;
 
-		protected SingleIcon(int color, int type) {
-			this.color = color;
-			this.type = type;
+		protected SingleIcon(int color) {
+			RGB rgb = new RGB(color);
+			this.r = rgb.getR();
+			this.g = rgb.getG();
+			this.b = rgb.getB();
 		}
 
-		public SingleIcon(IIcon icon, int color, int type) {
-			this(color, type);
+		public SingleIcon(TextureAtlasSprite icon, int color) {
+			this(color);
 			this.icon = icon;
 		}
 
 		@Override
-		public void draw(TextureManager tex, double alpha, double scale) {
+		public void draw(double alpha, double scale) {
 			Preconditions.checkNotNull(icon);
-			TextureUtils.bindIconSheet(tex, type);
-			final Tessellator tes = Tessellator.instance;
-			tes.startDrawingQuads();
-			tes.setTranslation(0, 0, 0);
-			tes.setColorRGBA_I(color, MathHelper.floor_double(255 * alpha));
-			renderQuad(tes, scale, icon);
+			GlStateManager.color(r, g, b, MathHelper.floor_double(255 * alpha));
+			final Tessellator tes = Tessellator.getInstance();
+			final WorldRenderer wr = tes.getWorldRenderer();
+			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			addVertexWithUV(wr, scale, scale, icon.getMinU(), icon.getMinV());
+			addVertexWithUV(wr, scale, -scale, icon.getMinU(), icon.getMaxV());
+			addVertexWithUV(wr, -scale, -scale, icon.getMaxU(), icon.getMaxV());
+			addVertexWithUV(wr, -scale, scale, icon.getMaxU(), icon.getMinV());
 			tes.draw();
 		}
 
 		@Override
-		public void registerIcons(int type, IIconRegister registry) {}
+		public void registerIcons(TextureMap registry) {}
 	}
 
 	private static class LoadableSingleIcon extends SingleIcon {
-		private final String iconId;
+		private final ResourceLocation iconId;
 
-		private LoadableSingleIcon(String iconId, int color, int type) {
-			super(color, type);
+		private LoadableSingleIcon(ResourceLocation iconId, int color) {
+			super(color);
 			this.iconId = iconId;
 		}
 
 		@Override
-		public void registerIcons(int type, IIconRegister registry) {
-			if (this.type == type) icon = registry.registerIcon(iconId);
+		public void registerIcons(TextureMap registry) {
+			icon = registry.registerSprite(iconId);
 		}
 	}
 
@@ -83,32 +90,25 @@ public class Icons {
 		}
 
 		@Override
-		public void draw(TextureManager tex, double alpha, double scale) {
-			back.draw(tex, alpha, scale * scaleRatio);
+		public void draw(double alpha, double scale) {
+			back.draw(alpha, scale * scaleRatio);
 			GL11.glTranslated(0, 0, -distance);
-			front.draw(tex, alpha, scale);
+			front.draw(alpha, scale);
 		}
 
 		@Override
-		public void registerIcons(int type, IIconRegister registry) {
-			front.registerIcons(type, registry);
-			back.registerIcons(type, registry);
+		public void registerIcons(TextureMap registry) {
+			front.registerIcons(registry);
+			back.registerIcons(registry);
 		}
 	}
 
-	public static IDrawableIcon itemIcon(String iconId, int color) {
-		return new LoadableSingleIcon(iconId, color, TextureUtils.TEXTURE_MAP_ITEMS);
+	public static IDrawableIcon createIcon(ResourceLocation iconId, int color) {
+		return new LoadableSingleIcon(iconId, color);
 	}
 
-	public static IDrawableIcon itemIcon(String iconId) {
-		return itemIcon(iconId, 0xFFFFFF);
+	public static IDrawableIcon createIcon(ResourceLocation iconId) {
+		return createIcon(iconId, 0xFFFFFF);
 	}
 
-	public static IDrawableIcon blockIcon(String iconId, int color) {
-		return new LoadableSingleIcon(iconId, color, TextureUtils.TEXTURE_MAP_BLOCKS);
-	}
-
-	public static IDrawableIcon blockIcon(String iconId) {
-		return blockIcon(iconId, 0xFFFFFF);
-	}
 }

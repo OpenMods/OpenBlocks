@@ -1,10 +1,10 @@
 package openblocks.common.sync;
 
-import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import openblocks.common.Stencil;
 import openmods.sync.SyncableObjectBase;
 
@@ -70,7 +70,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 			return false;
 		}
 
-		public static Layer createFromStream(DataInput stream) {
+		public static Layer createFromStream(PacketBuffer stream) {
 			Layer layer = new Layer();
 			try {
 				layer.setColor(stream.readInt());
@@ -117,7 +117,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	public SyncableBlockLayers() {}
 
 	@Override
-	public void readFromStream(DataInputStream stream) throws IOException {
+	public void readFromStream(PacketBuffer stream) {
 		int size = stream.readByte();
 		layers.clear();
 		for (byte i = 0; i < size; i++) {
@@ -126,8 +126,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	@Override
-	public void writeToStream(DataOutputStream stream)
-			throws IOException {
+	public void writeToStream(PacketBuffer stream) {
 		stream.writeByte(layers.size());
 		for (Layer layer : layers) {
 			stream.writeInt(layer.getColor());

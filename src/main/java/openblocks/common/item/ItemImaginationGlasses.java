@@ -10,12 +10,12 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openmods.colors.ColorMeta;
-import openmods.colors.ColorUtils;
 import openmods.utils.ItemUtils;
 
 public class ItemImaginationGlasses extends ItemArmor {
@@ -36,7 +36,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		@Override
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public void getSubItems(Item item, CreativeTabs tab, List result) {
-			for (ColorMeta color : ColorUtils.getAllColors())
+			for (ColorMeta color : ColorMeta.getAllColors())
 				result.add(createCrayonGlasses(color.rgb));
 		}
 
@@ -84,7 +84,6 @@ public class ItemImaginationGlasses extends ItemArmor {
 		this.type = type;
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
-		setTextureName(type.iconName);
 	}
 
 	public enum Type {
@@ -130,11 +129,6 @@ public class ItemImaginationGlasses extends ItemArmor {
 	}
 
 	@Override
-	public IIcon getIcon(ItemStack stack, int pass) {
-		return itemIcon;
-	}
-
-	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		return this.type.textureName;
 	}
@@ -147,16 +141,5 @@ public class ItemImaginationGlasses extends ItemArmor {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		result.add(new ItemStack(this));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return 1;
 	}
 }

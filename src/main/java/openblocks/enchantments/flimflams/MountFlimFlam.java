@@ -2,8 +2,6 @@ package openblocks.enchantments.flimflams;
 
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntitySquid;
@@ -12,13 +10,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
 import openmods.utils.CollectionUtils;
-import openmods.utils.WorldUtils;
+
+import com.google.common.base.Predicate;
 
 public class MountFlimFlam implements IFlimFlamAction {
 
-	private static final IEntitySelector SAFE_SELECTOR = new IEntitySelector() {
+	private static final Predicate<EntityLiving> SAFE_SELECTOR = new Predicate<EntityLiving>() {
 		@Override
-		public boolean isEntityApplicable(Entity entity) {
+		public boolean apply(EntityLiving entity) {
 			return !(entity instanceof EntityCreeper) && !(entity instanceof EntitySquid);
 		}
 	};
@@ -27,8 +26,8 @@ public class MountFlimFlam implements IFlimFlamAction {
 	public boolean execute(EntityPlayerMP target) {
 		final World world = target.worldObj;
 
-		AxisAlignedBB around = target.boundingBox.expand(40, 40, 40);
-		List<EntityCreature> mobs = WorldUtils.getEntitiesWithinAABB(world, EntityCreature.class, around, SAFE_SELECTOR);
+		AxisAlignedBB around = target.getEntityBoundingBox().expand(40, 40, 40);
+		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, around, SAFE_SELECTOR);
 		if (mobs.isEmpty()) return false;
 		EntityLiving selected = CollectionUtils.getRandom(mobs);
 		target.mountEntity(selected);

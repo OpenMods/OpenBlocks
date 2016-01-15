@@ -9,8 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -37,7 +36,7 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui {
+public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui, ITickable {
 
 	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
 
@@ -84,13 +83,13 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
 				@Override
 				public void usePlayer(OpenModsFakePlayer fakePlayer) {
-					final int x = selectFromRange(Config.sprinklerEffectiveRange) + xCoord;
-					final int z = selectFromRange(Config.sprinklerEffectiveRange) + zCoord;
+					final int x = selectFromRange(Config.sprinklerEffectiveRange);
+					final int z = selectFromRange(Config.sprinklerEffectiveRange);
 
-					for (int i = -1; i <= 1; i++) {
-						int y = yCoord + i;
+					for (int y = -1; y <= 1; y++) {
+						BlockPos target = pos.add(x, y, z);
 
-						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, x, y, z, fakePlayer))
+						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, target, fakePlayer))
 						break;
 
 					}
@@ -125,12 +124,15 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			final int fillFactor = SPRINKER_MOD[particleSetting];
 
 			if ((ticks % fillFactor) != 0) return;
-			final ForgeDirection blockYawRotation = getOrientation().north();
+			final EnumFacing blockYawRotation = getOrientation().north();
 			final double nozzleAngle = getSprayDirection();
 			final double sprayForwardVelocity = Math.sin(Math.toRadians(nozzleAngle * 25));
 
-			final double forwardVelocityX = sprayForwardVelocity * blockYawRotation.offsetZ / -2;
-			final double forwardVelocityZ = sprayForwardVelocity * blockYawRotation.offsetX / 2;
+			final int offsetZ = blockYawRotation.getFrontOffsetZ();
+			final int offsetX = blockYawRotation.getFrontOffsetX();
+			// TODO 1.8.9 verify
+			final double forwardVelocityX = sprayForwardVelocity * offsetZ / -2;
+			final double forwardVelocityZ = sprayForwardVelocity * offsetX / 2;
 
 			final double sprinklerDelta = SPRINKER_DELTA[particleSetting];
 			double outletPosition = -0.5;
@@ -138,18 +140,18 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 			while (outletPosition <= 0.5) {
 				final double spraySideVelocity = Math.sin(SPRAY_SIDE_SCATTER * (RANDOM.nextDouble() - 0.5));
 
-				final double sideVelocityX = spraySideVelocity * blockYawRotation.offsetX;
-				final double sideVelocityZ = spraySideVelocity * blockYawRotation.offsetZ;
+				final double sideVelocityX = spraySideVelocity * offsetX;
+				final double sideVelocityZ = spraySideVelocity * offsetZ;
 
-				Vec3 vec = Vec3.createVectorHelper(
+				Vec3 vec = new Vec3(
 						forwardVelocityX + sideVelocityX,
 						0.35,
 						forwardVelocityZ + sideVelocityZ);
 
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid().getFluid(),
-						xCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetX),
-						yCoord + 0.2,
-						zCoord + 0.5 + (outletPosition * 0.6 * blockYawRotation.offsetZ),
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
+						pos.getX() + 0.5 + (outletPosition * 0.6 * offsetX),
+						pos.getY() + 0.2,
+						pos.getZ() + 0.5 + (outletPosition * 0.6 * offsetZ),
 						0.3f, 0.7f, vec);
 
 				outletPosition += sprinklerDelta;
@@ -158,11 +160,9 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
+	public void update() {
 		if (!worldObj.isRemote) {
-			if (tank.getFluidAmount() <= 0) tank.fillFromSide(worldObj, getPosition(), ForgeDirection.DOWN);
+			if (tank.getFluidAmount() <= 0) tank.fillFromSide(worldObj, pos, EnumFacing.DOWN);
 
 			if (ticks % Config.sprinklerBonemealConsumeRate == 0) {
 				hasBonemeal = ItemDistribution.consumeFirstInventoryItem(inventory, BONEMEAL);
@@ -193,14 +193,14 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return ForgeDirection.DOWN;
+	public EnumFacing getSurfaceDirection() {
+		return EnumFacing.DOWN;
 	}
 
 	@Override
 	public void onBlockBroken() {
-		if (!worldObj.isRemote && !worldObj.isAirBlock(xCoord, yCoord, zCoord)) {
-			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, new ItemStack(OpenBlocks.Blocks.sprinkler));
+		if (!worldObj.isRemote && !worldObj.isAirBlock(pos)) {
+			BlockUtils.dropItemStackInWorld(worldObj, pos, new ItemStack(OpenBlocks.Blocks.sprinkler));
 		}
 	}
 
@@ -215,7 +215,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	@IncludeOverride
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return false;
 	}
 

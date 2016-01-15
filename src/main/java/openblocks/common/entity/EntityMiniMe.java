@@ -1,17 +1,13 @@
 package openblocks.common.entity;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -19,23 +15,24 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
 import openmods.Log;
 import openmods.api.VisibleForDocumentation;
 import openmods.network.event.*;
-import openmods.utils.ByteUtils;
 import openmods.utils.io.GameProfileSerializer;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -45,7 +42,7 @@ import com.mojang.authlib.properties.Property;
 @VisibleForDocumentation
 public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpawnData {
 
-	@NetworkEventMeta(direction = EventDirection.S2C, compressed = true)
+	@NetworkEventMeta(direction = EventDirection.S2C)
 	public static class OwnerChangeEvent extends NetworkEvent {
 
 		private GameProfile profile;
@@ -58,16 +55,16 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		}
 
 		@Override
-		protected void readFromStream(DataInput input) throws IOException {
-			this.entityId = ByteUtils.readVLI(input);
+		protected void readFromStream(PacketBuffer input) {
+			this.entityId = input.readVarIntFromBuffer();
 			if (input.readBoolean()) {
 				profile = GameProfileSerializer.read(input);
 			}
 		}
 
 		@Override
-		protected void writeToStream(DataOutput output) throws IOException {
-			ByteUtils.writeVLI(output, entityId);
+		protected void writeToStream(PacketBuffer output) {
+			output.writeVarIntToBuffer(entityId);
 
 			if (profile != null) {
 				output.writeBoolean(true);
@@ -109,15 +106,22 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	public EntityMiniMe(World world) {
 		super(world);
 		setSize(0.6F, 0.95F);
-		func_110163_bv();
-		getNavigator().setAvoidsWater(true);
-		getNavigator().setCanSwim(true);
+		enablePersistence();
+
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIPickupPlayer(this));
 		this.tasks.addTask(3, new EntityAIBreakBlock(this));
 		this.tasks.addTask(4, new EntityAIWander(this, 1.0D));
 		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
+	}
+
+	@Override
+	protected PathNavigate getNewNavigator(World worldIn) {
+		final PathNavigateGround navigator = new PathNavigateGround(this, worldIn);
+		navigator.setAvoidsWater(true);
+		navigator.setCanSwim(true);
+		return navigator;
 	}
 
 	@Override
@@ -152,11 +156,6 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getLocationSkin() {
-		return Objects.firstNonNull(getResourceLocation(), AbstractClientPlayer.locationStevePng);
-	}
-
 	@Override
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
@@ -164,7 +163,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		if (!worldObj.isRemote && MinecraftServer.getServer() != null) {
 			if (name != null && (owner == null || !name.equalsIgnoreCase(owner.getName()))) {
 				try {
-					final GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(name);
+					final GameProfile profile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(name);
 					this.owner = profile != null? fetchFullProfile(profile) : null;
 					propagateOwnerChange();
 				} catch (Exception e) {
@@ -178,14 +177,18 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		NetworkEventManager.INSTANCE.dispatcher().senders.entity.sendMessage(new OwnerChangeEvent(getEntityId(), owner), this);
 	}
 
-	private ResourceLocation getResourceLocation() {
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getSkinResourceLocation() {
 		if (owner != null) {
-			Minecraft minecraft = Minecraft.getMinecraft();
-			Map<?, ?> map = minecraft.func_152342_ad().func_152788_a(owner);
+			final SkinManager manager = Minecraft.getMinecraft().getSkinManager();
+			Map<Type, MinecraftProfileTexture> map = manager.loadSkinFromCache(owner);
 
 			if (map.containsKey(Type.SKIN)) {
-				final MinecraftProfileTexture skin = (MinecraftProfileTexture)map.get(Type.SKIN);
-				return minecraft.func_152342_ad().func_152792_a(skin, Type.SKIN);
+				final MinecraftProfileTexture skin = map.get(Type.SKIN);
+				return manager.loadSkin(skin, Type.SKIN);
+			} else {
+				UUID uuid = EntityPlayer.getUUID(owner);
+				return DefaultPlayerSkin.getDefaultSkin(uuid);
 			}
 		}
 
@@ -193,18 +196,19 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	}
 
 	private static GameProfile fetchFullProfile(GameProfile profile) {
+		// TODO 1.8.9 verify
 		final Property property = Iterables.getFirst(profile.getProperties().get("textures"), null);
-		return property != null? profile : MinecraftServer.getServer().func_147130_as().fillProfileProperties(profile, true);
+		if (property != null) return profile;
+
+		final GameProfile cachedProfile = MinecraftServer.getServer().getPlayerProfileCache().getProfileByUUID(profile.getId());
+		if (cachedProfile != null) return cachedProfile;
+
+		return MinecraftServer.getServer().getMinecraftSessionService().fillProfileProperties(profile, true);
 	}
 
 	@Override
 	protected boolean canDespawn() {
 		return false;
-	}
-
-	@Override
-	public boolean isAIEnabled() {
-		return true;
 	}
 
 	@Override
@@ -220,22 +224,14 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	public void writeSpawnData(ByteBuf data) {
 		if (owner != null) {
 			data.writeBoolean(true);
-			try {
-				GameProfileSerializer.write(owner, new ByteBufOutputStream(data));
-			} catch (IOException e) {
-				throw Throwables.propagate(e);
-			}
+			GameProfileSerializer.write(owner, new PacketBuffer(data));
 		} else data.writeBoolean(false);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
 		if (data.readBoolean()) {
-			try {
-				this.owner = GameProfileSerializer.read(new ByteBufInputStream(data));
-			} catch (IOException e) {
-				throw Throwables.propagate(e);
-			}
+			this.owner = GameProfileSerializer.read(new PacketBuffer(data));
 		}
 	}
 
@@ -245,7 +241,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 		if (owner != null) {
 			NBTTagCompound ownerTag = new NBTTagCompound();
-			NBTUtil.func_152460_a(ownerTag, owner);
+			NBTUtil.writeGameProfile(ownerTag, owner);
 			tag.setTag("Owner", ownerTag);
 		}
 
@@ -265,7 +261,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	private static GameProfile readOwner(NBTTagCompound tag) {
 		if (tag.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = tag.getString("owner");
-			return MinecraftServer.getServer().func_152358_ax().func_152655_a(ownerName);
+			return MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(ownerName);
 		} else if (tag.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
 			final String uuidStr = tag.getString("OwnerUUID");
 			try {
@@ -274,7 +270,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 			} catch (IllegalArgumentException e) {
 				Log.warn(e, "Failed to parse UUID: %s", uuidStr);
 			}
-		} else if (tag.hasKey("Owner", Constants.NBT.TAG_COMPOUND)) { return NBTUtil.func_152459_a(tag.getCompoundTag("Owner")); }
+		} else if (tag.hasKey("Owner", Constants.NBT.TAG_COMPOUND)) { return NBTUtil.readGameProfileFromNBT(tag.getCompoundTag("Owner")); }
 
 		return null;
 	}

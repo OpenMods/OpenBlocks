@@ -9,10 +9,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -48,30 +50,26 @@ public class ItemGoldenEye extends Item {
 	}
 
 	private static void tryLearnStructure(ItemStack stack, WorldServer world, EntityPlayerMP player) {
-		Map<String, ChunkPosition> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, (int)player.posX, (int)player.posY, (int)player.posZ);
+		Map<String, BlockPos> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, player.getPosition());
 
 		String structureName = "";
 		double max = Double.MAX_VALUE;
 
-		for (Map.Entry<String, ChunkPosition> e : nearbyStructures.entrySet()) {
-			ChunkPosition pos = e.getValue();
+		for (Map.Entry<String, BlockPos> e : nearbyStructures.entrySet()) {
+			BlockPos pos = e.getValue();
 			if (Config.eyeDebug) player.addChatMessage(new ChatComponentTranslation(
-					"openblocks.misc.structure_pos", e.getKey(), pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ));
+					"openblocks.misc.structure_pos", e.getKey(), pos.getX(), pos.getY(), pos.getZ()));
 
-			double dx = pos.chunkPosX - player.posX;
-			double dy = pos.chunkPosY - player.posY;
-			double dz = pos.chunkPosZ - player.posZ;
+			double distSq = player.getDistanceSqToCenter(pos);
 
-			double dist = (dx * dx) + (dy * dy) + (dz * dz);
-
-			if (dist < max) {
-				max = dist;
+			if (distSq < max) {
+				max = distSq;
 				structureName = e.getKey();
 			}
 		}
 
 		if (!Strings.isNullOrEmpty(structureName)) {
-			Log.info("Learned structure %s, d = %f", structureName, max);
+			Log.info("Learned structure %s, d = %f", structureName, Math.sqrt(max));
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			tag.setString(TAG_STRUCTURE, structureName);
 		}
@@ -86,12 +84,12 @@ public class ItemGoldenEye extends Item {
 
 		if (Strings.isNullOrEmpty(structureName)) return false;
 
-		Map<String, ChunkPosition> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, (int)player.posX, (int)player.posY, (int)player.posZ);
+		Map<String, BlockPos> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, player.getPosition());
 
-		ChunkPosition structurePos = nearbyStructures.get(structureName);
+		BlockPos structurePos = nearbyStructures.get(structureName);
 		if (structurePos != null) {
 			if (Config.eyeDebug) player.addChatComponentMessage(new ChatComponentTranslation(
-					"openblocks.misc.structure_pos", structureName, structurePos.chunkPosX, structurePos.chunkPosY, structurePos.chunkPosZ));
+					"openblocks.misc.structure_pos", structureName, structurePos.getX(), structurePos.getY(), structurePos.getZ()));
 
 			stack.setItemDamage(damage + 1);
 			EntityGoldenEye eye = new EntityGoldenEye(world, stack, player, structurePos);

@@ -9,6 +9,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -34,18 +36,20 @@ import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback, INeighbourAwareTile {
+public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(30);
 
 	public static enum Slots {
 		input,
-		output
+		output,
+		lapis
 	}
 
 	public static enum AutoSlots {
 		input,
 		output,
+		lapis,
 		xp
 	}
 
@@ -103,13 +107,13 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		handleBookRotation();
+		// TODO 1.8.9 rewrite to match vanilla (lapis!)
 		if (!worldObj.isRemote) {
 
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.fillFromSides(80, worldObj, getPosition(), xpSides.getValue());
+				tank.fillFromSides(80, worldObj, pos, xpSides.getValue());
 			}
 
 			if (shouldAutoOutput() && hasStack(Slots.output)) {
@@ -126,7 +130,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 					&& !hasStack(Slots.output)) {
 				int xpRequired = LiquidXpUtils.getLiquidForLevel(targetLevel.get());
 				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
-					float power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
+					float power = EnchantmentUtils.getPower(worldObj, pos);
 					int enchantability = EnchantmentUtils.calcEnchantability(getStack(Slots.input), (int)power, true);
 					if (enchantability >= targetLevel.get()) {
 						ItemStack inputStack = getStack(Slots.input);
@@ -154,11 +158,11 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private void handleBookRotation() {
 		this.bookSpreadPrev = this.bookSpread;
 		this.bookRotationPrev = this.bookRotation2;
-		EntityPlayer entityplayer = this.worldObj.getClosestPlayer(this.xCoord + 0.5F, this.yCoord + 0.5F, this.zCoord + 0.5F, 3.0D);
+		EntityPlayer entityplayer = this.worldObj.getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D);
 
 		if (entityplayer != null) {
-			double d0 = entityplayer.posX - (this.xCoord + 0.5F);
-			double d1 = entityplayer.posZ - (this.zCoord + 0.5F);
+			double d0 = entityplayer.posX - (pos.getX() + 0.5F);
+			double d1 = entityplayer.posZ - (pos.getZ() + 0.5F);
 			this.bookRotation = (float)Math.atan2(d1, d0);
 			this.bookSpread += 0.1F;
 
@@ -262,7 +266,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@IncludeOverride
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return false;
 	}
 
@@ -301,12 +305,12 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public IValueProvider<Set<ForgeDirection>> createAllowedDirectionsProvider(AutoSlots slot) {
+	public IValueProvider<Set<EnumFacing>> createAllowedDirectionsProvider(AutoSlots slot) {
 		return selectSlotMap(slot);
 	}
 
 	@Override
-	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
+	public IWriteableBitMap<EnumFacing> createAllowedDirectionsReceiver(AutoSlots slot) {
 		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
@@ -339,7 +343,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	@Override
 	public void onInventoryChanged(IInventory inventory, int slotNumber) {
 		if (worldObj.isRemote) return;
-		float power = EnchantmentUtils.getPower(worldObj, xCoord, yCoord, zCoord);
+		float power = EnchantmentUtils.getPower(worldObj, pos);
 		ItemStack stack = getStack(Slots.input);
 
 		int enchantability = stack == null? 30 : stack.getItem().getItemEnchantability();
@@ -352,7 +356,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, getPosition());
+		tank.updateNeighbours(worldObj, pos);
 	}
 
 }

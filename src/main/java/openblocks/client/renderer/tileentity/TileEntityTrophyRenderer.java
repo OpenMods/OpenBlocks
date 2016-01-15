@@ -1,10 +1,9 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
@@ -13,11 +12,10 @@ import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
+public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEntityTrophy> {
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float partialTick) {
-		TileEntityTrophy trophy = (TileEntityTrophy)tileentity;
+	public void renderTileEntityAt(TileEntityTrophy trophy, double x, double y, double z, float partialTick, int destroyProgress) {
 
 		Trophy type = trophy.getTrophy();
 		if (type != null) {
@@ -37,7 +35,7 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer {
 			GL11.glScaled(ratio, ratio, ratio);
 			World renderWorld = RenderUtils.getRenderWorld();
 			if (renderWorld != null) {
-				Render renderer = RenderManager.instance.getEntityRenderObject(entity);
+				Render<Entity> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 				// yeah we don't care about fonts, but we do care that the
 				// renderManager is available
 				if (renderer != null && renderer.getFontRendererFromRenderManager() != null) {

@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity.tank;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 
 public class HorizontalConnection extends GridConnection {
@@ -19,15 +20,15 @@ public class HorizontalConnection extends GridConnection {
 		return isConnected;
 	}
 
-	public void updateFluid(ForgeDirection direction, FluidStack stack) {
-		if (direction == ForgeDirection.NORTH || direction == ForgeDirection.WEST) this.fluidA = TankRenderUtils.safeCopy(stack);
+	public void updateFluid(EnumFacing direction, FluidStack stack) {
+		if (direction == EnumFacing.NORTH || direction == EnumFacing.WEST) this.fluidA = TankRenderUtils.safeCopy(stack);
 		else this.fluidB = TankRenderUtils.safeCopy(stack);
 
 		this.isConnected = fluidA != null && fluidB != null && fluidA.isFluidEqual(fluidB);
 	}
 
-	public void clearFluid(ForgeDirection direction) {
-		if (direction == ForgeDirection.NORTH || direction == ForgeDirection.WEST) this.fluidA = null;
+	public void clearFluid(EnumFacing direction) {
+		if (direction == EnumFacing.NORTH || direction == EnumFacing.WEST) this.fluidA = null;
 		else this.fluidB = null;
 
 		this.isConnected = false;

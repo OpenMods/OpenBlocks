@@ -9,6 +9,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -33,7 +35,9 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.*;
 import openmods.utils.bitmap.*;
 
-public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile {
+import com.google.common.base.Optional;
+
+public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
 
 	protected static final int TOTAL_COOLDOWN = 40;
 	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(45);
@@ -101,13 +105,11 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
+	public void update() {
 		if (!worldObj.isRemote) {
 			// if we should auto-drink liquid, do it!
 			if (automaticSlots.get(AutoSlots.xp)) {
-				tank.fillFromSides(100, worldObj, getPosition(), xpSides.getValue());
+				tank.fillFromSides(100, worldObj, getPos(), xpSides.getValue());
 			}
 
 			if (shouldAutoOutput() && hasOutput()) {
@@ -134,7 +136,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	private void repairItem() {
-		final VanillaAnvilLogic helper = new VanillaAnvilLogic(inventory.getStackInSlot(Slots.tool), inventory.getStackInSlot(Slots.modifier));
+		final VanillaAnvilLogic helper = new VanillaAnvilLogic(inventory.getStackInSlot(Slots.tool), inventory.getStackInSlot(Slots.modifier), false, Optional.<String> absent());
 
 		final ItemStack output = helper.getOutputStack();
 		if (output != null) {
@@ -149,7 +151,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 				removeModifiers(helper.getModifierCost());
 				inventory.setInventorySlotContents(Slots.tool.ordinal(), null);
 				inventory.setInventorySlotContents(Slots.output.ordinal(), output);
-				worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.anvil_use", 0.3f, 1f);
+				playSoundAtBlock("random.anvil_use", 0.3f, 1f);
 			}
 		}
 	}
@@ -206,7 +208,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@IncludeOverride
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return false;
 	}
 
@@ -243,12 +245,12 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public IValueProvider<Set<ForgeDirection>> createAllowedDirectionsProvider(AutoSlots slot) {
+	public IValueProvider<Set<EnumFacing>> createAllowedDirectionsProvider(AutoSlots slot) {
 		return selectSlotMap(slot);
 	}
 
 	@Override
-	public IWriteableBitMap<ForgeDirection> createAllowedDirectionsReceiver(AutoSlots slot) {
+	public IWriteableBitMap<EnumFacing> createAllowedDirectionsReceiver(AutoSlots slot) {
 		SyncableSides dirs = selectSlotMap(slot);
 		return BitMapUtils.createRpcAdapter(createRpcProxy(dirs, IRpcDirectionBitMap.class));
 	}
@@ -266,6 +268,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, getPosition());
+		tank.updateNeighbours(worldObj, getPos());
 	}
 }

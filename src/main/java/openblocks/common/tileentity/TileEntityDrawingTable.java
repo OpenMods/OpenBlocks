@@ -46,11 +46,6 @@ public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, I
 	}
 
 	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
-	@Override
 	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;

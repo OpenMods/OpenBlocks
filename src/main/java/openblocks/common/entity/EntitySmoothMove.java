@@ -3,8 +3,10 @@ package openblocks.common.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO 1.8.9 verify changes in entity movement
 public abstract class EntitySmoothMove extends Entity {
 
 	public class MoveSmoother {
@@ -83,7 +85,7 @@ public abstract class EntitySmoothMove extends Entity {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int something) {
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean something) {
 		smoother.setTarget(x, y, z);
 		super.setRotation(yaw, pitch);
 	}

@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityAssistant;
@@ -25,7 +26,6 @@ public class ItemCartographer extends Item {
 
 		public final String untranslatedName;
 		public final String iconName;
-		private IIcon icon;
 
 		private AssistantType(String name, String iconName) {
 			this.untranslatedName = "openblocks.assistant_" + name;
@@ -42,19 +42,6 @@ public class ItemCartographer extends Item {
 		setHasSubtypes(true);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconIndex(ItemStack stack) {
-		return getTypeFromItem(stack).icon;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		for (AssistantType type : AssistantType.VALUES)
-			type.icon = register.registerIcon(type.iconName);
 	}
 
 	@Override

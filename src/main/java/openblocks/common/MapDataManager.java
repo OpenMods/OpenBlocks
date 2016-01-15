@@ -57,7 +57,7 @@ public class MapDataManager {
 	@NetworkEventMeta(direction = EventDirection.S2C)
 	public static class MapUpdatesEvent extends MapIdRequest {}
 
-	@NetworkEventMeta(direction = EventDirection.S2C, compressed = true)
+	@NetworkEventMeta(direction = EventDirection.S2C)
 	public static class MapDataResponseEvent extends NetworkEvent {
 		public Map<Integer, HeightMapData> maps = Maps.newHashMap();
 

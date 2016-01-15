@@ -7,10 +7,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
@@ -21,12 +22,6 @@ import openmods.inventory.legacy.ItemDistribution;
 
 @BookDocumentation
 public class ItemDevNull extends Item {
-
-	public static class Icons {
-		public static IIcon iconFull;
-		public static IIcon iconTransparent;
-		public static IIcon iconOverload;
-	}
 
 	public static final int STACK_LIMIT = 5;
 
@@ -84,25 +79,20 @@ public class ItemDevNull extends Item {
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int sideId, float hitX, float hitY, float hitZ) {
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		IInventory inventory = new ItemInventory(stack, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
 		if (containedStack != null) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
-				Block placedBlock = ((ItemBlock)item).field_150939_a;
-				// logic based on ItemBlock.func_150936_a, so don't blame me for hardcoding
-				Block clickedBlock = world.getBlock(x, y, z);
+				final Block placedBlock = ((ItemBlock)item).getBlock();
+				// logic based on ItemBlock.canPlaceBlockOnSide, so don't blame me for hardcoding
+				final Block block = world.getBlockState(pos).getBlock();
 
-				if (clickedBlock == Blocks.snow_layer) sideId = 1; // UP
-				else if (!clickedBlock.isReplaceable(world, x, y, z)) {
-					ForgeDirection side = ForgeDirection.getOrientation(sideId);
-					x += side.offsetX;
-					y += side.offsetY;
-					z += side.offsetZ;
-				}
+				if (block == Blocks.snow_layer && block.isReplaceable(world, pos)) side = EnumFacing.UP;
+				else if (!block.isReplaceable(world, pos)) pos = pos.offset(side);
 
-				return !world.canPlaceEntityOnSide(placedBlock, x, y, z, false, sideId, null, stack);
+				return world.canBlockBePlaced(placedBlock, pos, false, side, null, stack);
 			}
 		}
 
@@ -110,13 +100,13 @@ public class ItemDevNull extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		PlayerItemInventory inventory = new PlayerItemInventory(player, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
 		if (containedStack != null) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
-				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, x, y, z, par7, par8, par9, par10);
+				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, pos, side, hitX, hitY, hitZ);
 				if (containedStack.stackSize == 0) {
 					inventory.setInventorySlotContents(0, null);
 				}
@@ -157,14 +147,5 @@ public class ItemDevNull extends Item {
 		}
 
 		if (foundMatchingContainer) pickedStack.stackSize = 0;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		super.registerIcons(register);
-		Icons.iconTransparent = register.registerIcon("openblocks:devnull");
-		Icons.iconFull = register.registerIcon("openblocks:devfull");
-		Icons.iconOverload = register.registerIcon("openblocks:devzerooverzero");
 	}
 }

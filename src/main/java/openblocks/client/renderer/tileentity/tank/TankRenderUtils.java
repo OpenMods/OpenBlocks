@@ -1,9 +1,11 @@
 package openblocks.client.renderer.tileentity.tank;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.fluids.FluidStack;
 import openmods.utils.Diagonal;
 
@@ -37,13 +39,14 @@ public class TankRenderUtils {
 	}
 
 	public static FluidStack safeCopy(FluidStack stack) {
-		return stack != null? stack : null;
+		return stack != null? stack.copy() : null;
 	}
 
-	public static TileEntity getTileEntitySafe(World world, int x, int y, int z) {
-		if (world.blockExists(x, y, z)) {
-			Chunk chunk = world.getChunkFromBlockCoords(x, z);
-			return chunk.getTileEntityUnsafe(x & 0xF, y, z & 0xF);
+	public static TileEntity getTileEntitySafe(World world, BlockPos pos) {
+		// TODO 1.8.9 verify
+		if (world.isBlockLoaded(pos)) {
+			Chunk chunk = world.getChunkFromBlockCoords(pos);
+			return chunk.getTileEntity(pos, EnumCreateEntityType.CHECK);
 		}
 
 		return null;

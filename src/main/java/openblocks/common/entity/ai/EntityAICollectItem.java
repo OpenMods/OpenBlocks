@@ -27,10 +27,10 @@ public class EntityAICollectItem extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (!pathFinder.noPath()) { return false; }
+		if (!pathFinder.noPath()) return false;
+
 		if (luggage.worldObj != null) {
-			@SuppressWarnings("unchecked")
-			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
+			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
 			EntityItem closest = null;
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {
@@ -78,7 +78,7 @@ public class EntityAICollectItem extends EntityAIBase {
 			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
 				ItemStack stack = targetItem.getEntityItem();
 				int preEatSize = stack.stackSize;
-				ItemDistribution.insertItemIntoInventory(luggage.getInventory(), stack);
+				ItemDistribution.insertItemIntoInventory(luggage.getChestInventory(), stack);
 				// Check that the size changed
 				if (preEatSize != stack.stackSize) {
 					if (luggage.lastSound > 15) {

@@ -9,11 +9,8 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.*;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openmods.Log;
@@ -29,10 +26,11 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 import openmods.utils.EntityUtils;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile {
+public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile, ITickable {
 
 	private int strength = 0;
 	private int tickCounter = -1;
@@ -52,10 +50,10 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		addClass(FLANS_BULLET);
 	}
 
-	private final static IEntitySelector PROJECTILE_SELECTOR = new IEntitySelector() {
+	private final static Predicate<Entity> PROJECTILE_SELECTOR = new Predicate<Entity>() {
 		@Override
-		public boolean isEntityApplicable(Entity p_82704_1_) {
-			return EXTRA_PROJECTILE_CLASSES.contains(p_82704_1_.getClass());
+		public boolean apply(Entity target) {
+			return EXTRA_PROJECTILE_CLASSES.contains(target.getClass());
 		}
 	};
 
@@ -67,26 +65,25 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote) predictOtherProjectiles();
 
 		tickCounter--;
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.target);
+			worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.target);
 		}
 	}
 
 	private void predictOtherProjectiles() {
 		@SuppressWarnings("unchecked")
-		List<Entity> projectiles = worldObj.selectEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
+		List<Entity> projectiles = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
 
 		for (Entity projectile : projectiles) {
 			MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);
-			if (BlockUtils.isBlockHit(hit, this)) {
-				Blocks.target.onTargetHit(worldObj, xCoord, yCoord, zCoord, hit.hitVec);
+			if (pos.equals(hit.getBlockPos())) {
+				Blocks.target.onTargetHit(worldObj, pos, hit.hitVec);
 			}
 		}
 	}
@@ -110,19 +107,12 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	public void setStrength(int strength) {
 		this.strength = strength;
 		tickCounter = 10;
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.target);
+		worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.target);
 	}
 
 	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return ForgeDirection.DOWN;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void prepareForInventoryRender(Block block, int metadata) {
-		super.prepareForInventoryRender(block, metadata);
-		setEnabled(true);
+	public EnumFacing getSurfaceDirection() {
+		return EnumFacing.DOWN;
 	}
 
 	@Override
@@ -139,11 +129,11 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		if (!(worldObj instanceof WorldServer)) return;
 		WorldServer world = (WorldServer)worldObj;
 
-		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 
 		if (isPowered != isEnabled()) {
 			dropArrowsAsItems(world);
-			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, isPowered? "openblocks:target.open" : "openblocks:target.close", 0.5f, 1.0f);
+			playSoundAtBlock(isPowered? "openblocks:target.open" : "openblocks:target.close", 0.5f, 1.0f);
 
 			setEnabled(isPowered);
 
@@ -152,9 +142,9 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	private void dropArrowsAsItems(WorldServer world) {
-		final AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord - 0.1, yCoord - 0.1, zCoord - 0.1, xCoord + 1.1, yCoord + 1.1, zCoord + 1.1);
+		// TODO 1.8.9 verify range
+		final AxisAlignedBB aabb = BlockUtils.aabbOffset(pos, -0.1, -0.1, -0.1, +1.1, +1.1, +1.1);
 
-		@SuppressWarnings("unchecked")
 		final List<EntityArrow> arrows = worldObj.getEntitiesWithinAABB(EntityArrow.class, aabb);
 
 		final List<ItemStack> drops = Lists.newArrayList();
@@ -189,8 +179,8 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		});
 
 		for (ItemStack drop : drops)
-			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, drop);
+			BlockUtils.dropItemStackInWorld(worldObj, pos, drop);
 
-		if (failed > 0) BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, new ItemStack(Items.arrow, failed));
+		if (failed > 0) BlockUtils.dropItemStackInWorld(worldObj, pos, new ItemStack(Items.arrow, failed));
 	}
 }

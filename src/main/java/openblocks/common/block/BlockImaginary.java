@@ -50,7 +50,7 @@ public class BlockImaginary extends OpenBlock {
 			if (te != null && te.is(Property.SELECTABLE)) return te.getSelectionBox();
 		}
 
-		return AxisAlignedBB.fromBounds(0, 0, 0, 0, 0, 0);
+		return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 	}
 
 	@Override

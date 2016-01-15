@@ -70,7 +70,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 
 	private void getBlockBounds(IBlockAccess world, BlockPos pos, float thickness) {
 		final Orientation orientation = getOrientation(world, pos);
-		final AxisAlignedBB aabb = AxisAlignedBB.fromBounds(0.0, 0.0, 0.0, 1.0, 1.0, thickness);
+		final AxisAlignedBB aabb = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, thickness);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}

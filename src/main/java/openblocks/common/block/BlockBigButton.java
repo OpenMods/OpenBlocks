@@ -52,7 +52,7 @@ public class BlockBigButton extends OpenBlock.FourDirections {
 		boolean pressed = tile.isButtonActive();
 		final Orientation orientation = tile.getOrientation();
 
-		final AxisAlignedBB aabb = AxisAlignedBB.fromBounds(0.0625, 0.0625, 0, 0.9375, 0.9375, pressed? 0.0625 : 0.125);
+		final AxisAlignedBB aabb = new AxisAlignedBB(0.0625, 0.0625, 0, 0.9375, 0.9375, pressed? 0.0625 : 0.125);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}

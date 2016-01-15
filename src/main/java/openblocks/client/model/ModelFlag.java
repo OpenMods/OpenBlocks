@@ -19,7 +19,7 @@ public class ModelFlag extends ModelBase {
 		setRotation(pole, 0F, 0F, 0F);
 	}
 
-	public void render(float f) {
+	public void render() {
 		pole.render(0.0625F);
 	}
 

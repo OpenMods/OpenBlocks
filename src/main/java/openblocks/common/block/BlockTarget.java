@@ -11,7 +11,6 @@ import openblocks.common.tileentity.TileEntityTarget;
 import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
-t openmods.geometry.Orientation;
 
 public class BlockTarget extends OpenBlock.FourDirections {
 
@@ -27,7 +26,6 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	public int getRenderType() {
 		return 2; // TESR only
 	}
-
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
@@ -64,20 +62,6 @@ public class BlockTarget extends OpenBlock.FourDirections {
 		double centerY = pos.getY() + 0.55 + (opposite.getFrontOffsetY() * 0.45);
 		double centerZ = pos.getZ() + 0.5 + (opposite.getFrontOffsetZ() * 0.5);
 
-		switch (opposite) {
-			case NORTH:
-			case SOUTH:
-				entityPosition.zCoord = centerZ;
-				break;
-			case EAST:
-			case WEST:
-				entityPosition.xCoord = centerX;
-				break;
-			default:
-				break;
-
-		}
-
 		final Vec3 bullseye = new Vec3(centerX, centerY, centerZ);
 
 		double distance = entityPosition.distanceTo(bullseye);
@@ -110,7 +94,7 @@ public class BlockTarget extends OpenBlock.FourDirections {
 
 		final Orientation orientation = target.getOrientation();
 
-		final AxisAlignedBB aabb = AxisAlignedBB.fromBounds(0.0, 0.0, 0.9, 1.0, 1.0, 1.0);
+		final AxisAlignedBB aabb = new AxisAlignedBB(0.0, 0.0, 0.9, 1.0, 1.0, 1.0);
 		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 		setBlockBounds(rotatedAabb);
 	}

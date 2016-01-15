@@ -38,9 +38,8 @@ public class ItemGuide extends ItemOpenBlock {
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addInformation(ItemStack stack, EntityPlayer player, List result, boolean extended) {
-		NBTTagCompound tag = stack.stackTagCompound;
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
+		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null) {
 			if (tag.hasKey(TAG_NEG_X) && tag.hasKey(TAG_NEG_Y) || tag.hasKey(TAG_NEG_Z) ||
 					tag.hasKey(TAG_POS_X) && tag.hasKey(TAG_POS_Y) || tag.hasKey(TAG_POS_Z)) {

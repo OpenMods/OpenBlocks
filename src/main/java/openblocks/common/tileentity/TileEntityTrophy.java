@@ -2,20 +2,21 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.item.ItemTrophyBlock;
-import openmods.api.IActivateAwareTile;
-import openmods.api.ICustomHarvestDrops;
-import openmods.api.ICustomPickItem;
+import openmods.api.*;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ItemUtils;
 
-public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
+public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem, ITickable {
 
 	private final String TAG_COOLDOWN = "cooldown";
 
@@ -34,8 +35,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTi
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote) {
 			Trophy trophy = getTrophy();
 			if (trophy != null) trophy.executeTickBehavior(this);
@@ -44,11 +44,11 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTi
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			Trophy trophyType = getTrophy();
 			if (trophyType != null) {
-				trophyType.playSound(worldObj, xCoord, yCoord, zCoord);
+				trophyType.playSound(worldObj, pos);
 				if (cooldown <= 0) cooldown = trophyType.executeActivateBehavior(this, player);
 			}
 		}
@@ -56,7 +56,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTi
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		Trophy trophy = ItemTrophyBlock.getTrophy(stack);
 		if (trophy != null) trophyIndex.set(trophy);
 
@@ -79,7 +79,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTi
 	}
 
 	@Override
-	public boolean suppressNormalHarvestDrops() {
+	public boolean suppressBlockHarvestDrops() {
 		return true;
 	}
 
@@ -96,13 +96,13 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlacerAwareTi
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, int fortune, boolean isSilkTouch) {
 		ItemStack stack = getAsItem();
 		if (stack != null) drops.add(stack);
 	}
 
 	@Override
-	public ItemStack getPickBlock() {
+	public ItemStack getPickBlock(EntityPlayer player) {
 		final Trophy trophy = getTrophy();
 		return trophy != null? trophy.getItemStack() : null;
 	}

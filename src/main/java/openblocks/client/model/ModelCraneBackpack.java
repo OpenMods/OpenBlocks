@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -94,13 +94,15 @@ public class ModelCraneBackpack extends ModelBiped {
 
 		if (magnet == null) return;
 
+		// TODO 1.8.9 check values (maybe 0?)
 		double playerX = interpolatePos(player.posX, player.lastTickPosX, evt.partialRenderTick)
-				- RenderManager.renderPosX;
+				- TileEntityRendererDispatcher.staticPlayerX;
 		double playerY = interpolatePos(player.posY, player.lastTickPosY, evt.partialRenderTick)
-				- RenderManager.renderPosY;
+				- TileEntityRendererDispatcher.staticPlayerY;
 		double playerZ = interpolatePos(player.posZ, player.lastTickPosZ, evt.partialRenderTick)
-				- RenderManager.renderPosZ;
+				- TileEntityRendererDispatcher.staticPlayerZ;
 
+		// TODO 1.8.9 check eye height
 		if (player instanceof EntityOtherPlayerMP) playerY += 1.62;
 
 		final float offset = interpolateAngle(player.renderYawOffset, player.prevRenderYawOffset, evt.partialRenderTick);
@@ -125,9 +127,9 @@ public class ModelCraneBackpack extends ModelBiped {
 		armX += armLength * MathHelper.cos(head);
 		armZ += armLength * MathHelper.sin(head);
 
-		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick) - RenderManager.renderPosX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick) - RenderManager.renderPosY + magnet.height - 0.1;
-		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick) - RenderManager.renderPosZ;
+		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick) - TileEntityRendererDispatcher.staticPlayerX;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick) - TileEntityRendererDispatcher.staticPlayerY + magnet.height - 0.1;
+		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick) - TileEntityRendererDispatcher.staticPlayerZ;
 
 		GL11.glLineWidth(2);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -216,7 +218,7 @@ public class ModelCraneBackpack extends ModelBiped {
 
 		if (mc.gameSettings.thirdPersonView != 0) return;
 
-		final Entity rve = mc.renderViewEntity;
+		final Entity rve = mc.getRenderViewEntity();
 		if (!(rve instanceof EntityPlayer)) return;
 
 		final EntityPlayer player = (EntityPlayer)rve;

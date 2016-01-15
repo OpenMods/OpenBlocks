@@ -20,8 +20,8 @@ public class RenameFlimFlam implements IFlimFlamAction {
 	@Override
 	public boolean execute(EntityPlayerMP target) {
 		World world = target.worldObj;
-		AxisAlignedBB around = target.boundingBox.expand(20, 20, 20);
-		List<EntityLiving> living = WorldUtils.getEntitiesWithinAABB(world, EntityLiving.class, around, WorldUtils.NON_PLAYER);
+		AxisAlignedBB around = target.getEntityBoundingBox().expand(20, 20, 20);
+		List<EntityLiving> living = world.getEntitiesWithinAABB(EntityLiving.class, around, WorldUtils.NON_PLAYER);
 
 		Collections.shuffle(living);
 		for (EntityLiving e : living) {

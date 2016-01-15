@@ -11,6 +11,7 @@ import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -150,14 +151,14 @@ public class TrophyHandler {
 			return ItemTrophyBlock.putMetadata(new ItemStack(OpenBlocks.Blocks.trophy), this);
 		}
 
-		public void playSound(World world, double x, double y, double z) {
+		public void playSound(World world, BlockPos pos) {
 			if (world == null) return;
 
 			Entity e = getEntity();
 			if (e instanceof EntityLiving) {
-				e.posX = x;
-				e.posY = y;
-				e.posZ = z;
+				e.posX = pos.getX();
+				e.posY = pos.getY();
+				e.posZ = pos.getZ();
 
 				synchronized (e) {
 					e.worldObj = world;

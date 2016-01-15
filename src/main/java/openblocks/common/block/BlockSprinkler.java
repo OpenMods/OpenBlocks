@@ -35,7 +35,7 @@ public class BlockSprinkler extends OpenBlock.TwoDirections {
 		TileEntitySprinkler sprinkler = getTileEntity(world, pos, TileEntitySprinkler.class);
 		if (sprinkler != null) {
 			final Orientation orientation = sprinkler.getOrientation();
-			final AxisAlignedBB aabb = AxisAlignedBB.fromBounds(0.3, 0.0, 0.0, 0.7, 0.3, 1.0);
+			final AxisAlignedBB aabb = new AxisAlignedBB(0.3, 0.0, 0.0, 0.7, 0.3, 1.0);
 			final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
 			setBlockBounds(rotatedAabb);
 		}

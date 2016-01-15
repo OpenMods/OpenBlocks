@@ -3,22 +3,21 @@ package openblocks.common.tileentity;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import openblocks.OpenBlocks.Blocks;
-import openmods.api.IActivateAwareTile;
-import openmods.api.ICustomHarvestDrops;
-import openmods.api.ICustomPickItem;
+import openmods.api.*;
 import openmods.colors.ColorMeta;
-import openmods.colors.ColorUtils;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.CollectionUtils;
 
-public class TileEntityElevatorRotating extends SyncedTileEntity implements IPlacerAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
+public class TileEntityElevatorRotating extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile, ICustomHarvestDrops, ICustomPickItem {
 
-	private SyncableEnum<ColorUtils.ColorMeta> color;
+	private SyncableEnum<ColorMeta> color;
 
 	public TileEntityElevatorRotating() {
 		syncMap.addUpdateListener(createRenderUpdateListener());
@@ -26,7 +25,7 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 
 	@Override
 	protected void createSyncedFields() {
-		this.color = new SyncableEnum<ColorUtils.ColorMeta>(ColorUtils.ColorMeta.BLACK);
+		this.color = new SyncableEnum<ColorMeta>(ColorMeta.BLACK);
 	}
 
 	public ColorMeta getColor() {
@@ -39,22 +38,17 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
-	public boolean canUpdate() {
-		return false;
-	}
-
-	@Override
-	public boolean suppressNormalHarvestDrops() {
+	public boolean suppressBlockHarvestDrops() {
 		return true;
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops) {
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, int fortune, boolean isSilkTouch) {
 		drops.add(createStack());
 	}
 
 	@Override
-	public ItemStack getPickBlock() {
+	public ItemStack getPickBlock(EntityPlayer player) {
 		return createStack();
 	}
 
@@ -64,12 +58,12 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (worldObj.isRemote) return false;
 
 		ItemStack stack = player.getHeldItem();
 		if (stack != null) {
-			Set<ColorMeta> metas = ColorUtils.stackToColor(stack);
+			Set<ColorMeta> metas = ColorMeta.fromStack(stack);
 			if (!metas.isEmpty()) {
 				ColorMeta meta = CollectionUtils.getRandom(metas);
 				color.set(meta);
@@ -81,8 +75,9 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
-		ColorMeta colorMeta = ColorUtils.vanillaBlockToColor(stack.getItemDamage());
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		// TODO 1.8.9 verify colors
+		ColorMeta colorMeta = ColorMeta.fromBlockMeta(stack.getItemDamage());
 		color.set(colorMeta);
 	}
 

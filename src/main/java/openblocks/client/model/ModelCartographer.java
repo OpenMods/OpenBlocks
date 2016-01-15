@@ -2,14 +2,8 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Items;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openmods.renderer.DisplayListWrapper;
-import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -22,27 +16,9 @@ public class ModelCartographer extends ModelBase {
 
 		@Override
 		public void compile() {
-			GL11.glColor3d(1, 1, 1);
-			GL11.glScalef(SCALE * 3, SCALE * 3, SCALE);
-
-			final Tessellator tes = new Tessellator();
-			tes.setTranslation(-0.5, -0.5, 0);
-
-			final IIcon icon = Items.ender_eye.getIconFromDamage(0);
-			ItemRenderer.renderItemIn2D(
-					tes,
-					icon.getInterpolatedU(15), icon.getInterpolatedV(2),
-					icon.getInterpolatedU(2), icon.getInterpolatedV(15),
-					13, 13,
-					0.5f
-					);
+			// TODO somehow render eye?
 		}
 	};
-
-	@SubscribeEvent
-	public void onTextureChange(TextureStitchEvent evt) {
-		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_ITEMS) eyeList.reset();
-	}
 
 	public ModelCartographer() {
 		textureWidth = 32;

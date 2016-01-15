@@ -6,9 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
@@ -17,7 +15,6 @@ import openblocks.shapes.GuideShape;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
 import openmods.colors.ColorMeta;
-import openmods.colors.ColorUtils;
 import openmods.geometry.HalfAxis;
 import openmods.geometry.Orientation;
 import openmods.shapes.IShapeGenerator;
@@ -26,7 +23,6 @@ import openmods.sync.*;
 import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.CollectionUtils;
-import openmods.utils.Coord;
 import openmods.utils.MathUtils;
 import openperipheral.api.adapter.Asynchronous;
 import openperipheral.api.adapter.method.*;
@@ -38,21 +34,21 @@ import com.google.common.collect.*;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
 
-public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile {
+public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile, ITickable {
 
-	private static final Comparator<Coord> COORD_COMPARATOR = new Comparator<Coord>() {
+	private static final Comparator<BlockPos> BlockPos_COMPARATOR = new Comparator<BlockPos>() {
 		@Override
-		public int compare(Coord o1, Coord o2) {
+		public int compare(BlockPos o1, BlockPos o2) {
 			{
 				// first, go from bottom to top
-				int result = Ints.compare(o1.y, o2.y);
+				int result = Ints.compare(o1.getX(), o2.getX());
 				if (result != 0) return result;
 			}
 
 			{
 				// then sort by angle, to make placement more intuitive
-				final double angle1 = Math.atan2(o1.z, o1.x);
-				final double angle2 = Math.atan2(o2.z, o2.x);
+				final double angle1 = Math.atan2(o1.getZ(), o1.getX());
+				final double angle2 = Math.atan2(o2.getZ(), o2.getX());
 
 				int result = Doubles.compare(angle1, angle2);
 				if (result != 0) return result;
@@ -60,28 +56,28 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 			{
 				// then sort by distance, far ones first
-				final double length1 = MathUtils.lengthSq(o1.x, o1.z);
-				final double length2 = MathUtils.lengthSq(o2.x, o2.z);
+				final double length1 = MathUtils.lengthSq(o1.getX(), o1.getZ());
+				final double length2 = MathUtils.lengthSq(o2.getX(), o2.getZ());
 
 				int result = Doubles.compare(length2, length1);
 				if (result != 0) return result;
 			}
 
-			// then sort by x and z to make all unique coordinates are included
+			// then sort by x and z to make all unique BlockPosinates are included
 			{
-				int result = Ints.compare(o1.x, o2.x);
+				int result = Ints.compare(o1.getX(), o2.getX());
 				if (result != 0) return result;
 			}
 
 			{
-				int result = Ints.compare(o1.z, o2.z);
+				int result = Ints.compare(o1.getZ(), o2.getZ());
 				return result;
 			}
 		}
 	};
 
-	private List<Coord> shape;
-	private List<Coord> previousShape;
+	private List<BlockPos> shape;
+	private List<BlockPos> previousShape;
 	private float timeSinceChange = 0;
 	private AxisAlignedBB renderAABB;
 
@@ -281,7 +277,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	@Override
-	public void updateEntity() {
+	public void update() {
 		if (worldObj.isRemote) {
 			if (timeSinceChange < 1.0) {
 				timeSinceChange = (float)Math.min(1.0f, timeSinceChange + 0.1);
@@ -299,30 +295,30 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		renderAABB = null;
 	}
 
-	private List<Coord> generateShape() {
+	private List<BlockPos> generateShape() {
 		final IShapeGenerator generator = getCurrentMode().generator;
 
-		final Set<Coord> uniqueResults = Sets.newHashSet();
+		final Set<BlockPos> uniqueResults = Sets.newHashSet();
 		final IShapeable collector = new IShapeable() {
 			@Override
 			public void setBlock(int x, int y, int z) {
-				if (canAddCoord(x, y, z)) uniqueResults.add(new Coord(x, y, z));
+				if (canAddCoord(x, y, z)) uniqueResults.add(new BlockPos(x, y, z));
 			}
 		};
 		generator.generateShape(-negX.get(), -negY.get(), -negZ.get(), posX.get(), posY.get(), posZ.get(), collector);
 
-		final List<Coord> sortedResults = Lists.newArrayList(uniqueResults);
-		Collections.sort(sortedResults, COORD_COMPARATOR);
+		final List<BlockPos> sortedResults = Lists.newArrayList(uniqueResults);
+		Collections.sort(sortedResults, BlockPos_COMPARATOR);
 
-		final List<Coord> rotatedResult = Lists.newArrayList();
+		final List<BlockPos> rotatedResult = Lists.newArrayList();
 		final Orientation orientation = getOrientation();
 
-		for (Coord c : sortedResults) {
-			final int tx = orientation.transformX(c.x, c.y, c.z);
-			final int ty = orientation.transformY(c.x, c.y, c.z);
-			final int tz = orientation.transformZ(c.x, c.y, c.z);
+		for (BlockPos c : sortedResults) {
+			final int tx = orientation.transformX(c.getX(), c.getY(), c.getZ());
+			final int ty = orientation.transformY(c.getX(), c.getY(), c.getZ());
+			final int tz = orientation.transformZ(c.getX(), c.getY(), c.getZ());
 
-			rotatedResult.add(new Coord(tx, ty, tz));
+			rotatedResult.add(new BlockPos(tx, ty, tz));
 		}
 
 		return ImmutableList.copyOf(rotatedResult);
@@ -332,11 +328,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return true;
 	}
 
-	public List<Coord> getShape() {
+	public List<BlockPos> getShape() {
 		return shape;
 	}
 
-	public List<Coord> getPreviousShape() {
+	public List<BlockPos> getPreviousShape() {
 		return previousShape;
 	}
 
@@ -351,26 +347,42 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		if (renderAABB == null) renderAABB = createRenderAABB();
-		return renderAABB.copy();
+		return renderAABB;
 	}
 
 	private AxisAlignedBB createRenderAABB() {
-		final AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+		double minX = 0;
+		double minY = 0;
+		double minZ = 0;
+
+		double maxX = 1;
+		double maxY = 1;
+		double maxZ = 1;
 
 		if (shape != null) {
-			for (Coord c : shape) {
-				if (box.maxX < c.x) box.maxX = c.x;
-				if (box.maxY < c.y) box.maxY = c.y;
-				if (box.maxZ < c.z) box.maxZ = c.z;
+			for (BlockPos c : shape) {
+				{
+					final int x = c.getX();
+					if (maxX < x) maxX = x;
+					if (minX > x) minX = x;
+				}
 
-				if (box.minX > c.x) box.minX = c.x;
-				if (box.minY > c.y) box.minY = c.y;
-				if (box.minZ > c.z) box.minZ = c.z;
+				{
+					final int y = c.getY();
+					if (maxY < y) maxY = y;
+					if (minY > y) minY = y;
+				}
+
+				{
+					final int z = c.getZ();
+					if (maxZ < z) maxZ = z;
+					if (minZ > z) minZ = z;
+				}
 			}
 
 		}
 
-		return box.offset(xCoord, yCoord, zCoord);
+		return new AxisAlignedBB(pos.add(minX, minY, minZ), pos.add(maxX, maxY, maxZ));
 	}
 
 	@Override
@@ -429,7 +441,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	private void updateRedstone() {
 		if (Config.guideRedstone != 0) {
-			boolean redstoneState = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+			boolean redstoneState = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 			active.set(redstoneState);
 			sync();
 		}
@@ -445,13 +457,13 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		updateRedstone();
 	}
 
-	protected List<Coord> getShapeSafe() {
+	protected List<BlockPos> getShapeSafe() {
 		if (shape == null) recreateShape();
 		return shape;
 	}
 
 	public boolean onItemUse(EntityPlayerMP player, ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
-		Set<ColorMeta> colors = ColorUtils.stackToColor(heldStack);
+		Set<ColorMeta> colors = ColorMeta.fromStack(heldStack);
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);
 			color.set(selected.rgb);

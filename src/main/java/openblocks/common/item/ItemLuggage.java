@@ -21,12 +21,12 @@ public class ItemLuggage extends Item {
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
 		if (!world.isRemote) {
 
-			Vec3 vec3 = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+			Vec3 vec3 = new Vec3(player.posX, player.posY, player.posZ);
 			Vec3 vec31 = player.getLook(1.0f);
 			Vec3 vec32 = vec3.addVector(vec31.xCoord * 2.0f, vec31.yCoord * 2.0f, vec31.zCoord * 2.0f);
 			EntityLuggage luggage = new EntityLuggage(world);
 			luggage.setPositionAndRotation(0.5 + vec32.xCoord, vec3.yCoord, 0.5 + vec32.zCoord, 0, 0);
-			luggage.func_152115_b(player.getGameProfile().getId().toString());
+			luggage.setOwnerId(player.getGameProfile().getId().toString());
 			luggage.restoreFromStack(itemStack);
 
 			world.spawnEntityInWorld(luggage);

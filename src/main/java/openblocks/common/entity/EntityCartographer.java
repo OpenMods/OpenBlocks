@@ -1,8 +1,5 @@
 package openblocks.common.entity;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
 
@@ -11,8 +8,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks.Items;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectAware;
@@ -25,7 +24,6 @@ import openmods.Log;
 import openmods.api.VisibleForDocumentation;
 import openmods.sync.*;
 import openmods.utils.BitSet;
-import openmods.utils.ByteUtils;
 import openmods.utils.ItemUtils;
 
 import com.google.common.collect.ImmutableSet;
@@ -51,15 +49,15 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		}
 
 		@Override
-		public void readFromStream(DataInputStream input) throws IOException {
-			size = ByteUtils.readVLI(input);
-			bits.readFromStream(input);
+		public void readFromStream(PacketBuffer input) {
+			size = input.readVarIntFromBuffer();
+			bits.readFromBuffer(input);
 		}
 
 		@Override
-		public void writeToStream(DataOutputStream output) throws IOException {
-			ByteUtils.writeVLI(output, size);
-			bits.writeToStream(output);
+		public void writeToStream(PacketBuffer output) {
+			output.writeVarIntToBuffer(size);
+			bits.writeToBuffer(output);
 		}
 
 		@Override
@@ -178,7 +176,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		super.onUpdate();
 
 		if (!worldObj.isRemote) {
-			if (worldObj.provider.dimensionId == mappingDimension && isMapping.get() && countdownToAction-- <= 0) {
+			if (worldObj.provider.getDimensionId() == mappingDimension && isMapping.get() && countdownToAction-- <= 0) {
 				jobs.runJob(worldObj, (int)posX, (int)posZ);
 				countdownToAction = MAP_JOB_DELAY;
 			}
@@ -198,7 +196,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 		if (tag.hasKey("MapItem")) {
 			NBTTagCompound mapItem = tag.getCompoundTag("MapItem");
-			this.mapItem = ItemUtils.readStack(mapItem);
+			this.mapItem = ItemStack.loadItemStackFromNBT(mapItem);
 
 			if (this.mapItem != null && isMapping.get()) {
 				int mapId = this.mapItem.getItemDamage();
@@ -218,7 +216,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		syncMap.writeToNBT(tag);
 
 		if (mapItem != null) {
-			NBTTagCompound mapItem = ItemUtils.writeStack(this.mapItem);
+			NBTTagCompound mapItem = this.mapItem.writeToNBT(new NBTTagCompound());
 			tag.setTag("MapItem", mapItem);
 			tag.setInteger("Dimension", mappingDimension);
 		}
@@ -249,7 +247,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 					if (holding.stackSize <= 0) player.setCurrentItemOrArmor(0, null);
 
 					mapItem = inserted;
-					mappingDimension = worldObj.provider.dimensionId;
+					mappingDimension = worldObj.provider.getDimensionId();
 					isMapping.toggle();
 					mapItem = MapDataBuilder.upgradeToMap(worldObj, mapItem);
 					int mapId = mapItem.getItemDamage();

@@ -6,7 +6,9 @@ import java.util.Map;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import openblocks.common.HeightMapData;
 import openmods.renderer.DynamicTextureAtlas;
 import openmods.renderer.DynamicTextureAtlas.AtlasCell;
@@ -115,33 +117,33 @@ public class HeightMapRenderer {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glEnable(GL11.GL_BLEND);
 
-			final Tessellator tes = new Tessellator();
-			tes.startDrawingQuads();
-			tes.setColorOpaque(255, 255, 255);
+			final Tessellator tes = new Tessellator(4 * (3 + 2) * 4 * 2);
+			WorldRenderer wr = tes.getWorldRenderer();
 
+			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			for (PlaneData plane : planes) {
 				final AtlasCell tex = plane.texture;
 				final double param = PLANE_HEIGHT * plane.param;
 				switch (plane.orientation) {
 					case XZ: {
-						tes.addVertexWithUV(0, param, 0, tex.minU, tex.minV);
-						tes.addVertexWithUV(0, param, 1, tex.minU, tex.maxV);
-						tes.addVertexWithUV(1, param, 1, tex.maxU, tex.maxV);
-						tes.addVertexWithUV(1, param, 0, tex.maxU, tex.minV);
+						wr.pos(0, param, 0).tex(tex.minU, tex.minV).endVertex();
+						wr.pos(0, param, 1).tex(tex.minU, tex.maxV).endVertex();
+						wr.pos(1, param, 1).tex(tex.maxU, tex.maxV).endVertex();
+						wr.pos(1, param, 0).tex(tex.maxU, tex.minV).endVertex();
 						break;
 					}
 					case XY: {
-						tes.addVertexWithUV(0, 0, param, tex.minU, tex.minV);
-						tes.addVertexWithUV(0, 1, param, tex.minU, tex.maxV);
-						tes.addVertexWithUV(1, 1, param, tex.maxU, tex.maxV);
-						tes.addVertexWithUV(1, 0, param, tex.maxU, tex.minV);
+						wr.pos(0, 0, param).tex(tex.minU, tex.minV).endVertex();
+						wr.pos(0, 1, param).tex(tex.minU, tex.maxV).endVertex();
+						wr.pos(1, 1, param).tex(tex.maxU, tex.maxV).endVertex();
+						wr.pos(1, 0, param).tex(tex.maxU, tex.minV).endVertex();
 						break;
 					}
 					case YZ: {
-						tes.addVertexWithUV(param, 0, 0, tex.minU, tex.minV);
-						tes.addVertexWithUV(param, 1, 0, tex.minU, tex.maxV);
-						tes.addVertexWithUV(param, 1, 1, tex.maxU, tex.maxV);
-						tes.addVertexWithUV(param, 0, 1, tex.maxU, tex.minV);
+						wr.pos(param, 0, 0).tex(tex.minU, tex.minV).endVertex();
+						wr.pos(param, 1, 0).tex(tex.minU, tex.maxV).endVertex();
+						wr.pos(param, 1, 1).tex(tex.maxU, tex.maxV).endVertex();
+						wr.pos(param, 0, 1).tex(tex.maxU, tex.minV).endVertex();
 						break;
 					}
 					default:

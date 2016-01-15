@@ -3,18 +3,23 @@ package openblocks.common.item;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.api.IPaintableBlock;
 import openblocks.common.block.BlockCanvas;
 import openmods.colors.ColorMeta;
 import openmods.colors.ColorUtils;
+import openmods.colors.RGB;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.ItemUtils;
 import openmods.utils.render.PaintUtils;
@@ -28,8 +33,6 @@ public class ItemPaintBrush extends Item {
 
 	public static final int MAX_USES = 24;
 
-	public IIcon paintIcon;
-
 	public ItemPaintBrush() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
@@ -38,30 +41,15 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean extended) {
 		Integer color = getColorFromStack(itemStack);
 		if (color != null) list.add(String.format("#%06X", color));
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
-		paintIcon = registry.registerIcon("openblocks:paintbrush_paint");
-	}
-
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		list.add(new ItemStack(this));
-		for (ColorMeta color : ColorUtils.getAllColors()) {
+		for (ColorMeta color : ColorMeta.getAllColors()) {
 			list.add(createStackWithColor(color.rgb));
 		}
 	}
@@ -74,18 +62,18 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		Integer color = getColorFromStack(stack);
 		if (stack.getItemDamage() > getMaxDamage() || color == null) return true;
 
-		if (PaintUtils.instance.isAllowedToReplace(world, x, y, z)) {
-			BlockCanvas.replaceBlock(world, x, y, z);
+		if (PaintUtils.instance.isAllowedToReplace(world, pos)) {
+			BlockCanvas.replaceBlock(world, pos);
 		}
 
 		final boolean changed;
 
-		if (player.isSneaking()) changed = tryRecolorBlock(world, x, y, z, color, ForgeDirection.VALID_DIRECTIONS);
-		else changed = tryRecolorBlock(world, x, y, z, color, ForgeDirection.getOrientation(side));
+		if (player.isSneaking()) changed = tryRecolorBlock(world, pos, color, EnumFacing.VALUES);
+		else changed = tryRecolorBlock(world, pos, color, side);
 
 		if (changed) {
 			world.playSoundAtEntity(player, "mob.slime.small", 0.1F, 0.8F);
@@ -102,28 +90,28 @@ public class ItemPaintBrush extends Item {
 		return true;
 	}
 
-	private static boolean tryRecolorBlock(World world, int x, int y, int z, int rgb, ForgeDirection... sides) {
-		Block block = world.getBlock(x, y, z);
+	private static boolean tryRecolorBlock(World world, BlockPos pos, int rgb, EnumFacing... sides) {
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
 
 		// first try RGB color...
 		if (block instanceof IPaintableBlock) {
 			IPaintableBlock canvas = (IPaintableBlock)block;
 
 			boolean result = false;
-			for (ForgeDirection dir : sides)
-				result |= canvas.recolourBlockRGB(world, x, y, z, dir, rgb);
+			for (EnumFacing dir : sides)
+				result |= canvas.recolorBlock(world, pos, dir, rgb);
 
 			return result;
 		}
 
 		// ...then try finding nearest vanilla one
-		final ColorMeta nearest = ColorUtils.findNearestColor(new ColorUtils.RGB(rgb), SINGLE_COLOR_THRESHOLD);
+		final ColorMeta nearest = ColorUtils.findNearestColor(new RGB(rgb), SINGLE_COLOR_THRESHOLD);
 		if (nearest != null) {
-			final int vanillaColorId = nearest.vanillaBlockId;
 
 			boolean result = false;
-			for (ForgeDirection dir : sides)
-				result |= block.recolourBlock(world, x, y, z, dir, vanillaColorId);
+			for (EnumFacing dir : sides)
+				result |= block.recolorBlock(world, pos, dir, nearest.vanillaEnum);
 
 			return result;
 		}
@@ -132,7 +120,7 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player) {
+	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
 		return false;
 	}
 
@@ -147,11 +135,7 @@ public class ItemPaintBrush extends Item {
 		return 0xFFFFFF;
 	}
 
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int dmg, int pass) {
-		return pass == 1? paintIcon : getIconFromDamage(dmg);
-	}
-
+	// TODO 1.8.9 color rendering
 	public static Integer getColorFromStack(ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();

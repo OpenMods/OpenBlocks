@@ -3,9 +3,9 @@ package openblocks.client.renderer.tileentity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCannon;
 import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.tileentity.TileEntityCannon;
@@ -13,14 +13,13 @@ import openmods.OpenMods;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
+public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEntityCannon> {
 
 	private ModelCannon model = new ModelCannon();
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/cannon.png");
+	private static final ResourceLocation texture = OpenBlocks.location("textures/models/cannon.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		TileEntityCannon cannon = (TileEntityCannon)tileentity;
+	public void renderTileEntityAt(TileEntityCannon cannon, double x, double y, double z, float partialTick, int destroyProgress) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glTranslatef(0.5f, 1.0f, 0.5f);
@@ -29,7 +28,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {
 		GL11.glRotated(180 - cannon.currentYaw, 0, 1, 0);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		bindTexture(texture);
-		model.render(tileentity, f);
+		model.render(cannon, partialTick);
 		GL11.glPopMatrix();
 
 		if (cannon.renderLine && playerHasCursor()) {

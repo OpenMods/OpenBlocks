@@ -5,20 +5,18 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ITickable;
 import openmods.OpenMods;
 import openmods.tileentity.OpenTileEntity;
+import openmods.utils.BlockUtils;
 
-public class TileEntityHealBlock extends OpenTileEntity {
+public class TileEntityHealBlock extends OpenTileEntity implements ITickable {
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
+	public void update() {
 		if (worldObj.isRemote) return;
 
-		@SuppressWarnings("unchecked")
-		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 2, zCoord + 1));
+		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.expandAround(pos, 1, 2, 1));
 		if (OpenMods.proxy.getTicks(worldObj) % 20 == 0) {
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
@@ -32,13 +30,7 @@ public class TileEntityHealBlock extends OpenTileEntity {
 					 * done (you know who you are)
 					 */
 					player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 1, 10));
-					player.addPotionEffect(new PotionEffect(23, 1)); // Saturation
-					/*
-					 * TODO: the saturation potion does not yet have a legible
-					 * name, so I'm using its ID value At the moment, this
-					 * potion is under the name Potion.field_76443_y. Some name,
-					 * eh?
-					 */
+					player.addPotionEffect(new PotionEffect(Potion.saturation.id, 1));
 				}
 			}
 		}

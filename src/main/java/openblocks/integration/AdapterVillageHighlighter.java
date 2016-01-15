@@ -1,8 +1,8 @@
 package openblocks.integration;
 
-import java.util.List;
 import java.util.Map;
 
+import net.minecraft.util.Vec3i;
 import net.minecraft.village.Village;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openperipheral.api.adapter.IPeripheralAdapter;
@@ -23,17 +23,17 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 		return "openblocks_village";
 	}
 
-	@SuppressWarnings({ "unchecked" })
 	@ScriptCallable(returnTypes = ReturnType.TABLE, description = "Get information about the villages this block is inside")
 	public Map<?, ?> getVillages(TileEntityVillageHighlighter vh) {
 		Map<Integer, Object> map = Maps.newHashMap();
 		int i = 1;
-		for (Village village : (List<Village>)vh.getWorldObj().villageCollectionObj.getVillageList()) {
-			if (village.isInRange(vh.xCoord, vh.yCoord, vh.zCoord)) {
+		for (Village village : vh.getWorld().villageCollectionObj.getVillageList()) {
+			if (village.func_179866_a(vh.getPos())) {
 				Map<String, Object> villageMap = Maps.newHashMap();
-				villageMap.put("x", village.getCenter().posX - vh.xCoord);
-				villageMap.put("y", village.getCenter().posY - vh.yCoord);
-				villageMap.put("z", village.getCenter().posZ - vh.zCoord);
+				Vec3i d = village.getCenter().subtract(vh.getPos());
+				villageMap.put("x", d.getX());
+				villageMap.put("y", d.getY());
+				villageMap.put("z", d.getZ());
 				villageMap.put("doors", village.getNumVillageDoors());
 				villageMap.put("villagers", village.getNumVillagers());
 				villageMap.put("radius", village.getVillageRadius());

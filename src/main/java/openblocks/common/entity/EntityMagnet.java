@@ -7,30 +7,39 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.api.IMagnetAware;
 import openblocks.common.CraneRegistry;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.item.ItemCraneBackpack;
-import openmods.entity.DelayedEntityLoadManager;
-import openmods.entity.EntityBlock;
-import openmods.entity.IEntityLoadListener;
+import openmods.entity.*;
+import openmods.entity.EntityBlock.EntityFactory;
 
-public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData, IEntitySelector {
+import com.google.common.base.Predicate;
+
+public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData {
 
 	private static final float MAGNET_HEIGHT = 0.5f;
 	private static final float MAGNET_WIDTH = 0.5f;
 	private static final Random RANDOM = new Random();
+
+	protected static class PickTargetPredicate implements Predicate<Entity> {
+		@Override
+		public boolean apply(@Nullable Entity entity) {
+			return (entity instanceof EntityLivingBase) || MagnetWhitelists.instance.entityWhitelist.check(entity);
+		}
+	}
 
 	public interface IEntityBlockFactory {
 		public EntityBlock create(EntityPlayer player);
@@ -73,7 +82,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			double posY = player.posY + player.height
 					- CraneRegistry.instance.getCraneMagnetDistance(player);
 
-			return Vec3.createVectorHelper(posX, posY, posZ);
+			return new Vec3(posX, posY, posZ);
 		}
 
 		@Override
@@ -114,16 +123,22 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		}
 
 		@Override
-		public boolean isEntityApplicable(Entity entity) {
-			return entity != owner.get() && super.isEntityApplicable(entity);
-		}
-
-		@Override
 		public void onEntityLoaded(Entity entity) {
 			if (entity instanceof EntityPlayer) {
 				owner = new WeakReference<Entity>(entity);
 				CraneRegistry.instance.bindMagnetToPlayer(entity, this);
 			}
+		}
+
+		@Override
+		protected Predicate<Entity> createPickTargetPredicate() {
+			return new PickTargetPredicate() {
+				@Override
+				public boolean apply(@Nullable Entity entity) {
+					return entity != owner.get() && super.apply(entity);
+
+				}
+			};
 		}
 	}
 
@@ -145,7 +160,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	@Override
-	public boolean isEntityInvulnerable() {
+	public boolean isEntityInvulnerable(DamageSource source) {
 		return true;
 	}
 
@@ -196,7 +211,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		isAboveTarget = !detectEntityTargets().isEmpty();
 
-		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle("portal", posX
+		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle(EnumParticleTypes.PORTAL, posX
 				+ RANDOM.nextDouble() * 0.1, posY - RANDOM.nextDouble() * 0.2, posZ
 				+ RANDOM.nextDouble() * 0.1, RANDOM.nextGaussian(), -Math.abs(RANDOM.nextGaussian()), RANDOM.nextGaussian());
 	}
@@ -226,7 +241,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int something) {
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean something) {
 		smoother.setTarget(x, y, z);
 		super.setRotation(yaw, pitch);
 	}
@@ -277,16 +292,14 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		return it.hasNext()? it.next() : null;
 	}
 
-	@Override
-	public boolean isEntityApplicable(Entity entity) {
-		return (entity instanceof EntityLivingBase) || MagnetWhitelists.instance.entityWhitelist.check(entity);
+	protected List<Entity> detectEntityTargets() {
+		// TODO 1.8.9 verify addCoord usage
+		AxisAlignedBB aabb = getEntityBoundingBox().expand(0.25, 0, 0.25).addCoord(0, -1, 0);
+		return worldObj.getEntitiesInAABBexcluding(this, aabb, createPickTargetPredicate());
 	}
 
-	@SuppressWarnings("unchecked")
-	protected List<Entity> detectEntityTargets() {
-		AxisAlignedBB aabb = boundingBox.expand(0.25, 0, 0.25).copy();
-		aabb.minY -= 1;
-		return worldObj.getEntitiesWithinAABBExcludingEntity(this, aabb, this);
+	protected Predicate<Entity> createPickTargetPredicate() {
+		return new PickTargetPredicate();
 	}
 
 	private Entity createBlockEntity() {
@@ -294,16 +307,22 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		final int y = MathHelper.floor_double(posY - 0.5);
 		final int z = MathHelper.floor_double(posZ);
 
-		if (!worldObj.blockExists(x, y, z) || worldObj.isAirBlock(x, y, z)) return null;
+		final BlockPos pos = new BlockPos(x, y, z);
+
+		if (!worldObj.isBlockLoaded(pos) || worldObj.isAirBlock(pos)) return null;
 
 		Entity result = null;
 
-		if (MagnetWhitelists.instance.testBlock(worldObj, x, y, z)) {
+		if (MagnetWhitelists.instance.testBlock(worldObj, pos)) {
 			result = owner.createByPlayer(new IEntityBlockFactory() {
-
 				@Override
 				public EntityBlock create(EntityPlayer player) {
-					return EntityBlock.create(player, worldObj, x, y, z, EntityMountedBlock.class);
+					return EntityBlock.create(player, worldObj, pos, new EntityFactory() {
+						@Override
+						public EntityBlock create(World world) {
+							return new EntityMountedBlock(world);
+						}
+					});
 				}
 			});
 		}

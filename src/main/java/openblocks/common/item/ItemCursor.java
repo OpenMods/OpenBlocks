@@ -1,16 +1,19 @@
 package openblocks.common.item;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
+import openmods.utils.NbtUtils;
 
 @BookDocumentation(hasVideo = true)
 public class ItemCursor extends Item {
@@ -26,13 +29,11 @@ public class ItemCursor extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
-		tag.setInteger("dimension", world.provider.dimensionId);
-		tag.setInteger("x", x);
-		tag.setInteger("y", y);
-		tag.setInteger("z", z);
-		tag.setInteger("side", side);
+		tag.setInteger("dimension", world.provider.getDimensionId());
+		NbtUtils.store(tag, pos);
+		tag.setInteger("side", side.ordinal());
 		return true;
 	}
 
@@ -41,37 +42,32 @@ public class ItemCursor extends Item {
 		if (world.isRemote) return itemStack;
 
 		NBTTagCompound tag = itemStack.getTagCompound();
-		if (tag != null && tag.hasKey("x") && tag.hasKey("y") && tag.hasKey("z") && tag.hasKey("dimension")) {
-			final int x = tag.getInteger("x");
-			final int y = tag.getInteger("y");
-			final int z = tag.getInteger("z");
+		if (tag != null && NbtUtils.hasCoordinates(tag) && tag.hasKey("dimension")) {
 			final int dimension = tag.getInteger("dimension");
 
-			if (world.provider.dimensionId == dimension && world.blockExists(x, y, z)) clickBlock(world, player, x, y, z, tag.getInteger("side"));
+			final BlockPos pos = NbtUtils.readBlockPos(tag);
+			if (world.provider.getDimensionId() == dimension && world.isBlockLoaded(pos)) {
+				final EnumFacing side = NbtUtils.readEnum(tag, "side", EnumFacing.UP);
+				clickBlock(world, player, pos, side);
+			}
 		}
 		return itemStack;
 	}
 
-	private static void clickBlock(World world, EntityPlayer player, final int x, final int y, final int z, int side) {
-		Block block = world.getBlock(x, y, z);
-		if (block != Blocks.air) {
-			if (player.capabilities.isCreativeMode) block.onBlockActivated(world, x, y, z, player, side, 0, 0, 0);
+	private static void clickBlock(World world, EntityPlayer player, BlockPos pos, EnumFacing side) {
+		if (!world.isAirBlock(pos)) {
+			final IBlockState state = world.getBlockState(pos);
+			final Block block = state.getBlock();
+			if (player.capabilities.isCreativeMode) block.onBlockActivated(world, pos, state, player, side, 0, 0, 0);
 			else {
-				final int cost = (int)Math.max(0, getDistanceToLinkedBlock(player, x, y, z) - 10);
+				final int cost = (int)Math.max(0, Math.sqrt(player.getDistanceSq(pos)) - 10);
 				final int playerExperience = EnchantmentUtils.getPlayerXP(player);
 				if (cost <= playerExperience) {
-					block.onBlockActivated(world, x, y, z, player, side, 0, 0, 0);
+					block.onBlockActivated(world, pos, state, player, side, 0, 0, 0);
 					EnchantmentUtils.addPlayerXP(player, -cost);
 				}
 			}
 		}
-	}
-
-	private static double getDistanceToLinkedBlock(EntityPlayer player, double x, double y, double z) {
-		double xd = player.posX - x;
-		double yd = player.posY - y;
-		double zd = player.posZ - z;
-		return Math.sqrt(xd * xd + yd * yd + zd * zd);
 	}
 
 }

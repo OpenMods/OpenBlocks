@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.item.ItemHangGlider;
 import openmods.Log;
@@ -37,7 +38,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 		ItemStack held = player.getHeldItem();
 		if (held == null || !(held.getItem() instanceof ItemHangGlider)) return false;
-		if (player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) return false;
+		if (player.worldObj.provider.getDimensionId() != glider.worldObj.provider.getDimensionId()) return false;
 		return true;
 	}
 

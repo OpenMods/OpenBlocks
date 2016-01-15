@@ -9,7 +9,11 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.BreakBlockAction;
@@ -20,7 +24,7 @@ import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile {
+public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile, ITickable {
 
 	private static final int EVENT_ACTIVATE = 3;
 
@@ -51,8 +55,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote && activated.get()) {
 			if (redstoneAnimTimer <= 0) {
 				activated.set(false);
@@ -73,22 +76,20 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		}
 	}
 
-	private boolean canBreakBlock(Block block, int x, int y, int z) {
-		return !block.isAir(worldObj, x, y, z) && block != Blocks.bedrock && block.getBlockHardness(worldObj, z, y, z) > -1.0F;
+	private boolean canBreakBlock(Block block, BlockPos pos) {
+		return !block.isAir(worldObj, pos) && block != Blocks.bedrock && block.getBlockHardness(worldObj, pos) > -1.0F;
 	}
 
 	private void triggerBreakBlock() {
-		final ForgeDirection direction = getOrientation().up();
-		final int x = xCoord + direction.offsetX;
-		final int y = yCoord + direction.offsetY;
-		final int z = zCoord + direction.offsetZ;
+		final EnumFacing direction = getOrientation().up();
+		final BlockPos target = pos.offset(direction);
 
-		if (worldObj.blockExists(x, y, z)) {
-			final Block block = worldObj.getBlock(x, y, z);
-			if (canBreakBlock(block, x, y, z)) sendBlockEvent(EVENT_ACTIVATE, 0);
+		if (worldObj.isBlockLoaded(target)) {
+			final Block block = worldObj.getBlockState(target).getBlock();
+			if (canBreakBlock(block, target)) sendBlockEvent(EVENT_ACTIVATE, 0);
 		}
 
-		worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
+		playSoundAtBlock("tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 	}
 
 	@Override
@@ -104,21 +105,19 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	public void breakBlock() {
 		if (!(worldObj instanceof WorldServer)) return;
 
-		final ForgeDirection direction = getOrientation().up();
-		final int x = xCoord + direction.offsetX;
-		final int y = yCoord + direction.offsetY;
-		final int z = zCoord + direction.offsetZ;
+		final EnumFacing direction = getOrientation().up();
+		final BlockPos target = pos.offset(direction);
 
-		if (!worldObj.blockExists(x, y, z)) return;
+		if (!worldObj.isBlockLoaded(target)) return;
 
-		final Block block = worldObj.getBlock(x, y, z);
-		if (!canBreakBlock(block, x, y, z)) return;
+		final Block block = worldObj.getBlockState(target).getBlock();
+		if (!canBreakBlock(block, target)) return;
 
-		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new BreakBlockAction(worldObj, x, y, z));
+		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new BreakBlockAction(worldObj, target));
 		tryInjectItems(drops, direction.getOpposite());
 	}
 
-	private void tryInjectItems(List<EntityItem> drops, ForgeDirection direction) {
+	private void tryInjectItems(List<EntityItem> drops, EnumFacing direction) {
 		TileEntity targetInventory = getTileInDirection(direction);
 		if (targetInventory == null) return;
 
@@ -133,7 +132,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	@Override
 	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
-			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
+			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
 		}
 	}
 

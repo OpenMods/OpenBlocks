@@ -8,6 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.item.ItemImaginary;
@@ -15,6 +17,7 @@ import openblocks.common.item.ItemImaginationGlasses;
 import openmods.OpenMods;
 import openmods.api.ICustomPickItem;
 import openmods.tileentity.SimpleNetTileEntity;
+import openmods.utils.BlockUtils;
 
 import com.google.common.base.Preconditions;
 
@@ -60,7 +63,7 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 
 		public void writeToNBT(NBTTagCompound tag);
 
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result);
+		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result);
 
 		public AxisAlignedBB getBlockBounds();
 	}
@@ -79,14 +82,14 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 		}
 
 		@Override
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
+		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result) {
+			AxisAlignedBB aabb = BlockUtils.singleBlock(pos);
 			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
 		}
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+			return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 		}
 	};
 
@@ -115,25 +118,25 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 		}
 
 		@Override
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(x, y + height - PANEL_HEIGHT, z, x + 1, y + height, z + 1);
+		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result) {
+			AxisAlignedBB aabb = BlockUtils.aabbOffset(pos, 0, height - PANEL_HEIGHT, 0, 1, height, 1);
 			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
 		}
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getBoundingBox(0, height - PANEL_HEIGHT, 0, 1, height, 1);
+			return new AxisAlignedBB(0, height - PANEL_HEIGHT, 0, 1, height, 1);
 		}
 	}
 
 	public static class StairsData implements ICollisionData {
 		public float lowerPanelHeight;
 		public float upperPanelHeight;
-		public ForgeDirection orientation;
+		public EnumFacing orientation;
 
 		public StairsData() {}
 
-		public StairsData(float lowerPanelHeight, float upperPanelHeight, ForgeDirection orientation) {
+		public StairsData(float lowerPanelHeight, float upperPanelHeight, EnumFacing orientation) {
 			this.lowerPanelHeight = lowerPanelHeight;
 			this.upperPanelHeight = upperPanelHeight;
 			this.orientation = orientation;
@@ -143,7 +146,7 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 		public void readFromNBT(NBTTagCompound tag) {
 			lowerPanelHeight = tag.getFloat("LowerPanelHeight");
 			upperPanelHeight = tag.getFloat("UpperPanelHeight");
-			orientation = ForgeDirection.getOrientation(tag.getByte("Orientation"));
+			orientation = EnumFacing.VALUES[tag.getByte("Orientation")];
 		}
 
 		@Override
@@ -159,7 +162,11 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 		}
 
 		@Override
-		public void addCollisions(int x, int y, int z, AxisAlignedBB region, List<AxisAlignedBB> result) {
+		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result) {
+			final int x = pos.getX();
+			final int y = pos.getY();
+			final int z = pos.getZ();
+
 			AxisAlignedBB lower;
 			AxisAlignedBB upper;
 
@@ -171,20 +178,20 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 
 			switch (orientation) {
 				case NORTH:
-					lower = AxisAlignedBB.getBoundingBox(x, lowerBottom, z + 0.5, x + 1, lowerTop, z + 1.0);
-					upper = AxisAlignedBB.getBoundingBox(x, upperBottom, z + 0.0, x + 1, upperTop, z + 0.5);
+					lower = new AxisAlignedBB(x, lowerBottom, z + 0.5, x + 1, lowerTop, z + 1.0);
+					upper = new AxisAlignedBB(x, upperBottom, z + 0.0, x + 1, upperTop, z + 0.5);
 					break;
 				case SOUTH:
-					lower = AxisAlignedBB.getBoundingBox(x, lowerBottom, z + 0.0, x + 1, lowerTop, z + 0.5);
-					upper = AxisAlignedBB.getBoundingBox(x, upperBottom, z + 0.5, x + 1, upperTop, z + 1.0);
+					lower = new AxisAlignedBB(x, lowerBottom, z + 0.0, x + 1, lowerTop, z + 0.5);
+					upper = new AxisAlignedBB(x, upperBottom, z + 0.5, x + 1, upperTop, z + 1.0);
 					break;
 				case WEST:
-					lower = AxisAlignedBB.getBoundingBox(x + 0.5, lowerBottom, z, x + 1.0, lowerTop, z + 1);
-					upper = AxisAlignedBB.getBoundingBox(x + 0.0, upperBottom, z, x + 0.5, upperTop, z + 1);
+					lower = new AxisAlignedBB(x + 0.5, lowerBottom, z, x + 1.0, lowerTop, z + 1);
+					upper = new AxisAlignedBB(x + 0.0, upperBottom, z, x + 0.5, upperTop, z + 1);
 					break;
 				case EAST:
-					lower = AxisAlignedBB.getBoundingBox(x + 0.0, lowerBottom, z, x + 0.5, lowerTop, z + 1);
-					upper = AxisAlignedBB.getBoundingBox(x + 0.5, upperBottom, z, x + 1.0, upperTop, z + 1);
+					lower = new AxisAlignedBB(x + 0.0, lowerBottom, z, x + 0.5, lowerTop, z + 1);
+					upper = new AxisAlignedBB(x + 0.5, upperBottom, z, x + 1.0, upperTop, z + 1);
 					break;
 				default:
 					lower = upper = null;
@@ -197,7 +204,7 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 
 		@Override
 		public AxisAlignedBB getBlockBounds() {
-			return AxisAlignedBB.getBoundingBox(0, lowerPanelHeight, 0, 1, upperPanelHeight, 1);
+			return new AxisAlignedBB(0, lowerPanelHeight, 0, 1, upperPanelHeight, 1);
 		}
 	}
 
@@ -237,11 +244,6 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 		tag.setBoolean("IsInverted", isInverted);
 		tag.setByte("Type", (byte)collisionData.getType().ordinal());
 		collisionData.writeToNBT(tag);
-	}
-
-	@Override
-	public boolean canUpdate() {
-		return false;
 	}
 
 	@Override
@@ -285,11 +287,11 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 	}
 
 	public void addCollisions(AxisAlignedBB region, List<AxisAlignedBB> result) {
-		collisionData.addCollisions(xCoord, yCoord, zCoord, region, result);
+		collisionData.addCollisions(pos, region, result);
 	}
 
 	public AxisAlignedBB getSelectionBox() {
-		return collisionData.getBlockBounds().offset(xCoord, yCoord, zCoord);
+		return BlockUtils.aabbOffset(pos, collisionData.getBlockBounds());
 	}
 
 	public AxisAlignedBB getBlockBounds() {

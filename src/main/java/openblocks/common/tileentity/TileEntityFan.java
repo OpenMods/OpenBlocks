@@ -3,20 +3,24 @@ package openblocks.common.tileentity;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.Vec3;
 import openblocks.Config;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.BlockUtils;
 
-public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile, INeighbourAwareTile, IAddAwareTile {
+public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, INeighbourAwareTile, IAddAwareTile, ITickable {
 
 	private static final double CONE_HALF_APERTURE = 1.2 / 2.0;
 	private SyncableFloat angle;
@@ -33,7 +37,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile,
 	}
 
 	@Override
-	public void updateEntity() {
+	public void update() {
 		float redstonePower = power.get() / 15.0f;
 
 		bladeSpeed = redstonePower;
@@ -41,18 +45,18 @@ public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile,
 
 		final double maxForce = Config.fanForce * redstonePower;
 		if (maxForce <= 0) return;
-		@SuppressWarnings("unchecked")
+
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
 		if (entities.isEmpty()) return;
 
 		double angle = Math.toRadians(getAngle() - 90);
 		final Vec3 blockPos = getConeApex(angle);
 		final Vec3 basePos = getConeBaseCenter(angle);
-		final Vec3 coneAxis = Vec3.createVectorHelper(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
+		final Vec3 coneAxis = new Vec3(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
 
 		for (Entity entity : entities) {
 			if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) continue;
-			Vec3 directionVec = Vec3.createVectorHelper(
+			Vec3 directionVec = new Vec3(
 					entity.posX - blockPos.xCoord,
 					entity.posY - blockPos.yCoord,
 					entity.posZ - blockPos.zCoord);
@@ -69,18 +73,24 @@ public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile,
 	}
 
 	private Vec3 getConeBaseCenter(double angle) {
-		return Vec3.createVectorHelper(
-				xCoord + (Math.cos(angle) * Config.fanRange),
-				yCoord + 0.5,
-				zCoord + (Math.sin(angle) * Config.fanRange));
+		// TODO 1.8.9 this may be constant
+		return new Vec3(pos)
+				.addVector(
+						(Math.cos(angle) * Config.fanRange),
+						0.5,
+						(Math.sin(angle) * Config.fanRange));
 	}
 
 	private Vec3 getConeApex(double angle) {
-		return Vec3.createVectorHelper(xCoord + 0.5 - Math.cos(angle) * 1.1, yCoord + 0.5, zCoord + 0.5 - Math.sin(angle) * 1.1);
+		return new Vec3(pos)
+				.addVector(
+						0.5 - Math.cos(angle) * 1.1,
+						0.5,
+						0.5 - Math.sin(angle) * 1.1);
 	}
 
 	private AxisAlignedBB getEntitySearchBoundingBox() {
-		AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(xCoord, yCoord - 2, zCoord, xCoord + 1, yCoord + 3, zCoord + 1);
+		AxisAlignedBB boundingBox = BlockUtils.aabbOffset(pos, 0, -2, 0, +1, +3, 1);
 		return boundingBox.expand(Config.fanRange, Config.fanRange, Config.fanRange);
 	}
 
@@ -90,7 +100,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile,
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		angle.set(placer.rotationYawHead);
 	}
 
@@ -114,7 +124,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlacerAwareTile,
 
 	private void updateRedstone() {
 		if (!worldObj.isRemote) {
-			int power = Config.redstoneActivatedFan? worldObj.getStrongestIndirectPower(xCoord, yCoord, zCoord) : 15;
+			int power = Config.redstoneActivatedFan? worldObj.isBlockIndirectlyGettingPowered(pos) : 15;
 			this.power.set((byte)power);
 			sync();
 		}

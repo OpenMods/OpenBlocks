@@ -1,6 +1,7 @@
 package openblocks.common;
 
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
 
 public enum Stencil {
 
@@ -20,28 +21,14 @@ public enum Stencil {
 	MUSIC("music"),
 	BALLOON("balloon");
 
-	private IIcon blockIcon;
-	private IIcon coverBlockIcon;
-	private String iconName;
+	public final String iconName;
+	public final ResourceLocation blockIcon;
+	public final ResourceLocation coverBlockIcon;
 
-	Stencil(String iconName) {
+	private Stencil(String iconName) {
 		this.iconName = iconName;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister register) {
-		blockIcon = register.registerIcon("openblocks:stencil_" + iconName);
-		coverBlockIcon = register.registerIcon("openblocks:stencilcover_" + iconName);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getCoverBlockIcon() {
-		return coverBlockIcon;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getBlockIcon() {
-		return blockIcon;
+		this.blockIcon = OpenBlocks.location("stencil_" + iconName);
+		this.coverBlockIcon = OpenBlocks.location("openblocks:stencilcover_" + iconName);
 	}
 
 	public static final Stencil[] VALUES = values();

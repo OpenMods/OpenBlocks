@@ -8,8 +8,9 @@ import net.minecraft.block.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 
@@ -34,7 +35,7 @@ public class ItemWrench extends Item {
 	}
 
 	@Override
-	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+	public boolean doesSneakBypassUse(World world, BlockPos pos, EntityPlayer player) {
 		return true;
 	}
 
@@ -48,24 +49,14 @@ public class ItemWrench extends Item {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean isFull3D() {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		final Block block = world.getBlock(x, y, z);
-
-		if (block == null) return false;
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+		final Block block = world.getBlockState(pos).getBlock();
 
 		if (requiresSneaking(block) && !player.isSneaking()) return false;
 
-		final ForgeDirection rotationAxis = ForgeDirection.getOrientation(side);
-
-		final ForgeDirection[] rotations = block.getValidRotations(world, x, y, z);
-		if (ArrayUtils.contains(rotations, rotationAxis)) {
-			if (block.rotateBlock(world, x, y, z, rotationAxis)) {
+		final EnumFacing[] rotations = block.getValidRotations(world, pos);
+		if (ArrayUtils.contains(rotations, side)) {
+			if (block.rotateBlock(world, pos, side)) {
 				player.swingItem();
 				return !world.isRemote;
 			}

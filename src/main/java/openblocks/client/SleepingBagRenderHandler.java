@@ -13,7 +13,7 @@ public class SleepingBagRenderHandler {
 		final EntityPlayer entityPlayer = event.entityPlayer;
 		if (entityPlayer instanceof EntityOtherPlayerMP) {
 			if (entityPlayer.isPlayerSleeping() && ItemSleepingBag.isWearingSleepingBag(entityPlayer)) {
-				event.entityPlayer.yOffset = 1.7f;
+				event.entityPlayer.renderOffsetY = 1.7f;
 			}
 		}
 

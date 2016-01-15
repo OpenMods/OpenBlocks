@@ -1,6 +1,5 @@
 package openblocks.common.entity;
 
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import openblocks.api.IMagnetAware;
 import openmods.entity.EntityBlock;
@@ -23,9 +22,6 @@ public class EntityMountedBlock extends EntityBlock implements IMagnetAware {
 
 	@Override
 	public boolean canRelease() {
-		int x = MathHelper.floor_double(posX);
-		int y = MathHelper.floor_double(posY);
-		int z = MathHelper.floor_double(posZ);
-		return worldObj.isAirBlock(x, y, z);
+		return worldObj.isAirBlock(getPosition());
 	}
 }

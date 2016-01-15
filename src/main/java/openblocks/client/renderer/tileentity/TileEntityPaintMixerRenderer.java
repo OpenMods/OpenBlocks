@@ -1,39 +1,30 @@
 package openblocks.client.renderer.tileentity;
 
-import java.util.EnumSet;
-
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
-import openmods.colors.ColorUtils;
+import openmods.colors.RGB;
 import openmods.utils.BlockUtils;
-import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
+public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<TileEntityPaintMixer> {
 
-	RenderBlocks renderer = new RenderBlocks();
 	private ModelPaintMixer model = new ModelPaintMixer();
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/paintmixer.png");
-	private static final ColorUtils.RGB start = new ColorUtils.RGB(), end = new ColorUtils.RGB();
-	private static final EnumSet<ForgeDirection> TOP_FACE = EnumSet.of(ForgeDirection.UP);
-	private static final EnumSet<ForgeDirection> SIDES = EnumSet.complementOf(TOP_FACE);
+	private static final ResourceLocation texture = OpenBlocks.location("textures/models/paintmixer.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
-		TileEntityPaintMixer mixer = (TileEntityPaintMixer)tileentity;
+	public void renderTileEntityAt(TileEntityPaintMixer mixer, double x, double y, double z, float partialTick, int destroyProgress) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glPushMatrix();
 		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(mixer.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
-		model.render(mixer, f);
+		model.render(mixer, partialTick);
 		GL11.glPushMatrix();
 		// The top of the paint can is rendering longer than the can. WHYY :(
 		// Fixed this, rotating the matrix and not using the stack :)
@@ -52,9 +43,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 				double progress = (double)mixer.getProgress().getValue() / TileEntityPaintMixer.PROGRESS_TICKS;
 				secondPass = calculateColorFade(secondPass, mixer.getColor().getValue(), progress);
 			}
-			// Render first pass
-			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, 0, 0xFFFFFF, SIDES);
-			RenderUtils.renderInventoryBlock(renderer, OpenBlocks.Blocks.paintCan, 0, secondPass, TOP_FACE);
+			// TODO 1.8.9 render can!
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();
@@ -63,9 +52,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {
 	}
 
 	private static int calculateColorFade(int a, int b, double magnitude) {
-		start.setColor(a);
-		end.setColor(b);
-		return start.interpolate(end, magnitude).getColor();
+		return new RGB(a).interpolate(new RGB(b), magnitude).getColor();
 	}
 
 }

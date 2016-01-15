@@ -8,5 +8,5 @@ public class BlockHeal extends OpenBlock {
 	public BlockHeal() {
 		super(Material.rock);
 	}
-	
+
 }

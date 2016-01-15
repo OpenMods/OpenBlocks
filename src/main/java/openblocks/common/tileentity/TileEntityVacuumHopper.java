@@ -3,6 +3,8 @@ package openblocks.common.tileentity;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -13,6 +15,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
@@ -36,9 +41,10 @@ import openmods.utils.EnchantmentUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
-public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, IEntitySelector, INeighbourAwareTile {
+public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
 
@@ -67,19 +73,19 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		sided.registerAllSlots(itemOutputs, false, true);
 	}
 
-	public IReadableBitMap<ForgeDirection> getReadableXpOutputs() {
+	public IReadableBitMap<EnumFacing> getReadableXpOutputs() {
 		return xpOutputs;
 	}
 
-	public IWriteableBitMap<ForgeDirection> getWriteableXpOutputs() {
+	public IWriteableBitMap<EnumFacing> getWriteableXpOutputs() {
 		return BitMapUtils.createRpcAdapter(createRpcProxy(xpOutputs, IRpcDirectionBitMap.class));
 	}
 
-	public IReadableBitMap<ForgeDirection> getReadableItemOutputs() {
+	public IReadableBitMap<EnumFacing> getReadableItemOutputs() {
 		return itemOutputs;
 	}
 
-	public IWriteableBitMap<ForgeDirection> getWriteableItemOutputs() {
+	public IWriteableBitMap<EnumFacing> getWriteableItemOutputs() {
 		return BitMapUtils.createRpcAdapter(createRpcProxy(itemOutputs, IRpcDirectionBitMap.class));
 	}
 
@@ -87,43 +93,44 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		return tank;
 	}
 
-	@Override
-	public boolean isEntityApplicable(Entity entity) {
-		if (entity.isDead) return false;
+	private final Predicate<Entity> entitySelector = new Predicate<Entity>() {
+		@Override
+		public boolean apply(@Nullable Entity entity) {
+			if (entity.isDead) return false;
 
-		if (entity instanceof EntityItemProjectile) return entity.motionY < 0.01;
+			if (entity instanceof EntityItemProjectile) return entity.motionY < 0.01;
 
-		if (entity instanceof EntityItem) {
-			ItemStack stack = ((EntityItem)entity).getEntityItem();
-			return ItemDistribution.testInventoryInsertion(inventory, stack) > 0;
+			if (entity instanceof EntityItem) {
+				ItemStack stack = ((EntityItem)entity).getEntityItem();
+				return ItemDistribution.testInventoryInsertion(inventory, stack) > 0;
+			}
+
+			if (entity instanceof EntityXPOrb) return tank.getSpace() > 0;
+
+			return false;
 		}
-
-		if (entity instanceof EntityXPOrb) return tank.getSpace() > 0;
-
-		return false;
-	}
+	};
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 
 		if (vacuumDisabled.get()) return;
 
 		if (worldObj.isRemote) {
-			worldObj.spawnParticle("portal", xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
+			spawnParticle(EnumParticleTypes.PORTAL, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
 		}
 
 		@SuppressWarnings("unchecked")
-		List<Entity> interestingItems = worldObj.selectEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3), this);
+		List<Entity> interestingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3), entitySelector);
 
 		boolean needsSync = false;
 
 		for (Entity entity : interestingItems) {
-			double x = (xCoord + 0.5D - entity.posX);
-			double y = (yCoord + 0.5D - entity.posY);
-			double z = (zCoord + 0.5D - entity.posZ);
+			double dx = (pos.getX() + 0.5D - entity.posX);
+			double dy = (pos.getY() + 0.5D - entity.posY);
+			double dz = (pos.getZ() + 0.5D - entity.posZ);
 
-			double distance = Math.sqrt(x * x + y * y + z * z);
+			double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 			if (distance < 1.1) {
 				needsSync |= onEntityCollidedWithBlock(entity);
 			} else {
@@ -131,9 +138,9 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 				if (var11 > 0.0D) {
 					var11 *= var11;
-					entity.motionX += x / distance * var11 * 0.05;
-					entity.motionY += y / distance * var11 * 0.2;
-					entity.motionZ += z / distance * var11 * 0.05;
+					entity.motionX += dx / distance * var11 * 0.05;
+					entity.motionY += dy / distance * var11 * 0.2;
+					entity.motionZ += dz / distance * var11 * 0.05;
 				}
 			}
 
@@ -147,7 +154,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	private boolean outputToNeighbors() {
 		if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
-			tank.distributeToSides(50, worldObj, getPosition(), xpOutputs.getValue());
+			tank.distributeToSides(50, worldObj, pos, xpOutputs.getValue());
 			autoInventoryOutput();
 			return true;
 		}
@@ -165,10 +172,10 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	private void getItemOutOfSlot(int slot) {
-		final List<ForgeDirection> outputSides = Lists.newArrayList(itemOutputs.getValue());
+		final List<EnumFacing> outputSides = Lists.newArrayList(itemOutputs.getValue());
 		Collections.shuffle(outputSides);
 
-		for (ForgeDirection output : outputSides) {
+		for (EnumFacing output : outputSides) {
 			TileEntity tileOnSurface = getTileInDirection(output);
 			if (ItemDistribution.moveItemInto(inventory, slot, tileOnSurface, output, 64, true) > 0) return;
 		}
@@ -190,7 +197,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) {
 			if (player.inventory.getStackInSlot(player.inventory.currentItem) == null) {
 				vacuumDisabled.toggle();
@@ -246,6 +253,6 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, getPosition());
+		tank.updateNeighbours(worldObj, pos);
 	}
 }

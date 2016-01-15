@@ -9,9 +9,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.NBTBase.NBTPrimitive;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.tileentity.*;
@@ -19,12 +19,8 @@ import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 import openmods.colors.ColorMeta;
-import openmods.colors.ColorUtils;
 import openmods.item.ItemOpenBlock;
-import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
-
-import com.google.common.base.Objects;
 
 public class ItemImaginary extends ItemOpenBlock {
 
@@ -58,7 +54,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		STAIRS(0.75f, "stairs", "overlay_stairs", false) {
 			@Override
 			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				ForgeDirection dir = BlockUtils.get2dOrientation(player);
+				EnumFacing dir = player.getHorizontalFacing();
 				return new StairsData(0.5f, 1.0f, dir);
 			}
 		},
@@ -85,7 +81,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		INV_STAIRS(1.25f, "inverted_stairs", "overlay_inverted_stairs", true) {
 			@Override
 			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				ForgeDirection dir = BlockUtils.get2dOrientation(player);
+				EnumFacing dir = player.getHorizontalFacing();
 				return new StairsData(0.5f, 1.0f, dir);
 			}
 		};
@@ -94,7 +90,6 @@ public class ItemImaginary extends ItemOpenBlock {
 		public final String name;
 		public final String overlayName;
 		public final boolean isInverted;
-		public IIcon overlay;
 
 		private PlacementMode(float cost, String name, String overlayName, boolean isInverted) {
 			this.cost = cost;
@@ -111,7 +106,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	public static float getUses(NBTTagCompound tag) {
 		NBTBase value = tag.getTag(TAG_USES);
 		if (value == null) return 0;
-		if (value instanceof NBTPrimitive) return ((NBTPrimitive)value).func_150288_h();
+		if (value instanceof NBTPrimitive) return ((NBTPrimitive)value).getFloat();
 
 		throw new IllegalStateException("Invalid tag type: " + value);
 	}
@@ -159,13 +154,13 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player, World world, int x, int y, int z) {
+	protected void afterBlockPlaced(ItemStack stack, EntityPlayer player, World world, BlockPos pos) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
 		PlacementMode mode = getMode(tag);
 		ICollisionData collisions = mode.createCollisionData(stack, player);
-		world.setTileEntity(x, y, z, new TileEntityImaginary(color == null? null : color.func_150287_d(), mode.isInverted, collisions));
+		world.setTileEntity(pos, new TileEntityImaginary(color == null? null : color.getInt(), mode.isInverted, collisions));
 
 		if (!player.capabilities.isCreativeMode) {
 			float uses = Math.max(getUses(tag) - mode.cost, 0);
@@ -176,7 +171,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (stack == null) return false;
 
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
@@ -188,7 +183,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 		if (uses < getMode(tag).cost) return false;
 
-		return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+		return super.onItemUse(stack, player, world, pos, side, hitX, hitY, hitZ);
 	}
 
 	@Override
@@ -211,7 +206,7 @@ public class ItemImaginary extends ItemOpenBlock {
 		result.add(StatCollector.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
 
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
-		if (color != null) result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", color.func_150287_d()));
+		if (color != null) result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", color.getInt()));
 
 		PlacementMode mode = getMode(tag);
 		String translatedMode = StatCollector.translateToLocal(mode.name);
@@ -222,85 +217,19 @@ public class ItemImaginary extends ItemOpenBlock {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(Item item, CreativeTabs tab, List result) {
 		result.add(setupValues(null, new ItemStack(this, 1, DAMAGE_PENCIL)));
-		for (ColorMeta color : ColorUtils.getAllColors())
+		for (ColorMeta color : ColorMeta.getAllColors())
 			result.add(setupValues(color.rgb, new ItemStack(this, 1, DAMAGE_CRAYON)));
-	}
-
-	@Override
-	public int getSpriteNumber() {
-		return 1; // render as item
-	}
-
-	private IIcon iconCrayonBackground;
-	private IIcon iconCrayonColor;
-	private IIcon iconPencil;
-	private IIcon iconBlank;
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		iconCrayonBackground = registry.registerIcon("openblocks:crayon_1");
-		iconCrayonColor = registry.registerIcon("openblocks:crayon_2");
-		iconPencil = registry.registerIcon("openblocks:pencil");
-		iconBlank = registry.registerIcon("openblocks:blank");
-
-		for (PlacementMode mode : PlacementMode.VALUES)
-			mode.overlay = registry.registerIcon(mode.overlayName);
-	}
-
-	private IIcon getOverlayIcon(ItemStack stack, boolean inGui) {
-		return inGui? getMode(stack).overlay : iconBlank;
-	}
-
-	private IIcon getIcon(ItemStack stack, int pass, boolean inGui) {
-		if (!isCrayon(stack)) return pass == 1? getOverlayIcon(stack, inGui) : iconPencil;
-
-		switch (pass) {
-			case 0:
-				return iconCrayonBackground;
-			case 1:
-				return iconCrayonColor;
-			case 2:
-				return getOverlayIcon(stack, inGui);
-		}
-
-		throw new IllegalArgumentException("Invalid pass: " + pass);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public final IIcon getIcon(ItemStack stack, int pass) {
-		return getIcon(stack, pass, true);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(ItemStack stack, int pass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-		return getIcon(stack, pass, false);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int pass) {
-		if (isCrayon(stack) && pass == 1) return Objects.firstNonNull(ItemUtils.getInt(stack, TAG_COLOR), 0x000000);
+		if (isCrayon(stack) && pass == 1) {
+			NBTTagCompound tag = stack.getTagCompound();
+			return tag != null? tag.getInteger(TAG_COLOR) : 0x000000;
+		}
 
 		return 0xFFFFFF;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
-	@Override
-	public int getRenderPasses(int metadata) {
-		return metadata == DAMAGE_CRAYON? 3 : 2;
-	}
-
-	@Override
-	public boolean doesContainerItemLeaveCraftingGrid(ItemStack stack) {
-		return false;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package openblocks.client.renderer.tileentity.tank;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.tileentity.TileEntityTank;
@@ -8,9 +9,12 @@ import openblocks.common.tileentity.TileEntityTank;
 public class NeighbourMap implements INeighbourMap {
 	private boolean[] neighbors = new boolean[64];
 
-	public NeighbourMap(World world, int x, int y, int z, FluidStack fluid) {
+	public NeighbourMap(World world, BlockPos pos, FluidStack fluid) {
 		if (world == null) return;
 
+		final int x = pos.getX();
+		final int y = pos.getY();
+		final int z = pos.getZ();
 		testNeighbour(world, fluid, x + 0, y + 1, z + 0, DIR_UP);
 		testNeighbour(world, fluid, x + 0, y - 1, z + 0, DIR_DOWN);
 
@@ -36,7 +40,7 @@ public class NeighbourMap implements INeighbourMap {
 	}
 
 	private void testNeighbour(World world, FluidStack ownFluid, int x, int y, int z, int flag) {
-		final TileEntity te = TankRenderUtils.getTileEntitySafe(world, x, y, z);
+		final TileEntity te = TankRenderUtils.getTileEntitySafe(world, new BlockPos(x, y, z));
 		if (te instanceof TileEntityTank) neighbors[flag] = ((TileEntityTank)te).accepts(ownFluid);
 	}
 

@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
 import openmods.api.IActivateAwareTile;
@@ -26,7 +27,7 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote && amount.get() > 0) {
 			ItemStack heldStack = player.getHeldItem();
 			if (heldStack != null && heldStack.getItem() instanceof ItemPaintBrush) {
@@ -40,8 +41,8 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 
 		if (amount.get() <= 0 && !worldObj.isRemote) {
 			ItemStack item = new ItemStack(Items.bucket);
-			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, item);
-			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			BlockUtils.dropItemStackInWorld(worldObj, pos, item);
+			worldObj.setBlockToAir(pos);
 		}
 		return false;
 	}
@@ -58,8 +59,4 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 		amount.set(amt);
 	}
 
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
 }

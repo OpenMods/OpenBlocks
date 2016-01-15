@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSonicGlasses;
@@ -23,12 +24,6 @@ public class ItemSonicGlasses extends ItemArmor {
 	@Override
 	public boolean isValidArmor(ItemStack stack, int armorType, Entity entity) {
 		return armorType == ARMOR_HELMET;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1) {
-		return itemIcon;
 	}
 
 	@SideOnly(Side.CLIENT)

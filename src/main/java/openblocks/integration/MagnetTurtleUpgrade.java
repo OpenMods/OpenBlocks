@@ -1,21 +1,35 @@
 package openblocks.integration;
 
+import javax.vecmath.Matrix4f;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.IBakedModel;
+import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks;
 import openblocks.common.item.MetasGeneric;
-import openmods.utils.TextureUtils;
 import openperipheral.api.ApiAccess;
 import openperipheral.api.architecture.cc.IComputerCraftObjectsFactory;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 
 public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 
-	public IIcon icon;
+	@Override
+	public ResourceLocation getUpgradeID() {
+		return OpenBlocks.location("magnet_turtle");
+	}
 
 	@Override
-	public int getUpgradeID() {
+	public int getLegacyUpgradeID() {
 		return TurtleIds.MAGNET_TURTLE_ID;
 	}
 
@@ -40,24 +54,25 @@ public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 	}
 
 	@Override
-	public TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, int direction) {
+	public TurtleCommandResult useTool(ITurtleAccess turtle, TurtleSide side, TurtleVerb verb, EnumFacing direction) {
 		return null;
-	}
-
-	@Override
-	public IIcon getIcon(ITurtleAccess turtle, TurtleSide side) {
-		return icon;
-	}
-
-	@SubscribeEvent
-	public void registerIcons(TextureStitchEvent evt) {
-		if (evt.map.getTextureType() == TextureUtils.TEXTURE_MAP_BLOCKS) icon = evt.map.registerIcon("openblocks:magnet_upgrade");
 	}
 
 	@Override
 	public void update(ITurtleAccess turtle, TurtleSide side) {
 		IPeripheral peripheral = turtle.getPeripheral(side);
 		if (peripheral instanceof ITickingTurtle) ((ITickingTurtle)peripheral).onPeripheralTick();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Pair<IBakedModel, Matrix4f> getModel(ITurtleAccess turtle, TurtleSide side) {
+		final Minecraft mc = Minecraft.getMinecraft();
+		final ModelManager modelManager = mc.getRenderItem().getItemModelMesher().getModelManager();
+
+		// TODO: actual models
+		ModelResourceLocation location = new ModelResourceLocation(side == TurtleSide.Left? "computercraft:turtle_crafting_table_left" : "computercraft:turtle_crafting_table_right", "inventory");
+		return Pair.of(modelManager.getModel(location), null);
 	}
 
 }

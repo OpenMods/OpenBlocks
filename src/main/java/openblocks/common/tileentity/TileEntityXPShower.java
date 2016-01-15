@@ -3,8 +3,11 @@ package openblocks.common.tileentity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.entity.EntityXPOrbNoFly;
@@ -16,7 +19,7 @@ import openmods.liquids.GenericTank;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile, IAddAwareTile, ISurfaceAttachment {
+public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile, IAddAwareTile, ISurfaceAttachment, ITickable {
 
 	private static final int DRAIN_PER_CYCLE = 50;
 
@@ -32,13 +35,11 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
+	public void update() {
 		if (!worldObj.isRemote) {
 
 			if (!isPowered && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
-				bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, getPosition(), getOrientation().north());
+				bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getOrientation().north());
 
 				int amountInTank = bufferTank.getFluidAmount();
 
@@ -56,7 +57,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 						while (xpInTank > 0) {
 							int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
 							xpInTank -= xpAmount;
-							worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, xCoord + 0.5D, yCoord, zCoord + 0.5D, xpAmount));
+							worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, xpAmount));
 						}
 					}
 				}
@@ -66,11 +67,11 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 			sync();
 
 		} else if (isOn.get()) {
-			Vec3 vec = Vec3.createVectorHelper(
+			Vec3 vec = new Vec3(
 					(worldObj.rand.nextDouble() - 0.5) * 0.05,
 					0,
 					(worldObj.rand.nextDouble() - 0.5) * 0.05);
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, OpenBlocks.Fluids.xpJuice, xCoord + 0.5d, yCoord + 0.4d, zCoord + 0.5d, 0.4f, 0.7f, vec);
+			OpenBlocks.proxy.spawnLiquidSpray(worldObj, new FluidStack(OpenBlocks.Fluids.xpJuice, 1000), pos.getX() + 0.5, pos.getY() + 0.4, pos.getZ() + 0.5, 0.4f, 0.7f, vec);
 
 		}
 
@@ -87,7 +88,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	public void updateState() {
-		isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		isPowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	@Override
-	public ForgeDirection getSurfaceDirection() {
+	public EnumFacing getSurfaceDirection() {
 		return getOrientation().north();
 	}
 

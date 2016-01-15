@@ -3,23 +3,27 @@ package openblocks.common.entity;
 import io.netty.buffer.ByteBuf;
 
 import java.lang.ref.WeakReference;
+import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openmods.utils.NbtUtils;
 
-import com.google.common.base.Strings;
-
+// TODO 1.8.9 verify ownership
 public abstract class EntityAssistant extends EntitySmoothMove implements IEntityAdditionalSpawnData {
 
-	private String owner;
+	private static final String OWNER_ID_TAG = "OwnerId";
+	private UUID ownerId;
 	private WeakReference<EntityPlayer> cachedOwner;
 	protected double ownerOffsetX;
 	protected double ownerOffsetY;
@@ -29,13 +33,13 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 		super(world);
 		this.cachedOwner = new WeakReference<EntityPlayer>(owner);
 
-		if (owner != null) this.owner = owner.getCommandSenderName();
+		if (owner != null) this.ownerId = owner.getGameProfile().getId();
 	}
 
 	public EntityPlayer findOwner() {
-		if (owner == null || owner.isEmpty()) return null;
+		if (ownerId == null) return null;
 
-		EntityPlayer result = worldObj.getPlayerEntityByName(owner);
+		EntityPlayer result = worldObj.getPlayerEntityByUUID(ownerId);
 
 		if (result != null) cachedOwner = new WeakReference<EntityPlayer>(result);
 
@@ -44,12 +48,17 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tag) {
-		owner = tag.getString("Owner");
+		if (tag.hasKey(OWNER_ID_TAG, Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound ownerTag = tag.getCompoundTag(OWNER_ID_TAG);
+			ownerId = NbtUtils.readUuid(ownerTag);
+		} else {
+			ownerId = null;
+		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tag) {
-		if (owner != null) tag.setString("Owner", owner);
+		if (ownerId != null) tag.setTag(OWNER_ID_TAG, NbtUtils.store(ownerId));
 	}
 
 	@Override
@@ -105,12 +114,16 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		ByteBufUtils.writeUTF8String(data, Strings.nullToEmpty(owner));
+		if (ownerId != null) {
+			data.writeBoolean(true);
+			new PacketBuffer(data).writeUuid(ownerId);
+		} else data.writeBoolean(false);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		owner = ByteBufUtils.readUTF8String(data);
+		if (data.readBoolean()) ownerId = new PacketBuffer(data).readUuid();
+		else ownerId = null;
 	}
 
 	public void setSpawnPosition(Entity owner) {

@@ -7,32 +7,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.utils.render.PaintUtils;
 
-import com.google.common.base.Objects;
-
 public class ItemStencil extends Item {
 
 	public ItemStencil() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getSpriteNumber() {
-		return 0;
-	}
-
-	@Override
-	public IIcon getIconFromDamage(int dmg) {
-		return Objects.firstNonNull(Stencil.values()[dmg].getCoverBlockIcon(), itemIcon);
 	}
 
 	@Override
@@ -44,13 +32,13 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
 
-		if (PaintUtils.instance.isAllowedToReplace(world, x, y, z)) {
-			BlockCanvas.replaceBlock(world, x, y, z);
+		if (PaintUtils.instance.isAllowedToReplace(world, pos)) {
+			BlockCanvas.replaceBlock(world, pos);
 		}
 
-		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(pos);
 
 		if (te instanceof TileEntityCanvas) {
 			TileEntityCanvas canvas = (TileEntityCanvas)te;

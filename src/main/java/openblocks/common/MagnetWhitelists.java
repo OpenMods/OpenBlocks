@@ -84,7 +84,7 @@ public class MagnetWhitelists {
 		return new ITester<BlockCoords>() {
 			@Override
 			public ITester.Result test(BlockCoords o) {
-				return (o.blockState == template)? Result.ACCEPT : Result.CONTINUE;
+				return (o.block == template)? Result.ACCEPT : Result.CONTINUE;
 			}
 		};
 	}

@@ -2,7 +2,6 @@ package openblocks.common.item;
 
 import java.util.Map;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.CraneRegistry;
@@ -22,11 +20,6 @@ import com.google.common.collect.MapMaker;
 
 @BookDocumentation(customName = "crane_control", hasVideo = true)
 public class ItemCraneControl extends Item {
-
-	private IIcon iconDown;
-	private IIcon iconUp;
-	private IIcon iconLocked;
-	private IIcon iconDetected;
 
 	public ItemCraneControl() {
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
@@ -88,38 +81,31 @@ public class ItemCraneControl extends Item {
 		return 72000; // quite long time!
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
-		iconLocked = registry.registerIcon("openblocks:manipulator_locked");
-		iconDetected = registry.registerIcon("openblocks:manipulator_detected");
-		iconDown = registry.registerIcon("openblocks:manipulator_down");
-		iconUp = registry.registerIcon("openblocks:manipulator_up");
+	public enum State {
+		NONE,
+		DOWN,
+		UP,
+		LOCKED,
+		DETECTED
 	}
 
-	@Override
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+	// TODO 1.8.9 temporary. Enum probably only for port reasons
+	public State getState(ItemStack stack, EntityPlayer player, ItemStack usingItem, int useRemaining) {
 		if (player != null && ItemCraneBackpack.isWearingCrane(player)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
 			if (data != null) {
-				if (usingItem == stack) { return data.isExtending? iconDown : iconUp; }
+				if (usingItem == stack) { return data.isExtending? State.DOWN : State.UP; }
 
 				EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(player);
 
 				if (magnet != null) {
-					if (magnet.isLocked()) return iconLocked;
-					else if (magnet.isAboveTarget()) return iconDetected;
+					if (magnet.isLocked()) return State.LOCKED;
+					else if (magnet.isAboveTarget()) return State.DETECTED;
 				}
 			}
 		}
 
-		return itemIcon;
-	}
-
-	@Override
-	public boolean func_150897_b(Block block) {
-		return false;
+		return State.LOCKED;
 	}
 
 }

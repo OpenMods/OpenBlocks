@@ -1,12 +1,10 @@
 package openblocks.events;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-
+import net.minecraft.network.PacketBuffer;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
 import openmods.network.event.NetworkEventMeta;
-import openmods.utils.ByteUtils;
+import openmods.utils.EnumUtils;
 
 @NetworkEventMeta(direction = EventDirection.C2S)
 public class PlayerActionEvent extends NetworkEvent {
@@ -23,14 +21,14 @@ public class PlayerActionEvent extends NetworkEvent {
 	}
 
 	@Override
-	protected void readFromStream(DataInput input) {
-		int typeId = ByteUtils.readVLI(input);
-		type = Type.values()[typeId];
+	protected void readFromStream(PacketBuffer input) {
+		int typeId = input.readVarIntFromBuffer();
+		type = EnumUtils.fromOrdinal(Type.class, typeId);
 	}
 
 	@Override
-	protected void writeToStream(DataOutput output) {
-		ByteUtils.writeVLI(output, type.ordinal());
+	protected void writeToStream(PacketBuffer output) {
+		output.writeVarIntToBuffer(type.ordinal());
 	}
 
 }

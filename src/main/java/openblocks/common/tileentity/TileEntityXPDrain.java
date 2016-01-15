@@ -7,23 +7,24 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.common.LiquidXpUtils;
 import openmods.OpenMods;
 import openmods.tileentity.OpenTileEntity;
+import openmods.utils.BlockUtils;
 import openmods.utils.EnchantmentUtils;
 
-public class TileEntityXPDrain extends OpenTileEntity {
+public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 
 	private WeakReference<TileEntity> targetTank;
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-
+	public void update() {
 		if (OpenMods.proxy.getTicks(worldObj) % 100 == 0) {
 			searchForTank();
 		}
@@ -56,19 +57,19 @@ public class TileEntityXPDrain extends OpenTileEntity {
 		int xpAmount = LiquidXpUtils.xpToLiquidRatio(maxDrainedXp);
 		FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 
-		int maxAcceptedLiquid = tank.fill(ForgeDirection.UP, xpStack, false);
+		int maxAcceptedLiquid = tank.fill(EnumFacing.UP, xpStack, false);
 
 		// rounding down, so we only use as much as we can
 		int acceptedXP = LiquidXpUtils.liquidToXpRatio(maxAcceptedLiquid);
 		int acceptedLiquid = LiquidXpUtils.xpToLiquidRatio(acceptedXP);
 
 		xpStack.amount = acceptedLiquid;
-		int finallyAcceptedLiquid = tank.fill(ForgeDirection.UP, xpStack, true);
+		int finallyAcceptedLiquid = tank.fill(EnumFacing.UP, xpStack, true);
 
 		if (finallyAcceptedLiquid <= 0) return;
 
 		if (OpenMods.proxy.getTicks(worldObj) % 4 == 0) {
-			worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
+			playSoundAtBlock("random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
 		}
 
 		EnchantmentUtils.addPlayerXP(player, -acceptedXP);
@@ -78,9 +79,9 @@ public class TileEntityXPDrain extends OpenTileEntity {
 		if (!orb.isDead) {
 			int xpAmount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
 			FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
-			int filled = tank.fill(ForgeDirection.UP, xpStack, false);
+			int filled = tank.fill(EnumFacing.UP, xpStack, false);
 			if (filled == xpStack.amount) {
-				tank.fill(ForgeDirection.UP, xpStack, true);
+				tank.fill(EnumFacing.UP, xpStack, true);
 				orb.setDead();
 			}
 		}
@@ -88,10 +89,11 @@ public class TileEntityXPDrain extends OpenTileEntity {
 
 	public void searchForTank() {
 		targetTank = null;
-		for (int y = yCoord - 1; y > 0; y--) {
-			boolean isAir = worldObj.isAirBlock(xCoord, y, zCoord);
+		BlockPos target = pos.down();
+		while (target.getY() >= 0) {
+			boolean isAir = worldObj.isAirBlock(target);
 			if (!isAir) {
-				TileEntity te = worldObj.getTileEntity(xCoord, y, zCoord);
+				TileEntity te = worldObj.getTileEntity(target);
 				if (!(te instanceof IFluidHandler) && te != null) {
 					Block block = te.getBlockType();
 					if (block.isOpaqueCube()) { return; }
@@ -100,19 +102,16 @@ public class TileEntityXPDrain extends OpenTileEntity {
 					return;
 				}
 			}
+			target = target.down();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected List<EntityPlayer> getPlayersOnGrid() {
-		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
-		return worldObj.getEntitiesWithinAABB(EntityPlayer.class, bb);
+		return worldObj.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.singleBlock(pos));
 	}
 
-	@SuppressWarnings("unchecked")
 	protected List<EntityXPOrb> getXPOrbsOnGrid() {
-		AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 0.3, zCoord + 1);
-		return worldObj.getEntitiesWithinAABB(EntityXPOrb.class, bb);
+		return worldObj.getEntitiesWithinAABB(EntityXPOrb.class, BlockUtils.aabbOffset(pos, 0, 0, 0, 1, 0.3, 1));
 	}
 
 }

@@ -5,14 +5,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.WorldServer;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
+import openmods.fakeplayer.DropItemAction;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUser;
-import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -48,13 +48,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 			final ItemStack dropped = stack.splitStack(1);
 
 			if (stack.stackSize <= 0) inventory.setInventorySlotContents(i, null);
-
-			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
-				@Override
-				public void usePlayer(OpenModsFakePlayer fakePlayer) {
-					fakePlayer.dropItemAt(dropped, xCoord, yCoord, zCoord, ForgeDirection.DOWN);
-				}
-			});
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new DropItemAction(dropped, pos, EnumFacing.DOWN));
 
 			break;
 		}
@@ -63,7 +57,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	@Override
 	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
-			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
+			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
 		}
 	}
 
@@ -98,10 +92,5 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
-	}
-
-	@Override
-	public boolean canUpdate() {
-		return false;
 	}
 }

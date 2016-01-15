@@ -1,15 +1,15 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openmods.renderer.DisplayListWrapper;
+import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer {
+public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer<TileEntityBuilderGuide> {
 
 	private static final float RADIUS = 0.4f;
 
@@ -37,52 +37,20 @@ public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer {
 
 		@Override
 		public void compile() {
-			final Tessellator tes = new Tessellator();
-			tes.startDrawingQuads();
-
-			tes.addVertex(-HALF_SIZE, -HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(-HALF_SIZE, +HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, +HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, -HALF_SIZE, -HALF_SIZE);
-
-			tes.addVertex(-HALF_SIZE, -HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, -HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, +HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(-HALF_SIZE, +HALF_SIZE, +HALF_SIZE);
-
-			tes.addVertex(-HALF_SIZE, -HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(-HALF_SIZE, -HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(-HALF_SIZE, +HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(-HALF_SIZE, +HALF_SIZE, -HALF_SIZE);
-
-			tes.addVertex(+HALF_SIZE, -HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, +HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, +HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, -HALF_SIZE, +HALF_SIZE);
-
-			tes.addVertex(-HALF_SIZE, -HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, -HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, -HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(-HALF_SIZE, -HALF_SIZE, +HALF_SIZE);
-
-			tes.addVertex(-HALF_SIZE, +HALF_SIZE, -HALF_SIZE);
-			tes.addVertex(-HALF_SIZE, +HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, +HALF_SIZE, +HALF_SIZE);
-			tes.addVertex(+HALF_SIZE, +HALF_SIZE, -HALF_SIZE);
-
-			tes.draw();
+			Tessellator tes = new Tessellator(6 * 4 * 3 * 4 * 2);
+			RenderUtils.renderSolidCube(tes, -HALF_SIZE, -HALF_SIZE, -HALF_SIZE, +HALF_SIZE, +HALF_SIZE, +HALF_SIZE);
 		}
 	};
 
 	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTickTime) {
+	public void renderTileEntityAt(TileEntityBuilderGuide te, double x, double y, double z, float partialTickTime, int destroyProgress) {
 		if (MinecraftForgeClient.getRenderPass() == 0) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-			renderCubes(((TileEntityBuilderGuide)te).getTicks() + partialTickTime);
+			renderCubes(te.getTicks() + partialTickTime);
 			GL11.glPopMatrix();
 		} else {
-			super.renderTileEntityAt(te, x, y, z, partialTickTime);
+			super.renderTileEntityAt(te, x, y, z, partialTickTime, destroyProgress);
 		}
 	}
 

@@ -51,7 +51,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 			if (tickCounter > 0) {
 				tickCounter--;
 				if (tickCounter <= 0) {
-					worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.5F);
+					playSoundAtBlock("random.click", 0.3F, 0.5F);
 					flags.off(Flags.active);
 					sync();
 				}
@@ -80,14 +80,14 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!worldObj.isRemote) {
 			if (player.isSneaking()) {
 				openGui(OpenBlocks.instance, player);
 			} else {
 				flags.on(Flags.active);
 				tickCounter = getTickTime();
-				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.click", 0.3F, 0.6F);
+				playSoundAtBlock("random.click", 0.3F, 0.6F);
 				sync();
 			}
 		}
@@ -123,8 +123,8 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 
 	@Override
 	public void onSync(Set<ISyncableObject> changes) {
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.bigButton);
-		final ForgeDirection rot = getOrientation().north();
-		worldObj.notifyBlocksOfNeighborChange(xCoord + rot.offsetX, yCoord + rot.offsetY, zCoord + rot.offsetZ, OpenBlocks.Blocks.bigButton);
+		worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.bigButton);
+		final EnumFacing rot = getOrientation().north();
+		worldObj.notifyNeighborsOfStateChange(pos.offset(rot), OpenBlocks.Blocks.bigButton);
 	}
 }

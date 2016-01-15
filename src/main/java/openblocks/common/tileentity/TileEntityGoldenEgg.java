@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -11,14 +12,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ITickable;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.Log;
 import openmods.api.IBreakAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.entity.EntityBlock;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
@@ -30,7 +35,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
-public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwareTile, IBreakAwareTile {
+public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile, IBreakAwareTile, ITickable {
 
 	private static final float SPEED_CHANGE_RATE = 0.1f;
 	private static final Random RANDOM = new Random();
@@ -96,11 +101,10 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 			public void onServerTick(TileEntityGoldenEgg target, WorldServer world) {
 				target.tickCounter--;
 				if (Config.eggCanPickBlocks && RANDOM.nextInt(6) == 0) {
-					int posX = target.xCoord + RANDOM.nextInt(20) - 10;
-					int posY = target.yCoord + RANDOM.nextInt(2) - 1;
-					int posZ = target.zCoord + RANDOM.nextInt(20) - 10;
-					boolean canMove = MagnetWhitelists.instance.testBlock(target.worldObj, posX, posY, posZ);
-					if (canMove) target.pickUpBlock(world, posX, posY, posZ);
+					final BlockPos pos = target.getPos();
+					final BlockPos targetPos = pos.add(RANDOM.nextInt(20) - 10, RANDOM.nextInt(2) - 1, RANDOM.nextInt(20) - 10);
+					boolean canMove = MagnetWhitelists.instance.testBlock(target.getWorld(), targetPos);
+					if (canMove) target.pickUpBlock(world, targetPos);
 				}
 			}
 
@@ -191,12 +195,12 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 		stage = SyncableEnum.create(State.INERT);
 	}
 
-	private void pickUpBlock(final WorldServer world, final int x, final int y, final int z) {
+	private void pickUpBlock(final WorldServer world, final BlockPos pos) {
 		FakePlayerPool.instance.executeOnPlayer(world, new PlayerUser() {
 
 			@Override
 			public void usePlayer(OpenModsFakePlayer fakePlayer) {
-				EntityBlock block = EntityBlock.create(fakePlayer, worldObj, x, y, z);
+				EntityBlock block = EntityBlock.create(fakePlayer, worldObj, pos);
 				if (block != null) {
 					block.setHasAirResistance(false);
 					block.setHasGravity(false);
@@ -219,10 +223,10 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 	}
 
 	private void explode() {
-		worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-		worldObj.createExplosion(null, 0.5 + xCoord, 0.5 + yCoord, 0.5 + zCoord, 2, true);
+		worldObj.setBlockToAir(pos);
+		worldObj.createExplosion(null, 0.5 + pos.getX(), 0.5 + pos.getY(), 0.5 + pos.getZ(), 2, true);
 		EntityMiniMe miniMe = new EntityMiniMe(worldObj, Objects.firstNonNull(owner, MR_GLITCH));
-		miniMe.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, 0, 0);
+		miniMe.setPositionAndRotation(0.5 + pos.getX(), 0.5 + pos.getY(), 0.5 + pos.getZ(), 0, 0);
 		worldObj.spawnEntityInWorld(miniMe);
 	}
 
@@ -231,8 +235,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		State state = getState();
 
 		if (worldObj.isRemote) {
@@ -259,7 +262,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 
 		if (owner != null) {
 			NBTTagCompound ownerTag = new NBTTagCompound();
-			NBTUtil.func_152460_a(ownerTag, owner);
+			NBTUtil.writeGameProfile(ownerTag, owner);
 			nbt.setTag("Owner", ownerTag);
 		}
 	}
@@ -270,7 +273,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 
 		if (nbt.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = nbt.getString("owner");
-			this.owner = MinecraftServer.getServer().func_152358_ax().func_152655_a(ownerName);
+			this.owner = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(ownerName);
 		} else if (nbt.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
 			final String uuidStr = nbt.getString("OwnerUUID");
 			try {
@@ -280,7 +283,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 				Log.warn(e, "Failed to parse UUID: %s", uuidStr);
 			}
 		} else if (nbt.hasKey("Owner", Constants.NBT.TAG_COMPOUND)) {
-			this.owner = NBTUtil.func_152459_a(nbt.getCompoundTag("Owner"));
+			this.owner = NBTUtil.readGameProfileFromNBT(nbt.getCompoundTag("Owner"));
 		}
 
 	}
@@ -291,7 +294,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (!worldObj.isRemote && placer instanceof EntityPlayer) {
 			this.owner = ((EntityPlayer)placer).getGameProfile();
 		}
@@ -300,7 +303,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlacerAwar
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getBoundingBox(xCoord, -1024, zCoord, xCoord + 1, 1024, zCoord + 1);
+		return new AxisAlignedBB(pos.getX(), -1024, pos.getZ(), pos.getX() + 1, 1024, pos.getZ() + 1);
 	}
 
 }

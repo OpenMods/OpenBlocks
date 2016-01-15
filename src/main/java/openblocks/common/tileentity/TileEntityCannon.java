@@ -1,13 +1,11 @@
 package openblocks.common.tileentity;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
@@ -20,7 +18,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.InventoryUtils;
 import openmods.utils.render.GeometryUtils;
 
-public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ITriggerable {
+public class TileEntityCannon extends SyncedTileEntity implements IPointable, ISurfaceAttachment, ITriggerable, ITickable {
 
 	/*
 	 * Blocks and Entities have a right-angle offset
@@ -58,14 +56,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void prepareForInventoryRender(Block block, int metadata) {
-		super.prepareForInventoryRender(block, metadata);
-		renderLine = false;
-	}
-
-	@Override
-	public void updateEntity() {
+	public void update() {
 		checkOrigin();
 
 		if (Double.isNaN(currentPitch)) {
@@ -77,8 +68,6 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 			Log.warn("Yaw was NaN");
 			currentYaw = 0;
 		}
-
-		super.updateEntity();
 
 		// ugly, need to clean
 		currentPitch = currentPitch - ((currentPitch - targetPitch.get()) / KNOB_PITCH_CHANGE_SPEED);
@@ -97,7 +86,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		if (!worldObj.isRemote) {
 			if (worldObj.getTotalWorldTime() % 20 == 0) {
-				if (worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+				if (worldObj.isBlockIndirectlyGettingPowered(pos) > 0) {
 					ItemStack stack = findStack();
 					if (stack != null) fireStack(stack);
 				}
@@ -110,8 +99,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	private ItemStack findStack() {
-		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
-			IInventory inventory = InventoryUtils.getInventory(worldObj, xCoord, yCoord, zCoord, direction);
+		for (EnumFacing direction : EnumFacing.VALUES) {
+			IInventory inventory = InventoryUtils.getInventory(worldObj, pos, direction);
 			if (inventory != null) {
 				ItemStack stack = ItemDistribution.removeFromFirstNonEmptySlot(inventory);
 				if (stack != null) return stack;
@@ -126,8 +115,8 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		rpc.trigger();
 
 		// projectileOrigin is not used here, it's used for the calculations below.
-		EntityItem item = new EntityItemProjectile(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, stack);
-		item.delayBeforeCanPickup = 20;
+		EntityItem item = new EntityItemProjectile(worldObj, pos.getX() + 0.5, pos.getY(), pos.getZ(), stack);
+		item.setDefaultPickupDelay();
 
 		// Now that we generate vectors instead of eular angles, this should be revised.
 		Vec3 motion = getMotion();
@@ -135,7 +124,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		item.motionY = motion.yCoord;
 		item.motionZ = motion.zCoord;
 		worldObj.spawnEntityInWorld(item);
-		worldObj.playSoundEffect(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, "openblocks:cannon.activate", 0.2f, 1.0f);
+		playSoundAtBlock("openblocks:cannon.activate", 0.2f, 1.0f);
 	}
 
 	@Override
@@ -145,7 +134,11 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		double x = -0.5 * Math.cos(pitchRad);
 		double z = -0.5 * Math.sin(pitchRad);
 		for (int i = 0; i < 20; i++) {
-			worldObj.spawnParticle((i < 4? "large" : "") + "smoke", x + xCoord + 0.3 + (worldObj.rand.nextDouble() * 0.4), yCoord + 0.7, z + zCoord + 0.3 + (worldObj.rand.nextDouble() * 0.4), 0.0D, 0.0D, 0.0D);
+			spawnParticle((i < 4? EnumParticleTypes.SMOKE_LARGE : EnumParticleTypes.SMOKE_NORMAL),
+					x + 0.3 + (worldObj.rand.nextDouble() * 0.4),
+					0.7,
+					z + 0.3 + (worldObj.rand.nextDouble() * 0.4),
+					0.0D, 0.0D, 0.0D);
 		}
 	}
 
@@ -168,7 +161,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		double sinYaw = Math.sin(y);
 		double cosYaw = Math.cos(y);
 
-		return Vec3.createVectorHelper(-cosPitch * sinYaw * currentSpeed,
+		return new Vec3(-cosPitch * sinYaw * currentSpeed,
 				sinPitch * currentSpeed,
 				-cosPitch * cosYaw * currentSpeed);
 	}
@@ -184,14 +177,14 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	private void checkOrigin() {
 		if (projectileOrigin == null) {
-			projectileOrigin = Vec3.createVectorHelper(xCoord + 0.5, yCoord, zCoord + 0.5);
+			projectileOrigin = new Vec3(pos).addVector(0.5, 0, 0.5);
 		}
 	}
 
-	public void setTarget(int x, int y, int z) {
+	public void setTarget(BlockPos pos) {
 		checkOrigin();
 		// We target the middle of the block, at the very top.
-		final Vec3 target = Vec3.createVectorHelper(x + 0.5, y + 1, z + 0.5);
+		final Vec3 target = new Vec3(pos).addVector(0.5, 1, 0.5);
 
 		// Horizontal distance between the origin and target
 		final double distHorizontal = KNOB_LOB_HORIZONTAL_MUL * Math.sqrt(
@@ -240,9 +233,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	@Override
-	public void onPointingEnd(ItemStack itemStack, EntityPlayer player, int x, int y, int z) {
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.pointed_cannon", x, y, z));
-		setTarget(x, y, z);
+	public void onPointingEnd(ItemStack itemStack, EntityPlayer player, BlockPos pos) {
+		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.pointed_cannon", pos.getX(), pos.getY(), pos.getZ()));
+		setTarget(pos);
 	}
 
 	public void setSpeed(double speed) {
@@ -300,7 +293,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		/**
 		 * Physics gravity vector in partial time squared for acceleration calculation
 		 */
-		private static final Vec3 PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL = Vec3.createVectorHelper(0, PHYS_PARTIAL_TIME_SQUARE * -PHYS_PARTIAL_WORLD_GRAVITY, 0);
+		private static final Vec3 PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL = new Vec3(0, PHYS_PARTIAL_TIME_SQUARE * -PHYS_PARTIAL_WORLD_GRAVITY, 0);
 
 		/**
 		 * The actual work for calculating trajectory. Which is much simpler now.
@@ -317,7 +310,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 			final double n = scale * PHYS_STEPS_PER_SECOND;
 			final double accelerationMultiplier = 0.5 * n * n + n; // (n^2+n)/2
 
-			final Vec3 scaledAcceleration = Vec3.createVectorHelper(
+			final Vec3 scaledAcceleration = new Vec3(
 					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.xCoord * accelerationMultiplier,
 					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.yCoord * accelerationMultiplier,
 					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.zCoord * accelerationMultiplier
@@ -326,7 +319,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 			// -1 /n * Phys = -Phys / n
 			final double velocityMultiplier = -PHYS_STEPS_PER_SECOND / n;
 
-			final Vec3 velocity = Vec3.createVectorHelper(
+			final Vec3 velocity = new Vec3(
 					(start.xCoord + scaledAcceleration.xCoord - target.xCoord) * velocityMultiplier,
 					(start.yCoord + scaledAcceleration.yCoord - target.yCoord) * velocityMultiplier,
 					(start.zCoord + scaledAcceleration.zCoord - target.zCoord) * velocityMultiplier
@@ -337,7 +330,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 	}
 
 	@Override
-	public ForgeDirection getSurfaceDirection() {
-		return ForgeDirection.DOWN;
+	public EnumFacing getSurfaceDirection() {
+		return EnumFacing.DOWN;
 	}
 }

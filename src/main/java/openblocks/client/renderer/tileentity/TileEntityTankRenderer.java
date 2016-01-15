@@ -1,33 +1,32 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.renderer.TessellatorPool;
+import openmods.renderer.TessellatorPool.WorldRendererUser;
 import openmods.utils.Diagonal;
 import openmods.utils.TextureUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
-
-	RenderBlocks renderBlocks = new RenderBlocks();
+public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntityTank> {
 
 	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f) {
-		TileEntityTank tankTile = (TileEntityTank)te;
-
+	public void renderTileEntityAt(TileEntityTank tankTile, double x, double y, double z, float partialTicks, int damageProgress) {
 		if (tankTile.isInvalid()) return;
 
-		ITankRenderFluidData data = tankTile.getRenderFluidData();
-
+		final ITankRenderFluidData data = tankTile.getRenderFluidData();
 		if (data.hasFluid()) {
 			bindTexture(TextureMap.locationBlocksTexture);
 			GL11.glPushMatrix();
@@ -37,11 +36,15 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 			// OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			// I just can't get it right
 			GL11.glDisable(GL11.GL_BLEND);
-			float time = te.getWorldObj().getTotalWorldTime() + f;
+			final float time = tankTile.getWorld().getTotalWorldTime() + partialTicks;
 			renderFluid(data, time);
 			// GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
+	}
+
+	private static void addVertexWithUV(WorldRenderer wr, double x, double y, double z, double u, double v) {
+		wr.pos(x, y, z).tex(u, v).endVertex();
 	}
 
 	public static void renderFluid(final ITankRenderFluidData data, float time) {
@@ -50,14 +53,14 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		FluidStack fluidStack = data.getFluid();
 		final Fluid fluid = fluidStack.getFluid();
 
-		IIcon texture = fluid.getStillIcon();
+		TextureAtlasSprite texture = TextureUtils.getFluidTexture(fluidStack);
 		final int color;
 
+		TextureUtils.bindTextureToClient(TextureMap.locationBlocksTexture);
+
 		if (texture != null) {
-			TextureUtils.bindTextureToClient(getFluidSheet(fluid));
 			color = fluid.getColor(fluidStack);
 		} else {
-			TextureUtils.bindDefaultTerrainTexture();
 			texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("missingno");
 			color = 0xFFFFFFFF;
 		}
@@ -80,60 +83,62 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 		final float g = (color >> 8 & 0xFF) / 255.0F;
 		final float b = (color & 0xFF) / 255.0F;
 
-		TessellatorPool.instance.startDrawingQuads(new TessellatorUser() {
+		GlStateManager.color(r, g, b);
+
+		TessellatorPool.instance.startDrawing(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, new WorldRendererUser() {
+
 			@Override
-			public void execute(Tessellator tes) {
-				tes.setColorOpaque_F(r, g, b);
+			public void execute(WorldRenderer wr) {
 
-				if (data.shouldRenderFluidWall(ForgeDirection.NORTH) && (nw > 0 || ne > 0)) {
-					tes.addVertexWithUV(1, 0, 0, uMax, vMin);
-					tes.addVertexWithUV(0, 0, 0, uMin, vMin);
-					tes.addVertexWithUV(0, nw, 0, uMin, vMin + (vHeight * nw));
-					tes.addVertexWithUV(1, ne, 0, uMax, vMin + (vHeight * ne));
+				if (data.shouldRenderFluidWall(EnumFacing.NORTH) && (nw > 0 || ne > 0)) {
+					addVertexWithUV(wr, 1, 0, 0, uMax, vMin);
+					addVertexWithUV(wr, 0, 0, 0, uMin, vMin);
+					addVertexWithUV(wr, 0, nw, 0, uMin, vMin + (vHeight * nw));
+					addVertexWithUV(wr, 1, ne, 0, uMax, vMin + (vHeight * ne));
 				}
 
-				if (data.shouldRenderFluidWall(ForgeDirection.SOUTH) && (se > 0 || sw > 0)) {
-					tes.addVertexWithUV(1, 0, 1, uMin, vMin);
-					tes.addVertexWithUV(1, se, 1, uMin, vMin + (vHeight * se));
-					tes.addVertexWithUV(0, sw, 1, uMax, vMin + (vHeight * sw));
-					tes.addVertexWithUV(0, 0, 1, uMax, vMin);
+				if (data.shouldRenderFluidWall(EnumFacing.SOUTH) && (se > 0 || sw > 0)) {
+					addVertexWithUV(wr, 1, 0, 1, uMin, vMin);
+					addVertexWithUV(wr, 1, se, 1, uMin, vMin + (vHeight * se));
+					addVertexWithUV(wr, 0, sw, 1, uMax, vMin + (vHeight * sw));
+					addVertexWithUV(wr, 0, 0, 1, uMax, vMin);
 				}
 
-				if (data.shouldRenderFluidWall(ForgeDirection.EAST) && (ne > 0 || se > 0)) {
-					tes.addVertexWithUV(1, 0, 0, uMin, vMin);
-					tes.addVertexWithUV(1, ne, 0, uMin, vMin + (vHeight * ne));
-					tes.addVertexWithUV(1, se, 1, uMax, vMin + (vHeight * se));
-					tes.addVertexWithUV(1, 0, 1, uMax, vMin);
+				if (data.shouldRenderFluidWall(EnumFacing.EAST) && (ne > 0 || se > 0)) {
+					addVertexWithUV(wr, 1, 0, 0, uMin, vMin);
+					addVertexWithUV(wr, 1, ne, 0, uMin, vMin + (vHeight * ne));
+					addVertexWithUV(wr, 1, se, 1, uMax, vMin + (vHeight * se));
+					addVertexWithUV(wr, 1, 0, 1, uMax, vMin);
 				}
 
-				if (data.shouldRenderFluidWall(ForgeDirection.WEST) && (sw > 0 || nw > 0)) {
-					tes.addVertexWithUV(0, 0, 1, uMin, vMin);
-					tes.addVertexWithUV(0, sw, 1, uMin, vMin + (vHeight * sw));
-					tes.addVertexWithUV(0, nw, 0, uMax, vMin + (vHeight * nw));
-					tes.addVertexWithUV(0, 0, 0, uMax, vMin);
+				if (data.shouldRenderFluidWall(EnumFacing.WEST) && (sw > 0 || nw > 0)) {
+					addVertexWithUV(wr, 0, 0, 1, uMin, vMin);
+					addVertexWithUV(wr, 0, sw, 1, uMin, vMin + (vHeight * sw));
+					addVertexWithUV(wr, 0, nw, 0, uMax, vMin + (vHeight * nw));
+					addVertexWithUV(wr, 0, 0, 0, uMax, vMin);
 				}
 
-				if (data.shouldRenderFluidWall(ForgeDirection.UP)) {
+				if (data.shouldRenderFluidWall(EnumFacing.UP)) {
 					final double uMid = (uMax + uMin) / 2;
 					final double vMid = (vMax + vMin) / 2;
 
-					tes.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-					tes.addVertexWithUV(1, se, 1, uMax, vMin);
-					tes.addVertexWithUV(1, ne, 0, uMin, vMin);
-					tes.addVertexWithUV(0, nw, 0, uMin, vMax);
+					addVertexWithUV(wr, 0.5, center, 0.5, uMid, vMid);
+					addVertexWithUV(wr, 1, se, 1, uMax, vMin);
+					addVertexWithUV(wr, 1, ne, 0, uMin, vMin);
+					addVertexWithUV(wr, 0, nw, 0, uMin, vMax);
 
-					tes.addVertexWithUV(0, sw, 1, uMax, vMax);
-					tes.addVertexWithUV(1, se, 1, uMax, vMin);
-					tes.addVertexWithUV(0.5, center, 0.5, uMid, vMid);
-					tes.addVertexWithUV(0, nw, 0, uMin, vMax);
+					addVertexWithUV(wr, 0, sw, 1, uMax, vMax);
+					addVertexWithUV(wr, 1, se, 1, uMax, vMin);
+					addVertexWithUV(wr, 0.5, center, 0.5, uMid, vMid);
+					addVertexWithUV(wr, 0, nw, 0, uMin, vMax);
 
 				}
 
-				if (data.shouldRenderFluidWall(ForgeDirection.DOWN)) {
-					tes.addVertexWithUV(1, 0, 0, uMax, vMin);
-					tes.addVertexWithUV(1, 0, 1, uMin, vMin);
-					tes.addVertexWithUV(0, 0, 1, uMin, vMax);
-					tes.addVertexWithUV(0, 0, 0, uMax, vMax);
+				if (data.shouldRenderFluidWall(EnumFacing.DOWN)) {
+					addVertexWithUV(wr, 1, 0, 0, uMax, vMin);
+					addVertexWithUV(wr, 1, 0, 1, uMin, vMin);
+					addVertexWithUV(wr, 0, 0, 1, uMin, vMax);
+					addVertexWithUV(wr, 0, 0, 0, uMax, vMax);
 				}
 			}
 		});

@@ -1,11 +1,13 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.client.StencilSkyRenderer;
 import openblocks.common.block.BlockSky;
+import openblocks.common.tileentity.TileEntitySky;
 import openmods.Log;
 import openmods.colors.RGB;
 import openmods.renderer.StencilRendererHandler;
@@ -13,7 +15,7 @@ import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
-public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
+public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntitySky> {
 
 	private boolean initialized;
 
@@ -21,9 +23,8 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 	private StencilRendererHandler handler;
 
 	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTickTime) {
-		int meta = te.getBlockMetadata();
-		if (!BlockSky.isActive(meta)) return;
+	public void renderTileEntityAt(TileEntitySky te, double x, double y, double z, float partialTickTime, int destroyStage) {
+		if (!BlockSky.isActive(te.getWorld().getBlockState(te.getPos()))) return;
 
 		if (!initialized) {
 			intialize();
@@ -44,58 +45,63 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {
 	protected void intialize() {
 		displayListBase = GL11.glGenLists(2);
 
-		final Tessellator tes = new Tessellator();
+		final Tessellator tes = new Tessellator(6 * 4 * 3 * 8);
 		GL11.glNewList(displayListBase, GL11.GL_COMPILE);
 		renderCube(tes);
 		GL11.glEndList();
 
-		StencilBitAllocation bit = StencilPoolManager.pool().acquire();
-
 		GL11.glNewList(displayListBase + 1, GL11.GL_COMPILE);
-		if (bit != null) {
-			Log.debug("Stencil bit %d allocated for skyblock rendering", bit.bit);
-			cutHoleInWorld(tes, bit.mask);
+
+		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
+
+		if (stencilBit >= 0) {
+			Log.debug("Stencil bit %d allocated for skyblock rendering", stencilBit);
+			cutHoleInWorld(tes, 1 << stencilBit);
 		} else {
 			Log.warn("Failed to allocate stencil bit for skyblock rendering");
 		}
 		GL11.glEndList();
 
-		handler = bit != null? new StencilSkyRenderer(bit.mask) : StencilRendererHandler.DUMMY;
+		handler = stencilBit >= 0? new StencilSkyRenderer(1 << stencilBit) : StencilRendererHandler.DUMMY;
+	}
+
+	private static void addVertex(WorldRenderer wr, double x, double y, double z) {
+		wr.pos(x, y, z).endVertex();
 	}
 
 	private static void renderCube(Tessellator tes) {
+		final WorldRenderer wr = tes.getWorldRenderer();
+		wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 
-		tes.startDrawingQuads();
+		addVertex(wr, 0, 0, 0);
+		addVertex(wr, 0, 1, 0);
+		addVertex(wr, 1, 1, 0);
+		addVertex(wr, 1, 0, 0);
 
-		tes.addVertex(0, 0, 0);
-		tes.addVertex(0, 1, 0);
-		tes.addVertex(1, 1, 0);
-		tes.addVertex(1, 0, 0);
+		addVertex(wr, 0, 0, 1);
+		addVertex(wr, 1, 0, 1);
+		addVertex(wr, 1, 1, 1);
+		addVertex(wr, 0, 1, 1);
 
-		tes.addVertex(0, 0, 1);
-		tes.addVertex(1, 0, 1);
-		tes.addVertex(1, 1, 1);
-		tes.addVertex(0, 1, 1);
+		addVertex(wr, 0, 0, 0);
+		addVertex(wr, 0, 0, 1);
+		addVertex(wr, 0, 1, 1);
+		addVertex(wr, 0, 1, 0);
 
-		tes.addVertex(0, 0, 0);
-		tes.addVertex(0, 0, 1);
-		tes.addVertex(0, 1, 1);
-		tes.addVertex(0, 1, 0);
+		addVertex(wr, 1, 0, 0);
+		addVertex(wr, 1, 1, 0);
+		addVertex(wr, 1, 1, 1);
+		addVertex(wr, 1, 0, 1);
 
-		tes.addVertex(1, 0, 0);
-		tes.addVertex(1, 1, 0);
-		tes.addVertex(1, 1, 1);
-		tes.addVertex(1, 0, 1);
+		addVertex(wr, 0, 0, 0);
+		addVertex(wr, 1, 0, 0);
+		addVertex(wr, 1, 0, 1);
+		addVertex(wr, 0, 0, 1);
 
-		tes.addVertex(0, 0, 0);
-		tes.addVertex(1, 0, 0);
-		tes.addVertex(1, 0, 1);
-		tes.addVertex(0, 0, 1);
-
-		tes.addVertex(0, 1, 0);
-		tes.addVertex(0, 1, 1);
-		tes.addVertex(1, 1, 1);
-		tes.addVertex(1, 1, 0);
+		addVertex(wr, 0, 1, 0);
+		addVertex(wr, 0, 1, 1);
+		addVertex(wr, 1, 1, 1);
+		addVertex(wr, 1, 1, 0);
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);

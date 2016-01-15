@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.integration.TurtleIds;
 import openblocks.integration.TurtleUtils;
@@ -15,13 +14,7 @@ public class MetaMiracleMagnet extends MetaGeneric {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		registerIcon(register, "crane_magnet"); // reuse!
-	}
-
-	@Override
-	public boolean hasEffect(int renderPass) {
+	public boolean hasEffect() {
 		return true;
 	}
 

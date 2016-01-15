@@ -25,7 +25,7 @@ public class BlockVacuumHopper extends OpenBlock {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		return AxisAlignedBB.fromBounds(pos.getX() + 0.01, pos.getY() + 0.01, pos.getZ() + 0.01,
+		return new AxisAlignedBB(pos.getX() + 0.01, pos.getY() + 0.01, pos.getZ() + 0.01,
 				pos.getX() + 0.99, pos.getY() + 0.99, pos.getZ() + 0.99);
 	}
 
@@ -44,7 +44,7 @@ public class BlockVacuumHopper extends OpenBlock {
 
 	@Override
 	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-		return AxisAlignedBB.fromBounds(pos.getX() + 0.3, pos.getY() + 0.3, pos.getZ() + 0.3,
+		return new AxisAlignedBB(pos.getX() + 0.3, pos.getY() + 0.3, pos.getZ() + 0.3,
 				pos.getX() + 0.7, pos.getY() + 0.7, pos.getZ() + 0.7);
 	}
 

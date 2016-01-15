@@ -2,15 +2,15 @@ package openblocks.common.recipe;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import openblocks.common.item.ItemEpicEraser;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
+import openmods.utils.CustomRecipeBase;
 import openmods.utils.InventoryUtils;
 
-public class EpicEraserRecipe implements IRecipe {
+public class EpicEraserRecipe extends CustomRecipeBase {
 
 	private static boolean hasLore(ItemStack itemStack) {
 		final NBTTagCompound itemTag = itemStack.getTagCompound();
@@ -76,11 +76,6 @@ public class EpicEraserRecipe implements IRecipe {
 	@Override
 	public int getRecipeSize() {
 		return 2;
-	}
-
-	@Override
-	public ItemStack getRecipeOutput() {
-		return null;
 	}
 
 }

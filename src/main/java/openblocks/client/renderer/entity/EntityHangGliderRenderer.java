@@ -2,15 +2,16 @@ package openblocks.client.renderer.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.renderer.DisplayListWrapper;
 
 import org.lwjgl.opengl.GL11;
 
-public class EntityHangGliderRenderer extends Render {
+public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 
 	private static final float QUAD_HALF_SIZE = 2.4f;
 	private static final float ONGROUND_ROTATION = 90f;
@@ -40,11 +41,14 @@ public class EntityHangGliderRenderer extends Render {
 		}
 	};
 
-	private final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/hangglider.png");
+	private static final ResourceLocation texture = OpenBlocks.location("textures/models/hangglider.png");
+
+	public EntityHangGliderRenderer(RenderManager renderManager) {
+		super(renderManager);
+	}
 
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float f, float f1) {
-		final EntityHangGlider glider = (EntityHangGlider)entity;
+	public void doRender(EntityHangGlider glider, double x, double y, double z, float f, float f1) {
 		final EntityPlayer owner = glider.getPlayer();
 		if (owner == null) return;
 
@@ -110,7 +114,7 @@ public class EntityHangGliderRenderer extends Render {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
+	protected ResourceLocation getEntityTexture(EntityHangGlider entity) {
 		return texture;
 	}
 }

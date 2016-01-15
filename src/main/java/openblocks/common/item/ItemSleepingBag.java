@@ -2,7 +2,7 @@ package openblocks.common.item;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.api.SleepingBagUseEvent;
@@ -29,6 +30,7 @@ import openmods.infobook.BookDocumentation;
 import openmods.reflection.FieldAccess;
 import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
+import openmods.utils.NbtUtils;
 
 @BookDocumentation(customName = "sleepingbag")
 public class ItemSleepingBag extends ItemArmor {
@@ -101,57 +103,57 @@ public class ItemSleepingBag extends ItemArmor {
 			getOutOfSleepingBag(player);
 		} else {
 			// player just put in on
-			final int posX = MathHelper.floor_double(player.posX);
-			final int posY = MathHelper.floor_double(player.posY);
-			final int posZ = MathHelper.floor_double(player.posZ);
+			final BlockPos pos = player.getPosition();
 
-			if (canPlayerSleep(player, world, posX, posY, posZ)) {
+			if (canPlayerSleep(player, world, pos)) {
 				storeOriginalSpawn(player, tag);
 				storeOriginalPosition(player, tag);
 				tag.setBoolean(TAG_SLEEPING, true);
-				sleepSafe((EntityPlayerMP)player, world, posX, posY, posZ);
+				sleepSafe((EntityPlayerMP)player, world, pos);
 			} else getOutOfSleepingBag(player);
 		}
 	}
 
-	private static void sleepSafe(EntityPlayerMP player, World world, int x, int y, int z) {
+	private static void sleepSafe(EntityPlayerMP player, World world, BlockPos pos) {
+		// TODO 1.8.9 replace if forge PR is accepted
 		if (player.isRiding()) player.mountEntity(null);
 
 		IS_SLEEPING.set(player, true);
 		SLEEPING_TIMER.set(player, 0);
-		player.playerLocation = new ChunkCoordinates(x, y, z);
+		player.playerLocation = pos;
 
 		player.motionX = player.motionZ = player.motionY = 0.0D;
 		world.updateAllPlayersSleepingFlag();
 
-		S0APacketUseBed sleepPacket = new S0APacketUseBed(player, x, y, z);
-		player.getServerForPlayer().getEntityTracker().func_151247_a(player, sleepPacket);
+		S0APacketUseBed sleepPacket = new S0APacketUseBed(player, pos);
+		player.getServerForPlayer().getEntityTracker().sendToAllTrackingEntity(player, sleepPacket);
 		player.playerNetServerHandler.sendPacket(sleepPacket);
 	}
 
-	private static EnumStatus vanillaCanSleep(EntityPlayer player, World world, int x, int y, int z) {
-		PlayerSleepInBedEvent event = new PlayerSleepInBedEvent(player, x, y, z);
+	private static EnumStatus vanillaCanSleep(EntityPlayer player, World world, BlockPos pos) {
+		PlayerSleepInBedEvent event = new PlayerSleepInBedEvent(player, pos);
 		MinecraftForge.EVENT_BUS.post(event);
 		if (event.result != null) return event.result;
 
 		if (!world.provider.isSurfaceWorld()) return EntityPlayer.EnumStatus.NOT_POSSIBLE_HERE;
 		if (world.isDaytime()) return EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW;
 
-		List<?> list = world.getEntitiesWithinAABB(EntityMob.class, AxisAlignedBB.getBoundingBox(x - 8, y - 5, z - 8, x + 8, y + 5, z + 8));
+		List<EntityMob> list = world.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(pos.getX() - 8, pos.getY() - 5, pos.getZ() - 8, pos.getX() + 8, pos.getY() + 5, pos.getZ() + 8));
+
 		if (!list.isEmpty()) return EntityPlayer.EnumStatus.NOT_SAFE;
 
 		return EntityPlayer.EnumStatus.OK;
 	}
 
-	private static boolean canPlayerSleep(EntityPlayer player, World world, int x, int y, int z) {
+	private static boolean canPlayerSleep(EntityPlayer player, World world, BlockPos pos) {
 		if (player.isPlayerSleeping() || !player.isEntityAlive()) return false;
 
-		if (!isNotSuffocating(world, x, y, z) || !isSolidEnough(world, x, y - 1, z)) {
+		if (!isNotSuffocating(world, pos) || !isSolidEnough(world, pos.down())) {
 			player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.oh_no_ground"));
 			return false;
 		}
 
-		final EnumStatus status = vanillaCanSleep(player, world, x, y, z);
+		final EnumStatus status = vanillaCanSleep(player, world, pos);
 		final SleepingBagUseEvent evt = new SleepingBagUseEvent(player, status);
 		evt.playerChat = findDefaultChatComponent(status);
 		MinecraftForge.EVENT_BUS.post(evt);
@@ -180,13 +182,17 @@ public class ItemSleepingBag extends ItemArmor {
 		}
 	}
 
-	private static boolean isNotSuffocating(World world, int x, int y, int z) {
-		return world.getBlock(x, y, z).getCollisionBoundingBoxFromPool(world, x, y, z) == null || world.isAirBlock(x, y, z);
+	private static AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos) {
+		final IBlockState state = world.getBlockState(pos);
+		return state.getBlock().getCollisionBoundingBox(world, pos, state);
 	}
 
-	private static boolean isSolidEnough(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
-		AxisAlignedBB aabb = block.getCollisionBoundingBoxFromPool(world, x, y, z);
+	private static boolean isNotSuffocating(World world, BlockPos pos) {
+		return (world.isAirBlock(pos) || getCollisionBoundingBox(world, pos) == null);
+	}
+
+	private static boolean isSolidEnough(World world, BlockPos pos) {
+		AxisAlignedBB aabb = getCollisionBoundingBox(world, pos);
 		if (aabb == null) return false;
 
 		double dx = aabb.maxX - aabb.minX;
@@ -250,26 +256,29 @@ public class ItemSleepingBag extends ItemArmor {
 		}
 	}
 
+	// TODO 1.8.9 may not be needed after Forge PR
+	// alternativelly, use event
 	private static void storeOriginalSpawn(EntityPlayer player, NBTTagCompound tag) {
-		ChunkCoordinates spawn = player.getBedLocation(player.worldObj.provider.dimensionId);
-		if (spawn != null) tag.setTag(TAG_SPAWN, TagUtils.store(spawn));
+		BlockPos spawn = player.getBedLocation(player.worldObj.provider.getDimensionId());
+		if (spawn != null) tag.setTag(TAG_SPAWN, NbtUtils.store(spawn));
 	}
 
 	private static void restoreOriginalSpawn(EntityPlayer player, NBTTagCompound tag) {
 		if (tag.hasKey(TAG_SPAWN)) {
-			ChunkCoordinates coords = TagUtils.readCoord(tag.getCompoundTag(TAG_SPAWN)).asChunkCoordinate();
-			player.setSpawnChunk(coords, false, player.worldObj.provider.dimensionId);
+			BlockPos coords = NbtUtils.readBlockPos(tag.getCompoundTag(TAG_SPAWN));
+			player.setSpawnChunk(coords, false, player.worldObj.provider.getDimensionId());
 			tag.removeTag(TAG_SPAWN);
 		}
 	}
 
+	// TODO 1.8.9 may not be needed - players seem to be frozen in 1.8.9
 	private static void storeOriginalPosition(Entity e, NBTTagCompound tag) {
-		tag.setTag(TAG_POSITION, TagUtils.store(e.posX, e.posY, e.posZ));
+		tag.setTag(TAG_POSITION, NbtUtils.store(e.posX, e.posY, e.posZ));
 	}
 
 	private static void restoreOriginalPosition(Entity e, NBTTagCompound tag) {
 		if (tag.hasKey(TAG_POSITION)) {
-			Vec3 position = TagUtils.readVec(tag.getCompoundTag(TAG_POSITION));
+			Vec3 position = NbtUtils.readVec(tag.getCompoundTag(TAG_POSITION));
 			e.setPosition(position.xCoord, position.yCoord, position.zCoord);
 			tag.removeTag(TAG_POSITION);
 		}

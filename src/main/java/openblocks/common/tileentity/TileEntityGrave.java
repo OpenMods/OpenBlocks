@@ -2,8 +2,10 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -14,16 +16,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.*;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
-import openmods.api.IActivateAwareTile;
-import openmods.api.IAddAwareTile;
-import openmods.api.INeighbourAwareTile;
+import openmods.api.*;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.sync.SyncableBoolean;
@@ -31,9 +31,17 @@ import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 
-public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile, IAddAwareTile {
+public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile, IAddAwareTile, ITickable {
+
+	private static final Predicate<EntityLiving> IS_MOB = new Predicate<EntityLiving>() {
+		@Override
+		public boolean apply(@Nullable EntityLiving input) {
+			return input instanceof IMob;
+		}
+	};
 
 	private static final String TAG_MESSAGE = "Message";
 	private SyncableString perishedUsername;
@@ -53,16 +61,16 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void updateEntity() {
-		super.updateEntity();
-
+	public void update() {
 		if (!worldObj.isRemote) {
-			if (Config.spawnSkeletons && worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < Config.skeletonSpawnRate) {
-				List<Entity> mobs = worldObj.getEntitiesWithinAABB(IMob.class, getBB().expand(7, 7, 7));
+			if (Config.spawnSkeletons && worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < Config.skeletonSpawnRate) {
+
+				List<EntityLiving> mobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, getBB().expand(7, 7, 7), IS_MOB);
+
 				if (mobs.size() < 5) {
 					double chance = worldObj.rand.nextDouble();
 					EntityLiving living = chance < 0.5? new EntitySkeleton(worldObj) : new EntityBat(worldObj);
-					living.setPositionAndRotation(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, worldObj.rand.nextFloat() * 360, 0);
+					living.setPositionAndRotation(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, worldObj.rand.nextFloat() * 360, 0);
 					if (living.getCanSpawnHere()) {
 						worldObj.spawnEntityInWorld(living);
 					}
@@ -93,7 +101,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 	}
 
 	@Override
-	public void onBlockPlacedBy(EntityLivingBase placer, ItemStack stack) {
+	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if (!worldObj.isRemote) {
 			if ((placer instanceof EntityPlayer) && !(placer instanceof FakePlayer)) {
 				EntityPlayer player = (EntityPlayer)placer;
@@ -113,7 +121,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 		inventory.writeToNBT(tag);
 
 		if (deathMessage != null) {
-			String serialized = IChatComponent.Serializer.func_150696_a(deathMessage);
+			String serialized = IChatComponent.Serializer.componentToJson(deathMessage);
 			tag.setString(TAG_MESSAGE, serialized);
 		}
 	}
@@ -126,7 +134,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 		String serializedMsg = tag.getString(TAG_MESSAGE);
 
 		if (!Strings.isNullOrEmpty(serializedMsg)) {
-			deathMessage = IChatComponent.Serializer.func_150699_a(serializedMsg);
+			deathMessage = IChatComponent.Serializer.jsonToComponent(serializedMsg);
 		}
 	}
 
@@ -136,7 +144,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 	}
 
 	protected void updateBlockBelow() {
-		Block block = worldObj.getBlock(xCoord, yCoord - 1, zCoord);
+		Block block = worldObj.getBlockState(pos.down()).getBlock();
 		onSoil.set(block == Blocks.dirt || block == Blocks.grass);
 	}
 
@@ -154,11 +162,11 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1);
+		return BlockUtils.singleBlock(pos);
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player.worldObj.isRemote) return false;
 		ItemStack held = player.getHeldItem();
 		if (held != null && held.getItem().getToolClasses(held).contains("shovel")) {
@@ -176,14 +184,14 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlacerAwareTil
 			final ItemStack stack = inventory.getStackInSlot(i);
 			if (stack != null) {
 				dropped = true;
-				BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, stack);
+				BlockUtils.dropItemStackInWorld(worldObj, pos, stack);
 			}
 		}
 
 		inventory.clearAndSetSlotCount(0);
 
 		if (dropped) {
-			worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord, zCoord, Block.getIdFromBlock(Blocks.dirt));
+			worldObj.playAuxSFXAtEntity(null, 2001, pos, Block.getIdFromBlock(Blocks.dirt));
 			if (worldObj.rand.nextDouble() < Config.graveSpecialAction) ohNoes(player);
 			held.damageItem(2, player);
 		}

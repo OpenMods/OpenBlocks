@@ -1,12 +1,14 @@
 package openblocks.client.gui;
 
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.rpc.IStencilCrafter;
 import openmods.gui.BaseGuiContainer;
+import openmods.gui.Icon;
 import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
 
@@ -18,29 +20,36 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 
 	private int patternIndex = 0;
 
+	private TextureAtlasSprite getStencilIcon(int index) {
+		final ResourceLocation blockIcon = Stencil.VALUES[index].blockIcon;
+		return componentParent.getIcon(blockIcon);
+	}
+
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
 		final IStencilCrafter rpcProxy = getContainer().getOwner().createClientRpcProxy(IStencilCrafter.class);
 
-		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, FakeIcon.createSheetIcon(0, 82, 16, 16), BaseComponent.TEXTURE_SHEET);
+		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(componentParent, 47, 32, 0xFFFFFF, Icon.createSheetIcon(BaseComponent.WIDGETS, 0, 82, 16, 16));
 		buttonLeft.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				patternIndex--;
 				if (patternIndex < 0) patternIndex = Stencil.VALUES.length - 1;
-				iconDisplay.setIcon(Stencil.VALUES[patternIndex].getBlockIcon());
+				iconDisplay.setIcon(getStencilIcon(patternIndex));
 			}
 		});
-		GuiComponentIconButton buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, FakeIcon.createSheetIcon(16, 82, -16, 16), BaseComponent.TEXTURE_SHEET);
+
+		// TODO 1.8.9 verify stencil icon rendering
+		GuiComponentIconButton buttonRight = new GuiComponentIconButton(componentParent, 108, 32, 0xFFFFFF, Icon.createSheetIcon(BaseComponent.WIDGETS, 16, 82, -16, 16));
 		buttonRight.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
 				patternIndex++;
 				if (patternIndex >= Stencil.VALUES.length) patternIndex = 0;
-				iconDisplay.setIcon(Stencil.VALUES[patternIndex].getBlockIcon());
+				iconDisplay.setIcon(getStencilIcon(patternIndex));
 			}
 		});
-		GuiComponentTextButton buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF);
+		GuiComponentTextButton buttonDraw = new GuiComponentTextButton(componentParent, 68, 57, 40, 13, 0xFFFFFF);
 		buttonDraw.setText("Draw").setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
@@ -49,7 +58,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 		});
 
 		root.addComponent(buttonDraw);
-		(iconDisplay = new GuiComponentSprite(80, 34, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture)
+		(iconDisplay = new GuiComponentSprite(componentParent, 80, 34, getStencilIcon(0))
 				.setColor(0f, 0f, 0f))
 				.setOverlayMode(true)
 				.setEnabled(inventorySlots.getSlot(0).getStack() != null);

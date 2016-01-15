@@ -92,7 +92,7 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 			tank.writeToNBT(tankTag);
 			itemTag.setTag(TANK_TAG, tankTag);
 		} else {
-			container.stackTagCompound = null;
+			container.setTagCompound(null);
 		}
 	}
 

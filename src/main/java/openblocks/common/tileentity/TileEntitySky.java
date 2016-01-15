@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.tileentity.OpenTileEntity;
 
@@ -18,8 +19,4 @@ public class TileEntitySky extends OpenTileEntity {
 		return 256 * 256;
 	}
 
-	@Override
-	public boolean canUpdate() {
-		return false;
-	}
 }

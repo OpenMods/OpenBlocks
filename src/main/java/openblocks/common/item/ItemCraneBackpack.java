@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -52,7 +53,7 @@ public class ItemCraneBackpack extends ItemArmor {
 				+ radius
 				* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
 
-		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
+		AxisAlignedBB aabb = new AxisAlignedBB(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
 		return !world.getCollidingBoundingBoxes(player, aabb).isEmpty();
 	}
 

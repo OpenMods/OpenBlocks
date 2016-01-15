@@ -34,7 +34,7 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(COLOR, ColorMeta.fromBlockMeta(meta));
+		return getDefaultState().withProperty(COLOR, ColorMeta.fromBlockMeta(meta));
 	}
 
 	@Override
@@ -43,9 +43,8 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 	}
 
 	@Override
-	protected BlockState createBlockState()
-	{
-		return new BlockState(this, new IProperty[] { COLOR });
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] { getPropertyOrientation(), COLOR });
 	}
 
 	@Override

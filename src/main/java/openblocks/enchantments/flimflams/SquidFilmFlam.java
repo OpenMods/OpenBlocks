@@ -26,7 +26,7 @@ public class SquidFilmFlam implements IFlimFlamAction {
 		if (target.riddenByEntity != null && !target.riddenByEntity.isDead) return false;
 
 		EntitySquid squid = new EntitySquid(target.worldObj);
-		squid.moveEntity(target.posX, target.boundingBox.minY, target.posZ);
+		squid.moveEntity(target.posX, target.getEntityBoundingBox().minY, target.posZ);
 
 		int selected = random.nextInt(names.size());
 		squid.setCustomNameTag(names.get(selected));

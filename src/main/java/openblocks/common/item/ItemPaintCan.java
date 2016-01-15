@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.OpenBlocks;
 import openmods.colors.ColorMeta;
-import openmods.colors.ColorUtils;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
 
@@ -37,11 +36,9 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void getSubItems(Item item, CreativeTabs tab, List result) {
-		for (ColorMeta meta : ColorUtils.getAllColors()) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+		for (ColorMeta meta : ColorMeta.getAllColors())
 			result.add(createStack(meta.rgb, FULL_CAN_SIZE));
-		}
 	}
 
 	public static ItemStack createStack(int color, int amount) {
@@ -57,8 +54,7 @@ public class ItemPaintCan extends ItemOpenBlock {
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean extended) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean extended) {
 		list.add(String.format("#%06X", getColorFromStack(stack)));
 	}
 

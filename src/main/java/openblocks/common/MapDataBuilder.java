@@ -88,7 +88,7 @@ public class MapDataBuilder {
 						groundColors[color.colorIndex]++;
 					}
 
-					if (blockLiquid != null && heightLiquid != null	) {
+					if (blockLiquid != null && heightLiquid != null) {
 						liquidHeightSum += heightLiquid.getY();
 						MapColor color = blockLiquid.getBlock().getMapColor(blockLiquid);
 						liquidColors[color.colorIndex]++;

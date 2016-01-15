@@ -3,6 +3,8 @@ package openblocks.client.renderer.tileentity.tank;
 import java.util.Map;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.tileentity.TileEntityTank;
@@ -13,11 +15,7 @@ import com.google.common.collect.Maps;
 
 public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 
-	private int x;
-
-	private int y;
-
-	private int z;
+	private BlockPos pos;
 
 	private World world;
 
@@ -25,7 +23,7 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 
 	private final Map<Diagonal, DiagonalConnection> diagonalConnections = Maps.newEnumMap(Diagonal.class);
 
-	private final Map<ForgeDirection, HorizontalConnection> horizontalConnections = Maps.newEnumMap(ForgeDirection.class);
+	private final Map<EnumFacing, HorizontalConnection> horizontalConnections = Maps.newEnumMap(EnumFacing.class);
 
 	private VerticalConnection topConnection;
 
@@ -41,25 +39,25 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		return connection != null? connection.isConnected() : false;
 	}
 
-	private DoubledCoords createCoords(ForgeDirection dir) {
-		return new DoubledCoords(x, y, z, dir);
+	private DoubledCoords createCoords(EnumFacing dir) {
+		return new DoubledCoords(pos, dir);
 	}
 
 	private DoubledCoords createCoords(Diagonal dir) {
-		return new DoubledCoords(x, y, z, dir);
+		return new DoubledCoords(pos, dir);
 	}
 
-	private ITankConnections getNeighbourTank(int x, int y, int z) {
-		TileEntity te = TankRenderUtils.getTileEntitySafe(world, x, y, z);
+	private ITankConnections getNeighbourTank(BlockPos pos) {
+		TileEntity te = TankRenderUtils.getTileEntitySafe(world, pos);
 		return (te instanceof TileEntityTank)? ((TileEntityTank)te).getRenderConnectionsData() : null;
 	}
 
-	private ITankConnections getNeighbourTank(ForgeDirection dir) {
-		return getNeighbourTank(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+	private ITankConnections getNeighbourTank(EnumFacing dir) {
+		return getNeighbourTank(pos.offset(dir));
 	}
 
 	private ITankConnections getNeighbourTank(Diagonal dir) {
-		return getNeighbourTank(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+		return getNeighbourTank(pos.add(dir.offsetX, dir.offsetY, dir.offsetZ));
 	}
 
 	private DiagonalConnection selectDiagonalConnection(ITankConnections tankCW, ITankConnections tankD, ITankConnections tankCCW, Diagonal dir) {
@@ -74,7 +72,7 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		dir = dir.rotateCW();
 		if (tankCCW != null) return tankCCW.getDiagonalConnection(dir);
 
-		return new DiagonalConnection(TankRenderUtils.calculatePhase(x, y, z, start), createCoords(start));
+		return new DiagonalConnection(TankRenderUtils.calculatePhase(pos.getX(), pos.getY(), pos.getZ(), start), createCoords(start));
 	}
 
 	private void tryCornerConnection(ITankConnections tankCW, ITankConnections tankD, ITankConnections tankCCW, Diagonal dir) {
@@ -82,40 +80,40 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		diagonalConnections.put(dir, connection);
 	}
 
-	private void tryHorizontalConnection(ITankConnections neighbour, ForgeDirection dir) {
+	private void tryHorizontalConnection(ITankConnections neighbour, EnumFacing dir) {
 		final HorizontalConnection connection = (neighbour != null)? neighbour.getHorizontalConnection(dir.getOpposite()) : new HorizontalConnection(createCoords(dir));
 		horizontalConnections.put(dir, connection);
 	}
 
 	private void tryBottomConnection(ITankConnections neighbour) {
-		bottomConnection = neighbour != null? neighbour.getTopConnection() : new VerticalConnection(createCoords(ForgeDirection.DOWN));
+		bottomConnection = neighbour != null? neighbour.getTopConnection() : new VerticalConnection(createCoords(EnumFacing.DOWN));
 	}
 
 	private void tryTopConnection(ITankConnections neighbour) {
-		topConnection = neighbour != null? neighbour.getBottomConnection() : new VerticalConnection(createCoords(ForgeDirection.UP));
+		topConnection = neighbour != null? neighbour.getBottomConnection() : new VerticalConnection(createCoords(EnumFacing.UP));
 	}
 
 	public void updateConnections() {
-		final ITankConnections tankN = getNeighbourTank(ForgeDirection.NORTH);
-		final ITankConnections tankS = getNeighbourTank(ForgeDirection.SOUTH);
-		final ITankConnections tankW = getNeighbourTank(ForgeDirection.WEST);
-		final ITankConnections tankE = getNeighbourTank(ForgeDirection.EAST);
+		final ITankConnections tankN = getNeighbourTank(EnumFacing.NORTH);
+		final ITankConnections tankS = getNeighbourTank(EnumFacing.SOUTH);
+		final ITankConnections tankW = getNeighbourTank(EnumFacing.WEST);
+		final ITankConnections tankE = getNeighbourTank(EnumFacing.EAST);
 
 		final ITankConnections tankNE = getNeighbourTank(Diagonal.NE);
 		final ITankConnections tankNW = getNeighbourTank(Diagonal.NW);
 		final ITankConnections tankSE = getNeighbourTank(Diagonal.SE);
 		final ITankConnections tankSW = getNeighbourTank(Diagonal.SW);
 
-		final ITankConnections tankT = getNeighbourTank(ForgeDirection.UP);
-		final ITankConnections tankB = getNeighbourTank(ForgeDirection.DOWN);
+		final ITankConnections tankT = getNeighbourTank(EnumFacing.UP);
+		final ITankConnections tankB = getNeighbourTank(EnumFacing.DOWN);
 
 		tryTopConnection(tankT);
 		tryBottomConnection(tankB);
 
-		tryHorizontalConnection(tankN, ForgeDirection.NORTH);
-		tryHorizontalConnection(tankS, ForgeDirection.SOUTH);
-		tryHorizontalConnection(tankW, ForgeDirection.WEST);
-		tryHorizontalConnection(tankE, ForgeDirection.EAST);
+		tryHorizontalConnection(tankN, EnumFacing.NORTH);
+		tryHorizontalConnection(tankS, EnumFacing.SOUTH);
+		tryHorizontalConnection(tankW, EnumFacing.WEST);
+		tryHorizontalConnection(tankE, EnumFacing.EAST);
 
 		tryCornerConnection(tankN, tankNW, tankW, Diagonal.NW);
 		tryCornerConnection(tankW, tankSW, tankS, Diagonal.SW);
@@ -123,13 +121,11 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		tryCornerConnection(tankS, tankSE, tankE, Diagonal.SE);
 	}
 
-	public void initialize(World world, int x, int y, int z) {
-		this.phase = TankRenderUtils.calculatePhase(x, y, z);
+	public void initialize(World world, BlockPos pos) {
+		this.phase = TankRenderUtils.calculatePhase(pos.getX(), pos.getY(), pos.getZ());
 
 		this.world = world;
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		this.pos = pos;
 
 		updateConnections();
 	}
@@ -140,7 +136,7 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 
 		diagonalConnections.clear();
 
-		for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
+		for (Map.Entry<EnumFacing, HorizontalConnection> e : horizontalConnections.entrySet())
 			e.getValue().clearFluid(e.getKey().getOpposite());
 
 		horizontalConnections.clear();
@@ -156,15 +152,15 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		}
 	}
 
-	private boolean checkConnection(RenderConnection connection, ForgeDirection dir) {
-		return connection == null || !connection.check(x, y, z, dir);
+	private boolean checkConnection(RenderConnection connection, EnumFacing dir) {
+		return connection == null || !connection.check(pos, dir);
 	}
 
 	private boolean checkConnection(RenderConnection connection, Diagonal dir) {
-		return connection == null || !connection.check(x, y, z, dir);
+		return connection == null || !connection.check(pos, dir);
 	}
 
-	private boolean checkHorizontalConnection(ForgeDirection dir) {
+	private boolean checkHorizontalConnection(EnumFacing dir) {
 		return checkConnection(horizontalConnections.get(dir), dir);
 	}
 
@@ -173,13 +169,13 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 	}
 
 	private boolean checkConnections() {
-		return checkConnection(topConnection, ForgeDirection.UP) ||
-				checkConnection(bottomConnection, ForgeDirection.DOWN) ||
-				checkConnection(topConnection, ForgeDirection.UP) ||
-				checkHorizontalConnection(ForgeDirection.NORTH) ||
-				checkHorizontalConnection(ForgeDirection.SOUTH) ||
-				checkHorizontalConnection(ForgeDirection.EAST) ||
-				checkHorizontalConnection(ForgeDirection.WEST) ||
+		return checkConnection(topConnection, EnumFacing.UP) ||
+				checkConnection(bottomConnection, EnumFacing.DOWN) ||
+				checkConnection(topConnection, EnumFacing.UP) ||
+				checkHorizontalConnection(EnumFacing.NORTH) ||
+				checkHorizontalConnection(EnumFacing.SOUTH) ||
+				checkHorizontalConnection(EnumFacing.EAST) ||
+				checkHorizontalConnection(EnumFacing.WEST) ||
 				checkDiagonalConnection(Diagonal.NE) ||
 				checkDiagonalConnection(Diagonal.NW) ||
 				checkDiagonalConnection(Diagonal.SE) ||
@@ -198,7 +194,7 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		for (Map.Entry<Diagonal, DiagonalConnection> e : diagonalConnections.entrySet())
 			e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
 
-		for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
+		for (Map.Entry<EnumFacing, HorizontalConnection> e : horizontalConnections.entrySet())
 			e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
 
 		topConnection.updateBottomFluid(fluidStack, tank.getSpace() == 0);
@@ -206,7 +202,7 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 	}
 
 	@Override
-	public boolean shouldRenderFluidWall(ForgeDirection side) {
+	public boolean shouldRenderFluidWall(EnumFacing side) {
 		switch (side) {
 			case DOWN:
 				return !isConnected(bottomConnection);
@@ -257,7 +253,7 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 	}
 
 	@Override
-	public HorizontalConnection getHorizontalConnection(ForgeDirection dir) {
+	public HorizontalConnection getHorizontalConnection(EnumFacing dir) {
 		return horizontalConnections.get(dir);
 	}
 

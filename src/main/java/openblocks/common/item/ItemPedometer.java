@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.PedometerHandler;
 import openblocks.common.PedometerHandler.PedometerData;
@@ -20,17 +19,6 @@ public class ItemPedometer extends Item {
 	public ItemPedometer() {
 		setMaxStackSize(1);
 		setCreativeTab(OpenBlocks.tabOpenBlocks);
-	}
-
-	private IIcon pedometerMoving;
-	private IIcon pedometerStill;
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
-		pedometerMoving = registry.registerIcon("openblocks:pedometer_moving");
-		pedometerStill = registry.registerIcon("openblocks:pedometer_still");
 	}
 
 	private static void send(EntityPlayer player, String format, Object... args) {
@@ -86,10 +74,9 @@ public class ItemPedometer extends Item {
 		if (world.isRemote && slotId < 9) PedometerHandler.updatePedometerData(entity);
 	}
 
-	@Override
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-		if (player.motionX * player.motionX + player.motionY * player.motionY + player.motionZ * player.motionZ > 0.01) return pedometerMoving;
-		return pedometerStill;
+	// TODO 1.8.9 actually change model based on this
+	public static boolean isPlayerMoving(EntityPlayer player) {
+		return player.motionX * player.motionX + player.motionY * player.motionY + player.motionZ * player.motionZ > 0.01;
 	}
 
 }

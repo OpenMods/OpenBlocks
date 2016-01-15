@@ -5,6 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 import openblocks.client.gui.GuiBlockPlacer;
@@ -12,8 +14,7 @@ import openblocks.common.container.ContainerBlockPlacer;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUser;
-import openmods.fakeplayer.OpenModsFakePlayer;
+import openmods.fakeplayer.UseItemAction;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -68,35 +69,27 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		final ItemStack stack = inventory.getStackInSlot(slotId);
 		if (stack == null || stack.stackSize <= 0) return;
 
-		final ForgeDirection direction = getOrientation().up();
-		final int x = xCoord + direction.offsetX;
-		final int y = yCoord + direction.offsetY;
-		final int z = zCoord + direction.offsetZ;
+		final EnumFacing direction = getOrientation().up();
+		final BlockPos target = pos.offset(direction);
 
-		final boolean blockExists;
+		if (!worldObj.isBlockLoaded(target)) return;
 
-		if (worldObj.blockExists(x, y, z)) {
-			Block block = worldObj.getBlock(x, y, z);
-			blockExists = !block.isAir(worldObj, x, y, z) && !block.isReplaceable(worldObj, x, y, z);
-		} else blockExists = false;
+		final Block block = worldObj.getBlockState(target).getBlock();
+		if (!block.isAir(worldObj, target) && !block.isReplaceable(worldObj, target)) return;
 
-		FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
-			@Override
-			public void usePlayer(OpenModsFakePlayer fakePlayer) {
-				ItemStack newStack = fakePlayer.equipWithAndRightClick(stack,
-						Vec3.createVectorHelper(xCoord, yCoord, zCoord),
-						Vec3.createVectorHelper(x, y - 1, z),
-						direction.getOpposite(),
-						blockExists);
-				inventory.setInventorySlotContents(slotId, newStack);
-			}
-		});
+		// TODO 1.8.9 verify placing
+		ItemStack newStack = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new UseItemAction(stack,
+				new Vec3(pos),
+				new Vec3(pos.down()),
+				direction.getOpposite()));
+
+		inventory.setInventorySlotContents(slotId, newStack);
 	}
 
 	@Override
 	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
-			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord));
+			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
 		}
 	}
 

@@ -3,12 +3,15 @@ package openblocks.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.client.renderer.HeightMapRenderer;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openblocks.rpc.IRotatable;
 import openmods.gui.BaseGuiContainer;
+import openmods.gui.IComponentParent;
+import openmods.gui.Icon;
 import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.misc.Trackball.TrackballWrapper;
@@ -19,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 
-	private static final ResourceLocation texture = new ResourceLocation("openblocks:textures/gui/projector.png");
+	private static final ResourceLocation texture = OpenBlocks.location("textures/gui/projector.png");
 
 	private static final int VIEW_HEIGHT = 138;
 	private static final int VIEW_WIDTH = 160;
@@ -38,18 +41,18 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 		super(container, 176, 234, "");
 		IRotatable proxy = getContainer().getOwner().createClientRpcProxy(IRotatable.class);
 
-		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(7, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176, 0, 13, 13), texture);
+		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(componentParent, 7, 130, 0xFFFFFF, Icon.createSheetIcon(texture, 176, 0, 13, 13));
 		buttonLeft.setListener(createRotationListener(proxy, -1));
 		root.addComponent(buttonLeft);
 
-		GuiComponentIconButton buttonRight = new GuiComponentIconButton(152, 130, 0xFFFFFF, FakeIcon.createSheetIcon(176 + 13, 0, -13, 13), texture);
+		GuiComponentIconButton buttonRight = new GuiComponentIconButton(componentParent, 152, 130, 0xFFFFFF, Icon.createSheetIcon(texture, 176 + 13, 0, -13, 13));
 		buttonRight.setListener(createRotationListener(proxy, +1));
 		root.addComponent(buttonRight);
 	}
 
 	@Override
-	protected BaseComposite createRoot() {
-		return new EmptyComposite(0, 0, xSize, ySize);
+	protected BaseComposite createRoot(IComponentParent parent) {
+		return new EmptyComposite(parent, 0, 0, xSize, ySize);
 	}
 
 	private boolean isInitialized;
@@ -59,7 +62,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int mouseX, int mouseY) {
 		if (isInitialized == false || Mouse.isButtonDown(2)) {
-			trackball.setTransform(MathUtils.createEntityRotateMatrix(Minecraft.getMinecraft().renderViewEntity));
+			trackball.setTransform(MathUtils.createEntityRotateMatrix(Minecraft.getMinecraft().getRenderViewEntity()));
 			isInitialized = true;
 		}
 
@@ -91,7 +94,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 		Integer mapId = container.getMapId();
 
 		if (mapId != null) {
-			World world = container.getOwner().getWorldObj();
+			World world = container.getOwner().getWorld();
 			HeightMapData data = MapDataManager.getMapData(world, mapId);
 			if (data.isValid()) {
 				GL11.glPushMatrix();
@@ -122,7 +125,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 		GL11.glTranslated(guiLeft, guiTop, 0);
 		drawTexturedModalRect(0, 0, 0, 0, xSize, ySize);
 
-		root.render(mc, 0, 0, mouseX - guiLeft, mouseY - guiTop);
+		root.render(0, 0, mouseX - guiLeft, mouseY - guiTop);
 		GL11.glPopMatrix();
 	}
 

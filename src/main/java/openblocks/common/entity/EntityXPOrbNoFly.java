@@ -1,8 +1,8 @@
 package openblocks.common.entity;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -27,53 +27,48 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 	{
 		super.onEntityUpdate();
 
-		if (this.field_70532_c > 0) {
-			--this.field_70532_c;
-		}
+		if (this.delayBeforeCanPickup > 0) --this.delayBeforeCanPickup;
 
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.029999999329447746D;
 
-		Block block = worldObj.getBlock(
-				MathHelper.floor_double(this.posX),
-				MathHelper.floor_double(this.posY),
-				MathHelper.floor_double(this.posZ));
-
-		if (block.getMaterial() == Material.lava) {
+		final BlockPos pos = new BlockPos(this);
+		if (this.worldObj.getBlockState(pos).getBlock().getMaterial() == Material.lava) {
 			this.motionY = 0.20000000298023224D;
 			this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 			this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 			playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
-		func_145771_j(this.posX, (this.boundingBox.minY + this.boundingBox.maxY) / 2.0D, this.posZ);
+		pushOutOfBlocks(this.posX, (getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D, this.posZ);
+
 		moveEntity(this.motionX, this.motionY, this.motionZ);
-		float f = 0.98F;
+		final float f;
 
-		if (this.onGround) {
-			f = 0.58800006F;
-			Block blockUnder = worldObj.getBlock(
-					MathHelper.floor_double(this.posX),
-					MathHelper.floor_double(this.boundingBox.minY) - 1,
-					MathHelper.floor_double(this.posZ));
-
-			f = blockUnder.slipperiness * 0.98F;
+		if (this.onGround)
+		{
+			final BlockPos posUnder = new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ));
+			f = this.worldObj.getBlockState(posUnder).getBlock().slipperiness * 0.98F;
+		} else {
+			f = 0.98F;
 		}
 
 		this.motionX *= f;
-		this.motionY *= 0.9800000190734863D;
+		this.motionY *= 0.98;
 		this.motionZ *= f;
 
-		if (this.onGround) {
+		if (this.onGround)
+		{
 			this.motionY *= -0.8999999761581421D;
 		}
 
 		++this.xpColor;
 		++this.xpOrbAge;
 
-		if (this.xpOrbAge >= 6000) {
+		if (this.xpOrbAge >= 6000)
+		{
 			setDead();
 		}
 	}

@@ -1,83 +1,67 @@
 package openblocks.client.renderer.entity;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelLuggage;
 import openblocks.common.entity.EntityLuggage;
 
 import org.lwjgl.opengl.GL11;
 
-import com.google.common.base.Strings;
-
-public class EntityLuggageRenderer extends RenderLiving {
+public class EntityLuggageRenderer extends RenderLiving<EntityLuggage> {
 
 	private static ModelBase luggageModel = new ModelLuggage();
 
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/luggage.png");
-	private static final ResourceLocation textureSpecial = new ResourceLocation("openblocks", "textures/models/luggage_special.png");
+	private static final ResourceLocation textureNormal = OpenBlocks.location("textures/models/luggage.png");
+	private static final ResourceLocation textureSpecial = OpenBlocks.location("textures/models/luggage_special.png");
 	private static final ResourceLocation creeperEffect = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 
-	public EntityLuggageRenderer() {
-		super(luggageModel, 0.5F);
-	}
+	private class LayerCharge implements LayerRenderer<EntityLuggage>
+	{
 
-	private int renderSpecial(EntityLuggage luggage, int pass, float partialTickTime) {
-		if (luggage.isSpecial() && !Strings.isNullOrEmpty(luggage.func_152113_b())) {
-			if (pass == 1) {
-				float f1 = luggage.ticksExisted + partialTickTime;
+		// TODO 1.8.9 verify if it works
+		@Override
+		public void doRenderLayer(EntityLuggage luggage, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
+		{
+			if (luggage.isSpecial())
+			{
 				bindTexture(creeperEffect);
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glLoadIdentity();
-				float f2 = f1 * 0.01F;
-				float f3 = f1 * 0.01F;
-				GL11.glTranslatef(f2, f3, 0.0F);
-				setRenderPassModel(EntityLuggageRenderer.luggageModel);
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glEnable(GL11.GL_BLEND);
-				float f4 = 0.5F;
-				GL11.glColor4f(f4, f4, f4, 1.0F);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-				return 1;
-			}
-			if (pass == 2) {
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glLoadIdentity();
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glEnable(GL11.GL_LIGHTING);
-				GL11.glDisable(GL11.GL_BLEND);
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.loadIdentity();
+				float f = luggage.ticksExisted + partialTicks;
+				GlStateManager.translate(f * 0.01F, f * 0.01F, 0.0F);
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				GlStateManager.enableBlend();
+				GlStateManager.color(0.5F, 0.5F, 0.5F, 1.0F);
+				GlStateManager.disableLighting();
+				GlStateManager.blendFunc(1, 1);
+				luggageModel.render(luggage, p_177141_2_, p_177141_3_, p_177141_5_, p_177141_6_, p_177141_7_, scale);
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.loadIdentity();
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				GlStateManager.enableLighting();
+				GlStateManager.disableBlend();
 			}
 		}
-		return -1;
-	}
 
-	@Override
-	protected void preRenderCallback(EntityLivingBase entity, float par2) {
-		EntityLuggage luggage = (EntityLuggage)entity;
-		if (luggage.isSpecial()) {
-			float oscMagnitude = (float)Math.abs(Math.sin((entity.ticksExisted + par2) * 0.05));
-			GL11.glColor3f(oscMagnitude * 0.4f + 0.6f, oscMagnitude * 0.4f + 0.6f, 1f);
+		@Override
+		public boolean shouldCombineTextures() {
+			return false;
 		}
 	}
 
-	@Override
-	protected int inheritRenderPass(EntityLivingBase par1EntityLiving, int par2, float par3) {
-		return -1;
+	public EntityLuggageRenderer(RenderManager renderManager) {
+		super(renderManager, luggageModel, 0.5F);
+		addLayer(new LayerCharge());
 	}
 
 	@Override
-	protected int shouldRenderPass(EntityLivingBase entity, int pass, float partialTickTime) {
-		return renderSpecial((EntityLuggage)entity, pass, partialTickTime);
-	}
-
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
-		if (entity instanceof EntityLuggage
-				&& ((EntityLuggage)entity).isSpecial()) { return textureSpecial; }
-		return texture;
+	protected ResourceLocation getEntityTexture(EntityLuggage entity) {
+		return entity.isSpecial()? textureSpecial : textureNormal;
 	}
 
 }

@@ -2,29 +2,24 @@ package openblocks.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.item.Item;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.ModelCraneBackpack;
-import openblocks.client.renderer.block.*;
 import openblocks.client.renderer.entity.*;
-import openblocks.client.renderer.item.*;
 import openblocks.client.renderer.tileentity.*;
-import openblocks.common.block.BlockGuide;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
@@ -35,28 +30,9 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	public ClientProxy() {}
 
-	public static class Icons {
-		public static IIcon xpJuiceStill;
-		public static IIcon xpJuiceFlowing;
-	}
-
-	@SubscribeEvent
-	public void textureHook(TextureStitchEvent.Pre event) {
-		if (event.map.getTextureType() == 0) {
-			Icons.xpJuiceFlowing = event.map.registerIcon("openblocks:xpjuiceflowing");
-			Icons.xpJuiceStill = event.map.registerIcon("openblocks:xpjuicestill");
-
-			OpenBlocks.Fluids.xpJuice.setIcons(Icons.xpJuiceStill, Icons.xpJuiceFlowing);
-		}
-	}
-
 	@Override
 	public void preInit() {
 		new KeyInputHandler().setup();
-
-		if (Config.radioVillagerId > 0) {
-			VillagerRegistry.instance().registerVillagerSkin(Config.radioVillagerId, RADIO_VILLAGER_TEXTURE);
-		}
 
 		if (Config.flimFlamEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new LoreFlimFlam.DisplayHandler());
@@ -65,7 +41,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@Override
 	public void init() {
-		FMLCommonHandler.instance().bus().register(new ClientTickHandler());
+		MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new EntityMiniMe.OwnerChangeHandler());
 	}
@@ -77,38 +53,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@Override
 	public void registerRenderInformation() {
-
-		{
-			OpenBlocks.renderIdFull = RenderingRegistry.getNextAvailableRenderId();
-			final BlockRenderingHandler blockRenderingHandler = new BlockRenderingHandler(OpenBlocks.renderIdFull, true);
-
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.path, new BlockPathRenderer());
-			BlockCanvasRenderer canvasRenderer = new BlockCanvasRenderer();
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvas, canvasRenderer);
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.tank, new BlockTankRenderer());
-
-			{
-				final IBlockRenderer<BlockGuide> guideBlockRenderer = RotatedBlockRenderer.wrap(new BlockGuideRenderer());
-				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.guide, guideBlockRenderer);
-				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.builderGuide, guideBlockRenderer);
-			}
-
-			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
-		}
-
-		{
-			OpenBlocks.renderIdFlat = RenderingRegistry.getNextAvailableRenderId();
-			final BlockRenderingHandler blockRenderingHandler = new BlockRenderingHandler(OpenBlocks.renderIdFlat, false);
-
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.ropeLadder, new BlockRopeLadderRenderer());
-
-			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
-		}
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<TileEntityGuide>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
@@ -131,20 +76,30 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPShower.class, new TileEntityXPShowerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
 
-		if (OpenBlocks.Blocks.tank != null) MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(OpenBlocks.Blocks.tank), new ItemRendererTank());
+		// TODO 1.8.9 Tank item rendering
 
 		if (OpenBlocks.Items.luggage != null) {
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.luggage, new ItemRendererLuggage());
-			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new EntityLuggageRenderer());
+			// TODO 1.8.9 Luggage item rendering
+			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new IRenderFactory<EntityLuggage>() {
+				@Override
+				public Render<EntityLuggage> createRenderFor(RenderManager manager) {
+					return new EntityLuggageRenderer(manager);
+				}
+			});
 		}
 
-		if (OpenBlocks.Blocks.paintCan != null) {
-			MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(OpenBlocks.Blocks.paintCan), new ItemRendererPaintCan());
-		}
+		// TODO 1.8.9 Paint can item rendering
 
 		if (OpenBlocks.Items.hangGlider != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new EntityHangGliderRenderer());
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.hangGlider, new ItemRendererHangGlider());
+			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new IRenderFactory<EntityHangGlider>() {
+
+				@Override
+				public Render<EntityHangGlider> createRenderFor(RenderManager manager) {
+					return new EntityHangGliderRenderer(manager);
+				}
+			});
+
+			// TODO 1.8.9 hang glider item rendering
 			MinecraftForge.EVENT_BUS.register(new GliderPlayerRenderHandler());
 		}
 
@@ -154,17 +109,31 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.craneBackpack != null) {
 			ModelCraneBackpack.instance.init();
-			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new EntityMagnetRenderer());
-			RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, new EntityBlockRenderer());
+			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new IRenderFactory<EntityMagnet>() {
+				@Override
+				public Render<? super EntityMagnet> createRenderFor(RenderManager manager) {
+					return new EntityMagnetRenderer(manager);
+				}
+			});
+
+			RenderingRegistry.registerEntityRenderingHandler(EntityBlock.class, new IRenderFactory<EntityBlock>() {
+				@Override
+				public Render<? super EntityBlock> createRenderFor(RenderManager manager) {
+					return new EntityBlockRenderer(manager);
+				}
+			});
 		}
 
 		if (OpenBlocks.Blocks.goldenEgg != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityMiniMe.class, new EntityMiniMeRenderer());
+			RenderingRegistry.registerEntityRenderingHandler(EntityMiniMe.class, new IRenderFactory<EntityMiniMe>() {
+				@Override
+				public Render<? super EntityMiniMe> createRenderFor(RenderManager manager) {
+					return new EntityMiniMeRenderer(manager);
+				}
+			});
 		}
 
-		if (OpenBlocks.Items.devNull != null) {
-			MinecraftForgeClient.registerItemRenderer(OpenBlocks.Items.devNull, new ItemRendererDevNull());
-		}
+		// TODO 1.8.9 /dev/null item rendering
 
 		if (OpenBlocks.Items.sleepingBag != null) {
 			MinecraftForge.EVENT_BUS.register(new SleepingBagRenderHandler());
@@ -173,19 +142,26 @@ public class ClientProxy implements IOpenBlocksProxy {
 		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
 
 		if (OpenBlocks.Items.cartographer != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new EntityCartographerRenderer());
+			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new IRenderFactory<EntityCartographer>() {
+				@Override
+				public Render<? super EntityCartographer> createRenderFor(RenderManager manager) {
+					return new EntityCartographerRenderer(manager);
+				}
+			});
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
-		if (OpenBlocks.Blocks.trophy != null) {
-			MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(OpenBlocks.Blocks.trophy), new ItemRendererTrophy());
-		}
+		// TODO 1.8.9 trophy item rendering
 
 		if (OpenBlocks.Items.goldenEye != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new EntityGoldenEyeRenderer());
-		}
+			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new IRenderFactory<EntityGoldenEye>() {
 
-		new BlockRenderingValidator().verifyBlocks(OpenBlocks.Blocks.class);
+				@Override
+				public Render<? super EntityGoldenEye> createRenderFor(RenderManager manager) {
+					return new RenderSnowball<EntityGoldenEye>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem());
+				}
+			});
+		}
 	}
 
 	private static void spawnParticle(EntityFX spray) {

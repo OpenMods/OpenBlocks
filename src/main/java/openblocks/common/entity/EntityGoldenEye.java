@@ -4,9 +4,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openmods.utils.ItemUtils;
 
 public class EntityGoldenEye extends EntitySmoothMove {
 
@@ -14,7 +16,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	private int timeToLive;
 	private ItemStack spawningStack;
 
-	public EntityGoldenEye(World world, ItemStack spawningStack, Entity owner, ChunkPosition target) {
+	public EntityGoldenEye(World world, ItemStack spawningStack, Entity owner, BlockPos target) {
 		super(world);
 		timeToLive = TTL;
 		this.spawningStack = spawningStack.copy();
@@ -34,14 +36,14 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	protected void readEntityFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey("SpawningItem")) {
 			NBTTagCompound item = tag.getCompoundTag("SpawningItem");
-			spawningStack = ItemUtils.readStack(item);
+			spawningStack = ItemStack.loadItemStackFromNBT(item);
 		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tag) {
 		if (spawningStack != null) {
-			NBTTagCompound item = ItemUtils.writeStack(spawningStack);
+			NBTTagCompound item = spawningStack.writeToNBT(new NBTTagCompound());
 			tag.setTag("SpawningItem", item);
 		}
 	}
@@ -65,7 +67,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 		smoother.update();
 
 		if (worldObj.isRemote) {
-			worldObj.spawnParticle("portal",
+			worldObj.spawnParticle(EnumParticleTypes.PORTAL,
 					posX + rand.nextGaussian() * 0.3 - 0.15,
 					posY - 0.5 + rand.nextGaussian() * 0.3 - 0.15,
 					posZ - rand.nextGaussian() * 0.3 - 0.15,
@@ -73,10 +75,11 @@ public class EntityGoldenEye extends EntitySmoothMove {
 		}
 	}
 
-	private void targetStructure(Entity owner, ChunkPosition target) {
-		double playerY = owner.posY + 1.62 - owner.yOffset;
-		double dx = target.chunkPosX - owner.posX;
-		double dz = target.chunkPosZ - owner.posZ;
+	private void targetStructure(Entity owner, BlockPos target) {
+		// TODO 1.8.9 verify height
+		double playerY = owner.posY + owner.getEyeHeight();
+		double dx = target.getX() - owner.posX;
+		double dz = target.getZ() - owner.posZ;
 		double dist = Math.sqrt(dx * dx + dz * dz);
 		dx /= dist;
 		dz /= dist;

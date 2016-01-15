@@ -15,13 +15,8 @@ public class ItemEpicEraser extends Item {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack p_77636_1_, int pass) {
+	public boolean hasEffect(ItemStack stack) {
 		return true;
-	}
-
-	@Override
-	public boolean doesContainerItemLeaveCraftingGrid(ItemStack p_77630_1_) {
-		return false;
 	}
 
 	@Override

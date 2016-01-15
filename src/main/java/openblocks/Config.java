@@ -328,7 +328,6 @@ public class Config {
 	public static boolean devNullSneakGui = true;
 
 	public static void register() {
-		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
 		// There is no fail checking here because if the Generic item fails,

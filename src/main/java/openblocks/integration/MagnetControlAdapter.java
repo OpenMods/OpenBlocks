@@ -2,7 +2,8 @@ package openblocks.integration;
 
 import java.lang.ref.WeakReference;
 
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -33,42 +34,44 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 
 	public class Owner implements IOwner {
 
-		private final Vec3 target;
+		private Vec3 target;
 
 		public Owner() {
-			this.target = Vec3.createVectorHelper(0, 0, 0);
+			this.target = new Vec3(0, 0, 0);
 		}
 
 		public synchronized void setTargetPosition(double x, double y, double z) {
-			target.xCoord = x;
-			target.yCoord = y;
-			target.zCoord = z;
+			target = new Vec3(x, y, z);
 		}
 
-		public synchronized Vec3 getTarget(Vec3 pos, ForgeDirection side) {
-			pos.yCoord += target.yCoord;
+		public synchronized Vec3 getTarget(Vec3 pos, EnumFacing side) {
+			double x = pos.xCoord + 0.5;
+			double y = pos.yCoord + 0.5;
+			double z = pos.zCoord + 0.5;
+
+			y += target.xCoord;
 			switch (side) {
 				case NORTH:
-					pos.xCoord += target.zCoord;
-					pos.zCoord -= target.xCoord;
+					x += target.zCoord;
+					z -= target.xCoord;
 					break;
 				case SOUTH:
-					pos.xCoord -= target.zCoord;
-					pos.zCoord += target.xCoord;
+					x -= target.zCoord;
+					z += target.xCoord;
 					break;
 				case WEST:
-					pos.xCoord -= target.xCoord;
-					pos.zCoord -= target.zCoord;
+					x -= target.xCoord;
+					z -= target.zCoord;
 					break;
 				case EAST:
-					pos.xCoord += target.xCoord;
-					pos.zCoord += target.zCoord;
+					x += target.xCoord;
+					z += target.zCoord;
 					break;
 				default:
 					break;
 			}
 
-			return pos.addVector(0.5, 0.5, 0.5);
+			return new Vec3(x, y, z);
 		}
 
 		@Override
@@ -78,7 +81,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 
 		@Override
 		public Vec3 getTarget() {
-			return getTarget(getTurtlePosition(), getTurtleFacing());
+			return getTarget(new Vec3(turtle.getPosition()), turtle.getDirection());
 		}
 
 		@Override
@@ -109,11 +112,6 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		this.side = side;
 	}
 
-	public enum SpawnSide {
-		Left,
-		Right;
-	}
-
 	private int fuelTick = 0;
 
 	@Override
@@ -123,25 +121,6 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 
 	protected boolean consumeFuel(int amount) {
 		return turtle.consumeFuel(amount);
-	}
-
-	protected SpawnSide getSpawnSide() {
-		switch (side) {
-			case Left:
-				return SpawnSide.Left;
-			case Right:
-			default:
-				return SpawnSide.Right;
-		}
-	}
-
-	protected ForgeDirection getTurtleFacing() {
-		return ForgeDirection.getOrientation(turtle.getDirection());
-	}
-
-	protected Vec3 getTurtlePosition() {
-		ChunkCoordinates coord = turtle.getPosition();
-		return Vec3.createVectorHelper(coord.posX, coord.posY, coord.posZ);
 	}
 
 	@ScriptCallable(description = "Activate magnet")
@@ -154,7 +133,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		Preconditions.checkState(consumeFuel(5), "No fuel");
 
 		magnetOwner = new Owner();
-		magnetOwner.target.zCoord = getSpawnSide() == SpawnSide.Left? -1 : 1;
+		magnetOwner.setTargetPosition(0, side == TurtleSide.Left? -1 : 1, 0);
 		magnet = new EntityMagnet(world, magnetOwner, true);
 		world.spawnEntityInWorld(magnet);
 
@@ -231,38 +210,35 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 	}
 
 	private Vec3 getRelativeDistance(EntityMagnet magnet) {
-		Vec3 magnetPos = Vec3.createVectorHelper(magnet.posX, magnet.posY, magnet.posZ);
-		Vec3 turtlePos = getTurtlePosition().addVector(0.5, 0.5, 0.5);
+		Vec3 magnetPos = new Vec3(magnet.posX, magnet.posY, magnet.posZ);
+		Vec3 turtlePos = new Vec3(turtle.getPosition()).addVector(0.5, 0.5, 0.5);
 
 		Vec3 dist = turtlePos.subtract(magnetPos);
 
-		ForgeDirection side = getTurtleFacing();
+		EnumFacing side = turtle.getDirection();
 
 		switch (side) {
 			case NORTH:
-				return Vec3.createVectorHelper(-dist.zCoord, dist.yCoord, dist.xCoord);
+				return new Vec3(-dist.zCoord, dist.yCoord, dist.xCoord);
 			case SOUTH:
-				return Vec3.createVectorHelper(dist.zCoord, dist.yCoord, -dist.xCoord);
+				return new Vec3(dist.zCoord, dist.yCoord, -dist.xCoord);
 			case EAST:
-				return Vec3.createVectorHelper(dist.xCoord, dist.yCoord, dist.zCoord);
+				return new Vec3(dist.xCoord, dist.yCoord, dist.zCoord);
 			case WEST:
-				return Vec3.createVectorHelper(-dist.xCoord, dist.yCoord, -dist.zCoord);
+				return new Vec3(-dist.xCoord, dist.yCoord, -dist.zCoord);
 			default:
 				return dist;
 		}
 	}
 
 	private boolean canSpawn(World world) {
-		ForgeDirection facing = getTurtleFacing();
-		Vec3 position = getTurtlePosition();
-		SpawnSide side = getSpawnSide();
+		EnumFacing facing = turtle.getDirection();
 
-		ForgeDirection spawnSide = facing.getRotation((side == SpawnSide.Left)? ForgeDirection.DOWN : ForgeDirection.UP);
-		int x = MathHelper.floor_double(position.xCoord) + spawnSide.offsetX;
-		int y = MathHelper.floor_double(position.yCoord) + spawnSide.offsetY;
-		int z = MathHelper.floor_double(position.zCoord) + spawnSide.offsetZ;
+		// TODO 1.8.9 verify rotation
+		EnumFacing spawnSide = (side == TurtleSide.Left)? facing.rotateYCCW() : facing.rotateY();
+		BlockPos spawnPos = turtle.getPosition().offset(spawnSide);
 
-		return world.isAirBlock(x, y, z);
+		return world.isAirBlock(spawnPos);
 	}
 
 	private EntityMagnet getMagnet() {
@@ -275,8 +251,8 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		EntityMagnet magnet = this.magnet.get();
 		Preconditions.checkNotNull(magnet, "Magnet not active");
 
-		Vec3 magnetPos = Vec3.createVectorHelper(magnet.posX, magnet.posY, magnet.posZ);
-		Vec3 turtlePos = getTurtlePosition().addVector(0.5, 0.5, 0.5);
+		Vec3 magnetPos = new Vec3(magnet.posX, magnet.posY, magnet.posZ);
+		Vec3 turtlePos = new Vec3(turtle.getPosition()).addVector(0.5, 0.5, 0.5);
 
 		Preconditions.checkState(!checkPosition || canOperateOnMagnet(magnetPos, turtlePos), "Magnet too far");
 

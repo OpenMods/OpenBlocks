@@ -3,16 +3,16 @@ package openblocks.common.recipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
+import openmods.utils.CustomRecipeBase;
 import openmods.utils.ItemUtils;
 
-public class MapCloneRecipe implements IRecipe {
+public class MapCloneRecipe extends CustomRecipeBase {
 
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
@@ -60,11 +60,6 @@ public class MapCloneRecipe implements IRecipe {
 	@Override
 	public int getRecipeSize() {
 		return 2;
-	}
-
-	@Override
-	public ItemStack getRecipeOutput() {
-		return null;
 	}
 
 }

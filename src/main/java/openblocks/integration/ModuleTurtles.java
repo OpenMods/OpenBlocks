@@ -1,8 +1,8 @@
 package openblocks.integration;
 
 import static openmods.conditions.Conditions.all;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import static openmods.integration.IntegrationConditions.classExists;
+import static openmods.integration.IntegrationConditions.modLoaded;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
 import dan200.computercraft.api.ComputerCraftAPI;
@@ -28,9 +28,7 @@ public class ModuleTurtles extends IntegrationModule {
 
 	private static class LoadHack {
 		private static void load() {
-			final MagnetTurtleUpgrade magnetUpgrade = new MagnetTurtleUpgrade();
-			ComputerCraftAPI.registerTurtleUpgrade(magnetUpgrade);
-			if (FMLCommonHandler.instance().getSide() == Side.CLIENT) MinecraftForge.EVENT_BUS.register(magnetUpgrade);
+			ComputerCraftAPI.registerTurtleUpgrade(new MagnetTurtleUpgrade());
 		}
 	}
 

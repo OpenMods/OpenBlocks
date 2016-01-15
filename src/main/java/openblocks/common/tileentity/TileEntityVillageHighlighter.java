@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.Vec3i;
 import net.minecraft.village.Village;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,7 +15,7 @@ import openmods.OpenMods;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityVillageHighlighter extends SyncedTileEntity {
+public class TileEntityVillageHighlighter extends SyncedTileEntity implements ITickable {
 
 	public static int VALUES_PER_VILLAGE = 7;
 
@@ -37,19 +39,18 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote) {
 			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
 				ArrayList<Integer> tmpDataList = new ArrayList<Integer>();
-				for (Village village : (List<Village>)worldObj.villageCollectionObj.getVillageList()) {
-					if (village.isInRange(xCoord, yCoord, zCoord)) {
+				for (Village village : worldObj.villageCollectionObj.getVillageList()) {
+					if (village.func_179866_a(pos)) {
 						tmpDataList.add(village.getVillageRadius());
-						tmpDataList.add(village.getCenter().posX - xCoord);
-						tmpDataList.add(village.getCenter().posY - yCoord);
-						tmpDataList.add(village.getCenter().posZ - zCoord);
+						Vec3i d = village.getCenter().subtract(pos);
+						tmpDataList.add(d.getX());
+						tmpDataList.add(d.getY());
+						tmpDataList.add(d.getZ());
 						tmpDataList.add(village.getNumVillageDoors());
 						tmpDataList.add(village.getNumVillagers());
 						tmpDataList.add(System.identityHashCode(village));
@@ -59,7 +60,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 				sync();
 				boolean canBreed = canVillagersBreed();
 				if (previousBreedStatus != canBreed) {
-					worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, OpenBlocks.Blocks.villageHighlighter);
+					worldObj.notifyBlockOfStateChange(pos, OpenBlocks.Blocks.villageHighlighter);
 					previousBreedStatus = canBreed;
 				}
 			}
@@ -78,7 +79,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 
 	public boolean isPowered() {
 		if (worldObj == null) return false;
-		return worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		return worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 	}
 
 	@Override
@@ -87,10 +88,9 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity {
 		return 65536.0D;
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean canVillagersBreed() {
-		for (Village village : (List<Village>)worldObj.villageCollectionObj.getVillageList()) {
-			if (village.isInRange(xCoord, yCoord, zCoord)) {
+		for (Village village : worldObj.villageCollectionObj.getVillageList()) {
+			if (village.func_179866_a(pos)) {
 				int i = (int)(village.getNumVillageDoors() * 0.35D);
 				if (village.getNumVillagers() < i) { return true; }
 			}
