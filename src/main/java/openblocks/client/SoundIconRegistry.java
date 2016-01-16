@@ -23,13 +23,15 @@ import com.google.common.collect.Maps;
 
 public class SoundIconRegistry {
 
-	private final static ResourceLocation ICON_FRAME = OpenBlocks.location("sound_frame");
-
-	public final static String CATEGORY_STREAMING = "!streaming";
-
-	private static ResourceLocation iconIdPrefix(String id) {
-		return OpenBlocks.location("sound_" + id);
+	private static ResourceLocation ob(String id) {
+		return OpenBlocks.location("items/sound_" + id);
 	}
+
+	private static ResourceLocation mc(String id) {
+		return new ResourceLocation("minecraft", id);
+	}
+
+	private final static ResourceLocation ICON_FRAME = ob("frame");
 
 	public interface ISoundCategory {
 		public IDrawableIcon getIcon(Iterator<String> path);
@@ -124,9 +126,9 @@ public class SoundIconRegistry {
 
 		private static MobIcons createMobIcons(String innerIcon, int innerColor, int frameColor) {
 			IDrawableIcon frame = createIcon(ICON_FRAME, frameColor);
-			IDrawableIcon normal = makeFramedItemIcon(iconIdPrefix(innerIcon), innerColor, frame);
-			IDrawableIcon hurt = makeFramedItemIcon(iconIdPrefix("mob_hurt"), innerColor, frame);
-			IDrawableIcon death = makeFramedItemIcon(iconIdPrefix("mob_death"), innerColor, frame);
+			IDrawableIcon normal = makeFramedIcon(ob(innerIcon), innerColor, frame);
+			IDrawableIcon hurt = makeFramedIcon(ob("mob_hurt"), innerColor, frame);
+			IDrawableIcon death = makeFramedIcon(ob("mob_death"), innerColor, frame);
 			return new MobIcons(normal, hurt, death);
 		}
 
@@ -236,15 +238,11 @@ public class SoundIconRegistry {
 	}
 
 	private static IDrawableIcon simpleIcon(String id, int color) {
-		return createIcon(iconIdPrefix(id), color);
+		return createIcon(ob(id), color);
 	}
 
 	private static IDrawableIcon makeLayeredIcon(IDrawableIcon front, IDrawableIcon back) {
 		return new ComposedIcon(front, back, 1.0, 0.00001);
-	}
-
-	public static IDrawableIcon makeFramedIcon(IDrawableIcon inner, IDrawableIcon frame) {
-		return new ComposedIcon(frame, inner, 0.6, 0);
 	}
 
 	public static IDrawableIcon makeFramedIcon(IDrawableIcon front, IDrawableIcon back, IDrawableIcon frame) {
@@ -252,43 +250,33 @@ public class SoundIconRegistry {
 		return new ComposedIcon(frame, inner, 0.6, 0);
 	}
 
-	private static IDrawableIcon makeFramedItemIcon(ResourceLocation innerIcon, int innerColor, IDrawableIcon frame) {
+	public static IDrawableIcon makeFramedIcon(IDrawableIcon inner, IDrawableIcon frame) {
+		return new ComposedIcon(frame, inner, 0.6, 0);
+	}
+
+	private static IDrawableIcon makeFramedIcon(ResourceLocation innerIcon, int innerColor, IDrawableIcon frame) {
 		IDrawableIcon inner = createIcon(innerIcon, innerColor);
 		return makeFramedIcon(inner, frame);
 	}
 
-	private static IDrawableIcon makeFramedItemIcon(ResourceLocation innerIcon, IDrawableIcon frame) {
-		return makeFramedItemIcon(innerIcon, 0xFFFFFF, frame);
+	private static IDrawableIcon makeFramedIcon(ResourceLocation innerIcon, IDrawableIcon frame) {
+		return makeFramedIcon(innerIcon, 0xFFFFFF, frame);
 	}
 
-	private static IDrawableIcon makeFramedBlockIcon(ResourceLocation innerIcon, int innerColor, IDrawableIcon frame) {
-		IDrawableIcon inner = createIcon(innerIcon, innerColor);
-		return makeFramedIcon(inner, frame);
-	}
-
-	private static IDrawableIcon makeFramedBlockIcon(ResourceLocation innerIcon, IDrawableIcon frame) {
-		return makeFramedBlockIcon(innerIcon, 0xFFFFFF, frame);
-	}
-
-	private static IDrawableIcon makeBlockIcon(ResourceLocation block, IDrawableIcon front, IDrawableIcon frame) {
+	private static IDrawableIcon makeIcon(ResourceLocation block, IDrawableIcon front, IDrawableIcon frame) {
 		IDrawableIcon back = createIcon(block);
 		return makeFramedIcon(makeLayeredIcon(front, back), frame);
 	}
 
-	private static ResourceLocation mc(String id) {
-		return new ResourceLocation("minecraft", id);
-	}
-
 	private static void addBlocks(MappedCategory cat, IDrawableIcon front, IDrawableIcon frame) {
-		// TODO 1.8.9 verify texture names
-		cat.add("cloth", makeBlockIcon(mc("wool_colored_white"), front, frame));
-		cat.add("grass", makeBlockIcon(mc("dirt"), front, frame));
-		cat.add("gravel", makeBlockIcon(mc("gravel"), front, frame));
-		cat.add("sand", makeBlockIcon(mc("sand"), front, frame));
-		cat.add("snow", makeBlockIcon(mc("snow"), front, frame));
-		cat.add("stone", makeBlockIcon(mc("stone"), front, frame));
-		cat.add("wood", makeBlockIcon(mc("log_oak_top"), front, frame));
-		cat.add("ladder", makeBlockIcon(mc("ladder"), front, frame));
+		cat.add("cloth", makeIcon(mc("blocks/wool_colored_white"), front, frame));
+		cat.add("grass", makeIcon(mc("blocks/dirt"), front, frame));
+		cat.add("gravel", makeIcon(mc("blocks/gravel"), front, frame));
+		cat.add("sand", makeIcon(mc("blocks/sand"), front, frame));
+		cat.add("snow", makeIcon(mc("blocks/snow"), front, frame));
+		cat.add("stone", makeIcon(mc("blocks/stone"), front, frame));
+		cat.add("wood", makeIcon(mc("blocks/log_oak_top"), front, frame));
+		cat.add("ladder", makeIcon(mc("blocks/ladder"), front, frame));
 	}
 
 	private MappedCategory createRoot(String id) {
@@ -306,8 +294,8 @@ public class SoundIconRegistry {
 		IDrawableIcon frameBlue = createIcon(ICON_FRAME, 0x0000FF);
 		IDrawableIcon frameYellow = createIcon(ICON_FRAME, 0xFFFF00);
 
-		IDrawableIcon shovel = createIcon(mc("diamond_shovel"));
-		IDrawableIcon boots = createIcon(mc("diamond_boots"));
+		IDrawableIcon shovel = createIcon(mc("items/diamond_shovel"));
+		IDrawableIcon boots = createIcon(mc("items/diamond_boots"));
 
 		defaultRoot.defaultIcon = unknownIcon;
 
@@ -328,37 +316,37 @@ public class SoundIconRegistry {
 			{
 
 				MappedCategory fire = mcRoot.add("fire", new MappedCategory());
-				fire.add("fire", makeFramedBlockIcon(mc("fire_layer_0"), frameRed));
-				fire.add("ignite", makeFramedItemIcon(mc("flint_and_steel"), frameRed));
+				fire.add("fire", makeFramedIcon(mc("blocks/fire_layer_0"), frameRed));
+				fire.add("ignite", makeFramedIcon(mc("items/flint_and_steel"), frameRed));
 
 			}
 
-			mcRoot.add("fireworks", makeFramedItemIcon(mc("fireworks"), frameRed));
+			mcRoot.add("fireworks", makeFramedIcon(mc("items/fireworks"), frameRed));
 
 			addBlocks(mcRoot.add("dig", new MappedCategory()), shovel, frameYellow);
 			addBlocks(mcRoot.add("step", new MappedCategory()), boots, frameGreen);
 
 			{
-				TintedIconCategory liquid = mcRoot.add("liquid", new TintedIconCategory(iconIdPrefix("liquid")));
-				liquid.add("lava", makeFramedBlockIcon(mc("lava_flow"), frameRed));
-				liquid.add("water", makeFramedBlockIcon(mc("water_flow"), frameBlue));
+				TintedIconCategory liquid = mcRoot.add("liquid", new TintedIconCategory(ob("liquid")));
+				liquid.add("lava", makeFramedIcon(mc("blocks/lava_flow"), frameRed));
+				liquid.add("water", makeFramedIcon(mc("blocks/water_flow"), frameBlue));
 				liquid.add("lavapop", 0xFF0000);
 			}
 
 			{
-				IDrawableIcon hurt = makeFramedItemIcon(iconIdPrefix("mob_hurt"), 0xFFFFFF, frameWhite);
-				IDrawableIcon death = makeFramedItemIcon(iconIdPrefix("mob_death"), 0xFFFFFF, frameWhite);
+				IDrawableIcon hurt = makeFramedIcon(ob("mob_hurt"), 0xFFFFFF, frameWhite);
+				IDrawableIcon death = makeFramedIcon(ob("mob_death"), 0xFFFFFF, frameWhite);
 
 				MappedCategory game = mcRoot.add("game", new MappedCategory());
 
 				{
 					MappedCategory potion = game.add("potion", new MappedCategory());
-					potion.add("smash", makeFramedItemIcon(mc("potion_bottle_splash"), frameWhite));
+					potion.add("smash", makeFramedIcon(mc("items/potion_bottle_splash"), frameWhite));
 				}
 
 				{
 					MappedCategory potion = game.add("tnt", new MappedCategory());
-					potion.add("primed", makeFramedBlockIcon(mc("tnt_side"), frameRed));
+					potion.add("primed", makeFramedIcon(mc("blocks/tnt_side"), frameRed));
 				}
 
 				{
@@ -379,7 +367,7 @@ public class SoundIconRegistry {
 				}
 
 				{
-					IDrawableIcon playerBack = createIcon(mc("skull_steve"), 0xFFFFFF);
+					IDrawableIcon playerBack = createIcon(mc("skull_steve"), 0xFFFFFF); // TODO 1.8.9 find replacement
 					MappedCategory player = game.add("player", new MappedCategory());
 					player.defaultIcon = makeFramedIcon(playerBack, frameWhite);
 					player.add("die", makeFramedIcon(hurt, playerBack, frameRed));
@@ -389,18 +377,18 @@ public class SoundIconRegistry {
 
 			{
 				MappedCategory records = mcRoot.add("records", new MappedCategory());
-				records.add("13", makeFramedItemIcon(mc("record_13"), frameBlue));
-				records.add("cat", makeFramedItemIcon(mc("record_cat"), frameBlue));
-				records.add("blocks", makeFramedItemIcon(mc("record_blocks"), frameBlue));
-				records.add("chirp", makeFramedItemIcon(mc("record_chirp"), frameBlue));
-				records.add("far", makeFramedItemIcon(mc("record_far"), frameBlue));
-				records.add("mall", makeFramedItemIcon(mc("record_mall"), frameBlue));
-				records.add("mellohi", makeFramedItemIcon(mc("record_mellohi"), frameBlue));
-				records.add("stal", makeFramedItemIcon(mc("record_stal"), frameBlue));
-				records.add("strad", makeFramedItemIcon(mc("record_strad"), frameBlue));
-				records.add("ward", makeFramedItemIcon(mc("record_ward"), frameBlue));
-				records.add("11", makeFramedItemIcon(mc("record_11"), frameBlue));
-				records.add("wait", makeFramedItemIcon(mc("record_wait"), frameBlue));
+				records.add("13", makeFramedIcon(mc("items/record_13"), frameBlue));
+				records.add("cat", makeFramedIcon(mc("items/record_cat"), frameBlue));
+				records.add("blocks", makeFramedIcon(mc("items/record_blocks"), frameBlue));
+				records.add("chirp", makeFramedIcon(mc("items/record_chirp"), frameBlue));
+				records.add("far", makeFramedIcon(mc("items/record_far"), frameBlue));
+				records.add("mall", makeFramedIcon(mc("items/record_mall"), frameBlue));
+				records.add("mellohi", makeFramedIcon(mc("items/record_mellohi"), frameBlue));
+				records.add("stal", makeFramedIcon(mc("items/record_stal"), frameBlue));
+				records.add("strad", makeFramedIcon(mc("items/record_strad"), frameBlue));
+				records.add("ward", makeFramedIcon(mc("items/record_ward"), frameBlue));
+				records.add("11", makeFramedIcon(mc("items/record_11"), frameBlue));
+				records.add("wait", makeFramedIcon(mc("items/record_wait"), frameBlue));
 			}
 
 			{
@@ -433,7 +421,7 @@ public class SoundIconRegistry {
 			}
 
 			{
-				TintedIconCategory note = mcRoot.add("note", new TintedIconCategory(iconIdPrefix("note")));
+				TintedIconCategory note = mcRoot.add("note", new TintedIconCategory(ob("note")));
 				note.add("bass", 0x0000FF);
 				note.add("bassattack", 0xFFFF00);
 				note.add("bd", 0x00FFFF);
@@ -443,28 +431,28 @@ public class SoundIconRegistry {
 				note.add("snare", 0xFFFFFF);
 			}
 
-			mcRoot.add("portal", makeFramedBlockIcon(mc("portal"), frameWhite));
-			mcRoot.add("minecart", makeFramedItemIcon(mc("minecart_normal"), frameWhite));
+			mcRoot.add("portal", makeFramedIcon(mc("blocks/portal"), frameWhite));
+			mcRoot.add("minecart", makeFramedIcon(mc("items/minecart_normal"), frameWhite));
 
 			{
 				MappedCategory random = mcRoot.add("random", new MappedCategory());
 
-				IDrawableIcon anvil = makeFramedBlockIcon(mc("anvil_base"), frameWhite);
+				IDrawableIcon anvil = makeFramedIcon(mc("blocks/anvil_base"), frameWhite);
 				random.add("anvil_land", anvil);
 				random.add("anvil_use", anvil);
 				random.add("anvil_break", anvil);
 
-				random.add("bow", makeFramedItemIcon(mc("bow_standby"), frameWhite));
-				random.add("bowhit", makeFramedItemIcon(mc("arrow"), frameWhite));
+				random.add("bow", makeFramedIcon(mc("items/bow_standby"), frameWhite));
+				random.add("bowhit", makeFramedIcon(mc("items/arrow"), frameWhite));
 
-				IDrawableIcon damage = makeFramedBlockIcon(mc("destroy_stage_5"), frameWhite);
+				IDrawableIcon damage = makeFramedIcon(mc("blocks/destroy_stage_5"), frameWhite);
 				random.add("break", damage);
 
-				IDrawableIcon eat = makeFramedItemIcon(mc("potato_baked"), frameWhite);
+				IDrawableIcon eat = makeFramedIcon(mc("items/potato_baked"), frameWhite);
 				random.add("eat", eat);
 				random.add("burp", eat);
 
-				IDrawableIcon chest = makeFramedBlockIcon(mc("planks_oak"), frameWhite);
+				IDrawableIcon chest = makeFramedIcon(mc("blocks/planks_oak"), frameWhite);
 				random.add("chestclosed", chest);
 				random.add("chestopen", chest);
 
@@ -473,39 +461,40 @@ public class SoundIconRegistry {
 				random.add("wood_click", click);
 				random.add("pop", click);
 
-				IDrawableIcon door = makeFramedItemIcon(mc("door_wood"), frameWhite);
+				IDrawableIcon door = makeFramedIcon(mc("items/door_wood"), frameWhite);
 				random.add("door_close", door);
 				random.add("door_open", door);
 
-				IDrawableIcon drink = makeFramedItemIcon(mc("potion_bottle_drinkable"), frameWhite);
+				IDrawableIcon drink = makeFramedIcon(mc("items/potion_bottle_drinkable"), frameWhite);
 				random.add("drink", drink);
 
-				IDrawableIcon tnt = makeFramedBlockIcon(mc("tnt_side"), frameWhite);
+				IDrawableIcon tnt = makeFramedIcon(mc("blocks/tnt_side"), frameWhite);
 				random.add("explode", tnt);
 
 				random.add("fizz", simpleIcon("fizz", DEFAULT_COLOR));
 
-				IDrawableIcon exp = makeFramedItemIcon(mc("experience_bottle"), frameWhite);
+				IDrawableIcon exp = makeFramedIcon(mc("items/experience_bottle"), frameWhite);
 				random.add("levelup", exp);
 				random.add("orb", exp);
 
-				IDrawableIcon glass = makeFramedBlockIcon(mc("glass"), frameWhite);
+				IDrawableIcon glass = makeFramedIcon(mc("blocks/glass"), frameWhite);
 				random.add("splash", glass);
 			}
 
 			{
 				MappedCategory tile = mcRoot.add("tile", new MappedCategory());
-				IDrawableIcon piston = makeFramedBlockIcon(mc("piston_side"), frameWhite);
+				IDrawableIcon piston = makeFramedIcon(mc("blocks/piston_side"), frameWhite);
 				tile.add("piston", piston);
 			}
 
-			mcRoot.add("creeper", makeFramedItemIcon(mc("skull_creeper"), frameGreen));
+			// TODO 1.8.9 find replacement
+			mcRoot.add("creeper", makeFramedIcon(mc("blocks/skull_creeper"), frameGreen));
 		}
 
-		IDrawableIcon potato = makeFramedItemIcon(mc("potato_baked"), frameWhite);
-		IDrawableIcon apple = makeFramedItemIcon(mc("apple"), frameWhite);
-		IDrawableIcon pearl = makeFramedItemIcon(mc("ender_pearl"), frameWhite);
-		IDrawableIcon write = makeFramedItemIcon(mc("book_writable"), frameWhite);
+		IDrawableIcon potato = makeFramedIcon(mc("items/potato_baked"), frameWhite);
+		IDrawableIcon apple = makeFramedIcon(mc("items/apple"), frameWhite);
+		IDrawableIcon pearl = makeFramedIcon(mc("items/ender_pearl"), frameWhite);
+		IDrawableIcon write = makeFramedIcon(mc("items/book_writable"), frameWhite);
 
 		{
 			MappedCategory openblocks = createRoot("openblocks");
