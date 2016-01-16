@@ -9,14 +9,12 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
 public class ItemSpongeOnAStick extends Item {
 
 	public ItemSpongeOnAStick() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 		setMaxDamage(Config.spongeMaxDamage);
 	}

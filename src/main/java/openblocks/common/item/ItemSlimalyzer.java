@@ -5,15 +5,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
 public class ItemSlimalyzer extends Item {
 
-	public ItemSlimalyzer() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
-	}
+	public ItemSlimalyzer() {}
 
 	// TODO 1.8.9 If possible, move to rendering logic?
 	@Override

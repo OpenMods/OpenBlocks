@@ -22,7 +22,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openblocks.api.SleepingBagUseEvent;
 import openblocks.asm.EntityPlayerVisitor;
 import openblocks.client.model.ModelSleepingBag;
@@ -50,7 +49,6 @@ public class ItemSleepingBag extends ItemArmor {
 
 	public ItemSleepingBag() {
 		super(ArmorMaterial.IRON, 2, ARMOR_CHESTPIECE_TYPE);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
 	@Override

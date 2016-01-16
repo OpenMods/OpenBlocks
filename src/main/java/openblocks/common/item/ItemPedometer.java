@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.common.PedometerHandler;
 import openblocks.common.PedometerHandler.PedometerData;
 import openblocks.common.PedometerHandler.PedometerState;
@@ -18,7 +17,6 @@ public class ItemPedometer extends Item {
 
 	public ItemPedometer() {
 		setMaxStackSize(1);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
 	private static void send(EntityPlayer player, String format, Object... args) {

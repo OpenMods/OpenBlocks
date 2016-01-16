@@ -17,7 +17,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityGoldenEye;
 import openmods.Log;
 import openmods.utils.ItemUtils;
@@ -32,7 +31,6 @@ public class ItemGoldenEye extends Item {
 
 	public ItemGoldenEye() {
 		setMaxDamage(MAX_DAMAGE);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}
 

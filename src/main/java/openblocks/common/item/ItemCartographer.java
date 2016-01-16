@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityAssistant;
 import openblocks.common.entity.EntityCartographer;
 
@@ -40,7 +39,6 @@ public class ItemCartographer extends Item {
 	public ItemCartographer() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}
 

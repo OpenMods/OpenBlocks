@@ -54,7 +54,6 @@ public class ItemDevNull extends Item {
 	}
 
 	public ItemDevNull() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}
 

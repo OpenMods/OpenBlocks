@@ -34,7 +34,6 @@ public class ItemPaintBrush extends Item {
 	public static final int MAX_USES = 24;
 
 	public ItemPaintBrush() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 		setMaxDamage(MAX_USES);
 		setNoRepair();

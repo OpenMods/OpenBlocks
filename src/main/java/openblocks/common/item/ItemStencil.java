@@ -10,7 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
@@ -19,7 +18,6 @@ import openmods.utils.render.PaintUtils;
 public class ItemStencil extends Item {
 
 	public ItemStencil() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 	}
 

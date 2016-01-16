@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openmods.OpenMods;
@@ -22,7 +21,6 @@ import com.google.common.collect.MapMaker;
 public class ItemCraneControl extends Item {
 
 	public ItemCraneControl() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}
 

@@ -5,14 +5,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiInfoBook;
 
 public class ItemInfoBook extends Item {
 
-	public ItemInfoBook() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
-	}
+	public ItemInfoBook() {}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {

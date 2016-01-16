@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.infobook.BookDocumentation;
 
@@ -17,9 +16,7 @@ public class ItemHangGlider extends Item {
 
 	private static Map<EntityPlayer, EntityHangGlider> spawnedGlidersMap = new MapMaker().weakKeys().weakValues().makeMap();
 
-	public ItemHangGlider() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
-	}
+	public ItemHangGlider() {}
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {

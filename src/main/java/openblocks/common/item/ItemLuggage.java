@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
 import openmods.infobook.BookDocumentation;
 
@@ -13,7 +12,6 @@ import openmods.infobook.BookDocumentation;
 public class ItemLuggage extends Item {
 
 	public ItemLuggage() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}
 

@@ -350,6 +350,11 @@ public class OpenBlocks {
 		}
 
 		@Override
+		protected void setupConfigPre(GameConfigProvider gameConfig) {
+			gameConfig.setCreativeTab(tabOpenBlocks);
+		}
+
+		@Override
 		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
 			itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
 				@Override

@@ -2,7 +2,6 @@ package openblocks.common.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(customName = "epic_eraser")
@@ -11,7 +10,6 @@ public class ItemEpicEraser extends Item {
 	public ItemEpicEraser() {
 		setMaxStackSize(1);
 		setMaxDamage(15);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
 	@Override

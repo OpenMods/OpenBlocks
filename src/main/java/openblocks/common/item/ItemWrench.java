@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -27,7 +26,6 @@ public class ItemWrench extends Item {
 
 	public ItemWrench() {
 		setMaxStackSize(1);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 
 		sneakOnly.add(BlockLever.class);
 		sneakOnly.add(BlockButton.class);

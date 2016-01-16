@@ -7,7 +7,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSonicGlasses;
 import openmods.infobook.BookDocumentation;
 
@@ -18,7 +17,6 @@ public class ItemSonicGlasses extends ItemArmor {
 
 	public ItemSonicGlasses() {
 		super(ArmorMaterial.IRON, 2, ARMOR_HELMET);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
 	@Override

@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openmods.colors.ColorMeta;
@@ -80,7 +79,6 @@ public class ItemImaginationGlasses extends ItemArmor {
 	public ItemImaginationGlasses(Type type) {
 		super(ArmorMaterial.GOLD, 1, ARMOR_HELMET);
 		this.type = type;
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 	}
 

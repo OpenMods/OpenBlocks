@@ -10,7 +10,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(hasVideo = true)
@@ -22,7 +21,6 @@ public class BlockLadder extends BlockTrapDoor {
 		super(Material.wood);
 		setHardness(3.0F);
 		setStepSound(soundTypeWood);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setBlockBounds(0f, 0f, 0f, 1.5f, 1f, 1.5f);
 	}
 

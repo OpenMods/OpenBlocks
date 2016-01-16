@@ -9,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
@@ -19,7 +18,6 @@ import openmods.utils.NbtUtils;
 public class ItemCursor extends Item {
 
 	public ItemCursor() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setMaxStackSize(1);
 	}
 

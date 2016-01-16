@@ -7,7 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.infobook.BookDocumentation;
 
@@ -15,7 +14,6 @@ import openmods.infobook.BookDocumentation;
 public class ItemSqueegee extends Item {
 
 	public ItemSqueegee() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 		setHasSubtypes(true);
 		setMaxStackSize(1);
 	}

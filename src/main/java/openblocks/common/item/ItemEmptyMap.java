@@ -20,9 +20,7 @@ public class ItemEmptyMap extends Item {
 	public static final String TAG_SCALE = "Scale";
 	public static final int MAX_SCALE = 4;
 
-	public ItemEmptyMap() {
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
-	}
+	public ItemEmptyMap() {}
 
 	@Override
 	@SideOnly(Side.CLIENT)

@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
-import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.common.CraneRegistry;
 import openmods.infobook.BookDocumentation;
@@ -25,7 +24,6 @@ public class ItemCraneBackpack extends ItemArmor {
 
 	public ItemCraneBackpack() {
 		super(ArmorMaterial.IRON, 2, ARMOR_CHESTPIECE);
-		setCreativeTab(OpenBlocks.tabOpenBlocks);
 	}
 
 	@Override
