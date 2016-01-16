@@ -21,11 +21,9 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<Tile
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glPushMatrix();
 		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(mixer.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render(mixer, partialTick);
-		GL11.glPushMatrix();
 		// The top of the paint can is rendering longer than the can. WHYY :(
 		// Fixed this, rotating the matrix and not using the stack :)
 		GL11.glTranslated(0.05, 0.5, 0);
@@ -34,7 +32,6 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<Tile
 		GL11.glScaled(0.8, 0.8, 0.8);
 		bindTexture(TextureMap.locationBlocksTexture);
 		if (mixer.hasPaint()) {
-			GL11.glPushMatrix();
 			if (mixer.isEnabled()) {
 				GL11.glTranslated(0, Math.random() * 0.2, 0);
 			}
@@ -44,10 +41,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<Tile
 				secondPass = calculateColorFade(secondPass, mixer.getColor().getValue(), progress);
 			}
 			// TODO 1.8.9 render can!
-			GL11.glPopMatrix();
 		}
-		GL11.glPopMatrix();
-		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 	}
 

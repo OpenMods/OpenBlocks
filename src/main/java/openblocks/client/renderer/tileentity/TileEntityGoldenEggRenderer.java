@@ -52,17 +52,17 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 	private void renderPhantom(float rotation, float progress, float partialTicks) {
 		RenderHelper.disableStandardItemLighting();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
-		GL11.glColor4f(1f, 1f, 1f, 0.2f + 0.8f * progress);
+		GlStateManager.color(1f, 1f, 1f, 0.2f + 0.8f * progress);
 		float scale = PHANTOM_SCALE * (0.2f + progress * 0.8f);
 
 		GL11.glTranslatef(0, -0.1f * progress, 0);
 		GL11.glScalef(scale, scale, scale);
 		model.render();
 
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.disableBlend();
 		RenderHelper.enableStandardItemLighting();
 	}
 

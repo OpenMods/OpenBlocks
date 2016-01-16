@@ -17,6 +17,7 @@ import openmods.renderer.TessellatorPool;
 import openmods.renderer.TessellatorPool.WorldRendererUser;
 import openmods.utils.Diagonal;
 import openmods.utils.TextureUtils;
+import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -32,13 +33,13 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
 			// it just looks broken with blending
-			// GL11.glEnable(GL11.GL_BLEND);
+			// GlStateManager.enableBlend();
 			// OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			// I just can't get it right
-			GL11.glDisable(GL11.GL_BLEND);
+			GlStateManager.disableBlend();
 			final float time = tankTile.getWorld().getTotalWorldTime() + partialTicks;
 			renderFluid(data, time);
-			// GL11.glDisable(GL11.GL_BLEND);
+			// GlStateManager.disableBlend();
 			GL11.glPopMatrix();
 		}
 	}
@@ -48,8 +49,8 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 	}
 
 	public static void renderFluid(final ITankRenderFluidData data, float time) {
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glColor4f(1, 1, 1, 1);
+		GlStateManager.disableLighting();
+		GlStateManager.color(1, 1, 1, 1);
 		FluidStack fluidStack = data.getFluid();
 		final Fluid fluid = fluidStack.getFluid();
 
@@ -79,11 +80,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 
 		final double vHeight = vMax - vMin;
 
-		final float r = (color >> 16 & 0xFF) / 255.0F;
-		final float g = (color >> 8 & 0xFF) / 255.0F;
-		final float b = (color & 0xFF) / 255.0F;
-
-		GlStateManager.color(r, g, b);
+		RenderUtils.setColor(color);
 
 		TessellatorPool.instance.startDrawing(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, new WorldRendererUser() {
 
@@ -142,7 +139,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 				}
 			}
 		});
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 	}
 
 	public static ResourceLocation getFluidSheet(FluidStack liquid) {

@@ -1,6 +1,7 @@
 package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelGrave;
@@ -21,7 +22,6 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer<TileEntit
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glPushMatrix();
 		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(target.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render(target, partialTicks);
@@ -42,11 +42,10 @@ public class TileEntityGraveRenderer extends TileEntitySpecialRenderer<TileEntit
 
 			GL11.glRotatef(-5F, 1.0F, 0.0F, 0.0F);
 			GL11.glRotatef(2F, 0F, 0.0F, 1.0F);
-			GL11.glDepthMask(false);
+			GlStateManager.depthMask(false);
 			renderer.drawString(username, 0, 0, 0);
-			GL11.glDepthMask(true);
+			GlStateManager.depthMask(true);
 		}
-		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 
 	}

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -42,22 +43,22 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 	private static final DisplayListWrapper CONE_DISPLAY = new DisplayListWrapper() {
 		@Override
 		public void compile() {
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GlStateManager.disableLighting();
+			GlStateManager.disableTexture2D();
 
 			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor4d(1, 1, 1, 1);
+			GlStateManager.color(1, 1, 1, 1);
 			GL11.glVertex3d(-INTERSECTION_SIZE, -INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
 			GL11.glVertex3d(-INTERSECTION_SIZE, +INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
 			GL11.glVertex3d(+INTERSECTION_SIZE, +INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
 			GL11.glVertex3d(+INTERSECTION_SIZE, -INTERSECTION_SIZE, -INTERSECTION_DIST - Z_FIGHTER);
 			GL11.glEnd();
 
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_CULL_FACE);
+			GlStateManager.enableBlend();
+			GlStateManager.disableCull();
 
 			GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-			GL11.glColor4d(0, 1, 1, 0.125);
+			GlStateManager.color(0f, 1f, 1f, 0.125f);
 			GL11.glVertex3d(0, 0, -CONE_START);
 			GL11.glVertex3d(-BASE_SIZE, -BASE_SIZE, -CONE_END);
 			GL11.glVertex3d(+BASE_SIZE, -BASE_SIZE, -CONE_END);
@@ -66,9 +67,9 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 			GL11.glVertex3d(-BASE_SIZE, -BASE_SIZE, -CONE_END);
 			GL11.glEnd();
 
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GlStateManager.enableCull();
+			GlStateManager.disableBlend();
+			GlStateManager.enableTexture2D();
 		}
 	};
 
@@ -108,7 +109,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 			GL11.glTranslated(0, -0.03, 0);
 			CONE_DISPLAY.render();
 
-			GL11.glColor4f(1, 1, 1, 1);
+			GlStateManager.color(1, 1, 1, 1);
 
 			final TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 
@@ -126,10 +127,10 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 		}
 
 		private static void drawBase() {
-			GL11.glDisable(GL11.GL_CULL_FACE);
+			GlStateManager.disableCull();
 
 			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor4d(1, 1, 1, 1);
+			GlStateManager.color(1, 1, 1, 1);
 			GL11.glTexCoord2d(0.0, 1.0);
 			GL11.glVertex3d(-BASE_SIZE, -BASE_SIZE, -CONE_END);
 			GL11.glTexCoord2d(0.5, 1.0);
@@ -140,7 +141,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 			GL11.glVertex3d(-BASE_SIZE, +BASE_SIZE, -CONE_END);
 			GL11.glEnd();
 
-			GL11.glEnable(GL11.GL_CULL_FACE);
+			GlStateManager.enableCull();
 		}
 
 		private static void renderText(EntityCartographer e, RenderGlobal context) {
@@ -205,7 +206,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 	public void doRender(EntityCartographer cartographer, double x, double y, double z, float scale, float partialTickTime) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
 		bindTexture(TEXTURE);
 		MODEL.renderBase(cartographer.eyeYaw);
 

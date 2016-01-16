@@ -1,6 +1,7 @@
 package openblocks.client.renderer.entity;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,8 +20,8 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 	private final DisplayListWrapper gliderRender = new DisplayListWrapper() {
 		@Override
 		public void compile() {
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			GlStateManager.disableCull();
+			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 			GL11.glBegin(GL11.GL_QUADS);
 
 			GL11.glTexCoord2f(1, 1);
@@ -36,7 +37,7 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 			GL11.glVertex3f(QUAD_HALF_SIZE, 0, -QUAD_HALF_SIZE);
 
 			GL11.glEnd();
-			GL11.glEnable(GL11.GL_CULL_FACE);
+			GlStateManager.enableCull();
 
 		}
 	};

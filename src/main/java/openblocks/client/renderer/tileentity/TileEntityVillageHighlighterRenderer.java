@@ -66,7 +66,6 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 					wr.pos(vX + px * radius, vY + py * radius, vZ + pz * radius).color(r, g, b, 1.0f).endVertex();
 				}
 				t.draw();
-				GL11.glPopMatrix();
 			}
 
 			t.draw();
@@ -84,11 +83,9 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 			t.draw();
 			GlStateManager.enableTexture2D();
-			GL11.glPopMatrix();
 		}
 
-		GL11.glPushMatrix();
-		GL11.glColor4f(1, 1, 1, 1);
+		GlStateManager.color(1, 1, 1, 1);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(villagehighlighter.getOrientation()), 0, 1, 0);
 		bindTexture(texture);

@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -131,7 +132,7 @@ public class SoundEventsManager {
 		if (level <= 0) return;
 
 		if (level >= 1 && !Config.sonicGlassesUseTexture) {
-			GL11.glColor3f(0, 0, 0);
+			GlStateManager.color(0, 0, 0);
 			GL11.glClearColor(0, 0, 0, 1);
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			return;
@@ -150,17 +151,17 @@ public class SoundEventsManager {
 					GL11.glLoadIdentity();
 					GL11.glOrtho(-1, 1, -1, 1, -1, 1);
 
-					GL11.glDisable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_DEPTH_TEST);
-					GL11.glDisable(GL11.GL_ALPHA_TEST);
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GlStateManager.disableLighting();
+					GlStateManager.disableDepth();
+					GlStateManager.disableAlpha();
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 					final float maxU = (float)mc.displayWidth / 1024;
 					final float maxV = (float)mc.displayHeight / 1024;
 
 					if (Config.sonicGlassesUseTexture) {
-						GL11.glColor4f(1, 1, 1, (float)level);
+						GlStateManager.color(1, 1, 1, (float)level);
 						tex.bindTexture(notPumpkin);
 						GL11.glBegin(GL11.GL_QUADS);
 
@@ -177,21 +178,21 @@ public class SoundEventsManager {
 						GL11.glVertex3f(-1, +1, 0);
 						GL11.glEnd();
 					} else {
-						GL11.glDisable(GL11.GL_TEXTURE_2D);
-						GL11.glColor4f(0.085f, 0.074f, 0.129f, (float)level);
+						GlStateManager.disableTexture2D();
+						GlStateManager.color(0.085f, 0.074f, 0.129f, (float)level);
 						GL11.glBegin(GL11.GL_QUADS);
 						GL11.glVertex3f(-1, -1, 0);
 						GL11.glVertex3f(+1, -1, 0);
 						GL11.glVertex3f(+1, +1, 0);
 						GL11.glVertex3f(-1, +1, 0);
 						GL11.glEnd();
-						GL11.glEnable(GL11.GL_TEXTURE_2D);
+						GlStateManager.enableTexture2D();
 					}
 
-					GL11.glDisable(GL11.GL_BLEND);
-					GL11.glEnable(GL11.GL_DEPTH_TEST);
-					GL11.glEnable(GL11.GL_ALPHA_TEST);
-					GL11.glEnable(GL11.GL_LIGHTING);
+					GlStateManager.disableBlend();
+					GlStateManager.enableDepth();
+					GlStateManager.enableAlpha();
+					GlStateManager.enableLighting();
 
 					GL11.glPopMatrix();
 					GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -220,9 +221,9 @@ public class SoundEventsManager {
 		final double interpY = rve.prevPosY + (rve.posY - rve.prevPosY) * evt.partialTicks;
 		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ) * evt.partialTicks;
 
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		synchronized (events) {
 			for (SoundEvent snd : events) {
 				final double px = snd.sound.getXPosF() - interpX;
@@ -236,7 +237,7 @@ public class SoundEventsManager {
 				GL11.glPopMatrix();
 			}
 		}
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
 	}
 }

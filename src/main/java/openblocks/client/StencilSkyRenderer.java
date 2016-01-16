@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import openmods.Log;
@@ -51,8 +52,8 @@ public class StencilSkyRenderer extends StencilRendererHandler {
 		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
 
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableDepth();
+		GlStateManager.disableLighting();
 
 		setupFog(partialTickTime);
 		context.renderSky(partialTickTime, 0); // TODO 1.8.9 verify

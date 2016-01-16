@@ -2,9 +2,11 @@ package openblocks.client.renderer.tileentity;
 
 import java.util.Collection;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.BlockPos;
 import openblocks.common.tileentity.TileEntityGuide;
+import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -25,16 +27,16 @@ public class TileEntityGuideRenderer<T extends TileEntityGuide> extends TileEnti
 	private void renderShape(Collection<BlockPos> shape, int color, float scale) {
 		if (shape == null) return;
 
-		GL11.glColor3ub((byte)(color >> 16), (byte)(color >> 8), (byte)(color >> 0));
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		RenderUtils.setColor(color);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GlStateManager.disableLighting();
 
 		for (BlockPos coord : shape)
 			renderMarkerAt(coord, scale);
 
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
 	}
 
 	private void renderMarkerAt(BlockPos pos, float scale) {

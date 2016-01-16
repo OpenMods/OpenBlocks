@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import openblocks.Config;
@@ -8,6 +9,7 @@ import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
+import openmods.utils.render.RenderUtils;
 
 import org.lwjgl.opengl.GL11;
 
@@ -25,12 +27,9 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileE
 		bindTexture(TextureMap.locationBlocksTexture);
 
 		if (!te.isPencil()) {
-			byte red = (byte)(te.color >> 16);
-			byte green = (byte)(te.color >> 8);
-			byte blue = (byte)(te.color >> 0);
-			GL11.glColor4ub(red, green, blue, (byte)(255 * te.visibility));
+			RenderUtils.setColor(te.color, te.visibility);
 		} else {
-			GL11.glColor4ub((byte)255, (byte)255, (byte)255, (byte)(255 * te.visibility));
+			GlStateManager.color(1, 1, 1, te.visibility);
 		}
 
 		GL11.glPushMatrix();

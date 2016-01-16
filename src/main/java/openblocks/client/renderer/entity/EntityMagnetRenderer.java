@@ -2,6 +2,7 @@ package openblocks.client.renderer.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -48,7 +49,7 @@ public class EntityMagnetRenderer extends Render<EntityMagnet> {
 	public void doRender(EntityMagnet magnet, double x, double y, double z, float yaw, float partialTick) {
 		bindEntityTexture(magnet);
 
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
 		GL11.glPushMatrix();
 		GL11.glRotatef(yaw, 0, 1, 0);
 		GL11.glTranslated(x, y + magnet.height - 0.4f, z);

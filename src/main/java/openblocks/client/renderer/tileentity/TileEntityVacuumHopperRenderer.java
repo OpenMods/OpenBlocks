@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
@@ -20,7 +21,7 @@ public class TileEntityVacuumHopperRenderer extends TileEntitySpecialRenderer<Ti
 		bindTexture(texture);
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1f, (float)z + 0.5F);
 		GL11.glRotatef(180, 1, 0, 0);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		model.render(hopper, partialTick);
 		GL11.glPopMatrix();
 	}

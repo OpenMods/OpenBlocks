@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
@@ -22,7 +23,7 @@ public class TileEntityBearTrapRenderer extends TileEntitySpecialRenderer<TileEn
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0F, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(tile.getOrientation()), 0, 1, 0);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		model.renderAll(tile.isShut(), tile.ticksSinceOpened());
 		GL11.glPopMatrix();
 	}

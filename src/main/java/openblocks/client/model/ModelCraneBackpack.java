@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
@@ -132,18 +133,18 @@ public class ModelCraneBackpack extends ModelBiped {
 		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick) - TileEntityRendererDispatcher.staticPlayerZ;
 
 		GL11.glLineWidth(2);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableLighting();
 		GL11.glEnable(GL11.GL_LINE_STIPPLE);
-		GL11.glColor3f(1, 1, 0);
+		GlStateManager.color(1, 1, 0);
 		GL11.glLineStipple(3, (short)0x0555);
 		GL11.glBegin(GL11.GL_LINES);
 		GL11.glVertex3d(armX, armY, armZ);
 		GL11.glVertex3d(magnetX, magnetY, magnetZ);
 		GL11.glEnd();
 		GL11.glDisable(GL11.GL_LINE_STIPPLE);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
 
 		drawLine(magnetX, magnetY, magnetZ, armX, armY, armZ);
 	}
@@ -171,18 +172,18 @@ public class ModelCraneBackpack extends ModelBiped {
 
 	private static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2) {
 		GL11.glLineWidth(2);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableLighting();
 		GL11.glEnable(GL11.GL_LINE_STIPPLE);
 
-		GL11.glColor3f(0, 0, 0);
+		GlStateManager.color(0, 0, 0);
 		GL11.glLineStipple(5, (short)0x5555);
 		GL11.glBegin(GL11.GL_LINES);
 		GL11.glVertex3d(x1, y1, z1);
 		GL11.glVertex3d(x2, y2, z2);
 		GL11.glEnd();
 
-		GL11.glColor3f(1, 1, 0);
+		GlStateManager.color(1, 1, 0);
 		GL11.glLineStipple(5, (short)0xAAAA);
 		GL11.glBegin(GL11.GL_LINES);
 		GL11.glVertex3d(x1, y1, z1);
@@ -190,16 +191,16 @@ public class ModelCraneBackpack extends ModelBiped {
 		GL11.glEnd();
 
 		GL11.glDisable(GL11.GL_LINE_STIPPLE);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
 	}
 
 	private void drawArm(RenderWorldLastEvent evt, final EntityPlayer player) {
 		final TextureManager tex = Minecraft.getMinecraft().getTextureManager();
 		tex.bindTexture(texture);
 
-		GL11.glColor3f(1, 1, 1);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.color(1, 1, 1);
+		GlStateManager.disableLighting();
 		GL11.glPushMatrix();
 
 		// values adjusted to roughly match TPP crane position
@@ -209,7 +210,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		arm.rotateAngleY = 0;
 		arm.render(1.0f / 16.0f);
 		GL11.glPopMatrix();
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 	}
 
 	@SubscribeEvent

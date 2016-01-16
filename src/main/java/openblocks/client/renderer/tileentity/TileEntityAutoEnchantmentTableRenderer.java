@@ -49,6 +49,5 @@ public class TileEntityAutoEnchantmentTableRenderer extends TileEntitySpecialRen
 		GlStateManager.enableCull();
 		this.enchantmentBook.render((Entity)null, f1, f4, f5, f6, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
-		GL11.glColor4f(1, 1, 1, 1);
 	}
 }

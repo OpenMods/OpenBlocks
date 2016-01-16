@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,9 +34,9 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 
 		if (cannon.renderLine && playerHasCursor()) {
 			GL11.glTranslatef(0, -0.5F, 0);
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glColor3f(0, 0, 0);
+			GlStateManager.disableCull();
+			GlStateManager.disableTexture2D();
+			GlStateManager.color(0, 0, 0);
 			GL11.glBegin(GL11.GL_LINE_STRIP);
 
 			final Vec3 motion = cannon.getMotion();
@@ -56,8 +57,8 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 				// motionZ *= 0.98;
 			}
 			GL11.glEnd();
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GlStateManager.enableCull();
+			GlStateManager.enableTexture2D();
 		} else cannon.renderLine = true;
 		GL11.glPopMatrix();
 	}

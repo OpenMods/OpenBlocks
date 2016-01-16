@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -55,9 +56,9 @@ public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer<Tile
 	}
 
 	private void renderCubes(float time) {
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor3ub((byte)0x06, (byte)0x23, (byte)0x20);
+		GlStateManager.disableLighting();
+		GlStateManager.disableTexture2D();
+		GlStateManager.color(0x06 / 255.0f, 0x23 / 255.0f, 0x20 / 255.0f);
 
 		GL11.glPushMatrix();
 
@@ -84,8 +85,8 @@ public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer<Tile
 			drawCube(theta, phi);
 		}
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableLighting();
 	}
 
 	protected void drawCube(float theta, float phi) {

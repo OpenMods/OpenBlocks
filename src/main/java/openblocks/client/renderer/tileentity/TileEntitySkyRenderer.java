@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -34,7 +35,7 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		RGB fog = RenderUtils.getFogColor();
-		GL11.glColor3f(fog.getR(), fog.getG(), fog.getB());
+		GlStateManager.color(fog.getR(), fog.getG(), fog.getB());
 		GL11.glCallList(displayListBase + MinecraftForgeClient.getRenderPass()); // fancy!
 
 		GL11.glPopMatrix();
@@ -103,13 +104,13 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		addVertex(wr, 1, 1, 1);
 		addVertex(wr, 1, 1, 0);
 
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableLighting();
+		GlStateManager.disableTexture2D();
 		RenderUtils.disableLightmap();
 		tes.draw();
 		RenderUtils.enableLightmap();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableLighting();
 	}
 
 	private static void cutHoleInWorld(Tessellator tes, int stencilMask) {
@@ -117,9 +118,9 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
 		GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
 		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-		GL11.glColorMask(false, false, false, false);
+		GlStateManager.colorMask(false, false, false, false);
 		renderCube(tes);
-		GL11.glColorMask(true, true, true, true);
+		GlStateManager.colorMask(true, true, true, true);
 		GL11.glStencilMask(0);
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
 	}

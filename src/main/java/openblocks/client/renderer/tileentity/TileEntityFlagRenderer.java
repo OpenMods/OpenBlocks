@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -55,7 +56,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer<TileEntity
 		GL11.glRotatef(-90, 0, 1, 0);
 
 		RGB color = flag.getColor();
-		GL11.glColor3ub((byte)color.r, (byte)color.g, (byte)color.b);
+		GlStateManager.color(color.getR(), color.getG(), color.getB());
 		bindTexture(textureFlag);
 		FLAG.render();
 

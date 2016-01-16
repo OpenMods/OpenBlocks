@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -113,9 +114,9 @@ public class HeightMapRenderer {
 
 			GL11.glNewList(displayList, GL11.GL_COMPILE);
 
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_CULL_FACE);
-			GL11.glEnable(GL11.GL_BLEND);
+			GlStateManager.disableLighting();
+			GlStateManager.disableCull();
+			GlStateManager.enableBlend();
 
 			final Tessellator tes = new Tessellator(4 * (3 + 2) * 4 * 2);
 			WorldRenderer wr = tes.getWorldRenderer();
@@ -153,9 +154,9 @@ public class HeightMapRenderer {
 			}
 			tes.draw();
 
-			GL11.glEnable(GL11.GL_CULL_FACE);
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_BLEND);
+			GlStateManager.enableCull();
+			GlStateManager.enableLighting();
+			GlStateManager.disableBlend();
 			GL11.glEndList();
 		}
 

@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -33,7 +34,7 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer<TileE
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
 		GL11.glRotated(90 * projector.rotation(), 0, 1, 0);
 		GL11.glTranslated(-0.5, 0, -0.5);
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
 		int mapId = projector.mapId();
 		if (pass <= 0) renderProjector(projector, partialTickTime, mapId >= 0);
 		else renderMap(projector, mapId);
