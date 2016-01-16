@@ -10,7 +10,6 @@ import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
 import openmods.api.IValueReceiver;
 import openmods.gui.GuiConfigurableSlots;
-import openmods.gui.IComponentParent;
 import openmods.gui.component.*;
 import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.ValueCopyAction;
@@ -30,12 +29,12 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 	}
 
 	@Override
-	protected void addCustomizations(IComponentParent parent, BaseComposite root) {
+	protected void addCustomizations(BaseComposite root) {
 		TileEntityAutoEnchantmentTable te = getContainer().getOwner();
 
 		final ILevelChanger rpc = te.createClientRpcProxy(ILevelChanger.class);
 
-		final GuiComponentSlider slider = new GuiComponentSlider(parent, 44, 39, 45, 1, 30, 0);
+		final GuiComponentSlider slider = new GuiComponentSlider(44, 39, 45, 1, 30, 0);
 		slider.setListener(new IValueChangedListener<Integer>() {
 			@Override
 			public void valueChanged(Integer value) {
@@ -45,7 +44,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		addSyncUpdateListener(ValueCopyAction.create(te.getLevelProvider(), slider));
 		root.addComponent(slider);
 
-		final GuiComponentLabel maxLevel = new GuiComponentLabel(parent, 40, 25, "0");
+		final GuiComponentLabel maxLevel = new GuiComponentLabel(40, 25, "0");
 		maxLevel.setMaxWidth(100);
 		addSyncUpdateListener(ValueCopyAction.create(te.getMaxLevelProvider(), new IValueReceiver<Integer>() {
 			@Override
@@ -55,37 +54,37 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		}));
 		root.addComponent(maxLevel);
 
-		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(parent, 140, 30, 17, 37, TileEntityAutoEnchantmentTable.TANK_CAPACITY);
+		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoEnchantmentTable.TANK_CAPACITY);
 		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));
 		root.addComponent(tankLevel);
 	}
 
 	@Override
-	protected GuiComponentTab createTab(IComponentParent parent, AutoSlots slot) {
+	protected GuiComponentTab createTab(AutoSlots slot) {
 		switch (slot) {
 			case input:
-				return new GuiComponentTab(parent, StandardPalette.blue.getColor(), new ItemStack(Items.diamond_pickaxe, 1), 100, 100);
+				return new GuiComponentTab(StandardPalette.blue.getColor(), new ItemStack(Items.diamond_pickaxe, 1), 100, 100);
 			case output: {
 				ItemStack enchantedAxe = new ItemStack(Items.diamond_pickaxe, 1);
 				enchantedAxe.addEnchantment(Enchantment.fortune, 1);
-				return new GuiComponentTab(parent, StandardPalette.lightblue.getColor(), enchantedAxe, 100, 100);
+				return new GuiComponentTab(StandardPalette.lightblue.getColor(), enchantedAxe, 100, 100);
 			}
 			case xp:
-				return new GuiComponentTab(parent, StandardPalette.green.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
+				return new GuiComponentTab(StandardPalette.green.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
 			default:
 				throw MiscUtils.unhandledEnum(slot);
 		}
 	}
 
 	@Override
-	protected GuiComponentLabel createLabel(IComponentParent parent, AutoSlots slot) {
+	protected GuiComponentLabel createLabel(AutoSlots slot) {
 		switch (slot) {
 			case input:
-				return new GuiComponentLabel(parent, 22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
+				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
 			case output:
-				return new GuiComponentLabel(parent, 22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
+				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
 			case xp:
-				return new GuiComponentLabel(parent, 22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
+				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
 			default:
 				throw MiscUtils.unhandledEnum(slot);
 

@@ -11,7 +11,6 @@ import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openblocks.rpc.IRotatable;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.IComponentParent;
 import openmods.gui.Icon;
 import openmods.gui.component.*;
 import openmods.gui.listener.IMouseDownListener;
@@ -42,18 +41,18 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 		super(container, 176, 234, "");
 		IRotatable proxy = getContainer().getOwner().createClientRpcProxy(IRotatable.class);
 
-		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(componentParent, 7, 130, 0xFFFFFF, Icon.createSheetIcon(texture, 176, 0, 13, 13));
+		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(7, 130, 0xFFFFFF, Icon.createSheetIcon(texture, 176, 0, 13, 13));
 		buttonLeft.setListener(createRotationListener(proxy, -1));
 		root.addComponent(buttonLeft);
 
-		GuiComponentIconButton buttonRight = new GuiComponentIconButton(componentParent, 152, 130, 0xFFFFFF, Icon.createSheetIcon(texture, 176 + 13, 0, -13, 13));
+		GuiComponentIconButton buttonRight = new GuiComponentIconButton(152, 130, 0xFFFFFF, Icon.createSheetIcon(texture, 176 + 13, 0, -13, 13));
 		buttonRight.setListener(createRotationListener(proxy, +1));
 		root.addComponent(buttonRight);
 	}
 
 	@Override
-	protected BaseComposite createRoot(IComponentParent parent) {
-		return new EmptyComposite(parent, 0, 0, xSize, ySize);
+	protected BaseComposite createRoot() {
+		return new EmptyComposite(0, 0, xSize, ySize);
 	}
 
 	private boolean isInitialized;

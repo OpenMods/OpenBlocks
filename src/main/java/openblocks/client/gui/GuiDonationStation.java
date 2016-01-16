@@ -31,9 +31,9 @@ public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStatio
 	public GuiDonationStation(ContainerDonationStation container) {
 		super(container, 176, 172, "openblocks.gui.donationstation");
 
-		root.addComponent((lblModName = new GuiComponentLabel(componentParent, 55, 31, 100, 10, "")));
-		root.addComponent((lblAuthors = new GuiComponentLabel(componentParent, 55, 42, 200, 18, "").setScale(0.5f)));
-		root.addComponent((buttonDonate = new GuiComponentTextButton(componentParent, 31, 60, 115, 13, 0xFFFFFF)).setText("Donate to the author"));
+		root.addComponent((lblModName = new GuiComponentLabel(55, 31, 100, 10, "")));
+		root.addComponent((lblAuthors = new GuiComponentLabel(55, 42, 200, 18, "").setScale(0.5f)));
+		root.addComponent((buttonDonate = new GuiComponentTextButton(31, 60, 115, 13, 0xFFFFFF)).setText("Donate to the author"));
 
 		buttonDonate.setListener(new IMouseDownListener() {
 			@Override

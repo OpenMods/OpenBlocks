@@ -2,11 +2,8 @@ package openblocks.client.gui;
 
 import java.util.List;
 
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.StatCollector;
-import openmods.gui.IComponentParent;
-import openmods.gui.component.GuiComponentBook;
-import openmods.gui.component.GuiComponentLabel;
+import openmods.gui.component.*;
 import openmods.gui.component.page.BookScaleConfig;
 import openmods.gui.component.page.PageBase;
 
@@ -23,52 +20,63 @@ public class ChangelogPage extends PageBase {
 		}
 	};
 
-	private final GuiComponentLabel centerTitle;
+	final GuiComponentLabel prevVersionLabel;
 
-	private int center(FontRenderer renderer, String text) {
-		return (getWidth() - renderer.getStringWidth(text)) / 2;
-	}
+	final GuiComponentLabel nextVersionBookmark;
 
-	public ChangelogPage(IComponentParent parent, String currentVersion, String section, List<String> lines) {
-		super(parent);
+	public ChangelogPage(String currentVersion, String section, List<String> lines) {
 		final float scaleTitle = BookScaleConfig.getPageTitleScale();
 		final float scaleContent = BookScaleConfig.getPageContentScale();
 		final int lineSpace = BookScaleConfig.getTitlePageSeparator();
 
 		section = StatCollector.translateToLocal(section);
 
-		FontRenderer renderer = parent.getFontRenderer();
-		addComponent(new GuiComponentLabel(parent, center(renderer, section), 24, section).setScale(scaleTitle));
+		final GuiComponentLabel currentVersionLabel = new GuiComponentLabel(0, 0, section).setScale(scaleTitle);
+		addComponent(new GuiComponentHCenter(0, 24, getWidth()).addComponent(currentVersionLabel));
 
-		int titleMiddle = center(renderer, currentVersion);
+		{
+			final GuiComponentHBox titleLine = new GuiComponentHBox(0, 0);
 
-		centerTitle = new GuiComponentLabel(parent, titleMiddle, 12, currentVersion);
-		centerTitle.setScale(scaleTitle);
-		addComponent(centerTitle);
+			{
+				prevVersionLabel = new GuiComponentLabel(0, 2, "");
+				prevVersionLabel.setScale(BookScaleConfig.getPageContentScale());
+				titleLine.addComponent(prevVersionLabel);
+			}
+
+			titleLine.addComponent(new EmptyComposite(0, 0, 0, 7));
+
+			{
+				final GuiComponentLabel centerVersionLabel = new GuiComponentLabel(0, 0, currentVersion);
+				centerVersionLabel.setScale(scaleTitle);
+				titleLine.addComponent(centerVersionLabel);
+			}
+
+			titleLine.addComponent(new EmptyComposite(0, 0, 0, 7));
+
+			{
+				nextVersionBookmark = new GuiComponentLabel(0, 2, "");
+				nextVersionBookmark.setScale(BookScaleConfig.getPageContentScale());
+				titleLine.addComponent(nextVersionBookmark);
+			}
+
+			addComponent(new GuiComponentHCenter(0, 12, getWidth()).addComponent(titleLine));
+		}
 
 		String contents = Joiner.on('\n').join(Iterables.transform(lines, BULLET_TRANSFORMER));
 
-		final GuiComponentLabel lblContent = new GuiComponentLabel(parent, 15, 40, getWidth() - 10, getHeight(), contents);
+		final GuiComponentLabel lblContent = new GuiComponentLabel(15, 40, getWidth() - 10, getHeight(), contents);
 		lblContent.setScale(scaleContent);
 		lblContent.setAdditionalLineHeight(lineSpace);
 		addComponent(lblContent);
 	}
 
-	void addPrevVersionBookmark(final GuiComponentBook book, String name, int page) {
-		IComponentParent parent = book.parent;
-		FontRenderer renderer = parent.getFontRenderer();
-		int leftSize = renderer.getStringWidth(name) / 2;
-		GuiComponentLabel bookmark = new GuiComponentLabel(parent, centerTitle.getX() - 7 - leftSize, 14, "\u00a77" + name);
-		bookmark.setListener(book.createBookmarkListener(page));
-		bookmark.setScale(BookScaleConfig.getPageContentScale());
-		addComponent(bookmark);
+	void setPrevVersionBookmark(GuiComponentBook book, String name, int page) {
+		prevVersionLabel.setText("\u00a77" + name);
+		prevVersionLabel.setListener(book.createBookmarkListener(page));
 	}
 
-	void addNextVersionBookmark(final GuiComponentBook book, String name, int page) {
-		IComponentParent parent = book.parent;
-		GuiComponentLabel bookmark = new GuiComponentLabel(parent, centerTitle.getX() + centerTitle.getWidth() + 7, 14, "\u00a77" + name);
-		bookmark.setListener(book.createBookmarkListener(page));
-		bookmark.setScale(BookScaleConfig.getPageContentScale());
-		addComponent(bookmark);
+	void setNextVersionBookmark(GuiComponentBook book, String name, int page) {
+		nextVersionBookmark.setText("\u00a77" + name);
+		nextVersionBookmark.setListener(book.createBookmarkListener(page));
 	}
 }

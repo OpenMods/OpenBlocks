@@ -22,14 +22,14 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 
 	private TextureAtlasSprite getStencilIcon(int index) {
 		final ResourceLocation blockIcon = Stencil.VALUES[index].blockIcon;
-		return componentParent.getIcon(blockIcon);
+		return mc.getTextureMapBlocks().getAtlasSprite(blockIcon.toString());
 	}
 
 	public GuiDrawingTable(ContainerDrawingTable container) {
 		super(container, 176, 172, "openblocks.gui.drawingtable");
 		final IStencilCrafter rpcProxy = getContainer().getOwner().createClientRpcProxy(IStencilCrafter.class);
 
-		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(componentParent, 47, 32, 0xFFFFFF, Icon.createSheetIcon(BaseComponent.WIDGETS, 0, 82, 16, 16));
+		GuiComponentIconButton buttonLeft = new GuiComponentIconButton(47, 32, 0xFFFFFF, Icon.createSheetIcon(BaseComponent.WIDGETS, 0, 82, 16, 16));
 		buttonLeft.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
@@ -40,7 +40,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 		});
 
 		// TODO 1.8.9 verify stencil icon rendering
-		GuiComponentIconButton buttonRight = new GuiComponentIconButton(componentParent, 108, 32, 0xFFFFFF, Icon.createSheetIcon(BaseComponent.WIDGETS, 16, 82, -16, 16));
+		GuiComponentIconButton buttonRight = new GuiComponentIconButton(108, 32, 0xFFFFFF, Icon.createSheetIcon(BaseComponent.WIDGETS, 16, 82, -16, 16));
 		buttonRight.setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
@@ -49,7 +49,7 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 				iconDisplay.setIcon(getStencilIcon(patternIndex));
 			}
 		});
-		GuiComponentTextButton buttonDraw = new GuiComponentTextButton(componentParent, 68, 57, 40, 13, 0xFFFFFF);
+		GuiComponentTextButton buttonDraw = new GuiComponentTextButton(68, 57, 40, 13, 0xFFFFFF);
 		buttonDraw.setText("Draw").setListener(new IMouseDownListener() {
 			@Override
 			public void componentMouseDown(BaseComponent component, int x, int y, int button) {
@@ -58,13 +58,19 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 		});
 
 		root.addComponent(buttonDraw);
-		(iconDisplay = new GuiComponentSprite(componentParent, 80, 34, getStencilIcon(0))
+		(iconDisplay = new GuiComponentSprite(80, 34)
 				.setColor(0f, 0f, 0f))
 				.setOverlayMode(true)
 				.setEnabled(inventorySlots.getSlot(0).getStack() != null);
 		root.addComponent(iconDisplay);
 		root.addComponent(buttonLeft);
 		root.addComponent(buttonRight);
+	}
+
+	@Override
+	public void initGui() {
+		super.initGui();
+		iconDisplay.setIcon(getStencilIcon(patternIndex));
 	}
 
 	@Override
