@@ -252,7 +252,7 @@ public class OpenBlocks {
 		public static ItemPaintBrush paintBrush;
 
 		@RegisterItem(name = "stencil", registerDefaultModel = false)
-		public static ItemStencil stencil;
+		public static ItemOBGeneric stencil;
 
 		@RegisterItem(name = "squeegee")
 		public static ItemSqueegee squeegee;

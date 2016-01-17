@@ -16,7 +16,6 @@ import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
-import openblocks.common.item.ItemStencil;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
@@ -216,7 +215,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		ItemStack held = player.getHeldItem();
 		if (held != null) {
 			Item heldItem = held.getItem();
-			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem instanceof ItemStencil) return false;
+			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem == OpenBlocks.Items.stencil) return false;
 		}
 
 		SyncableBlockLayers layer = getLayersForSide(side);

@@ -592,6 +592,9 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.stencil != null) {
+			for (Stencil stencil : Stencil.VALUES)
+				OpenBlocks.Items.stencil.registerItem(stencil.ordinal(), new MetaStencil(stencil));
+
 			if (stencilLoot) {
 				for (Stencil stencil : Stencil.values()) {
 					WeightedRandomChestContent drop = new WeightedRandomChestContent(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()), 1, 1, 2);

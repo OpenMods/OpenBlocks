@@ -21,14 +21,14 @@ public enum Stencil {
 	MUSIC("music"),
 	BALLOON("balloon");
 
-	public final String iconName;
+	public final String name;
 	public final ResourceLocation blockIcon;
 	public final ResourceLocation coverBlockIcon;
 
-	private Stencil(String iconName) {
-		this.iconName = iconName;
-		this.blockIcon = OpenBlocks.location("stencil_" + iconName);
-		this.coverBlockIcon = OpenBlocks.location("openblocks:stencilcover_" + iconName);
+	private Stencil(String name) {
+		this.name = name;
+		this.blockIcon = OpenBlocks.location("stencil_" + name);
+		this.coverBlockIcon = OpenBlocks.location("openblocks:stencilcover_" + name);
 	}
 
 	public static final Stencil[] VALUES = values();

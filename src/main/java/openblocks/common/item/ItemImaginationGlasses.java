@@ -110,12 +110,10 @@ public class ItemImaginationGlasses extends ItemArmor {
 			}
 		};
 
-
 		public final String textureName;
 
 		private Type(String name) {
-			this.textureName = "openblocks:textures/models/glasses_" + name
-					+ ".png";
+			this.textureName = "openblocks:textures/models/glasses_" + name + ".png";
 		}
 
 		protected abstract boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te);
