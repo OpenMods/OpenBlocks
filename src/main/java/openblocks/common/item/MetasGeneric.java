@@ -9,10 +9,11 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.infobook.ICustomBookEntryProvider;
 import openmods.item.IMetaItem;
+import openmods.item.IMetaItemFactory;
 
 import com.google.common.collect.ImmutableList;
 
-public enum MetasGeneric {
+public enum MetasGeneric implements IMetaItemFactory {
 	gliderWing {
 		@Override
 		public IMetaItem createMetaItem() {
@@ -151,15 +152,14 @@ public enum MetasGeneric {
 		return (stack.getItem() instanceof ItemOBGeneric) && (stack.getItemDamage() == ordinal());
 	}
 
-	protected abstract IMetaItem createMetaItem();
-
-	protected boolean isEnabled() {
+	@Override
+	public boolean isEnabled() {
 		return true;
 	}
 
-	public static void registerItems() {
-		for (MetasGeneric m : values())
-			if (m.isEnabled()) OpenBlocks.Items.generic.registerItem(m.ordinal(), m.createMetaItem());
+	@Override
+	public int getMeta() {
+		return ordinal();
 	}
 
 	public static class DocProvider implements ICustomBookEntryProvider {

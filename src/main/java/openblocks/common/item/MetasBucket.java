@@ -5,10 +5,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
-import openblocks.OpenBlocks.Items;
 import openmods.item.IMetaItem;
+import openmods.item.IMetaItemFactory;
 
-public enum MetasBucket {
+public enum MetasBucket implements IMetaItemFactory {
 	xpbucket {
 		@Override
 		public IMetaItem createMetaItem() {
@@ -28,10 +28,14 @@ public enum MetasBucket {
 		return (stack.getItem() instanceof ItemFilledBucket) && (stack.getItemDamage() == ordinal());
 	}
 
-	protected abstract IMetaItem createMetaItem();
-
-	protected boolean isEnabled() {
+	@Override
+	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public int getMeta() {
+		return ordinal();
 	}
 
 	public void registerAsBucketFor(Fluid fluid) {
@@ -40,12 +44,5 @@ public enum MetasBucket {
 
 	public void registerAsContainerFor(FluidStack fluid, ItemStack emptyContainer) {
 		FluidContainerRegistry.registerFluidContainer(fluid.copy(), newItemStack(), emptyContainer);
-	}
-
-	public static void registerItems() {
-		for (MetasBucket m : values())
-			if (m.isEnabled()) {
-				Items.filledBucket.registerItem(m.ordinal(), m.createMetaItem());
-			}
 	}
 }

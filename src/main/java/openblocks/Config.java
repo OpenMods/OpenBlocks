@@ -333,10 +333,10 @@ public class Config {
 		// There is no fail checking here because if the Generic item fails,
 		// then I doubt anyone wants this to be silent.
 		// Too many items would suffer from this. - NC
-		MetasGeneric.registerItems();
+		OpenBlocks.Items.generic.registerItems(MetasGeneric.values());
 		OpenBlocks.Items.generic.initRecipes();
 
-		MetasGenericUnstackable.registerItems();
+		OpenBlocks.Items.genericUnstackable.registerItems(MetasGenericUnstackable.values());
 		OpenBlocks.Items.genericUnstackable.initRecipes();
 
 		if (OpenBlocks.Blocks.ladder != null) {
@@ -670,7 +670,7 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.filledBucket != null) {
-			MetasBucket.registerItems();
+			OpenBlocks.Items.filledBucket.registerItems(MetasBucket.values());
 			MetasBucket.xpbucket.registerAsBucketFor(OpenBlocks.Fluids.xpJuice);
 		}
 

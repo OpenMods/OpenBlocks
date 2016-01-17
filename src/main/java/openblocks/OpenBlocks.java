@@ -212,7 +212,7 @@ public class OpenBlocks {
 		@RegisterItem(name = "hangglider")
 		public static ItemHangGlider hangGlider;
 
-		@RegisterItem(name = "generic", isConfigurable = false)
+		@RegisterItem(name = "generic", isConfigurable = false, registerDefaultModel = false)
 		public static ItemOBGeneric generic;
 
 		@RegisterItem(name = "luggage")
@@ -242,7 +242,7 @@ public class OpenBlocks {
 		@RegisterItem(name = "slimalyzer")
 		public static ItemSlimalyzer slimalyzer;
 
-		@RegisterItem(name = "filledbucket")
+		@RegisterItem(name = "filledbucket", registerDefaultModel = false)
 		public static ItemFilledBucket filledBucket;
 
 		@RegisterItem(name = "sleepingBag", unlocalizedName = "sleepingbag")
@@ -251,7 +251,7 @@ public class OpenBlocks {
 		@RegisterItem(name = "paintBrush", unlocalizedName = "paintbrush")
 		public static ItemPaintBrush paintBrush;
 
-		@RegisterItem(name = "stencil")
+		@RegisterItem(name = "stencil", registerDefaultModel = false)
 		public static ItemStencil stencil;
 
 		@RegisterItem(name = "squeegee")
@@ -272,7 +272,7 @@ public class OpenBlocks {
 		@RegisterItem(name = "goldenEye", unlocalizedName = "golden_eye")
 		public static ItemGoldenEye goldenEye;
 
-		@RegisterItem(name = "genericUnstackable", isConfigurable = false)
+		@RegisterItem(name = "genericUnstackable", isConfigurable = false, registerDefaultModel = false)
 		public static ItemOBGenericUnstackable genericUnstackable;
 
 		@RegisterItem(name = "cursor")
@@ -497,6 +497,8 @@ public class OpenBlocks {
 		proxy.init();
 		proxy.registerRenderInformation();
 		registerOreDictionary();
+
+		startupHelper.init();
 	}
 
 	@EventHandler

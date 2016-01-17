@@ -24,11 +24,9 @@ public class ItemCartographer extends Item {
 		};
 
 		public final String untranslatedName;
-		public final String iconName;
 
 		private AssistantType(String name, String iconName) {
 			this.untranslatedName = "openblocks.assistant_" + name;
-			this.iconName = "openblocks:assistant_" + iconName;
 		}
 
 		public abstract EntityAssistant createAssistant(World world, EntityPlayer owner, ItemStack stack);

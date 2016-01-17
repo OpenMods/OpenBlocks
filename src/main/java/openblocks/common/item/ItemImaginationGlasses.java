@@ -110,11 +110,10 @@ public class ItemImaginationGlasses extends ItemArmor {
 			}
 		};
 
-		public final String iconName;
+
 		public final String textureName;
 
 		private Type(String name) {
-			this.iconName = "openblocks:glasses_" + name;
 			this.textureName = "openblocks:textures/models/glasses_" + name
 					+ ".png";
 		}
