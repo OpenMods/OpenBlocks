@@ -1,0 +1,14 @@
+{
+    "parent" : "block/cube_top",
+    "textures" : {
+        "side" : "openblocks:blocks/elevator_lime",
+        "top" : "openblocks:blocks/elevator_rot_lime"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    }
+}

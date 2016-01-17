@@ -13,7 +13,6 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,11 +44,6 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 	@Override
 	protected BlockState createBlockState() {
 		return new BlockState(this, new IProperty[] { getPropertyOrientation(), COLOR });
-	}
-
-	@Override
-	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		return world.getBlockState(pos).getValue(COLOR).rgb;
 	}
 
 	@Override

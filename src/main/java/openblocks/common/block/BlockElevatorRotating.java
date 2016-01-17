@@ -1,6 +1,9 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.BlockPos;
@@ -15,8 +18,16 @@ import openmods.geometry.Orientation;
 
 public class BlockElevatorRotating extends OpenBlock.FourDirections implements IElevatorBlock {
 
+	public static final PropertyEnum<ColorMeta> COLOR = PropertyEnum.create("color", ColorMeta.class);
+
 	public BlockElevatorRotating() {
 		super(Material.rock);
+		setDefaultState(getDefaultState().withProperty(COLOR, ColorMeta.WHITE));
+	}
+
+	@Override
+	protected BlockState createBlockState() {
+		return new BlockState(this, new IProperty[] { getPropertyOrientation(), COLOR });
 	}
 
 	private static ColorMeta getColorMeta(IBlockAccess world, BlockPos pos) {
@@ -25,12 +36,10 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 	}
 
 	@Override
-	public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-		return getColorMeta(world, pos).rgb;
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		final ColorMeta color = getColorMeta(world, pos);
+		return state.withProperty(COLOR, color);
 	}
-
-	// TODO 1.8.9 getRenderColor(IBlockState state) and item coloring
-	// TODO 1.8.9 getActualState with color
 
 	@Override
 	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {

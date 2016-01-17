@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_top",
+    "textures": {
+        "side": "openblocks:blocks/elevator",
+        "top" : "openblocks:blocks/elevator_rot"
+    }
+}

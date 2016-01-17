@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import openblocks.OpenBlocks.Blocks;
 import openmods.api.*;
 import openmods.colors.ColorMeta;
 import openmods.sync.SyncableEnum;
@@ -54,7 +53,7 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 
 	private ItemStack createStack() {
 		final int colorMeta = color.get().vanillaBlockId;
-		return new ItemStack(Blocks.elevatorRotating, 1, colorMeta);
+		return new ItemStack(getBlockType(), 1, colorMeta);
 	}
 
 	@Override
