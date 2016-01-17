@@ -14,7 +14,7 @@ import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
-public class BlockBigButton extends OpenBlock.FourDirections {
+public class BlockBigButton extends OpenBlock.SixDirections {
 
 	public BlockBigButton() {
 		super(Material.circuits);
