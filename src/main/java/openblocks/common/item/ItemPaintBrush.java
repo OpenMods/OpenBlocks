@@ -134,7 +134,6 @@ public class ItemPaintBrush extends Item {
 		return 0xFFFFFF;
 	}
 
-	// TODO 1.8.9 color rendering
 	public static Integer getColorFromStack(ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
