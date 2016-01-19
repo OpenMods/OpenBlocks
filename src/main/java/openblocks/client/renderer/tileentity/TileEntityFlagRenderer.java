@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelFlag;
+import openblocks.common.block.BlockFlag;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.colors.RGB;
 import openmods.renderer.DisplayListWrapper;
@@ -45,17 +46,21 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer<TileEntity
 	public void renderTileEntityAt(TileEntityFlag flag, double x, double y, double z, float partialTicks, int destroyStage) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
-		GL11.glRotatef(-flag.getAngle(), 0, 1, 0);
-		if (flag.getOrientation().down() != EnumFacing.DOWN) {
-			GL11.glRotatef(45, 1f, 0f, 0f);
-			GL11.glTranslatef(0f, -0.2f, -0.7f);
+		if (flag != null) {
+			GL11.glRotatef(-flag.getAngle(), 0, 1, 0);
+			if (flag.getOrientation().down() != EnumFacing.DOWN) {
+				GL11.glRotatef(45, 1f, 0f, 0f);
+				GL11.glTranslatef(0f, -0.2f, -0.7f);
+			}
+		} else {
+			GL11.glRotatef(90, 0, 1, 0);
 		}
 		bindTexture(textureFlagpole);
 		POLE.render();
 
 		GL11.glRotatef(-90, 0, 1, 0);
 
-		RGB color = flag.getColor();
+		RGB color = flag != null? flag.getColor() : BlockFlag.COLORS[0];
 		GlStateManager.color(color.getR(), color.getG(), color.getB());
 		bindTexture(textureFlag);
 		FLAG.render();

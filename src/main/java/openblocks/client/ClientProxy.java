@@ -1,12 +1,17 @@
 package openblocks.client;
 
+import java.lang.reflect.Field;
+
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.item.Item;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -17,14 +22,18 @@ import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
-import openblocks.client.model.ModelCraneBackpack;
+import openblocks.client.model.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
+import openmods.config.game.RegisterBlock;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
+import openmods.renderer.SimpleModelTileEntityRenderer;
+
+import com.google.common.base.Throwables;
 
 public class ClientProxy implements IOpenBlocksProxy {
 
@@ -55,26 +64,28 @@ public class ClientProxy implements IOpenBlocksProxy {
 	public void registerRenderInformation() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<TileEntityGuide>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, new TileEntityTargetRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, SimpleModelTileEntityRenderer.create(new ModelTarget(), OpenBlocks.location("textures/models/target.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, new TileEntityBearTrapRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, new TileEntitySprinklerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, SimpleModelTileEntityRenderer.create(new ModelBearTrap(), OpenBlocks.location("textures/models/beartrap.png")));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySprinkler.class, SimpleModelTileEntityRenderer.create(new ModelSprinkler(), OpenBlocks.location("textures/models/sprinkler.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCannon.class, new TileEntityCannonRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVacuumHopper.class, new TileEntityVacuumHopperRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVacuumHopper.class, SimpleModelTileEntityRenderer.create(new ModelVacuumHopper(), OpenBlocks.location("textures/models/vacuumhopper.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoAnvil.class, new TileEntityAutoAnvilRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoAnvil.class, SimpleModelTileEntityRenderer.create(new ModelAutoAnvil(), OpenBlocks.location("textures/models/autoanvil.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, new TileEntityDonationStationRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, SimpleModelTileEntityRenderer.create(new ModelPiggy(), OpenBlocks.location("textures/models/piggy.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPShower.class, new TileEntityXPShowerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPShower.class, SimpleModelTileEntityRenderer.create(new ModelXPShower(), OpenBlocks.location("textures/models/xpshower.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
+
+		tempHackRegisterTesrItemRenderers();
 
 		// TODO 1.8.9 Tank item rendering
 
@@ -161,6 +172,24 @@ public class ClientProxy implements IOpenBlocksProxy {
 					return new RenderSnowball<EntityGoldenEye>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem());
 				}
 			});
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private static void tempHackRegisterTesrItemRenderers() {
+		for (Field f : OpenBlocks.Blocks.class.getFields()) {
+			RegisterBlock ann = f.getAnnotation(RegisterBlock.class);
+			if (ann.tileEntity() != null) {
+				try {
+					Block block = (Block)f.get(null);
+					if (block.getRenderType() == 2) {
+						Item item = Item.getItemFromBlock(block);
+						ForgeHooksClient.registerTESRItemStack(item, 0, ann.tileEntity());
+					}
+				} catch (Exception e) {
+					throw Throwables.propagate(e);
+				}
+			}
 		}
 	}
 

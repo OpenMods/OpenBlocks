@@ -26,14 +26,14 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 	// TODO 1.8.9 verify
 	@Override
-	public void renderTileEntityAt(TileEntityVillageHighlighter villagehighlighter, double x, double y, double z, float partialTick, int destroyProcess) {
+	public void renderTileEntityAt(TileEntityVillageHighlighter vh, double x, double y, double z, float partialTick, int destroyProcess) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
-		if (villagehighlighter.isPowered()) {
+		if (vh != null && vh.isPowered()) {
 			Tessellator t = Tessellator.getInstance();
 			WorldRenderer wr = t.getWorldRenderer();
 
-			SyncableIntArray villages = villagehighlighter.getVillageData();
+			SyncableIntArray villages = vh.getVillageData();
 			int[] data = villages.getValue();
 
 			GL11.glPointSize(4.0F);
@@ -87,7 +87,7 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 		GlStateManager.color(1, 1, 1, 1);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(villagehighlighter.getOrientation()), 0, 1, 0);
+		if (vh != null) GL11.glRotatef(-BlockUtils.getRotationFromOrientation(vh.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render();
 		GL11.glPopMatrix();

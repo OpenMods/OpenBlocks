@@ -33,11 +33,9 @@ public class ModelVillage extends ModelBase {
 	}
 
 	public void render() {
-
-		float f5 = 0.0625F;
-		main.render(f5);
-		step.render(f5);
-		roof.render(f5);
+		main.render(0.0625F);
+		step.render(0.0625F);
+		roof.render(0.0625F);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

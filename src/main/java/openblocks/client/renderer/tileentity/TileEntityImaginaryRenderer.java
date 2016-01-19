@@ -17,6 +17,8 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileE
 
 	@Override
 	public void renderTileEntityAt(TileEntityImaginary te, double x, double y, double z, float partialTicks, int destroyProgress) {
+		if (te == null) return;
+
 		boolean isVisible = te.is(Property.VISIBLE);
 
 		if (isVisible && te.visibility < 1) te.visibility = Math.min(te.visibility + Config.imaginaryFadingSpeed, 1);

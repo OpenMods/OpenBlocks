@@ -2,10 +2,10 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntityTarget;
+import openmods.renderer.ITileEntityModel;
 
-public class ModelTarget extends ModelBase {
+public class ModelTarget extends ModelBase implements ITileEntityModel<TileEntityTarget> {
 
 	ModelRenderer stand1;
 	ModelRenderer target;
@@ -35,27 +35,19 @@ public class ModelTarget extends ModelBase {
 		setRotation(stand2, 0F, 1.570796F, 0F);
 	}
 
-	public void render(TileEntity te, float f) {
+	@Override
+	public void render(TileEntityTarget te, float f) {
+		target.rotateAngleX = te != null? te.getTargetRotation() : 0;
 
-		float f5 = 0.0625F;
-		setRotationAngles(te, f);
-		stand1.render(f5);
-		target.render(f5);
-		stand2.render(f5);
+		stand1.render(0.0625F);
+		target.render(0.0625F);
+		stand2.render(0.0625F);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
-	}
-
-	/**
-	 * @param f
-	 */
-	public void setRotationAngles(TileEntity te, float f) {
-		TileEntityTarget targetTe = (TileEntityTarget)te;
-		target.rotateAngleX = targetTe.getTargetRotation();
 	}
 
 }

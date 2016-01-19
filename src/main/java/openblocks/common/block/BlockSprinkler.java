@@ -1,6 +1,8 @@
 package openblocks.common.block;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -17,6 +19,13 @@ public class BlockSprinkler extends OpenBlock.TwoDirections {
 
 	public BlockSprinkler() {
 		super(Material.water);
+		setDefaultState(getDefaultState().withProperty(BlockLiquid.LEVEL, 1));
+	}
+
+	@Override
+	protected BlockState createBlockState() {
+		// 1.8.9 Hack, crashes otherwise
+		return new BlockState(this, getPropertyOrientation(), BlockLiquid.LEVEL);
 	}
 
 	// TODO 1.8.9 room for improvments?

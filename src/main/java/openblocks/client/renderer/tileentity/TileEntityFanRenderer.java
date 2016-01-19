@@ -19,9 +19,9 @@ public class TileEntityFanRenderer extends TileEntitySpecialRenderer<TileEntityF
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 
-		GL11.glRotatef(fan.getAngle(), 0F, 1.0F, 0.0F);
+		GL11.glRotatef(fan != null? fan.getAngle() : 180, 0F, 1.0F, 0.0F);
 		bindTexture(texture);
-		model.render(fan, partialTick, fan.getBladeRotation(partialTick));
+		model.render(partialTick, fan != null? fan.getBladeRotation(partialTick) : 0);
 		GL11.glPopMatrix();
 	}
 

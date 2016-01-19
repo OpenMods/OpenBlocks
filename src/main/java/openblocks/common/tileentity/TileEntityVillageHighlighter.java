@@ -78,6 +78,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	}
 
 	public boolean isPowered() {
+		// TODO 1.8.9 - either state or sync
 		if (worldObj == null) return false;
 		return worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 	}
@@ -89,6 +90,8 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	}
 
 	public boolean canVillagersBreed() {
+		if (worldObj.isRemote) return false;
+
 		for (Village village : worldObj.villageCollectionObj.getVillageList()) {
 			if (village.func_179866_a(pos)) {
 				int i = (int)(village.getNumVillageDoors() * 0.35D);

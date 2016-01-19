@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg.State;
@@ -20,7 +21,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 	private static final Random RANDOM = new Random(432L);
 
-	private static final ResourceLocation texture = new ResourceLocation("openblocks", "textures/models/egg.png");
+	private static final ResourceLocation texture = OpenBlocks.location("textures/models/egg.png");
 
 	@Override
 	public void renderTileEntityAt(TileEntityGoldenEgg egg, double x, double y, double z, float partialTickTime, int destroyProgress) {
@@ -28,24 +29,22 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 
-		float rotation = egg.getRotation(partialTickTime);
-		float progress = egg.getProgress(partialTickTime);
-		float offset = egg.getOffset(partialTickTime);
+		float rotation = egg != null? egg.getRotation(partialTickTime) : 0;
+		float progress = egg != null? egg.getProgress(partialTickTime) : 0;
+		float offset = egg != null? egg.getOffset(partialTickTime) : 0;
 
 		GL11.glTranslatef(0, -offset, 0);
-
-		GL11.glPushMatrix();
 
 		GL11.glRotatef(rotation, 0, 1, 0);
 
 		bindTexture(texture);
 		model.render();
 
-		State state = egg.getState();
-		if (state.specialEffects) renderPhantom(rotation, progress, partialTickTime);
-		GL11.glPopMatrix();
-
-		if (state.specialEffects) renderStar(rotation, progress, Tessellator.getInstance(), partialTickTime);
+		if (egg != null) {
+			State state = egg.getState();
+			if (state.specialEffects) renderPhantom(rotation, progress, partialTickTime);
+			if (state.specialEffects) renderStar(rotation, progress, Tessellator.getInstance(), partialTickTime);
+		}
 
 		GL11.glPopMatrix();
 	}

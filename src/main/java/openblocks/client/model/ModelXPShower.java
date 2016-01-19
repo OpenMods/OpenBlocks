@@ -2,15 +2,15 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityXPShower;
+import openmods.renderer.ITileEntityModel;
 
-public class ModelXPShower extends ModelBase
+public class ModelXPShower extends ModelBase implements ITileEntityModel<TileEntityXPShower>
 {
 	ModelRenderer end;
 	ModelRenderer main;
 
-	public ModelXPShower()
-	{
+	public ModelXPShower() {
 		textureWidth = 32;
 		textureHeight = 32;
 
@@ -28,12 +28,10 @@ public class ModelXPShower extends ModelBase
 		setRotation(main, 0F, 0F, 0F);
 	}
 
-	public void render(TileEntity te, float f) {
-
-		float f5 = 0.0625F;
-		setRotationAngles(te, f);
-		main.render(f5);
-		end.render(f5);
+	@Override
+	public void render(TileEntityXPShower te, float f) {
+		main.render(0.0625F);
+		end.render(0.0625F);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -41,11 +39,5 @@ public class ModelXPShower extends ModelBase
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	/**
-	 * @param te
-	 * @param f
-	 */
-	public void setRotationAngles(TileEntity te, float f) {}
 
 }

@@ -28,6 +28,11 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	}
 
 	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
 
 		if (!world.isRemote && entity != null && entity instanceof EntityArrow) {

@@ -34,4 +34,9 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 		Orientation orientation = getOrientation(world, pos);
 		setBoundsBasedOnOrientation(orientation);
 	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 }

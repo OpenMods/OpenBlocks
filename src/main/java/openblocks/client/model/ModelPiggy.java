@@ -3,8 +3,9 @@ package openblocks.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import openblocks.common.tileentity.TileEntityDonationStation;
+import openmods.renderer.ITileEntityModel;
 
-public class ModelPiggy extends ModelBase {
+public class ModelPiggy extends ModelBase implements ITileEntityModel<TileEntityDonationStation> {
 	// fields
 	ModelRenderer body;
 	ModelRenderer head;
@@ -84,18 +85,18 @@ public class ModelPiggy extends ModelBase {
 		setRotation(tail, 0F, 0.2617994F, 0.2268928F);
 	}
 
-	public void render(TileEntityDonationStation station, float f) {
-		float f5 = 0.0625F;
-		body.render(f5);
-		head.render(f5);
-		snout.render(f5);
-		ear2.render(f5);
-		ear1.render(f5);
-		leg4.render(f5);
-		leg2.render(f5);
-		leg1.render(f5);
-		leg3.render(f5);
-		tail.render(f5);
+	@Override
+	public void render(TileEntityDonationStation station, float partialTicks) {
+		body.render(0.0625F);
+		head.render(0.0625F);
+		snout.render(0.0625F);
+		ear2.render(0.0625F);
+		ear1.render(0.0625F);
+		leg4.render(0.0625F);
+		leg2.render(0.0625F);
+		leg1.render(0.0625F);
+		leg3.render(0.0625F);
+		tail.render(0.0625F);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

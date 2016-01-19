@@ -2,8 +2,10 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import openblocks.common.tileentity.TileEntityAutoAnvil;
+import openmods.renderer.ITileEntityModel;
 
-public class ModelAutoAnvil extends ModelBase {
+public class ModelAutoAnvil extends ModelBase implements ITileEntityModel<TileEntityAutoAnvil> {
 	// fields
 	ModelRenderer level1;
 	ModelRenderer level2;
@@ -41,7 +43,8 @@ public class ModelAutoAnvil extends ModelBase {
 		setRotation(level4, 0F, 0F, 0F);
 	}
 
-	public void render() {
+	@Override
+	public void render(TileEntityAutoAnvil tile, float partialTicks) {
 		level1.render(f5);
 		level2.render(f5);
 		level3.render(f5);

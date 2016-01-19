@@ -17,10 +17,12 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 	@Override
 	public void renderTileEntityAt(TileEntityTrophy trophy, double x, double y, double z, float partialTick, int destroyProgress) {
 
-		Trophy type = trophy.getTrophy();
-		if (type != null) {
-			float angle = BlockUtils.getRotationFromOrientation(trophy.getOrientation());
-			renderTrophy(type, x + 0.5, y, z + 0.5, angle);
+		if (trophy != null) {
+			Trophy type = trophy.getTrophy();
+			if (type != null) {
+				float angle = BlockUtils.getRotationFromOrientation(trophy.getOrientation());
+				renderTrophy(type, x + 0.5, y, z + 0.5, angle);
+			}
 		}
 	}
 

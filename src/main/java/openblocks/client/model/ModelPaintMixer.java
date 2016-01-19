@@ -2,11 +2,11 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
+import openblocks.common.tileentity.TileEntityPaintMixer;
+import openmods.renderer.ITileEntityModel;
 
-public class ModelPaintMixer extends ModelBase
-{
-	// fields
+public class ModelPaintMixer extends ModelBase implements ITileEntityModel<TileEntityPaintMixer> {
+
 	ModelRenderer controls;
 	ModelRenderer right;
 	ModelRenderer left;
@@ -70,7 +70,8 @@ public class ModelPaintMixer extends ModelBase
 		model.rotateAngleZ = z;
 	}
 
-	public void render(TileEntity te, float f) {
+	@Override
+	public void render(TileEntityPaintMixer te, float partialTicks) {
 		float f5 = 0.0625F;
 		controls.render(f5);
 		right.render(f5);

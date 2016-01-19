@@ -24,4 +24,10 @@ public class BlockAutoAnvil extends OpenBlock.TwoDirections {
 	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
 	}
+
+	// TODO 1.8.9 too trivial to live
+	@Override
+	public int getRenderType() {
+		return 2; // TESR only
+	}
 }

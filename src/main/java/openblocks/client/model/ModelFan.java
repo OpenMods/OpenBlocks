@@ -2,7 +2,6 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 
 public class ModelFan extends ModelBase {
 
@@ -89,7 +88,7 @@ public class ModelFan extends ModelBase {
 		setRotation(fan, 0F, 0F, 0F);
 	}
 
-	public void render(TileEntity te, float partialTickTime, float bladeRotation) {
+	public void render(float partialTickTime, float bladeRotation) {
 		fan.rotateAngleZ = bladeRotation;
 
 		final float scale = 1.0f / 16.0f;

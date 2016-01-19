@@ -66,12 +66,11 @@ public class ModelCannon extends ModelBase {
 		TileEntityCannon cannon = (TileEntityCannon)te;
 
 		float f5 = 0.0625F;
-		setRotationAngles(te, f);
 
-		int elapsed = Math.min(12, cannon.getTicksSinceLastFire());
+		int elapsed = Math.min(12, cannon != null? cannon.getTicksSinceLastFire() : 100);
 		double ease = keyframes[elapsed];
 		float shooterAnim = -(float)(3.0f * ease);
-		shooter.rotateAngleX = (float)Math.toRadians(cannon.currentPitch);
+		shooter.rotateAngleX = (float)Math.toRadians(cannon != null? cannon.currentPitch : 45);
 		float z = (float)(3 + shooterAnim * Math.cos(shooter.rotateAngleX));
 		float y = (float)(11 - shooterAnim * Math.sin(shooter.rotateAngleX));
 		shooter.rotationPointY = y;
@@ -120,7 +119,5 @@ public class ModelCannon extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	public void setRotationAngles(TileEntity te, float f) {}
 
 }

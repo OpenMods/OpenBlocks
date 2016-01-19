@@ -23,6 +23,11 @@ public class BlockVillageHighlighter extends OpenBlock.FourDirections {
 	}
 
 	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
 	public int getWeakPower(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
 		TileEntityVillageHighlighter tile = getTileEntity(world, pos, TileEntityVillageHighlighter.class);
 		return (tile != null)? tile.getSignalStrength() : 0;

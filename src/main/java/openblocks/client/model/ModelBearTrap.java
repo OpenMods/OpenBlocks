@@ -3,8 +3,9 @@ package openblocks.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import openblocks.common.tileentity.TileEntityBearTrap;
+import openmods.renderer.ITileEntityModel;
 
-public class ModelBearTrap extends ModelBase {
+public class ModelBearTrap extends ModelBase implements ITileEntityModel<TileEntityBearTrap> {
 
 	ModelRenderer middle;
 
@@ -141,8 +142,12 @@ public class ModelBearTrap extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
-	public void renderAll(boolean shut, int ticksSinceOpened) {
+	@Override
+	public void render(TileEntityBearTrap te, float partialTicks) {
 		float f5 = 0.0625F;
+
+		boolean shut = te != null? te.isShut() : false;
+		int ticksSinceOpened = te != null? te.ticksSinceOpened() : TileEntityBearTrap.OPENING_ANIMATION_TIME;
 
 		float rot = 1.4F;
 

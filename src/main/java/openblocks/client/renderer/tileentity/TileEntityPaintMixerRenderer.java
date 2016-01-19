@@ -21,26 +21,29 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<Tile
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(-BlockUtils.getRotationFromOrientation(mixer.getOrientation()), 0, 1, 0);
+		if (mixer != null) GL11.glRotatef(-BlockUtils.getRotationFromOrientation(mixer.getOrientation()), 0, 1, 0);
 		bindTexture(texture);
 		model.render(mixer, partialTick);
 		// The top of the paint can is rendering longer than the can. WHYY :(
 		// Fixed this, rotating the matrix and not using the stack :)
-		GL11.glTranslated(0.05, 0.5, 0);
-		GL11.glRotated(150, 0, 0, -1);
-		GL11.glRotated(90, 0, 1, 0);
-		GL11.glScaled(0.8, 0.8, 0.8);
-		bindTexture(TextureMap.locationBlocksTexture);
-		if (mixer.hasPaint()) {
-			if (mixer.isEnabled()) {
-				GL11.glTranslated(0, Math.random() * 0.2, 0);
+
+		if (mixer != null) {
+			GL11.glTranslated(0.05, 0.5, 0);
+			GL11.glRotated(150, 0, 0, -1);
+			GL11.glRotated(90, 0, 1, 0);
+			GL11.glScaled(0.8, 0.8, 0.8);
+			bindTexture(TextureMap.locationBlocksTexture);
+			if (mixer.hasPaint()) {
+				if (mixer.isEnabled()) {
+					GL11.glTranslated(0, Math.random() * 0.2, 0);
+				}
+				int secondPass = mixer.getCanColor();
+				if (mixer.isEnabled()) {
+					double progress = (double)mixer.getProgress().getValue() / TileEntityPaintMixer.PROGRESS_TICKS;
+					secondPass = calculateColorFade(secondPass, mixer.getColor().getValue(), progress);
+				}
+				// TODO 1.8.9 render can!
 			}
-			int secondPass = mixer.getCanColor();
-			if (mixer.isEnabled()) {
-				double progress = (double)mixer.getProgress().getValue() / TileEntityPaintMixer.PROGRESS_TICKS;
-				secondPass = calculateColorFade(secondPass, mixer.getColor().getValue(), progress);
-			}
-			// TODO 1.8.9 render can!
 		}
 		GL11.glPopMatrix();
 	}

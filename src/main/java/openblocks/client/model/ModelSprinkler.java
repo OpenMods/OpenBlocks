@@ -2,10 +2,10 @@ package openblocks.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntitySprinkler;
+import openmods.renderer.ITileEntityModel;
 
-public class ModelSprinkler extends ModelBase {
+public class ModelSprinkler extends ModelBase implements ITileEntityModel<TileEntitySprinkler> {
 
 	ModelRenderer side1;
 	ModelRenderer side2;
@@ -49,31 +49,21 @@ public class ModelSprinkler extends ModelBase {
 		setRotation(end2, 0F, 0F, 0F);
 	}
 
-	public void render(TileEntitySprinkler sprinkler, float f) {
+	@Override
+	public void render(TileEntitySprinkler sprinkler, float partialTicks) {
+		sprayer.rotateAngleZ = sprinkler != null? (float)(Math.toRadians(30) * sprinkler.getSprayDirection()) : 0;
+		side1.render(0.0625F);
+		side2.render(0.0625F);
+		end1.render(0.0625F);
+		end2.render(0.0625F);
 
-		float f5 = 0.0625F;
-		setRotationAngles(sprinkler, f);
-		side1.render(f5);
-		side2.render(f5);
-		end1.render(f5);
-		end2.render(f5);
-
-		sprayer.render(f5);
+		sprayer.render(0.0625F);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
-	}
-
-	/**
-	 * @param f
-	 */
-	public void setRotationAngles(TileEntity te, float f) {
-		TileEntitySprinkler sprinkler = (TileEntitySprinkler)te;
-
-		sprayer.rotateAngleZ = (float)(Math.toRadians(30) * sprinkler.getSprayDirection());
 	}
 
 }
