@@ -1,10 +1,21 @@
 package openblocks.client.renderer.tileentity;
 
+import java.util.List;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.pipeline.LightUtil;
+import openblocks.OpenBlocks.Blocks;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openmods.utils.BlockUtils;
@@ -14,19 +25,58 @@ import org.lwjgl.opengl.GL11;
 
 public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEntityTrophy> {
 
-	@Override
-	public void renderTileEntityAt(TileEntityTrophy trophy, double x, double y, double z, float partialTick, int destroyProgress) {
+	private static final int INVENTORY_ROTATION = 0;
 
-		if (trophy != null) {
-			Trophy type = trophy.getTrophy();
-			if (type != null) {
-				float angle = BlockUtils.getRotationFromOrientation(trophy.getOrientation());
-				renderTrophy(type, x + 0.5, y, z + 0.5, angle);
-			}
-		}
+	private final Trophy trophyType;
+
+	public TileEntityTrophyRenderer(Trophy trophyType) {
+		this.trophyType = trophyType;
 	}
 
-	public static void renderTrophy(Trophy type, double x, double y, double z, float angle) {
+	public TileEntityTrophyRenderer() {
+		this(null);
+	}
+
+	@Override
+	public void renderTileEntityAt(TileEntityTrophy trophy, double x, double y, double z, float partialTick, int destroyProgress) {
+		Trophy type = trophy != null? trophy.getTrophy() : trophyType;
+		if (type != null) {
+			float angle = trophy != null? BlockUtils.getRotationFromOrientation(trophy.getOrientation()) : INVENTORY_ROTATION;
+			renderTrophy(type, x + 0.5, y, z + 0.5, angle);
+		}
+
+		if (trophy == null) renderStaticPart(x + 0.5, y + 0.5, z + 0.5);
+	}
+
+	private void renderStaticPart(double x, double y, double z) {
+		GlStateManager.disableBlend();
+		final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
+		IBlockState state = Blocks.trophy.getDefaultState();
+
+		IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer wr = tessellator.getWorldRenderer();
+		bindTexture(TextureMap.locationBlocksTexture);
+
+		wr.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+		wr.setTranslation(x, y, z);
+
+		for (EnumFacing face : EnumFacing.values())
+			renderQuads(wr, model.getFaceQuads(face));
+
+		renderQuads(wr, model.getGeneralQuads());
+		tessellator.draw();
+
+		wr.setTranslation(0, 0, 0);
+	}
+
+	private static void renderQuads(WorldRenderer wr, List<BakedQuad> quads) {
+		for (BakedQuad quad : quads)
+			LightUtil.renderQuadColor(wr, quad, 0xFFFFFFFF);
+	}
+
+	private static void renderTrophy(Trophy type, double x, double y, double z, float angle) {
 		Entity entity = type.getEntity();
 		if (entity != null) {
 			GL11.glPushMatrix();
@@ -41,8 +91,9 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 				// yeah we don't care about fonts, but we do care that the
 				// renderManager is available
 				if (renderer != null && renderer.getFontRendererFromRenderManager() != null) {
-					GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-					RenderUtils.enableLightmap();
+					GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+					final boolean lightmapEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
+					GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
 					synchronized (entity) {
 						entity.worldObj = renderWorld;
@@ -50,7 +101,11 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 						entity.worldObj = null;
 					}
 
-					GL11.glPopAttrib();
+					GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+					if (lightmapEnabled) GlStateManager.enableTexture2D();
+					else GlStateManager.disableTexture2D();
+					GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
 				}
 			}
 			GL11.glPopMatrix();

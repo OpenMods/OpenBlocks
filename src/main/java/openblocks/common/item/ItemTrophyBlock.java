@@ -32,6 +32,13 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 		return null;
 	}
 
+	@Override
+	public int getMetadata(ItemStack stack) {
+		// for item rendering purposes
+		Trophy trophy = getTrophy(stack);
+		return trophy != null? trophy.ordinal() : 0;
+	}
+
 	public static ItemStack putMetadata(ItemStack stack, Trophy trophy) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		tag.setString(TAG_ENTITY, trophy.name());

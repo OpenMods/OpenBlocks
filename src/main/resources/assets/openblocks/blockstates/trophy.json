@@ -1,0 +1,12 @@
+{
+    "forge_marker" : 1,
+    "defaults" : { "model" : "openblocks:trophy_base" },
+    "variants" : {
+        "orientation" : {
+            "xp_yp" : { "y" :   0 },
+            "zp_yp" : { "y" :  90 },
+            "xn_yp" : { "y" : 180 },
+            "zn_yp" : { "y" : 270 }
+           }
+    }
+}

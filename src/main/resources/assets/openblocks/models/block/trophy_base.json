@@ -1,0 +1,20 @@
+{
+    "textures": {
+        "texture": "openblocks:blocks/trophy",
+        "particle": "openblocks:blocks/trophy"
+    },
+    "elements": [
+        {
+            "from": [ 3.0, 0.0, 3.0 ],
+            "to": [ 13.0, 4.0, 13.0 ],
+            "faces": {
+                "north": { "texture": "#texture", "uv": [ 6.0, 0.0, 16.0, 4.0 ] },
+                "east": { "texture": "#texture", "uv": [ 6.0, 12.0, 16.0, 16.0 ] },
+                "south": { "texture": "#texture", "uv": [ 0.0, 0.0, 10.0, 4.0 ] },
+                "west": { "texture": "#texture", "uv": [ 0.0, 12.0, 10.0, 16.0 ] },
+                "up": { "texture": "#texture", "uv": [ 3.0, 3.0, 13.0, 13.0 ] },
+                "down": { "texture": "#texture", "uv": [ 3.0, 3.0, 13.0, 13.0 ] }
+            }
+        }
+    ]
+}

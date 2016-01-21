@@ -8,10 +8,12 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -25,6 +27,7 @@ import openblocks.client.fx.FXLiquidSpray;
 import openblocks.client.model.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.tileentity.*;
+import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
@@ -32,6 +35,7 @@ import openmods.config.game.RegisterBlock;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import openmods.renderer.SimpleModelTileEntityRenderer;
+import openmods.utils.render.MarkerClassGenerator;
 
 import com.google.common.base.Throwables;
 
@@ -45,6 +49,12 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (Config.flimFlamEnchantmentId > 0) {
 			MinecraftForge.EVENT_BUS.register(new LoreFlimFlam.DisplayHandler());
+		}
+
+		if (OpenBlocks.Blocks.trophy != null) {
+			Item trophyItem = Item.getItemFromBlock(OpenBlocks.Blocks.trophy);
+			for (Trophy trophy : Trophy.VALUES)
+				registerTrophyItemRenderer(trophyItem, trophy);
 		}
 	}
 
@@ -162,8 +172,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
-		// TODO 1.8.9 trophy item rendering
-
 		if (OpenBlocks.Items.goldenEye != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoldenEye.class, new IRenderFactory<EntityGoldenEye>() {
 
@@ -173,6 +181,16 @@ public class ClientProxy implements IOpenBlocksProxy {
 				}
 			});
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private static void registerTrophyItemRenderer(Item item, Trophy trophy) {
+		// this is probably enough to revoke my modding licence!
+		final Class<? extends TileEntityTrophy> markerCls = MarkerClassGenerator.instance.createMarkerCls(TileEntityTrophy.class);
+		final int meta = trophy.ordinal();
+		ForgeHooksClient.registerTESRItemStack(item, meta, markerCls);
+		ClientRegistry.bindTileEntitySpecialRenderer(markerCls, new TileEntityTrophyRenderer(trophy));
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(OpenBlocks.location("trophy"), "inventory"));
 	}
 
 	@SuppressWarnings("deprecation")
