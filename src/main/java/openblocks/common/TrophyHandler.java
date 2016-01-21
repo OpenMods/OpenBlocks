@@ -104,7 +104,11 @@ public class TrophyHandler {
 		MushroomCow(new MooshroomBehavior()),
 		VillagerGolem(0.3),
 		SnowMan(new SnowmanBehavior()),
-		Pig(new ItemDropBehavior(20000, new ItemStack(Items.porkchop)));
+		Pig(new ItemDropBehavior(20000, new ItemStack(Items.porkchop))),
+		Endermite(),
+		Guardian(new GuardianBehavior()),
+		Rabbit(new ItemDropBehavior(20000, new ItemStack(Items.carrot)));
+		// Skipped: Horse (needs world in ctor), Wither (renders boss bar)
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
@@ -178,7 +182,7 @@ public class TrophyHandler {
 		}
 
 		protected Entity createEntity() {
-			return EntityList.createEntityByName(toString(), null);
+			return EntityList.createEntityByName(name(), null);
 		}
 
 		static {
