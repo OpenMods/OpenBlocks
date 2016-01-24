@@ -55,6 +55,7 @@ dependencies {
 // Grab system env
 ext.env = System.getenv()
 
+mod_version += "." + (env.BUILD_NUMBER ?: 'dev')
 version = mc_ver + "-" + mod_version
 
 ext.in_jenkins = false
@@ -84,9 +85,6 @@ if (!in_jenkins) {
 } else { // In Jenkins
     branch = env.GIT_BRANCH.minus("origin/")
 }
-
-// Version tag for jar file name
-version += "." + (env.BUILD_NUMBER ?: 'dev')
 
 // Get Git metadata (if in Jenkins)
 ext.gitManifest = manifest {
