@@ -36,6 +36,10 @@ repositories {
         name "OpenMods"
         url "http://repo.openmods.info/artifactory/openmods"
     }
+    maven {
+        name "OpenMods 3rd party"
+        url "http://repo.openmods.info/artifactory/thirdparty"
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -46,6 +50,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 dependencies {
     compile project(":OpenModsLib") // Load OpenModsLib from submodule
 
+    compile "info.computercraft:ComputerCraft-API:1.78"
     compile "openperipheral:OpenPeripheralCore-API:"+opc_api_version
 }
 
