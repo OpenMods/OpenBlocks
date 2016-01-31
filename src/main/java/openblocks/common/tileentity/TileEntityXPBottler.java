@@ -1,7 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -44,7 +42,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Items.experience_bottle, 1);
 
-	public List<ForgeDirection> surroundingTanks = new ArrayList<ForgeDirection>();
+	private boolean needsTankUpdate;
 
 	public static enum Slots {
 		input,
@@ -103,6 +101,11 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			// if we should, we'll autofill the tank
 			if (automaticSlots.get(AutoSlots.xp)) {
+				if (needsTankUpdate) {
+					tank.updateNeighbours(worldObj, getPosition());
+					needsTankUpdate = false;
+				}
+
 				tank.fillFromSides(10, worldObj, getPosition(), xpSides.getValue());
 			}
 
@@ -248,7 +251,13 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@Override
+	public void validate() {
+		super.validate();
+		this.needsTankUpdate = true;
+	}
+
+	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, getPosition());
+		this.needsTankUpdate = true;
 	}
 }

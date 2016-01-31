@@ -39,7 +39,9 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	protected static final int TOTAL_COOLDOWN = 40;
 	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(45);
 
-	protected int cooldown = 0;
+	private int cooldown = 0;
+
+	private boolean needsTankUpdate;
 
 	/**
 	 * The 3 slots in the inventory
@@ -108,6 +110,11 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		if (!worldObj.isRemote) {
 			// if we should auto-drink liquid, do it!
 			if (automaticSlots.get(AutoSlots.xp)) {
+				if (needsTankUpdate) {
+					tank.updateNeighbours(worldObj, getPosition());
+					needsTankUpdate = false;
+				}
+
 				tank.fillFromSides(100, worldObj, getPosition(), xpSides.getValue());
 			}
 
@@ -266,7 +273,13 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
+	public void validate() {
+		super.validate();
+		this.needsTankUpdate = true;
+	}
+
+	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, getPosition());
+		this.needsTankUpdate = true;
 	}
 }
