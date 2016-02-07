@@ -1,5 +1,19 @@
 [
     {
+        version : "1.5.1",
+        sections :
+        [
+             {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Blocks with internal tanks ignoring neighbouring tanks after reload",
+                    "XP shower popping after block update"
+                ]
+            }
+        ]
+    },
+    {
         version : "1.5",
         sections :
         [

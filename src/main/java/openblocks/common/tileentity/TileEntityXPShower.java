@@ -3,7 +3,6 @@ package openblocks.common.tileentity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -14,12 +13,11 @@ import openblocks.common.entity.EntityXPOrbNoFly;
 import openmods.OpenMods;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
-import openmods.api.ISurfaceAttachment;
 import openmods.liquids.GenericTank;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile, IAddAwareTile, ISurfaceAttachment, ITickable {
+public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile, IAddAwareTile, ITickable {
 
 	private static final int DRAIN_PER_CYCLE = 50;
 
@@ -102,10 +100,4 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 		super.writeToNBT(nbt);
 		bufferTank.writeToNBT(nbt);
 	}
-
-	@Override
-	public EnumFacing getSurfaceDirection() {
-		return getOrientation().north();
-	}
-
 }

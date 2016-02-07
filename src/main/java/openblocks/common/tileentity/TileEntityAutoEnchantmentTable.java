@@ -61,6 +61,8 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private SyncableFlags automaticSlots;
 	private SyncableInt maxLevel;
 
+	private boolean needsTankUpdate;
+
 	private final GenericInventory inventory = new TileEntityInventory(this, "autoenchant", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
@@ -113,6 +115,11 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		if (!worldObj.isRemote) {
 
 			if (automaticSlots.get(AutoSlots.xp)) {
+				if (needsTankUpdate) {
+					tank.updateNeighbours(worldObj, pos);
+					needsTankUpdate = false;
+				}
+
 				tank.fillFromSides(80, worldObj, pos, xpSides.getValue());
 			}
 
@@ -355,8 +362,14 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
+	public void validate() {
+		super.validate();
+		this.needsTankUpdate = true;
+	}
+
+	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, pos);
+		this.needsTankUpdate = true;
 	}
 
 }

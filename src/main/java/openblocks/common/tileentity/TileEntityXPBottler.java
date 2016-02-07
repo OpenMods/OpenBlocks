@@ -1,6 +1,5 @@
 package openblocks.common.tileentity;
 
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -36,8 +35,6 @@ import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.*;
 
-import com.google.common.collect.Lists;
-
 public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(LiquidXpUtils.XP_PER_BOTTLE);
@@ -46,7 +43,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
 	protected static final ItemStack XP_BOTTLE = new ItemStack(Items.experience_bottle, 1);
 
-	public List<EnumFacing> surroundingTanks = Lists.newArrayList();
+	private boolean needsTankUpdate;
 
 	public static enum Slots {
 		input,
@@ -104,6 +101,11 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			// if we should, we'll autofill the tank
 			if (automaticSlots.get(AutoSlots.xp)) {
+				if (needsTankUpdate) {
+					tank.updateNeighbours(worldObj, pos);
+					needsTankUpdate = false;
+				}
+
 				tank.fillFromSides(10, worldObj, pos, xpSides.getValue());
 			}
 
@@ -249,7 +251,13 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@Override
+	public void validate() {
+		super.validate();
+		this.needsTankUpdate = true;
+	}
+
+	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, pos);
+		this.needsTankUpdate = true;
 	}
 }

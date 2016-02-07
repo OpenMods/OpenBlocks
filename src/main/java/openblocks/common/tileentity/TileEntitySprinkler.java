@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -18,9 +19,7 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
-import openmods.api.IBreakAwareTile;
-import openmods.api.IHasGui;
-import openmods.api.ISurfaceAttachment;
+import openmods.api.*;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
@@ -36,7 +35,7 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui, ITickable {
+public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui, ITickable, INeighbourAwareTile {
 
 	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
 
@@ -46,6 +45,8 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	private static final int[] SPRINKER_MOD = new int[] { 1, 5, 20 };
 
 	private boolean hasBonemeal = false;
+
+	private boolean needsTankUpdate;
 
 	public enum Flags {
 		enabled
@@ -162,7 +163,15 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	@Override
 	public void update() {
 		if (!worldObj.isRemote) {
-			if (tank.getFluidAmount() <= 0) tank.fillFromSide(worldObj, pos, EnumFacing.DOWN);
+
+			if (tank.getFluidAmount() <= 0) {
+				if (needsTankUpdate) {
+					tank.updateNeighbours(worldObj, pos);
+					needsTankUpdate = false;
+				}
+
+				tank.fillFromSide(worldObj, pos, EnumFacing.DOWN);
+			}
 
 			if (ticks % Config.sprinklerBonemealConsumeRate == 0) {
 				hasBonemeal = ItemDistribution.consumeFirstInventoryItem(inventory, BONEMEAL);
@@ -235,5 +244,16 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	@Override
+	public void validate() {
+		super.validate();
+		this.needsTankUpdate = true;
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		this.needsTankUpdate = true;
 	}
 }

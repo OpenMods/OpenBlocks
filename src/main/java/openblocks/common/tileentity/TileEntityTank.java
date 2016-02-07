@@ -69,9 +69,13 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private final TankRenderLogic renderLogic;
 
+	private boolean needsTankUpdate;
+
 	@Override
 	public void validate() {
 		super.validate();
+
+		needsTankUpdate = true;
 		if (worldObj.isRemote) renderLogic.initialize(worldObj, pos);
 	}
 
@@ -180,6 +184,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public void onNeighbourChanged(Block block) {
 		forceUpdate = true;
+		needsTankUpdate = true;
 	}
 
 	@Override
@@ -258,11 +263,15 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@Override
 	public void update() {
-
 		ticksSinceLastSync++;
 		ticksSinceLastUpdate++;
 
 		if (Config.shouldTanksUpdate && !worldObj.isRemote && forceUpdate) {
+			if (needsTankUpdate) {
+				tank.updateNeighbours(worldObj, pos);
+				needsTankUpdate = false;
+			}
+
 			forceUpdate = false;
 
 			FluidStack contents = tank.getFluid();

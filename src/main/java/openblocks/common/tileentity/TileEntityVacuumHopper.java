@@ -53,6 +53,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public SyncableSides itemOutputs;
 	public SyncableBoolean vacuumDisabled;
 
+	private boolean needsTankUpdate;
+
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "vacuumhopper", true, 10));
 
 	@IncludeInterface(ISidedInventory.class)
@@ -153,6 +155,11 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	private boolean outputToNeighbors() {
 		if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
+			if (needsTankUpdate) {
+				tank.updateNeighbours(worldObj, pos);
+				needsTankUpdate = false;
+			}
+
 			tank.distributeToSides(50, worldObj, pos, xpOutputs.getValue());
 			autoInventoryOutput();
 			return true;
@@ -251,7 +258,13 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	@Override
+	public void validate() {
+		super.validate();
+		this.needsTankUpdate = true;
+	}
+
+	@Override
 	public void onNeighbourChanged(Block block) {
-		tank.updateNeighbours(worldObj, pos);
+		this.needsTankUpdate = true;
 	}
 }
