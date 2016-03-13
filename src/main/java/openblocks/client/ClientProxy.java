@@ -56,6 +56,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 			for (Trophy trophy : Trophy.VALUES)
 				registerTrophyItemRenderer(trophyItem, trophy);
 		}
+
+		registerEntityRenderers();
 	}
 
 	@Override
@@ -99,27 +101,11 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		// TODO 1.8.9 Tank item rendering
 
-		if (OpenBlocks.Items.luggage != null) {
-			// TODO 1.8.9 Luggage item rendering
-			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new IRenderFactory<EntityLuggage>() {
-				@Override
-				public Render<EntityLuggage> createRenderFor(RenderManager manager) {
-					return new EntityLuggageRenderer(manager);
-				}
-			});
-		}
+		registerEntityRenderers();
 
 		// TODO 1.8.9 Paint can item rendering
 
 		if (OpenBlocks.Items.hangGlider != null) {
-			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new IRenderFactory<EntityHangGlider>() {
-
-				@Override
-				public Render<EntityHangGlider> createRenderFor(RenderManager manager) {
-					return new EntityHangGliderRenderer(manager);
-				}
-			});
-
 			// TODO 1.8.9 hang glider item rendering
 			MinecraftForge.EVENT_BUS.register(new GliderPlayerRenderHandler());
 		}
@@ -130,6 +116,47 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.craneBackpack != null) {
 			ModelCraneBackpack.instance.init();
+		}
+
+		// TODO 1.8.9 /dev/null item rendering
+
+		if (OpenBlocks.Items.sleepingBag != null) {
+			MinecraftForge.EVENT_BUS.register(new SleepingBagRenderHandler());
+		}
+
+		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
+
+		if (OpenBlocks.Items.cartographer != null) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new IRenderFactory<EntityCartographer>() {
+				@Override
+				public Render<? super EntityCartographer> createRenderFor(RenderManager manager) {
+					return new EntityCartographerRenderer(manager);
+				}
+			});
+		}
+	}
+
+	private static void registerEntityRenderers() {
+		if (OpenBlocks.Items.luggage != null) {
+			// TODO 1.8.9 Luggage item rendering
+			RenderingRegistry.registerEntityRenderingHandler(EntityLuggage.class, new IRenderFactory<EntityLuggage>() {
+				@Override
+				public Render<EntityLuggage> createRenderFor(RenderManager manager) {
+					return new EntityLuggageRenderer(manager);
+				}
+			});
+		}
+
+		if (OpenBlocks.Items.hangGlider != null) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new IRenderFactory<EntityHangGlider>() {
+				@Override
+				public Render<EntityHangGlider> createRenderFor(RenderManager manager) {
+					return new EntityHangGliderRenderer(manager);
+				}
+			});
+		}
+
+		if (OpenBlocks.Items.craneBackpack != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityMagnet.class, new IRenderFactory<EntityMagnet>() {
 				@Override
 				public Render<? super EntityMagnet> createRenderFor(RenderManager manager) {
@@ -154,14 +181,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 			});
 		}
 
-		// TODO 1.8.9 /dev/null item rendering
-
-		if (OpenBlocks.Items.sleepingBag != null) {
-			MinecraftForge.EVENT_BUS.register(new SleepingBagRenderHandler());
-		}
-
-		MinecraftForge.EVENT_BUS.register(new EntitySelectionHandler());
-
 		if (OpenBlocks.Items.cartographer != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new IRenderFactory<EntityCartographer>() {
 				@Override
@@ -169,7 +188,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 					return new EntityCartographerRenderer(manager);
 				}
 			});
-			EntitySelectionHandler.registerRenderer(EntityCartographer.class, new EntityCartographerRenderer.Selection());
 		}
 
 		if (OpenBlocks.Items.goldenEye != null) {
