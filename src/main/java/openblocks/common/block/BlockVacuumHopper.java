@@ -14,6 +14,7 @@ public class BlockVacuumHopper extends OpenBlock {
 	public BlockVacuumHopper() {
 		super(Material.rock);
 		setRenderMode(RenderMode.TESR_ONLY);
+		setBlockBounds(0.25f, 0.25f, 0.25f, 0.75f, 0.75f, 0.75f);
 	}
 
 	@Override
@@ -37,11 +38,6 @@ public class BlockVacuumHopper extends OpenBlock {
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
-	}
-
-	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x + 0.3, y + 0.3, z + 0.3, x + 0.7, y + 0.7, z + 0.7);
 	}
 
 }
