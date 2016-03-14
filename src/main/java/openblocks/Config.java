@@ -218,8 +218,9 @@ public class Config {
 	@ConfigProperty(category = "features", name = "explosiveEnchantGrief", comment = "Explosive enchant can break blocks at level 3")
 	public static boolean explosiveEnchantGrief = true;
 
-	@ConfigProperty(category = "cursor", name = "cursorMaxDamage", comment = "Amount of damage a cursor can take")
-	public static int cursorMaxDamage = 128;
+	// 64 blocks, since containers usually have 64 blocks usability range (IInventory.isUseableByPlayer)
+	@ConfigProperty(category = "cursor", name = "cursorMaxDistance", comment = "Maximum distance cursor can reach (warning: increasing may cause crashes)")
+	public static int cursorDistanceLimit = 64;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "additional", name = "disableMobNames", comment = "List any mob names you want disabled on the server")
