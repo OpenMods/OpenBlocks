@@ -3,7 +3,7 @@ package openblocks.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelFlag extends ModelBase {
+public class ModelFlag extends AbstractModel {
 	// fields
 	ModelRenderer pole;
 
@@ -20,7 +20,7 @@ public class ModelFlag extends ModelBase {
 	}
 
 	public void render(float f) {
-		pole.render(0.0625F);
+		pole.render(SCALE);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

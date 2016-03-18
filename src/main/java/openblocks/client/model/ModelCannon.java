@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntityCannon;
 
-public class ModelCannon extends ModelBase {
+public class ModelCannon extends AbstractModel {
 
 	private double[] keyframes = new double[] {
 			0,
@@ -64,8 +64,7 @@ public class ModelCannon extends ModelBase {
 	public void render(TileEntity te, float f) {
 
 		TileEntityCannon cannon = (TileEntityCannon)te;
-
-		float f5 = 0.0625F;
+		
 		setRotationAngles(te, f);
 
 		int elapsed = Math.min(12, cannon.getTicksSinceLastFire());
@@ -86,33 +85,33 @@ public class ModelCannon extends ModelBase {
 		body.rotateAngleX = shooter.rotateAngleX;
 
 		body.rotateAngleX = shooter.rotateAngleX;
-		body.render(f5);
-		shooter.render(f5);
-		base.render(f5);
+		body.render(SCALE);
+		shooter.render(SCALE);
+		base.render(SCALE);
 
 		float startAngleX = (float)ease;
 
 		wheel.rotateAngleZ = 0;
 		wheel.rotateAngleX = startAngleX;
 		wheel.rotationPointX = 0;
-		wheel.render(f5);
+		wheel.render(SCALE);
 		wheel.rotateAngleX += deg30;
 		wheel.rotationPointX -= 0.01;
-		wheel.render(f5);
+		wheel.render(SCALE);
 		wheel.rotateAngleX += deg30;
 		wheel.rotationPointX -= 0.01;
-		wheel.render(f5);
+		wheel.render(SCALE);
 
 		wheel.rotateAngleZ = deg180;
 		wheel.rotateAngleX = -startAngleX;
 		wheel.rotationPointX = 0;
-		wheel.render(f5);
+		wheel.render(SCALE);
 		wheel.rotateAngleX += deg30;
 		wheel.rotationPointX -= 0.01;
-		wheel.render(f5);
+		wheel.render(SCALE);
 		wheel.rotateAngleX += deg30;
 		wheel.rotationPointX -= 0.01;
-		wheel.render(f5);
+		wheel.render(SCALE);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

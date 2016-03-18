@@ -3,7 +3,7 @@ package openblocks.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelEgg extends ModelBase {
+public class ModelEgg extends AbstractModel {
 	ModelRenderer egg;
 
 	public ModelEgg() {
@@ -32,6 +32,6 @@ public class ModelEgg extends ModelBase {
 	}
 
 	public void render() {
-		egg.render(0.0625f);
+		egg.render(SCALE);
 	}
 }

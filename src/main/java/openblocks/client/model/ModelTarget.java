@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntityTarget;
 
-public class ModelTarget extends ModelBase {
+public class ModelTarget extends AbstractModel {
 
 	ModelRenderer stand1;
 	ModelRenderer target;
@@ -37,11 +37,10 @@ public class ModelTarget extends ModelBase {
 
 	public void render(TileEntity te, float f) {
 
-		float f5 = 0.0625F;
 		setRotationAngles(te, f);
-		stand1.render(f5);
-		target.render(f5);
-		stand2.render(f5);
+		stand1.render(SCALE);
+		target.render(SCALE);
+		stand2.render(SCALE);
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
