@@ -1,6 +1,5 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -62,12 +61,6 @@ public class ModelPaintMixer extends AbstractModel
 		bottom2.setTextureSize(64, 64);
 		bottom2.mirror = true;
 		setRotation(bottom2, 0F, 0F, 0F);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
 	}
 
 	public void render(TileEntity te, float f) {

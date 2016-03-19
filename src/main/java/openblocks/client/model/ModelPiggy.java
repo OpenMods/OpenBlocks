@@ -1,6 +1,5 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import openblocks.common.tileentity.TileEntityDonationStation;
 
@@ -95,11 +94,5 @@ public class ModelPiggy extends AbstractModel {
 		leg1.render(SCALE);
 		leg3.render(SCALE);
 		tail.render(SCALE);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
 	}
 }

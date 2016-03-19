@@ -1,6 +1,5 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntityGrave;
@@ -38,12 +37,6 @@ public class ModelGrave extends AbstractModel {
 			stone.setRotationPoint(0F, 16.5F, 6F);
 		}
 		stone.render(SCALE);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
 	}
 
 	/**

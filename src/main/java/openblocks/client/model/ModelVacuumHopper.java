@@ -1,6 +1,5 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
@@ -82,12 +81,6 @@ public class ModelVacuumHopper extends AbstractModel {
 		renderValve(itemOutputs, xpOutputs, ForgeDirection.NORTH, (float)Math.toRadians(-90), 0, SCALE);
 		renderValve(itemOutputs, xpOutputs, ForgeDirection.SOUTH, (float)Math.toRadians(90), 0, SCALE);
 
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
 	}
 
 }

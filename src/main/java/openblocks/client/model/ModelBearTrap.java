@@ -1,6 +1,5 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import openblocks.common.tileentity.TileEntityBearTrap;
 
@@ -133,12 +132,6 @@ public class ModelBearTrap extends AbstractModel {
 		trigger.setTextureSize(64, 32);
 		trigger.mirror = true;
 		setRotation(trigger, 0F, 0F, 0F);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
 	}
 
 	public void renderAll(boolean shut, int ticksSinceOpened) {
