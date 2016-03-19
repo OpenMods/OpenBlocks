@@ -1,16 +1,13 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelAutoAnvil extends ModelBase {
+public class ModelAutoAnvil extends AbstractModel {
 	// fields
 	ModelRenderer level1;
 	ModelRenderer level2;
 	ModelRenderer level3;
 	ModelRenderer level4;
-
-	float f5 = 0.0625F;
 
 	public ModelAutoAnvil() {
 		textureWidth = 128;
@@ -42,16 +39,10 @@ public class ModelAutoAnvil extends ModelBase {
 	}
 
 	public void render() {
-		level1.render(f5);
-		level2.render(f5);
-		level3.render(f5);
-		level4.render(f5);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		level1.render(SCALE);
+		level2.render(SCALE);
+		level3.render(SCALE);
+		level4.render(SCALE);
 	}
 
 }

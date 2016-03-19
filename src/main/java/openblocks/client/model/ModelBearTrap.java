@@ -1,10 +1,9 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import openblocks.common.tileentity.TileEntityBearTrap;
 
-public class ModelBearTrap extends ModelBase {
+public class ModelBearTrap extends AbstractModel {
 
 	ModelRenderer middle;
 
@@ -135,15 +134,7 @@ public class ModelBearTrap extends ModelBase {
 		setRotation(trigger, 0F, 0F, 0F);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
-	}
-
 	public void renderAll(boolean shut, int ticksSinceOpened) {
-		float f5 = 0.0625F;
-
 		float rot = 1.4F;
 
 		if (!shut) {
@@ -167,24 +158,24 @@ public class ModelBearTrap extends ModelBase {
 		rightspike3.rotateAngleZ = rot;
 		rightspike4.rotateAngleZ = rot;
 
-		middle.render(f5);
+		middle.render(SCALE);
 
-		trigger.render(f5);
-		leftnearside.render(f5);
-		lefttopside.render(f5);
-		leftfarside.render(f5);
-		leftspike2.render(f5);
-		leftspike1.render(f5);
-		leftspike3.render(f5);
-		leftspike4.render(f5);
-		leftspike5.render(f5);
+		trigger.render(SCALE);
+		leftnearside.render(SCALE);
+		lefttopside.render(SCALE);
+		leftfarside.render(SCALE);
+		leftspike2.render(SCALE);
+		leftspike1.render(SCALE);
+		leftspike3.render(SCALE);
+		leftspike4.render(SCALE);
+		leftspike5.render(SCALE);
 
-		righttopside.render(f5);
-		rightfarside.render(f5);
-		rightnearside.render(f5);
-		rightspike1.render(f5);
-		rightspike2.render(f5);
-		rightspike3.render(f5);
-		rightspike4.render(f5);
+		righttopside.render(SCALE);
+		rightfarside.render(SCALE);
+		rightnearside.render(SCALE);
+		rightspike1.render(SCALE);
+		rightspike2.render(SCALE);
+		rightspike3.render(SCALE);
+		rightspike4.render(SCALE);
 	}
 }

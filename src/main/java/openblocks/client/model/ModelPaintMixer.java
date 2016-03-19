@@ -1,10 +1,9 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
-public class ModelPaintMixer extends ModelBase
+public class ModelPaintMixer extends AbstractModel
 {
 	// fields
 	ModelRenderer controls;
@@ -64,20 +63,13 @@ public class ModelPaintMixer extends ModelBase
 		setRotation(bottom2, 0F, 0F, 0F);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
-	}
-
 	public void render(TileEntity te, float f) {
-		float f5 = 0.0625F;
-		controls.render(f5);
-		right.render(f5);
-		left.render(f5);
-		back.render(f5);
-		top.render(f5);
-		bottom.render(f5);
-		bottom2.render(f5);
+		controls.render(SCALE);
+		right.render(SCALE);
+		left.render(SCALE);
+		back.render(SCALE);
+		top.render(SCALE);
+		bottom.render(SCALE);
+		bottom2.render(SCALE);
 	}
 }

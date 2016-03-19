@@ -1,10 +1,9 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import openblocks.common.tileentity.TileEntityDonationStation;
 
-public class ModelPiggy extends ModelBase {
+public class ModelPiggy extends AbstractModel {
 	// fields
 	ModelRenderer body;
 	ModelRenderer head;
@@ -85,22 +84,15 @@ public class ModelPiggy extends ModelBase {
 	}
 
 	public void render(TileEntityDonationStation station, float f) {
-		float f5 = 0.0625F;
-		body.render(f5);
-		head.render(f5);
-		snout.render(f5);
-		ear2.render(f5);
-		ear1.render(f5);
-		leg4.render(f5);
-		leg2.render(f5);
-		leg1.render(f5);
-		leg3.render(f5);
-		tail.render(f5);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		body.render(SCALE);
+		head.render(SCALE);
+		snout.render(SCALE);
+		ear2.render(SCALE);
+		ear1.render(SCALE);
+		leg4.render(SCALE);
+		leg2.render(SCALE);
+		leg1.render(SCALE);
+		leg3.render(SCALE);
+		tail.render(SCALE);
 	}
 }

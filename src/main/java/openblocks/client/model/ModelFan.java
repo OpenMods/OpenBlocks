@@ -1,10 +1,9 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
-public class ModelFan extends ModelBase {
+public class ModelFan extends AbstractModel {
 
 	ModelRenderer outline1;
 	ModelRenderer outline2;
@@ -92,24 +91,17 @@ public class ModelFan extends ModelBase {
 	public void render(TileEntity te, float partialTickTime, float bladeRotation) {
 		fan.rotateAngleZ = bladeRotation;
 
-		final float scale = 1.0f / 16.0f;
-		outline1.render(scale);
-		outline2.render(scale);
-		outline3.render(scale);
-		outline4.render(scale);
-		outline5.render(scale);
-		outline6.render(scale);
-		outline7.render(scale);
-		outline8.render(scale);
-		stand.render(scale);
-		base.render(scale);
-		fan.render(scale);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		outline1.render(SCALE);
+		outline2.render(SCALE);
+		outline3.render(SCALE);
+		outline4.render(SCALE);
+		outline5.render(SCALE);
+		outline6.render(SCALE);
+		outline7.render(SCALE);
+		outline8.render(SCALE);
+		stand.render(SCALE);
+		base.render(SCALE);
+		fan.render(SCALE);
 	}
 
 }

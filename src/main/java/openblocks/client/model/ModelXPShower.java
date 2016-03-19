@@ -1,10 +1,9 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
-public class ModelXPShower extends ModelBase
+public class ModelXPShower extends AbstractModel
 {
 	ModelRenderer end;
 	ModelRenderer main;
@@ -30,16 +29,9 @@ public class ModelXPShower extends ModelBase
 
 	public void render(TileEntity te, float f) {
 
-		float f5 = 0.0625F;
 		setRotationAngles(te, f);
-		main.render(f5);
-		end.render(f5);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		main.render(SCALE);
+		end.render(SCALE);
 	}
 
 	/**

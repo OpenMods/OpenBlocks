@@ -1,9 +1,8 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelFlag extends ModelBase {
+public class ModelFlag extends AbstractModel {
 	// fields
 	ModelRenderer pole;
 
@@ -20,13 +19,7 @@ public class ModelFlag extends ModelBase {
 	}
 
 	public void render(float f) {
-		pole.render(0.0625F);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		pole.render(SCALE);
 	}
 
 }

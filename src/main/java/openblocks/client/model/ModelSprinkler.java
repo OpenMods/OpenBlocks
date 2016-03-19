@@ -1,11 +1,10 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 import openblocks.common.tileentity.TileEntitySprinkler;
 
-public class ModelSprinkler extends ModelBase {
+public class ModelSprinkler extends AbstractModel {
 
 	ModelRenderer side1;
 	ModelRenderer side2;
@@ -51,20 +50,13 @@ public class ModelSprinkler extends ModelBase {
 
 	public void render(TileEntitySprinkler sprinkler, float f) {
 
-		float f5 = 0.0625F;
 		setRotationAngles(sprinkler, f);
-		side1.render(f5);
-		side2.render(f5);
-		end1.render(f5);
-		end2.render(f5);
+		side1.render(SCALE);
+		side2.render(SCALE);
+		end1.render(SCALE);
+		end2.render(SCALE);
 
-		sprayer.render(f5);
-	}
-
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		sprayer.render(SCALE);
 	}
 
 	/**

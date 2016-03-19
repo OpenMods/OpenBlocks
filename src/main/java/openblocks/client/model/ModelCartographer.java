@@ -1,6 +1,5 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,8 +14,7 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class ModelCartographer extends ModelBase {
-	private static final float SCALE = 1.0f / 16.0f;
+public class ModelCartographer extends AbstractModel {
 	private final ModelRenderer body;
 	private final ModelRenderer base;
 

@@ -1,11 +1,9 @@
 package openblocks.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelProjector extends ModelBase {
+public class ModelProjector extends AbstractModel {
 
-	private static final float SCALE = 1.0f / 16.0f;
 	private static final float DEG_45 = (float)Math.toRadians(45);
 	// private static final float DEG_135 = (float)Math.toRadians(135);
 
