@@ -27,21 +27,6 @@ buildscript {
     }
 }
 
-repositories {
-    maven {
-        name 'Forge'
-        url 'http://files.minecraftforge.net/maven'
-    }
-    maven {
-        name 'MinecraftS3'
-        url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
-    }
-    maven {
-        name "OpenMods"
-        url "http://repo.openmods.info/artifactory/openmods"
-    }
-}
-
 apply plugin: 'forge'
 
 //================================================
