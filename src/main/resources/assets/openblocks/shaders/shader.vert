@@ -1,0 +1,23 @@
+#version 150
+
+in vec3 aVertex;
+in vec2 aTexCoord;
+in vec4 aColor;
+in vec2 aBrightnessCoord;
+in vec3 aPosition;
+
+uniform float uScale;
+
+out vec2 vTexCoord;
+out vec4 vColor;
+out vec2 vBrightnessCoord;
+
+const vec3 offset = vec3(0.5, 0, 0.5);
+
+void main()
+{
+	vTexCoord = aTexCoord;
+	vColor = aColor;
+	vBrightnessCoord = aBrightnessCoord;
+	gl_Position = gl_ModelViewProjectionMatrix * vec4(aVertex * uScale + aPosition + offset, 1);  
+}
