@@ -18,68 +18,77 @@ public class ShaderHelper {
 	}
 
 	public static IShaderMethods methods;
-	
-	// these are the same constants for ARB and GL20 anyway...
-	public static final int GL_LINK_STATUS = GL20.GL_LINK_STATUS;
-	public static final int GL_VALIDATE_STATUS = GL20.GL_VALIDATE_STATUS;
-	public static final int GL_COMPILE_STATUS = GL20.GL_COMPILE_STATUS;
-	public static final int GL_INFO_LOG_LENGTH = GL20.GL_INFO_LOG_LENGTH;
-	public static final int GL_VERTEX_SHADER = GL20.GL_VERTEX_SHADER;
-	public static final int GL_FRAGMENT_SHADER = GL20.GL_FRAGMENT_SHADER;
 
-	static void initialize() {		
+	static void initialize() {
 		ContextCapabilities caps = GLContext.getCapabilities();
-		
+
 		if (GL20ShaderMethods.isSupported(caps))
 			methods = new GL20ShaderMethods();
 		else if (ARBShaderMethods.isSupported(caps))
 			methods = new ARBShaderMethods();
 	}
 
-	public static boolean isSupported()
-	{
+	public static boolean isSupported() {
 		return methods != null;
 	}
-	
-	public static IShaderMethods methods()
-	{
+
+	public static IShaderMethods methods() {
 		return methods;
 	}
-	
-	public static interface IShaderMethods
-	{
+
+	public static interface IShaderMethods {
 		public int glCreateProgram();
+
 		public int glCreateShader(int type);
+
 		public void glAttachShader(int program, int shader);
+
 		public void glDetachShader(int program, int shader);
+
 		public void glLinkProgram(int program);
+
 		public void glValidateProgram(int program);
+
 		public void glDeleteProgram(int program);
+
 		public void glDeleteShader(int shader);
+
 		public int glGetProgrami(int shader, int parameter);
+
 		public int glGetShaderi(int program, int parameter);
+
 		public String getProgramLogInfo(int program);
+
 		public String getShaderLogInfo(int shader);
+
 		public void glUseProgram(int program);
+
 		public void glShaderSource(int shader, String shaderSource);
+
 		public void glCompileShader(int shader);
+
 		public int glGetUniformLocation(int program, String uniform);
+
 		public void glUniform1i(int loc, int val);
+
 		public void glUniform1f(int loc, float val);
+
 		public void glUniform3f(int loc, float x, float y, float z);
+
 		public int glGetAttribLocation(int program, String attrib);
+
 		public void glEnableVertexAttribArray(int index);
+
 		public void glDisableVertexAttribArray(int index);
+
 		public void glVertexAttribPointer(int index, int size, int type, boolean normalized, int stride, long offset);
 	}
-	
-	private static class GL20ShaderMethods implements IShaderMethods
-	{
-		public static boolean isSupported(ContextCapabilities caps)
-		{
+
+	private static class GL20ShaderMethods implements IShaderMethods {
+		public static boolean isSupported(ContextCapabilities caps) {
 			return caps.OpenGL20;
 		}
-		
+
 		@Override
 		public int glCreateProgram() {
 			return GL20.glCreateProgram();
@@ -129,15 +138,15 @@ public class ShaderHelper {
 		public int glGetShaderi(int shader, int parameter) {
 			return GL20.glGetShaderi(shader, parameter);
 		}
-		
+
 		@Override
 		public String getProgramLogInfo(int program) {
-			return GL20.glGetProgramInfoLog(program, glGetProgrami(program, GL_INFO_LOG_LENGTH));
+			return GL20.glGetProgramInfoLog(program, glGetProgrami(program, GL20.GL_INFO_LOG_LENGTH));
 		}
 
 		@Override
 		public String getShaderLogInfo(int shader) {
-			return GL20.glGetShaderInfoLog(shader, glGetShaderi(shader, GL_INFO_LOG_LENGTH));
+			return GL20.glGetShaderInfoLog(shader, glGetShaderi(shader, GL20.GL_INFO_LOG_LENGTH));
 		}
 
 		@Override
@@ -169,7 +178,7 @@ public class ShaderHelper {
 		public void glUniform1f(int loc, float val) {
 			GL20.glUniform1f(loc, val);
 		}
-		
+
 		@Override
 		public void glUniform3f(int loc, float x, float y, float z) {
 			GL20.glUniform3f(loc, x, y, z);
@@ -195,14 +204,12 @@ public class ShaderHelper {
 			GL20.glVertexAttribPointer(index, size, type, normalized, stride, offset);
 		}
 	}
-	
-	private static class ARBShaderMethods implements IShaderMethods
-	{	
-		public static boolean isSupported(ContextCapabilities caps)
-		{
+
+	private static class ARBShaderMethods implements IShaderMethods {
+		public static boolean isSupported(ContextCapabilities caps) {
 			return caps.GL_ARB_shader_objects && caps.GL_ARB_vertex_shader && caps.GL_ARB_fragment_shader;
 		}
-		
+
 		@Override
 		public int glCreateProgram() {
 			return ARBShaderObjects.glCreateProgramObjectARB();
@@ -242,7 +249,7 @@ public class ShaderHelper {
 		public void glDeleteShader(int shader) {
 			ARBShaderObjects.glDeleteObjectARB(shader);
 		}
-		
+
 		@Override
 		public int glGetProgrami(int program, int parameter) {
 			return ARBShaderObjects.glGetObjectParameteriARB(program, parameter);
@@ -255,12 +262,12 @@ public class ShaderHelper {
 
 		@Override
 		public String getProgramLogInfo(int program) {
-			return ARBShaderObjects.glGetInfoLogARB(program, glGetProgrami(program, GL_INFO_LOG_LENGTH));
+			return ARBShaderObjects.glGetInfoLogARB(program, glGetProgrami(program, GL20.GL_INFO_LOG_LENGTH));
 		}
 
 		@Override
 		public String getShaderLogInfo(int shader) {
-			return ARBShaderObjects.glGetInfoLogARB(shader, glGetShaderi(shader, GL_INFO_LOG_LENGTH));
+			return ARBShaderObjects.glGetInfoLogARB(shader, glGetShaderi(shader, GL20.GL_INFO_LOG_LENGTH));
 		}
 
 		@Override
@@ -292,7 +299,7 @@ public class ShaderHelper {
 		public void glUniform1f(int loc, float val) {
 			ARBShaderObjects.glUniform1fARB(loc, val);
 		}
-		
+
 		@Override
 		public void glUniform3f(int loc, float x, float y, float z) {
 			ARBShaderObjects.glUniform3fARB(loc, x, y, z);

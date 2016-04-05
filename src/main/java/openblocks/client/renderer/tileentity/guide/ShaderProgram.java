@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.OpenGLException;
 
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,6 @@ public class ShaderProgram {
 		ShaderHelper.methods().glUseProgram(0);
 	}
 
-	// See ShaderHelper.methods() for shader types
 	public void addShader(ResourceLocation source, int type) throws Exception {
 		if (compiled)
 			throw new UnsupportedOperationException("Shader already compiled");
@@ -58,13 +58,13 @@ public class ShaderProgram {
 		for (Integer shader : shaders)
 			ShaderHelper.methods().glAttachShader(program, shader);
 		ShaderHelper.methods().glLinkProgram(program);
-		if (ShaderHelper.methods().glGetProgrami(program, ShaderHelper.GL_LINK_STATUS) == GL11.GL_FALSE)
+		if (ShaderHelper.methods().glGetProgrami(program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
 			throw new OpenGLException("Shader link error: " + ShaderHelper.methods().getProgramLogInfo(program));
 
 		for (Integer shader : shaders)
 			ShaderHelper.methods().glDetachShader(program, shader);
 		ShaderHelper.methods().glValidateProgram(program);
-		if (ShaderHelper.methods().glGetProgrami(program, ShaderHelper.GL_VALIDATE_STATUS) == GL11.GL_FALSE)
+		if (ShaderHelper.methods().glGetProgrami(program, GL20.GL_VALIDATE_STATUS) == GL11.GL_FALSE)
 			throw new OpenGLException("Shader validate error: " + ShaderHelper.methods().getProgramLogInfo(program));
 
 		compiled = true;
@@ -87,7 +87,7 @@ public class ShaderProgram {
 
 			ShaderHelper.methods().glShaderSource(shader, readShaderSource(source));
 			ShaderHelper.methods().glCompileShader(shader);
-			if (ShaderHelper.methods().glGetShaderi(shader, ShaderHelper.GL_COMPILE_STATUS) == GL11.GL_FALSE)
+			if (ShaderHelper.methods().glGetShaderi(shader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
 				throw new OpenGLException("Shader compile error: " + ShaderHelper.methods().getShaderLogInfo(shader));
 
 			return shader;
@@ -120,45 +120,37 @@ public class ShaderProgram {
 		}
 		return loc;
 	}
-	
-	public void uniform1i(String name, int val)
-	{
+
+	public void uniform1i(String name, int val) {
 		ShaderHelper.methods().glUniform1i(getUniformLocation(name), val);
 	}
-	
-	public void uniform1f(String name, float val)
-	{
+
+	public void uniform1f(String name, float val) {
 		ShaderHelper.methods().glUniform1f(getUniformLocation(name), val);
 	}
-	
-	public void uniform3f(String name, float x, float y, float z)
-	{
+
+	public void uniform3f(String name, float x, float y, float z) {
 		ShaderHelper.methods().glUniform3f(getUniformLocation(name), x, y, z);
 	}
-	
-	public int getProgram()
-	{
+
+	public int getProgram() {
 		return program;
 	}
-	
-	public void instanceAttributePointer(String attrib, int size, int type, boolean normalized, int stride, long offset)
-	{
+
+	public void instanceAttributePointer(String attrib, int size, int type, boolean normalized, int stride, long offset) {
 		instanceAttributePointer(ShaderHelper.methods().glGetAttribLocation(program, attrib), size, type, normalized, stride, offset);
 	}
-	
-	public void instanceAttributePointer(int index, int size, int type, boolean normalized, int stride, long offset)
-	{
+
+	public void instanceAttributePointer(int index, int size, int type, boolean normalized, int stride, long offset) {
 		attributePointer(index, size, type, normalized, stride, offset);
-		ArraysHelper.glVertexDivisor(index, 1);
+		ArraysHelper.methods().glVertexAttribDivisor(index, 1);
 	}
-	
-	public void attributePointer(String attrib, int size, int type, boolean normalized, int stride, long offset)
-	{
+
+	public void attributePointer(String attrib, int size, int type, boolean normalized, int stride, long offset) {
 		attributePointer(ShaderHelper.methods().glGetAttribLocation(program, attrib), size, type, normalized, stride, offset);
 	}
-	
-	public void attributePointer(int index, int size, int type, boolean normalized, int stride, long offset)
-	{
+
+	public void attributePointer(int index, int size, int type, boolean normalized, int stride, long offset) {
 		ShaderHelper.methods().glVertexAttribPointer(index, size, type, normalized, stride, offset);
 		ShaderHelper.methods().glEnableVertexAttribArray(index);
 	}

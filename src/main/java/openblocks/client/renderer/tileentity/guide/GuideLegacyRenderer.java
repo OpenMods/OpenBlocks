@@ -13,23 +13,22 @@ import openmods.utils.TextureUtils;
 public class GuideLegacyRenderer implements IGuideRenderer {
 
 	private DisplayListWrapper wrapper;
-	
-	public GuideLegacyRenderer(final FutureTesselator marker)
-	{
+
+	public GuideLegacyRenderer(final Runnable model) {
 		wrapper = new DisplayListWrapper() {
 			@Override
 			public void compile() {
-				marker.render();
+				model.run();
 				Tessellator.instance.draw();
 			}
 		};
 	}
-	
+
 	@Override
 	public void onTextureChange() {
 		wrapper.reset();
 	}
-	
+
 	@Override
 	public void renderShape(TileEntityGuide guide) {
 		float scaleDelta = guide.getTimeSinceChange();
@@ -38,13 +37,14 @@ public class GuideLegacyRenderer implements IGuideRenderer {
 			renderShape(guide.getPreviousShape().getCoords(), guide.getColor(), 1.0f - scaleDelta);
 		}
 	}
-	
+
 	private void renderShape(Collection<Coord> shape, int color, float scale) {
-		if (shape == null) return;
+		if (shape == null)
+			return;
 
 		TextureUtils.bindDefaultTerrainTexture();
 
-		GL11.glColor3ub((byte)(color >> 16), (byte)(color >> 8), (byte)(color >> 0));
+		GL11.glColor3ub((byte) (color >> 16), (byte) (color >> 8), (byte) (color >> 0));
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDisable(GL11.GL_LIGHTING);

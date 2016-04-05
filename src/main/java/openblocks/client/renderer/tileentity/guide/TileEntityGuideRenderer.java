@@ -12,13 +12,14 @@ import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockGuide.Icons;
 import openblocks.common.tileentity.TileEntityGuide;
+import openmods.Log;
 import openmods.utils.TextureUtils;
 
 public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	
-	private final FutureTesselator marker = new FutureTesselator(){
+	private final Runnable marker = new Runnable(){
 		@Override
-		public void render() {
+		public void run() {
 			Tessellator t = Tessellator.instance;
 			RenderBlocks renderBlocks = new RenderBlocks();
 			renderBlocks.setRenderBounds(0.05D, 0.05D, 0.05D, 0.95D, 0.95D, 0.95D);
@@ -34,10 +35,22 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 		}
 	};
 	
-	private final IGuideRenderer renderer = new GuideLegacyRenderer(marker);
+	private IGuideRenderer renderer;
 	
 	public TileEntityGuideRenderer() {
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		if (!ShaderHelper.isSupported() || !BufferHelper.isSupported() || !ArraysHelper.isSupported()) {
+			renderer = new GuideLegacyRenderer(marker); // advanced renderer not supported :(
+			Log.info("Advanced guide renderer not supported, falling back to legacy renderer.", (Object[]) null);
+		} else {
+			try {
+				renderer = new GuideAdvancedRenderer(marker); // try to use the advanced renderer
+			} catch (Exception e) {
+				Log.info("Error trying to create advanced renderer, falling back to legacy renderer", (Object[]) null);
+				renderer = new GuideLegacyRenderer(marker); // fall back to the old renderer.
+			}
+		}
 	}
 
 	@SubscribeEvent
