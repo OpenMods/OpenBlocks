@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.block.BlockGuide.Icons;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -39,15 +40,18 @@ public class TileEntityGuideRenderer extends TileEntitySpecialRenderer {
 	
 	public TileEntityGuideRenderer() {
 		MinecraftForge.EVENT_BUS.register(this);
-		
+
 		if (!ShaderHelper.isSupported() || !BufferHelper.isSupported() || !ArraysHelper.isSupported()) {
 			renderer = new GuideLegacyRenderer(marker); // advanced renderer not supported :(
-			Log.info("Advanced guide renderer not supported, falling back to legacy renderer.", (Object[]) null);
+			Log.debug("Advanced guide renderer not supported, falling back to legacy renderer.", (Object[]) null);
+		} else if (Config.useAdvancedRenderer == false){
+			renderer = new GuideLegacyRenderer(marker);
+			Log.debug("Advanced guide renderer disabled, falling back to legacy renderer.", (Object[]) null);
 		} else {
 			try {
 				renderer = new GuideAdvancedRenderer(marker); // try to use the advanced renderer
 			} catch (Exception e) {
-				Log.info("Error trying to create advanced renderer, falling back to legacy renderer", (Object[]) null);
+				Log.debug("Error trying to create advanced renderer, falling back to legacy renderer", (Object[]) null);
 				renderer = new GuideLegacyRenderer(marker); // fall back to the old renderer.
 			}
 		}

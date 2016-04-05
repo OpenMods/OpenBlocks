@@ -1,11 +1,10 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import java.util.Collection;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.Tessellator;
 import openblocks.common.tileentity.TileEntityGuide;
+import openblocks.shapes.CoordShape;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.Coord;
 import openmods.utils.TextureUtils;
@@ -32,13 +31,13 @@ public class GuideLegacyRenderer implements IGuideRenderer {
 	@Override
 	public void renderShape(TileEntityGuide guide) {
 		float scaleDelta = guide.getTimeSinceChange();
-		renderShape(guide.getShape().getCoords(), guide.getColor(), scaleDelta);
+		renderShape(guide.getShape(), guide.getColor(), scaleDelta);
 		if (scaleDelta < 1.0) {
-			renderShape(guide.getPreviousShape().getCoords(), guide.getColor(), 1.0f - scaleDelta);
+			renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
 		}
 	}
 
-	private void renderShape(Collection<Coord> shape, int color, float scale) {
+	private void renderShape(CoordShape shape, int color, float scale) {
 		if (shape == null)
 			return;
 
@@ -49,7 +48,7 @@ public class GuideLegacyRenderer implements IGuideRenderer {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDisable(GL11.GL_LIGHTING);
 
-		for (Coord coord : shape)
+		for (Coord coord : shape.getCoords())
 			renderMarkerAt(coord.x, coord.y, coord.z, scale);
 
 		GL11.glEnable(GL11.GL_LIGHTING);
