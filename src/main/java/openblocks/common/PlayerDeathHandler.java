@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -24,6 +25,7 @@ import openblocks.api.GraveDropsEvent;
 import openblocks.api.GraveSpawnEvent;
 import openblocks.common.GameRuleManager.GameRule;
 import openblocks.common.PlayerInventoryStore.ExtrasFiller;
+import openblocks.common.block.BlockGrave;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
@@ -362,8 +364,6 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		drops.clear();
-
 		final List<EntityItem> graveLoot = Lists.newArrayList();
 
 		for (GraveDropsEvent.ItemAction entry : dropsEvent.drops) {
@@ -383,8 +383,36 @@ public class PlayerDeathHandler {
 
 		if (graveLoot.isEmpty()) {
 			Log.log(debugLevel(), "No grave drops left for player '%s' after event filtering, grave will not be spawned'", player);
+			drops.clear();
 			return;
 		}
+
+		if (Config.requiresGraveInInv) {
+			Iterator<EntityItem> lootIter = graveLoot.iterator();
+			while (lootIter.hasNext()) {
+				EntityItem drop = lootIter.next();
+				ItemStack itemStack = drop.getEntityItem();  if (itemStack == null) continue;
+				if (itemStack.stackSize <= 0) continue;
+				Item item = itemStack.getItem();  if (item == null) continue;
+				if (Block.getBlockFromItem(item) instanceof BlockGrave) { // require grave
+					if (--itemStack.stackSize <= 0) {                     // and consume it
+						lootIter.remove();
+					} else {
+						drop.setEntityItemStack(itemStack);
+					}
+
+					lootIter = null;
+					break;
+				}
+			}
+
+			if (lootIter != null) {
+				Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
+				return;
+			}
+		}
+
+		drops.clear();
 
 		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), graveLoot.size());
 		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, graveLoot));
