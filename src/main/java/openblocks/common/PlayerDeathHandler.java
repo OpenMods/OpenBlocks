@@ -25,7 +25,6 @@ import openblocks.api.GraveDropsEvent;
 import openblocks.api.GraveSpawnEvent;
 import openblocks.common.GameRuleManager.GameRule;
 import openblocks.common.PlayerInventoryStore.ExtrasFiller;
-import openblocks.common.block.BlockGrave;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
@@ -38,6 +37,7 @@ import openmods.world.DelayedActionTickHandler;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
@@ -365,6 +365,7 @@ public class PlayerDeathHandler {
 		}
 
 		final List<EntityItem> graveLoot = Lists.newArrayList();
+		drops.clear(); // will be rebuilt based from event
 
 		for (GraveDropsEvent.ItemAction entry : dropsEvent.drops) {
 			switch (entry.action) {
@@ -383,39 +384,46 @@ public class PlayerDeathHandler {
 
 		if (graveLoot.isEmpty()) {
 			Log.log(debugLevel(), "No grave drops left for player '%s' after event filtering, grave will not be spawned'", player);
-			drops.clear();
 			return;
 		}
 
-		if (Config.requiresGraveInInv) {
-			Iterator<EntityItem> lootIter = graveLoot.iterator();
-			while (lootIter.hasNext()) {
-				EntityItem drop = lootIter.next();
-				ItemStack itemStack = drop.getEntityItem();  if (itemStack == null) continue;
-				if (itemStack.stackSize <= 0) continue;
-				Item item = itemStack.getItem();  if (item == null) continue;
-				if (Block.getBlockFromItem(item) instanceof BlockGrave) { // require grave
-					if (--itemStack.stackSize <= 0) {                     // and consume it
-						lootIter.remove();
-					} else {
-						drop.setEntityItemStack(itemStack);
-					}
+		if (!tryConsumeGrave(player, Iterables.concat(graveLoot, drops))) {
+			Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
+			return;
+		}
 
-					lootIter = null;
-					break;
+		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s) stored and %d item(s) dropped",
+				player, player.getGameProfile(), graveLoot.size(), drops.size());
+
+		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, graveLoot));
+	}
+
+	// TODO: candidate for scripting
+	private static boolean tryConsumeGrave(EntityPlayer player, Iterable<EntityItem> graveLoot) {
+		if (!Config.requiresGraveInInv || player.capabilities.isCreativeMode) return true;
+
+		final Item graveItem = Item.getItemFromBlock(OpenBlocks.Blocks.grave);
+		if (graveItem == null) return true;
+
+		final Iterator<EntityItem> lootIter = graveLoot.iterator();
+		while (lootIter.hasNext()) {
+			final EntityItem drop = lootIter.next();
+			final ItemStack itemStack = drop.getEntityItem();
+			if (itemStack != null &&
+					itemStack.getItem() == graveItem &&
+					itemStack.stackSize > 0) {
+
+				if (--itemStack.stackSize <= 0) {
+					lootIter.remove();
+				} else {
+					drop.setEntityItemStack(itemStack);
 				}
-			}
 
-			if (lootIter != null) {
-				Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
-				return;
+				return true;
 			}
 		}
 
-		drops.clear();
-
-		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), graveLoot.size());
-		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, graveLoot));
+		return false;
 	}
 
 	private static void dumpDebugInfo(PlayerDropsEvent event) {
