@@ -21,6 +21,8 @@ import openblocks.client.renderer.block.*;
 import openblocks.client.renderer.entity.*;
 import openblocks.client.renderer.item.*;
 import openblocks.client.renderer.tileentity.*;
+import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRenderer;
+import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
 import openblocks.common.block.BlockGuide;
 import openblocks.common.entity.*;
 import openblocks.common.tileentity.*;

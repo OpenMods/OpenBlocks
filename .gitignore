@@ -5,6 +5,7 @@
 *.class
 *.log
 *.pid
+*.log.gz
 
 # Package Files
 *.jar
@@ -35,3 +36,9 @@ desktop.ini
 
 # Misc
 download/
+config/
+saves/
+crash-reports/
+screenshots/
+usernamecache.json
+options.txt

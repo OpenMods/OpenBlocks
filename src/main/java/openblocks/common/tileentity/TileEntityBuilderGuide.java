@@ -54,7 +54,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 	}
 
 	private void creativeReplaceBlocks(Block block, int blockMeta) {
-		for (Coord coord : getShapeSafe())
+		for (Coord coord : getShapeSafe().getCoords())
 			worldObj.setBlock(xCoord + coord.x, yCoord + coord.y, zCoord + coord.z, block, blockMeta, BlockNotifyFlags.ALL);
 	}
 
@@ -65,7 +65,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 	}
 
 	private boolean survivalPlaceBlocks(EntityPlayerMP player, ItemStack heldItem, Block block, int blockMeta, int side, float hitX, float hitY, float hitZ) {
-		for (Coord relCoord : getShapeSafe()) {
+		for (Coord relCoord : getShapeSafe().getCoords()) {
 			final int absX = relCoord.x + xCoord;
 			final int absY = relCoord.y + yCoord;
 			final int absZ = relCoord.z + zCoord;

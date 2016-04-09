@@ -308,6 +308,10 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "guide", name = "renderDistanceSq", comment = "Square of guide maximum render distance")
 	public static double guideRenderRangeSq = 256 * 256;
+	
+	@OnLineModifiable
+	@ConfigProperty(category = "guide", name = "useAdvancedRenderer", comment = "Try to use advanced OpenGL for performance improvement")
+	public static boolean useAdvancedRenderer = true;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "scaffolding", name = "despawnRate", comment = "The rate at which scaffolding should break. 0 - fastest")

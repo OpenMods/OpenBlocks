@@ -10,6 +10,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
+import openblocks.shapes.CoordShape;
 import openblocks.shapes.GuideShape;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
@@ -77,8 +78,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		}
 	};
 
-	private List<Coord> shape;
-	private List<Coord> previousShape;
+	private CoordShape shape;
+	private CoordShape previousShape;
+	private CoordShape toDeleteShape;
 	private float timeSinceChange = 0;
 	private AxisAlignedBB renderAABB;
 
@@ -291,8 +293,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private void recreateShape() {
+		toDeleteShape = previousShape;
 		previousShape = shape;
-		shape = generateShape();
+		shape = new CoordShape(generateShape());
 		renderAABB = null;
 	}
 
@@ -329,12 +332,19 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return true;
 	}
 
-	public List<Coord> getShape() {
+	public CoordShape getShape() {
 		return shape;
 	}
 
-	public List<Coord> getPreviousShape() {
+	public CoordShape getPreviousShape() {
 		return previousShape;
+	}
+	
+	public CoordShape getAndDeleteShape()
+	{
+		CoordShape toDel = toDeleteShape;
+		toDeleteShape = null;
+		return toDel;
 	}
 
 	@Override
@@ -355,7 +365,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		final AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
 
 		if (shape != null) {
-			for (Coord c : shape) {
+			for (Coord c : shape.getCoords()) {
 				if (box.maxX < c.x) box.maxX = c.x;
 				if (box.maxY < c.y) box.maxY = c.y;
 				if (box.maxZ < c.z) box.maxZ = c.z;
@@ -442,7 +452,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		updateRedstone();
 	}
 
-	protected List<Coord> getShapeSafe() {
+	protected CoordShape getShapeSafe() {
 		if (shape == null) recreateShape();
 		return shape;
 	}

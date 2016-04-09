@@ -1,4 +1,4 @@
-package openblocks.client.renderer.tileentity;
+package openblocks.client.renderer.tileentity.guide;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
