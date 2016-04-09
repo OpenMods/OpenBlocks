@@ -38,7 +38,6 @@ openblocks.gui.drawingtable=Стол для рисования
 openblocks.gui.digitalfuse=Цифровой запал
 openblocks.gui.xp_outputs=Выходы опыта
 openblocks.gui.item_outputs=Выходы предметов
-openblocks.gui.watch_video=Смотреть видео
 openblocks.gui.max_level=Макс. уровень: %d
 openblocks.gui.save_folder=Сохранить папку
 
@@ -86,12 +85,14 @@ openblocks.misc.selected_cannon=Выбрана пушка для прицели�
 openblocks.misc.pointed_cannon=Пушка направлена на %s, %s, %s
 openblocks.misc.change_mode=Изменение режима на %s
 openblocks.misc.change_size=Изменение размера на %sx%sx%s
+#openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
 openblocks.misc.total_blocks=Общее количество блоков: %d
 openblocks.misc.get_witched=Get witched!
 openblocks.misc.page=Страница %d из %d
 openblocks.misc.oh_no_ceiling=Вы не можете спать здесь. Вас беспокоит потолок...
 openblocks.misc.oh_no_ground=Вы хотите спать на ЭТОМ!?
 openblocks.misc.sleeping_bag_broken=Предмет недоступен из-за неудавшейся инициализации
+#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
 
 openblocks.misc.grave_msg=%s (день: %.1f)
 
@@ -125,12 +126,16 @@ openblocks.misc.shape=Форма: %s
 openblocks.misc.shape.sphere=Сфера
 openblocks.misc.shape.cylinder=Цилиндр
 openblocks.misc.shape.cuboid=Куб
+#openblocks.misc.shape.full_cuboid=Full Cuboid ## NEEDS TRANSLATION ##
 openblocks.misc.shape.dome=Купол
 openblocks.misc.shape.triangle=Треугольник
 openblocks.misc.shape.pentagon=Пятиугольник
 openblocks.misc.shape.hexagon=Шестиугольник
 openblocks.misc.shape.octagon=Восьмиугольник
+#openblocks.misc.shape.axes=Axes ## NEEDS TRANSLATION ##
+#openblocks.misc.shape.planes=Planes ## NEEDS TRANSLATION ##
 
+#openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
 openblocks.misc.width=Ширина: %d
 openblocks.misc.height=Высота: %d
 openblocks.misc.depth=Глубина: %d
@@ -159,7 +164,9 @@ openblocks.misc.command.flim_flam_source=Игрок %s успешно стал �
 openblocks.misc.command.flim_flam_target=Кто-то не любит Вас. Кто-то, у кого есть сила
 openblocks.misc.command.flim_flam_failed=Не удалось стать братом!
 openblocks.misc.command.luck_added=Удача изменена для игрока %s, текущая: %d
-openblocks.misc.command.luck_current=Удача: %d игрока %s
+openblocks.misc.command.luck_current=Удача: %2$d игрока %1$s
+
+#openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Что-то странное происходит вокруг Вас
 
 openblocks.turtle.magnet=Магнит
@@ -196,6 +203,9 @@ tile.openblocks.sponge.description=Губка является заменой о
 
 item.openblocks.spongeonastick.name=Губка на палочке
 item.openblocks.spongeonastick.description=Губка на палочке - это инструмент для очистки жидкостей. Работает, как простая губка, но более мобильна за счёт изнашивания.
+
+#item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
+#item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
 
 tile.openblocks.cannon.name=Предметная пушка
 tile.openblocks.cannon.description=Когда подан сигнал красного камня, предметная пушка будет выстреливать предметы, которые она найдёт в соседнем инвентаре. Используйте 'указатель', чтобы направить пушку.
@@ -255,7 +265,7 @@ tile.openblocks.xpbottler.name=Разливщик опыта
 tile.openblocks.xpbottler.description=Разливщик опыта будет брать жидкий опыт и заливать его в стеклянные бутылки, создавая тем самым зелье опыта.
 
 tile.openblocks.autoanvil.name=Автоматическая наковальня
-tile.openblocks.autoanvil.description=Автоматическая наковальня работает так же, как и обычная наковальня, но она требует жидкий опыт, и может быть полностью автоматизирована.n\n\В правой части интерфейса Вы можете выбрать, какие стороны наковальни будут использованы для извлечения/помещения жидкостей/предметов.
+tile.openblocks.autoanvil.description=Автоматическая наковальня работает так же, как и обычная наковальня, но она требует жидкий опыт, и может быть полностью автоматизирована.n\nВ правой части интерфейса Вы можете выбрать, какие стороны наковальни будут использованы для извлечения/помещения жидкостей/предметов.
 
 tile.openblocks.drawingtable.name=Стол для рисования
 tile.openblocks.drawingtable.description=Стол для рисования нужен для создания трафаретов, которые можно использовать во время рисования. Вставьте неподготовленный трафарет в стол для рисования и выберете нужный Вам трафарет, используя стрелки для выбора!
@@ -282,6 +292,7 @@ tile.openblocks.scaffolding.description=Вы когда-нибудь хотел�
 tile.openblocks.goldenegg.name=Золотое яйцо
 
 tile.openblocks.digitalfuse.name=Цифровой запал
+
 item.openblocks.cursor.name=Курсор
 item.openblocks.cursor.description=Курсор позволит Вам нажимать на блоки удалённо.\nПросто нажмите shift-ПКМ по блоку, чтобы соединить курсор, затем примените курсор туда, куда Вы хотите нажать. Будьте осторожны, по умолчанию курсор использует Ваш опыт, количество потребляемого опыта зависит от дальности блока, на который Вы нажимаете.
 
@@ -319,6 +330,9 @@ item.openblocks.crane_backpack.description=В мире Minecraft "магнит" 
 
 item.openblocks.crane_control.name=Крановое управление
 item.openblocks.crane_control.description=Этот высокотехнологичный беспроводной пульт используется для управления хранилищами.\n\nПКМ, чтобы поднять, ПКМ, присев, чтобы опустить, ЛКМ, чтобы поднять/отпустить.\nМигающие световые сигналы относятся к магниту.
+
+#item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
+#item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=Трафарет
 item.openblocks.crayon.name=Магический цветной карандаш

@@ -92,6 +92,7 @@ openblocks.misc.page=Seite %d von %d
 openblocks.misc.oh_no_ceiling=Du kannst hier nicht schlafen. Die Decke beunruhigt dich zu sehr...
 openblocks.misc.oh_no_ground=Auf DEM Ding willst du schlafen?!
 openblocks.misc.sleeping_bag_broken=Item inaktiv wegen fehlerhafter Initialisierung
+#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
 
 openblocks.misc.grave_msg=%s (Tag: %.1f)
 
@@ -121,7 +122,7 @@ openblocks.misc.pedometer.last_check_time=Zeit seit dem letzen Check: %d ticks
 
 openblocks.misc.pedometer.total_time=Gesamtdauer: %d ticks
 
-openblocks.misc.shape=Form: %
+openblocks.misc.shape=Form: %s
 openblocks.misc.shape.sphere=Kugel
 openblocks.misc.shape.cylinder=Zylinder
 openblocks.misc.shape.cuboid=Quader
@@ -164,6 +165,8 @@ openblocks.misc.command.flim_flam_target=Jemand mag dich nicht. Jemand mit Macht
 openblocks.misc.command.flim_flam_failed=Der Blödsinn hat nicht funktioniert!
 openblocks.misc.command.luck_added=Glück von Spieler %s geändert, aktuell: %d
 openblocks.misc.command.luck_current=Glück von Spieler %s: %d
+
+#openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Etwas seltsames geschieht um dich herum...
 
 openblocks.turtle.magnet=Magnet
@@ -200,6 +203,9 @@ tile.openblocks.sponge.description=Der Schwamm ist ein Ersatz für den Vanilla-S
 
 item.openblocks.spongeonastick.name=Schwamm
 item.openblocks.spongeonastick.description=Der Schwamm am Stiel ist ein Werkzeug zum Enfernen von Flüssigkeiten. Funktioniert wie der Schwamm, ist aber mobil und wird mit der Zeit aufgebraucht.
+
+#item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
+#item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
 
 tile.openblocks.cannon.name=Item-Kanone
 tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Item-Kannone Items, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger', um die Kannone auszurichten.
@@ -286,6 +292,7 @@ tile.openblocks.scaffolding.description=Wolltest du jemals irgendwo hochbauen, o
 tile.openblocks.goldenegg.name=Goldenes Ei
 
 tile.openblocks.digitalfuse.name=Digitalzünder
+
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
 
@@ -323,6 +330,9 @@ item.openblocks.crane_backpack.description="Magnet" in der Minecraftwelt ist ein
 
 item.openblocks.crane_control.name=Krankontrolle
 item.openblocks.crane_control.description=Dise drahtlose Hi-Tech-Fernbedienung wird für die Steuerung des Kranrucksacks verwendet.\n\nRechtsklick zum Anheben, Shift-Rechtsklick zum Absenken, Linksklick zum Aufheben/Fallenlassen.\nEine blinkende Leuchte signalisiert, das etwas unter dem Magneten ist.
+
+#item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
+#item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=Schablone
 item.openblocks.crayon.name=Magischer Buntstift
