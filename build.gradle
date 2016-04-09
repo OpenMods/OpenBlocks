@@ -20,10 +20,17 @@ buildscript {
             name = "Sonatype Nexus"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+
+        maven {
+              name 'OpenMods Third Party'
+              url 'http://repo.openmods.info/artifactory/simple/thirdparty'
+        }
     }
+
 
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.thesilkminer.gradle.translationchecker:TranslationChecker:1.1'
     }
 }
 
@@ -181,4 +188,17 @@ artifacts {
     archives deobfJar
     archives apiJar
     archives apiSrcJar
+}
+
+task updateTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
+    modId = "openblocks"
+}
+
+task checkTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
+    modId = "openblocks"
+    dryRun = true
+}
+
+task wrapper (type: Wrapper) {
+    gradleVersion = "2.12"
 }
