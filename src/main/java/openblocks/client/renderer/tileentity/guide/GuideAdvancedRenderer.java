@@ -1,35 +1,30 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import org.lwjgl.opengl.GL11;
-
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.shapes.CoordShape;
 import openmods.utils.TextureUtils;
 
+import org.lwjgl.opengl.GL11;
+
 public class GuideAdvancedRenderer implements IGuideRenderer {
 
-	static MarkerRenderer mr;
+	private final MarkerRenderer mr;
 
 	public GuideAdvancedRenderer(Runnable marker) throws Exception {
-		if (mr == null)
-			mr = new MarkerRenderer(marker);
+		this.mr = new MarkerRenderer(marker);
 	}
 
 	@Override
 	public void renderShape(TileEntityGuide guide) {
-
 		float scaleDelta = guide.getTimeSinceChange();
 		renderShape(guide.getShape(), guide.getColor(), scaleDelta);
-		if (scaleDelta < 1.0)
-			renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
+		if (scaleDelta < 1.0) renderShape(guide.getPreviousShape(), guide.getColor(), 1.0f - scaleDelta);
 		CoordShape toDelete = guide.getAndDeleteShape();
-		if (toDelete != null && mr != null)
-			mr.deleteShape(toDelete);
+		if (toDelete != null && mr != null) mr.deleteShape(toDelete);
 	}
 
 	private void renderShape(CoordShape shape, int color, float scale) {
-		if (shape == null)
-			return;
+		if (shape == null) return;
 
 		TextureUtils.bindDefaultTerrainTexture();
 
@@ -37,14 +32,12 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDisable(GL11.GL_LIGHTING);
 
-		if (mr != null)
-			mr.drawInstanced(shape, color, scale);
+		mr.drawInstanced(shape, color, scale);
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	@Override
-	public void onTextureChange() {
-	}
+	public void onTextureChange() {}
 }

@@ -339,9 +339,8 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public CoordShape getPreviousShape() {
 		return previousShape;
 	}
-	
-	public CoordShape getAndDeleteShape()
-	{
+
+	public CoordShape getAndDeleteShape() {
 		CoordShape toDel = toDeleteShape;
 		toDeleteShape = null;
 		return toDel;

@@ -1,13 +1,13 @@
 package openblocks.client.renderer.tileentity.guide;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.Tessellator;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.shapes.CoordShape;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.Coord;
 import openmods.utils.TextureUtils;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuideLegacyRenderer implements IGuideRenderer {
 
@@ -38,12 +38,11 @@ public class GuideLegacyRenderer implements IGuideRenderer {
 	}
 
 	private void renderShape(CoordShape shape, int color, float scale) {
-		if (shape == null)
-			return;
+		if (shape == null) return;
 
 		TextureUtils.bindDefaultTerrainTexture();
 
-		GL11.glColor3ub((byte) (color >> 16), (byte) (color >> 8), (byte) (color >> 0));
+		GL11.glColor3ub((byte)(color >> 16), (byte)(color >> 8), (byte)(color >> 0));
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glDisable(GL11.GL_LIGHTING);
