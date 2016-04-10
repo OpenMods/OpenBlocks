@@ -39,5 +39,8 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 	}
 
 	@Override
-	public void onTextureChange() {}
+	public void onTextureChange()
+	{
+		mr.reset();
+	}
 }
