@@ -1,4 +1,4 @@
-#version 150
+#version 150 compatibility
 
 in vec3 aVertex;
 in vec2 aTexCoord;

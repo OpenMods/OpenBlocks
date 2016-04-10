@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -36,6 +37,7 @@ import openmods.world.DelayedActionTickHandler;
 import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
@@ -362,9 +364,8 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		drops.clear();
-
 		final List<EntityItem> graveLoot = Lists.newArrayList();
+		drops.clear(); // will be rebuilt based from event
 
 		for (GraveDropsEvent.ItemAction entry : dropsEvent.drops) {
 			switch (entry.action) {
@@ -386,8 +387,43 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), graveLoot.size());
+		if (!tryConsumeGrave(player, Iterables.concat(graveLoot, drops))) {
+			Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
+			return;
+		}
+
+		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s) stored and %d item(s) dropped",
+				player, player.getGameProfile(), graveLoot.size(), drops.size());
+
 		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, graveLoot));
+	}
+
+	// TODO: candidate for scripting
+	private static boolean tryConsumeGrave(EntityPlayer player, Iterable<EntityItem> graveLoot) {
+		if (!Config.requiresGraveInInv || player.capabilities.isCreativeMode) return true;
+
+		final Item graveItem = Item.getItemFromBlock(OpenBlocks.Blocks.grave);
+		if (graveItem == null) return true;
+
+		final Iterator<EntityItem> lootIter = graveLoot.iterator();
+		while (lootIter.hasNext()) {
+			final EntityItem drop = lootIter.next();
+			final ItemStack itemStack = drop.getEntityItem();
+			if (itemStack != null &&
+					itemStack.getItem() == graveItem &&
+					itemStack.stackSize > 0) {
+
+				if (--itemStack.stackSize <= 0) {
+					lootIter.remove();
+				} else {
+					drop.setEntityItemStack(itemStack);
+				}
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private static void dumpDebugInfo(PlayerDropsEvent event) {

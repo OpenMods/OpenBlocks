@@ -195,6 +195,10 @@ public class Config {
 	public static double skeletonSpawnRate = 0.002;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "requiresGraveInInv", comment = "Require gravestone to be in a player's inventory (it is consumed)")
+	public static boolean requiresGraveInInv = false;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "graves", name = "specialActionFrequency", comment = "Frequency of special action on grave digging, 0..1")
 	public static double graveSpecialAction = 0.03;
 
@@ -304,8 +308,7 @@ public class Config {
 	@OnLineModifiable
 	@ConfigProperty(category = "guide", name = "renderDistanceSq", comment = "Square of guide maximum render distance")
 	public static double guideRenderRangeSq = 256 * 256;
-	
-	@OnLineModifiable
+
 	@ConfigProperty(category = "guide", name = "useAdvancedRenderer", comment = "Try to use advanced OpenGL for performance improvement")
 	public static boolean useAdvancedRenderer = true;
 
