@@ -43,7 +43,7 @@ public class GuideRendererSelector {
 		} else {
 			try {
 				return new GuideAdvancedRenderer(marker); // try to use the advanced renderer
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				Log.warn(e, "Error trying to create advanced renderer, falling back to legacy renderer");
 				return new GuideLegacyRenderer(marker); // fall back to the old renderer.
 			}

@@ -16,5 +16,5 @@ void main()
 {
 	vTexCoord = aTexCoord;
 	vColor = aColor;
-	gl_Position = gl_ModelViewProjectionMatrix * vec4(aVertex * uScale + aPosition + offset, 1);  
+	gl_Position = gl_ModelViewProjectionMatrix * vec4(aVertex * uScale + aPosition + offset, 1);
 }

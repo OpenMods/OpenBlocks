@@ -10,7 +10,7 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 
 	private final MarkerRenderer mr;
 
-	public GuideAdvancedRenderer(Runnable marker) throws Exception {
+	public GuideAdvancedRenderer(Runnable marker) {
 		this.mr = new MarkerRenderer(marker);
 	}
 
@@ -39,8 +39,7 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 	}
 
 	@Override
-	public void onTextureChange()
-	{
+	public void onTextureChange() {
 		mr.reset();
 	}
 }
