@@ -13,8 +13,7 @@ import openblocks.common.container.ContainerBlockPlacer;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUser;
-import openmods.fakeplayer.OpenModsFakePlayer;
+import openmods.fakeplayer.UseItemAction;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -63,35 +62,39 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		return false;
 	}
 
-	private void placeBlock(final int slotId) {
+	private void placeBlock(int slotId) {
 		if (!(worldObj instanceof WorldServer)) return;
 
 		final ItemStack stack = inventory.getStackInSlot(slotId);
 		if (stack == null || stack.stackSize <= 0) return;
 
 		final ForgeDirection direction = getOrientation().up();
-		final int x = xCoord + direction.offsetX;
-		final int y = yCoord + direction.offsetY;
-		final int z = zCoord + direction.offsetZ;
+		final int targetX = xCoord + direction.offsetX;
+		final int targetY = yCoord + direction.offsetY;
+		final int targetZ = zCoord + direction.offsetZ;
 
-		final boolean blockExists;
+		if (worldObj.blockExists(targetX, targetY, targetZ)) {
+			final Block block = worldObj.getBlock(targetX, targetY, targetZ);
+			if (!block.isAir(worldObj, targetX, targetY, targetZ)
+					&& !block.isReplaceable(worldObj, targetX, targetY, targetZ)) return;
+		}
 
-		if (worldObj.blockExists(x, y, z)) {
-			Block block = worldObj.getBlock(x, y, z);
-			blockExists = !block.isAir(worldObj, x, y, z) && !block.isReplaceable(worldObj, x, y, z);
-		} else blockExists = false;
+		// this logic is tuned for vanilla blocks (like pistons), which places blocks with front facing player
+		// so to place object pointing in the same direction as placer, we need configuration player-target-placer
+		// * 2, since some blocks may take into account player height, so distance must be greater than that
+		final int playerX = targetX + 2 * direction.offsetX;
+		final int playerY = targetY + 2 * direction.offsetY;
+		final int playerZ = targetZ + 2 * direction.offsetZ;
 
-		FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
-			@Override
-			public void usePlayer(OpenModsFakePlayer fakePlayer) {
-				ItemStack newStack = fakePlayer.equipWithAndRightClick(stack,
-						Vec3.createVectorHelper(xCoord, yCoord, zCoord),
-						Vec3.createVectorHelper(x, y - 1, z),
-						direction.getOpposite(),
-						blockExists);
-				inventory.setInventorySlotContents(slotId, newStack);
-			}
-		});
+		final ItemStack result = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new UseItemAction(
+				stack,
+				Vec3.createVectorHelper(playerX, playerY, playerZ),
+				Vec3.createVectorHelper(targetX, targetY, targetZ),
+				Vec3.createVectorHelper(targetX + 0.5, targetY + 0.5, targetZ + 0.5),
+				direction.getOpposite()
+				));
+
+		inventory.setInventorySlotContents(slotId, result);
 	}
 
 	@Override
