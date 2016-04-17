@@ -5,8 +5,10 @@ import openperipheral.api.adapter.IPeripheralAdapter;
 import openperipheral.api.adapter.method.IMultiReturn;
 import openperipheral.api.adapter.method.ReturnType;
 import openperipheral.api.adapter.method.ScriptCallable;
+import openperipheral.api.architecture.FeatureGroup;
 import openperipheral.api.helpers.MultiReturn;
 
+@FeatureGroup("openblocks-donation-station")
 public class AdapterDonationStation implements IPeripheralAdapter {
 
 	@Override

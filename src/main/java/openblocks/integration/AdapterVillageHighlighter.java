@@ -8,9 +8,11 @@ import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openperipheral.api.adapter.IPeripheralAdapter;
 import openperipheral.api.adapter.method.ReturnType;
 import openperipheral.api.adapter.method.ScriptCallable;
+import openperipheral.api.architecture.FeatureGroup;
 
 import com.google.common.collect.Maps;
 
+@FeatureGroup("openblocks-village-highlighter")
 public class AdapterVillageHighlighter implements IPeripheralAdapter {
 
 	@Override

@@ -9,6 +9,7 @@ import openblocks.common.tileentity.TileEntityProjector;
 import openperipheral.api.adapter.Asynchronous;
 import openperipheral.api.adapter.IPeripheralAdapter;
 import openperipheral.api.adapter.method.*;
+import openperipheral.api.architecture.FeatureGroup;
 import openperipheral.api.helpers.MultiReturn;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -17,6 +18,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.UnsignedBytes;
 
+@FeatureGroup("openblocks-projector")
 public class AdapterProjector implements IPeripheralAdapter {
 
 	@Override
