@@ -257,6 +257,7 @@ tile.openblocks.blockbreaker.description=Quando gli viene fornito un impulso di 
 
 tile.openblocks.projector.name=Proiettore della Mappa di Altitudine
 tile.openblocks.projector.description=Ti lascio scrivere questa, boq!
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=Tavolo da Incantamento Automatico
 tile.openblocks.autoenchantmenttable.description=Il tavolo da incantamento automatico funziona in una maniera simile al tavolo da incantamento Vanilla, eccetto che funziona con l'Esperienza Liquida. Usa le schede sul lato destro dell'interfaccia per selezionare dove gli oggetti o i punti esperienza verranno presi. Esattamente come il tavolo da incantamento Vanilla, sono richieste le librerie per avere livelli di incantamento maggiori.

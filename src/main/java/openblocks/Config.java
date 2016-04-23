@@ -295,6 +295,25 @@ public class Config {
 	@ConfigProperty(category = "sponge", name = "spongeRange", comment = "Sponge block range (distance from center)")
 	public static int spongeStickRange = 3;
 
+	@ConfigProperty(category = "projector", name = "lightUpWhenWorking", comment = "Projector will light up whenever it is displaying a map")
+	public static boolean litWhenDisplayingMap = true;
+
+	@ConfigProperty(category = "projector", name = "renderHolographicCone", comment = "Projector will render a holographic cone whenever active")
+	public static boolean renderHoloCone = true;
+
+	@ConfigProperty(category = "projector", name = "brightness", comment = "The projector's cone will use the specified brightness value to render.\n"
+			+ "Value must be between 0 and 255 inclusive. To use the default world brightness set -1 as the value.\n"
+			+ "Keep in mind that default brightness means that the cone will render as light blue during the day and dark blue during the night.")
+	public static int coneBrightness = -1;
+
+	@ConfigProperty(category = "projector", name = "lightLevel", comment = "Level of light emitted by the active projector. Defaults to 10. Must be at maximum 15 and positive")
+	public static int projectorLightLevelValue = 10;
+
+	@ConfigProperty(category = "projector", name = "renderHolographicGrid", comment = "The holographic cone will display a grid.\n"
+			+ "The grid texture may look a bit pixelated and there may be a little gap between two corners.\n"
+			+ "This is not an error and it is only a texture calculation problem (e.g. 0.25 does not correctly correspond to 16 pixels in a 64x64 texture)")
+	public static boolean renderHoloGrid = false;
+
 	@OnLineModifiable
 	@ConfigProperty(category = "loot", name = "donationStation")
 	public static boolean donationStationLoot = false;
@@ -732,6 +751,11 @@ public class Config {
 				recipeList.add(new ShapelessOreRecipe(result, recipe));
 			}
 
+		}
+
+		// Avoid crashes whenever lit projector is deactivated - TSM
+		if (OpenBlocks.Blocks.workingProjector == null) {
+			Config.litWhenDisplayingMap = false;
 		}
 	}
 }

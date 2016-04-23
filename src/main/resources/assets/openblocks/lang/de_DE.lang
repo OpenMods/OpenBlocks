@@ -257,6 +257,7 @@ tile.openblocks.blockbreaker.description=Wenn er ein Redstone-Signal bekommt, br
 
 tile.openblocks.projector.name=Höhenkartenprojektor
 tile.openblocks.projector.description=Ich überlasse es boq, das hier zu schreiben!
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=Auto-Zaubertisch
 tile.openblocks.autoenchantmenttable.description=Der Auto-Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er mit flüssigen XP arbeitet. Benutze die Tabs auf der rechten Seite des Interfaces, um auszuwählen, von wo Items und XP genommen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.

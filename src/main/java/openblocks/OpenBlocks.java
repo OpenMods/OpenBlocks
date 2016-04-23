@@ -85,6 +85,7 @@ import openblocks.common.block.BlockTarget;
 import openblocks.common.block.BlockTrophy;
 import openblocks.common.block.BlockVacuumHopper;
 import openblocks.common.block.BlockVillageHighlighter;
+import openblocks.common.block.BlockWorkingProjector;
 import openblocks.common.block.BlockXPBottler;
 import openblocks.common.block.BlockXPDrain;
 import openblocks.common.block.BlockXPShower;
@@ -344,6 +345,9 @@ public class OpenBlocks {
 
 		@RegisterBlock(name = "projector", tileEntity = TileEntityProjector.class, textureName = RegisterBlock.NONE)
 		public static BlockProjector projector;
+
+		@RegisterBlock(name = "projector.working", tileEntity = TileEntityProjector.class, textureName = RegisterBlock.NONE)
+		public static BlockWorkingProjector workingProjector;
 
 		@RegisterBlock(name = "drawingtable", tileEntity = TileEntityDrawingTable.class)
 		public static BlockDrawingTable drawingTable;

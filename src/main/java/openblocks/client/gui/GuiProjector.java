@@ -61,7 +61,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int mouseX, int mouseY) {
-		if (isInitialized == false || Mouse.isButtonDown(2)) {
+		if (!isInitialized || Mouse.isButtonDown(2)) {
 			trackball.setTransform(MathUtils.createEntityRotateMatrix(Minecraft.getMinecraft().renderViewEntity));
 			isInitialized = true;
 		}

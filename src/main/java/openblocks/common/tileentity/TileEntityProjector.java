@@ -3,15 +3,19 @@ package openblocks.common.tileentity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Set;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
+import openblocks.common.block.BlockProjector;
 import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
@@ -29,7 +33,9 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
 
-	private GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
+	private int prevId = -1;
+
+	private final GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack stack) {
 			if (stack == null) return false;
@@ -60,6 +66,15 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 						} else TileEntityProjector.this.mapId.set(-1);
 					} else TileEntityProjector.this.mapId.set(-1);
 					sync();
+
+					if (TileEntityProjector.this.prevId != TileEntityProjector.this.mapId()) {
+						BlockProjector.update(TileEntityProjector.this.mapId() != -1,
+								TileEntityProjector.this.worldObj,
+								TileEntityProjector.this.xCoord,
+								TileEntityProjector.this.yCoord,
+								TileEntityProjector.this.zCoord);
+					}
+					TileEntityProjector.this.prevId = TileEntityProjector.this.mapId();
 				}
 
 				markUpdated();
@@ -89,6 +104,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@Override
 	public void validate() {
 		super.validate();
+		this.prevId = this.mapId();
 		inventory.onInventoryChanged(0);
 	}
 
@@ -139,6 +155,20 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 		sync();
 	}
 
+	@Override
+	public boolean shouldRefresh(final Block oldBlock,
+								 final Block newBlock,
+								 final int oldMeta,
+								 final int newMeta,
+								 final World world,
+								 final int x,
+								 final int y,
+								 final int z) {
+
+		return !((oldBlock == OpenBlocks.Blocks.projector && newBlock == OpenBlocks.Blocks.workingProjector)
+				|| (oldBlock == OpenBlocks.Blocks.workingProjector && newBlock == OpenBlocks.Blocks.projector));
+	}
+
 	public byte rotation() {
 		return rotation.get();
 	}
@@ -159,6 +189,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 		if (worldObj != null || mapId < 0) MapDataManager.instance.markDataUpdated(worldObj, mapId);
 	}
 
+	@SuppressWarnings("unused")
 	public void fetchMap() {
 		int mapId = this.mapId.get();
 		if (worldObj != null && mapId >= 0) MapDataManager.getMapData(worldObj, mapId);
