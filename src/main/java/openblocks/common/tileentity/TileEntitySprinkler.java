@@ -21,7 +21,9 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
-import openmods.api.*;
+import openmods.api.IHasGui;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
@@ -35,9 +37,8 @@ import openmods.liquids.GenericFluidHandler;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.BlockUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui, INeighbourAwareTile {
+public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAttachment, IInventoryProvider, IHasGui, INeighbourAwareTile {
 
 	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
 
@@ -205,13 +206,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	@Override
 	public ForgeDirection getSurfaceDirection() {
 		return ForgeDirection.DOWN;
-	}
-
-	@Override
-	public void onBlockBroken() {
-		if (!worldObj.isRemote && !worldObj.isAirBlock(xCoord, yCoord, zCoord)) {
-			BlockUtils.dropItemStackInWorld(worldObj, xCoord, yCoord, zCoord, new ItemStack(OpenBlocks.Blocks.sprinkler));
-		}
 	}
 
 	/**
