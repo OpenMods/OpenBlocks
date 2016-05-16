@@ -21,8 +21,8 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		public static final GuiId[] VALUES = GuiId.values();
 	}
 
-	private static ContainerDevNull createDevNullContainer(EntityPlayer player) {
-		return new ContainerDevNull(player.inventory, new ItemDevNull.DevNullInventory(player));
+	private static ContainerDevNull createDevNullContainer(EntityPlayer player, int protectedSlot) {
+		return new ContainerDevNull(player.inventory, new ItemDevNull.DevNullInventory(player, protectedSlot), protectedSlot);
 	}
 
 	private static ContainerLuggage createLuggageContainer(EntityPlayer player, World world, int entityId) {
@@ -43,7 +43,7 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 				return createLuggageContainer(player, world, x);
 			case devNull:
 				if (player.inventory.getCurrentItem() == null) return null;
-				return createDevNullContainer(player);
+				return createDevNullContainer(player, x);
 			default:
 				return null;
 		}
@@ -60,7 +60,7 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 				return container != null? new GuiLuggage(container) : null;
 			}
 			case devNull:
-				return new GuiDevNull(createDevNullContainer(player));
+				return new GuiDevNull(createDevNullContainer(player, x));
 			default:
 				return null;
 		}

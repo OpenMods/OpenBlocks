@@ -11,16 +11,19 @@ public class ContainerDevNull extends ContainerBase<Void> {
 
 	private InventoryPlayer playerInventory;
 
-	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory) {
+	private final int protectedSlot;
+
+	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory, int protectedSlot) {
 		super(playerInventory, ownerInventory, null);
 		this.playerInventory = (InventoryPlayer)playerInventory;
+		this.protectedSlot = protectedSlot;
 		addInventoryGrid(80, 22, 1);
 		addPlayerInventorySlots(55);
 	}
 
 	@Override
 	public ItemStack slotClick(int slotId, int key, int modifier, EntityPlayer player) {
-		if (modifier == 2 && key == player.inventory.currentItem) return null;
+		if (modifier == 2 && key == protectedSlot) return null;
 		return super.slotClick(slotId, key, modifier, player);
 	}
 
@@ -40,7 +43,7 @@ public class ContainerDevNull extends ContainerBase<Void> {
 			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58) {
 				@Override
 				public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
-					return currentSlot != playerInventory.currentItem;
+					return currentSlot != protectedSlot;
 				}
 			});
 

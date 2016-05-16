@@ -38,8 +38,8 @@ public class ItemDevNull extends Item {
 
 		private final EntityPlayer player;
 
-		public DevNullInventory(EntityPlayer player) {
-			super(player, 1);
+		public DevNullInventory(EntityPlayer player, int protectedSlot) {
+			super(player, 1, protectedSlot);
 			this.player = player;
 		}
 
