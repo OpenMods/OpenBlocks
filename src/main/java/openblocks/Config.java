@@ -222,6 +222,10 @@ public class Config {
 	@ConfigProperty(category = "features", name = "explosiveEnchantGrief", comment = "Explosive enchant can break blocks at level 3")
 	public static boolean explosiveEnchantGrief = true;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "features", name = "lastStandFormula", comment = "Formula for XP cost (variables: hp,dmg,ench,xp). Note: calculation only triggers when hp - dmg < 1.")
+	public static String lastStandEnchantmentFormula = "max(1, 50*(1-(hp-dmg))/ench)";
+
 	// 64 blocks, since containers usually have 64 blocks usability range (IInventory.isUseableByPlayer)
 	@ConfigProperty(category = "cursor", name = "cursorMaxDistance", comment = "Maximum distance cursor can reach (warning: increasing may cause crashes)")
 	public static int cursorDistanceLimit = 64;
