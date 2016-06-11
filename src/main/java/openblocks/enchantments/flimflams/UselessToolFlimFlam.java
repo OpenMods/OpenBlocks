@@ -2,7 +2,6 @@ package openblocks.enchantments.flimflams;
 
 import java.util.Map;
 import java.util.Random;
-
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayerMP;

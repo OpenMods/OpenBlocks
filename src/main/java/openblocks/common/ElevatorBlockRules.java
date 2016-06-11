@@ -1,19 +1,16 @@
 package openblocks.common;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.Locale;
 import java.util.Map;
-
 import net.minecraft.block.Block;
 import openblocks.Config;
 import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ElevatorBlockRules {
 

@@ -10,7 +10,6 @@ import openblocks.client.model.ModelCannon;
 import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.tileentity.TileEntityCannon;
 import openmods.OpenMods;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityCannonRenderer extends TileEntitySpecialRenderer {

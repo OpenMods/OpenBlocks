@@ -3,7 +3,6 @@ package openblocks.events;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
 import openmods.events.network.BlockEventPacket;
 import openmods.movement.PlayerMovementEvent;
 import openmods.network.event.EventDirection;

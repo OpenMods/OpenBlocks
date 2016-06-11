@@ -1,5 +1,6 @@
 package openblocks.client.gui;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -10,12 +11,14 @@ import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
 import openmods.api.IValueReceiver;
 import openmods.gui.GuiConfigurableSlots;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComposite;
+import openmods.gui.component.GuiComponentLabel;
+import openmods.gui.component.GuiComponentSlider;
+import openmods.gui.component.GuiComponentTab;
+import openmods.gui.component.GuiComponentTankLevel;
 import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.MiscUtils;
-
-import com.google.common.collect.ImmutableList;
 
 public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAutoEnchantmentTable, ContainerAutoEnchantmentTable, TileEntityAutoEnchantmentTable.AutoSlots> {
 

@@ -1,5 +1,7 @@
 package openblocks.common.item;
 
+import com.google.common.collect.ImmutableList;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -8,10 +10,6 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.infobook.ICustomBookEntryProvider;
 import openmods.item.IMetaItem;
-
-import com.google.common.collect.ImmutableList;
-
-import cpw.mods.fml.common.Loader;
 
 public enum MetasGeneric {
 	gliderWing {

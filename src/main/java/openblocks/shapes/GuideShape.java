@@ -1,7 +1,13 @@
 package openblocks.shapes;
 
 import net.minecraft.util.StatCollector;
-import openmods.shapes.*;
+import openmods.shapes.IShapeGenerator;
+import openmods.shapes.ShapeAxesGenerator;
+import openmods.shapes.ShapeCuboidGenerator;
+import openmods.shapes.ShapeCylinderGenerator;
+import openmods.shapes.ShapeEquilateral2dGenerator;
+import openmods.shapes.ShapePlanesGenerator;
+import openmods.shapes.ShapeSphereGenerator;
 import openmods.utils.render.GeometryUtils.Octant;
 
 public enum GuideShape {

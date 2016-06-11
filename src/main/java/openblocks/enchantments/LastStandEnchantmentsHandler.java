@@ -1,7 +1,8 @@
 package openblocks.enchantments;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Map;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,13 +10,13 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.Log;
-import openmods.calc.*;
+import openmods.calc.Calculator;
 import openmods.calc.Calculator.ExprType;
+import openmods.calc.Constant;
+import openmods.calc.IExecutable;
 import openmods.calc.types.fp.DoubleCalculator;
 import openmods.config.properties.ConfigurationChange;
 import openmods.utils.EnchantmentUtils;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class LastStandEnchantmentsHandler {
 

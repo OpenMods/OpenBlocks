@@ -1,7 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
 import java.util.Random;
-
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -10,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg.State;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer {

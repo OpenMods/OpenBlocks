@@ -2,7 +2,6 @@ package openblocks.client.renderer.item;
 
 import java.util.EnumSet;
 import java.util.Set;
-
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
@@ -10,7 +9,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemPaintCan;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 

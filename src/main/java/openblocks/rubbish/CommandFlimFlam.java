@@ -1,17 +1,19 @@
 package openblocks.rubbish;
 
-import static openmods.utils.CommandUtils.*;
+import static openmods.utils.CommandUtils.error;
+import static openmods.utils.CommandUtils.filterPrefixes;
+import static openmods.utils.CommandUtils.fiterPlayerNames;
+import static openmods.utils.CommandUtils.getPlayer;
+import static openmods.utils.CommandUtils.respond;
 
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import openblocks.api.IFlimFlamDescription;
 import openblocks.enchantments.flimflams.FlimFlamRegistry;
 import openmods.utils.CollectionUtils;
-
-import com.google.common.collect.Lists;
 
 public class CommandFlimFlam implements ICommand {
 

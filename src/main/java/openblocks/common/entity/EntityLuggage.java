@@ -1,5 +1,7 @@
 package openblocks.common.entity;
 
+import com.google.common.base.Strings;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
@@ -21,10 +23,6 @@ import openmods.api.VisibleForDocumentation;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.legacy.ItemDistribution;
-
-import com.google.common.base.Strings;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 @VisibleForDocumentation
 public class EntityLuggage extends EntityTameable implements IInventoryProvider, IEntityAdditionalSpawnData {

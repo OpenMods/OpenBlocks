@@ -3,14 +3,12 @@ package openblocks.client.renderer.block;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import openblocks.common.block.BlockPath;
 import openmods.renderer.IBlockRenderer;
 import openmods.tileentity.renderer.OpenRenderHelper;
-
 import org.lwjgl.opengl.GL11;
 
 public class BlockPathRenderer implements IBlockRenderer<BlockPath> {

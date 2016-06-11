@@ -1,7 +1,8 @@
 package openblocks.common.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Set;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -10,10 +11,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.api.IElevatorBlock;
 import openmods.infobook.BookDocumentation;
-import openmods.utils.*;
+import openmods.utils.BlockNotifyFlags;
+import openmods.utils.CollectionUtils;
+import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(hasVideo = true)
 public class BlockElevator extends OpenBlock implements IElevatorBlock {

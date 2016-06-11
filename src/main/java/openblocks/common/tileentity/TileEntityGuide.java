@@ -1,7 +1,19 @@
 package openblocks.common.tileentity;
 
-import java.util.*;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Ints;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,23 +30,26 @@ import openmods.geometry.HalfAxis;
 import openmods.geometry.Orientation;
 import openmods.shapes.IShapeGenerator;
 import openmods.shapes.IShapeable;
-import openmods.sync.*;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableEnum;
+import openmods.sync.SyncableInt;
+import openmods.sync.SyncableVarInt;
 import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
-import openmods.utils.*;
+import openmods.utils.CollectionUtils;
+import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
+import openmods.utils.Coord;
+import openmods.utils.MathUtils;
 import openperipheral.api.adapter.Asynchronous;
-import openperipheral.api.adapter.method.*;
+import openperipheral.api.adapter.method.Alias;
+import openperipheral.api.adapter.method.Arg;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
 import openperipheral.api.struct.ScriptStruct;
 import openperipheral.api.struct.StructField;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.*;
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Ints;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile {
 

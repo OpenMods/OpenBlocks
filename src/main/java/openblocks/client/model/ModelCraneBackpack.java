@@ -1,5 +1,6 @@
 package openblocks.client.model;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.model.ModelBiped;
@@ -16,10 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.item.ItemCraneBackpack;
-
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ModelCraneBackpack extends ModelBiped {
 

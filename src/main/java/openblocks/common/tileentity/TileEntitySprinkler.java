@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

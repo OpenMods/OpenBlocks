@@ -1,9 +1,11 @@
 package openblocks.common.entity;
 
+import com.google.common.collect.MapMaker;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-
 import java.util.Map;
-
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,12 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import openblocks.common.item.ItemHangGlider;
 import openmods.Log;
-
-import com.google.common.collect.MapMaker;
-
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
 	private static final int PROPERTY_DEPLOYED = 17;

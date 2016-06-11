@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
+import cpw.mods.fml.common.ModContainer;
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,6 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ModIdentifier;
-import cpw.mods.fml.common.ModContainer;
 
 public class TileEntityDonationStation extends OpenTileEntity implements IHasGui, IInventoryProvider {
 

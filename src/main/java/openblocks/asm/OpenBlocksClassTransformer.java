@@ -4,7 +4,6 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import openmods.Log;
 import openmods.asm.VisitorHelper;
 import openmods.asm.VisitorHelper.TransformProvider;
-
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 

@@ -1,11 +1,13 @@
 package openblocks.common.entity;
 
+import com.google.common.collect.ImmutableSet;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -22,15 +24,16 @@ import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.Log;
 import openmods.api.VisibleForDocumentation;
-import openmods.sync.*;
+import openmods.sync.ISyncMapProvider;
+import openmods.sync.SyncMap;
+import openmods.sync.SyncMapEntity;
+import openmods.sync.SyncObjectScanner;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableInt;
+import openmods.sync.SyncableObjectBase;
 import openmods.utils.BitSet;
 import openmods.utils.ByteUtils;
 import openmods.utils.ItemUtils;
-
-import com.google.common.collect.ImmutableSet;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @VisibleForDocumentation
 public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncMapProvider {

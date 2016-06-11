@@ -11,7 +11,6 @@ import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
 import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.utils.Diagonal;
-
 import org.lwjgl.opengl.GL11;
 
 public class ItemRendererTank implements IItemRenderer {

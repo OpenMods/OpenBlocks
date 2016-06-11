@@ -1,5 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -9,15 +10,12 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import openblocks.Config;
 import openblocks.OpenBlocks.Blocks;
-import openblocks.common.tileentity.*;
+import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
-
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer {
 

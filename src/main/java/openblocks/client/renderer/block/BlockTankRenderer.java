@@ -1,6 +1,12 @@
 package openblocks.client.renderer.block;
 
-import static openblocks.client.renderer.tileentity.tank.INeighbourMap.*;
+import static openblocks.client.renderer.tileentity.tank.INeighbourMap.DIR_DOWN;
+import static openblocks.client.renderer.tileentity.tank.INeighbourMap.DIR_EAST;
+import static openblocks.client.renderer.tileentity.tank.INeighbourMap.DIR_NORTH;
+import static openblocks.client.renderer.tileentity.tank.INeighbourMap.DIR_SOUTH;
+import static openblocks.client.renderer.tileentity.tank.INeighbourMap.DIR_UP;
+import static openblocks.client.renderer.tileentity.tank.INeighbourMap.DIR_WEST;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +18,6 @@ import openblocks.common.tileentity.TileEntityTank;
 import openmods.renderer.DisplayListWrapper;
 import openmods.renderer.IBlockRenderer;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class BlockTankRenderer implements IBlockRenderer<BlockTank> {

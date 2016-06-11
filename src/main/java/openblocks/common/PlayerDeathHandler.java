@@ -1,9 +1,21 @@
 package openblocks.common;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.eventhandler.ASMEventHandler;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.IEventListener;
+import cpw.mods.fml.common.eventhandler.ListenerList;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.*;
-
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +25,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,16 +49,7 @@ import openmods.utils.BlockNotifyFlags;
 import openmods.utils.Coord;
 import openmods.utils.TagUtils;
 import openmods.world.DelayedActionTickHandler;
-
 import org.apache.logging.log4j.Level;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.eventhandler.*;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class PlayerDeathHandler {
 

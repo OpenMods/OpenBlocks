@@ -1,7 +1,6 @@
 package openblocks.common.entity.ai;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;

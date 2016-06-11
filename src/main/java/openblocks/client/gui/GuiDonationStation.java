@@ -1,10 +1,11 @@
 package openblocks.client.gui;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
 import net.minecraft.client.gui.GuiYesNoCallback;
@@ -16,9 +17,6 @@ import openmods.gui.component.BaseComponent;
 import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.GuiComponentTextButton;
 import openmods.gui.listener.IMouseDownListener;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 
 public class GuiDonationStation extends BaseGuiContainer<ContainerDonationStation> implements GuiYesNoCallback {
 

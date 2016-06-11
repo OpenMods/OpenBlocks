@@ -1,14 +1,15 @@
 package openblocks.common.sync;
 
-import java.io.*;
+import com.google.common.collect.Lists;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
 import net.minecraft.nbt.NBTTagCompound;
 import openblocks.common.Stencil;
 import openmods.sync.SyncableObjectBase;
-
-import com.google.common.collect.Lists;
 
 public class SyncableBlockLayers extends SyncableObjectBase {
 

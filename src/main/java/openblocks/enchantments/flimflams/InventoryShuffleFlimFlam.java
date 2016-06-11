@@ -3,7 +3,6 @@ package openblocks.enchantments.flimflams;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.item.ItemStack;

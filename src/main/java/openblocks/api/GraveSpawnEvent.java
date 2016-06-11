@@ -1,12 +1,11 @@
 package openblocks.api;
 
+import cpw.mods.fml.common.eventhandler.Cancelable;
 import java.util.List;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import cpw.mods.fml.common.eventhandler.Cancelable;
 
 @Cancelable
 public class GraveSpawnEvent extends PlayerEvent {

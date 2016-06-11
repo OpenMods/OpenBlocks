@@ -1,8 +1,8 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,13 +11,24 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.client.renderer.tileentity.tank.*;
+import openblocks.client.renderer.tileentity.tank.INeighbourMap;
+import openblocks.client.renderer.tileentity.tank.ITankConnections;
+import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
+import openblocks.client.renderer.tileentity.tank.NeighbourMap;
+import openblocks.client.renderer.tileentity.tank.TankRenderLogic;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.item.ItemTankBlock;
-import openmods.api.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IPlacerAwareTile;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.GenericFluidHandler;
@@ -27,8 +38,6 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
-
-import com.google.common.collect.Lists;
 
 public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlacerAwareTile, INeighbourAwareTile, ICustomHarvestDrops {
 

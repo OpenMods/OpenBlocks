@@ -1,7 +1,9 @@
 package openblocks.integration;
 
+import com.google.common.base.Preconditions;
+import dan200.computercraft.api.turtle.ITurtleAccess;
+import dan200.computercraft.api.turtle.TurtleSide;
 import java.lang.ref.WeakReference;
-
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -17,17 +19,16 @@ import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
 import openmods.fakeplayer.OpenModsFakePlayer;
 import openperipheral.api.adapter.IWorldProvider;
-import openperipheral.api.adapter.method.*;
+import openperipheral.api.adapter.method.Alias;
+import openperipheral.api.adapter.method.Arg;
+import openperipheral.api.adapter.method.IMultiReturn;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
 import openperipheral.api.architecture.IArchitectureAccess;
 import openperipheral.api.architecture.IAttachable;
 import openperipheral.api.helpers.MultiReturn;
 import openperipheral.api.peripheral.ExposeInterface;
 import openperipheral.api.peripheral.PeripheralTypeId;
-
-import com.google.common.base.Preconditions;
-
-import dan200.computercraft.api.turtle.ITurtleAccess;
-import dan200.computercraft.api.turtle.TurtleSide;
 
 @PeripheralTypeId("openblocks_magnet")
 @ExposeInterface({ ITickingTurtle.class, IAttachable.class })

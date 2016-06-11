@@ -1,5 +1,8 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,12 +19,11 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.infobook.BookDocumentation;
-import openmods.inventory.*;
+import openmods.inventory.ItemInventory;
+import openmods.inventory.PlayerItemInventory;
+import openmods.inventory.StackEqualityTesterBuilder;
 import openmods.inventory.StackEqualityTesterBuilder.IEqualityTester;
 import openmods.inventory.legacy.ItemDistribution;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class ItemDevNull extends Item {

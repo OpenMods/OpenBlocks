@@ -3,7 +3,6 @@ package openblocks.common;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSavedData;

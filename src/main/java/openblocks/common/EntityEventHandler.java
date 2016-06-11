@@ -1,7 +1,8 @@
 package openblocks.common;
 
+import com.google.common.collect.Sets;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Set;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,10 +15,6 @@ import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
 import openmods.utils.BlockUtils;
 import openmods.utils.PlayerUtils;
-
-import com.google.common.collect.Sets;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class EntityEventHandler {
 

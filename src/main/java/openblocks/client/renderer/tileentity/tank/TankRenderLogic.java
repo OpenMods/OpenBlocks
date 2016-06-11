@@ -1,7 +1,7 @@
 package openblocks.client.renderer.tileentity.tank;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -9,8 +9,6 @@ import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.liquids.GenericTank;
 import openmods.utils.Diagonal;
-
-import com.google.common.collect.Maps;
 
 public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 

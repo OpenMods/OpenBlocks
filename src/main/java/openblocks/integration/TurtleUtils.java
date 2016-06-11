@@ -1,11 +1,10 @@
 package openblocks.integration;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import openmods.Mods;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TurtleUtils {
 

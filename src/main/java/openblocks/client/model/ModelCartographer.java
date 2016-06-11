@@ -1,5 +1,6 @@
 package openblocks.client.model;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -10,10 +11,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.TextureUtils;
-
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ModelCartographer extends ModelBase {
 	private static final float SCALE = 1.0f / 16.0f;

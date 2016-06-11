@@ -2,7 +2,6 @@ package openblocks.enchantments.flimflams;
 
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;

@@ -1,15 +1,16 @@
 package openblocks.rubbish;
 
-import static openmods.utils.CommandUtils.*;
+import static openmods.utils.CommandUtils.error;
+import static openmods.utils.CommandUtils.fiterPlayerNames;
+import static openmods.utils.CommandUtils.getPlayer;
+import static openmods.utils.CommandUtils.respond;
 
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import openblocks.enchantments.FlimFlamEnchantmentsHandler;
-
-import com.google.common.collect.Lists;
 
 public class CommandLuck implements ICommand {
 

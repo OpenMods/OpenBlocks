@@ -4,10 +4,13 @@ import static openmods.utils.CommandUtils.filterPrefixes;
 import static openmods.utils.CommandUtils.fiterPlayerNames;
 import static openmods.utils.CommandUtils.getPlayer;
 
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
-
-import net.minecraft.command.*;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.SyntaxErrorException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -18,8 +21,6 @@ import openblocks.common.PlayerInventoryStore.LoadedInventories;
 import openmods.Log;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
-
-import com.google.common.collect.Lists;
 
 public class CommandInventory implements ICommand {
 

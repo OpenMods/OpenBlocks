@@ -11,7 +11,6 @@ import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.tileentity.TileEntityProjector;
 import openmods.OpenMods;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer {

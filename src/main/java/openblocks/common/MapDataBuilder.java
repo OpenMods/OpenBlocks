@@ -1,7 +1,13 @@
 package openblocks.common;
 
-import java.util.*;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
+import java.util.Collection;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.item.Item;
@@ -14,11 +20,6 @@ import openblocks.common.HeightMapData.LayerData;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.utils.BitSet;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
 
 public class MapDataBuilder {
 	private static final int LAYER_TERRAIN = 0;

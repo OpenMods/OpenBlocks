@@ -6,7 +6,6 @@ import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelBearTrap;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openmods.utils.BlockUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityBearTrapRenderer extends TileEntitySpecialRenderer {

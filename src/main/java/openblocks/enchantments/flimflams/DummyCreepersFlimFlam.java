@@ -1,14 +1,12 @@
 package openblocks.enchantments.flimflams;
 
+import com.google.common.base.Throwables;
 import java.util.Random;
-
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import openblocks.api.IFlimFlamAction;
 import openmods.reflection.FieldAccess;
-
-import com.google.common.base.Throwables;
 
 public class DummyCreepersFlimFlam implements IFlimFlamAction {
 

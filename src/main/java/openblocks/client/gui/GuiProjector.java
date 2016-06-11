@@ -9,12 +9,14 @@ import openblocks.common.MapDataManager;
 import openblocks.common.container.ContainerProjector;
 import openblocks.rpc.IRotatable;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent;
+import openmods.gui.component.BaseComposite;
+import openmods.gui.component.EmptyComposite;
+import openmods.gui.component.GuiComponentIconButton;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.misc.Trackball.TrackballWrapper;
 import openmods.utils.MathUtils;
 import openmods.utils.render.FakeIcon;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 

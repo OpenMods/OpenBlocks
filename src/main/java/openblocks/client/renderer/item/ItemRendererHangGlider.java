@@ -8,7 +8,6 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.utils.TextureUtils;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 

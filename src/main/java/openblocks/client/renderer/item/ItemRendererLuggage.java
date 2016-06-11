@@ -8,7 +8,6 @@ import net.minecraftforge.client.IItemRenderer;
 import openblocks.common.entity.EntityLuggage;
 import openmods.utils.LazyValue;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 

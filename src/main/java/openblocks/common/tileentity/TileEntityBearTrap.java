@@ -3,14 +3,20 @@ package openblocks.common.tileentity;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
-import openmods.api.*;
-import openmods.sync.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IAddAwareTile;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.ISurfaceAttachment;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableUUID;
 import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile {

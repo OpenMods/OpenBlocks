@@ -1,13 +1,11 @@
 package openblocks;
 
+import codechicken.nei.api.IConfigureNEI;
+import com.google.common.base.Throwables;
 import java.lang.reflect.Method;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks.Items;
-import codechicken.nei.api.IConfigureNEI;
-
-import com.google.common.base.Throwables;
 
 public class NEIOpenBlocksConfig implements IConfigureNEI {
 

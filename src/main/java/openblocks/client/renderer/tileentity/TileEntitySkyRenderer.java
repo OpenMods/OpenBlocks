@@ -12,7 +12,6 @@ import openmods.stencil.StencilBitAllocation;
 import openmods.stencil.StencilPoolManager;
 import openmods.utils.ColorUtils.RGB;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntitySkyRenderer extends TileEntitySpecialRenderer {

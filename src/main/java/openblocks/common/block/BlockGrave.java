@@ -1,7 +1,6 @@
 package openblocks.common.block;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -12,7 +11,6 @@ import net.minecraft.world.World;
 import openblocks.Config;
 import openmods.Log;
 import openmods.block.BlockRotationMode;
-
 import org.apache.logging.log4j.Level;
 
 public class BlockGrave extends OpenBlock {

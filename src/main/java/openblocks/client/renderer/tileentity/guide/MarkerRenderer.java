@@ -2,14 +2,15 @@ package openblocks.client.renderer.tileentity.guide;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.shader.TesselatorVertexState;
 import net.minecraft.util.ResourceLocation;
 import openblocks.shapes.CoordShape;
-import openmods.renderer.shaders.*;
-
+import openmods.renderer.shaders.ArraysHelper;
+import openmods.renderer.shaders.BufferHelper;
+import openmods.renderer.shaders.ShaderProgram;
+import openmods.renderer.shaders.ShaderProgramBuilder;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;

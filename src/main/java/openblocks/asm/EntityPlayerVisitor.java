@@ -2,8 +2,10 @@ package openblocks.asm;
 
 import openmods.Log;
 import openmods.asm.MethodMatcher;
-
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 public class EntityPlayerVisitor extends ClassVisitor {
 

@@ -1,5 +1,6 @@
 package openblocks.client.renderer.entity;
 
+import com.google.common.base.Strings;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
@@ -7,10 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelLuggage;
 import openblocks.common.entity.EntityLuggage;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Strings;
 
 public class EntityLuggageRenderer extends RenderLiving {
 

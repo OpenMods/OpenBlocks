@@ -1,17 +1,16 @@
 package openblocks.common.tileentity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.village.Village;
 import openblocks.OpenBlocks;
 import openmods.OpenMods;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityVillageHighlighter extends SyncedTileEntity {
 

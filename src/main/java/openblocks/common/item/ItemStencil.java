@@ -1,7 +1,9 @@
 package openblocks.common.item;
 
+import com.google.common.base.Objects;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -14,11 +16,6 @@ import openblocks.common.Stencil;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.utils.render.PaintUtils;
-
-import com.google.common.base.Objects;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemStencil extends Item {
 

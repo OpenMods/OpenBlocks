@@ -1,5 +1,7 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,8 +11,6 @@ import net.minecraft.util.IIcon;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSonicGlasses;
 import openmods.infobook.BookDocumentation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class ItemSonicGlasses extends ItemArmor {

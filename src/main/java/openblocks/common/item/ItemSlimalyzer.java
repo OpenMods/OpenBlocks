@@ -1,5 +1,7 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -10,8 +12,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class ItemSlimalyzer extends Item {

@@ -1,5 +1,6 @@
 package openblocks;
 
+import cpw.mods.fml.common.discovery.ASMDataTable;
 import openblocks.api.ApiHolder;
 import openblocks.api.IApiInterface;
 import openblocks.api.OpenBlocksApi;
@@ -8,7 +9,6 @@ import openmods.Log;
 import openmods.access.ApiFactory;
 import openmods.access.ApiProviderBase;
 import openmods.access.ApiProviderRegistry;
-import cpw.mods.fml.common.discovery.ASMDataTable;
 
 public class ApiSetup {
 

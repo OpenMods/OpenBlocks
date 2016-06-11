@@ -1,9 +1,10 @@
 package openblocks.common.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,10 +20,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.common.tileentity.TileEntityGuide;
 import openmods.api.ISelectionAware;
 import openmods.block.BlockRotationMode;
-import openmods.geometry.*;
+import openmods.geometry.AabbUtils;
+import openmods.geometry.BlockSpaceTransform;
+import openmods.geometry.BlockTextureTransform;
+import openmods.geometry.BoundingBoxMap;
+import openmods.geometry.HalfAxis;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(hasVideo = true)
 public class BlockGuide extends OpenBlock implements ISelectionAware {

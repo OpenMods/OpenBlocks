@@ -1,8 +1,10 @@
 package openblocks.client.renderer;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
-
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -10,12 +12,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import openblocks.common.HeightMapData;
 import openmods.renderer.DynamicTextureAtlas;
 import openmods.renderer.DynamicTextureAtlas.AtlasCell;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class HeightMapRenderer {
 	public static final HeightMapRenderer instance = new HeightMapRenderer();

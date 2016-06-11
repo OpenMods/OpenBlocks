@@ -1,16 +1,13 @@
 package openblocks.shapes;
 
-import java.nio.ByteBuffer;
-import java.util.List;
-
-import openmods.renderer.shaders.BufferHelper;
-import openmods.utils.Coord;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL15;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.nio.ByteBuffer;
+import java.util.List;
+import openmods.renderer.shaders.BufferHelper;
+import openmods.utils.Coord;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL15;
 
 public class CoordShape {
 

@@ -1,8 +1,8 @@
 package openblocks.common;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.event.world.WorldEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class GameRuleManager {
 

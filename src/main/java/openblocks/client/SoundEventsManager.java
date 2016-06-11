@@ -1,8 +1,10 @@
 package openblocks.client;
 
+import com.google.common.collect.Lists;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Iterator;
 import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
@@ -22,13 +24,7 @@ import openmods.config.properties.ConfigurationChange;
 import openmods.renderer.ManualDisplayList;
 import openmods.renderer.ManualDisplayList.Renderer;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Lists;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SoundEventsManager {
 

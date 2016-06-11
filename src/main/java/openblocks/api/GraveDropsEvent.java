@@ -1,15 +1,12 @@
 package openblocks.api;
 
-import java.util.List;
-
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-
 import cpw.mods.fml.common.eventhandler.Cancelable;
 import cpw.mods.fml.common.eventhandler.Event;
+import java.util.List;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 
 @Cancelable
 public class GraveDropsEvent extends Event {

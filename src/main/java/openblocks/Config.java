@@ -1,8 +1,10 @@
 package openblocks;
 
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.RegistryDelegate;
 import java.util.Arrays;
 import java.util.List;
-
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -13,20 +15,35 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.*;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
-import openblocks.common.item.*;
-import openblocks.common.recipe.*;
-import openblocks.enchantments.*;
+import openblocks.common.item.ItemGoldenEye;
+import openblocks.common.item.ItemImaginary;
+import openblocks.common.item.ItemPaintBrush;
+import openblocks.common.item.MetasBucket;
+import openblocks.common.item.MetasGeneric;
+import openblocks.common.item.MetasGenericUnstackable;
+import openblocks.common.recipe.CrayonGlassesRecipe;
+import openblocks.common.recipe.CrayonMixingRecipe;
+import openblocks.common.recipe.EpicEraserRecipe;
+import openblocks.common.recipe.GoldenEyeRechargeRecipe;
+import openblocks.common.recipe.MapCloneRecipe;
+import openblocks.common.recipe.MapResizeRecipe;
+import openblocks.enchantments.EnchantmentExplosive;
+import openblocks.enchantments.EnchantmentFlimFlam;
+import openblocks.enchantments.EnchantmentLastStand;
+import openblocks.enchantments.ExplosiveEnchantmentsHandler;
+import openblocks.enchantments.FlimFlamEnchantmentsHandler;
+import openblocks.enchantments.LastStandEnchantmentsHandler;
 import openmods.config.properties.ConfigProperty;
 import openmods.config.properties.OnLineModifiable;
 import openmods.utils.ColorUtils;
 import openmods.utils.ColorUtils.ColorMeta;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.RegistryDelegate;
 
 public class Config {
 

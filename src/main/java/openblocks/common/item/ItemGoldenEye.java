@@ -1,8 +1,10 @@
 package openblocks.common.item;
 
+import com.google.common.base.Strings;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Map;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,11 +22,6 @@ import openblocks.common.entity.EntityGoldenEye;
 import openmods.Log;
 import openmods.utils.ItemUtils;
 import openmods.world.StructureRegistry;
-
-import com.google.common.base.Strings;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemGoldenEye extends Item {
 

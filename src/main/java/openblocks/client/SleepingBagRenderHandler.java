@@ -1,10 +1,10 @@
 package openblocks.client;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import openblocks.common.item.ItemSleepingBag;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SleepingBagRenderHandler {
 

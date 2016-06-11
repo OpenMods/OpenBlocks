@@ -1,22 +1,23 @@
 package openblocks.integration;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+import com.google.common.primitives.UnsignedBytes;
 import java.util.Map;
-
 import net.minecraft.block.material.MapColor;
 import openblocks.common.HeightMapData;
 import openblocks.common.HeightMapData.LayerData;
 import openblocks.common.tileentity.TileEntityProjector;
 import openperipheral.api.adapter.Asynchronous;
 import openperipheral.api.adapter.IPeripheralAdapter;
-import openperipheral.api.adapter.method.*;
+import openperipheral.api.adapter.method.Arg;
+import openperipheral.api.adapter.method.ArgType;
+import openperipheral.api.adapter.method.IMultiReturn;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
 import openperipheral.api.architecture.FeatureGroup;
 import openperipheral.api.helpers.MultiReturn;
-
 import org.apache.commons.lang3.ArrayUtils;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-import com.google.common.primitives.UnsignedBytes;
 
 @FeatureGroup("openblocks-projector")
 public class AdapterProjector implements IPeripheralAdapter {

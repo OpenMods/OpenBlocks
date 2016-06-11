@@ -1,7 +1,7 @@
 package openblocks.common.item;
 
+import com.google.common.collect.MapMaker;
 import java.util.Map;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -9,8 +9,6 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.infobook.BookDocumentation;
-
-import com.google.common.collect.MapMaker;
 
 @BookDocumentation(hasVideo = true)
 public class ItemHangGlider extends Item {

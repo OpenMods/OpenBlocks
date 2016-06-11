@@ -1,8 +1,8 @@
 package openblocks.client.gui;
 
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.StatCollector;
@@ -19,14 +19,13 @@ import openmods.gui.DummyContainer;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentBook;
 import openmods.gui.component.GuiComponentLabel;
-import openmods.gui.component.page.*;
+import openmods.gui.component.page.PageBase;
 import openmods.gui.component.page.PageBase.ActionIcon;
+import openmods.gui.component.page.SectionPage;
+import openmods.gui.component.page.TitledPage;
 import openmods.infobook.PageBuilder;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Lists;
 
 public class GuiInfoBook extends ComponentGui {
 

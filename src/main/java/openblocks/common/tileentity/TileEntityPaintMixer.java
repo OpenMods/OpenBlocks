@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.Maps;
 import java.util.EnumMap;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -28,10 +28,7 @@ import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.ColorUtils;
 import openmods.utils.MiscUtils;
-
 import org.apache.commons.lang3.ArrayUtils;
-
-import com.google.common.collect.Maps;
 
 public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger {
 

@@ -1,7 +1,8 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,8 +13,6 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityAssistant;
 import openblocks.common.entity.EntityCartographer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCartographer extends Item {
 

@@ -2,7 +2,6 @@ package openblocks.events;
 
 import java.io.DataInput;
 import java.io.DataOutput;
-
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
 import openmods.network.event.NetworkEventMeta;

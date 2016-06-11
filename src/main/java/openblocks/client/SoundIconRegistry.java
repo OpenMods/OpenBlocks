@@ -3,10 +3,13 @@ package openblocks.client;
 import static openblocks.client.Icons.blockIcon;
 import static openblocks.client.Icons.itemIcon;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Maps;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityList;
@@ -16,12 +19,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import openblocks.client.Icons.ComposedIcon;
 import openblocks.client.Icons.IDrawableIcon;
 import openmods.Log;
-
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class SoundIconRegistry {
 

@@ -6,7 +6,6 @@ import net.minecraft.util.ResourceLocation;
 import openblocks.client.model.ModelTarget;
 import openblocks.common.tileentity.TileEntityTarget;
 import openmods.utils.BlockUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityTargetRenderer extends TileEntitySpecialRenderer {

@@ -1,7 +1,6 @@
 package openblocks.client.renderer.tileentity;
 
 import java.util.EnumSet;
-
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -14,7 +13,6 @@ import openblocks.common.tileentity.TileEntityPaintMixer;
 import openmods.utils.BlockUtils;
 import openmods.utils.ColorUtils;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer {

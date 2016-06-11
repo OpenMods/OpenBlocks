@@ -8,7 +8,6 @@ import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.item.ItemTrophyBlock;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class ItemRendererTrophy implements IItemRenderer {

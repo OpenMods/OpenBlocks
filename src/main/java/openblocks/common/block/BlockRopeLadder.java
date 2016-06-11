@@ -1,8 +1,9 @@
 package openblocks.common.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -21,8 +22,6 @@ import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockManipulator;
 import openmods.utils.BlockUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation
 public class BlockRopeLadder extends OpenBlock {

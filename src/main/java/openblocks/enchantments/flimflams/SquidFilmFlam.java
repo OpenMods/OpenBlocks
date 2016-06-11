@@ -1,13 +1,11 @@
 package openblocks.enchantments.flimflams;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayerMP;
 import openblocks.api.IFlimFlamAction;
-
-import com.google.common.collect.ImmutableList;
 
 public class SquidFilmFlam implements IFlimFlamAction {
 

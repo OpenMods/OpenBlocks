@@ -1,15 +1,13 @@
 package openblocks.common.entity.ai;
 
+import com.mojang.authlib.GameProfile;
 import java.util.List;
-
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.world.World;
 import openblocks.common.entity.EntityMiniMe;
 import openmods.utils.WorldUtils;
-
-import com.mojang.authlib.GameProfile;
 
 public class EntityAIPickupPlayer extends EntityAIBase {
 

@@ -1,5 +1,7 @@
 package openblocks.common.block;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,8 +16,6 @@ import openblocks.common.tileentity.TileEntityFlag;
 import openmods.block.BlockRotationMode;
 import openmods.geometry.Orientation;
 import openmods.utils.ColorUtils.RGB;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFlag extends OpenBlock {
 

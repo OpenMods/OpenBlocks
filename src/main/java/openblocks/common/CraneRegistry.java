@@ -1,12 +1,10 @@
 package openblocks.common;
 
+import com.google.common.collect.MapMaker;
 import java.util.Map;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import openblocks.common.entity.EntityMagnet;
-
-import com.google.common.collect.MapMaker;
 
 public class CraneRegistry {
 	private static final double MIN_LENGTH = 0.25;

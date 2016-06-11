@@ -1,5 +1,7 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,8 +16,6 @@ import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.common.CraneRegistry;
 import openmods.infobook.BookDocumentation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(customName = "crane_backpack", hasVideo = true)
 public class ItemCraneBackpack extends ItemArmor {

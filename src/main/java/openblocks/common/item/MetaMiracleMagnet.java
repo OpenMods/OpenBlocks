@@ -1,15 +1,14 @@
 package openblocks.common.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import openblocks.Config;
 import openblocks.integration.TurtleIds;
 import openblocks.integration.TurtleUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class MetaMiracleMagnet extends MetaGeneric {
 	public MetaMiracleMagnet(String name, Object... recipes) {

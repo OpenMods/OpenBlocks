@@ -1,8 +1,11 @@
 package openblocks.common;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Map;
 import java.util.Random;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -17,15 +20,19 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.trophy.*;
+import openblocks.trophy.BlazeBehavior;
+import openblocks.trophy.CaveSpiderBehavior;
+import openblocks.trophy.CreeperBehavior;
+import openblocks.trophy.EndermanBehavior;
+import openblocks.trophy.ITrophyBehavior;
+import openblocks.trophy.ItemDropBehavior;
+import openblocks.trophy.MooshroomBehavior;
+import openblocks.trophy.SkeletonBehavior;
+import openblocks.trophy.SnowmanBehavior;
+import openblocks.trophy.SquidBehavior;
+import openblocks.trophy.WitchBehavior;
 import openmods.Log;
 import openmods.reflection.ReflectionHelper;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TrophyHandler {
 

@@ -7,7 +7,10 @@ import openblocks.common.Stencil;
 import openblocks.common.container.ContainerDrawingTable;
 import openblocks.rpc.IStencilCrafter;
 import openmods.gui.BaseGuiContainer;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent;
+import openmods.gui.component.GuiComponentIconButton;
+import openmods.gui.component.GuiComponentSprite;
+import openmods.gui.component.GuiComponentTextButton;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.utils.render.FakeIcon;
 

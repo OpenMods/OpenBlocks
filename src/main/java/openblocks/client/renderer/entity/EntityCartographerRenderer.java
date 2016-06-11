@@ -1,7 +1,6 @@
 package openblocks.client.renderer.entity;
 
 import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -20,7 +19,6 @@ import openblocks.common.entity.EntityCartographer.MapJobs;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.BlockUtils;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class EntityCartographerRenderer extends Render {

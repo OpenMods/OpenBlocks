@@ -1,7 +1,7 @@
 package openblocks.common;
 
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import java.util.Random;
-
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -11,7 +11,6 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.Config;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 
 public class RadioVillagerTradeManager implements IVillageTradeHandler {
 

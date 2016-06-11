@@ -1,7 +1,6 @@
 package openblocks.common.entity.ai;
 
 import java.util.List;
-
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemFood;

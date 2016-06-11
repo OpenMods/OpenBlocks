@@ -9,7 +9,6 @@ import openblocks.client.model.ModelFlag;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.ColorUtils.RGB;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityFlagRenderer extends TileEntitySpecialRenderer {

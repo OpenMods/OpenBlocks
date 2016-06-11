@@ -1,7 +1,9 @@
 package openblocks.common.item;
 
+import com.google.common.collect.MapMaker;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Map;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -18,11 +20,6 @@ import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openmods.OpenMods;
 import openmods.infobook.BookDocumentation;
-
-import com.google.common.collect.MapMaker;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @BookDocumentation(customName = "crane_control", hasVideo = true)
 public class ItemCraneControl extends Item {

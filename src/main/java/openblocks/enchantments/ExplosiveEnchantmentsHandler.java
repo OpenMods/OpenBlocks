@@ -1,7 +1,13 @@
 package openblocks.enchantments;
 
-import java.util.*;
-
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.MapMaker;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -20,12 +26,6 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.OpenMods;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.MapMaker;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ExplosiveEnchantmentsHandler {
 

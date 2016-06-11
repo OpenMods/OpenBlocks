@@ -1,11 +1,11 @@
 package openblocks.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.World;
-import openblocks.common.entity.EntityHangGlider;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
+import openblocks.common.entity.EntityHangGlider;
 
 public class ClientTickHandler {
 

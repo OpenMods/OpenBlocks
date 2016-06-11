@@ -3,7 +3,6 @@ package openblocks.client.renderer.tileentity.guide;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.shapes.CoordShape;
 import openmods.utils.TextureUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class GuideAdvancedRenderer implements IGuideRenderer {

@@ -1,11 +1,10 @@
 package openblocks;
 
-import java.util.Map;
-
-import net.minecraft.launchwrapper.Launch;
-import openmods.core.OpenModsCorePlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
+import java.util.Map;
+import net.minecraft.launchwrapper.Launch;
+import openmods.core.OpenModsCorePlugin;
 
 //must be higher than one in openmodslib
 @SortingIndex(32)

@@ -1,8 +1,8 @@
 package openblocks.common.tileentity;
 
-import openmods.tileentity.OpenTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import openmods.tileentity.OpenTileEntity;
 
 public class TileEntitySky extends OpenTileEntity {
 

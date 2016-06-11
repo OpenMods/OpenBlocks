@@ -1,5 +1,6 @@
 package openblocks.common;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -7,7 +8,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import openblocks.common.item.ItemLuggage;
 import openmods.utils.EntityUtils;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class LuggageDropHandler {
 

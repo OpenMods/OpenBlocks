@@ -1,7 +1,7 @@
 package openblocks.common.recipe;
 
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -11,8 +11,6 @@ import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
 import openmods.utils.ItemUtils;
-
-import com.google.common.collect.Lists;
 
 public class CrayonGlassesRecipe extends ShapelessRecipes {
 

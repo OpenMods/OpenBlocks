@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;

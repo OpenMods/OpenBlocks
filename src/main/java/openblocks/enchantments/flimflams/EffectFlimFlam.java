@@ -1,15 +1,13 @@
 package openblocks.enchantments.flimflams;
 
+import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import openblocks.api.IFlimFlamAction;
-
-import com.google.common.collect.Lists;
 
 public class EffectFlimFlam implements IFlimFlamAction {
 
