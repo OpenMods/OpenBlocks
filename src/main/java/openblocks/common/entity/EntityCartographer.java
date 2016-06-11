@@ -97,8 +97,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			MapDataBuilder builder = new MapDataBuilder(mapId);
 
 			builder.loadMap(world);
-			builder.resizeIfNeeded(bits); // better to lost progress than to
-											// break world
+			builder.resizeIfNeeded(bits); // better to lost progress than to break world
 
 			size = builder.size();
 			jobs = builder.createJobs(bits);

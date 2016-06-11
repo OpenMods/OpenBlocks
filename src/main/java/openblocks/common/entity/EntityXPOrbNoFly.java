@@ -23,8 +23,7 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 	}
 
 	@Override
-	public void onUpdate()
-	{
+	public void onUpdate() {
 		super.onEntityUpdate();
 
 		if (this.field_70532_c > 0) {

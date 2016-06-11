@@ -17,8 +17,7 @@ public class ModelPiggy extends ModelBase {
 	ModelRenderer leg3;
 	ModelRenderer tail;
 
-	public ModelPiggy()
-	{
+	public ModelPiggy() {
 		textureWidth = 64;
 		textureHeight = 64;
 

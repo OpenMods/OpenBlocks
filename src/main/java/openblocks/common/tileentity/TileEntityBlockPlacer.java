@@ -76,7 +76,8 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		if (worldObj.blockExists(targetX, targetY, targetZ)) {
 			final Block block = worldObj.getBlock(targetX, targetY, targetZ);
 			if (!block.isAir(worldObj, targetX, targetY, targetZ)
-					&& !block.isReplaceable(worldObj, targetX, targetY, targetZ)) return;
+					&& !block.isReplaceable(worldObj, targetX, targetY, targetZ))
+				return;
 		}
 
 		// this logic is tuned for vanilla blocks (like pistons), which places blocks with front facing player
@@ -91,8 +92,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 				Vec3.createVectorHelper(playerX, playerY, playerZ),
 				Vec3.createVectorHelper(targetX, targetY, targetZ),
 				Vec3.createVectorHelper(targetX + 0.5, targetY + 0.5, targetZ + 0.5),
-				direction.getOpposite()
-				));
+				direction.getOpposite()));
 
 		inventory.setInventorySlotContents(slotId, result);
 	}

@@ -64,11 +64,8 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			EntityPlayer player = owner.get();
 			if (player == null) return null;
 
-			double posX = player.posX + CraneRegistry.ARM_RADIUS
-					* MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
-			double posZ = player.posZ
-					+ CraneRegistry.ARM_RADIUS
-					* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
+			double posX = player.posX + CraneRegistry.ARM_RADIUS * MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
+			double posZ = player.posZ + CraneRegistry.ARM_RADIUS * MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
 
 			double posY = player.posY + player.height
 					- CraneRegistry.instance.getCraneMagnetDistance(player);
@@ -196,9 +193,12 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		isAboveTarget = !detectEntityTargets().isEmpty();
 
-		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle("portal", posX
-				+ RANDOM.nextDouble() * 0.1, posY - RANDOM.nextDouble() * 0.2, posZ
-				+ RANDOM.nextDouble() * 0.1, RANDOM.nextGaussian(), -Math.abs(RANDOM.nextGaussian()), RANDOM.nextGaussian());
+		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle("portal",
+				posX + RANDOM.nextDouble() * 0.1,
+				posY - RANDOM.nextDouble() * 0.2, posZ + RANDOM.nextDouble() * 0.1,
+				RANDOM.nextGaussian(),
+				-Math.abs(RANDOM.nextGaussian()),
+				RANDOM.nextGaussian());
 	}
 
 	protected void fixSize() {
@@ -248,7 +248,8 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			final Entity tmp = riddenByEntity;
 
 			if (tmp instanceof IMagnetAware
-					&& !((IMagnetAware)tmp).canRelease()) return false;
+					&& !((IMagnetAware)tmp).canRelease())
+				return false;
 			// default unmount position is above entity and it
 			// looks strange, so we hack around that
 			double tmpPosY = tmp.posY;

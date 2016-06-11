@@ -135,8 +135,7 @@ public class BlockRopeLadder extends OpenBlock {
 			final BlockManipulator manipulator = new BlockManipulator(world, player, x, y, z);
 			if (world.isAirBlock(x, y, z) && manipulator.place(this, blockMeta)) {
 				if (!Config.infiniteLadder) stack.stackSize--;
-			}
-			else return;
+			} else return;
 		}
 	}
 

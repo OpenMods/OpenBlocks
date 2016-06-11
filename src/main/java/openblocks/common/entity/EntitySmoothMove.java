@@ -44,8 +44,7 @@ public abstract class EntitySmoothMove extends Entity {
 			if (lenSq > panicLengthSq || lenSq < minimalLengthSq) {
 				setPosition(targetX, targetY, targetZ);
 				motionX = motionY = motionZ = 0;
-			}
-			else {
+			} else {
 				if (lenSq > cutoff * cutoff) {
 					double scale = cutoff / Math.sqrt(lenSq);
 					dx *= scale;
@@ -66,8 +65,7 @@ public abstract class EntitySmoothMove extends Entity {
 	}
 
 	protected MoveSmoother createSmoother(boolean isRemote) {
-		return isRemote? new MoveSmoother(0.25, 1.0, 8.0, 0.01) :
-				new MoveSmoother(0.5, 5.0, 128.0, 0.01);
+		return isRemote? new MoveSmoother(0.25, 1.0, 8.0, 0.01) : new MoveSmoother(0.5, 5.0, 128.0, 0.01);
 	}
 
 	@Override

@@ -60,8 +60,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 			if (owner != null) smoother.setTarget(
 					owner.posX + ownerOffsetX,
 					owner.posY + owner.getEyeHeight() + ownerOffsetY,
-					owner.posZ + ownerOffsetZ
-					);
+					owner.posZ + ownerOffsetZ);
 
 		}
 

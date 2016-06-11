@@ -93,7 +93,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 						int y = yCoord + i;
 
 						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, x, y, z, fakePlayer))
-						break;
+							break;
 
 					}
 				}

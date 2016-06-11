@@ -4,8 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
-public class ModelPaintMixer extends ModelBase
-{
+public class ModelPaintMixer extends ModelBase {
 	// fields
 	ModelRenderer controls;
 	ModelRenderer right;
@@ -15,8 +14,7 @@ public class ModelPaintMixer extends ModelBase
 	ModelRenderer bottom;
 	ModelRenderer bottom2;
 
-	public ModelPaintMixer()
-	{
+	public ModelPaintMixer() {
 		textureWidth = 64;
 		textureHeight = 64;
 

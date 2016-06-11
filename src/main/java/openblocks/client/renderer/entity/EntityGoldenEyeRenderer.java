@@ -34,8 +34,7 @@ public class EntityGoldenEyeRenderer extends Render {
 				icon.getInterpolatedU(15), icon.getInterpolatedV(2),
 				icon.getInterpolatedU(2), icon.getInterpolatedV(15),
 				13, 13,
-				1.0f / 16.0f
-				);
+				1.0f / 16.0f);
 		GL11.glPopMatrix();
 	}
 

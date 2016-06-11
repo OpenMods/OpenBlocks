@@ -46,8 +46,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 				blockCoord = new Coord(
 						(int)(x + entity.posX),
 						(int)(y + entity.posY),
-						(int)(z + entity.posZ)
-						);
+						(int)(z + entity.posZ));
 				if (canHarvestBlock(blockCoord)) { return true; }
 				blockCoord = null;
 			}

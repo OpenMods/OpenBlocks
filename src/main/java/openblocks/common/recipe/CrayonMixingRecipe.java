@@ -16,8 +16,9 @@ public class CrayonMixingRecipe implements IRecipe {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack == null) continue;
-			if ((!(stack.getItem() instanceof ItemImaginary))
-					|| !ItemImaginary.isCrayon(stack)) return false;
+			if (!(stack.getItem() instanceof ItemImaginary)
+					|| !ItemImaginary.isCrayon(stack))
+				return false;
 			if (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) continue;
 			count++;
 		}
@@ -31,7 +32,8 @@ public class CrayonMixingRecipe implements IRecipe {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack == null
-					|| (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST)) continue;
+					|| (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST))
+				continue;
 			count++;
 
 			int color = ItemUtils.getInt(stack, ItemImaginary.TAG_COLOR);

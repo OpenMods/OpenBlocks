@@ -34,8 +34,7 @@ public class ModelCartographer extends ModelBase {
 					icon.getInterpolatedU(15), icon.getInterpolatedV(2),
 					icon.getInterpolatedU(2), icon.getInterpolatedV(15),
 					13, 13,
-					0.5f
-					);
+					0.5f);
 		}
 	};
 

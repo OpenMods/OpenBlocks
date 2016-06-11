@@ -39,15 +39,15 @@ public class BlockAutoEnchantmentTable extends OpenBlock {
 				if (rand.nextInt(16) == 0) {
 					for (int j1 = y; j1 <= y + 1; ++j1) {
 						if (world.getBlock(l, j1, i1) == Blocks.bookshelf) {
-							if (!world.isAirBlock((l - x) / 2 + x, j1, (i1 - z)
-									/ 2 + z)) {
+							if (!world.isAirBlock((l - x) / 2 + x, j1, (i1 - z) / 2 + z)) {
 								break;
 							}
 
-							world.spawnParticle("enchantmenttable", x + 0.5D, y + 2.0D, z + 0.5D, l
-									- x + rand.nextFloat() - 0.5D, j1 - y
-									- rand.nextFloat() - 1.0F, i1 - z
-									+ rand.nextFloat() - 0.5D);
+							world.spawnParticle("enchantmenttable",
+									x + 0.5D, y + 2.0D, z + 0.5D,
+									l - x + rand.nextFloat() - 0.5D,
+									j1 - y - rand.nextFloat() - 1.0F,
+									i1 - z + rand.nextFloat() - 0.5D);
 						}
 					}
 				}

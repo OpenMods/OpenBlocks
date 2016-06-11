@@ -204,10 +204,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		final double distVertical = Math.max((target.yCoord - projectileOrigin.yCoord) * KNOB_LOB_VERTICAL_MUL, 0);
 
 		// Calculate the arc of the trajectory
-		final float lobScale = (float)
-				Math.min(KNOB_LOB_MAXIMUM_VALUE,
-						Math.max(KNOB_LOB_MINIMUM_VALUE,
-								KNOB_LOB_BONUS + distHorizontal + distVertical));
+		final float lobScale = (float)Math.min(KNOB_LOB_MAXIMUM_VALUE,
+				Math.max(KNOB_LOB_MINIMUM_VALUE,
+						KNOB_LOB_BONUS + distHorizontal + distVertical));
 
 		// Calculate the velocity of the projectile
 		final Vec3 velocity = TileEntityCannonLogic.calculateTrajectory(projectileOrigin, target, lobScale);
@@ -322,8 +321,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 			final Vec3 scaledAcceleration = Vec3.createVectorHelper(
 					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.xCoord * accelerationMultiplier,
 					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.yCoord * accelerationMultiplier,
-					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.zCoord * accelerationMultiplier
-					);
+					PHYS_GRAVITY_VECTOR_SQUARE_PARTIAL.zCoord * accelerationMultiplier);
 
 			// -1 /n * Phys = -Phys / n
 			final double velocityMultiplier = -PHYS_STEPS_PER_SECOND / n;
@@ -331,8 +329,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 			final Vec3 velocity = Vec3.createVectorHelper(
 					(start.xCoord + scaledAcceleration.xCoord - target.xCoord) * velocityMultiplier,
 					(start.yCoord + scaledAcceleration.yCoord - target.yCoord) * velocityMultiplier,
-					(start.zCoord + scaledAcceleration.zCoord - target.zCoord) * velocityMultiplier
-					);
+					(start.zCoord + scaledAcceleration.zCoord - target.zCoord) * velocityMultiplier);
 
 			return velocity;
 		}

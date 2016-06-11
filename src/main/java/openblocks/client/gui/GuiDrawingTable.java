@@ -53,8 +53,8 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 		});
 
 		root.addComponent(buttonDraw);
-		(iconDisplay = new GuiComponentSprite(80, 34, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture)
-				.setColor(0f, 0f, 0f))
+		(iconDisplay = new GuiComponentSprite(80, 34, Stencil.values()[0].getBlockIcon(), TextureMap.locationBlocksTexture))
+				.setColor(0f, 0f, 0f)
 				.setOverlayMode(true)
 				.setEnabled(inventorySlots.getSlot(0).getStack() != null);
 		root.addComponent(iconDisplay);

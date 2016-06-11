@@ -21,8 +21,7 @@ public class SoundFlimFlam implements IFlimFlamAction {
 			"mob.endermen.stare",
 			"mob.ghast.charge",
 			"mob.zombiepig.zpigangry",
-			"mob.creeper.say"
-			);
+			"mob.creeper.say");
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {

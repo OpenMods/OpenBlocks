@@ -4,13 +4,11 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.tileentity.TileEntity;
 
-public class ModelXPShower extends ModelBase
-{
+public class ModelXPShower extends ModelBase {
 	ModelRenderer end;
 	ModelRenderer main;
 
-	public ModelXPShower()
-	{
+	public ModelXPShower() {
 		textureWidth = 32;
 		textureHeight = 32;
 
