@@ -257,6 +257,7 @@ tile.openblocks.blockbreaker.description=Когда будет подан сиг
 
 tile.openblocks.projector.name=Прожектор карты высот
 tile.openblocks.projector.description=Пусть boq напишет описание для него!
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=Автоматический стол зачаровывания
 tile.openblocks.autoenchantmenttable.description=Автоматический стол зачаровывания работает так же, как и обычный стол зачаровывания, но он требует жидкий опыт. В правой части интерфейса Вы можете выбрать, какие стороны стола будут использованы для извлечения/помещения жидкого опыта/предметов. Так же, книжные полки будут влиять на уровень зачарования.

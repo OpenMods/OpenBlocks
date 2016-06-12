@@ -29,6 +29,7 @@ import openblocks.client.renderer.block.BlockPathRenderer;
 import openblocks.client.renderer.block.BlockRopeLadderRenderer;
 import openblocks.client.renderer.block.BlockSkyRenderer;
 import openblocks.client.renderer.block.BlockTankRenderer;
+import openblocks.client.renderer.block.BlockWorkingProjectorRenderer;
 import openblocks.client.renderer.entity.EntityCartographerRenderer;
 import openblocks.client.renderer.entity.EntityGoldenEyeRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
@@ -155,9 +156,13 @@ public class ClientProxy implements IOpenBlocksProxy {
 			final BlockRenderingHandler blockRenderingHandler = new BlockRenderingHandler(OpenBlocks.renderIdFull, true);
 
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.path, new BlockPathRenderer());
-			BlockCanvasRenderer canvasRenderer = new BlockCanvasRenderer();
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvas, canvasRenderer);
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
+
+			{
+				final BlockCanvasRenderer canvasRenderer = new BlockCanvasRenderer();
+				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvas, canvasRenderer);
+				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.canvasGlass, canvasRenderer);
+			}
+
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.paintCan, new BlockPaintCanRenderer());
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.sky, new BlockSkyRenderer());
 			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.tank, new BlockTankRenderer());
@@ -167,6 +172,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.guide, guideBlockRenderer);
 				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.builderGuide, guideBlockRenderer);
 			}
+
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.workingProjector, new BlockWorkingProjectorRenderer());
 
 			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
 		}

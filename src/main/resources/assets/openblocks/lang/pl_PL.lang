@@ -257,6 +257,7 @@ tile.openblocks.blockbreaker.name=Burzyciel blokowy
 
 tile.openblocks.projector.name=Projektor mapy wysokościowej
 #tile.openblocks.projector.description=I'll let you write this one boq! ## NEEDS TRANSLATION ##
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=Automatyczny stół do zaklęć
 #tile.openblocks.autoenchantmenttable.description=The auto enchantment table works in a similar way to the vanilla enchantment table except it runs off XP juice. Use the tabs on the right side of the interface to select where items or xp can be pulled from. Just like with the vanilla table bookshelves are required for higher levels. ## NEEDS TRANSLATION ##

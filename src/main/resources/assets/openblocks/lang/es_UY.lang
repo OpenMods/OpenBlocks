@@ -257,6 +257,7 @@ tile.openblocks.blockbreaker.description=Cuando se le aplique un pulso de redsto
 
 tile.openblocks.projector.name=Proyector de Mapas Topográficos
 tile.openblocks.projector.description=¡Te dejo escribir esta, boq!
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=Mesa de Encantamiento Automática
 tile.openblocks.autoenchantmenttable.description=La mesa de encantamiento automática funciona de forma similar a la mesa de encantamiento corriente excepto por que funciona con XP líquida. Usa las pestañas en la parte derecha de la interfaz para seleccionar de donde se cogen los objetos o la XP. Se necesitan librerías para conseguir mejores encantamientos, justo como con la mesa corriente.

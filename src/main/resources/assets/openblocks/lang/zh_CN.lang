@@ -257,6 +257,7 @@ tile.openblocks.blockbreaker.description=为方块采掘器通入红石信号,�
 
 tile.openblocks.projector.name=高度图投影仪
 tile.openblocks.projector.description=用于显示由制图机器人制作的高度图.将高度图放入投影仪内,将在其上方显示3D的全息地图.
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=自动附魔台
 tile.openblocks.autoenchantmenttable.description=自动附魔台的使用方法类似于普通附魔台,但它可以通过消耗经验来自动工作.\n在操作界面右边的设定栏可以调整输入经验或工具的面.自动附魔台也需要书架来提升自己的附魔等级上限.
