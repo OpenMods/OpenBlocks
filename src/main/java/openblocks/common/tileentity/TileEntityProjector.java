@@ -104,7 +104,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@Override
 	public void validate() {
 		super.validate();
-		this.prevId = this.mapId();
+		this.prevId = mapId();
 		inventory.onInventoryChanged(0);
 	}
 
@@ -156,15 +156,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public boolean shouldRefresh(final Block oldBlock,
-								 final Block newBlock,
-								 final int oldMeta,
-								 final int newMeta,
-								 final World world,
-								 final int x,
-								 final int y,
-								 final int z) {
-
+	public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
 		return !((oldBlock == OpenBlocks.Blocks.projector && newBlock == OpenBlocks.Blocks.workingProjector)
 				|| (oldBlock == OpenBlocks.Blocks.workingProjector && newBlock == OpenBlocks.Blocks.projector));
 	}
@@ -187,12 +179,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	public void markMapDirty() {
 		int mapId = this.mapId.get();
 		if (worldObj != null || mapId < 0) MapDataManager.instance.markDataUpdated(worldObj, mapId);
-	}
-
-	@SuppressWarnings("unused")
-	public void fetchMap() {
-		int mapId = this.mapId.get();
-		if (worldObj != null && mapId >= 0) MapDataManager.getMapData(worldObj, mapId);
 	}
 
 	@Override

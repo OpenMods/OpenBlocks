@@ -17,15 +17,15 @@ public class NEIOpenBlocksConfig implements IConfigureNEI {
 	@Override
 	public void loadConfig() {
 		if (OpenBlocks.Blocks.canvasGlass != null) {
-			this.API$hideItem(new ItemStack(OpenBlocks.Blocks.canvasGlass));
+			API$hideItem(new ItemStack(OpenBlocks.Blocks.canvasGlass));
 		}
 
 		if (OpenBlocks.Blocks.workingProjector != null) {
-			this.API$hideItem(new ItemStack(OpenBlocks.Blocks.workingProjector));
+			API$hideItem(new ItemStack(OpenBlocks.Blocks.workingProjector));
 		}
 
 		if (OpenBlocks.Items.heightMap != null) {
-			this.API$hideItem(new ItemStack(OpenBlocks.Items.heightMap, 1, OreDictionary.WILDCARD_VALUE));
+			API$hideItem(new ItemStack(OpenBlocks.Items.heightMap, 1, OreDictionary.WILDCARD_VALUE));
 		}
 
 		Log.info("OpenBlocks NEI Integration loaded successfully");

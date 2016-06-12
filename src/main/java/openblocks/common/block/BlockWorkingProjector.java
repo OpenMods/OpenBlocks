@@ -17,7 +17,7 @@ public class BlockWorkingProjector extends BlockProjector {
 
 	private static final int MIN_LIGHT_LEVEL = 0;
 	private static final int MAX_LIGHT_LEVEL = 15;
-	private static final String CONE_ICON = "openblocks:projector_cone" + (Config.renderHoloGrid ? "_grid" : "");
+	private static final String CONE_ICON = "openblocks:projector_cone" + (Config.renderHoloGrid? "_grid" : "");
 
 	@SideOnly(Side.CLIENT)
 	private IIcon coneIcon;
@@ -44,19 +44,19 @@ public class BlockWorkingProjector extends BlockProjector {
 
 	@Override
 	public Item getItem(World world, int x, int y, int z) {
-		return this.getItemDropped(0, null, 0);
+		return getItemDropped(0, null, 0);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(final IIconRegister registry) {
+	public void registerBlockIcons(IIconRegister registry) {
 		super.registerBlockIcons(registry);
 		this.coneIcon = registry.registerIcon(CONE_ICON);
 	}
 
 	@Override
-	public IIcon getIcon(final IBlockAccess world, final int x, final int y, final int z, final int side) {
-		return side >= 0?  super.getIcon(world, x, y, z, side) : this.coneIcon;
+	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+		return side >= 0? super.getIcon(world, x, y, z, side) : this.coneIcon;
 	}
 
 	@Override
@@ -65,8 +65,7 @@ public class BlockWorkingProjector extends BlockProjector {
 	}
 
 	@Override
-	public boolean canRenderInPass(final int pass) {
-		openblocks.client.renderer.block.BlockWorkingProjectorRenderer.renderPass = pass;
+	public boolean canRenderInPass(int pass) {
 		return true;
 	}
 }

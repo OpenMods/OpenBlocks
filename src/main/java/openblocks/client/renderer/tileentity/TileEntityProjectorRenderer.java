@@ -20,11 +20,6 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer {
 
 	private static ModelProjector model = new ModelProjector();
 
-	@SuppressWarnings("unused")
-	public static void reload() {
-		model = new ModelProjector();
-	}
-
 	@Override
 	public void renderTileEntityAt(final TileEntity te, final double x, final double y, final double z, final float partialTickTime) {
 		int pass = MinecraftForgeClient.getRenderPass();
@@ -38,15 +33,14 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer {
 		int mapId = projector.mapId();
 		if (pass <= 0) {
 			renderProjector(projector, partialTickTime, mapId >= 0);
-		}
-		else {
+		} else {
 			renderMap(projector, mapId);
 		}
 
 		GL11.glPopMatrix();
 	}
 
-	private void renderMap(final TileEntityProjector projector, final int mapId) {
+	private static void renderMap(final TileEntityProjector projector, final int mapId) {
 		if (projector.getWorldObj() != null) {
 			HeightMapData data = MapDataManager.getMapData(projector.getWorldObj(), mapId);
 			if (data.isValid()) {
@@ -56,7 +50,6 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private void renderProjector(final TileEntityProjector projector, final float partialTickTime, final boolean active) {
 		GL11.glTranslated(BLOCK_CENTRE_TRANSLATION / 2, BLOCK_CENTRE_TRANSLATION, BLOCK_CENTRE_TRANSLATION / 2);
 		bindTexture(TEXTURE);

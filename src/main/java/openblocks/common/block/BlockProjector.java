@@ -65,9 +65,7 @@ public class BlockProjector extends OpenBlock {
 		final int meta = world.getBlockMetadata(x, y, z);
 		if (getTileEntity(world, x, y, z, TileEntityProjector.class) == null) return;
 		changingState = true;
-		final Block block = lit && Config.litWhenDisplayingMap?
-				OpenBlocks.Blocks.workingProjector :
-				OpenBlocks.Blocks.projector;
+		final Block block = lit && Config.litWhenDisplayingMap? OpenBlocks.Blocks.workingProjector : OpenBlocks.Blocks.projector;
 		world.setBlock(x, y, z, block, meta, BlockNotifyFlags.ALL);
 		changingState = false;
 	}
