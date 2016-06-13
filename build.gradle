@@ -51,7 +51,7 @@ dependencies {
 // Grab system env
 ext.env = System.getenv()
 
-version = mc_ver + "-" + mod_version
+version = mc_version + "-" + mod_version
 
 ext.in_jenkins = false
 // Get Jenkins metadata
@@ -95,14 +95,14 @@ if (env.BUILD_NUMBER != null) {
 
 // Get Git metadata (if in Jenkins)
 ext.gitManifest = manifest {
-    if (env.GIT_BRANCH != null) {
+    if (branch != null) {
         attributes("Git-Branch": branch, "Git-Hash": hash)
     }
 }
 
 // Setup Forge plugin
 minecraft {
-    version = mc_ver + "-" + forge_ver
+    version = mc_version + "-" + forge_version
     runDir = "eclipse/assets"
 
     replaceIn 'openblocks/OpenBlocks.java'
@@ -116,12 +116,13 @@ minecraft {
 }
 
 processResources {
-    inputs.property "version", rootProject.mod_version
+    inputs.property "version", mod_version
+    inputs.property "mc_version", mc_version
 
     // Process mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         include '**/*.info'
-        expand 'version':mod_version,'MCVersion':mc_ver
+        expand 'version':mod_version, 'mc_version':mc_version
     }
 
     // Copy anything else directly

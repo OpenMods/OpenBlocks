@@ -7,7 +7,7 @@
       "name": "OpenBlocks",
       "description": "All the things you never thought you will ever need",
       "version": "${version}",
-      "mcversion": "${MCVersion}",
+      "mcversion": "${mc_version}",
       "url": "http://openmods.info/",
       "updateUrl": "",
       "authorList": [
@@ -20,14 +20,7 @@
       "logoFile": "",
       "screenshots": [
       ],
-      "parent": "",
-      "requiredMods": [
-      ],
-      "dependencies": [
-      ],
-      "dependants": [
-      ],
-      "useDependencyInformation": "false"
+      "parent": ""
     }
   ]
 }
