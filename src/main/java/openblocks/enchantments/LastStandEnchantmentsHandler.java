@@ -1,12 +1,10 @@
 package openblocks.enchantments;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Map;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.Log;
@@ -16,6 +14,7 @@ import openmods.calc.Constant;
 import openmods.calc.IExecutable;
 import openmods.calc.types.fp.DoubleCalculator;
 import openmods.config.properties.ConfigurationChange;
+import openmods.entity.PlayerDamageEvent;
 import openmods.utils.EnchantmentUtils;
 
 public class LastStandEnchantmentsHandler {
@@ -47,55 +46,49 @@ public class LastStandEnchantmentsHandler {
 		return xpRequired;
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public void onHurt(LivingHurtEvent e) {
+	@SubscribeEvent
+	public void onHurt(PlayerDamageEvent e) {
+		final int enchantmentLevels = countLastStandEnchantmentLevels(e.player);
 
-		if (e.entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)e.entityLiving;
+		if (enchantmentLevels > 0) {
+			final float playerHealth = e.player.getHealth();
+			final float healthAvailable = playerHealth - e.amount;
 
-			final int enchantmentLevels = countLastStandEnchantmentLevels(player);
+			if (healthAvailable < 1f) {
+				final int xpAvailable = EnchantmentUtils.getPlayerXP(e.player);
 
-			if (enchantmentLevels > 0) {
-				final float playerHealth = player.getHealth();
-				final float healthAvailable = playerHealth - e.ammount;
+				float xpRequired = builtInFormula(healthAvailable, enchantmentLevels);
 
-				if (healthAvailable < 1f) {
-					final int xpAvailable = EnchantmentUtils.getPlayerXP(player);
-
-					float xpRequired = builtInFormula(healthAvailable, enchantmentLevels);
-
-					if (!useBuiltIn) {
-						if (formula == null) {
-							try {
-								formula = reductionCalculator.compile(ExprType.INFIX, Config.lastStandEnchantmentFormula);
-							} catch (Exception ex) {
-								useBuiltIn = true;
-								Log.warn(ex, "Failed to compile formula %s", Config.lastStandEnchantmentFormula);
-							}
-						}
-
-						reductionCalculator.setGlobalSymbol(VAR_ENCH_LEVEL, Constant.create(Double.valueOf(enchantmentLevels)));
-						reductionCalculator.setGlobalSymbol(VAR_PLAYER_XP, Constant.create(Double.valueOf(xpAvailable)));
-						reductionCalculator.setGlobalSymbol(VAR_PLAYER_HP, Constant.create(Double.valueOf(playerHealth)));
-						reductionCalculator.setGlobalSymbol(VAR_DAMAGE, Constant.create(Double.valueOf(e.ammount)));
-
+				if (!useBuiltIn) {
+					if (formula == null) {
 						try {
-							xpRequired = reductionCalculator.executeAndPop(formula).floatValue();
+							formula = reductionCalculator.compile(ExprType.INFIX, Config.lastStandEnchantmentFormula);
 						} catch (Exception ex) {
 							useBuiltIn = true;
-							Log.warn(ex, "Failed to execute formula %s", Config.lastStandEnchantmentFormula);
+							Log.warn(ex, "Failed to compile formula %s", Config.lastStandEnchantmentFormula);
 						}
 					}
 
-					if (xpAvailable >= xpRequired) {
-						player.setHealth(1f);
-						EnchantmentUtils.addPlayerXP(player, -(int)xpRequired);
-						e.ammount = 0;
-						e.setCanceled(true);
+					reductionCalculator.setGlobalSymbol(VAR_ENCH_LEVEL, Constant.create(Double.valueOf(enchantmentLevels)));
+					reductionCalculator.setGlobalSymbol(VAR_PLAYER_XP, Constant.create(Double.valueOf(xpAvailable)));
+					reductionCalculator.setGlobalSymbol(VAR_PLAYER_HP, Constant.create(Double.valueOf(playerHealth)));
+					reductionCalculator.setGlobalSymbol(VAR_DAMAGE, Constant.create(Double.valueOf(e.amount)));
+
+					try {
+						xpRequired = reductionCalculator.executeAndPop(formula).floatValue();
+					} catch (Exception ex) {
+						useBuiltIn = true;
+						Log.warn(ex, "Failed to execute formula %s", Config.lastStandEnchantmentFormula);
 					}
 				}
-			}
 
+				if (xpAvailable >= xpRequired) {
+					e.player.setHealth(1f);
+					EnchantmentUtils.addPlayerXP(e.player, -(int)xpRequired);
+					e.amount = 0;
+					e.setCanceled(true);
+				}
+			}
 		}
 	}
 
