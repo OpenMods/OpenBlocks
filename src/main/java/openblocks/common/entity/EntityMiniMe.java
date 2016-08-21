@@ -41,7 +41,6 @@ import openmods.Log;
 import openmods.api.VisibleForDocumentation;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
-import openmods.network.event.NetworkEventManager;
 import openmods.network.event.NetworkEventMeta;
 import openmods.utils.ByteUtils;
 import openmods.utils.io.GameProfileSerializer;
@@ -179,7 +178,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	}
 
 	private void propagateOwnerChange() {
-		NetworkEventManager.INSTANCE.dispatcher().senders.entity.sendMessage(new OwnerChangeEvent(getEntityId(), owner), this);
+		new OwnerChangeEvent(getEntityId(), owner).sendToEntity(this);
 	}
 
 	private ResourceLocation getResourceLocation() {
