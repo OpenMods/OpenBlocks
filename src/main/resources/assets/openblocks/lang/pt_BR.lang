@@ -1,24 +1,24 @@
 #achievement.openblocks.droppedBrick=Zoinks! ## NEEDS TRANSLATION ##
-#achievement.openblocks.droppedBrick.desc=Sorry, it just happened... ## NEEDS TRANSLATION ##
+#achievement.openblocks.droppedBrick.desc=Eita, parece que aconteceu...
 #stat.openblocks.bricksDropped=Bricks dropped ## NEEDS TRANSLATION ##
-#achievement.openblocks.stackOverflow=Stack Overflow ## NEEDS TRANSLATION ##
-#achievement.openblocks.stackOverflow.desc=It's full of stars! ## NEEDS TRANSLATION ##
+#achievement.openblocks.stackOverflow=Stack Overflow
+#achievement.openblocks.stackOverflow.desc=Quanta estrela!
 
-#openblocks.keybind.category=OpenBlocks ## NEEDS TRANSLATION ##
+#openblocks.keybind.category=OpenBlocks
 #openblocks.keybind.drop_brick=Be silly ## NEEDS TRANSLATION ##
 
-#enchantment.openblocks.explosive=Unstable ## NEEDS TRANSLATION ##
+#enchantment.openblocks.explosive=Instável
 #enchantment.openblocks.laststand=Last Stand ## NEEDS TRANSLATION ##
 #enchantment.openblocks.flimflam=Flim Flam ## NEEDS TRANSLATION ##
 
-#openblocks.gui.blocks=Blocks ## NEEDS TRANSLATION ##
-#openblocks.gui.items=Items ## NEEDS TRANSLATION ##
-#openblocks.gui.misc=Miscellanea ## NEEDS TRANSLATION ##
-#openblocks.gui.changelogs=Changelogs ## NEEDS TRANSLATION ##
+#openblocks.gui.blocks=Blocos
+#openblocks.gui.items=Itens
+#openblocks.gui.misc=Variado
+#openblocks.gui.changelogs=Lista de alterações
 
-#openblocks.gui.features=Features ## NEEDS TRANSLATION ##
-#openblocks.gui.bugfixes=Bugfixes ## NEEDS TRANSLATION ##
-#openblocks.gui.tweaks=Tweaks ## NEEDS TRANSLATION ##
+#openblocks.gui.features=Funções
+#openblocks.gui.bugfixes=Correções de bugs
+#openblocks.gui.tweaks=Melhoria
 
 openblocks.gui.luggage=Bagagem
 openblocks.gui.sprinkler=Borrifador
@@ -30,43 +30,43 @@ openblocks.gui.autoeject=Ejetar automaticamente
 openblocks.gui.autoextract=Extrair automaticamente
 openblocks.gui.autodrink=Beber automaticamente
 openblocks.gui.autoenchantmenttable=Mesa de encantamentos automática
-#openblocks.gui.donationstation=Donation Station ## NEEDS TRANSLATION ##
-#openblocks.gui.itemdropper=Item Dropper ## NEEDS TRANSLATION ##
-#openblocks.gui.blockplacer=Block Placer ## NEEDS TRANSLATION ##
-#openblocks.gui.paintmixer=Paint Mixer ## NEEDS TRANSLATION ##
-#openblocks.gui.drawingtable=Drawing Table ## NEEDS TRANSLATION ##
+#openblocks.gui.donationstation=Estação de Doação
+#openblocks.gui.itemdropper=Jogador de Itens
+#openblocks.gui.blockplacer=Colocador de Blocos
+#openblocks.gui.paintmixer=Misturador de Tinta
+#openblocks.gui.drawingtable=Mesa de Desenho
 #openblocks.gui.digitalfuse=Digital Fuse ## NEEDS TRANSLATION ##
-#openblocks.gui.xp_outputs=XP Outputs ## NEEDS TRANSLATION ##
-#openblocks.gui.item_outputs=Item Outputs ## NEEDS TRANSLATION ##
-#openblocks.gui.max_level=Max. Level: %d ## NEEDS TRANSLATION ##
+#openblocks.gui.xp_outputs=Saídas de XP
+#openblocks.gui.item_outputs=Saídas de Itens
+#openblocks.gui.max_level=Level Máximo: %d
 #openblocks.gui.save_folder=Save folder ## NEEDS TRANSLATION ##
 
-#openblocks.gui.welcome.title=Welcome! ## NEEDS TRANSLATION ##
-#openblocks.gui.welcome.content=OpenBlocks is a new open source mod that introduces a variety of ideas into Minecraft, including hang gliders, elevators, tanks, graves, paints, cranes, liquid XP, cartographers, trophies and more! ## NEEDS TRANSLATION ##
+#openblocks.gui.welcome.title=Bem vindo!
+#openblocks.gui.welcome.content=OpenBlocks é um novo mod open-source que adiciona uma variedade de idéias ao Minecraft, incluindo asa-deltas, elevadores, tanques, túmulos, pinturas, guindastes, experiência líquida, cartógrafos, troféis e muito mais!
 
-#openblocks.gui.credits.title=Credits ## NEEDS TRANSLATION ##
-#openblocks.gui.credits.content=§LBoq, Mikee and NeverCast§R - Leading developers of OpenBlocks (are we allowed to credit ourselves?)\n\n§LSinZ and Yoshi2§R - members of the OpenMods team from the start.\n\n§LVexatos and crafteverywhere§R - Regularly translating the mods.\n\nEveryone else who has contributed to the code over the past two years.\n\n§LDirewolf20 and the rest of ForgeCraft§R - for putting up with the bugs and crashes before we release.\n\nEveryone who's done spotlights, lets plays and generally supported the mod since we started! ## NEEDS TRANSLATION ##
+#openblocks.gui.credits.title=Créditos
+#openblocks.gui.credits.content=§LBoq, Mikee e NeverCast§R - Programadores líderes do OpenBlocks (nós podemos nos dar créditos?)\n\n§LSinZ e Yoshi2§R - membros do OpenMods desde o início.\n\n§LVexatos e crafteverywhere§R - Traduzindo os mods regularmente.\n\nE mais todo mundo que contribuiu nos códigos nos últimos dois anos.\n\n§LDirewolf20 e o resto do ForgeCraft§R - por relatar os bugs e crashes antes de nós disponibilizarmos.\n\nTodo mundo que fez vídeos de apresentação, gameplays e suportou o mod desde que começamos!
 
-#openblocks.gui.config.title=Easy Config Editing ## NEEDS TRANSLATION ##
-#openblocks.gui.config.content=OpenMods allow for both client and server config options to be changed from chat commands. Some don't even require restart!\n\nServer config settings can be changed using '§L/om_config_s§R' (op needed) and client config settings can be changed using '§L/om_config_c§R'\n\nFor example:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nFor a full list of commands type: §L/help om_config_s§R or §L/help om_config_c§R ## NEEDS TRANSLATION ##
+#openblocks.gui.config.title=Edição de Configs
+#openblocks.gui.config.content=OpenMods permite que tanto configs do client ou server sejam alteradas por comandos no chat. Alguns não precisam nem de um reinício!\n\nAs configs do server podem ser mudadas usando '§L/om_config_s§R' (precisa ser OP) e configs do client podem ser alteradas usando '§L/om_config_c§R'\n\nPor exemplo:\n\n§L/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§R\n§L/om_config_s save§R\n\nPara ver a lista inteira de comandos, use: §L/help om_config_s§R ou §L/help om_config_c§R
 
-#openblocks.gui.restore_inv.title=Inventory backup ## NEEDS TRANSLATION ##
-#openblocks.gui.restore_inv.content=Everyone can make mistake. But with §L/ob_inventory§R command you can fix some of them. This command can be used to restore inventory. Backup is created when:\n - player dies\n - grave is spawned \n - player issued command §L/ob_inventory store§R\n\nTo restore inventory you need backup name. Go to folder below or to saves folder on server and look for files named §Linventory-*.dat§R. Then restore inventory with §L/ob_inventory restore <player> <id>§R - where id is either full filename or just middle part, without §Linventory-§R and §L.dat§R. You can also use tab completion. Backups are normal NBT files and can be opened with any editor. ## NEEDS TRANSLATION ##
+#openblocks.gui.restore_inv.title=Backup de Inventários
+#openblocks.gui.restore_inv.content=Todo mundo pode cometer um engano. Mas, com o comando §L/ob_inventory§R você pode corrigir alguns deles. Esse comando pode ser usado para recuperar inventários. Backups são criados quando:\n - Um player morre\n - Um túmulo é spawnado \n - O player usa o comando §L/ob_inventory store§R\n\nPara restaurar um inventário você precisa do nome do arquivo. Vá na pasta abaixo ou na pasta de saves do servidor e procure por arquivos com o nome §Linventory-*.dat§R. Então, você pode restaurá-lo usando §L/ob_inventory restore <player> <id>§R - onde ID é ou o nome inteiro do arquivo ou só a metade, sem o §Linventory-§R and §L.dat§R. Você também pode usar o tab-complete. Backups são arquivos NBT comuns e podem ser aberto com qualquer editor próprio.
 
-#openblocks.gui.bkey.title=The Infamous 'B' Key ## NEEDS TRANSLATION ##
-#openblocks.gui.bkey.content=The 'B' key is a very special key in OpenBlocks.\n\nEnabling the 'weAreSeriousPeople' config option in the 'tomfoolery' category of both the client and server config files will give you your very own digestive system.\n\nTry eating some of that tasty clay and press 'B' to digest! ## NEEDS TRANSLATION ##
+#openblocks.gui.bkey.title=A infame tecla 'B'
+#openblocks.gui.bkey.content=A tecla 'B' é uma tecla muito especial no OpenBlocks.\n\nAtivando a config 'weAreSeriousPeople' nas parte de 'tomfoolery' nos arquivos do server e client vai te dar seu próprio sistema digestivo.\n\nTente comer uma dessas deliciosas argilas e tecle 'B' para digerir!
 
-#openblocks.gui.unstable.title=Unstable Enchantment ## NEEDS TRANSLATION ##
+#openblocks.gui.unstable.title=Encantamento 'Instável'
 #openblocks.gui.unstable.content=We've had unconfirmed reports that this enchantment causes any gunpowder you're carrying to become unstable when you're attacked or when you jump off something.\n\nUse at your own risk! ## NEEDS TRANSLATION ##
 
-#openblocks.gui.flimflam.title=Flim Flam Enchantment ## NEEDS TRANSLATION ##
-#openblocks.gui.flimflam.content=Scientists have yet to discover the properties of this enchantment. ## NEEDS TRANSLATION ##
+#openblocks.gui.flimflam.title=Chama Traiçoeira
+#openblocks.gui.flimflam.content=Nenhum cientista descobriu as propriedades desse encantamento, ainda...
 
 #openblocks.gui.laststand.title=Last Stand Enchantment ## NEEDS TRANSLATION ##
 #openblocks.gui.laststand.content=The last stand enchantment uses your XP bar as a final protection against dying.\n\nWhen you reach 0.5 hearts, the game will take XP from you whenever you're damaged instead of killing you. The higher number of enchantments you have the cheaper the XP cost will be. ## NEEDS TRANSLATION ##
 
-#openblocks.changelog.title=What's new in OpenBlocks %s ## NEEDS TRANSLATION ##
-#openblocks.misc.url=URL: %s ## NEEDS TRANSLATION ##
+#openblocks.changelog.title=Quais são as novidades no OpenBlocks?
+#openblocks.misc.url=Link: %s
 openblocks.misc.type=Tipo: %s
 openblocks.misc.uses=Usa: %.2f
 openblocks.misc.color=Cor: %06X
@@ -80,37 +80,37 @@ openblocks.misc.mode.inverted_panel=Painel invertido
 openblocks.misc.mode.inverted_half_panel=Painel ao meio invertido
 openblocks.misc.mode.inverted_stairs=Escadas invertidas
 #openblocks.misc.structure_pos=Debug: found structure %s at (%d,%d,%d) ## NEEDS TRANSLATION ##
-#openblocks.misc.locked=Locked ## NEEDS TRANSLATION ##
-#openblocks.misc.selected_cannon=Selected cannon for targeting ## NEEDS TRANSLATION ##
-#openblocks.misc.pointed_cannon=Pointed cannon at %s, %s, %s ## NEEDS TRANSLATION ##
-#openblocks.misc.change_mode=Changing to %s mode ## NEEDS TRANSLATION ##
-#openblocks.misc.change_size=Changing size to %sx%sx%s ## NEEDS TRANSLATION ##
-#openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
-#openblocks.misc.total_blocks=Total block count: %d ## NEEDS TRANSLATION ##
+#openblocks.misc.locked=Travado
+#openblocks.misc.selected_cannon=Canhão selecionado na mira
+#openblocks.misc.pointed_cannon=O canhão foi mirado para %s, %s, %s
+#openblocks.misc.change_mode=Mudando para o modo %s
+#openblocks.misc.change_size=Mudando o tamanho para %sx%sx%s
+#openblocks.misc.change_box_size=Mudando o tamanho para (%d,%d,%d):(%d,%d,%d)
+#openblocks.misc.total_blocks=Número de blocos no total: %d
 #openblocks.misc.get_witched=Get witched! ## NEEDS TRANSLATION ##
-#openblocks.misc.page=Page %d of %d ## NEEDS TRANSLATION ##
-#openblocks.misc.oh_no_ceiling=You can't fall asleep here. Ceiling disturbs you too much... ## NEEDS TRANSLATION ##
-#openblocks.misc.oh_no_ground=You want to sleep on THAT!? ## NEEDS TRANSLATION ##
-#openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization ## NEEDS TRANSLATION ##
-#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
+#openblocks.misc.page=Página %d de %d
+#openblocks.misc.oh_no_ceiling=Você não pode adormecer aqui. O teto pertuba você demais!
+#openblocks.misc.oh_no_ground=Sério que você quer dormir NISSO? Meu deus.
+#openblocks.misc.sleeping_bag_broken=Item desativado devido a uma falha na inicialização.
+#openblocks.misc.inverted=Invertido
 
-#openblocks.misc.grave_msg=%s (day: %.1f) ## NEEDS TRANSLATION ##
+#openblocks.misc.grave_msg=Descanse em Paz %s (data: %.1f)
 
-#openblocks.misc.cant_restore_player=Can't restore inventory for player %s ## NEEDS TRANSLATION ##
-#openblocks.misc.cant_restore_inventory=Can't restore inventory ## NEEDS TRANSLATION ##
-#openblocks.misc.cant_store=Can't store player %s inventory ## NEEDS TRANSLATION ##
-#openblocks.misc.invalid_sub_inventory=Can't restore sub inventory %s ## NEEDS TRANSLATION ##
-#openblocks.misc.stored_inventory=Stored player inventory to %s ## NEEDS TRANSLATION ##
-#openblocks.misc.restored_inventory=Restored inventory for player %s ## NEEDS TRANSLATION ##
-#openblocks.misc.invalid_index=Invalid index ## NEEDS TRANSLATION ##
-#openblocks.misc.empty_slot=No item in slot ## NEEDS TRANSLATION ##
+#openblocks.misc.cant_restore_player=Não foi possível restaurar o inventário de %s.
+#openblocks.misc.cant_restore_inventory=Não foi possível restaurar o inventário.
+#openblocks.misc.cant_store=Não foi possível salvar o inventário de %s.
+#openblocks.misc.invalid_sub_inventory=Não foi possível restaurar o sub-inventário de %s.
+#openblocks.misc.stored_inventory=O inventário foi guardado em %s.
+#openblocks.misc.restored_inventory=O inventário de %s foi restaurado.
+#openblocks.misc.invalid_index=Índice incorreto!
+#openblocks.misc.empty_slot=Não há itens no slot!
 
-#openblocks.misc.pedometer.tracking_reset=Tracking reset ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.tracking_started=Tracking started ## NEEDS TRANSLATION ##
+#openblocks.misc.pedometer.tracking_reset=Contagem resetada
+#openblocks.misc.pedometer.tracking_started=A contagem começou
 
-#openblocks.misc.pedometer.start_point=Start point: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.speed=Speed: %s ## NEEDS TRANSLATION ##
-#openblocks.misc.pedometer.avg_speed=Average speed: %s ## NEEDS TRANSLATION ##
+#openblocks.misc.pedometer.start_point=Ponto inicial: %s
+#openblocks.misc.pedometer.speed=Velocidade: %s
+#openblocks.misc.pedometer.avg_speed=Velocidade máxima: %s
 #openblocks.misc.pedometer.total_distance=Total distance: %s ## NEEDS TRANSLATION ##
 
 #openblocks.misc.pedometer.straght_line_distance=Straight line distance: %s ## NEEDS TRANSLATION ##
