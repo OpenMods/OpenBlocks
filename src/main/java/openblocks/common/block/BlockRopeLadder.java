@@ -120,7 +120,6 @@ public class BlockRopeLadder extends OpenBlock {
 		if (y > 0) {
 			Block bottomBlock = world.getBlock(x, y, z);
 			if (bottomBlock == block) {
-				dropBlockAsItem(world, x, y, z, meta, 0);
 				world.setBlockToAir(x, y, z);
 			}
 		}
