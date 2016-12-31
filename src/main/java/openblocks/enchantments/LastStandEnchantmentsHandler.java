@@ -9,10 +9,9 @@ import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.Log;
 import openmods.calc.Calculator;
-import openmods.calc.Calculator.ExprType;
-import openmods.calc.Constant;
+import openmods.calc.ExprType;
 import openmods.calc.IExecutable;
-import openmods.calc.types.fp.DoubleCalculator;
+import openmods.calc.types.fp.DoubleCalculatorFactory;
 import openmods.config.properties.ConfigurationChange;
 import openmods.entity.PlayerDamageEvent;
 import openmods.utils.EnchantmentUtils;
@@ -24,7 +23,7 @@ public class LastStandEnchantmentsHandler {
 	private static final String VAR_PLAYER_HP = "hp";
 	private static final String VAR_DAMAGE = "dmg";
 
-	private final Calculator<Double> reductionCalculator = new DoubleCalculator();
+	private final Calculator<Double, ExprType> reductionCalculator = DoubleCalculatorFactory.createSimple();
 
 	private boolean useBuiltIn;
 	private IExecutable<Double> formula;
@@ -62,20 +61,20 @@ public class LastStandEnchantmentsHandler {
 				if (!useBuiltIn) {
 					if (formula == null) {
 						try {
-							formula = reductionCalculator.compile(ExprType.INFIX, Config.lastStandEnchantmentFormula);
+							formula = reductionCalculator.compilers.compile(ExprType.INFIX, Config.lastStandEnchantmentFormula);
 						} catch (Exception ex) {
 							useBuiltIn = true;
 							Log.warn(ex, "Failed to compile formula %s", Config.lastStandEnchantmentFormula);
 						}
 					}
 
-					reductionCalculator.setGlobalSymbol(VAR_ENCH_LEVEL, Constant.create(Double.valueOf(enchantmentLevels)));
-					reductionCalculator.setGlobalSymbol(VAR_PLAYER_XP, Constant.create(Double.valueOf(xpAvailable)));
-					reductionCalculator.setGlobalSymbol(VAR_PLAYER_HP, Constant.create(Double.valueOf(playerHealth)));
-					reductionCalculator.setGlobalSymbol(VAR_DAMAGE, Constant.create(Double.valueOf(e.amount)));
+					reductionCalculator.environment.setGlobalSymbol(VAR_ENCH_LEVEL, Double.valueOf(enchantmentLevels));
+					reductionCalculator.environment.setGlobalSymbol(VAR_PLAYER_XP, Double.valueOf(xpAvailable));
+					reductionCalculator.environment.setGlobalSymbol(VAR_PLAYER_HP, Double.valueOf(playerHealth));
+					reductionCalculator.environment.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.amount));
 
 					try {
-						xpRequired = reductionCalculator.executeAndPop(formula).floatValue();
+						xpRequired = reductionCalculator.environment.executeAndPop(formula).floatValue();
 					} catch (Exception ex) {
 						useBuiltIn = true;
 						Log.warn(ex, "Failed to execute formula %s", Config.lastStandEnchantmentFormula);
