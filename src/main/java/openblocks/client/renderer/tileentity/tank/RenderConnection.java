@@ -10,11 +10,11 @@ public class RenderConnection {
 		this.coords = coords;
 	}
 
-	public boolean check(int baseX, int baseY, int baseZ, ForgeDirection dir) {
-		return coords.check(baseX, baseY, baseZ, dir);
+	public boolean isPositionEqualTo(int baseX, int baseY, int baseZ, ForgeDirection dir) {
+		return coords.isSameAs(baseX, baseY, baseZ, dir);
 	}
 
-	public boolean check(int baseX, int baseY, int baseZ, Diagonal dir) {
-		return coords.check(baseX, baseY, baseZ, dir);
+	public boolean isPositionEqualTo(int baseX, int baseY, int baseZ, Diagonal dir) {
+		return coords.isSameAs(baseX, baseY, baseZ, dir);
 	}
 }

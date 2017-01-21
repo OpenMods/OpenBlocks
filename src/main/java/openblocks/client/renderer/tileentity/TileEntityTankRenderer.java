@@ -29,9 +29,9 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer {
 
 		if (tankTile.isInvalid()) return;
 
-		ITankRenderFluidData data = tankTile.getRenderFluidData();
+		final ITankRenderFluidData data = tankTile.getRenderFluidData();
 
-		if (data.hasFluid()) {
+		if (data != null && data.hasFluid()) {
 			bindTexture(TextureMap.locationBlocksTexture);
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);

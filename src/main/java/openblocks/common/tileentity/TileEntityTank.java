@@ -86,7 +86,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		if (worldObj.isRemote) renderLogic.clearConnections();
+		if (worldObj.isRemote) renderLogic.invalidateConnections();
 	}
 
 	protected TileEntityTank getNeighourTank(final int x, final int y, final int z) {
@@ -156,11 +156,11 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	public ITankRenderFluidData getRenderFluidData() {
-		return renderLogic;
+		return renderLogic.getTankRenderData();
 	}
 
-	public ITankConnections getRenderConnectionsData() {
-		return renderLogic;
+	public ITankConnections getTankConnections() {
+		return renderLogic.getTankConnections();
 	}
 
 	public boolean accepts(FluidStack liquid) {
@@ -306,7 +306,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
 		}
 
-		if (worldObj.isRemote) renderLogic.validateConnections();
+		if (worldObj.isRemote) renderLogic.validateConnections(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	private void tryGetNeighbor(List<TileEntityTank> result, FluidStack fluid, ForgeDirection side) {

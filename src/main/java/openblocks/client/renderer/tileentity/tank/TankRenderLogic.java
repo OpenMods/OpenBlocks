@@ -10,7 +10,167 @@ import openblocks.common.tileentity.TileEntityTank;
 import openmods.liquids.GenericTank;
 import openmods.utils.Diagonal;
 
-public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
+public class TankRenderLogic {
+
+	private static class TankConnections implements ITankConnections {
+
+		private final GenericTank tank;
+
+		private final Map<Diagonal, DiagonalConnection> diagonalConnections;
+
+		private final Map<ForgeDirection, HorizontalConnection> horizontalConnections;
+
+		private final VerticalConnection topConnection;
+
+		private final VerticalConnection bottomConnection;
+
+		public TankConnections(GenericTank tank, Map<Diagonal, DiagonalConnection> diagonalConnections, Map<ForgeDirection, HorizontalConnection> horizontalConnections, VerticalConnection topConnection, VerticalConnection bottomConnection) {
+			this.tank = tank;
+			this.diagonalConnections = diagonalConnections;
+			this.horizontalConnections = horizontalConnections;
+			this.topConnection = topConnection;
+			this.bottomConnection = bottomConnection;
+		}
+
+		@Override
+		public VerticalConnection getTopConnection() {
+			return topConnection;
+		}
+
+		@Override
+		public VerticalConnection getBottomConnection() {
+			return bottomConnection;
+		}
+
+		@Override
+		public HorizontalConnection getHorizontalConnection(ForgeDirection dir) {
+			return horizontalConnections.get(dir);
+		}
+
+		@Override
+		public DiagonalConnection getDiagonalConnection(Diagonal dir) {
+			return diagonalConnections.get(dir);
+		}
+
+		public void updateFluid(FluidStack fluidStack) {
+			for (Map.Entry<Diagonal, DiagonalConnection> e : diagonalConnections.entrySet())
+				e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
+
+			for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
+				e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
+
+			topConnection.updateBottomFluid(fluidStack, tank.getSpace() == 0);
+			bottomConnection.updateTopFluid(fluidStack);
+		}
+
+		private static boolean checkConsistency(RenderConnection connection, int x, int y, int z, ForgeDirection dir) {
+			return connection != null && connection.isPositionEqualTo(x, y, z, dir);
+		}
+
+		private static boolean checkConsistency(RenderConnection connection, int x, int y, int z, Diagonal dir) {
+			return connection != null && connection.isPositionEqualTo(x, y, z, dir);
+		}
+
+		private boolean checkHorizontalConsistency(int x, int y, int z, ForgeDirection dir) {
+			return checkConsistency(horizontalConnections.get(dir), x, y, z, dir);
+		}
+
+		private boolean checkDiagonalConsistency(int x, int y, int z, Diagonal dir) {
+			return checkConsistency(diagonalConnections.get(dir), x, y, z, dir);
+		}
+
+		public boolean checkConsistency(int x, int y, int z) {
+			return checkConsistency(topConnection, x, y, z, ForgeDirection.UP) &&
+					checkConsistency(bottomConnection, x, y, z, ForgeDirection.DOWN) &&
+					checkHorizontalConsistency(x, y, z, ForgeDirection.NORTH) &&
+					checkHorizontalConsistency(x, y, z, ForgeDirection.SOUTH) &&
+					checkHorizontalConsistency(x, y, z, ForgeDirection.EAST) &&
+					checkHorizontalConsistency(x, y, z, ForgeDirection.WEST) &&
+					checkDiagonalConsistency(x, y, z, Diagonal.NE) &&
+					checkDiagonalConsistency(x, y, z, Diagonal.NW) &&
+					checkDiagonalConsistency(x, y, z, Diagonal.SE) &&
+					checkDiagonalConsistency(x, y, z, Diagonal.SW);
+		}
+
+		public void detach() {
+			for (Map.Entry<Diagonal, DiagonalConnection> e : diagonalConnections.entrySet())
+				e.getValue().clearFluid(e.getKey().getOpposite());
+
+			for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
+				e.getValue().clearFluid(e.getKey().getOpposite());
+
+			if (topConnection != null) {
+				topConnection.clearBottomFluid();
+			}
+
+			if (bottomConnection != null) {
+				bottomConnection.clearTopFluid();
+			}
+		}
+
+	}
+
+	private static class TankRenderFluidData implements ITankRenderFluidData {
+
+		private final TankConnections connections;
+
+		private final GenericTank tank;
+
+		private final float phase;
+
+		public TankRenderFluidData(TankConnections connections, GenericTank tank, float phase) {
+			this.connections = connections;
+			this.tank = tank;
+			this.phase = phase;
+		}
+
+		private static boolean isConnected(GridConnection connection) {
+			return connection != null? connection.isConnected() : false;
+		}
+
+		@Override
+		public boolean shouldRenderFluidWall(ForgeDirection side) {
+			switch (side) {
+				case DOWN:
+					return !isConnected(connections.getBottomConnection());
+				case UP:
+					return !isConnected(connections.getTopConnection());
+				case EAST:
+				case WEST:
+				case NORTH:
+				case SOUTH: {
+					return !isConnected(connections.getHorizontalConnection(side));
+				}
+				default:
+					return true;
+			}
+		}
+
+		@Override
+		public boolean hasFluid() {
+			return tank.getFluidAmount() > 0;
+		}
+
+		@Override
+		public FluidStack getFluid() {
+			return tank.getFluid();
+		}
+
+		@Override
+		public float getCenterFluidLevel(float time) {
+			final float raw = (float)tank.getFluidAmount() / tank.getCapacity();
+			final float waving = TankRenderUtils.calculateWaveAmplitude(time, phase) + raw;
+			return TankRenderUtils.clampLevel(waving);
+		}
+
+		@Override
+		public float getCornerFluidLevel(Diagonal corner, float time) {
+			final DiagonalConnection diagonal = connections.getDiagonalConnection(corner);
+			return diagonal != null? diagonal.getRenderHeight(corner.getOpposite(), time) : getCenterFluidLevel(time);
+		}
+	}
+
+	private final GenericTank tank;
 
 	private int x;
 
@@ -20,24 +180,12 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 
 	private World world;
 
-	private final GenericTank tank;
+	private TankConnections connections;
 
-	private final Map<Diagonal, DiagonalConnection> diagonalConnections = Maps.newEnumMap(Diagonal.class);
-
-	private final Map<ForgeDirection, HorizontalConnection> horizontalConnections = Maps.newEnumMap(ForgeDirection.class);
-
-	private VerticalConnection topConnection;
-
-	private VerticalConnection bottomConnection;
-
-	private float phase;
+	private TankRenderFluidData renderData;
 
 	public TankRenderLogic(GenericTank tank) {
 		this.tank = tank;
-	}
-
-	private static boolean isConnected(GridConnection connection) {
-		return connection != null? connection.isConnected() : false;
 	}
 
 	private DoubledCoords createCoords(ForgeDirection dir) {
@@ -50,7 +198,7 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 
 	private ITankConnections getNeighbourTank(int x, int y, int z) {
 		TileEntity te = TankRenderUtils.getTileEntitySafe(world, x, y, z);
-		return (te instanceof TileEntityTank)? ((TileEntityTank)te).getRenderConnectionsData() : null;
+		return (te instanceof TileEntityTank)? ((TileEntityTank)te).getTankConnections() : null;
 	}
 
 	private ITankConnections getNeighbourTank(ForgeDirection dir) {
@@ -76,25 +224,25 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		return new DiagonalConnection(TankRenderUtils.calculatePhase(x, y, z, start), createCoords(start));
 	}
 
-	private void tryCornerConnection(ITankConnections tankCW, ITankConnections tankD, ITankConnections tankCCW, Diagonal dir) {
+	private void tryCornerConnection(Map<Diagonal, DiagonalConnection> diagonalConnections, ITankConnections tankCW, ITankConnections tankD, ITankConnections tankCCW, Diagonal dir) {
 		final DiagonalConnection connection = selectDiagonalConnection(tankCW, tankD, tankCCW, dir);
 		diagonalConnections.put(dir, connection);
 	}
 
-	private void tryHorizontalConnection(ITankConnections neighbour, ForgeDirection dir) {
+	private void tryHorizontalConnection(Map<ForgeDirection, HorizontalConnection> horizontalConnections, ITankConnections neighbour, ForgeDirection dir) {
 		final HorizontalConnection connection = (neighbour != null)? neighbour.getHorizontalConnection(dir.getOpposite()) : new HorizontalConnection(createCoords(dir));
 		horizontalConnections.put(dir, connection);
 	}
 
-	private void tryBottomConnection(ITankConnections neighbour) {
-		bottomConnection = neighbour != null? neighbour.getTopConnection() : new VerticalConnection(createCoords(ForgeDirection.DOWN));
+	private VerticalConnection tryBottomConnection(ITankConnections neighbour) {
+		return neighbour != null? neighbour.getTopConnection() : new VerticalConnection(createCoords(ForgeDirection.DOWN));
 	}
 
-	private void tryTopConnection(ITankConnections neighbour) {
-		topConnection = neighbour != null? neighbour.getBottomConnection() : new VerticalConnection(createCoords(ForgeDirection.UP));
+	private VerticalConnection tryTopConnection(ITankConnections neighbour) {
+		return neighbour != null? neighbour.getBottomConnection() : new VerticalConnection(createCoords(ForgeDirection.UP));
 	}
 
-	public void updateConnections() {
+	private TankConnections updateConnections() {
 		final ITankConnections tankN = getNeighbourTank(ForgeDirection.NORTH);
 		final ITankConnections tankS = getNeighbourTank(ForgeDirection.SOUTH);
 		final ITankConnections tankW = getNeighbourTank(ForgeDirection.WEST);
@@ -108,161 +256,65 @@ public class TankRenderLogic implements ITankConnections, ITankRenderFluidData {
 		final ITankConnections tankT = getNeighbourTank(ForgeDirection.UP);
 		final ITankConnections tankB = getNeighbourTank(ForgeDirection.DOWN);
 
-		tryTopConnection(tankT);
-		tryBottomConnection(tankB);
+		final VerticalConnection topConnection = tryTopConnection(tankT);
+		final VerticalConnection bottomConnection = tryBottomConnection(tankB);
 
-		tryHorizontalConnection(tankN, ForgeDirection.NORTH);
-		tryHorizontalConnection(tankS, ForgeDirection.SOUTH);
-		tryHorizontalConnection(tankW, ForgeDirection.WEST);
-		tryHorizontalConnection(tankE, ForgeDirection.EAST);
+		final Map<Diagonal, DiagonalConnection> diagonalConnections = Maps.newEnumMap(Diagonal.class);
 
-		tryCornerConnection(tankN, tankNW, tankW, Diagonal.NW);
-		tryCornerConnection(tankW, tankSW, tankS, Diagonal.SW);
-		tryCornerConnection(tankE, tankNE, tankN, Diagonal.NE);
-		tryCornerConnection(tankS, tankSE, tankE, Diagonal.SE);
+		final Map<ForgeDirection, HorizontalConnection> horizontalConnections = Maps.newEnumMap(ForgeDirection.class);
+
+		tryHorizontalConnection(horizontalConnections, tankN, ForgeDirection.NORTH);
+		tryHorizontalConnection(horizontalConnections, tankS, ForgeDirection.SOUTH);
+		tryHorizontalConnection(horizontalConnections, tankW, ForgeDirection.WEST);
+		tryHorizontalConnection(horizontalConnections, tankE, ForgeDirection.EAST);
+
+		tryCornerConnection(diagonalConnections, tankN, tankNW, tankW, Diagonal.NW);
+		tryCornerConnection(diagonalConnections, tankW, tankSW, tankS, Diagonal.SW);
+		tryCornerConnection(diagonalConnections, tankE, tankNE, tankN, Diagonal.NE);
+		tryCornerConnection(diagonalConnections, tankS, tankSE, tankE, Diagonal.SE);
+
+		return new TankConnections(tank, diagonalConnections, horizontalConnections, topConnection, bottomConnection);
 	}
 
 	public void initialize(World world, int x, int y, int z) {
-		this.phase = TankRenderUtils.calculatePhase(x, y, z);
-
 		this.world = world;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 
-		updateConnections();
-	}
+		if (this.connections != null) connections.detach();
 
-	public void clearConnections() {
-		for (Map.Entry<Diagonal, DiagonalConnection> e : diagonalConnections.entrySet())
-			e.getValue().clearFluid(e.getKey().getOpposite());
-
-		diagonalConnections.clear();
-
-		for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
-			e.getValue().clearFluid(e.getKey().getOpposite());
-
-		horizontalConnections.clear();
-
-		if (topConnection != null) {
-			topConnection.clearBottomFluid();
-			topConnection = null;
-		}
-
-		if (bottomConnection != null) {
-			bottomConnection.clearTopFluid();
-			bottomConnection = null;
+		if (world == null) {
+			this.connections = null;
+			this.renderData = null;
+		} else {
+			float phase = TankRenderUtils.calculatePhase(x, y, z);
+			this.connections = updateConnections();
+			this.renderData = new TankRenderFluidData(connections, tank, phase);
 		}
 	}
 
-	private boolean checkConnection(RenderConnection connection, ForgeDirection dir) {
-		return connection == null || !connection.check(x, y, z, dir);
+	public void validateConnections(World world, int x, int y, int z) {
+		if (world != this.world || connections == null || !connections.checkConsistency(x, y, z))
+			initialize(world, x, y, z);
 	}
 
-	private boolean checkConnection(RenderConnection connection, Diagonal dir) {
-		return connection == null || !connection.check(x, y, z, dir);
+	public void invalidateConnections() {
+		if (this.connections != null) connections.detach();
+		this.connections = null;
+		this.renderData = null;
 	}
 
-	private boolean checkHorizontalConnection(ForgeDirection dir) {
-		return checkConnection(horizontalConnections.get(dir), dir);
+	public void updateFluid(FluidStack stack) {
+		if (connections != null) connections.updateFluid(stack);
 	}
 
-	private boolean checkDiagonalConnection(Diagonal dir) {
-		return checkConnection(diagonalConnections.get(dir), dir);
+	public ITankRenderFluidData getTankRenderData() {
+		return renderData;
 	}
 
-	private boolean checkConnections() {
-		return checkConnection(topConnection, ForgeDirection.UP) ||
-				checkConnection(bottomConnection, ForgeDirection.DOWN) ||
-				checkConnection(topConnection, ForgeDirection.UP) ||
-				checkHorizontalConnection(ForgeDirection.NORTH) ||
-				checkHorizontalConnection(ForgeDirection.SOUTH) ||
-				checkHorizontalConnection(ForgeDirection.EAST) ||
-				checkHorizontalConnection(ForgeDirection.WEST) ||
-				checkDiagonalConnection(Diagonal.NE) ||
-				checkDiagonalConnection(Diagonal.NW) ||
-				checkDiagonalConnection(Diagonal.SE) ||
-				checkDiagonalConnection(Diagonal.SW);
-
-	}
-
-	public void validateConnections() {
-		if (checkConnections()) {
-			clearConnections();
-			updateConnections();
-		}
-	}
-
-	public void updateFluid(FluidStack fluidStack) {
-		for (Map.Entry<Diagonal, DiagonalConnection> e : diagonalConnections.entrySet())
-			e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
-
-		for (Map.Entry<ForgeDirection, HorizontalConnection> e : horizontalConnections.entrySet())
-			e.getValue().updateFluid(e.getKey().getOpposite(), fluidStack);
-
-		topConnection.updateBottomFluid(fluidStack, tank.getSpace() == 0);
-		bottomConnection.updateTopFluid(fluidStack);
-	}
-
-	@Override
-	public boolean shouldRenderFluidWall(ForgeDirection side) {
-		switch (side) {
-			case DOWN:
-				return !isConnected(bottomConnection);
-			case UP:
-				return !isConnected(topConnection);
-			case EAST:
-			case WEST:
-			case NORTH:
-			case SOUTH: {
-				return !isConnected(horizontalConnections.get(side));
-			}
-			default:
-				return true;
-		}
-	}
-
-	@Override
-	public boolean hasFluid() {
-		return tank.getFluidAmount() > 0;
-	}
-
-	@Override
-	public FluidStack getFluid() {
-		return tank.getFluid();
-	}
-
-	@Override
-	public float getCenterFluidLevel(float time) {
-		final float raw = (float)tank.getFluidAmount() / tank.getCapacity();
-		final float waving = TankRenderUtils.calculateWaveAmplitude(time, phase) + raw;
-		return TankRenderUtils.clampLevel(waving);
-	}
-
-	@Override
-	public float getCornerFluidLevel(Diagonal corner, float time) {
-		final DiagonalConnection diagonal = diagonalConnections.get(corner);
-		return diagonal != null? diagonal.getRenderHeight(corner.getOpposite(), time) : getCenterFluidLevel(time);
-	}
-
-	@Override
-	public VerticalConnection getTopConnection() {
-		return topConnection;
-	}
-
-	@Override
-	public VerticalConnection getBottomConnection() {
-		return bottomConnection;
-	}
-
-	@Override
-	public HorizontalConnection getHorizontalConnection(ForgeDirection dir) {
-		return horizontalConnections.get(dir);
-	}
-
-	@Override
-	public DiagonalConnection getDiagonalConnection(Diagonal dir) {
-		return diagonalConnections.get(dir);
+	public ITankConnections getTankConnections() {
+		return connections;
 	}
 
 }
