@@ -20,7 +20,7 @@ public class ModelTarget extends ModelBase {
 		stand1.setRotationPoint(0F, 15F, 0F);
 		stand1.setTextureSize(64, 32);
 		stand1.mirror = true;
-		setRotation(stand1, 0F, 1.570796F, 0F);
+		setRotation(stand1, 0F, (float)(Math.PI / 2), 0F);
 		target = new ModelRenderer(this, 0, 0);
 		target.addBox(-8F, -15F, -1F, 16, 15, 1);
 		target.setRotationPoint(0F, 15F, -7F);
@@ -32,7 +32,7 @@ public class ModelTarget extends ModelBase {
 		stand2.setRotationPoint(0F, 15F, 0F);
 		stand2.setTextureSize(64, 32);
 		stand2.mirror = true;
-		setRotation(stand2, 0F, 1.570796F, 0F);
+		setRotation(stand2, 0F, (float)(Math.PI / 2), 0F);
 	}
 
 	public void render(TileEntity te, float f) {

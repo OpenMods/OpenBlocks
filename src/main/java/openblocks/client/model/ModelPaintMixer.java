@@ -29,7 +29,7 @@ public class ModelPaintMixer extends ModelBase {
 		right.setRotationPoint(0F, 0F, 0F);
 		right.setTextureSize(64, 64);
 		right.mirror = true;
-		setRotation(right, 0F, 3.141593F, 0F);
+		setRotation(right, 0F, (float)Math.PI, 0F);
 		left = new ModelRenderer(this, 0, 36);
 		left.addBox(-6F, 0F, -6F, 1, 16, 12);
 		left.setRotationPoint(0F, 0F, 0F);

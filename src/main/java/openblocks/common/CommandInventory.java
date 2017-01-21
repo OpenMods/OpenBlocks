@@ -99,7 +99,7 @@ public class CommandInventory implements ICommand {
 			if (args.length != 2 && args.length != 3 && args.length != 4) throw new SyntaxErrorException();
 			final String id = args[1];
 
-			final String target = (args.length > 1)? args[2] : ID_MAIN_INVENTORY;
+			final String target = (args.length > 2)? args[2] : ID_MAIN_INVENTORY;
 
 			LoadedInventories loadedInventories = loadInventories(sender, id);
 			if (loadedInventories == null) throw new CommandException("openblocks.misc.cant_restore_inventory");
