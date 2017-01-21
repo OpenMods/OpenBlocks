@@ -26,10 +26,10 @@ import openblocks.client.renderer.block.BlockCanvasRenderer;
 import openblocks.client.renderer.block.BlockGuideRenderer;
 import openblocks.client.renderer.block.BlockPaintCanRenderer;
 import openblocks.client.renderer.block.BlockPathRenderer;
+import openblocks.client.renderer.block.BlockProjectorRenderer;
 import openblocks.client.renderer.block.BlockRopeLadderRenderer;
 import openblocks.client.renderer.block.BlockSkyRenderer;
 import openblocks.client.renderer.block.BlockTankRenderer;
-import openblocks.client.renderer.block.BlockWorkingProjectorRenderer;
 import openblocks.client.renderer.entity.EntityCartographerRenderer;
 import openblocks.client.renderer.entity.EntityGoldenEyeRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
@@ -173,7 +173,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 				blockRenderingHandler.addRenderer(OpenBlocks.Blocks.builderGuide, guideBlockRenderer);
 			}
 
-			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.workingProjector, new BlockWorkingProjectorRenderer());
+			blockRenderingHandler.addRenderer(OpenBlocks.Blocks.projector, new BlockProjectorRenderer());
 
 			RenderingRegistry.registerBlockHandler(blockRenderingHandler);
 		}

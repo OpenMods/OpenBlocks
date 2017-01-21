@@ -2,22 +2,25 @@ package openblocks.common.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import openblocks.Config;
-import openblocks.OpenBlocks;
-import openblocks.common.tileentity.TileEntityProjector;
-import openmods.utils.BlockNotifyFlags;
+import openmods.utils.ByteUtils;
 
 public class BlockProjector extends OpenBlock {
 
+	public static final int META_BIT_ACTIVE = 0;
+
 	private static final float SLAB_HEIGHT = 0.5F;
 
-	private static boolean changingState;
+	private static final int MIN_LIGHT_LEVEL = 0;
+	private static final int MAX_LIGHT_LEVEL = 15;
+	private static final String CONE_ICON = "openblocks:projector_cone" + (Config.renderHoloGrid? "_grid" : "");
+
+	@SideOnly(Side.CLIENT)
+	private IIcon coneIcon;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon sideIcon;
@@ -26,6 +29,19 @@ public class BlockProjector extends OpenBlock {
 		super(Material.iron);
 		setBlockBounds(0, 0, 0, 1, SLAB_HEIGHT, 1);
 		setRenderMode(RenderMode.BOTH);
+	}
+
+	@Override
+	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+		if (ByteUtils.get(world.getBlockMetadata(x, y, z), META_BIT_ACTIVE))
+			return Math.min(Math.max(MIN_LIGHT_LEVEL, Config.projectorLightLevelValue), MAX_LIGHT_LEVEL);
+
+		return 0;
+	}
+
+	@Override
+	public int getLightValue() {
+		return 1;
 	}
 
 	@Override
@@ -46,27 +62,26 @@ public class BlockProjector extends OpenBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(final IIconRegister registry) {
-		sideIcon = registry.registerIcon("stone_slab_side");
-		blockIcon = registry.registerIcon("stone_slab_top");
+		this.sideIcon = registry.registerIcon("stone_slab_side");
+		this.blockIcon = registry.registerIcon("stone_slab_top");
+		this.coneIcon = registry.registerIcon(CONE_ICON);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		return (side < 2)? blockIcon : sideIcon;
+		if (side < 0) return this.coneIcon;
+		if (side < 2) return blockIcon;
+		return sideIcon;
 	}
 
 	@Override
-	public void breakBlock(final World world, final int x, final int y, final int z, final Block block, final int meta) {
-		if (!changingState) super.breakBlock(world, x, y, z, block, meta);
+	public int getRenderBlockPass() {
+		return 1;
 	}
 
-	public static void update(final boolean lit, final World world, final int x, final int y, final int z) {
-		final int meta = world.getBlockMetadata(x, y, z);
-		if (getTileEntity(world, x, y, z, TileEntityProjector.class) == null) return;
-		changingState = true;
-		final Block block = lit && Config.litWhenDisplayingMap? OpenBlocks.Blocks.workingProjector : OpenBlocks.Blocks.projector;
-		world.setBlock(x, y, z, block, meta, BlockNotifyFlags.ALL);
-		changingState = false;
+	@Override
+	public boolean canRenderInPass(int pass) {
+		return true;
 	}
 }

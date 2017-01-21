@@ -3,15 +3,12 @@ package openblocks.common.tileentity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Set;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
@@ -30,10 +27,10 @@ import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.BlockNotifyFlags;
+import openmods.utils.ByteUtils;
 
 public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
-
-	private int prevId = -1;
 
 	private final GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
@@ -67,14 +64,13 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 					} else TileEntityProjector.this.mapId.set(-1);
 					sync();
 
-					if (TileEntityProjector.this.prevId != TileEntityProjector.this.mapId()) {
-						BlockProjector.update(TileEntityProjector.this.mapId() != -1,
-								TileEntityProjector.this.worldObj,
-								TileEntityProjector.this.xCoord,
-								TileEntityProjector.this.yCoord,
-								TileEntityProjector.this.zCoord);
+					final int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+					final boolean isActive = TileEntityProjector.this.mapId() >= 0;
+					final int newMeta = ByteUtils.set(meta, BlockProjector.META_BIT_ACTIVE, isActive);
+					if (newMeta != meta) {
+						worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, newMeta, BlockNotifyFlags.ALL);
+						worldObj.func_147451_t(xCoord, yCoord, zCoord);
 					}
-					TileEntityProjector.this.prevId = TileEntityProjector.this.mapId();
 				}
 
 				markUpdated();
@@ -99,13 +95,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 5, zCoord + 1);
-	}
-
-	@Override
-	public void validate() {
-		super.validate();
-		this.prevId = mapId();
-		inventory.onInventoryChanged(0);
 	}
 
 	@Override
@@ -153,12 +142,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 		int value = rotation.get() + delta;
 		rotation.set((byte)(value & 0x3));
 		sync();
-	}
-
-	@Override
-	public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
-		return !((oldBlock == OpenBlocks.Blocks.projector && newBlock == OpenBlocks.Blocks.workingProjector)
-				|| (oldBlock == OpenBlocks.Blocks.workingProjector && newBlock == OpenBlocks.Blocks.projector));
 	}
 
 	public byte rotation() {

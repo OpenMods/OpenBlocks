@@ -756,10 +756,5 @@ public class Config {
 			}
 
 		}
-
-		// Avoid crashes whenever lit projector is deactivated - TSM
-		if (OpenBlocks.Blocks.workingProjector == null) {
-			Config.litWhenDisplayingMap = false;
-		}
 	}
 }

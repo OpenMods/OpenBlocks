@@ -2,14 +2,20 @@ package openblocks.client.renderer.block;
 
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.ForgeHooksClient;
 import openblocks.Config;
-import openblocks.common.block.BlockWorkingProjector;
+import openblocks.common.block.BlockProjector;
 import openmods.renderer.IBlockRenderer;
+import openmods.tileentity.OpenTileEntity;
+import openmods.utils.ByteUtils;
+import openmods.utils.render.RenderUtils;
+import org.lwjgl.opengl.GL11;
 
-public class BlockWorkingProjectorRenderer implements IBlockRenderer<BlockWorkingProjector> {
+public class BlockProjectorRenderer implements IBlockRenderer<BlockProjector> {
 
 	private static final float TO_BLOCK_CENTRE = 0.5F;
 	private static final int BRIGHTNESS_LEVEL_MAX = 255;
@@ -19,13 +25,27 @@ public class BlockWorkingProjectorRenderer implements IBlockRenderer<BlockWorkin
 	private static final float CONE_BEGIN = Config.renderHoloGrid? 0F : 0.25F;
 	private static final float CONE_END = Config.renderHoloGrid? 1F : 0.75F;
 
+	private TileEntity renderTe;
+
 	@Override
-	public void renderInventoryBlock(BlockWorkingProjector block, int metadata, int modelID, RenderBlocks renderer) {
-		// Do nothing: Working Projector cannot be obtained in inventory
+	public void renderInventoryBlock(BlockProjector block, int metadata, int modelID, RenderBlocks renderer) {
+		if (block.shouldRenderTesrInInventory()) {
+			// duplication with default renderer, but I don't care - this code is going to die soon
+			if (renderTe == null) renderTe = block.createTileEntityForRender();
+			if (renderTe instanceof OpenTileEntity) ((OpenTileEntity)renderTe).prepareForInventoryRender(block, metadata);
+			GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
+			GL11.glPushMatrix();
+			GL11.glTranslated(-0.5, -0.5, -0.5);
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(renderTe, 0.0D, 0.0D, 0.0D, 0.0F);
+			GL11.glPopMatrix();
+			GL11.glPopAttrib();
+		}
+
+		RenderUtils.renderInventoryBlock(renderer, block, 0);
 	}
 
 	@Override
-	public boolean renderWorldBlock(final IBlockAccess world, int x, int y, int z, BlockWorkingProjector block, int modelId, RenderBlocks renderer) {
+	public boolean renderWorldBlock(final IBlockAccess world, int x, int y, int z, BlockProjector block, int modelId, RenderBlocks renderer) {
 		if (ForgeHooksClient.getWorldRenderPass() == 0) {
 			renderer.renderStandardBlock(block, x, y, z);
 			return true;
@@ -33,6 +53,9 @@ public class BlockWorkingProjectorRenderer implements IBlockRenderer<BlockWorkin
 
 		if (!Config.renderHoloCone) return false;
 		if (ForgeHooksClient.getWorldRenderPass() != 1) return false; // Just in case something breaks
+
+		final int blockMeta = world.getBlockMetadata(x, y, z);
+		if (!ByteUtils.get(blockMeta, BlockProjector.META_BIT_ACTIVE)) return false;
 
 		final Tessellator tex = Tessellator.instance;
 		tex.addTranslation(x, y + TO_BLOCK_CENTRE, z);

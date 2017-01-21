@@ -20,10 +20,6 @@ public class NEIOpenBlocksConfig implements IConfigureNEI {
 			API$hideItem(new ItemStack(OpenBlocks.Blocks.canvasGlass));
 		}
 
-		if (OpenBlocks.Blocks.workingProjector != null) {
-			API$hideItem(new ItemStack(OpenBlocks.Blocks.workingProjector));
-		}
-
 		if (OpenBlocks.Items.heightMap != null) {
 			API$hideItem(new ItemStack(OpenBlocks.Items.heightMap, 1, OreDictionary.WILDCARD_VALUE));
 		}
