@@ -255,13 +255,13 @@ public class PlayerDeathHandler {
 		}
 
 		private Coord findLocation(World world, EntityPlayer player, GravePlacementChecker checker) {
-			final int correctedY = Config.voidGraves? Math.max(posY, 1) : posY;
-
+			final int limitedPosY = Math.min(Math.max(posY, Config.minGraveY), Config.maxGraveY);
 			final int searchSize = Config.graveSpawnRange / 2;
 
 			for (Coord c : getSearchOrder(searchSize)) {
+				final int y = limitedPosY + c.y;
+				if (y > Config.maxGraveY || y < Config.minGraveY) continue;
 				final int x = posX + c.x;
-				final int y = correctedY + c.y;
 				final int z = posZ + c.z;
 				if (checker.canPlace(world, player, x, y, z)) return new Coord(x, y, z);
 			}

@@ -224,8 +224,12 @@ public class Config {
 	public static boolean graveBase = true;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "graves", name = "voidFix", comment = "Should grave try to spawn when player died by falling into void? (false -> legacy behaviour)")
-	public static boolean voidGraves = true;
+	@ConfigProperty(category = "graves", name = "minimalPosY", comment = "Minimal height where grave should be spawned (default value selected to prevent spawning in bedrock)")
+	public static int minGraveY = 6;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "graves", name = "maximalPosY", comment = "Maximal height where grave should be spawned (default value selected to prevent spawning in bedrock)")
+	public static int maxGraveY = 255 - 6;
 
 	@ConfigProperty(category = "features", name = "explosiveEnchantmentId", comment = "Id of explosive enchantment")
 	public static int explosiveEnchantmentId = 211;
