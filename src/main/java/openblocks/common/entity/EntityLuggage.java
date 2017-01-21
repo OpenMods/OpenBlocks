@@ -217,6 +217,11 @@ public class EntityLuggage extends EntityTameable implements IInventoryProvider,
 	}
 
 	@Override
+	public void setHealth(float health) {
+		// NO-OP
+	}
+
+	@Override
 	protected boolean canDespawn() {
 		return false;
 	}
