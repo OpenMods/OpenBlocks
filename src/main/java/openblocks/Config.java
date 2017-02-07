@@ -380,6 +380,10 @@ public class Config {
 	@ConfigProperty(category = "devnull", name = "sneakClickToGui", comment = "If true, /dev/null will require sneaking in addition to clicking air to open gui")
 	public static boolean devNullSneakGui = true;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "hangglider", name = "enableThermal", comment = "Enable a whole new level of hanggliding experience through thermal lift. See keybindings for acoustic vario controls")
+	public static boolean hanggliderEnableThermal = true;
+
 	public static void register() {
 		@SuppressWarnings("unchecked")
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
