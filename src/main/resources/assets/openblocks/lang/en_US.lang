@@ -6,6 +6,9 @@ achievement.openblocks.stackOverflow.desc=It's full of stars!
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Be silly
+openblocks.keybind.vario_switch=Vario on/off
+openblocks.keybind.vario_vol_up=Vario volume up
+openblocks.keybind.vario_vol_down=Vario volume down
 
 enchantment.openblocks.explosive=Unstable
 enchantment.openblocks.laststand=Last Stand

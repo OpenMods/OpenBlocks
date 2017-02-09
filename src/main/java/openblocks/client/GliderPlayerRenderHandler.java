@@ -11,7 +11,7 @@ public class GliderPlayerRenderHandler {
 	@SubscribeEvent
 	public void onPlayerBodyRender(PlayerBodyRenderEvent evt) {
 		final AbstractClientPlayer player = evt.player;
-		if (!EntityHangGlider.isGliderDeployed(player)) {
+		if (EntityHangGlider.isGliderDeployed(player)) {
 			player.limbSwing = 0f;
 			player.prevLimbSwingAmount = 0f;
 			player.limbSwingAmount = 0f;

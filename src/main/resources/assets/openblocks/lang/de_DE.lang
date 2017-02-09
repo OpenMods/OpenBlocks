@@ -6,6 +6,9 @@ achievement.openblocks.stackOverflow.desc=Es ist voller Sterne!
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Sei albern
+openblocks.keybind.vario_switch=Vario Ein/Aus
+openblocks.keybind.vario_vol_up=Vario lauter
+openblocks.keybind.vario_vol_down=Vario leiser
 
 enchantment.openblocks.explosive=Instabil
 enchantment.openblocks.laststand=Letzte Rettung
@@ -92,7 +95,7 @@ openblocks.misc.page=Seite %d von %d
 openblocks.misc.oh_no_ceiling=Du kannst hier nicht schlafen. Die Decke beunruhigt dich zu sehr...
 openblocks.misc.oh_no_ground=Auf DEM Ding willst du schlafen?!
 openblocks.misc.sleeping_bag_broken=Item inaktiv wegen fehlerhafter Initialisierung
-#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
+openblocks.misc.inverted=Invertiert
 
 openblocks.misc.grave_msg=%s (Tag: %.1f)
 
