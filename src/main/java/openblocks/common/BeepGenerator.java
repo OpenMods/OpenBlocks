@@ -1,16 +1,16 @@
 package openblocks.common;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 
 public class BeepGenerator {
 
 	private static final int SAMPLE_RATE = 128 * 1024;
-	private static final int MIN_BUFFER_AVAILABLE = (int) (SAMPLE_RATE * 64 / 1000);
+	private static final int MIN_BUFFER_AVAILABLE = SAMPLE_RATE * 64 / 1000;
 	private static final int TIMEOUT_SECONDS = 1;
 
 	private static byte volume = 8;
@@ -35,8 +35,6 @@ public class BeepGenerator {
 	private int timeout;
 
 	private SourceDataLine line;
-
-	private Thread writer;
 
 	public BeepGenerator() {
 		running = false;
@@ -78,8 +76,6 @@ public class BeepGenerator {
 
 			@Override
 			public void run() {
-				long t;
-
 				writeSample();
 				writeSample();
 
@@ -93,7 +89,7 @@ public class BeepGenerator {
 
 					// Calculate sleep in ms from buffer-surplus
 					int bufferAvailable = bufferSize - BeepGenerator.this.line.available();
-					int ms = (int) ((double) (bufferAvailable - MIN_BUFFER_AVAILABLE) / ((double) (SAMPLE_RATE) / 1000d));
+					int ms = (int)((bufferAvailable - MIN_BUFFER_AVAILABLE) / ((SAMPLE_RATE) / 1000d));
 
 					if (ms <= 8)
 						continue;
@@ -150,12 +146,12 @@ public class BeepGenerator {
 	}
 
 	private void writeSample() {
-		if (this.lastToneFrequency == 0d || this.getToneFrequency() == 0d)
-			this.lastToneFrequency = this.getToneFrequency();
-		else if (this.lastToneFrequency < this.getToneFrequency())
-			this.lastToneFrequency += Math.min(5d, this.getToneFrequency() - this.lastToneFrequency);
-		else if (this.lastToneFrequency > this.getToneFrequency())
-			this.lastToneFrequency -= Math.min(5d, this.lastToneFrequency - this.getToneFrequency());
+		if (this.lastToneFrequency == 0d || getToneFrequency() == 0d)
+			this.lastToneFrequency = getToneFrequency();
+		else if (this.lastToneFrequency < getToneFrequency())
+			this.lastToneFrequency += Math.min(5d, getToneFrequency() - this.lastToneFrequency);
+		else if (this.lastToneFrequency > getToneFrequency())
+			this.lastToneFrequency -= Math.min(5d, this.lastToneFrequency - getToneFrequency());
 
 		BeepGenerator.this.generateSample(this.lastToneFrequency);
 		line.write(BeepGenerator.this.buffer, 0, this.buffer.length);
@@ -163,7 +159,7 @@ public class BeepGenerator {
 
 	private void generateSample(double frequency) {
 
-		final int samples = (int) (SAMPLE_RATE * 16 / 1000);
+		final int samples = SAMPLE_RATE * 16 / 1000;
 		final float soundLevel = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER);
 
 		if (frequency == 0.0) {
@@ -171,32 +167,32 @@ public class BeepGenerator {
 			return;
 		}
 
-		double sinLength = (SAMPLE_RATE/frequency);
+		double sinLength = (SAMPLE_RATE / frequency);
 
-		int sinSmooth = (int) (sinLength - (int)(samples % sinLength));
+		int sinSmooth = (int)(sinLength - (int)(samples % sinLength));
 
 		this.buffer = new byte[samples + sinSmooth];
 
 		final int samplesPerBeep;
 		float vol;
 		if (getBeepFrequency() > 0) {
-			samplesPerBeep = (int) ((double) SAMPLE_RATE / getBeepFrequency());
-			vol = (byte) (this.currentlyBeeping ? this.volume : 0);
+			samplesPerBeep = (int)(SAMPLE_RATE / getBeepFrequency());
+			vol = this.currentlyBeeping? BeepGenerator.volume : 0;
 		} else {
 			samplesPerBeep = 0;
-			vol = this.volume;
+			vol = BeepGenerator.volume;
 			this.currentlyBeeping = true;
 		}
 
-		vol = (soundLevel != 0 ? Math.max((vol * soundLevel), 2) : 0);
+		vol = (soundLevel != 0? Math.max((vol * soundLevel), 2) : 0);
 
 		for (int i = 0; i < this.buffer.length; i++) {
-			this.buffer[i] = (byte) (Math.sin((2.0 * Math.PI * i) / sinLength) * vol);
+			this.buffer[i] = (byte)(Math.sin((2.0 * Math.PI * i) / sinLength) * vol);
 			samplesSinceLastBeepChange++;
 			if (samplesPerBeep > 0 && samplesSinceLastBeepChange >= samplesPerBeep) {
 				this.currentlyBeeping = !this.currentlyBeeping;
 				if (soundLevel == 0) this.currentlyBeeping = false;
-				vol = (this.currentlyBeeping ? Math.max(((float) this.volume * soundLevel), 2) : 0);
+				vol = (this.currentlyBeeping? Math.max((BeepGenerator.volume * soundLevel), 2) : 0);
 				samplesSinceLastBeepChange = 0;
 			}
 		}

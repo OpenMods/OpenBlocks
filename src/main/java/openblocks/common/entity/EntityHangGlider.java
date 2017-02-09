@@ -5,7 +5,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -16,8 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import openblocks.Config;
-import openblocks.common.item.ItemHangGlider;
 import openblocks.common.BeepGenerator;
+import openblocks.common.item.ItemHangGlider;
 import openmods.Log;
 import openmods.OpenMods;
 
@@ -85,12 +85,12 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	public static void incVarioVol() {
 		varioVolume = Math.min((varioVolume + 2), VOL_MAX);
-		BeepGenerator.setVolume((byte) varioVolume);
+		BeepGenerator.setVolume((byte)varioVolume);
 	}
 
 	public static void decVarioVol() {
 		varioVolume = Math.max((varioVolume - 2), VOL_MIN);
-		BeepGenerator.setVolume((byte) varioVolume);
+		BeepGenerator.setVolume((byte)varioVolume);
 	}
 
 	private EntityPlayer player;
@@ -102,8 +102,8 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	public EntityHangGlider(World world) {
 		super(world);
-		this.noiseGen = new NoiseGeneratorPerlin(new Random(world.getCurrentDate().get(GregorianCalendar.DAY_OF_YEAR)), 2);
-		BeepGenerator.setVolume((byte) varioVolume);
+		this.noiseGen = new NoiseGeneratorPerlin(new Random(world.getCurrentDate().get(Calendar.DAY_OF_YEAR)), 2);
+		BeepGenerator.setVolume((byte)varioVolume);
 	}
 
 	public EntityHangGlider(World world, EntityPlayer player) {
@@ -175,7 +175,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			else
 				noise = 0;
 
-			final double vspeed = (noise >= 0 ? VSPEED_MAX : -VSPEED_MIN);
+			final double vspeed = (noise >= 0? VSPEED_MAX : -VSPEED_MIN);
 
 			if (player.isSneaking()) {
 				horizontalSpeed = 0.1;
@@ -192,7 +192,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			if (isLocalPlayer()) {
 				if (varioActive) {
 					ticksSinceLastVarioUpdate++;
-					avgVspeed += verticalSpeed / (double) TICKS_PER_VARIO_UPDATE;
+					avgVspeed += verticalSpeed / TICKS_PER_VARIO_UPDATE;
 					if (ticksSinceLastVarioUpdate > TICKS_PER_VARIO_UPDATE) {
 						vario(avgVspeed);
 						ticksSinceLastVarioUpdate = 0;
@@ -218,22 +218,22 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	}
 
 	public double getNoise() {
-		double noise = (double) noiseGen.func_151601_a((float) player.posX / 20f,(float) player.posZ / 20f) / 4d;
-		final boolean strong = (noise > 0.7 ? true : false);
-		final int bonus = (strong ? THERMAL_STRONG_BONUS_HEIGTH : 0);
-		final int biomeRain = worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ).getIntRainfall();
+		double noise = noiseGen.func_151601_a((float)player.posX / 20f, (float)player.posZ / 20f) / 4d;
+		final boolean strong = (noise > 0.7? true : false);
+		final int bonus = (strong? THERMAL_STRONG_BONUS_HEIGTH : 0);
+		final int biomeRain = worldObj.getBiomeGenForCoords((int)player.posX, (int)player.posZ).getIntRainfall();
 
-		noise *= Math.min((Math.max((player.posY - (double) THERMAL_HEIGTH_MIN), 0d) / (double) (THERMAL_HEIGTH_OPT - THERMAL_HEIGTH_MIN)), 1d);
-		noise *= Math.min((Math.max(((double) (THERMAL_HEIGTH_MAX + bonus) - player.posY), 0d) / (double) (THERMAL_HEIGTH_MAX - THERMAL_HEIGTH_OPT + bonus / 4)), 1d);
+		noise *= Math.min((Math.max((player.posY - THERMAL_HEIGTH_MIN), 0d) / (THERMAL_HEIGTH_OPT - THERMAL_HEIGTH_MIN)), 1d);
+		noise *= Math.min((Math.max((THERMAL_HEIGTH_MAX + bonus - player.posY), 0d) / (THERMAL_HEIGTH_MAX - THERMAL_HEIGTH_OPT + bonus / 4)), 1d);
 
-		int worldTime = (int) (worldObj.getWorldTime() % 24000);
-		noise *= Math.min(((double) worldTime / 1000d), 1);
-		noise *= Math.min(((double) Math.max((12000 - worldTime), 0) / 1000d), 1);
+		int worldTime = (int)(worldObj.getWorldTime() % 24000);
+		noise *= Math.min((worldTime / 1000d), 1);
+		noise *= Math.min((Math.max((12000 - worldTime), 0) / 1000d), 1);
 
 		if (player.dimension != 0)
 			noise = 0;
 		else if (worldObj.isRaining() && !strong)
-			noise = (biomeRain > 0 ? -0.5 : 0);
+			noise = (biomeRain > 0? -0.5 : 0);
 		return noise;
 	}
 
@@ -278,15 +278,15 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	@SideOnly(Side.CLIENT)
 	private void vario(double vspeed) {
-		if (vspeed <= 0){
+		if (vspeed <= 0) {
 			vspeed = Math.max(VSPEED_MIN, vspeed);
-			double freq = (vspeed - VSPEED_MIN) / Math.abs(VSPEED_MIN) * (double) (FREQ_AVG - FREQ_MIN) + (double) FREQ_MIN;
+			double freq = (vspeed - VSPEED_MIN) / Math.abs(VSPEED_MIN) * (FREQ_AVG - FREQ_MIN) + FREQ_MIN;
 			beeper.setToneFrequency(freq);
 			beeper.setBeepFrequency(0d);
 		} else {
 			vspeed = Math.min(VSPEED_MAX, vspeed);
-			double freq = vspeed / Math.abs(VSPEED_MAX) * (double) (FREQ_MAX - FREQ_AVG) + (double) FREQ_AVG;
-			double beepfreq = vspeed / Math.abs(VSPEED_MAX) * (double) (BEEP_RATE_MAX - BEEP_RATE_AVG) + (double) BEEP_RATE_AVG;
+			double freq = vspeed / Math.abs(VSPEED_MAX) * (FREQ_MAX - FREQ_AVG) + FREQ_AVG;
+			double beepfreq = vspeed / Math.abs(VSPEED_MAX) * (BEEP_RATE_MAX - BEEP_RATE_AVG) + BEEP_RATE_AVG;
 			beeper.setToneFrequency(freq);
 			beeper.setBeepFrequency(beepfreq);
 		}
