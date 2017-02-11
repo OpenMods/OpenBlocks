@@ -23,6 +23,10 @@ public class Vario {
 
 	private final BeepGenerator beeper = new BeepGenerator();
 
+	{
+		setVolume(varioVolume);
+	}
+
 	private class Controller implements IVarioController {
 
 		private boolean isValid = true;
@@ -61,12 +65,16 @@ public class Vario {
 
 	public void incVolume() {
 		varioVolume = Math.min((varioVolume + 2), VOL_MAX);
-		beeper.setVolume((byte)varioVolume);
+		setVolume(varioVolume);
 	}
 
 	public void decVolume() {
 		varioVolume = Math.max((varioVolume - 2), VOL_MIN);
-		beeper.setVolume((byte)varioVolume);
+		setVolume(varioVolume);
+	}
+
+	private void setVolume(int volume) {
+		beeper.setVolume((short)(varioVolume << 8));
 	}
 
 	public void enable() {

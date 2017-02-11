@@ -10,30 +10,29 @@ import openmods.Log;
 
 public class BeepGenerator {
 
-	private static final int SAMPLE_RATE = 128 * 1024;
-	private static final int MIN_BUFFER_AVAILABLE = SAMPLE_RATE * 64 / 1000;
+	private static final int SAMPLE_RATE = 44100;
 
-	private byte volume = 8;
+	private static final int SAMPLES_PER_BUFFER = SAMPLE_RATE / 8;
 
-	public byte getVolume() {
-		return volume;
-	}
+	private static final int BYTES_PER_SAMPLE = 2;
 
-	public void setVolume(byte volume) {
-		this.volume = volume;
-	}
+	private static final int BYTES_PER_BUFFER = BYTES_PER_SAMPLE * SAMPLES_PER_BUFFER;
 
-	private byte[] buffer;
-	private int bufferSize;
-	private boolean currentlyBeeping;
+	private final byte[] scratchBuffer = new byte[BYTES_PER_BUFFER];
+
+	private static final byte[] ZERO_BUFFER = new byte[BYTES_PER_BUFFER];
+
+	private short volume = 2560;
+
 	private boolean running;
+
+	private double wavePhase;
+	private int beepPhase;
 
 	private double toneFrequency;
 	private double lastToneFrequency;
 	private double beepFrequency;
-	private int samplesSinceLastBeepChange;
-
-	private SourceDataLine line;
+	private int samplesPerBeep;
 
 	public BeepGenerator() {
 		running = false;
@@ -41,16 +40,17 @@ public class BeepGenerator {
 
 	public void start() {
 		running = true;
-		AudioFormat af = new AudioFormat(SAMPLE_RATE, 8, 1, true, true);
+		wavePhase = 0;
+		beepPhase = 0;
+
+		AudioFormat af = new AudioFormat(SAMPLE_RATE, 8 * BYTES_PER_SAMPLE, 1, true, true);
 		try {
-			this.line = AudioSystem.getSourceDataLine(af);
-			this.line.open(af, SAMPLE_RATE);
+			SourceDataLine line = AudioSystem.getSourceDataLine(af);
+			line.open(af, SAMPLE_RATE);
+			startWriter(line);
 		} catch (LineUnavailableException e) {
 			Log.warn(e, "Failed to initialize beeper");
 		}
-
-		bufferSize = this.line.getBufferSize();
-		startWriter();
 	}
 
 	public void stop() {
@@ -63,110 +63,112 @@ public class BeepGenerator {
 		return running;
 	}
 
-	private void startWriter() {
-		new Thread(new Runnable() {
+	private void startWriter(final SourceDataLine line) {
+		final Thread writerThread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				writeSample();
-				writeSample();
-
 				line.start();
 
-				int kill = 5;
+				try {
+					while (running) {
+						final int available = line.available();
 
-				while (running) {
-					writeSample();
+						if (available >= SAMPLES_PER_BUFFER)
+							writeSample(line);
 
-					// Calculate sleep in ms from buffer-surplus
-					int bufferAvailable = bufferSize - line.available();
-					int ms = (int)((bufferAvailable - MIN_BUFFER_AVAILABLE) / ((SAMPLE_RATE) / 1000d));
-
-					if (ms <= 8)
-						continue;
-
-					// Fixes a weird bug (BeepGenerator.this.line.available() returning 0)
-					if (bufferAvailable == bufferSize) {
-						line.stop();
-						while (bufferAvailable == bufferSize || bufferAvailable <= MIN_BUFFER_AVAILABLE) {
-							writeSample();
-							bufferAvailable = bufferSize - BeepGenerator.this.line.available();
+						try {
+							Thread.sleep(100); // has to be lower than SAMPLES_PER_BUFFER / SAMPLE_RATE
+						} catch (InterruptedException e) {
+							running = false;
 						}
-						line.start();
-						continue;
+
 					}
-
-					if (ms < 100)
-						kill = 5;
-
-					if (kill == 0) {
-						stop();
-					} else {
-						kill--;
-					}
-
-					try {
-						Thread.sleep(ms);
-					} catch (InterruptedException e) {
-						running = false;
-					}
-
+				} finally {
+					line.close();
 				}
-				line.close();
 			}
-		}).start();
+		});
+		writerThread.setDaemon(true);
+		writerThread.setName("Beeper thread");
+		writerThread.start();
 	}
 
-	private void writeSample() {
-		if (this.lastToneFrequency == 0d || getToneFrequency() == 0d)
-			this.lastToneFrequency = toneFrequency;
-		else if (this.lastToneFrequency < toneFrequency)
-			this.lastToneFrequency += Math.min(5d, toneFrequency - this.lastToneFrequency);
-		else if (this.lastToneFrequency > toneFrequency)
-			this.lastToneFrequency -= Math.min(5d, this.lastToneFrequency - toneFrequency);
-
-		generateSample(this.lastToneFrequency);
+	private void writeSample(SourceDataLine line) {
+		byte[] buffer = generateSamplesWithSweep(this.lastToneFrequency, this.toneFrequency);
+		this.lastToneFrequency = this.toneFrequency;
 		line.write(buffer, 0, buffer.length);
 	}
 
-	private void generateSample(double frequency) {
-		final int samples = SAMPLE_RATE * 16 / 1000;
-		final float soundLevel = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER);
+	private byte[] generateSamplesWithSweep(double f0, double f1) {
+		if (f0 == 0.0 && f1 == 0.0)
+			return ZERO_BUFFER;
 
-		if (frequency == 0.0) {
-			this.buffer = new byte[samples];
-			return;
-		}
+		final float masterSoundLevel = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER);
 
-		double sinLength = (SAMPLE_RATE / frequency);
+		if (masterSoundLevel == 0)
+			return ZERO_BUFFER;
 
-		int sinSmooth = (int)(sinLength - (int)(samples % sinLength));
+		final float amplitude = Math.max(volume * masterSoundLevel, 2);
 
-		this.buffer = new byte[samples + sinSmooth];
+		// trying to spread frequency sweep over whole sample
+		final double sweepDuration = (double)SAMPLES_PER_BUFFER / SAMPLE_RATE;
 
-		final int samplesPerBeep;
-		float vol;
-		if (getBeepFrequency() > 0) {
-			samplesPerBeep = (int)(SAMPLE_RATE / getBeepFrequency());
-			vol = this.currentlyBeeping? volume : 0;
-		} else {
-			samplesPerBeep = 0;
-			vol = volume;
-			this.currentlyBeeping = true;
-		}
+		// see 'chirp' on wiki for explanation of constants
+		final double k = (f1 - f0) / sweepDuration;
 
-		vol = (soundLevel != 0? Math.max((vol * soundLevel), 2) : 0);
+		int sampleCount = 0;
 
-		for (int i = 0; i < this.buffer.length; i++) {
-			this.buffer[i] = (byte)(Math.sin((2.0 * Math.PI * i) / sinLength) * vol);
-			samplesSinceLastBeepChange++;
-			if (samplesPerBeep > 0 && samplesSinceLastBeepChange >= samplesPerBeep) {
-				this.currentlyBeeping = !this.currentlyBeeping;
-				if (soundLevel == 0) this.currentlyBeeping = false;
-				vol = (this.currentlyBeeping? Math.max((volume * soundLevel), 2) : 0);
-				samplesSinceLastBeepChange = 0;
+		if (samplesPerBeep == 0) {
+			for (int i = 0; i < BYTES_PER_BUFFER; i += BYTES_PER_SAMPLE, sampleCount++) {
+				final short v = (short)calculateSample(amplitude, wavePhase, f0, k, sampleToRealTime(sampleCount));
+				writeShortSample(scratchBuffer, i, v);
 			}
+		} else {
+			int beepSample = beepPhase;
+			for (int i = 0; i < BYTES_PER_BUFFER; i += BYTES_PER_SAMPLE, sampleCount++) {
+				if (beepSample < samplesPerBeep) {
+					final short v = (short)calculateSample(amplitude, wavePhase, f0, k, sampleToRealTime(sampleCount));
+					writeShortSample(scratchBuffer, i, v);
+				} else {
+					scratchBuffer[i] = 0;
+					scratchBuffer[i + 1] = 0;
+				}
+
+				if (beepSample++ >= 2 * samplesPerBeep)
+					beepSample = 0;
+			}
+			beepPhase = beepSample;
 		}
+
+		wavePhase = phase(wavePhase, f0, k, sampleToRealTime(sampleCount)) % (2 * Math.PI);
+		return scratchBuffer;
+
+	}
+
+	private static void writeShortSample(byte[] buf, int i, final short v) {
+		buf[i] = (byte)(v >> 8);
+		buf[i + 1] = (byte)(v);
+	}
+
+	private static double sampleToRealTime(int sampleCount) {
+		return (double)sampleCount / SAMPLE_RATE;
+	}
+
+	private static double calculateSample(float amplitude, double phase0, double f0, double k, double t) {
+		return (short)(amplitude * Math.sin(phase(phase0, f0, k, t)));
+	}
+
+	private static double phase(double phase0, double f0, double k, double t) {
+		return phase0 + 2.0 * Math.PI * (f0 + k / 2.0 * t) * t;
+	}
+
+	public short getVolume() {
+		return volume;
+	}
+
+	public void setVolume(short volume) {
+		this.volume = volume;
 	}
 
 	public double getToneFrequency() {
@@ -183,6 +185,12 @@ public class BeepGenerator {
 
 	public void setBeepFrequency(double beepFrequency) {
 		this.beepFrequency = beepFrequency;
+
+		if (beepFrequency == 0) {
+			samplesPerBeep = 0;
+		} else {
+			samplesPerBeep = (int)(SAMPLE_RATE / beepFrequency);
+		}
 	}
 
 }
