@@ -16,35 +16,38 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import openblocks.Config;
-import openblocks.common.BeepGenerator;
+import openblocks.common.IVarioController;
+import openblocks.common.Vario;
 import openblocks.common.item.ItemHangGlider;
 import openmods.Log;
 import openmods.OpenMods;
 
 public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnData {
-	// Vario Config
-	public static boolean varioActive = false;
-	public static int varioVolume = 8;
-	public static final int VOL_MIN = 2;
-	public static final int VOL_MAX = 20;
-	public static final int FREQ_MIN = 300;
-	public static final int FREQ_AVG = 600;
-	public static final int FREQ_MAX = 2000;
-	public static final int BEEP_RATE_AVG = 4;
-	public static final int BEEP_RATE_MAX = 24;
-	public static final int TICKS_PER_VARIO_UPDATE = 4;
+
 	public static final int THERMAL_HEIGTH_MIN = 70;
 	public static final int THERMAL_HEIGTH_OPT = 110;
 	public static final int THERMAL_HEIGTH_MAX = 136;
 	public static final int THERMAL_STRONG_BONUS_HEIGTH = 100;
+
 	public static final double VSPEED_NORMAL = -0.052;
 	public static final double VSPEED_FAST = -0.176;
 	public static final double VSPEED_MIN = -0.32;
 	public static final double VSPEED_MAX = 0.4;
 
+	private static final int TICKS_PER_VARIO_UPDATE = 4;
+
+	public static final int FREQ_MIN = 300;
+	public static final int FREQ_AVG = 600;
+	public static final int FREQ_MAX = 2000;
+
+	public static final int BEEP_RATE_AVG = 4;
+	public static final int BEEP_RATE_MAX = 24;
+
 	private static final int PROPERTY_DEPLOYED = 17;
 
 	private static Map<EntityPlayer, EntityHangGlider> gliderMap = new MapMaker().weakKeys().weakValues().makeMap();
+
+	private IVarioController varioControl = IVarioController.NULL;
 
 	public static boolean isEntityHoldingGlider(Entity player) {
 		EntityHangGlider glider = gliderMap.get(player);
@@ -75,35 +78,15 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		}
 	}
 
-	public static void toggleVario() {
-		if (!varioActive) {
-			varioActive = true;
-		} else {
-			varioActive = false;
-		}
-	}
-
-	public static void incVarioVol() {
-		varioVolume = Math.min((varioVolume + 2), VOL_MAX);
-		BeepGenerator.setVolume((byte)varioVolume);
-	}
-
-	public static void decVarioVol() {
-		varioVolume = Math.max((varioVolume - 2), VOL_MIN);
-		BeepGenerator.setVolume((byte)varioVolume);
-	}
-
 	private EntityPlayer player;
 	private NoiseGeneratorPerlin noiseGen;
-	private BeepGenerator beeper;
 	private int ticksSinceLastVarioUpdate = 0;
-	private double avgVspeed = 0;
+	private double verticalMotionSinceLastVarioUpdate = 0;
 	private double lastMotionY = 0;
 
 	public EntityHangGlider(World world) {
 		super(world);
 		this.noiseGen = new NoiseGeneratorPerlin(new Random(world.getCurrentDate().get(Calendar.DAY_OF_YEAR)), 2);
-		BeepGenerator.setVolume((byte)varioVolume);
 	}
 
 	public EntityHangGlider(World world, EntityPlayer player) {
@@ -120,6 +103,10 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		if (e instanceof EntityPlayer) {
 			player = (EntityPlayer)e;
 			gliderMap.put(player, this);
+
+			if (OpenMods.proxy.isClientPlayer(player))
+				varioControl = Vario.instance.acquire();
+
 		} else {
 			setDead();
 		}
@@ -155,6 +142,8 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			return;
 		}
 
+		varioControl.keepAlive();
+
 		boolean isDeployed = !player.onGround && !player.isInWater();
 
 		if (!worldObj.isRemote) {
@@ -162,54 +151,63 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			fixPositions(player, false);
 		}
 
-		if (isLocalPlayer() && Config.hanggliderEnableThermal && beeper == null)
-			beeper = new BeepGenerator();
+		if (isDeployed) {
+			if (player.motionY < lastMotionY) {
 
-		if (isDeployed && player.motionY < lastMotionY) {
-			final double horizontalSpeed;
-			final double verticalSpeed;
-			final double noise;
+				final double noise = Config.hanggliderEnableThermal? getNoise() : 0;
 
-			if (Config.hanggliderEnableThermal)
-				noise = getNoise();
-			else
-				noise = 0;
+				final double vspeed = (noise >= 0? VSPEED_MAX : -VSPEED_MIN);
 
-			final double vspeed = (noise >= 0? VSPEED_MAX : -VSPEED_MIN);
-
-			if (player.isSneaking()) {
-				horizontalSpeed = 0.1;
-				verticalSpeed = Math.max((VSPEED_FAST + noise * vspeed), VSPEED_MIN);
-			} else {
-				horizontalSpeed = 0.03;
-				verticalSpeed = Math.max((VSPEED_NORMAL + noise * vspeed), VSPEED_MIN);
-			}
-
-			player.motionY = verticalSpeed;
-			motionY = verticalSpeed;
-			lastMotionY = verticalSpeed;
-
-			if (isLocalPlayer()) {
-				if (varioActive) {
-					ticksSinceLastVarioUpdate++;
-					avgVspeed += verticalSpeed / TICKS_PER_VARIO_UPDATE;
-					if (ticksSinceLastVarioUpdate > TICKS_PER_VARIO_UPDATE) {
-						vario(avgVspeed);
-						ticksSinceLastVarioUpdate = 0;
-						avgVspeed = 0;
-					}
+				final double horizontalSpeed;
+				final double verticalSpeed;
+				if (player.isSneaking()) {
+					horizontalSpeed = 0.1;
+					verticalSpeed = Math.max((VSPEED_FAST + noise * vspeed), VSPEED_MIN);
 				} else {
-					stopVario();
+					horizontalSpeed = 0.03;
+					verticalSpeed = Math.max((VSPEED_NORMAL + noise * vspeed), VSPEED_MIN);
 				}
-			}
 
-			double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
-			double z = Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
-			player.motionX += x;
-			player.motionZ += z;
-			player.fallDistance = 0f; /* Don't like getting hurt :( */
-		} else if (isLocalPlayer() && varioActive) {
-			stopVario();
+				player.motionY = verticalSpeed;
+				motionY = verticalSpeed;
+				lastMotionY = verticalSpeed;
+
+				if (varioControl.isValid()) {
+					ticksSinceLastVarioUpdate++;
+					verticalMotionSinceLastVarioUpdate += verticalSpeed; // * 1 tick, for unit freaks
+					if (ticksSinceLastVarioUpdate > TICKS_PER_VARIO_UPDATE) {
+						updateVario(verticalMotionSinceLastVarioUpdate / TICKS_PER_VARIO_UPDATE);
+						ticksSinceLastVarioUpdate = 0;
+						verticalMotionSinceLastVarioUpdate = 0;
+					}
+				}
+
+				double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
+				double z = Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
+				player.motionX += x;
+				player.motionZ += z;
+				player.fallDistance = 0f; // Don't like getting hurt :( -- Mikee, probably
+			}
+		} else {
+			if (varioControl.isValid()) {
+				updateVario(0); // well, our vertical velocity is zero, right?
+				ticksSinceLastVarioUpdate = 0;
+				verticalMotionSinceLastVarioUpdate = 0;
+			}
+		}
+
+	}
+
+	private void updateVario(double vspeed) {
+		if (vspeed <= 0) {
+			vspeed = Math.max(VSPEED_MIN, vspeed);
+			double freq = (vspeed - VSPEED_MIN) / Math.abs(VSPEED_MIN) * (FREQ_AVG - FREQ_MIN) + FREQ_MIN;
+			varioControl.setFrequencies(freq, 0);
+		} else {
+			vspeed = Math.min(VSPEED_MAX, vspeed);
+			double freq = vspeed / Math.abs(VSPEED_MAX) * (FREQ_MAX - FREQ_AVG) + FREQ_AVG;
+			double beepfreq = vspeed / Math.abs(VSPEED_MAX) * (BEEP_RATE_MAX - BEEP_RATE_AVG) + BEEP_RATE_AVG;
+			varioControl.setFrequencies(freq, beepfreq);
 		}
 	}
 
@@ -241,8 +239,13 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	public void setDead() {
 		super.setDead();
 		gliderMap.remove(player);
-		if (isLocalPlayer())
-			stopVario();
+
+		if (varioControl.isValid()) {
+			varioControl.kill();
+			varioControl.release();
+			ticksSinceLastVarioUpdate = 0;
+			verticalMotionSinceLastVarioUpdate = 0;
+		}
 	}
 
 	private void fixPositions(EntityPlayer thePlayer, boolean localPlayer) {
@@ -270,41 +273,6 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		this.motionX = this.posX - this.prevPosX;
 		this.motionY = this.posY - this.prevPosY;
 		this.motionZ = this.posZ - this.prevPosZ;
-	}
-
-	private boolean isLocalPlayer() {
-		return worldObj.isRemote && OpenMods.proxy.isClientPlayer(player);
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void vario(double vspeed) {
-		if (vspeed <= 0) {
-			vspeed = Math.max(VSPEED_MIN, vspeed);
-			double freq = (vspeed - VSPEED_MIN) / Math.abs(VSPEED_MIN) * (FREQ_AVG - FREQ_MIN) + FREQ_MIN;
-			beeper.setToneFrequency(freq);
-			beeper.setBeepFrequency(0d);
-		} else {
-			vspeed = Math.min(VSPEED_MAX, vspeed);
-			double freq = vspeed / Math.abs(VSPEED_MAX) * (FREQ_MAX - FREQ_AVG) + FREQ_AVG;
-			double beepfreq = vspeed / Math.abs(VSPEED_MAX) * (BEEP_RATE_MAX - BEEP_RATE_AVG) + BEEP_RATE_AVG;
-			beeper.setToneFrequency(freq);
-			beeper.setBeepFrequency(beepfreq);
-		}
-		if (beeper.isRunning()) {
-			beeper.keepAlive();
-		} else {
-			beeper.start();
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void stopVario() {
-		if (beeper != null) {
-			beeper.stop();
-			beeper = null;
-		}
-		ticksSinceLastVarioUpdate = 0;
-		avgVspeed = 0;
 	}
 
 	@Override

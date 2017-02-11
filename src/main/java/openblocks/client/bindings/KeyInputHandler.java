@@ -7,7 +7,7 @@ import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import openblocks.Config;
-import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.Vario;
 import openblocks.events.PlayerActionEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -53,19 +53,19 @@ public class KeyInputHandler {
 		} else brickKeyPressed = false;
 		if (varioSwitchBinding != null && varioSwitchBinding.isPressed()) {
 			if (!varioSwitchKeyPressed) {
-				EntityHangGlider.toggleVario();
+				Vario.instance.toggle();
 				varioSwitchKeyPressed = true;
 			}
 		} else varioSwitchKeyPressed = false;
 		if (varioVolUpBinding != null && varioVolUpBinding.isPressed()) {
 			if (!varioVolUpKeyPressed) {
-				EntityHangGlider.incVarioVol();
+				Vario.instance.incVolume();
 				varioVolUpKeyPressed = true;
 			}
 		} else varioVolUpKeyPressed = false;
 		if (varioVolDownBinding != null && varioVolDownBinding.isPressed()) {
 			if (!varioVolDownKeyPressed) {
-				EntityHangGlider.decVarioVol();
+				Vario.instance.decVolume();
 				varioVolDownKeyPressed = true;
 			}
 		} else varioVolDownKeyPressed = false;

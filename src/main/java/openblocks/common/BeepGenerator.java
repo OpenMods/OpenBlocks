@@ -6,21 +6,21 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
+import openmods.Log;
 
 public class BeepGenerator {
 
 	private static final int SAMPLE_RATE = 128 * 1024;
 	private static final int MIN_BUFFER_AVAILABLE = SAMPLE_RATE * 64 / 1000;
-	private static final int TIMEOUT_SECONDS = 1;
 
-	private static byte volume = 8;
+	private byte volume = 8;
 
-	public static byte getVolume() {
+	public byte getVolume() {
 		return volume;
 	}
 
-	public static void setVolume(byte volume) {
-		BeepGenerator.volume = volume;
+	public void setVolume(byte volume) {
+		this.volume = volume;
 	}
 
 	private byte[] buffer;
@@ -32,7 +32,6 @@ public class BeepGenerator {
 	private double lastToneFrequency;
 	private double beepFrequency;
 	private int samplesSinceLastBeepChange;
-	private int timeout;
 
 	private SourceDataLine line;
 
@@ -42,29 +41,22 @@ public class BeepGenerator {
 
 	public void start() {
 		running = true;
-		timeout = TIMEOUT_SECONDS * 10;
-
 		AudioFormat af = new AudioFormat(SAMPLE_RATE, 8, 1, true, true);
 		try {
 			this.line = AudioSystem.getSourceDataLine(af);
 			this.line.open(af, SAMPLE_RATE);
 		} catch (LineUnavailableException e) {
-			e.printStackTrace();
+			Log.warn(e, "Failed to initialize beeper");
 		}
-		bufferSize = this.line.getBufferSize();
 
+		bufferSize = this.line.getBufferSize();
 		startWriter();
-		startTimeout();
 	}
 
 	public void stop() {
-		timeout = 0;
+		running = false;
 		setToneFrequency(0d);
 		setBeepFrequency(0d);
-	}
-
-	public void keepAlive() {
-		timeout = TIMEOUT_SECONDS * 10;
 	}
 
 	public boolean isRunning() {
@@ -79,16 +71,15 @@ public class BeepGenerator {
 				writeSample();
 				writeSample();
 
-				BeepGenerator.this.line.start();
+				line.start();
 
 				int kill = 5;
 
-				while (BeepGenerator.this.running) {
-
+				while (running) {
 					writeSample();
 
 					// Calculate sleep in ms from buffer-surplus
-					int bufferAvailable = bufferSize - BeepGenerator.this.line.available();
+					int bufferAvailable = bufferSize - line.available();
 					int ms = (int)((bufferAvailable - MIN_BUFFER_AVAILABLE) / ((SAMPLE_RATE) / 1000d));
 
 					if (ms <= 8)
@@ -96,12 +87,12 @@ public class BeepGenerator {
 
 					// Fixes a weird bug (BeepGenerator.this.line.available() returning 0)
 					if (bufferAvailable == bufferSize) {
-						BeepGenerator.this.line.stop();
+						line.stop();
 						while (bufferAvailable == bufferSize || bufferAvailable <= MIN_BUFFER_AVAILABLE) {
 							writeSample();
 							bufferAvailable = bufferSize - BeepGenerator.this.line.available();
 						}
-						BeepGenerator.this.line.start();
+						line.start();
 						continue;
 					}
 
@@ -117,48 +108,28 @@ public class BeepGenerator {
 					try {
 						Thread.sleep(ms);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						running = false;
 					}
 
 				}
-				BeepGenerator.this.line.close();
-			}
-		}).start();
-	}
-
-	private void startTimeout() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				while (BeepGenerator.this.running) {
-					BeepGenerator.this.timeout--;
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					if (BeepGenerator.this.timeout <= 0)
-						BeepGenerator.this.running = false;
-				}
+				line.close();
 			}
 		}).start();
 	}
 
 	private void writeSample() {
 		if (this.lastToneFrequency == 0d || getToneFrequency() == 0d)
-			this.lastToneFrequency = getToneFrequency();
-		else if (this.lastToneFrequency < getToneFrequency())
-			this.lastToneFrequency += Math.min(5d, getToneFrequency() - this.lastToneFrequency);
-		else if (this.lastToneFrequency > getToneFrequency())
-			this.lastToneFrequency -= Math.min(5d, this.lastToneFrequency - getToneFrequency());
+			this.lastToneFrequency = toneFrequency;
+		else if (this.lastToneFrequency < toneFrequency)
+			this.lastToneFrequency += Math.min(5d, toneFrequency - this.lastToneFrequency);
+		else if (this.lastToneFrequency > toneFrequency)
+			this.lastToneFrequency -= Math.min(5d, this.lastToneFrequency - toneFrequency);
 
-		BeepGenerator.this.generateSample(this.lastToneFrequency);
-		line.write(BeepGenerator.this.buffer, 0, this.buffer.length);
+		generateSample(this.lastToneFrequency);
+		line.write(buffer, 0, buffer.length);
 	}
 
 	private void generateSample(double frequency) {
-
 		final int samples = SAMPLE_RATE * 16 / 1000;
 		final float soundLevel = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER);
 
@@ -177,10 +148,10 @@ public class BeepGenerator {
 		float vol;
 		if (getBeepFrequency() > 0) {
 			samplesPerBeep = (int)(SAMPLE_RATE / getBeepFrequency());
-			vol = this.currentlyBeeping? BeepGenerator.volume : 0;
+			vol = this.currentlyBeeping? volume : 0;
 		} else {
 			samplesPerBeep = 0;
-			vol = BeepGenerator.volume;
+			vol = volume;
 			this.currentlyBeeping = true;
 		}
 
@@ -192,7 +163,7 @@ public class BeepGenerator {
 			if (samplesPerBeep > 0 && samplesSinceLastBeepChange >= samplesPerBeep) {
 				this.currentlyBeeping = !this.currentlyBeeping;
 				if (soundLevel == 0) this.currentlyBeeping = false;
-				vol = (this.currentlyBeeping? Math.max((BeepGenerator.volume * soundLevel), 2) : 0);
+				vol = (this.currentlyBeeping? Math.max((volume * soundLevel), 2) : 0);
 				samplesSinceLastBeepChange = 0;
 			}
 		}
