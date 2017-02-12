@@ -29,8 +29,8 @@ public class BeepGenerator {
 	private double wavePhase;
 	private int beepPhase;
 
+	private double targetToneFrequency;
 	private double toneFrequency;
-	private double lastToneFrequency;
 	private double beepFrequency;
 	private int samplesPerBeep;
 
@@ -95,8 +95,17 @@ public class BeepGenerator {
 	}
 
 	private void writeSample(SourceDataLine line) {
-		byte[] buffer = generateSamplesWithSweep(this.lastToneFrequency, this.toneFrequency);
-		this.lastToneFrequency = this.toneFrequency;
+		double lastToneFrequency = this.toneFrequency;
+		if (this.toneFrequency == 0d || this.targetToneFrequency == 0d) {
+			this.toneFrequency = targetToneFrequency;
+			lastToneFrequency = targetToneFrequency;
+		}
+		else if (this.toneFrequency < targetToneFrequency)
+			this.toneFrequency += Math.min(50d, targetToneFrequency - this.toneFrequency);
+		else if (this.toneFrequency > targetToneFrequency)
+			this.toneFrequency -= Math.min(50d, this.toneFrequency - targetToneFrequency);
+
+		byte[] buffer = generateSamplesWithSweep(lastToneFrequency, this.toneFrequency);
 		line.write(buffer, 0, buffer.length);
 	}
 
@@ -176,7 +185,7 @@ public class BeepGenerator {
 	}
 
 	public void setToneFrequency(double frequency) {
-		this.toneFrequency = frequency;
+		this.targetToneFrequency = frequency;
 	}
 
 	public double getBeepFrequency() {
