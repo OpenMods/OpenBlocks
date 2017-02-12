@@ -190,7 +190,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			}
 		} else {
 			if (varioControl.isValid()) {
-				updateVario(0); // well, our vertical velocity is zero, right?
+				varioControl.setFrequencies(0, 0);
 				ticksSinceLastVarioUpdate = 0;
 				verticalMotionSinceLastVarioUpdate = 0;
 			}

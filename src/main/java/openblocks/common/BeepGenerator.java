@@ -18,6 +18,10 @@ public class BeepGenerator {
 
 	private static final int BYTES_PER_BUFFER = BYTES_PER_SAMPLE * SAMPLES_PER_BUFFER;
 
+	private static final double BUFFER_DURATION = (double)SAMPLES_PER_BUFFER / SAMPLE_RATE;
+
+	private static final double FREQUENCY_MAX_CHANGE_PER_BUFFER_DURATION = 50.0;
+
 	private final byte[] scratchBuffer = new byte[BYTES_PER_BUFFER];
 
 	private static final byte[] ZERO_BUFFER = new byte[BYTES_PER_BUFFER];
@@ -30,7 +34,7 @@ public class BeepGenerator {
 	private int beepPhase;
 
 	private double toneFrequency;
-	private double lastToneFrequency;
+	private double targetToneFrequency;
 	private double beepFrequency;
 	private int samplesPerBeep;
 
@@ -55,7 +59,7 @@ public class BeepGenerator {
 
 	public void stop() {
 		running = false;
-		setToneFrequency(0d);
+		setTargetToneFrequency(0d);
 		setBeepFrequency(0d);
 	}
 
@@ -95,9 +99,26 @@ public class BeepGenerator {
 	}
 
 	private void writeSample(SourceDataLine line) {
-		byte[] buffer = generateSamplesWithSweep(this.lastToneFrequency, this.toneFrequency);
-		this.lastToneFrequency = this.toneFrequency;
+		final double lastToneFrequency;
+
+		if (this.toneFrequency == 0d || this.targetToneFrequency == 0d) {
+			lastToneFrequency = this.targetToneFrequency;
+			this.toneFrequency = this.targetToneFrequency;
+		} else {
+			lastToneFrequency = this.toneFrequency;
+			final double delta = this.targetToneFrequency - this.toneFrequency;
+			this.toneFrequency += limit(delta, FREQUENCY_MAX_CHANGE_PER_BUFFER_DURATION);
+		}
+
+		byte[] buffer = generateSamplesWithSweep(lastToneFrequency, this.toneFrequency);
 		line.write(buffer, 0, buffer.length);
+	}
+
+	private static double limit(double value, double limit) {
+		if (value < 0)
+			return Math.max(value, -limit);
+		else
+			return Math.min(value, limit);
 	}
 
 	private byte[] generateSamplesWithSweep(double f0, double f1) {
@@ -111,8 +132,7 @@ public class BeepGenerator {
 
 		final float amplitude = Math.max(volume * masterSoundLevel, 2);
 
-		// trying to spread frequency sweep over whole sample
-		final double sweepDuration = (double)SAMPLES_PER_BUFFER / SAMPLE_RATE;
+		final double sweepDuration = BUFFER_DURATION;
 
 		// see 'chirp' on wiki for explanation of constants
 		final double k = (f1 - f0) / sweepDuration;
@@ -175,8 +195,12 @@ public class BeepGenerator {
 		return toneFrequency;
 	}
 
-	public void setToneFrequency(double frequency) {
-		this.toneFrequency = frequency;
+	public double getTargetToneFrequency() {
+		return this.targetToneFrequency;
+	}
+
+	public void setTargetToneFrequency(double frequency) {
+		this.targetToneFrequency = frequency;
 	}
 
 	public double getBeepFrequency() {

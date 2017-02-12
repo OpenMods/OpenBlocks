@@ -15,6 +15,8 @@ public class Vario {
 
 	private boolean isAlive;
 
+	private boolean isEnabled;
+
 	private IVarioController activeController = IVarioController.NULL;
 
 	private int watchdogMissedTicks;
@@ -34,7 +36,7 @@ public class Vario {
 		@Override
 		public void setFrequencies(double toneFrequency, double beepFrequency) {
 			if (isValid) {
-				beeper.setToneFrequency(toneFrequency);
+				beeper.setTargetToneFrequency(toneFrequency);
 				beeper.setBeepFrequency(beepFrequency);
 			}
 		}
@@ -42,14 +44,13 @@ public class Vario {
 		@Override
 		public void keepAlive() {
 			if (isValid)
-				watchdogMissedTicks = 0;
+				resetWatchdog();
 		}
 
 		@Override
 		public void kill() {
-			if (isValid) {
+			if (isValid)
 				isAlive = false;
-			}
 		}
 
 		@Override
@@ -78,30 +79,19 @@ public class Vario {
 	}
 
 	public void enable() {
-		// no point in activating, if nothing feeds us data
-		if (activeController.isValid()) {
-			isAlive = true;
-			watchdogMissedTicks = 0;
-
-			if (watchdogThread == null || !watchdogThread.isAlive())
-				watchdogThread = startWatchdog();
-		}
+		isEnabled = true;
 	}
 
 	public void disable() {
-		isAlive = false;
+		isEnabled = false;
 	}
 
 	public boolean isEnabled() {
-		return isAlive;
+		return isEnabled;
 	}
 
 	public void toggle() {
-		if (isAlive) {
-			disable();
-		} else {
-			enable();
-		}
+		isEnabled = !isEnabled;
 	}
 
 	public IVarioController acquire() {
@@ -111,14 +101,26 @@ public class Vario {
 		return (activeController = new Controller());
 	}
 
+	private void resetWatchdog() {
+		if (isEnabled) {
+			watchdogMissedTicks = 0;
+
+			if (watchdogThread == null || !watchdogThread.isAlive()) {
+				watchdogThread = startWatchdog();
+			}
+		}
+	}
+
 	private Thread startWatchdog() {
+		isAlive = true;
+
 		final Thread watchdogThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				beeper.start();
 
 				try {
-					while (isAlive) {
+					while (isAlive && isEnabled) {
 						if (watchdogMissedTicks++ > WATCHDOG_TIMEOUT_TICKS)
 							break;
 
