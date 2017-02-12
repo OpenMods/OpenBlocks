@@ -28,8 +28,6 @@ public class BeepGenerator {
 
 	private short volume = 2560;
 
-	private boolean running;
-
 	private double wavePhase;
 	private int beepPhase;
 
@@ -38,64 +36,78 @@ public class BeepGenerator {
 	private double beepFrequency;
 	private int samplesPerBeep;
 
-	public BeepGenerator() {
-		running = false;
-	}
+	private class WriterThread extends Thread {
 
-	public void start() {
-		running = true;
-		wavePhase = 0;
-		beepPhase = 0;
+		private final SourceDataLine line;
 
-		AudioFormat af = new AudioFormat(SAMPLE_RATE, 8 * BYTES_PER_SAMPLE, 1, true, true);
-		try {
-			SourceDataLine line = AudioSystem.getSourceDataLine(af);
-			line.open(af, SAMPLE_RATE);
-			startWriter(line);
-		} catch (LineUnavailableException e) {
-			Log.warn(e, "Failed to initialize beeper");
+		private boolean running = true;
+
+		public WriterThread(SourceDataLine line) {
+			this.line = line;
+			setDaemon(true);
+			setName("Beeper thread");
+		}
+
+		@Override
+		public void run() {
+			line.start();
+
+			try {
+				while (running) {
+					final int available = line.available();
+
+					if (available >= SAMPLES_PER_BUFFER)
+						writeSample(line);
+
+					try {
+						Thread.sleep(100); // has to be lower than SAMPLES_PER_BUFFER / SAMPLE_RATE
+					} catch (InterruptedException e) {
+						running = false;
+					}
+				}
+			} finally {
+				running = false;
+				line.close();
+			}
+		}
+
+		public boolean isShuttingDown() {
+			return !running;
+		}
+
+		public void shutdown() {
+			running = false;
 		}
 	}
 
-	public void stop() {
-		running = false;
+	private WriterThread writerThread;
+
+	public synchronized void start() {
+		wavePhase = 0;
+		beepPhase = 0;
+
+		if (!isRunning()) {
+			final AudioFormat af = new AudioFormat(SAMPLE_RATE, 8 * BYTES_PER_SAMPLE, 1, true, true);
+			try {
+				SourceDataLine line = AudioSystem.getSourceDataLine(af);
+				line.open(af, SAMPLE_RATE);
+				writerThread = new WriterThread(line);
+				writerThread.start();
+			} catch (LineUnavailableException e) {
+				Log.warn(e, "Failed to initialize beeper");
+				if (writerThread != null) writerThread.shutdown();
+			}
+		}
+	}
+
+	public synchronized void stop() {
+		if (writerThread != null) writerThread.shutdown();
 		setTargetToneFrequency(0d);
 		setBeepFrequency(0d);
 	}
 
-	public boolean isRunning() {
-		return running;
-	}
-
-	private void startWriter(final SourceDataLine line) {
-		final Thread writerThread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				line.start();
-
-				try {
-					while (running) {
-						final int available = line.available();
-
-						if (available >= SAMPLES_PER_BUFFER)
-							writeSample(line);
-
-						try {
-							Thread.sleep(100); // has to be lower than SAMPLES_PER_BUFFER / SAMPLE_RATE
-						} catch (InterruptedException e) {
-							running = false;
-						}
-
-					}
-				} finally {
-					line.close();
-				}
-			}
-		});
-		writerThread.setDaemon(true);
-		writerThread.setName("Beeper thread");
-		writerThread.start();
+	public synchronized boolean isRunning() {
+		return writerThread != null && writerThread.isAlive() && !writerThread.isShuttingDown();
 	}
 
 	private void writeSample(SourceDataLine line) {

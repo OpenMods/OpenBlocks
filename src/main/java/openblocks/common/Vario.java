@@ -13,15 +13,11 @@ public class Vario {
 
 	private int varioVolume = 8;
 
-	private boolean isAlive;
-
 	private boolean isEnabled;
 
 	private IVarioController activeController = IVarioController.NULL;
 
-	private int watchdogMissedTicks;
-
-	private Thread watchdogThread;
+	private WatchdogThread watchdogThread;
 
 	private final BeepGenerator beeper = new BeepGenerator();
 
@@ -42,15 +38,15 @@ public class Vario {
 		}
 
 		@Override
-		public void keepAlive() {
+		public synchronized void keepAlive() {
 			if (isValid)
 				resetWatchdog();
 		}
 
 		@Override
-		public void kill() {
+		public synchronized void kill() {
 			if (isValid)
-				isAlive = false;
+				if (watchdogThread != null) watchdogThread.shutdown();
 		}
 
 		@Override
@@ -61,6 +57,53 @@ public class Vario {
 		@Override
 		public void release() {
 			isValid = false;
+		}
+	}
+
+	private class WatchdogThread extends Thread {
+
+		private boolean isAlive = true;
+		private int watchdogMissedTicks;
+
+		public WatchdogThread() {
+			setName("Vario watchdog");
+			setDaemon(true);
+		}
+
+		@Override
+		public void run() {
+			try {
+				while (isAlive && isEnabled) {
+					if (watchdogMissedTicks++ > WATCHDOG_TIMEOUT_TICKS) {
+						isAlive = false;
+						break;
+					}
+
+					if (!beeper.isRunning()) beeper.start();
+
+					try {
+						Thread.sleep(WATCHDOG_PERIOD);
+					} catch (InterruptedException e) {
+						isAlive = false;
+						break;
+					}
+				}
+			} finally {
+				beeper.stop();
+				isAlive = false;
+			}
+		}
+
+		public boolean isShuttingDown() {
+			return !isAlive || !isEnabled;
+		}
+
+		public void shutdown() {
+			isAlive = false;
+		}
+
+		public void ping() {
+			watchdogMissedTicks = 0;
 		}
 	}
 
@@ -103,44 +146,12 @@ public class Vario {
 
 	private void resetWatchdog() {
 		if (isEnabled) {
-			watchdogMissedTicks = 0;
-
-			if (watchdogThread == null || !watchdogThread.isAlive()) {
-				watchdogThread = startWatchdog();
+			if (watchdogThread == null || !watchdogThread.isAlive() || watchdogThread.isShuttingDown()) {
+				watchdogThread = new WatchdogThread();
+				watchdogThread.start();
+			} else if (watchdogThread != null) {
+				watchdogThread.ping();
 			}
 		}
-	}
-
-	private Thread startWatchdog() {
-		isAlive = true;
-
-		final Thread watchdogThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				beeper.start();
-
-				try {
-					while (isAlive && isEnabled) {
-						if (watchdogMissedTicks++ > WATCHDOG_TIMEOUT_TICKS)
-							break;
-
-						try {
-							Thread.sleep(WATCHDOG_PERIOD);
-						} catch (InterruptedException e) {
-							break;
-						}
-					}
-				} finally {
-					beeper.stop();
-					isAlive = false;
-				}
-			}
-		});
-
-		watchdogThread.setName("Vario watchdog");
-		watchdogThread.setDaemon(true);
-		watchdogThread.start();
-
-		return watchdogThread;
 	}
 }
