@@ -14,6 +14,7 @@ public class Vario {
 	private int varioVolume = 8;
 
 	private boolean isAlive;
+	private boolean isEnabled;
 
 	private IVarioController activeController = IVarioController.NULL;
 
@@ -78,8 +79,12 @@ public class Vario {
 	}
 
 	public void enable() {
+		isEnabled = true;
+	}
+
+	public void resume() {
 		// no point in activating, if nothing feeds us data
-		if (activeController.isValid()) {
+		if (activeController.isValid() && !isAlive) {
 			isAlive = true;
 			watchdogMissedTicks = 0;
 
@@ -90,10 +95,19 @@ public class Vario {
 
 	public void disable() {
 		isAlive = false;
+		isEnabled = false;
+	}
+
+	public void pause() {
+		isAlive = false;
+	}
+
+	public boolean isAlive() {
+		return isAlive;
 	}
 
 	public boolean isEnabled() {
-		return isAlive;
+		return isEnabled;
 	}
 
 	public void toggle() {

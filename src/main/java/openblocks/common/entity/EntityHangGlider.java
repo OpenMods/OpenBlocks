@@ -172,7 +172,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 				motionY = verticalSpeed;
 				lastMotionY = verticalSpeed;
 
-				if (varioControl.isValid()) {
+				if (Vario.instance.isEnabled()) {
 					ticksSinceLastVarioUpdate++;
 					verticalMotionSinceLastVarioUpdate += verticalSpeed; // * 1 tick, for unit freaks
 					if (ticksSinceLastVarioUpdate > TICKS_PER_VARIO_UPDATE) {
@@ -190,7 +190,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			}
 		} else {
 			if (varioControl.isValid()) {
-				updateVario(0); // well, our vertical velocity is zero, right?
+				Vario.instance.pause();
 				ticksSinceLastVarioUpdate = 0;
 				verticalMotionSinceLastVarioUpdate = 0;
 			}
@@ -209,6 +209,8 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 			double beepfreq = vspeed / Math.abs(VSPEED_MAX) * (BEEP_RATE_MAX - BEEP_RATE_AVG) + BEEP_RATE_AVG;
 			varioControl.setFrequencies(freq, beepfreq);
 		}
+		if (!Vario.instance.isAlive() && Vario.instance.isEnabled())
+			Vario.instance.resume();
 	}
 
 	public EntityPlayer getPlayer() {
