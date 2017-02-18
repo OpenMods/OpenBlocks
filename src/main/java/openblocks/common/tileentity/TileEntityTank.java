@@ -329,6 +329,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			sum += n.tank.getFluidAmount();
 
 		final int suggestedAmount = sum / (count + 1);
+		if (Math.abs(suggestedAmount - contents.amount) < Config.tankFluidUpdateThreshold) return; // Don't balance small amounts to reduce server load
+
 		FluidStack suggestedStack = contents.copy();
 		suggestedStack.amount = suggestedAmount;
 

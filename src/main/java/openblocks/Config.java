@@ -87,6 +87,10 @@ public class Config {
 	public static boolean displayAllFilledTanks = true;
 
 	@OnLineModifiable
+	@ConfigProperty(category = "tanks", name = "fluidDifferenceUpdateThreshold", comment = "Minimal difference in fluid level between neigbors required for tank update (can be used for performance finetuning")
+	public static final int tankFluidUpdateThreshold = 0;
+
+	@OnLineModifiable
 	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000")
 	public static double trophyDropChance = 0.001;
 
