@@ -88,11 +88,15 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "tanks", name = "fluidDifferenceUpdateThreshold", comment = "Minimal difference in fluid level between neigbors required for tank update (can be used for performance finetuning")
-	public static final int tankFluidUpdateThreshold = 0;
+	public static int tankFluidUpdateThreshold = 0;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "The chance (from 0 to 1) of a trophy drop. for example, 0.001 for 1/1000")
+	@ConfigProperty(category = "trophy", name = "trophyDropChance", comment = "Legacy value. For actual configuration, see 'trophyDropChanceFormula'")
 	public static double trophyDropChance = 0.001;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "trophy", name = "trophyDropChanceFormula", comment = "Formula for calculating trophy drop chance. Trophy drops when result is positive.")
+	public static String trophyDropChanceFormula = "let([bias=rand()/4, selection=rand()], (looting + bias) * chance - selection)";
 
 	@OnLineModifiable
 	@ConfigProperty(category = "dropblock", name = "irregularBlocksArePassable", comment = "The elevator will try to pass through blocks that have custom collision boxes")

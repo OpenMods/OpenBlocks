@@ -1,6 +1,7 @@
 package openblocks.common;
 
 import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -32,13 +33,35 @@ import openblocks.trophy.SnowmanBehavior;
 import openblocks.trophy.SquidBehavior;
 import openblocks.trophy.WitchBehavior;
 import openmods.Log;
+import openmods.calc.Environment;
+import openmods.calc.ExprType;
+import openmods.calc.SingleExprEvaluator;
+import openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
+import openmods.calc.types.fp.DoubleCalculatorFactory;
+import openmods.config.properties.ConfigurationChange;
 import openmods.reflection.ReflectionHelper;
 
 public class TrophyHandler {
 
-	private static final Random DROP_RAND = new Random();
-
 	private static final Map<Trophy, Entity> ENTITY_CACHE = Maps.newHashMap();
+
+	private final Random fallbackDropChance = new Random();
+
+	private final SingleExprEvaluator<Double, ExprType> dropChangeCalculator = SingleExprEvaluator.create(DoubleCalculatorFactory.createDefault());
+
+	{
+		updateDropChanceFormula();
+	}
+
+	@SubscribeEvent
+	public void onConfigChange(ConfigurationChange.Post evt) {
+		if (evt.check("trophy", "trophyDropChanceFormula"))
+			updateDropChanceFormula();
+	}
+
+	private void updateDropChanceFormula() {
+		dropChangeCalculator.setExpr(ExprType.INFIX, Config.trophyDropChanceFormula);
+	}
 
 	public static Entity getEntityFromCache(Trophy trophy) {
 		Entity entity = ENTITY_CACHE.get(trophy);
@@ -204,19 +227,43 @@ public class TrophyHandler {
 	}
 
 	@SubscribeEvent
-	public void onLivingDrops(LivingDropsEvent event) {
-		if (event.recentlyHit && DROP_RAND.nextDouble() < Config.trophyDropChance * event.lootingLevel) {
-			final Entity entity = event.entity;
-			String entityName = EntityList.getEntityString(entity);
-			if (!Strings.isNullOrEmpty(entityName)) {
-				Trophy mobTrophy = Trophy.TYPES.get(entityName);
-				if (mobTrophy != null) {
-					EntityItem drop = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
-					drop.delayBeforeCanPickup = 10;
-					event.drops.add(drop);
+	public void onLivingDrops(final LivingDropsEvent event) {
+		final Entity entity = event.entity;
+		if (event.recentlyHit && canDrop(entity)) {
+			final Double result = dropChangeCalculator.evaluate(
+					new EnvironmentConfigurator<Double>() {
+						@Override
+						public void accept(Environment<Double> env) {
+							env.setGlobalSymbol("looting", Double.valueOf(event.lootingLevel));
+							env.setGlobalSymbol("specialDrop", Double.valueOf(event.specialDropValue));
+							env.setGlobalSymbol("chance", Config.trophyDropChance);
+						}
+					}, new Supplier<Double>() {
+						@Override
+						public Double get() {
+							final double bias = fallbackDropChance.nextDouble() / 4;
+							final double selection = fallbackDropChance.nextDouble();
+							return (event.lootingLevel + bias) * Config.trophyDropChance - selection;
+						}
+					});
+
+			if (result > 0) {
+				final String entityName = EntityList.getEntityString(entity);
+				if (!Strings.isNullOrEmpty(entityName)) {
+					Trophy mobTrophy = Trophy.TYPES.get(entityName);
+					if (mobTrophy != null) {
+						EntityItem drop = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
+						drop.delayBeforeCanPickup = 10;
+						event.drops.add(drop);
+					}
 				}
 			}
 		}
+	}
+
+	private static boolean canDrop(Entity entity) {
+		final World world = entity.worldObj;
+		return world != null && world.getGameRules().getGameRuleBooleanValue("doMobLoot");
 	}
 
 }
