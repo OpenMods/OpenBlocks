@@ -1,5 +1,6 @@
 package openblocks.enchantments;
 
+import com.google.common.base.Supplier;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Map;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -7,10 +8,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
-import openmods.Log;
-import openmods.calc.Calculator;
+import openmods.calc.Environment;
 import openmods.calc.ExprType;
-import openmods.calc.IExecutable;
+import openmods.calc.SingleExprEvaluator;
+import openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
 import openmods.calc.types.fp.DoubleCalculatorFactory;
 import openmods.config.properties.ConfigurationChange;
 import openmods.entity.PlayerDamageEvent;
@@ -23,30 +24,24 @@ public class LastStandEnchantmentsHandler {
 	private static final String VAR_PLAYER_HP = "hp";
 	private static final String VAR_DAMAGE = "dmg";
 
-	private final Calculator<Double, ExprType> reductionCalculator = DoubleCalculatorFactory.createSimple();
+	private final SingleExprEvaluator<Double, ExprType> reductionCalculator = SingleExprEvaluator.create(DoubleCalculatorFactory.createDefault());
 
-	private boolean useBuiltIn;
-	private IExecutable<Double> formula;
+	{
+		updateReductionFormula();
+	}
 
 	@SubscribeEvent
 	public void onConfigChange(ConfigurationChange.Post evt) {
-		if (evt.check("features", "lastStandFormula")) {
-			useBuiltIn = false;
-			formula = null;
-		}
+		if (evt.check("features", "lastStandFormula"))
+			updateReductionFormula();
 	}
 
-	private static float builtInFormula(float healthAvailable, float enchantmentLevels) {
-		float xpRequired = 1f - healthAvailable;
-
-		xpRequired *= 50;
-		xpRequired /= enchantmentLevels;
-		xpRequired = Math.max(1, xpRequired);
-		return xpRequired;
+	private void updateReductionFormula() {
+		reductionCalculator.setExpr(ExprType.INFIX, Config.lastStandEnchantmentFormula);
 	}
 
 	@SubscribeEvent
-	public void onHurt(PlayerDamageEvent e) {
+	public void onHurt(final PlayerDamageEvent e) {
 		final int enchantmentLevels = countLastStandEnchantmentLevels(e.player);
 
 		if (enchantmentLevels > 0) {
@@ -56,30 +51,26 @@ public class LastStandEnchantmentsHandler {
 			if (healthAvailable < 1f) {
 				final int xpAvailable = EnchantmentUtils.getPlayerXP(e.player);
 
-				float xpRequired = builtInFormula(healthAvailable, enchantmentLevels);
-
-				if (!useBuiltIn) {
-					if (formula == null) {
-						try {
-							formula = reductionCalculator.compilers.compile(ExprType.INFIX, Config.lastStandEnchantmentFormula);
-						} catch (Exception ex) {
-							useBuiltIn = true;
-							Log.warn(ex, "Failed to compile formula %s", Config.lastStandEnchantmentFormula);
-						}
-					}
-
-					reductionCalculator.environment.setGlobalSymbol(VAR_ENCH_LEVEL, Double.valueOf(enchantmentLevels));
-					reductionCalculator.environment.setGlobalSymbol(VAR_PLAYER_XP, Double.valueOf(xpAvailable));
-					reductionCalculator.environment.setGlobalSymbol(VAR_PLAYER_HP, Double.valueOf(playerHealth));
-					reductionCalculator.environment.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.amount));
-
-					try {
-						xpRequired = reductionCalculator.environment.executeAndPop(formula).floatValue();
-					} catch (Exception ex) {
-						useBuiltIn = true;
-						Log.warn(ex, "Failed to execute formula %s", Config.lastStandEnchantmentFormula);
-					}
-				}
+				float xpRequired = reductionCalculator.evaluate(
+						new EnvironmentConfigurator<Double>() {
+							@Override
+							public void accept(Environment<Double> env) {
+								env.setGlobalSymbol(VAR_ENCH_LEVEL, Double.valueOf(enchantmentLevels));
+								env.setGlobalSymbol(VAR_PLAYER_XP, Double.valueOf(xpAvailable));
+								env.setGlobalSymbol(VAR_PLAYER_HP, Double.valueOf(playerHealth));
+								env.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.amount));
+							}
+						},
+						new Supplier<Double>() {
+							@Override
+							public Double get() {
+								float xpRequired = 1f - healthAvailable;
+								xpRequired *= 50;
+								xpRequired /= enchantmentLevels;
+								xpRequired = Math.max(1, xpRequired);
+								return Double.valueOf(xpRequired);
+							}
+						}).floatValue();
 
 				if (xpAvailable >= xpRequired) {
 					e.player.setHealth(1f);
