@@ -126,8 +126,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
 
-		subBoxes.addBox(addButton(face, transform, 1, 7, 4, 7), createRotationManipulator(HalfAxis.NEG_Y));
-		subBoxes.addBox(addButton(face, transform, 11, 7, 4, 7), createRotationManipulator(HalfAxis.POS_Y));
+		subBoxes.addBox(addButton(face, transform, 1, 3, 4, 11), createRotationManipulator(HalfAxis.NEG_Y));
+		subBoxes.addBox(addButton(face, transform, 11, 3, 4, 11), createRotationManipulator(HalfAxis.POS_Y));
 
 		subBoxes.addBox(addButton(face, transform, 5, 2, 6, 3), new IShapeManipulator() {
 			@Override

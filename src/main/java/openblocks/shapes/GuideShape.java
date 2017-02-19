@@ -15,7 +15,7 @@ public enum GuideShape {
 	Cylinder(new ShapeCylinderGenerator(), "cylinder"),
 	Cuboid(new ShapeCuboidGenerator(ShapeCuboidGenerator.Elements.EDGES), "cuboid"),
 	FullCuboid(new ShapeCuboidGenerator(ShapeCuboidGenerator.Elements.WALLS), "full_cuboid"),
-	Dome(new ShapeSphereGenerator(Octant.TOP), "dome"),
+	Dome(new ShapeSphereGenerator(Octant.SOUTH), "dome"),
 	Triangle(new ShapeEquilateral2dGenerator(3), "triangle"),
 	Pentagon(new ShapeEquilateral2dGenerator(5), "pentagon"),
 	Hexagon(new ShapeEquilateral2dGenerator(6), "hexagon"),
