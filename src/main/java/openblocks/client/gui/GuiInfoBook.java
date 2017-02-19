@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.client.ChangelogBuilder;
@@ -18,7 +17,6 @@ import openmods.gui.ComponentGui;
 import openmods.gui.DummyContainer;
 import openmods.gui.component.BaseComposite;
 import openmods.gui.component.GuiComponentBook;
-import openmods.gui.component.GuiComponentLabel;
 import openmods.gui.component.page.PageBase;
 import openmods.gui.component.page.PageBase.ActionIcon;
 import openmods.gui.component.page.SectionPage;
@@ -33,10 +31,6 @@ public class GuiInfoBook extends ComponentGui {
 
 	public GuiInfoBook() {
 		super(new DummyContainer(), 0, 0);
-	}
-
-	private static void setupBookmark(GuiComponentLabel label, GuiComponentBook book, int index) {
-		label.setListener(book.createBookmarkListener(index));
 	}
 
 	@Override
@@ -54,12 +48,6 @@ public class GuiInfoBook extends ComponentGui {
 			index++;
 		}
 		return index;
-	}
-
-	private static int tocLine(int index) {
-		final int tocStartHeight = 70;
-		final int tocLineHeight = 15;
-		return tocStartHeight + index * tocLineHeight;
 	}
 
 	@Override
@@ -87,30 +75,16 @@ public class GuiInfoBook extends ComponentGui {
 	@Override
 	protected BaseComposite createRoot() {
 		book = new GuiComponentBook();
-		PageBase contentsPage = new TitledPage("openblocks.gui.welcome.title", "openblocks.gui.welcome.content");
-
-		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, tocLine(0), "- " + StatCollector.translateToLocal("openblocks.gui.blocks"));
-		contentsPage.addComponent(lblBlocks);
-
-		GuiComponentLabel lblItems = new GuiComponentLabel(27, tocLine(1), "- " + StatCollector.translateToLocal("openblocks.gui.items"));
-		contentsPage.addComponent(lblItems);
-
-		GuiComponentLabel lblMisc = new GuiComponentLabel(27, tocLine(2), "- " + StatCollector.translateToLocal("openblocks.gui.misc"));
-		contentsPage.addComponent(lblMisc);
-
-		GuiComponentLabel lblChangelogs = new GuiComponentLabel(27, tocLine(3), "- " + StatCollector.translateToLocal("openblocks.gui.changelogs"));
-		contentsPage.addComponent(lblChangelogs);
 
 		book.addPage(PageBase.BLANK_PAGE);
 		book.addPage(new IntroPage());
 		book.addPage(new TitledPage("openblocks.gui.credits.title", "openblocks.gui.credits.content"));
+
+		final TocPage contentsPage = new TocPage(book, Minecraft.getMinecraft().fontRenderer);
 		book.addPage(contentsPage);
 
 		{
-			int blocksIndex = alignToEven(book);
-			setupBookmark(lblBlocks, book, blocksIndex);
-			book.addPage(PageBase.BLANK_PAGE);
-			book.addPage(new SectionPage("openblocks.gui.blocks"));
+			addSectionPage(book, contentsPage, "openblocks.gui.blocks");
 
 			PageBuilder builder = new PageBuilder();
 			builder.includeModId(OpenBlocks.MODID);
@@ -121,10 +95,7 @@ public class GuiInfoBook extends ComponentGui {
 		}
 
 		{
-			int itemsIndex = alignToEven(book);
-			setupBookmark(lblItems, book, itemsIndex);
-			book.addPage(PageBase.BLANK_PAGE);
-			book.addPage(new SectionPage("openblocks.gui.items"));
+			addSectionPage(book, contentsPage, "openblocks.gui.items");
 
 			PageBuilder builder = new PageBuilder();
 			builder.includeModId(OpenBlocks.MODID);
@@ -135,10 +106,8 @@ public class GuiInfoBook extends ComponentGui {
 		}
 
 		{
-			int miscIndex = alignToEven(book);
-			setupBookmark(lblMisc, book, miscIndex);
-			book.addPage(PageBase.BLANK_PAGE);
-			book.addPage(new SectionPage("openblocks.gui.misc"));
+			addSectionPage(book, contentsPage, "openblocks.gui.misc");
+
 			book.addPage(new TitledPage("openblocks.gui.config.title", "openblocks.gui.config.content"));
 			book.addPage(new TitledPage("openblocks.gui.restore_inv.title", "openblocks.gui.restore_inv.content")
 					.addActionButton(10, 133, getSavePath(), ActionIcon.FOLDER.icon, "openblocks.gui.save_folder"));
@@ -150,12 +119,11 @@ public class GuiInfoBook extends ComponentGui {
 
 		}
 
-		int changelogsIndex = alignToEven(book);
-		book.addPage(PageBase.BLANK_PAGE);
-		setupBookmark(lblChangelogs, book, changelogsIndex);
-		book.addPage(new SectionPage("openblocks.gui.changelogs"));
+		{
+			addSectionPage(book, contentsPage, "openblocks.gui.changelogs");
 
-		createChangelogPages(book);
+			createChangelogPages(book);
+		}
 
 		book.enablePages();
 
@@ -163,6 +131,14 @@ public class GuiInfoBook extends ComponentGui {
 		ySize = book.getHeight();
 
 		return book;
+	}
+
+	private static void addSectionPage(GuiComponentBook book, TocPage contentsPage, String sectionLabel) {
+		final int startIndex = alignToEven(book);
+
+		book.addPage(PageBase.BLANK_PAGE);
+		book.addPage(new SectionPage(sectionLabel));
+		contentsPage.addTocEntry(sectionLabel, startIndex, startIndex + 2);
 	}
 
 	private static File getSavePath() {
