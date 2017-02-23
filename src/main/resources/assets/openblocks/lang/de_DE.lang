@@ -306,10 +306,10 @@ item.openblocks.devnull.description=Klicke mit /dev/null, um das Inventar zu öf
 item.openblocks.slimalyzer.name=Schleimalysierer
 item.openblocks.slimalyzer.description=Renne mit einem Schleimalysierer in deiner Hand herum, und er wird jedes Mal aufleuchten, wenn du dich in einem Schleime spawnenden Chunk befindest.
 
-item.openblocks.hangglider.name=Gleitschirm
-item.openblocks.hangglider.description=Der Gleitschirm ist selbsterklärend. Halte ihn in deiner Hand und klicke, um ihn auf deinem Rücken zu platzieren. Und jetzt spring!\nUm deine Geschwindigkeit zu erhöhen, kannst du Shift drücken, während du gleitest, aber pass auf, du wirst schneller sinken!
+item.openblocks.hangglider.name=Hängegleiter
+item.openblocks.hangglider.description=Der Hängegleiter ist selbsterklärend. Halte ihn in deiner Hand und klicke, um ihn auf deinem Rücken zu platzieren. Jetzt spring!\nDrücke Shift um während des Gleitens deine Geschwindigkeit zu erhöhen, doch pass auf, du wirst schneller sinken!\n\nDein Hängegleiter ist außerdem mit einem Variometer zur akustischen Indikation vertikaler Luftbewegungen ausgerüstet. Drücke V und bleibe für immer oben (oder bis die Sonne untergeht)!
 
-item.openblocks.gliderwing.name=Gleitschirmflügel
+item.openblocks.gliderwing.name=Gleiterflügel
 
 item.openblocks.sleepingbag.name=Schlafsack
 item.openblocks.sleepingbag.description=Mit dem Schlafsack kannst du in der Wildnis schlafen, ohne deine Spawn-Position zurückzusetzen. Um zu schlafen, trage ihn einfach auf dem Rücken.

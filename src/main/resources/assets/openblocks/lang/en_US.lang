@@ -307,7 +307,7 @@ item.openblocks.slimalyzer.name=Slimalyzer
 item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk.
 
 item.openblocks.hangglider.name=Hang Glider
-item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!
+item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!\n\nYour hang glider now also includes an acoustic variometer indicating vertical air movement. Press V to activate it and stay up forever (or until the sun goes down)!
 
 item.openblocks.gliderwing.name=Glider Wing
 
