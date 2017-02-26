@@ -144,7 +144,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 		varioControl.keepAlive();
 
-		boolean isDeployed = !player.onGround && !player.isInWater();
+		boolean isDeployed = !player.onGround && !player.isInWater() && !player.isPlayerSleeping();
 
 		if (!worldObj.isRemote) {
 			this.dataWatcher.updateObject(PROPERTY_DEPLOYED, (byte)(isDeployed? 1 : 0));
