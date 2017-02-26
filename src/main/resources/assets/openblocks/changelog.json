@@ -1,5 +1,40 @@
 [
     {
+        version : "1.6",
+        sections :
+        [
+            {
+                title : "openblocks.gui.features",
+                lines :
+                [
+                    "Improve building guide rendering",
+                    "More realistic hang glider mechanics",
+                    "Vertical speed indication for hang-glider (variometer)"
+                ]
+            },
+            {
+                title : "openblocks.gui.bugfixes",
+                lines :
+                [
+                    "Last Stand takes into account armor damage reduction",
+                    "Block placers now properly orient placed blocks",
+                    "XP shower no longer ignores redstone after game restart",
+                    "/dev/null and sprinkler item duplications",
+                    "Graves no longer spawn in bedrock layer (configurable)"
+                ]
+            },
+            {
+                title : "openblocks.gui.tweaks",
+                lines :
+                [
+                    "Fancify map projector",
+                    "This book now has page numbers in Table of Contents",
+                    "Builder guide dome shape rotated to allow more orientations"
+                ]
+            }
+        ]
+    },
+    {
         version : "1.5.1",
         sections :
         [
