@@ -267,6 +267,11 @@ public class ClientProxy implements IOpenBlocksProxy {
 		new BlockRenderingValidator().verifyBlocks(OpenBlocks.Blocks.class);
 	}
 
+	@Override
+	public int getParticleSettings() {
+		return Minecraft.getMinecraft().gameSettings.particleSetting;
+	}
+
 	private static void spawnParticle(EntityFX spray) {
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
 	}

@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import java.util.Random;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -121,7 +120,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	private void sprayParticles() {
 		if (tank.getFluidAmount() > 0) {
 			// 0 = All, 1 = Decreased, 2 = Minimal
-			final int particleSetting = Minecraft.getMinecraft().gameSettings.particleSetting;
+			final int particleSetting = OpenBlocks.proxy.getParticleSettings();
 			if (particleSetting > 2) return;
 
 			final int fillFactor = SPRINKER_MOD[particleSetting];

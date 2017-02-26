@@ -21,13 +21,14 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	private GenericTank bufferTank = new GenericTank(FluidContainerRegistry.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
 
-	private int drainedCountdown = 0;
 	private SyncableBoolean isOn;
-	private boolean isPowered = false;
+	private SyncableBoolean particleSpawnerActive;
+	private int particleSpawnTimer = 0;
 
 	@Override
 	protected void createSyncedFields() {
 		isOn = new SyncableBoolean();
+		particleSpawnerActive = new SyncableBoolean();
 	}
 
 	@Override
@@ -35,44 +36,53 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 		super.updateEntity();
 
 		if (!worldObj.isRemote) {
+			trySpawnXpOrbs();
+		} else {
+			trySpawnParticles();
+		}
+	}
 
-			if (!isPowered && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
-				bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, getPosition(), getOrientation().north());
+	private void trySpawnXpOrbs() {
+		boolean hasSpawnedParticle = false;
+		if (isOn.get() && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
+			bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, getPosition(), getOrientation().north());
 
-				int amountInTank = bufferTank.getFluidAmount();
+			int amountInTank = bufferTank.getFluidAmount();
 
-				if (amountInTank > 0) {
+			if (amountInTank > 0) {
+				int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
+				int drainable = LiquidXpUtils.xpToLiquidRatio(xpInTank);
 
-					int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
-					int drainable = LiquidXpUtils.xpToLiquidRatio(xpInTank);
-
-					if (drainable > 0) {
-
-						bufferTank.drain(drainable, true);
-
-						drainedCountdown = 10;
-
-						while (xpInTank > 0) {
-							int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
-							xpInTank -= xpAmount;
-							worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, xCoord + 0.5D, yCoord, zCoord + 0.5D, xpAmount));
-						}
+				if (drainable > 0) {
+					bufferTank.drain(drainable, true);
+					while (xpInTank > 0) {
+						hasSpawnedParticle = true;
+						int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
+						xpInTank -= xpAmount;
+						worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, xCoord + 0.5D, yCoord, zCoord + 0.5D, xpAmount));
 					}
 				}
 			}
-
-			isOn.set(drainedCountdown-- > 0 && !isPowered);
-			sync();
-
-		} else if (isOn.get()) {
-			Vec3 vec = Vec3.createVectorHelper(
-					(worldObj.rand.nextDouble() - 0.5) * 0.05,
-					0,
-					(worldObj.rand.nextDouble() - 0.5) * 0.05);
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, OpenBlocks.Fluids.xpJuice, xCoord + 0.5d, yCoord + 0.4d, zCoord + 0.5d, 0.4f, 0.7f, vec);
-
 		}
 
+		particleSpawnerActive.set(hasSpawnedParticle);
+		sync();
+	}
+
+	private void trySpawnParticles() {
+		final int particleLevel = OpenBlocks.proxy.getParticleSettings();
+
+		if (particleLevel == 0 || (particleLevel == 1 && worldObj.rand.nextInt(3) == 0)) {
+			particleSpawnTimer = particleSpawnerActive.get()? 10 : particleSpawnTimer - 1;
+
+			if (particleSpawnTimer > 0) {
+				Vec3 vec = Vec3.createVectorHelper(
+						(worldObj.rand.nextDouble() - 0.5) * 0.05,
+						0,
+						(worldObj.rand.nextDouble() - 0.5) * 0.05);
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, OpenBlocks.Fluids.xpJuice, xCoord + 0.5d, yCoord + 0.4d, zCoord + 0.5d, 0.4f, 0.7f, vec);
+			}
+		}
 	}
 
 	@Override
@@ -86,7 +96,8 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	public void updateState() {
-		isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		isOn.set(!isPowered);
 	}
 
 	@Override

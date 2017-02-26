@@ -7,6 +7,8 @@ import net.minecraftforge.fluids.Fluid;
 import openmods.api.IProxy;
 
 public interface IOpenBlocksProxy extends IProxy {
+	public int getParticleSettings();
+
 	public void spawnLiquidSpray(World worldObj, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity);
 
 	public void spawnParticleSpray(World worldObj, IIcon icon, double x, double y, double z, float scale, float gravity, Vec3 velocity);

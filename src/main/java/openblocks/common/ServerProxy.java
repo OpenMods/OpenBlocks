@@ -26,4 +26,9 @@ public class ServerProxy implements IOpenBlocksProxy {
 	@Override
 	public void spawnParticleSpray(World worldObj, IIcon icon, double x, double y, double z, float scale, float gravity, Vec3 velocity) {}
 
+	@Override
+	public int getParticleSettings() {
+		return 3; // really no particles
+	}
+
 }
