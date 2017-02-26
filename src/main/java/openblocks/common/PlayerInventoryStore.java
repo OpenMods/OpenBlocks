@@ -169,14 +169,17 @@ public class PlayerInventoryStore {
 				stream.close();
 			}
 		} catch (IOException e) {
-			Log.warn("Failed to dump data for player %s, file %s", name, dumpFile.getAbsoluteFile());
+			Log.warn(e, "Failed to dump data for player %s, file %s", name, dumpFile.getAbsoluteFile());
 		}
 
 		return dumpFile;
 	}
 
 	private static IInventory loadInventory(NBTTagCompound rootTag) {
-		if (!rootTag.hasKey(TAG_INVENTORY, Constants.NBT.TAG_COMPOUND)) return null;
+		if (!rootTag.hasKey(TAG_INVENTORY, Constants.NBT.TAG_COMPOUND)) {
+			Log.debug("No main inventory found");
+			return null;
+		}
 
 		NBTTagCompound invTag = rootTag.getCompoundTag(TAG_INVENTORY);
 		GenericInventory result = new GenericInventory("tmp", false, 0);
@@ -225,7 +228,7 @@ public class PlayerInventoryStore {
 				stream.close();
 			}
 		} catch (IOException e) {
-			Log.warn("Failed to read data from file %s", file.getAbsoluteFile());
+			Log.warn(e, "Failed to read data from file %s", file.getAbsoluteFile());
 			return null;
 		}
 	}
@@ -274,7 +277,8 @@ public class PlayerInventoryStore {
 	}
 
 	public boolean restoreInventory(EntityPlayer player, String fileId) {
-		LoadedInventories inventories = loadInventories(player.worldObj, fileId);
+		final LoadedInventories inventories = loadInventories(player.worldObj, fileId);
+		if (inventories == null) return false;
 
 		final IInventory main = inventories.mainInventory;
 		if (main != null) {
