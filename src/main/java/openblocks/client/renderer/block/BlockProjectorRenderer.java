@@ -30,8 +30,13 @@ public class BlockProjectorRenderer implements IBlockRenderer<BlockProjector> {
 
 	@Override
 	public void renderInventoryBlock(BlockProjector block, int metadata, int modelID, RenderBlocks renderer) {
-
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+
+		// Block.getRenderBlockPass causes this be false, but only in some codepaths
+		final boolean depthMaskState = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
+		if (!depthMaskState)
+			GL11.glDepthMask(true);
+
 		RenderUtils.renderInventoryBlock(renderer, block, 0);
 
 		if (block.shouldRenderTesrInInventory()) {
@@ -41,6 +46,8 @@ public class BlockProjectorRenderer implements IBlockRenderer<BlockProjector> {
 			TileEntityRendererDispatcher.instance.renderTileEntityAt(renderTe, -0.5, -0.5, -0.5, 0.0F);
 		}
 
+		if (!depthMaskState)
+			GL11.glDepthMask(false);
 	}
 
 	@Override

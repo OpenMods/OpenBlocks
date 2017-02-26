@@ -77,4 +77,9 @@ public class BlockProjector extends OpenBlock {
 	public boolean canRenderInPass(int pass) {
 		return true;
 	}
+
+	@Override
+	public int getRenderBlockPass() {
+		return 1;
+	}
 }
