@@ -6,6 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.util.ForgeDirection;
 import openblocks.Config;
 import openmods.utils.ByteUtils;
 
@@ -20,7 +21,7 @@ public class BlockProjector extends OpenBlock {
 	private static final String CONE_ICON = "openblocks:projector_cone" + (Config.renderHoloGrid? "_grid" : "");
 
 	@SideOnly(Side.CLIENT)
-	private IIcon coneIcon;
+	public IIcon coneIcon;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon sideIcon;
@@ -65,19 +66,11 @@ public class BlockProjector extends OpenBlock {
 		this.sideIcon = registry.registerIcon("stone_slab_side");
 		this.blockIcon = registry.registerIcon("stone_slab_top");
 		this.coneIcon = registry.registerIcon(CONE_ICON);
-	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		if (side < 0) return this.coneIcon;
-		if (side < 2) return blockIcon;
-		return sideIcon;
-	}
-
-	@Override
-	public int getRenderBlockPass() {
-		return 1;
+		setTexture(ForgeDirection.NORTH, this.sideIcon);
+		setTexture(ForgeDirection.SOUTH, this.sideIcon);
+		setTexture(ForgeDirection.EAST, this.sideIcon);
+		setTexture(ForgeDirection.WEST, this.sideIcon);
 	}
 
 	@Override

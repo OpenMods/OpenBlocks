@@ -14,6 +14,7 @@ import openmods.tileentity.OpenTileEntity;
 import openmods.utils.ByteUtils;
 import openmods.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class BlockProjectorRenderer implements IBlockRenderer<BlockProjector> {
 
@@ -29,19 +30,17 @@ public class BlockProjectorRenderer implements IBlockRenderer<BlockProjector> {
 
 	@Override
 	public void renderInventoryBlock(BlockProjector block, int metadata, int modelID, RenderBlocks renderer) {
+
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		RenderUtils.renderInventoryBlock(renderer, block, 0);
+
 		if (block.shouldRenderTesrInInventory()) {
 			// duplication with default renderer, but I don't care - this code is going to die soon
 			if (renderTe == null) renderTe = block.createTileEntityForRender();
 			if (renderTe instanceof OpenTileEntity) ((OpenTileEntity)renderTe).prepareForInventoryRender(block, metadata);
-			GL11.glPushAttrib(GL11.GL_TEXTURE_BIT);
-			GL11.glPushMatrix();
-			GL11.glTranslated(-0.5, -0.5, -0.5);
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(renderTe, 0.0D, 0.0D, 0.0D, 0.0F);
-			GL11.glPopMatrix();
-			GL11.glPopAttrib();
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(renderTe, -0.5, -0.5, -0.5, 0.0F);
 		}
 
-		RenderUtils.renderInventoryBlock(renderer, block, 0);
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public class BlockProjectorRenderer implements IBlockRenderer<BlockProjector> {
 			tex.setBrightness(Math.max(BRIGHTNESS_LEVEL_MIN, Math.min(Config.coneBrightness, BRIGHTNESS_LEVEL_MAX)));
 		}
 
-		renderCoreWithTex(block.getIcon(world, x, y, z, -1), tex);
+		renderCoreWithTex(block.coneIcon, tex);
 
 		tex.addTranslation(-x, -(y + TO_BLOCK_CENTRE), -z);
 
