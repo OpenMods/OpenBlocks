@@ -1,18 +1,16 @@
 package openblocks.common.item;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.block.BlockSky;
-import openmods.utils.render.RenderUtils;
+import openmods.utils.TranslationUtils;
 
 public class ItemSkyBlock extends ItemBlock {
 
@@ -33,16 +31,12 @@ public class ItemSkyBlock extends ItemBlock {
 		result.add(new ItemStack(this, 1, 1));
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack stack, int pass) {
-		return RenderUtils.getFogColor().getColor();
-	}
+	// TODO 1.10 item colors
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
 		super.addInformation(stack, player, result, expanded);
-		if (BlockSky.isInverted(stack.getItemDamage())) result.add(StatCollector.translateToLocal("openblocks.misc.inverted"));
+		if (BlockSky.isInverted(stack.getItemDamage())) result.add(TranslationUtils.translateToLocal("openblocks.misc.inverted"));
 	}
 
 }

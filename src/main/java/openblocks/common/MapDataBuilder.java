@@ -1,14 +1,20 @@
 package openblocks.common;
 
-import java.util.*;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
+import java.util.Collection;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -16,11 +22,6 @@ import openblocks.common.HeightMapData.LayerData;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.utils.BitSet;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
 
 public class MapDataBuilder {
 	private static final int LAYER_TERRAIN = 0;
@@ -41,9 +42,9 @@ public class MapDataBuilder {
 			final IBlockState blockState = chunk.getBlockState(pos);
 			final Block block = blockState.getBlock();
 
-			if (block.isAir(world, pos)) return null;
+			if (block.isAir(blockState, world, pos)) return null;
 
-			if (block.getMapColor(blockState) == MapColor.airColor) return null;
+			if (blockState.getMapColor() == MapColor.AIR) return null;
 
 			if (MapDataManager.instance.isBlockTransparent(block)) return null;
 
@@ -52,11 +53,11 @@ public class MapDataBuilder {
 
 		public void average(World world, Chunk chunk, int startX, int startZ, int size) {
 			double groundHeightSum = 0;
-			int[] groundColors = new int[MapColor.mapColorArray.length];
+			int[] groundColors = new int[MapColor.COLORS.length];
 
 			double liquidHeightSum = 0;
 			int liquidCount = 0;
-			int[] liquidColors = new int[MapColor.mapColorArray.length];
+			int[] liquidColors = new int[MapColor.COLORS.length];
 
 			for (int x = startX; x < startX + size; x++)
 				for (int z = startZ; z < startZ + size; z++) {
@@ -70,7 +71,7 @@ public class MapDataBuilder {
 						final BlockPos pos = new BlockPos(x, y, z);
 						IBlockState blockState = getValidBlock(world, chunk, pos);
 
-						if (blockState.getBlock().getMaterial().isLiquid()) {
+						if (blockState.getMaterial().isLiquid()) {
 							if (blockLiquid == null) {
 								blockLiquid = blockState;
 								heightLiquid = pos;
@@ -84,13 +85,13 @@ public class MapDataBuilder {
 
 					if (blockSolid != null && heightSolid != null) {
 						groundHeightSum += heightSolid.getY();
-						MapColor color = blockSolid.getBlock().getMapColor(blockSolid);
+						MapColor color = blockSolid.getMapColor();
 						groundColors[color.colorIndex]++;
 					}
 
 					if (blockLiquid != null && heightLiquid != null) {
 						liquidHeightSum += heightLiquid.getY();
-						MapColor color = blockLiquid.getBlock().getMapColor(blockLiquid);
+						MapColor color = blockLiquid.getMapColor();
 						liquidColors[color.colorIndex]++;
 						liquidCount++;
 					}
@@ -120,13 +121,13 @@ public class MapDataBuilder {
 	}
 
 	public class ChunkJob {
-		public final ChunkCoordIntPair chunk;
+		public final ChunkPos chunk;
 		public final int pixelsPerChunk;
 		public final int mapMinX;
 		public final int mapMinY;
 		public final int bitNum;
 
-		private ChunkJob(ChunkCoordIntPair chunk, int pixelsPerChunk, int mapMinX, int mapMinY, int bitNum) {
+		private ChunkJob(ChunkPos chunk, int pixelsPerChunk, int mapMinX, int mapMinY, int bitNum) {
 			this.chunk = chunk;
 			this.pixelsPerChunk = pixelsPerChunk;
 			this.mapMinX = mapMinX;
@@ -175,7 +176,7 @@ public class MapDataBuilder {
 		this.data = MapDataManager.getMapData(world, mapId);
 		data.centerX = ((x >> 4) << 4);
 		data.centerZ = ((z >> 4) << 4);
-		data.dimension = world.provider.getDimensionId();
+		data.dimension = world.provider.getDimension();
 
 		if (data.layers == null || data.layers.length != LAYER_COUNT) data.layers = new HeightMapData.LayerData[LAYER_COUNT];
 
@@ -200,7 +201,7 @@ public class MapDataBuilder {
 	public Set<ChunkJob> createJobs(BitSet finishedChunks) {
 		Preconditions.checkState(data != null, "Invalid usage, load map first");
 
-		Map<ChunkCoordIntPair, ChunkJob> result = Maps.newHashMap();
+		Map<ChunkPos, ChunkJob> result = Maps.newHashMap();
 		final int blocksPerPixel = (1 << data.scale);
 		final int pixelsPerChunk = 16 / blocksPerPixel;
 		final int chunksPerSide = 64 / pixelsPerChunk;
@@ -211,7 +212,7 @@ public class MapDataBuilder {
 		int bitNum = 0;
 		for (int mapX = 0, chunkX = middleChunkX - chunksPerSide / 2; chunkX < middleChunkX + chunksPerSide / 2; mapX += pixelsPerChunk, chunkX++)
 			for (int mapY = 0, chunkZ = middleChunkZ - chunksPerSide / 2; chunkZ < middleChunkZ + chunksPerSide / 2; mapY += pixelsPerChunk, chunkZ++) {
-				ChunkCoordIntPair chunk = new ChunkCoordIntPair(chunkX, chunkZ);
+				ChunkPos chunk = new ChunkPos(chunkX, chunkZ);
 				if (!finishedChunks.testBit(bitNum)) {
 					result.put(chunk, new ChunkJob(chunk, pixelsPerChunk, mapX, mapY, bitNum));
 				}
@@ -242,7 +243,7 @@ public class MapDataBuilder {
 		PriorityQueue<JobDistance> distances = Queues.newPriorityQueue();
 
 		for (ChunkJob job : jobs) {
-			ChunkCoordIntPair chunk = job.chunk;
+			ChunkPos chunk = job.chunk;
 			double dx = chunk.getCenterXPos() - x;
 			double dz = chunk.getCenterZPosition() - z;
 			distances.add(new JobDistance(dx * dx + dz * dz, job));
@@ -252,10 +253,11 @@ public class MapDataBuilder {
 		while (!distances.isEmpty()) {
 			JobDistance dist = distances.poll();
 			ChunkJob job = dist.job;
-			ChunkCoordIntPair chunkCoord = job.chunk;
+			ChunkPos chunkCoord = job.chunk;
 
-			if (provider.chunkExists(chunkCoord.chunkXPos, chunkCoord.chunkZPos)) {
-				Chunk chunk = provider.provideChunk(chunkCoord.chunkXPos, chunkCoord.chunkZPos);
+			// TODO verify, if does not load
+			Chunk chunk = provider.getLoadedChunk(chunkCoord.chunkXPos, chunkCoord.chunkZPos);
+			if (chunk != null && !chunk.isEmpty()) {
 				job.mapChunk(world, chunk);
 				return job;
 			}

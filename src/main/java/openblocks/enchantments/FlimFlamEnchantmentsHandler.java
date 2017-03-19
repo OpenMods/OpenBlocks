@@ -1,29 +1,37 @@
 package openblocks.enchantments;
 
-import java.util.*;
-
+import com.google.common.collect.Lists;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.Callable;
+import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
-import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Enchantments;
 import openblocks.api.IFlimFlamDescription;
 import openblocks.enchantments.flimflams.FlimFlamRegistry;
 import openmods.Log;
 
-import com.google.common.collect.Lists;
-
 public class FlimFlamEnchantmentsHandler {
-
-	public static final String LUCK_PROPERTY = "OpenBlocks-Luck";
 
 	public static final int LUCK_MARGIN = -30;
 
@@ -31,7 +39,7 @@ public class FlimFlamEnchantmentsHandler {
 
 	private static final Random RANDOM = new Random();
 
-	private static class Luck implements IExtendedEntityProperties {
+	private static class Luck {
 
 		public int luck;
 
@@ -39,39 +47,69 @@ public class FlimFlamEnchantmentsHandler {
 
 		public boolean forceNext;
 
-		@Override
-		public void saveNBTData(NBTTagCompound entityTag) {
-			entityTag.setInteger(LUCK_PROPERTY, luck);
-		}
+	}
 
-		@Override
-		public void loadNBTData(NBTTagCompound entityTag) {
-			luck = entityTag.getInteger(LUCK_PROPERTY);
-		}
+	private static final ResourceLocation CAPABILITY_KEY = OpenBlocks.location("luck");
 
-		@Override
-		public void init(Entity entity, World world) {}
+	@CapabilityInject(Luck.class)
+	private static Capability<Luck> CAPABILITY;
+
+	public static void registerCapability() {
+		CapabilityManager.INSTANCE.register(Luck.class, new Capability.IStorage<Luck>() {
+			@Override
+			public NBTBase writeNBT(Capability<Luck> capability, Luck instance, EnumFacing side) {
+				return new NBTTagInt(instance.luck);
+			}
+
+			@Override
+			public void readNBT(Capability<Luck> capability, Luck instance, EnumFacing side, NBTBase nbt) {
+				instance.luck = ((NBTTagInt)nbt).getInt();
+			}
+
+		}, new Callable<Luck>() {
+			@Override
+			public Luck call() throws Exception {
+				return new Luck();
+			}
+		});
 	}
 
 	private static Luck getProperty(Entity entity) {
-		IExtendedEntityProperties prop = entity.getExtendedProperties(LUCK_PROPERTY);
-		return (prop instanceof Luck)? (Luck)prop : null;
+		return entity.getCapability(CAPABILITY, EnumFacing.UP);
 	}
 
 	@SubscribeEvent
-	public void onEntityConstruct(EntityEvent.EntityConstructing evt) {
-		if (evt.entity instanceof EntityPlayer) evt.entity.registerExtendedProperties(LUCK_PROPERTY, new Luck());
+	public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
+		if (evt.getObject() instanceof EntityPlayer) {
+			evt.addCapability(CAPABILITY_KEY, new ICapabilityProvider() {
+
+				private final Luck state = new Luck();
+
+				@Override
+				public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+					return capability == CAPABILITY;
+				}
+
+				@Override
+				@SuppressWarnings("unchecked")
+				public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+					if (capability == CAPABILITY) return (T)state;
+					return null;
+				}
+			});
+		}
 	}
 
 	@SubscribeEvent
 	public void onDamage(LivingHurtEvent e) {
-		if (!(e.entityLiving instanceof EntityPlayer)) return;
-		if (e.entityLiving.worldObj.isRemote) return;
+		final EntityLivingBase entityLiving = e.getEntityLiving();
+		if (!(entityLiving instanceof EntityPlayer)) return;
+		if (entityLiving.worldObj.isRemote) return;
 
-		final EntityPlayer targetPlayer = (EntityPlayer)e.entityLiving;
+		final EntityPlayer targetPlayer = (EntityPlayer)entityLiving;
 
-		if (e.source == null) return;
-		final Entity damageSource = e.source.getEntity();
+		if (e.getSource() == null) return;
+		final Entity damageSource = e.getSource().getEntity();
 
 		if (!(damageSource instanceof EntityPlayer)) return;
 		final EntityPlayer sourcePlayer = (EntityPlayer)damageSource;
@@ -146,7 +184,7 @@ public class FlimFlamEnchantmentsHandler {
 						if (effectMeta.action().execute(player)) {
 							property.luck -= effectMeta.cost();
 							Log.debug("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
-							if (!effectMeta.isSilent()) player.addChatMessage(new ChatComponentTranslation("openblocks.flim_flammed"));
+							if (!effectMeta.isSilent()) player.addChatMessage(new TextComponentTranslation("openblocks.flim_flammed"));
 							return;
 						}
 					} catch (Throwable t) {
@@ -187,21 +225,14 @@ public class FlimFlamEnchantmentsHandler {
 	}
 
 	private static int getFlimFlamToolLevel(EntityPlayer player) {
-		return getFlimFlamLevel(player.getHeldItem());
+		return EnchantmentHelper.getEnchantmentLevel(Enchantments.flimFlam, player.getHeldItemMainhand());
 	}
 
 	private static int getFlimFlamArmorLevel(EntityPlayer player) {
 		int sum = 0;
 		for (ItemStack stack : player.inventory.armorInventory) {
-			sum += getFlimFlamLevel(stack);
+			sum += EnchantmentHelper.getEnchantmentLevel(Enchantments.flimFlam, stack);
 		}
 		return sum;
-	}
-
-	private static int getFlimFlamLevel(ItemStack stack) {
-		if (stack == null) return 0;
-		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-		Integer result = enchantments.get(Enchantments.flimFlam.effectId);
-		return result != null? result : 0;
 	}
 }

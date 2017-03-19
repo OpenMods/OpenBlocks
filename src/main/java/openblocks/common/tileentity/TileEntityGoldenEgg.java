@@ -1,19 +1,21 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,10 +32,6 @@ import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
 
 public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAwareTile, IBreakAwareTile, ITickable {
 
@@ -257,14 +255,16 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
 
 		if (owner != null) {
 			NBTTagCompound ownerTag = new NBTTagCompound();
 			NBTUtil.writeGameProfile(ownerTag, owner);
 			nbt.setTag("Owner", ownerTag);
 		}
+
+		return nbt;
 	}
 
 	@Override
@@ -273,7 +273,8 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 		if (nbt.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = nbt.getString("owner");
-			this.owner = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(ownerName);
+
+			this.owner = TileEntitySkull.updateGameprofile(new GameProfile(null, ownerName));
 		} else if (nbt.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
 			final String uuidStr = nbt.getString("OwnerUUID");
 			try {

@@ -1,23 +1,25 @@
 package openblocks.common.item;
 
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.*;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import openmods.infobook.BookDocumentation;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import java.util.Set;
+import javax.annotation.Nullable;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockLever;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import openmods.infobook.BookDocumentation;
+import org.apache.commons.lang3.ArrayUtils;
 
 @BookDocumentation
 public class ItemWrench extends Item {
@@ -33,7 +35,7 @@ public class ItemWrench extends Item {
 	}
 
 	@Override
-	public boolean doesSneakBypassUse(World world, BlockPos pos, EntityPlayer player) {
+	public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
 		return true;
 	}
 
@@ -47,20 +49,18 @@ public class ItemWrench extends Item {
 	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		final Block block = world.getBlockState(pos).getBlock();
 
-		if (requiresSneaking(block) && !player.isSneaking()) return false;
+		if (requiresSneaking(block) && !player.isSneaking()) return EnumActionResult.PASS;
 
 		final EnumFacing[] rotations = block.getValidRotations(world, pos);
 		if (ArrayUtils.contains(rotations, side)) {
-			if (block.rotateBlock(world, pos, side)) {
-				player.swingItem();
-				return !world.isRemote;
+			if (block.rotateBlock(world, pos, side)) { return EnumActionResult.SUCCESS; // TODO verify if swing animation plays
 			}
 		}
 
-		return false;
+		return EnumActionResult.FAIL;
 	}
 
 }

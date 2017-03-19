@@ -13,7 +13,7 @@ public enum MetasGenericUnstackable implements IMetaItemFactory {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			final ItemStack whiteWool = ColorMeta.WHITE.createStack(Blocks.wool, 1);
+			final ItemStack whiteWool = ColorMeta.WHITE.createStack(Blocks.WOOL, 1);
 			return new MetaPointer("pointer", new ShapedOreRecipe(result, "w  ", "ww ", "w  ", 'w', whiteWool));
 		}
 	};

@@ -4,9 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityFlag;
@@ -36,20 +37,20 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	};
 
 	public BlockFlag() {
-		super(Material.circuits);
-		setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
+		super(Material.CIRCUITS);
+
 		setPlacementMode(BlockPlacementMode.SURFACE);
 		setInventoryRenderOrientation(Orientation.XN_YN);
 	}
 
 	// TODO 1.8.9 Ehhh
 	@Override
-	public int getRenderType() {
-		return 2; // TESR only
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
@@ -59,23 +60,32 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		return null;
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+		return NULL_AABB;
 	}
 
+	private static final AxisAlignedBB MIDDLE_AABB = new AxisAlignedBB(0.5 - (1.0 / 16.0), 0.0, 0.5 - (1.0 / 16.0), 0.5 + (1.0 / 16.0), 0.0 + 1.0, 0.5 + (1.0 / 16.0));
+	private static final AxisAlignedBB NS_AABB = new AxisAlignedBB(0.5 - (1.0 / 16.0), 0.0, 0.5 - (5.0 / 16.0), 0.5 + (1.0 / 16.0), 0.0 + 1.0, 0.5 + (5.0 / 16.0));
+	private static final AxisAlignedBB WE_AABB = new AxisAlignedBB(0.5 - (5.0 / 16.0), 0.0, 0.5 - (1.0 / 16.0), 0.5 + (5.0 / 16.0), 0.0 + 1.0, 0.5 + (1.0 / 16.0));
+
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-		TileEntityFlag flag = getTileEntity(world, pos, TileEntityFlag.class);
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		TileEntityFlag flag = getTileEntity(source, pos, TileEntityFlag.class);
 		if (flag != null) {
 			EnumFacing onSurface = flag.getOrientation().down();
-			if (onSurface == EnumFacing.DOWN) {
-				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 1 / 16f);
-			} else if (onSurface == EnumFacing.EAST || onSurface == EnumFacing.WEST) {
-				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 5 / 16f, 1f, 1 / 16f);
-			} else {
-				setupDimensionsFromCenter(0.5f, 0f, 0.5f, 1 / 16f, 1f, 5 / 16f);
+			switch (onSurface) {
+				case EAST:
+				case WEST:
+					return WE_AABB;
+				case NORTH:
+				case SOUTH:
+					return NS_AABB;
+				default:
+					return MIDDLE_AABB;
 			}
 		}
+
+		return MIDDLE_AABB;
 	}
 
 	@Override
@@ -96,8 +106,8 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighbour) {
-		super.onNeighborBlockChange(world, pos, state, neighbour);
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+		super.neighborChanged(state, world, pos, block);
 
 		final Orientation orientation = getOrientation(state);
 		if (!isNeighborBlockSolid(world, pos, orientation.down())) world.destroyBlock(pos, true);

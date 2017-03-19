@@ -1,13 +1,15 @@
 package openblocks.common.tileentity;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import openblocks.client.gui.GuiBlockPlacer;
 import openblocks.common.container.ContainerBlockPlacer;
@@ -63,7 +65,7 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 		return false;
 	}
 
-	private void placeBlock(final int slotId) {
+	private void placeBlock(int slotId) {
 		if (!(worldObj instanceof WorldServer)) return;
 
 		final ItemStack stack = inventory.getStackInSlot(slotId);
@@ -74,16 +76,24 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 
 		if (!worldObj.isBlockLoaded(target)) return;
 
-		final Block block = worldObj.getBlockState(target).getBlock();
-		if (!block.isAir(worldObj, target) && !block.isReplaceable(worldObj, target)) return;
+		final IBlockState state = worldObj.getBlockState(target);
+		final Block block = state.getBlock();
+		if (!block.isAir(state, worldObj, target) && !block.isReplaceable(worldObj, target)) return;
 
-		// TODO 1.8.9 verify placing
-		ItemStack newStack = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new UseItemAction(stack,
-				new Vec3(pos),
-				new Vec3(pos.down()),
-				direction.getOpposite()));
+		// this logic is tuned for vanilla blocks (like pistons), which places blocks with front facing player
+		// so to place object pointing in the same direction as placer, we need configuration player-target-placer
+		// * 2, since some blocks may take into account player height, so distance must be greater than that
+		final BlockPos playerPos = target.offset(direction, 2);
 
-		inventory.setInventorySlotContents(slotId, newStack);
+		final ItemStack result = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new UseItemAction(
+				stack,
+				new Vec3d(playerPos),
+				new Vec3d(target),
+				new Vec3d(target).addVector(0.5, 0.5, 0.5),
+				direction.getOpposite(),
+				EnumHand.MAIN_HAND));
+
+		inventory.setInventorySlotContents(slotId, result);
 	}
 
 	@Override
@@ -115,9 +125,10 @@ public class TileEntityBlockPlacer extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override

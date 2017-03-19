@@ -22,13 +22,13 @@ public class TorchBowRecipe extends CustomRecipeBase {
 		for (int i = 0; i < inventorycrafting.getSizeInventory(); i++) {
 			ItemStack stack = inventorycrafting.getStackInSlot(i);
 			if (stack != null) {
-				if (stack.getItem() == Items.bow && bowStack == null) {
+				if (stack.getItem() == Items.BOW && bowStack == null) {
 					bowStack = stack;
 					continue;
-				} else if (stack.getItem() == Items.flint && flintStack == null) {
+				} else if (stack.getItem() == Items.FLINT && flintStack == null) {
 					flintStack = stack;
 					continue;
-				} else if (stack.getItem() == Items.bone && boneStack == null) {
+				} else if (stack.getItem() == Items.BONE && boneStack == null) {
 					boneStack = stack;
 					continue;
 				}
@@ -65,7 +65,7 @@ public class TorchBowRecipe extends CustomRecipeBase {
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return new ItemStack(Items.bow);
+		return new ItemStack(Items.BOW);
 	}
 
 }

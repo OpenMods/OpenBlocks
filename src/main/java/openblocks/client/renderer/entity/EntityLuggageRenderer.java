@@ -9,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelLuggage;
 import openblocks.common.entity.EntityLuggage;
-
 import org.lwjgl.opengl.GL11;
 
 public class EntityLuggageRenderer extends RenderLiving<EntityLuggage> {
@@ -20,15 +19,12 @@ public class EntityLuggageRenderer extends RenderLiving<EntityLuggage> {
 	private static final ResourceLocation textureSpecial = OpenBlocks.location("textures/models/luggage_special.png");
 	private static final ResourceLocation creeperEffect = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 
-	private class LayerCharge implements LayerRenderer<EntityLuggage>
-	{
+	private class LayerCharge implements LayerRenderer<EntityLuggage> {
 
 		// TODO 1.8.9 verify if it works
 		@Override
-		public void doRenderLayer(EntityLuggage luggage, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
-		{
-			if (luggage.isSpecial())
-			{
+		public void doRenderLayer(EntityLuggage luggage, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale) {
+			if (luggage.isSpecial()) {
 				bindTexture(creeperEffect);
 				GlStateManager.matrixMode(GL11.GL_TEXTURE);
 				GlStateManager.loadIdentity();

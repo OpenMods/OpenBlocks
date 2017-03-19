@@ -38,7 +38,6 @@ openblocks.gui.drawingtable=Tavolo da Disegno
 openblocks.gui.digitalfuse=Innesco digitale
 openblocks.gui.xp_outputs=Emissione di Punti Esperienza
 openblocks.gui.item_outputs=Emissione di Oggetti
-openblocks.gui.watch_video=Guarda video
 openblocks.gui.max_level=Livello massimo: %d
 openblocks.gui.save_folder=Cartella di salvataggio
 
@@ -52,7 +51,7 @@ openblocks.gui.config.title=Facili Modifiche della Configurazione
 openblocks.gui.config.content=OpenMods permette sia alle opzioni di configurazione del client sia a quelle del server di essere modificate da comandi in chat. Alcune non hanno nemmeno bisogno di un riavvio!\n\nLe impostazioni di configurazione del server possono essere modificate usando '§l/om_config_s§r' (OP necessario) e le impostazioni di configurazione del client possono essere modificate con '§l/om_config_c§r'\n\nPer esempio:\n\n§l/om_config_s set OpenBlocks dropblock elevatorDrainsXP false§r\n§l/om_config_s save§r\n\nPer una lista completa dei comandi scrivi: §l/help om_config_s§r or §l/help om_config_c§r
 
 openblocks.gui.restore_inv.title=Backup dell'Inventario
-openblocks.gui.restore_inv.content=Ognuno può fare degli errori. Ma con il comando §l/ob_inventory§r si può rimediare ad alcuni. Questo comando può essere usato per ripristinare l'inventario. Il backup viene creato quando:\n - un giocatore muore\n - una tomba appare \n\ - un giocatore esegue il comando §l/ob_inventory store§r\n\nPer ripristinare l'inventario si ha bisogno del nome del backup. Vai nella cartella sotto o nella cartella dei salvataggi sul server e cerca dei file chiamati §linventory-*.dat§r. Poi ripristina l'inventario con §l/ob_inventory restore <player> <id>§r - dove id è o il nome del file completo o solo la parte centrale, senza §linventory-§r e §l.dat§r. Si può anche usare il completamento automatico (TAB). I backup sono dei normali file NBT e possono essere aperti con ogni editor.
+openblocks.gui.restore_inv.content=Ognuno può fare degli errori. Ma con il comando §l/ob_inventory§r si può rimediare ad alcuni. Questo comando può essere usato per ripristinare l'inventario. Il backup viene creato quando:\n - un giocatore muore\n - una tomba appare \n - un giocatore esegue il comando §l/ob_inventory store§r\n\nPer ripristinare l'inventario si ha bisogno del nome del backup. Vai nella cartella sotto o nella cartella dei salvataggi sul server e cerca dei file chiamati §linventory-*.dat§r. Poi ripristina l'inventario con §l/ob_inventory restore <player> <id>§r - dove id è o il nome del file completo o solo la parte centrale, senza §linventory-§r e §l.dat§r. Si può anche usare il completamento automatico (TAB). I backup sono dei normali file NBT e possono essere aperti con ogni editor.
 
 openblocks.gui.bkey.title=L'infamante tasto 'B'
 openblocks.gui.bkey.content=Il tasto 'B' è un tasto molto speciale in OpenBlocks.\n\nL'abilitazione dell'opzione di configurazione 'weAreSeriousPeople' nella categoria 'tomfoolery' sia nel file di configurazione del client sia in quello del server ti darà il tuo personale sistema digestivo.\n\nProva a mangiare un po' di quella gustosa argilla e poi premi 'B' per digerire!
@@ -93,6 +92,7 @@ openblocks.misc.page=Pagina %d di %d
 openblocks.misc.oh_no_ceiling=Non ti puoi addormentare lì. Il soffitto ti disturba troppo...
 openblocks.misc.oh_no_ground=Vuoi dormire su QUEL COSO!?
 openblocks.misc.sleeping_bag_broken=Oggetto disattivato in quanto l'inizializzazione è fallita
+#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
 
 openblocks.misc.grave_msg=%s (Giorno: %.1f)
 
@@ -257,6 +257,7 @@ tile.openblocks.blockbreaker.description=Quando gli viene fornito un impulso di 
 
 tile.openblocks.projector.name=Proiettore della Mappa di Altitudine
 tile.openblocks.projector.description=Ti lascio scrivere questa, boq!
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=Tavolo da Incantamento Automatico
 tile.openblocks.autoenchantmenttable.description=Il tavolo da incantamento automatico funziona in una maniera simile al tavolo da incantamento Vanilla, eccetto che funziona con l'Esperienza Liquida. Usa le schede sul lato destro dell'interfaccia per selezionare dove gli oggetti o i punti esperienza verranno presi. Esattamente come il tavolo da incantamento Vanilla, sono richieste le librerie per avere livelli di incantamento maggiori.
@@ -323,7 +324,7 @@ item.openblocks.paintbrush.name=Pennello
 item.openblocks.paintbrush.description=I pennelli ti permettono di dipingere i blocchi con ogni colore che vuoi!\n\nPicchietta il tuo pennello su una Lattina di Pittura fatta nel Miscelatore di Pittura, poi clicca su un blocco per dipingerlo.\n\nI blocchi di Tela sono perfetti per dipingere, ma puoi anche dipingere un bel po' di blocchi Vanilla e anche alcuni blocchi di altre mod. Puoi anche piazzare degli stampi sui blocchi e poi dipingere sullo stampo!
 
 item.openblocks.unprepared_stencil.name=Stampo non Preparato
-item.openblocks.unprepared_stencil.description=Gli stampi possono essere piazzati sui blocchi e poi dipinti sui blocchi usando i pennello!\n\nPuoi dipingere un blocco usando stampi multipli e puoi cliccare su di essi con una mano vuota per ruotarli.\b\bPiazza uno Stampo non Preparato in un Tavolo da Disegno per creare diversi motivi.
+item.openblocks.unprepared_stencil.description=Gli stampi possono essere piazzati sui blocchi e poi dipinti sui blocchi usando i pennello!\n\nPuoi dipingere un blocco usando stampi multipli e puoi cliccare su di essi con una mano vuota per ruotarli. Piazza uno Stampo non Preparato in un Tavolo da Disegno per creare diversi motivi.
 
 item.openblocks.crane_backpack.name=Zaino della Gru
 item.openblocks.crane_backpack.description=Nel mondo di Minecraft, "magnete" è un'antica parola per "questo come funzionano?".\n\nQuesto particolare pezzo di vero equipaggiamento ti permette di prendere e trasportare mob, giocatori, oggetti e blocchi. Può essere controllato con il controllore del magnete.
@@ -333,7 +334,6 @@ item.openblocks.crane_control.description=Questo telecomando wireless ad alta te
 
 item.openblocks.wrench.name=Grande Barra di Metallo
 item.openblocks.wrench.description=Questo strumento estremamente sofisticato è usato per trasformare oggetti con simmetria ottaedra.\n\n\nO semplicemente un grande e stupido pezzo di metallo che puoi usare per ruotare cubi e altre cose.\n\nQuinfi sì, è semplicemente un'altra chiave inglese. Sto solo cercando di essere originale, ok?
-
 
 item.openblocks.stencil.name=Stampo
 item.openblocks.crayon.name=Pastello Magico

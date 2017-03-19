@@ -2,7 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -13,7 +13,6 @@ import openmods.Log;
 import openmods.colors.RGB;
 import openmods.renderer.StencilRendererHandler;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntitySky> {
@@ -66,12 +65,12 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		handler = stencilBit >= 0? new StencilSkyRenderer(1 << stencilBit) : StencilRendererHandler.DUMMY;
 	}
 
-	private static void addVertex(WorldRenderer wr, double x, double y, double z) {
+	private static void addVertex(VertexBuffer wr, double x, double y, double z) {
 		wr.pos(x, y, z).endVertex();
 	}
 
 	private static void renderCube(Tessellator tes) {
-		final WorldRenderer wr = tes.getWorldRenderer();
+		final VertexBuffer wr = tes.getBuffer();
 		wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 
 		addVertex(wr, 0, 0, 0);

@@ -1,24 +1,21 @@
 package openblocks.client.renderer;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
-
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import openblocks.common.HeightMapData;
 import openmods.renderer.DynamicTextureAtlas;
 import openmods.renderer.DynamicTextureAtlas.AtlasCell;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class HeightMapRenderer {
 	public static final HeightMapRenderer instance = new HeightMapRenderer();
@@ -76,7 +73,7 @@ public class HeightMapRenderer {
 						// stupid singed bytes
 						int height = layer.heightMap[index] & 0xFF;
 
-						int fullColor = MapColor.mapColorArray[color].colorValue;
+						int fullColor = MapColor.COLORS[color].colorValue;
 						int[] plane = getPlane(levels, height);
 						plane[index] = fullColor | (layer.alpha << 24);
 					}
@@ -119,7 +116,7 @@ public class HeightMapRenderer {
 			GlStateManager.enableBlend();
 
 			final Tessellator tes = new Tessellator(4 * (3 + 2) * 4 * 2);
-			WorldRenderer wr = tes.getWorldRenderer();
+			VertexBuffer wr = tes.getBuffer();
 
 			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			for (PlaneData plane : planes) {

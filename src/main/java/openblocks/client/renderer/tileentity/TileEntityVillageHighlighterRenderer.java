@@ -2,18 +2,17 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelVillage;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openmods.sync.SyncableIntArray;
 import openmods.utils.BlockUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRenderer<TileEntityVillageHighlighter> {
@@ -31,7 +30,7 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 		if (vh != null && vh.isPowered()) {
 			Tessellator t = Tessellator.getInstance();
-			WorldRenderer wr = t.getWorldRenderer();
+			VertexBuffer wr = t.getBuffer();
 
 			SyncableIntArray villages = vh.getVillageData();
 			int[] data = villages.getValue();
@@ -93,11 +92,11 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 		GL11.glPopMatrix();
 	}
 
-	private static void addVertex(WorldRenderer wr, double x, double y, double z) {
+	private static void addVertex(VertexBuffer wr, double x, double y, double z) {
 		wr.pos(x, y, z).endVertex();
 	}
 
-	public void drawBox(WorldRenderer wr, AxisAlignedBB bb) {
+	public void drawBox(VertexBuffer wr, AxisAlignedBB bb) {
 		// bottom
 		addVertex(wr, bb.minX, bb.minY, bb.minZ);
 		addVertex(wr, bb.maxX, bb.minY, bb.minZ);

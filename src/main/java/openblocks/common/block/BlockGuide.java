@@ -3,14 +3,20 @@ package openblocks.common.block;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-
+import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +25,12 @@ import openblocks.common.tileentity.TileEntityGuide;
 import openmods.api.ISelectionAware;
 import openmods.block.BlockRotationMode;
 import openmods.block.OpenBlock;
-import openmods.geometry.*;
+import openmods.geometry.AabbUtils;
+import openmods.geometry.BlockSpaceTransform;
+import openmods.geometry.BlockTextureTransform;
+import openmods.geometry.BoundingBoxMap;
+import openmods.geometry.HalfAxis;
+import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation(hasVideo = true)
@@ -133,8 +144,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 		final BoundingBoxMap<IShapeManipulator> subBoxes = BoundingBoxMap.create();
 
-		subBoxes.addBox(addButton(face, transform, 1, 7, 4, 7), createRotationManipulator(HalfAxis.NEG_Y));
-		subBoxes.addBox(addButton(face, transform, 11, 7, 4, 7), createRotationManipulator(HalfAxis.POS_Y));
+		subBoxes.addBox(addButton(face, transform, 1, 3, 4, 11), createRotationManipulator(HalfAxis.NEG_Y));
+		subBoxes.addBox(addButton(face, transform, 11, 3, 4, 11), createRotationManipulator(HalfAxis.POS_Y));
 
 		subBoxes.addBox(addButton(face, transform, 5, 2, 6, 3), new IShapeManipulator() {
 			@Override
@@ -168,33 +179,34 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	public BlockGuide() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setLightLevel(0.6f);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube() {
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public EnumWorldBlockLayer getBlockLayer() {
-		return EnumWorldBlockLayer.TRANSLUCENT;
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-		return selection != null? selection : super.getSelectedBoundingBox(world, pos);
+	@SuppressWarnings("deprecation")
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+		return selection != null? selection : super.getSelectedBoundingBox(state, world, pos);
 	}
 
-	private Map.Entry<AxisAlignedBB, IShapeManipulator> findClickBox(Vec3 pos) {
+	private Map.Entry<AxisAlignedBB, IShapeManipulator> findClickBox(Vec3d pos) {
 		final Entry<AxisAlignedBB, BoundingBoxMap<IShapeManipulator>> sideBox = buttons.findEntryContainingPoint(pos);
 		if (sideBox != null) {
 			final Entry<AxisAlignedBB, IShapeManipulator> subSideBox = sideBox.getValue().findEntryContainingPoint(pos);
@@ -214,11 +226,11 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	@Override
 	public boolean onSelected(World world, BlockPos pos, DrawBlockHighlightEvent evt) {
-		if (areButtonsActive(evt.player)) {
-			final Vec3 hitVec = evt.target.hitVec;
+		if (areButtonsActive(evt.getPlayer())) {
+			final Vec3d hitVec = evt.getTarget().hitVec;
 
 			final Orientation orientation = getOrientation(world, pos);
-			final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.xCoord - pos.getX(), hitVec.yCoord - pos.getY(), hitVec.zCoord - pos.getZ());
+			final Vec3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitVec.xCoord - pos.getX(), hitVec.yCoord - pos.getY(), hitVec.zCoord - pos.getZ());
 			final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
 			selection = clickBox != null? BlockSpaceTransform.instance.mapBlockToWorld(orientation, clickBox.getKey()).offset(pos.getX(), pos.getY(), pos.getZ()) : null;
 		} else selection = null;
@@ -227,7 +239,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
 			final TileEntityGuide guide = getTileEntity(world, pos, TileEntityGuide.class);
 
@@ -236,12 +248,12 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 				if (areButtonsActive(playerMP)) {
 					final Orientation orientation = getOrientation(world, pos);
-					final Vec3 localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitX, hitY, hitZ);
+					final Vec3d localHit = BlockSpaceTransform.instance.mapWorldToBlock(orientation, hitX, hitY, hitZ);
 					final Entry<AxisAlignedBB, IShapeManipulator> clickBox = findClickBox(localHit);
 					if (clickBox != null) return clickBox.getValue().activate(guide, playerMP);
 				}
 
-				final ItemStack heldStack = playerMP.getHeldItem();
+				final ItemStack heldStack = playerMP.getHeldItemMainhand();
 				if (heldStack != null) {
 					if (guide.onItemUse(playerMP, heldStack, side, hitX, hitY, hitZ)) return true;
 				}
@@ -253,7 +265,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random random) {
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		final float x = pos.getX() + 0.5f;
 		final float y = pos.getY() + 0.7f;
 		final float z = pos.getZ() + 0.5f;

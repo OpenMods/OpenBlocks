@@ -4,13 +4,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import openblocks.Config;
-import openblocks.common.tileentity.*;
+import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileEntityImaginary> {
@@ -26,7 +25,7 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileE
 
 		if (te.visibility <= 0) return;
 
-		bindTexture(TextureMap.locationBlocksTexture);
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		if (!te.isPencil()) {
 			RenderUtils.setColor(te.color, te.visibility);

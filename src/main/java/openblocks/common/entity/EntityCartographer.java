@@ -1,15 +1,17 @@
 package openblocks.common.entity;
 
+import com.google.common.collect.ImmutableSet;
 import java.util.Random;
 import java.util.Set;
-
+import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,11 +24,15 @@ import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openmods.Log;
 import openmods.api.VisibleForDocumentation;
-import openmods.sync.*;
+import openmods.sync.ISyncMapProvider;
+import openmods.sync.SyncMap;
+import openmods.sync.SyncMapEntity;
+import openmods.sync.SyncObjectScanner;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableInt;
+import openmods.sync.SyncableObjectBase;
 import openmods.utils.BitSet;
 import openmods.utils.ItemUtils;
-
-import com.google.common.collect.ImmutableSet;
 
 @VisibleForDocumentation
 public class EntityCartographer extends EntityAssistant implements ISelectAware, ISyncMapProvider {
@@ -90,8 +96,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 			MapDataBuilder builder = new MapDataBuilder(mapId);
 
 			builder.loadMap(world);
-			builder.resizeIfNeeded(bits); // better to lost progress than to
-											// break world
+			builder.resizeIfNeeded(bits); // better to lost progress than to break world
 
 			size = builder.size();
 			jobs = builder.createJobs(bits);
@@ -176,7 +181,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 		super.onUpdate();
 
 		if (!worldObj.isRemote) {
-			if (worldObj.provider.getDimensionId() == mappingDimension && isMapping.get() && countdownToAction-- <= 0) {
+			if (worldObj.provider.getDimension() == mappingDimension && isMapping.get() && countdownToAction-- <= 0) {
 				jobs.runJob(worldObj, (int)posX, (int)posZ);
 				countdownToAction = MAP_JOB_DELAY;
 			}
@@ -231,11 +236,10 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer player) {
+	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack holding, EnumHand hand) {
 		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) {
-			ItemStack holding = player.getHeldItem();
 			if (holding == null && mapItem != null) {
-				player.setCurrentItemOrArmor(0, mapItem);
+				player.setHeldItem(hand, mapItem);
 				mapItem = null;
 				isMapping.toggle();
 				jobs.stopMapping();
@@ -244,10 +248,10 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 				if (itemType instanceof ItemHeightMap || itemType instanceof ItemEmptyMap) {
 					ItemStack inserted = holding.splitStack(1);
 
-					if (holding.stackSize <= 0) player.setCurrentItemOrArmor(0, null);
+					if (holding.stackSize <= 0) player.setHeldItem(hand, null);
 
 					mapItem = inserted;
-					mappingDimension = worldObj.provider.getDimensionId();
+					mappingDimension = worldObj.provider.getDimension();
 					isMapping.toggle();
 					mapItem = MapDataBuilder.upgradeToMap(worldObj, mapItem);
 					int mapId = mapItem.getItemDamage();

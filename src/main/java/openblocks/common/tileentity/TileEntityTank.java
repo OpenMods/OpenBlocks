@@ -1,8 +1,8 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,18 +10,29 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.IFluidTank;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.client.renderer.tileentity.tank.*;
+import openblocks.client.renderer.tileentity.tank.INeighbourMap;
+import openblocks.client.renderer.tileentity.tank.ITankConnections;
+import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
+import openblocks.client.renderer.tileentity.tank.NeighbourMap;
+import openblocks.client.renderer.tileentity.tank.TankRenderLogic;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.item.ItemTankBlock;
-import openmods.api.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.GenericFluidHandler;
@@ -31,8 +42,6 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.ItemUtils;
-
-import com.google.common.collect.Lists;
 
 public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTile, IPlaceAwareTile, INeighbourAwareTile, ICustomHarvestDrops, ITickable {
 
@@ -52,7 +61,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			if (changes.contains(tank)) {
 				final FluidStack fluidStack = tank.getFluid();
 				if (!isSameFluid(fluidStack)) {
-					worldObj.markBlockForUpdate(pos);
+					// TODO 1.10 - verify
+					worldObj.markBlockRangeForRenderUpdate(pos, pos);
 					prevFluidStack = fluidStack;
 
 					int luminosity = fluidStack != null? fluidStack.getFluid().getLuminosity(fluidStack) : 0;
@@ -82,7 +92,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public void invalidate() {
 		super.invalidate();
-		if (worldObj.isRemote) renderLogic.clearConnections();
+		if (worldObj.isRemote) renderLogic.invalidateConnections();
 	}
 
 	protected TileEntityTank getNeighourTank(BlockPos pos) {
@@ -152,11 +162,11 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	public ITankRenderFluidData getRenderFluidData() {
-		return renderLogic;
+		return renderLogic.getTankRenderData();
 	}
 
-	public ITankConnections getRenderConnectionsData() {
-		return renderLogic;
+	public ITankConnections getTankConnections() {
+		return renderLogic.getTankConnections();
 	}
 
 	public boolean accepts(FluidStack liquid) {
@@ -299,7 +309,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
 		}
 
-		if (worldObj.isRemote) renderLogic.validateConnections();
+		if (worldObj.isRemote) renderLogic.validateConnections(worldObj, getPos());
 	}
 
 	private void tryGetNeighbor(List<TileEntityTank> result, FluidStack fluid, EnumFacing side) {
@@ -322,6 +332,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			sum += n.tank.getFluidAmount();
 
 		final int suggestedAmount = sum / (count + 1);
+		if (Math.abs(suggestedAmount - contents.amount) < Config.tankFluidUpdateThreshold) return; // Don't balance small amounts to reduce server load
+
 		FluidStack suggestedStack = contents.copy();
 		suggestedStack.amount = suggestedAmount;
 

@@ -20,7 +20,7 @@ public class LuggageDropHandler {
 
 	@SubscribeEvent
 	public void onItemDrop(EntityJoinWorldEvent evt) {
-		final Entity entity = evt.entity;
+		final Entity entity = evt.getEntity();
 		if (entity instanceof EntityItem && shouldPreventDespawn((EntityItem)entity)) {
 			EntityUtils.setEntityInvulnerable(entity, true);
 		}
@@ -28,8 +28,8 @@ public class LuggageDropHandler {
 
 	@SubscribeEvent
 	public void onItemExpire(ItemExpireEvent evt) {
-		if (shouldPreventDespawn(evt.entityItem)) {
-			evt.extraLife += 0x12F58BF;
+		if (shouldPreventDespawn(evt.getEntityItem())) {
+			evt.setExtraLife(evt.getExtraLife() + 0x12F58BF);
 			evt.setCanceled(true);
 		}
 	}

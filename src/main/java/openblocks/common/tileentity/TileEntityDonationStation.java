@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -50,9 +49,10 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override

@@ -1,11 +1,17 @@
 package openblocks.integration;
 
+import dan200.computercraft.api.peripheral.IPeripheral;
+import dan200.computercraft.api.turtle.ITurtleAccess;
+import dan200.computercraft.api.turtle.ITurtleUpgrade;
+import dan200.computercraft.api.turtle.TurtleCommandResult;
+import dan200.computercraft.api.turtle.TurtleSide;
+import dan200.computercraft.api.turtle.TurtleUpgradeType;
+import dan200.computercraft.api.turtle.TurtleVerb;
 import javax.vecmath.Matrix4f;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -15,11 +21,7 @@ import openblocks.OpenBlocks;
 import openblocks.common.item.MetasGeneric;
 import openperipheral.api.ApiAccess;
 import openperipheral.api.architecture.cc.IComputerCraftObjectsFactory;
-
 import org.apache.commons.lang3.tuple.Pair;
-
-import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.turtle.*;
 
 public class MagnetTurtleUpgrade implements ITurtleUpgrade {
 

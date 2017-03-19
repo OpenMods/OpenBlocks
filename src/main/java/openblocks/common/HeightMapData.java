@@ -110,7 +110,7 @@ public class HeightMapData extends WorldSavedData {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		tag.setInteger("Dimension", dimension);
 
 		tag.setInteger("CenterX", centerX);
@@ -124,6 +124,8 @@ public class HeightMapData extends WorldSavedData {
 			result.appendTag(layerData);
 		}
 		tag.setTag("Layers", result);
+
+		return tag;
 	}
 
 	public void readFromStream(PacketBuffer input) {

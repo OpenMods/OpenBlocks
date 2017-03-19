@@ -10,10 +10,10 @@ public class SleepingBagRenderHandler {
 
 	@SubscribeEvent
 	public void onPrePlayerRender(RenderPlayerEvent.Pre event) {
-		final EntityPlayer entityPlayer = event.entityPlayer;
+		final EntityPlayer entityPlayer = event.getEntityPlayer();
 		if (entityPlayer instanceof EntityOtherPlayerMP) {
 			if (entityPlayer.isPlayerSleeping() && ItemSleepingBag.isWearingSleepingBag(entityPlayer)) {
-				event.entityPlayer.renderOffsetY = 1.7f;
+				entityPlayer.renderOffsetY = 1.7f;
 			}
 		}
 

@@ -1,16 +1,16 @@
 package openblocks.common.block;
 
 import java.util.List;
-
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -30,23 +30,24 @@ import openmods.utils.ItemUtils;
 public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
-		super(Material.rock);
+		super(Material.ROCK);
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess world, BlockPos pos) {
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 		if (!Config.tanksEmitLight) return 0;
+
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		return tile != null? tile.getFluidLightLevel() : 0;
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, BlockPos pos, EntityPlayer player) {
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		ItemStack result = new ItemStack(this);
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		if (tile != null) {
@@ -63,12 +64,12 @@ public class BlockTank extends OpenBlock {
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride() {
+	public boolean hasComparatorInputOverride(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, BlockPos pos) {
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		double value = tile.getFluidRatio() * 15;
 		if (value == 0) return 0;

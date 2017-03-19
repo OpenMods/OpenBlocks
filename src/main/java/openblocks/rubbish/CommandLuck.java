@@ -1,15 +1,18 @@
 package openblocks.rubbish;
 
-import static openmods.utils.CommandUtils.*;
+import static openmods.utils.CommandUtils.error;
+import static openmods.utils.CommandUtils.fiterPlayerNames;
+import static openmods.utils.CommandUtils.respond;
 
 import java.util.Collections;
 import java.util.List;
-
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import openblocks.enchantments.FlimFlamEnchantmentsHandler;
 
 public class CommandLuck implements ICommand {
@@ -37,11 +40,11 @@ public class CommandLuck implements ICommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] params) throws CommandException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] params) throws CommandException {
 		if (params.length < 1) throw error("openblocks.misc.command.invalid");
 
 		String playerName = params[0];
-		EntityPlayer player = getPlayer(sender, playerName);
+		EntityPlayer player = CommandBase.getPlayer(server, sender, playerName);
 
 		if (params.length == 1) {
 			int result = FlimFlamEnchantmentsHandler.getLuck(player);
@@ -60,12 +63,12 @@ public class CommandLuck implements ICommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 		return sender.canCommandSenderUseCommand(4, NAME); // OP
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] params, BlockPos pos) {
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] params, BlockPos pos) {
 		if (params.length == 1) {
 			String playerPrefix = params[0];
 			return fiterPlayerNames(playerPrefix);

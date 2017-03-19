@@ -1,32 +1,33 @@
 package openblocks.common.entity;
 
+import com.google.common.base.Predicate;
 import io.netty.buffer.ByteBuf;
-
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.api.IMagnetAware;
 import openblocks.common.CraneRegistry;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.item.ItemCraneBackpack;
-import openmods.entity.*;
+import openmods.entity.DelayedEntityLoadManager;
+import openmods.entity.EntityBlock;
 import openmods.entity.EntityBlock.EntityFactory;
-
-import com.google.common.base.Predicate;
+import openmods.entity.IEntityLoadListener;
 
 public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalSpawnData {
 
@@ -42,52 +43,49 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	public interface IEntityBlockFactory {
-		public EntityBlock create(EntityPlayer player);
+		public EntityBlock create(EntityLivingBase player);
 	}
 
 	public interface IOwner {
 		public boolean isValid(EntityMagnet magnet);
 
-		public Vec3 getTarget();
+		public Vec3d getTarget();
 
 		public EntityBlock createByPlayer(IEntityBlockFactory factory);
 	}
 
 	private static class EntityPlayerTarget implements IOwner {
-		private WeakReference<EntityPlayer> owner;
+		private WeakReference<EntityLivingBase> owner;
 
-		public EntityPlayerTarget(EntityPlayer owner) {
-			this.owner = new WeakReference<EntityPlayer>(owner);
+		public EntityPlayerTarget(EntityLivingBase owner) {
+			this.owner = new WeakReference<EntityLivingBase>(owner);
 		}
 
 		@Override
 		public boolean isValid(EntityMagnet magnet) {
-			EntityPlayer player = owner.get();
+			EntityLivingBase player = owner.get();
 			if (player == null || player.isDead) return false;
 			if (magnet.worldObj != player.worldObj) return false;
 			return ItemCraneBackpack.isWearingCrane(player);
 		}
 
 		@Override
-		public Vec3 getTarget() {
-			EntityPlayer player = owner.get();
+		public Vec3d getTarget() {
+			EntityLivingBase player = owner.get();
 			if (player == null) return null;
 
-			double posX = player.posX + CraneRegistry.ARM_RADIUS
-					* MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
-			double posZ = player.posZ
-					+ CraneRegistry.ARM_RADIUS
-					* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
+			double posX = player.posX + CraneRegistry.ARM_RADIUS * MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
+			double posZ = player.posZ + CraneRegistry.ARM_RADIUS * MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
 
 			double posY = player.posY + player.height
 					- CraneRegistry.instance.getCraneMagnetDistance(player);
 
-			return new Vec3(posX, posY, posZ);
+			return new Vec3d(posX, posY, posZ);
 		}
 
 		@Override
 		public EntityBlock createByPlayer(IEntityBlockFactory factory) {
-			EntityPlayer player = owner.get();
+			EntityLivingBase player = owner.get();
 			if (player == null) return null;
 
 			return factory.create(player);
@@ -102,7 +100,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			owner = new WeakReference<Entity>(null);
 		}
 
-		public PlayerBound(World world, EntityPlayer owner) {
+		public PlayerBound(World world, EntityLivingBase owner) {
 			super(world, new EntityPlayerTarget(owner), false);
 			this.owner = new WeakReference<Entity>(owner);
 			CraneRegistry.instance.bindMagnetToPlayer(owner, this);
@@ -155,7 +153,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		this(world);
 		this.owner = owner;
 		this.isMagic = isMagic;
-		Vec3 initialTarget = owner.getTarget();
+		Vec3d initialTarget = owner.getTarget();
 		setPosition(initialTarget.xCoord, initialTarget.yCoord, initialTarget.zCoord);
 	}
 
@@ -200,7 +198,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 				setDead();
 				return;
 			} else if (owner != null) {
-				final Vec3 target = owner.getTarget().addVector(0, -height, 0);
+				final Vec3d target = owner.getTarget().addVector(0, -height, 0);
 				smoother.setTarget(target);
 			}
 		}
@@ -211,15 +209,21 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		isAboveTarget = !detectEntityTargets().isEmpty();
 
-		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle(EnumParticleTypes.PORTAL, posX
-				+ RANDOM.nextDouble() * 0.1, posY - RANDOM.nextDouble() * 0.2, posZ
-				+ RANDOM.nextDouble() * 0.1, RANDOM.nextGaussian(), -Math.abs(RANDOM.nextGaussian()), RANDOM.nextGaussian());
+		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle(EnumParticleTypes.PORTAL,
+				posX + RANDOM.nextDouble() * 0.1,
+				posY - RANDOM.nextDouble() * 0.2, posZ + RANDOM.nextDouble() * 0.1,
+				RANDOM.nextGaussian(),
+				-Math.abs(RANDOM.nextGaussian()),
+				RANDOM.nextGaussian());
 	}
 
 	protected void fixSize() {
-		if (riddenByEntity != null) {
-			float width = Math.max(MAGNET_WIDTH, riddenByEntity.width);
-			float height = MAGNET_HEIGHT + riddenByEntity.height;
+		// TODO 1.10 verify
+		final List<Entity> passengers = getPassengers();
+		if (!passengers.isEmpty()) {
+			Entity passenger = passengers.get(0);
+			float width = Math.max(MAGNET_WIDTH, passenger.width);
+			float height = MAGNET_HEIGHT + passenger.height;
 			setSize(width, height);
 		} else {
 			setSize(MAGNET_WIDTH, MAGNET_HEIGHT);
@@ -227,48 +231,31 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	@Override
-	public void setPosition(double x, double y, double z) {
-		if (smoother != null) smoother.setTarget(x, y, z);
-
-		super.setPosition(x, y, z);
-	}
-
-	@Override
-	public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
-		smoother.setTarget(x, y, z);
-		super.setPositionAndRotation(x, y, z, yaw, pitch);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean something) {
-		smoother.setTarget(x, y, z);
-		super.setRotation(yaw, pitch);
-	}
-
-	@Override
 	public double getMountedYOffset() {
-		if (riddenByEntity == null) return 0;
+		final List<Entity> passengers = getPassengers();
+		if (passengers.isEmpty()) return 0;
 
-		return getMountedYOffset(riddenByEntity);
+		return getMountedYOffset(passengers.get(0));
 	}
 
 	private static double getMountedYOffset(Entity rider) {
-		if (rider instanceof EntityPlayer) return 0.5f;
+		if (rider instanceof EntityPlayer) return 0.5f; // TODO 1.10 verify if it's still a problem
 		return 0;
 	}
 
 	public boolean toggleMagnet() {
-		if (riddenByEntity != null) {
-			final Entity tmp = riddenByEntity;
+		final List<Entity> passengers = getPassengers();
+		if (!passengers.isEmpty()) {
+			final Entity passenger = passengers.get(0);
 
-			if (tmp instanceof IMagnetAware
-					&& !((IMagnetAware)tmp).canRelease()) return false;
+			if (passenger instanceof IMagnetAware // TODO 1.10 there seems to be Forge event for that?
+					&& !((IMagnetAware)passenger).canRelease())
+				return false;
 			// default unmount position is above entity and it
 			// looks strange, so we hack around that
-			double tmpPosY = tmp.posY;
-			tmp.mountEntity(null);
-			tmp.setPosition(tmp.posX, tmpPosY, tmp.posZ);
+			double tmpPosY = passenger.posY;
+			removePassengers();
+			passenger.setPosition(passenger.posX, tmpPosY, passenger.posZ);
 			return true;
 		} else if (!worldObj.isRemote) {
 			Entity target = null;
@@ -278,7 +265,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			if (target == null && Config.canMagnetPickBlocks) target = createBlockEntity();
 
 			if (target != null) {
-				target.mountEntity(this);
+				target.startRiding(this);
 				return true;
 			}
 		}
@@ -316,7 +303,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		if (MagnetWhitelists.instance.testBlock(worldObj, pos)) {
 			result = owner.createByPlayer(new IEntityBlockFactory() {
 				@Override
-				public EntityBlock create(EntityPlayer player) {
+				public EntityBlock create(EntityLivingBase player) {
 					return EntityBlock.create(player, worldObj, pos, new EntityFactory() {
 						@Override
 						public EntityBlock create(World world) {
@@ -355,7 +342,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	public boolean isLocked() {
-		return riddenByEntity != null;
+		return isBeingRidden();
 	}
 
 	public boolean isValid() {

@@ -3,7 +3,7 @@ package openblocks.trophy;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openmods.utils.CollectionUtils;
@@ -19,9 +19,9 @@ public class SnowmanBehavior implements ITrophyBehavior {
 			for (int z = -1; z <= 1; z++) {
 				final BlockPos pos = base.add(x, 0, z);
 
-				if (world.isAirBlock(pos) && Blocks.snow_layer.canPlaceBlockAt(world, pos)) {
+				if (world.isAirBlock(pos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, pos)) {
 					final Integer snowLayers = CollectionUtils.getRandom(BlockSnow.LAYERS.getAllowedValues());
-					world.setBlockState(pos, Blocks.snow_layer.getDefaultState().withProperty(BlockSnow.LAYERS, snowLayers));
+					world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, snowLayers));
 				}
 			}
 		}

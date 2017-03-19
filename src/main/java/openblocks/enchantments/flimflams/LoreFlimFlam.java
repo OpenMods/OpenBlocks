@@ -1,16 +1,26 @@
 package openblocks.enchantments.flimflams;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.*;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBucket;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemShears;
+import net.minecraft.item.ItemSpade;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,24 +28,20 @@ import openblocks.Config;
 import openblocks.api.IFlimFlamAction;
 import openblocks.rubbish.LoreGenerator;
 import openmods.utils.ItemUtils;
-
+import openmods.utils.TranslationUtils;
 import org.lwjgl.input.Keyboard;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 public class LoreFlimFlam implements IFlimFlamAction {
 
 	public static final String TAG_NAME = "SillyLore";
 
-	public static final String LORE_FORMAT = EnumChatFormatting.GREEN + "" + EnumChatFormatting.ITALIC;
+	public static final String LORE_FORMAT = TextFormatting.GREEN + "" + TextFormatting.ITALIC;
 
 	public static class DisplayHandler {
 		@SubscribeEvent
 		public void onItemTooltip(ItemTooltipEvent evt) {
 			if (Config.loreDisplay > 0) {
-				final NBTTagCompound itemTag = evt.itemStack.getTagCompound();
+				final NBTTagCompound itemTag = evt.getItemStack().getTagCompound();
 				if (itemTag != null) {
 					if (itemTag.hasKey("display", Constants.NBT.TAG_COMPOUND)) {
 						final NBTTagCompound displayTag = itemTag.getCompoundTag("display");
@@ -47,9 +53,9 @@ public class LoreFlimFlam implements IFlimFlamAction {
 									Keyboard.isKeyDown(Keyboard.KEY_LMENU) ||
 									Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
 								for (int i = 0; i < sillyLore.tagCount(); i++)
-									evt.toolTip.add(LORE_FORMAT + sillyLore.getStringTagAt(i));
+									evt.getToolTip().add(LORE_FORMAT + sillyLore.getStringTagAt(i));
 							} else {
-								evt.toolTip.add(StatCollector.translateToLocal("openblocks.misc.hidden_lore"));
+								evt.getToolTip().add(TranslationUtils.translateToLocal("openblocks.misc.hidden_lore"));
 							}
 						}
 					}
@@ -60,20 +66,17 @@ public class LoreFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
-		List<Integer> slots = Lists.newArrayList(0, 1, 2, 3, 4);
+		List<EntityEquipmentSlot> slots = Lists.newArrayList(EntityEquipmentSlot.values());
 		Collections.shuffle(slots);
 
-		for (int slot : slots)
+		for (EntityEquipmentSlot slot : slots)
 			if (tryAddLore(target, slot)) return true;
 
 		return false;
 	}
 
-	private static boolean tryAddLore(EntityPlayer target, int slot) {
-		final ItemStack item;
-
-		if (slot == 4) item = target.getHeldItem();
-		else item = target.inventory.armorInventory[slot];
+	private static boolean tryAddLore(EntityPlayer target, EntityEquipmentSlot slot) {
+		final ItemStack item = target.getItemStackFromSlot(slot);
 
 		if (item == null) return false;
 
@@ -118,14 +121,16 @@ public class LoreFlimFlam implements IFlimFlamAction {
 		Item item = stack.getItem();
 		if (item instanceof ItemArmor) {
 			switch (((ItemArmor)item).armorType) {
-				case 0:
+				case HEAD:
 					return "helmet";
-				case 1:
+				case CHEST:
 					return "chestplate";
-				case 2:
+				case LEGS:
 					return "leggings";
-				case 3:
+				case FEET:
 					return "boots";
+				default:
+					break;
 			}
 		} else if (item instanceof ItemPickaxe) return "pickaxe";
 		else if (item instanceof ItemShears) return "shears";

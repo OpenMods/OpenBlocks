@@ -5,8 +5,8 @@ import net.minecraft.client.model.ModelRenderer;
 import openblocks.common.tileentity.TileEntityXPShower;
 import openmods.renderer.ITileEntityModel;
 
-public class ModelXPShower extends ModelBase implements ITileEntityModel<TileEntityXPShower>
-{
+public class ModelXPShower extends ModelBase implements ITileEntityModel<TileEntityXPShower> {
+
 	ModelRenderer end;
 	ModelRenderer main;
 

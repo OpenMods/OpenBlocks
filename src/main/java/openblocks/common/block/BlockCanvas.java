@@ -5,8 +5,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.api.IPaintableBlock;
@@ -21,7 +21,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	// TODO 1.8.9 everything
 
 	public BlockCanvas() {
-		this(Material.sponge);
+		this(Material.SPONGE);
 	}
 
 	public BlockCanvas(Material material) {
@@ -33,7 +33,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 		final Block block = state.getBlock();
 		final int meta = block.getMetaFromState(state);
 
-		final Block toReplace = (block.getMaterial() == Material.glass)? OpenBlocks.Blocks.canvasGlass : OpenBlocks.Blocks.canvas;
+		final Block toReplace = (state.getMaterial() == Material.GLASS)? OpenBlocks.Blocks.canvasGlass : OpenBlocks.Blocks.canvas;
 		world.setBlockState(pos, toReplace.getDefaultState());
 
 		final TileEntityCanvas tile = getTileEntity(world, pos, TileEntityCanvas.class);

@@ -3,8 +3,8 @@ package openblocks.enchantments.flimflams;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
 
@@ -27,7 +27,7 @@ public class SkyblockFlimFlam implements IFlimFlamAction {
 		for (BlockPos pos : blocks)
 			if (!world.isAirBlock(pos)) return false;
 
-		final IBlockState state = Blocks.ice.getDefaultState();
+		final IBlockState state = Blocks.ICE.getDefaultState();
 
 		for (BlockPos pos : blocks)
 			world.setBlockState(pos, state);

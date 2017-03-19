@@ -9,7 +9,10 @@ import openblocks.common.container.ContainerDrawingTable;
 import openblocks.rpc.IStencilCrafter;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.Icon;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent;
+import openmods.gui.component.GuiComponentIconButton;
+import openmods.gui.component.GuiComponentSprite;
+import openmods.gui.component.GuiComponentTextButton;
 import openmods.gui.listener.IMouseDownListener;
 
 public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
@@ -58,10 +61,11 @@ public class GuiDrawingTable extends BaseGuiContainer<ContainerDrawingTable> {
 		});
 
 		root.addComponent(buttonDraw);
+
 		(iconDisplay = new GuiComponentSprite(80, 34)
 				.setColor(0f, 0f, 0f))
-				.setOverlayMode(true)
-				.setEnabled(inventorySlots.getSlot(0).getStack() != null);
+						.setOverlayMode(true)
+						.setEnabled(inventorySlots.getSlot(0).getStack() != null);
 		root.addComponent(iconDisplay);
 		root.addComponent(buttonLeft);
 		root.addComponent(buttonRight);

@@ -4,7 +4,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.common.MinecraftForge;
 import openmods.renderer.DisplayListWrapper;
-
 import org.lwjgl.opengl.GL11;
 
 public class ModelCartographer extends ModelBase {

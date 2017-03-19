@@ -1,9 +1,13 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openmods.block.OpenBlock;
@@ -13,29 +17,35 @@ import openmods.infobook.BookDocumentation;
 public class BlockBearTrap extends OpenBlock.TwoDirections {
 
 	public BlockBearTrap() {
-		super(Material.rock);
-		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 0.4f, 0.9f);
+		super(Material.ROCK);
+	}
+
+	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.4, 0.9);
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return AABB;
 	}
 
 	@Override
-	public int getRenderType() {
-		return 2; // TESR only
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
+	public boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
 		TileEntityBearTrap te = getTileEntity(world, pos, TileEntityBearTrap.class);
 		if (te != null) te.onEntityCollided(entity);
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean isFullCube() {
-		return false;
 	}
 
 	@Override
@@ -44,12 +54,12 @@ public class BlockBearTrap extends OpenBlock.TwoDirections {
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride() {
+	public boolean hasComparatorInputOverride(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, BlockPos pos) {
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
 		TileEntityBearTrap tile = getTileEntity(world, pos, TileEntityBearTrap.class);
 		return tile != null? tile.getComparatorLevel() : 0;
 	}

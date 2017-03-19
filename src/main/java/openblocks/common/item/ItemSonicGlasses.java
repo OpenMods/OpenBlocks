@@ -3,6 +3,7 @@ package openblocks.common.item;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -12,16 +13,13 @@ import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
 public class ItemSonicGlasses extends ItemArmor {
-
-	private static final int ARMOR_HELMET = 0;
-
 	public ItemSonicGlasses() {
-		super(ArmorMaterial.IRON, 2, ARMOR_HELMET);
+		super(ArmorMaterial.IRON, 2, EntityEquipmentSlot.HEAD);
 	}
 
 	@Override
-	public boolean isValidArmor(ItemStack stack, int armorType, Entity entity) {
-		return armorType == ARMOR_HELMET;
+	public boolean isValidArmor(ItemStack stack, EntityEquipmentSlot armorType, Entity entity) {
+		return armorType == EntityEquipmentSlot.HEAD;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -29,8 +27,8 @@ public class ItemSonicGlasses extends ItemArmor {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-		if (armorSlot == ARMOR_HELMET) {
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+		if (armorSlot == EntityEquipmentSlot.HEAD) {
 			if (model == null) model = new ModelSonicGlasses();
 			return model;
 		}
@@ -39,7 +37,7 @@ public class ItemSonicGlasses extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		return "openblocks:textures/models/glasses.png";
 	}
 

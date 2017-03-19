@@ -1,7 +1,6 @@
 package openblocks.integration;
 
 import java.util.List;
-
 import net.minecraft.item.ItemStack;
 
 public class TurtleUtils {

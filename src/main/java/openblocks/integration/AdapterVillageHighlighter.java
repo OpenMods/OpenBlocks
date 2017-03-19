@@ -1,16 +1,16 @@
 package openblocks.integration;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
-
-import net.minecraft.util.Vec3i;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.village.Village;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openperipheral.api.adapter.IPeripheralAdapter;
 import openperipheral.api.adapter.method.ReturnType;
 import openperipheral.api.adapter.method.ScriptCallable;
+import openperipheral.api.architecture.FeatureGroup;
 
-import com.google.common.collect.Maps;
-
+@FeatureGroup("openblocks-village-highlighter")
 public class AdapterVillageHighlighter implements IPeripheralAdapter {
 
 	@Override
@@ -28,7 +28,7 @@ public class AdapterVillageHighlighter implements IPeripheralAdapter {
 		Map<Integer, Object> map = Maps.newHashMap();
 		int i = 1;
 		for (Village village : vh.getWorld().villageCollectionObj.getVillageList()) {
-			if (village.func_179866_a(vh.getPos())) {
+			if (village.isBlockPosWithinSqVillageRadius(vh.getPos())) {
 				Map<String, Object> villageMap = Maps.newHashMap();
 				Vec3i d = village.getCenter().subtract(vh.getPos());
 				villageMap.put("x", d.getX());

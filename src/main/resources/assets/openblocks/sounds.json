@@ -2,137 +2,137 @@
     "elevator.activate": {
         "category": "block",
         "sounds": [
-            "teleport"
+            "openblocks:teleport"
         ]
     },
     "cannon.activate": {
         "category": "block",
         "sounds": [
-            "cannon"
+            "openblocks:cannon"
         ]
     },
     "radio.activate": {
         "category": "block",
         "sounds": [
-            "radio"
+            "openblocks:radio"
         ]
     },
     "bottler.signal": {
         "category": "block",
         "sounds": [
-            "fill"
+            "openblocks:fill"
         ]
     },
     "crayon.place": {
         "category": "block",
         "sounds": [
-            "draw1",
-            "draw2",
-            "draw3",
-            "draw4"
+            "openblocks:draw1",
+            "openblocks:draw2",
+            "openblocks:draw3",
+            "openblocks:draw4"
         ]
     },
     "target.open": {
         "category": "block",
         "sounds": [
-            "open"
+            "openblocks:open"
         ]
     },
     "target.close": {
         "category": "block",
         "sounds": [
-            "close"
+            "openblocks:close"
         ]
     },
     "beartrap.open": {
         "category": "block",
         "sounds": [
-            "beartrapopen"
+            "openblocks:beartrapopen"
         ]
     },
     "beartrap.close": {
         "category": "block",
         "sounds": [
-            "beartrapclose",
-            "beartrapcloseb"
+            "openblocks:beartrapclose",
+            "openblocks:beartrapcloseb"
         ]
     },
 
     "luggage.eat.item": {
         "category": "neutral",
         "sounds": [
-            "chomp"
+            "openblocks:chomp"
         ]
     },
     "luggage.eat.food": {
         "category": "neutral",
         "sounds": [
-            "slowpokenom"
+            "openblocks:slowpokenom"
         ]
     },
     "luggage.walk": {
         "category": "neutral",
         "sounds": [
-            "feet"
+            "openblocks:feet"
         ]
     },
 
     "slimalyzer.signal": {
         "category": "player",
         "sounds": [
-            "beep"
+            "openblocks:beep"
         ]
     },
     "pedometer.use": {
         "category": "player",
         "sounds": [
-            "beep"
+            "openblocks:beep"
         ]
     },
     "squeegee.use": {
         "category": "player",
         "sounds": [
-            "wipe"
+            "openblocks:wipe"
         ]
     },
     "best.feature.ever.fart": {
         "category": "player",
         "sounds": [
-            "fart1",
-            "fart2",
-            "fart3",
-            "fart4"
+            "openblocks:fart1",
+            "openblocks:fart2",
+            "openblocks:fart3",
+            "openblocks:fart4"
         ]
     },
 
     "annoying.mosquito": {
         "category": "master",
         "sounds": [
-            "mosquito"
+            "openblocks:mosquito"
         ]
     },
     "annoying.alarmclock": {
         "category": "master",
         "sounds": [
-            "alarmclock"
+            "openblocks:alarmclock"
         ]
     },
     "annoying.vibrate": {
         "category": "master",
         "sounds": [
-            "vibrate"
+            "openblocks:vibrate"
         ]
     },
     "unused.mortar": {
         "category": "master",
         "sounds": [
-            "mortar"
+            "openblocks:mortar"
         ]
     },
     "grave.rob": {
         "category": "block",
         "sounds": [
-            "BWV565"
+            "openblocks:BWV565"
         ]
     }
 }

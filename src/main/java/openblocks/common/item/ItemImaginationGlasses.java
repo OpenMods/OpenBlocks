@@ -1,21 +1,21 @@
 package openblocks.common.item;
 
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openmods.colors.ColorMeta;
 import openmods.utils.ItemUtils;
+import openmods.utils.TranslationUtils;
 
 public class ItemImaginationGlasses extends ItemArmor {
 
@@ -52,32 +52,25 @@ public class ItemImaginationGlasses extends ItemArmor {
 			return stack;
 		}
 
-		@Override
-		@SideOnly(Side.CLIENT)
-		public int getColorFromItemStack(ItemStack stack, int pass) {
-			return getGlassesColor(stack);
-		}
+		// TODO 1.10 glasses color
 
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
-			result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", getColor(stack)));
+			result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.color", getColor(stack)));
 		}
 
 		@Override
-		public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+		public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 			if ("overlay".equals(type)) return "openblocks:textures/models/glasses_crayon_overlay.png";
-
 			return super.getArmorTexture(stack, entity, slot, type);
 		}
 	}
 
-	private static final int ARMOR_HELMET = 0;
-
 	public final Type type;
 
 	public ItemImaginationGlasses(Type type) {
-		super(ArmorMaterial.GOLD, 1, ARMOR_HELMET);
+		super(ArmorMaterial.GOLD, 1, EntityEquipmentSlot.HEAD);
 		this.type = type;
 		setHasSubtypes(true);
 	}
@@ -122,7 +115,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 		return this.type.textureName;
 	}
 

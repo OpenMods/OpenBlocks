@@ -1,8 +1,8 @@
 package openblocks.client;
 
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
@@ -11,11 +11,12 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.client.Icons.IDrawableIcon;
@@ -24,10 +25,7 @@ import openmods.config.properties.ConfigurationChange;
 import openmods.renderer.ManualDisplayList;
 import openmods.renderer.ManualDisplayList.Renderer;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.Lists;
 
 public class SoundEventsManager {
 
@@ -94,10 +92,10 @@ public class SoundEventsManager {
 		return isEntityWearingGlasses(e);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onSoundEvent(PlaySoundEvent evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
-			final ISound sound = evt.sound;
+			final ISound sound = evt.getResultSound();
 			final IDrawableIcon icon = icons.getIcon(sound.getSoundLocation());
 
 			synchronized (events) {
@@ -217,9 +215,10 @@ public class SoundEventsManager {
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		dimWorld(tex, mc);
 
-		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX) * evt.partialTicks;
-		final double interpY = rve.prevPosY + (rve.posY - rve.prevPosY) * evt.partialTicks;
-		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ) * evt.partialTicks;
+		final float partialTicks = evt.getPartialTicks();
+		final double interpX = rve.prevPosX + (rve.posX - rve.prevPosX) * partialTicks;
+		final double interpY = rve.prevPosY + (rve.posY - rve.prevPosY) * partialTicks;
+		final double interpZ = rve.prevPosZ + (rve.posZ - rve.prevPosZ) * partialTicks;
 
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
@@ -233,7 +232,7 @@ public class SoundEventsManager {
 				GL11.glPushMatrix();
 				GL11.glTranslated(px, py, pz);
 				RenderUtils.setupBillboard(rve);
-				snd.icon.draw(snd.getAlpha(evt.partialTicks), snd.size);
+				snd.icon.draw(snd.getAlpha(partialTicks), snd.size);
 				GL11.glPopMatrix();
 			}
 		}

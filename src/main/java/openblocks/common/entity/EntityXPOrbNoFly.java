@@ -2,32 +2,44 @@ package openblocks.common.entity;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityXPOrbNoFly extends EntityXPOrb {
 
 	public EntityXPOrbNoFly(World world) {
 		super(world);
-		this.motionX = 0;
-		this.motionY = 0;
-		this.motionZ = 0;
 	}
 
 	public EntityXPOrbNoFly(World world, double x, double y, double z, int xp) {
 		super(world, x, y, z, xp);
-		this.motionX = 0;
-		this.motionY = 0;
-		this.motionZ = 0;
 	}
 
 	@Override
-	public void onUpdate()
-	{
-		super.onEntityUpdate();
+	public void onUpdate() {
+		final double x = posX;
+		final double y = posY;
+		final double z = posZ;
 
-		if (this.delayBeforeCanPickup > 0) --this.delayBeforeCanPickup;
+		final double vx = motionX;
+		final double vy = motionY;
+		final double vz = motionZ;
+
+		// let original update run
+		super.onEntityUpdate();
+		if (isDead) return;
+
+		// and then re-do motion calculations without player tracking
+
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+
+		this.motionX = vx;
+		this.motionY = vy;
+		this.motionZ = vz;
 
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
@@ -35,11 +47,11 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		this.motionY -= 0.029999999329447746D;
 
 		final BlockPos pos = new BlockPos(this);
-		if (this.worldObj.getBlockState(pos).getBlock().getMaterial() == Material.lava) {
+		if (this.worldObj.getBlockState(pos).getMaterial() == Material.LAVA) {
 			this.motionY = 0.20000000298023224D;
 			this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 			this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
-			playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+			playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 		}
 
 		pushOutOfBlocks(this.posX, (getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D, this.posZ);
@@ -47,8 +59,7 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		moveEntity(this.motionX, this.motionY, this.motionZ);
 		final float f;
 
-		if (this.onGround)
-		{
+		if (this.onGround) {
 			final BlockPos posUnder = new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ));
 			f = this.worldObj.getBlockState(posUnder).getBlock().slipperiness * 0.98F;
 		} else {
@@ -59,17 +70,8 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		this.motionY *= 0.98;
 		this.motionZ *= f;
 
-		if (this.onGround)
-		{
+		if (this.onGround) {
 			this.motionY *= -0.8999999761581421D;
-		}
-
-		++this.xpColor;
-		++this.xpOrbAge;
-
-		if (this.xpOrbAge >= 6000)
-		{
-			setDead();
 		}
 	}
 

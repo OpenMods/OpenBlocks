@@ -1,11 +1,13 @@
 package openblocks.common.item;
 
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,7 +50,7 @@ public class ItemCartographer extends Item {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (!player.capabilities.isCreativeMode) --stack.stackSize;
 
 		if (!world.isRemote) {
@@ -59,7 +61,7 @@ public class ItemCartographer extends Item {
 			}
 		}
 
-		return stack;
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
 	public static AssistantType getTypeFromItem(ItemStack stack) {

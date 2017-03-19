@@ -3,8 +3,10 @@ package openblocks.common.item;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import openblocks.OpenBlocks;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
@@ -21,7 +23,7 @@ public class ItemSlimalyzer extends Item {
 				int previousDamage = stack.getItemDamage();
 				stack.setItemDamage(chunk.getRandomWithSeed(987234911L).nextInt(10) == 0? 1 : 0);
 				if (previousDamage != stack.getItemDamage() && previousDamage == 0) {
-					world.playSoundAtEntity(entity, "openblocks:slimalyzer.signal", 1F, 1F);
+					world.playSound(null, entity.getPosition(), OpenBlocks.Sounds.ITEM_SLIMALYZER_PING, SoundCategory.PLAYERS, 1F, 1F);
 				}
 			} else {
 				stack.setItemDamage(0);

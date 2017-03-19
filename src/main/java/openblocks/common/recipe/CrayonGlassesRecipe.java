@@ -1,7 +1,7 @@
 package openblocks.common.recipe;
 
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -12,14 +12,12 @@ import openblocks.OpenBlocks;
 import openblocks.common.item.ItemImaginary;
 import openmods.utils.ItemUtils;
 
-import com.google.common.collect.Lists;
-
 public class CrayonGlassesRecipe extends ShapelessRecipes {
 
 	private static List<ItemStack> createFakeIngredientsList() {
 		ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON);
 		ItemImaginary.setupValues(0x00FFFF, block);
-		return Lists.newArrayList(new ItemStack(Items.paper), block);
+		return Lists.newArrayList(new ItemStack(Items.PAPER), block);
 	}
 
 	private static ItemStack createFakeResult() {
@@ -39,11 +37,9 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (stack != null) {
 				if (stack.getItem() instanceof ItemImaginary) {
-					if (gotCrayon
-							|| ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
-
+					if (gotCrayon || ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
 					gotCrayon = true;
-				} else if (stack.getItem() == Items.paper) {
+				} else if (stack.getItem() == Items.PAPER) {
 					if (gotPaper) return false;
 
 					gotPaper = true;

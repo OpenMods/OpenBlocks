@@ -6,7 +6,7 @@ import openmods.block.OpenBlock;
 public class BlockHeal extends OpenBlock {
 
 	public BlockHeal() {
-		super(Material.rock);
+		super(Material.ROCK);
 	}
 
 }

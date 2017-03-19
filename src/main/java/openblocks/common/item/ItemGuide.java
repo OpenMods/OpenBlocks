@@ -1,14 +1,13 @@
 package openblocks.common.item;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
 import openblocks.shapes.GuideShape;
 import openmods.item.ItemOpenBlock;
+import openmods.utils.TranslationUtils;
 
 public class ItemGuide extends ItemOpenBlock {
 
@@ -34,7 +33,7 @@ public class ItemGuide extends ItemOpenBlock {
 	}
 
 	private static void addIntInfo(NBTTagCompound tag, String name, String format, List<String> result) {
-		if (tag.hasKey(name)) result.add(StatCollector.translateToLocalFormatted(format, tag.getInteger(name)));
+		if (tag.hasKey(name)) result.add(TranslationUtils.translateToLocalFormatted(format, tag.getInteger(name)));
 	}
 
 	@Override
@@ -51,7 +50,7 @@ public class ItemGuide extends ItemOpenBlock {
 				final int negY = -tag.getInteger(TAG_NEG_Y);
 				final int negZ = -tag.getInteger(TAG_NEG_Z);
 
-				result.add(StatCollector.translateToLocalFormatted("openblocks.misc.box", negX, negY, negZ, posX, posY, posZ));
+				result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.box", negX, negY, negZ, posX, posY, posZ));
 			} else {
 				addIntInfo(tag, TAG_WIDTH, "openblocks.misc.width", result);
 				addIntInfo(tag, TAG_HEIGHT, "openblocks.misc.height", result);
@@ -64,7 +63,7 @@ public class ItemGuide extends ItemOpenBlock {
 				int mode = tag.getInteger(TAG_SHAPE);
 				try {
 					GuideShape shape = GuideShape.VALUES[mode];
-					result.add(StatCollector.translateToLocalFormatted("openblocks.misc.shape", shape.getLocalizedName()));
+					result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.shape", shape.getLocalizedName()));
 				} catch (ArrayIndexOutOfBoundsException e) {}
 			}
 		}

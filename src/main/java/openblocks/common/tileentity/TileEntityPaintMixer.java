@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.Maps;
 import java.util.EnumMap;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -30,15 +30,11 @@ import openmods.sync.SyncableInt;
 import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.MiscUtils;
-
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.google.common.collect.Maps;
-
 public class TileEntityPaintMixer extends DroppableTileEntity implements IInventoryProvider, IHasGui, IInventoryCallback, IColorChanger, ITickable {
-
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
-	private static final ItemStack MILK_BUCKET = new ItemStack(Items.milk_bucket);
+	private static final ItemStack MILK_BUCKET = new ItemStack(Items.MILK_BUCKET);
 	public static final int PROGRESS_TICKS = 300;
 
 	public static enum Slots {
@@ -332,9 +328,10 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override

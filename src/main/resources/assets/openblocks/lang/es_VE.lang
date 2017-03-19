@@ -1,12 +1,9 @@
-//** OPENBLOCKS **//
-
-// Traducido al español por @SamerNieve
-
 achievement.openblocks.droppedBrick=Zoinks!
 achievement.openblocks.droppedBrick.desc=Lo siento, simplemente ocurrió.
 stat.openblocks.bricksDropped=Se han caído los ladrillos
 achievement.openblocks.stackOverflow=Desbordamientos de montones
 achievement.openblocks.stackOverflow.desc=¡Está lleno de estrellas!
+
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Sé idiota
 
@@ -41,7 +38,6 @@ openblocks.gui.drawingtable=Mesa de Dibujo
 openblocks.gui.digitalfuse=Detonador Digital
 openblocks.gui.xp_outputs=Salidas de XP
 openblocks.gui.item_outputs=Salidas de Objetos
-openblocks.gui.watch_video=Ver vídeo
 openblocks.gui.max_level=Nivel máx.: %d
 openblocks.gui.save_folder=Guardar carpeta
 
@@ -89,12 +85,14 @@ openblocks.misc.selected_cannon=Cañón seleccionado para apuntar
 openblocks.misc.pointed_cannon=Cañón apuntado a %s, %s, %s
 openblocks.misc.change_mode=Cambiando a modo %s
 openblocks.misc.change_size=Cambiando tamaño a %sx%sx%s
+#openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
 openblocks.misc.total_blocks=Número Total de Bloques: %d
 openblocks.misc.get_witched=¡Embrújate!
 openblocks.misc.page=Página %d de %d
 openblocks.misc.oh_no_ceiling=No puedes dormirte aquí, el techo te inquieta demasiado.
 openblocks.misc.oh_no_ground=¿¡Quieres dormir encima de ESO!?
 openblocks.misc.sleeping_bag_broken=Objeto inactivo debido a una fallo en la inicialización.
+#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
 
 openblocks.misc.grave_msg=%s (día: %.1f)
 
@@ -128,12 +126,16 @@ openblocks.misc.shape=Forma: %s
 openblocks.misc.shape.sphere=Esfera
 openblocks.misc.shape.cylinder=Cilindro
 openblocks.misc.shape.cuboid=Cuboide
+#openblocks.misc.shape.full_cuboid=Full Cuboid ## NEEDS TRANSLATION ##
 openblocks.misc.shape.dome=Cúpula
 openblocks.misc.shape.triangle=Triángulo
 openblocks.misc.shape.pentagon=Pentágono
 openblocks.misc.shape.hexagon=Hexágono
 openblocks.misc.shape.octagon=Octágono
+#openblocks.misc.shape.axes=Axes ## NEEDS TRANSLATION ##
+#openblocks.misc.shape.planes=Planes ## NEEDS TRANSLATION ##
 
+#openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
 openblocks.misc.width=Anchura: %d
 openblocks.misc.height=Altura: %d
 openblocks.misc.depth=Profundidad: %d
@@ -163,6 +165,8 @@ openblocks.misc.command.flim_flam_target=No le gustas a alguien. Alguien con pod
 openblocks.misc.command.flim_flam_failed=¡La estafa ha fallado!
 openblocks.misc.command.luck_added=Al jugador %s le ha cambiado la suerte, actualmente: %d
 openblocks.misc.command.luck_current=Suerte del jugador %s: %d
+
+#openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Ha ocurrido algo extraño a tu alrededor
 
 openblocks.turtle.magnet=Imán
@@ -170,11 +174,16 @@ openblocks.turtle.magnet=Imán
 tile.openblocks.elevator.name=Ascensor
 tile.openblocks.elevator.description=Coloca un ascensor justo arriba de 3 o más bloques arriba de otro sin ningún bloque entremedias y podrás saltar hacia arriba o agacharte para ir hacia abajo. Los ascensores pueden tintarse haciendo clic con un tinte, sin embargo, solo puedes teletransportarte entre ascensores del mismo color.
 
+#tile.openblocks.elevator_rotating.name=Rotating Elevator ## NEEDS TRANSLATION ##
+
 tile.openblocks.heal.name=Curador
 tile.openblocks.heal.description=El bloque curativo es un bloque creativo que proporciona un leve efecto de curación a través del tiempo.
 
 tile.openblocks.guide.name=Guía de Construcción
 tile.openblocks.guide.description=La guía de construcción te dará un contorno de bloques fantasma de diferentes formas y tamaños que te ayudará a planear tus habitaciones.\nPuedes hacer shift+clic para cambiar el forma, o puedes darle a loas diferentes cara para aumentar o disminuir el tamaño.\nCuando estás en modo creativo puedes colocar un bloque de obsidiana encima, y entonces golpear la guía de construcción con cualquier bloque que quieras para crear una forma automáticamente.
+
+#tile.openblocks.builder_guide.name=Enhanced Building Guide ## NEEDS TRANSLATION ##
+#tile.openblocks.builder_guide.description=This enhanced version of building guide not only displays ghost blocks to make building easier, but also allows you to place actual blocks. Just click central block with any block stack!\nWhen in creative mode you can place an obsidian block above, then hit the building guide with any block you like to automatically create the shape. ## NEEDS TRANSLATION ##
 
 tile.openblocks.ladder.name=Escalera Cansina
 tile.openblocks.ladder.description=La escalera cansina soluciona ese irritante problema de saltar a través de una trampilla al final de la escalera. La escalera cansina actúa como una trampilla y una escalera al mismo tiempo.
@@ -194,6 +203,9 @@ tile.openblocks.sponge.description=Esta esponja es un recambio de la esponja cor
 
 item.openblocks.spongeonastick.name=Palo con Esponja
 item.openblocks.spongeonastick.description=El palo con esponja es una herramienta para limpiar líquidos. Funciona como la Esponja, pero es más móvil a expensas de cansar más.
+
+#item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
+#item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
 
 tile.openblocks.cannon.name=Cañón de Objetos
 tile.openblocks.cannon.description=Cuando se le aplique una señal de redstone, el cañon de objetos disparará los objetos que encuentre en un inventario adyacente. Usa el objeto 'apuntador' para apuntar el cañón.
@@ -245,6 +257,7 @@ tile.openblocks.blockbreaker.description=Cuando se le aplique un pulso de redsto
 
 tile.openblocks.projector.name=Proyector de Mapas Topográficos
 tile.openblocks.projector.description=¡Te dejo escribir esta, boq!
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=Mesa de Encantamiento Automática
 tile.openblocks.autoenchantmenttable.description=La mesa de encantamiento automática funciona de forma similar a la mesa de encantamiento corriente excepto por que funciona con XP líquida. Usa las pestañas en la parte derecha de la interfaz para seleccionar de donde se cogen los objetos o la XP. Se necesitan librerías para conseguir mejores encantamientos, justo como con la mesa corriente.
@@ -280,6 +293,7 @@ tile.openblocks.scaffolding.description=¿Has querido alguna vez subir hacia el 
 tile.openblocks.goldenegg.name=Huevo Dorado
 
 tile.openblocks.digitalfuse.name=Detonador Digital
+
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=El cursor te permitirá hacer clic en bloques de forma remota.\nHaz shift+clic en un bloque para enlazarlo al cursor y luego usa el cursor donde quieras para acceder al bloque. Ve con cuidado, por defecto el cursor usa tu XP en relación a cuan lejos estás del bloque enlazado.
 
@@ -317,6 +331,9 @@ item.openblocks.crane_backpack.description=En el mundo Minecraft "imán" es una 
 
 item.openblocks.crane_control.name=Control de Grúa
 item.openblocks.crane_control.description=Este mando inalámbrico de alta tecnología se usa para controlar las grúas portatiles.\n\nClic derecho para subir, shift+clic-derecho para bajar y clic izquierdo para coger o soltar.\nLuces intermitentes señalan que algo está en el imán.
+
+#item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
+#item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=Plantilla
 item.openblocks.crayon.name=Cera Mágica

@@ -7,6 +7,7 @@ import openmods.renderer.ITileEntityModel;
 
 public class ModelPaintMixer extends ModelBase implements ITileEntityModel<TileEntityPaintMixer> {
 
+	// fields
 	ModelRenderer controls;
 	ModelRenderer right;
 	ModelRenderer left;
@@ -15,8 +16,7 @@ public class ModelPaintMixer extends ModelBase implements ITileEntityModel<TileE
 	ModelRenderer bottom;
 	ModelRenderer bottom2;
 
-	public ModelPaintMixer()
-	{
+	public ModelPaintMixer() {
 		textureWidth = 64;
 		textureHeight = 64;
 
@@ -31,7 +31,7 @@ public class ModelPaintMixer extends ModelBase implements ITileEntityModel<TileE
 		right.setRotationPoint(0F, 0F, 0F);
 		right.setTextureSize(64, 64);
 		right.mirror = true;
-		setRotation(right, 0F, 3.141593F, 0F);
+		setRotation(right, 0F, (float)Math.PI, 0F);
 		left = new ModelRenderer(this, 0, 36);
 		left.addBox(-6F, 0F, -6F, 1, 16, 12);
 		left.setRotationPoint(0F, 0F, 0F);

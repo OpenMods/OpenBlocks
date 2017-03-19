@@ -2,16 +2,23 @@ package openblocks.common.tileentity;
 
 import java.util.Set;
 import java.util.UUID;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.MathHelper;
-import openmods.api.*;
-import openmods.sync.*;
+import net.minecraft.util.math.MathHelper;
+import openblocks.OpenBlocks;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IAddAwareTile;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.ISurfaceAttachment;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableUUID;
 import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile, ITickable {
@@ -133,7 +140,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 		if (!flags.get(Flags.isShut)) {
 			flags.on(Flags.isShut);
 			trappedEntity.setValue(trapped.getUniqueID());
-			playSoundAtBlock("openblocks:beartrap.close", 0.5F, 1.0F);
+			playSoundAtBlock(OpenBlocks.Sounds.BLOCK_BEARTRAP_CLOSE, 0.5F, 1.0F);
 			worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
 		}
 	}
@@ -142,7 +149,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 		if (flags.get(Flags.isShut)) {
 			flags.off(Flags.isShut);
 			trappedEntity.clear();
-			playSoundAtBlock("openblocks:beartrap.open", 0.5F, 1.0F);
+			playSoundAtBlock(OpenBlocks.Sounds.BLOCK_BEARTRAP_OPEN, 0.5F, 1.0F);
 			worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
 		}
 	}

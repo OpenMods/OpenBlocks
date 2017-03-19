@@ -1,21 +1,22 @@
 package openblocks.common.item;
 
+import com.google.common.collect.MapMaker;
 import java.util.Map;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openmods.OpenMods;
 import openmods.infobook.BookDocumentation;
-
-import com.google.common.collect.MapMaker;
 
 @BookDocumentation(customName = "crane_control", hasVideo = true)
 public class ItemCraneControl extends Item {
@@ -54,19 +55,19 @@ public class ItemCraneControl extends Item {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
 
 		if (data != null) {
 			data.isExtending = Config.craneShiftControl? player.isSneaking() : !data.isExtending;
 		}
 
-		player.setItemInUse(stack, getMaxItemUseDuration(stack));
-		return stack;
+		player.setActiveHand(hand);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override
-	public void onUsingTick(ItemStack stack, EntityPlayer player, int count) {
+	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
 		if (player instanceof EntityPlayerMP
 				&& ItemCraneBackpack.isWearingCrane(player)) {
 			CraneRegistry.Data data = CraneRegistry.instance.getData(player, true);

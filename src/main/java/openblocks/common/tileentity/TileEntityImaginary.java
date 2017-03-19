@@ -1,15 +1,15 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Preconditions;
 import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.item.ItemImaginary;
@@ -18,8 +18,6 @@ import openmods.OpenMods;
 import openmods.api.ICustomPickItem;
 import openmods.tileentity.SimpleNetTileEntity;
 import openmods.utils.BlockUtils;
-
-import com.google.common.base.Preconditions;
 
 public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomPickItem {
 
@@ -237,13 +235,15 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 
 		if (color != null) tag.setInteger("Color", color);
 		tag.setBoolean("IsInverted", isInverted);
 		tag.setByte("Type", (byte)collisionData.getType().ordinal());
 		collisionData.writeToNBT(tag);
+
+		return tag;
 	}
 
 	@Override
@@ -271,10 +271,6 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 		if (item instanceof ItemImaginationGlasses) return ((ItemImaginationGlasses)item).checkBlock(what, helmet, this);
 
 		return isInverted();
-	}
-
-	public boolean is(EntityPlayer player) {
-		return player.getHeldItem() != null;
 	}
 
 	public boolean is(Property what, Entity e) {

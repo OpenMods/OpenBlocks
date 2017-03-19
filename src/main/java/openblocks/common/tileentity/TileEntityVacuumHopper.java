@@ -1,10 +1,10 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
-
 import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -26,7 +26,10 @@ import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerVacuumHopper;
 import openblocks.common.entity.EntityItemProjectile;
 import openmods.OpenMods;
-import openmods.api.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IHasGui;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IValueProvider;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
@@ -39,10 +42,10 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.SidedInventoryAdapter;
-import openmods.utils.bitmap.*;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
+import openmods.utils.bitmap.BitMapUtils;
+import openmods.utils.bitmap.IReadableBitMap;
+import openmods.utils.bitmap.IRpcDirectionBitMap;
+import openmods.utils.bitmap.IWriteableBitMap;
 
 public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
 
@@ -246,9 +249,10 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override

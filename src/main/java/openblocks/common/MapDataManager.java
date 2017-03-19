@@ -1,21 +1,21 @@
 package openblocks.common;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import gnu.trove.procedure.TIntProcedure;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import openblocks.Config;
 import openmods.Log;
 import openmods.Mods;
@@ -23,11 +23,6 @@ import openmods.config.properties.ConfigurationChange;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
 import openmods.network.event.NetworkEventMeta;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 public class MapDataManager {
 
@@ -203,15 +198,11 @@ public class MapDataManager {
 			blockBlacklist = Sets.newIdentityHashSet();
 			for (String entry : Config.mapBlacklist) {
 				try {
-					String[] parts = entry.split(":");
-					Preconditions.checkState(parts.length == 2);
-					String modId = parts[0];
-					String blockName = parts[1];
-
-					Block block = GameRegistry.findBlock(modId, blockName);
-
-					if (block != Blocks.air) blockBlacklist.add(block);
-					else Log.warn("Can't find block %s", entry);
+					final ResourceLocation loc = new ResourceLocation(entry);
+					if (Block.REGISTRY.containsKey(loc)) {
+						Block block = Block.REGISTRY.getObject(loc);
+						blockBlacklist.add(block);
+					} else Log.warn("Can't find block %s", loc);
 				} catch (Throwable t) {
 					Log.warn(t, "Invalid entry in map blacklist: %s", entry);
 				}

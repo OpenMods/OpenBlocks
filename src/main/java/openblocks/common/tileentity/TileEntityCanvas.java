@@ -1,9 +1,9 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,8 +26,6 @@ import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
-
-import com.google.common.collect.Maps;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ICustomBreakDrops, ICustomHarvestDrops {
 
@@ -125,7 +123,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	public IBlockState getPaintedBlockState() {
 		if (paintedBlockState == null) {
 			final Block block = paintedBlock.getValue();
-			if (block != Blocks.air) {
+			if (block != Blocks.AIR) {
+				// TODO 1.10 switch storage to state
 				paintedBlockState = block.getStateFromMeta(paintedBlockMeta.get());
 			} else {
 				paintedBlockState = OpenBlocks.Blocks.canvas.getDefaultState();
@@ -212,7 +211,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack held = player.getHeldItem();
+		ItemStack held = player.getHeldItemMainhand();
 		if (held != null) {
 			Item heldItem = held.getItem();
 			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem == OpenBlocks.Items.stencil) return false;

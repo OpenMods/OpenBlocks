@@ -1,7 +1,6 @@
 package openblocks.enchantments.flimflams;
 
 import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -28,7 +27,7 @@ public class ItemDropFlimFlam implements IFlimFlamAction {
 		ItemStack stack = inv.getStackInSlot(slot);
 		if (stack == null || random.nextFloat() > 0.5f) return false;
 
-		target.dropPlayerItemWithRandomChoice(inv.decrStackSize(slot, 1), true);
+		target.dropItem(inv.decrStackSize(slot, 1), true);
 		return true;
 	}
 

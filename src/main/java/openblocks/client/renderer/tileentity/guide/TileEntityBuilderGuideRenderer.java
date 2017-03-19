@@ -1,13 +1,12 @@
-package openblocks.client.renderer.tileentity;
+package openblocks.client.renderer.tileentity.guide;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityBuilderGuideRenderer extends TileEntityGuideRenderer<TileEntityBuilderGuide> {

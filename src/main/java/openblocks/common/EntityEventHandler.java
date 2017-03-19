@@ -1,7 +1,7 @@
 package openblocks.common;
 
+import com.google.common.collect.Sets;
 import java.util.Set;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +15,6 @@ import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
 import openmods.utils.BlockUtils;
 import openmods.utils.PlayerUtils;
-
-import com.google.common.collect.Sets;
 
 public class EntityEventHandler {
 
@@ -33,13 +31,13 @@ public class EntityEventHandler {
 			Set<String> unknownNames = Sets.newHashSet();
 			for (String name : Config.disableMobNames) {
 
-				Class<? extends Entity> cls = EntityList.stringToClassMapping.get(name);
+				Class<? extends Entity> cls = EntityList.NAME_TO_CLASS.get(name);
 				if (cls != null) entityBlacklist.add(cls);
 				else unknownNames.add(name);
 			}
 
 			// using Class.forName is unsafe
-			for (Class<? extends Entity> cls : EntityList.classToStringMapping.keySet()) {
+			for (Class<? extends Entity> cls : EntityList.CLASS_TO_NAME.keySet()) {
 				if (unknownNames.isEmpty()) break;
 				if (unknownNames.remove(cls.getName())) entityBlacklist.add(cls);
 			}
@@ -58,7 +56,7 @@ public class EntityEventHandler {
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 
-		final Entity entity = event.entity;
+		final Entity entity = event.getEntity();
 		if (entity != null) {
 			Set<Class<? extends Entity>> blacklist = getBlacklist();
 			if (blacklist.contains(entity.getClass())) {
@@ -72,7 +70,7 @@ public class EntityEventHandler {
 		 * If the player hasn't been given a manual, we'll give him one! (or
 		 * throw it on the floor..)
 		 */
-		if (Config.spamInfoBook && !event.world.isRemote && entity instanceof EntityPlayer) {
+		if (Config.spamInfoBook && !event.getWorld().isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)entity;
 			NBTTagCompound persistTag = PlayerUtils.getModPlayerPersistTag(player, "OpenBlocks");
 

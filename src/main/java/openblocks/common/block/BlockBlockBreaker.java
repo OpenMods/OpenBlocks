@@ -8,7 +8,7 @@ import openmods.infobook.BookDocumentation;
 public class BlockBlockBreaker extends OpenBlock.SixDirections {
 
 	public BlockBlockBreaker() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
 	}
 

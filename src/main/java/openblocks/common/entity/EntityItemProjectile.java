@@ -2,9 +2,10 @@ package openblocks.common.entity;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 /**
@@ -28,14 +29,6 @@ public class EntityItemProjectile extends EntityItem {
 
 	@Override
 	public void onUpdate() {
-		final ItemStack stack = getDataWatcher().getWatchableObjectItemStack(10);
-		if (stack == null)
-		{
-			setDead();
-			return;
-		}
-		if (stack.getItem() != null && stack.getItem().onEntityItemUpdate(this)) return;
-
 		// TODO 1.8.9 verify
 		final double x = posX;
 		final double y = posY;
@@ -48,7 +41,7 @@ public class EntityItemProjectile extends EntityItem {
 		// let vanilla run
 		super.onUpdate();
 		if (!isDead) return;
-		// and then overwrite
+		// and then overwrite position calculations
 
 		this.posX = x;
 		this.posY = y;
@@ -67,14 +60,12 @@ public class EntityItemProjectile extends EntityItem {
 
 		boolean hasMoved = (int)this.prevPosX != (int)this.posX || (int)this.prevPosY != (int)this.posY || (int)this.prevPosZ != (int)this.posZ;
 
-		if (hasMoved || this.ticksExisted % 25 == 0)
-		{
-			if (this.worldObj.getBlockState(new BlockPos(this)).getBlock().getMaterial() == Material.lava)
-			{
+		if (hasMoved || this.ticksExisted % 25 == 0) {
+			if (this.worldObj.getBlockState(new BlockPos(this)).getMaterial() == Material.LAVA) {
 				this.motionY = 0.20000000298023224D;
 				this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 				this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
-				playSound("random.fizz", 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
+				playSound(SoundEvents.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.rand.nextFloat() * 0.4F);
 			}
 		}
 
@@ -82,8 +73,7 @@ public class EntityItemProjectile extends EntityItem {
 		float f = 1F;
 
 		// Keep ground friction
-		if (this.onGround)
-		{
+		if (this.onGround) {
 			f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.98F;
 		}
 

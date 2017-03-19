@@ -1,22 +1,27 @@
 package openblocks.common;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.api.IElevatorBlock;
 import openblocks.api.IElevatorBlock.PlayerRotation;
 import openblocks.events.ElevatorActionEvent;
 import openmods.movement.PlayerMovementEvent;
 import openmods.utils.EnchantmentUtils;
-
-import com.google.common.base.Preconditions;
 
 public class ElevatorActionHandler {
 
@@ -34,9 +39,7 @@ public class ElevatorActionHandler {
 
 		if (!Config.irregularBlocksArePassable) return false;
 		final IBlockState blockState = world.getBlockState(pos);
-		final Block block = blockState.getBlock();
-
-		final AxisAlignedBB aabb = block.getCollisionBoundingBox(world, pos, blockState);
+		final AxisAlignedBB aabb = blockState.getCollisionBoundingBox(world, pos);
 		return aabb == null || aabb.getAverageEdgeLength() < 0.7;
 	}
 
@@ -78,7 +81,7 @@ public class ElevatorActionHandler {
 			}
 
 			if (!Config.elevatorIgnoreBlocks) {
-				ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(block);
+				ElevatorBlockRules.Action action = ElevatorBlockRules.instance.getActionForBlock(blockState);
 				switch (action) {
 					case ABORT:
 						return null;
@@ -105,7 +108,7 @@ public class ElevatorActionHandler {
 				if (result.rotation != PlayerRotation.NONE) player.rotationYaw = getYaw(result.rotation);
 				if (Config.elevatorCenter) player.setPositionAndUpdate(result.getX() + 0.5, result.getY() + 1.1, result.getZ() + 0.5);
 				else player.setPositionAndUpdate(player.posX, result.getY() + 1.1, player.posZ);
-				world.playSoundAtEntity(player, "openblocks:elevator.activate", 1, 1);
+				world.playSound(null, player.getPosition(), OpenBlocks.Sounds.BLOCK_ELEVATOR_ACTIVATE, SoundCategory.BLOCKS, 1, 1);
 			}
 		}
 	}
@@ -147,7 +150,7 @@ public class ElevatorActionHandler {
 		if (!(blockState.getBlock() instanceof IElevatorBlock)) return;
 
 		if (evt.sender != null) {
-			if (evt.sender.ridingEntity != null) return;
+			if (evt.sender.isRiding()) return;
 
 			switch (evt.type) {
 				case JUMP:
@@ -163,7 +166,7 @@ public class ElevatorActionHandler {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onPlayerMovement(PlayerMovementEvent evt) {
-		final EntityPlayer player = evt.entityPlayer;
+		final EntityPlayer player = evt.getEntityPlayer();
 		if (player == null) return;
 
 		final World world = player.worldObj;
@@ -175,7 +178,7 @@ public class ElevatorActionHandler {
 		final BlockPos pos = new BlockPos(x, y, z);
 		final Block block = world.getBlockState(pos).getBlock();
 
-		if (block instanceof IElevatorBlock) new ElevatorActionEvent(world.provider.getDimensionId(), pos, evt.type).sendToServer();
+		if (block instanceof IElevatorBlock) new ElevatorActionEvent(world.provider.getDimension(), pos, evt.type).sendToServer();
 
 	}
 }

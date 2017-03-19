@@ -1,22 +1,20 @@
 package openblocks.client;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import openmods.colors.RGB;
-
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Preconditions;
 
 public class Icons {
 
-	private static void addVertexWithUV(WorldRenderer wr, double x, double y, double u, double v) {
+	private static void addVertexWithUV(VertexBuffer wr, double x, double y, double u, double v) {
 		wr.pos(x, y, 0).tex(u, v).endVertex();
 	}
 
@@ -49,7 +47,7 @@ public class Icons {
 			Preconditions.checkNotNull(icon);
 			GlStateManager.color(r, g, b, MathHelper.floor_double(255 * alpha));
 			final Tessellator tes = Tessellator.getInstance();
-			final WorldRenderer wr = tes.getWorldRenderer();
+			final VertexBuffer wr = tes.getBuffer();
 			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			addVertexWithUV(wr, scale, scale, icon.getMinU(), icon.getMinV());
 			addVertexWithUV(wr, scale, -scale, icon.getMinU(), icon.getMaxV());

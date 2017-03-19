@@ -4,9 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.common.PedometerHandler;
 import openblocks.common.PedometerHandler.PedometerData;
 import openblocks.common.PedometerHandler.PedometerState;
@@ -20,17 +25,17 @@ public class ItemPedometer extends Item {
 	}
 
 	private static void send(EntityPlayer player, String format, Object... args) {
-		player.addChatComponentMessage(new ChatComponentTranslation(format, args));
+		player.addChatComponentMessage(new TextComponentTranslation(format, args));
 	}
 
 	private SpeedUnit speedUnit = SpeedUnit.M_PER_TICK;
 	private DistanceUnit distanceUnit = DistanceUnit.M;
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (world.isRemote) {
 			if (player.isSneaking()) {
-				PedometerHandler.reset(player);
+				PedometerHandler.getProperty(player).reset();
 				send(player, "openblocks.misc.pedometer.tracking_reset");
 			} else {
 				PedometerState state = PedometerHandler.getProperty(player);
@@ -42,15 +47,16 @@ public class ItemPedometer extends Item {
 				}
 			}
 		} else {
-			world.playSoundAtEntity(player, "openblocks:pedometer.use", 1F, 1F);
+			world.playSound(null, player.getPosition(), OpenBlocks.Sounds.ITEM_PEDOMETER_USE, SoundCategory.PLAYERS, 1F, 1F);
 		}
-		return stack;
+
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
 	protected void showPedometerData(EntityPlayer player, PedometerState state) {
 		PedometerData result = state.getData();
 		if (result == null) return;
-		player.addChatComponentMessage(new ChatComponentText(""));
+		player.addChatComponentMessage(new TextComponentString(""));
 		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.xCoord, result.startingPoint.yCoord, result.startingPoint.zCoord));
 
 		send(player, "openblocks.misc.pedometer.speed", speedUnit.format(result.currentSpeed));
@@ -69,7 +75,10 @@ public class ItemPedometer extends Item {
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slotId, boolean isSelected) {
-		if (world.isRemote && slotId < 9) PedometerHandler.updatePedometerData(entity);
+		if (world.isRemote && slotId < 9) {
+			PedometerState state = PedometerHandler.getProperty(entity);
+			if (state.isRunning()) state.update(entity);
+		}
 	}
 
 	// TODO 1.8.9 actually change model based on this

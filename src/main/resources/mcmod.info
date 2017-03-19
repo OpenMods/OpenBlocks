@@ -1,20 +1,26 @@
-[
 {
-  "modid" : "OpenBlocks",
-  "name" : "OpenBlocks",
-  "version" : "${version}",
-  "url" : "http://www.openperipheral.info",
-  "credits" : "",
-  "authors": [
-    "Mikee",
-    "NeverCast",
-    "boq",
-    "Lyqyd"
-  ],
-  "description": "All the things you never thought you will ever need",
-  "logoFile" : "",
-  "updateUrl" : "",
-  "parent" : "",
-  "screenshots": [
+  "modListVersion": "2",
+  "modList":
+  [
+    {
+      "modid": "OpenBlocks",
+      "name": "OpenBlocks",
+      "description": "All the things you never thought you will ever need",
+      "version": "${version}",
+      "mcversion": "${mc_version}",
+      "url": "http://openmods.info/",
+      "updateUrl": "",
+      "authorList": [
+        "Mikee",
+        "NeverCast",
+        "boq",
+        "Lyqyd"
+      ],
+      "credits": "",
+      "logoFile": "",
+      "screenshots": [
+      ],
+      "parent": ""
+    }
   ]
-}]
+}

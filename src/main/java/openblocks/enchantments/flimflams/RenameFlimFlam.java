@@ -1,19 +1,16 @@
 package openblocks.enchantments.flimflams;
 
+import com.google.common.base.Strings;
 import java.util.Collections;
 import java.util.List;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
 import openblocks.rubbish.LoreGenerator;
 import openmods.utils.WorldUtils;
-
 import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.base.Strings;
 
 public class RenameFlimFlam implements IFlimFlamAction {
 

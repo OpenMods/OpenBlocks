@@ -1,24 +1,29 @@
 package openblocks.common.entity;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import io.netty.buffer.ByteBuf;
-
 import java.util.Map;
 import java.util.UUID;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -30,14 +35,10 @@ import openblocks.common.entity.ai.EntityAIBreakBlock;
 import openblocks.common.entity.ai.EntityAIPickupPlayer;
 import openmods.Log;
 import openmods.api.VisibleForDocumentation;
-import openmods.network.event.*;
+import openmods.network.event.EventDirection;
+import openmods.network.event.NetworkEvent;
+import openmods.network.event.NetworkEventMeta;
 import openmods.utils.io.GameProfileSerializer;
-
-import com.google.common.collect.Iterables;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
-import com.mojang.authlib.properties.Property;
 
 @VisibleForDocumentation
 public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpawnData {
@@ -100,7 +101,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 	public EntityMiniMe(World world, GameProfile owner) {
 		this(world);
-		this.owner = owner != null? fetchFullProfile(owner) : null;
+		this.owner = owner != null? TileEntitySkull.updateGameprofile(owner) : null;
 	}
 
 	public EntityMiniMe(World world) {
@@ -119,7 +120,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	@Override
 	protected PathNavigate getNewNavigator(World worldIn) {
 		final PathNavigateGround navigator = new PathNavigateGround(this, worldIn);
-		navigator.setAvoidsWater(true);
+		setPathPriority(PathNodeType.WATER, -1.0F);
 		navigator.setCanSwim(true);
 		return navigator;
 	}
@@ -128,10 +129,10 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
 		if (pickupCooldown > 0) pickupCooldown--;
-		if (wasRidden && riddenByEntity == null) {
+		if (wasRidden && !isBeingRidden()) {
 			wasRidden = false;
 			setPickupCooldown(1200);
-		} else if (riddenByEntity != null) {
+		} else if (isBeingRidden()) {
 			wasRidden = true;
 		}
 	}
@@ -152,19 +153,18 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 	}
 
 	@Override
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
 
-		if (!worldObj.isRemote && MinecraftServer.getServer() != null) {
+		if (!worldObj.isRemote) {
 			if (name != null && (owner == null || !name.equalsIgnoreCase(owner.getName()))) {
 				try {
-					final GameProfile profile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(name);
-					this.owner = profile != null? fetchFullProfile(profile) : null;
+					this.owner = TileEntitySkull.updateGameprofile(new GameProfile(null, name));
 					propagateOwnerChange();
 				} catch (Exception e) {
 					Log.warn(e, "Failed to change skin to %s", name);
@@ -174,7 +174,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	}
 
 	private void propagateOwnerChange() {
-		NetworkEventManager.INSTANCE.dispatcher().senders.entity.sendMessage(new OwnerChangeEvent(getEntityId(), owner), this);
+		new OwnerChangeEvent(getEntityId(), owner).sendToEntity(this);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -193,17 +193,6 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 		}
 
 		return null;
-	}
-
-	private static GameProfile fetchFullProfile(GameProfile profile) {
-		// TODO 1.8.9 verify
-		final Property property = Iterables.getFirst(profile.getProperties().get("textures"), null);
-		if (property != null) return profile;
-
-		final GameProfile cachedProfile = MinecraftServer.getServer().getPlayerProfileCache().getProfileByUUID(profile.getId());
-		if (cachedProfile != null) return cachedProfile;
-
-		return MinecraftServer.getServer().getMinecraftSessionService().fillProfileProperties(profile, true);
 	}
 
 	@Override
@@ -261,7 +250,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	private static GameProfile readOwner(NBTTagCompound tag) {
 		if (tag.hasKey("owner", Constants.NBT.TAG_STRING)) {
 			String ownerName = tag.getString("owner");
-			return MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(ownerName);
+			return TileEntitySkull.updateGameprofile(new GameProfile((UUID)null, ownerName));
 		} else if (tag.hasKey("OwnerUUID", Constants.NBT.TAG_STRING)) {
 			final String uuidStr = tag.getString("OwnerUUID");
 			try {

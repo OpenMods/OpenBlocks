@@ -83,9 +83,10 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override

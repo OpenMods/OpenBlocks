@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -19,7 +18,10 @@ import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerXPBottler;
 import openblocks.common.tileentity.TileEntityXPBottler.AutoSlots;
-import openmods.api.*;
+import openmods.api.IHasGui;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IValueProvider;
+import openmods.api.IValueReceiver;
 import openmods.gamelogic.WorkerLogic;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
@@ -29,19 +31,25 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
-import openmods.sync.*;
+import openmods.sync.SyncableFlags;
+import openmods.sync.SyncableInt;
+import openmods.sync.SyncableSides;
+import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
-import openmods.utils.bitmap.*;
+import openmods.utils.bitmap.BitMapUtils;
+import openmods.utils.bitmap.IRpcDirectionBitMap;
+import openmods.utils.bitmap.IRpcIntBitMap;
+import openmods.utils.bitmap.IWriteableBitMap;
 
 public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(LiquidXpUtils.XP_PER_BOTTLE);
 	public static final int PROGRESS_TICKS = 40;
 
-	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.glass_bottle, 1);
-	protected static final ItemStack XP_BOTTLE = new ItemStack(Items.experience_bottle, 1);
+	protected static final ItemStack GLASS_BOTTLE = new ItemStack(Items.GLASS_BOTTLE, 1);
+	protected static final ItemStack XP_BOTTLE = new ItemStack(Items.EXPERIENCE_BOTTLE, 1);
 
 	private boolean needsTankUpdate;
 
@@ -60,7 +68,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 			if (slot != Slots.input.ordinal()) return false;
-			return itemstack.getItem() == Items.glass_bottle;
+			return itemstack.getItem() == Items.GLASS_BOTTLE;
 		}
 	});
 
@@ -123,7 +131,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 			if (logic.update()) {
 				// this happens when the progress has completed
-				playSoundAtBlock("openblocks:bottler.signal", .5f, .8f);
+				playSoundAtBlock(OpenBlocks.Sounds.BLOCK_XPBOTTLER_DONE, 0.5f, 0.8f);
 				inventory.decrStackSize(Slots.input.ordinal(), 1);
 				tank.setFluid(null);
 
@@ -204,9 +212,10 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override

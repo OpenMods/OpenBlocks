@@ -1,19 +1,20 @@
 package openblocks.common.item;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.api.IPaintableBlock;
 import openblocks.common.block.BlockCanvas;
@@ -61,9 +62,9 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		Integer color = getColorFromStack(stack);
-		if (stack.getItemDamage() > getMaxDamage() || color == null) return true;
+		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
 
 		if (PaintUtils.instance.isAllowedToReplace(world, pos)) {
 			BlockCanvas.replaceBlock(world, pos);
@@ -72,10 +73,10 @@ public class ItemPaintBrush extends Item {
 		final boolean changed;
 
 		if (player.isSneaking()) changed = tryRecolorBlock(world, pos, color, EnumFacing.VALUES);
-		else changed = tryRecolorBlock(world, pos, color, side);
+		else changed = tryRecolorBlock(world, pos, color, facing);
 
 		if (changed) {
-			world.playSoundAtEntity(player, "mob.slime.small", 0.1F, 0.8F);
+			world.playSound(null, player.getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 0.1F, 0.8F);
 
 			if (!player.capabilities.isCreativeMode) {
 				if (stack.attemptDamageItem(1, player.getRNG())) {
@@ -84,9 +85,11 @@ public class ItemPaintBrush extends Item {
 					stack.setItemDamage(0);
 				}
 			}
+
+			return EnumActionResult.SUCCESS;
 		}
 
-		return true;
+		return EnumActionResult.FAIL;
 	}
 
 	private static boolean tryRecolorBlock(World world, BlockPos pos, int rgb, EnumFacing... sides) {
@@ -123,16 +126,7 @@ public class ItemPaintBrush extends Item {
 		return false;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack itemStack, int pass) {
-		if (pass == 1) {
-			Integer color = getColorFromStack(itemStack);
-			if (color != null) return color;
-		}
-
-		return 0xFFFFFF;
-	}
+	// TODO 1.10 figure out RGB item coloring
 
 	public static Integer getColorFromStack(ItemStack stack) {
 		if (stack.hasTagCompound()) {

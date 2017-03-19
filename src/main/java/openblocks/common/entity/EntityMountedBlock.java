@@ -12,7 +12,7 @@ public class EntityMountedBlock extends EntityBlock implements IMagnetAware {
 
 	@Override
 	protected boolean shouldPlaceBlock() {
-		return ridingEntity == null && !worldObj.isRemote;
+		return !isRiding() && !worldObj.isRemote;
 	}
 
 	@Override

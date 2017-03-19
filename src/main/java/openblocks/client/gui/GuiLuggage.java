@@ -1,10 +1,9 @@
 package openblocks.client.gui;
 
+import com.google.common.base.Strings;
 import openblocks.common.container.ContainerLuggage;
 import openblocks.common.entity.EntityLuggage;
 import openmods.gui.BaseGuiContainer;
-
-import com.google.common.base.Strings;
 
 public class GuiLuggage extends BaseGuiContainer<ContainerLuggage> {
 

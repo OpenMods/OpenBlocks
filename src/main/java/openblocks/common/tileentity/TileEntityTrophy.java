@@ -1,7 +1,6 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +10,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.item.ItemTrophyBlock;
-import openmods.api.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
+import openmods.api.ICustomPickItem;
+import openmods.api.IPlaceAwareTile;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.ItemUtils;
@@ -73,9 +75,10 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		tag.setInteger("cooldown", cooldown);
+		return tag;
 	}
 
 	@Override

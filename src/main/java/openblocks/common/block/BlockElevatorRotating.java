@@ -3,11 +3,11 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.api.IElevatorBlock;
@@ -21,13 +21,13 @@ public class BlockElevatorRotating extends OpenBlock.FourDirections implements I
 	public static final PropertyEnum<ColorMeta> COLOR = PropertyEnum.create("color", ColorMeta.class);
 
 	public BlockElevatorRotating() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setDefaultState(getDefaultState().withProperty(COLOR, ColorMeta.WHITE));
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, new IProperty[] { getPropertyOrientation(), COLOR });
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), COLOR });
 	}
 
 	private static ColorMeta getColorMeta(IBlockAccess world, BlockPos pos) {

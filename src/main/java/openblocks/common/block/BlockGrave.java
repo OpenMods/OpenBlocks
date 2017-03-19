@@ -1,37 +1,43 @@
 package openblocks.common.block;
 
 import java.util.Random;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openmods.Log;
 import openmods.block.OpenBlock;
-
 import org.apache.logging.log4j.Level;
 
 public class BlockGrave extends OpenBlock.FourDirections {
 
 	public BlockGrave() {
-		super(Material.ground);
-		setBlockBounds(0, 0, 0, 1f, 0.2f, 1f);
+		super(Material.GROUND);
 		setResistance(2000.0F);
+	}
+
+	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.2, 1.0);
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return AABB;
 	}
 
 	// TODO 1.8.9 model all the things
 	@Override
-	public int getRenderType() {
-		return 2; // TESR only
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
@@ -46,7 +52,7 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean canEntityDestroy(IBlockAccess world, BlockPos pos, Entity entity) {
+	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
 		return false;
 	}
 
@@ -57,19 +63,19 @@ public class BlockGrave extends OpenBlock.FourDirections {
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		super.breakBlock(world, pos, state);
-		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed", pos, world.provider.getDimensionId());
+		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed", pos, world.provider.getDimension());
 	}
 
 	@Override
-	public boolean removedByPlayer(World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed by player %s", pos, world.provider.getDimensionId(), player);
-		return super.removedByPlayer(world, pos, player, willHarvest);
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed by player %s", pos, world.provider.getDimension(), player);
+		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	@Override
 	public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosionIn) {
 		super.onBlockDestroyedByExplosion(world, pos, explosionIn);
-		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed by explosion", pos, world.provider.getDimensionId());
+		Log.log(debugLevel(), "Grave @ (%s) dimension = %d destroyed by explosion", pos, world.provider.getDimension());
 	}
 
 }

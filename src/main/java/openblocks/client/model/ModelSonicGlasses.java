@@ -3,7 +3,6 @@ package openblocks.client.model;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-
 import org.lwjgl.opengl.GL11;
 
 public class ModelSonicGlasses extends ModelBiped {

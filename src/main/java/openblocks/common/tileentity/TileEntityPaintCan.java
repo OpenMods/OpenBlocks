@@ -2,8 +2,10 @@ package openblocks.common.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
 import openmods.api.IActivateAwareTile;
@@ -28,19 +30,19 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && amount.get() > 0) {
-			ItemStack heldStack = player.getHeldItem();
+		if (amount.get() > 0) { // TODO 1.10 verify sounds effects of removing 'isRemote'
+			ItemStack heldStack = player.getHeldItemMainhand();
 			if (heldStack != null && heldStack.getItem() instanceof ItemPaintBrush) {
 				ItemPaintBrush.setColor(heldStack, color.get());
 				heldStack.setItemDamage(0);
 				amount.modify(-1);
 				sync();
-				worldObj.playSoundAtEntity(player, "game.neutral.swim.splash", 0.1F, 1.2F);
+				worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 1.2F);
 			}
 		}
 
 		if (amount.get() <= 0 && !worldObj.isRemote) {
-			ItemStack item = new ItemStack(Items.bucket);
+			ItemStack item = new ItemStack(Items.BUCKET);
 			BlockUtils.dropItemStackInWorld(worldObj, pos, item);
 			worldObj.setBlockToAir(pos);
 		}

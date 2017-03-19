@@ -1,17 +1,18 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -76,8 +77,9 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		}
 	}
 
-	private boolean canBreakBlock(Block block, BlockPos pos) {
-		return !block.isAir(worldObj, pos) && block != Blocks.bedrock && block.getBlockHardness(worldObj, pos) > -1.0F;
+	private boolean canBreakBlock(IBlockState state, BlockPos pos) {
+		final Block block = state.getBlock();
+		return !block.isAir(state, worldObj, pos) && state != Blocks.BEDROCK && state.getBlockHardness(worldObj, pos) > -1.0F;
 	}
 
 	private void triggerBreakBlock() {
@@ -85,11 +87,11 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		final BlockPos target = pos.offset(direction);
 
 		if (worldObj.isBlockLoaded(target)) {
-			final Block block = worldObj.getBlockState(target).getBlock();
-			if (canBreakBlock(block, target)) sendBlockEvent(EVENT_ACTIVATE, 0);
+			final IBlockState state = worldObj.getBlockState(target);
+			if (canBreakBlock(state, target)) sendBlockEvent(EVENT_ACTIVATE, 0);
 		}
 
-		playSoundAtBlock("tile.piston.in", 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
+		playSoundAtBlock(SoundEvents.BLOCK_PISTON_EXTEND, 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 	}
 
 	@Override
@@ -110,8 +112,8 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 
 		if (!worldObj.isBlockLoaded(target)) return;
 
-		final Block block = worldObj.getBlockState(target).getBlock();
-		if (!canBreakBlock(block, target)) return;
+		final IBlockState blockState = worldObj.getBlockState(target);
+		if (!canBreakBlock(blockState, target)) return;
 
 		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new BreakBlockAction(worldObj, target));
 		tryInjectItems(drops, direction.getOpposite());
@@ -137,9 +139,11 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+
+		return tag;
 	}
 
 	@Override

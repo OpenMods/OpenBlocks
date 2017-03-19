@@ -3,8 +3,10 @@ package openblocks.common.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.block.OpenBlock;
@@ -13,24 +15,38 @@ import openmods.infobook.BookDocumentation;
 @BookDocumentation
 public class BlockVacuumHopper extends OpenBlock {
 
+	private static final AxisAlignedBB SELECTION_AABB = new AxisAlignedBB(0.3, 0.3, 0.3, 0.7, 0.7, 0.7);
+	private static final AxisAlignedBB COLLISION_AABB = new AxisAlignedBB(0.01, 0.01, 0.01, 0.99, 0.99, 0.99);
+
 	public BlockVacuumHopper() {
-		super(Material.rock);
+		super(Material.ROCK);
+	}
+
+	private static final AxisAlignedBB STANDARD_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return STANDARD_AABB;
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+		return COLLISION_AABB;
+	}
+
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+		return SELECTION_AABB;
 	}
 
 	// TODO 1.8.9 hello states
 	@Override
-	public int getRenderType() {
-		return 2; // TESR only
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos pos, IBlockState state) {
-		return new AxisAlignedBB(pos.getX() + 0.01, pos.getY() + 0.01, pos.getZ() + 0.01,
-				pos.getX() + 0.99, pos.getY() + 0.99, pos.getZ() + 0.99);
-	}
-
-	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity) {
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
 		TileEntityVacuumHopper te = getTileEntity(world, pos, TileEntityVacuumHopper.class);
 		if (te != null) {
 			te.onEntityCollidedWithBlock(entity);
@@ -38,14 +54,8 @@ public class BlockVacuumHopper extends OpenBlock {
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
-	}
-
-	@Override
-	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-		return new AxisAlignedBB(pos.getX() + 0.3, pos.getY() + 0.3, pos.getZ() + 0.3,
-				pos.getX() + 0.7, pos.getY() + 0.7, pos.getZ() + 0.7);
 	}
 
 }

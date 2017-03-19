@@ -8,7 +8,7 @@ import openmods.infobook.BookDocumentation;
 public class BlockItemDropper extends OpenBlock {
 
 	public BlockItemDropper() {
-		super(Material.rock);
+		super(Material.ROCK);
 	}
 
 }

@@ -9,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityHangGlider;
 import openmods.renderer.DisplayListWrapper;
-
 import org.lwjgl.opengl.GL11;
 
 public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
@@ -58,7 +57,7 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 		final boolean isFpp = minecraft.gameSettings.thirdPersonView == 0;
 		final boolean isDeployed = glider.isDeployed();
 
-		if (isLocalPlayer && isFpp && isDeployed) return;
+		if (isLocalPlayer && isFpp && !isDeployed) return;
 
 		final float rotation = interpolateRotation(glider.prevRotationYaw, glider.rotationYaw, f1);
 
@@ -68,7 +67,7 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 		GL11.glRotatef(180.0F - rotation, 0.0F, 1.0F, 0.0F);
 
 		if (isLocalPlayer) {
-			if (isDeployed) {
+			if (!isDeployed) {
 				// move up and closer to back
 				GL11.glTranslated(0, -0.2, +0.3);
 			} else {
@@ -81,7 +80,7 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 				}
 			}
 		} else {
-			if (isDeployed) {
+			if (!isDeployed) {
 				// move up little bit (other player center is lower)
 				GL11.glTranslated(0, +0.2, +0.3);
 			} else {
@@ -90,7 +89,7 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 			}
 		}
 
-		if (isDeployed) {
+		if (!isDeployed) {
 			GL11.glRotatef(ONGROUND_ROTATION, 1, 0, 0);
 			GL11.glScalef(0.4f, 1f, 0.4f);
 		}

@@ -2,17 +2,19 @@ package openblocks.common.block;
 
 import java.util.List;
 import java.util.Random;
-
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.Config;
@@ -25,18 +27,15 @@ import openmods.utils.BlockManipulator;
 @BookDocumentation
 public class BlockRopeLadder extends OpenBlock.FourDirections {
 
-	public static final float RENDER_THICKNESS = 1.0f / 64.0f;
-	private static final float COLLISION_THICKNESS = 1.0f / 16.0f;
-
 	public BlockRopeLadder() {
-		super(Material.circuits);
+		super(Material.CIRCUITS);
 		setHardness(0.4F);
-		setStepSound(soundTypeLadder);
+		setSoundType(SoundType.LADDER);
 		setPlacementMode(BlockPlacementMode.SURFACE);
 	}
 
 	@Override
-	public boolean isLadder(IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
+	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
 		return true;
 	}
 
@@ -46,33 +45,30 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World world, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> result, Entity entity) {
+	@SuppressWarnings("deprecation")
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity) {
 		if (entity instanceof EntityLivingBase) {
 			Orientation orientation = getOrientation(world, pos);
 			EnumFacing playerRotation = ((EntityLivingBase)entity).getHorizontalFacing();
 			if (orientation.north() == playerRotation) {
-				super.addCollisionBoxesToList(world, pos, state, mask, result, entity);
+				super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity);
 			}
 		} else {
-			super.addCollisionBoxesToList(world, pos, state, mask, result, entity);
+			super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity);
 		}
 	}
 
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-		getBlockBounds(world, pos, COLLISION_THICKNESS);
-	}
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0f / 16.0f);
 
-	private void getBlockBounds(IBlockAccess world, BlockPos pos, float thickness) {
-		final Orientation orientation = getOrientation(world, pos);
-		final AxisAlignedBB aabb = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, thickness);
-		final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
-		setBlockBounds(rotatedAabb);
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		final Orientation orientation = getOrientation(source, pos);
+		return BlockSpaceTransform.instance.mapBlockToWorld(orientation, AABB);
 	}
 
 	@Override
@@ -81,10 +77,11 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighbour) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
 		final EnumFacing dir = getOrientation(state).north();
 
 		if (world.isAirBlock(pos.offset(dir))) {
+			// TODO 1.10 verify if it still drops
 			if (world.getBlockState(pos.up()).getBlock() != this) world.setBlockToAir(pos);
 		}
 	}
@@ -115,10 +112,10 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 				final BlockManipulator manipulator = new BlockManipulator(world, player, pos);
 
 				// TODO 1.8.9 verify place direction
-				if (world.isAirBlock(placePos) && manipulator.place(state, orientation.north())) {
+				// TODO 1.10 verify handness
+				if (world.isAirBlock(placePos) && manipulator.place(state, orientation.north(), EnumHand.MAIN_HAND)) {
 					if (!Config.infiniteLadder) stack.stackSize--;
-				}
-				else return;
+				} else return;
 
 				placePos = placePos.down();
 			}

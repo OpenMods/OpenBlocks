@@ -1,7 +1,6 @@
 package openblocks.common;
 
 import java.util.HashMap;
-
 import openmods.Mods;
 
 public class DonationUrlManager {

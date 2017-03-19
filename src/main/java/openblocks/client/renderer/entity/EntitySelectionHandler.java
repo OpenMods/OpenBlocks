@@ -1,7 +1,7 @@
 package openblocks.client.renderer.entity;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
@@ -10,8 +10,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import com.google.common.collect.Maps;
 
 public class EntitySelectionHandler {
 
@@ -43,7 +41,7 @@ public class EntitySelectionHandler {
 			final Entity target = mc.objectMouseOver.entityHit;
 			if (target instanceof ISelectAware) {
 				ISelectionRenderer<Entity> renderer = registry.get(mc.objectMouseOver.entityHit.getClass());
-				if (renderer != null) renderer.render(target, mc.thePlayer, evt.context, evt.partialTicks);
+				if (renderer != null) renderer.render(target, mc.thePlayer, evt.getContext(), evt.getPartialTicks());
 			}
 		}
 	}

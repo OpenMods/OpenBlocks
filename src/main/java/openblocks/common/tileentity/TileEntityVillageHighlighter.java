@@ -1,12 +1,11 @@
 package openblocks.common.tileentity;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.Vec3i;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.Village;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,11 +42,11 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	public void update() {
 		if (!worldObj.isRemote) {
 			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
-				ArrayList<Integer> tmpDataList = new ArrayList<Integer>();
+				List<Integer> tmpDataList = Lists.newArrayList();
 				for (Village village : worldObj.villageCollectionObj.getVillageList()) {
-					if (village.func_179866_a(pos)) {
+					if (village.isBlockPosWithinSqVillageRadius(pos)) {
 						tmpDataList.add(village.getVillageRadius());
-						Vec3i d = village.getCenter().subtract(pos);
+						BlockPos d = village.getCenter().subtract(pos);
 						tmpDataList.add(d.getX());
 						tmpDataList.add(d.getY());
 						tmpDataList.add(d.getZ());
@@ -93,7 +92,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 		if (worldObj.isRemote) return false;
 
 		for (Village village : worldObj.villageCollectionObj.getVillageList()) {
-			if (village.func_179866_a(pos)) {
+			if (village.isBlockPosWithinSqVillageRadius(pos)) {
 				int i = (int)(village.getNumVillageDoors() * 0.35D);
 				if (village.getNumVillagers() < i) { return true; }
 			}

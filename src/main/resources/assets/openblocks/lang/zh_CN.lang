@@ -38,7 +38,6 @@ openblocks.gui.drawingtable=绘图桌
 openblocks.gui.digitalfuse=游标
 openblocks.gui.xp_outputs=输出经验
 openblocks.gui.item_outputs=输出物品
-openblocks.gui.watch_video=观看教学视频
 openblocks.gui.max_level=最高附魔等级: %d
 openblocks.gui.save_folder=打开存档文件夹
 
@@ -86,12 +85,14 @@ openblocks.misc.selected_cannon=选择加农炮发射目标
 openblocks.misc.pointed_cannon=加农炮已瞄准 %s, %s, %s
 openblocks.misc.change_mode=改变至%s模式
 openblocks.misc.change_size=改变规模至 %s x %s x %s
+#openblocks.misc.change_box_size=Changing size to (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
 openblocks.misc.total_blocks=搭建共需要: %d 个方块
 openblocks.misc.get_witched=为之沉迷!
 openblocks.misc.page=%d / %d 页
 openblocks.misc.oh_no_ceiling=你睡意全无,头顶空空荡荡,房子徒有四壁,令你坐立难安...
 openblocks.misc.oh_no_ground=你居然还想要睡在那上面!?
 openblocks.misc.sleeping_bag_broken=由于初始化错误,该物品无法生效
+#openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
 
 openblocks.misc.grave_msg=%s (天数: %.1f)
 
@@ -125,12 +126,16 @@ openblocks.misc.shape=形状: %s
 openblocks.misc.shape.sphere=球体
 openblocks.misc.shape.cylinder=圆柱
 openblocks.misc.shape.cuboid=立方
+#openblocks.misc.shape.full_cuboid=Full Cuboid ## NEEDS TRANSLATION ##
 openblocks.misc.shape.dome=圆锥
 openblocks.misc.shape.triangle=三角形
 openblocks.misc.shape.pentagon=五边形
 openblocks.misc.shape.hexagon=六边形
 openblocks.misc.shape.octagon=八边形
+#openblocks.misc.shape.axes=Axes ## NEEDS TRANSLATION ##
+#openblocks.misc.shape.planes=Planes ## NEEDS TRANSLATION ##
 
+#openblocks.misc.box=Dimensions: (%d,%d,%d):(%d,%d,%d) ## NEEDS TRANSLATION ##
 openblocks.misc.width=宽度: %d
 openblocks.misc.height=高度: %d
 openblocks.misc.depth=深度: %d
@@ -160,6 +165,8 @@ openblocks.misc.command.flim_flam_target=某个有权限的人不太喜欢你.
 openblocks.misc.command.flim_flam_failed=欺骗失败!
 openblocks.misc.command.luck_added=与玩家 %s 交换运气值,当前运气值为: %d
 openblocks.misc.command.luck_current=玩家 %s 的运气值: %d
+
+#openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=你周围发生了一些诡异的事.
 
 openblocks.turtle.magnet=磁铁
@@ -167,11 +174,16 @@ openblocks.turtle.magnet=磁铁
 tile.openblocks.elevator.name=电梯
 tile.openblocks.elevator.description=将一个电梯方块在另一个电梯方块正上方三格或以上的位置,中间不能有障碍物.玩家在电梯上跳跃时就会向上传送,蹲下时就向下传送.电梯可以用染料右键染色,相同颜色的电梯才能互相传送玩家.
 
+#tile.openblocks.elevator_rotating.name=Rotating Elevator ## NEEDS TRANSLATION ##
+
 tile.openblocks.heal.name=治愈方块
 tile.openblocks.heal.description=只有在创造模式下才能得到治愈方块,它会为站在上方的玩家提供轻微的治疗效果.
 
 tile.openblocks.guide.name=建筑指导仪
 tile.openblocks.guide.description=提供红石信号,建筑指导仪便会投影出方块轮廓.你可以通过Shift+右键它来改变形状,或者右键它的不同面来增大或减小轮廓.\n创造模式下将黑曜石放在建筑指导仪上,再拿着任何方块右键它,则会自动完成搭建.
+
+#tile.openblocks.builder_guide.name=Enhanced Building Guide ## NEEDS TRANSLATION ##
+#tile.openblocks.builder_guide.description=This enhanced version of building guide not only displays ghost blocks to make building easier, but also allows you to place actual blocks. Just click central block with any block stack!\nWhen in creative mode you can place an obsidian block above, then hit the building guide with any block you like to automatically create the shape. ## NEEDS TRANSLATION ##
 
 tile.openblocks.ladder.name=梯子活板门
 tile.openblocks.ladder.description=爬梯子遇上活板门时必须跳出去是件麻烦事,但梯子活板门解决了这个问题.梯子活板门可以在打开时起到梯子的作用,让玩家顺着活板门爬上去.
@@ -191,6 +203,9 @@ tile.openblocks.sponge.description=这种海绵是原版海绵的重置版.它�
 
 item.openblocks.spongeonastick.name=海绵棒
 item.openblocks.spongeonastick.description=类似海绵,海绵棒可用于清理一片范围内的液体.但它比海绵更方便,也很容易坏掉.
+
+#item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
+#item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
 
 tile.openblocks.cannon.name=投掷加农炮
 tile.openblocks.cannon.description=当投掷加农炮接收到红石信号时,投掷加农炮会向指定目标投掷出相邻容器内的物品.你可以使用'指针'工具来给加农炮定位投掷的目标.
@@ -242,6 +257,7 @@ tile.openblocks.blockbreaker.description=为方块采掘器通入红石信号,�
 
 tile.openblocks.projector.name=高度图投影仪
 tile.openblocks.projector.description=用于显示由制图机器人制作的高度图.将高度图放入投影仪内,将在其上方显示3D的全息地图.
+#tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
 tile.openblocks.autoenchantmenttable.name=自动附魔台
 tile.openblocks.autoenchantmenttable.description=自动附魔台的使用方法类似于普通附魔台,但它可以通过消耗经验来自动工作.\n在操作界面右边的设定栏可以调整输入经验或工具的面.自动附魔台也需要书架来提升自己的附魔等级上限.
@@ -277,6 +293,7 @@ tile.openblocks.scaffolding.description=你是否想过通过向脚下垫方块�
 tile.openblocks.goldenegg.name=金蛋
 
 tile.openblocks.digitalfuse.name=游标
+
 item.openblocks.cursor.name=游标
 item.openblocks.cursor.description=游标可以让你远程控制方块.手持游标Shift右键一个方块就可以建立连接,之后用游标右键空气就控制连接的方块.\n默认设置下,使用游标与方块远程互动会消耗你的经验,距离越远,消耗越多.
 
@@ -314,6 +331,9 @@ item.openblocks.crane_backpack.description=在Minecraft的世界里,磁铁是一
 
 item.openblocks.crane_control.name=起重机控制器
 item.openblocks.crane_control.description=这个高科技的无线遥控工具,能用来控制起重机背包.\n右键升起,Shift+右键降低,左键拾取/释放.\n当有光在闪烁时,表示物体正受到磁力影响.
+
+#item.openblocks.wrench.name=Big Metal Bar ## NEEDS TRANSLATION ##
+#item.openblocks.wrench.description=This is extremely sophisticated tool used to perform transformations of objects with octahedral symmetry.\n\n\nOr just big, dumb piece of metal you can use to rotate cubes and stuff.\n\nSo yeah, it's yet another wrench. I'm just trying to be original here, ok? ## NEEDS TRANSLATION ##
 
 item.openblocks.stencil.name=模板
 item.openblocks.crayon.name=魔法蜡笔

@@ -2,21 +2,20 @@ package openblocks.trophy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import openblocks.common.tileentity.TileEntityTrophy;
-
-import com.google.common.base.Strings;
 
 public class ItemDropBehavior implements ITrophyBehavior {
 
 	private final int minTicks;
-	private final String sound;
+	private final SoundEvent sound;
 	private final ItemStack drop;
 
 	public ItemDropBehavior(int minTicks, ItemStack drop) {
-		this(minTicks, drop, "");
+		this(minTicks, drop, null);
 	}
 
-	public ItemDropBehavior(int minTicks, ItemStack drop, String sound) {
+	public ItemDropBehavior(int minTicks, ItemStack drop, SoundEvent sound) {
 		this.minTicks = minTicks;
 		this.sound = sound;
 		this.drop = drop.copy();
@@ -24,7 +23,7 @@ public class ItemDropBehavior implements ITrophyBehavior {
 
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
-		if (!Strings.isNullOrEmpty(sound)) {
+		if (sound != null) {
 			player.playSound(sound, 1.0F, (tile.getWorld().rand.nextFloat() - tile.getWorld().rand.nextFloat()) * 0.2F + 1.0F);
 		}
 

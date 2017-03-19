@@ -2,7 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
@@ -12,7 +12,6 @@ import openblocks.common.block.BlockFlag;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.colors.RGB;
 import openmods.renderer.DisplayListWrapper;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityFlagRenderer extends TileEntitySpecialRenderer<TileEntityFlag> {
@@ -23,7 +22,7 @@ public class TileEntityFlagRenderer extends TileEntitySpecialRenderer<TileEntity
 		@Override
 		public void compile() {
 			Tessellator tessellator = Tessellator.getInstance();
-			WorldRenderer wr = tessellator.getWorldRenderer();
+			VertexBuffer wr = tessellator.getBuffer();
 			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL);
 
 			wr.pos(0, 0, 0).tex(0, 1).normal(0, 0, 1);

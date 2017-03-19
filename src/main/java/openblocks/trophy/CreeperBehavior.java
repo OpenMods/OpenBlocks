@@ -1,7 +1,7 @@
 package openblocks.trophy;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import openblocks.common.tileentity.TileEntityTrophy;
 
 public class CreeperBehavior implements ITrophyBehavior {

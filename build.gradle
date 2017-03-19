@@ -16,29 +16,16 @@ buildscript {
             name = 'Forge'
             url = 'http://files.minecraftforge.net/maven'
         }
+        maven {
+              name 'OpenMods Third Party'
+              url 'http://repo.openmods.info/artifactory/simple/thirdparty'
+        }
     }
+
 
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
-    }
-}
-
-repositories {
-    maven {
-        name 'Forge'
-        url 'http://files.minecraftforge.net/maven'
-    }
-    maven {
-        name 'MinecraftS3'
-        url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
-    }
-    maven {
-        name "OpenMods"
-        url "http://repo.openmods.info/artifactory/openmods"
-    }
-    maven {
-        name "OpenMods 3rd party"
-        url "http://repo.openmods.info/artifactory/thirdparty"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.thesilkminer.gradle.translationchecker:TranslationChecker:1.1'
     }
 }
 
@@ -50,8 +37,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 dependencies {
     compile project(":OpenModsLib") // Load OpenModsLib from submodule
 
-    compile "info.computercraft:ComputerCraft-API:1.78"
-    compile "openperipheral:OpenPeripheralCore-API:"+opc_api_version
+    compile "info.computercraft:ComputerCraft-API:1.80pr0"
+    compile "info.openmods:OpenPeripheralCore-API:"+opc_api_version
 }
 
 //================================================
@@ -60,8 +47,7 @@ dependencies {
 // Grab system env
 ext.env = System.getenv()
 
-mod_version += "." + (env.BUILD_NUMBER ?: 'dev')
-version = mc_ver + "-" + mod_version
+version = mc_version + "-" + mod_version
 
 ext.in_jenkins = false
 // Get Jenkins metadata
@@ -93,14 +79,14 @@ if (!in_jenkins) {
 
 // Get Git metadata (if in Jenkins)
 ext.gitManifest = manifest {
-    if (env.GIT_BRANCH != null) {
+    if (branch != null) {
         attributes("Git-Branch": branch, "Git-Hash": hash)
     }
 }
 
 // Setup Forge plugin
 minecraft {
-    version = mc_ver + "-" + forge_ver
+    version = mc_version + "-" + forge_version
     runDir = "run"
 
     mappings = mcp_mappings
@@ -116,12 +102,13 @@ minecraft {
 }
 
 processResources {
-    inputs.property "version", rootProject.mod_version
+    inputs.property "version", mod_version
+    inputs.property "mc_version", mc_version
 
     // Process mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         include '**/*.info'
-        expand 'version':mod_version,'MCVersion':mc_ver
+        expand 'version':mod_version, 'mc_version':mc_version
     }
 
     // Copy anything else directly
@@ -177,4 +164,17 @@ task apiSrcJar(type: Jar) {
 artifacts {
     archives apiJar
     archives apiSrcJar
+}
+
+task updateTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
+    modId = "openblocks"
+}
+
+task checkTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
+    modId = "openblocks"
+    dryRun = true
+}
+
+task wrapper (type: Wrapper) {
+    gradleVersion = "2.14"
 }

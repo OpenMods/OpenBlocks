@@ -2,10 +2,12 @@ package openblocks.client;
 
 import static openblocks.client.Icons.createIcon;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
@@ -16,10 +18,6 @@ import openblocks.OpenBlocks;
 import openblocks.client.Icons.ComposedIcon;
 import openblocks.client.Icons.IDrawableIcon;
 import openmods.Log;
-
-import com.google.common.base.Preconditions;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
 
 public class SoundIconRegistry {
 
@@ -160,7 +158,7 @@ public class SoundIconRegistry {
 		}
 
 		public void addMob(String soundId, int mobId, boolean isHostile) {
-			EntityEggInfo mobInfo = EntityList.entityEggs.get(mobId);
+			EntityEggInfo mobInfo = EntityList.ENTITY_EGGS.get(mobId);
 
 			if (mobInfo != null) mobs.put(soundId, createMobIcons(isHostile? "mob_hostile" : "mob_friendly", mobInfo.primaryColor, mobInfo.secondaryColor));
 			else mobs.put(soundId, unknownMob);
@@ -201,12 +199,13 @@ public class SoundIconRegistry {
 
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent evt) {
-		genericIcon.registerIcons(evt.map);
-		unknownIcon.registerIcons(evt.map);
-		defaultRoot.registerIcons(evt.map);
+		final TextureMap map = evt.getMap();
+		genericIcon.registerIcons(map);
+		unknownIcon.registerIcons(map);
+		defaultRoot.registerIcons(map);
 
 		for (MappedCategory category : roots.values())
-			category.registerIcons(evt.map);
+			category.registerIcons(map);
 	}
 
 	private IDrawableIcon findIcon(ResourceLocation sound) {

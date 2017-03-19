@@ -4,10 +4,11 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,40 +20,35 @@ import openmods.infobook.BookDocumentation;
 @BookDocumentation(customName = "crane_backpack", hasVideo = true)
 public class ItemCraneBackpack extends ItemArmor {
 
-	private static final int ARMOR_CHESTPIECE = 1;
 	public static final String TEXTURE_CRANE = "openblocks:textures/models/crane.png";
 
 	public ItemCraneBackpack() {
-		super(ArmorMaterial.IRON, 2, ARMOR_CHESTPIECE);
+		super(ArmorMaterial.IRON, 2, EntityEquipmentSlot.CHEST);
 	}
 
 	@Override
-	public boolean isValidArmor(ItemStack stack, int armorType, Entity entity) {
-		return armorType == ARMOR_CHESTPIECE;
+	public boolean isValidArmor(ItemStack stack, EntityEquipmentSlot armorType, Entity entity) {
+		return armorType == EntityEquipmentSlot.CHEST;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-		return armorSlot == ARMOR_CHESTPIECE? ModelCraneBackpack.instance : null;
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+		return armorSlot == EntityEquipmentSlot.CHEST? ModelCraneBackpack.instance : null;
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot armorSlot, String type) {
 		return TEXTURE_CRANE;
 	}
 
 	private static boolean isPointInBlock(World world, EntityPlayer player, double radius) {
-		double posX = player.posX
-				+ radius
-				* MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
+		double posX = player.posX + radius * MathHelper.cos((player.rotationYaw + 90) * (float)Math.PI / 180);
 		double posY = player.posY + player.getEyeHeight() + 0.2;
-		double posZ = player.posZ
-				+ radius
-				* MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
+		double posZ = player.posZ + radius * MathHelper.sin((player.rotationYaw + 90) * (float)Math.PI / 180);
 
 		AxisAlignedBB aabb = new AxisAlignedBB(posX - 0.1, posY - 0.1, posZ - 0.1, posX + 0.1, posY + 0.1, posZ + 0.1);
-		return !world.getCollidingBoundingBoxes(player, aabb).isEmpty();
+		return !world.getCollisionBoxes(player, aabb).isEmpty();
 	}
 
 	@Override
@@ -61,6 +57,7 @@ public class ItemCraneBackpack extends ItemArmor {
 		if (!world.isRemote) CraneRegistry.instance.ensureMagnetExists(player);
 
 		if (Config.doCraneCollisionCheck) {
+			// TODO 1.10 verify if this still works
 			boolean isColliding = isPointInBlock(world, player, CraneRegistry.ARM_RADIUS)
 					|| isPointInBlock(world, player, 2 * CraneRegistry.ARM_RADIUS / 3)
 					|| isPointInBlock(world, player, CraneRegistry.ARM_RADIUS / 3);
@@ -80,8 +77,8 @@ public class ItemCraneBackpack extends ItemArmor {
 		}
 	}
 
-	public static boolean isWearingCrane(EntityPlayer player) {
-		ItemStack armor = player.getCurrentArmor(2);
+	public static boolean isWearingCrane(EntityLivingBase player) {
+		ItemStack armor = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		return armor != null && armor.getItem() instanceof ItemCraneBackpack;
 	}
 }

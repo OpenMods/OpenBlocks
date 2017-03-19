@@ -1,7 +1,6 @@
 package openblocks.enchantments.flimflams;
 
 import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.world.World;

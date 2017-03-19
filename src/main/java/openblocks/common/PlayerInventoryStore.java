@@ -1,6 +1,15 @@
 package openblocks.common;
 
-import java.io.*;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -30,12 +39,7 @@ import openblocks.api.InventoryEvent.SubInventory;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
 import openmods.utils.NbtUtils;
-
 import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mojang.authlib.GameProfile;
 
 public class PlayerInventoryStore {
 
@@ -165,14 +169,17 @@ public class PlayerInventoryStore {
 				stream.close();
 			}
 		} catch (IOException e) {
-			Log.warn("Failed to dump data for player %s, file %s", name, dumpFile.getAbsoluteFile());
+			Log.warn(e, "Failed to dump data for player %s, file %s", name, dumpFile.getAbsoluteFile());
 		}
 
 		return dumpFile;
 	}
 
 	private static IInventory loadInventory(NBTTagCompound rootTag) {
-		if (!rootTag.hasKey(TAG_INVENTORY, Constants.NBT.TAG_COMPOUND)) return null;
+		if (!rootTag.hasKey(TAG_INVENTORY, Constants.NBT.TAG_COMPOUND)) {
+			Log.debug("No main inventory found");
+			return null;
+		}
 
 		NBTTagCompound invTag = rootTag.getCompoundTag(TAG_INVENTORY);
 		GenericInventory result = new GenericInventory("tmp", false, 0);
@@ -219,7 +226,7 @@ public class PlayerInventoryStore {
 				stream.close();
 			}
 		} catch (IOException e) {
-			Log.warn("Failed to read data from file %s", file.getAbsoluteFile());
+			Log.warn(e, "Failed to read data from file %s", file.getAbsoluteFile());
 			return null;
 		}
 	}
@@ -268,7 +275,8 @@ public class PlayerInventoryStore {
 	}
 
 	public boolean restoreInventory(EntityPlayer player, String fileId) {
-		LoadedInventories inventories = loadInventories(player.worldObj, fileId);
+		final LoadedInventories inventories = loadInventories(player.worldObj, fileId);
+		if (inventories == null) return false;
 
 		final IInventory main = inventories.mainInventory;
 		if (main != null) {
@@ -279,7 +287,7 @@ public class PlayerInventoryStore {
 			for (int i = 0; i < sourceInventorySize; i++) {
 				final ItemStack stack = main.getStackInSlot(i);
 				if (i < targetInventorySize) current.setInventorySlotContents(i, stack);
-				else player.dropPlayerItemWithRandomChoice(stack, false);
+				else player.dropItem(stack, false, false);
 			}
 		}
 
@@ -293,16 +301,19 @@ public class PlayerInventoryStore {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onPlayerDeath(LivingDeathEvent event) {
-		if (Config.dumpStiffsStuff && (event.entity instanceof EntityPlayerMP) && !(event.entity instanceof FakePlayer)) {
-			EntityPlayer player = (EntityPlayer)event.entity;
-			final String playerName = player.getName();
-			try {
+		if (Config.dumpStiffsStuff) {
+			final Entity rottingMeat = event.getEntity();
+			if ((rottingMeat instanceof EntityPlayerMP) && !(rottingMeat instanceof FakePlayer)) {
+				EntityPlayer player = (EntityPlayer)rottingMeat;
+				final String playerName = player.getName();
+				try {
 
-				File file = storePlayerInventory(player, "death");
-				Log.info("Storing post-mortem inventory into %s. It can be restored with command '/ob_inventory restore %s %s'",
-						file.getAbsolutePath(), playerName, stripFilename(file.getName()));
-			} catch (Exception e) {
-				Log.severe(e, "Failed to store inventory for player %s", playerName);
+					File file = storePlayerInventory(player, "death");
+					Log.info("Storing post-mortem inventory into %s. It can be restored with command '/ob_inventory restore %s %s'",
+							file.getAbsolutePath(), playerName, stripFilename(file.getName()));
+				} catch (Exception e) {
+					Log.severe(e, "Failed to store inventory for player %s", playerName);
+				}
 			}
 		}
 	}

@@ -2,12 +2,13 @@ package openblocks.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import openblocks.OpenBlocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class EnchantmentLastStand extends Enchantment {
+	private static final EntityEquipmentSlot[] ALL_ARMOR = new EntityEquipmentSlot[] { EntityEquipmentSlot.FEET, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD };
 
-	public EnchantmentLastStand(int id) {
-		super(id, OpenBlocks.location("laststand"), 2, EnumEnchantmentType.ARMOR);
+	public EnchantmentLastStand() {
+		super(Rarity.UNCOMMON, EnumEnchantmentType.ARMOR, ALL_ARMOR);
 		setName("openblocks.laststand");
 	}
 

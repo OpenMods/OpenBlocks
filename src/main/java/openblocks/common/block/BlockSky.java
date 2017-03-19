@@ -1,20 +1,16 @@
 package openblocks.common.block;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
-import openmods.utils.render.RenderUtils;
 
 @BookDocumentation(customName = "sky.normal")
 public class BlockSky extends OpenBlock {
@@ -33,13 +29,13 @@ public class BlockSky extends OpenBlock {
 	}
 
 	public BlockSky() {
-		super(Material.iron);
+		super(Material.IRON);
 		setDefaultState(getDefaultState().withProperty(POWERED, false));
 	}
 
 	@Override
-	protected BlockState createBlockState() {
-		return new BlockState(this, getPropertyOrientation(), INVERTED, POWERED);
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, getPropertyOrientation(), INVERTED, POWERED);
 	}
 
 	@Override
@@ -57,15 +53,11 @@ public class BlockSky extends OpenBlock {
 		return isPowered | isInverted;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getBlockColor() {
-		// randomness more or less intended
-		return RenderUtils.getFogColor().getColor();
-	}
+	// TODO 1.10 rendering!
+	// return RenderUtils.getFogColor().getColor();
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
 		if (!world.isRemote) {
 			final boolean isPowered = world.isBlockIndirectlyGettingPowered(pos) > 0;
 			final boolean isActive = state.getValue(POWERED);
@@ -88,9 +80,9 @@ public class BlockSky extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(World world, BlockPos pos) {
-		final IBlockState state = world.getBlockState(pos);
-		return isActive(state)? EMPTY : super.getSelectedBoundingBox(world, pos);
+	@SuppressWarnings("deprecation")
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+		return isActive(state)? EMPTY : super.getSelectedBoundingBox(state, world, pos);
 	}
 
 }

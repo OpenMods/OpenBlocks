@@ -5,13 +5,12 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCannon;
 import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.tileentity.TileEntityCannon;
 import openmods.OpenMods;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEntityCannon> {
@@ -40,7 +39,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 				GlStateManager.color(0, 0, 0);
 				GL11.glBegin(GL11.GL_LINE_STRIP);
 
-				final Vec3 motion = cannon.getMotion();
+				final Vec3d motion = cannon.getMotion();
 				double motionX = motion.xCoord;
 				double motionY = motion.yCoord;
 				double motionZ = motion.zCoord;
@@ -68,7 +67,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 	private static boolean playerHasCursor() {
 		EntityPlayer player = OpenMods.proxy.getThePlayer();
 		if (player == null) return false;
-		ItemStack held = player.getHeldItem();
+		ItemStack held = player.getHeldItemMainhand();
 		return held != null && MetasGenericUnstackable.pointer.isA(held);
 	}
 

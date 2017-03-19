@@ -4,7 +4,9 @@ import openblocks.common.tileentity.TileEntityCannon;
 import openperipheral.api.adapter.IPeripheralAdapter;
 import openperipheral.api.adapter.method.Arg;
 import openperipheral.api.adapter.method.ScriptCallable;
+import openperipheral.api.architecture.FeatureGroup;
 
+@FeatureGroup("openblocks-cannon")
 public class AdapterCannon implements IPeripheralAdapter {
 
 	@Override

@@ -1,15 +1,15 @@
 package openblocks.common.block;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openmods.block.OpenBlock;
@@ -22,14 +22,14 @@ public class BlockSponge extends OpenBlock {
 	private static final Random RANDOM = new Random();
 
 	public BlockSponge() {
-		super(Material.sponge);
-		setStepSound(soundTypeCloth);
+		super(Material.SPONGE);
+		setSoundType(SoundType.CLOTH);
 		setTickRandomly(true);
 		setHarvestLevel("axe", 1);
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
 		clearupLiquid(world, pos);
 	}
 
@@ -57,10 +57,10 @@ public class BlockSponge extends OpenBlock {
 			for (int dy = -Config.spongeRange; dy <= Config.spongeRange; dy++) {
 				for (int dz = -Config.spongeRange; dz <= Config.spongeRange; dz++) {
 					final BlockPos workPos = pos.add(dx, dy, dz);
-					Block block = world.getBlockState(workPos).getBlock();
-					Material material = block.getMaterial();
+					final IBlockState state = world.getBlockState(workPos);
+					Material material = state.getMaterial();
 					if (material.isLiquid()) {
-						hitLava |= material == Material.lava;
+						hitLava |= material == Material.LAVA;
 						world.setBlockToAir(pos);
 					}
 				}
@@ -70,7 +70,7 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public boolean onBlockEventReceived(World world, BlockPos pos, IBlockState state, int eventId, int eventParam) {
+	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
 		if (world.isRemote) {
 			for (int i = 0; i < 20; i++) {
 				double px = pos.getX() + RANDOM.nextDouble() * 0.1;
@@ -79,7 +79,7 @@ public class BlockSponge extends OpenBlock {
 				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px, py, pz, 0.0D, 0.0D, 0.0D);
 			}
 		} else {
-			world.setBlockState(pos, Blocks.fire.getDefaultState());
+			world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 		}
 		return true;
 	}

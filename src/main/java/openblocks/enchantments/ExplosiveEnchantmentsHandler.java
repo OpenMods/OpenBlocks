@@ -1,7 +1,11 @@
 package openblocks.enchantments;
 
-import java.util.*;
-
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.MapMaker;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -10,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -22,20 +27,11 @@ import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
 import openmods.OpenMods;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.MapMaker;
-
 public class ExplosiveEnchantmentsHandler {
 
-	public static final int ARMOR_HELMET = 3;
-	public static final int ARMOR_CHESTPIECE = 2;
-	public static final int ARMOR_PANTS = 1;
-	public static final int ARMOR_BOOTS = 0;
-
-	private final List<Integer> protectionParts = Lists.newArrayList(ARMOR_CHESTPIECE, ARMOR_HELMET, ARMOR_PANTS);
-
 	private static final double VERTICAL_FACTOR = 5;
+
+	private final List<EntityEquipmentSlot> protectionParts = Lists.newArrayList(EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.HEAD);
 
 	private static final Set<String> ALLOWED_DAMAGE_SOURCE = ImmutableSet.of("arrow", "player", "mob");
 
@@ -74,7 +70,6 @@ public class ExplosiveEnchantmentsHandler {
 	}
 
 	private final static EnchantmentLevel LEVELS[] = new EnchantmentLevel[] {
-			null, // 1-based
 			new EnchantmentLevel(0.10, 5, 5, 1, false, 1),
 			new EnchantmentLevel(0.75, 7.5, 10, 2, false, 2),
 			new EnchantmentLevel(1.00, 10, 5, 4, Config.explosiveEnchantGrief, 4)
@@ -106,38 +101,34 @@ public class ExplosiveEnchantmentsHandler {
 
 	private Map<Entity, JumpInfo> jumpBoosts = new MapMaker().weakKeys().makeMap();
 
-	private static final ItemStack gunpowder = new ItemStack(Items.gunpowder);
+	private static final ItemStack gunpowder = new ItemStack(Items.GUNPOWDER);
 
-	private static void useItems(EntityPlayer player, int gunpowderSlot, int armorSlot, int gunpowderAmout) {
+	private static void useItems(EntityPlayer player, int gunpowderSlot, EntityEquipmentSlot armorSlot, int gunpowderAmout) {
 		if (player.capabilities.isCreativeMode) return;
 
-		final InventoryPlayer inventory = player.inventory;
-
-		ItemStack armor = inventory.armorItemInSlot(armorSlot);
+		ItemStack armor = player.getItemStackFromSlot(armorSlot);
 		armor.damageItem(1, player);
-		if (armor.stackSize <= 0) inventory.armorInventory[armorSlot] = null;
+		if (armor.stackSize <= 0) player.setItemStackToSlot(armorSlot, null);
 
+		final InventoryPlayer inventory = player.inventory;
 		ItemStack resource = inventory.mainInventory[gunpowderSlot];
 		resource.stackSize -= gunpowderAmout;
 		if (resource.stackSize <= 0) inventory.mainInventory[gunpowderSlot] = null;
 	}
 
-	private static EnchantmentLevel tryUseEnchantment(EntityPlayer player, int armorSlot) {
-		final InventoryPlayer inventory = player.inventory;
-
-		ItemStack armor = inventory.armorInventory[armorSlot];
+	private static EnchantmentLevel tryUseEnchantment(EntityPlayer player, EntityEquipmentSlot slot) {
+		ItemStack armor = player.getItemStackFromSlot(slot);
 		if (armor == null || !(armor.getItem() instanceof ItemArmor)) return null;
 
-		Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(armor);
-		Integer ench = enchantments.get(Enchantments.explosive.effectId);
-		if (ench == null || ench >= LEVELS.length) return null;
-		EnchantmentLevel level = LEVELS[ench];
-		if (level == null) return null;
+		final InventoryPlayer inventory = player.inventory;
+		int explosiveLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.explosive, armor);
+		if (explosiveLevel <= 0 || explosiveLevel >= LEVELS.length - 1) return null;
+		EnchantmentLevel level = LEVELS[explosiveLevel - 1];
 
 		for (int i = 0; i < inventory.mainInventory.length; i++) {
 			ItemStack stack = inventory.mainInventory[i];
 			if (stack != null && gunpowder.isItemEqual(stack) && stack.stackSize >= level.gunpowderNeeded) {
-				useItems(player, i, armorSlot, level.gunpowderNeeded);
+				useItems(player, i, slot, level.gunpowderNeeded);
 				return level;
 			}
 		}
@@ -146,8 +137,7 @@ public class ExplosiveEnchantmentsHandler {
 	}
 
 	private EnchantmentLevel tryUseUpperArmor(EntityPlayer player) {
-		Collections.shuffle(protectionParts);
-		for (int armorPart : protectionParts) {
+		for (EntityEquipmentSlot armorPart : protectionParts) {
 			EnchantmentLevel result = tryUseEnchantment(player, armorPart);
 			if (result != null) return result;
 		}
@@ -157,13 +147,13 @@ public class ExplosiveEnchantmentsHandler {
 
 	@SubscribeEvent
 	public void onFall(LivingFallEvent evt) {
-		final Entity e = evt.entityLiving;
-		if (evt.distance > 4 && !e.isSneaking() && e instanceof EntityPlayer) {
+		final Entity e = evt.getEntityLiving();
+		if (evt.getDistance() > 4 && !e.isSneaking() && e instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)e;
 
-			EnchantmentLevel level = tryUseEnchantment(player, ARMOR_BOOTS);
+			EnchantmentLevel level = tryUseEnchantment(player, EntityEquipmentSlot.LEGS);
 			if (level == null) return;
-			JumpInfo boost = new JumpInfo(level, evt.distance);
+			JumpInfo boost = new JumpInfo(level, evt.getDistance());
 			level.createJumpExplosion(player);
 			if (OpenMods.proxy.isClientPlayer(player)) {
 				// And Now, Ladies and Gentlemen!
@@ -171,6 +161,7 @@ public class ExplosiveEnchantmentsHandler {
 				// Loved By Everyone...
 				// Possibly Buggy
 				// TEEERRRRRIIIIBLE HAAAAAACK!
+				// TODO 1.10 maybe now stuff is betten?
 				KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), true);
 				// no, seriously, can't find better way to make jump
 				jumpBoosts.put(player, boost);
@@ -181,7 +172,7 @@ public class ExplosiveEnchantmentsHandler {
 
 	@SubscribeEvent
 	public void onJump(LivingJumpEvent e) {
-		final Entity entity = e.entity;
+		final Entity entity = e.getEntity();
 		JumpInfo boost = jumpBoosts.remove(entity);
 		if (boost != null) {
 			boost.modifyVelocity(entity);
@@ -198,8 +189,8 @@ public class ExplosiveEnchantmentsHandler {
 
 	@SubscribeEvent
 	public void onDamage(LivingAttackEvent e) {
-		final Entity victim = e.entity;
-		if (victim instanceof EntityPlayerMP && checkSource(e.source)) {
+		final Entity victim = e.getEntity();
+		if (victim instanceof EntityPlayerMP && checkSource(e.getSource())) {
 			EnchantmentLevel level = tryUseUpperArmor(((EntityPlayer)victim));
 
 			if (level != null) level.createArmorExplosion(victim);

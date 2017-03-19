@@ -1,10 +1,11 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Optional;
 import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,10 @@ import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
-import openmods.api.*;
+import openmods.api.IHasGui;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IValueProvider;
+import openmods.api.IValueReceiver;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
@@ -32,10 +36,14 @@ import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableSides;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.*;
-import openmods.utils.bitmap.*;
-
-import com.google.common.base.Optional;
+import openmods.utils.EnchantmentUtils;
+import openmods.utils.MiscUtils;
+import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.VanillaAnvilLogic;
+import openmods.utils.bitmap.BitMapUtils;
+import openmods.utils.bitmap.IRpcDirectionBitMap;
+import openmods.utils.bitmap.IRpcIntBitMap;
+import openmods.utils.bitmap.IWriteableBitMap;
 
 public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
 
@@ -78,7 +86,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "autoanvil", true, 3) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Items.enchanted_book)) { return false; }
+			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Items.ENCHANTED_BOOK)) { return false; }
 			if (i == 2) { return false; }
 			return super.isItemValidForSlot(i, itemstack);
 		}
@@ -158,7 +166,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 				removeModifiers(helper.getModifierCost());
 				inventory.setInventorySlotContents(Slots.tool.ordinal(), null);
 				inventory.setInventorySlotContents(Slots.output.ordinal(), output);
-				playSoundAtBlock("random.anvil_use", 0.3f, 1f);
+				playSoundAtBlock(SoundEvents.BLOCK_ANVIL_USE, 0.3f, 1f);
 			}
 		}
 	}
@@ -225,9 +233,10 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override

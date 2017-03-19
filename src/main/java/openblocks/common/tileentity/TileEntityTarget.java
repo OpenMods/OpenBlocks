@@ -1,15 +1,20 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.WorldServer;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
@@ -25,10 +30,6 @@ import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 import openmods.utils.EntityUtils;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile, ITickable {
 
@@ -80,7 +81,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		List<Entity> projectiles = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
 
 		for (Entity projectile : projectiles) {
-			MovingObjectPosition hit = EntityUtils.raytraceEntity(projectile);
+			RayTraceResult hit = EntityUtils.raytraceEntity(projectile);
 			if (pos.equals(hit.getBlockPos())) {
 				Blocks.target.onTargetHit(worldObj, pos, hit.hitVec);
 			}
@@ -132,7 +133,7 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 
 		if (isPowered != isEnabled()) {
 			dropArrowsAsItems(world);
-			playSoundAtBlock(isPowered? "openblocks:target.open" : "openblocks:target.close", 0.5f, 1.0f);
+			playSoundAtBlock(isPowered? OpenBlocks.Sounds.BLOCK_TARGET_OPEN : OpenBlocks.Sounds.BLOCK_TARGET_CLOSE, 0.5f, 1.0f);
 
 			setEnabled(isPowered);
 
@@ -180,6 +181,6 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 		for (ItemStack drop : drops)
 			BlockUtils.dropItemStackInWorld(worldObj, pos, drop);
 
-		if (failed > 0) BlockUtils.dropItemStackInWorld(worldObj, pos, new ItemStack(Items.arrow, failed));
+		if (failed > 0) BlockUtils.dropItemStackInWorld(worldObj, pos, new ItemStack(Items.ARROW, failed));
 	}
 }

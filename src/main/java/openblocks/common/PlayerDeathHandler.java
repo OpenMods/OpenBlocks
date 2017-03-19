@@ -1,24 +1,40 @@
 package openblocks.common;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.*;
-
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import net.minecraftforge.fml.common.eventhandler.*;
+import net.minecraftforge.fml.common.eventhandler.ASMEventHandler;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.IEventListener;
+import net.minecraftforge.fml.common.eventhandler.ListenerList;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -32,12 +48,7 @@ import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.utils.NbtUtils;
 import openmods.world.DelayedActionTickHandler;
-
 import org.apache.logging.log4j.Level;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
 
 public class PlayerDeathHandler {
 
@@ -100,30 +111,31 @@ public class PlayerDeathHandler {
 			if (!world.isBlockLoaded(pos)) return false;
 			if (!world.isBlockModifiable(player, pos)) return false;
 
-			Block block = world.getBlockState(pos).getBlock();
+			IBlockState block = world.getBlockState(pos);
 			return checkBlock(world, pos, block);
 		}
 
-		public abstract boolean checkBlock(World world, BlockPos pos, Block block);
+		public abstract boolean checkBlock(World world, BlockPos pos, IBlockState state);
 	}
 
 	private static final GravePlacementChecker POLITE = new GravePlacementChecker() {
 		@Override
-		public boolean checkBlock(World world, BlockPos pos, Block block) {
-			return (block.isAir(world, pos) || block.isReplaceable(world, pos));
+		public boolean checkBlock(World world, BlockPos pos, IBlockState state) {
+			final Block block = state.getBlock();
+			return (block.isAir(state, world, pos) || block.isReplaceable(world, pos));
 		}
 	};
 
 	private static final GravePlacementChecker BRUTAL = new GravePlacementChecker() {
 		@Override
-		public boolean checkBlock(World world, BlockPos pos, Block block) {
-			return block.getBlockHardness(world, pos) >= 0 && world.getTileEntity(pos) == null;
+		public boolean checkBlock(World world, BlockPos pos, IBlockState state) {
+			return state.getBlockHardness(world, pos) >= 0 && world.getTileEntity(pos) == null;
 		}
 	};
 
 	private static class GraveCallable implements Runnable {
 
-		private final IChatComponent cause;
+		private final ITextComponent cause;
 
 		private final GameProfile stiffId;
 
@@ -143,18 +155,18 @@ public class PlayerDeathHandler {
 			this.exPlayer = new WeakReference<EntityPlayer>(exPlayer);
 			this.stiffId = exPlayer.getGameProfile();
 
-			final IChatComponent day = formatDate(world);
-			final IChatComponent deathCause = exPlayer.getCombatTracker().getDeathMessage();
-			this.cause = new ChatComponentTranslation("openblocks.misc.grave_msg", deathCause, day);
+			final ITextComponent day = formatDate(world);
+			final ITextComponent deathCause = exPlayer.getCombatTracker().getDeathMessage();
+			this.cause = new TextComponentTranslation("openblocks.misc.grave_msg", deathCause, day);
 
 			this.loot = ImmutableList.copyOf(loot);
 		}
 
-		private static IChatComponent formatDate(World world) {
+		private static ITextComponent formatDate(World world) {
 			final long time = world.getTotalWorldTime();
 			final String day = String.format("%.1f", time / 24000.0);
-			final IChatComponent dayComponent = new ChatComponentText(day);
-			dayComponent.getChatStyle().setColor(EnumChatFormatting.WHITE).setBold(true);
+			final ITextComponent dayComponent = new TextComponentString(day);
+			dayComponent.getStyle().setColor(TextFormatting.WHITE).setBold(true);
 			return dayComponent;
 		}
 
@@ -165,7 +177,7 @@ public class PlayerDeathHandler {
 			meta.setBoolean("Placed", placed);
 		}
 
-		private boolean tryPlaceGrave(World world, final BlockPos gravePos, String gravestoneText, IChatComponent deathMessage) {
+		private boolean tryPlaceGrave(World world, final BlockPos gravePos, String gravestoneText, ITextComponent deathMessage) {
 			world.setBlockState(gravePos, OpenBlocks.Blocks.grave.getDefaultState());
 			TileEntity tile = world.getTileEntity(gravePos);
 			if (tile == null || !(tile instanceof TileEntityGrave)) {
@@ -223,7 +235,7 @@ public class PlayerDeathHandler {
 
 			final BlockPos under = evt.location.down();
 			if (Config.graveBase && canSpawnBase(world, player, under)) {
-				world.setBlockState(under, Blocks.dirt.getDefaultState());
+				world.setBlockState(under, Blocks.DIRT.getDefaultState());
 			}
 
 			return tryPlaceGrave(world, evt.location, evt.gravestoneText, evt.clickText);
@@ -236,13 +248,14 @@ public class PlayerDeathHandler {
 		}
 
 		private BlockPos findLocation(World world, EntityPlayer player, GravePlacementChecker checker) {
-			BlockPos searchPos = playerPos;
-			if (Config.voidGraves && searchPos.getY() == 0) searchPos = searchPos.up();
-
+			final int limitedPosY = Math.min(Math.max(playerPos.getY(), Config.minGraveY), Config.maxGraveY);
+			BlockPos searchPos = new BlockPos(playerPos.getX(), limitedPosY, playerPos.getZ());
 			final int searchSize = Config.graveSpawnRange / 2;
 
 			for (BlockPos c : getSearchOrder(searchSize)) {
 				final BlockPos tryPos = searchPos.add(c);
+				final int y = tryPos.getY();
+				if (y > Config.maxGraveY || y < Config.minGraveY) continue;
 				if (checker.canPlace(world, player, tryPos)) return tryPos;
 			}
 
@@ -307,12 +320,12 @@ public class PlayerDeathHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
 	public void onPlayerDrops(PlayerDropsEvent event) {
-		World world = event.entityPlayer.worldObj;
+		World world = event.getEntityPlayer().worldObj;
 		if (world.isRemote) return;
 
 		if (Config.debugGraves) dumpDebugInfo(event);
 
-		final EntityPlayer player = event.entityPlayer;
+		final EntityPlayer player = event.getEntityPlayer();
 
 		if (OpenBlocks.Blocks.grave == null) {
 			Log.log(debugLevel(), "OpenBlocks graves disabled, not placing (player '%s')", player);
@@ -329,7 +342,7 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		final List<EntityItem> drops = event.drops;
+		final List<EntityItem> drops = event.getDrops();
 		if (drops.isEmpty()) {
 			Log.log(debugLevel(), "No drops from player '%s', grave will not be spawned'", player);
 			return;
@@ -351,9 +364,8 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		drops.clear();
-
 		final List<EntityItem> graveLoot = Lists.newArrayList();
+		drops.clear(); // will be rebuilt based from event
 
 		for (GraveDropsEvent.ItemAction entry : dropsEvent.drops) {
 			switch (entry.action) {
@@ -375,15 +387,50 @@ public class PlayerDeathHandler {
 			return;
 		}
 
-		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s)", player, player.getGameProfile(), graveLoot.size());
+		if (!tryConsumeGrave(player, Iterables.concat(graveLoot, drops))) {
+			Log.log(debugLevel(), "No grave in drops for player '%s', grave will not be spawned'", player);
+			return;
+		}
+
+		Log.log(debugLevel(), "Scheduling grave placement for player '%s':'%s' with %d item(s) stored and %d item(s) dropped",
+				player, player.getGameProfile(), graveLoot.size(), drops.size());
+
 		DelayedActionTickHandler.INSTANCE.addTickCallback(world, new GraveCallable(world, player, graveLoot));
 	}
 
+	// TODO: candidate for scripting
+	private static boolean tryConsumeGrave(EntityPlayer player, Iterable<EntityItem> graveLoot) {
+		if (!Config.requiresGraveInInv || player.capabilities.isCreativeMode) return true;
+
+		final Item graveItem = Item.getItemFromBlock(OpenBlocks.Blocks.grave);
+		if (graveItem == null) return true;
+
+		final Iterator<EntityItem> lootIter = graveLoot.iterator();
+		while (lootIter.hasNext()) {
+			final EntityItem drop = lootIter.next();
+			final ItemStack itemStack = drop.getEntityItem();
+			if (itemStack != null &&
+					itemStack.getItem() == graveItem &&
+					itemStack.stackSize > 0) {
+
+				if (--itemStack.stackSize <= 0) {
+					lootIter.remove();
+				} else {
+					drop.setEntityItemStack(itemStack);
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private static void dumpDebugInfo(PlayerDropsEvent event) {
-		Log.info("Trying to spawn grave for player '%s':'%s'", event.entityPlayer, event.entityPlayer.getGameProfile());
+		Log.info("Trying to spawn grave for player '%s':'%s'", event.getEntityPlayer(), event.getEntityPlayer().getGameProfile());
 
 		int i = 0;
-		for (EntityItem e : event.drops)
+		for (EntityItem e : event.getDrops())
 			Log.info("\tGrave drop %d: %s -> %s", i++, e.getClass(), e.getEntityItem());
 
 		final ListenerList listeners = event.getListenerList();

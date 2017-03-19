@@ -1,10 +1,11 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import java.util.List;
-
 import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,23 +17,28 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
-import openmods.api.*;
+import openblocks.OpenBlocks;
+import openmods.api.IActivateAwareTile;
+import openmods.api.IAddAwareTile;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.IPlaceAwareTile;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableString;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
 
 public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile, IInventoryProvider, INeighbourAwareTile, IActivateAwareTile, IAddAwareTile, ITickable {
 
@@ -47,7 +53,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	private SyncableString perishedUsername;
 	public SyncableBoolean onSoil;
 
-	private IChatComponent deathMessage;
+	private ITextComponent deathMessage;
 
 	private GenericInventory inventory = registerInventoryCallback(new GenericInventory("grave", false, 1));
 
@@ -82,7 +88,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		return perishedUsername.getValue();
 	}
 
-	public void setDeathMessage(IChatComponent msg) {
+	public void setDeathMessage(ITextComponent msg) {
 		deathMessage = msg.createCopy();
 	}
 
@@ -115,14 +121,16 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
 
 		if (deathMessage != null) {
-			String serialized = IChatComponent.Serializer.componentToJson(deathMessage);
+			String serialized = ITextComponent.Serializer.componentToJson(deathMessage);
 			tag.setString(TAG_MESSAGE, serialized);
 		}
+
+		return tag;
 	}
 
 	@Override
@@ -133,7 +141,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		String serializedMsg = tag.getString(TAG_MESSAGE);
 
 		if (!Strings.isNullOrEmpty(serializedMsg)) {
-			deathMessage = IChatComponent.Serializer.jsonToComponent(serializedMsg);
+			deathMessage = ITextComponent.Serializer.jsonToComponent(serializedMsg);
 		}
 	}
 
@@ -143,8 +151,9 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	protected void updateBlockBelow() {
-		Block block = worldObj.getBlockState(pos.down()).getBlock();
-		onSoil.set(block == Blocks.dirt || block == Blocks.grass);
+		IBlockState block = worldObj.getBlockState(pos.down());
+		final Material material = block.getMaterial();
+		onSoil.set(material == Material.GRASS || material == Material.GROUND);
 	}
 
 	@Override
@@ -167,7 +176,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (player.worldObj.isRemote) return false;
-		ItemStack held = player.getHeldItem();
+		ItemStack held = player.getHeldItemMainhand();
 		if (held != null && held.getItem().getToolClasses(held).contains("shovel")) {
 			robGrave(player, held);
 			return true;
@@ -190,14 +199,14 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		inventory.clearAndSetSlotCount(0);
 
 		if (dropped) {
-			worldObj.playAuxSFXAtEntity(null, 2001, pos, Block.getIdFromBlock(Blocks.dirt));
+			worldObj.playEvent(null, 2001, pos, Block.getIdFromBlock(Blocks.DIRT));
 			if (worldObj.rand.nextDouble() < Config.graveSpecialAction) ohNoes(player);
 			held.damageItem(2, player);
 		}
 	}
 
 	private void ohNoes(EntityPlayer player) {
-		worldObj.playSoundAtEntity(player, "openblocks:grave.rob", 1, 1);
+		worldObj.playSound(null, player.getPosition(), OpenBlocks.Sounds.BLOCK_GRAVE_ROB, SoundCategory.BLOCKS, 1, 1);
 
 		final WorldInfo worldInfo = worldObj.getWorldInfo();
 		worldInfo.setThunderTime(35 * 20);

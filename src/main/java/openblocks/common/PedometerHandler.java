@@ -1,40 +1,43 @@
 package openblocks.common;
 
+import java.util.concurrent.Callable;
+import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Vec3;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import openblocks.OpenBlocks;
 import openmods.OpenMods;
 
 public class PedometerHandler {
 
-	private static final String PROPERTY_PEDOMETER = "Pedometer";
-
-	public static class PedometerState implements IExtendedEntityProperties {
+	public static class PedometerState {
 		private double totalDistance;
 
 		private long startTicks;
 
-		private Vec3 startPos;
+		private Vec3d startPos;
 
-		private Vec3 prevTickPos;
+		private Vec3d prevTickPos;
 
 		private long prevTickTime;
 
-		private Vec3 lastCheckPos;
+		private Vec3d lastCheckPos;
 
 		private long lastCheckTime;
 
 		private PedometerData lastResult;
 
 		private boolean isRunning;
-
-		@Override
-		public void saveNBTData(NBTTagCompound compound) {}
-
-		@Override
-		public void loadNBTData(NBTTagCompound compound) {}
 
 		public void reset() {
 			isRunning = false;
@@ -48,7 +51,6 @@ public class PedometerHandler {
 			prevTickTime = 0;
 		}
 
-		@Override
 		public void init(Entity entity, World world) {
 			lastCheckPos = prevTickPos = startPos = entity.getPositionVector();
 			lastCheckTime = prevTickTime = startTicks = OpenMods.proxy.getTicks(world);
@@ -56,8 +58,8 @@ public class PedometerHandler {
 		}
 
 		public void update(Entity entity) {
-			Vec3 currentPosition = entity.getPositionVector();
-			Vec3 deltaSinceLastUpdate = currentPosition.subtract(prevTickPos);
+			Vec3d currentPosition = entity.getPositionVector();
+			Vec3d deltaSinceLastUpdate = currentPosition.subtract(prevTickPos);
 			prevTickPos = currentPosition;
 
 			long currentTime = OpenMods.proxy.getTicks(entity.worldObj);
@@ -68,7 +70,7 @@ public class PedometerHandler {
 			double currentSpeed = ticksSinceLastUpdate != 0? distanceSinceLastTick / ticksSinceLastUpdate : 0;
 			totalDistance += distanceSinceLastTick;
 
-			Vec3 deltaFromStart = currentPosition.subtract(startPos);
+			Vec3d deltaFromStart = currentPosition.subtract(startPos);
 			long ticksFromStart = currentTime - startTicks;
 
 			double distanceFromStart = deltaFromStart.lengthVector();
@@ -93,7 +95,7 @@ public class PedometerHandler {
 	}
 
 	public static class PedometerData {
-		public final Vec3 startingPoint;
+		public final Vec3d startingPoint;
 		public final long totalTime;
 		public final double totalDistance;
 		public final double straightLineDistance;
@@ -102,7 +104,7 @@ public class PedometerHandler {
 
 		public final double currentSpeed;
 
-		private PedometerData(Vec3 startingPoint,
+		private PedometerData(Vec3d startingPoint,
 				long totalTime,
 				double totalDistance,
 				double straightLineDistance,
@@ -134,29 +136,61 @@ public class PedometerHandler {
 		}
 	}
 
+	private static final ResourceLocation CAPABILITY_KEY = OpenBlocks.location("pedometerState");
+
+	@CapabilityInject(PedometerState.class)
+	private static final Capability<PedometerState> PEDOMETER_CAPABILITY = null;
+
+	private static class CapabilityInjector {
+
+		@SubscribeEvent
+		public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
+			evt.addCapability(CAPABILITY_KEY, new ICapabilityProvider() {
+
+				private PedometerState state;
+
+				@Override
+				public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+					return capability == PEDOMETER_CAPABILITY;
+				}
+
+				@Override
+				@SuppressWarnings("unchecked")
+				public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+					if (capability == PEDOMETER_CAPABILITY) {
+						if (state == null)
+							state = new PedometerState();
+
+						return (T)state;
+					}
+
+					return null;
+				}
+			});
+		}
+	}
+
+	public static void registerCapability() {
+		CapabilityManager.INSTANCE.register(PedometerState.class, new Capability.IStorage<PedometerState>() {
+			@Override
+			public NBTBase writeNBT(Capability<PedometerState> capability, PedometerState instance, EnumFacing side) {
+				return null;
+			}
+
+			@Override
+			public void readNBT(Capability<PedometerState> capability, PedometerState instance, EnumFacing side, NBTBase nbt) {}
+
+		}, new Callable<PedometerState>() {
+			@Override
+			public PedometerState call() throws Exception {
+				return new PedometerState();
+			}
+		});
+
+		MinecraftForge.EVENT_BUS.register(new CapabilityInjector());
+	}
+
 	public static PedometerState getProperty(Entity entity) {
-		IExtendedEntityProperties property = entity.getExtendedProperties(PROPERTY_PEDOMETER);
-
-		PedometerState state;
-		if (property instanceof PedometerState) {
-			state = (PedometerState)property;
-		} else {
-			state = new PedometerState();
-			entity.registerExtendedProperties(PROPERTY_PEDOMETER, state);
-		}
-		return state;
-	}
-
-	public static void reset(Entity entity) {
-		PedometerState state = getProperty(entity);
-		state.reset();
-	}
-
-	public static void updatePedometerData(Entity entity) {
-		IExtendedEntityProperties property = entity.getExtendedProperties(PROPERTY_PEDOMETER);
-		if (property instanceof PedometerState) {
-			PedometerState state = (PedometerState)property;
-			if (state.isRunning) state.update(entity);
-		}
+		return entity.getCapability(PEDOMETER_CAPABILITY, EnumFacing.UP);
 	}
 }

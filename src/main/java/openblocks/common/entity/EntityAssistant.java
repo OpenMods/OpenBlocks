@@ -1,10 +1,9 @@
 package openblocks.common.entity;
 
 import io.netty.buffer.ByteBuf;
-
 import java.lang.ref.WeakReference;
 import java.util.UUID;
-
+import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -71,8 +71,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 			if (owner != null) smoother.setTarget(
 					owner.posX + ownerOffsetX,
 					owner.posY + owner.getEyeHeight() + ownerOffsetY,
-					owner.posZ + ownerOffsetZ
-					);
+					owner.posZ + ownerOffsetZ);
 
 		}
 
@@ -93,11 +92,8 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	public abstract ItemStack toItemStack();
 
 	@Override
-	public boolean interactFirst(EntityPlayer player) {
-		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) {
-			System.out.println("Interact: " + player);
-			return true;
-		}
+	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) { return true; }
 		return false;
 	}
 

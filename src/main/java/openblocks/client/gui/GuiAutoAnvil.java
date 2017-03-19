@@ -1,18 +1,21 @@
 package openblocks.client.gui;
 
-import net.minecraft.enchantment.Enchantment;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
 import openmods.gui.GuiConfigurableSlots;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComposite;
+import openmods.gui.component.GuiComponentLabel;
+import openmods.gui.component.GuiComponentSprite;
+import openmods.gui.component.GuiComponentTab;
+import openmods.gui.component.GuiComponentTankLevel;
 import openmods.gui.logic.ValueCopyAction;
 import openmods.utils.MiscUtils;
-
-import com.google.common.collect.ImmutableList;
+import openmods.utils.TranslationUtils;
 
 public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, ContainerAutoAnvil, TileEntityAutoAnvil.AutoSlots> {
 
@@ -41,16 +44,16 @@ public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, Cont
 	protected GuiComponentTab createTab(AutoSlots slot) {
 		switch (slot) {
 			case modifier:
-				return new GuiComponentTab(StandardPalette.lightblue.getColor(), new ItemStack(Items.enchanted_book, 1), 100, 100);
+				return new GuiComponentTab(StandardPalette.lightblue.getColor(), new ItemStack(Items.ENCHANTED_BOOK, 1), 100, 100);
 			case output: {
-				ItemStack enchantedAxe = new ItemStack(Items.diamond_pickaxe, 1);
-				enchantedAxe.addEnchantment(Enchantment.fortune, 1);
+				ItemStack enchantedAxe = new ItemStack(Items.DIAMOND_PICKAXE, 1);
+				enchantedAxe.addEnchantment(Enchantments.FORTUNE, 1);
 				return new GuiComponentTab(StandardPalette.green.getColor(), enchantedAxe, 100, 100);
 			}
 			case tool:
-				return new GuiComponentTab(StandardPalette.blue.getColor(), new ItemStack(Items.diamond_pickaxe, 1), 100, 100);
+				return new GuiComponentTab(StandardPalette.blue.getColor(), new ItemStack(Items.DIAMOND_PICKAXE, 1), 100, 100);
 			case xp:
-				return new GuiComponentTab(StandardPalette.yellow.getColor(), new ItemStack(Items.bucket, 1), 100, 100);
+				return new GuiComponentTab(StandardPalette.yellow.getColor(), new ItemStack(Items.BUCKET, 1), 100, 100);
 			default:
 				throw MiscUtils.unhandledEnum(slot);
 		}
@@ -61,11 +64,11 @@ public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, Cont
 		switch (slot) {
 			case modifier:
 			case tool:
-				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoextract"));
+				return new GuiComponentLabel(22, 82, TranslationUtils.translateToLocal("openblocks.gui.autoextract"));
 			case output:
-				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autoeject"));
+				return new GuiComponentLabel(22, 82, TranslationUtils.translateToLocal("openblocks.gui.autoeject"));
 			case xp:
-				return new GuiComponentLabel(22, 82, StatCollector.translateToLocal("openblocks.gui.autodrink"));
+				return new GuiComponentLabel(22, 82, TranslationUtils.translateToLocal("openblocks.gui.autodrink"));
 			default:
 				throw MiscUtils.unhandledEnum(slot);
 

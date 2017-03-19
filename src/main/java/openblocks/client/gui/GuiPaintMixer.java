@@ -1,8 +1,8 @@
 package openblocks.client.gui;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import java.util.List;
-
-import net.minecraft.util.StatCollector;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer.DyeSlot;
@@ -10,15 +10,21 @@ import openblocks.rpc.IColorChanger;
 import openmods.api.IValueProvider;
 import openmods.colors.ColorMeta;
 import openmods.gui.SyncedGuiContainer;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent;
+import openmods.gui.component.GuiComponentColorPicker;
+import openmods.gui.component.GuiComponentLevel;
+import openmods.gui.component.GuiComponentPalettePicker;
 import openmods.gui.component.GuiComponentPalettePicker.PaletteEntry;
+import openmods.gui.component.GuiComponentProgress;
+import openmods.gui.component.GuiComponentRect;
+import openmods.gui.component.GuiComponentSlider;
+import openmods.gui.component.GuiComponentTextButton;
+import openmods.gui.component.GuiComponentTextbox;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.IValueUpdateAction;
 import openmods.gui.logic.ValueCopyAction;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import openmods.utils.TranslationUtils;
 
 public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 
@@ -102,7 +108,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 			{
 				final List<PaletteEntry> vanillaPalette = Lists.newArrayList();
 				for (ColorMeta color : ColorMeta.getAllColors()) {
-					vanillaPalette.add(new PaletteEntry(color.vanillaBlockId, color.rgb, StatCollector.translateToLocal(color.unlocalizedName)));
+					vanillaPalette.add(new PaletteEntry(color.vanillaBlockId, color.rgb, TranslationUtils.translateToLocal(color.unlocalizedName)));
 				}
 				palettePicker.setPalette(vanillaPalette);
 			}

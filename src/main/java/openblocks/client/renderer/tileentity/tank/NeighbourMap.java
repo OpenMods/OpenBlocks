@@ -1,7 +1,7 @@
 package openblocks.client.renderer.tileentity.tank;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.tileentity.TileEntityTank;

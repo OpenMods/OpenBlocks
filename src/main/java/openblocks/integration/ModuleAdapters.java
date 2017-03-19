@@ -1,6 +1,7 @@
 package openblocks.integration;
 
 import static openmods.integration.IntegrationConditions.modLoaded;
+
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
 import openperipheral.api.ApiHolder;

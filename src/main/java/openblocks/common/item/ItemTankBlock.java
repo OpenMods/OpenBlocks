@@ -1,20 +1,22 @@
 package openblocks.common.item;
 
+import com.google.common.base.Strings;
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.*;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityTank;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
-
-import com.google.common.base.Strings;
+import openmods.utils.TranslationUtils;
 
 public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem {
 
@@ -42,7 +44,7 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 
 		if (fluidStack != null && fluidStack.amount > 0) {
 			final String fluidName = getFluidName(fluidStack);
-			return StatCollector.translateToLocalFormatted(unlocalizedName + ".filled.name", fluidName);
+			return TranslationUtils.translateToLocalFormatted(unlocalizedName + ".filled.name", fluidName);
 		}
 
 		return super.getItemStackDisplayName(stack);
@@ -54,7 +56,7 @@ public class ItemTankBlock extends ItemOpenBlock implements IFluidContainerItem 
 		if (!Strings.isNullOrEmpty(localizedName) && !localizedName.equals(fluid.getUnlocalizedName())) {
 			return fluid.getRarity(fluidStack).rarityColor.toString() + localizedName;
 		} else {
-			return EnumChatFormatting.OBFUSCATED + "LOLNOPE" + EnumChatFormatting.RESET;
+			return TextFormatting.OBFUSCATED + "LOLNOPE" + TextFormatting.RESET;
 		}
 	}
 

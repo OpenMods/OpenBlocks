@@ -2,14 +2,14 @@ package openblocks.common.tileentity;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 import openblocks.OpenBlocks;
@@ -69,7 +69,7 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 		if (finallyAcceptedLiquid <= 0) return;
 
 		if (OpenMods.proxy.getTicks(worldObj) % 4 == 0) {
-			playSoundAtBlock("random.orb", 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
+			playSoundAtBlock(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
 		}
 
 		EnchantmentUtils.addPlayerXP(player, -acceptedXP);
@@ -95,8 +95,8 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 			if (!isAir) {
 				TileEntity te = worldObj.getTileEntity(target);
 				if (!(te instanceof IFluidHandler) && te != null) {
-					Block block = te.getBlockType();
-					if (block.isOpaqueCube()) { return; }
+					final IBlockState blockState = worldObj.getBlockState(pos);
+					if (blockState.isOpaqueCube()) { return; }
 				} else {
 					targetTank = new WeakReference<TileEntity>(te);
 					return;

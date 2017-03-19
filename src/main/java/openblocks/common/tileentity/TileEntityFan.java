@@ -1,16 +1,15 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import openblocks.Config;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
@@ -50,13 +49,13 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 		if (entities.isEmpty()) return;
 
 		double angle = Math.toRadians(getAngle() - 90);
-		final Vec3 blockPos = getConeApex(angle);
-		final Vec3 basePos = getConeBaseCenter(angle);
-		final Vec3 coneAxis = new Vec3(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
+		final Vec3d blockPos = getConeApex(angle);
+		final Vec3d basePos = getConeBaseCenter(angle);
+		final Vec3d coneAxis = new Vec3d(basePos.xCoord - blockPos.xCoord, basePos.yCoord - blockPos.yCoord, basePos.zCoord - blockPos.zCoord);
 
 		for (Entity entity : entities) {
 			if (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode) continue;
-			Vec3 directionVec = new Vec3(
+			Vec3d directionVec = new Vec3d(
 					entity.posX - blockPos.xCoord,
 					entity.posY - blockPos.yCoord,
 					entity.posZ - blockPos.zCoord);
@@ -65,24 +64,24 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 				final double distToOrigin = directionVec.lengthVector();
 				final double force = (1.0 - distToOrigin / Config.fanRange) * maxForce;
 				if (force <= 0) continue;
-				Vec3 normal = directionVec.normalize();
+				Vec3d normal = directionVec.normalize();
 				entity.motionX += force * normal.xCoord;
 				entity.motionZ += force * normal.zCoord;
 			}
 		}
 	}
 
-	private Vec3 getConeBaseCenter(double angle) {
+	private Vec3d getConeBaseCenter(double angle) {
 		// TODO 1.8.9 this may be constant
-		return new Vec3(pos)
+		return new Vec3d(pos)
 				.addVector(
 						(Math.cos(angle) * Config.fanRange),
 						0.5,
 						(Math.sin(angle) * Config.fanRange));
 	}
 
-	private Vec3 getConeApex(double angle) {
-		return new Vec3(pos)
+	private Vec3d getConeApex(double angle) {
+		return new Vec3d(pos)
 				.addVector(
 						0.5 - Math.cos(angle) * 1.1,
 						0.5,
@@ -94,7 +93,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 		return boundingBox.expand(Config.fanRange, Config.fanRange, Config.fanRange);
 	}
 
-	private static boolean isLyingInSphericalCone(Vec3 coneAxis, Vec3 originToTarget, double halfAperture) {
+	private static boolean isLyingInSphericalCone(Vec3d coneAxis, Vec3d originToTarget, double halfAperture) {
 		double angleToAxisCos = originToTarget.dotProduct(coneAxis) / originToTarget.lengthVector() / coneAxis.lengthVector();
 		return angleToAxisCos > Math.cos(halfAperture);
 	}

@@ -1,16 +1,15 @@
 package openblocks.common.item;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
 import openblocks.common.TrophyHandler.Trophy;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
+import openmods.utils.TranslationUtils;
 
 public class ItemTrophyBlock extends ItemOpenBlock {
 
@@ -49,8 +48,8 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	public String getItemStackDisplayName(ItemStack stack) {
 		Trophy trophyType = getTrophy(stack);
 		if (trophyType != null) {
-			final String name = StatCollector.translateToLocal("entity." + trophyType.name() + ".name");
-			return StatCollector.translateToLocalFormatted(super.getUnlocalizedName() + ".entity.name", name);
+			final String name = TranslationUtils.translateToLocal("entity." + trophyType.name() + ".name");
+			return TranslationUtils.translateToLocalFormatted(super.getUnlocalizedName() + ".entity.name", name);
 		}
 
 		return super.getItemStackDisplayName(stack);

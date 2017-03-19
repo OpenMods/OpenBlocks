@@ -4,9 +4,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityCanvas;
 import openmods.infobook.BookDocumentation;
 
@@ -19,16 +23,16 @@ public class ItemSqueegee extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity te = world.getTileEntity(pos);
 
 		if (te instanceof TileEntityCanvas) {
 			TileEntityCanvas canvas = (TileEntityCanvas)te;
 			if (player.isSneaking()) canvas.removePaint(EnumFacing.VALUES);
-			else canvas.removePaint(side);
-			world.playSoundAtEntity(player, "openblocks:squeegee.use", 1, 1);
-			return true;
+			else canvas.removePaint(facing);
+			world.playSound(null, player.getPosition(), OpenBlocks.Sounds.ITEM_SQUEEGEE_ACTION, SoundCategory.PLAYERS, 1, 1);
+			return EnumActionResult.SUCCESS;
 		}
-		return false;
+		return EnumActionResult.FAIL;
 	}
 }

@@ -3,9 +3,10 @@ package openblocks.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
@@ -14,18 +15,24 @@ import openmods.infobook.BookDocumentation;
 public class BlockPath extends OpenBlock {
 
 	public BlockPath() {
-		super(Material.ground);
-		setBlockBounds(0, 0, 0, 1f, 0.1f, 1f);
+		super(Material.GROUND);
+	}
+
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.1, 1.0);
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return AABB;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World world, BlockPos blockPos, IBlockState state) {
-		return null;
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+		return NULL_AABB;
 	}
 
 	@Override
@@ -34,7 +41,7 @@ public class BlockPath extends OpenBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block block) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
 		if (!world.isRemote && !isNeighborBlockSolid(world, pos, EnumFacing.DOWN)) {
 			world.destroyBlock(pos, true);
 		}

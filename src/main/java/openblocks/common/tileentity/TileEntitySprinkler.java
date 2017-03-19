@@ -1,16 +1,18 @@
 package openblocks.common.tileentity;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -19,7 +21,9 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiSprinkler;
 import openblocks.common.container.ContainerSprinkler;
-import openmods.api.*;
+import openmods.api.IHasGui;
+import openmods.api.INeighbourAwareTile;
+import openmods.api.ISurfaceAttachment;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
@@ -33,11 +37,10 @@ import openmods.liquids.GenericFluidHandler;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.BlockUtils;
 
-public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAwareTile, ISurfaceAttachment, IInventoryProvider, IHasGui, ITickable, INeighbourAwareTile {
+public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAttachment, IInventoryProvider, IHasGui, ITickable, INeighbourAwareTile {
 
-	private static final ItemStack BONEMEAL = new ItemStack(Items.dye, 1, 15);
+	private static final ItemStack BONEMEAL = new ItemStack(Items.DYE, 1, 15);
 
 	private static final Random RANDOM = new Random();
 
@@ -91,7 +94,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 						BlockPos target = pos.add(x, y, z);
 
 						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, target, fakePlayer))
-						break;
+							break;
 
 					}
 				}
@@ -119,7 +122,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	private void sprayParticles() {
 		if (tank.getFluidAmount() > 0) {
 			// 0 = All, 1 = Decreased, 2 = Minimal
-			final int particleSetting = Minecraft.getMinecraft().gameSettings.particleSetting;
+			final int particleSetting = OpenBlocks.proxy.getParticleSettings();
 			if (particleSetting > 2) return;
 
 			final int fillFactor = SPRINKER_MOD[particleSetting];
@@ -144,7 +147,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 				final double sideVelocityX = spraySideVelocity * offsetX;
 				final double sideVelocityZ = spraySideVelocity * offsetZ;
 
-				Vec3 vec = new Vec3(
+				Vec3d vec = new Vec3d(
 						forwardVelocityX + sideVelocityX,
 						0.35,
 						forwardVelocityZ + sideVelocityZ);
@@ -206,13 +209,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 		return EnumFacing.DOWN;
 	}
 
-	@Override
-	public void onBlockBroken() {
-		if (!worldObj.isRemote && !worldObj.isAirBlock(pos)) {
-			BlockUtils.dropItemStackInWorld(worldObj, pos, new ItemStack(OpenBlocks.Blocks.sprinkler));
-		}
-	}
-
 	/**
 	 * Get spray direction of Sprinkler particles
 	 *
@@ -235,9 +231,11 @@ public class TileEntitySprinkler extends SyncedTileEntity implements IBreakAware
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+
+		return tag;
 	}
 
 	@Override

@@ -7,9 +7,11 @@ import openmods.infobook.BookDocumentation;
 @BookDocumentation(customName = "epic_eraser")
 public class ItemEpicEraser extends Item {
 
+	private static final int MAX_DAMAGE = 15;
+
 	public ItemEpicEraser() {
 		setMaxStackSize(1);
-		setMaxDamage(15);
+		setMaxDamage(MAX_DAMAGE);
 	}
 
 	@Override
@@ -26,7 +28,7 @@ public class ItemEpicEraser extends Item {
 
 	@Override
 	public boolean hasContainerItem(ItemStack stack) {
-		return stack.getItemDamage() < getMaxDamage() - 1;
+		return stack.getItemDamage() < MAX_DAMAGE - 1;
 	}
 
 }

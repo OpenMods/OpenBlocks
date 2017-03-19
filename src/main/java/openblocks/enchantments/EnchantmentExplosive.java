@@ -2,11 +2,13 @@ package openblocks.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import openblocks.OpenBlocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public final class EnchantmentExplosive extends Enchantment {
-	public EnchantmentExplosive(int id) {
-		super(id, OpenBlocks.location("explosive"), 2, EnumEnchantmentType.ARMOR);
+	private static final EntityEquipmentSlot[] ALL_ARMOR = new EntityEquipmentSlot[] { EntityEquipmentSlot.FEET, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD };
+
+	public EnchantmentExplosive() {
+		super(Rarity.RARE, EnumEnchantmentType.ARMOR, ALL_ARMOR);
 		setName("openblocks.explosive");
 	}
 

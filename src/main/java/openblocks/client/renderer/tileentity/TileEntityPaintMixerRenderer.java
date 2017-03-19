@@ -8,7 +8,6 @@ import openblocks.client.model.ModelPaintMixer;
 import openblocks.common.tileentity.TileEntityPaintMixer;
 import openmods.colors.RGB;
 import openmods.utils.BlockUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<TileEntityPaintMixer> {
@@ -32,7 +31,7 @@ public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<Tile
 			GL11.glRotated(150, 0, 0, -1);
 			GL11.glRotated(90, 0, 1, 0);
 			GL11.glScaled(0.8, 0.8, 0.8);
-			bindTexture(TextureMap.locationBlocksTexture);
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			if (mixer.hasPaint()) {
 				if (mixer.isEnabled()) {
 					GL11.glTranslated(0, Math.random() * 0.2, 0);

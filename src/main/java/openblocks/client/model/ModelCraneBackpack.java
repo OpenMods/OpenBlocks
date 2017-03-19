@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.item.ItemCraneBackpack;
-
 import org.lwjgl.opengl.GL11;
 
 public class ModelCraneBackpack extends ModelBiped {
@@ -87,7 +86,7 @@ public class ModelCraneBackpack extends ModelBiped {
 
 	@SubscribeEvent
 	public void renderLines(RenderPlayerEvent.Pre evt) {
-		final EntityPlayer player = evt.entityPlayer;
+		final EntityPlayer player = evt.getEntityPlayer();
 
 		if (!ItemCraneBackpack.isWearingCrane(player)) return;
 
@@ -96,18 +95,19 @@ public class ModelCraneBackpack extends ModelBiped {
 		if (magnet == null) return;
 
 		// TODO 1.8.9 check values (maybe 0?)
-		double playerX = interpolatePos(player.posX, player.lastTickPosX, evt.partialRenderTick)
+		final float partialRenderTick = evt.getPartialRenderTick();
+		double playerX = interpolatePos(player.posX, player.lastTickPosX, partialRenderTick)
 				- TileEntityRendererDispatcher.staticPlayerX;
-		double playerY = interpolatePos(player.posY, player.lastTickPosY, evt.partialRenderTick)
+		double playerY = interpolatePos(player.posY, player.lastTickPosY, partialRenderTick)
 				- TileEntityRendererDispatcher.staticPlayerY;
-		double playerZ = interpolatePos(player.posZ, player.lastTickPosZ, evt.partialRenderTick)
+		double playerZ = interpolatePos(player.posZ, player.lastTickPosZ, partialRenderTick)
 				- TileEntityRendererDispatcher.staticPlayerZ;
 
 		// TODO 1.8.9 check eye height
 		if (player instanceof EntityOtherPlayerMP) playerY += 1.62;
 
-		final float offset = interpolateAngle(player.renderYawOffset, player.prevRenderYawOffset, evt.partialRenderTick);
-		final float head = interpolateAngle(player.rotationYawHead, player.prevRotationYawHead, evt.partialRenderTick);
+		final float offset = interpolateAngle(player.renderYawOffset, player.prevRenderYawOffset, partialRenderTick);
+		final float head = interpolateAngle(player.rotationYawHead, player.prevRotationYawHead, partialRenderTick);
 
 		double armX = playerX;
 		double armY = playerY;
@@ -128,9 +128,9 @@ public class ModelCraneBackpack extends ModelBiped {
 		armX += armLength * MathHelper.cos(head);
 		armZ += armLength * MathHelper.sin(head);
 
-		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, evt.partialRenderTick) - TileEntityRendererDispatcher.staticPlayerX;
-		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, evt.partialRenderTick) - TileEntityRendererDispatcher.staticPlayerY + magnet.height - 0.1;
-		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, evt.partialRenderTick) - TileEntityRendererDispatcher.staticPlayerZ;
+		final double magnetX = interpolatePos(magnet.posX, magnet.lastTickPosX, partialRenderTick) - TileEntityRendererDispatcher.staticPlayerX;
+		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialRenderTick) - TileEntityRendererDispatcher.staticPlayerY + magnet.height - 0.1;
+		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialRenderTick) - TileEntityRendererDispatcher.staticPlayerZ;
 
 		GL11.glLineWidth(2);
 		GlStateManager.disableTexture2D();
@@ -226,7 +226,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		if (!ItemCraneBackpack.isWearingCrane(player)) return;
 
 		drawArm(evt, player);
-		drawLineFPP(player, evt.partialTicks);
+		drawLineFPP(player, evt.getPartialTicks());
 	}
 
 	public void init() {

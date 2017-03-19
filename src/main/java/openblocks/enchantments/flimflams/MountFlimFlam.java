@@ -1,17 +1,15 @@
 package openblocks.enchantments.flimflams;
 
+import com.google.common.base.Predicate;
 import java.util.List;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
 import openmods.utils.CollectionUtils;
-
-import com.google.common.base.Predicate;
 
 public class MountFlimFlam implements IFlimFlamAction {
 
@@ -30,8 +28,7 @@ public class MountFlimFlam implements IFlimFlamAction {
 		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, around, SAFE_SELECTOR);
 		if (mobs.isEmpty()) return false;
 		EntityLiving selected = CollectionUtils.getRandom(mobs);
-		target.mountEntity(selected);
-		return true;
+		return target.startRiding(selected);
 	}
 
 }

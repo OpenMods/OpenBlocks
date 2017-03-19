@@ -1,6 +1,8 @@
 package openblocks.common.entity;
 
+import com.google.common.base.Strings;
 import io.netty.buffer.ByteBuf;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
@@ -8,12 +10,21 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.*;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -24,12 +35,10 @@ import openmods.api.VisibleForDocumentation;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
 
-import com.google.common.base.Strings;
-
 @VisibleForDocumentation
 public class EntityLuggage extends EntityTameable implements IEntityAdditionalSpawnData {
 
-	private static final int INV_SIZE_WATCH = 18;
+	private static final DataParameter<Integer> PROPERTY_INV_SIZE = EntityDataManager.<Integer> createKey(EntityLuggage.class, DataSerializers.VARINT);
 
 	private static final int SIZE_SPECIAL = 54;
 
@@ -63,16 +72,16 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		setMoveForward(0);
 		setTamed(true);
 		enablePersistence();
+		setPathPriority(PathNodeType.WATER, -1.0F);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIFollowOwner(this, getAIMoveSpeed(), 10.0F, 2.0F));
 		this.tasks.addTask(3, new EntityAICollectItem(this));
-		this.dataWatcher.addObject(INV_SIZE_WATCH, Integer.valueOf(inventory.getSizeInventory()));
+		getDataManager().register(PROPERTY_INV_SIZE, inventory.getSizeInventory());
 	}
 
 	@Override
 	protected PathNavigate getNewNavigator(World worldIn) {
 		final PathNavigateGround navigator = new PathNavigateGround(this, worldIn);
-		navigator.setAvoidsWater(true);
 		navigator.setCanSwim(true);
 		return navigator;
 	}
@@ -82,9 +91,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 		special = true;
 		GenericInventory inventory = createInventory(SIZE_SPECIAL);
 		inventory.copyFrom(this.inventory);
-		if (this.dataWatcher != null) {
-			this.dataWatcher.updateObject(INV_SIZE_WATCH, inventory.getSizeInventory());
-		}
+		getDataManager().set(PROPERTY_INV_SIZE, inventory.getSizeInventory());
 		this.inventory = inventory;
 	}
 
@@ -97,7 +104,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (worldObj.isRemote) {
-			int inventorySize = dataWatcher.getWatchableObjectInt(18);
+			int inventorySize = getDataManager().get(PROPERTY_INV_SIZE);
 			if (inventory.getSizeInventory() != inventorySize) {
 				inventory = createInventory(inventorySize);
 			}
@@ -110,7 +117,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target) {
+	public ItemStack getPickedResult(RayTraceResult target) {
 		return convertToItem();
 	}
 
@@ -120,9 +127,8 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public boolean interact(EntityPlayer player) {
+	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
 		if (!isDead) {
-			final ItemStack heldItem = player.getHeldItem();
 			if (heldItem != null && heldItem.getItem() instanceof ItemNameTag) return false;
 
 			if (worldObj.isRemote) {
@@ -131,15 +137,20 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 				if (player.isSneaking()) {
 					ItemStack luggageItem = convertToItem();
 					if (player.inventory.addItemStackToInventory(luggageItem)) setDead();
-					playSound("random.pop", 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
+					playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
 
 				} else {
-					playSound("random.chestopen", 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
+					playSound(SoundEvents.BLOCK_CHEST_OPEN, 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
 					player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, getEntityId(), 0, 0);
 				}
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean canBeLeashedTo(EntityPlayer player) {
+		return false;
 	}
 
 	protected void spawnPickupParticles() {
@@ -172,7 +183,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 			inventory.readFromNBT(tag);
 			if (inventory.getSizeInventory() > SIZE_NORMAL) setSpecial();
 
-			NBTTagCompound tagCopy = (NBTTagCompound)tag.copy();
+			NBTTagCompound tagCopy = tag.copy();
 			tagCopy.removeTag(GenericInventory.TAG_SIZE);
 			tagCopy.removeTag(GenericInventory.TAG_ITEMS);
 			this.itemTag = tagCopy.hasNoTags()? null : tagCopy;
@@ -187,7 +198,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		playSound("openblocks:luggage.walk", 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+		playSound(OpenBlocks.Sounds.ENTITY_LUGGAGE_WALK, 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
 	}
 
 	public void storeItemTag(NBTTagCompound itemTag) {
@@ -218,6 +229,11 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	@Override
 	public boolean isEntityInvulnerable(DamageSource dmg) {
 		return true;
+	}
+
+	@Override
+	public void setHealth(float health) {
+		// NO-OP
 	}
 
 	@Override

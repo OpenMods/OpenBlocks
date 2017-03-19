@@ -1,16 +1,23 @@
 package openblocks.enchantments.flimflams;
 
-import java.util.*;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
-import openblocks.api.*;
+import openblocks.api.FlimFlamDescriptionSimple;
+import openblocks.api.IFlimFlamAction;
+import openblocks.api.IFlimFlamDescription;
+import openblocks.api.IFlimFlamRegistry;
 import openmods.Log;
 import openmods.access.ApiSingleton;
 import openmods.config.properties.ConfigurationChange;
-
-import com.google.common.collect.*;
 
 @ApiSingleton
 public class FlimFlamRegistry implements IFlimFlamRegistry {

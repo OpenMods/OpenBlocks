@@ -1,14 +1,12 @@
 package openblocks.common.sync;
 
+import com.google.common.collect.Lists;
 import java.util.LinkedList;
 import java.util.List;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import openblocks.common.Stencil;
 import openmods.sync.SyncableObjectBase;
-
-import com.google.common.collect.Lists;
 
 public class SyncableBlockLayers extends SyncableObjectBase {
 

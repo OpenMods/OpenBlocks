@@ -1,8 +1,11 @@
 package openblocks.common;
 
+import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Random;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -10,8 +13,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,19 +23,48 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.tileentity.TileEntityTrophy;
-import openblocks.trophy.*;
+import openblocks.trophy.BlazeBehavior;
+import openblocks.trophy.CaveSpiderBehavior;
+import openblocks.trophy.CreeperBehavior;
+import openblocks.trophy.EndermanBehavior;
+import openblocks.trophy.GuardianBehavior;
+import openblocks.trophy.ITrophyBehavior;
+import openblocks.trophy.ItemDropBehavior;
+import openblocks.trophy.MooshroomBehavior;
+import openblocks.trophy.SkeletonBehavior;
+import openblocks.trophy.SnowmanBehavior;
+import openblocks.trophy.SquidBehavior;
+import openblocks.trophy.WitchBehavior;
 import openmods.Log;
+import openmods.calc.Environment;
+import openmods.calc.ExprType;
+import openmods.calc.SingleExprEvaluator;
+import openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
+import openmods.calc.types.fp.DoubleCalculatorFactory;
+import openmods.config.properties.ConfigurationChange;
 import openmods.reflection.ReflectionHelper;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 
 public class TrophyHandler {
 
-	private static final Random DROP_RAND = new Random();
-
 	private static final Map<Trophy, Entity> ENTITY_CACHE = Maps.newHashMap();
+
+	private final Random fallbackDropChance = new Random();
+
+	private final SingleExprEvaluator<Double, ExprType> dropChangeCalculator = SingleExprEvaluator.create(DoubleCalculatorFactory.createDefault());
+
+	{
+		updateDropChanceFormula();
+	}
+
+	@SubscribeEvent
+	public void onConfigChange(ConfigurationChange.Post evt) {
+		if (evt.check("trophy", "trophyDropChanceFormula"))
+			updateDropChanceFormula();
+	}
+
+	private void updateDropChanceFormula() {
+		dropChangeCalculator.setExpr(ExprType.INFIX, Config.trophyDropChanceFormula);
+	}
 
 	public static Entity getEntityFromCache(Trophy trophy) {
 		Entity entity = ENTITY_CACHE.get(trophy);
@@ -59,11 +92,11 @@ public class TrophyHandler {
 
 	public enum Trophy {
 		Wolf(),
-		Chicken(new ItemDropBehavior(10000, new ItemStack(Items.egg), "mob.chicken.plop")),
-		Cow(new ItemDropBehavior(20000, new ItemStack(Items.leather))),
+		Chicken(new ItemDropBehavior(10000, new ItemStack(Items.EGG), SoundEvents.ENTITY_CHICKEN_EGG)),
+		Cow(new ItemDropBehavior(20000, new ItemStack(Items.LEATHER))),
 		Creeper(new CreeperBehavior()),
 		Skeleton(new SkeletonBehavior()),
-		PigZombie(new ItemDropBehavior(20000, new ItemStack(Items.gold_nugget))),
+		PigZombie(new ItemDropBehavior(20000, new ItemStack(Items.GOLD_NUGGET))),
 		Bat(1.0, -0.3),
 		Zombie(),
 		Witch(0.35, new WitchBehavior()),
@@ -104,11 +137,12 @@ public class TrophyHandler {
 		MushroomCow(new MooshroomBehavior()),
 		VillagerGolem(0.3),
 		SnowMan(new SnowmanBehavior()),
-		Pig(new ItemDropBehavior(20000, new ItemStack(Items.porkchop))),
+		Pig(new ItemDropBehavior(20000, new ItemStack(Items.PORKCHOP))),
 		Endermite(),
 		Guardian(new GuardianBehavior()),
-		Rabbit(new ItemDropBehavior(20000, new ItemStack(Items.carrot)));
+		Rabbit(new ItemDropBehavior(20000, new ItemStack(Items.CARROT)));
 		// Skipped: Horse (needs world in ctor), Wither (renders boss bar)
+		// TODO bear, shulker
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
@@ -201,19 +235,42 @@ public class TrophyHandler {
 	}
 
 	@SubscribeEvent
-	public void onLivingDrops(LivingDropsEvent event) {
-		if (event.recentlyHit && DROP_RAND.nextDouble() < Config.trophyDropChance * event.lootingLevel) {
-			final Entity entity = event.entity;
-			String entityName = EntityList.getEntityString(entity);
-			if (!Strings.isNullOrEmpty(entityName)) {
-				Trophy mobTrophy = Trophy.TYPES.get(entityName);
-				if (mobTrophy != null) {
-					EntityItem drop = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
-					drop.setDefaultPickupDelay();
-					event.drops.add(drop);
+	public void onLivingDrops(final LivingDropsEvent event) {
+		final Entity entity = event.getEntity();
+		if (event.isRecentlyHit() && canDrop(entity)) {
+			final Double result = dropChangeCalculator.evaluate(
+					new EnvironmentConfigurator<Double>() {
+						@Override
+						public void accept(Environment<Double> env) {
+							env.setGlobalSymbol("looting", Double.valueOf(event.getLootingLevel()));
+							env.setGlobalSymbol("chance", Config.trophyDropChance);
+						}
+					}, new Supplier<Double>() {
+						@Override
+						public Double get() {
+							final double bias = fallbackDropChance.nextDouble() / 4;
+							final double selection = fallbackDropChance.nextDouble();
+							return (event.getLootingLevel() + bias) * Config.trophyDropChance - selection;
+						}
+					});
+
+			if (result > 0) {
+				final String entityName = EntityList.getEntityString(entity);
+				if (!Strings.isNullOrEmpty(entityName)) {
+					Trophy mobTrophy = Trophy.TYPES.get(entityName);
+					if (mobTrophy != null) {
+						EntityItem drop = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
+						drop.setDefaultPickupDelay();
+						event.getDrops().add(drop);
+					}
 				}
 			}
 		}
+	}
+
+	private static boolean canDrop(Entity entity) {
+		final World world = entity.worldObj;
+		return world != null && world.getGameRules().getBoolean("doMobLoot");
 	}
 
 }

@@ -1,8 +1,8 @@
 package openblocks.common.tileentity;
 
 import java.util.Set;
-
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,7 +51,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 			if (tickCounter > 0) {
 				tickCounter--;
 				if (tickCounter <= 0) {
-					playSoundAtBlock("random.click", 0.3F, 0.5F);
+					playSoundAtBlock(SoundEvents.BLOCK_STONE_BUTTON_CLICK_OFF, 0.3F, 0.5F);
 					flags.off(Flags.active);
 					sync();
 				}
@@ -87,7 +87,7 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 			} else {
 				flags.on(Flags.active);
 				tickCounter = getTickTime();
-				playSoundAtBlock("random.click", 0.3F, 0.6F);
+				playSoundAtBlock(SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON, 0.3F, 0.6F);
 				sync();
 			}
 		}
@@ -104,9 +104,11 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+
+		return tag;
 	}
 
 	@Override

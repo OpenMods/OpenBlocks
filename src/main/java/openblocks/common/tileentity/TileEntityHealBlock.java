@@ -1,9 +1,8 @@
 package openblocks.common.tileentity;
 
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ITickable;
 import openmods.OpenMods;
@@ -29,8 +28,8 @@ public class TileEntityHealBlock extends OpenTileEntity implements ITickable {
 					 * someone else should ultimately decide if it should be
 					 * done (you know who you are)
 					 */
-					player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 1, 10));
-					player.addPotionEffect(new PotionEffect(Potion.saturation.id, 1));
+					player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 1, 10));
+					player.addPotionEffect(new PotionEffect(MobEffects.SATURATION, 1));
 				}
 			}
 		}

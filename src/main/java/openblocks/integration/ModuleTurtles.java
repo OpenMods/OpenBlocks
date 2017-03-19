@@ -3,9 +3,10 @@ package openblocks.integration;
 import static openmods.conditions.Conditions.all;
 import static openmods.integration.IntegrationConditions.classExists;
 import static openmods.integration.IntegrationConditions.modLoaded;
+
+import dan200.computercraft.api.ComputerCraftAPI;
 import openmods.Mods;
 import openmods.integration.IntegrationModule;
-import dan200.computercraft.api.ComputerCraftAPI;
 
 public class ModuleTurtles extends IntegrationModule {
 

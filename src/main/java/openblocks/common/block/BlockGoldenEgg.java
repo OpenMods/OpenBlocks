@@ -1,21 +1,23 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
 import openmods.block.OpenBlock;
 
 public class BlockGoldenEgg extends OpenBlock {
 
 	public BlockGoldenEgg() {
-		super(Material.ground);
+		super(Material.GROUND);
 	}
 
 	@Override
-	public int getRenderType() {
-		return 2; // TESR only
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 }

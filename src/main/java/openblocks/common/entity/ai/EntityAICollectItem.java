@@ -1,13 +1,13 @@
 package openblocks.common.entity.ai;
 
 import java.util.List;
-
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemFood;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
 import openmods.inventory.legacy.ItemDistribution;
 
@@ -82,8 +82,8 @@ public class EntityAICollectItem extends EntityAIBase {
 				// Check that the size changed
 				if (preEatSize != stack.stackSize) {
 					if (luggage.lastSound > 15) {
-						boolean isFood = stack.getItem() instanceof ItemFood;
-						luggage.playSound(isFood? "openblocks:luggage.eat.food" : "openblocks:luggage.eat.item",
+						boolean isFood = stack.getItemUseAction() == EnumAction.EAT;
+						luggage.playSound(isFood? OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_FOOD : OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_ITEM,
 								0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						luggage.lastSound = 0;
 					}

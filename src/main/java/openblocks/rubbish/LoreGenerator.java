@@ -1,15 +1,19 @@
 package openblocks.rubbish;
 
-import static openmods.words.Words.*;
-
-import java.util.Map;
-import java.util.Random;
-
-import openmods.words.IGenerator;
-
-import org.apache.commons.lang3.StringUtils;
+import static openmods.words.Words.alt;
+import static openmods.words.Words.capitalize;
+import static openmods.words.Words.capitalizeFully;
+import static openmods.words.Words.opt;
+import static openmods.words.Words.range;
+import static openmods.words.Words.seq;
+import static openmods.words.Words.sub;
+import static openmods.words.Words.word;
 
 import com.google.common.collect.Maps;
+import java.util.Map;
+import java.util.Random;
+import openmods.words.IGenerator;
+import org.apache.commons.lang3.StringUtils;
 
 public class LoreGenerator {
 

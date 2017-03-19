@@ -1,7 +1,7 @@
 package openblocks.client.renderer.tileentity.tank;
 
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import openmods.utils.Diagonal;
 
 public class RenderConnection {
@@ -11,11 +11,19 @@ public class RenderConnection {
 		this.coords = coords;
 	}
 
-	public boolean check(BlockPos pos, EnumFacing dir) {
-		return coords.check(pos, dir);
+	public boolean isPositionEqualTo(int x, int y, int z, EnumFacing dir) {
+		return coords.isSameAs(x, y, z, dir);
 	}
 
-	public boolean check(BlockPos pos, Diagonal dir) {
-		return coords.check(pos, dir);
+	public boolean isPositionEqualTo(BlockPos pos, EnumFacing dir) {
+		return coords.isSameAs(pos, dir);
+	}
+
+	public boolean isPositionEqualTo(int x, int y, int z, Diagonal dir) {
+		return coords.isSameAs(x, y, z, dir);
+	}
+
+	public boolean isPositionEqualTo(BlockPos pos, Diagonal dir) {
+		return coords.isSameAs(pos, dir);
 	}
 }

@@ -1,26 +1,33 @@
 package openblocks.common.item;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.*;
-import net.minecraft.nbt.NBTBase.NBTPrimitive;
-import net.minecraft.util.*;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
-import openblocks.common.tileentity.*;
+import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 import openmods.colors.ColorMeta;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
+import openmods.utils.TranslationUtils;
 
 public class ItemImaginary extends ItemOpenBlock {
 
@@ -171,19 +178,17 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (stack == null) return false;
-
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		float uses = getUses(tag);
 		if (uses <= 0) {
 			stack.stackSize = 0;
-			return true;
+			return EnumActionResult.FAIL;
 		}
 
-		if (uses < getMode(tag).cost) return false;
+		if (uses < getMode(tag).cost) return EnumActionResult.FAIL;
 
-		return super.onItemUse(stack, player, world, pos, side, hitX, hitY, hitZ);
+		return super.onItemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
 	@Override
@@ -202,14 +207,14 @@ public class ItemImaginary extends ItemOpenBlock {
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 
-		result.add(StatCollector.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
+		result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.uses", getUses(tag)));
 
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
-		if (color != null) result.add(StatCollector.translateToLocalFormatted("openblocks.misc.color", color.getInt()));
+		if (color != null) result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.color", color.getInt()));
 
 		PlacementMode mode = getMode(tag);
-		String translatedMode = StatCollector.translateToLocal(mode.name);
-		result.add(StatCollector.translateToLocalFormatted("openblocks.misc.mode", translatedMode));
+		String translatedMode = TranslationUtils.translateToLocal(mode.name);
+		result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.mode", translatedMode));
 	}
 
 	@Override
@@ -219,16 +224,7 @@ public class ItemImaginary extends ItemOpenBlock {
 			result.add(setupValues(color.rgb, new ItemStack(this, 1, DAMAGE_CRAYON)));
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack stack, int pass) {
-		if (isCrayon(stack) && pass == 1) {
-			NBTTagCompound tag = stack.getTagCompound();
-			return tag != null? tag.getInteger(TAG_COLOR) : 0x000000;
-		}
-
-		return 0xFFFFFF;
-	}
+	// TODO 1.10 item coloring
 
 	@Override
 	public boolean hasContainerItem(ItemStack stack) {
@@ -248,7 +244,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		if (getUses(tag) <= 0) {
 			stack.stackSize = 0;
@@ -259,11 +255,11 @@ public class ItemImaginary extends ItemOpenBlock {
 
 			if (world.isRemote) {
 				PlacementMode mode = PlacementMode.VALUES[modeId];
-				ChatComponentTranslation modeName = new ChatComponentTranslation(mode.name);
-				player.addChatComponentMessage(new ChatComponentTranslation("openblocks.misc.mode", modeName));
+				TextComponentTranslation modeName = new TextComponentTranslation(mode.name);
+				player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.mode", modeName));
 			}
 		}
-
-		return stack;
+		// TODO 1.10 verify if mode change is stored
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 }

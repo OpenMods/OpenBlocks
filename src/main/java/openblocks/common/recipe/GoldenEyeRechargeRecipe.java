@@ -15,7 +15,7 @@ public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
 	private static final int PEARL_RECHARGE = 10;
 
 	public GoldenEyeRechargeRecipe() {
-		super(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE - PEARL_RECHARGE), new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), Items.ender_pearl);
+		super(new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE - PEARL_RECHARGE), new ItemStack(OpenBlocks.Items.goldenEye, 1, ItemGoldenEye.MAX_DAMAGE), Items.ENDER_PEARL);
 	}
 
 	@Override

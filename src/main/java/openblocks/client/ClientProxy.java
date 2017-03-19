@@ -1,16 +1,17 @@
 package openblocks.client;
 
+import com.google.common.base.Throwables;
 import java.lang.reflect.Field;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
@@ -24,20 +25,70 @@ import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
-import openblocks.client.model.*;
-import openblocks.client.renderer.entity.*;
-import openblocks.client.renderer.tileentity.*;
+import openblocks.client.model.ModelAutoAnvil;
+import openblocks.client.model.ModelBearTrap;
+import openblocks.client.model.ModelCraneBackpack;
+import openblocks.client.model.ModelPiggy;
+import openblocks.client.model.ModelSprinkler;
+import openblocks.client.model.ModelTarget;
+import openblocks.client.model.ModelVacuumHopper;
+import openblocks.client.model.ModelXPShower;
+import openblocks.client.renderer.entity.EntityCartographerRenderer;
+import openblocks.client.renderer.entity.EntityHangGliderRenderer;
+import openblocks.client.renderer.entity.EntityLuggageRenderer;
+import openblocks.client.renderer.entity.EntityMagnetRenderer;
+import openblocks.client.renderer.entity.EntityMiniMeRenderer;
+import openblocks.client.renderer.entity.EntitySelectionHandler;
+import openblocks.client.renderer.tileentity.TileEntityAutoEnchantmentTableRenderer;
+import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
+import openblocks.client.renderer.tileentity.TileEntityFanRenderer;
+import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
+import openblocks.client.renderer.tileentity.TileEntityGoldenEggRenderer;
+import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
+import openblocks.client.renderer.tileentity.TileEntityImaginaryRenderer;
+import openblocks.client.renderer.tileentity.TileEntityPaintMixerRenderer;
+import openblocks.client.renderer.tileentity.TileEntityProjectorRenderer;
+import openblocks.client.renderer.tileentity.TileEntitySkyRenderer;
+import openblocks.client.renderer.tileentity.TileEntityTankRenderer;
+import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
+import openblocks.client.renderer.tileentity.TileEntityVillageHighlighterRenderer;
+import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRenderer;
+import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
 import openblocks.common.TrophyHandler.Trophy;
-import openblocks.common.entity.*;
-import openblocks.common.tileentity.*;
+import openblocks.common.entity.EntityCartographer;
+import openblocks.common.entity.EntityGoldenEye;
+import openblocks.common.entity.EntityHangGlider;
+import openblocks.common.entity.EntityLuggage;
+import openblocks.common.entity.EntityMagnet;
+import openblocks.common.entity.EntityMiniMe;
+import openblocks.common.tileentity.TileEntityAutoAnvil;
+import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
+import openblocks.common.tileentity.TileEntityBearTrap;
+import openblocks.common.tileentity.TileEntityBuilderGuide;
+import openblocks.common.tileentity.TileEntityCannon;
+import openblocks.common.tileentity.TileEntityDonationStation;
+import openblocks.common.tileentity.TileEntityFan;
+import openblocks.common.tileentity.TileEntityFlag;
+import openblocks.common.tileentity.TileEntityGoldenEgg;
+import openblocks.common.tileentity.TileEntityGrave;
+import openblocks.common.tileentity.TileEntityGuide;
+import openblocks.common.tileentity.TileEntityImaginary;
+import openblocks.common.tileentity.TileEntityPaintMixer;
+import openblocks.common.tileentity.TileEntityProjector;
+import openblocks.common.tileentity.TileEntitySky;
+import openblocks.common.tileentity.TileEntitySprinkler;
+import openblocks.common.tileentity.TileEntityTank;
+import openblocks.common.tileentity.TileEntityTarget;
+import openblocks.common.tileentity.TileEntityTrophy;
+import openblocks.common.tileentity.TileEntityVacuumHopper;
+import openblocks.common.tileentity.TileEntityVillageHighlighter;
+import openblocks.common.tileentity.TileEntityXPShower;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
 import openmods.config.game.RegisterBlock;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import openmods.renderer.SimpleModelTileEntityRenderer;
 import openmods.utils.render.MarkerClassGenerator;
-
-import com.google.common.base.Throwables;
 
 public class ClientProxy implements IOpenBlocksProxy {
 
@@ -47,7 +98,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 	public void preInit() {
 		new KeyInputHandler().setup();
 
-		if (Config.flimFlamEnchantmentId > 0) {
+		if (Config.flimFlamEnchantmentEnabled) {
 			MinecraftForge.EVENT_BUS.register(new LoreFlimFlam.DisplayHandler());
 		}
 
@@ -195,12 +246,13 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	@SuppressWarnings("deprecation")
 	private static void tempHackRegisterTesrItemRenderers() {
+		// TODO kill it with fire!
 		for (Field f : OpenBlocks.Blocks.class.getFields()) {
 			RegisterBlock ann = f.getAnnotation(RegisterBlock.class);
 			if (ann.tileEntity() != null) {
 				try {
 					Block block = (Block)f.get(null);
-					if (block.getRenderType() == 2) {
+					if (block.getDefaultState().getRenderType() == EnumBlockRenderType.ENTITYBLOCK_ANIMATED) {
 						Item item = Item.getItemFromBlock(block);
 						ForgeHooksClient.registerTESRItemStack(item, 0, ann.tileEntity());
 					}
@@ -211,12 +263,17 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 	}
 
-	private static void spawnParticle(EntityFX spray) {
+	@Override
+	public int getParticleSettings() {
+		return Minecraft.getMinecraft().gameSettings.particleSetting;
+	}
+
+	private static void spawnParticle(Particle spray) {
 		Minecraft.getMinecraft().effectRenderer.addEffect(spray);
 	}
 
 	@Override
-	public void spawnLiquidSpray(World worldObj, FluidStack fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
+	public void spawnLiquidSpray(World worldObj, FluidStack fluid, double x, double y, double z, float scale, float gravity, Vec3d velocity) {
 		spawnParticle(new FXLiquidSpray(worldObj, fluid, x, y, z, scale, gravity, velocity));
 	}
 }

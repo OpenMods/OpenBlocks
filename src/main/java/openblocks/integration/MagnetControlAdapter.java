@@ -1,10 +1,13 @@
 package openblocks.integration;
 
+import com.google.common.base.Preconditions;
+import dan200.computercraft.api.turtle.ITurtleAccess;
+import dan200.computercraft.api.turtle.TurtleSide;
 import java.lang.ref.WeakReference;
-
-import net.minecraft.util.BlockPos;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import openblocks.Config;
@@ -16,17 +19,16 @@ import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
 import openmods.fakeplayer.OpenModsFakePlayer;
 import openperipheral.api.adapter.IWorldProvider;
-import openperipheral.api.adapter.method.*;
+import openperipheral.api.adapter.method.Alias;
+import openperipheral.api.adapter.method.Arg;
+import openperipheral.api.adapter.method.IMultiReturn;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
 import openperipheral.api.architecture.IArchitectureAccess;
 import openperipheral.api.architecture.IAttachable;
 import openperipheral.api.helpers.MultiReturn;
 import openperipheral.api.peripheral.ExposeInterface;
 import openperipheral.api.peripheral.PeripheralTypeId;
-
-import com.google.common.base.Preconditions;
-
-import dan200.computercraft.api.turtle.ITurtleAccess;
-import dan200.computercraft.api.turtle.TurtleSide;
 
 @PeripheralTypeId("openblocks_magnet")
 @ExposeInterface({ ITickingTurtle.class, IAttachable.class })
@@ -34,17 +36,17 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 
 	public class Owner implements IOwner {
 
-		private Vec3 target;
+		private Vec3d target;
 
 		public Owner() {
-			this.target = new Vec3(0, 0, 0);
+			this.target = new Vec3d(0, 0, 0);
 		}
 
 		public synchronized void setTargetPosition(double x, double y, double z) {
-			target = new Vec3(x, y, z);
+			target = new Vec3d(x, y, z);
 		}
 
-		public synchronized Vec3 getTarget(Vec3 pos, EnumFacing side) {
+		public synchronized Vec3d getTarget(Vec3d pos, EnumFacing side) {
 			double x = pos.xCoord + 0.5;
 			double y = pos.yCoord + 0.5;
 			double z = pos.zCoord + 0.5;
@@ -71,7 +73,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 					break;
 			}
 
-			return new Vec3(x, y, z);
+			return new Vec3d(x, y, z);
 		}
 
 		@Override
@@ -80,8 +82,8 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		}
 
 		@Override
-		public Vec3 getTarget() {
-			return getTarget(new Vec3(turtle.getPosition()), turtle.getDirection());
+		public Vec3d getTarget() {
+			return getTarget(new Vec3d(turtle.getPosition()), turtle.getDirection());
 		}
 
 		@Override
@@ -137,7 +139,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		magnet = new EntityMagnet(world, magnetOwner, true);
 		world.spawnEntityInWorld(magnet);
 
-		magnet.playSound("mob.endermen.portal", 1, 1);
+		magnet.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
 		this.magnet = new WeakReference<EntityMagnet>(magnet);
 	}
 
@@ -159,7 +161,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 			description = "Get turtle position")
 	public IMultiReturn getPosition() {
 		EntityMagnet magnet = getMagnet();
-		Vec3 rotated = getRelativeDistance(magnet);
+		Vec3d rotated = getRelativeDistance(magnet);
 		return MultiReturn.wrap(rotated.xCoord, rotated.yCoord, rotated.zCoord);
 	}
 
@@ -183,8 +185,8 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 	@ScriptCallable(returnTypes = { ReturnType.NUMBER, ReturnType.NUMBER, ReturnType.NUMBER })
 	public IMultiReturn getDistanceToTarget() {
 		EntityMagnet magnet = getMagnet();
-		Vec3 current = getRelativeDistance(magnet);
-		Vec3 target = magnetOwner.target;
+		Vec3d current = getRelativeDistance(magnet);
+		Vec3d target = magnetOwner.target;
 		return MultiReturn.wrap(current.xCoord - target.xCoord,
 				current.yCoord - target.yCoord,
 				current.zCoord - target.zCoord);
@@ -209,23 +211,23 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 				&& Math.abs(z) <= Config.turtleMagnetRange;
 	}
 
-	private Vec3 getRelativeDistance(EntityMagnet magnet) {
-		Vec3 magnetPos = new Vec3(magnet.posX, magnet.posY, magnet.posZ);
-		Vec3 turtlePos = new Vec3(turtle.getPosition()).addVector(0.5, 0.5, 0.5);
+	private Vec3d getRelativeDistance(EntityMagnet magnet) {
+		Vec3d magnetPos = new Vec3d(magnet.posX, magnet.posY, magnet.posZ);
+		Vec3d turtlePos = new Vec3d(turtle.getPosition()).addVector(0.5, 0.5, 0.5);
 
-		Vec3 dist = turtlePos.subtract(magnetPos);
+		Vec3d dist = turtlePos.subtract(magnetPos);
 
 		EnumFacing side = turtle.getDirection();
 
 		switch (side) {
 			case NORTH:
-				return new Vec3(-dist.zCoord, dist.yCoord, dist.xCoord);
+				return new Vec3d(-dist.zCoord, dist.yCoord, dist.xCoord);
 			case SOUTH:
-				return new Vec3(dist.zCoord, dist.yCoord, -dist.xCoord);
+				return new Vec3d(dist.zCoord, dist.yCoord, -dist.xCoord);
 			case EAST:
-				return new Vec3(dist.xCoord, dist.yCoord, dist.zCoord);
+				return new Vec3d(dist.xCoord, dist.yCoord, dist.zCoord);
 			case WEST:
-				return new Vec3(-dist.xCoord, dist.yCoord, -dist.zCoord);
+				return new Vec3d(-dist.xCoord, dist.yCoord, -dist.zCoord);
 			default:
 				return dist;
 		}
@@ -251,18 +253,18 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		EntityMagnet magnet = this.magnet.get();
 		Preconditions.checkNotNull(magnet, "Magnet not active");
 
-		Vec3 magnetPos = new Vec3(magnet.posX, magnet.posY, magnet.posZ);
-		Vec3 turtlePos = new Vec3(turtle.getPosition()).addVector(0.5, 0.5, 0.5);
+		Vec3d magnetPos = new Vec3d(magnet.posX, magnet.posY, magnet.posZ);
+		Vec3d turtlePos = new Vec3d(turtle.getPosition()).addVector(0.5, 0.5, 0.5);
 
 		Preconditions.checkState(!checkPosition || canOperateOnMagnet(magnetPos, turtlePos), "Magnet too far");
 
-		magnet.playSound("mob.endermen.portal", 1, 1);
+		magnet.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
 		magnet.setDead();
 		this.magnet.clear();
 		magnetOwner = null;
 	}
 
-	private static boolean canOperateOnMagnet(Vec3 magnetPos, Vec3 turtlePos) {
+	private static boolean canOperateOnMagnet(Vec3d magnetPos, Vec3d turtlePos) {
 		return magnetPos.squareDistanceTo(turtlePos) <= Config.turtleMagnetRangeDeactivate * Config.turtleMagnetRangeDeactivate;
 	}
 

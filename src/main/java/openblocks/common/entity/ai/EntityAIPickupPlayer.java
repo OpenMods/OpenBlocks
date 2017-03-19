@@ -1,14 +1,12 @@
 package openblocks.common.entity.ai;
 
+import com.mojang.authlib.GameProfile;
 import java.util.List;
-
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.world.World;
 import openblocks.common.entity.EntityMiniMe;
-
-import com.mojang.authlib.GameProfile;
 
 public class EntityAIPickupPlayer extends EntityAIBase {
 
@@ -65,7 +63,7 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 		World world = minime.worldObj;
 		if (!world.isRemote && canRidePlayer(targetPlayer)) {
 			if (minime.getDistanceToEntity(targetPlayer) < 1.0) {
-				targetPlayer.mountEntity(minime);
+				targetPlayer.startRiding(minime);
 			}
 		}
 	}
@@ -74,6 +72,6 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 		final GameProfile owner = minime.getOwner();
 		return owner != null && player != null &&
 				player.getGameProfile().getId().equals(owner.getId()) &&
-				player.ridingEntity == null;
+				player.isRiding();
 	}
 }

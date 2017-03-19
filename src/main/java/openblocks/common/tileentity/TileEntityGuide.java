@@ -1,16 +1,31 @@
 package openblocks.common.tileentity;
 
-import java.util.*;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Ints;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
+import openblocks.shapes.CoordShape;
 import openblocks.shapes.GuideShape;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
@@ -19,24 +34,27 @@ import openmods.geometry.HalfAxis;
 import openmods.geometry.Orientation;
 import openmods.shapes.IShapeGenerator;
 import openmods.shapes.IShapeable;
-import openmods.sync.*;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableEnum;
+import openmods.sync.SyncableInt;
+import openmods.sync.SyncableVarInt;
 import openmods.sync.drops.DroppableTileEntity;
 import openmods.sync.drops.StoreOnDrop;
 import openmods.utils.CollectionUtils;
 import openmods.utils.MathUtils;
 import openperipheral.api.adapter.Asynchronous;
-import openperipheral.api.adapter.method.*;
+import openperipheral.api.adapter.method.Alias;
+import openperipheral.api.adapter.method.Arg;
+import openperipheral.api.adapter.method.ReturnType;
+import openperipheral.api.adapter.method.ScriptCallable;
 import openperipheral.api.struct.ScriptStruct;
 import openperipheral.api.struct.StructField;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.*;
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Ints;
-
 public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile, ITickable {
 
-	private static final Comparator<BlockPos> BlockPos_COMPARATOR = new Comparator<BlockPos>() {
+	private static final Comparator<BlockPos> COMPARATOR = new Comparator<BlockPos>() {
 		@Override
 		public int compare(BlockPos o1, BlockPos o2) {
 			{
@@ -76,8 +94,10 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		}
 	};
 
-	private List<BlockPos> shape;
-	private List<BlockPos> previousShape;
+	private CoordShape shape;
+	private CoordShape previousShape;
+	private CoordShape toDeleteShape;
+
 	private float timeSinceChange = 0;
 	private AxisAlignedBB renderAABB;
 
@@ -265,11 +285,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private void displayModeChange(EntityPlayer player) {
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
+		player.addChatMessage(new TextComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
 	}
 
 	private void displayBlockCount(EntityPlayer player) {
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.total_blocks", shape.size()));
+		player.addChatMessage(new TextComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
 	public boolean shouldRender() {
@@ -290,8 +310,9 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private void recreateShape() {
+		toDeleteShape = previousShape;
 		previousShape = shape;
-		shape = generateShape();
+		shape = new CoordShape(generateShape());
 		renderAABB = null;
 	}
 
@@ -308,7 +329,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		generator.generateShape(-negX.get(), -negY.get(), -negZ.get(), posX.get(), posY.get(), posZ.get(), collector);
 
 		final List<BlockPos> sortedResults = Lists.newArrayList(uniqueResults);
-		Collections.sort(sortedResults, BlockPos_COMPARATOR);
+		Collections.sort(sortedResults, COMPARATOR);
 
 		final List<BlockPos> rotatedResult = Lists.newArrayList();
 		final Orientation orientation = getOrientation();
@@ -328,12 +349,18 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return true;
 	}
 
-	public List<BlockPos> getShape() {
+	public CoordShape getShape() {
 		return shape;
 	}
 
-	public List<BlockPos> getPreviousShape() {
+	public CoordShape getPreviousShape() {
 		return previousShape;
+	}
+
+	public CoordShape getAndDeleteShape() {
+		CoordShape toDel = toDeleteShape;
+		toDeleteShape = null;
+		return toDel;
 	}
 
 	@Override
@@ -360,7 +387,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		double maxZ = 1;
 
 		if (shape != null) {
-			for (BlockPos c : shape) {
+			for (BlockPos c : shape.getCoords()) {
 				{
 					final int x = c.getX();
 					if (maxX < x) maxX = x;
@@ -411,7 +438,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private void notifyPlayer(EntityPlayer player) {
-		player.addChatMessage(new ChatComponentTranslation("openblocks.misc.change_box_size",
+		player.addChatMessage(new TextComponentTranslation("openblocks.misc.change_box_size",
 				-negX.get(), -negY.get(), -negZ.get(),
 				+posX.get(), +posY.get(), +posZ.get()));
 		displayBlockCount(player);
@@ -457,7 +484,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		updateRedstone();
 	}
 
-	protected List<BlockPos> getShapeSafe() {
+	protected CoordShape getShapeSafe() {
 		if (shape == null) recreateShape();
 		return shape;
 	}

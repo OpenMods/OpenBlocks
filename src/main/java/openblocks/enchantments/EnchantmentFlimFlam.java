@@ -2,12 +2,18 @@ package openblocks.enchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import openblocks.OpenBlocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
 public class EnchantmentFlimFlam extends Enchantment {
 
-	public EnchantmentFlimFlam(int id) {
-		super(id, OpenBlocks.location("flimflam"), 2, EnumEnchantmentType.ALL);
+	private static final EntityEquipmentSlot[] ALL_ARMOR = new EntityEquipmentSlot[] { EntityEquipmentSlot.FEET, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.MAINHAND };
+
+	public EnchantmentFlimFlam() {
+		super(Rarity.RARE, EnumEnchantmentType.ALL, ALL_ARMOR);
 		setName("openblocks.flimflam");
 	}
 
@@ -25,4 +31,11 @@ public class EnchantmentFlimFlam extends Enchantment {
 	public int getMaxEnchantability(int level) {
 		return getMinEnchantability(level) + 10;
 	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+		final Item item = stack.getItem();
+		return (item instanceof ItemArmor) || (item instanceof ItemSword);
+	}
+
 }

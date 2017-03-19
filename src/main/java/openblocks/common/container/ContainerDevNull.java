@@ -2,6 +2,7 @@ package openblocks.common.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -11,17 +12,20 @@ public class ContainerDevNull extends ContainerBase<Void> {
 
 	private InventoryPlayer playerInventory;
 
-	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory) {
+	private final int protectedSlot;
+
+	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory, int protectedSlot) {
 		super(playerInventory, ownerInventory, null);
 		this.playerInventory = (InventoryPlayer)playerInventory;
+		this.protectedSlot = protectedSlot;
 		addInventoryGrid(80, 22, 1);
 		addPlayerInventorySlots(55);
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int key, int modifier, EntityPlayer player) {
-		if (modifier == 2 && key == player.inventory.currentItem) return null;
-		return super.slotClick(slotId, key, modifier, player);
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
+		if (slotId == protectedSlot) return null; // TODO 1.10 verify if it's proper solution
+		return super.slotClick(slotId, dragType, clickType, player);
 	}
 
 	@Override
@@ -40,7 +44,7 @@ public class ContainerDevNull extends ContainerBase<Void> {
 			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58) {
 				@Override
 				public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
-					return currentSlot != playerInventory.currentItem;
+					return currentSlot != protectedSlot;
 				}
 			});
 

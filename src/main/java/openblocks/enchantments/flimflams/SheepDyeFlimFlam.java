@@ -3,11 +3,10 @@ package openblocks.enchantments.flimflams;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import openblocks.api.IFlimFlamAction;
 import openmods.utils.CollectionUtils;

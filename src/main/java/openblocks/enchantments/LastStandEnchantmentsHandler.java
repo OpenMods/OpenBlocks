@@ -1,66 +1,91 @@
 package openblocks.enchantments;
 
-import java.util.Map;
-
+import com.google.common.base.Supplier;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
+import openmods.calc.Environment;
+import openmods.calc.ExprType;
+import openmods.calc.SingleExprEvaluator;
+import openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
+import openmods.calc.types.fp.DoubleCalculatorFactory;
+import openmods.config.properties.ConfigurationChange;
+import openmods.entity.PlayerDamageEvent;
 import openmods.utils.EnchantmentUtils;
 
 public class LastStandEnchantmentsHandler {
 
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public void onHurt(LivingHurtEvent e) {
+	private static final String VAR_ENCH_LEVEL = "ench";
+	private static final String VAR_PLAYER_XP = "xp";
+	private static final String VAR_PLAYER_HP = "hp";
+	private static final String VAR_DAMAGE = "dmg";
 
-		if (e.entityLiving instanceof EntityPlayer) {
+	private final SingleExprEvaluator<Double, ExprType> reductionCalculator = SingleExprEvaluator.create(DoubleCalculatorFactory.createDefault());
 
-			EntityPlayer player = (EntityPlayer)e.entityLiving;
+	{
+		updateReductionFormula();
+	}
 
-			int enchantmentLevels = countLastStandEnchantmentLevels(player);
+	@SubscribeEvent
+	public void onConfigChange(ConfigurationChange.Post evt) {
+		if (evt.check("features", "lastStandFormula"))
+			updateReductionFormula();
+	}
 
-			if (enchantmentLevels > 0) {
+	private void updateReductionFormula() {
+		reductionCalculator.setExpr(ExprType.INFIX, Config.lastStandEnchantmentFormula);
+	}
 
-				float healthAvailable = player.getHealth();
-				healthAvailable -= e.ammount;
+	@SubscribeEvent
+	public void onHurt(final PlayerDamageEvent e) {
+		final int enchantmentLevels = countLastStandEnchantmentLevels(e.player);
 
-				if (healthAvailable < 1f) {
+		if (enchantmentLevels > 0) {
+			final float playerHealth = e.player.getHealth();
+			final float healthAvailable = playerHealth - e.amount;
 
-					int xpAvailable = EnchantmentUtils.getPlayerXP(player);
+			if (healthAvailable < 1f) {
+				final int xpAvailable = EnchantmentUtils.getPlayerXP(e.player);
 
-					float xpRequired = 1f - healthAvailable;
+				float xpRequired = reductionCalculator.evaluate(
+						new EnvironmentConfigurator<Double>() {
+							@Override
+							public void accept(Environment<Double> env) {
+								env.setGlobalSymbol(VAR_ENCH_LEVEL, Double.valueOf(enchantmentLevels));
+								env.setGlobalSymbol(VAR_PLAYER_XP, Double.valueOf(xpAvailable));
+								env.setGlobalSymbol(VAR_PLAYER_HP, Double.valueOf(playerHealth));
+								env.setGlobalSymbol(VAR_DAMAGE, Double.valueOf(e.amount));
+							}
+						},
+						new Supplier<Double>() {
+							@Override
+							public Double get() {
+								float xpRequired = 1f - healthAvailable;
+								xpRequired *= 50;
+								xpRequired /= enchantmentLevels;
+								xpRequired = Math.max(1, xpRequired);
+								return Double.valueOf(xpRequired);
+							}
+						}).floatValue();
 
-					xpRequired *= 50;
-					xpRequired /= enchantmentLevels;
-					xpRequired = Math.max(1, xpRequired);
-
-					if (xpAvailable >= xpRequired) {
-						player.setHealth(1f);
-						EnchantmentUtils.addPlayerXP(player, -(int)xpRequired);
-						e.ammount = 0;
-						e.setCanceled(true);
-					}
+				if (xpAvailable >= xpRequired) {
+					e.player.setHealth(1f);
+					EnchantmentUtils.addPlayerXP(e.player, -(int)xpRequired);
+					e.amount = 0;
+					e.setCanceled(true);
 				}
 			}
-
 		}
 	}
 
 	public static int countLastStandEnchantmentLevels(EntityPlayer player) {
 		if (player != null) {
 			int count = 0;
-			for (ItemStack stack : player.inventory.armorInventory) {
-				if (stack != null) {
-					Map<Integer, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-					Integer ench = enchantments.get(Enchantments.lastStand.effectId);
-					if (ench != null) {
-						count += ench;
-					}
-				}
-			}
+			for (ItemStack stack : player.inventory.armorInventory)
+				count += EnchantmentHelper.getEnchantmentLevel(Enchantments.lastStand, stack);
 			return count;
 		}
 		return 0;

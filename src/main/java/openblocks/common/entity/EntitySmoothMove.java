@@ -1,12 +1,10 @@
 package openblocks.common.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-// TODO 1.8.9 verify changes in entity movement
+// TODO 1.8.9 verify changes in entity movement. Seems that 'setPosition' catches all, so other overrides were removed
 public abstract class EntitySmoothMove extends Entity {
 
 	public class MoveSmoother {
@@ -26,7 +24,7 @@ public abstract class EntitySmoothMove extends Entity {
 			this.minimalLengthSq = minimalLength * minimalLength;
 		}
 
-		public void setTarget(Vec3 position) {
+		public void setTarget(Vec3d position) {
 			setTarget(position.xCoord, position.yCoord, position.zCoord);
 		}
 
@@ -45,8 +43,7 @@ public abstract class EntitySmoothMove extends Entity {
 			if (lenSq > panicLengthSq || lenSq < minimalLengthSq) {
 				setPosition(targetX, targetY, targetZ);
 				motionX = motionY = motionZ = 0;
-			}
-			else {
+			} else {
 				if (lenSq > cutoff * cutoff) {
 					double scale = cutoff / Math.sqrt(lenSq);
 					dx *= scale;
@@ -67,27 +64,13 @@ public abstract class EntitySmoothMove extends Entity {
 	}
 
 	protected MoveSmoother createSmoother(boolean isRemote) {
-		return isRemote? new MoveSmoother(0.25, 1.0, 8.0, 0.01) :
-				new MoveSmoother(0.5, 5.0, 128.0, 0.01);
+		return isRemote? new MoveSmoother(0.25, 1.0, 8.0, 0.01) : new MoveSmoother(0.5, 5.0, 128.0, 0.01);
 	}
 
 	@Override
 	public void setPosition(double x, double y, double z) {
 		if (smoother != null) smoother.setTarget(x, y, z);
 		super.setPosition(x, y, z);
-	}
-
-	@Override
-	public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
-		smoother.setTarget(x, y, z);
-		super.setPositionAndRotation(x, y, z, yaw, pitch);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean something) {
-		smoother.setTarget(x, y, z);
-		super.setRotation(yaw, pitch);
 	}
 
 	protected void updatePrevPosition() {

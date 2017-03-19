@@ -1,14 +1,14 @@
 package openblocks.common.item;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +16,9 @@ import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocksGuiHandler;
 import openmods.infobook.BookDocumentation;
-import openmods.inventory.*;
+import openmods.inventory.ItemInventory;
+import openmods.inventory.PlayerItemInventory;
+import openmods.inventory.StackEqualityTesterBuilder;
 import openmods.inventory.StackEqualityTesterBuilder.IEqualityTester;
 import openmods.inventory.legacy.ItemDistribution;
 
@@ -29,8 +31,8 @@ public class ItemDevNull extends Item {
 
 		private final EntityPlayer player;
 
-		public DevNullInventory(EntityPlayer player) {
-			super(player, 1);
+		public DevNullInventory(EntityPlayer player, int protectedSlot) {
+			super(player, 1, protectedSlot);
 			this.player = player;
 		}
 
@@ -49,7 +51,7 @@ public class ItemDevNull extends Item {
 		}
 
 		private void checkStack(ItemStack stack) {
-			if (calculateDepth(stack) > STACK_LIMIT) player.triggerAchievement(OpenBlocks.stackAchievement);
+			if (calculateDepth(stack) > STACK_LIMIT) player.addStat(OpenBlocks.stackAchievement);
 		}
 	}
 
@@ -72,40 +74,23 @@ public class ItemDevNull extends Item {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote && (!Config.devNullSneakGui || player.isSneaking())) player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
-		return stack;
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
-	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		IInventory inventory = new ItemInventory(stack, 1);
-		ItemStack containedStack = inventory.getStackInSlot(0);
-		if (containedStack != null) {
-			Item item = containedStack.getItem();
-			if (item instanceof ItemBlock) {
-				final Block placedBlock = ((ItemBlock)item).getBlock();
-				// logic based on ItemBlock.canPlaceBlockOnSide, so don't blame me for hardcoding
-				final Block block = world.getBlockState(pos).getBlock();
-
-				if (block == Blocks.snow_layer && block.isReplaceable(world, pos)) side = EnumFacing.UP;
-				else if (!block.isReplaceable(world, pos)) pos = pos.offset(side);
-
-				return world.canBlockBePlaced(placedBlock, pos, false, side, null, stack);
-			}
-		}
-
-		return false;
-	}
+	// TODO 1.10 removed onItemUseFirst, verify if it was needed?
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (hand == EnumHand.OFF_HAND) return EnumActionResult.PASS; // TODO 1.10 verify if it works as expected?
+
 		PlayerItemInventory inventory = new PlayerItemInventory(player, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
 		if (containedStack != null) {
 			Item item = containedStack.getItem();
 			if (item instanceof ItemBlock) {
-				boolean response = ((ItemBlock)item).onItemUse(containedStack, player, world, pos, side, hitX, hitY, hitZ);
+				EnumActionResult response = item.onItemUse(containedStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
 				if (containedStack.stackSize == 0) {
 					inventory.setInventorySlotContents(0, null);
 				}
@@ -113,7 +98,7 @@ public class ItemDevNull extends Item {
 				return response;
 			}
 		}
-		return true;
+		return EnumActionResult.PASS; // TODO 1.01 verify this result
 	}
 
 	private static final IEqualityTester tester = new StackEqualityTesterBuilder().useItem().useDamage().useNBT().build();
@@ -121,8 +106,8 @@ public class ItemDevNull extends Item {
 	@SubscribeEvent
 	public void onItemPickUp(EntityItemPickupEvent evt) {
 
-		final EntityPlayer player = evt.entityPlayer;
-		final ItemStack pickedStack = evt.item.getEntityItem();
+		final EntityPlayer player = evt.getEntityPlayer();
+		final ItemStack pickedStack = evt.getItem().getEntityItem();
 
 		if (pickedStack == null || player == null) return;
 

@@ -1,40 +1,36 @@
 package openblocks.client.fx;
 
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import openmods.utils.TextureUtils;
 
-public class FXLiquidSpray extends EntityFX {
+public class FXLiquidSpray extends Particle {
 
-	public FXLiquidSpray(World world, FluidStack fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
+	public FXLiquidSpray(World world, FluidStack fluid, double x, double y, double z, float scale, float gravity, Vec3d velocity) {
 		this(world, TextureUtils.getFluidTexture(fluid), x, y, z, scale, gravity, velocity);
 	}
 
-	public FXLiquidSpray(World world, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
+	public FXLiquidSpray(World world, Fluid fluid, double x, double y, double z, float scale, float gravity, Vec3d velocity) {
 		this(world, TextureUtils.getFluidTexture(fluid), x, y, z, scale, gravity, velocity);
 	}
 
-	public FXLiquidSpray(World world, TextureAtlasSprite icon, double x, double y, double z, float scale, float gravity, Vec3 velocity) {
-		super(world, x, y, z, 0, 0, 0);
-
-		this.lastTickPosX = this.prevPosX = this.posX = x;
-		this.lastTickPosY = this.prevPosY = this.posY = y;
-		this.lastTickPosZ = this.prevPosZ = this.posZ = z;
+	public FXLiquidSpray(World world, TextureAtlasSprite icon, double x, double y, double z, float scale, float gravity, Vec3d velocity) {
+		super(world, x, y, z, velocity.xCoord, velocity.yCoord, velocity.zCoord);
 
 		particleGravity = gravity;
 		this.particleMaxAge = 50;
 		setSize(0.2f, 0.2f);
 		this.particleScale = scale;
-		this.noClip = false;
+		this.canCollide = true;
 		motionX = velocity.xCoord;
 		motionY = velocity.yCoord;
 		motionZ = velocity.zCoord;
 
-		setParticleIcon(icon);
+		setParticleTexture(icon);
 	}
 
 	@Override

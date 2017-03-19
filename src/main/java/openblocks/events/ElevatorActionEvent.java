@@ -1,7 +1,7 @@
 package openblocks.events;
 
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import openmods.events.network.BlockEventPacket;
 import openmods.movement.PlayerMovementEvent;
 import openmods.network.event.EventDirection;

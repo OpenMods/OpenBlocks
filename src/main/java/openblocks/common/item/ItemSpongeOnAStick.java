@@ -1,12 +1,14 @@
 package openblocks.common.item;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openmods.infobook.BookDocumentation;
@@ -20,19 +22,19 @@ public class ItemSpongeOnAStick extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-		soakUp(world, pos, player, stack);
-		return true;
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		return soakUp(world, pos, player, stack)? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		soakUp(world, player.getPosition(), player, stack);
-		return stack;
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+		boolean result = soakUp(world, player.getPosition(), player, stack);
+		return ActionResult.newResult(result? EnumActionResult.SUCCESS : EnumActionResult.FAIL, stack);
 	}
 
-	private void soakUp(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
-		if (world.isRemote) return;
+	private static boolean soakUp(World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+		boolean absorbedAnything = false;
 		boolean hitLava = false;
 		int damage = stack.getItemDamage();
 
@@ -40,15 +42,15 @@ public class ItemSpongeOnAStick extends Item {
 			for (int y = -Config.spongeStickRange; y <= Config.spongeStickRange; y++) {
 				for (int z = -Config.spongeStickRange; z <= Config.spongeStickRange; z++) {
 					final BlockPos targetPos = pos.add(x, y, z);
-					Block block = world.getBlockState(targetPos).getBlock();
-					if (block != null) {
-						Material material = block.getMaterial();
-						if (material.isLiquid()) {
-							hitLava |= material == Material.lava;
-							world.setBlockToAir(targetPos);
-							if (++damage >= getMaxDamage()) break;
-						}
+
+					Material material = world.getBlockState(targetPos).getMaterial();
+					if (material.isLiquid()) {
+						absorbedAnything = true;
+						hitLava |= material == Material.LAVA;
+						world.setBlockToAir(targetPos);
+						if (++damage >= Config.spongeMaxDamage) break;
 					}
+
 				}
 			}
 		}
@@ -58,8 +60,13 @@ public class ItemSpongeOnAStick extends Item {
 			player.setFire(6);
 		}
 
-		if (damage >= getMaxDamage()) stack.stackSize = 0;
-		else stack.setItemDamage(damage);
+		if (absorbedAnything) {
+			if (damage >= Config.spongeMaxDamage) stack.stackSize = 0;
+			else stack.setItemDamage(damage);
+			return true;
+		}
+
+		return false;
 	}
 
 }

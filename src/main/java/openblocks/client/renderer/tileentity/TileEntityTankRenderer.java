@@ -2,7 +2,7 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -18,7 +18,6 @@ import openmods.renderer.TessellatorPool.WorldRendererUser;
 import openmods.utils.Diagonal;
 import openmods.utils.TextureUtils;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntityTank> {
@@ -28,8 +27,9 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 		if (tankTile.isInvalid()) return;
 
 		final ITankRenderFluidData data = tankTile.getRenderFluidData();
-		if (data.hasFluid()) {
-			bindTexture(TextureMap.locationBlocksTexture);
+
+		if (data != null && data.hasFluid()) {
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
 			// it just looks broken with blending
@@ -44,7 +44,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 		}
 	}
 
-	private static void addVertexWithUV(WorldRenderer wr, double x, double y, double z, double u, double v) {
+	private static void addVertexWithUV(VertexBuffer wr, double x, double y, double z, double u, double v) {
 		wr.pos(x, y, z).tex(u, v).endVertex();
 	}
 
@@ -57,7 +57,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 		TextureAtlasSprite texture = TextureUtils.getFluidTexture(fluidStack);
 		final int color;
 
-		TextureUtils.bindTextureToClient(TextureMap.locationBlocksTexture);
+		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		if (texture != null) {
 			color = fluid.getColor(fluidStack);
@@ -85,7 +85,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 		TessellatorPool.instance.startDrawing(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX, new WorldRendererUser() {
 
 			@Override
-			public void execute(WorldRenderer wr) {
+			public void execute(VertexBuffer wr) {
 
 				if (data.shouldRenderFluidWall(EnumFacing.NORTH) && (nw > 0 || ne > 0)) {
 					addVertexWithUV(wr, 1, 0, 0, uMax, vMin);
@@ -143,7 +143,7 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 	}
 
 	public static ResourceLocation getFluidSheet(FluidStack liquid) {
-		if (liquid == null) return TextureMap.locationBlocksTexture;
+		if (liquid == null) return TextureMap.LOCATION_BLOCKS_TEXTURE;
 		return getFluidSheet(liquid.getFluid());
 	}
 
@@ -151,6 +151,6 @@ public class TileEntityTankRenderer extends TileEntitySpecialRenderer<TileEntity
 	 * @param liquid
 	 */
 	public static ResourceLocation getFluidSheet(Fluid liquid) {
-		return TextureMap.locationBlocksTexture;
+		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 }

@@ -27,7 +27,7 @@ public class ModelSleepingBag extends ModelBiped {
 		pillow.setRotationPoint(0F, 0F, 3F);
 		pillow.setTextureSize(128, 64);
 		pillow.mirror = true;
-		setRotation(pillow, 0F, 0F, 1.570796F);
+		setRotation(pillow, 0F, 0F, (float)(Math.PI / 2));
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {

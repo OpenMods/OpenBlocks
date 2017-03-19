@@ -1,8 +1,10 @@
 package openblocks.client.renderer.tileentity;
 
 import java.util.Random;
-
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -10,7 +12,6 @@ import openblocks.OpenBlocks;
 import openblocks.client.model.ModelEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg.State;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileEntityGoldenEgg> {
@@ -94,7 +95,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 		RANDOM.setSeed(432L);
 
 		// TODO 1.8.9 verify
-		WorldRenderer wr = tes.getWorldRenderer();
+		VertexBuffer wr = tes.getBuffer();
 		wr.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 
 		final int alpha = (int)(MAX_OPACITY * (1.0F - f2));

@@ -16,7 +16,7 @@ public class GameRuleManager {
 
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {
-		final GameRules rules = evt.world.getGameRules();
+		final GameRules rules = evt.getWorld().getGameRules();
 		addRule(rules, GameRule.SPAWN_GRAVES, "true");
 	}
 }

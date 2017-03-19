@@ -1,18 +1,20 @@
 package openblocks.common.tileentity;
 
 import java.util.Set;
-
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
+import openblocks.common.block.BlockProjector;
 import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
@@ -22,13 +24,17 @@ import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.sync.*;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncableByte;
+import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
+import openmods.utils.BlockNotifyFlags;
 import openmods.utils.BlockUtils;
 
 public class TileEntityProjector extends SyncedTileEntity implements IHasGui, IInventoryProvider, ISyncListener, IRotatable {
 
-	private GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
+	private final GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack stack) {
 			if (stack == null) return false;
@@ -59,6 +65,17 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 						} else TileEntityProjector.this.mapId.set(-1);
 					} else TileEntityProjector.this.mapId.set(-1);
 					sync();
+
+					final boolean isActive = TileEntityProjector.this.mapId() >= 0;
+					final BlockPos pos = getPos();
+					final IBlockState oldState = worldObj.getBlockState(pos);
+					final IBlockState newState = oldState.withProperty(BlockProjector.ACTIVE, isActive);
+
+					if (oldState != newState) {
+						worldObj.setBlockState(pos, newState, BlockNotifyFlags.ALL);
+						// TODO 1.10 verify is following is needed (seems to be already handled)
+						// worldObj.checkLight(pos);
+					}
 				}
 
 				markUpdated();
@@ -86,12 +103,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void validate() {
-		super.validate();
-		inventory.onInventoryChanged(0);
-	}
-
-	@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 0 || pass == 1;
 	}
@@ -103,9 +114,10 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
+		return tag;
 	}
 
 	@Override
@@ -156,11 +168,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	public void markMapDirty() {
 		int mapId = this.mapId.get();
 		if (worldObj != null || mapId < 0) MapDataManager.instance.markDataUpdated(worldObj, mapId);
-	}
-
-	public void fetchMap() {
-		int mapId = this.mapId.get();
-		if (worldObj != null && mapId >= 0) MapDataManager.getMapData(worldObj, mapId);
 	}
 
 	@Override

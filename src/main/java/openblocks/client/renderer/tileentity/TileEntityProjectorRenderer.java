@@ -2,8 +2,8 @@ package openblocks.client.renderer.tileentity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.OpenBlocks;
@@ -13,31 +13,33 @@ import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
 import openblocks.common.tileentity.TileEntityProjector;
 import openmods.OpenMods;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer<TileEntityProjector> {
 
 	private final static ResourceLocation texture = OpenBlocks.location("textures/models/projector.png");
 
-	private static ModelProjector model = new ModelProjector();
+	private static final float BLOCK_CENTRE_TRANSLATION = 0.5F;
 
-	public static void reload() {
-		model = new ModelProjector();
-	}
+	private static ModelProjector model = new ModelProjector();
 
 	@Override
 	public void renderTileEntityAt(TileEntityProjector projector, double x, double y, double z, float partialTickTime, int destroyProgess) {
 		int pass = MinecraftForgeClient.getRenderPass();
 
 		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5, y, z + 0.5);
+		GL11.glTranslated(x + BLOCK_CENTRE_TRANSLATION, y, z + BLOCK_CENTRE_TRANSLATION);
 		GL11.glRotated(90 * projector.rotation(), 0, 1, 0);
-		GL11.glTranslated(-0.5, 0, -0.5);
+
+		GL11.glTranslated(-BLOCK_CENTRE_TRANSLATION, 0, -BLOCK_CENTRE_TRANSLATION);
 		GlStateManager.color(1, 1, 1);
+
 		int mapId = projector.mapId();
-		if (pass <= 0) renderProjector(projector, partialTickTime, mapId >= 0);
-		else renderMap(projector, mapId);
+		if (pass <= 0) {
+			renderProjector(projector, partialTickTime, mapId >= 0);
+		} else {
+			renderMap(projector, mapId);
+		}
 
 		GL11.glPopMatrix();
 	}
@@ -53,8 +55,8 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer<TileE
 		}
 	}
 
-	private void renderProjector(TileEntityProjector projector, float partialTickTime, boolean active) {
-		GL11.glTranslated(0.25, 0.5, 0.25);
+	private void renderProjector(final TileEntityProjector projector, final float partialTickTime, final boolean active) {
+		GL11.glTranslated(BLOCK_CENTRE_TRANSLATION / 2, BLOCK_CENTRE_TRANSLATION, BLOCK_CENTRE_TRANSLATION / 2);
 		bindTexture(texture);
 		if (active) {
 			long ticks = OpenMods.proxy.getTicks(projector.getWorld());
@@ -63,5 +65,4 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer<TileE
 			model.render(0, 0, 0);
 		}
 	}
-
 }

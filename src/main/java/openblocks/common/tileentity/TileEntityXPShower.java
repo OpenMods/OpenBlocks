@@ -4,7 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
@@ -19,60 +20,73 @@ import openmods.tileentity.SyncedTileEntity;
 
 public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile, IAddAwareTile, ITickable {
 
+	private static final FluidStack XP_FLUID = new FluidStack(OpenBlocks.Fluids.xpJuice, 1);
+
 	private static final int DRAIN_PER_CYCLE = 50;
 
 	private GenericTank bufferTank = new GenericTank(FluidContainerRegistry.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
 
-	private int drainedCountdown = 0;
 	private SyncableBoolean isOn;
-	private boolean isPowered = false;
+	private SyncableBoolean particleSpawnerActive;
+	private int particleSpawnTimer = 0;
 
 	@Override
 	protected void createSyncedFields() {
 		isOn = new SyncableBoolean();
+		particleSpawnerActive = new SyncableBoolean();
 	}
 
 	@Override
 	public void update() {
 		if (!worldObj.isRemote) {
+			trySpawnXpOrbs();
+		} else {
+			trySpawnParticles();
+		}
+	}
 
-			if (!isPowered && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
-				bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getOrientation().north());
+	private void trySpawnXpOrbs() {
+		boolean hasSpawnedParticle = false;
+		if (isOn.get() && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
+			bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getOrientation().north());
 
-				int amountInTank = bufferTank.getFluidAmount();
+			int amountInTank = bufferTank.getFluidAmount();
 
-				if (amountInTank > 0) {
+			if (amountInTank > 0) {
+				int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
+				int drainable = LiquidXpUtils.xpToLiquidRatio(xpInTank);
 
-					int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
-					int drainable = LiquidXpUtils.xpToLiquidRatio(xpInTank);
-
-					if (drainable > 0) {
-
-						bufferTank.drain(drainable, true);
-
-						drainedCountdown = 10;
-
-						while (xpInTank > 0) {
-							int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
-							xpInTank -= xpAmount;
-							worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, xpAmount));
-						}
+				if (drainable > 0) {
+					bufferTank.drain(drainable, true);
+					while (xpInTank > 0) {
+						hasSpawnedParticle = true;
+						int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
+						xpInTank -= xpAmount;
+						final BlockPos p = getPos();
+						worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, p.getX() + 0.5D, p.getY(), p.getZ() + 0.5D, xpAmount));
 					}
 				}
 			}
-
-			isOn.set(drainedCountdown-- > 0 && !isPowered);
-			sync();
-
-		} else if (isOn.get()) {
-			Vec3 vec = new Vec3(
-					(worldObj.rand.nextDouble() - 0.5) * 0.05,
-					0,
-					(worldObj.rand.nextDouble() - 0.5) * 0.05);
-			OpenBlocks.proxy.spawnLiquidSpray(worldObj, new FluidStack(OpenBlocks.Fluids.xpJuice, 1000), pos.getX() + 0.5, pos.getY() + 0.4, pos.getZ() + 0.5, 0.4f, 0.7f, vec);
-
 		}
 
+		particleSpawnerActive.set(hasSpawnedParticle);
+		sync();
+	}
+
+	private void trySpawnParticles() {
+		final int particleLevel = OpenBlocks.proxy.getParticleSettings();
+		if (particleLevel == 0 || (particleLevel == 1 && worldObj.rand.nextInt(3) == 0)) {
+			particleSpawnTimer = particleSpawnerActive.get()? 10 : particleSpawnTimer - 1;
+
+			if (particleSpawnTimer > 0) {
+				final BlockPos p = getPos();
+				Vec3d vec = new Vec3d(
+						(worldObj.rand.nextDouble() - 0.5) * 0.05,
+						0,
+						(worldObj.rand.nextDouble() - 0.5) * 0.05);
+				OpenBlocks.proxy.spawnLiquidSpray(worldObj, XP_FLUID, p.getX() + 0.5d, p.getY() + 0.4d, p.getZ() + 0.5d, 0.4f, 0.7f, vec);
+			}
+		}
 	}
 
 	@Override
@@ -86,7 +100,8 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	public void updateState() {
-		isPowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
+		final int power = worldObj.isBlockIndirectlyGettingPowered(getPos()); // TODO 1.10 verify
+		isOn.set(power > 0);
 	}
 
 	@Override
@@ -96,8 +111,9 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		bufferTank.writeToNBT(nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+		tag = super.writeToNBT(tag);
+		bufferTank.writeToNBT(tag);
+		return tag;
 	}
 }

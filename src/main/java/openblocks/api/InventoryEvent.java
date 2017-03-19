@@ -1,15 +1,13 @@
 package openblocks.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.Map;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class InventoryEvent extends PlayerEvent {
 

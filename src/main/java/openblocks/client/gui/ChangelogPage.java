@@ -1,15 +1,17 @@
 package openblocks.client.gui;
 
-import java.util.List;
-
-import net.minecraft.util.StatCollector;
-import openmods.gui.component.*;
-import openmods.gui.component.page.BookScaleConfig;
-import openmods.gui.component.page.PageBase;
-
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
+import java.util.List;
+import openmods.gui.component.EmptyComposite;
+import openmods.gui.component.GuiComponentBook;
+import openmods.gui.component.GuiComponentHBox;
+import openmods.gui.component.GuiComponentHCenter;
+import openmods.gui.component.GuiComponentLabel;
+import openmods.gui.component.page.BookScaleConfig;
+import openmods.gui.component.page.PageBase;
+import openmods.utils.TranslationUtils;
 
 public class ChangelogPage extends PageBase {
 
@@ -29,7 +31,7 @@ public class ChangelogPage extends PageBase {
 		final float scaleContent = BookScaleConfig.getPageContentScale();
 		final int lineSpace = BookScaleConfig.getTitlePageSeparator();
 
-		section = StatCollector.translateToLocal(section);
+		section = TranslationUtils.translateToLocal(section);
 
 		final GuiComponentLabel currentVersionLabel = new GuiComponentLabel(0, 0, section).setScale(scaleTitle);
 		addComponent(new GuiComponentHCenter(0, 24, getWidth()).addComponent(currentVersionLabel));

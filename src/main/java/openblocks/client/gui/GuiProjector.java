@@ -12,11 +12,13 @@ import openblocks.common.container.ContainerProjector;
 import openblocks.rpc.IRotatable;
 import openmods.gui.BaseGuiContainer;
 import openmods.gui.Icon;
-import openmods.gui.component.*;
+import openmods.gui.component.BaseComponent;
+import openmods.gui.component.BaseComposite;
+import openmods.gui.component.EmptyComposite;
+import openmods.gui.component.GuiComponentIconButton;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.misc.Trackball.TrackballWrapper;
 import openmods.utils.MathUtils;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -61,7 +63,7 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int mouseX, int mouseY) {
-		if (isInitialized == false || Mouse.isButtonDown(2)) {
+		if (!isInitialized || Mouse.isButtonDown(2)) {
 			trackball.setTransform(MathUtils.createEntityRotateMatrix(Minecraft.getMinecraft().getRenderViewEntity()));
 			isInitialized = true;
 		}

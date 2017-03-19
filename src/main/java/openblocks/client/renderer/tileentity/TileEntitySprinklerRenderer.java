@@ -6,7 +6,6 @@ import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openmods.utils.BlockUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntitySprinklerRenderer extends TileEntitySpecialRenderer<TileEntitySprinkler> {

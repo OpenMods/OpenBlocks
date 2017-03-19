@@ -8,7 +8,7 @@ import openmods.infobook.BookDocumentation;
 public class BlockDrawingTable extends OpenBlock.FourDirections {
 
 	public BlockDrawingTable() {
-		super(Material.wood);
+		super(Material.WOOD);
 	}
 
 }

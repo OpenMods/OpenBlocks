@@ -2,10 +2,12 @@ package openblocks.common.block;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import openblocks.common.tileentity.TileEntitySprinkler;
@@ -17,37 +19,40 @@ import openmods.infobook.BookDocumentation;
 @BookDocumentation
 public class BlockSprinkler extends OpenBlock.TwoDirections {
 
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.3, 0.0, 0.0, 0.7, 0.3, 1.0);
+
 	public BlockSprinkler() {
-		super(Material.water);
+		super(Material.WATER);
 		setDefaultState(getDefaultState().withProperty(BlockLiquid.LEVEL, 1));
 	}
 
 	@Override
-	protected BlockState createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		// 1.8.9 Hack, crashes otherwise
-		return new BlockState(this, getPropertyOrientation(), BlockLiquid.LEVEL);
+		return new BlockStateContainer(this, getPropertyOrientation(), BlockLiquid.LEVEL);
 	}
 
 	// TODO 1.8.9 room for improvments?
 	@Override
-	public int getRenderType() {
-		return 2; // TESR only
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
+	// TODO 1.10 orientation to block state?
 	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, BlockPos pos) {
-		TileEntitySprinkler sprinkler = getTileEntity(world, pos, TileEntitySprinkler.class);
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		TileEntitySprinkler sprinkler = getTileEntity(source, pos, TileEntitySprinkler.class);
 		if (sprinkler != null) {
 			final Orientation orientation = sprinkler.getOrientation();
-			final AxisAlignedBB aabb = new AxisAlignedBB(0.3, 0.0, 0.0, 0.7, 0.3, 1.0);
-			final AxisAlignedBB rotatedAabb = BlockSpaceTransform.instance.mapBlockToWorld(orientation, aabb);
-			setBlockBounds(rotatedAabb);
+			return BlockSpaceTransform.instance.mapBlockToWorld(orientation, AABB);
 		}
+
+		return AABB;
 	}
 
 	@Override
@@ -57,7 +62,7 @@ public class BlockSprinkler extends OpenBlock.TwoDirections {
 	}
 
 	@Override
-	public boolean isReplaceable(World world, BlockPos pos) {
+	public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
 		return false;
 	}
 }

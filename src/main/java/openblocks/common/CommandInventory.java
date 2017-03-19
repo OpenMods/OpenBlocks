@@ -2,25 +2,27 @@ package openblocks.common;
 
 import static openmods.utils.CommandUtils.filterPrefixes;
 import static openmods.utils.CommandUtils.fiterPlayerNames;
-import static openmods.utils.CommandUtils.getPlayer;
 
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
-
-import net.minecraft.command.*;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.SyntaxErrorException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import openblocks.api.InventoryEvent.SubInventory;
 import openblocks.common.PlayerInventoryStore.LoadedInventories;
 import openmods.Log;
 import openmods.utils.BlockUtils;
 import openmods.utils.InventoryUtils;
-
-import com.google.common.collect.Lists;
 
 public class CommandInventory implements ICommand {
 
@@ -59,7 +61,7 @@ public class CommandInventory implements ICommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 1) throw new SyntaxErrorException();
 
 		String subCommand = args[0];
@@ -68,7 +70,7 @@ public class CommandInventory implements ICommand {
 			if (args.length != 3) throw new SyntaxErrorException();
 			String playerName = args[1];
 			String id = args[2];
-			EntityPlayerMP player = getPlayer(sender, playerName);
+			EntityPlayerMP player = CommandBase.getPlayer(server, sender, playerName);
 
 			final boolean success;
 			try {
@@ -78,16 +80,16 @@ public class CommandInventory implements ICommand {
 				throw new CommandException("openblocks.misc.cant_restore_player", playerName);
 			}
 
-			if (success) sender.addChatMessage(new ChatComponentTranslation("openblocks.misc.restored_inventory", playerName));
+			if (success) sender.addChatMessage(new TextComponentTranslation("openblocks.misc.restored_inventory", playerName));
 			else throw new CommandException("openblocks.misc.cant_restore_player", playerName);
 
 		} else if (subCommand.equalsIgnoreCase(COMMAND_STORE)) {
 			if (args.length != 2) throw new SyntaxErrorException();
 			String playerName = args[1];
-			EntityPlayerMP player = getPlayer(sender, playerName);
+			EntityPlayerMP player = CommandBase.getPlayer(server, sender, playerName);
 			try {
 				File result = PlayerInventoryStore.instance.storePlayerInventory(player, "command");
-				sender.addChatMessage(new ChatComponentTranslation(
+				sender.addChatMessage(new TextComponentTranslation(
 						"openblocks.misc.stored_inventory",
 						result.getAbsolutePath()));
 			} catch (Exception e) {
@@ -98,7 +100,7 @@ public class CommandInventory implements ICommand {
 			if (args.length != 2 && args.length != 3 && args.length != 4) throw new SyntaxErrorException();
 			final String id = args[1];
 
-			final String target = (args.length > 1)? args[2] : ID_MAIN_INVENTORY;
+			final String target = (args.length > 2)? args[2] : ID_MAIN_INVENTORY;
 
 			LoadedInventories loadedInventories = loadInventories(sender, id);
 			if (loadedInventories == null) throw new CommandException("openblocks.misc.cant_restore_inventory");
@@ -156,12 +158,12 @@ public class CommandInventory implements ICommand {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 		return sender.canCommandSenderUseCommand(4, NAME);
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 		if (args.length == 0) return null;
 		if (args.length == 1) return filterPrefixes(args[0], SUB_COMMANDS);
 

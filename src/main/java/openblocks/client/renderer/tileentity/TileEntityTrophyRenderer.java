@@ -1,16 +1,19 @@
 package openblocks.client.renderer.tileentity;
 
 import java.util.List;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -20,7 +23,6 @@ import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openmods.utils.BlockUtils;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEntityTrophy> {
@@ -56,22 +58,22 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 		IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer wr = tessellator.getWorldRenderer();
-		bindTexture(TextureMap.locationBlocksTexture);
+		final VertexBuffer wr = tessellator.getBuffer();
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		wr.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 		wr.setTranslation(x, y, z);
 
 		for (EnumFacing face : EnumFacing.values())
-			renderQuads(wr, model.getFaceQuads(face));
+			renderQuads(wr, model.getQuads(state, face, 0));
 
-		renderQuads(wr, model.getGeneralQuads());
+		renderQuads(wr, model.getQuads(state, null, 0));
 		tessellator.draw();
 
 		wr.setTranslation(0, 0, 0);
 	}
 
-	private static void renderQuads(WorldRenderer wr, List<BakedQuad> quads) {
+	private static void renderQuads(VertexBuffer wr, List<BakedQuad> quads) {
 		for (BakedQuad quad : quads)
 			LightUtil.renderQuadColor(wr, quad, 0xFFFFFFFF);
 	}

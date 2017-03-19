@@ -1,15 +1,14 @@
 package openblocks.common.entity.ai;
 
 import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import openmods.OpenMods;
@@ -44,8 +43,8 @@ public class EntityAIBreakBlock extends EntityAIBase {
 				blockCoord = new BlockPos(
 						x + entity.posX,
 						y + entity.posY,
-						z + entity.posZ
-						);
+						z + entity.posZ);
+
 				if (canHarvestBlock(blockCoord)) { return true; }
 				blockCoord = null;
 			}
@@ -70,7 +69,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		if (blockCoord != null) {
-			final PathEntity pathentity = pathFinder.getPathToPos(blockCoord);
+			final Path pathentity = pathFinder.getPathToPos(blockCoord);
 			pathFinder.setPath(pathentity, 1.0);
 		}
 	}
@@ -90,6 +89,6 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	public boolean canHarvestBlock(BlockPos coord) {
 		final Block block = entity.worldObj.getBlockState(coord).getBlock();
 		return block instanceof BlockFlower ||
-				block == Blocks.torch;
+				block == Blocks.TORCH;
 	}
 }

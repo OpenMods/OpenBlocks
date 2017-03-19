@@ -9,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityMagnet;
-
 import org.lwjgl.opengl.GL11;
 
 public class EntityMagnetRenderer extends Render<EntityMagnet> {

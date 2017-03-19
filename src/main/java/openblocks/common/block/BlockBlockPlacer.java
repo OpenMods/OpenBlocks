@@ -8,7 +8,7 @@ import openmods.infobook.BookDocumentation;
 public class BlockBlockPlacer extends OpenBlock.SixDirections {
 
 	public BlockBlockPlacer() {
-		super(Material.rock);
+		super(Material.ROCK);
 	}
 
 }

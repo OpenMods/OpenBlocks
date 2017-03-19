@@ -8,7 +8,7 @@ import openmods.infobook.BookDocumentation;
 public class BlockXPBottler extends OpenBlock.FourDirections {
 
 	public BlockXPBottler() {
-		super(Material.rock);
+		super(Material.ROCK);
 	}
 
 }

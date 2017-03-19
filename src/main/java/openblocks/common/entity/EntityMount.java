@@ -29,7 +29,7 @@ public class EntityMount extends Entity {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (riddenByEntity == null) setDead();
+		if (isBeingRidden()) setDead();
 
 		// if((int) posY == posY) // Fix the client sometimes derping for some
 		// odd reason...

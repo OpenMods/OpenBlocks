@@ -1,18 +1,18 @@
 package openblocks.common;
 
-import java.util.Locale;
-import java.util.Map;
-
-import net.minecraft.block.Block;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import openblocks.Config;
-import openmods.Log;
-import openmods.config.properties.ConfigurationChange;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import java.util.Locale;
+import java.util.Map;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import openblocks.Config;
+import openmods.Log;
+import openmods.config.properties.ConfigurationChange;
 
 public class ElevatorBlockRules {
 
@@ -63,9 +63,9 @@ public class ElevatorBlockRules {
 
 		Preconditions.checkNotNull(action, "Unknown action: %s", actionName);
 
-		Block block = GameRegistry.findBlock(modId, blockName);
+		Block block = Block.REGISTRY.getObject(new ResourceLocation(modId, blockName));
 
-		if (block != null) rules.put(block, action);
+		if (block != Blocks.AIR) rules.put(block, action);
 		else Log.warn("Can't find block %s", entry);
 	}
 
@@ -74,16 +74,15 @@ public class ElevatorBlockRules {
 		if (evt.check("dropblock", "specialBlockRules")) rules = null;
 	}
 
-	private static boolean isPassable(Block block) {
-		return Config.elevatorIgnoreHalfBlocks && !block.isNormalCube();
+	private static boolean isPassable(IBlockState state) {
+		return Config.elevatorIgnoreHalfBlocks && !state.isNormalCube();
 	}
 
-	public Action getActionForBlock(Block block) {
-		if (block == null) return Action.IGNORE;
-		Action action = getRules().get(block);
+	public Action getActionForBlock(IBlockState state) {
+		Action action = getRules().get(state.getBlock());
 		if (action != null) return action;
 
-		return isPassable(block)? Action.IGNORE : Action.INCREMENT;
+		return isPassable(state)? Action.IGNORE : Action.INCREMENT;
 	}
 
 }

@@ -1,7 +1,6 @@
 package openblocks.client.renderer.entity;
 
 import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,7 +20,6 @@ import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityCartographer.MapJobs;
 import openmods.renderer.DisplayListWrapper;
 import openmods.utils.render.RenderUtils;
-
 import org.lwjgl.opengl.GL11;
 
 public class EntityCartographerRenderer extends Render<EntityCartographer> {
@@ -210,7 +208,7 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 		bindTexture(TEXTURE);
 		MODEL.renderBase(cartographer.eyeYaw);
 
-		bindTexture(TextureMap.locationBlocksTexture);
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		MODEL.renderEye(cartographer.eyeYaw, cartographer.eyePitch);
 		cartographer.updateEye();
 

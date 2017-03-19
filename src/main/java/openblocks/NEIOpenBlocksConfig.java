@@ -1,27 +1,30 @@
 package openblocks;
 
+import codechicken.nei.api.IConfigureNEI;
+import com.google.common.base.Throwables;
 import java.lang.reflect.Method;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import openblocks.OpenBlocks.Items;
-import codechicken.nei.api.IConfigureNEI;
-
-import com.google.common.base.Throwables;
+import openmods.Log;
 
 public class NEIOpenBlocksConfig implements IConfigureNEI {
 
+	private static final String API = "codechicken.nei.api.API";
+	private static final String HIDE_ITEM = "hideItem";
+
+	private Method hideItem;
+
 	@Override
 	public void loadConfig() {
-		try {
-			// I have no idea how to link with NEI API
-			Class<?> cls = Class.forName("codechicken.nei.api.API");
-			Method hide = cls.getMethod("hideItem", ItemStack.class);
-
-			if (Items.heightMap != null) hide.invoke(null, new ItemStack(Items.heightMap, 1, OreDictionary.WILDCARD_VALUE));
-		} catch (Throwable t) {
-			Throwables.propagate(t);
+		if (OpenBlocks.Blocks.canvasGlass != null) {
+			API$hideItem(new ItemStack(OpenBlocks.Blocks.canvasGlass));
 		}
+
+		if (OpenBlocks.Items.heightMap != null) {
+			API$hideItem(new ItemStack(OpenBlocks.Items.heightMap, 1, OreDictionary.WILDCARD_VALUE));
+		}
+
+		Log.info("OpenBlocks NEI Integration loaded successfully");
 	}
 
 	@Override
@@ -34,4 +37,12 @@ public class NEIOpenBlocksConfig implements IConfigureNEI {
 		return "0.0";
 	}
 
+	private void API$hideItem(final ItemStack stack) {
+		try {
+			if (this.hideItem == null) this.hideItem = Class.forName(API).getMethod(HIDE_ITEM, ItemStack.class);
+			this.hideItem.invoke(null, stack);
+		} catch (final Throwable thr) {
+			Throwables.propagate(thr);
+		}
+	}
 }

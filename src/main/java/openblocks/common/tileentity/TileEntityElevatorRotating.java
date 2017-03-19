@@ -2,13 +2,15 @@ package openblocks.common.tileentity;
 
 import java.util.List;
 import java.util.Set;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import openmods.api.*;
+import openmods.api.IActivateAwareTile;
+import openmods.api.ICustomHarvestDrops;
+import openmods.api.ICustomPickItem;
+import openmods.api.IPlaceAwareTile;
 import openmods.colors.ColorMeta;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
@@ -60,7 +62,7 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (worldObj.isRemote) return false;
 
-		ItemStack stack = player.getHeldItem();
+		ItemStack stack = player.getHeldItemMainhand();
 		if (stack != null) {
 			Set<ColorMeta> metas = ColorMeta.fromStack(stack);
 			if (!metas.isEmpty()) {
