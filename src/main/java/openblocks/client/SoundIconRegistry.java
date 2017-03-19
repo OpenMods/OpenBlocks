@@ -157,7 +157,7 @@ public class SoundIconRegistry {
 				icons.registerIcons(registry);
 		}
 
-		public void addMob(String soundId, int mobId, boolean isHostile) {
+		public void addMob(String soundId, String mobId, boolean isHostile) {
 			EntityEggInfo mobInfo = EntityList.ENTITY_EGGS.get(mobId);
 
 			if (mobInfo != null) mobs.put(soundId, createMobIcons(isHostile? "mob_hostile" : "mob_friendly", mobInfo.primaryColor, mobInfo.secondaryColor));
@@ -391,32 +391,41 @@ public class SoundIconRegistry {
 			}
 
 			{
+				// TODO 1.10 verify new additions
 				MobSounds mobs = mcRoot.add("mob", new MobSounds());
-				mobs.addMob("blaze", 61, true);
-				mobs.addMob("creeper", 50, true);
-				mobs.addMob("magmacube", 62, true);
-				mobs.addMob("silverfish", 60, true);
-				mobs.addMob("skeleton", 51, true);
-				mobs.addMob("slime", 55, true);
-				mobs.addMob("spider", 52, true);
-				mobs.addMob("wither", 64, true);
-				mobs.addMob("zombie", 54, true);
-				mobs.addMob("enderdragon", 62, true);
-				mobs.addMob("endermen", 58, true);
-				mobs.addMob("ghast", 56, true);
-				mobs.addMob("witch", 66, true);
+				mobs.addMob("blaze", "Blaze", true);
+				mobs.addMob("creeper", "Creeper", true);
+				mobs.addMob("magmacube", "LavaSlime", true);
+				mobs.addMob("silverfish", "Silverfish", true);
+				mobs.addMob("skeleton", "Skeleton", true);
+				mobs.addMob("slime", "Slime", true);
+				mobs.addMob("spider", "Spider", true);
+				mobs.addMob("wither", "WitherBoss", true);
+				mobs.addMob("zombie", "Zombie", true);
+				mobs.addMob("enderdragon", "EnderDragon", true);
+				mobs.addMob("endermen", "Enderman", true);
+				mobs.addMob("ghast", "Ghast", true);
+				mobs.addMob("witch", "Witch", true);
+				mobs.addMob("cave_spider", "CaveSpider", true);
+				mobs.addMob("endermite", "Endermite", true);
+				mobs.addMob("guardian", "Guardian", true);
+				mobs.addMob("shulker", "Shulker", true);
 
-				mobs.addMob("bat", 65, false);
-				mobs.addMob("cat", 62, false);
-				mobs.addMob("chicken", 93, false);
-				mobs.addMob("cow", 92, false);
-				mobs.addMob("horse", 100, false);
-				mobs.addMob("irongolem", 99, false);
-				mobs.addMob("pig", 90, false);
-				mobs.addMob("sheep", 91, false);
-				mobs.addMob("villager", 120, false);
-				mobs.addMob("zombiepig", 57, false); // YMMV
-				mobs.addMob("wolf", 95, false);
+				mobs.addMob("bat", "Bat", false);
+				mobs.addMob("cat", "Ozelot", false);
+				mobs.addMob("chicken", "Chicken", false);
+				mobs.addMob("cow", "Cow", false);
+				mobs.addMob("horse", "EntityHorse", false);
+				mobs.addMob("irongolem", "VillagerGolem", false);
+				mobs.addMob("pig", "Pig", false);
+				mobs.addMob("sheep", "Sheep", false);
+				mobs.addMob("villager", "Villager", false);
+				mobs.addMob("zombiepig", "PigZombie", false); // YMMV
+				mobs.addMob("wolf", "Wolf", false);
+				mobs.addMob("squid", "Squid", false);
+				mobs.addMob("snowman", "SnowMan", false);
+				mobs.addMob("rabbit", "Rabbit", false);
+				mobs.addMob("polar_bear", "PolarBear", false);
 			}
 
 			{

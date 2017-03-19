@@ -79,7 +79,7 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 
 	private boolean canBreakBlock(IBlockState state, BlockPos pos) {
 		final Block block = state.getBlock();
-		return !block.isAir(state, worldObj, pos) && state != Blocks.BEDROCK && state.getBlockHardness(worldObj, pos) > -1.0F;
+		return !block.isAir(state, worldObj, pos) && block != Blocks.BEDROCK && state.getBlockHardness(worldObj, pos) > -1.0F;
 	}
 
 	private void triggerBreakBlock() {
