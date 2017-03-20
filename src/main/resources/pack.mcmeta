@@ -1,33 +1,6 @@
 {
    "pack":{
-      "pack_format":1,
-      "description":"OpenBlocks"
-   },
-   "language":{
-      "de_DE":{
-         "name":"Deutsch",
-         "region":"Deutschland",
-         "bidirectional":false
-      },
-      "en_US":{
-         "name":"English",
-         "region":"US",
-         "bidirectional":false
-      },
-      "nl_NL":{
-         "name":"Dutch",
-         "region":"Nederlands",
-         "bidirectional":false
-      },
-      "ru_RU":{
-         "name":"Russian",
-         "region":"Russia",
-         "bidirectional":false
-      },
-      "zh_CN":{
-         "name":"Chinese",
-         "region":"China",
-         "bidirectional":false
-      }
+      "pack_format": 3,
+      "description": "OpenBlocks"
    }
 }
