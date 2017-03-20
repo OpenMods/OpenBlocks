@@ -121,9 +121,7 @@ processResources {
 // Jar tasks
 
 // Generate FML Coremod manifest
-ext.fmlManifest = manifest {
-    attributes("FMLCorePlugin": "openblocks.OpenBlocksCorePlugin", "FMLCorePluginContainsFMLMod": "true")
-}
+ext.fmlManifest = manifest {}
 
 // Merge Jenkins and Git manifests to form final manifest in final release jar
 jar {

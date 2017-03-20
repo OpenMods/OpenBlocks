@@ -13,12 +13,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openblocks.asm.EntityPlayerVisitor;
 import openblocks.client.model.ModelSleepingBag;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockUtils;
@@ -76,10 +77,7 @@ public class ItemSleepingBag extends ItemArmor {
 		if (player.isPlayerSleeping()) return;
 
 		NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
-		if (!EntityPlayerVisitor.IsInBedHookSuccess) {
-			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.sleeping_bag_broken"));
-			getOutOfSleepingBag(player);
-		} else if (tag.getBoolean(TAG_SLEEPING)) {
+		if (tag.getBoolean(TAG_SLEEPING)) {
 			// player just woke up
 			// TODO 1.10 reimplement if needed?
 			tag.removeTag(TAG_SLEEPING);
@@ -138,6 +136,14 @@ public class ItemSleepingBag extends ItemArmor {
 	public static boolean isWearingSleepingBag(EntityPlayer player) {
 		ItemStack armor = getChestpieceSlot(player);
 		return isSleepingBag(armor);
+	}
+
+	public static class IsSleepingHandler {
+		@SubscribeEvent
+		public void onBedCheck(SleepingLocationCheckEvent evt) {
+			if (isWearingSleepingBag(evt.getEntityPlayer()))
+				evt.setResult(Result.ALLOW);
+		}
 	}
 
 	private static boolean isSleepingBag(ItemStack armor) {

@@ -734,6 +734,9 @@ public class OpenBlocks {
 			PedometerHandler.registerCapability();
 		}
 
+		if (Items.sleepingBag != null)
+			MinecraftForge.EVENT_BUS.register(new ItemSleepingBag.IsSleepingHandler());
+
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
 
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
