@@ -3,7 +3,7 @@
   "modList":
   [
     {
-      "modid": "OpenBlocks",
+      "modid": "openblocks",
       "name": "OpenBlocks",
       "description": "All the things you never thought you will ever need",
       "version": "${version}",

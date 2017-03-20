@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.util.ResourceLocation;
+import openblocks.OpenBlocks;
 import openblocks.shapes.CoordShape;
 import openmods.renderer.shaders.ArraysHelper;
 import openmods.renderer.shaders.BufferHelper;
@@ -17,8 +18,8 @@ import org.lwjgl.opengl.GL20;
 
 public class MarkerRenderer {
 
-	private static final ResourceLocation vertexSource = new ResourceLocation("openblocks:shaders/shader.vert");
-	private static final ResourceLocation fragmentSource = new ResourceLocation("openblocks:shaders/shader.frag");
+	private static final ResourceLocation vertexSource = OpenBlocks.location("shaders/shader.vert");
+	private static final ResourceLocation fragmentSource = OpenBlocks.location("shaders/shader.frag");
 	private final ShaderProgram shader;
 
 	private static final int nativeBufferSize = 0x200000;

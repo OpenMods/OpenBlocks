@@ -217,12 +217,12 @@ import openmods.utils.EnchantmentUtils;
 
 @Mod(modid = OpenBlocks.MODID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES, guiFactory = "openblocks.client.ModGuiFactory")
 public class OpenBlocks {
-	public static final String MODID = "OpenBlocks";
+	public static final String MODID = "openblocks";
 	public static final String NAME = "OpenBlocks";
 	public static final String VERSION = "$VERSION$";
 	public static final String PROXY_SERVER = "openblocks.common.ServerProxy";
 	public static final String PROXY_CLIENT = "openblocks.client.ClientProxy";
-	public static final String DEPENDENCIES = "required-after:OpenMods@[$LIB-VERSION$,$NEXT-LIB-VERSION$)";
+	public static final String DEPENDENCIES = "required-after:openmods@[$LIB-VERSION$,$NEXT-LIB-VERSION$)";
 
 	private static final int ENTITY_HANGGLIDER_ID = 701;
 	private static final int ENTITY_LUGGAGE_ID = 702;
@@ -599,12 +599,13 @@ public class OpenBlocks {
 
 		@Override
 		protected void populateConfig(Configuration config) {
-			ConfigProcessing.processAnnotations("OpenBlocks", config, Config.class);
+			ConfigProcessing.processAnnotations(MODID, config, Config.class);
 		}
 
 		@Override
 		protected void setupConfigPre(GameRegistryObjectsProvider gameConfig) {
 			gameConfig.setCreativeTab(tabOpenBlocks);
+			gameConfig.addModIdToRemap("OpenBlocks");
 		}
 
 		@Override
