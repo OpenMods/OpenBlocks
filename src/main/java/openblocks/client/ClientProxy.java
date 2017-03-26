@@ -61,6 +61,8 @@ import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMiniMe;
+import openblocks.common.item.ItemImaginationGlasses;
+import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityBearTrap;
@@ -231,6 +233,14 @@ public class ClientProxy implements IOpenBlocksProxy {
 					return new RenderSnowball<EntityGoldenEye>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem());
 				}
 			});
+		}
+
+		if (OpenBlocks.Items.paintBrush != null) {
+			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemPaintBrush.ColorHandler(), OpenBlocks.Items.paintBrush);
+		}
+
+		if (OpenBlocks.Items.crayonGlasses != null) {
+			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemImaginationGlasses.CrayonColorHandler(), OpenBlocks.Items.crayonGlasses);
 		}
 	}
 

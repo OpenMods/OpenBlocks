@@ -1,6 +1,7 @@
 package openblocks.common.item;
 
 import java.util.List;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +25,14 @@ public class ItemImaginationGlasses extends ItemArmor {
 	public static int getGlassesColor(ItemStack stack) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		return tag.getInteger(TAG_COLOR);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class CrayonColorHandler implements IItemColor {
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			return getGlassesColor(stack);
+		}
 	}
 
 	public static class ItemCrayonGlasses extends ItemImaginationGlasses {

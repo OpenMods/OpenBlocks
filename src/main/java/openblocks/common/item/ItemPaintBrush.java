@@ -3,6 +3,7 @@ package openblocks.common.item;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -15,6 +16,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.api.IPaintableBlock;
 import openblocks.common.block.BlockCanvas;
@@ -27,6 +30,19 @@ import openmods.utils.render.PaintUtils;
 
 @BookDocumentation(customName = "paintbrush", hasVideo = true)
 public class ItemPaintBrush extends Item {
+
+	@SideOnly(Side.CLIENT)
+	public static class ColorHandler implements IItemColor {
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			if (tintIndex == 1) {
+				Integer color = getColorFromStack(stack);
+				if (color != null) return color;
+			}
+
+			return 0xFFFFFF;
+		}
+	}
 
 	private static final int SINGLE_COLOR_THRESHOLD = 16;
 
