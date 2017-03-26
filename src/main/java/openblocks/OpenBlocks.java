@@ -750,7 +750,7 @@ public class OpenBlocks {
 	@SuppressWarnings({ "unused" })
 	protected void registerUselessVillager() {
 		final VillagerProfession prof = GameRegistry.register(new VillagerProfession(
-				"radio",
+				"openblocks:radio",
 				"openblocks:textures/models/king-ish.png",
 				"openblocks:textures/models/king-ish.png")); // TODO: zombie texture?
 

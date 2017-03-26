@@ -12,7 +12,7 @@ public enum MetasBucket implements IMetaItemFactory {
 	xpbucket {
 		@Override
 		public IMetaItem createMetaItem() {
-			return new MetaGeneric("xpbucket");
+			return new MetaGeneric("xpbucket"); // TODO: 1.10 use forge bucket
 		}
 	};
 

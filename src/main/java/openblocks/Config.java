@@ -2,6 +2,7 @@ package openblocks;
 
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,7 +18,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openblocks.OpenBlocks.Enchantments;
 import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.item.ItemGoldenEye;
@@ -743,11 +743,11 @@ public class Config {
 		if (flimFlamEnchantmentEnabled) {
 			FlimFlamEnchantmentsHandler.registerCapability();
 			MinecraftForge.EVENT_BUS.register(new FlimFlamEnchantmentsHandler());
-			GameRegistry.register(new EnchantmentFlimFlam().setRegistryName(OpenBlocks.location("flim_flam")));
+			final Enchantment flimFlam = GameRegistry.register(new EnchantmentFlimFlam().setRegistryName(OpenBlocks.location("flim_flam")));
 
 			for (int i = 0; i < 4; i++) {
 				int emeraldCount = 1 << i;
-				ItemStack result = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.flimFlam, i + 1));
+				ItemStack result = Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(flimFlam, i + 1));
 				Object recipe[] = new Object[emeraldCount + 1];
 				recipe[0] = Items.BOOK;
 				Arrays.fill(recipe, 1, recipe.length, "gemEmerald");
