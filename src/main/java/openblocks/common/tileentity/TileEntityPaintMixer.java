@@ -344,9 +344,4 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 		return createClientRpcProxy(IColorChanger.class);
 	}
 
-	@Override
-	public ItemStack getPickBlock(EntityPlayer player) {
-		return getRawDrop();
-	}
-
 }

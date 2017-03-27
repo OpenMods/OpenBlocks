@@ -1,0 +1,17 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model" : "openblocks:paintcan"
+    },
+    "variants" : {
+        "inventory" : [{
+            "transform": "forge:default-block"
+        }],
+        "orientation" : {
+            "xp_yp" : { "y" :   0 },
+            "zp_yp" : { "y" :  90 },
+            "xn_yp" : { "y" : 180 },
+            "zn_yp" : { "y" : 270 }
+        }
+    }
+}

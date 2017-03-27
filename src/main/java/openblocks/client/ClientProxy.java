@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
@@ -55,6 +57,7 @@ import openblocks.client.renderer.tileentity.TileEntityVillageHighlighterRendere
 import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRenderer;
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.block.BlockPaintCan;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityGoldenEye;
 import openblocks.common.entity.EntityHangGlider;
@@ -63,6 +66,7 @@ import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMiniMe;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
+import openblocks.common.item.ItemPaintCan;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityBearTrap;
@@ -235,12 +239,20 @@ public class ClientProxy implements IOpenBlocksProxy {
 			});
 		}
 
+		final ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
+		final BlockColors blockColors = Minecraft.getMinecraft().getBlockColors();
+
 		if (OpenBlocks.Items.paintBrush != null) {
-			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemPaintBrush.ColorHandler(), OpenBlocks.Items.paintBrush);
+			itemColors.registerItemColorHandler(new ItemPaintBrush.ColorHandler(), OpenBlocks.Items.paintBrush);
 		}
 
 		if (OpenBlocks.Items.crayonGlasses != null) {
-			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new ItemImaginationGlasses.CrayonColorHandler(), OpenBlocks.Items.crayonGlasses);
+			itemColors.registerItemColorHandler(new ItemImaginationGlasses.CrayonColorHandler(), OpenBlocks.Items.crayonGlasses);
+		}
+
+		if (OpenBlocks.Blocks.paintCan != null) {
+			itemColors.registerItemColorHandler(new ItemPaintCan.ItemColorHandler(), OpenBlocks.Blocks.paintCan);
+			blockColors.registerBlockColorHandler(new BlockPaintCan.BlockColorHandler(), OpenBlocks.Blocks.paintCan);
 		}
 	}
 

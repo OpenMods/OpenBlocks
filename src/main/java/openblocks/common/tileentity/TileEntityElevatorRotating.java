@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomHarvestDrops;
 import openmods.api.ICustomPickItem;
@@ -44,7 +45,7 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, int fortune, boolean isSilkTouch) {
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkTouch) {
 		drops.add(createStack());
 	}
 
@@ -55,7 +56,7 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 
 	private ItemStack createStack() {
 		final int colorMeta = color.get().vanillaBlockId;
-		return new ItemStack(getBlockType(), 1, colorMeta);
+		return new ItemStack(OpenBlocks.Blocks.elevatorRotating, 1, colorMeta);
 	}
 
 	@Override

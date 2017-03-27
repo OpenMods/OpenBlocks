@@ -462,7 +462,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, int fortune, boolean isSilkTouch) {
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkTouch) {
 		ItemStack stack = new ItemStack(OpenBlocks.Blocks.tank);
 
 		if (tank.getFluidAmount() > 0) {

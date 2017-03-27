@@ -340,7 +340,7 @@ public class OpenBlocks {
 		@RegisterBlock(id = "canvas", tileEntity = TileEntityCanvas.class)
 		public static BlockCanvas canvas;
 
-		@RegisterBlock(id = "paintcan", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class)
+		@RegisterBlock(id = "paintcan", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, registerDefaultItemModel = true)
 		public static BlockPaintCan paintCan;
 
 		@RegisterBlock(id = "canvasglass", tileEntity = TileEntityCanvas.class)

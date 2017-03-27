@@ -99,7 +99,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, int fortune, boolean isSilkTouch) {
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkTouch) {
 		ItemStack stack = getAsItem();
 		if (stack != null) drops.add(stack);
 	}

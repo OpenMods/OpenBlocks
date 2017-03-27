@@ -1,0 +1,37 @@
+{
+    "textures": {
+        "particle": "openblocks:blocks/paintcan_side",
+
+        "north": "openblocks:blocks/paintcan_front",
+        "east": "openblocks:blocks/paintcan_left",
+        "south": "openblocks:blocks/paintcan_side",
+        "west": "openblocks:blocks/paintcan_right",
+        "bottom": "openblocks:blocks/paintcan_bottom",
+
+        "top": "openblocks:blocks/paintcan_top",
+        "spill": "openblocks:blocks/paintcan_side2"
+    },
+    "elements": [
+        {
+            "name": "can",
+            "from": [ 4.0, 0.0, 4.0 ], 
+            "to": [ 12.0, 11.0, 12.0 ], 
+            "faces": {
+                "north": { "texture": "#north", "uv": [ 4.0, 5.0, 12.0, 16.0 ] },
+                "east": { "texture": "#east", "uv": [ 4.0, 5.0, 12.0, 16.0 ] },
+                "south": { "texture": "#south", "uv": [ 4.0, 5.0, 12.0, 16.0 ] },
+                "west": { "texture": "#west", "uv": [ 4.0, 5.0, 12.0, 16.0 ] },
+                "down": { "texture": "#bottom", "uv": [ 4.0, 4.0, 12.0, 12.0 ] }
+            }
+        },
+        {
+            "name": "paint",
+            "from": [ 4.0, 0.0, 4.0 ], 
+            "to": [ 12.0, 11.0, 12.0 ], 
+            "faces": {
+                "south": { "texture": "#spill", "uv": [ 4.0, 5.0, 12.0, 16.0 ], "tintindex": 1 },
+                "up": { "texture": "#top", "uv": [ 4.0, 4.0, 12.0, 12.0 ], "tintindex": 1 }
+            }
+        }
+    ]
+}

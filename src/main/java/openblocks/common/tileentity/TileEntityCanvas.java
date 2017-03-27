@@ -251,7 +251,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, int fortune, boolean isSilkHarvest) {
+	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkHarvest) {
 		if (paintedBlock.containsValidBlock()) {
 			final Block paintedBlock = this.paintedBlock.getValue();
 			final IBlockState state = paintedBlock.getStateFromMeta(paintedBlockMeta.get());

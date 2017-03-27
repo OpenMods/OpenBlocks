@@ -30,7 +30,7 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (amount.get() > 0) { // TODO 1.10 verify sounds effects of removing 'isRemote'
+		if (!worldObj.isRemote && amount.get() > 0) {
 			ItemStack heldStack = player.getHeldItemMainhand();
 			if (heldStack != null && heldStack.getItem() instanceof ItemPaintBrush) {
 				ItemPaintBrush.setColor(heldStack, color.get());
@@ -39,12 +39,12 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 				sync();
 				worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 1.2F);
 			}
-		}
 
-		if (amount.get() <= 0 && !worldObj.isRemote) {
-			ItemStack item = new ItemStack(Items.BUCKET);
-			BlockUtils.dropItemStackInWorld(worldObj, pos, item);
-			worldObj.setBlockToAir(pos);
+			if (amount.get() <= 0 && !worldObj.isRemote) {
+				ItemStack item = new ItemStack(Items.BUCKET);
+				BlockUtils.dropItemStackInWorld(worldObj, pos, item);
+				worldObj.setBlockToAir(pos);
+			}
 		}
 		return false;
 	}
