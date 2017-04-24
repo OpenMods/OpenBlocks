@@ -1,16 +1,21 @@
 package openblocks.common.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import openblocks.common.tileentity.TileEntityVacuumHopper;
 import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
+import openmods.model.variant.VariantModelState;
 
 @BookDocumentation
 public class BlockVacuumHopper extends OpenBlock {
@@ -20,6 +25,13 @@ public class BlockVacuumHopper extends OpenBlock {
 
 	public BlockVacuumHopper() {
 		super(Material.ROCK);
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new ExtendedBlockState(this,
+				new IProperty[] { getPropertyOrientation() },
+				new IUnlistedProperty[] { VariantModelState.PROPERTY });
 	}
 
 	private static final AxisAlignedBB STANDARD_AABB = new AxisAlignedBB(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
@@ -39,10 +51,12 @@ public class BlockVacuumHopper extends OpenBlock {
 		return SELECTION_AABB;
 	}
 
-	// TODO 1.8.9 hello states
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		final IExtendedBlockState oldState = (IExtendedBlockState)state;
+		final TileEntityVacuumHopper te = getTileEntity(world, pos, TileEntityVacuumHopper.class);
+		final VariantModelState selectors = VariantModelState.create(te.getOutputState());
+		return oldState.withProperty(VariantModelState.PROPERTY, selectors);
 	}
 
 	@Override

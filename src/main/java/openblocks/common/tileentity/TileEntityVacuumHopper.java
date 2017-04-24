@@ -1,9 +1,12 @@
 package openblocks.common.tileentity;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -36,6 +39,8 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableSides;
 import openmods.sync.SyncableTank;
@@ -50,6 +55,10 @@ import openmods.utils.bitmap.IWriteableBitMap;
 public class TileEntityVacuumHopper extends SyncedTileEntity implements IInventoryProvider, IActivateAwareTile, IHasGui, INeighbourAwareTile, ITickable {
 
 	public static final int TANK_CAPACITY = LiquidXpUtils.xpToLiquidRatio(EnchantmentUtils.getExperienceForLevel(5));
+
+	public static final String OUTPUT_ITEMS = "items";
+	public static final String OUTPUT_FLUIDS = "fluids";
+	public static final String OUTPUT_BOTH = "both";
 
 	private SyncableTank tank;
 	public SyncableSides xpOutputs;
@@ -66,6 +75,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	@IncludeInterface
 	private final IFluidHandler tankWrapper = new SidedFluidHandler.Source(xpOutputs, tank);
 
+	private Map<String, String> outputState = ImmutableMap.of();
+
 	@Override
 	protected void createSyncedFields() {
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
@@ -76,6 +87,36 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	public TileEntityVacuumHopper() {
 		sided.registerAllSlots(itemOutputs, false, true);
+
+		syncMap.addUpdateListener(new ISyncListener() {
+			@Override
+			public void onSync(Set<ISyncableObject> changes) {
+				if (changes.contains(xpOutputs) || changes.contains(itemOutputs)) {
+					updateOutputStates();
+					worldObj.markBlockRangeForRenderUpdate(pos, pos);
+				}
+			}
+
+			private void updateOutputStates() {
+				ImmutableMap.Builder<String, String> newOutputState = ImmutableMap.builder();
+				for (EnumFacing side : EnumFacing.VALUES) {
+					final boolean outputItems = itemOutputs.get(side);
+					final boolean outputXp = xpOutputs.get(side);
+
+					if (outputItems) {
+						if (outputXp) {
+							newOutputState.put(side.getName(), OUTPUT_BOTH);
+						} else {
+							newOutputState.put(side.getName(), OUTPUT_ITEMS);
+						}
+					} else if (outputXp) {
+						newOutputState.put(side.getName(), OUTPUT_FLUIDS);
+					}
+				}
+
+				outputState = newOutputState.build();
+			}
+		});
 	}
 
 	public IReadableBitMap<EnumFacing> getReadableXpOutputs() {
@@ -270,5 +311,9 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	@Override
 	public void onNeighbourChanged(Block block) {
 		this.needsTankUpdate = true;
+	}
+
+	public Map<String, String> getOutputState() {
+		return outputState;
 	}
 }

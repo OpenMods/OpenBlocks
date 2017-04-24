@@ -1,0 +1,21 @@
+{
+    "textures": {
+        "particle": "openblocks:blocks/vacuumhopper_body",
+        "body": "openblocks:blocks/vacuumhopper_body"
+    },
+    "elements": [
+        {
+            "name": "middle",
+            "from": [ 4.0, 4.0, 4.0 ],
+            "to": [ 12.0, 12.0, 12.0 ],
+            "faces": {
+                "north": { "texture": "#body", "uv": [ 4.0, 4.0, 12.0, 12.0 ] },
+                "east": { "texture": "#body", "uv": [ 4.0, 4.0, 12.0, 12.0 ] },
+                "south": { "texture": "#body", "uv": [ 4.0, 4.0, 12.0, 12.0 ] },
+                "west": { "texture": "#body", "uv": [ 4.0, 4.0, 12.0, 12.0 ] },
+                "up": { "texture": "#body", "uv": [ 4.0, 4.0, 12.0, 12.0 ] },
+                "down": { "texture": "#body", "uv": [ 4.0, 4.0, 12.0, 12.0 ] }
+            }
+        }
+    ]
+}
