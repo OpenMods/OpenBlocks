@@ -1,17 +1,18 @@
 package openblocks.enchantments;
 
 import com.google.common.base.Supplier;
+import info.openmods.calc.Environment;
+import info.openmods.calc.ExprType;
+import info.openmods.calc.SingleExprEvaluator;
+import info.openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
+import info.openmods.calc.types.fp.DoubleCalculatorFactory;
+import jline.internal.Log;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks.Enchantments;
-import openmods.calc.Environment;
-import openmods.calc.ExprType;
-import openmods.calc.SingleExprEvaluator;
-import openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
-import openmods.calc.types.fp.DoubleCalculatorFactory;
 import openmods.config.properties.ConfigurationChange;
 import openmods.entity.PlayerDamageEvent;
 import openmods.utils.EnchantmentUtils;
@@ -37,6 +38,9 @@ public class LastStandEnchantmentsHandler {
 
 	private void updateReductionFormula() {
 		reductionCalculator.setExpr(ExprType.INFIX, Config.lastStandEnchantmentFormula);
+
+		if (!reductionCalculator.isExprValid())
+			Log.warn("Invalid lastStandFormula: ", Config.lastStandEnchantmentEnabled);
 	}
 
 	@SubscribeEvent

@@ -4,6 +4,11 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import info.openmods.calc.Environment;
+import info.openmods.calc.ExprType;
+import info.openmods.calc.SingleExprEvaluator;
+import info.openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
+import info.openmods.calc.types.fp.DoubleCalculatorFactory;
 import java.util.Map;
 import java.util.Random;
 import net.minecraft.entity.Entity;
@@ -36,11 +41,6 @@ import openblocks.trophy.SnowmanBehavior;
 import openblocks.trophy.SquidBehavior;
 import openblocks.trophy.WitchBehavior;
 import openmods.Log;
-import openmods.calc.Environment;
-import openmods.calc.ExprType;
-import openmods.calc.SingleExprEvaluator;
-import openmods.calc.SingleExprEvaluator.EnvironmentConfigurator;
-import openmods.calc.types.fp.DoubleCalculatorFactory;
 import openmods.config.properties.ConfigurationChange;
 import openmods.reflection.ReflectionHelper;
 
@@ -50,7 +50,7 @@ public class TrophyHandler {
 
 	private final Random fallbackDropChance = new Random();
 
-	private final SingleExprEvaluator<Double, ExprType> dropChangeCalculator = SingleExprEvaluator.create(DoubleCalculatorFactory.createDefault());
+	private final SingleExprEvaluator<Double, ExprType> dropChanceCalculator = SingleExprEvaluator.create(DoubleCalculatorFactory.createDefault());
 
 	{
 		updateDropChanceFormula();
@@ -63,7 +63,10 @@ public class TrophyHandler {
 	}
 
 	private void updateDropChanceFormula() {
-		dropChangeCalculator.setExpr(ExprType.INFIX, Config.trophyDropChanceFormula);
+		dropChanceCalculator.setExpr(ExprType.INFIX, Config.trophyDropChanceFormula);
+
+		if (!dropChanceCalculator.isExprValid())
+			Log.info("Invalid trophyDropChanceFormula formula: ", Config.trophyDropChanceFormula);
 	}
 
 	public static Entity getEntityFromCache(Trophy trophy) {
@@ -238,7 +241,7 @@ public class TrophyHandler {
 	public void onLivingDrops(final LivingDropsEvent event) {
 		final Entity entity = event.getEntity();
 		if (event.isRecentlyHit() && canDrop(entity)) {
-			final Double result = dropChangeCalculator.evaluate(
+			final Double result = dropChanceCalculator.evaluate(
 					new EnvironmentConfigurator<Double>() {
 						@Override
 						public void accept(Environment<Double> env) {
