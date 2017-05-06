@@ -13,15 +13,20 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
@@ -125,6 +130,17 @@ public class ClientProxy implements IOpenBlocksProxy {
 		SoundEventsManager.instance.init();
 	}
 
+	private static class FluidTextureRegisterListener {
+		@SubscribeEvent
+		public void onTextureStitch(TextureStitchEvent.Pre evt) {
+			for (Fluid f : FluidRegistry.getRegisteredFluids().values()) {
+				final ResourceLocation fluidTexture = f.getStill();
+				if (fluidTexture != null)
+					evt.getMap().registerSprite(fluidTexture);
+			}
+		}
+	}
+
 	@Override
 	public void registerRenderInformation() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<TileEntityGuide>());
@@ -151,7 +167,9 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		tempHackRegisterTesrItemRenderers();
 
-		// TODO 1.8.9 Tank item rendering
+		if (OpenBlocks.Blocks.tank != null) {
+			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
+		}
 
 		if (OpenBlocks.Items.luggage != null) {
 			// TODO 1.8.9 Luggage item rendering

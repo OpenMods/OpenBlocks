@@ -1,0 +1,22 @@
+{
+    "parent": "openblocks:block/tank_empty",
+    "overrides" : [
+        { "predicate": { "level": 0 }, "model": "openblocks:block/tank_fluid_0" },
+        { "predicate": { "level": 1 }, "model": "openblocks:block/tank_fluid_1" },
+        { "predicate": { "level": 2 }, "model": "openblocks:block/tank_fluid_2" },
+        { "predicate": { "level": 3 }, "model": "openblocks:block/tank_fluid_3" },
+        { "predicate": { "level": 4 }, "model": "openblocks:block/tank_fluid_4" },
+        { "predicate": { "level": 5 }, "model": "openblocks:block/tank_fluid_5" },
+        { "predicate": { "level": 6 }, "model": "openblocks:block/tank_fluid_6" },
+        { "predicate": { "level": 7 }, "model": "openblocks:block/tank_fluid_7" },
+        { "predicate": { "level": 8 }, "model": "openblocks:block/tank_fluid_8" },
+        { "predicate": { "level": 9 }, "model": "openblocks:block/tank_fluid_9" },
+        { "predicate": { "level": 10 }, "model": "openblocks:block/tank_fluid_10" },
+        { "predicate": { "level": 11 }, "model": "openblocks:block/tank_fluid_11" },
+        { "predicate": { "level": 12 }, "model": "openblocks:block/tank_fluid_12" },
+        { "predicate": { "level": 13 }, "model": "openblocks:block/tank_fluid_13" },
+        { "predicate": { "level": 14 }, "model": "openblocks:block/tank_fluid_14" },
+        { "predicate": { "level": 15 }, "model": "openblocks:block/tank_fluid_15" },
+        { "predicate": { "level": 16 }, "model": "openblocks:block/tank_fluid_16" }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "inventory" : [{
+            "model" : "openblocks:tank_frame",
+            "submodel": {
+                "contents": {
+                    "model": "openmods:textureditem",
+                    "custom": {
+                        "untexturedModel": "openblocks:block/tank_empty",
+                        "texturedModel": "openblocks:block/tank_fluid",
+                        "textures": [ "fluid" ]
+                    }
+                }
+               },
+            "transform": "forge:default-block"
+        }]
+    }
+}

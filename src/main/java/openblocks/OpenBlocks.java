@@ -465,7 +465,7 @@ public class OpenBlocks {
 		 * It may not be used as default fluid, so don't compare directly with other fluids.
 		 * FluidStacks created with this fluid should always be valid.
 		 */
-		public static final Fluid xpJuice = new Fluid("xpjuice", location("xpjuicestill"), location("xpjuiceflowing")).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		public static final Fluid xpJuice = new Fluid("xpjuice", location("blocks/xpjuicestill"), location("blocks/xpjuiceflowing")).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
 	}
 
 	@ObjectHolder(MODID)
