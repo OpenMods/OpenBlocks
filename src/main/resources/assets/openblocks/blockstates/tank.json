@@ -1,6 +1,66 @@
 {
     "forge_marker": 1,
     "variants": {
+        "orientation=xp_yp": [{
+            "model": "openmods:variantmodel",
+            "custom": {
+                "base": "openblocks:tank#base",
+                "_comments" : [
+                    "Can I interest you in Karnaugh maps? -B",
+                    "n_x is present when block has connected neigbour on side x, n_xy is present when neigbour is on diagonal between x and y",
+                    "Whole logic stuff and how I got those equations would be really hard to document here. Sorry.",
+                    "Symmetry of equations is broken by special casing for blocks on diagonal (to prevent edge from being drawn twice)"
+                ],
+                "expansions": [
+                    "edgeT(n_1, n_2, n_12) := (n_1 = n_2) & !n_12",
+                    "edgeB(n_1, n_2, n_12) := (!n_2 & !n_1) | (n_2 & !n_12 & n_1)",
+
+                    "bs := edgeT(n_b, n_s, n_bs)",
+                    "bn := edgeT(n_b, n_n, n_bn)",
+                    "ts := edgeB(n_t, n_s, n_ts)",
+                    "tn := edgeB(n_t, n_n, n_tn)",
+
+                    "ne := edgeT(n_n, n_e, n_ne)",
+                    "nw := edgeT(n_n, n_w, n_nw)",
+                    "se := edgeB(n_s, n_e, n_se)",
+                    "sw := edgeB(n_s, n_w, n_sw)",
+
+                    "be := edgeT(n_b, n_e, n_be)",
+                    "bw := edgeT(n_b, n_w, n_bw)",
+                    "te := edgeB(n_t, n_e, n_te)",
+                    "tw := edgeB(n_t, n_w, n_tw)"
+                ],
+                "variants": {
+                    "nw" : "openblocks:tank#nw",
+                    "ne" : "openblocks:tank#ne",
+                    "se" : "openblocks:tank#se",
+                    "sw" : "openblocks:tank#sw",
+                    "tw" : "openblocks:tank#tw",
+                    "te" : "openblocks:tank#te",
+                    "be" : "openblocks:tank#be",
+                    "bw" : "openblocks:tank#bw",
+                    "tn" : "openblocks:tank#tn",
+                    "ts" : "openblocks:tank#ts",
+                    "bs" : "openblocks:tank#bs",
+                    "bn" : "openblocks:tank#bn"
+                 }
+            }
+        }],
+
+        "base": { "model": "openblocks:tank_empty" },
+        "nw" : { "model": "openblocks:tank_frame_nw" },
+        "ne" : { "model": "openblocks:tank_frame_ne" },
+        "se" : { "model": "openblocks:tank_frame_se" },
+        "sw" : { "model": "openblocks:tank_frame_sw" },
+        "tw" : { "model": "openblocks:tank_frame_tw" },
+        "te" : { "model": "openblocks:tank_frame_te" },
+        "be" : { "model": "openblocks:tank_frame_be" },
+        "bw" : { "model": "openblocks:tank_frame_bw" },
+        "tn" : { "model": "openblocks:tank_frame_tn" },
+        "ts" : { "model": "openblocks:tank_frame_ts" },
+        "bs" : { "model": "openblocks:tank_frame_bs" },
+        "bn" : { "model": "openblocks:tank_frame_bn" },
+
         "inventory" : [{
             "model" : "openblocks:tank_frame",
             "submodel": {

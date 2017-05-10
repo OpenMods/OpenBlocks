@@ -22,7 +22,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 import openblocks.Config;
 import openblocks.OpenBlocks;
-import openblocks.client.renderer.tileentity.tank.INeighbourMap;
 import openblocks.client.renderer.tileentity.tank.ITankConnections;
 import openblocks.client.renderer.tileentity.tank.ITankRenderFluidData;
 import openblocks.client.renderer.tileentity.tank.NeighbourMap;
@@ -36,6 +35,7 @@ import openmods.api.IPlaceAwareTile;
 import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.liquids.GenericFluidHandler;
+import openmods.model.variant.VariantModelState;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncableTank;
@@ -157,16 +157,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return 0;
 	}
 
-	public INeighbourMap getRenderNeigbourMap() {
-		return new NeighbourMap(worldObj, pos, tank.getFluid());
-	}
-
 	public ITankRenderFluidData getRenderFluidData() {
 		return renderLogic.getTankRenderData();
 	}
 
 	public ITankConnections getTankConnections() {
 		return renderLogic.getTankConnections();
+	}
+
+	public VariantModelState getModelState() {
+		// TODO maybe cache?
+		return new NeighbourMap(worldObj, pos, tank.getFluid()).getState();
 	}
 
 	public boolean accepts(FluidStack liquid) {

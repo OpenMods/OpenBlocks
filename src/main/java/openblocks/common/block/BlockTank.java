@@ -2,6 +2,8 @@ package openblocks.common.block;
 
 import java.util.List;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +15,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidTank;
@@ -24,6 +29,7 @@ import openblocks.common.tileentity.TileEntityTank;
 import openmods.Log;
 import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
+import openmods.model.variant.VariantModelState;
 import openmods.utils.ItemUtils;
 
 @BookDocumentation(hasVideo = true)
@@ -31,6 +37,21 @@ public class BlockTank extends OpenBlock {
 
 	public BlockTank() {
 		super(Material.ROCK);
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new ExtendedBlockState(this,
+				new IProperty[] { getPropertyOrientation() },
+				new IUnlistedProperty[] { VariantModelState.PROPERTY });
+	}
+
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		final IExtendedBlockState oldState = (IExtendedBlockState)state;
+		final TileEntityTank te = getTileEntity(world, pos, TileEntityTank.class);
+		final VariantModelState selectors = te.getModelState();
+		return oldState.withProperty(VariantModelState.PROPERTY, selectors);
 	}
 
 	@Override

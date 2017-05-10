@@ -1,0 +1,20 @@
+{
+    "textures": {
+        "frame": "openblocks:blocks/tank"
+    }, 
+    "elements": [
+        {
+            "name": "se", 
+            "from": [ 15.9, -0.1, 15.9 ],
+            "to": [ 16.1, 16.1, 16.1 ],
+            "faces": {
+                "north": { "texture": "#frame", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+                "east": { "texture": "#frame", "uv": [ 0.0, 0.0, 1.0, 16.0 ], "cullface": "east" },
+                "south": { "texture": "#frame", "uv": [ 0.0, 0.0, 1.0, 16.0 ], "cullface": "south" },
+                "west": { "texture": "#frame", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+                "up": { "texture": "#frame", "uv": [ 0.0, 0.0, 1.0, 1.0 ], "cullface": "up" },
+                "down": { "texture": "#frame", "uv": [ 0.0, 15.0, 1.0, 16.0 ], "cullface": "down" }
+            }
+        }
+    ]
+}

@@ -316,4 +316,5 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public Map<String, String> getOutputState() {
 		return outputState;
 	}
+
 }
