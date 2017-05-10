@@ -12,23 +12,6 @@ import openmods.model.variant.VariantModelState;
 public class NeighbourMap {
 	private final VariantModelState state;
 
-	public static final String DIR_NORTH = "n";
-	public static final String DIR_SOUTH = "s";
-
-	public static final String DIR_WEST = "w";
-	public static final String DIR_EAST = "e";
-
-	public static final String DIR_UP = "t";
-	public static final String DIR_DOWN = "b";
-
-	private static String direct(String a) {
-		return "n_" + a;
-	}
-
-	private static String diagonal(String a, String b) {
-		return "n_" + a + b;
-	}
-
 	private static void testNeighbour(Set<String> result, World world, FluidStack ownFluid, int x, int y, int z, String id) {
 		final TileEntity te = TankRenderUtils.getTileEntitySafe(world, new BlockPos(x, y, z));
 		if (te instanceof TileEntityTank) if (((TileEntityTank)te).accepts(ownFluid)) result.add(id);
@@ -43,28 +26,28 @@ public class NeighbourMap {
 			final int z = pos.getZ();
 
 			final Set<String> neighbours = Sets.newHashSet();
-			testNeighbour(neighbours, world, fluid, x + 0, y + 1, z + 0, direct(DIR_UP));
-			testNeighbour(neighbours, world, fluid, x + 0, y - 1, z + 0, direct(DIR_DOWN));
+			testNeighbour(neighbours, world, fluid, x + 0, y + 1, z + 0, "n_t");
+			testNeighbour(neighbours, world, fluid, x + 0, y - 1, z + 0, "n_b");
 
-			testNeighbour(neighbours, world, fluid, x + 1, y + 0, z + 0, direct(DIR_EAST));
-			testNeighbour(neighbours, world, fluid, x - 1, y + 0, z + 0, direct(DIR_WEST));
-			testNeighbour(neighbours, world, fluid, x + 0, y + 0, z + 1, direct(DIR_SOUTH));
-			testNeighbour(neighbours, world, fluid, x + 0, y + 0, z - 1, direct(DIR_NORTH));
+			testNeighbour(neighbours, world, fluid, x + 1, y + 0, z + 0, "n_e");
+			testNeighbour(neighbours, world, fluid, x - 1, y + 0, z + 0, "n_w");
+			testNeighbour(neighbours, world, fluid, x + 0, y + 0, z + 1, "n_s");
+			testNeighbour(neighbours, world, fluid, x + 0, y + 0, z - 1, "n_n");
 
-			testNeighbour(neighbours, world, fluid, x + 1, y + 1, z + 0, diagonal(DIR_UP, DIR_EAST));
-			testNeighbour(neighbours, world, fluid, x - 1, y + 1, z + 0, diagonal(DIR_UP, DIR_WEST));
-			testNeighbour(neighbours, world, fluid, x + 0, y + 1, z + 1, diagonal(DIR_UP, DIR_SOUTH));
-			testNeighbour(neighbours, world, fluid, x + 0, y + 1, z - 1, diagonal(DIR_UP, DIR_NORTH));
+			testNeighbour(neighbours, world, fluid, x + 1, y + 1, z + 0, "n_te");
+			testNeighbour(neighbours, world, fluid, x - 1, y + 1, z + 0, "n_tw");
+			testNeighbour(neighbours, world, fluid, x + 0, y + 1, z + 1, "n_ts");
+			testNeighbour(neighbours, world, fluid, x + 0, y + 1, z - 1, "n_tn");
 
-			testNeighbour(neighbours, world, fluid, x + 1, y - 1, z + 0, diagonal(DIR_DOWN, DIR_EAST));
-			testNeighbour(neighbours, world, fluid, x - 1, y - 1, z + 0, diagonal(DIR_DOWN, DIR_WEST));
-			testNeighbour(neighbours, world, fluid, x + 0, y - 1, z + 1, diagonal(DIR_DOWN, DIR_SOUTH));
-			testNeighbour(neighbours, world, fluid, x + 0, y - 1, z - 1, diagonal(DIR_DOWN, DIR_NORTH));
+			testNeighbour(neighbours, world, fluid, x + 1, y - 1, z + 0, "n_be");
+			testNeighbour(neighbours, world, fluid, x - 1, y - 1, z + 0, "n_bw");
+			testNeighbour(neighbours, world, fluid, x + 0, y - 1, z + 1, "n_bs");
+			testNeighbour(neighbours, world, fluid, x + 0, y - 1, z - 1, "n_bn");
 
-			testNeighbour(neighbours, world, fluid, x - 1, y + 0, z - 1, diagonal(DIR_NORTH, DIR_WEST));
-			testNeighbour(neighbours, world, fluid, x - 1, y + 0, z + 1, diagonal(DIR_SOUTH, DIR_WEST));
-			testNeighbour(neighbours, world, fluid, x + 1, y + 0, z + 1, diagonal(DIR_SOUTH, DIR_EAST));
-			testNeighbour(neighbours, world, fluid, x + 1, y + 0, z - 1, diagonal(DIR_NORTH, DIR_EAST));
+			testNeighbour(neighbours, world, fluid, x - 1, y + 0, z - 1, "n_nw");
+			testNeighbour(neighbours, world, fluid, x - 1, y + 0, z + 1, "n_sw");
+			testNeighbour(neighbours, world, fluid, x + 1, y + 0, z + 1, "n_se");
+			testNeighbour(neighbours, world, fluid, x + 1, y + 0, z - 1, "n_ne");
 
 			this.state = VariantModelState.create().withKeys(neighbours);
 		}
