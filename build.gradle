@@ -37,7 +37,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 dependencies {
     compile project(":OpenModsLib") // Load OpenModsLib from submodule
 
-    compile group: 'info.openmods', name: 'calc', version: '0.1'
+    compile group: 'info.openmods', name: 'calc', version: '0.2'
     compile "info.computercraft:ComputerCraft-API:1.80pr0"
     compile "info.openmods:OpenPeripheralCore-API:"+opc_api_version
 }

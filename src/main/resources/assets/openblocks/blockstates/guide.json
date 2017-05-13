@@ -1,0 +1,45 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "openmods:multi-layer",
+        "custom": {
+            "base": "openblocks:guide#inner",
+            "Solid": "openblocks:guide#inner",
+            "Translucent": "openblocks:guide#outer"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "inventory": [{}],
+
+        "inner": [{
+            "model": "openblocks:guide_inner",
+            "textures": {
+                "texture": "openblocks:blocks/guide_center_normal"
+            }
+        }],
+
+        "outer": [{
+            "model": "cube_column",
+            "textures": {
+                "end": "openblocks:blocks/guide_top_new",
+                "side": "openblocks:blocks/guide_side_new"
+            }
+        }],
+
+        "orientation=xp_yp" : { y : 0 },
+        "orientation=xn_yp" : { y : 180 },
+        "orientation=zp_yp" : { y : 90 },
+        "orientation=zn_yp" : { y : 270 },
+
+        "orientation=yp_xn" : [{ transform : { rotation : { z : 90 } } }],
+        "orientation=yn_xn" : [{ transform : { rotation : [{ z : 90 }, { y : 180 }] } }],
+        "orientation=zp_xn" : [{ transform : { rotation : [{ z : 90 }, { y : 270 }] } }],
+        "orientation=zn_xn" : [{ transform : { rotation : [{ z : 90 }, { y : 90 }] } }],
+
+        "orientation=xp_zn" : { x : 90 },
+        "orientation=xn_zn" : [{ transform : { rotation : [{ x : 90 }, { z : 180 }] } }],
+        "orientation=yp_zn" : [{ transform : { rotation : [{ x : 270 }, { y : 270 }] } }],
+        "orientation=yn_zn" : [{ transform : { rotation : [{ x : 270 }, { y : 90 }] } }]
+    }
+}
