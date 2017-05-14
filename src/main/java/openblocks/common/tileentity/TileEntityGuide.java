@@ -2,6 +2,7 @@ package openblocks.common.tileentity;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -21,14 +24,17 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.item.ItemGuide;
 import openblocks.shapes.CoordShape;
 import openblocks.shapes.GuideShape;
+import openmods.Log;
 import openmods.api.IAddAwareTile;
 import openmods.api.INeighbourAwareTile;
+import openmods.block.OpenBlock;
 import openmods.colors.ColorMeta;
 import openmods.geometry.HalfAxis;
 import openmods.geometry.Orientation;
@@ -53,6 +59,92 @@ import openperipheral.api.struct.ScriptStruct;
 import openperipheral.api.struct.StructField;
 
 public class TileEntityGuide extends DroppableTileEntity implements ISyncListener, INeighbourAwareTile, IAddAwareTile, ITickable {
+
+	private interface IShapeManipulator {
+		public boolean activate(TileEntityGuide te, EntityPlayerMP player);
+	}
+
+	private static IShapeManipulator createHalfAxisIncrementer(final HalfAxis halfAxis) {
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				return te.incrementHalfAxis(halfAxis, player);
+			}
+		};
+	}
+
+	private static IShapeManipulator createHalfAxisDecrementer(final HalfAxis halfAxis) {
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				return te.decrementHalfAxis(halfAxis, player);
+			}
+		};
+	}
+
+	private static IShapeManipulator createHalfAxisCopier(final HalfAxis halfAxis) {
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				return te.copyHalfAxis(halfAxis, halfAxis.negate(), player);
+			}
+		};
+	}
+
+	private static IShapeManipulator createRotationManipulator(final HalfAxis ha) {
+		return new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				final World world = te.getWorld();
+				final BlockPos pos = te.getPos();
+				final IBlockState state = world.getBlockState(pos);
+				final Block block = state.getBlock();
+				if (block instanceof OpenBlock) {
+					final IProperty<Orientation> orientationProperty = ((OpenBlock)block).propertyOrientation;
+					final Orientation orientation = state.getValue(orientationProperty);
+					final Orientation newOrientation = orientation.rotateAround(ha);
+					world.setBlockState(pos, state.withProperty(orientationProperty, newOrientation));
+					return true;
+				}
+
+				return false;
+			}
+		};
+	}
+
+	private static final Map<String, IShapeManipulator> COMMANDS;
+
+	static {
+		ImmutableMap.Builder<String, IShapeManipulator> commands = ImmutableMap.builder();
+
+		for (HalfAxis ha : HalfAxis.VALUES) {
+			final String name = ha.name().toLowerCase();
+			commands.put("inc_" + name, createHalfAxisIncrementer(ha));
+			commands.put("dec_" + name, createHalfAxisDecrementer(ha));
+			commands.put("copy_" + name, createHalfAxisCopier(ha));
+		}
+
+		commands.put("rotate_ccw", createRotationManipulator(HalfAxis.NEG_Y));
+		commands.put("rotate_cw", createRotationManipulator(HalfAxis.POS_Y));
+
+		commands.put("inc_mode", new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				te.incrementMode(player);
+				return true;
+			}
+		});
+
+		commands.put("dec_mode", new IShapeManipulator() {
+			@Override
+			public boolean activate(TileEntityGuide te, EntityPlayerMP player) {
+				te.decrementMode(player);
+				return true;
+			}
+		});
+
+		COMMANDS = commands.build();
+	}
 
 	private static final Comparator<BlockPos> COMPARATOR = new Comparator<BlockPos>() {
 		@Override
@@ -244,7 +336,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		sync();
 	}
 
-	public boolean incrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
+	private boolean incrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
 		final SyncableVarInt v = axisDimensions.get(axis);
 		v.modify(+1);
 		afterDimensionsChange(player);
@@ -252,7 +344,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	}
 
-	public boolean decrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
+	private boolean decrementHalfAxis(HalfAxis axis, EntityPlayerMP player) {
 		final SyncableVarInt v = axisDimensions.get(axis);
 		if (v.get() > 0) {
 			v.modify(-1);
@@ -262,7 +354,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return false;
 	}
 
-	public boolean copyHalfAxis(HalfAxis from, HalfAxis to, EntityPlayerMP player) {
+	private boolean copyHalfAxis(HalfAxis from, HalfAxis to, EntityPlayerMP player) {
 		final SyncableVarInt fromV = axisDimensions.get(from);
 		final SyncableVarInt toV = axisDimensions.get(to);
 		toV.set(fromV.get());
@@ -270,14 +362,14 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		return true;
 	}
 
-	public void incrementMode(EntityPlayer player) {
+	private void incrementMode(EntityPlayer player) {
 		incrementMode();
 
 		displayModeChange(player);
 		displayBlockCount(player);
 	}
 
-	public void decrementMode(EntityPlayer player) {
+	private void decrementMode(EntityPlayer player) {
 		decrementMode();
 
 		displayModeChange(player);
@@ -499,5 +591,16 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		}
 
 		return false;
+	}
+
+	public void onCommand(EntityPlayer sender, String commandId) {
+		if (sender instanceof EntityPlayerMP) {
+			final IShapeManipulator command = COMMANDS.get(commandId);
+			if (command != null) {
+				command.activate(this, (EntityPlayerMP)sender);
+			} else {
+				Log.info("Player %s tried to send invalid command '%s' to guide %s", sender, commandId, this);
+			}
+		}
 	}
 }

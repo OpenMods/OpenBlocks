@@ -52,12 +52,12 @@ public class ItemWrench extends Item {
 	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		final Block block = world.getBlockState(pos).getBlock();
 
-		if (requiresSneaking(block) && !player.isSneaking()) return EnumActionResult.PASS;
+		if (requiresSneaking(block) && !player.isSneaking()) return EnumActionResult.FAIL;
 
 		final EnumFacing[] rotations = block.getValidRotations(world, pos);
 		if (ArrayUtils.contains(rotations, side)) {
-			if (block.rotateBlock(world, pos, side)) { return EnumActionResult.SUCCESS; // TODO verify if swing animation plays
-			}
+			if (world.isRemote) return EnumActionResult.PASS;
+			if (block.rotateBlock(world, pos, side)) return EnumActionResult.SUCCESS;
 		}
 
 		return EnumActionResult.FAIL;

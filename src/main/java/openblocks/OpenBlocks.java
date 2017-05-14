@@ -44,6 +44,7 @@ import openblocks.common.ElevatorActionHandler;
 import openblocks.common.ElevatorBlockRules;
 import openblocks.common.EntityEventHandler;
 import openblocks.common.GameRuleManager;
+import openblocks.common.GuideActionHandler;
 import openblocks.common.LuggageDropHandler;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.MapDataManager;
@@ -186,6 +187,7 @@ import openblocks.enchantments.flimflams.SquidFilmFlam;
 import openblocks.enchantments.flimflams.TeleportFlimFlam;
 import openblocks.enchantments.flimflams.UselessToolFlimFlam;
 import openblocks.events.ElevatorActionEvent;
+import openblocks.events.GuideActionEvent;
 import openblocks.events.PlayerActionEvent;
 import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
@@ -656,6 +658,7 @@ public class OpenBlocks {
 				.register(MapDataManager.MapUpdatesEvent.class)
 				.register(ElevatorActionEvent.class)
 				.register(PlayerActionEvent.class)
+				.register(GuideActionEvent.class)
 				.register(EntityMiniMe.OwnerChangeEvent.class);
 
 		RpcCallDispatcher.INSTANCE.startRegistration()
@@ -707,6 +710,7 @@ public class OpenBlocks {
 
 		if (OpenBlocks.Blocks.elevator != null || OpenBlocks.Blocks.elevatorRotating != null) {
 			MinecraftForge.EVENT_BUS.register(ElevatorBlockRules.instance);
+			MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
 		}
 
 		if (Config.radioVillagerId > 0) {
@@ -723,8 +727,8 @@ public class OpenBlocks {
 			MinecraftForge.EVENT_BUS.register(new LuggageDropHandler());
 		}
 
-		if (Blocks.elevator != null) {
-			MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
+		if (Blocks.guide != null || Blocks.builderGuide != null) {
+			MinecraftForge.EVENT_BUS.register(new GuideActionHandler());
 		}
 
 		if (Blocks.tank != null) {
