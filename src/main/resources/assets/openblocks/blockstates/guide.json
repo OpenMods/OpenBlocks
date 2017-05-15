@@ -41,19 +41,19 @@
             }
         }],
 
-        "orientation=xp_yp" : { y : 0 },
-        "orientation=xn_yp" : { y : 180 },
-        "orientation=zp_yp" : { y : 90 },
-        "orientation=zn_yp" : { y : 270 },
+        "orientation=xp_yp" : { "y" : 0 },
+        "orientation=xn_yp" : { "y" : 180 },
+        "orientation=zp_yp" : { "y" : 90 },
+        "orientation=zn_yp" : { "y" : 270 },
 
-        "orientation=yp_xn" : [{ transform : { rotation : { z : 90 } } }],
-        "orientation=yn_xn" : [{ transform : { rotation : [{ z : 90 }, { y : 180 }] } }],
-        "orientation=zp_xn" : [{ transform : { rotation : [{ z : 90 }, { y : 270 }] } }],
-        "orientation=zn_xn" : [{ transform : { rotation : [{ z : 90 }, { y : 90 }] } }],
+        "orientation=yp_xn" : [{ "transform" : { "rotation" : { "z" : 90 } } }],
+        "orientation=yn_xn" : [{ "transform" : { "rotation" : [{ "z" : 90 }, { "y" : 180 }] } }],
+        "orientation=zp_xn" : [{ "transform" : { "rotation" : [{ "z" : 90 }, { "y" : 270 }] } }],
+        "orientation=zn_xn" : [{ "transform" : { "rotation" : [{ "z" : 90 }, { "y" : 90 }] } }],
 
-        "orientation=xp_zn" : { x : 90 },
-        "orientation=xn_zn" : [{ transform : { rotation : [{ x : 90 }, { z : 180 }] } }],
-        "orientation=yp_zn" : [{ transform : { rotation : [{ x : 270 }, { y : 270 }] } }],
-        "orientation=yn_zn" : [{ transform : { rotation : [{ x : 270 }, { y : 90 }] } }]
+        "orientation=xp_zn" : { "x" : 90 },
+        "orientation=xn_zn" : [{ "transform" : { "rotation" : [{ "x" : 90 }, { "z" : 180 }] } }],
+        "orientation=yp_zn" : [{ "transform" : { "rotation" : [{ "x" : 270 }, { "y" : 270 }] } }],
+        "orientation=yn_zn" : [{ "transform" : { "rotation" : [{ "x" : 270 }, { "y" : 90 }] } }]
     }
 }
