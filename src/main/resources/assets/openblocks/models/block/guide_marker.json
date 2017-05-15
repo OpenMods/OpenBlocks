@@ -1,0 +1,19 @@
+{
+    "textures": {
+        "all": "openblocks:blocks/guide"
+    },
+    "elements": [
+        {
+            "from": [ 0.8, 0.8, 0.8 ],
+            "to": [ 15.2, 15.2, 15.2 ],
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 0.8, 0.8, 15.2, 15.2 ] },
+                "east": { "texture": "#all", "uv": [ 0.8, 0.8, 15.2, 15.2 ] },
+                "south": { "texture": "#all", "uv": [ 0.8, 0.8, 15.2, 15.2 ] },
+                "west": { "texture": "#all", "uv": [ 0.8, 0.8, 15.2, 15.2 ] },
+                "up": { "texture": "#all", "uv": [ 0.8, 0.8, 15.2, 15.2 ] },
+                "down": { "texture": "#all", "uv": [ 0.8, 0.8, 15.2, 15.2 ] }
+            }
+        }
+    ]
+}

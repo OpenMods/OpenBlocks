@@ -51,6 +51,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 
 	@Override
 	public void update() {
+		super.update();
 		if (worldObj.isRemote) ticks++;
 	}
 
@@ -72,10 +73,10 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 	private boolean survivalPlaceBlocks(EntityPlayerMP player, ItemStack heldItem, Block block, int blockMeta, EnumFacing side, float hitX, float hitY, float hitZ) {
 		for (BlockPos relCoord : getShapeSafe().getCoords()) {
 			BlockPos absPos = pos.add(relCoord);
-			if (worldObj.isBlockLoaded(absPos) && worldObj.isAirBlock(absPos)) {
+			if (worldObj.isBlockLoaded(absPos) && worldObj.isAirBlock(absPos) && absPos.getY() >= 0 && absPos.getY() < 256) {
 				final EnumActionResult placeResult = player.interactionManager.processRightClickBlock(player, worldObj, heldItem, EnumHand.MAIN_HAND, absPos, side, hitX, hitY, hitZ);
 
-				if (placeResult == EnumActionResult.PASS) {
+				if (placeResult == EnumActionResult.SUCCESS) {
 					final int stateId = Block.getStateId(worldObj.getBlockState(absPos));
 					createServerRpcProxy(IGuideAnimationTrigger.class).trigger(absPos, stateId);
 					return true;

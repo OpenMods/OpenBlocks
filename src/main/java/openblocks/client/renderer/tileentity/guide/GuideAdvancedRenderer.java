@@ -1,6 +1,8 @@
 package openblocks.client.renderer.tileentity.guide;
 
+import com.google.common.base.Supplier;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.shapes.CoordShape;
@@ -11,8 +13,8 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 
 	private final MarkerRenderer mr;
 
-	public GuideAdvancedRenderer(Runnable marker) {
-		this.mr = new MarkerRenderer(marker);
+	public GuideAdvancedRenderer() {
+		this.mr = new MarkerRenderer();
 	}
 
 	@Override
@@ -27,12 +29,12 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 	private void renderShape(CoordShape shape, int color, float scale) {
 		if (shape == null) return;
 
-		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
-
 		GlStateManager.enableBlend();
 
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.disableLighting();
+
+		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		mr.drawInstanced(shape, color, scale);
 
@@ -41,7 +43,7 @@ public class GuideAdvancedRenderer implements IGuideRenderer {
 	}
 
 	@Override
-	public void onTextureChange() {
-		mr.reset();
+	public void onModelBake(Supplier<VertexBuffer> modelSupplier) {
+		mr.setModel(modelSupplier);
 	}
 }

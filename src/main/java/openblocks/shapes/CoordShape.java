@@ -25,7 +25,7 @@ public class CoordShape {
 		if (vbo == 0) {
 			ByteBuffer data = BufferUtils.createByteBuffer(coords.size() * 3 * 4);
 			for (BlockPos c : coords)
-				data.putInt(c.getX()).putInt(c.getY()).putInt(c.getZ());
+				data.putFloat(c.getX() - 0.5f).putFloat(c.getY()).putFloat(c.getZ() - 0.5f);
 			data.flip();
 
 			vbo = BufferHelper.methods().glGenBuffers();

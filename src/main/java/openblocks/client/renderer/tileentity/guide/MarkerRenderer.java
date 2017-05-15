@@ -1,10 +1,13 @@
 package openblocks.client.renderer.tileentity.guide;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Supplier;
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
+import java.util.List;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.shapes.CoordShape;
@@ -24,56 +27,80 @@ public class MarkerRenderer {
 
 	private static final int nativeBufferSize = 0x200000;
 	private final ByteBuffer byteBuffer = GLAllocation.createDirectByteBuffer(nativeBufferSize * 4);
-	private final IntBuffer intBuffer = byteBuffer.asIntBuffer();
-
-	private final Runnable model;
 
 	private boolean initialized;
-	private boolean hasTexture;
-	private boolean hasColor;
 
-	private boolean shouldRefresh = true;
+	private boolean shouldRefresh;
+	private Supplier<VertexBuffer> modelSupplier;
 
 	private int vertexCount;
 
 	private int vao;
 	private int vbo;
 
-	public MarkerRenderer(Runnable model) {
-		this.model = model;
-
+	public MarkerRenderer() {
 		final ShaderProgramBuilder shaderProgramBuilder = new ShaderProgramBuilder();
 		shaderProgramBuilder.addShader(vertexSource, GL20.GL_VERTEX_SHADER);
 		shaderProgramBuilder.addShader(fragmentSource, GL20.GL_FRAGMENT_SHADER);
 		this.shader = shaderProgramBuilder.build();
 	}
 
-	public void reset() {
-		shouldRefresh = true;
+	public void setModel(Supplier<VertexBuffer> modelSupplier) {
+		this.modelSupplier = modelSupplier;
+		this.shouldRefresh = true;
 	}
 
-	private void createModel() {
-		model.run();
-		VertexBuffer.State state = Tessellator.getInstance().getBuffer().getVertexState();
-		Tessellator.getInstance().draw(); // just discard the state this way.
+	private void copyBuffer(ByteBuffer buffer) {
+		byteBuffer.clear();
+		byteBuffer.put(buffer);
+		byteBuffer.flip();
+	}
 
-		if (state.getRawBuffer().length > nativeBufferSize) throw new UnsupportedOperationException("Big buffers not supported!");
+	private void attributePointer(String name, VertexFormat format, int index, VertexFormatElement el) {
+		shader.attributePointer(name, el.getElementCount(), el.getType().getGlConstant(), true, format.getIntegerSize() * 4, format.getOffset(index));
+	}
 
-		vertexCount = state.getVertexCount();
+	private void setupAttributes(final VertexFormat format) {
+		boolean hasTexture = false;
+		boolean hasColor = false;
 
-		byteBuffer.position(0);
-		intBuffer.clear();
-		intBuffer.put(state.getRawBuffer(), 0, vertexCount * 8);
-		byteBuffer.position(0);
-		byteBuffer.limit(vertexCount * 32);
+		final List<VertexFormatElement> elements = format.getElements();
+		for (int i = 0; i < elements.size(); i++) {
+			final VertexFormatElement el = elements.get(i);
+			switch (el.getUsage()) {
+				case COLOR:
+					attributePointer("aColor", format, i, el);
+					hasColor = true;
+					break;
+				case POSITION:
+					attributePointer("aVertex", format, i, el);
+					break;
+				case UV:
+					attributePointer("aTexCoord", format, i, el);
+					hasTexture = true;
+					break;
+				default:
+					break;
+			}
+		}
 
-		hasTexture = state.getVertexFormat().hasUvOffset(0);
-		hasColor = state.getVertexFormat().hasColor();
+		shader.uniform1f("uHasTexture", hasTexture? 1f : 0f);
+		shader.uniform1f("uHasColor", hasColor? 1f : 0f);
+		shader.uniform1i("uDefaultTexture", 0);
 	}
 
 	private void createVAO() {
 		if (initialized) {
-			createModel();
+			Preconditions.checkNotNull(modelSupplier, "Marker model not loaded");
+
+			final VertexBuffer vertexBuffer = modelSupplier.get();
+
+			final ByteBuffer modelByteBuffer = vertexBuffer.getByteBuffer();
+			if (modelByteBuffer.limit() > nativeBufferSize) throw new UnsupportedOperationException("Big buffers not supported!");
+
+			vertexCount = vertexBuffer.getVertexCount();
+
+			copyBuffer(modelByteBuffer);
 
 			if (vao == 0) vao = ArraysHelper.methods().glGenVertexArrays();
 			ArraysHelper.methods().glBindVertexArray(vao);
@@ -82,15 +109,9 @@ public class MarkerRenderer {
 			BufferHelper.methods().glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
 			BufferHelper.methods().glBufferData(GL15.GL_ARRAY_BUFFER, byteBuffer, GL15.GL_STATIC_DRAW);
 
-			shader.attributePointer("aVertex", 3, GL11.GL_FLOAT, false, 32, 0);
-			shader.attributePointer("aTexCoord", 2, GL11.GL_FLOAT, false, 32, 12);
-			shader.attributePointer("aColor", 4, GL11.GL_UNSIGNED_BYTE, false, 32, 20);
+			setupAttributes(vertexBuffer.getVertexFormat());
 
 			BufferHelper.methods().glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-
-			shader.uniform1f("uHasTexture", hasTexture? 1f : 0f);
-			shader.uniform1f("uHasColor", hasColor? 1f : 0f);
-			shader.uniform1i("uDefaultTexture", 0);
 
 			ArraysHelper.methods().glBindVertexArray(0);
 			shouldRefresh = false;
@@ -103,12 +124,11 @@ public class MarkerRenderer {
 		if (shouldRefresh) createVAO();
 		ArraysHelper.methods().glBindVertexArray(vao);
 		shape.bindVBO();
-		shader.instanceAttributePointer("aPosition", 3, GL11.GL_INT, false, 0, 0);
+		shader.instanceAttributePointer("aPosition", 3, GL11.GL_FLOAT, false, 0, 0);
 		BufferHelper.methods().glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		shader.uniform3f("uColor", ((color >> 16) & 0xFF) / 255f, ((color >> 8) & 0xFF) / 255f, (color & 0xFF) / 255f);
 		shader.uniform1f("uScale", scale);
 		ArraysHelper.methods().glDrawArraysInstanced(GL11.GL_QUADS, 0, vertexCount, shape.size());
-
 		ArraysHelper.methods().glBindVertexArray(0);
 		shader.release();
 	}

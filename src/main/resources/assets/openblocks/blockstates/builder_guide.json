@@ -1,16 +1,26 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "openmods:multi-layer",
+        "model": "openmods:with-dependencies",
         "custom": {
-            "base": "openblocks:builder_guide#inner",
-            "Solid": "openblocks:builder_guide#inner",
-            "Translucent": "openblocks:builder_guide#outer"
+            "base": "openblocks:builder_guide#main",
+            "dependencies": [
+                "openblocks:guide#marker"
+            ]
         },
         "transform": "forge:default-block"
     },
     "variants": {
         "inventory": [{}],
+
+        "main": [{
+            "model": "openmods:multi-layer",
+            "custom": {
+                "base": "openblocks:builder_guide#inner",
+                "Solid": "openblocks:builder_guide#inner",
+                "Translucent": "openblocks:builder_guide#outer"
+            }
+        }],
 
         "inner": [{
             "model": "openblocks:guide_inner",
