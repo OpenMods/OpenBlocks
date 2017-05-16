@@ -477,6 +477,11 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@Override
 	public boolean shouldRenderInPass(int pass) {
-		return pass == 0;
+		return pass == 1;
+	}
+
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
 	}
 }
