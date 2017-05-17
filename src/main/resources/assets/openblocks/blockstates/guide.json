@@ -16,7 +16,7 @@
         "main": [{
             "model": "openmods:multi-layer",
             "custom": {
-                "base": "openblocks:guide#inner",
+                "base": "openblocks:guide#outer",
                 "Solid": "openblocks:guide#inner",
                 "Translucent": "openblocks:guide#outer"
             }
