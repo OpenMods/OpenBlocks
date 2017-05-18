@@ -53,10 +53,16 @@ public class BlockVacuumHopper extends OpenBlock {
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		final IExtendedBlockState oldState = (IExtendedBlockState)state;
-		final TileEntityVacuumHopper te = getTileEntity(world, pos, TileEntityVacuumHopper.class);
-		final VariantModelState selectors = VariantModelState.create(te.getOutputState());
-		return oldState.withProperty(VariantModelState.PROPERTY, selectors);
+		if (state instanceof IExtendedBlockState) {
+			final IExtendedBlockState oldState = (IExtendedBlockState)state;
+			final TileEntityVacuumHopper te = getTileEntity(world, pos, TileEntityVacuumHopper.class);
+			if (te != null) {
+				final VariantModelState selectors = VariantModelState.create(te.getOutputState());
+				return oldState.withProperty(VariantModelState.PROPERTY, selectors);
+			}
+		}
+
+		return state;
 	}
 
 	@Override
