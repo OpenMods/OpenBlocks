@@ -18,8 +18,7 @@ public class BlockLadder extends BlockTrapDoor {
 		setSoundType(SoundType.WOOD);
 	}
 
-	// TODO verify if it's still flushed
-
+	// NOTE vanilla's ladder provides similar capability, but only when bottom block is actual ladder, so this is still useful
 	@Override
 	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
 		return world.getBlockState(pos).getValue(BlockTrapDoor.OPEN);
