@@ -1,0 +1,8 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "openblocks:items/crayon_1",
+        "layer1": "openblocks:items/crayon_2",
+        "layer2": "openblocks:items/overlay_inverted_stairs"
+    }
+}

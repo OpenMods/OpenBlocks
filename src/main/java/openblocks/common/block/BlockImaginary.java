@@ -27,17 +27,17 @@ public class BlockImaginary extends OpenBlock {
 
 	private static final Material IMAGINARY = new Material(MapColor.AIR);
 
-	public static final SoundType NOISES_IN_YOUR_HEAD = new SoundType(0.5f, 1.0f,
-			Sounds.ITEM_CRAYON_PLACE,
-			Sounds.ITEM_CRAYON_PLACE,
-			Sounds.ITEM_CRAYON_PLACE,
-			Sounds.ITEM_CRAYON_PLACE,
-			Sounds.ITEM_CRAYON_PLACE);
-
 	public BlockImaginary() {
 		super(IMAGINARY);
-		setHardness(0.3f);
-		setSoundType(NOISES_IN_YOUR_HEAD);
+	}
+
+	public void setSoundType() {
+		setSoundType(new SoundType(0.5f, 1.0f,
+				Sounds.ITEM_CRAYON_PLACE,
+				Sounds.ITEM_CRAYON_PLACE,
+				Sounds.ITEM_CRAYON_PLACE,
+				Sounds.ITEM_CRAYON_PLACE,
+				Sounds.ITEM_CRAYON_PLACE));
 	}
 
 	@Override

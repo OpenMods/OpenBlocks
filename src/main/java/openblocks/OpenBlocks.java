@@ -297,7 +297,7 @@ public class OpenBlocks {
 		@RegisterBlock(id = "bigbutton", tileEntity = TileEntityBigButton.class)
 		public static BlockBigButton bigButton;
 
-		@RegisterBlock(id = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class)
+		@RegisterBlock(id = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class, customItemModels = ItemImaginary.ModelProvider.class, registerDefaultItemModel = false)
 		public static BlockImaginary imaginary;
 
 		@RegisterBlock(id = "fan", tileEntity = TileEntityFan.class)
@@ -769,6 +769,11 @@ public class OpenBlocks {
 		registerOreDictionary();
 
 		startupHelper.init();
+
+		if (Blocks.imaginary != null) {
+			// delayed to init, since sounds are not loaded in pre-init
+			Blocks.imaginary.setSoundType();
+		}
 	}
 
 	@EventHandler

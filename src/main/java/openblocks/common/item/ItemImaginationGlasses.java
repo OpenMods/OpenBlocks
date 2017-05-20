@@ -61,8 +61,6 @@ public class ItemImaginationGlasses extends ItemArmor {
 			return stack;
 		}
 
-		// TODO 1.10 glasses color
-
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean extended) {

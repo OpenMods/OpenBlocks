@@ -1,0 +1,15 @@
+{
+    "forge_marker" : 1,
+    "variants" : {
+
+        "inventory_crayon" : [{
+            "transform": "forge:default-item",
+            "model": "openblocks:crayon"
+        }],
+
+        "inventory_pencil" : [{
+            "transform": "forge:default-item",
+            "model": "openblocks:pencil"
+        }]
+    }
+}

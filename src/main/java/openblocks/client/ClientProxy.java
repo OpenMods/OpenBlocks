@@ -1,11 +1,15 @@
 package openblocks.client;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableMap;
 import java.lang.reflect.Field;
+import java.util.Map;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.Render;
@@ -68,6 +72,7 @@ import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMiniMe;
+import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
@@ -103,6 +108,13 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 	public ClientProxy() {}
 
+	private final IStateMapper EMPTY = new IStateMapper() {
+		@Override
+		public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block blockIn) {
+			return ImmutableMap.of();
+		}
+	};
+
 	@Override
 	public void preInit() {
 		new KeyInputHandler().setup();
@@ -115,6 +127,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 			Item trophyItem = Item.getItemFromBlock(OpenBlocks.Blocks.trophy);
 			for (Trophy trophy : Trophy.VALUES)
 				registerTrophyItemRenderer(trophyItem, trophy);
+		}
+
+		if (OpenBlocks.Blocks.imaginary != null) {
+			ModelLoader.setCustomStateMapper(OpenBlocks.Blocks.imaginary, EMPTY);
 		}
 	}
 
@@ -180,8 +196,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 				}
 			});
 		}
-
-		// TODO 1.8.9 Paint can item rendering
 
 		if (OpenBlocks.Items.hangGlider != null) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityHangGlider.class, new IRenderFactory<EntityHangGlider>() {
@@ -268,6 +282,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.paintCan != null) {
 			itemColors.registerItemColorHandler(new ItemPaintCan.ItemColorHandler(), OpenBlocks.Blocks.paintCan);
 			blockColors.registerBlockColorHandler(new BlockPaintCan.BlockColorHandler(), OpenBlocks.Blocks.paintCan);
+		}
+
+		if (OpenBlocks.Blocks.imaginary != null) {
+			itemColors.registerItemColorHandler(new ItemImaginary.CrayonColorHandler(), OpenBlocks.Blocks.imaginary);
 		}
 	}
 

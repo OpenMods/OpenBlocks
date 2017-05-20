@@ -1,0 +1,16 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "openblocks:items/crayon"
+    },
+    "overrides": [
+         { "predicate": { "mode": 0 }, "model": "openblocks:item/crayon_block" },
+         { "predicate": { "mode": 1 }, "model": "openblocks:item/crayon_panel" },
+         { "predicate": { "mode": 2 }, "model": "openblocks:item/crayon_half" },
+         { "predicate": { "mode": 3 }, "model": "openblocks:item/crayon_stairs" },
+         { "predicate": { "mode": 4 }, "model": "openblocks:item/crayon_inverted_block" },
+         { "predicate": { "mode": 5 }, "model": "openblocks:item/crayon_inverted_panel" },
+         { "predicate": { "mode": 6 }, "model": "openblocks:item/crayon_inverted_half" },
+         { "predicate": { "mode": 7 }, "model": "openblocks:item/crayon_inverted_stairs" }
+    ]
+}

@@ -1,9 +1,14 @@
 package openblocks.common.item;
 
 import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -14,22 +19,47 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
 import openblocks.common.tileentity.TileEntityImaginary.PanelData;
 import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 import openmods.colors.ColorMeta;
+import openmods.config.game.ICustomItemModelProvider;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
 import openmods.utils.TranslationUtils;
 
 public class ItemImaginary extends ItemOpenBlock {
+
+	@SideOnly(Side.CLIENT)
+	public static class CrayonColorHandler implements IItemColor {
+		@Override
+		public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+			if (tintIndex == 1) {
+				if (isCrayon(stack)) { return ItemUtils.getItemTag(stack).getInteger(TAG_COLOR); }
+			}
+
+			return 0xFFFFFFFF;
+		}
+	}
+
+	public static class ModelProvider implements ICustomItemModelProvider {
+		@Override
+		public void addCustomItemModels(Item item, ResourceLocation itemId, IModelRegistrationSink modelsOut) {
+			final ResourceLocation location = OpenBlocks.location("imaginary");
+			ModelLoader.setCustomModelResourceLocation(item, DAMAGE_CRAYON, new ModelResourceLocation(location, "inventory_crayon"));
+			ModelLoader.setCustomModelResourceLocation(item, DAMAGE_PENCIL, new ModelResourceLocation(location, "inventory_pencil"));
+		}
+	}
 
 	public static final float CRAFTING_COST = 1.0f;
 	public static final String TAG_COLOR = "Color";
@@ -142,6 +172,14 @@ public class ItemImaginary extends ItemOpenBlock {
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 		setMaxDamage(0);
+
+		addPropertyOverride(new ResourceLocation("mode"), new IItemPropertyGetter() {
+			@Override
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				NBTTagCompound tag = ItemUtils.getItemTag(stack);
+				return tag.getByte(TAG_MODE);
+			}
+		});
 	}
 
 	public static ItemStack setupValues(Integer color, ItemStack result) {
@@ -224,8 +262,6 @@ public class ItemImaginary extends ItemOpenBlock {
 			result.add(setupValues(color.rgb, new ItemStack(this, 1, DAMAGE_CRAYON)));
 	}
 
-	// TODO 1.10 item coloring
-
 	@Override
 	public boolean hasContainerItem(ItemStack stack) {
 		return true;
@@ -259,7 +295,7 @@ public class ItemImaginary extends ItemOpenBlock {
 				player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.mode", modeName));
 			}
 		}
-		// TODO 1.10 verify if mode change is stored
+
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 }

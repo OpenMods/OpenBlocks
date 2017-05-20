@@ -16,10 +16,10 @@ import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openmods.OpenMods;
 import openmods.api.ICustomPickItem;
-import openmods.tileentity.SimpleNetTileEntity;
+import openmods.tileentity.OpenTileEntity;
 import openmods.utils.BlockUtils;
 
-public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomPickItem {
+public class TileEntityImaginary extends OpenTileEntity implements ICustomPickItem {
 
 	public static final double PANEL_HEIGHT = 0.1;
 
@@ -227,6 +227,7 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
+
 		color = tag.hasKey("Color")? tag.getInteger("Color") : null;
 		isInverted = tag.getBoolean("IsInverted");
 		CollisionType type = CollisionType.VALUES[tag.getByte("Type")];
@@ -244,6 +245,11 @@ public class TileEntityImaginary extends SimpleNetTileEntity implements ICustomP
 		collisionData.writeToNBT(tag);
 
 		return tag;
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return writeToNBT(new NBTTagCompound());
 	}
 
 	@Override
