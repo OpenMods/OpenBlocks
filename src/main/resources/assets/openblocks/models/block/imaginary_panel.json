@@ -1,4 +1,7 @@
 {
+    "textures": {
+        "particle": "#full_panel"
+    },
     "elements": [
         {
             "from": [ 0.0, 0.0, 0.0 ],
