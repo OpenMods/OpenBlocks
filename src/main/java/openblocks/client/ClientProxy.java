@@ -128,10 +128,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 			for (Trophy trophy : Trophy.VALUES)
 				registerTrophyItemRenderer(trophyItem, trophy);
 		}
-
-		if (OpenBlocks.Blocks.imaginary != null) {
-			ModelLoader.setCustomStateMapper(OpenBlocks.Blocks.imaginary, EMPTY);
-		}
 	}
 
 	@Override

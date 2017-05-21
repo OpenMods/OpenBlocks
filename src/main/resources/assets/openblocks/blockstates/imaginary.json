@@ -10,6 +10,37 @@
         "inventory_pencil" : [{
             "transform": "forge:default-item",
             "model": "openblocks:pencil"
-        }]
+        }],
+
+        "orientation": {
+            "xp_yp" : { "y" : 0 },
+            "zp_yp": { "y" : 90 },
+            "xn_yp": { "y" : 180 },
+            "zn_yp": { "y" : 270 }
+        },
+
+        "shape": {
+            "block" : { "model": "openblocks:imaginary_block" },
+            "panel" : { "model": "openblocks:imaginary_panel" },
+            "half_panel" : { "model": "openblocks:imaginary_half" },
+            "stairs" : { "model": "openblocks:imaginary_stairs" }
+        },
+
+        "type": {
+            "pencil": {
+                "textures": {
+                    "full_panel": "openblocks:blocks/pencilPanel",
+                    "half_panel": "openblocks:blocks/pencilHalfPanel",
+                    "block": "openblocks:blocks/pencilBlock"
+                }
+            },
+            "crayon": {
+                "textures": {
+                    "full_panel": "openblocks:blocks/crayonPanel",
+                    "half_panel": "openblocks:blocks/crayonHalfPanel",
+                    "block": "openblocks:blocks/crayonBlock"
+                }
+            }
+        }
     }
 }

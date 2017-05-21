@@ -1,7 +1,8 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "openblocks:items/crayon"
+        "layer0": "openblocks:items/crayon_1",
+        "layer1": "openblocks:items/crayon_2"
     },
     "overrides": [
          { "predicate": { "mode": 0 }, "model": "openblocks:item/crayon_block" },

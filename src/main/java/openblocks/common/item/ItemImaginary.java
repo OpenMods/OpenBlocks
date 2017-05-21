@@ -28,10 +28,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.common.block.BlockImaginary;
 import openblocks.common.tileentity.TileEntityImaginary;
-import openblocks.common.tileentity.TileEntityImaginary.ICollisionData;
-import openblocks.common.tileentity.TileEntityImaginary.PanelData;
-import openblocks.common.tileentity.TileEntityImaginary.StairsData;
 import openmods.colors.ColorMeta;
 import openmods.config.game.ICustomItemModelProvider;
 import openmods.item.ItemOpenBlock;
@@ -70,72 +68,27 @@ public class ItemImaginary extends ItemOpenBlock {
 	public static final int DAMAGE_CRAYON = 1;
 
 	private enum PlacementMode {
-		BLOCK(1.0f, "block", "overlay_block", false) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				return TileEntityImaginary.DUMMY;
-			}
-		},
-		PANEL(0.5f, "panel", "overlay_panel", false) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				return new PanelData(1.0f);
-			}
-		},
-		HALF_PANEL(0.5f, "half_panel", "overlay_half", false) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				return new PanelData(0.5f);
-			}
-		},
-		STAIRS(0.75f, "stairs", "overlay_stairs", false) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				EnumFacing dir = player.getHorizontalFacing();
-				return new StairsData(0.5f, 1.0f, dir);
-			}
-		},
+		BLOCK(1.0f, "block", false, BlockImaginary.Shape.BLOCK),
+		PANEL(0.5f, "panel", false, BlockImaginary.Shape.PANEL),
+		HALF_PANEL(0.5f, "half_panel", false, BlockImaginary.Shape.HALF_PANEL),
+		STAIRS(0.75f, "stairs", false, BlockImaginary.Shape.STAIRS),
 
-		INV_BLOCK(1.5f, "inverted_block", "overlay_inverted_block", true) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				return TileEntityImaginary.DUMMY;
-			}
-		},
-		INV_PANEL(1.0f, "inverted_panel", "overlay_inverted_panel", true) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				return new PanelData(1.0f);
-			}
-		},
-		INV_HALF_PANEL(1.0f, "inverted_half_panel", "overlay_inverted_half",
-				true) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				return new PanelData(0.5f);
-			}
-		},
-		INV_STAIRS(1.25f, "inverted_stairs", "overlay_inverted_stairs", true) {
-			@Override
-			public ICollisionData createCollisionData(ItemStack stack, EntityPlayer player) {
-				EnumFacing dir = player.getHorizontalFacing();
-				return new StairsData(0.5f, 1.0f, dir);
-			}
-		};
+		INV_BLOCK(1.5f, "inverted_block", true, BlockImaginary.Shape.BLOCK),
+		INV_PANEL(1.0f, "inverted_panel", true, BlockImaginary.Shape.PANEL),
+		INV_HALF_PANEL(1.0f, "inverted_half_panel", true, BlockImaginary.Shape.HALF_PANEL),
+		INV_STAIRS(1.25f, "inverted_stairs", true, BlockImaginary.Shape.STAIRS);
 
 		public final float cost;
 		public final String name;
-		public final String overlayName;
 		public final boolean isInverted;
+		public final BlockImaginary.Shape shape;
 
-		private PlacementMode(float cost, String name, String overlayName, boolean isInverted) {
+		private PlacementMode(float cost, String name, boolean isInverted, BlockImaginary.Shape shape) {
 			this.cost = cost;
 			this.name = "openblocks.misc.mode." + name;
-			this.overlayName = "openblocks:" + overlayName;
 			this.isInverted = isInverted;
+			this.shape = shape;
 		}
-
-		public abstract ICollisionData createCollisionData(ItemStack stack, EntityPlayer player);
 
 		public static final PlacementMode[] VALUES = values();
 	}
@@ -204,8 +157,7 @@ public class ItemImaginary extends ItemOpenBlock {
 
 		NBTTagInt color = (NBTTagInt)tag.getTag(TAG_COLOR);
 		PlacementMode mode = getMode(tag);
-		ICollisionData collisions = mode.createCollisionData(stack, player);
-		world.setTileEntity(pos, new TileEntityImaginary(color == null? null : color.getInt(), mode.isInverted, collisions));
+		world.setTileEntity(pos, new TileEntityImaginary(color == null? null : color.getInt(), mode.isInverted, mode.shape));
 
 		if (!player.capabilities.isCreativeMode) {
 			float uses = Math.max(getUses(tag) - mode.cost, 0);

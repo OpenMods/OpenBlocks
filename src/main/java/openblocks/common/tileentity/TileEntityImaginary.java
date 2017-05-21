@@ -1,27 +1,24 @@
 package openblocks.common.tileentity;
 
 import com.google.common.base.Preconditions;
-import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.common.block.BlockImaginary;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openmods.OpenMods;
 import openmods.api.ICustomPickItem;
 import openmods.tileentity.OpenTileEntity;
-import openmods.utils.BlockUtils;
 
 public class TileEntityImaginary extends OpenTileEntity implements ICustomPickItem {
-
-	public static final double PANEL_HEIGHT = 0.1;
 
 	public enum Property {
 		VISIBLE,
@@ -29,227 +26,105 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 		SOLID
 	}
 
-	private enum CollisionType {
+	public enum LegacyCollisionData {
 		BLOCK {
 			@Override
-			public ICollisionData createData() {
-				return DUMMY;
+			public BlockImaginary.Shape readFromNBT(NBTTagCompound tag) {
+				return BlockImaginary.Shape.BLOCK;
 			}
 		},
 		PANEL {
+
 			@Override
-			public ICollisionData createData() {
-				return new PanelData();
+			public BlockImaginary.Shape readFromNBT(NBTTagCompound tag) {
+				final float height = tag.getFloat("PanelHeight");
+				return (height < 0.75)? BlockImaginary.Shape.HALF_PANEL : BlockImaginary.Shape.PANEL;
 			}
+
 		},
 		STAIRS {
 			@Override
-			public ICollisionData createData() {
-				return new StairsData();
+			public BlockImaginary.Shape readFromNBT(NBTTagCompound tag) {
+				return BlockImaginary.Shape.STAIRS;
 			}
+
 		};
 
-		public abstract ICollisionData createData();
+		public static final LegacyCollisionData[] VALUES = values();
 
-		public final static CollisionType[] VALUES = values();
+		public abstract BlockImaginary.Shape readFromNBT(NBTTagCompound tag);
 	}
 
-	public interface ICollisionData {
-		public CollisionType getType();
-
-		public void readFromNBT(NBTTagCompound tag);
-
-		public void writeToNBT(NBTTagCompound tag);
-
-		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result);
-
-		public AxisAlignedBB getBlockBounds();
-	}
-
-	public final static ICollisionData DUMMY = new ICollisionData() {
-
-		@Override
-		public void readFromNBT(NBTTagCompound tag) {}
-
-		@Override
-		public void writeToNBT(NBTTagCompound tag) {}
-
-		@Override
-		public CollisionType getType() {
-			return CollisionType.BLOCK;
-		}
-
-		@Override
-		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = BlockUtils.singleBlock(pos);
-			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
-		}
-
-		@Override
-		public AxisAlignedBB getBlockBounds() {
-			return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-		}
-	};
-
-	public static class PanelData implements ICollisionData {
-		public float height;
-
-		public PanelData() {}
-
-		public PanelData(float height) {
-			this.height = height;
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound tag) {
-			height = tag.getFloat("PanelHeight");
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound tag) {
-			tag.setFloat("PanelHeight", height);
-		}
-
-		@Override
-		public CollisionType getType() {
-			return CollisionType.PANEL;
-		}
-
-		@Override
-		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			AxisAlignedBB aabb = BlockUtils.aabbOffset(pos, 0, height - PANEL_HEIGHT, 0, 1, height, 1);
-			if (aabb != null && aabb.intersectsWith(region)) result.add(aabb);
-		}
-
-		@Override
-		public AxisAlignedBB getBlockBounds() {
-			return new AxisAlignedBB(0, height - PANEL_HEIGHT, 0, 1, height, 1);
-		}
-	}
-
-	public static class StairsData implements ICollisionData {
-		public float lowerPanelHeight;
-		public float upperPanelHeight;
-		public EnumFacing orientation;
-
-		public StairsData() {}
-
-		public StairsData(float lowerPanelHeight, float upperPanelHeight, EnumFacing orientation) {
-			this.lowerPanelHeight = lowerPanelHeight;
-			this.upperPanelHeight = upperPanelHeight;
-			this.orientation = orientation;
-		}
-
-		@Override
-		public void readFromNBT(NBTTagCompound tag) {
-			lowerPanelHeight = tag.getFloat("LowerPanelHeight");
-			upperPanelHeight = tag.getFloat("UpperPanelHeight");
-			orientation = EnumFacing.VALUES[tag.getByte("Orientation")];
-		}
-
-		@Override
-		public void writeToNBT(NBTTagCompound tag) {
-			tag.setFloat("LowerPanelHeight", lowerPanelHeight);
-			tag.setFloat("UpperPanelHeight", upperPanelHeight);
-			tag.setByte("Orientation", (byte)orientation.ordinal());
-		}
-
-		@Override
-		public CollisionType getType() {
-			return CollisionType.STAIRS;
-		}
-
-		@Override
-		public void addCollisions(BlockPos pos, AxisAlignedBB region, List<AxisAlignedBB> result) {
-			final int x = pos.getX();
-			final int y = pos.getY();
-			final int z = pos.getZ();
-
-			AxisAlignedBB lower;
-			AxisAlignedBB upper;
-
-			final double lowerTop = y + lowerPanelHeight;
-			final double lowerBottom = lowerTop - PANEL_HEIGHT;
-
-			final double upperTop = y + upperPanelHeight;
-			final double upperBottom = upperTop - PANEL_HEIGHT;
-
-			switch (orientation) {
-				case NORTH:
-					lower = new AxisAlignedBB(x, lowerBottom, z + 0.5, x + 1, lowerTop, z + 1.0);
-					upper = new AxisAlignedBB(x, upperBottom, z + 0.0, x + 1, upperTop, z + 0.5);
-					break;
-				case SOUTH:
-					lower = new AxisAlignedBB(x, lowerBottom, z + 0.0, x + 1, lowerTop, z + 0.5);
-					upper = new AxisAlignedBB(x, upperBottom, z + 0.5, x + 1, upperTop, z + 1.0);
-					break;
-				case WEST:
-					lower = new AxisAlignedBB(x + 0.5, lowerBottom, z, x + 1.0, lowerTop, z + 1);
-					upper = new AxisAlignedBB(x + 0.0, upperBottom, z, x + 0.5, upperTop, z + 1);
-					break;
-				case EAST:
-					lower = new AxisAlignedBB(x + 0.0, lowerBottom, z, x + 0.5, lowerTop, z + 1);
-					upper = new AxisAlignedBB(x + 0.5, upperBottom, z, x + 1.0, upperTop, z + 1);
-					break;
-				default:
-					lower = upper = null;
-					break;
-			}
-
-			if (lower != null && lower.intersectsWith(region)) result.add(lower);
-			if (upper != null && upper.intersectsWith(region)) result.add(upper);
-		}
-
-		@Override
-		public AxisAlignedBB getBlockBounds() {
-			return new AxisAlignedBB(0, lowerPanelHeight, 0, 1, upperPanelHeight, 1);
-		}
+	public interface ILegacyCollisionData {
+		public BlockImaginary.Shape readFromNBT(NBTTagCompound tag);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public float visibility;
 
 	public TileEntityImaginary() {
-		collisionData = DUMMY;
+		shape = BlockImaginary.Shape.BLOCK;
 	}
 
-	public TileEntityImaginary(Integer color, boolean isInverted, ICollisionData collisionData) {
-		Preconditions.checkNotNull(collisionData, "Bad idea! Rejected!");
+	public TileEntityImaginary(Integer color, boolean isInverted, BlockImaginary.Shape shape) {
+		Preconditions.checkNotNull(shape, "Bad idea! Rejected!");
 		this.color = color;
 		this.isInverted = isInverted;
-		this.collisionData = collisionData;
+		this.shape = shape;
 	}
 
 	public Integer color;
 	public boolean isInverted;
-	public ICollisionData collisionData;
+	private BlockImaginary.Shape shape;
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-
-		color = tag.hasKey("Color")? tag.getInteger("Color") : null;
-		isInverted = tag.getBoolean("IsInverted");
-		CollisionType type = CollisionType.VALUES[tag.getByte("Type")];
-		collisionData = type.createData();
-		collisionData.readFromNBT(tag);
+		readShapeData(tag);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		tag = super.writeToNBT(tag);
 
+		writeShapeData(tag);
+
+		return tag;
+	}
+
+	private void readShapeData(NBTTagCompound tag) {
+		color = tag.hasKey("Color")? tag.getInteger("Color") : null;
+		isInverted = tag.getBoolean("IsInverted");
+
+		if (tag.hasKey("Type", Constants.NBT.TAG_BYTE)) {
+			LegacyCollisionData data = LegacyCollisionData.VALUES[tag.getByte("Type")];
+			shape = data.readFromNBT(tag);
+		} else {
+			byte shapeId = tag.getByte("Shape");
+			shape = BlockImaginary.Shape.VALUES[shapeId];
+		}
+	}
+
+	private NBTTagCompound writeShapeData(NBTTagCompound tag) {
 		if (color != null) tag.setInteger("Color", color);
 		tag.setBoolean("IsInverted", isInverted);
-		tag.setByte("Type", (byte)collisionData.getType().ordinal());
-		collisionData.writeToNBT(tag);
-
+		tag.setByte("Shape", (byte)shape.ordinal());
 		return tag;
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		return writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(getPos(), 42, writeShapeData(new NBTTagCompound()));
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		readShapeData(pkt.getNbtCompound());
 	}
 
 	@Override
@@ -288,21 +163,22 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 		return player != null && is(what, player);
 	}
 
-	public void addCollisions(AxisAlignedBB region, List<AxisAlignedBB> result) {
-		collisionData.addCollisions(pos, region, result);
-	}
-
-	public AxisAlignedBB getSelectionBox() {
-		return BlockUtils.aabbOffset(pos, collisionData.getBlockBounds());
-	}
-
-	public AxisAlignedBB getBlockBounds() {
-		return collisionData.getBlockBounds();
-	}
-
 	@Override
 	public ItemStack getPickBlock(EntityPlayer player) {
 		int dmg = isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
 		return ItemImaginary.setupValues(color, new ItemStack(getBlockType(), 1, dmg));
+	}
+
+	public BlockImaginary.Shape getShape() {
+		return shape;
+	}
+
+	public BlockImaginary.Type getType() {
+		return isPencil()? BlockImaginary.Type.PENCIL : BlockImaginary.Type.CRAYON;
+	}
+
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
 	}
 }
