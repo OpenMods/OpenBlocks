@@ -198,7 +198,7 @@ public class PlayerDeathHandler {
 				}
 			});
 
-			Log.info("Grave for (%s,%s) was spawned at (%s)", stiffId.getId(), stiffId.getName(), playerPos);
+			Log.info("Grave for (%s,%s) was spawned at (%s) (player died at (%s))", stiffId.getId(), stiffId.getName(), gravePos, playerPos);
 
 			grave.setUsername(gravestoneText);
 			grave.setLoot(loot);
