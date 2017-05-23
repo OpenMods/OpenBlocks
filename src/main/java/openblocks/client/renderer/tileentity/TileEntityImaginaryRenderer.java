@@ -1,10 +1,15 @@
 package openblocks.client.renderer.tileentity;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -17,9 +22,10 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
@@ -27,6 +33,210 @@ import openblocks.common.tileentity.TileEntityImaginary.Property;
 public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileEntityImaginary> {
 
 	private static BlockRendererDispatcher blockRenderer;
+
+	private static final int BYTES_PER_INT = 4;
+	private static final int VERTICES_PER_QUAD = 4;
+
+	private static class RenderInfo {
+		public final double x;
+		public final double y;
+		public final double z;
+
+		public final float r;
+		public final float g;
+		public final float b;
+		public final float a;
+
+		public RenderInfo(double x, double y, double z, float r, float g, float b, float a) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			this.r = r;
+			this.g = g;
+			this.b = b;
+			this.a = a;
+		}
+
+	}
+
+	private interface IVertexElementWriter {
+		public void write(ByteBuffer output, RenderInfo info);
+	}
+
+	private static class VertexWriter {
+		private final IVertexElementWriter[] writers;
+
+		public VertexWriter(IVertexElementWriter[] writers) {
+			this.writers = writers;
+		}
+
+		public void write(VertexBuffer buffer, RenderInfo info) {
+			final ByteBuffer outputBuffer = buffer.getByteBuffer();
+			for (IVertexElementWriter writer : writers)
+				writer.write(outputBuffer, info);
+
+			buffer.endVertex();
+		}
+	}
+
+	private static Map<VertexFormatElement, Integer> createElementOffsetMap(VertexFormat format) {
+		ImmutableMap.Builder<VertexFormatElement, Integer> builder = ImmutableMap.builder();
+
+		for (int i = 0; i < format.getElementCount(); i++) {
+			VertexFormatElement vfe = format.getElement(i);
+			builder.put(vfe, format.getOffset(i));
+		}
+
+		return builder.build();
+	}
+
+	private static void convertQuad(BakedQuad quad, List<VertexWriter> output) {
+		final VertexFormat inputFormat = quad.getFormat();
+		final Map<VertexFormatElement, Integer> inputFormatMap = createElementOffsetMap(inputFormat);
+
+		final int[] vertexData = quad.getVertexData();
+		ByteBuffer inputBuffer = ByteBuffer.allocate(vertexData.length * BYTES_PER_INT);
+		inputBuffer.asIntBuffer().put(vertexData);
+		inputBuffer.clear();
+
+		final Integer positionOffset = inputFormatMap.get(DefaultVertexFormats.POSITION_3F);
+		if (positionOffset == null) throw new AssertionError("Invalid format: " + inputFormat);
+
+		final Integer colorOffset = inputFormatMap.get(DefaultVertexFormats.COLOR_4UB);
+
+		final Integer textureOffset = inputFormatMap.get(DefaultVertexFormats.TEX_2F);
+		if (textureOffset == null) throw new AssertionError("Invalid format: " + inputFormat);
+
+		final int vertexSize = inputFormat.getIntegerSize() * BYTES_PER_INT;
+		int vertexOffset = 0;
+		for (int i = 0; i < VERTICES_PER_QUAD; i++) {
+
+			IVertexElementWriter[] vertexWriters = new IVertexElementWriter[4];
+			// BLOCK.addElement(POSITION_3F);
+			vertexWriters[0] = createPositionWriter(inputBuffer, vertexOffset + positionOffset);
+
+			// BLOCK.addElement(COLOR_4UB);
+			vertexWriters[1] = colorOffset != null
+					? createColorWriter(inputBuffer, vertexOffset + colorOffset)
+					: FIXED_COLOR_WRITER;
+
+			// BLOCK.addElement(TEX_2F);
+			vertexWriters[2] = createTextureWriter(inputBuffer, vertexOffset + textureOffset);
+
+			// BLOCK.addElement(TEX_2S);
+			vertexWriters[3] = FIXED_BRIGHTNESS_WRITER;
+
+			output.add(new VertexWriter(vertexWriters));
+
+			vertexOffset += vertexSize;
+		}
+	}
+
+	private static IVertexElementWriter createPositionWriter(ByteBuffer inputBuffer, int position) {
+		inputBuffer.position(position);
+
+		final float x = inputBuffer.getFloat();
+		final float y = inputBuffer.getFloat();
+		final float z = inputBuffer.getFloat();
+
+		return new IVertexElementWriter() {
+			@Override
+			public void write(ByteBuffer output, RenderInfo info) {
+				output.putFloat((float)(x + info.x));
+				output.putFloat((float)(y + info.y));
+				output.putFloat((float)(z + info.z));
+			}
+		};
+	}
+
+	private static IVertexElementWriter createColorWriter(ByteBuffer inputBuffer, int position) {
+		inputBuffer.position(position);
+
+		final float inputA = inputBuffer.get() & 0xFF;
+		final float inputB = inputBuffer.get() & 0xFF;
+		final float inputG = inputBuffer.get() & 0xFF;
+		final float inputR = inputBuffer.get() & 0xFF;
+
+		return new IVertexElementWriter() {
+			@Override
+			public void write(ByteBuffer output, RenderInfo info) {
+				final int alpha = Math.min(0xFF, (int)(inputA * info.a));
+				final int red = Math.min(0xFF, (int)(inputR * info.r));
+				final int green = Math.min(0xFF, (int)(inputG * info.g));
+				final int blue = Math.min(0xFF, (int)(inputB * info.b));
+
+				output.put((byte)red);
+				output.put((byte)green);
+				output.put((byte)blue);
+				output.put((byte)alpha);
+			}
+		};
+	}
+
+	private static IVertexElementWriter createTextureWriter(ByteBuffer inputBuffer, int position) {
+		inputBuffer.position(position);
+
+		final float u = inputBuffer.getFloat();
+		final float v = inputBuffer.getFloat();
+
+		return new IVertexElementWriter() {
+			@Override
+			public void write(ByteBuffer output, RenderInfo info) {
+				output.putFloat(u);
+				output.putFloat(v);
+			}
+		};
+	}
+
+	private static final IVertexElementWriter FIXED_COLOR_WRITER = new IVertexElementWriter() {
+		@Override
+		public void write(ByteBuffer output, RenderInfo info) {
+			output.put((byte)Math.min(0xFF, 0xFF * info.a));
+			output.put((byte)Math.min(0xFF, 0xFF * info.b));
+			output.put((byte)Math.min(0xFF, 0xFF * info.g));
+			output.put((byte)Math.min(0xFF, 0xFF * info.r));
+		}
+	};
+
+	private static final IVertexElementWriter FIXED_BRIGHTNESS_WRITER = new IVertexElementWriter() {
+		@Override
+		public void write(ByteBuffer output, RenderInfo info) {
+			// maximum brightness, because imagination!
+			output.putInt(0x00F000F0);
+		}
+	};
+
+	private static void addQuads(List<BakedQuad> quads, List<VertexWriter> output) {
+		for (BakedQuad quad : quads) {
+			convertQuad(quad, output);
+		}
+	}
+
+	private static final LoadingCache<IBlockState, List<VertexWriter>> MODEL_CACHE = CacheBuilder.newBuilder()
+			.expireAfterAccess(1, TimeUnit.SECONDS)
+			.build(new CacheLoader<IBlockState, List<VertexWriter>>() {
+				@Override
+				public List<VertexWriter> load(IBlockState state) throws Exception {
+					if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
+					IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
+
+					final List<VertexWriter> vertexWriters = Lists.newArrayList();
+
+					for (EnumFacing side : EnumFacing.VALUES)
+						addQuads(model.getQuads(state, side, 0), vertexWriters);
+
+					addQuads(model.getQuads(state, null, 0), vertexWriters);
+
+					return ImmutableList.copyOf(vertexWriters);
+				}
+			});
+
+	public static class CacheFlushListener {
+		@SubscribeEvent
+		public void onModelBake(ModelBakeEvent evt) {
+			MODEL_CACHE.invalidateAll();
+		}
+	}
 
 	@Override
 	public void renderTileEntityFast(TileEntityImaginary te, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
@@ -38,14 +248,6 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileE
 		else if (!isVisible && te.visibility > 0) te.visibility = Math.max(te.visibility - Config.imaginaryFadingSpeed, 0);
 
 		if (te.visibility <= 0) return;
-
-		BlockPos pos = te.getPos();
-		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
-		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
-		long rand = MathHelper.getPositionRandom(pos);
-
-		if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
-		IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(state);
 
 		final float r;
 		final float g;
@@ -63,177 +265,15 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileE
 		}
 
 		final float a = te.visibility;
+		final RenderInfo info = new RenderInfo(x, y, z, r, g, b, a);
 
-		for (EnumFacing side : EnumFacing.VALUES)
-			addQuads(model.getQuads(state, side, rand), x, y, z, r, g, b, a, buffer);
+		BlockPos pos = te.getPos();
+		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
+		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
 
-		addQuads(model.getQuads(state, null, rand), x, y, z, r, g, b, a, buffer);
-	}
-
-	private static void addQuads(List<BakedQuad> quads, double x, double y, double z, float r, float g, float b, float a, VertexBuffer buffer) {
-		for (BakedQuad quad : quads) {
-			buffer.addVertexData(repackQuad(quad, x, y, z, r, g, b, a));
-		}
-	}
-
-	private static final Map<VertexFormatElement, Integer> blockFormatOffsets = createElementOffsetMap(DefaultVertexFormats.BLOCK);
-
-	private static Map<VertexFormatElement, Integer> createElementOffsetMap(VertexFormat format) {
-		ImmutableMap.Builder<VertexFormatElement, Integer> builder = ImmutableMap.builder();
-
-		for (int i = 0; i < format.getElementCount(); i++) {
-			VertexFormatElement vfe = format.getElement(i);
-			builder.put(vfe, format.getOffset(i));
-		}
-
-		return builder.build();
-	}
-
-	private static final int BYTES_PER_INT = 4;
-	private static final int VERTICES_PER_QUAD = 4;
-
-	private static int[] repackQuad(BakedQuad quad, double offsetX, double offsetY, double offsetZ, float r, float g, float b, float a) {
-		int[] inputData = quad.getVertexData();
-
-		final VertexFormat inputFormat = quad.getFormat();
-		if (inputFormat.equals(DefaultVertexFormats.BLOCK)) return inputData;
-
-		ByteBuffer inputBuffer = ByteBuffer.allocate(inputData.length * BYTES_PER_INT);
-		inputBuffer.asIntBuffer().put(inputData);
-		inputBuffer.flip();
-
-		int outputSize = DefaultVertexFormats.BLOCK.getIntegerSize() * VERTICES_PER_QUAD * BYTES_PER_INT;
-		ByteBuffer outputBuffer = ByteBuffer.allocate(outputSize);
-		outputBuffer.limit(outputSize);
-
-		final int outputVertexDelta = DefaultVertexFormats.BLOCK.getIntegerSize() * BYTES_PER_INT;
-		final int inputVertexDelta = inputFormat.getIntegerSize() * BYTES_PER_INT;
-
-		for (int elementIndex = 0; elementIndex < inputFormat.getElementCount(); elementIndex++) {
-			VertexFormatElement vfe = inputFormat.getElement(elementIndex);
-
-			Integer blockElementOffset = blockFormatOffsets.get(vfe);
-			if (blockElementOffset != null) {
-				int inputOffset = inputFormat.getOffset(elementIndex);
-
-				if (vfe.equals(DefaultVertexFormats.COLOR_4UB)) {
-					copyColor(r, g, b, a, inputBuffer, inputOffset, inputVertexDelta, outputBuffer, blockElementOffset, outputVertexDelta);
-				} else if (vfe.equals(DefaultVertexFormats.POSITION_3F)) {
-					copyPosition(offsetX, offsetY, offsetZ, inputBuffer, inputOffset, inputVertexDelta, outputBuffer, blockElementOffset, outputVertexDelta);
-				} else {
-					copyElement(vfe, inputBuffer, inputOffset, inputVertexDelta, outputBuffer, blockElementOffset, outputVertexDelta);
-				}
-			}
-		}
-
-		fixBrightness(outputBuffer, outputVertexDelta);
-
-		outputBuffer.limit(outputSize);
-		outputBuffer.position(0);
-
-		int[] output = new int[DefaultVertexFormats.BLOCK.getIntegerSize() * VERTICES_PER_QUAD];
-		outputBuffer.asIntBuffer().get(output);
-
-		return output;
-	}
-
-	private static void fixBrightness(ByteBuffer outputBuffer, final int outputVertexDelta) {
-		final int brightnessOffset = DefaultVertexFormats.BLOCK.getUvOffsetById(1);
-		int outputQuadOffset = 0;
-		for (int quadIndex = 0; quadIndex < VERTICES_PER_QUAD; quadIndex++) {
-			final int outputStart = outputQuadOffset + brightnessOffset;
-			outputBuffer.limit(outputStart + DefaultVertexFormats.TEX_2S.getSize());
-			outputBuffer.position(outputStart);
-
-			// maximum brightness, because imagination!
-			outputBuffer.putInt(0x00F000F0);
-
-			outputQuadOffset += outputVertexDelta;
-		}
-	}
-
-	private static void copyPosition(double offsetX, double offsetY, double offsetZ, ByteBuffer inputBuffer, int inputOffset, int inputVertexDelta, ByteBuffer outputBuffer, int outputOffset, int outputVertexDelta) {
-		final int elementSize = DefaultVertexFormats.POSITION_3F.getSize();
-		int outputQuadOffset = 0;
-		int inputQuadOffset = 0;
-		for (int quadIndex = 0; quadIndex < VERTICES_PER_QUAD; quadIndex++) {
-			final int inputStart = inputQuadOffset + inputOffset;
-
-			inputBuffer.limit(inputStart + elementSize);
-			inputBuffer.position(inputStart);
-
-			final FloatBuffer inputFloatBuffer = inputBuffer.asFloatBuffer();
-			float x = inputFloatBuffer.get();
-			float y = inputFloatBuffer.get();
-			float z = inputFloatBuffer.get();
-
-			final int outputStart = outputQuadOffset + outputOffset;
-			outputBuffer.limit(outputStart + elementSize);
-			outputBuffer.position(outputStart);
-
-			final FloatBuffer outputFloatBuffer = outputBuffer.asFloatBuffer();
-			outputFloatBuffer.put((float)(x + offsetX));
-			outputFloatBuffer.put((float)(y + offsetY));
-			outputFloatBuffer.put((float)(z + offsetZ));
-
-			outputQuadOffset += outputVertexDelta;
-			inputQuadOffset += inputVertexDelta;
-		}
-	}
-
-	private static void copyColor(float r, float g, float b, float a, ByteBuffer inputBuffer, int inputOffset, int inputVertexDelta, ByteBuffer outputBuffer, int outputOffset, int outputVertexDelta) {
-		final int elementSize = DefaultVertexFormats.COLOR_4UB.getSize();
-		int outputQuadOffset = 0;
-		int inputQuadOffset = 0;
-		for (int quadIndex = 0; quadIndex < VERTICES_PER_QUAD; quadIndex++) {
-			final int inputStart = inputQuadOffset + inputOffset;
-
-			inputBuffer.limit(inputStart + elementSize);
-			inputBuffer.position(inputStart);
-
-			float inputA = inputBuffer.get() & 0xFF;
-			float inputB = inputBuffer.get() & 0xFF;
-			float inputG = inputBuffer.get() & 0xFF;
-			float inputR = inputBuffer.get() & 0xFF;
-
-			final int outputStart = outputQuadOffset + outputOffset;
-			outputBuffer.limit(outputStart + elementSize);
-			outputBuffer.position(outputStart);
-
-			outputBuffer.put((byte)Math.min(0xFF, a * inputA));
-			outputBuffer.put((byte)Math.min(0xFF, b * inputB));
-			outputBuffer.put((byte)Math.min(0xFF, g * inputG));
-			outputBuffer.put((byte)Math.min(0xFF, r * inputR));
-
-			// outputBuffer.put((byte)0);
-			// outputBuffer.put((byte)0);
-			// outputBuffer.put((byte)0);
-
-			outputQuadOffset += outputVertexDelta;
-			inputQuadOffset += inputVertexDelta;
-		}
-
-	}
-
-	private static void copyElement(VertexFormatElement element, ByteBuffer inputBuffer, int inputOffset, int inputVertexDelta, ByteBuffer outputBuffer, int outputOffset, int outputVertexDelta) {
-		final int elementSize = element.getSize();
-		int outputQuadOffset = 0;
-		int inputQuadOffset = 0;
-
-		for (int quadIndex = 0; quadIndex < VERTICES_PER_QUAD; quadIndex++) {
-			final int inputStart = inputQuadOffset + inputOffset;
-			inputBuffer.limit(inputStart + elementSize);
-			inputBuffer.position(inputStart);
-
-			final int outputStart = outputQuadOffset + outputOffset;
-			outputBuffer.limit(outputStart + elementSize);
-			outputBuffer.position(outputStart);
-
-			outputBuffer.put(inputBuffer);
-
-			outputQuadOffset += outputVertexDelta;
-			inputQuadOffset += inputVertexDelta;
-		}
+		final List<VertexWriter> vertexWriters = MODEL_CACHE.getUnchecked(state);
+		for (VertexWriter writer : vertexWriters)
+			writer.write(buffer, info);
 	}
 
 }

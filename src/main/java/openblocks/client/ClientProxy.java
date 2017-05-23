@@ -282,6 +282,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.imaginary != null) {
 			itemColors.registerItemColorHandler(new ItemImaginary.CrayonColorHandler(), OpenBlocks.Blocks.imaginary);
+			MinecraftForge.EVENT_BUS.register(new TileEntityImaginaryRenderer.CacheFlushListener());
 		}
 	}
 
