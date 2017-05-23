@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "dummy": { "model": "openblocks:tesr_empty" }
+    }
+}

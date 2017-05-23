@@ -1,8 +1,6 @@
 package openblocks.client;
 
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
-import java.lang.reflect.Field;
 import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -16,7 +14,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -98,7 +95,7 @@ import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openblocks.common.tileentity.TileEntityXPShower;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
-import openmods.config.game.RegisterBlock;
+import openmods.block.OpenBlock;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import openmods.renderer.SimpleModelTileEntityRenderer;
@@ -107,13 +104,6 @@ import openmods.utils.render.MarkerClassGenerator;
 public class ClientProxy implements IOpenBlocksProxy {
 
 	public ClientProxy() {}
-
-	private final IStateMapper EMPTY = new IStateMapper() {
-		@Override
-		public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block blockIn) {
-			return ImmutableMap.of();
-		}
-	};
 
 	@Override
 	public void preInit() {
@@ -128,6 +118,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 			for (Trophy trophy : Trophy.VALUES)
 				registerTrophyItemRenderer(trophyItem, trophy);
 		}
+
+		tempHackRegisterTesrStateMappers();
 	}
 
 	@Override
@@ -296,23 +288,58 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(OpenBlocks.location("trophy"), "inventory"));
 	}
 
+	private interface BlockConsumer {
+		public void nom(OpenBlock block);
+	}
+
+	// TODO kill it with fire!
+	// most of those blocks don't require TESR, but have complex models, that now can be done in data
+	private static void visitTempHackTesrBlocks(BlockConsumer consumer) {
+		consumer.nom(OpenBlocks.Blocks.autoAnvil);
+		consumer.nom(OpenBlocks.Blocks.bearTrap);
+		consumer.nom(OpenBlocks.Blocks.cannon);
+		consumer.nom(OpenBlocks.Blocks.donationStation);
+		consumer.nom(OpenBlocks.Blocks.fan);
+		consumer.nom(OpenBlocks.Blocks.flag);
+		consumer.nom(OpenBlocks.Blocks.goldenEgg);
+		consumer.nom(OpenBlocks.Blocks.grave);
+		consumer.nom(OpenBlocks.Blocks.paintMixer);
+		consumer.nom(OpenBlocks.Blocks.sprinkler);
+		consumer.nom(OpenBlocks.Blocks.target);
+		consumer.nom(OpenBlocks.Blocks.villageHighlighter);
+		consumer.nom(OpenBlocks.Blocks.xpShower);
+	}
+
 	@SuppressWarnings("deprecation")
 	private static void tempHackRegisterTesrItemRenderers() {
-		// TODO kill it with fire!
-		for (Field f : OpenBlocks.Blocks.class.getFields()) {
-			RegisterBlock ann = f.getAnnotation(RegisterBlock.class);
-			if (ann.tileEntity() != null) {
-				try {
-					Block block = (Block)f.get(null);
-					if (block.getDefaultState().getRenderType() == EnumBlockRenderType.ENTITYBLOCK_ANIMATED) {
-						Item item = Item.getItemFromBlock(block);
-						ForgeHooksClient.registerTESRItemStack(item, 0, ann.tileEntity());
-					}
-				} catch (Exception e) {
-					throw Throwables.propagate(e);
-				}
+		visitTempHackTesrBlocks(new BlockConsumer() {
+			@Override
+			public void nom(OpenBlock block) {
+				Item item = Item.getItemFromBlock(block);
+				ForgeHooksClient.registerTESRItemStack(item, 0, block.getTileClass());
 			}
-		}
+		});
+	}
+
+	private static void tempHackRegisterTesrStateMappers() {
+		// TODO differentiate models to get proper particles
+		final ModelResourceLocation location = new ModelResourceLocation(OpenBlocks.location("temp"), "dummy");
+		visitTempHackTesrBlocks(new BlockConsumer() {
+			@Override
+			public void nom(OpenBlock block) {
+				ImmutableMap.Builder<IBlockState, ModelResourceLocation> statesBuilder = ImmutableMap.builder();
+				for (IBlockState state : block.getBlockState().getValidStates())
+					statesBuilder.put(state, location);
+
+				final Map<IBlockState, ModelResourceLocation> states = statesBuilder.build();
+				ModelLoader.setCustomStateMapper(block, new IStateMapper() {
+					@Override
+					public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block blockIn) {
+						return states;
+					}
+				});
+			}
+		});
 	}
 
 	@Override
