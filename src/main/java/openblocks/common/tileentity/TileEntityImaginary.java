@@ -141,6 +141,7 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 	}
 
 	public boolean is(Property what, EntityPlayer player) {
+		if (what == Property.VISIBLE && player.isSpectator()) return true;
 		if (what == Property.SOLID && isPencil()) return true;
 
 		ItemStack helmet = player.inventory.armorItemInSlot(3);
