@@ -465,12 +465,12 @@ public class Config {
 
 		if (OpenBlocks.Blocks.imaginary != null) {
 			{
-				ItemStack pencil = ItemImaginary.setupValues(null, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_PENCIL));
+				ItemStack pencil = ItemImaginary.setupValues(new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_PENCIL), null);
 				recipeList.add(new ShapelessOreRecipe(pencil, Items.COAL, "stickWood", Items.ENDER_EYE, "slimeball"));
 			}
 
 			for (ColorMeta color : ColorMeta.getAllColors()) {
-				ItemStack crayon = ItemImaginary.setupValues(color.rgb, new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON));
+				ItemStack crayon = ItemImaginary.setupValues(new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON), color.rgb);
 				recipeList.add(new ShapelessOreRecipe(crayon, color.oreName, Items.PAPER, Items.ENDER_EYE, "slimeball"));
 			}
 
@@ -592,14 +592,14 @@ public class Config {
 		if (OpenBlocks.Blocks.imaginary != null) {
 			if (OpenBlocks.Items.pencilGlasses != null) {
 				ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_PENCIL);
-				ItemImaginary.setupValues(null, block);
+				ItemImaginary.setupValues(block, null);
 				recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.pencilGlasses, block, Items.PAPER));
 			}
 
 			if (OpenBlocks.Items.crayonGlasses != null) {
 				recipeList.add(new CrayonGlassesRecipe());
 				// must be after pencil
-				RecipeSorter.register("openblocks:crayon_glasses", CrayonGlassesRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+				RecipeSorter.register("openblocks:crayon_glasses", CrayonGlassesRecipe.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
 			}
 
 			if (technicolorGlassesLoot && OpenBlocks.Items.technicolorGlasses != null) {

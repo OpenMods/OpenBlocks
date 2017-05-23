@@ -1,5 +1,8 @@
 package openblocks.common.item;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
@@ -67,7 +70,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	public static final int DAMAGE_PENCIL = 0;
 	public static final int DAMAGE_CRAYON = 1;
 
-	private enum PlacementMode {
+	public enum PlacementMode {
 		BLOCK(1.0f, "block", false, BlockImaginary.Shape.BLOCK),
 		PANEL(0.5f, "panel", false, BlockImaginary.Shape.PANEL),
 		HALF_PANEL(0.5f, "half_panel", false, BlockImaginary.Shape.HALF_PANEL),
@@ -91,6 +94,16 @@ public class ItemImaginary extends ItemOpenBlock {
 		}
 
 		public static final PlacementMode[] VALUES = values();
+	}
+
+	private static final Table<BlockImaginary.Shape, Boolean, PlacementMode> shapeToMode;
+
+	static {
+		ImmutableTable.Builder<BlockImaginary.Shape, Boolean, PlacementMode> shapeToModeBuilder = ImmutableTable.builder();
+		for (PlacementMode mode : PlacementMode.VALUES)
+			shapeToModeBuilder.put(mode.shape, mode.isInverted, mode);
+
+		shapeToMode = shapeToModeBuilder.build();
 	}
 
 	public static float getUses(NBTTagCompound tag) {
@@ -135,11 +148,23 @@ public class ItemImaginary extends ItemOpenBlock {
 		});
 	}
 
-	public static ItemStack setupValues(Integer color, ItemStack result) {
-		return setupValues(color, result, Config.imaginaryItemUseCount);
+	public static ItemStack setupValues(ItemStack result, Integer color, BlockImaginary.Shape shape, boolean isInverted) {
+		return setupValues(result, color, shape, isInverted, Config.imaginaryItemUseCount);
 	}
 
-	public static ItemStack setupValues(Integer color, ItemStack result, float uses) {
+	public static ItemStack setupValues(ItemStack result, Integer color, BlockImaginary.Shape shape, boolean isInverted, float uses) {
+		return setupValues(result, color, Objects.firstNonNull(shapeToMode.get(shape, isInverted), PlacementMode.BLOCK), uses);
+	}
+
+	public static ItemStack setupValues(ItemStack result, Integer color) {
+		return setupValues(result, color, PlacementMode.BLOCK);
+	}
+
+	public static ItemStack setupValues(ItemStack result, Integer color, PlacementMode mode) {
+		return setupValues(result, color, mode, Config.imaginaryItemUseCount);
+	}
+
+	public static ItemStack setupValues(ItemStack result, Integer color, PlacementMode mode, float uses) {
 		NBTTagCompound tag = ItemUtils.getItemTag(result);
 
 		if (color != null) {
@@ -147,6 +172,7 @@ public class ItemImaginary extends ItemOpenBlock {
 			result.setItemDamage(DAMAGE_CRAYON);
 		}
 
+		tag.setInteger(TAG_MODE, mode.ordinal());
 		tag.setFloat(TAG_USES, uses);
 		return result;
 	}
@@ -209,9 +235,9 @@ public class ItemImaginary extends ItemOpenBlock {
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
-		result.add(setupValues(null, new ItemStack(this, 1, DAMAGE_PENCIL)));
+		result.add(setupValues(new ItemStack(this, 1, DAMAGE_PENCIL), null, PlacementMode.BLOCK));
 		for (ColorMeta color : ColorMeta.getAllColors())
-			result.add(setupValues(color.rgb, new ItemStack(this, 1, DAMAGE_CRAYON)));
+			result.add(setupValues(new ItemStack(this, 1, DAMAGE_CRAYON), color.rgb, PlacementMode.BLOCK));
 	}
 
 	@Override

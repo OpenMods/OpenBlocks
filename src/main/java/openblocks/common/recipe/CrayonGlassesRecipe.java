@@ -16,7 +16,7 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 
 	private static List<ItemStack> createFakeIngredientsList() {
 		ItemStack block = new ItemStack(OpenBlocks.Blocks.imaginary, 1, ItemImaginary.DAMAGE_CRAYON);
-		ItemImaginary.setupValues(0x00FFFF, block);
+		ItemImaginary.setupValues(block, 0x00FFFF);
 		return Lists.newArrayList(new ItemStack(Items.PAPER), block);
 	}
 

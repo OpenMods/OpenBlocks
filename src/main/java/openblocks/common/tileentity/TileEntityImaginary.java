@@ -166,7 +166,7 @@ public class TileEntityImaginary extends OpenTileEntity implements ICustomPickIt
 	@Override
 	public ItemStack getPickBlock(EntityPlayer player) {
 		int dmg = isPencil()? ItemImaginary.DAMAGE_PENCIL : ItemImaginary.DAMAGE_CRAYON;
-		return ItemImaginary.setupValues(color, new ItemStack(getBlockType(), 1, dmg));
+		return ItemImaginary.setupValues(new ItemStack(getBlockType(), 1, dmg), color, shape, isInverted);
 	}
 
 	public BlockImaginary.Shape getShape() {
