@@ -1,0 +1,16 @@
+{
+    "forge_marker" : 1,
+    "defaults" : { "model" : "openblocks:rope_ladder" },
+    "variants" : {
+        "inventory":  [{
+            "transform": "forge:default-item"
+        }],
+
+        "orientation" : {
+            "xp_yp" : { "y" :   0 },
+            "zp_yp" : { "y" :  90 },
+            "xn_yp" : { "y" : 180 },
+            "zn_yp" : { "y" : 270 }
+        }
+    }
+}

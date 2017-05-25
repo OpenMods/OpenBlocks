@@ -11,12 +11,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
@@ -47,6 +50,17 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
@@ -81,9 +95,23 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 		final EnumFacing dir = getOrientation(state).north();
 
 		if (world.isAirBlock(pos.offset(dir))) {
-			// TODO 1.10 verify if it still drops
-			if (world.getBlockState(pos.up()).getBlock() != this) world.setBlockToAir(pos);
+			if (world.getBlockState(pos.up()).getBlock() != this) world.destroyBlock(pos, true);
 		}
+	}
+
+	@Override
+	public boolean canBlockBePlaced(World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ, int itemMetadata, EntityPlayer player) {
+		if (side == EnumFacing.DOWN) {
+			final IBlockState maybeLadder = world.getBlockState(pos.up());
+			return maybeLadder.getBlock() == this;
+		}
+
+		for (Orientation o : getRotationMode().validDirections) {
+			final EnumFacing placeDir = o.north();
+			if (!world.isAirBlock(pos.offset(placeDir))) return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -93,10 +121,38 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 		if (pos.getY() > 0) {
 			final Block bottomBlock = world.getBlockState(pos).getBlock();
 			if (bottomBlock == this) {
-				// TODO 1.8.9 verify
 				world.destroyBlock(pos, true);
 			}
 		}
+	}
+
+	@Override
+	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		Orientation orientation = calculateOrientationAfterPlace(pos, facing, placer);
+		if (orientation == null) orientation = findValidBlock(world, pos);
+		if (orientation == null) orientation = tryCloneState(world, pos, facing);
+		if (orientation == null) return getDefaultState();
+
+		return getStateFromMeta(meta).withProperty(propertyOrientation, orientation);
+	}
+
+	private Orientation tryCloneState(World world, BlockPos pos, EnumFacing facing) {
+		if (facing == EnumFacing.DOWN) {
+			final IBlockState maybeLadder = world.getBlockState(pos.up());
+			if (maybeLadder.getBlock() == this)
+				return maybeLadder.getValue(getPropertyOrientation());
+		}
+
+		return null;
+	}
+
+	private Orientation findValidBlock(World world, BlockPos pos) {
+		for (Orientation o : getRotationMode().validDirections) {
+			final EnumFacing placeDir = o.north();
+			if (!world.isAirBlock(pos.offset(placeDir))) return o;
+		}
+
+		return null;
 	}
 
 	@Override
@@ -109,10 +165,8 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 
 			BlockPos placePos = pos.down();
 			while (placePos.getY() > 0 && (Config.infiniteLadder || stack.stackSize > 1)) {
-				final BlockManipulator manipulator = new BlockManipulator(world, player, pos);
+				final BlockManipulator manipulator = new BlockManipulator(world, player, placePos);
 
-				// TODO 1.8.9 verify place direction
-				// TODO 1.10 verify handness
 				if (world.isAirBlock(placePos) && manipulator.place(state, orientation.north(), EnumHand.MAIN_HAND)) {
 					if (!Config.infiniteLadder) stack.stackSize--;
 				} else return;
