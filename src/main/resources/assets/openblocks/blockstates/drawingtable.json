@@ -1,0 +1,26 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model" : "cube",
+        "textures": {
+            "particle": "openblocks:blocks/drawingtable",
+            "down": "openblocks:blocks/drawingtable",
+            "up": "openblocks:blocks/drawingtable_top",
+            "north": "openblocks:blocks/drawingtable_front",
+            "south": "openblocks:blocks/drawingtable",
+            "east": "openblocks:blocks/drawingtable",
+            "west": "openblocks:blocks/drawingtable"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants" : {
+        "inventory" : [{ }],
+
+        "orientation" : {
+            "xp_yp" : { "y" :   0 },
+            "zp_yp" : { "y" :  90 },
+            "xn_yp" : { "y" : 180 },
+            "zn_yp" : { "y" : 270 }
+        }
+    }
+}

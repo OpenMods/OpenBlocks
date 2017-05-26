@@ -27,8 +27,8 @@ public enum Stencil {
 
 	private Stencil(String name) {
 		this.name = name;
-		this.blockIcon = OpenBlocks.location("stencil_" + name);
-		this.coverBlockIcon = OpenBlocks.location("openblocks:stencilcover_" + name);
+		this.blockIcon = OpenBlocks.location("blocks/stencil_" + name);
+		this.coverBlockIcon = OpenBlocks.location("blocks/stencilcover_" + name);
 	}
 
 	public static final Stencil[] VALUES = values();
