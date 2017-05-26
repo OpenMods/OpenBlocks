@@ -1,63 +1,23 @@
 package openblocks.common.tileentity;
 
-import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.container.ContainerBigButton;
-import openmods.api.IActivateAwareTile;
 import openmods.api.IHasGui;
 import openmods.api.ISurfaceAttachment;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.sync.ISyncListener;
-import openmods.sync.ISyncableObject;
-import openmods.sync.SyncableFlags;
-import openmods.tileentity.SyncedTileEntity;
+import openmods.tileentity.OpenTileEntity;
 
-public class TileEntityBigButton extends SyncedTileEntity implements IActivateAwareTile, ISurfaceAttachment, IHasGui, IInventoryProvider, ISyncListener, ITickable {
-
-	private int tickCounter = 0;
-
-	public enum Flags {
-		active
-	}
-
-	private SyncableFlags flags;
+public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttachment, IHasGui, IInventoryProvider {
 
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "bigbutton", true, 1));
-
-	public TileEntityBigButton() {
-		syncMap.addUpdateListener(createRenderUpdateListener());
-		syncMap.addSyncListener(this);
-	}
-
-	@Override
-	protected void createSyncedFields() {
-		flags = SyncableFlags.create(Flags.values().length);
-	}
-
-	@Override
-	public void update() {
-		if (!worldObj.isRemote) {
-			if (tickCounter > 0) {
-				tickCounter--;
-				if (tickCounter <= 0) {
-					playSoundAtBlock(SoundEvents.BLOCK_STONE_BUTTON_CLICK_OFF, 0.3F, 0.5F);
-					flags.off(Flags.active);
-					sync();
-				}
-			}
-		}
-	}
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {
@@ -80,27 +40,8 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) {
-			if (player.isSneaking()) {
-				openGui(OpenBlocks.instance, player);
-			} else {
-				flags.on(Flags.active);
-				tickCounter = getTickTime();
-				playSoundAtBlock(SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON, 0.3F, 0.6F);
-				sync();
-			}
-		}
-		return true;
-	}
-
-	@Override
 	public EnumFacing getSurfaceDirection() {
-		return getOrientation().north();
-	}
-
-	public boolean isButtonActive() {
-		return flags.get(Flags.active);
+		return getOrientation().down();
 	}
 
 	@Override
@@ -123,10 +64,4 @@ public class TileEntityBigButton extends SyncedTileEntity implements IActivateAw
 		return inventory;
 	}
 
-	@Override
-	public void onSync(Set<ISyncableObject> changes) {
-		worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.bigButton);
-		final EnumFacing rot = getOrientation().north();
-		worldObj.notifyNeighborsOfStateChange(pos.offset(rot), OpenBlocks.Blocks.bigButton);
-	}
 }

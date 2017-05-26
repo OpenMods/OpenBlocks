@@ -1,0 +1,34 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "textures": {
+            "particle": "openblocks:blocks/bigbutton",
+            "all": "openblocks:blocks/bigbutton"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants" : {
+        "inventory" : [{
+            "model": "openblocks:big_button_inventory"
+        }],
+
+        "powered" : {
+            "true": {
+                "model": "openblocks:big_button_active"
+            },
+            "false": {
+                "model": "openblocks:big_button_inactive"
+            }
+        },
+
+        "orientation" : {
+            "xp_yp" : { },
+            "xn_yn" : { "x" : 180 },
+
+            "xp_zn" : { "x" : 90, "y": 0 },
+            "xp_zp" : { "x" : 90, "y": 180 },
+            "yp_xn" : { "x" : 90, "y" : 270 },
+            "yn_xp" : { "x" : 90, "y" : 90 }
+        }
+    }
+}
