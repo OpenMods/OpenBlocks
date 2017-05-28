@@ -13,6 +13,7 @@ import openmods.api.ICustomHarvestDrops;
 import openmods.api.ICustomPickItem;
 import openmods.api.IPlaceAwareTile;
 import openmods.colors.ColorMeta;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableEnum;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.CollectionUtils;
@@ -21,7 +22,10 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 
 	private SyncableEnum<ColorMeta> color;
 
-	public TileEntityElevatorRotating() {
+	public TileEntityElevatorRotating() {}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
 		syncMap.addUpdateListener(createRenderUpdateListener());
 	}
 

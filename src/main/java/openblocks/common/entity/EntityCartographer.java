@@ -26,6 +26,7 @@ import openmods.Log;
 import openmods.api.VisibleForDocumentation;
 import openmods.sync.ISyncMapProvider;
 import openmods.sync.SyncMap;
+import openmods.sync.SyncMapClient;
 import openmods.sync.SyncMapEntity;
 import openmods.sync.SyncObjectScanner;
 import openmods.sync.SyncableBoolean;
@@ -137,20 +138,28 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	private int countdownToMove = MOVE_DELAY;
 	private float randomDelta;
 
-	private final SyncMapEntity<EntityCartographer> syncMap = new SyncMapEntity<EntityCartographer>(this);
+	private final SyncMap syncMap;
 
 	{
-		SyncObjectScanner.INSTANCE.registerAllFields(syncMap, this);
 		setSize(0.2f, 0.2f);
 	}
 
 	public EntityCartographer(World world) {
 		super(world, null);
+		this.syncMap = createSyncMap(world.isRemote);
+	}
+
+	private SyncMap createSyncMap(boolean isRemote) {
+		final SyncMap syncMap = isRemote? new SyncMapClient() : new SyncMapEntity(this);
+		SyncObjectScanner.INSTANCE.registerAllFields(syncMap, this);
+		return syncMap;
 	}
 
 	public EntityCartographer(World world, EntityPlayer owner, ItemStack stack) {
 		super(world, owner);
 		setSpawnPosition(owner);
+
+		this.syncMap = createSyncMap(world.isRemote);
 
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		readOwnDataFromNBT(tag);
@@ -186,7 +195,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 				countdownToAction = MAP_JOB_DELAY;
 			}
 
-			syncMap.sync();
+			syncMap.sendUpdates();
 		}
 	}
 
@@ -197,7 +206,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	private void readOwnDataFromNBT(NBTTagCompound tag) {
-		syncMap.readFromNBT(tag);
+		syncMap.read(tag);
 
 		if (tag.hasKey("MapItem")) {
 			NBTTagCompound mapItem = tag.getCompoundTag("MapItem");
@@ -218,7 +227,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	private void writeOwnDataToNBT(NBTTagCompound tag) {
-		syncMap.writeToNBT(tag);
+		syncMap.write(tag);
 
 		if (mapItem != null) {
 			NBTTagCompound mapItem = this.mapItem.writeToNBT(new NBTTagCompound());
@@ -276,7 +285,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	@Override
-	public SyncMap<EntityCartographer> getSyncMap() {
+	public SyncMap getSyncMap() {
 		return syncMap;
 	}
 

@@ -38,6 +38,7 @@ import openmods.liquids.GenericFluidHandler;
 import openmods.model.variant.VariantModelState;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
@@ -122,6 +123,11 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
 
 	public TileEntityTank() {
+		renderLogic = new TankRenderLogic(tank);
+	}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
 		syncMap.addSyncListener(new ISyncListener() {
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {
@@ -130,8 +136,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		});
 
 		syncMap.addUpdateListener(new RenderUpdateListeners());
-
-		renderLogic = new TankRenderLogic(tank);
 	}
 
 	@Override

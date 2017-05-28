@@ -26,6 +26,7 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableByte;
 import openmods.sync.SyncableInt;
 import openmods.tileentity.SyncedTileEntity;
@@ -86,7 +87,10 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	private SyncableByte rotation;
 	private SyncableInt mapId;
 
-	public TileEntityProjector() {
+	public TileEntityProjector() {}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
 		syncMap.addUpdateListener(this);
 	}
 

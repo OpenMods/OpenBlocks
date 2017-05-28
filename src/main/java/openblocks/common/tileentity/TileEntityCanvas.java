@@ -21,6 +21,7 @@ import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomBreakDrops;
 import openmods.api.ICustomHarvestDrops;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableBlock;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableIntArray;
@@ -57,7 +58,10 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	private Map<EnumFacing, SyncableBlockLayers> allSides = Maps.newEnumMap(EnumFacing.class);
 
-	public TileEntityCanvas() {
+	public TileEntityCanvas() {}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
 		syncMap.addUpdateListener(createRenderUpdateListener());
 	}
 

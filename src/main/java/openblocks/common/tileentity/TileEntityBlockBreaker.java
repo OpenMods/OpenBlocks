@@ -22,6 +22,7 @@ import openmods.fakeplayer.FakePlayerPool;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 
@@ -41,7 +42,10 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 	private int redstoneAnimTimer;
 	private SyncableBoolean activated;
 
-	public TileEntityBlockBreaker() {
+	public TileEntityBlockBreaker() {}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
 		syncMap.addUpdateListener(createRenderUpdateListener());
 	}
 

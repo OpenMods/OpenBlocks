@@ -42,6 +42,7 @@ import openmods.shapes.IShapeGenerator;
 import openmods.shapes.IShapeable;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableEnum;
 import openmods.sync.SyncableInt;
@@ -222,8 +223,6 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	private final Map<HalfAxis, SyncableVarInt> axisDimensions = Maps.newEnumMap(HalfAxis.class);
 
 	public TileEntityGuide() {
-		syncMap.addUpdateListener(this);
-
 		axisDimensions.put(HalfAxis.NEG_X, negX);
 		axisDimensions.put(HalfAxis.NEG_Y, negY);
 		axisDimensions.put(HalfAxis.NEG_Z, negZ);
@@ -231,6 +230,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		axisDimensions.put(HalfAxis.POS_X, posX);
 		axisDimensions.put(HalfAxis.POS_Y, posY);
 		axisDimensions.put(HalfAxis.POS_Z, posZ);
+	}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addUpdateListener(this);
 	}
 
 	@Override

@@ -93,6 +93,7 @@ import openblocks.common.block.BlockXPBottler;
 import openblocks.common.block.BlockXPDrain;
 import openblocks.common.block.BlockXPShower;
 import openblocks.common.entity.EntityCartographer;
+import openblocks.common.entity.EntityCartographer.MapJobs;
 import openblocks.common.entity.EntityGoldenEye;
 import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityItemProjectile;
@@ -135,6 +136,7 @@ import openblocks.common.item.ItemTankBlock;
 import openblocks.common.item.ItemTastyClay;
 import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.item.ItemWrench;
+import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityBearTrap;
@@ -215,6 +217,7 @@ import openmods.integration.Integration;
 import openmods.liquids.BucketFillHandler;
 import openmods.network.event.NetworkEventManager;
 import openmods.network.rpc.RpcCallDispatcher;
+import openmods.sync.SyncableObjectTypeRegistry;
 import openmods.utils.EnchantmentUtils;
 
 @Mod(modid = OpenBlocks.MODID, name = OpenBlocks.NAME, version = OpenBlocks.VERSION, dependencies = OpenBlocks.DEPENDENCIES, guiFactory = "openblocks.client.ModGuiFactory")
@@ -651,8 +654,10 @@ public class OpenBlocks {
 
 		startupHelper.preInit(evt.getSuggestedConfigurationFile());
 
+		SyncableObjectTypeRegistry.register(MapJobs.class);
+		SyncableObjectTypeRegistry.register(SyncableBlockLayers.class);
+
 		NetworkEventManager.INSTANCE
-				.startRegistration()
 				.register(MapDataManager.MapDataRequestEvent.class)
 				.register(MapDataManager.MapDataResponseEvent.class)
 				.register(MapDataManager.MapUpdatesEvent.class)
@@ -661,7 +666,7 @@ public class OpenBlocks {
 				.register(GuideActionEvent.class)
 				.register(EntityMiniMe.OwnerChangeEvent.class);
 
-		RpcCallDispatcher.INSTANCE.startRegistration()
+		RpcCallDispatcher.INSTANCE
 				.registerInterface(IRotatable.class)
 				.registerInterface(IStencilCrafter.class)
 				.registerInterface(IColorChanger.class)

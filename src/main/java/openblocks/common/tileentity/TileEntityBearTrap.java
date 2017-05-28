@@ -16,6 +16,7 @@ import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableUUID;
@@ -36,7 +37,10 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	private int tickSinceOpened;
 	private Entity cachedEntity;
 
-	public TileEntityBearTrap() {
+	public TileEntityBearTrap() {}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
 		syncMap.addUpdateListener(new ISyncListener() {
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {

@@ -41,6 +41,7 @@ import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableSides;
 import openmods.sync.SyncableTank;
@@ -87,7 +88,10 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	public TileEntityVacuumHopper() {
 		sided.registerAllSlots(itemOutputs, false, true);
+	}
 
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
 		syncMap.addUpdateListener(new ISyncListener() {
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {

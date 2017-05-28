@@ -36,14 +36,16 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 				ItemPaintBrush.setColor(heldStack, color.get());
 				heldStack.setItemDamage(0);
 				amount.modify(-1);
-				sync();
-				worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 1.2F);
-			}
 
-			if (amount.get() <= 0 && !worldObj.isRemote) {
-				ItemStack item = new ItemStack(Items.BUCKET);
-				BlockUtils.dropItemStackInWorld(worldObj, pos, item);
-				worldObj.setBlockToAir(pos);
+				if (amount.get() <= 0) {
+					ItemStack item = new ItemStack(Items.BUCKET);
+					BlockUtils.dropItemStackInWorld(worldObj, pos, item);
+					worldObj.setBlockToAir(pos);
+				} else {
+					sync();
+				}
+				worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 1.2F);
+				return true;
 			}
 		}
 		return false;
