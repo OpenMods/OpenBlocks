@@ -1,5 +1,7 @@
 package openblocks.common.block;
 
+import com.google.common.base.Supplier;
+import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
@@ -21,12 +23,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityGuide;
 import openblocks.events.GuideActionEvent;
+import openmods.OpenMods;
 import openmods.api.ISelectionAware;
 import openmods.block.BlockRotationMode;
 import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Hitbox;
-import openmods.geometry.HitboxManager;
 import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
 
@@ -40,13 +42,12 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	private AxisAlignedBB selection;
 
-	private final HitboxManager.Holder buttonsHitbox;
+	private final Supplier<List<Hitbox>> buttonsHitbox = OpenMods.proxy.getHitboxes(OpenBlocks.location("guide_buttons"));
 
 	public BlockGuide() {
 		super(Material.ROCK);
 		setLightLevel(0.6f);
 		setPlacementMode(BlockPlacementMode.SURFACE);
-		buttonsHitbox = HitboxManager.INSTANCE.get(OpenBlocks.location("guide_buttons"));
 	}
 
 	@Override
