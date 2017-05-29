@@ -45,14 +45,31 @@ dependencies {
 //================================================
 // Jar data
 
-// Grab system env
-ext.env = System.getenv()
-
 version = mc_version + "-" + mod_version
 
-ext.in_jenkins = false
-// Get Jenkins metadata
-ext.jenkinsManifest = manifest {
+def String git(String... arguments) {
+    def out = new ByteArrayOutputStream()
+    exec {
+        executable = 'git'
+        args = arguments.toList()
+        standardOutput = out
+    }
+    out.toString().trim()
+}
+
+def String gitHash() {
+    git 'rev-parse', '--short', 'HEAD'
+}
+
+def String gitBranch() {
+    git 'rev-parse', '--abbrev-ref', 'HEAD'
+}
+
+def env = System.getenv()
+
+def in_jenkins = false
+
+def jenkinsManifest = manifest {
     if (env.BUILD_TAG != null) { // If this works, we'll assume we're in Jenkins atleast.
         attributes("Jenkins-Build": "true", "Jenkins-Tag": env.BUILD_TAG, "Jenkins-ID": env.BUILD_ID)
         in_jenkins = true
@@ -61,25 +78,18 @@ ext.jenkinsManifest = manifest {
     }
 }
 
-def branch = null
-def hash = null
-def proc1 = "git rev-parse --short HEAD".execute()
-proc1.in.eachLine { line -> hash = line }
-proc1.err.eachLine { line -> println line }
-proc1.waitFor()
+def branch = in_jenkins ? env.GIT_BRANCH.minus("origin/") : gitBranch()
+def hash = gitHash()
 
-
-if (!in_jenkins) {
-    def proc2 = "git rev-parse --abbrev-ref HEAD".execute()
-    proc2.in.eachLine { line -> branch = line }
-    proc2.err.eachLine { line -> println line }
-    proc2.waitFor()
-} else { // In Jenkins
-    branch = env.GIT_BRANCH.minus("origin/")
+if (branch != null && !branch.equals("master")) {
+    version += "-" + branch
 }
 
-// Get Git metadata (if in Jenkins)
-ext.gitManifest = manifest {
+if (env.BUILD_NUMBER != null) {
+    version += "-snapshot-" + env.BUILD_NUMBER
+}
+
+def gitManifest = manifest {
     if (branch != null) {
         attributes("Git-Branch": branch, "Git-Hash": hash)
     }
