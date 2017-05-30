@@ -15,8 +15,8 @@ public class TileEntityHealBlock extends OpenTileEntity implements ITickable {
 	public void update() {
 		if (worldObj.isRemote) return;
 
-		List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.expandAround(pos, 1, 2, 1));
 		if (OpenMods.proxy.getTicks(worldObj) % 20 == 0) {
+			List<EntityPlayer> playersOnTop = worldObj.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.expandAround(pos, 1, 2, 1));
 			for (EntityPlayer player : playersOnTop) {
 				if (!player.capabilities.isCreativeMode) {
 					/*
