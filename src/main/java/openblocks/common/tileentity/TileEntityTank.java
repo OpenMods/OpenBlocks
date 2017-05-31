@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.fluids.Fluid;
@@ -237,11 +238,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	protected boolean tryDrainXp(EntityPlayer player, EnumFacing direction) {
 		final FluidStack fluid = tank.getFluid();
 		if (fluid != null && fluid.isFluidEqual(new FluidStack(OpenBlocks.Fluids.xpJuice, 0))) {
-			int currentXP = EnchantmentUtils.getPlayerXP(player);
-			int nextLevelXP = EnchantmentUtils.getExperienceForLevel(player.experienceLevel + 1);
-			int requiredXP = nextLevelXP - currentXP;
-
-			int requiredXPJuice = LiquidXpUtils.xpToLiquidRatio(requiredXP);
+			int requiredXp = MathHelper.ceiling_float_int(player.xpBarCap() * (1 - player.experience));
+			int requiredXPJuice = LiquidXpUtils.xpToLiquidRatio(requiredXp);
 
 			FluidStack drained = drain(direction, requiredXPJuice, false);
 			if (drained != null) {

@@ -1,48 +1,47 @@
 package openblocks.common.tileentity;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import openblocks.OpenBlocks;
 import openblocks.common.LiquidXpUtils;
 import openmods.OpenMods;
 import openmods.tileentity.OpenTileEntity;
 import openmods.utils.BlockUtils;
+import openmods.utils.CompatibilityUtils;
 import openmods.utils.EnchantmentUtils;
 
 public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 
-	private WeakReference<TileEntity> targetTank;
-
 	@Override
 	public void update() {
-		if (OpenMods.proxy.getTicks(worldObj) % 100 == 0) {
-			searchForTank();
-		}
+		if (!worldObj.isRemote) {
+			final List<EntityXPOrb> xpOrbsOnGrid = getXPOrbsOnGrid();
+			final List<EntityPlayer> playersOnGrid = getPlayersOnGrid();
 
-		if (targetTank != null) {
-			TileEntity tile = targetTank.get();
-			if (!(tile instanceof IFluidHandler) || tile.isInvalid()) {
-				targetTank = null;
-			} else {
+			if (!xpOrbsOnGrid.isEmpty() || !playersOnGrid.isEmpty()) {
+				final BlockPos down = getPos().down();
 
-				if (!worldObj.isRemote) {
-					IFluidHandler tank = (IFluidHandler)tile;
+				if (worldObj.isBlockLoaded(down)) {
+					final TileEntity te = worldObj.getTileEntity(down);
 
-					for (EntityXPOrb orb : getXPOrbsOnGrid())
-						tryConsumeOrb(tank, orb);
+					if (te != null && !te.isInvalid()) {
+						final IFluidHandler maybeHandler = CompatibilityUtils.getFluidHandler(te);
 
-					for (EntityPlayer player : getPlayersOnGrid())
-						tryDrainPlayer(tank, player);
+						if (maybeHandler != null) {
+							for (EntityXPOrb orb : xpOrbsOnGrid)
+								tryConsumeOrb(maybeHandler, orb);
+
+							for (EntityPlayer player : playersOnGrid)
+								tryDrainPlayer(maybeHandler, player);
+						}
+					}
 				}
 			}
 		}
@@ -57,14 +56,14 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 		int xpAmount = LiquidXpUtils.xpToLiquidRatio(maxDrainedXp);
 		FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
 
-		int maxAcceptedLiquid = tank.fill(EnumFacing.UP, xpStack, false);
+		int maxAcceptedLiquid = tank.fill(xpStack, false);
 
 		// rounding down, so we only use as much as we can
 		int acceptedXP = LiquidXpUtils.liquidToXpRatio(maxAcceptedLiquid);
 		int acceptedLiquid = LiquidXpUtils.xpToLiquidRatio(acceptedXP);
 
 		xpStack.amount = acceptedLiquid;
-		int finallyAcceptedLiquid = tank.fill(EnumFacing.UP, xpStack, true);
+		int finallyAcceptedLiquid = tank.fill(xpStack, true);
 
 		if (finallyAcceptedLiquid <= 0) return;
 
@@ -79,30 +78,11 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 		if (!orb.isDead) {
 			int xpAmount = LiquidXpUtils.xpToLiquidRatio(orb.getXpValue());
 			FluidStack xpStack = new FluidStack(OpenBlocks.Fluids.xpJuice, xpAmount);
-			int filled = tank.fill(EnumFacing.UP, xpStack, false);
+			int filled = tank.fill(xpStack, false);
 			if (filled == xpStack.amount) {
-				tank.fill(EnumFacing.UP, xpStack, true);
+				tank.fill(xpStack, true);
 				orb.setDead();
 			}
-		}
-	}
-
-	public void searchForTank() {
-		targetTank = null;
-		BlockPos target = pos.down();
-		while (target.getY() >= 0) {
-			boolean isAir = worldObj.isAirBlock(target);
-			if (!isAir) {
-				TileEntity te = worldObj.getTileEntity(target);
-				if (!(te instanceof IFluidHandler) && te != null) {
-					final IBlockState blockState = worldObj.getBlockState(pos);
-					if (blockState.isOpaqueCube()) { return; }
-				} else {
-					targetTank = new WeakReference<TileEntity>(te);
-					return;
-				}
-			}
-			target = target.down();
 		}
 	}
 
