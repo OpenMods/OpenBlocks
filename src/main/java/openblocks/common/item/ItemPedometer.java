@@ -1,12 +1,15 @@
 package openblocks.common.item;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -22,6 +25,13 @@ public class ItemPedometer extends Item {
 
 	public ItemPedometer() {
 		setMaxStackSize(1);
+		addPropertyOverride(new ResourceLocation("speed"), new IItemPropertyGetter() {
+			@Override
+			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+				if (entityIn == null) return 0;
+				return (float)Math.sqrt(entityIn.motionX * entityIn.motionX + entityIn.motionY * entityIn.motionY + entityIn.motionZ * entityIn.motionZ);
+			}
+		});
 	}
 
 	private static void send(EntityPlayer player, String format, Object... args) {
@@ -79,11 +89,6 @@ public class ItemPedometer extends Item {
 			PedometerState state = PedometerHandler.getProperty(entity);
 			if (state.isRunning()) state.update(entity);
 		}
-	}
-
-	// TODO 1.8.9 actually change model based on this
-	public static boolean isPlayerMoving(EntityPlayer player) {
-		return player.motionX * player.motionX + player.motionY * player.motionY + player.motionZ * player.motionZ > 0.01;
 	}
 
 }
