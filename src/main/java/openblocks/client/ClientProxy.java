@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -46,6 +47,7 @@ import openblocks.client.renderer.entity.EntityLuggageRenderer;
 import openblocks.client.renderer.entity.EntityMagnetRenderer;
 import openblocks.client.renderer.entity.EntityMiniMeRenderer;
 import openblocks.client.renderer.entity.EntitySelectionHandler;
+import openblocks.client.renderer.item.devnull.DevNullModelLoader;
 import openblocks.client.renderer.tileentity.TileEntityAutoEnchantmentTableRenderer;
 import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFanRenderer;
@@ -69,6 +71,7 @@ import openblocks.common.entity.EntityHangGlider;
 import openblocks.common.entity.EntityLuggage;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMiniMe;
+import openblocks.common.item.ItemDevNull;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
@@ -120,6 +123,8 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		tempHackRegisterTesrStateMappers();
+
+		ModelLoaderRegistry.registerLoader(new DevNullModelLoader());
 	}
 
 	@Override
@@ -275,6 +280,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.imaginary != null) {
 			itemColors.registerItemColorHandler(new ItemImaginary.CrayonColorHandler(), OpenBlocks.Blocks.imaginary);
 			MinecraftForge.EVENT_BUS.register(new TileEntityImaginaryRenderer.CacheFlushListener());
+		}
+
+		if (OpenBlocks.Items.devNull != null) {
+			itemColors.registerItemColorHandler(new ItemDevNull.NestedItemColorHandler(itemColors), OpenBlocks.Items.devNull);
 		}
 	}
 

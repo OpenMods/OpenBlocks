@@ -21,8 +21,8 @@ public class OpenBlocksGuiHandler implements IGuiHandler {
 		public static final GuiId[] VALUES = GuiId.values();
 	}
 
-	private static ContainerDevNull createDevNullContainer(EntityPlayer player, int protectedSlot) {
-		return new ContainerDevNull(player.inventory, new ItemDevNull.DevNullInventory(player, protectedSlot), protectedSlot);
+	private static ContainerDevNull createDevNullContainer(EntityPlayer player, int selectedItem) {
+		return new ContainerDevNull(player.inventory, new ItemDevNull.DevNullInventory(player, selectedItem), selectedItem);
 	}
 
 	private static ContainerLuggage createLuggageContainer(EntityPlayer player, World world, int entityId) {

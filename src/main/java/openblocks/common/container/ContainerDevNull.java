@@ -12,19 +12,32 @@ public class ContainerDevNull extends ContainerBase<Void> {
 
 	private InventoryPlayer playerInventory;
 
-	private final int protectedSlot;
+	private final int protectedSlotIndex;
 
-	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory, int protectedSlot) {
+	private final int protectedSlotNumber;
+
+	public ContainerDevNull(IInventory playerInventory, IInventory ownerInventory, int selectedIndex) {
 		super(playerInventory, ownerInventory, null);
 		this.playerInventory = (InventoryPlayer)playerInventory;
-		this.protectedSlot = protectedSlot;
 		addInventoryGrid(80, 22, 1);
 		addPlayerInventorySlots(55);
+
+		this.protectedSlotIndex = selectedIndex;
+		this.protectedSlotNumber = findSlotForIndex(selectedIndex);
+	}
+
+	private int findSlotForIndex(int selectedIndex) {
+		for (Slot slot : inventorySlots)
+			if (slot.inventory == this.playerInventory && slot.getSlotIndex() == selectedIndex)
+				return slot.slotNumber;
+
+		return -1;
 	}
 
 	@Override
 	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
-		if (slotId == protectedSlot) return null; // TODO 1.10 verify if it's proper solution
+		if (slotId == protectedSlotNumber) return null;
+		if (clickType == ClickType.SWAP && dragType == protectedSlotIndex) return null;
 		return super.slotClick(slotId, dragType, clickType, player);
 	}
 
@@ -38,13 +51,15 @@ public class ContainerDevNull extends ContainerBase<Void> {
 						offsetY + row * 18));
 
 		for (int slot = 0; slot < 9; slot++) {
-
-			final int currentSlot = slot;
-
 			addSlotToContainer(new Slot(playerInventory, slot, offsetX + slot * 18, offsetY + 58) {
 				@Override
 				public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
-					return currentSlot != protectedSlot;
+					return slotNumber != protectedSlotNumber;
+				}
+
+				@Override
+				public boolean canBeHovered() {
+					return slotNumber != protectedSlotNumber;
 				}
 			});
 

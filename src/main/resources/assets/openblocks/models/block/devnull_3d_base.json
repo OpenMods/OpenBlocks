@@ -1,0 +1,18 @@
+{
+    "parent": "block/block",
+    "elements": [
+        {
+            "_comment": "NOTE: coordinates are inverted by design : we want broken culling for that block",
+            "from": [ 16, 16, 16 ],
+            "to": [ 0, 0, 0 ],
+            "faces": {
+                "down":  { "texture": "#all", "cullface": "down" },
+                "up":    { "texture": "#all", "cullface": "up" },
+                "north": { "texture": "#all", "cullface": "north" },
+                "south": { "texture": "#all", "cullface": "south" },
+                "west":  { "texture": "#all", "cullface": "west" },
+                "east":  { "texture": "#all", "cullface": "east" }
+            }
+        }
+    ]
+}
