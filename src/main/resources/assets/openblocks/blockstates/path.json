@@ -1,0 +1,17 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model": "openblocks:magic-path",
+        "textures": {
+            "particle": "openblocks:blocks/path",
+            "tex0": "openblocks:blocks/path"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants" : {
+        "inventory" : [{}],
+        "orientation": {
+            "xp_yp": {}
+        }
+    }
+}

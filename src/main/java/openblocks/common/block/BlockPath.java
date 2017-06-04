@@ -31,6 +31,21 @@ public class BlockPath extends OpenBlock {
 	}
 
 	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+		return true;
+	}
+
+	@Override
+	public boolean canSpawnInBlock() {
+		return true;
+	}
+
+	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
 		return NULL_AABB;
 	}

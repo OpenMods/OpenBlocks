@@ -41,13 +41,14 @@ import openblocks.client.model.ModelPiggy;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.client.model.ModelTarget;
 import openblocks.client.model.ModelXPShower;
+import openblocks.client.renderer.block.PathModel;
 import openblocks.client.renderer.entity.EntityCartographerRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
 import openblocks.client.renderer.entity.EntityLuggageRenderer;
 import openblocks.client.renderer.entity.EntityMagnetRenderer;
 import openblocks.client.renderer.entity.EntityMiniMeRenderer;
 import openblocks.client.renderer.entity.EntitySelectionHandler;
-import openblocks.client.renderer.item.devnull.DevNullModelLoader;
+import openblocks.client.renderer.item.devnull.DevNullModel;
 import openblocks.client.renderer.tileentity.TileEntityAutoEnchantmentTableRenderer;
 import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFanRenderer;
@@ -101,6 +102,7 @@ import openblocks.enchantments.flimflams.LoreFlimFlam;
 import openmods.block.OpenBlock;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
+import openmods.model.MappedModelLoader;
 import openmods.renderer.SimpleModelTileEntityRenderer;
 import openmods.utils.render.MarkerClassGenerator;
 
@@ -124,7 +126,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		tempHackRegisterTesrStateMappers();
 
-		ModelLoaderRegistry.registerLoader(new DevNullModelLoader());
+		ModelLoaderRegistry.registerLoader(MappedModelLoader.builder()
+				.put("magic-devnull", DevNullModel.INSTANCE)
+				.put("magic-path", PathModel.INSTANCE)
+				.build(OpenBlocks.MODID));
 	}
 
 	@Override

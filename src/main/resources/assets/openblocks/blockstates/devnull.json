@@ -16,7 +16,7 @@
                 }
             },
             "textures": {
-                "particle": "openblocks:devnull"
+                "particle": "openblocks:items/devnull"
             }
         }],
 
