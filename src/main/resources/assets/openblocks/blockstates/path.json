@@ -6,6 +6,11 @@
             "particle": "openblocks:blocks/path",
             "tex0": "openblocks:blocks/path"
         },
+        "custom": {
+            "maxBlockCount": 10,
+            "inventorySeed": -5077139222181326242,
+            "inventoryTransform": "block/thin_block"
+        },
         "transform": "forge:default-block"
     },
     "variants" : {

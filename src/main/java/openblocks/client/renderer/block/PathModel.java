@@ -4,10 +4,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.Collection;
@@ -29,35 +27,51 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.IModelCustomData;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel.MapWrapper;
 import net.minecraftforge.client.model.IRetexturableModel;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
+import openmods.model.ModelTextureMap;
+import openmods.model.ModelUpdater;
 import openmods.utils.CollectionUtils;
 import openmods.utils.render.RenderUtils;
 import openmods.utils.render.RenderUtils.IQuadSink;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class PathModel implements IRetexturableModel {
+public class PathModel implements IModelCustomData, IRetexturableModel {
 
-	public static final PathModel INSTANCE = new PathModel(ImmutableMap.<String, ResourceLocation> of());
+	private static final int DEFAULT_MAX_BLOCK_COUNT = 10;
 
-	private final Map<String, ResourceLocation> textures;
+	private static final long NOT_MAGIC_NUMBER = 0;
 
-	private PathModel(Map<String, ResourceLocation> textures) {
+	public static final PathModel INSTANCE = new PathModel(new ModelTextureMap(), DEFAULT_MAX_BLOCK_COUNT, NOT_MAGIC_NUMBER, Optional.<ResourceLocation> absent());
+
+	private final ModelTextureMap textures;
+
+	private final int maxBlockCount;
+
+	private final long inventorySeed;
+
+	private final Optional<ResourceLocation> inventoryTransformProvider;
+
+	public PathModel(ModelTextureMap textures, int maxBlockCount, long inventorySeed, Optional<ResourceLocation> inventoryTransformProvider) {
 		this.textures = textures;
+		this.maxBlockCount = maxBlockCount;
+		this.inventorySeed = inventorySeed;
+		this.inventoryTransformProvider = inventoryTransformProvider;
 	}
 
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
-		return ImmutableSet.of();
+		return inventoryTransformProvider.asSet();
 	}
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
-		return textures.values();
+		return textures.getTextures();
 	}
 
 	private static final Predicate<EnumFacing> ALL_SIDES = Predicates.alwaysTrue();
@@ -78,34 +92,32 @@ public class PathModel implements IRetexturableModel {
 
 	private class Baked implements IPerspectiveAwareModel {
 
-		private static final long NOT_MAGIC_NUMBER = 0xB98A60C6FAADD25EL;
-
 		private final TextureAtlasSprite particle;
 
 		private final List<TextureAtlasSprite> textures;
 
 		private final VertexFormat format;
 
-		private final Map<TransformType, TRSRTransformation> transforms;
+		private final Map<TransformType, Matrix4f> transforms;
 
 		private final List<BakedQuad> itemQuads;
 
 		private final Random rand = new Random();
 
-		public Baked(TextureAtlasSprite particle, List<TextureAtlasSprite> textures, VertexFormat format, Map<TransformType, TRSRTransformation> transforms) {
+		public Baked(TextureAtlasSprite particle, List<TextureAtlasSprite> textures, VertexFormat format, Map<TransformType, Matrix4f> transforms) {
 			this.particle = particle;
 			this.textures = ImmutableList.copyOf(textures);
 			this.format = format;
 			this.transforms = transforms;
 
-			this.itemQuads = ImmutableList.copyOf(createQuads(NOT_MAGIC_NUMBER, ALL_SIDES));
+			this.itemQuads = ImmutableList.copyOf(createQuads(inventorySeed, ALL_SIDES));
 		}
 
 		private List<BakedQuad> createQuads(long seed, Predicate<EnumFacing> shouldInclude) {
 			rand.setSeed(seed);
 
 			final List<AxisAlignedBB> boundingBoxes = Lists.newArrayList();
-			LOOP: for (int i = 0; i < 10; i++) {
+			LOOP: for (int i = 0; i < maxBlockCount; i++) {
 				double width = rand.nextDouble() * 0.3 + 0.1;
 				double length = rand.nextDouble() * 0.3 + 0.1;
 				double pX = rand.nextDouble() * (1.0 - width);
@@ -261,27 +273,24 @@ public class PathModel implements IRetexturableModel {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-			final TRSRTransformation transform = transforms.get(cameraTransformType);
-			Matrix4f mat = null;
-			if (transform != null && !transform.equals(TRSRTransformation.identity())) mat = TRSRTransformation.blockCornerToCenter(transform).getMatrix();
-			return Pair.of(this, mat);
+			final Matrix4f transform = transforms.get(cameraTransformType);
+			return Pair.of(this, transform);
 		}
 
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		final Map<TransformType, TRSRTransformation> transforms = MapWrapper.getTransforms(state);
+		final Map<TransformType, Matrix4f> transforms = extractInventoryTransforms(state, format, bakedTextureGetter);
 
 		List<TextureAtlasSprite> textures = Lists.newArrayList();
 		Optional<TextureAtlasSprite> maybeParticle = Optional.absent();
 
-		for (Map.Entry<String, ResourceLocation> e : this.textures.entrySet()) {
-			final TextureAtlasSprite tex = bakedTextureGetter.apply(e.getValue());
+		for (Map.Entry<String, TextureAtlasSprite> e : this.textures.bakeWithKeys(bakedTextureGetter).entrySet()) {
 			if (e.getKey().equals("particle")) {
-				maybeParticle = Optional.of(tex);
+				maybeParticle = Optional.of(e.getValue());
 			} else {
-				textures.add(tex);
+				textures.add(e.getValue());
 			}
 		}
 
@@ -293,27 +302,62 @@ public class PathModel implements IRetexturableModel {
 		return new Baked(particle, textures, format, transforms);
 	}
 
+	private Map<TransformType, Matrix4f> extractInventoryTransforms(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+		if (inventoryTransformProvider.isPresent()) {
+			final IModel model = ModelLoaderRegistry.getModelOrLogError(inventoryTransformProvider.get(), "Couldn't load MultiLayerModel dependency: " + inventoryTransformProvider.get());
+			final IBakedModel bakedModel = model.bake(model.getDefaultState(), format, bakedTextureGetter);
+			if (bakedModel instanceof IPerspectiveAwareModel)
+				return extractInventoryTransformsFromModel((IPerspectiveAwareModel)bakedModel);
+		}
+		// fallback: get transforms from our own model
+		return extractInventoryTransformsFromState(state);
+	}
+
+	private static Map<TransformType, Matrix4f> extractInventoryTransformsFromModel(IPerspectiveAwareModel model) {
+		final Map<TransformType, Matrix4f> output = Maps.newHashMap();
+		for (TransformType type : TransformType.values()) {
+			final Pair<? extends IBakedModel, Matrix4f> transform = model.handlePerspective(type);
+			output.put(type, transform.getRight());
+		}
+		return output;
+	}
+
+	private static Map<TransformType, Matrix4f> extractInventoryTransformsFromState(IModelState state) {
+		final Map<TransformType, Matrix4f> output = Maps.newHashMap();
+		for (TransformType type : TransformType.values()) {
+			Matrix4f mat = null;
+			final Optional<TRSRTransformation> maybeTransform = state.apply(Optional.of(type));
+			if (maybeTransform.isPresent()) {
+				final TRSRTransformation transform = maybeTransform.get();
+				if (!transform.equals(TRSRTransformation.identity())) {
+					mat = TRSRTransformation.blockCornerToCenter(transform).getMatrix();
+				}
+			}
+
+			output.put(type, mat);
+		}
+		return output;
+	}
+
 	@Override
 	public IModelState getDefaultState() {
 		return TRSRTransformation.identity();
 	}
 
 	@Override
-	public IModel retexture(ImmutableMap<String, String> textures) {
-		if (textures.isEmpty()) return this;
+	public IModel retexture(ImmutableMap<String, String> updates) {
+		final Optional<ModelTextureMap> newTextures = textures.update(updates);
+		return newTextures.isPresent()? new PathModel(newTextures.get(), maxBlockCount, inventorySeed, inventoryTransformProvider) : this;
+	}
 
-		final Map<String, ResourceLocation> newTextures = Maps.newHashMap();
+	@Override
+	public IModel process(ImmutableMap<String, String> customData) {
+		final ModelUpdater updater = new ModelUpdater(customData);
+		final int maxBlockCount = updater.get("maxBlockCount", ModelUpdater.TO_INT, this.maxBlockCount);
+		final long inventorySeed = updater.get("inventorySeed", ModelUpdater.TO_LONG, this.inventorySeed);
+		final Optional<ResourceLocation> inventoryTransformProvider = updater.get("inventoryTransform", ModelUpdater.MODEL_LOCATION, this.inventoryTransformProvider);
 
-		for (Map.Entry<String, String> e : textures.entrySet()) {
-			final String location = e.getValue();
-			if (Strings.isNullOrEmpty(location)) {
-				newTextures.remove(e.getKey());
-			} else {
-				newTextures.put(e.getKey(), new ResourceLocation(location));
-			}
-		}
-
-		return new PathModel(ImmutableMap.copyOf(newTextures));
+		return updater.hasChanged()? new PathModel(this.textures, maxBlockCount, inventorySeed, inventoryTransformProvider) : this;
 	}
 
 }
