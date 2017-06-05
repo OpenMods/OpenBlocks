@@ -48,18 +48,21 @@
         }],
 
         "base": { "model": "openblocks:tank_empty" },
-        "nw" : { "model": "openblocks:tank_frame_nw" },
-        "ne" : { "model": "openblocks:tank_frame_ne" },
-        "se" : { "model": "openblocks:tank_frame_se" },
-        "sw" : { "model": "openblocks:tank_frame_sw" },
-        "tw" : { "model": "openblocks:tank_frame_tw" },
-        "te" : { "model": "openblocks:tank_frame_te" },
-        "be" : { "model": "openblocks:tank_frame_be" },
-        "bw" : { "model": "openblocks:tank_frame_bw" },
-        "tn" : { "model": "openblocks:tank_frame_tn" },
-        "ts" : { "model": "openblocks:tank_frame_ts" },
-        "bs" : { "model": "openblocks:tank_frame_bs" },
-        "bn" : { "model": "openblocks:tank_frame_bn" },
+
+        "nw" : { "model": "openblocks:tank_frame_y", "transform" : { "translation": [0, 0, 0] } },
+        "ne" : { "model": "openblocks:tank_frame_y", "transform" : { "translation": [1, 0, 0] } },
+        "se" : { "model": "openblocks:tank_frame_y", "transform" : { "translation": [1, 0, 1] } },
+        "sw" : { "model": "openblocks:tank_frame_y", "transform" : { "translation": [0, 0, 1] } },
+
+        "tw" : { "model": "openblocks:tank_frame_z", "transform" : { "translation": [0, 1, 0] } },
+        "te" : { "model": "openblocks:tank_frame_z", "transform" : { "translation": [1, 1, 0] } },
+        "be" : { "model": "openblocks:tank_frame_z", "transform" : { "translation": [1, 0, 0] } },
+        "bw" : { "model": "openblocks:tank_frame_z", "transform" : { "translation": [0, 0, 0] } },
+
+        "tn" : { "model": "openblocks:tank_frame_x", "transform" : { "translation": [0, 1, 0] } },
+        "ts" : { "model": "openblocks:tank_frame_x", "transform" : { "translation": [0, 1, 1] } },
+        "bs" : { "model": "openblocks:tank_frame_x", "transform" : { "translation": [0, 0, 1] } },
+        "bn" : { "model": "openblocks:tank_frame_x", "transform" : { "translation": [0, 0, 0] } },
 
         "inventory" : [{
             "model" : "openblocks:tank_frame",
