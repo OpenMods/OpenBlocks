@@ -23,6 +23,7 @@
         }],
 
         "marker": [{
+            _comment: "This variant is hardcoded",
             "model": "openblocks:guide_marker"
         }],
 

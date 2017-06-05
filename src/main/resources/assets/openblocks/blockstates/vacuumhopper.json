@@ -8,7 +8,7 @@
         "orientation=xp_yp": [{
             "model": "openmods:variantmodel",
             "custom": {
-                "base": "openblocks:vacuumhopper#base",
+                "base": "openblocks:block/vacuumhopper_body",
                 "variants": {
                     "north" : {
                         "items" : "openblocks:vacuumhopper#north_items",
@@ -43,11 +43,6 @@
                 }
             }
         }],
-
-        // base
-        "base": {
-            "model": "openblocks:vacuumhopper_body"
-        },
 
         // west
         "west_items": {

@@ -4,7 +4,7 @@
         "orientation=xp_yp": [{
             "model": "openmods:variantmodel",
             "custom": {
-                "base": "openblocks:tank#base",
+                "base": "openblocks:block/tank_empty",
                 "_comments" : [
                     "Can I interest you in Karnaugh maps? -B",
                     "n_x is present when block has connected neigbour on side x, n_xy is present when neigbour is on diagonal between x and y",
@@ -46,8 +46,6 @@
                  }
             }
         }],
-
-        "base": { "model": "openblocks:tank_empty" },
 
         "nw" : { "model": "openblocks:tank_frame_y", "transform" : { "translation": [0, 0, 0] } },
         "ne" : { "model": "openblocks:tank_frame_y", "transform" : { "translation": [1, 0, 0] } },
