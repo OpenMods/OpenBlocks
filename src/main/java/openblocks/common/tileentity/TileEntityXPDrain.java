@@ -5,6 +5,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
@@ -32,7 +33,7 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 					final TileEntity te = worldObj.getTileEntity(down);
 
 					if (te != null && !te.isInvalid()) {
-						final IFluidHandler maybeHandler = CompatibilityUtils.getFluidHandler(te);
+						final IFluidHandler maybeHandler = CompatibilityUtils.getFluidHandler(te, EnumFacing.UP);
 
 						if (maybeHandler != null) {
 							for (EntityXPOrb orb : xpOrbsOnGrid)
