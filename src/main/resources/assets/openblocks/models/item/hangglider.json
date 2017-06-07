@@ -1,0 +1,14 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "openblocks:items/hangglider"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "hidden": 1
+            },
+            "model": "openblocks:item/hangglider_hidden"
+        }
+    ]
+}

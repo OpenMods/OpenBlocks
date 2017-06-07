@@ -53,7 +53,7 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 		if (owner == null) return;
 
 		final Minecraft minecraft = Minecraft.getMinecraft();
-		final boolean isLocalPlayer = owner == minecraft.thePlayer;
+		final boolean isLocalPlayer = owner.isUser();
 		final boolean isFpp = minecraft.gameSettings.thirdPersonView == 0;
 		final boolean isDeployed = glider.isDeployed();
 
@@ -65,23 +65,12 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 
 		GL11.glTranslated(x, y, z);
 		GL11.glRotatef(180.0F - rotation, 0.0F, 1.0F, 0.0F);
-
-		if (isLocalPlayer) {
-			if (!isDeployed) {
-				// move up and closer to back
-				GL11.glTranslated(0, -0.2, +0.3);
-			} else {
-				if (isFpp) {
-					// move over head when flying in FPP
-					GL11.glTranslated(0, +0.2, 0);
-				} else {
-					// move closer to back and forward when flying in TDD
-					GL11.glTranslated(0, -0.8, -1.0);
-				}
-			}
+		if (isLocalPlayer && isFpp) {
+			// move over head when flying in FPP
+			GL11.glTranslated(0, +0.7, 0);
 		} else {
 			if (!isDeployed) {
-				// move up little bit (other player center is lower)
+				// move up little bit
 				GL11.glTranslated(0, +0.2, +0.3);
 			} else {
 				// move closer to back and forward when flying
@@ -99,7 +88,6 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 		GL11.glPopMatrix();
 	}
 
-	/* Interpolate rotation */
 	private static float interpolateRotation(float prevRotation, float nextRotation, float modifier) {
 		float rotation = nextRotation - prevRotation;
 

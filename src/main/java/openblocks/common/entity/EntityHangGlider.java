@@ -53,7 +53,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 	private IVarioController varioControl = IVarioController.NULL;
 
-	public static boolean isEntityHoldingGlider(Entity player) {
+	public static boolean isEntityWearingGlider(Entity player) {
 		EntityHangGlider glider = gliderMap.get(player);
 		return glider != null;
 	}
@@ -63,12 +63,16 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		return glider != null && glider.isDeployed();
 	}
 
+	private static boolean isItemHangglider(ItemStack stack) {
+		return stack != null && stack.getItem() instanceof ItemHangGlider;
+	}
+
 	private static boolean isGliderValid(EntityPlayer player, EntityHangGlider glider) {
 		if (player == null || player.isDead || glider == null || glider.isDead) return false;
 
-		ItemStack held = player.getHeldItemMainhand();
-		if (held == null || !(held.getItem() instanceof ItemHangGlider)) return false;
+		if (!isItemHangglider(player.getHeldItemMainhand()) && !isItemHangglider(player.getHeldItemOffhand())) return false;
 		if (player.worldObj.provider.getDimension() != glider.worldObj.provider.getDimension()) return false;
+		if (player.isElytraFlying()) return false;
 		return true;
 	}
 
@@ -269,11 +273,9 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		this.prevRotationPitch = player.prevRotationPitch;
 		this.rotationPitch = player.rotationPitch;
 
-		if (!localPlayer) {
-			this.posY += 1.2;
-			this.prevPosY += 1.2;
-			this.lastTickPosY += 1.2;
-		}
+		this.posY += 1.2;
+		this.prevPosY += 1.2;
+		this.lastTickPosY += 1.2;
 
 		this.motionX = this.posX - this.prevPosX;
 		this.motionY = this.posY - this.prevPosY;
