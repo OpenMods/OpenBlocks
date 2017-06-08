@@ -72,7 +72,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 		if (!isItemHangglider(player.getHeldItemMainhand()) && !isItemHangglider(player.getHeldItemOffhand())) return false;
 		if (player.worldObj.provider.getDimension() != glider.worldObj.provider.getDimension()) return false;
-		if (player.isElytraFlying()) return false;
+		if (player.isElytraFlying() || player.isSpectator()) return false;
 		return true;
 	}
 
