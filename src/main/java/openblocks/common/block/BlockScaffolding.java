@@ -1,9 +1,9 @@
 package openblocks.common.block;
 
 import java.util.Random;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -28,6 +28,11 @@ public class BlockScaffolding extends OpenBlock {
 	}
 
 	@Override
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
+	}
+
+	@Override
 	public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (Config.scaffoldingDespawnRate <= 0 || random.nextInt(Config.scaffoldingDespawnRate) == 0) {
 			world.destroyBlock(pos, true);
@@ -38,13 +43,7 @@ public class BlockScaffolding extends OpenBlock {
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings("deprecation")
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		// Code adapted from BlockBreakable
-		final IBlockState iblockstate = blockAccess.getBlockState(pos);
-		final Block block = iblockstate.getBlock();
-
-		if (blockAccess.getBlockState(pos.offset(side.getOpposite())) != iblockstate) return true;
-
-		if (block == this) return false;
-		return super.shouldSideBeRendered(iblockstate, blockAccess, pos, side);
+		final IBlockState neighbourState = blockAccess.getBlockState(pos.offset(side));
+		return neighbourState.getBlock() != this && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 }
