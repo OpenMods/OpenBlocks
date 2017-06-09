@@ -19,12 +19,12 @@ import openmods.infobook.BookDocumentation;
 public class BlockSponge extends OpenBlock {
 
 	private static final int TICK_RATE = 20 * 5;
-	private static final Random RANDOM = new Random();
+
+	private static final int EVENT_BURN = 123;
 
 	public BlockSponge() {
 		super(Material.SPONGE);
 		setSoundType(SoundType.CLOTH);
-		setTickRandomly(true);
 		setHarvestLevel("axe", 1);
 	}
 
@@ -41,13 +41,13 @@ public class BlockSponge extends OpenBlock {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		clearupLiquid(world, pos);
-		world.scheduleUpdate(pos, this, TICK_RATE + RANDOM.nextInt(5));
+		world.scheduleUpdate(pos, this, TICK_RATE + world.rand.nextInt(5));
 	}
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
 		clearupLiquid(world, pos);
-		world.scheduleUpdate(pos, this, TICK_RATE + RANDOM.nextInt(5));
+		world.scheduleUpdate(pos, this, TICK_RATE + world.rand.nextInt(5));
 	}
 
 	private void clearupLiquid(World world, BlockPos pos) {
@@ -61,26 +61,30 @@ public class BlockSponge extends OpenBlock {
 					Material material = state.getMaterial();
 					if (material.isLiquid()) {
 						hitLava |= material == Material.LAVA;
-						world.setBlockToAir(pos);
+						world.setBlockToAir(pos.add(dx, dy, dz));
 					}
 				}
 			}
 		}
-		if (hitLava) world.addBlockEvent(pos, this, 0, 0);
+		if (hitLava) world.addBlockEvent(pos, this, EVENT_BURN, 0);
 	}
 
 	@Override
-	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
-		if (world.isRemote) {
-			for (int i = 0; i < 20; i++) {
-				double px = pos.getX() + RANDOM.nextDouble() * 0.1;
-				double py = pos.getY() + 1.0 + RANDOM.nextDouble();
-				double pz = pos.getZ() + RANDOM.nextDouble();
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px, py, pz, 0.0D, 0.0D, 0.0D);
+	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int eventId, int eventParam) {
+		if (eventId == EVENT_BURN) {
+			if (world.isRemote) {
+				for (int i = 0; i < 20; i++) {
+					double px = pos.getX() + world.rand.nextDouble() * 0.1;
+					double py = pos.getY() + 1.0 + world.rand.nextDouble();
+					double pz = pos.getZ() + world.rand.nextDouble();
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, px, py, pz, 0.0D, 0.0D, 0.0D);
+				}
+			} else {
+				world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 			}
-		} else {
-			world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+			return true;
 		}
-		return true;
+
+		return super.eventReceived(state, world, pos, eventId, eventParam);
 	}
 }
