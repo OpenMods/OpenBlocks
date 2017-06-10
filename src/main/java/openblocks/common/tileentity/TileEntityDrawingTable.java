@@ -1,34 +1,97 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import openblocks.OpenBlocks.Items;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiDrawingTable;
-import openblocks.common.Stencil;
+import openblocks.common.StencilPattern;
 import openblocks.common.container.ContainerDrawingTable;
+import openblocks.common.item.ItemStencil;
 import openblocks.common.item.MetasGeneric;
 import openblocks.rpc.IStencilCrafter;
+import openmods.api.ICustomBreakDrops;
 import openmods.api.IHasGui;
-import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.tileentity.OpenTileEntity;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
+import openmods.sync.SyncableEnum;
+import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, IInventoryProvider, IStencilCrafter {
+public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui, IInventoryProvider, IStencilCrafter, ICustomBreakDrops {
 
-	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "drawingtable", true, 1) {
+	public static final int SLOT_INPUT = 0;
 
+	public static final int SLOT_OUTPUT = 1;
+
+	private SyncableEnum<StencilPattern> selectedPattern;
+
+	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "drawingtable", true, 2) {
 		@Override
-		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			return i == 0 && (itemstack == null || MetasGeneric.unpreparedStencil.isA(itemstack));
+		public boolean isItemValidForSlot(int slotId, ItemStack itemstack) {
+			return itemstack == null || (slotId == SLOT_INPUT && MetasGeneric.unpreparedStencil.isA(itemstack));
 		}
 
+		@Override
+		public void onInventoryChanged(int slotNumber) {
+			if (slotNumber == SLOT_INPUT) {
+				final ItemStack input = inventoryContents[SLOT_INPUT];
+				if (input != null && MetasGeneric.unpreparedStencil.isA(input)) {
+					final ItemStack output = new ItemStack(OpenBlocks.Items.stencil, input.stackSize, selectedPattern.get().ordinal());
+					inventoryContents[SLOT_OUTPUT] = output;
+				} else {
+					inventoryContents[SLOT_OUTPUT] = null;
+				}
+			} else if (slotNumber == SLOT_OUTPUT) {
+				final ItemStack output = inventoryContents[SLOT_OUTPUT];
+				if (output != null && output.getItem() instanceof ItemStencil) {
+					final ItemStack input = MetasGeneric.unpreparedStencil.newItemStack(output.stackSize);
+					inventoryContents[SLOT_INPUT] = input;
+				} else {
+					inventoryContents[SLOT_INPUT] = null;
+				}
+			}
+
+			super.onInventoryChanged(slotNumber);
+		}
 	});
 
 	public TileEntityDrawingTable() {}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addSyncListener(new ISyncListener() {
+			@Override
+			public void onSync(Set<ISyncableObject> changes) {
+				if (changes.contains(selectedPattern))
+					inventory.onInventoryChanged(SLOT_INPUT);
+			}
+		});
+	}
+
+	@Override
+	protected void createSyncedFields() {
+		selectedPattern = SyncableEnum.create(StencilPattern.CREEPER_FACE);
+	}
+
+	@Override
+	public void selectionUp() {
+		selectedPattern.increment();
+		sync();
+	}
+
+	@Override
+	public void selectionDown() {
+		selectedPattern.decrement();
+		sync();
+	}
 
 	@Override
 	public Object getServerGui(EntityPlayer player) {
@@ -46,7 +109,6 @@ public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, I
 	}
 
 	@Override
-	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
 	}
@@ -65,12 +127,10 @@ public class TileEntityDrawingTable extends OpenTileEntity implements IHasGui, I
 	}
 
 	@Override
-	public void craft(Stencil stencil) {
-		ItemStack stack = inventory.getStackInSlot(0);
-		if (stack != null && MetasGeneric.unpreparedStencil.isA(stack)) {
-			ItemStack stencilItem = new ItemStack(Items.stencil, 1, stencil.ordinal());
-			stencilItem.stackSize = stack.stackSize;
-			inventory.setInventorySlotContents(0, stencilItem);
-		}
+	public List<ItemStack> getDrops(List<ItemStack> originalDrops) {
+		List<ItemStack> drops = Lists.newArrayList();
+		drops.add(inventory.getStackInSlot(SLOT_INPUT));
+		return drops; // original drops ignored
 	}
+
 }

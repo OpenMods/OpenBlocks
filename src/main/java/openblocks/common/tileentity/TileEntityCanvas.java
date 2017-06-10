@@ -11,7 +11,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 import openblocks.common.Stencil;
 import openblocks.common.item.ItemPaintBrush;
@@ -110,17 +109,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		if (layerId == 0) return getBaseColor(renderSide);
 		final Layer layer = getLayerForSide(renderSide, layerId);
 		return layer != null? layer.getColorForRender() : 0xCCCCCC;
-	}
-
-	// TODO 1.8.9 temporary, will be aligned once I figure rendering
-	public ResourceLocation getTextureForRender(EnumFacing renderSide, int layerId) {
-		Layer layer = getLayerForSide(renderSide, layerId);
-		if (layer != null) {
-			Stencil stencil = layer.getStencil();
-			if (stencil != null) { return layer.hasStencilCover()? stencil.coverBlockIcon : stencil.blockIcon; }
-		}
-
-		return null;
 	}
 
 	// TODO 1.8.9 possibly use for render?
@@ -240,13 +228,15 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public void addDrops(List<ItemStack> drops) {
+	public List<ItemStack> getDrops(List<ItemStack> drops) {
 		for (SyncableBlockLayers sideLayers : allSides.values()) {
 			if (sideLayers.isLastLayerStencil()) {
 				Stencil stencil = sideLayers.getTopStencil();
 				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
 			}
 		}
+
+		return drops;
 	}
 
 	@Override

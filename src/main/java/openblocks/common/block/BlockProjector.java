@@ -22,8 +22,6 @@ public class BlockProjector extends OpenBlock {
 
 	private static final int MIN_LIGHT_LEVEL = 0;
 	private static final int MAX_LIGHT_LEVEL = 15;
-	private static final String CONE_ICON = "openblocks:projector_cone" + (Config.renderHoloGrid? "_grid" : "");
-
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
 	private static final int MASK_ACTIVE = 1;

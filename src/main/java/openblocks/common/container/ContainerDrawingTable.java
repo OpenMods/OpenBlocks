@@ -8,7 +8,8 @@ public class ContainerDrawingTable extends ContainerInventoryProvider<TileEntity
 
 	public ContainerDrawingTable(IInventory playerInventory, TileEntityDrawingTable table) {
 		super(playerInventory, table);
-		addSlotToContainer(new RestrictedSlot(inventory, 0, 80, 34));
+		addSlotToContainer(new RestrictedSlot(inventory, TileEntityDrawingTable.SLOT_INPUT, 88 - 8 - 17, 34));
+		addSlotToContainer(new RestrictedSlot(inventory, TileEntityDrawingTable.SLOT_OUTPUT, 88 + 8 + 1, 34));
 		addPlayerInventorySlots(90);
 	}
 }

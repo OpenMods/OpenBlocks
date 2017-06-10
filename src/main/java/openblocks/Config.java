@@ -317,11 +317,6 @@ public class Config {
 	@ConfigProperty(category = "projector", name = "lightLevel", comment = "Level of light emitted by the active projector. Defaults to 10. Must be at maximum 15 and positive")
 	public static int projectorLightLevelValue = 10;
 
-	@ConfigProperty(category = "projector", name = "renderHolographicGrid", comment = "The holographic cone will display a grid.\n"
-			+ "The grid texture may look a bit pixelated and there may be a little gap between two corners.\n"
-			+ "This is not an error and it is only a texture calculation problem (e.g. 0.25 does not correctly correspond to 16 pixels in a 64x64 texture)")
-	public static boolean renderHoloGrid = false;
-
 	@OnLineModifiable
 	@ConfigProperty(category = "loot", name = "donationStation")
 	public static boolean donationStationLoot = false;
@@ -580,7 +575,6 @@ public class Config {
 
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Items.IRON_HELMET, 'o', Blocks.OBSIDIAN, 'i', "ingotIron"));
-			ItemStack stack = new ItemStack(OpenBlocks.Items.sonicGlasses);
 
 			if (sonicGlassesLoot) {
 				// TODO 1.10 Loot tables
@@ -633,10 +627,7 @@ public class Config {
 			}
 
 			if (paintBrushLoot) {
-				for (int color : new int[] { 0xFF0000, 0x00FF00, 0x0000FF }) {
-					ItemStack stack = ItemPaintBrush.createStackWithColor(color);
-					// TODO 1.10 Loot tables
-				}
+				// TODO 1.10 Loot tables
 			}
 		}
 
