@@ -3,6 +3,7 @@ package openblocks.common;
 import net.minecraft.util.ResourceLocation;
 import openblocks.OpenBlocks;
 
+@Deprecated
 public enum Stencil {
 
 	CREEPER_FACE("creeperface"),

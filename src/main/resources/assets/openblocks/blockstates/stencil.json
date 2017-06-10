@@ -1,0 +1,9 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "inventory" : [{
+            "model": "openblocks:magic-stencil",
+            "transform": "forge:default-item"
+        }]
+    }
+}

@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -49,6 +51,9 @@ import openblocks.client.renderer.entity.EntityMagnetRenderer;
 import openblocks.client.renderer.entity.EntityMiniMeRenderer;
 import openblocks.client.renderer.entity.EntitySelectionHandler;
 import openblocks.client.renderer.item.devnull.DevNullModel;
+import openblocks.client.renderer.item.stencil.ModelStencil;
+import openblocks.client.renderer.item.stencil.StencilItemOverride;
+import openblocks.client.renderer.item.stencil.StencilTextureManager;
 import openblocks.client.renderer.tileentity.TileEntityAutoEnchantmentTableRenderer;
 import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFanRenderer;
@@ -64,6 +69,7 @@ import openblocks.client.renderer.tileentity.TileEntityTrophyRenderer;
 import openblocks.client.renderer.tileentity.TileEntityVillageHighlighterRenderer;
 import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRenderer;
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
+import openblocks.common.StencilPattern;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.block.BlockPaintCan;
 import openblocks.common.entity.EntityCartographer;
@@ -129,6 +135,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ModelLoaderRegistry.registerLoader(MappedModelLoader.builder()
 				.put("magic-devnull", DevNullModel.INSTANCE)
 				.put("magic-path", PathModel.INSTANCE)
+				.put("magic-stencil", ModelStencil.INSTANCE)
 				.build(OpenBlocks.MODID));
 
 		if (OpenBlocks.Items.hangGlider != null) {
@@ -188,6 +195,20 @@ public class ClientProxy implements IOpenBlocksProxy {
 				@Override
 				public Render<? super EntityGoldenEye> createRenderFor(RenderManager manager) {
 					return new RenderSnowball<EntityGoldenEye>(manager, OpenBlocks.Items.goldenEye, Minecraft.getMinecraft().getRenderItem());
+				}
+			});
+		}
+
+		if (OpenBlocks.Items.stencil != null) {
+			StencilTextureManager.INSTANCE.register(StencilItemOverride.BACKGROUND_TEXTURE, StencilPattern.values().length);
+			MinecraftForge.EVENT_BUS.register(StencilTextureManager.INSTANCE);
+
+			final ModelResourceLocation location = new ModelResourceLocation(OpenBlocks.Items.stencil.getRegistryName(), "inventory");
+
+			ModelLoader.setCustomMeshDefinition(OpenBlocks.Items.stencil, new ItemMeshDefinition() {
+				@Override
+				public ModelResourceLocation getModelLocation(ItemStack stack) {
+					return location;
 				}
 			});
 		}

@@ -132,6 +132,7 @@ import openblocks.common.item.ItemSlimalyzer;
 import openblocks.common.item.ItemSonicGlasses;
 import openblocks.common.item.ItemSpongeOnAStick;
 import openblocks.common.item.ItemSqueegee;
+import openblocks.common.item.ItemStencil;
 import openblocks.common.item.ItemTankBlock;
 import openblocks.common.item.ItemTastyClay;
 import openblocks.common.item.ItemTrophyBlock;
@@ -415,7 +416,7 @@ public class OpenBlocks {
 		public static ItemPaintBrush paintBrush;
 
 		@RegisterItem(id = "stencil", registerDefaultModel = false)
-		public static ItemOBGeneric stencil;
+		public static ItemStencil stencil;
 
 		@RegisterItem(id = "squeegee")
 		public static ItemSqueegee squeegee;

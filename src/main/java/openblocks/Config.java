@@ -18,12 +18,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import openblocks.common.Stencil;
 import openblocks.common.TrophyHandler;
 import openblocks.common.item.ItemGoldenEye;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemPaintBrush;
-import openblocks.common.item.MetaStencil;
 import openblocks.common.item.MetasBucket;
 import openblocks.common.item.MetasGeneric;
 import openblocks.common.item.MetasGenericUnstackable;
@@ -643,13 +641,8 @@ public class Config {
 		}
 
 		if (OpenBlocks.Items.stencil != null) {
-			for (Stencil stencil : Stencil.VALUES)
-				OpenBlocks.Items.stencil.registerItem(stencil.ordinal(), new MetaStencil(stencil));
-
 			if (stencilLoot) {
-				for (Stencil stencil : Stencil.values()) {
-					// TODO 1.10 Loot tables
-				}
+				// TODO 1.10 Loot tables
 			}
 		}
 
