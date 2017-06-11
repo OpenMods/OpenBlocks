@@ -22,7 +22,6 @@ import openblocks.common.TrophyHandler;
 import openblocks.common.item.ItemGoldenEye;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemPaintBrush;
-import openblocks.common.item.MetasBucket;
 import openblocks.common.item.MetasGeneric;
 import openblocks.common.item.MetasGenericUnstackable;
 import openblocks.common.recipe.CrayonGlassesRecipe;
@@ -703,11 +702,6 @@ public class Config {
 			recipeList.add(new EpicEraserRecipe());
 			RecipeSorter.register("openblocks:epic_eraser", EpicEraserRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 			recipeList.add(new ShapelessOreRecipe(OpenBlocks.Items.epicEraser, "gemLapis", "slimeball", Blocks.WOOL));
-		}
-
-		if (OpenBlocks.Items.filledBucket != null) {
-			OpenBlocks.Items.filledBucket.registerItems(MetasBucket.values());
-			MetasBucket.xpbucket.registerAsBucketFor(OpenBlocks.Fluids.xpJuice);
 		}
 
 		if (OpenBlocks.Items.wrench != null) {

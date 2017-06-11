@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
 import openblocks.common.LiquidXpUtils;
@@ -24,7 +24,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	private static final int DRAIN_PER_CYCLE = 50;
 
-	private GenericTank bufferTank = new GenericTank(FluidContainerRegistry.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
+	private GenericTank bufferTank = new GenericTank(Fluid.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
 
 	private SyncableBoolean isOn;
 	private SyncableBoolean particleSpawnerActive;

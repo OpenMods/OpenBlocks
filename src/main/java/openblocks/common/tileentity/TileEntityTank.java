@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,15 +13,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.tileentity.tank.ITankConnections;
@@ -33,9 +38,6 @@ import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomHarvestDrops;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IPlaceAwareTile;
-import openmods.include.IncludeInterface;
-import openmods.include.IncludeOverride;
-import openmods.liquids.GenericFluidHandler;
 import openmods.model.variant.VariantModelState;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
@@ -120,8 +122,51 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	private boolean needsUpdate;
 
-	@IncludeInterface(IFluidHandler.class)
-	private final GenericFluidHandler tankWrapper = new GenericFluidHandler(tank);
+	private final IFluidHandler tankCapabilityWrapper = new IFluidHandler() {
+
+		@Override
+		public IFluidTankProperties[] getTankProperties() {
+			return tank.getTankProperties();
+		}
+
+		@Override
+		public int fill(FluidStack resource, boolean doFill) {
+			if (resource == null) return 0;
+			FluidStack copy = resource.copy();
+			fillColumn(copy, doFill);
+
+			return resource.amount - copy.amount;
+		}
+
+		@Override
+		@Nullable
+		public FluidStack drain(int maxDrain, boolean doDrain) {
+			if (maxDrain <= 0) return null;
+
+			FluidStack contents = tank.getFluid();
+			if (contents == null || contents.amount <= 0) return null;
+
+			FluidStack needed = contents.copy();
+			needed.amount = maxDrain;
+
+			drainFromColumn(needed, doDrain);
+
+			needed.amount = maxDrain - needed.amount;
+			return needed;
+		}
+
+		@Override
+		@Nullable
+		public FluidStack drain(FluidStack resource, boolean doDrain) {
+			if (resource == null) return null;
+
+			FluidStack needed = resource.copy();
+			drainFromColumn(needed, doDrain);
+
+			needed.amount = resource.amount - needed.amount;
+			return needed;
+		}
+	};
 
 	public TileEntityTank() {
 		renderLogic = new TankRenderLogic(tank);
@@ -149,7 +194,7 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	public static int getTankCapacity() {
-		return FluidContainerRegistry.BUCKET_VOLUME * Config.bucketsPerTank;
+		return Fluid.BUCKET_VOLUME * Config.bucketsPerTank;
 	}
 
 	public int getFluidLightLevel() {
@@ -229,25 +274,25 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public boolean onBlockActivated(EntityPlayer player, EnumFacing direction, float hitX, float hitY, float hitZ) {
 		ItemStack usedItem = player.inventory.getCurrentItem();
-		if (usedItem != null) return tryEmptyItem(player, direction, usedItem);
+		if (usedItem != null) return tryEmptyItem(player, usedItem);
 		if (worldObj.isRemote) return false;
 
-		return tryDrainXp(player, direction);
+		return tryDrainXp(player);
 	}
 
-	protected boolean tryDrainXp(EntityPlayer player, EnumFacing direction) {
+	protected boolean tryDrainXp(EntityPlayer player) {
 		final FluidStack fluid = tank.getFluid();
 		if (fluid != null && fluid.isFluidEqual(new FluidStack(OpenBlocks.Fluids.xpJuice, 0))) {
 			int requiredXp = MathHelper.ceiling_float_int(player.xpBarCap() * (1 - player.experience));
 			int requiredXPJuice = LiquidXpUtils.xpToLiquidRatio(requiredXp);
 
-			FluidStack drained = drain(direction, requiredXPJuice, false);
+			FluidStack drained = tankCapabilityWrapper.drain(requiredXPJuice, false);
 			if (drained != null) {
 				int xp = LiquidXpUtils.liquidToXpRatio(drained.amount);
 				if (xp > 0) {
 					int actualDrain = LiquidXpUtils.xpToLiquidRatio(xp);
 					EnchantmentUtils.addPlayerXP(player, xp);
-					drain(direction, actualDrain, true);
+					tankCapabilityWrapper.drain(actualDrain, true);
 					return true;
 				}
 			}
@@ -256,19 +301,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		return false;
 	}
 
-	protected boolean tryUseFluidContainer(EntityPlayer player, EnumFacing direction, ItemStack current) {
-		return tryEmptyItem(player, direction, current);
-	}
-
-	protected boolean tryEmptyItem(EntityPlayer player, EnumFacing direction, ItemStack current) {
-		FluidStack containedFluid = FluidContainerRegistry.getFluidForFilledItem(current);
-
-		if (containedFluid != null) {
-			int qty = fill(direction, containedFluid, true);
-			if (qty != 0 && !player.capabilities.isCreativeMode) {
-				player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemUtils.consumeItem(current));
+	protected boolean tryEmptyItem(EntityPlayer player, ItemStack container) {
+		final IFluidHandler containerFluidHandler = FluidUtil.getFluidHandler(container);
+		if (containerFluidHandler != null) {
+			FluidStack simulatedTransfer = FluidUtil.tryFluidTransfer(tankCapabilityWrapper, containerFluidHandler, Fluid.BUCKET_VOLUME, true);
+			if (simulatedTransfer != null) {
+				if (player != null) {
+					SoundEvent soundevent = simulatedTransfer.getFluid().getEmptySound(simulatedTransfer);
+					player.playSound(soundevent, 1f, 1f);
+				}
+				return true;
 			}
-			return true;
 		}
 
 		return false;
@@ -423,42 +466,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		}
 	}
 
-	@IncludeOverride
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		if (resource == null) return null;
-
-		FluidStack needed = resource.copy();
-		drainFromColumn(needed, doDrain);
-
-		needed.amount = resource.amount - needed.amount;
-		return needed;
-	}
-
-	@IncludeOverride
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		if (maxDrain <= 0) return null;
-
-		FluidStack contents = tank.getFluid();
-		if (contents == null || contents.amount <= 0) return null;
-
-		FluidStack needed = contents.copy();
-		needed.amount = maxDrain;
-
-		drainFromColumn(needed, doDrain);
-
-		needed.amount = maxDrain - needed.amount;
-		return needed;
-	}
-
-	@IncludeOverride
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		if (resource == null) return 0;
-		FluidStack copy = resource.copy();
-		fillColumn(copy, doFill);
-
-		return resource.amount - copy.amount;
-	}
-
 	@Override
 	public boolean suppressBlockHarvestDrops() {
 		return true;
@@ -485,5 +492,19 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	@Override
 	public boolean hasFastRenderer() {
 		return true;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return (T)tankCapabilityWrapper;
+
+		return null;
 	}
 }

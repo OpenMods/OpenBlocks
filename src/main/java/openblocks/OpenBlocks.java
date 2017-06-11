@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityList;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -110,7 +111,6 @@ import openblocks.common.item.ItemDevNull;
 import openblocks.common.item.ItemElevator;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemEpicEraser;
-import openblocks.common.item.ItemFilledBucket;
 import openblocks.common.item.ItemFlagBlock;
 import openblocks.common.item.ItemGoldenEye;
 import openblocks.common.item.ItemGuide;
@@ -137,6 +137,7 @@ import openblocks.common.item.ItemTankBlock;
 import openblocks.common.item.ItemTastyClay;
 import openblocks.common.item.ItemTrophyBlock;
 import openblocks.common.item.ItemWrench;
+import openblocks.common.item.ItemXpBucket;
 import openblocks.common.sync.SyncableBlockLayers;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
@@ -406,8 +407,8 @@ public class OpenBlocks {
 		@RegisterItem(id = "slimalyzer")
 		public static ItemSlimalyzer slimalyzer;
 
-		@RegisterItem(id = "filledbucket", registerDefaultModel = false)
-		public static ItemFilledBucket filledBucket;
+		@RegisterItem(id = "xpbucket", legacyIds = { "filledbucket" })
+		public static ItemXpBucket xpBucket;
 
 		@RegisterItem(id = "sleepingBag", unlocalizedName = "sleepingbag")
 		public static ItemSleepingBag sleepingBag;
@@ -471,7 +472,13 @@ public class OpenBlocks {
 		 * It may not be used as default fluid, so don't compare directly with other fluids.
 		 * FluidStacks created with this fluid should always be valid.
 		 */
-		public static final Fluid xpJuice = new Fluid("xpjuice", location("blocks/xpjuicestill"), location("blocks/xpjuiceflowing")).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("OpenBlocks.xpjuice");
+		public static final Fluid xpJuice = new Fluid("xpjuice", location("blocks/xpjuicestill"), location("blocks/xpjuiceflowing"))
+				.setLuminosity(10)
+				.setDensity(800)
+				.setViscosity(1500)
+				.setUnlocalizedName("OpenBlocks.xpjuice")
+				.setEmptySound(SoundEvents.ENTITY_PLAYER_LEVELUP)
+				.setFillSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP);
 	}
 
 	@ObjectHolder(MODID)
