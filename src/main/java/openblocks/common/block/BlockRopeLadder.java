@@ -67,9 +67,8 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	@SuppressWarnings("deprecation")
 	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity) {
 		if (entity instanceof EntityLivingBase) {
-			Orientation orientation = getOrientation(world, pos);
 			EnumFacing playerRotation = ((EntityLivingBase)entity).getHorizontalFacing();
-			if (orientation.north() == playerRotation) {
+			if (getFront(state) == playerRotation.getOpposite()) {
 				super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity);
 			}
 		} else {
@@ -77,7 +76,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 		}
 	}
 
-	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0f / 16.0f);
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0, 0.0, 15.0f / 16.0f, 1.0, 1.0, 1.0);
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -92,7 +91,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
-		final EnumFacing dir = getOrientation(state).north();
+		final EnumFacing dir = getBack(state);
 
 		if (world.isAirBlock(pos.offset(dir))) {
 			if (world.getBlockState(pos.up()).getBlock() != this) world.destroyBlock(pos, true);
@@ -107,7 +106,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 		}
 
 		for (Orientation o : getRotationMode().validDirections) {
-			final EnumFacing placeDir = o.north();
+			final EnumFacing placeDir = getRotationMode().getFront(o).getOpposite();
 			if (!world.isAirBlock(pos.offset(placeDir))) return true;
 		}
 
@@ -148,7 +147,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 
 	private Orientation findValidBlock(World world, BlockPos pos) {
 		for (Orientation o : getRotationMode().validDirections) {
-			final EnumFacing placeDir = o.north();
+			final EnumFacing placeDir = getRotationMode().getFront(o).getOpposite();
 			if (!world.isAirBlock(pos.offset(placeDir))) return o;
 		}
 

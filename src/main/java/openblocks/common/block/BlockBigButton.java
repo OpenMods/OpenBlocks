@@ -97,10 +97,8 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 
 	@Override
 	public int getStrongPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		EnumFacing direction = side.getOpposite();
 		final boolean pressed = blockState.getValue(POWERED);
-		final Orientation orientation = getOrientation(blockState);
-		return (direction == orientation.down() && pressed)? 15 : 0;
+		return (side == getFront(blockState) && pressed)? 15 : 0;
 	}
 
 	private void setPoweredState(World world, BlockPos pos, boolean isPowered) {
@@ -108,7 +106,7 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 		world.setBlockState(pos, state.withProperty(BlockBigButton.POWERED, isPowered), BlockNotifyFlags.ALL);
 
 		world.notifyNeighborsOfStateChange(pos, this);
-		final EnumFacing rot = getOrientation(state).down();
+		final EnumFacing rot = getBack(state);
 		world.notifyNeighborsOfStateChange(pos.offset(rot), this);
 	}
 

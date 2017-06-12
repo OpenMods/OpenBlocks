@@ -41,7 +41,7 @@ public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttac
 
 	@Override
 	public EnumFacing getSurfaceDirection() {
-		return getOrientation().down();
+		return getBack();
 	}
 
 	@Override
