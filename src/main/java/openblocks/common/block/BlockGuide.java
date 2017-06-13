@@ -26,6 +26,7 @@ import openblocks.events.GuideActionEvent;
 import openmods.OpenMods;
 import openmods.api.ISelectionAware;
 import openmods.block.BlockRotationMode;
+import openmods.block.IBlockRotationMode;
 import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Hitbox;
@@ -36,7 +37,7 @@ import openmods.infobook.BookDocumentation;
 public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	@Override
-	public BlockRotationMode getRotationMode() {
+	public IBlockRotationMode getRotationMode() {
 		return BlockRotationMode.THREE_FOUR_DIRECTIONS;
 	}
 

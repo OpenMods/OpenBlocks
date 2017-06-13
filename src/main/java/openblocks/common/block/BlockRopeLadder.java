@@ -105,7 +105,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 			return maybeLadder.getBlock() == this;
 		}
 
-		for (Orientation o : getRotationMode().validDirections) {
+		for (Orientation o : getRotationMode().getValidDirections()) {
 			final EnumFacing placeDir = getRotationMode().getFront(o).getOpposite();
 			if (!world.isAirBlock(pos.offset(placeDir))) return true;
 		}
@@ -146,7 +146,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	private Orientation findValidBlock(World world, BlockPos pos) {
-		for (Orientation o : getRotationMode().validDirections) {
+		for (Orientation o : getRotationMode().getValidDirections()) {
 			final EnumFacing placeDir = getRotationMode().getFront(o).getOpposite();
 			if (!world.isAirBlock(pos.offset(placeDir))) return o;
 		}
