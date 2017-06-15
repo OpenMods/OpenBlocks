@@ -442,7 +442,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	protected boolean canAddCoord(int x, int y, int z) {
-		return true;
+		return (x != 0) || (y != 0) || (z != 0);
 	}
 
 	public CoordShape getShape() {

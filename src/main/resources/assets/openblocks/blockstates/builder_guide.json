@@ -53,4 +53,5 @@
             "yp_zn" : { "transform" : { "rotation" : [{ "x" : 90 }, { "y" : 270 }] } },
             "yn_zn" : { "transform" : { "rotation" : [{ "x" : 90 }, { "y" : 90 }] } }
         }
+    }
 }
