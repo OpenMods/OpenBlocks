@@ -197,6 +197,7 @@ import openblocks.integration.ModuleAdapters;
 import openblocks.integration.ModuleTurtles;
 import openblocks.rpc.IColorChanger;
 import openblocks.rpc.IGuideAnimationTrigger;
+import openblocks.rpc.IItemDropper;
 import openblocks.rpc.ILevelChanger;
 import openblocks.rpc.IRotatable;
 import openblocks.rpc.IStencilCrafter;
@@ -332,7 +333,7 @@ public class OpenBlocks {
 		@RegisterBlock(id = "blockPlacer", tileEntity = TileEntityBlockPlacer.class)
 		public static BlockBlockPlacer blockPlacer;
 
-		@RegisterBlock(id = "itemDropper", tileEntity = TileEntityItemDropper.class)
+		@RegisterBlock(id = "itemdropper", tileEntity = TileEntityItemDropper.class, legacyIds = "itemDropper")
 		public static BlockItemDropper itemDropper;
 
 		@RegisterBlock(id = "ropeladder")
@@ -680,7 +681,8 @@ public class OpenBlocks {
 				.registerInterface(IColorChanger.class)
 				.registerInterface(ILevelChanger.class)
 				.registerInterface(ITriggerable.class)
-				.registerInterface(IGuideAnimationTrigger.class);
+				.registerInterface(IGuideAnimationTrigger.class)
+				.registerInterface(IItemDropper.class);
 
 		Config.register();
 

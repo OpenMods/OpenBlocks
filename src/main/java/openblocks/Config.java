@@ -382,6 +382,10 @@ public class Config {
 	@ConfigProperty(category = "hangglider", name = "enableThermal", comment = "Enable a whole new level of hanggliding experience through thermal lift. See keybindings for acoustic vario controls")
 	public static boolean hanggliderEnableThermal = true;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "itemdropper", name = "maxItemDropSpeed", comment = "Maximum speed that can be set in item dropper GUI")
+	public static double maxItemDropSpeed = 4;
+
 	public static void register() {
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 

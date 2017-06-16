@@ -6,6 +6,9 @@ achievement.openblocks.stackOverflow.desc=¡Está lleno de estrellas!
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Sé idiota
+#openblocks.keybind.vario_switch=Vario on/off ## NEEDS TRANSLATION ##
+#openblocks.keybind.vario_vol_up=Vario volume up ## NEEDS TRANSLATION ##
+#openblocks.keybind.vario_vol_down=Vario volume down ## NEEDS TRANSLATION ##
 
 enchantment.openblocks.explosive=Inestable
 enchantment.openblocks.laststand=Última Oportunidad
@@ -169,6 +172,9 @@ openblocks.misc.command.luck_current=Suerte del jugador %s: %d
 #openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Ha ocurrido algo extraño a tu alrededor
 
+#openblocks.misc.dropper.speed=Speed ## NEEDS TRANSLATION ##
+#openblocks.misc.dropper.use_redstone=Scale by redstone signal strength ## NEEDS TRANSLATION ##
+
 openblocks.turtle.magnet=Imán
 
 tile.openblocks.elevator.name=Ascensor
@@ -231,8 +237,8 @@ tile.openblocks.target.description=El objetivo emitirá una seña de redstone de
 tile.openblocks.path.name=Camino Rústico
 tile.openblocks.path.description=El camino rústico no hace nada, pero es muy mono.
 
-tile.openblocks.itemDropper.name=Lanzador de Objetos
-tile.openblocks.itemDropper.description=El lanzador de objetos es similar al lanzador de objetos corriente, Excepto en que deja caer los objetos en línea recta hacia abajo.
+tile.openblocks.itemdropper.name=Lanzador de Objetos
+tile.openblocks.itemdropper.description=El lanzador de objetos es similar al lanzador de objetos corriente, Excepto en que deja caer los objetos en línea recta hacia abajo.
 
 tile.openblocks.bigbutton.name=Botón Grande
 tile.openblocks.bigbutton.description=El botón grande es un botón más grande que se puede colocar en las paredes. Si haces shift+clic con la mano vacía, abrirá un inventario con una sola ranura. Puedes colocar objetos en esta ranura para aumentar la duración del tiempo en que el botón permanece presionado. Un objeto aumenta el tiempo un tic.

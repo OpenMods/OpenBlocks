@@ -6,6 +6,9 @@ achievement.openblocks.stackOverflow.desc=Оно забито звёздами!
 
 openblocks.keybind.category=OpenBlocks
 openblocks.keybind.drop_brick=Будьте глупым
+#openblocks.keybind.vario_switch=Vario on/off ## NEEDS TRANSLATION ##
+#openblocks.keybind.vario_vol_up=Vario volume up ## NEEDS TRANSLATION ##
+#openblocks.keybind.vario_vol_down=Vario volume down ## NEEDS TRANSLATION ##
 
 enchantment.openblocks.explosive=Нестабильность
 enchantment.openblocks.laststand=Последний рубеж
@@ -169,6 +172,9 @@ openblocks.misc.command.luck_current=Удача: %2$d игрока %1$s
 #openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Что-то странное происходит вокруг Вас
 
+#openblocks.misc.dropper.speed=Speed ## NEEDS TRANSLATION ##
+#openblocks.misc.dropper.use_redstone=Scale by redstone signal strength ## NEEDS TRANSLATION ##
+
 openblocks.turtle.magnet=Магнит
 
 tile.openblocks.elevator.name=Лифт
@@ -231,8 +237,8 @@ tile.openblocks.target.description=Мишень будет выдавать си
 tile.openblocks.path.name=Путь
 tile.openblocks.path.description=Путь ничего не делает. Он просто выглядит красиво!
 
-tile.openblocks.itemDropper.name=Выбрасыватель предметов
-tile.openblocks.itemDropper.description=Выбрасыватель предметов аналогичен оригинальному выбрасывателю, за исключением того, что он выбрасывает предметы вниз по прямой линии.
+tile.openblocks.itemdropper.name=Выбрасыватель предметов
+tile.openblocks.itemdropper.description=Выбрасыватель предметов аналогичен оригинальному выбрасывателю, за исключением того, что он выбрасывает предметы вниз по прямой линии.
 
 tile.openblocks.bigbutton.name=Большая кнопка
 tile.openblocks.bigbutton.description=Большая кнопка - это большая кнопка, которая может быть поставлена на стену. Если Вы нажмёте shift-ПКМ по кнопке пустой рукой, Вам будет показан инвентарь с одним слотом. Вы можете положить предметы в этот слот, чтобы увеличить количество времени, во время которого кнопка остаётся нажатой - один предмет увеличивает время нажатия кнопки на один тик.

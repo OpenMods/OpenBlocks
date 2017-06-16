@@ -6,6 +6,9 @@
 
 #openblocks.keybind.category=OpenBlocks ## NEEDS TRANSLATION ##
 #openblocks.keybind.drop_brick=Be silly ## NEEDS TRANSLATION ##
+#openblocks.keybind.vario_switch=Vario on/off ## NEEDS TRANSLATION ##
+#openblocks.keybind.vario_vol_up=Vario volume up ## NEEDS TRANSLATION ##
+#openblocks.keybind.vario_vol_down=Vario volume down ## NEEDS TRANSLATION ##
 
 #enchantment.openblocks.explosive=Unstable ## NEEDS TRANSLATION ##
 #enchantment.openblocks.laststand=Last Stand ## NEEDS TRANSLATION ##
@@ -169,6 +172,9 @@ openblocks.misc.mode.inverted_stairs=Escadas invertidas
 #openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 #openblocks.flim_flammed=Something weird happens around you ## NEEDS TRANSLATION ##
 
+#openblocks.misc.dropper.speed=Speed ## NEEDS TRANSLATION ##
+#openblocks.misc.dropper.use_redstone=Scale by redstone signal strength ## NEEDS TRANSLATION ##
+
 openblocks.turtle.magnet=Imã
 
 tile.openblocks.elevator.name=Elevador
@@ -231,8 +237,8 @@ tile.openblocks.target.name=Alvo
 tile.openblocks.path.name=Caminho
 #tile.openblocks.path.description=The path doesn't do anything. It just looks nice! ## NEEDS TRANSLATION ##
 
-#tile.openblocks.itemDropper.name=Item Dropper ## NEEDS TRANSLATION ##
-#tile.openblocks.itemDropper.description=The item dropper is similar to the vanilla dropper, except it drops items directly down in a straight line. ## NEEDS TRANSLATION ##
+#tile.openblocks.itemdropper.name=Item Dropper ## NEEDS TRANSLATION ##
+#tile.openblocks.itemdropper.description=The item dropper is similar to the vanilla dropper, except it drops items without any random bias. User can also control speed of dropped item from GUI and with redstone power. ## NEEDS TRANSLATION ##
 
 tile.openblocks.bigbutton.name=Grande botão
 #tile.openblocks.bigbutton.description=The big button is a large button that can be placed on walls. If you shift-click on the button with an empty hand it will bring up an inventory with a single slot. You can put items into this slot to increase the length of time the button is pressed - one item increases the button press by one tick. ## NEEDS TRANSLATION ##
@@ -304,7 +310,7 @@ item.openblocks.slimalyzer.name=Gosmalizador
 #item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk. ## NEEDS TRANSLATION ##
 
 item.openblocks.hangglider.name=Planador
-#item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster! ## NEEDS TRANSLATION ##
+#item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!\n\nYour hang glider now also includes an acoustic variometer indicating vertical air movement. Press V to activate it and stay up forever (or until the sun goes down)! ## NEEDS TRANSLATION ##
 
 item.openblocks.gliderwing.name=Asa do planador
 

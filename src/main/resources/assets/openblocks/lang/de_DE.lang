@@ -172,6 +172,9 @@ openblocks.misc.command.luck_current=Glück von Spieler %s: %d
 #openblocks.misc.hidden_lore=§a§oHold ALT to see history§r ## NEEDS TRANSLATION ##
 openblocks.flim_flammed=Etwas seltsames geschieht um dich herum...
 
+#openblocks.misc.dropper.speed=Speed ## NEEDS TRANSLATION ##
+#openblocks.misc.dropper.use_redstone=Scale by redstone signal strength ## NEEDS TRANSLATION ##
+
 openblocks.turtle.magnet=Magnet
 
 tile.openblocks.elevator.name=Fahrstuhl
@@ -234,8 +237,8 @@ tile.openblocks.target.description=Die Zielscheibe gibt ein Redstone-Signal mit 
 tile.openblocks.path.name=Pfad
 tile.openblocks.path.description=Der Pfad macht überhaupt nichts. Er sieht einfach nur gut aus!
 
-tile.openblocks.itemDropper.name=Itemspender
-tile.openblocks.itemDropper.description=Der Itemspender ist dem Vanilla-Spender ähnlich, außer dass er Items direkt in einer geraden Linie nach unten wirft.
+tile.openblocks.itemdropper.name=Itemspender
+tile.openblocks.itemdropper.description=Der Itemspender ist dem Vanilla-Spender ähnlich, außer dass er Items direkt in einer geraden Linie nach unten wirft.
 
 tile.openblocks.bigbutton.name=Großer Knopf
 tile.openblocks.bigbutton.description=Der große Knopf ist ein Knopf, der an der Wand platziert werden kann. Wenn du auf den Knopf mit einer leeren Hand Shift-klickst, wird ein Inventar mit einem einzelnen Slot erscheinen. Du kannst Items in diesen Slot geben, um die Zeit, die der Knopf gedrückt ist, zu verlängern - ein Item erhöht die Dauer um einen Tick.

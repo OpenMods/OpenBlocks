@@ -1,5 +1,6 @@
 package openblocks.client.gui;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -38,13 +39,20 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		final ILevelChanger rpc = te.createClientRpcProxy(ILevelChanger.class);
 
 		final GuiComponentSlider slider = new GuiComponentSlider(44, 39, 45, 1, 30, 0);
-		slider.setListener(new IValueChangedListener<Integer>() {
+		slider.setListener(new IValueChangedListener<Double>() {
 			@Override
-			public void valueChanged(Integer value) {
-				rpc.changeLevel(value);
+			public void valueChanged(Double value) {
+				rpc.changeLevel(value.intValue());
 			}
 		});
-		addSyncUpdateListener(ValueCopyAction.create(te.getLevelProvider(), slider));
+
+		addSyncUpdateListener(ValueCopyAction.create(te.getLevelProvider(), slider, new Function<Integer, Double>() {
+			@Override
+			public Double apply(Integer input) {
+				return input.doubleValue();
+			}
+		}));
+
 		root.addComponent(slider);
 
 		final GuiComponentLabel maxLevel = new GuiComponentLabel(40, 25, "0");

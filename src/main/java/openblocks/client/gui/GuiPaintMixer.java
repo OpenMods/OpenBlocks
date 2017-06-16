@@ -122,7 +122,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 					textbox.setValue(String.format("%06X", rgb));
 					colorBox.setValue(rgb);
 					colorPicker.setValue(rgb);
-					slider.setValue(colorPicker.tone);
+					slider.setValue(Double.valueOf(colorPicker.tone));
 				}
 			});
 
@@ -134,7 +134,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 
 						selectedColor = parsed;
 						colorPicker.setValue(parsed);
-						slider.setValue(colorPicker.tone);
+						slider.setValue(Double.valueOf(colorPicker.tone));
 						colorBox.setValue(parsed);
 					} catch (NumberFormatException e) {
 						// NO-OP, user derp
@@ -151,10 +151,10 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 				}
 			});
 
-			slider.setListener(new IValueChangedListener<Integer>() {
+			slider.setListener(new IValueChangedListener<Double>() {
 				@Override
-				public void valueChanged(Integer value) {
-					colorPicker.tone = value;
+				public void valueChanged(Double value) {
+					colorPicker.tone = value.intValue();
 					int color = colorPicker.getColor();
 					textbox.setValue(String.format("%06X", color));
 					colorBox.setValue(color);
@@ -175,7 +175,7 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 					selectedColor = value;
 					textbox.setValue(String.format("%06X", value));
 					colorPicker.setValue(value);
-					slider.setValue(colorPicker.tone);
+					slider.setValue(Double.valueOf(colorPicker.tone));
 					colorBox.setValue(value);
 				}
 			});

@@ -7,8 +7,8 @@ import openmods.container.ContainerInventoryProvider;
 public class ContainerItemDropper extends ContainerInventoryProvider<TileEntityItemDropper> {
 	public ContainerItemDropper(IInventory playerInventory, TileEntityItemDropper itemDropper) {
 		super(playerInventory, itemDropper);
-		addInventoryGrid(62, 18, 3);
-		addPlayerInventorySlots(85);
+		addInventoryGrid(8, 18, 3);
+		addPlayerInventorySlots(300/2 - (9 * 18 + 9) / 2, 85);
 	}
 
 }

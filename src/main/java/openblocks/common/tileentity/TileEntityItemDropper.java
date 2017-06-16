@@ -1,44 +1,65 @@
 package openblocks.common.tileentity;
 
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.WorldServer;
 import openblocks.client.gui.GuiItemDropper;
 import openblocks.common.container.ContainerItemDropper;
+import openblocks.rpc.IItemDropper;
 import openmods.api.IHasGui;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.DropItemAction;
 import openmods.fakeplayer.FakePlayerPool;
+import openmods.geometry.Orientation;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.tileentity.OpenTileEntity;
-import openmods.utils.InventoryUtils;
+import openmods.sync.SyncableBoolean;
+import openmods.sync.SyncableDouble;
+import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityItemDropper extends OpenTileEntity implements INeighbourAwareTile, IInventoryProvider, IHasGui {
+public class TileEntityItemDropper extends SyncedTileEntity implements INeighbourAwareTile, IInventoryProvider, IHasGui, IItemDropper {
 	static final int BUFFER_SIZE = 9;
 
-	private boolean _redstoneSignal;
+	private boolean redstoneState;
 
 	private GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "itemDropper", false, 9));
 
+	private SyncableDouble itemSpeedBase;
+
+	private SyncableBoolean useRedstoneStrength;
+
 	public TileEntityItemDropper() {}
 
-	public void setRedstoneSignal(boolean redstoneSignal) {
-		if (redstoneSignal != _redstoneSignal) {
-			_redstoneSignal = redstoneSignal;
-			if (_redstoneSignal && !InventoryUtils.inventoryIsEmpty(inventory)) {
-				dropItem();
+	@Override
+	protected void createSyncedFields() {
+		this.itemSpeedBase = new SyncableDouble(0);
+		this.useRedstoneStrength = new SyncableBoolean(false);
+	}
+
+	private void setRedstoneSignal(int redstoneSignal) {
+		boolean newRedstoneState = redstoneSignal > 0;
+		if (newRedstoneState != redstoneState) {
+			redstoneState = newRedstoneState;
+			if (redstoneState) {
+				final float speedMultiplier = (float)(itemSpeedBase.get() * (useRedstoneStrength.get()? redstoneSignal / 15.0f : 1.0f));
+				dropItem(speedMultiplier);
 			}
 		}
 	}
 
-	private void dropItem() {
+	private static final Vector4f DROP_POS = new Vector4f(0.5f, -0.5f, 0.5f, 1.0f);
+	private static final Vector3f DROP_V = new Vector3f(0.0f, -1.0f, 0.0f);
+
+	private void dropItem(float speedMultiplier) {
 		if (!(worldObj instanceof WorldServer)) return;
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -48,7 +69,28 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 			final ItemStack dropped = stack.splitStack(1);
 
 			if (stack.stackSize <= 0) inventory.setInventorySlotContents(i, null);
-			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new DropItemAction(dropped, pos, EnumFacing.DOWN));
+			final Orientation orientation = getOrientation();
+
+			final Vector4f worldDrop = new Vector4f();
+			{
+				final Matrix4f blockLocalToWorld = orientation.getBlockLocalToWorldMatrix();
+				blockLocalToWorld.transform(DROP_POS, worldDrop);
+			}
+
+			final Vector3f worldVel = new Vector3f();
+			{
+				final Matrix3f localToWorld = orientation.getLocalToWorldMatrix();
+				worldVel.set(DROP_V);
+				worldVel.scale(speedMultiplier);
+				localToWorld.transform(worldVel);
+			}
+
+			final double worldDropX = pos.getX() + worldDrop.x;
+			final double worldDropY = pos.getY() + worldDrop.y;
+			final double worldDropZ = pos.getZ() + worldDrop.z;
+
+			final DropItemAction action = new DropItemAction(dropped, worldDropX, worldDropY, worldDropZ, worldVel.x, worldVel.y, worldVel.z);
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, action);
 
 			break;
 		}
@@ -57,7 +99,7 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	@Override
 	public void onNeighbourChanged(Block block) {
 		if (!worldObj.isRemote) {
-			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
+			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(pos));
 		}
 	}
 
@@ -93,5 +135,29 @@ public class TileEntityItemDropper extends OpenTileEntity implements INeighbourA
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		inventory.readFromNBT(tag);
+	}
+
+	@Override
+	public void setItemSpeed(double speed) {
+		this.itemSpeedBase.set(speed);
+		sync();
+	}
+
+	public double getItemSpeed() {
+		return this.itemSpeedBase.get();
+	}
+
+	@Override
+	public void setUseRedstoneStrength(boolean useRedstone) {
+		this.useRedstoneStrength.set(useRedstone);
+		sync();
+	}
+
+	public boolean getUseRedstoneStrength() {
+		return this.useRedstoneStrength.get();
+	}
+
+	public IItemDropper createRpcProxy() {
+		return createClientRpcProxy(IItemDropper.class);
 	}
 }
