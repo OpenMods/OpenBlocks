@@ -75,8 +75,8 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
                 BlockSnapshot snapshot = BlockSnapshot.getBlockSnapshot(worldObj, absX, absY, absZ);
                 BlockEvent.PlaceEvent event = new BlockEvent.PlaceEvent(snapshot, worldObj.getBlock(absX, absY, absZ), player);
                 MinecraftForge.EVENT_BUS.post(event);
-                boolean hasPlaced = itemBlock.placeBlockAt(heldItem, player, worldObj, absX, absY, absZ, side, hitX, hitY, hitZ, blockMeta);
-                if (!event.isCanceled() && hasPlaced) {
+                if (!event.isCanceled()) {
+                    itemBlock.placeBlockAt(heldItem, player, worldObj, absX, absY, absZ, side, hitX, hitY, hitZ, blockMeta);
                     final String particle = "blockdust_" + Block.getIdFromBlock(block) + "_" + blockMeta;
                     createServerRpcProxy(IGuideAnimationTrigger.class).trigger(absX, absY, absZ, particle);
                     --heldItem.stackSize;
