@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import net.minecraft.block.Block;
@@ -10,9 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
 import openblocks.common.LiquidXpUtils;
@@ -20,18 +23,17 @@ import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable.AutoSlots;
 import openblocks.rpc.ILevelChanger;
 import openmods.api.IHasGui;
-import openmods.api.IInventoryCallback;
 import openmods.api.INeighbourAwareTile;
 import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
-import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
 import openmods.inventory.legacy.ItemDistribution;
-import openmods.liquids.SidedFluidHandler;
+import openmods.liquids.SidedFluidCapabilityWrapper;
+import openmods.sync.SyncableEnum;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableSides;
@@ -40,70 +42,182 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.VanillaEnchantLogic;
+import openmods.utils.VanillaEnchantLogic.Level;
 import openmods.utils.bitmap.BitMapUtils;
 import openmods.utils.bitmap.IRpcDirectionBitMap;
 import openmods.utils.bitmap.IRpcIntBitMap;
 import openmods.utils.bitmap.IWriteableBitMap;
 
-public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, IInventoryCallback, INeighbourAwareTile, ITickable {
+public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements IInventoryProvider, IHasGui, IConfigurableGuiSlots<AutoSlots>, ILevelChanger, INeighbourAwareTile, ITickable {
 
-	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(30);
+	private static final String TAG_SEED = "Seed";
+
+	public static final int MAX_STORED_LEVELS = 30;
+	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(MAX_STORED_LEVELS);
 
 	public static enum Slots {
-		input,
+		tool,
 		output,
 		lapis
 	}
 
 	public static enum AutoSlots {
-		input,
+		toolInput,
+		lapisInput,
 		output,
-		lapis,
 		xp
 	}
 
 	private SyncableTank tank;
 	private SyncableSides inputSides;
+	private SyncableSides lapisSides;
 	private SyncableSides outputSides;
 	private SyncableSides xpSides;
-	private SyncableInt targetLevel;
 	private SyncableFlags automaticSlots;
-	private SyncableInt maxLevel;
+
+	private SyncableInt powerLimit;
+	private SyncableInt availablePower;
+	private SyncableEnum<VanillaEnchantLogic.Level> selectedLevel;
+
+	private long seed;
+
+	private static final int POWER_CHECK_PERIOD = 20;
+
+	private int powerCheckCountdown = 0;
 
 	private boolean needsTankUpdate;
 
-	private final GenericInventory inventory = new TileEntityInventory(this, "autoenchant", true, 2) {
+	private final GenericInventory inventory = new TileEntityInventory(this, "autoenchant", true, 3) {
+		final List<ItemStack> lapis = OreDictionary.getOres("gemLapis");
+
 		@Override
-		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			return (i == Slots.input.ordinal()) && !itemstack.isItemEnchanted();
+		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+			if (slot == Slots.tool.ordinal()) return itemstack.isItemEnchantable();
+			if (slot == Slots.lapis.ordinal()) {
+				for (ItemStack ore : lapis)
+					if (OreDictionary.itemMatches(ore, itemstack, false)) return true;
+
+				return false;
+			}
+			return false;
 		}
 	};
 
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
 
-	@IncludeInterface
-	private final IFluidHandler tankWrapper = new SidedFluidHandler.Drain(xpSides, tank);
+	private final SidedFluidCapabilityWrapper tankCapability = SidedFluidCapabilityWrapper.wrap(tank, xpSides, false, true);
+
+	private static final Random bookRand = new Random();
+
+	private static final Random seedGenerator = new Random();
 
 	/**
 	 * grotesque book turning stuff taken from the main enchantment table
 	 */
-	public int tickCount;
-	public float pageFlip;
-	public float pageFlipPrev;
-	public float field_70373_d;
-	public float field_70374_e;
-	public float bookSpread;
-	public float bookSpreadPrev;
-	public float bookRotation2;
-	public float bookRotationPrev;
-	public float bookRotation;
-	private static Random rand = new Random();
+	public class BookState {
+
+		public int tickCount;
+		public float pageFlip;
+		public float pageFlipPrev;
+		public float flipT;
+		public float flipA;
+		public float bookSpread;
+		public float bookSpreadPrev;
+		public float bookRotation;
+		public float bookRotationPrev;
+		public float tRot;
+
+		public void handleBookRotation() {
+			this.bookSpreadPrev = this.bookSpread;
+			this.bookRotationPrev = this.bookRotation;
+			EntityPlayer entityplayer = worldObj.getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D, false);
+
+			if (entityplayer != null) {
+				double d0 = entityplayer.posX - (pos.getX() + 0.5F);
+				double d1 = entityplayer.posZ - (pos.getZ() + 0.5F);
+				this.tRot = (float)MathHelper.atan2(d1, d0);
+				this.bookSpread += 0.1F;
+
+				if (this.bookSpread < 0.5F || bookRand.nextInt(40) == 0) {
+					float f1 = this.flipT;
+
+					while (true) {
+						this.flipT += bookRand.nextInt(4) - bookRand.nextInt(4);
+
+						if (f1 != this.flipT) {
+							break;
+						}
+					}
+				}
+			} else {
+				this.tRot += 0.02F;
+				this.bookSpread -= 0.1F;
+			}
+
+			while (this.bookRotation >= (float)Math.PI) {
+				this.bookRotation -= ((float)Math.PI * 2F);
+			}
+
+			while (this.bookRotation < -(float)Math.PI) {
+				this.bookRotation += ((float)Math.PI * 2F);
+			}
+
+			while (this.tRot >= (float)Math.PI) {
+				this.tRot -= ((float)Math.PI * 2F);
+			}
+
+			while (this.tRot < -(float)Math.PI) {
+				this.tRot += ((float)Math.PI * 2F);
+			}
+
+			float f2 = this.tRot - this.bookRotation;
+
+			while (f2 >= (float)Math.PI) {
+				f2 -= ((float)Math.PI * 2F);
+			}
+
+			while (f2 < -(float)Math.PI) {
+				f2 += ((float)Math.PI * 2F);
+			}
+
+			this.bookRotation += f2 * 0.4F;
+			this.bookSpread = MathHelper.clamp_float(this.bookSpread, 0.0F, 1.0F);
+			++this.tickCount;
+			this.pageFlipPrev = this.pageFlip;
+			float f = (this.flipT - this.pageFlip) * 0.4F;
+			f = MathHelper.clamp_float(f, -0.2F, 0.2F);
+			this.flipA += (f - this.flipA) * 0.9F;
+			this.pageFlip += this.flipA;
+		}
+	}
+
+	public final BookState bookState = new BookState();
 
 	public TileEntityAutoEnchantmentTable() {
-		slotSides.registerSlot(Slots.input, inputSides, true, false);
+		slotSides.registerSlot(Slots.tool, inputSides, true, false);
+		slotSides.registerSlot(Slots.lapis, lapisSides, true, false);
 		slotSides.registerSlot(Slots.output, outputSides, false, true);
-		inventory.addCallback(this);
+
+		this.seed = seedGenerator.nextLong();
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return tankCapability.hasHandler(facing);
+
+		return false;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return (T)tankCapability.getHandler(facing);
+
+		return null;
 	}
 
 	@Override
@@ -112,17 +226,18 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		inputSides = new SyncableSides();
 		outputSides = new SyncableSides();
 		xpSides = new SyncableSides();
-		targetLevel = new SyncableInt(1);
-		maxLevel = new SyncableInt();
+		lapisSides = new SyncableSides();
+		powerLimit = new SyncableInt(1);
+		availablePower = new SyncableInt();
+		selectedLevel = new SyncableEnum<VanillaEnchantLogic.Level>(VanillaEnchantLogic.Level.L1);
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
 	}
 
 	@Override
 	public void update() {
-		handleBookRotation();
-		// TODO 1.8.9 rewrite to match vanilla (lapis!)
-		if (!worldObj.isRemote) {
+		bookState.handleBookRotation();
 
+		if (!worldObj.isRemote) {
 			if (automaticSlots.get(AutoSlots.xp)) {
 				if (needsTankUpdate) {
 					tank.updateNeighbours(worldObj, pos);
@@ -132,137 +247,100 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 				tank.fillFromSides(80, worldObj, pos, xpSides.getValue());
 			}
 
+			if (powerCheckCountdown-- <= 0) {
+				powerCheckCountdown = POWER_CHECK_PERIOD;
+				final int power = (int)EnchantmentUtils.getPower(worldObj, getPos());
+				availablePower.set(power);
+			}
+
 			if (shouldAutoOutput() && hasStack(Slots.output)) {
 				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue(), true);
 			}
 
-			// if we should auto input the tool and we don't currently have one
-			if (shouldAutoInput() && !hasStack(Slots.input)) {
-				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.input.ordinal(), inputSides.getValue(), true);
+			if (shouldAutoInputTool() && hasSpace(Slots.tool)) {
+				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.tool.ordinal(), inputSides.getValue(), true);
 			}
 
-			if (hasStack(Slots.input)
-					&& inventory.isItemValidForSlot(Slots.input.ordinal(), getStack(Slots.input))
-					&& !hasStack(Slots.output)) {
-				int xpRequired = LiquidXpUtils.getLiquidForLevel(targetLevel.get());
-				if (xpRequired > 0 && tank.getFluidAmount() >= xpRequired) {
-					float power = EnchantmentUtils.getPower(worldObj, pos);
-					int enchantability = EnchantmentUtils.calcEnchantability(getStack(Slots.input), (int)power, true);
-					if (enchantability >= targetLevel.get()) {
-						ItemStack inputStack = getStack(Slots.input);
-						if (inputStack == null) return;
-						ItemStack resultingStack = inputStack.copy();
-						resultingStack.stackSize = 1;
-						if (EnchantmentUtils.enchantItem(resultingStack, targetLevel.get(), worldObj.rand, false)) {
-							tank.drain(xpRequired, true);
-							inputStack.stackSize--;
-							if (inputStack.stackSize < 1) {
-								setStack(Slots.input, null);
-							}
-							setStack(Slots.output, resultingStack);
-
-							sync();
-						}
-					}
-				}
+			if (shouldAutoInputLapis() && hasSpace(Slots.lapis)) {
+				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.lapis.ordinal(), lapisSides.getValue(), true);
 			}
 
-			if (tank.isDirty()) sync();
+			tryEnchantItem();
+
+			sync();
 		}
 	}
 
-	private void handleBookRotation() {
-		this.bookSpreadPrev = this.bookSpread;
-		this.bookRotationPrev = this.bookRotation2;
-		EntityPlayer entityplayer = this.worldObj.getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D, false);
+	private void tryEnchantItem() {
+		final ItemStack tool = getStack(Slots.tool);
+		if (tool == null || !tool.isItemEnchantable()) return;
 
-		if (entityplayer != null) {
-			double d0 = entityplayer.posX - (pos.getX() + 0.5F);
-			double d1 = entityplayer.posZ - (pos.getZ() + 0.5F);
-			this.bookRotation = (float)Math.atan2(d1, d0);
-			this.bookSpread += 0.1F;
+		final ItemStack lapis = getStack(Slots.lapis);
+		if (lapis == null) return;
 
-			if (this.bookSpread < 0.5F || rand.nextInt(40) == 0) {
-				float f = this.field_70373_d;
+		if (hasStack(Slots.output)) return;
 
-				do {
-					this.field_70373_d += rand.nextInt(4) - rand.nextInt(4);
-				} while (f == this.field_70373_d);
-			}
-		} else {
-			this.bookRotation += 0.02F;
-			this.bookSpread -= 0.1F;
-		}
+		final int power = Math.min(availablePower.get(), powerLimit.get());
+		if (power <= 0) return;
 
-		while (this.bookRotation2 >= (float)Math.PI) {
-			this.bookRotation2 -= ((float)Math.PI * 2F);
-		}
+		final VanillaEnchantLogic logic = new VanillaEnchantLogic(seed);
+		if (!logic.setup(tool, selectedLevel.get(), power)) return;
 
-		while (this.bookRotation2 < -(float)Math.PI) {
-			this.bookRotation2 += ((float)Math.PI * 2F);
-		}
+		if (lapis.stackSize < logic.getLapisCost()) return;
 
-		while (this.bookRotation >= (float)Math.PI) {
-			this.bookRotation -= ((float)Math.PI * 2F);
-		}
+		final int levelsRequirement = logic.getLevelRequirement();
+		final int availableXp = LiquidXpUtils.liquidToXpRatio(tank.getFluidAmount());
+		final int availableLevels = EnchantmentUtils.getLevelForExperience(availableXp);
+		if (availableLevels < levelsRequirement) return;
 
-		while (this.bookRotation < -(float)Math.PI) {
-			this.bookRotation += ((float)Math.PI * 2F);
-		}
+		final int xpCost = EnchantmentUtils.getExperienceForLevel(levelsRequirement) - EnchantmentUtils.getExperienceForLevel(levelsRequirement - logic.getLevelCost());
+		final int liquidXpCost = LiquidXpUtils.xpToLiquidRatio(xpCost);
+		final FluidStack drainedXp = tank.drain(liquidXpCost, false);
+		if (drainedXp == null || drainedXp.amount < xpCost) return;
 
-		float f1 = this.bookRotation - this.bookRotation2;
+		setStack(Slots.output, logic.enchant());
 
-		while (f1 >= (float)Math.PI)
-			f1 -= ((float)Math.PI * 2F);
+		setStack(Slots.tool, null);
+		decrementStack(Slots.lapis, logic.getLapisCost());
+		tank.drain(liquidXpCost, true);
 
-		while (f1 < -(float)Math.PI) {
-			f1 += ((float)Math.PI * 2F);
-		}
-
-		this.bookRotation2 += f1 * 0.4F;
-
-		if (this.bookSpread < 0.0F) {
-			this.bookSpread = 0.0F;
-		}
-
-		if (this.bookSpread > 1.0F) {
-			this.bookSpread = 1.0F;
-		}
-
-		++this.tickCount;
-		this.pageFlipPrev = this.pageFlip;
-		float f2 = (this.field_70373_d - this.pageFlip) * 0.4F;
-		float f3 = 0.2F;
-
-		if (f2 < -f3) {
-			f2 = -f3;
-		}
-
-		if (f2 > f3) {
-			f2 = f3;
-		}
-
-		this.field_70374_e += (f2 - this.field_70374_e) * 0.9F;
-		this.pageFlip += this.field_70374_e;
+		this.seed = seedGenerator.nextLong();
 	}
 
-	private boolean shouldAutoInput() {
-		return automaticSlots.get(AutoSlots.input);
+	private boolean shouldAutoInputLapis() {
+		return automaticSlots.get(AutoSlots.lapisInput);
+	}
+
+	private boolean shouldAutoInputTool() {
+		return automaticSlots.get(AutoSlots.toolInput);
 	}
 
 	private boolean shouldAutoOutput() {
 		return automaticSlots.get(AutoSlots.output);
 	}
 
-	private boolean hasStack(Enum<?> slot) {
+	private boolean hasStack(Slots slot) {
 		return getStack(slot) != null;
 	}
 
-	public void setStack(Enum<?> slot, ItemStack stack) {
+	private boolean hasSpace(Slots slot) {
+		final ItemStack stackInSlot = getStack(slot);
+		return stackInSlot == null || stackInSlot.stackSize < stackInSlot.getMaxStackSize();
+	}
+
+	public void setStack(Slots slot, ItemStack stack) {
 		inventory.setInventorySlotContents(slot.ordinal(), stack);
 	}
 
-	private ItemStack getStack(Enum<?> slot) {
+	private void decrementStack(Slots slot, int amount) {
+		ItemStack stack = getStack(slot);
+		stack.stackSize -= amount;
+		if (stack.stackSize <= 0)
+			stack = null;
+		setStack(slot, stack);
+	}
+
+	private ItemStack getStack(Slots slot) {
 		return inventory.getStackInSlot(slot);
 	}
 
@@ -281,11 +359,6 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		return true;
 	}
 
-	@IncludeOverride
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
 	public IValueProvider<FluidStack> getFluidProvider() {
 		return tank;
 	}
@@ -299,24 +372,27 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		tag = super.writeToNBT(tag);
 		inventory.writeToNBT(tag);
-
+		tag.setLong(TAG_SEED, seed);
 		return tag;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		inventory.readFromNBT(tag);
+		seed = tag.getLong(TAG_SEED);
+		inventory.readFromNBT(tag, false);
 	}
 
 	private SyncableSides selectSlotMap(AutoSlots slot) {
 		switch (slot) {
-			case input:
+			case toolInput:
 				return inputSides;
 			case output:
 				return outputSides;
 			case xp:
 				return xpSides;
+			case lapisInput:
+				return lapisSides;
 			default:
 				throw MiscUtils.unhandledEnum(slot);
 		}
@@ -345,31 +421,27 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public void changeLevel(int level) {
-		targetLevel.set(level);
+	public void changePowerLimit(int powerLimit) {
+		this.powerLimit.set(powerLimit);
+		sync();
+	}
+
+	@Override
+	public void changeLevel(Level level) {
+		this.selectedLevel.set(level);
 		sync();
 	}
 
 	public IValueProvider<Integer> getLevelProvider() {
-		return targetLevel;
+		return powerLimit;
 	}
 
-	public IValueProvider<Integer> getMaxLevelProvider() {
-		return maxLevel;
+	public IValueProvider<Integer> getAvailablePowerProvider() {
+		return availablePower;
 	}
 
-	@Override
-	public void onInventoryChanged(IInventory inventory, int slotNumber) {
-		if (worldObj.isRemote) return;
-		float power = EnchantmentUtils.getPower(worldObj, pos);
-		ItemStack stack = getStack(Slots.input);
-
-		int enchantability = stack == null? 30 : stack.getItem().getItemEnchantability();
-		int maxLevel = EnchantmentUtils.calcEnchantability(enchantability, (int)power, true);
-
-		this.maxLevel.set(maxLevel);
-
-		sync();
+	public IValueProvider<Level> getSelectedLevelProvider() {
+		return selectedLevel;
 	}
 
 	@Override

@@ -41,7 +41,8 @@ openblocks.gui.drawingtable=Drawing Table
 openblocks.gui.digitalfuse=Digital Fuse
 openblocks.gui.xp_outputs=XP Outputs
 openblocks.gui.item_outputs=Item Outputs
-openblocks.gui.max_level=Max. Level: %d
+openblocks.gui.limit=Limit
+openblocks.gui.available_power=Available power: %d
 openblocks.gui.save_folder=Save folder
 
 openblocks.gui.welcome.title=Welcome!

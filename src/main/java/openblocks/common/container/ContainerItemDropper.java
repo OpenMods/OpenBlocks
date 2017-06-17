@@ -8,7 +8,7 @@ public class ContainerItemDropper extends ContainerInventoryProvider<TileEntityI
 	public ContainerItemDropper(IInventory playerInventory, TileEntityItemDropper itemDropper) {
 		super(playerInventory, itemDropper);
 		addInventoryGrid(8, 18, 3);
-		addPlayerInventorySlots(300/2 - (9 * 18 + 9) / 2, 85);
+		addPlayerInventorySlots(300 / 2 - (9 * 18 + 9) / 2, 85);
 	}
 
 }
