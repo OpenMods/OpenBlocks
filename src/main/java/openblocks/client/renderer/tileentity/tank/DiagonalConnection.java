@@ -53,8 +53,7 @@ public class DiagonalConnection extends RenderConnection {
 	public float getRenderHeight(Diagonal corner, float time) {
 		float h = height[corner.ordinal()];
 		if (h <= 0) return 0;
-
-		return TankRenderUtils.clampLevel(TankRenderUtils.calculateWaveAmplitude(time, phase) + h);
+		return TankRenderUtils.calculateRenderHeight(time, phase, h);
 	}
 
 	public void updateFluid(Diagonal corner, FluidStack stack) {

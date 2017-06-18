@@ -11,15 +11,23 @@ import openmods.utils.Diagonal;
 
 public class TankRenderUtils {
 
+	private static final float UPPER_CLAMP_LIMIT = 0.95f;
+
+	private static final float UPPER_CLAMP_VALUE = 1.0f;
+
+	private static final float LOWER_CLAMP_LIMIT = 0.05f;
+
+	public static final float LOWER_CLAMP_VALUE = 0.05f;
+
 	private static final float PHASE_PER_DISTANCE = 0.5f;
 
-	private static final float WAVE_AMPLITUDE = 0.01f;
+	private static final float WAVE_AMPLITUDE = 0.025f;
 
 	private static final float WAVE_FREQUENCY = 0.1f;
 
 	public static float clampLevel(float level) {
-		if (level <= 0.1f) return 0.1f;
-		if (level >= 0.9f) return 1.0f;
+		if (level <= LOWER_CLAMP_LIMIT) return LOWER_CLAMP_VALUE;
+		if (level >= UPPER_CLAMP_LIMIT) return UPPER_CLAMP_VALUE;
 		return level;
 	}
 
@@ -34,8 +42,16 @@ public class TankRenderUtils {
 		return (x + y + z) * PHASE_PER_DISTANCE;
 	}
 
-	public static float calculateWaveAmplitude(float time, float phase) {
+	private static float calculateWaveAmplitude(float time, float phase) {
 		return MathHelper.sin(time * WAVE_FREQUENCY + phase) * WAVE_AMPLITUDE;
+	}
+
+	public static float calculateRenderHeight(float time, float phase, float level) {
+		level = clampLevel(level) + calculateWaveAmplitude(time, phase);
+
+		if (level <= 0.0f) return 0.0f;
+		if (level >= 1.0f) return 1.0f;
+		return level;
 	}
 
 	public static FluidStack safeCopy(FluidStack stack) {

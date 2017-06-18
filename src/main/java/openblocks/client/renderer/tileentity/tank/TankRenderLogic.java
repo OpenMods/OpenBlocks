@@ -160,8 +160,7 @@ public class TankRenderLogic {
 		@Override
 		public float getCenterFluidLevel(float time) {
 			final float raw = (float)tank.getFluidAmount() / tank.getCapacity();
-			final float waving = TankRenderUtils.calculateWaveAmplitude(time, phase) + raw;
-			return TankRenderUtils.clampLevel(waving);
+			return TankRenderUtils.calculateRenderHeight(time, phase, raw);
 		}
 
 		@Override
