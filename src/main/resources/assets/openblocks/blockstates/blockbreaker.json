@@ -1,0 +1,41 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model": "cube_bottom_top",
+        "textures": {
+            "particle": "openblocks:blocks/blockbreaker_side",
+            "side": "openblocks:blocks/blockbreaker_side",
+            "bottom": "openblocks:blocks/blockbreaker_bottom"
+        },
+        "transform": "forge:default-block"
+    },
+    "variants" : {
+        "inventory" : [{
+            "textures": {
+                "top": "openblocks:blocks/blockbreaker"
+            }
+        }],
+        "powered" : {
+            "true": {
+                "textures": {
+                    "top": "openblocks:blocks/blockbreaker"
+                }
+            },
+            "false": {
+                "__comment": "'active' texture is actuall closed one, keeping for compatiblity",
+                "textures": {
+                    "top": "openblocks:blocks/blockbreaker_active"
+                }
+            }
+        },
+        "orientation" : {
+            "xp_yp" : { },
+            "xp_yn" : { "x" : 180 },
+
+            "xp_zn" : { "x" : 90, "y": 0 },
+            "zp_xp" : { "x" : 90, "y" : 90 },
+            "xn_zp" : { "x" : 90, "y": 180 },
+            "zn_xn" : { "x" : 90, "y" : 270 }
+        }
+    }
+}

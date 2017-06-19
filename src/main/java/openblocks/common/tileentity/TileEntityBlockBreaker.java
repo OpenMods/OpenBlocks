@@ -11,73 +11,50 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks;
+import openblocks.common.block.BlockBlockBreaker;
 import openmods.api.INeighbourAwareTile;
 import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.legacy.ItemDistribution;
-import openmods.sync.SyncMap;
-import openmods.sync.SyncableBoolean;
-import openmods.tileentity.SyncedTileEntity;
+import openmods.tileentity.OpenTileEntity;
+import openmods.utils.BlockNotifyFlags;
 
-public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbourAwareTile, ITickable {
+public class TileEntityBlockBreaker extends OpenTileEntity implements INeighbourAwareTile {
 
 	private static final int EVENT_ACTIVATE = 3;
 
 	// DON'T remove this object, even though it seems unused. Without it Builcraft pipes won't connect. -B
 	@IncludeInterface(IInventory.class)
-	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockbreaker", true, 1) {
+	private final GenericInventory inventory = new GenericInventory("blockbreaker", true, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return false;
 		}
-	});
-
-	private int redstoneAnimTimer;
-	private SyncableBoolean activated;
+	};
 
 	public TileEntityBlockBreaker() {}
 
 	@Override
-	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addUpdateListener(createRenderUpdateListener());
-	}
+	public void onNeighbourChanged(Block block) {
+		if (!worldObj.isRemote) {
+			final IBlockState state = worldObj.getBlockState(getPos());
+			if (state.getBlock() instanceof BlockBlockBreaker) {
+				final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
 
-	@Override
-	protected void createSyncedFields() {
-		activated = new SyncableBoolean(false);
-	}
+				final IBlockState newState = state.withProperty(BlockBlockBreaker.POWERED, isPowered);
+				if (newState != state) {
+					worldObj.setBlockState(getPos(), newState, BlockNotifyFlags.SEND_TO_CLIENTS);
+					playSoundAtBlock(isPowered? SoundEvents.BLOCK_PISTON_EXTEND : SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
+				}
 
-	@SideOnly(Side.CLIENT)
-	public boolean isActivated() {
-		return activated.get();
-	}
-
-	@Override
-	public void update() {
-		if (!worldObj.isRemote && activated.get()) {
-			if (redstoneAnimTimer <= 0) {
-				activated.set(false);
-				sync();
-			} else redstoneAnimTimer--;
-
-		}
-	}
-
-	private void setRedstoneSignal(boolean redstoneSignal) {
-		if (worldObj.isRemote) return;
-
-		if (redstoneSignal) {
-			redstoneAnimTimer = 5;
-			activated.set(true);
-			sync();
-			triggerBreakBlock();
+				if (isPowered)
+					triggerBreakBlock(newState);
+			}
 		}
 	}
 
@@ -86,16 +63,14 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		return !block.isAir(state, worldObj, pos) && block != Blocks.BEDROCK && state.getBlockHardness(worldObj, pos) > -1.0F;
 	}
 
-	private void triggerBreakBlock() {
-		final EnumFacing direction = getOrientation().up();
+	private void triggerBreakBlock(IBlockState newState) {
+		final EnumFacing direction = OpenBlocks.Blocks.blockBreaker.getFront(newState);
 		final BlockPos target = pos.offset(direction);
 
 		if (worldObj.isBlockLoaded(target)) {
 			final IBlockState state = worldObj.getBlockState(target);
 			if (canBreakBlock(state, target)) sendBlockEvent(EVENT_ACTIVATE, 0);
 		}
-
-		playSoundAtBlock(SoundEvents.BLOCK_PISTON_EXTEND, 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
 	}
 
 	@Override
@@ -108,10 +83,12 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 		return false;
 	}
 
-	public void breakBlock() {
+	private void breakBlock() {
 		if (!(worldObj instanceof WorldServer)) return;
 
-		final EnumFacing direction = getOrientation().up();
+		final IBlockState state = worldObj.getBlockState(getPos());
+		if (!(state.getBlock() instanceof BlockBlockBreaker)) return;
+		final EnumFacing direction = OpenBlocks.Blocks.blockBreaker.getFront(state);
 		final BlockPos target = pos.offset(direction);
 
 		if (!worldObj.isBlockLoaded(target)) return;
@@ -132,13 +109,6 @@ public class TileEntityBlockBreaker extends SyncedTileEntity implements INeighbo
 			ItemDistribution.insertItemInto(stack, targetInventory, direction, true);
 
 			if (stack.stackSize <= 0) drop.setDead();
-		}
-	}
-
-	@Override
-	public void onNeighbourChanged(Block block) {
-		if (!worldObj.isRemote) {
-			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
 		}
 	}
 
