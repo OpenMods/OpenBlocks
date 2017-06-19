@@ -30,12 +30,12 @@ public class TileEntityBlockBreaker extends OpenTileEntity implements INeighbour
 
 	// DON'T remove this object, even though it seems unused. Without it Builcraft pipes won't connect. -B
 	@IncludeInterface(IInventory.class)
-	private final GenericInventory inventory = new GenericInventory("blockbreaker", true, 1) {
+	private final GenericInventory inventory = registerInventoryCallback(new GenericInventory("blockbreaker", true, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 			return false;
 		}
-	};
+	});
 
 	public TileEntityBlockBreaker() {}
 
