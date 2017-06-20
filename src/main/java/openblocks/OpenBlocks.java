@@ -330,7 +330,7 @@ public class OpenBlocks {
 		@RegisterBlock(id = "blockbreaker", tileEntity = TileEntityBlockBreaker.class)
 		public static BlockBlockBreaker blockBreaker;
 
-		@RegisterBlock(id = "blockPlacer", tileEntity = TileEntityBlockPlacer.class)
+		@RegisterBlock(id = "blockplacer", tileEntity = TileEntityBlockPlacer.class, legacyIds = "blockPlacer")
 		public static BlockBlockPlacer blockPlacer;
 
 		@RegisterBlock(id = "itemdropper", tileEntity = TileEntityItemDropper.class, legacyIds = "itemDropper")

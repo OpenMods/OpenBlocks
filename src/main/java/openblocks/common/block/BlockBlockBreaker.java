@@ -1,38 +1,6 @@
 package openblocks.common.block;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import openmods.block.OpenBlock;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
-public class BlockBlockBreaker extends OpenBlock.SixDirections {
-
-	private static final int MASK_POWERED = 0x8;
-	public static final IProperty<Boolean> POWERED = PropertyBool.create("powered");
-
-	public BlockBlockBreaker() {
-		super(Material.ROCK);
-		setPlacementMode(BlockPlacementMode.ENTITY_ANGLE);
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), POWERED });
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return super.getStateFromMeta(meta)
-				.withProperty(POWERED, (meta & MASK_POWERED) != 0);
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return super.getMetaFromState(state) | (state.getValue(POWERED)? MASK_POWERED : 0);
-	}
-
-}
+public class BlockBlockBreaker extends BlockBlockManpulatorBase {}
