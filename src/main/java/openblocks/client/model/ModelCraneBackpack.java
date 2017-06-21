@@ -1,7 +1,6 @@
 package openblocks.client.model;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -103,8 +102,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		double playerZ = interpolatePos(player.posZ, player.lastTickPosZ, partialRenderTick)
 				- TileEntityRendererDispatcher.staticPlayerZ;
 
-		// TODO 1.8.9 check eye height
-		if (player instanceof EntityOtherPlayerMP) playerY += 1.62;
+		playerY += player.getEyeHeight();
 
 		final float offset = interpolateAngle(player.renderYawOffset, player.prevRenderYawOffset, partialRenderTick);
 		final float head = interpolateAngle(player.rotationYawHead, player.prevRotationYawHead, partialRenderTick);
@@ -132,7 +130,7 @@ public class ModelCraneBackpack extends ModelBiped {
 		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialRenderTick) - TileEntityRendererDispatcher.staticPlayerY + magnet.height - 0.1;
 		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialRenderTick) - TileEntityRendererDispatcher.staticPlayerZ;
 
-		GL11.glLineWidth(2);
+		GlStateManager.glLineWidth(2);
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
 		GL11.glEnable(GL11.GL_LINE_STIPPLE);
@@ -145,6 +143,8 @@ public class ModelCraneBackpack extends ModelBiped {
 		GL11.glDisable(GL11.GL_LINE_STIPPLE);
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
+		GlStateManager.glLineWidth(1);
+		GlStateManager.color(1, 1, 1);
 
 		drawLine(magnetX, magnetY, magnetZ, armX, armY, armZ);
 	}
@@ -167,11 +167,11 @@ public class ModelCraneBackpack extends ModelBiped {
 		final double magnetY = interpolatePos(magnet.posY, magnet.lastTickPosY, partialTickTime) - centerY + magnet.height - 0.05;
 		final double magnetZ = interpolatePos(magnet.posZ, magnet.lastTickPosZ, partialTickTime) - centerZ;
 
-		drawLine(magnetX, magnetY, magnetZ, posX, 0.6, posZ);
+		drawLine(magnetX, magnetY, magnetZ, posX, player.getEyeHeight() + 0.6, posZ);
 	}
 
 	private static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2) {
-		GL11.glLineWidth(2);
+		GlStateManager.glLineWidth(2);
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
 		GL11.glEnable(GL11.GL_LINE_STIPPLE);
@@ -190,9 +190,12 @@ public class ModelCraneBackpack extends ModelBiped {
 		GL11.glVertex3d(x2, y2, z2);
 		GL11.glEnd();
 
+		GlStateManager.color(1, 1, 1);
+
 		GL11.glDisable(GL11.GL_LINE_STIPPLE);
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
+		GlStateManager.glLineWidth(1);
 	}
 
 	private void drawArm(RenderWorldLastEvent evt, final EntityPlayer player) {
@@ -205,7 +208,7 @@ public class ModelCraneBackpack extends ModelBiped {
 
 		// values adjusted to roughly match TPP crane position
 		GL11.glRotated(-player.rotationYaw, 0, 1, 0);
-		GL11.glTranslatef(0, 1.6f, -1f);
+		GL11.glTranslatef(0, player.getEyeHeight() + 1.6f, -1f);
 
 		arm.rotateAngleY = 0;
 		arm.render(1.0f / 16.0f);

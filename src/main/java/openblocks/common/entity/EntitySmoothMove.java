@@ -24,14 +24,32 @@ public abstract class EntitySmoothMove extends Entity {
 			this.minimalLengthSq = minimalLength * minimalLength;
 		}
 
+		protected boolean shouldJump(double x, double y, double z) {
+			double dx = x - posX;
+			double dy = y - posY;
+			double dz = z - posZ;
+
+			double lenSq = dx * dx + dy * dy + dz * dz;
+			return shouldJump(lenSq);
+		}
+
+		private boolean shouldJump(double lenSq) {
+			return lenSq > panicLengthSq || lenSq < minimalLengthSq;
+		}
+
 		public void setTarget(Vec3d position) {
 			setTarget(position.xCoord, position.yCoord, position.zCoord);
 		}
 
 		public void setTarget(double targetX, double targetY, double targetZ) {
-			this.targetX = targetX;
-			this.targetY = targetY;
-			this.targetZ = targetZ;
+			if (shouldJump(targetX, targetY, targetZ)) {
+				setPositionRaw(targetX, targetY, targetZ);
+				motionX = motionY = motionZ = 0;
+			} else {
+				this.targetX = targetX;
+				this.targetY = targetY;
+				this.targetZ = targetZ;
+			}
 		}
 
 		public void update() {
@@ -39,9 +57,9 @@ public abstract class EntitySmoothMove extends Entity {
 			double dy = targetY - posY;
 			double dz = targetZ - posZ;
 
-			double lenSq = dx * dx + dy * dy + dz * dz;
-			if (lenSq > panicLengthSq || lenSq < minimalLengthSq) {
-				setPosition(targetX, targetY, targetZ);
+			final double lenSq = dx * dx + dy * dy + dz * dz;
+			if (shouldJump(lenSq)) {
+				setPositionRaw(targetX, targetY, targetZ);
 				motionX = motionY = motionZ = 0;
 			} else {
 				if (lenSq > cutoff * cutoff) {
@@ -67,10 +85,13 @@ public abstract class EntitySmoothMove extends Entity {
 		return isRemote? new MoveSmoother(0.25, 1.0, 8.0, 0.01) : new MoveSmoother(0.5, 5.0, 128.0, 0.01);
 	}
 
+	private void setPositionRaw(double x, double y, double z) {
+		super.setPosition(x, y, z);
+	}
+
 	@Override
 	public void setPosition(double x, double y, double z) {
 		if (smoother != null) smoother.setTarget(x, y, z);
-		super.setPosition(x, y, z);
 	}
 
 	protected void updatePrevPosition() {
