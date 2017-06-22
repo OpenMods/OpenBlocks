@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -15,7 +14,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -71,6 +69,7 @@ import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRendere
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
 import openblocks.common.StencilPattern;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockPaintCan;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityGoldenEye;
@@ -79,6 +78,7 @@ import openblocks.common.entity.EntityLuggage;
 import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMiniMe;
 import openblocks.common.item.ItemDevNull;
+import openblocks.common.item.ItemElevator;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
@@ -109,6 +109,7 @@ import openmods.block.OpenBlock;
 import openmods.entity.EntityBlock;
 import openmods.entity.renderer.EntityBlockRenderer;
 import openmods.model.MappedModelLoader;
+import openmods.model.ModelUtils;
 import openmods.renderer.SimpleModelTileEntityRenderer;
 import openmods.utils.render.MarkerClassGenerator;
 
@@ -202,15 +203,15 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Items.stencil != null) {
 			StencilTextureManager.INSTANCE.register(StencilItemOverride.BACKGROUND_TEXTURE, StencilPattern.values().length);
 			MinecraftForge.EVENT_BUS.register(StencilTextureManager.INSTANCE);
+			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.stencil);
+		}
 
-			final ModelResourceLocation location = new ModelResourceLocation(OpenBlocks.Items.stencil.getRegistryName(), "inventory");
+		if (OpenBlocks.Blocks.elevator != null) {
+			ModelUtils.registerMetaInsensitiveModel(Item.getItemFromBlock(OpenBlocks.Blocks.elevator));
+		}
 
-			ModelLoader.setCustomMeshDefinition(OpenBlocks.Items.stencil, new ItemMeshDefinition() {
-				@Override
-				public ModelResourceLocation getModelLocation(ItemStack stack) {
-					return location;
-				}
-			});
+		if (OpenBlocks.Blocks.elevatorRotating != null) {
+			ModelUtils.registerMetaInsensitiveModel(Item.getItemFromBlock(OpenBlocks.Blocks.elevatorRotating));
 		}
 	}
 
@@ -313,6 +314,16 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Items.devNull != null) {
 			itemColors.registerItemColorHandler(new ItemDevNull.NestedItemColorHandler(itemColors), OpenBlocks.Items.devNull);
+		}
+
+		if (OpenBlocks.Blocks.elevator != null) {
+			blockColors.registerBlockColorHandler(new BlockElevator.BlockColorHandler(), OpenBlocks.Blocks.elevator);
+			itemColors.registerItemColorHandler(new ItemElevator.ItemColorHandler(), OpenBlocks.Blocks.elevator);
+		}
+
+		if (OpenBlocks.Blocks.elevatorRotating != null) {
+			blockColors.registerBlockColorHandler(new BlockElevator.BlockColorHandler(), OpenBlocks.Blocks.elevatorRotating);
+			itemColors.registerItemColorHandler(new ItemElevator.ItemColorHandler(), OpenBlocks.Blocks.elevatorRotating);
 		}
 	}
 

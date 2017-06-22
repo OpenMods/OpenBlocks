@@ -207,7 +207,6 @@ import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
 import openmods.Mods;
 import openmods.OpenMods;
-import openmods.colors.ColoredModelProvider;
 import openmods.config.BlockInstances;
 import openmods.config.ItemInstances;
 import openmods.config.game.FactoryRegistry;
@@ -261,10 +260,10 @@ public class OpenBlocks {
 		@RegisterBlock(id = "builder_guide", tileEntity = TileEntityBuilderGuide.class, itemBlock = ItemGuide.class)
 		public static BlockBuilderGuide builderGuide;
 
-		@RegisterBlock(id = "elevator", itemBlock = ItemElevator.class, registerDefaultItemModel = false, customItemModels = ColoredModelProvider.class)
+		@RegisterBlock(id = "elevator", itemBlock = ItemElevator.class, registerDefaultItemModel = false)
 		public static BlockElevator elevator;
 
-		@RegisterBlock(id = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class, registerDefaultItemModel = false, customItemModels = ColoredModelProvider.class)
+		@RegisterBlock(id = "elevator_rotating", tileEntity = TileEntityElevatorRotating.class, itemBlock = ItemElevator.class, registerDefaultItemModel = false)
 		public static BlockElevatorRotating elevatorRotating;
 
 		@RegisterBlock(id = "heal", tileEntity = TileEntityHealBlock.class)

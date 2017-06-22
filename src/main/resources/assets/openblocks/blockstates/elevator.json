@@ -1,44 +1,31 @@
 {
     "forge_marker" : 1,
     "defaults" : {
-        "model" : "cube_all",
-        "transform": "forge:default-block"
+        "model" : "openmods:cube_all_tinted",
+        "transform": "forge:default-block",
+        "textures": {
+            "all": "openblocks:blocks/elevator"
+        }
     },
     "variants" : {
-        "inventory_black" : [{ "textures" : { "all" : "openblocks:blocks/elevator_black" } }],
-        "inventory_red" : [{ "textures" : { "all" : "openblocks:blocks/elevator_red" } }],
-        "inventory_green" : [{ "textures" : { "all" : "openblocks:blocks/elevator_green" } }],
-        "inventory_brown" : [{ "textures" : { "all" : "openblocks:blocks/elevator_brown" } }],
-        "inventory_blue" : [{ "textures" : { "all" : "openblocks:blocks/elevator_blue" } }],
-        "inventory_purple" : [{ "textures" : { "all" : "openblocks:blocks/elevator_purple" } }],
-        "inventory_cyan" : [{ "textures" : { "all" : "openblocks:blocks/elevator_cyan" } }],
-        "inventory_lightgray" : [{ "textures" : { "all" : "openblocks:blocks/elevator_lightgray" } }],
-        "inventory_gray" : [{ "textures" : { "all" : "openblocks:blocks/elevator_gray" } }],
-        "inventory_pink" : [{ "textures" : { "all" : "openblocks:blocks/elevator_pink" } }],
-        "inventory_lime" : [{ "textures" : { "all" : "openblocks:blocks/elevator_lime" } }],
-        "inventory_yellow" : [{ "textures" : { "all" : "openblocks:blocks/elevator_yellow" } }],
-        "inventory_lightblue" : [{ "textures" : { "all" : "openblocks:blocks/elevator_lightblue" } }],
-        "inventory_magenta" : [{ "textures" : { "all" : "openblocks:blocks/elevator_magenta" } }],
-        "inventory_orange" : [{ "textures" : { "all" : "openblocks:blocks/elevator_orange" } }],
-        "inventory_white" : [{ "textures" : { "all" : "openblocks:blocks/elevator_white" } }],
-
+        "inventory" :     [{}],
         "color" : {
-            "black" : { "textures" : { "all" : "openblocks:blocks/elevator_black" } },
-            "red" : { "textures" : { "all" : "openblocks:blocks/elevator_red" } },
-            "green" : { "textures" : { "all" : "openblocks:blocks/elevator_green" } },
-            "brown" : { "textures" : { "all" : "openblocks:blocks/elevator_brown" } },
-            "blue" : { "textures" : { "all" : "openblocks:blocks/elevator_blue" } },
-            "purple" : { "textures" : { "all" : "openblocks:blocks/elevator_purple" } },
-            "cyan" : { "textures" : { "all" : "openblocks:blocks/elevator_cyan" } },
-            "lightgray" : { "textures" : { "all" : "openblocks:blocks/elevator_lightgray" } },
-            "gray" : { "textures" : { "all" : "openblocks:blocks/elevator_gray" } },
-            "pink" : { "textures" : { "all" : "openblocks:blocks/elevator_pink" } },
-            "lime" : { "textures" : { "all" : "openblocks:blocks/elevator_lime" } },
-            "yellow" : { "textures" : { "all" : "openblocks:blocks/elevator_yellow" } },
-            "lightblue" : { "textures" : { "all" : "openblocks:blocks/elevator_lightblue" } },
-            "magenta" : { "textures" : { "all" : "openblocks:blocks/elevator_magenta" } },
-            "orange" : { "textures" : { "all" : "openblocks:blocks/elevator_orange" } },
-            "white" : { "textures" : { "all" : "openblocks:blocks/elevator_white" } }
+            "black" :     {},
+            "red" :       {},
+            "green" :     {},
+            "brown" :     {},
+            "blue" :      {},
+            "purple" :    {},
+            "cyan" :      {},
+            "lightgray" : {},
+            "gray" :      {},
+            "pink" :      {},
+            "lime" :      {},
+            "yellow" :    {},
+            "lightblue" : {},
+            "magenta" :   {},
+            "orange" :    {},
+            "white" :     {}
         },
         "orientation" : {
             "xp_yp": { "x" : 0 }

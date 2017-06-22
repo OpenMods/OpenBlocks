@@ -8,13 +8,17 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.api.IElevatorBlock;
 import openmods.block.OpenBlock;
 import openmods.colors.ColorMeta;
@@ -25,6 +29,16 @@ import openmods.utils.CollectionUtils;
 public class BlockElevator extends OpenBlock implements IElevatorBlock {
 
 	public static final PropertyEnum<ColorMeta> COLOR = PropertyEnum.create("color", ColorMeta.class);
+
+	@SideOnly(Side.CLIENT)
+	public static class BlockColorHandler implements IBlockColor {
+		private static final int WHITE = 0xFFFFFFFF;
+
+		@Override
+		public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+			return tintIndex == 0? state.getValue(COLOR).rgb : WHITE;
+		}
+	}
 
 	public BlockElevator() {
 		super(Material.ROCK);
@@ -44,8 +58,6 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), COLOR });
 	}
-
-	// TODO 1.10 Don't forget those things have colors!
 
 	@Override
 	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor colour) {
