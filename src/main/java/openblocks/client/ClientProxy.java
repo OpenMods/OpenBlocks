@@ -39,7 +39,6 @@ import openblocks.client.model.ModelBearTrap;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelPiggy;
 import openblocks.client.model.ModelSprinkler;
-import openblocks.client.model.ModelTarget;
 import openblocks.client.model.ModelXPShower;
 import openblocks.client.renderer.block.PathModel;
 import openblocks.client.renderer.entity.EntityCartographerRenderer;
@@ -100,7 +99,6 @@ import openblocks.common.tileentity.TileEntityProjector;
 import openblocks.common.tileentity.TileEntitySky;
 import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityTank;
-import openblocks.common.tileentity.TileEntityTarget;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openblocks.common.tileentity.TileEntityXPShower;
@@ -242,7 +240,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 	public void registerRenderInformation() {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<TileEntityGuide>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarget.class, SimpleModelTileEntityRenderer.create(new ModelTarget(), OpenBlocks.location("textures/models/target.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
@@ -354,7 +351,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.grave);
 		consumer.nom(OpenBlocks.Blocks.paintMixer);
 		consumer.nom(OpenBlocks.Blocks.sprinkler);
-		consumer.nom(OpenBlocks.Blocks.target);
 		consumer.nom(OpenBlocks.Blocks.villageHighlighter);
 		consumer.nom(OpenBlocks.Blocks.xpShower);
 	}

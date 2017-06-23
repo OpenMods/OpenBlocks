@@ -1,42 +1,27 @@
 package openblocks.common.tileentity;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.math.RayTraceResult.Type;
 import openblocks.OpenBlocks;
 import openblocks.OpenBlocks.Blocks;
 import openmods.Log;
-import openmods.api.IAddAwareTile;
-import openmods.api.INeighbourAwareTile;
 import openmods.api.ISurfaceAttachment;
-import openmods.fakeplayer.FakePlayerPool;
-import openmods.fakeplayer.FakePlayerPool.PlayerUserReturning;
-import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.reflection.SafeClassLoad;
-import openmods.sync.SyncableBoolean;
-import openmods.tileentity.SyncedTileEntity;
-import openmods.utils.BlockUtils;
+import openmods.tileentity.OpenTileEntity;
 import openmods.utils.EntityUtils;
 
-public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttachment, INeighbourAwareTile, IAddAwareTile, ITickable {
+public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachment, ITickable {
 
 	private int strength = 0;
 	private int tickCounter = -1;
-
-	private SyncableBoolean active;
 
 	private final static SafeClassLoad FLANS_BULLET = SafeClassLoad.create("com.flansmod.common.guns.EntityBullet");
 
@@ -61,13 +46,8 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	public TileEntityTarget() {}
 
 	@Override
-	protected void createSyncedFields() {
-		active = new SyncableBoolean();
-	}
-
-	@Override
 	public void update() {
-		if (!worldObj.isRemote) predictOtherProjectiles();
+		if (!worldObj.isRemote && !EXTRA_PROJECTILE_CLASSES.isEmpty()) predictOtherProjectiles();
 
 		tickCounter--;
 		if (tickCounter == 0) {
@@ -78,33 +58,24 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	}
 
 	private void predictOtherProjectiles() {
-		List<Entity> projectiles = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
+		final List<Entity> projectiles = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
+
+		IBlockState state = null;
 
 		for (Entity projectile : projectiles) {
 			RayTraceResult hit = EntityUtils.raytraceEntity(projectile);
-			if (pos.equals(hit.getBlockPos())) {
-				Blocks.target.onTargetHit(worldObj, pos, hit.hitVec);
+			if (hit.typeOfHit == Type.BLOCK && pos.equals(hit.getBlockPos())) {
+				if (state == null) state = worldObj.getBlockState(getPos());
+				Blocks.target.onTargetHit(worldObj, pos, state, hit.hitVec);
 			}
 		}
 	}
 
-	public void setEnabled(boolean en) {
-		active.set(en);
-	}
-
-	public boolean isEnabled() {
-		return active.get();
-	}
-
-	public float getTargetRotation() {
-		return isEnabled()? 0 : -(float)(Math.PI / 2);
-	}
-
-	public int getStrength() {
+	public int getRedstoneStrength() {
 		return strength;
 	}
 
-	public void setStrength(int strength) {
+	public void setRedstoneStrength(int strength) {
 		this.strength = strength;
 		tickCounter = 10;
 		worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.target);
@@ -113,74 +84,5 @@ public class TileEntityTarget extends SyncedTileEntity implements ISurfaceAttach
 	@Override
 	public EnumFacing getSurfaceDirection() {
 		return EnumFacing.DOWN;
-	}
-
-	@Override
-	public void onNeighbourChanged(Block block) {
-		updateRedstone();
-	}
-
-	@Override
-	public void onAdded() {
-		updateRedstone();
-	}
-
-	private void updateRedstone() {
-		if (!(worldObj instanceof WorldServer)) return;
-		WorldServer world = (WorldServer)worldObj;
-
-		boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
-
-		if (isPowered != isEnabled()) {
-			dropArrowsAsItems(world);
-			playSoundAtBlock(isPowered? OpenBlocks.Sounds.BLOCK_TARGET_OPEN : OpenBlocks.Sounds.BLOCK_TARGET_CLOSE, 0.5f, 1.0f);
-
-			setEnabled(isPowered);
-
-			sync();
-		}
-	}
-
-	private void dropArrowsAsItems(WorldServer world) {
-		// TODO 1.8.9 verify range
-		final AxisAlignedBB aabb = BlockUtils.aabbOffset(pos, -0.1, -0.1, -0.1, +1.1, +1.1, +1.1);
-
-		final List<EntityArrow> arrows = worldObj.getEntitiesWithinAABB(EntityArrow.class, aabb);
-
-		final List<ItemStack> drops = Lists.newArrayList();
-
-		int failed = FakePlayerPool.instance.executeOnPlayer(world, new PlayerUserReturning<Integer>() {
-
-			@Override
-			public Integer usePlayer(OpenModsFakePlayer fakePlayer) {
-				int failed = 0;
-
-				for (EntityArrow arrow : arrows) {
-					try {
-						arrow.onCollideWithPlayer(fakePlayer);
-					} catch (Throwable t) {
-						Log.warn(t, "Failed to collide arrow %s with fake player, returing vanilla one", arrow);
-						failed++;
-					}
-				}
-
-				IInventory inventory = fakePlayer.inventory;
-				for (int i = 0; i < inventory.getSizeInventory(); i++) {
-					ItemStack stack = inventory.getStackInSlot(i);
-					if (stack != null) {
-						drops.add(stack);
-						inventory.setInventorySlotContents(i, null);
-					}
-				}
-
-				return failed;
-
-			}
-		});
-
-		for (ItemStack drop : drops)
-			BlockUtils.dropItemStackInWorld(worldObj, pos, drop);
-
-		if (failed > 0) BlockUtils.dropItemStackInWorld(worldObj, pos, new ItemStack(Items.ARROW, failed));
 	}
 }

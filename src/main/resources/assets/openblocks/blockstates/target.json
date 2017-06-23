@@ -1,0 +1,19 @@
+{
+    "forge_marker" : 1,
+    "variants" : {
+        "inventory": [{
+            "model": "openblocks:target_active",
+            "transform": "forge:default-block"
+        }],
+        "powered" : {
+            "true" : { "model": "openblocks:target_active"},
+            "false" : { "model": "openblocks:target_inactive"}
+        },
+        "orientation" : {
+            "xp_yp" : { "y" : 180 },
+            "zp_yp" : { "y" : 270 },
+            "xn_yp" : { "y" :   0 },
+            "zn_yp" : { "y" :  90 }
+        }
+    }
+}
