@@ -1,9 +1,11 @@
 package openblocks.common.item;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayer.SleepResult;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -13,6 +15,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.SleepingLocationCheckEvent;
@@ -79,17 +84,58 @@ public class ItemSleepingBag extends ItemArmor {
 		NBTTagCompound tag = ItemUtils.getItemTag(itemStack);
 		if (tag.getBoolean(TAG_SLEEPING)) {
 			// player just woke up
-			// TODO 1.10 reimplement if needed?
 			tag.removeTag(TAG_SLEEPING);
 			getOutOfSleepingBag(player);
 		} else {
 			// player just put in on
-			// final BlockPos pos = player.getPosition();
-			// tag.setBoolean(TAG_SLEEPING, true);
-			// TODO 1.10 use PR to reimplement. Remember to add custom checks
-
-			getOutOfSleepingBag(player);
+			if (!trySleep(world, player)) {
+				getOutOfSleepingBag(player);
+			} else {
+				tag.setBoolean(TAG_SLEEPING, true);
+			}
 		}
+	}
+
+	private static boolean trySleep(World world, EntityPlayer player) {
+		final BlockPos pos = player.getPosition();
+
+		if (!isNotSuffocating(world, pos) || !isSolidEnough(world, pos.down())) {
+			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.oh_no_ground"));
+			return false;
+		}
+
+		final SleepResult sleepResult = player.trySleep(pos);
+
+		if (sleepResult == SleepResult.OK) return true;
+
+		switch (sleepResult) {
+			case NOT_POSSIBLE_NOW:
+				player.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
+				break;
+			case NOT_SAFE:
+				player.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
+				break;
+			default:
+				break;
+		}
+
+		return false;
+	}
+
+	private static boolean isNotSuffocating(World world, BlockPos pos) {
+		return world.getBlockState(pos).getCollisionBoundingBox(world, pos) == null || world.isAirBlock(pos);
+	}
+
+	private static boolean isSolidEnough(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		final AxisAlignedBB aabb = state.getCollisionBoundingBox(world, pos);
+		if (aabb == null) return false;
+
+		double dx = aabb.maxX - aabb.minX;
+		double dy = aabb.maxY - aabb.minY;
+		double dz = aabb.maxZ - aabb.minZ;
+
+		return (dx >= 0.5) && (dy >= 0.5) && (dz >= 0.5);
 	}
 
 	private static Integer getReturnSlot(NBTTagCompound tag) {
