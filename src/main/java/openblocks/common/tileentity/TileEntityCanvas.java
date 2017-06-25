@@ -1,9 +1,11 @@
 package openblocks.common.tileentity;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,18 +14,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import openblocks.OpenBlocks;
-import openblocks.common.Stencil;
+import openblocks.client.renderer.block.canvas.CanvasState;
+import openblocks.common.StencilPattern;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
 import openblocks.common.sync.SyncableBlockLayers;
-import openblocks.common.sync.SyncableBlockLayers.Layer;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomBreakDrops;
 import openmods.api.ICustomHarvestDrops;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableBlock;
 import openmods.sync.SyncableInt;
-import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
@@ -34,8 +37,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	private SyncableInt paintedBlockMeta;
 
 	private IBlockState paintedBlockState;
-
-	private SyncableIntArray baseColors;
 
 	@SuppressWarnings("unused")
 	private SyncableBlockLayers stencilsUp;
@@ -55,17 +56,30 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	@SuppressWarnings("unused")
 	private SyncableBlockLayers stencilsSouth;
 
-	private Map<EnumFacing, SyncableBlockLayers> allSides = Maps.newEnumMap(EnumFacing.class);
+	private Map<EnumFacing, SyncableBlockLayers> allSides;
+
+	private CanvasState canvasState = CanvasState.EMPTY;
 
 	public TileEntityCanvas() {}
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
-		syncMap.addUpdateListener(createRenderUpdateListener());
-	}
+		syncMap.addUpdateListener(new ISyncListener() {
+			@Override
+			public void onSync(Set<ISyncableObject> changes) {
+				boolean stateChanged = false;
+				for (Map.Entry<EnumFacing, SyncableBlockLayers> e : allSides.entrySet()) {
+					final SyncableBlockLayers side = e.getValue();
+					if (changes.contains(side)) {
+						canvasState = canvasState.update(e.getKey(), side.convertToState());
+						stateChanged = true;
+					}
+				}
 
-	public SyncableIntArray getBaseColors() {
-		return baseColors;
+				if (stateChanged)
+					markBlockForRenderUpdate(getPos());
+			}
+		});
 	}
 
 	private SyncableBlockLayers createLayer(EnumFacing facing) {
@@ -76,6 +90,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	protected void createSyncedFields() {
+		allSides = Maps.newEnumMap(EnumFacing.class);
+
 		stencilsUp = createLayer(EnumFacing.UP);
 		stencilsDown = createLayer(EnumFacing.DOWN);
 		stencilsEast = createLayer(EnumFacing.EAST);
@@ -83,7 +99,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		stencilsNorth = createLayer(EnumFacing.NORTH);
 		stencilsSouth = createLayer(EnumFacing.SOUTH);
 
-		baseColors = new SyncableIntArray(new int[] { 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF });
 		paintedBlock = new SyncableBlock();
 		paintedBlockMeta = new SyncableInt(0);
 	}
@@ -92,26 +107,6 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		return allSides.get(side);
 	}
 
-	public Layer getLayerForSide(EnumFacing renderSide, int layerId) {
-		final SyncableBlockLayers layers = getLayersForSide(renderSide);
-		return layers != null? layers.getLayer(layerId) : null;
-	}
-
-	private int getBaseColor(EnumFacing renderSide) {
-		return baseColors.getValue(renderSide.ordinal());
-	}
-
-	private void setBaseColor(EnumFacing renderSide, int color) {
-		baseColors.setValue(renderSide.ordinal(), color);
-	}
-
-	public int getColorForRender(EnumFacing renderSide, int layerId) {
-		if (layerId == 0) return getBaseColor(renderSide);
-		final Layer layer = getLayerForSide(renderSide, layerId);
-		return layer != null? layer.getColorForRender() : 0xCCCCCC;
-	}
-
-	// TODO 1.8.9 possibly use for render?
 	public IBlockState getPaintedBlockState() {
 		if (paintedBlockState == null) {
 			final Block block = paintedBlock.getValue();
@@ -127,9 +122,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	private boolean isBlockUnpainted() {
-		for (EnumFacing side : EnumFacing.VALUES) {
-			if (!allSides.get(side).isEmpty() || getBaseColor(side) != 0xFFFFFF) return false;
-		}
+		for (EnumFacing side : EnumFacing.VALUES)
+			if (!allSides.get(side).isEmpty()) return false;
+
 		return true;
 	}
 
@@ -138,19 +133,10 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 		for (EnumFacing side : sides) {
 			SyncableBlockLayers layers = getLayersForSide(side);
-			if (layers.isLastLayerStencil()) {
-				layers.setLastLayerColor(color);
-				layers.moveStencilToNextLayer();
-			} else {
-				// collapse all layers, since they will be fully covered by paint
-				layers.clear();
-				setBaseColor(side, color);
-			}
+			layers.applyPaint(color);
 
 			hasChanged |= layers.isDirty();
 		}
-
-		hasChanged |= baseColors.isDirty();
 
 		if (!worldObj.isRemote) sync();
 		return hasChanged;
@@ -165,16 +151,11 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		for (EnumFacing side : sides) {
 			SyncableBlockLayers layer = getLayersForSide(side);
 
-			// If there is a stencil on top, pop it off.
-			if (layer.isLastLayerStencil()) {
-				Stencil stencil = layer.getTopStencil();
-				ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal());
+			final Optional<StencilPattern> stencil = layer.clearAll();
+			if (stencil.isPresent()) {
+				ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, stencil.get().ordinal());
 				dropStackFromSide(dropStack, side);
 			}
-
-			layer.clear();
-
-			setBaseColor(side, 0xFFFFFF);
 		}
 
 		if (isBlockUnpainted() && paintedBlock.containsValidBlock()) {
@@ -186,16 +167,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		if (!worldObj.isRemote) sync();
 	}
 
-	public boolean useStencil(EnumFacing side, Stencil stencil) {
+	public boolean useStencil(EnumFacing side, StencilPattern stencil) {
 		SyncableBlockLayers layer = getLayersForSide(side);
-		if (layer.isLastLayerStencil()) {
-			Stencil topStencil = layer.getTopStencil();
-			if (topStencil == stencil) return false;
-
-			ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, topStencil.ordinal());
-			dropStackFromSide(dropStack, side);
-			layer.setLastLayerStencil(stencil);
-		} else layer.pushNewStencil(stencil);
+		layer.putStencil(stencil);
 
 		if (!worldObj.isRemote) sync();
 		return true;
@@ -211,28 +185,30 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 		SyncableBlockLayers layer = getLayersForSide(side);
 
-		if (layer.isLastLayerStencil()) {
-			if (player.isSneaking()) {
-				if (!worldObj.isRemote) {
-					ItemStack dropStack = new ItemStack(OpenBlocks.Items.stencil, 1, layer.getTopStencil().ordinal());
+		boolean result = false;
+		if (player.isSneaking()) {
+			if (!worldObj.isRemote) {
+				final Optional<StencilPattern> stencil = layer.popStencil();
+				if (stencil.isPresent()) {
+					ItemStack dropStack = OpenBlocks.Items.stencil.createItemStack(stencil.get());
 					dropStackFromSide(dropStack, side);
+					result = true;
 				}
-				layer.removeCover();
-			} else getLayersForSide(side).rotateCover();
-
-			if (!worldObj.isRemote) sync();
-			return true;
+			}
+		} else {
+			result = layer.rotateCover();
 		}
 
-		return false;
+		if (!worldObj.isRemote) sync();
+		return result;
 	}
 
 	@Override
 	public List<ItemStack> getDrops(List<ItemStack> drops) {
 		for (SyncableBlockLayers sideLayers : allSides.values()) {
-			if (sideLayers.isLastLayerStencil()) {
-				Stencil stencil = sideLayers.getTopStencil();
-				if (stencil != null) drops.add(new ItemStack(OpenBlocks.Items.stencil, 1, stencil.ordinal()));
+			final Optional<StencilPattern> stencil = sideLayers.peekStencil();
+			if (stencil.isPresent()) {
+				drops.add(OpenBlocks.Items.stencil.createItemStack(stencil.get()));
 			}
 		}
 
@@ -263,8 +239,15 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		}
 	}
 
-	public void setPaintedBlockBlock(Block block, int meta) {
+	public void setPaintedBlock(IBlockState state) {
+		final Block block = state.getBlock();
+		final int meta = block.getMetaFromState(state);
+
 		paintedBlock.setValue(block);
 		paintedBlockMeta.set(meta);
+	}
+
+	public CanvasState getCanvasState() {
+		return canvasState;
 	}
 }

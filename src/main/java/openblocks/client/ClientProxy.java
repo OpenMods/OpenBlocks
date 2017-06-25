@@ -41,6 +41,8 @@ import openblocks.client.model.ModelPiggy;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.client.model.ModelXPShower;
 import openblocks.client.renderer.block.PathModel;
+import openblocks.client.renderer.block.canvas.CanvasTextureManager;
+import openblocks.client.renderer.block.canvas.ModelCanvas;
 import openblocks.client.renderer.entity.EntityCartographerRenderer;
 import openblocks.client.renderer.entity.EntityHangGliderRenderer;
 import openblocks.client.renderer.entity.EntityLuggageRenderer;
@@ -68,6 +70,7 @@ import openblocks.client.renderer.tileentity.guide.TileEntityBuilderGuideRendere
 import openblocks.client.renderer.tileentity.guide.TileEntityGuideRenderer;
 import openblocks.common.StencilPattern;
 import openblocks.common.TrophyHandler.Trophy;
+import openblocks.common.block.BlockCanvas;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockPaintCan;
 import openblocks.common.entity.EntityCartographer;
@@ -135,6 +138,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 				.put("magic-devnull", DevNullModel.INSTANCE)
 				.put("magic-path", PathModel.INSTANCE)
 				.put("magic-stencil", ModelStencil.INSTANCE)
+				.put("magic-canvas", ModelCanvas.INSTANCE)
 				.build(OpenBlocks.MODID));
 
 		if (OpenBlocks.Items.hangGlider != null) {
@@ -204,6 +208,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.stencil);
 		}
 
+		if (OpenBlocks.Blocks.canvas != null) {
+			MinecraftForge.EVENT_BUS.register(CanvasTextureManager.INSTANCE);
+		}
+
 		if (OpenBlocks.Blocks.elevator != null) {
 			ModelUtils.registerMetaInsensitiveModel(Item.getItemFromBlock(OpenBlocks.Blocks.elevator));
 		}
@@ -266,7 +274,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		}
 
 		if (OpenBlocks.Items.hangGlider != null) {
-			// TODO 1.8.9 hang glider item rendering
 			MinecraftForge.EVENT_BUS.register(new GliderPlayerRenderHandler());
 		}
 
@@ -321,6 +328,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.elevatorRotating != null) {
 			blockColors.registerBlockColorHandler(new BlockElevator.BlockColorHandler(), OpenBlocks.Blocks.elevatorRotating);
 			itemColors.registerItemColorHandler(new ItemElevator.ItemColorHandler(), OpenBlocks.Blocks.elevatorRotating);
+		}
+
+		if (OpenBlocks.Blocks.canvas != null) {
+			blockColors.registerBlockColorHandler(new BlockCanvas.InnerBlockColorHandler(blockColors), OpenBlocks.Blocks.canvas);
 		}
 	}
 

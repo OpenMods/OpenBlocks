@@ -269,9 +269,9 @@ public enum StencilPattern implements IStencilPattern {
 	}
 
 	@Override
-	public int mix(int bitIndex, int background) {
+	public int mix(int bitIndex, int src, int dst) {
 		boolean bit = bits.testBit(bitIndex);
-		return bit? 0 : background;
+		return bit? src : dst;
 	}
 
 }

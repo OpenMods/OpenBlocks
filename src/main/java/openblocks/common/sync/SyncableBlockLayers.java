@@ -1,250 +1,288 @@
 package openblocks.common.sync;
 
-import com.google.common.collect.Lists;
-import java.util.LinkedList;
-import java.util.List;
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
-import openblocks.common.Stencil;
+import net.minecraftforge.common.util.Constants;
+import openblocks.client.renderer.block.canvas.CanvasSideState;
+import openblocks.client.renderer.block.canvas.TextureOrientation;
+import openblocks.common.StencilPattern;
+import openmods.Log;
 import openmods.sync.SyncableObjectBase;
+import openmods.utils.Stack;
 
 public class SyncableBlockLayers extends SyncableObjectBase {
 
-	public static class Layer {
+	private static final String TAG_LAYERS = "Layers";
+	private static final String TAG_BACKGROUND = "Background";
+	private static final String TAG_COLOR = "Color";
+	private static final String TAG_STENCIL = "Stencil";
+	private static final String TAG_ROTATION = "Rotation";
+	private static final String TAG_COVER = "Cover";
 
-		private int color;
-		private Stencil stencil;
-		private byte rotation;
-		private boolean hasStencilCover = false;
+	private static class Pattern {
+		public StencilPattern stencil;
+		public TextureOrientation rotation;
 
-		public Layer() {}
-
-		public Layer(int col) {
-			this.color = col;
+		public void readFromStream(PacketBuffer stream) {
+			rotation = TextureOrientation.values()[stream.readByte()];
+			stencil = (StencilPattern.values()[stream.readByte()]);
 		}
 
-		public int getColor() {
-			return color;
+		public void writeToStream(PacketBuffer stream) {
+			stream.writeByte(rotation.ordinal());
+			stream.writeByte(stencil.ordinal());
 		}
 
-		/***
-		 * If the layer has a cover on it, return white.
-		 * Otherwise we render on the stored color
-		 */
-		public int getColorForRender() {
-			return hasStencilCover()? 0xFFFFFF : getColor();
+		public void readFromNBT(NBTTagCompound tag) {
+			rotation = TextureOrientation.values()[tag.getByte(TAG_ROTATION)];
+			stencil = StencilPattern.valueOf(tag.getString(TAG_STENCIL));
 		}
 
-		public Stencil getStencil() {
-			return stencil;
+		public void writeToNBT(NBTTagCompound tag) {
+			tag.setByte(TAG_ROTATION, (byte)rotation.ordinal());
+			tag.setString(TAG_STENCIL, stencil.name());
 		}
 
-		public byte getRotation() {
-			return rotation;
+		public boolean hasSamePatternAndRotation(Pattern other) {
+			return this.rotation == other.rotation &&
+					this.stencil == other.stencil;
 		}
+	}
 
-		public boolean hasStencilCover() {
-			return hasStencilCover;
-		}
+	private static class Layer extends Pattern {
 
-		public void setHasStencilCover(boolean cover) {
-			this.hasStencilCover = cover;
-		}
-
-		public void setRotation(byte rotation) {
-			this.rotation = rotation;
-		}
-
-		public void setStencil(Stencil st) {
-			this.stencil = st;
-		}
-
-		public boolean setColor(int color) {
-			if (this.color != color) {
-				this.color = color;
-				return true;
-			}
-
-			return false;
-		}
+		public int color;
 
 		public static Layer createFromStream(PacketBuffer stream) {
-			Layer layer = new Layer();
+			final Layer layer = new Layer();
 			try {
-				layer.setColor(stream.readInt());
-				layer.setRotation(stream.readByte());
-				byte b = stream.readByte();
-				if (b > -1) {
-					layer.setStencil(Stencil.values()[b]);
-				}
-				layer.setHasStencilCover(stream.readBoolean());
+				layer.color = stream.readInt();
+				layer.readFromStream(stream);
 			} catch (Exception e) {
-
+				Log.warn(e, "Failed to read stencil layer");
 			}
+
 			return layer;
 		}
 
-		public void rotate() {
-			rotation++;
-			if (rotation > 3) {
-				rotation = 0;
-			}
+		@Override
+		public void writeToStream(PacketBuffer stream) {
+			stream.writeInt(color);
+			super.writeToStream(stream);
 		}
 
-		public NBTTagCompound getNBT() {
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setByte("rotation", rotation);
-			nbt.setString("stencil", stencil.name());
-			nbt.setBoolean("hasStencilCover", hasStencilCover);
-			nbt.setInteger("color", color);
+		public NBTTagCompound writeToNBT() {
+			final NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger(TAG_COLOR, color);
+			writeToNBT(nbt);
 			return nbt;
 		}
 
-		public static Layer createFromNBT(NBTTagCompound compoundTag) {
-			Layer layer = new Layer();
-			layer.setColor(compoundTag.getInteger("color"));
-			layer.setHasStencilCover(compoundTag.getBoolean("hasStencilCover"));
-			layer.setRotation(compoundTag.getByte("rotation"));
-			layer.setStencil(Stencil.valueOf(compoundTag.getString("stencil")));
+		public static Layer createFromNBT(NBTTagCompound tag) {
+			final Layer layer = new Layer();
+			layer.color = tag.getInteger(TAG_COLOR);
+			layer.readFromNBT(tag);
 			return layer;
 		}
 	}
 
-	public final LinkedList<Layer> layers = Lists.newLinkedList();
+	private static class Cover extends Pattern {
 
-	public SyncableBlockLayers() {}
+		public Layer paint(int color) {
+			final Layer result = new Layer();
+			result.color = color;
+			result.rotation = rotation;
+			result.stencil = stencil;
+			return result;
+		}
+
+		public static Optional<Cover> createFromStream(PacketBuffer stream) {
+			if (!stream.readBoolean()) return Optional.absent();
+
+			final Cover cover = new Cover();
+			try {
+				cover.readFromStream(stream);
+			} catch (Exception e) {
+				Log.warn(e, "Failed to read stencil cover");
+			}
+
+			return Optional.of(cover);
+		}
+
+		public NBTTagCompound writeToNBT() {
+			final NBTTagCompound nbt = new NBTTagCompound();
+			writeToNBT(nbt);
+			return nbt;
+		}
+
+		public static Cover createFromNBT(NBTTagCompound tag) {
+			final Cover cover = new Cover();
+			cover.readFromNBT(tag);
+			return cover;
+		}
+	}
+
+	private final Stack<Layer> layers = Stack.create();
+
+	private Optional<Cover> cover = Optional.absent();
+
+	private int backgroundColor;
 
 	@Override
 	public void readFromStream(PacketBuffer stream) {
+		backgroundColor = stream.readInt();
 		int size = stream.readByte();
 		layers.clear();
-		for (byte i = 0; i < size; i++) {
-			layers.add(Layer.createFromStream(stream));
-		}
+		for (byte i = 0; i < size; i++)
+			layers.push(Layer.createFromStream(stream));
+
+		cover = Cover.createFromStream(stream);
 	}
 
 	@Override
 	public void writeToStream(PacketBuffer stream) {
+		stream.writeInt(backgroundColor);
 		stream.writeByte(layers.size());
-		for (Layer layer : layers) {
-			stream.writeInt(layer.getColor());
-			stream.writeByte(layer.getRotation());
-			if (layer.getStencil() != null) {
-				stream.writeByte(layer.getStencil().ordinal());
-			} else {
-				stream.writeByte(-1);
-			}
-			stream.writeBoolean(layer.hasStencilCover());
+		for (Layer layer : layers)
+			layer.writeToStream(stream);
+
+		if (cover.isPresent()) {
+			stream.writeBoolean(true);
+			cover.get().writeToStream(stream);
+		} else {
+			stream.writeBoolean(false);
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt, String name) {
-		NBTTagCompound subTag = new NBTTagCompound();
-		subTag.setInteger("size", layers.size());
-		int i = 0;
-		for (Layer layer : layers) {
-			subTag.setTag("layer_" + i, layer.getNBT());
-			i++;
-		}
+		final NBTTagCompound subTag = new NBTTagCompound();
+		subTag.setInteger(TAG_BACKGROUND, backgroundColor);
+
+		final NBTTagList layersTag = new NBTTagList();
+
+		for (Layer layer : layers)
+			layersTag.appendTag(layer.writeToNBT());
+
+		subTag.setTag(TAG_LAYERS, layersTag);
+
+		if (cover.isPresent())
+			subTag.setTag(TAG_COVER, cover.get().writeToNBT());
+
 		nbt.setTag(name, subTag);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt, String name) {
-		NBTTagCompound subTag = nbt.getCompoundTag(name);
-		int size = subTag.getInteger("size");
+		final NBTTagCompound subTag = nbt.getCompoundTag(name);
+
+		this.backgroundColor = subTag.getInteger(TAG_BACKGROUND);
+		final NBTTagList layersTag = subTag.getTagList(TAG_LAYERS, Constants.NBT.TAG_COMPOUND);
 		layers.clear();
-		for (int i = 0; i < size; i++) {
-			layers.add(Layer.createFromNBT(subTag.getCompoundTag("layer_" + i)));
+		for (int i = 0; i < layersTag.tagCount(); i++)
+			layers.push(Layer.createFromNBT(layersTag.getCompoundTagAt(i)));
+
+		if (subTag.hasKey(TAG_COVER, Constants.NBT.TAG_COMPOUND)) {
+			cover = Optional.of(Cover.createFromNBT(subTag.getCompoundTag(TAG_COVER)));
+		} else {
+			cover = Optional.absent();
 		}
+
 	}
 
-	public List<Layer> getAllLayers() {
-		return layers;
-	}
-
-	public boolean isLastLayerStencil() {
-		Layer last = layers.peekLast();
-		return last != null && last.hasStencilCover && last.stencil != null;
-	}
-
-	public void setLastLayerColor(int color) {
-		Layer last = getOrCreateLastLayer();
-		final boolean hasChanged = last.setColor(color);
-		if (hasChanged) markDirty();
-	}
-
-	public void setLastLayerStencil(Stencil stencil) {
-		Layer last = getOrCreateLastLayer();
-		last.hasStencilCover = true;
-		last.stencil = stencil;
-		markDirty();
-	}
-
-	private Layer getOrCreateLastLayer() {
-		Layer last = layers.peekLast();
-		if (last == null) {
-			last = new Layer();
-			layers.addLast(last);
-		}
-		return last;
-	}
-
-	public void moveStencilToNextLayer() {
-		Layer prevTop = layers.getLast();
-		prevTop.setHasStencilCover(false);
-
-		Layer newLayer = new Layer();
-		newLayer.setStencil(prevTop.getStencil());
-		newLayer.setHasStencilCover(true);
-		newLayer.setRotation(prevTop.getRotation());
-		layers.addLast(newLayer);
-		markDirty();
-	}
-
-	public void pushNewStencil(Stencil stencil) {
-		Layer newLayer = new Layer();
-		newLayer.setStencil(stencil);
-		newLayer.setHasStencilCover(true);
-		layers.addLast(newLayer);
-		markDirty();
-	}
-
-	public Layer getLayer(int i) {
-		if (i < layers.size()) { return layers.get(i); }
-		return null;
-	}
-
-	public void removeCover() {
-		Layer last = layers.peekLast();
-		if (last != null && last.hasStencilCover()) {
-			layers.removeLast();
-			markDirty();
-		}
-	}
-
-	public Stencil getTopStencil() {
-		Layer top = layers.peekLast();
-		return top != null? top.stencil : null;
-	}
-
-	public void rotateCover() {
-		Layer lastLayer = layers.peekLast();
-		if (lastLayer != null && lastLayer.hasStencilCover()) {
-			lastLayer.rotate();
-			markDirty();
-		}
-	}
-
-	public void clear() {
-		if (!layers.isEmpty()) {
+	public void applyPaint(int color) {
+		if (cover.isPresent()) {
+			paintOverCover(cover.get(), color);
+		} else {
+			// no stencil, covering all
 			layers.clear();
-			markDirty();
+			backgroundColor = color;
 		}
+		markDirty();
+	}
+
+	private void paintOverCover(Cover cover, int color) {
+		if (!layers.isEmpty()) {
+			final Layer top = layers.peek(0);
+			if (cover.hasSamePatternAndRotation(top)) {
+				// painting over last layer -> just changing color
+				top.color = color;
+				return;
+			}
+		}
+
+		layers.push(cover.paint(color));
+	}
+
+	public boolean rotateCover() {
+		if (cover.isPresent()) {
+			final Cover c = cover.get();
+			c.rotation = c.rotation.increment();
+			markDirty();
+			return true;
+		}
+
+		return false;
+	}
+
+	private static final Function<Cover, StencilPattern> EXTRACT_PATTERN = new Function<Cover, StencilPattern>() {
+		@Override
+		public StencilPattern apply(Cover input) {
+			return input.stencil;
+		}
+	};
+
+	public Optional<StencilPattern> clearAll() {
+		layers.clear();
+		backgroundColor = 0;
+		markDirty();
+
+		final Optional<Cover> cover = this.cover;
+		this.cover = Optional.absent();
+		return cover.transform(EXTRACT_PATTERN);
+	}
+
+	public boolean putStencil(StencilPattern stencil) {
+		if (cover.isPresent()) return false;
+
+		final Cover cover = new Cover();
+		cover.rotation = TextureOrientation.R0;
+		cover.stencil = stencil;
+		this.cover = Optional.of(cover);
+
+		markDirty();
+		return true;
+	}
+
+	public Optional<StencilPattern> popStencil() {
+		final Optional<Cover> cover = this.cover;
+		this.cover = Optional.absent();
+		markDirty();
+		return cover.transform(EXTRACT_PATTERN);
+	}
+
+	public Optional<StencilPattern> peekStencil() {
+		return cover.transform(EXTRACT_PATTERN);
 	}
 
 	public boolean isEmpty() {
 		return layers.isEmpty();
+	}
+
+	public CanvasSideState convertToState() {
+		final CanvasSideState.Builder builder = CanvasSideState.builder().withBackground(backgroundColor);
+
+		for (Layer layer : layers)
+			builder.addLayer(layer.stencil, layer.color, layer.rotation);
+
+		if (cover.isPresent()) {
+			final Cover c = cover.get();
+			return builder.withCover(c.stencil, c.rotation);
+		} else {
+			return builder.withoutCover();
+		}
 	}
 }

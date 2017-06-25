@@ -1,0 +1,24 @@
+{
+	"forge_marker": 1,
+	"variants": {
+        "inventory": [{
+            "model": "cube_all",
+            "textures": {
+                "all": "openblocks:blocks/canvas"
+            }
+        }],
+		"orientation=xp_yp": [{
+			"model": "openblocks:magic-canvas",
+            "custom": {
+                "base": "openblocks:canvas#blank",
+                "baseLayers": ["Solid"]
+            }
+		}],
+        "blank": [{
+            "model": "cube_all",
+            "textures": {
+                "all": "openblocks:blocks/canvas"
+            }
+        }]
+	}
+}

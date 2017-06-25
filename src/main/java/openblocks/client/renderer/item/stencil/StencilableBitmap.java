@@ -81,7 +81,7 @@ public class StencilableBitmap {
 		}
 
 		public int convert(IStencilPattern stencil, int background) {
-			return stencil.mix(bitIndex, background);
+			return stencil.mix(bitIndex, 0, background);
 		}
 	}
 

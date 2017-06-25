@@ -79,7 +79,7 @@ public class ItemPaintBrush extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		Integer color = getColorFromStack(stack);
+		final Integer color = getColorFromStack(stack);
 		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
 
 		if (PaintUtils.instance.isAllowedToReplace(world, pos)) {
@@ -88,8 +88,9 @@ public class ItemPaintBrush extends Item {
 
 		final boolean changed;
 
-		if (player.isSneaking()) changed = tryRecolorBlock(world, pos, color, EnumFacing.VALUES);
-		else changed = tryRecolorBlock(world, pos, color, facing);
+		final int solidColor = 0xFF000000 | color;
+		if (player.isSneaking()) changed = tryRecolorBlock(world, pos, solidColor, EnumFacing.VALUES);
+		else changed = tryRecolorBlock(world, pos, solidColor, facing);
 
 		if (changed) {
 			world.playSound(null, player.getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.PLAYERS, 0.1F, 0.8F);
@@ -114,11 +115,11 @@ public class ItemPaintBrush extends Item {
 
 		// first try RGB color...
 		if (block instanceof IPaintableBlock) {
-			IPaintableBlock canvas = (IPaintableBlock)block;
+			IPaintableBlock paintableBlock = (IPaintableBlock)block;
 
 			boolean result = false;
 			for (EnumFacing dir : sides)
-				result |= canvas.recolorBlock(world, pos, dir, rgb);
+				result |= paintableBlock.recolorBlock(world, pos, dir, rgb);
 
 			return result;
 		}

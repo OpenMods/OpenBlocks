@@ -6,5 +6,5 @@ public interface IStencilPattern {
 
 	public int height();
 
-	public int mix(int bitIndex, int background);
+	public int mix(int bitIndex, int src, int dst);
 }
