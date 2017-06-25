@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.IPaintableBlock;
 import openblocks.common.block.BlockCanvas;
@@ -82,7 +83,7 @@ public class ItemPaintBrush extends Item {
 		final Integer color = getColorFromStack(stack);
 		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
 
-		if (PaintUtils.instance.isAllowedToReplace(world, pos)) {
+		if (Config.paintbrushReplacesBlocks && PaintUtils.instance.isAllowedToReplace(world, pos)) {
 			BlockCanvas.replaceBlock(world, pos);
 		}
 

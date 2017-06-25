@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader.White;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import openblocks.Config;
 import openblocks.OpenBlocks;
 import openmods.utils.TextureUtils;
 
@@ -24,15 +25,7 @@ public class CanvasTextureManager {
 
 	public static final CanvasTextureManager INSTANCE = new CanvasTextureManager();
 
-	private static final int DEFAULT_POOL_SIZE = 128;
-
-	private int poolSize = DEFAULT_POOL_SIZE;
-
 	private int peakRejectedAllocations = 0;
-
-	public void setPoolSize(int poolSize) {
-		this.poolSize = poolSize;
-	}
 
 	public int getPeakRejectedAllocations() {
 		return peakRejectedAllocations;
@@ -137,7 +130,7 @@ public class CanvasTextureManager {
 
 		final TextureMap map = evt.getMap();
 		final EmptyTextureData emptyTexture = new EmptyTextureData();
-		for (int i = 0; i < poolSize; i++) {
+		for (int i = 0; i < Config.canvasPoolSize; i++) {
 			final CanvasTexture entry = new CanvasTexture(OpenBlocks.location("canvas-" + i), emptyTexture);
 			map.setTextureEntry(entry);
 			freeTextures.push(entry);

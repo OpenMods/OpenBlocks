@@ -386,6 +386,14 @@ public class Config {
 	@ConfigProperty(category = "itemdropper", name = "maxItemDropSpeed", comment = "Maximum speed that can be set in item dropper GUI")
 	public static double maxItemDropSpeed = 4;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "canvas", name = "canvasTexturePoolSize", comment = "Controls number of textures allocated for canvas. Increase if canvas blocks stop rendering properly (get empty sides). To re-apply, reload textures")
+	public static int canvasPoolSize = 256;
+
+	@OnLineModifiable
+	@ConfigProperty(category = "canvas", name = "paintbrushReplacesBlocks", comment = "If true, paintbrush will replace suitable blocks with canvas. Otherwise, it will only try to paint blocks")
+	public static boolean paintbrushReplacesBlocks = true;
+
 	public static void register() {
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
