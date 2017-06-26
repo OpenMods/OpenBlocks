@@ -46,6 +46,8 @@ public class CanvasState {
 		final CanvasSideState oldSideState = sideStates.get(side);
 		if (oldSideState != null) oldSideState.release();
 
+		sideState.acquire();
+
 		final ImmutableMap.Builder<EnumFacing, CanvasSideState> builder = ImmutableMap.builder();
 
 		// put new one first, then rest (without old one) - since order is important
@@ -60,6 +62,11 @@ public class CanvasState {
 	public void release() {
 		for (CanvasSideState sideState : sideStates.values())
 			sideState.release();
+	}
+
+	public void onRender() {
+		for (CanvasSideState sideState : sideStates.values())
+			sideState.onRender();
 	}
 
 	@Override

@@ -39,6 +39,8 @@ public class BakedModelCanvas extends BakedModelAdapter {
 			final ImmutableMap<IUnlistedProperty<?>, Optional<?>> unlistedProperties = extendedState.getUnlistedProperties();
 			maybeInnerBlock = getProperty(unlistedProperties, InnerBlockState.PROPERTY);
 			maybeCanvasState = getProperty(unlistedProperties, CanvasState.PROPERTY);
+
+			if (maybeCanvasState.isPresent()) maybeCanvasState.get().onRender();
 		} else {
 			maybeInnerBlock = Optional.absent();
 			maybeCanvasState = Optional.absent();

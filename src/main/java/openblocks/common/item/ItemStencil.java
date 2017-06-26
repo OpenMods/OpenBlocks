@@ -14,10 +14,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
 import openblocks.common.IStencilPattern;
+import openblocks.common.PaintUtils;
 import openblocks.common.StencilPattern;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
-import openmods.utils.render.PaintUtils;
 
 public class ItemStencil extends Item {
 

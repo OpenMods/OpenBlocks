@@ -21,13 +21,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.IPaintableBlock;
+import openblocks.common.PaintUtils;
 import openblocks.common.block.BlockCanvas;
 import openmods.colors.ColorMeta;
 import openmods.colors.ColorUtils;
 import openmods.colors.RGB;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.ItemUtils;
-import openmods.utils.render.PaintUtils;
 
 @BookDocumentation(customName = "paintbrush", hasVideo = true)
 public class ItemPaintBrush extends Item {
@@ -143,8 +143,6 @@ public class ItemPaintBrush extends Item {
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
 		return false;
 	}
-
-	// TODO 1.10 figure out RGB item coloring
 
 	public static Integer getColorFromStack(ItemStack stack) {
 		if (stack.hasTagCompound()) {

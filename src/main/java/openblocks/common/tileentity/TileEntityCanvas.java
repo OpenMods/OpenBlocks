@@ -68,6 +68,12 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {
 				boolean stateChanged = false;
+
+				if (changes.contains(paintedBlock) || changes.contains(paintedBlockMeta)) {
+					paintedBlockState = null;
+					stateChanged = true;
+				}
+
 				for (Map.Entry<EnumFacing, SyncableBlockLayers> e : allSides.entrySet()) {
 					final SyncableBlockLayers side = e.getValue();
 					if (changes.contains(side)) {
@@ -249,5 +255,19 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	public CanvasState getCanvasState() {
 		return canvasState;
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		canvasState.release();
+		canvasState = CanvasState.EMPTY;
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		canvasState.release();
+		canvasState = CanvasState.EMPTY;
 	}
 }

@@ -119,9 +119,24 @@ public class CanvasSideState {
 		return coverTexture;
 	}
 
-	public void release() {
-		if (layersTexture != null)
-			CanvasTextureManager.INSTANCE.releaseTexture(background, layers);
+	public void onRender() {
+		// May not be called later due to caching
+		getLayersTexture();
+	}
+
+	private int referenceCount = 0;
+
+	public synchronized void acquire() {
+		referenceCount++;
+	}
+
+	public synchronized void release() {
+		if (--referenceCount <= 0) {
+			if (layersTexture != null) {
+				CanvasTextureManager.INSTANCE.releaseTexture(background, layers);
+				layersTexture = null;
+			}
+		}
 	}
 
 	public static class Builder {

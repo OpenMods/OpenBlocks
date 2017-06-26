@@ -8,20 +8,24 @@ import com.google.common.collect.Table;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import jline.internal.Log;
+import java.util.Queue;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader.White;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openmods.Log;
 import openmods.utils.TextureUtils;
 
 public class CanvasTextureManager {
+
+	private static final boolean DEBUG = Boolean.parseBoolean(System.getProperty("openblocks.debugCanvasTextures", "false"));
 
 	public static final CanvasTextureManager INSTANCE = new CanvasTextureManager();
 
@@ -30,6 +34,8 @@ public class CanvasTextureManager {
 	public int getPeakRejectedAllocations() {
 		return peakRejectedAllocations;
 	}
+
+	private final Queue<CanvasTexture> texturesToUpload = Queues.newConcurrentLinkedQueue();
 
 	private CanvasTextureManager() {}
 
@@ -59,7 +65,7 @@ public class CanvasTextureManager {
 		}
 	}
 
-	private static class CanvasTexture extends TextureAtlasSprite {
+	private class CanvasTexture extends TextureAtlasSprite {
 		public final ResourceLocation location;
 
 		private final EmptyTextureData emptyTexture;
@@ -67,6 +73,8 @@ public class CanvasTextureManager {
 		public int referenceCount = 0;
 
 		private int mipmapLevels;
+
+		private boolean requiresUpload;
 
 		public CanvasTexture(ResourceLocation location, EmptyTextureData emptyTexture) {
 			super(location.toString());
@@ -113,8 +121,17 @@ public class CanvasTextureManager {
 			framesTextureData.add(mipmaps);
 			super.generateMipmaps(this.mipmapLevels);
 
-			TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
+			this.requiresUpload = true;
+			texturesToUpload.add(this);
+		}
+
+		public void upload() {
+			// must be done in rendering thread
+			if (requiresUpload) {
+				this.requiresUpload = false;
+				TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
+			}
 		}
 	}
 
@@ -126,7 +143,10 @@ public class CanvasTextureManager {
 	public void onTextureStitchEvent(TextureStitchEvent.Pre evt) {
 		freeTextures.clear();
 		usedTextures.clear();
+		texturesToUpload.clear();
 		peakRejectedAllocations = 0;
+
+		if (DEBUG) Log.info("Allocating %s textures", Config.canvasPoolSize);
 
 		final TextureMap map = evt.getMap();
 		final EmptyTextureData emptyTexture = new EmptyTextureData();
@@ -137,17 +157,26 @@ public class CanvasTextureManager {
 		}
 	}
 
+	@SubscribeEvent
+	public void onRenderEnd(RenderWorldLastEvent evt) {
+		CanvasTexture t;
+		while ((t = texturesToUpload.poll()) != null)
+			t.upload();
+	}
+
 	public ResourceLocation getTexture(int background, List<CanvasLayer> layers) {
 		CanvasTexture allocatedTexture = usedTextures.get(background, layers);
 		if (allocatedTexture != null) {
 			allocatedTexture.referenceCount++;
+			if (DEBUG) Log.info("Incrementing texture %s [%08X:%s]. counter = %d", allocatedTexture.location, background, layers, allocatedTexture.referenceCount);
 			return allocatedTexture.location;
 		}
 
 		allocatedTexture = freeTextures.poll();
 		if (allocatedTexture == null) {
-			// TODO pool's empty, suggest reload
+			// TODO pool's empty, clean unreferenced, suggest reload
 			peakRejectedAllocations++;
+			if (DEBUG) Log.info("Can't load texture [%08X:%s]", background, layers);
 			return White.LOCATION;
 		}
 
@@ -156,6 +185,8 @@ public class CanvasTextureManager {
 		usedTextures.put(background, layers, allocatedTexture);
 		allocatedTexture.referenceCount++;
 
+		if (DEBUG) Log.info("Loaded texture %s [%08X:%s]. counter = %d", allocatedTexture.location, background, layers, allocatedTexture.referenceCount);
+
 		return allocatedTexture.location;
 	}
 
@@ -163,9 +194,8 @@ public class CanvasTextureManager {
 		CanvasTexture textureToRelease = usedTextures.get(background, layers);
 		Preconditions.checkNotNull(textureToRelease, "Texture not allocated");
 
-		if (textureToRelease.referenceCount-- <= 0) {
-			usedTextures.remove(background, layers);
-			freeTextures.push(textureToRelease);
-		}
+		--textureToRelease.referenceCount;
+
+		if (DEBUG) Log.info("Decrementing texture %s [%08X:%s]. counter = %d", textureToRelease.location, background, layers, textureToRelease.referenceCount);
 	}
 }
