@@ -3,8 +3,10 @@ package openblocks.client.renderer.block.canvas;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Nullable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -127,7 +129,8 @@ public class CanvasSideState {
 	private int referenceCount = 0;
 
 	public synchronized void acquire() {
-		referenceCount++;
+		if (referenceCount <= 0) referenceCount = 1;
+		else referenceCount++;
 	}
 
 	public synchronized void release() {
@@ -137,6 +140,29 @@ public class CanvasSideState {
 				layersTexture = null;
 			}
 		}
+	}
+
+	// huh, looks weird...
+	private static final Map<CanvasSideState, CanvasSideState> canonicMap = Maps.newHashMap();
+
+	private synchronized static CanvasSideState getCanonic(CanvasSideState i) {
+		CanvasSideState o = canonicMap.get(i);
+		if (o == null) {
+			canonicMap.put(i, i);
+			o = i;
+		}
+
+		return o;
+	}
+
+	static void onTextureReload() {
+		for (CanvasSideState k : canonicMap.keySet())
+			k.clearTextures();
+	}
+
+	private void clearTextures() {
+		layersTexture = null;
+		coverTexture = null;
 	}
 
 	public static class Builder {
@@ -156,12 +182,12 @@ public class CanvasSideState {
 
 		public CanvasSideState withCover(IStencilPattern cover, TextureOrientation rotation) {
 			final Pair<TextureOrientation, List<CanvasLayer>> layers = reorientLayers(this.layers);
-			return new CanvasSideState(background, layers.getRight(), layers.getLeft(), Optional.of(cover), rotation);
+			return getCanonic(new CanvasSideState(background, layers.getRight(), layers.getLeft(), Optional.of(cover), rotation));
 		}
 
 		public CanvasSideState withoutCover() {
 			final Pair<TextureOrientation, List<CanvasLayer>> layers = reorientLayers(this.layers);
-			return new CanvasSideState(background, layers.getRight(), layers.getLeft(), Optional.<IStencilPattern> absent(), TextureOrientation.R0);
+			return getCanonic(new CanvasSideState(background, layers.getRight(), layers.getLeft(), Optional.<IStencilPattern> absent(), TextureOrientation.R0));
 		}
 
 		private static Pair<TextureOrientation, List<CanvasLayer>> reorientLayers(List<CanvasLayer> layers) {

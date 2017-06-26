@@ -6,6 +6,8 @@ import com.google.common.base.Predicate;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
@@ -130,43 +132,55 @@ public class StencilModelTransformer {
 		}
 	});
 
-	private final LoadingCache<Key, ModelQuads> cache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build(new CacheLoader<Key, ModelQuads>() {
-		@Override
-		public ModelQuads load(Key key) throws Exception {
-			final LayerRenderInfo layersToRender = renderLayerCache.get(key.innerBlockState, key.renderLayer);
-			if (layersToRender.layers.isEmpty()) return ModelQuads.EMPTY;
+	private final LoadingCache<Key, ModelQuads> cache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES)
+			.removalListener(new RemovalListener<Key, ModelQuads>() {
+				@Override
+				public void onRemoval(RemovalNotification<Key, ModelQuads> notification) {
+					final Optional<CanvasState> canvasState = notification.getKey().canvasState;
+					if (canvasState.isPresent())
+						canvasState.get().release();
+				}
+			})
+			.build(new CacheLoader<Key, ModelQuads>() {
+				@Override
+				public ModelQuads load(Key key) throws Exception {
+					if (key.canvasState.isPresent())
+						key.canvasState.get().acquire();
 
-			final InnerModelInfo innerModel = key.innerBlockState.isPresent()? innerModelCache.get(key.innerBlockState.get()) : baseModel;
+					final LayerRenderInfo layersToRender = renderLayerCache.get(key.innerBlockState, key.renderLayer);
+					if (layersToRender.layers.isEmpty()) return ModelQuads.EMPTY;
 
-			if (!key.canvasState.isPresent()) {
-				// no stencils, early exit
-				final ModelQuads.Builder builder = ModelQuads.builder();
-				for (BlockRenderLayer layer : layersToRender.layers)
-					builder.merge(innerModel.layers.get(layer));
+					final InnerModelInfo innerModel = key.innerBlockState.isPresent()? innerModelCache.get(key.innerBlockState.get()) : baseModel;
 
-				return builder.build();
-			}
+					if (!key.canvasState.isPresent()) {
+						// no stencils, early exit
+						final ModelQuads.Builder builder = ModelQuads.builder();
+						for (BlockRenderLayer layer : layersToRender.layers)
+							builder.merge(innerModel.layers.get(layer));
 
-			final CanvasState canvasState = key.canvasState.get();
+						return builder.build();
+					}
 
-			final FaceClassifier faceClassifier = new FaceClassifier(canvasState.applicationOrder());
+					final CanvasState canvasState = key.canvasState.get();
 
-			final ModelQuads.Builder builder = ModelQuads.builder();
+					final FaceClassifier faceClassifier = new FaceClassifier(canvasState.applicationOrder());
 
-			for (BlockRenderLayer layer : layersToRender.layers) {
-				final ModelQuads layerQuads = innerModel.layers.get(layer);
-				for (EnumFacing side : EnumFacing.VALUES)
-					builder.addSidedQuads(side, prepareQuads(layerQuads.get(side), canvasState.sideStates, faceClassifier));
+					final ModelQuads.Builder builder = ModelQuads.builder();
 
-				builder.addGeneralQuads(prepareQuads(layerQuads.get(null), canvasState.sideStates, faceClassifier));
-			}
+					for (BlockRenderLayer layer : layersToRender.layers) {
+						final ModelQuads layerQuads = innerModel.layers.get(layer);
+						for (EnumFacing side : EnumFacing.VALUES)
+							builder.addSidedQuads(side, prepareQuads(layerQuads.get(side), canvasState.sideStates, faceClassifier));
 
-			if (layersToRender.renderCovers)
-				builder.addGeneralQuads(addStencilCovers(innerModel.bounds.expand(COVER_DELTA, COVER_DELTA, COVER_DELTA), canvasState.sideStates));
+						builder.addGeneralQuads(prepareQuads(layerQuads.get(null), canvasState.sideStates, faceClassifier));
+					}
 
-			return builder.build();
-		}
-	});
+					if (layersToRender.renderCovers)
+						builder.addGeneralQuads(addStencilCovers(innerModel.bounds.expand(COVER_DELTA, COVER_DELTA, COVER_DELTA), canvasState.sideStates));
+
+					return builder.build();
+				}
+			});
 
 	private List<BakedQuad> prepareQuads(List<BakedQuad> baseQuads, Map<EnumFacing, CanvasSideState> sides, FaceClassifier faceClassifier) {
 		final List<BakedQuad> result = Lists.newArrayListWithExpectedSize(baseQuads.size());

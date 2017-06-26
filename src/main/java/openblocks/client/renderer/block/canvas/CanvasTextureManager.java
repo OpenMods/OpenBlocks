@@ -146,6 +146,8 @@ public class CanvasTextureManager {
 		texturesToUpload.clear();
 		peakRejectedAllocations = 0;
 
+		CanvasSideState.onTextureReload();
+
 		if (DEBUG) Log.info("Allocating %s textures", Config.canvasPoolSize);
 
 		final TextureMap map = evt.getMap();

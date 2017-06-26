@@ -59,6 +59,11 @@ public class CanvasState {
 		return new CanvasState(builder.build());
 	}
 
+	public void acquire() {
+		for (CanvasSideState side : sideStates.values())
+			side.acquire();
+	}
+
 	public void release() {
 		for (CanvasSideState sideState : sideStates.values())
 			sideState.release();
