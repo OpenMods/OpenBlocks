@@ -6,13 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
 import openblocks.OpenBlocks;
 import openblocks.client.renderer.block.canvas.CanvasState;
 import openblocks.common.StencilPattern;
@@ -25,18 +32,77 @@ import openmods.api.ICustomHarvestDrops;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
-import openmods.sync.SyncableBlock;
-import openmods.sync.SyncableInt;
+import openmods.sync.SyncableBlockState;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ICustomBreakDrops, ICustomHarvestDrops {
 
-	/* Used for painting other blocks */
-	private SyncableBlock paintedBlock;
-	private SyncableInt paintedBlockMeta;
+	private static class UnpackingBlockAccess implements IBlockAccess {
 
-	private IBlockState paintedBlockState;
+		private final World original;
+
+		public UnpackingBlockAccess(World original) {
+			this.original = original;
+		}
+
+		@Override
+		@Nullable
+		public TileEntity getTileEntity(BlockPos pos) {
+			final TileEntity te = original.getTileEntity(pos);
+			return te instanceof TileEntityCanvas? null : te;
+		}
+
+		@Override
+		public int getCombinedLight(BlockPos pos, int lightValue) {
+			return original.getCombinedLight(pos, lightValue);
+		}
+
+		@Override
+		public IBlockState getBlockState(BlockPos pos) {
+			final TileEntity te = original.getTileEntity(pos);
+			if (te instanceof TileEntityCanvas) return ((TileEntityCanvas)te).getPaintedBlockState();
+
+			return original.getBlockState(pos);
+		}
+
+		@Override
+		public boolean isAirBlock(BlockPos pos) {
+			final IBlockState state = getBlockState(pos);
+			return state.getBlock().isAir(state, this, pos);
+		}
+
+		@Override
+		public Biome getBiome(BlockPos pos) {
+			return original.getBiome(pos);
+		}
+
+		@Override
+		public int getStrongPower(BlockPos pos, EnumFacing direction) {
+			return original.getStrongPower(pos, direction);
+		}
+
+		@Override
+		public WorldType getWorldType() {
+			return original.getWorldType();
+		}
+
+		@Override
+		public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
+			final Chunk chunk = original.getChunkFromBlockCoords(pos);
+			if (chunk == null || chunk.isEmpty()) return _default;
+
+			final IBlockState state = getBlockState(pos);
+			return state.getBlock().isSideSolid(state, this, pos, side);
+		}
+
+	}
+
+	private SyncableBlockState paintedBlockState;
+
+	private IBlockState rawPaintedBlockState;
+
+	private IBlockState actualPaintedBlockState;
 
 	@SuppressWarnings("unused")
 	private SyncableBlockLayers stencilsUp;
@@ -69,8 +135,9 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			public void onSync(Set<ISyncableObject> changes) {
 				boolean stateChanged = false;
 
-				if (changes.contains(paintedBlock) || changes.contains(paintedBlockMeta)) {
-					paintedBlockState = null;
+				if (changes.contains(paintedBlockState)) {
+					rawPaintedBlockState = null;
+					actualPaintedBlockState = null;
 					stateChanged = true;
 				}
 
@@ -105,8 +172,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		stencilsNorth = createLayer(EnumFacing.NORTH);
 		stencilsSouth = createLayer(EnumFacing.SOUTH);
 
-		paintedBlock = new SyncableBlock();
-		paintedBlockMeta = new SyncableInt(0);
+		paintedBlockState = new SyncableBlockState();
 	}
 
 	public SyncableBlockLayers getLayersForSide(EnumFacing side) {
@@ -114,17 +180,25 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	public IBlockState getPaintedBlockState() {
-		if (paintedBlockState == null) {
-			final Block block = paintedBlock.getValue();
-			if (block != Blocks.AIR) {
-				// TODO 1.10 switch storage to state
-				paintedBlockState = block.getStateFromMeta(paintedBlockMeta.get());
-			} else {
-				paintedBlockState = OpenBlocks.Blocks.canvas.getDefaultState();
+		if (rawPaintedBlockState == null) {
+			rawPaintedBlockState = paintedBlockState.getValue();
+		}
+
+		return rawPaintedBlockState;
+	}
+
+	public IBlockState getActualPaintedBlockState() {
+		if (actualPaintedBlockState == null) {
+			final IBlockState rawBlockState = getPaintedBlockState();
+			try {
+				actualPaintedBlockState = rawBlockState.getActualState(new UnpackingBlockAccess(getWorld()), getPos());
+			} catch (Exception e) {
+				// best effort, see?
+				actualPaintedBlockState = rawBlockState;
 			}
 		}
 
-		return paintedBlockState;
+		return actualPaintedBlockState;
 	}
 
 	private boolean isBlockUnpainted() {
@@ -164,9 +238,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			}
 		}
 
-		if (isBlockUnpainted() && paintedBlock.containsValidBlock()) {
-			final Block block = paintedBlock.getValue();
-			final IBlockState state = block.getStateFromMeta(paintedBlockMeta.get());
+		if (isBlockUnpainted() && !paintedBlockState.isAir()) {
+			final IBlockState state = paintedBlockState.getValue();
 			worldObj.setBlockState(pos, state);
 		}
 
@@ -223,14 +296,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	@Override
 	public boolean suppressBlockHarvestDrops() {
-		return paintedBlock.containsValidBlock();
+		return !paintedBlockState.isAir();
 	}
 
 	@Override
 	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkHarvest) {
-		if (paintedBlock.containsValidBlock()) {
-			final Block paintedBlock = this.paintedBlock.getValue();
-			final IBlockState state = paintedBlock.getStateFromMeta(paintedBlockMeta.get());
+		if (!paintedBlockState.isAir()) {
+			final IBlockState state = this.paintedBlockState.getValue();
+			final Block paintedBlock = state.getBlock();
 
 			final Random rand = worldObj.rand;
 
@@ -246,11 +319,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	public void setPaintedBlock(IBlockState state) {
-		final Block block = state.getBlock();
-		final int meta = block.getMetaFromState(state);
-
-		paintedBlock.setValue(block);
-		paintedBlockMeta.set(meta);
+		paintedBlockState.setValue(state);
 	}
 
 	public CanvasState getCanvasState() {

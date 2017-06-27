@@ -269,7 +269,7 @@ public class SyncableBlockLayers extends SyncableObjectBase {
 	}
 
 	public boolean isEmpty() {
-		return layers.isEmpty();
+		return backgroundColor == 0 && layers.isEmpty();
 	}
 
 	public CanvasSideState convertToState() {

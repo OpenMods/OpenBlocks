@@ -94,7 +94,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 		if (te != null) {
 			return extendedState
 					.withProperty(CanvasState.PROPERTY, te.getCanvasState())
-					.withProperty(InnerBlockState.PROPERTY, te.getPaintedBlockState());
+					.withProperty(InnerBlockState.PROPERTY, te.getActualPaintedBlockState());
 		} else {
 			return extendedState;
 		}
