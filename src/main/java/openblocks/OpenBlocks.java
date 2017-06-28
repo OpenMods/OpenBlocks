@@ -39,6 +39,7 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfessio
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import openblocks.common.CanvasReplaceBlacklist;
 import openblocks.common.CommandInventory;
 import openblocks.common.DonationUrlManager;
 import openblocks.common.ElevatorActionHandler;
@@ -755,6 +756,8 @@ public class OpenBlocks {
 
 		if (Items.sleepingBag != null)
 			MinecraftForge.EVENT_BUS.register(new ItemSleepingBag.IsSleepingHandler());
+
+		MinecraftForge.EVENT_BUS.register(CanvasReplaceBlacklist.instance);
 
 		MinecraftForge.EVENT_BUS.register(PlayerInventoryStore.instance);
 

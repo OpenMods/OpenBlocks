@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.IPaintableBlock;
-import openblocks.common.PaintUtils;
+import openblocks.common.CanvasReplaceBlacklist;
 import openblocks.common.block.BlockCanvas;
 import openmods.colors.ColorMeta;
 import openmods.colors.ColorUtils;
@@ -83,7 +83,7 @@ public class ItemPaintBrush extends Item {
 		final Integer color = getColorFromStack(stack);
 		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
 
-		if (Config.paintbrushReplacesBlocks && PaintUtils.instance.isAllowedToReplace(world, pos)) {
+		if (Config.paintbrushReplacesBlocks && CanvasReplaceBlacklist.instance.isAllowedToReplace(world, pos)) {
 			BlockCanvas.replaceBlock(world, pos);
 		}
 

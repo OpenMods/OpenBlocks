@@ -13,8 +13,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
+import openblocks.common.CanvasReplaceBlacklist;
 import openblocks.common.IStencilPattern;
-import openblocks.common.PaintUtils;
 import openblocks.common.StencilPattern;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.tileentity.TileEntityCanvas;
@@ -48,7 +48,7 @@ public class ItemStencil extends Item {
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
-		if (PaintUtils.instance.isAllowedToReplace(world, pos)) {
+		if (CanvasReplaceBlacklist.instance.isAllowedToReplace(world, pos)) {
 			BlockCanvas.replaceBlock(world, pos);
 		}
 

@@ -394,6 +394,10 @@ public class Config {
 	@ConfigProperty(category = "canvas", name = "paintbrushReplacesBlocks", comment = "If true, paintbrush will replace suitable blocks with canvas. Otherwise, it will only try to paint blocks")
 	public static boolean paintbrushReplacesBlocks = true;
 
+	@OnLineModifiable
+	@ConfigProperty(category = "canvas", name = "replaceBlacklist", comment = "List of block ids that should not be replaceable by canvas (by using brush, stencil, etc)")
+	public static String[] canvasBlacklist = new String[0];
+
 	public static void register() {
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
