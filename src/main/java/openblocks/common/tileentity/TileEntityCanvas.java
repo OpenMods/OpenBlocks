@@ -38,7 +38,7 @@ import openmods.utils.BlockUtils;
 
 public class TileEntityCanvas extends SyncedTileEntity implements IActivateAwareTile, ICustomBreakDrops, ICustomHarvestDrops {
 
-	private static class UnpackingBlockAccess implements IBlockAccess {
+	public static class UnpackingBlockAccess implements IBlockAccess {
 
 		private final World original;
 
@@ -102,6 +102,10 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	private IBlockState rawPaintedBlockState;
 
+	private int prevLightValue;
+
+	private int prevLightOpacity;
+
 	private IBlockState actualPaintedBlockState;
 
 	@SuppressWarnings("unused")
@@ -136,8 +140,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 				boolean stateChanged = false;
 
 				if (changes.contains(paintedBlockState)) {
-					rawPaintedBlockState = null;
-					actualPaintedBlockState = null;
+					onPaintedBlockUpdate();
 					stateChanged = true;
 				}
 
@@ -320,6 +323,26 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 	public void setPaintedBlock(IBlockState state) {
 		paintedBlockState.setValue(state);
+		onPaintedBlockUpdate();
+	}
+
+	private void onPaintedBlockUpdate() {
+		rawPaintedBlockState = null;
+		actualPaintedBlockState = null;
+		updateLight();
+	}
+
+	@SuppressWarnings("deprecation")
+	private void updateLight() {
+		final IBlockState paintedBlockStatek = getPaintedBlockState();
+		final Block paintedBlock = paintedBlockStatek.getBlock();
+		final int newLightValue = paintedBlock.getLightValue(paintedBlockStatek);
+		final int newLightOpacity = paintedBlock.getLightOpacity(paintedBlockStatek);
+		if (newLightValue != prevLightValue || newLightOpacity != prevLightOpacity) {
+			worldObj.checkLight(pos);
+			prevLightOpacity = newLightOpacity;
+			prevLightValue = newLightValue;
+		}
 	}
 
 	public CanvasState getCanvasState() {

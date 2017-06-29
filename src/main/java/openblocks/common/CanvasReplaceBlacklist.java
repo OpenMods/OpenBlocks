@@ -33,7 +33,6 @@ public class CanvasReplaceBlacklist {
 	public static final CanvasReplaceBlacklist instance = new CanvasReplaceBlacklist();
 
 	public boolean isAllowedToReplace(IBlockState state) {
-		if (state.canProvidePower()) return false;
 		final Block block = state.getBlock();
 		if (block.hasTileEntity(state)) return false;
 
