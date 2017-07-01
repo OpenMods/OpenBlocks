@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item",
+        "textures": {
+            "layer0": "openblocks:items/manipulator_base"
+        }
+    },
+    "variants": {
+        "inventory": {
+            "model": "openmods:stateitem",
+            "custom": {
+                "item": "openblocks:craneControl"
+            }
+        },
+        "lift" : {
+            "down": { "textures": { "layer1": "openblocks:items/manipulator_lift_down" } },
+            "idle": { "textures": { "layer1": "openblocks:items/manipulator_lift_idle" } },
+            "up":   { "textures": { "layer1": "openblocks:items/manipulator_lift_up"   } }
+        },
+        "magnet" : {
+            "idle":      { "textures": { "layer2": "openblocks:items/manipulator_magnet_idle"     } },
+            "detecting": { "textures": { "layer2": "openblocks:items/manipulator_magnet_detected" } },
+            "locked":    { "textures": { "layer2": "openblocks:items/manipulator_magnet_locked"   } }
+        }
+    }
+}

@@ -2,6 +2,8 @@ package openblocks.common.item;
 
 import com.google.common.collect.MapMaker;
 import java.util.Map;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,15 +13,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 import openblocks.Config;
 import openblocks.common.CraneRegistry;
 import openblocks.common.entity.EntityMagnet;
 import openmods.OpenMods;
 import openmods.infobook.BookDocumentation;
+import openmods.model.itemstate.IStateItem;
+import openmods.state.State;
+import openmods.state.StateContainer;
 
 @BookDocumentation(customName = "crane_control", hasVideo = true)
-public class ItemCraneControl extends Item {
+public class ItemCraneControl extends Item implements IStateItem {
 
 	public ItemCraneControl() {
 		setMaxStackSize(1);
@@ -80,31 +86,58 @@ public class ItemCraneControl extends Item {
 		return 72000; // quite long time!
 	}
 
-	public enum State {
-		NONE,
-		DOWN,
-		UP,
-		LOCKED,
-		DETECTED
+	private enum LiftState implements IStringSerializable {
+		IDLE, DOWN, UP;
+
+		@Override
+		public String getName() {
+			return name();
+		}
 	}
 
-	// TODO 1.8.9 temporary. Enum probably only for port reasons
-	public State getState(ItemStack stack, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-		if (player != null && ItemCraneBackpack.isWearingCrane(player)) {
-			CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
-			if (data != null) {
-				if (usingItem == stack) { return data.isExtending? State.DOWN : State.UP; }
+	private enum MagnetState implements IStringSerializable {
+		IDLE, DETECTING, LOCKED;
 
-				EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(player);
+		@Override
+		public String getName() {
+			return name();
+		}
+	}
+
+	private static final IProperty<LiftState> liftProperty = PropertyEnum.create("lift", LiftState.class);
+
+	private static final IProperty<MagnetState> magnetProperty = PropertyEnum.create("magnet", MagnetState.class);
+
+	private final StateContainer stateContainer = new StateContainer(liftProperty, magnetProperty);
+
+	private final State defaultState = stateContainer.getBaseState().withProperty(liftProperty, LiftState.IDLE).withProperty(magnetProperty, MagnetState.IDLE);
+
+	@Override
+	public StateContainer getStateContainer() {
+		return stateContainer;
+	}
+
+	@Override
+	public State getState(ItemStack stack, World world, EntityLivingBase entity) {
+		if (entity != null && ItemCraneBackpack.isWearingCrane(entity)) {
+			CraneRegistry.Data data = CraneRegistry.instance.getData(entity, false);
+			if (data != null) {
+				State state = defaultState;
+				if (entity.getActiveItemStack() == stack) {
+					state = state.withProperty(liftProperty, data.isExtending? LiftState.DOWN : LiftState.UP);
+				}
+
+				EntityMagnet magnet = CraneRegistry.instance.getMagnetForPlayer(entity);
 
 				if (magnet != null) {
-					if (magnet.isLocked()) return State.LOCKED;
-					else if (magnet.isAboveTarget()) return State.DETECTED;
+					if (magnet.isLocked()) state = state.withProperty(magnetProperty, MagnetState.LOCKED);
+					else if (magnet.isAboveTarget()) state = state.withProperty(magnetProperty, MagnetState.DETECTING);
 				}
+				return state;
 			}
 		}
 
-		return State.LOCKED;
+		return defaultState;
 	}
 
 }
