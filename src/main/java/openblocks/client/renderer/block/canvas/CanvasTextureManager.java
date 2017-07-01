@@ -8,20 +8,19 @@ import com.google.common.collect.Table;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader.White;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
 import openblocks.OpenBlocks;
+import openblocks.client.renderer.TextureUploader;
+import openblocks.client.renderer.TextureUploader.IUploadableTexture;
 import openmods.Log;
-import openmods.utils.TextureUtils;
 
 public class CanvasTextureManager {
 
@@ -34,8 +33,6 @@ public class CanvasTextureManager {
 	public int getPeakRejectedAllocations() {
 		return peakRejectedAllocations;
 	}
-
-	private final Queue<CanvasTexture> texturesToUpload = Queues.newConcurrentLinkedQueue();
 
 	private CanvasTextureManager() {}
 
@@ -65,7 +62,7 @@ public class CanvasTextureManager {
 		}
 	}
 
-	private class CanvasTexture extends TextureAtlasSprite {
+	private class CanvasTexture extends TextureAtlasSprite implements IUploadableTexture {
 		public final ResourceLocation location;
 
 		private final EmptyTextureData emptyTexture;
@@ -121,15 +118,14 @@ public class CanvasTextureManager {
 			framesTextureData.add(mipmaps);
 			super.generateMipmaps(this.mipmapLevels);
 
-			this.requiresUpload = true;
-			texturesToUpload.add(this);
+			requiresUpload = true;
+			TextureUploader.INSTANCE.scheduleTextureUpload(this);
 		}
 
+		@Override
 		public void upload() {
-			// must be done in rendering thread
 			if (requiresUpload) {
-				this.requiresUpload = false;
-				TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				requiresUpload = false;
 				TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
 			}
 		}
@@ -143,7 +139,6 @@ public class CanvasTextureManager {
 	public void onTextureStitchEvent(TextureStitchEvent.Pre evt) {
 		freeTextures.clear();
 		usedTextures.clear();
-		texturesToUpload.clear();
 		peakRejectedAllocations = 0;
 
 		CanvasSideState.onTextureReload();
@@ -157,13 +152,6 @@ public class CanvasTextureManager {
 			map.setTextureEntry(entry);
 			freeTextures.push(entry);
 		}
-	}
-
-	@SubscribeEvent
-	public void onRenderEnd(RenderWorldLastEvent evt) {
-		CanvasTexture t;
-		while ((t = texturesToUpload.poll()) != null)
-			t.upload();
 	}
 
 	public ResourceLocation getTexture(int background, List<CanvasLayer> layers) {

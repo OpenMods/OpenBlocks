@@ -16,9 +16,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import openblocks.client.renderer.TextureUploader;
+import openblocks.client.renderer.TextureUploader.IUploadableTexture;
 import openblocks.common.IStencilPattern;
 import openmods.Log;
-import openmods.utils.TextureUtils;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.input.CloseShieldInputStream;
 
@@ -100,13 +101,15 @@ public class StencilTextureManager {
 
 	}
 
-	private static class PoolTexture extends TextureAtlasSprite {
+	private static class PoolTexture extends TextureAtlasSprite implements IUploadableTexture {
 
 		private final ResourceLocation selfLocation;
 
 		private final PoolPrimerTexture primer;
 
 		private final int mipmapLevels;
+
+		private boolean requiresUpload;
 
 		private PoolTexture(ResourceLocation selfLocation, PoolPrimerTexture primer, int mipmapLevels) {
 			super(selfLocation.toString());
@@ -153,9 +156,16 @@ public class StencilTextureManager {
 			mipmaps[0] = primer.bitmap.apply(pattern);
 			framesTextureData.add(mipmaps);
 			super.generateMipmaps(this.mipmapLevels);
+			requiresUpload = true;
+			TextureUploader.INSTANCE.scheduleTextureUpload(this);
+		}
 
-			TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
+		@Override
+		public void upload() {
+			if (requiresUpload) {
+				requiresUpload = false;
+				TextureUtil.uploadTextureMipmap(this.framesTextureData.get(0), this.width, this.height, this.originX, this.originY, false, false);
+			}
 		}
 	}
 

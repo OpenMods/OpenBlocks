@@ -40,6 +40,7 @@ import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelPiggy;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.client.model.ModelXPShower;
+import openblocks.client.renderer.TextureUploader;
 import openblocks.client.renderer.block.PathModel;
 import openblocks.client.renderer.block.canvas.CanvasTextureManager;
 import openblocks.client.renderer.block.canvas.ModelCanvas;
@@ -210,6 +211,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.canvas != null) {
 			MinecraftForge.EVENT_BUS.register(CanvasTextureManager.INSTANCE);
+		}
+
+		if (OpenBlocks.Items.stencil != null || OpenBlocks.Blocks.canvas != null) {
+			MinecraftForge.EVENT_BUS.register(TextureUploader.INSTANCE);
 		}
 
 		if (OpenBlocks.Blocks.elevator != null) {
