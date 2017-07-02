@@ -6,6 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,7 +23,7 @@ public class BlockSky extends OpenBlock {
 
 	public static final PropertyBool INVERTED = PropertyBool.create("inverted");
 
-	public static final PropertyBool POWERED = PropertyBool.create("active");
+	public static final PropertyBool POWERED = PropertyBool.create("powered");
 
 	public static boolean isInverted(int meta) {
 		return (meta & MASK_INVERTED) != 0;
@@ -83,6 +84,11 @@ public class BlockSky extends OpenBlock {
 	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
 		return isActive(state)? EMPTY : super.getSelectedBoundingBox(state, world, pos);
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return isActive(state)? EnumBlockRenderType.ENTITYBLOCK_ANIMATED : EnumBlockRenderType.MODEL;
 	}
 
 }

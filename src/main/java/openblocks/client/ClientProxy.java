@@ -40,6 +40,7 @@ import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelPiggy;
 import openblocks.client.model.ModelSprinkler;
 import openblocks.client.model.ModelXPShower;
+import openblocks.client.renderer.SkyBlockRenderer;
 import openblocks.client.renderer.TextureUploader;
 import openblocks.client.renderer.block.PathModel;
 import openblocks.client.renderer.block.canvas.CanvasTextureManager;
@@ -223,6 +224,11 @@ public class ClientProxy implements IOpenBlocksProxy {
 
 		if (OpenBlocks.Blocks.elevatorRotating != null) {
 			ModelUtils.registerMetaInsensitiveModel(Item.getItemFromBlock(OpenBlocks.Blocks.elevatorRotating));
+		}
+
+		if (OpenBlocks.Blocks.sky != null) {
+			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.sky);
+			SkyBlockRenderer.INSTANCE.setup();
 		}
 	}
 

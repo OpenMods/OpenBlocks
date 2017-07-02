@@ -398,6 +398,9 @@ public class Config {
 	@ConfigProperty(category = "canvas", name = "replaceBlacklist", comment = "List of block ids that should not be replaceable by canvas (by using brush, stencil, etc)")
 	public static String[] canvasBlacklist = new String[0];
 
+	@ConfigProperty(category = "canvas", name = "skyblock", comment = "Enables skyblock rendering. Disable when there are graphic glitches or performance problems")
+	public static boolean renderSkyBlocks = true;
+
 	public static void register() {
 		final List<IRecipe> recipeList = CraftingManager.getInstance().getRecipeList();
 
