@@ -190,7 +190,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 			RenderingRegistry.registerEntityRenderingHandler(EntityCartographer.class, new IRenderFactory<EntityCartographer>() {
 				@Override
 				public Render<? super EntityCartographer> createRenderFor(RenderManager manager) {
-					return new EntityCartographerRenderer(manager);
+					return new EntityCartographerRenderer(manager).registerListener();
 				}
 			});
 		}
@@ -229,6 +229,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.sky != null) {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.sky);
 			SkyBlockRenderer.INSTANCE.setup();
+		}
+
+		if (OpenBlocks.Items.heightMap != null) {
+			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.heightMap);
 		}
 	}
 

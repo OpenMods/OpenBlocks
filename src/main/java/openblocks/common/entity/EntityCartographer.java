@@ -141,7 +141,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	private final SyncMap syncMap;
 
 	{
-		setSize(0.2f, 0.2f);
+		setSize(0.4f, 0.4f);
 	}
 
 	public EntityCartographer(World world) {
@@ -246,6 +246,8 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack holding, EnumHand hand) {
+		if (hand != EnumHand.MAIN_HAND) return true;
+
 		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) {
 			if (holding == null && mapItem != null) {
 				player.setHeldItem(hand, mapItem);

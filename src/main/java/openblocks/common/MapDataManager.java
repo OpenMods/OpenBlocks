@@ -202,7 +202,7 @@ public class MapDataManager {
 					if (Block.REGISTRY.containsKey(loc)) {
 						Block block = Block.REGISTRY.getObject(loc);
 						blockBlacklist.add(block);
-					} else Log.warn("Can't find block %s", loc);
+					} else Log.debug("Can't find block %s", loc);
 				} catch (Throwable t) {
 					Log.warn(t, "Invalid entry in map blacklist: %s", entry);
 				}

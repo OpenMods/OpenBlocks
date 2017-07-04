@@ -32,8 +32,8 @@ public class HeightMapData extends WorldSavedData {
 
 		public void writeToStream(PacketBuffer output) {
 			output.writeByte(alpha);
-			output.readBytes(heightMap);
-			output.readBytes(colorMap);
+			output.writeBytes(heightMap);
+			output.writeBytes(colorMap);
 		}
 	}
 

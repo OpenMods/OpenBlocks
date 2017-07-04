@@ -34,7 +34,7 @@ public abstract class EntitySmoothMove extends Entity {
 		}
 
 		private boolean shouldJump(double lenSq) {
-			return lenSq > panicLengthSq || lenSq < minimalLengthSq;
+			return (lenSq > panicLengthSq || lenSq < minimalLengthSq);
 		}
 
 		public void setTarget(Vec3d position) {
@@ -45,11 +45,11 @@ public abstract class EntitySmoothMove extends Entity {
 			if (shouldJump(targetX, targetY, targetZ)) {
 				setPositionRaw(targetX, targetY, targetZ);
 				motionX = motionY = motionZ = 0;
-			} else {
-				this.targetX = targetX;
-				this.targetY = targetY;
-				this.targetZ = targetZ;
 			}
+
+			this.targetX = targetX;
+			this.targetY = targetY;
+			this.targetZ = targetZ;
 		}
 
 		public void update() {

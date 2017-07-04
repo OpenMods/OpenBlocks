@@ -264,9 +264,7 @@ public class Config {
 
 	@OnLineModifiable
 	@ConfigProperty(category = "cartographer", name = "blockBlacklist", comment = "List of blocks that should be invisible to cartographer. Example: id:3,  OpenBlocks:openblocks_radio (case sensitive)")
-	public static String[] mapBlacklist = new String[] {
-			"Natura:Cloud"
-	};
+	public static String[] mapBlacklist = new String[] {};
 
 	@OnLineModifiable
 	@ConfigProperty(category = "cartographer", name = "reportInvalidRequest", comment = "Should invalid height map request be always reported")

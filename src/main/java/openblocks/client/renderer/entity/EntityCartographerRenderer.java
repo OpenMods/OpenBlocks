@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCartographer;
 import openblocks.client.renderer.entity.EntitySelectionHandler.ISelectionRenderer;
@@ -218,5 +219,10 @@ public class EntityCartographerRenderer extends Render<EntityCartographer> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCartographer entity) {
 		return TEXTURE;
+	}
+
+	public EntityCartographerRenderer registerListener() {
+		MinecraftForge.EVENT_BUS.register(MODEL);
+		return this;
 	}
 }

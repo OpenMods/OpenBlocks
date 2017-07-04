@@ -71,15 +71,17 @@ public class MapDataBuilder {
 						final BlockPos pos = new BlockPos(x, y, z);
 						IBlockState blockState = getValidBlock(world, chunk, pos);
 
-						if (blockState.getMaterial().isLiquid()) {
-							if (blockLiquid == null) {
-								blockLiquid = blockState;
-								heightLiquid = pos;
+						if (blockState != null) {
+							if (blockState.getMaterial().isLiquid()) {
+								if (blockLiquid == null) {
+									blockLiquid = blockState;
+									heightLiquid = pos;
+								}
+							} else {
+								blockSolid = blockState;
+								heightSolid = pos;
+								break;
 							}
-						} else {
-							blockSolid = blockState;
-							heightSolid = pos;
-							break;
 						}
 					}
 
