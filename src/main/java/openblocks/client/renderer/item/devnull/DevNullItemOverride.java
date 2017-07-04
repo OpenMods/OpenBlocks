@@ -375,18 +375,19 @@ public class DevNullItemOverride extends ItemOverrideList {
 		final TransformType transformType = TransformType.NONE;
 
 		final Pair<ItemStack, Integer> r = ItemDevNull.getContents(stack);
-		final int depth = Math.max(0, r.getRight());
+		final int depth = Math.max(1, r.getRight());
 
 		if (depth >= ItemDevNull.STACK_LIMIT)
 			return emptyFrameModels2d.get(ItemDevNull.STACK_LIMIT);
 
+		final int modelId = depth - 1;
 		final ItemStack innerStack = r.getLeft();
 		if (innerStack == null)
-			return emptyFrameModels2d.get(depth);
+			return emptyFrameModels2d.get(modelId);
 
 		final IBakedModel innerModel = getItemModel(innerStack);
 
-		final ModelKey key = new ModelKey(innerModel, depth, transformType);
+		final ModelKey key = new ModelKey(innerModel, modelId, transformType);
 		return wrappedModelCache.getUnchecked(key).getLeft();
 	}
 

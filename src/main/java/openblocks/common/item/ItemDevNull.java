@@ -47,9 +47,8 @@ public class ItemDevNull extends Item {
 			int depth = 0;
 
 			while (depth < STACK_LIMIT) {
-				final ItemStack contents = new ItemInventory(stack, 1).getStackInSlot(0);
-				if (contents == null || !(contents.getItem() instanceof ItemDevNull)) return Pair.of(contents, depth);
-				stack = contents;
+				if (stack == null || !(stack.getItem() instanceof ItemDevNull)) return Pair.of(stack, depth);
+				stack = new ItemInventory(stack, 1).getStackInSlot(0);
 				depth++;
 			}
 
