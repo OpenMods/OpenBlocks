@@ -34,6 +34,7 @@ public class TileEntityProjectorRenderer extends TileEntitySpecialRenderer<TileE
 		GL11.glTranslated(-BLOCK_CENTRE_TRANSLATION, 0, -BLOCK_CENTRE_TRANSLATION);
 		GlStateManager.color(1, 1, 1);
 
+		GlStateManager.disableLighting();
 		int mapId = projector.mapId();
 		if (pass <= 0) {
 			renderProjector(projector, partialTickTime, mapId >= 0);

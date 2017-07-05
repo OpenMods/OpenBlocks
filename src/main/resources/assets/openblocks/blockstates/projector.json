@@ -1,0 +1,35 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model" : "half_slab",
+        "transform": "forge:default-block",
+        "textures": {
+            "bottom": "blocks/stone_slab_top",
+            "top": "blocks/stone_slab_top",
+            "side": "blocks/stone_slab_side"
+        }
+    },
+    "variants" : {
+        "inventory": [{}],
+        "orientation" : {
+            "xp_yp" : { "y" :   0 },
+            "zp_yp" : { "y" :  90 },
+            "xn_yp" : { "y" : 180 },
+            "zn_yp" : { "y" : 270 }
+        },
+        "active" : {
+            "false": {},
+            "true": {
+                "model": "forge:multi-layer",
+                "custom": {
+                    "Solid": "openblocks:projector#base",
+                    "Translucent": "openblocks:projector#cone"
+                }
+            }
+        },
+        "base": [{}],
+        "cone": [{
+            "model": "openblocks:projector_cone"
+        }]
+    }
+}

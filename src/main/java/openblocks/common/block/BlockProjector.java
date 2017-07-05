@@ -9,8 +9,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openmods.block.OpenBlock;
 
@@ -77,10 +75,8 @@ public class BlockProjector extends OpenBlock {
 		return false;
 	}
 
-	// TODO 1.10 figure rendering of this thing. Duh
 	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.SOLID || (state.getValue(ACTIVE) && layer == BlockRenderLayer.TRANSLUCENT);
 	}
 }

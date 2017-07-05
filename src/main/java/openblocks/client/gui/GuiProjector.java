@@ -111,7 +111,6 @@ public class GuiProjector extends BaseGuiContainer<ContainerProjector> {
 				GL11.glRotated(90 * container.rotation(), 0, 1, 0);
 				GL11.glTranslated(-0.5, -mapHeight, -0.5);
 				HeightMapRenderer.instance.render(mapId, data);
-				GlStateManager.disableLighting();
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				drawLevels();
 				GL11.glPopMatrix();

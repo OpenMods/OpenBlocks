@@ -70,7 +70,7 @@ public class HeightMapRenderer {
 						byte color = layer.colorMap[index];
 
 						if (color == 0) continue;
-						// stupid singed bytes
+						// stupid signed bytes
 						int height = layer.heightMap[index] & 0xFF;
 
 						int fullColor = MapColor.COLORS[color].colorValue;
@@ -111,10 +111,6 @@ public class HeightMapRenderer {
 
 			GL11.glNewList(displayList, GL11.GL_COMPILE);
 
-			GlStateManager.disableLighting();
-			GlStateManager.disableCull();
-			GlStateManager.enableBlend();
-
 			final Tessellator tes = new Tessellator(4 * (3 + 2) * 4 * 2);
 			VertexBuffer wr = tes.getBuffer();
 
@@ -150,10 +146,6 @@ public class HeightMapRenderer {
 
 			}
 			tes.draw();
-
-			GlStateManager.enableCull();
-			GlStateManager.enableLighting();
-			GlStateManager.disableBlend();
 			GL11.glEndList();
 		}
 
@@ -170,7 +162,14 @@ public class HeightMapRenderer {
 		public void render() {
 			Preconditions.checkNotNull(displayList, "Display list not compiled");
 			atlas.bind();
+
+			GlStateManager.disableCull();
+			GlStateManager.enableBlend();
+
 			GL11.glCallList(displayList);
+
+			GlStateManager.enableCull();
+			GlStateManager.disableBlend();
 		}
 	}
 
