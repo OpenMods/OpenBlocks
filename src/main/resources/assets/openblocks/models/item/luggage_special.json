@@ -1,0 +1,7 @@
+{
+    "parent": "openblocks:item/luggage_base",
+    "textures": {
+        "body": "openblocks:models/luggage_special_body",
+        "leg": "openblocks:models/luggage_special_leg"
+    }
+}

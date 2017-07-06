@@ -1,0 +1,15 @@
+{
+    "parent": "openblocks:item/luggage_base",
+    "textures": {
+        "body": "openblocks:models/luggage_normal_body",
+        "leg": "openblocks:models/luggage_normal_leg"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "inventory": 28
+            },
+            "model": "openblocks:item/luggage_special"
+        }
+    ]
+}

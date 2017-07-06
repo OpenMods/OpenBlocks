@@ -40,9 +40,9 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 
 	private static final DataParameter<Integer> PROPERTY_INV_SIZE = EntityDataManager.<Integer> createKey(EntityLuggage.class, DataSerializers.VARINT);
 
-	private static final int SIZE_SPECIAL = 54;
+	public static final int SIZE_SPECIAL = 54;
 
-	private static final int SIZE_NORMAL = 27;
+	public static final int SIZE_NORMAL = 27;
 
 	private static final String TAG_ITEM_TAG = "ItemTag";
 

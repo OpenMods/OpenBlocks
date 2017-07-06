@@ -1,21 +1,39 @@
 package openblocks.common.item;
 
+import javax.annotation.Nullable;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import openblocks.common.entity.EntityLuggage;
 import openmods.infobook.BookDocumentation;
+import openmods.inventory.GenericInventory;
+import openmods.utils.ItemUtils;
 
 @BookDocumentation(hasVideo = true)
 public class ItemLuggage extends Item {
 
 	public ItemLuggage() {
 		setMaxStackSize(1);
+
+		addPropertyOverride(new ResourceLocation("inventory"), new IItemPropertyGetter() {
+			@Override
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				return getInventorySize(stack);
+			}
+		});
+	}
+
+	@Override
+	public boolean hasEffect(ItemStack stack) {
+		return getInventorySize(stack) > EntityLuggage.SIZE_NORMAL;
 	}
 
 	@Override
@@ -35,5 +53,9 @@ public class ItemLuggage extends Item {
 		}
 
 		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
+	}
+
+	private static int getInventorySize(ItemStack stack) {
+		return ItemUtils.getItemTag(stack).getInteger(GenericInventory.TAG_SIZE);
 	}
 }
