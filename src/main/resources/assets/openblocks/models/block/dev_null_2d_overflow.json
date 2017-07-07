@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "openblocks:items/gliderwing"
+        "layer0": "openblocks:items/dev_zero_over_zero"
     }
 }

@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 import openmods.colors.ColorMeta;
@@ -36,6 +37,8 @@ public class ItemImaginationGlasses extends ItemArmor {
 	}
 
 	public static class ItemCrayonGlasses extends ItemImaginationGlasses {
+
+		private static final String COLORED_OVERLAY = OpenBlocks.location("textures/models/glasses_crayon_overlay.png").toString();
 
 		public ItemCrayonGlasses() {
 			super(Type.CRAYON);
@@ -69,7 +72,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 
 		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-			if ("overlay".equals(type)) return "openblocks:textures/models/glasses_crayon_overlay.png";
+			if ("overlay".equals(type)) return COLORED_OVERLAY;
 			return super.getArmorTexture(stack, entity, slot, type);
 		}
 	}
@@ -113,7 +116,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		public final String textureName;
 
 		private Type(String name) {
-			this.textureName = "openblocks:textures/models/glasses_" + name + ".png";
+			this.textureName = OpenBlocks.location("textures/models/glasses_" + name + ".png").toString();
 		}
 
 		protected abstract boolean checkBlock(Property property, ItemStack stack, TileEntityImaginary te);

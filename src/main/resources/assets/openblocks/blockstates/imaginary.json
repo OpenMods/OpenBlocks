@@ -29,16 +29,16 @@
         "type": {
             "pencil": {
                 "textures": {
-                    "full_panel": "openblocks:blocks/pencilPanel",
-                    "half_panel": "openblocks:blocks/pencilHalfPanel",
-                    "block": "openblocks:blocks/pencilBlock"
+                    "full_panel": "openblocks:blocks/pencil_panel",
+                    "half_panel": "openblocks:blocks/pencil_half_panel",
+                    "block": "openblocks:blocks/pencil_block"
                 }
             },
             "crayon": {
                 "textures": {
-                    "full_panel": "openblocks:blocks/crayonPanel",
-                    "half_panel": "openblocks:blocks/crayonHalfPanel",
-                    "block": "openblocks:blocks/crayonBlock"
+                    "full_panel": "openblocks:blocks/crayon_panel",
+                    "half_panel": "openblocks:blocks/crayon_half_panel",
+                    "block": "openblocks:blocks/crayon_block"
                 }
             }
         }

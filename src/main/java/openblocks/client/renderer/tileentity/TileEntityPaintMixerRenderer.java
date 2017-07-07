@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<TileEntityPaintMixer> {
 
 	private ModelPaintMixer model = new ModelPaintMixer();
-	private static final ResourceLocation texture = OpenBlocks.location("textures/models/paintmixer.png");
+	private static final ResourceLocation texture = OpenBlocks.location("textures/models/paint_mixer.png");
 
 	@Override
 	public void renderTileEntityAt(TileEntityPaintMixer mixer, double x, double y, double z, float partialTick, int destroyProgress) {

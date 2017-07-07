@@ -132,7 +132,7 @@
     "grave.rob": {
         "category": "block",
         "sounds": [
-            "openblocks:BWV565"
+            "openblocks:bwv565"
         ]
     }
 }

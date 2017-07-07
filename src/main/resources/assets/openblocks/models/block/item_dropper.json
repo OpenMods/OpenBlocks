@@ -1,8 +1,8 @@
 {
     "textures": {
-        "boring": "openblocks:blocks/itemDropper",
-        "active": "openblocks:blocks/itemDropper_down",
-        "particle": "openblocks:blocks/itemDropper"
+        "boring": "openblocks:blocks/item_dropper",
+        "active": "openblocks:blocks/item_dropper_front",
+        "particle": "openblocks:blocks/item_dropper"
     },
     "elements": [
         {

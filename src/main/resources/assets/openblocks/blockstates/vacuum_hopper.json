@@ -1,0 +1,167 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "inventory" : [{
+            "transform": "forge:default-block",
+            "model": "openblocks:vacuum_hopper_body"
+        }],
+        "orientation=xp_yp": [{
+            "model": "openmods:variantmodel",
+            "custom": {
+                "base": "openblocks:block/vacuum_hopper_body",
+                "variants": {
+                    "north" : {
+                        "items" : "openblocks:vacuum_hopper#north_items",
+                        "fluids" : "openblocks:vacuum_hopper#north_fluids",
+                        "both" : "openblocks:vacuum_hopper#north_both"
+                    },
+                    "south" : {
+                        "items" : "openblocks:vacuum_hopper#south_items",
+                        "fluids" : "openblocks:vacuum_hopper#south_fluids",
+                        "both" : "openblocks:vacuum_hopper#south_both"
+                    },
+                    "east" : {
+                        "items" : "openblocks:vacuum_hopper#east_items",
+                        "fluids" : "openblocks:vacuum_hopper#east_fluids",
+                        "both" : "openblocks:vacuum_hopper#east_both"
+                    },
+                    "west" : {
+                        "items" : "openblocks:vacuum_hopper#west_items",
+                        "fluids" : "openblocks:vacuum_hopper#west_fluids",
+                        "both" : "openblocks:vacuum_hopper#west_both"
+                    },
+                    "up" : {
+                        "items" : "openblocks:vacuum_hopper#up_items",
+                        "fluids" : "openblocks:vacuum_hopper#up_fluids",
+                        "both" : "openblocks:vacuum_hopper#up_both"
+                    },
+                    "down" : {
+                        "items" : "openblocks:vacuum_hopper#down_items",
+                        "fluids" : "openblocks:vacuum_hopper#down_fluids",
+                        "both" : "openblocks:vacuum_hopper#down_both"
+                    }
+                }
+            }
+        }],
+
+        // west
+        "west_items": {
+            "model": "openblocks:vacuum_hopper_west",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_items"
+            }
+        },
+        "west_fluids": {
+            "model": "openblocks:vacuum_hopper_west",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_fluids"
+            }
+        },
+        "west_both": {
+            "model": "openblocks:vacuum_hopper_west",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_both"
+            }
+        },
+
+        //east
+        "east_items": {
+            "model": "openblocks:vacuum_hopper_east",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_items"
+            }
+        },
+        "east_fluids": {
+            "model": "openblocks:vacuum_hopper_east",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_fluids"
+            }
+        },
+        "east_both": {
+            "model": "openblocks:vacuum_hopper_east",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_both"
+            }
+        },
+
+        // north
+        "north_items": {
+            "model": "openblocks:vacuum_hopper_north",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_items"
+            }
+        },
+        "north_fluids": {
+            "model": "openblocks:vacuum_hopper_north",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_fluids"
+            }
+        },
+        "north_both": {
+            "model": "openblocks:vacuum_hopper_north",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_both"
+            }
+        },
+
+        // south
+        "south_items": {
+            "model": "openblocks:vacuum_hopper_south",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_items"
+            }
+        },
+        "south_fluids": {
+            "model": "openblocks:vacuum_hopper_south",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_fluids"
+            }
+        },
+        "south_both": {
+            "model": "openblocks:vacuum_hopper_south",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_both"
+            }
+        },
+
+        // up
+        "up_items": {
+            "model": "openblocks:vacuum_hopper_up",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_items"
+            }
+        },
+        "up_fluids": {
+            "model": "openblocks:vacuum_hopper_up",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_fluids"
+            }
+        },
+        "up_both": {
+            "model": "openblocks:vacuum_hopper_up",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_both"
+            }
+        },
+
+        // down
+        "down_items": {
+            "model": "openblocks:vacuum_hopper_down",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_items"
+            }
+        },
+        "down_fluids": {
+            "model": "openblocks:vacuum_hopper_down",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_fluids"
+            }
+        },
+        "down_both": {
+            "model": "openblocks:vacuum_hopper_down",
+            "textures" : {
+                "texture" : "openblocks:blocks/vacuum_hopper_both"
+            }
+        }
+    }
+}

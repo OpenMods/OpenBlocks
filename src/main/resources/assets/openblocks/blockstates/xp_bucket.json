@@ -17,7 +17,7 @@
         "inventory-old" : [{
             "model": "item/generated",
             "textures": {
-                "layer0": "openblocks:items/xpbucket"
+                "layer0": "openblocks:items/xp_bucket"
             }
         }]
     }

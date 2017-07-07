@@ -41,7 +41,8 @@ openblocks.gui.drawingtable=Drawing Table
 openblocks.gui.digitalfuse=Digital Fuse
 openblocks.gui.xp_outputs=경험치 추출
 openblocks.gui.item_outputs=아이템 추출
-openblocks.gui.max_level=최대 레벨: %d
+#openblocks.gui.limit=Limit ## NEEDS TRANSLATION ##
+#openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
 #openblocks.gui.save_folder=Save folder ## NEEDS TRANSLATION ##
 
 openblocks.gui.welcome.title=어서오세요!
@@ -207,8 +208,8 @@ tile.openblocks.beartrap.name=곰 덫
 tile.openblocks.sponge.name=스폰지
 #tile.openblocks.sponge.description=The sponge is a replacement for the vanilla sponge. Perfect for removing small pockets of lava or water. Be careful when using it on large areas of liquid though as it'll start to get quite messy. ## NEEDS TRANSLATION ##
 
-item.openblocks.spongeonastick.name=스폰지
-#item.openblocks.spongeonastick.description=The sponge on a stick is a tool for cleaning up liquids. Works just like the sponge, but is more mobile at the expense of wearing out. ## NEEDS TRANSLATION ##
+item.openblocks.sponge_on_a_stick.name=스폰지
+#item.openblocks.sponge_on_a_stick.description=The sponge on a stick is a tool for cleaning up liquids. Works just like the sponge, but is more mobile at the expense of wearing out. ## NEEDS TRANSLATION ##
 
 #item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
 #item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
@@ -216,14 +217,14 @@ item.openblocks.spongeonastick.name=스폰지
 tile.openblocks.cannon.name=아이템 대포
 #tile.openblocks.cannon.description=When given a redstone signal, the item cannon will shoot items that it finds in an adjacent inventory. Use the 'pointer' item to aim the cannon. ## NEEDS TRANSLATION ##
 
-tile.openblocks.ropeladder.name=로프 사다리
-#tile.openblocks.ropeladder.description=When you place a rope ladder it'll roll out all the way to the ground. For every created ladder block it will use one item from stack. ## NEEDS TRANSLATION ##
+tile.openblocks.rope_ladder.name=로프 사다리
+#tile.openblocks.rope_ladder.description=When you place a rope ladder it'll roll out all the way to the ground. For every created ladder block it will use one item from stack. ## NEEDS TRANSLATION ##
 
 tile.openblocks.sprinkler.name=스프링쿨러
 #tile.openblocks.sprinkler.description=The sprinkler will help fertilize crops up to 4 blocks away. Simply place it above an OpenBlocks tank filled with water! You can also add bonemeal for an even faster rate of growth.\nIt also acts as a water source block! ## NEEDS TRANSLATION ##
 
-tile.openblocks.paintmixer.name=패인트 믹서
-#tile.openblocks.paintmixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix! ## NEEDS TRANSLATION ##
+tile.openblocks.paint_mixer.name=패인트 믹서
+#tile.openblocks.paint_mixer.description=The paint mixer can mix any colour of paint you want! Drop either an existing paint bucket or a bucket of milk into the top slot, then cyan, magenta, yellow and black dyes into the other four slots and click mix! ## NEEDS TRANSLATION ##
 
 tile.openblocks.canvas.name=캔버스
 #tile.openblocks.canvas.description=The canvas is a perfectly white block that's perfect for painting. See the Paint Mixer for information about making paints. ## NEEDS TRANSLATION ##
@@ -237,51 +238,51 @@ tile.openblocks.fan.name=선풍기
 #tile.openblocks.path.name=Path ## NEEDS TRANSLATION ##
 #tile.openblocks.path.description=The path doesn't do anything. It just looks nice! ## NEEDS TRANSLATION ##
 
-#tile.openblocks.itemdropper.name=Item Dropper ## NEEDS TRANSLATION ##
-#tile.openblocks.itemdropper.description=The item dropper is similar to the vanilla dropper, except it drops items without any random bias. User can also control speed of dropped item from GUI and with redstone power. ## NEEDS TRANSLATION ##
+#tile.openblocks.item_dropper.name=Item Dropper ## NEEDS TRANSLATION ##
+#tile.openblocks.item_dropper.description=The item dropper is similar to the vanilla dropper, except it drops items without any random bias. User can also control speed of dropped item from GUI and with redstone power. ## NEEDS TRANSLATION ##
 
-tile.openblocks.bigbutton.name=큰 버튼
-#tile.openblocks.bigbutton.description=The big button is a large button that can be placed on walls. If you shift-click on the button with an empty hand it will bring up an inventory with a single slot. You can put items into this slot to increase the length of time the button is pressed - one item increases the button press by one tick. ## NEEDS TRANSLATION ##
+tile.openblocks.big_button.name=큰 버튼
+#tile.openblocks.big_button.description=The big button is a large button that can be placed on walls. If you shift-click on the button with an empty hand it will bring up an inventory with a single slot. You can put items into this slot to increase the length of time the button is pressed - one item increases the button press by one tick. ## NEEDS TRANSLATION ##
 
-tile.openblocks.xpdrain.name=XP 흡수기
-#tile.openblocks.xpdrain.description=Place the XP drain above an OpenBlocks tank and stand on it. Your XP will drain into the tank, which can then be used for blocks such as the auto enchantment table or the auto anvil. ## NEEDS TRANSLATION ##
+tile.openblocks.xp_drain.name=XP 흡수기
+#tile.openblocks.xp_drain.description=Place the XP drain above an OpenBlocks tank and stand on it. Your XP will drain into the tank, which can then be used for blocks such as the auto enchantment table or the auto anvil. ## NEEDS TRANSLATION ##
 
-tile.openblocks.vacuumhopper.name=진공 깔때기
-#tile.openblocks.vacuumhopper.description=The vacuum hopper will suck up items and XP orbs around it. You can use the tabs on the right of the interface to select which sides to output to. ## NEEDS TRANSLATION ##
+tile.openblocks.vacuum_hopper.name=진공 깔때기
+#tile.openblocks.vacuum_hopper.description=The vacuum hopper will suck up items and XP orbs around it. You can use the tabs on the right of the interface to select which sides to output to. ## NEEDS TRANSLATION ##
 
 tile.openblocks.village_highlighter.name=마을 표시기
 #tile.openblocks.village_highlighter.description=Drop the village highlighter down in a village and give it a redstone signal. It will outline the perimeter of the village and draw a box in the iron golem spawning area. Useful if you want to make sure villages don't merge into each other or you're making an iron farm! ## NEEDS TRANSLATION ##
 
-#tile.openblocks.donationStation.name=Donation Station ## NEEDS TRANSLATION ##
-#tile.openblocks.donationStation.description=Love a block or item and want to show the mod developer some appreciation? Drop it into the donation station and if we know the authors donation page we'll give you a link. ## NEEDS TRANSLATION ##
+#tile.openblocks.donation_station.name=Donation Station ## NEEDS TRANSLATION ##
+#tile.openblocks.donation_station.description=Love a block or item and want to show the mod developer some appreciation? Drop it into the donation station and if we know the authors donation page we'll give you a link. ## NEEDS TRANSLATION ##
 
-tile.openblocks.blockPlacer.name=블럭 설치기
-#tile.openblocks.blockPlacer.description=When given a redstone pulse the block placer will place an item in the direction it's facing. ## NEEDS TRANSLATION ##
+tile.openblocks.block_placer.name=블럭 설치기
+#tile.openblocks.block_placer.description=When given a redstone pulse the block placer will place an item in the direction it's facing. ## NEEDS TRANSLATION ##
 
-tile.openblocks.blockbreaker.name=블럭 파괴기
-#tile.openblocks.blockbreaker.description=When given a redstone pulse the block breaker will break the block it's facing. ## NEEDS TRANSLATION ##
+tile.openblocks.block_breaker.name=블럭 파괴기
+#tile.openblocks.block_breaker.description=When given a redstone pulse the block breaker will break the block it's facing. ## NEEDS TRANSLATION ##
 
 #tile.openblocks.projector.name=Height Map Projector ## NEEDS TRANSLATION ##
 #tile.openblocks.projector.description=I'll let you write this one boq! ## NEEDS TRANSLATION ##
 #tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
-tile.openblocks.autoenchantmenttable.name=자동 인첸트테이블
-#tile.openblocks.autoenchantmenttable.description=The auto enchantment table works in a similar way to the vanilla enchantment table except it runs off XP juice. Use the tabs on the right side of the interface to select where items or xp can be pulled from. Just like with the vanilla table bookshelves are required for higher levels. ## NEEDS TRANSLATION ##
+tile.openblocks.auto_enchantment_table.name=자동 인첸트테이블
+#tile.openblocks.auto_enchantment_table.description=The auto enchantment table works in a similar way to the vanilla enchantment table except it runs off XP juice. Use the tabs on the right side of the interface to select where items or xp can be pulled from. Just like with the vanilla table bookshelves are required for higher levels. ## NEEDS TRANSLATION ##
 
-tile.openblocks.xpbottler.name=경험치병 제조기
-#tile.openblocks.xpbottler.description=The XP bottler will take XP juice and bottle it up into glass bottles to create bottles o' enchanting. ## NEEDS TRANSLATION ##
+tile.openblocks.xp_bottler.name=경험치병 제조기
+#tile.openblocks.xp_bottler.description=The XP bottler will take XP juice and bottle it up into glass bottles to create bottles o' enchanting. ## NEEDS TRANSLATION ##
 
-tile.openblocks.autoanvil.name=자동 모루
-#tile.openblocks.autoanvil.description=The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.\n\nUse the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted. Right click and drag the anvil in the tab to spin it around and select other sides! ## NEEDS TRANSLATION ##
+tile.openblocks.auto_anvil.name=자동 모루
+#tile.openblocks.auto_anvil.description=The auto anvil works just like the vanilla anvil, except it runs from XP juice and can be fully automated.\n\nUse the tabs on the right of the GUI to select which sides of the anvil items or liquid can be inserted or extracted. Right click and drag the anvil in the tab to spin it around and select other sides! ## NEEDS TRANSLATION ##
 
-tile.openblocks.drawingtable.name=제도용 책상
-#tile.openblocks.drawingtable.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want! ## NEEDS TRANSLATION ##
+tile.openblocks.drawing_table.name=제도용 책상
+#tile.openblocks.drawing_table.description=The drawing table is for creating stencils which can be used while painting. Insert an Unprepared Stencil into the drawing table then use the arrows to select which stencil you want! ## NEEDS TRANSLATION ##
 
 tile.openblocks.grave.name=묘지
 tile.openblocks.trophy.name=트로피
 #tile.openblocks.trophy.entity.name=%s Trophy ## NEEDS TRANSLATION ##
 tile.openblocks.canvasglass.name=유리 캔버스
-tile.openblocks.paintcan.name=패인트 통
+tile.openblocks.paint_can.name=패인트 통
 
 tile.openblocks.sky.normal.name=하늘 블럭
 #tile.openblocks.sky.normal.description=Bring the outside inside with the new Sky block! Just apply a redstone signal. We also offer an inverted version. ## NEEDS TRANSLATION ##
@@ -290,38 +291,38 @@ tile.openblocks.sky.normal.name=하늘 블럭
 tile.openblocks.radio.name=라디오
 #tile.openblocks.radio.description=The radio allows you to stream internet radio! First, you need some tuned crystals which you can find in dungeon chests or from a special villager. Place the crystal in the radio and supply it with a redstone signal to turn it on.  The redstone strength controls the volume.\n\nYou can configure which radio stations are available in the servers config file. ## NEEDS TRANSLATION ##
 
-tile.openblocks.xpshower.name=XP 샤워기
-#tile.openblocks.xpshower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer. ## NEEDS TRANSLATION ##
+tile.openblocks.xp_shower.name=XP 샤워기
+#tile.openblocks.xp_shower.description=Attach an XP shower to a tank of XP juice and it'll pour out XP orbs. These orbs can be collected by an XP Drain or an MFR Sewer. ## NEEDS TRANSLATION ##
 
 #tile.openblocks.scaffolding.name=Scaffolding ## NEEDS TRANSLATION ##
 #tile.openblocks.scaffolding.description=Have you ever wanted to pillar up somewhere without leaving an ugly tower behind? Well, now you can! Simply build with scaffolding blocks and they will automatically despawn when you are done. ## NEEDS TRANSLATION ##
 
-tile.openblocks.goldenegg.name=금 알
+tile.openblocks.golden_egg.name=금 알
 
 #tile.openblocks.digitalfuse.name=Digital Fuse ## NEEDS TRANSLATION ##
 
 item.openblocks.cursor.name=커서
 #item.openblocks.cursor.description=The cursor will let you click on blocks remotely.\nSimply shift-click onto a block to link the cursor, then use the cursor wherever you like to click on the target block. Be warned, by default the cursor uses up your XP relative to how far you are from the block you're clicking. ## NEEDS TRANSLATION ##
 
-#item.openblocks.devnull.name=/dev/null ## NEEDS TRANSLATION ##
-#item.openblocks.devnull.description=Click using /dev/null to open the inventory. There's a single inventory slot - put an item in there - dirt, for example. As you gather dirt from the ground this slot will fill up. Once it's full, any more dirt you pick up will be automatically discarded. You can shift-click with the item in your hand as though you were placing the block! ## NEEDS TRANSLATION ##
+#item.openblocks.dev_null.name=/dev/null ## NEEDS TRANSLATION ##
+#item.openblocks.dev_null.description=Click using /dev/null to open the inventory. There's a single inventory slot - put an item in there - dirt, for example. As you gather dirt from the ground this slot will fill up. Once it's full, any more dirt you pick up will be automatically discarded. You can shift-click with the item in your hand as though you were placing the block! ## NEEDS TRANSLATION ##
 
 item.openblocks.slimalyzer.name=슬라임 탐지기
 #item.openblocks.slimalyzer.description=Walk around with the slimalyzer in your hand and it'll light up whenever you're in a slime spawning chunk. ## NEEDS TRANSLATION ##
 
-item.openblocks.hangglider.name=행글라이더
-#item.openblocks.hangglider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!\n\nYour hang glider now also includes an acoustic variometer indicating vertical air movement. Press V to activate it and stay up forever (or until the sun goes down)! ## NEEDS TRANSLATION ##
+item.openblocks.hang_glider.name=행글라이더
+#item.openblocks.hang_glider.description=The hang glider is self explanatory. Hold it in your hand and click to place it on your back. Now jump!\nTo increase your speed you can press shift while gliding, but watch out, you'll lose altitude faster!\n\nYour hang glider now also includes an acoustic variometer indicating vertical air movement. Press V to activate it and stay up forever (or until the sun goes down)! ## NEEDS TRANSLATION ##
 
-item.openblocks.gliderwing.name=행글라이더 날개
+item.openblocks.glider_wing.name=행글라이더 날개
 
-item.openblocks.sleepingbag.name=침낭
-#item.openblocks.sleepingbag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back. ## NEEDS TRANSLATION ##
+item.openblocks.sleeping_bag.name=침낭
+#item.openblocks.sleeping_bag.description=The sleeping bag lets you sleep out in the wilderness without having to reset your spawn location. To sleep, simply wear it on your back. ## NEEDS TRANSLATION ##
 
 item.openblocks.luggage.name=여행용 짐가방
 #item.openblocks.luggage.description=Luggage is your new friend. He'll follow you around anywhere you go collecting any items he finds on the floor. Nom nom nom!\nTo dismantle him just shift-click on him and he'll turn into an item that you can carry around.\nIf he ever gets struck by lightning he'll be able to carry even more items! ## NEEDS TRANSLATION ##
 
-#item.openblocks.sonicglasses.name=Sonic Glasses ## NEEDS TRANSLATION ##
-#item.openblocks.sonicglasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear! ## NEEDS TRANSLATION ##
+#item.openblocks.sonic_glasses.name=Sonic Glasses ## NEEDS TRANSLATION ##
+#item.openblocks.sonic_glasses.description=Introducing the fantabulous new Sonic Glasses!\nThis new and exciting technology from OpenMods Inc allow you see what you hear! ## NEEDS TRANSLATION ##
 
 #item.openblocks.squeegee.name=Squeegee ## NEEDS TRANSLATION ##
 #item.openblocks.squeegee.description=The squeegee removes paint from any painted blocks. Just click on the side of the block you want to remove the paint from, or alternative shift-click the block to remove paint from all sides! ## NEEDS TRANSLATION ##
@@ -354,7 +355,7 @@ item.openblocks.crane_magnet.name=크레인 자석
 #item.openblocks.line.name=Line ## NEEDS TRANSLATION ##
 item.openblocks.miracle_magnet.name=§5기적의 자석§r
 item.openblocks.info_book.name=Openblocks는 세계를 지배한다!!
-item.openblocks.xpbucket.name=XP 양동이
+item.openblocks.xp_bucket.name=XP 양동이
 #item.openblocks.height_map.name=Height Map ## NEEDS TRANSLATION ##
 item.openblocks.empty_map.name=비어있는 맵
 item.openblocks.map_controller.name=맵 조작 모듈
@@ -372,9 +373,9 @@ item.openblocks.wallpaper.name=달력
 
 itemGroup.tabOpenBlocks=오픈블럭[OpenBlocks]
 
-entity.OpenBlocks.Luggage.name=여행용 가방
-entity.OpenBlocks.Cartographer.name=제작자
-entity.OpenBlocks.Block.name=떨어지는 블럭
-entity.OpenBlocks.MiniMe.name=미니미
+entity.openblocks.luggage.name=여행용 가방
+entity.openblocks.cartographer.name=제작자
+entity.openblocks.block.name=떨어지는 블럭
+entity.openblocks.mini_me.name=미니미
 
-fluid.OpenBlocks.xpjuice=액체 경험치
+fluid.openblocks.xp_juice=액체 경험치

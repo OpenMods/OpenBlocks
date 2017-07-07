@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.common.CraneRegistry;
 import openmods.infobook.BookDocumentation;
@@ -20,7 +21,7 @@ import openmods.infobook.BookDocumentation;
 @BookDocumentation(customName = "crane_backpack", hasVideo = true)
 public class ItemCraneBackpack extends ItemArmor {
 
-	public static final String TEXTURE_CRANE = "openblocks:textures/models/crane.png";
+	public static final String TEXTURE_CRANE = OpenBlocks.location("textures/models/crane.png").toString();
 
 	public ItemCraneBackpack() {
 		super(ArmorMaterial.IRON, 2, EntityEquipmentSlot.CHEST);

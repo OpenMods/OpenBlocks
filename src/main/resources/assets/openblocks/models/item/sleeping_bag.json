@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "openblocks:items/sleepingbag"
+        "layer0": "openblocks:items/sleeping_bag"
     }
 }

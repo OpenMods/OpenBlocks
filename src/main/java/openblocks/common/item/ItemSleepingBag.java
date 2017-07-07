@@ -25,18 +25,19 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSleepingBag;
 import openmods.infobook.BookDocumentation;
 import openmods.utils.BlockUtils;
 import openmods.utils.ItemUtils;
 
-@BookDocumentation(customName = "sleepingbag")
+@BookDocumentation
 public class ItemSleepingBag extends ItemArmor {
 
 	private static final String TAG_SLEEPING = "Sleeping";
 	private static final String TAG_SLOT = "Slot";
 
-	public static final String TEXTURE_SLEEPINGBAG = "openblocks:textures/models/sleepingbag.png";
+	public static final String TEXTURE_SLEEPINGBAG = OpenBlocks.location("textures/models/sleeping_bag.png").toString();
 
 	public ItemSleepingBag() {
 		super(ArmorMaterial.IRON, 2, EntityEquipmentSlot.CHEST);

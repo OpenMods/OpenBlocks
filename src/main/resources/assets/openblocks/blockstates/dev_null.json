@@ -1,0 +1,29 @@
+{
+    "forge_marker" : 1,
+    "variants" : {
+        "inventory" : [{
+            "model": "openblocks:magic-devnull",
+            "custom": {
+                "gui": {
+                    "scale": 0.875,
+                    "normal": "openblocks:dev_null#normal_2d",
+                    "overflow": "openblocks:dev_null#overflow_2d"
+                },
+                "world": {
+                    "scale": 0.875,
+                    "normal": "openblocks:dev_null#normal_3d",
+                    "overflow": "openblocks:dev_null#overflow_3d"
+                }
+            },
+            "textures": {
+                "particle": "openblocks:items/dev_null"
+            }
+        }],
+
+        "normal_2d": [{ "model": "openblocks:dev_null_2d", "transform": "forge:default-item" }],
+        "overflow_2d": [{ "model": "openblocks:dev_null_2d_overflow" }],
+
+        "normal_3d": [{ "model": "openblocks:dev_null_3d", "transform": "forge:default-block" }],
+        "overflow_3d": [{ "model": "openblocks:dev_null_3d_overflow" }]
+    }
+}

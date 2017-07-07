@@ -11,7 +11,7 @@
         "inventory": {
             "model": "openmods:stateitem",
             "custom": {
-                "item": "openblocks:craneControl"
+                "item": "openblocks:crane_control"
             }
         },
         "lift" : {

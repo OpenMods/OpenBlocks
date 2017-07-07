@@ -1,15 +1,15 @@
 {
     "textures": {
-        "particle": "openblocks:blocks/paintcan_side",
+        "particle": "openblocks:blocks/paint_can_side",
 
-        "north": "openblocks:blocks/paintcan_front",
-        "east": "openblocks:blocks/paintcan_left",
-        "south": "openblocks:blocks/paintcan_side",
-        "west": "openblocks:blocks/paintcan_right",
-        "bottom": "openblocks:blocks/paintcan_bottom",
+        "north": "openblocks:blocks/paint_can_front",
+        "east": "openblocks:blocks/paint_can_left",
+        "south": "openblocks:blocks/paint_can_side",
+        "west": "openblocks:blocks/paint_can_right",
+        "bottom": "openblocks:blocks/paint_can_bottom",
 
-        "top": "openblocks:blocks/paintcan_top",
-        "spill": "openblocks:blocks/paintcan_side2"
+        "top": "openblocks:blocks/paint_can_top",
+        "spill": "openblocks:blocks/paint_can_side2"
     },
     "elements": [
         {

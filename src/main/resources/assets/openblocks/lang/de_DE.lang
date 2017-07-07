@@ -41,7 +41,8 @@ openblocks.gui.drawingtable=Zeichentisch
 openblocks.gui.digitalfuse=Digitalzünder
 openblocks.gui.xp_outputs=XP-Abgabe
 openblocks.gui.item_outputs=Itemabgabe
-openblocks.gui.max_level=Max. Level: %d
+#openblocks.gui.limit=Limit ## NEEDS TRANSLATION ##
+#openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
 openblocks.gui.save_folder=Sichere Ordner
 
 openblocks.gui.welcome.title=Willkommen!
@@ -207,8 +208,8 @@ tile.openblocks.beartrap.description=Platziere eine Bärenfalle und klicke auf s
 tile.openblocks.sponge.name=Schwamm
 tile.openblocks.sponge.description=Der Schwamm ist ein Ersatz für den Vanilla-Schwamm. Perfekt, um kleine Mengen an Lava oder Wasser zu entfernen. Sei jedoch vorsichtig, wenn du mit größeren Mengen an Flüssigkeit arbeitest, denn es könnte ziemlich unordentlich werden.
 
-item.openblocks.spongeonastick.name=Schwamm
-item.openblocks.spongeonastick.description=Der Schwamm am Stiel ist ein Werkzeug zum Enfernen von Flüssigkeiten. Funktioniert wie der Schwamm, ist aber mobil und wird mit der Zeit aufgebraucht.
+item.openblocks.sponge_on_a_stick.name=Schwamm
+item.openblocks.sponge_on_a_stick.description=Der Schwamm am Stiel ist ein Werkzeug zum Enfernen von Flüssigkeiten. Funktioniert wie der Schwamm, ist aber mobil und wird mit der Zeit aufgebraucht.
 
 #item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
 #item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
@@ -216,14 +217,14 @@ item.openblocks.spongeonastick.description=Der Schwamm am Stiel ist ein Werkzeug
 tile.openblocks.cannon.name=Item-Kanone
 tile.openblocks.cannon.description=Wenn ein Redstone-Signal anliegt, wird die Item-Kannone Items, die es in einem benachbarten Inventar findet, schießen. Benutze den 'Zeiger', um die Kannone auszurichten.
 
-tile.openblocks.ropeladder.name=Strickleiter
-tile.openblocks.ropeladder.description=Wenn du eine Strickleiter platzierst, wird sie sich bis zum Boden ausrollen.
+tile.openblocks.rope_ladder.name=Strickleiter
+tile.openblocks.rope_ladder.description=Wenn du eine Strickleiter platzierst, wird sie sich bis zum Boden ausrollen.
 
 tile.openblocks.sprinkler.name=Rasensprenger
 tile.openblocks.sprinkler.description=Der Rasensprenger hilft dir, Pflanzen bis zu 4 Blöcke weit weg zu düngen. Platziere ihn einfach über einem OpenBlocks-Tank, der mit Wasser gefüllt ist! Du kannst auch Knochenmehl für noch schnelleres Wachstum hinzufügen.\nEr zählt auch als Wasser-Quellblock!
 
-tile.openblocks.paintmixer.name=Farbmixer
-tile.openblocks.paintmixer.description=Der Farbmixer kann jede Farbe, die du willst, zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Türkisen, Magentafarbenen, Gelben und Schwarzen Farbstoff in die anderen vier Slots und klicke auf Mixen!
+tile.openblocks.paint_mixer.name=Farbmixer
+tile.openblocks.paint_mixer.description=Der Farbmixer kann jede Farbe, die du willst, zusammenmixen! Gib entweder einen Farbeimer oder einen Eimer Milch in den oberen Slot, dann Türkisen, Magentafarbenen, Gelben und Schwarzen Farbstoff in die anderen vier Slots und klicke auf Mixen!
 
 tile.openblocks.canvas.name=Leinwand
 tile.openblocks.canvas.description=Die Leinwand ist ein perfekt weißer Block, der perfekt zum Streichen ist. Siehe die Farbmixer-Information für die Herstellung von Farbe.
@@ -237,51 +238,51 @@ tile.openblocks.target.description=Die Zielscheibe gibt ein Redstone-Signal mit 
 tile.openblocks.path.name=Pfad
 tile.openblocks.path.description=Der Pfad macht überhaupt nichts. Er sieht einfach nur gut aus!
 
-tile.openblocks.itemdropper.name=Itemspender
-tile.openblocks.itemdropper.description=Der Itemspender ist dem Vanilla-Spender ähnlich, außer dass er Items direkt in einer geraden Linie nach unten wirft.
+tile.openblocks.item_dropper.name=Itemspender
+tile.openblocks.item_dropper.description=Der Itemspender ist dem Vanilla-Spender ähnlich, außer dass er Items direkt in einer geraden Linie nach unten wirft.
 
-tile.openblocks.bigbutton.name=Großer Knopf
-tile.openblocks.bigbutton.description=Der große Knopf ist ein Knopf, der an der Wand platziert werden kann. Wenn du auf den Knopf mit einer leeren Hand Shift-klickst, wird ein Inventar mit einem einzelnen Slot erscheinen. Du kannst Items in diesen Slot geben, um die Zeit, die der Knopf gedrückt ist, zu verlängern - ein Item erhöht die Dauer um einen Tick.
+tile.openblocks.big_button.name=Großer Knopf
+tile.openblocks.big_button.description=Der große Knopf ist ein Knopf, der an der Wand platziert werden kann. Wenn du auf den Knopf mit einer leeren Hand Shift-klickst, wird ein Inventar mit einem einzelnen Slot erscheinen. Du kannst Items in diesen Slot geben, um die Zeit, die der Knopf gedrückt ist, zu verlängern - ein Item erhöht die Dauer um einen Tick.
 
-tile.openblocks.xpdrain.name=XP-Gitter
-tile.openblocks.xpdrain.description=Platziere ein XP-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine XP werden in den Tank entleert, was dann für Blöcke wie den Auto-Zaubertisch oder den Auto-Amboss benutzt werden kann.
+tile.openblocks.xp_drain.name=XP-Gitter
+tile.openblocks.xp_drain.description=Platziere ein XP-Gittter über einem OpenBlocks-Tank und stelle dich darauf. Deine XP werden in den Tank entleert, was dann für Blöcke wie den Auto-Zaubertisch oder den Auto-Amboss benutzt werden kann.
 
-tile.openblocks.vacuumhopper.name=Vakuumtrichter
-tile.openblocks.vacuumhopper.description=Der Vakuumtrichter saugt Items und XP-Kugeln um sich herum auf. Du kannst die Tabs auf der rechten Seite des Interfaces verwenden, um auszuwählen, zu welchen Seiten etwas ausgegeben werden soll.
+tile.openblocks.vacuum_hopper.name=Vakuumtrichter
+tile.openblocks.vacuum_hopper.description=Der Vakuumtrichter saugt Items und XP-Kugeln um sich herum auf. Du kannst die Tabs auf der rechten Seite des Interfaces verwenden, um auszuwählen, zu welchen Seiten etwas ausgegeben werden soll.
 
 tile.openblocks.village_highlighter.name=Dorf-Highlighter
 tile.openblocks.village_highlighter.description=Platziere den Dorf-Highlighter in einem Dorf und gib ihm ein Redstone-Signal. Er wird den Umriss des Dorfes darstellen und eine Box im Eisengolem-Spawnbereich zeichnen. Nützlich, wenn du sichergehen willst, dass Dörfer nicht verschmelzen, oder wenn du eine Eisengolem-Farm baust!
 
-tile.openblocks.donationStation.name=Spendenstation
-tile.openblocks.donationStation.description=Du magst einen Block oder ein Item und willst dem Mod-Entwickler ein wenig Anerkennung zeigen? Schmeiß es in die Spendenstation und, wenn wir die Spendenseite der Entwickler kennen, geben wir dir einen Link.
+tile.openblocks.donation_station.name=Spendenstation
+tile.openblocks.donation_station.description=Du magst einen Block oder ein Item und willst dem Mod-Entwickler ein wenig Anerkennung zeigen? Schmeiß es in die Spendenstation und, wenn wir die Spendenseite der Entwickler kennen, geben wir dir einen Link.
 
-tile.openblocks.blockPlacer.name=Blockplatzierer
-tile.openblocks.blockPlacer.description=Wenn er ein Redstone-Signal bekommt, platziert der Blockplatzierer ein Item in die Richtung, in die er schaut.
+tile.openblocks.block_placer.name=Blockplatzierer
+tile.openblocks.block_placer.description=Wenn er ein Redstone-Signal bekommt, platziert der Blockplatzierer ein Item in die Richtung, in die er schaut.
 
-tile.openblocks.blockbreaker.name=Blockbrecher
-tile.openblocks.blockbreaker.description=Wenn er ein Redstone-Signal bekommt, bricht der Blockbrecher den Block, den er ansieht.
+tile.openblocks.block_breaker.name=Blockbrecher
+tile.openblocks.block_breaker.description=Wenn er ein Redstone-Signal bekommt, bricht der Blockbrecher den Block, den er ansieht.
 
 tile.openblocks.projector.name=Höhenkartenprojektor
 tile.openblocks.projector.description=Ich überlasse es boq, das hier zu schreiben!
 #tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
-tile.openblocks.autoenchantmenttable.name=Auto-Zaubertisch
-tile.openblocks.autoenchantmenttable.description=Der Auto-Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er mit flüssigen XP arbeitet. Benutze die Tabs auf der rechten Seite des Interfaces, um auszuwählen, von wo Items und XP genommen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.
+tile.openblocks.auto_enchantment_table.name=Auto-Zaubertisch
+tile.openblocks.auto_enchantment_table.description=Der Auto-Zaubertisch funktioniert ähnlich wie der Vanilla-Zaubertisch, außer dass er mit flüssigen XP arbeitet. Benutze die Tabs auf der rechten Seite des Interfaces, um auszuwählen, von wo Items und XP genommen werden sollen. Genau wie beim Vanilla-Zaubertisch brauchst du Bücherregale, wenn du mit höhere Leveln verzaubern willst.
 
-tile.openblocks.xpbottler.name=XP-Abfüllgerät
-tile.openblocks.xpbottler.description=Das XP-Abfüllgerät nimmt flüssige XP und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
+tile.openblocks.xp_bottler.name=XP-Abfüllgerät
+tile.openblocks.xp_bottler.description=Das XP-Abfüllgerät nimmt flüssige XP und füllt sie in Glasflaschen, um Erfahrungsfläschchen herzustellen.
 
-tile.openblocks.autoanvil.name=Auto-Amboss
-tile.openblocks.autoanvil.description=Der Auto-Amboss funktioniert ähnlich wie ein Vanilla-Amboss, außer dass er mit flüssigen XP arbeitet und komplett automatisierbar ist.\n\nBenutze die Tabs auf der rechten Seite des Interfaces, um auszuwählen, welche Seiten des Ambosses für Ein-/Ausgabe von Items oder Flüssigkeiten vorgesehen sind. Rechts-klicke und ziehe den Amboss im Tab, um ihn zu drehen und andere Seiten auszuwählen!
+tile.openblocks.auto_anvil.name=Auto-Amboss
+tile.openblocks.auto_anvil.description=Der Auto-Amboss funktioniert ähnlich wie ein Vanilla-Amboss, außer dass er mit flüssigen XP arbeitet und komplett automatisierbar ist.\n\nBenutze die Tabs auf der rechten Seite des Interfaces, um auszuwählen, welche Seiten des Ambosses für Ein-/Ausgabe von Items oder Flüssigkeiten vorgesehen sind. Rechts-klicke und ziehe den Amboss im Tab, um ihn zu drehen und andere Seiten auszuwählen!
 
-tile.openblocks.drawingtable.name=Zeichentisch
-tile.openblocks.drawingtable.description=Der Zeichentisch wird gebraucht, um Schablonen herzustellen, die zum Zeichnen gebraucht werden. Gib eine unbearbeitete Schablone in den Zeichentisch und benutze die Pfeile, um die gewünschte Schablone auszuwählen!
+tile.openblocks.drawing_table.name=Zeichentisch
+tile.openblocks.drawing_table.description=Der Zeichentisch wird gebraucht, um Schablonen herzustellen, die zum Zeichnen gebraucht werden. Gib eine unbearbeitete Schablone in den Zeichentisch und benutze die Pfeile, um die gewünschte Schablone auszuwählen!
 
 tile.openblocks.grave.name=Grab
 tile.openblocks.trophy.name=Trophäe
 tile.openblocks.trophy.entity.name=%s Trophäe
 tile.openblocks.canvasglass.name=Glasleinwand
-tile.openblocks.paintcan.name=Farbeimer
+tile.openblocks.paint_can.name=Farbeimer
 
 tile.openblocks.sky.normal.name=Himmelsblock
 tile.openblocks.sky.normal.description=Bringe das Außen nach innen mit dem neuen Himmelsblock! Du musst lediglich ein Redstone-Signal geben. Wir bieten auch die invertierte Version an.
@@ -290,38 +291,38 @@ tile.openblocks.sky.inverted.name=Invertierter Himmelsblock
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=Das Radio erlaubt es dir, Internetradio zu spielen! Zunächst brauchst du Wellenkristalle, die du in Dungeon-Truhen findest oder von einem bestimmten Dorfbewohner bekommst. Platziere den Kristall ins Radio und gib diesem ein Redstone-Signal, um es anzuschalten.  Die Stärke des Redstone-Signals bestimmt die Lautstärke.\n\nIn der Konfigurations-Datei des Servers kannst du konfigurieren, welche Radiosender verfügbar sind.
 
-tile.openblocks.xpshower.name=XP-Dusche
-tile.openblocks.xpshower.description=Bringe eine XP-Dusche an einen Tank voller XP-Saft an und sie wird XP-Orbs ausschütten. Diese Orbs können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.
+tile.openblocks.xp_shower.name=XP-Dusche
+tile.openblocks.xp_shower.description=Bringe eine XP-Dusche an einen Tank voller XP-Saft an und sie wird XP-Orbs ausschütten. Diese Orbs können von einem XP-Gitter oder einer MFR-Kloake aufgesammelt werden.
 
 tile.openblocks.scaffolding.name=Gerüst
 tile.openblocks.scaffolding.description=Wolltest du jemals irgendwo hochbauen, ohne einen häslichen Turm zu hinterlassen? Jetzt kannst du! Baue mit Gerüstblöcken und sie verschwinden wenn du fertig bist mit bauen.
 
-tile.openblocks.goldenegg.name=Goldenes Ei
+tile.openblocks.golden_egg.name=Goldenes Ei
 
 tile.openblocks.digitalfuse.name=Digitalzünder
 
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=Der Cursor lässt dich aus der Ferne klicken.\nShift-klicke einfach auf einen Block um den Cursor zu verknüpfen, dann benutze ihn, wo immer du willst, um einen Klick auf das ausgewählte Ziel zu simulieren. Sei gewarnt, standardmäßig benutzt der Cursor XP abhängig davon, wie weit du vom Ziel entfernt bist.
 
-item.openblocks.devnull.name=/dev/null
-item.openblocks.devnull.description=Klicke mit /dev/null, um das Inventar zu öffnen. Es gibt einen einzigen Inventar-Slot - dort legst du ein Item hinein, Erde zum Beispiel. Wenn du nun Erde abbaust, wird sich dieser Slot auffüllen. Sobald er voll ist, wird jegliche weitere Erde, die du einsammelst, automatisch weggeworfen. Du kannst das Item in deiner Hand Shift-klicken, als wenn du den Block platzieren würdest!
+item.openblocks.dev_null.name=/dev/null
+item.openblocks.dev_null.description=Klicke mit /dev/null, um das Inventar zu öffnen. Es gibt einen einzigen Inventar-Slot - dort legst du ein Item hinein, Erde zum Beispiel. Wenn du nun Erde abbaust, wird sich dieser Slot auffüllen. Sobald er voll ist, wird jegliche weitere Erde, die du einsammelst, automatisch weggeworfen. Du kannst das Item in deiner Hand Shift-klicken, als wenn du den Block platzieren würdest!
 
 item.openblocks.slimalyzer.name=Schleimalysierer
 item.openblocks.slimalyzer.description=Renne mit einem Schleimalysierer in deiner Hand herum, und er wird jedes Mal aufleuchten, wenn du dich in einem Schleime spawnenden Chunk befindest.
 
-item.openblocks.hangglider.name=Hängegleiter
-item.openblocks.hangglider.description=Der Hängegleiter ist selbsterklärend. Halte ihn in deiner Hand und klicke, um ihn auf deinem Rücken zu platzieren. Jetzt spring!\nDrücke Shift um während des Gleitens deine Geschwindigkeit zu erhöhen, doch pass auf, du wirst schneller sinken!\n\nDein Hängegleiter ist außerdem mit einem Variometer zur akustischen Indikation vertikaler Luftbewegungen ausgerüstet. Drücke V und bleibe für immer oben (oder bis die Sonne untergeht)!
+item.openblocks.hang_glider.name=Hängegleiter
+item.openblocks.hang_glider.description=Der Hängegleiter ist selbsterklärend. Halte ihn in deiner Hand und klicke, um ihn auf deinem Rücken zu platzieren. Jetzt spring!\nDrücke Shift um während des Gleitens deine Geschwindigkeit zu erhöhen, doch pass auf, du wirst schneller sinken!\n\nDein Hängegleiter ist außerdem mit einem Variometer zur akustischen Indikation vertikaler Luftbewegungen ausgerüstet. Drücke V und bleibe für immer oben (oder bis die Sonne untergeht)!
 
-item.openblocks.gliderwing.name=Gleiterflügel
+item.openblocks.glider_wing.name=Gleiterflügel
 
-item.openblocks.sleepingbag.name=Schlafsack
-item.openblocks.sleepingbag.description=Mit dem Schlafsack kannst du in der Wildnis schlafen, ohne deine Spawn-Position zurückzusetzen. Um zu schlafen, trage ihn einfach auf dem Rücken.
+item.openblocks.sleeping_bag.name=Schlafsack
+item.openblocks.sleeping_bag.description=Mit dem Schlafsack kannst du in der Wildnis schlafen, ohne deine Spawn-Position zurückzusetzen. Um zu schlafen, trage ihn einfach auf dem Rücken.
 
 item.openblocks.luggage.name=Reisegepäck
 item.openblocks.luggage.description=Das Reisegepäck ist dein neuer Freund. Es folgt dir überall hin und sammelt alle Items, die es am Boden findet, ein. Nom nom nom!\nUm es aufzuheben, Shift-klicke einfach auf es und es verwandelt sich zurück in ein Item, das du umhertragen kannst.\nWenn es jemals von einem Blitz getroffen werden sollte, wird es noch mehr Items tragen können!
 
-item.openblocks.sonicglasses.name=Schallbrille
-item.openblocks.sonicglasses.description=Wir stellen vor: Die fabelhafte neue Schallbrille!\nDiese neue und spannende Technologie der OpenMods GmbH erlaubt dir zu sehen, was du hörst!
+item.openblocks.sonic_glasses.name=Schallbrille
+item.openblocks.sonic_glasses.description=Wir stellen vor: Die fabelhafte neue Schallbrille!\nDiese neue und spannende Technologie der OpenMods GmbH erlaubt dir zu sehen, was du hörst!
 
 item.openblocks.squeegee.name=Scheibenwischer
 item.openblocks.squeegee.description=Der Scheibenwischer entfernt jegliche Farbe von gefärbten Blöcken. Klicke einfach auf die Seite eines Blockes, von der du die Farbe entfernen möchtest, oder Shift-klicke, um die Farbe von allen Seiten zu entfernen!
@@ -354,7 +355,7 @@ item.openblocks.beam.name=Balken
 item.openblocks.line.name=Leine
 item.openblocks.miracle_magnet.name=§5Mirakelmagnet§r
 item.openblocks.info_book.name=Welteroberung mit OpenBlocks
-item.openblocks.xpbucket.name=XP-Eimer
+item.openblocks.xp_bucket.name=XP-Eimer
 item.openblocks.height_map.name=Höhenkarte
 item.openblocks.empty_map.name=Leere Karte
 item.openblocks.map_controller.name=Kartenkontrollmodul
@@ -372,9 +373,9 @@ item.openblocks.wallpaper.name=Poster
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
-entity.OpenBlocks.Luggage.name=Reisegepäck
-entity.OpenBlocks.Cartographer.name=Kartograph
-entity.OpenBlocks.Block.name=Schwebender Block
-entity.OpenBlocks.MiniMe.name=Mini-Me
+entity.openblocks.luggage.name=Reisegepäck
+entity.openblocks.cartographer.name=Kartograph
+entity.openblocks.block.name=Schwebender Block
+entity.openblocks.mini_me.name=Mini-Me
 
-fluid.OpenBlocks.xpjuice=Flüssige XP
+fluid.openblocks.xp_juice=Flüssige XP

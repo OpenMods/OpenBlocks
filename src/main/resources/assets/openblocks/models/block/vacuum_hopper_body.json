@@ -1,7 +1,7 @@
 {
     "textures": {
-        "particle": "openblocks:blocks/vacuumhopper_body",
-        "body": "openblocks:blocks/vacuumhopper_body"
+        "particle": "openblocks:blocks/vacuum_hopper_body",
+        "body": "openblocks:blocks/vacuum_hopper_body"
     },
     "elements": [
         {

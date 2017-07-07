@@ -41,7 +41,8 @@ openblocks.gui.drawingtable=Mesa de Dibujo
 openblocks.gui.digitalfuse=Detonador Digital
 openblocks.gui.xp_outputs=Salidas de XP
 openblocks.gui.item_outputs=Salidas de Objetos
-openblocks.gui.max_level=Nivel máx.: %d
+#openblocks.gui.limit=Limit ## NEEDS TRANSLATION ##
+#openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
 openblocks.gui.save_folder=Guardar carpeta
 
 openblocks.gui.welcome.title=¡Bienvenido!
@@ -207,8 +208,8 @@ tile.openblocks.beartrap.description=Coloca una trampa para osos y haz clic para
 tile.openblocks.sponge.name=Esponja
 tile.openblocks.sponge.description=Esta esponja es un recambio de la esponja corriente. Perfecta para mover pequeños pozos de lava o agua. Ve con cuidado cuando lo uses en zonas de líquido amplias, se va a liar un poco gorda.
 
-item.openblocks.spongeonastick.name=Palo con Esponja
-item.openblocks.spongeonastick.description=El palo con esponja es una herramienta para limpiar líquidos. Funciona como la Esponja, pero es más móvil a expensas de cansar más.
+item.openblocks.sponge_on_a_stick.name=Palo con Esponja
+item.openblocks.sponge_on_a_stick.description=El palo con esponja es una herramienta para limpiar líquidos. Funciona como la Esponja, pero es más móvil a expensas de cansar más.
 
 #item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
 #item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
@@ -216,14 +217,14 @@ item.openblocks.spongeonastick.description=El palo con esponja es una herramient
 tile.openblocks.cannon.name=Cañón de Objetos
 tile.openblocks.cannon.description=Cuando se le aplique una señal de redstone, el cañon de objetos disparará los objetos que encuentre en un inventario adyacente. Usa el objeto 'apuntador' para apuntar el cañón.
 
-tile.openblocks.ropeladder.name=Escalera de cuerdas
-tile.openblocks.ropeladder.description=Cuando coloques una escalera de cuerda, se desenrollará hasta llegar al suelo. Por cada bloque de escalera creado usará una unidad de escalera del inventario.
+tile.openblocks.rope_ladder.name=Escalera de cuerdas
+tile.openblocks.rope_ladder.description=Cuando coloques una escalera de cuerda, se desenrollará hasta llegar al suelo. Por cada bloque de escalera creado usará una unidad de escalera del inventario.
 
 tile.openblocks.sprinkler.name=Aspersor
 tile.openblocks.sprinkler.description=El aspersor ayudará a fertilizar todas las cosechas a 4 bloques de distancia. Simplemente colócalo encima de un tanque de OpenBlocks lleno de agua. También puedes añadir polvo de hueso para un crecimiento aún más rápido.\n¡También actúa como una fuente de agua!
 
-tile.openblocks.paintmixer.name=Mezclador de Pintura
-tile.openblocks.paintmixer.description=¡El mezclador de pintura puede mezclar cualquier colo de pintura que quieras! ¡Coloca un cubo de pintura ya existente o un cubo de leche en la ranura superior, después tinte cian, magenta, amarillo y negro en las otras cuatro ranuras y haz clic para mezclar!
+tile.openblocks.paint_mixer.name=Mezclador de Pintura
+tile.openblocks.paint_mixer.description=¡El mezclador de pintura puede mezclar cualquier colo de pintura que quieras! ¡Coloca un cubo de pintura ya existente o un cubo de leche en la ranura superior, después tinte cian, magenta, amarillo y negro en las otras cuatro ranuras y haz clic para mezclar!
 
 tile.openblocks.canvas.name=Lienzo
 tile.openblocks.canvas.description=El lienzo es un bloque blanco perfecto para pintar. Consulta la Máquina de Pintar para información sobre la creación de pinturas.
@@ -237,51 +238,51 @@ tile.openblocks.target.description=El objetivo emitirá una seña de redstone de
 tile.openblocks.path.name=Camino Rústico
 tile.openblocks.path.description=El camino rústico no hace nada, pero es muy mono.
 
-tile.openblocks.itemdropper.name=Lanzador de Objetos
-tile.openblocks.itemdropper.description=El lanzador de objetos es similar al lanzador de objetos corriente, Excepto en que deja caer los objetos en línea recta hacia abajo.
+tile.openblocks.item_dropper.name=Lanzador de Objetos
+tile.openblocks.item_dropper.description=El lanzador de objetos es similar al lanzador de objetos corriente, Excepto en que deja caer los objetos en línea recta hacia abajo.
 
-tile.openblocks.bigbutton.name=Botón Grande
-tile.openblocks.bigbutton.description=El botón grande es un botón más grande que se puede colocar en las paredes. Si haces shift+clic con la mano vacía, abrirá un inventario con una sola ranura. Puedes colocar objetos en esta ranura para aumentar la duración del tiempo en que el botón permanece presionado. Un objeto aumenta el tiempo un tic.
+tile.openblocks.big_button.name=Botón Grande
+tile.openblocks.big_button.description=El botón grande es un botón más grande que se puede colocar en las paredes. Si haces shift+clic con la mano vacía, abrirá un inventario con una sola ranura. Puedes colocar objetos en esta ranura para aumentar la duración del tiempo en que el botón permanece presionado. Un objeto aumenta el tiempo un tic.
 
-tile.openblocks.xpdrain.name=Drenador de XP
-tile.openblocks.xpdrain.description=Coloca el drenador de XP encima de un tanque de Openblocks y permanece encima. Tu XP se drenará al tanque, que puede usarse con bloques como la mesa de encantamientos automática o al yunque automático.
+tile.openblocks.xp_drain.name=Drenador de XP
+tile.openblocks.xp_drain.description=Coloca el drenador de XP encima de un tanque de Openblocks y permanece encima. Tu XP se drenará al tanque, que puede usarse con bloques como la mesa de encantamientos automática o al yunque automático.
 
-tile.openblocks.vacuumhopper.name=Tolva Aspiradora
-tile.openblocks.vacuumhopper.description=La tolva aspiradora succionará objetos y orbes de experiencia cercanos a ella.Puedes usar las pestañas a la derecha de la interfaz para elegir que caras funcionarán como salidas.
+tile.openblocks.vacuum_hopper.name=Tolva Aspiradora
+tile.openblocks.vacuum_hopper.description=La tolva aspiradora succionará objetos y orbes de experiencia cercanos a ella.Puedes usar las pestañas a la derecha de la interfaz para elegir que caras funcionarán como salidas.
 
 tile.openblocks.village_highlighter.name=Subrayador de Aldeas
 tile.openblocks.village_highlighter.description=Suelta el subrayador de aldeas en una aldea y aplicale una señal de redstone. Marcará el perimetro de la aldea y dibujará una caja en el área de invocación de golems. Útil si quieres asegurarte de que las aldeas no se mezclan unas con las otras o estás construyendo una granja de hierro.
 
-tile.openblocks.donationStation.name=Estación de Donaciones
-tile.openblocks.donationStation.description=Te encanta un bloque u objeto y quieres demostrarle aprecio al desarrollador del mod? Déjalo caer en la estación de donaciones y si conocemos la web de donaciones del autor, te daremos su link.
+tile.openblocks.donation_station.name=Estación de Donaciones
+tile.openblocks.donation_station.description=Te encanta un bloque u objeto y quieres demostrarle aprecio al desarrollador del mod? Déjalo caer en la estación de donaciones y si conocemos la web de donaciones del autor, te daremos su link.
 
-tile.openblocks.blockPlacer.name=Colocador de Bloques
-tile.openblocks.blockPlacer.description=Cuando se le aplique un pulso de redstone, el colocador de bloques colocará un objeto en la dirección que esté mirando.
+tile.openblocks.block_placer.name=Colocador de Bloques
+tile.openblocks.block_placer.description=Cuando se le aplique un pulso de redstone, el colocador de bloques colocará un objeto en la dirección que esté mirando.
 
-tile.openblocks.blockbreaker.name=Rompedor de Bloques
-tile.openblocks.blockbreaker.description=Cuando se le aplique un pulso de redstone, el rompedor de bloques romperá el bloque que estéen la dirección que esté mirando.
+tile.openblocks.block_breaker.name=Rompedor de Bloques
+tile.openblocks.block_breaker.description=Cuando se le aplique un pulso de redstone, el rompedor de bloques romperá el bloque que estéen la dirección que esté mirando.
 
 tile.openblocks.projector.name=Proyector de Mapas Topográficos
 tile.openblocks.projector.description=¡Te dejo escribir esta, boq!
 #tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
-tile.openblocks.autoenchantmenttable.name=Mesa de Encantamiento Automática
-tile.openblocks.autoenchantmenttable.description=La mesa de encantamiento automática funciona de forma similar a la mesa de encantamiento corriente excepto por que funciona con XP líquida. Usa las pestañas en la parte derecha de la interfaz para seleccionar de donde se cogen los objetos o la XP. Se necesitan librerías para conseguir mejores encantamientos, justo como con la mesa corriente.
+tile.openblocks.auto_enchantment_table.name=Mesa de Encantamiento Automática
+tile.openblocks.auto_enchantment_table.description=La mesa de encantamiento automática funciona de forma similar a la mesa de encantamiento corriente excepto por que funciona con XP líquida. Usa las pestañas en la parte derecha de la interfaz para seleccionar de donde se cogen los objetos o la XP. Se necesitan librerías para conseguir mejores encantamientos, justo como con la mesa corriente.
 
-tile.openblocks.xpbottler.name=Embotellador de XP
-tile.openblocks.xpbottler.description=El embotellador de XP usará XP líquida para embotellarla en frascos de cristal para crear botellas de experiencia.
+tile.openblocks.xp_bottler.name=Embotellador de XP
+tile.openblocks.xp_bottler.description=El embotellador de XP usará XP líquida para embotellarla en frascos de cristal para crear botellas de experiencia.
 
-tile.openblocks.autoanvil.name=Yunque Automático
-tile.openblocks.autoanvil.description=El yunque automático funciona como el yunque corriente, excepto por que usa XP líquida y se puede automatizar completamente.\n\nUsa las pestañas en la parte derecha de la interfaz para seleccionar que caras del yunque se pueden insertar o extraer objetos y líquidos. Haz clic derecho y arrastra el yunque en la pestaña para hacerlo rodar y seleccionar otras caras.
+tile.openblocks.auto_anvil.name=Yunque Automático
+tile.openblocks.auto_anvil.description=El yunque automático funciona como el yunque corriente, excepto por que usa XP líquida y se puede automatizar completamente.\n\nUsa las pestañas en la parte derecha de la interfaz para seleccionar que caras del yunque se pueden insertar o extraer objetos y líquidos. Haz clic derecho y arrastra el yunque en la pestaña para hacerlo rodar y seleccionar otras caras.
 
-tile.openblocks.drawingtable.name=Mesa de Dibujo
-tile.openblocks.drawingtable.description=La mesa de dibujo se usa para crear plantillas que se pueden utilizar mientras se pinta. Introduce una plantilla en blanco y después usa las flechas para seleccionar que plantilla quieres.
+tile.openblocks.drawing_table.name=Mesa de Dibujo
+tile.openblocks.drawing_table.description=La mesa de dibujo se usa para crear plantillas que se pueden utilizar mientras se pinta. Introduce una plantilla en blanco y después usa las flechas para seleccionar que plantilla quieres.
 
 tile.openblocks.grave.name=Tumba
 tile.openblocks.trophy.name=Trofeo
 tile.openblocks.trophy.entity.name=Trofeo de %s 
 tile.openblocks.canvasglass.name=Lienzo de cristal
-tile.openblocks.paintcan.name=Lata de pintura
+tile.openblocks.paint_can.name=Lata de pintura
 
 tile.openblocks.sky.normal.name=Bloque de Cielo
 tile.openblocks.sky.normal.description=¡Tráete el exterior al interior con el nuevo bloque de cielo! Simplemente aplícale una señal de redstone. También ofrecemos una versión invertida.
@@ -290,38 +291,38 @@ tile.openblocks.sky.inverted.name=Bloque de Cielo Invertido
 tile.openblocks.radio.name=Radio
 tile.openblocks.radio.description=¡La radio te permite retransmitir una radio de Internet! Primero, necesitas cristales sintonizados que puedes encontrar en cofres de mazmorras o en aldeano especial. Coloca el cristal en la radio y aplícale una señal de redstone para encenderla. La fuerza de la señal de redstone controla el volumen.\n\nPuedes configurar que estaciones de radio están disponibles en el archivo de configuración del server.
 
-tile.openblocks.xpshower.name=Ducha de XP
-tile.openblocks.xpshower.description=Adjunta una ducha de XP a un tanque de XP líquida y verterá orbes de experiencia. Estos orbes se pueden recolectar con un drenador de XP o un alcantarillado MFR.
+tile.openblocks.xp_shower.name=Ducha de XP
+tile.openblocks.xp_shower.description=Adjunta una ducha de XP a un tanque de XP líquida y verterá orbes de experiencia. Estos orbes se pueden recolectar con un drenador de XP o un alcantarillado MFR.
 
 tile.openblocks.scaffolding.name=Andamio
 tile.openblocks.scaffolding.description=¿Has querido alguna vez subir hacia el cielo sin dejar un feo pilar detrás? ¡Bien, pues ahora puedes! Simplemente construye con andamios y desaparecerán cuando hayas acabado.
 
-tile.openblocks.goldenegg.name=Huevo Dorado
+tile.openblocks.golden_egg.name=Huevo Dorado
 
 tile.openblocks.digitalfuse.name=Detonador Digital
 
 item.openblocks.cursor.name=Cursor
 item.openblocks.cursor.description=El cursor te permitirá hacer clic en bloques de forma remota.\nHaz shift+clic en un bloque para enlazarlo al cursor y luego usa el cursor donde quieras para acceder al bloque. Ve con cuidado, por defecto el cursor usa tu XP en relación a cuan lejos estás del bloque enlazado.
 
-item.openblocks.devnull.name=/dev/null
-item.openblocks.devnull.description=Haz clic con el /dev/null para abrir el inventario. Solo hay un ranura de inventario. Pon un objeto ahí; tierra, por ejemplo. Mientras que recoges tierra del suelo esta ranura se irá llenando. Unaz vez esté lleno, cualquier bloque de tierra que recoges se descartará automáticamente. ¡Puedes hacer shift+clic con el objeto en la mano y actuará como si estuvieses colocando el bloque!
+item.openblocks.dev_null.name=/dev/null
+item.openblocks.dev_null.description=Haz clic con el /dev/null para abrir el inventario. Solo hay un ranura de inventario. Pon un objeto ahí; tierra, por ejemplo. Mientras que recoges tierra del suelo esta ranura se irá llenando. Unaz vez esté lleno, cualquier bloque de tierra que recoges se descartará automáticamente. ¡Puedes hacer shift+clic con el objeto en la mano y actuará como si estuvieses colocando el bloque!
 
 item.openblocks.slimalyzer.name=Slimalizador
 item.openblocks.slimalyzer.description=Anda por ahí con el slimalizador en la mano y se encendera cuando te encuentres en un chunk donde aparecen slimes.
 
-item.openblocks.hangglider.name=Ala Delta
-item.openblocks.hangglider.description=El ala delta no necesita explicación. Ponla en la mano y haz clic para colocártela en la espalda. ¡Ahora salta!\nPara aumentar tu velocidad, puedes pulsar shift mientras planeas, pero ten cuidado, perderás altitud más rápido.
+item.openblocks.hang_glider.name=Ala Delta
+item.openblocks.hang_glider.description=El ala delta no necesita explicación. Ponla en la mano y haz clic para colocártela en la espalda. ¡Ahora salta!\nPara aumentar tu velocidad, puedes pulsar shift mientras planeas, pero ten cuidado, perderás altitud más rápido.
 
-item.openblocks.gliderwing.name=Ala de ala delta
+item.openblocks.glider_wing.name=Ala de ala delta
 
-item.openblocks.sleepingbag.name=Saco de Dormir
-item.openblocks.sleepingbag.description=El saco de dormir te permite dormir fuera en la espesura. Para dormir, simplemente póntela en la espalda.
+item.openblocks.sleeping_bag.name=Saco de Dormir
+item.openblocks.sleeping_bag.description=El saco de dormir te permite dormir fuera en la espesura. Para dormir, simplemente póntela en la espalda.
 
 item.openblocks.luggage.name=Equipaje
 item.openblocks.luggage.description=El equipaje es tu nuevo amigo. Te seguirá allá donde vayas recogiendo cualquier objeto que encuentre en el suelo. ¡Nom nom nom!\nPara desmantelarlo, haz shift+clic en él y se convertirá en un objeto que podrás llevarte por ahí.\nSi por lo que sea le cae un rayo, podrá recoger aun más objetos.
 
-item.openblocks.sonicglasses.name=Gafas Sónicas
-item.openblocks.sonicglasses.description=Presentamos las nuevas y superguays gafas sónicas!\n¡Esta nueva y emocionante tecnología de OpenMods Inc. te permite ver lo que oyes!
+item.openblocks.sonic_glasses.name=Gafas Sónicas
+item.openblocks.sonic_glasses.description=Presentamos las nuevas y superguays gafas sónicas!\n¡Esta nueva y emocionante tecnología de OpenMods Inc. te permite ver lo que oyes!
 
 item.openblocks.squeegee.name=Escobilla de Goma
 item.openblocks.squeegee.description=La escobilla de goma elimina cualquier pintura de un bloque pintado. Haz clic en la cara del bloque que quieres limpiar la pintura, o haz shift+clic para eliminar la pintura de todas las caras del bloque.
@@ -354,7 +355,7 @@ item.openblocks.beam.name=Rayo de Luz
 item.openblocks.line.name=Línea
 item.openblocks.miracle_magnet.name=§5Imán Milagroso§r
 item.openblocks.info_book.name=Dominación Mundial con OpenBlocks
-item.openblocks.xpbucket.name=Cubo de XP
+item.openblocks.xp_bucket.name=Cubo de XP
 item.openblocks.height_map.name=Mapa de Altura
 item.openblocks.empty_map.name=Mapa Vacío
 item.openblocks.map_controller.name=Módulo Controlador de Mapa
@@ -372,9 +373,9 @@ item.openblocks.wallpaper.name=Papel Pintado
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
-entity.OpenBlocks.Luggage.name=Equipaje
-entity.OpenBlocks.Cartographer.name=Cartógrafo
-entity.OpenBlocks.Block.name=Bloque Flotante
-entity.OpenBlocks.MiniMe.name=Mini Yo
+entity.openblocks.luggage.name=Equipaje
+entity.openblocks.cartographer.name=Cartógrafo
+entity.openblocks.block.name=Bloque Flotante
+entity.openblocks.mini_me.name=Mini Yo
 
-fluid.OpenBlocks.xpjuice=XP Líquida
+fluid.openblocks.xp_juice=XP Líquida

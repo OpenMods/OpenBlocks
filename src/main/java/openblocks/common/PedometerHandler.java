@@ -136,7 +136,7 @@ public class PedometerHandler {
 		}
 	}
 
-	private static final ResourceLocation CAPABILITY_KEY = OpenBlocks.location("pedometerState");
+	private static final ResourceLocation CAPABILITY_KEY = OpenBlocks.location("pedometer_state");
 
 	@CapabilityInject(PedometerState.class)
 	private static final Capability<PedometerState> PEDOMETER_CAPABILITY = null;

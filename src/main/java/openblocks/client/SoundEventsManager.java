@@ -19,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
+import openblocks.OpenBlocks;
 import openblocks.client.Icons.IDrawableIcon;
 import openblocks.common.item.ItemSonicGlasses;
 import openmods.config.properties.ConfigurationChange;
@@ -123,7 +124,7 @@ public class SoundEventsManager {
 	}
 
 	private ManualDisplayList notPumpkinOverlay = new ManualDisplayList();
-	private static final ResourceLocation notPumpkin = new ResourceLocation("openblocks:textures/misc/glasses_obsidian.png");
+	private static final ResourceLocation notPumpkin = OpenBlocks.location("textures/misc/glasses_obsidian.png");
 
 	private void dimWorld(final TextureManager tex, final Minecraft mc) {
 		final double level = Config.sonicGlassesOpacity;

@@ -1,7 +1,7 @@
 {
     "textures": {
-        "front": "openblocks:blocks/ropeladder",
-        "particle": "openblocks:blocks/ropeladder"
+        "front": "openblocks:blocks/rope_ladder",
+        "particle": "openblocks:blocks/rope_ladder"
     },
     "elements": [
         {

@@ -18,7 +18,7 @@ public enum MetasGeneric implements IMetaItemFactory {
 		@Override
 		public IMetaItem createMetaItem() {
 			ItemStack result = newItemStack();
-			return new MetaGeneric("gliderwing",
+			return new MetaGeneric("glider_wing",
 					new ShapedOreRecipe(result, " sl", "sll", "lll", 's', "stickWood", 'l', Items.LEATHER),
 					new ShapedOreRecipe(result, "ls ", "lls", "lll", 's', "stickWood", 'l', Items.LEATHER));
 		}

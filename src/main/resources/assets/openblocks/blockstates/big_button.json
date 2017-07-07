@@ -1,21 +1,26 @@
 {
     "forge_marker" : 1,
     "defaults" : {
-        "model": "cube_bottom_top",
         "textures": {
-            "particle": "openblocks:blocks/blockplacer_side",
-            "side": "openblocks:blocks/blockplacer_side",
-            "bottom": "openblocks:blocks/blockplacer_bottom",
-            "top": "openblocks:blocks/blockplacer"
+            "particle": "openblocks:blocks/big_button",
+            "all": "openblocks:blocks/big_button"
         },
         "transform": "forge:default-block"
     },
     "variants" : {
-        "inventory" : [{}],
+        "inventory" : [{
+            "model": "openblocks:big_button_inventory"
+        }],
+
         "powered" : {
-            "true": {},
-            "false": {}
+            "true": {
+                "model": "openblocks:big_button_active"
+            },
+            "false": {
+                "model": "openblocks:big_button_inactive"
+            }
         },
+
         "orientation" : {
             "xp_yp" : { },
             "xp_yn" : { "x" : 180 },

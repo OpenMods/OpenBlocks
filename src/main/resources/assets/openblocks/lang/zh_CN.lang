@@ -41,7 +41,8 @@ openblocks.gui.drawingtable=绘图桌
 openblocks.gui.digitalfuse=游标
 openblocks.gui.xp_outputs=输出经验
 openblocks.gui.item_outputs=输出物品
-openblocks.gui.max_level=最高附魔等级: %d
+#openblocks.gui.limit=Limit ## NEEDS TRANSLATION ##
+#openblocks.gui.available_power=Available power: %d ## NEEDS TRANSLATION ##
 openblocks.gui.save_folder=打开存档文件夹
 
 openblocks.gui.welcome.title=欢迎!
@@ -207,8 +208,8 @@ tile.openblocks.beartrap.description=将捕兽夹放置在地上,再右键打开
 tile.openblocks.sponge.name=海绵
 tile.openblocks.sponge.description=这种海绵是原版海绵的重置版.它十分利于清理一片范围内的水或岩浆.但在清理一大片液体的时候要注意了,因为它会让液体的流动变的相当混乱.
 
-item.openblocks.spongeonastick.name=海绵棒
-item.openblocks.spongeonastick.description=类似海绵,海绵棒可用于清理一片范围内的液体.但它比海绵更方便,也很容易坏掉.
+item.openblocks.sponge_on_a_stick.name=海绵棒
+item.openblocks.sponge_on_a_stick.description=类似海绵,海绵棒可用于清理一片范围内的液体.但它比海绵更方便,也很容易坏掉.
 
 #item.openblocks.epic_eraser.name=Epic Eraser ## NEEDS TRANSLATION ##
 #item.openblocks.epic_eraser.description=Every item has its own history...\n\nDon't you hate it?\nWith this item you can scrub all traces of epic lore your loot has collected over the years and then sell it on black market without worrying about evidence. ## NEEDS TRANSLATION ##
@@ -216,14 +217,14 @@ item.openblocks.spongeonastick.description=类似海绵,海绵棒可用于清理
 tile.openblocks.cannon.name=投掷加农炮
 tile.openblocks.cannon.description=当投掷加农炮接收到红石信号时,投掷加农炮会向指定目标投掷出相邻容器内的物品.你可以使用'指针'工具来给加农炮定位投掷的目标.
 
-tile.openblocks.ropeladder.name=绳梯
-tile.openblocks.ropeladder.description=当你放置绳梯后,它会垂直落到地面.创建一处绳梯只从堆叠中消耗一个物品.
+tile.openblocks.rope_ladder.name=绳梯
+tile.openblocks.rope_ladder.description=当你放置绳梯后,它会垂直落到地面.创建一处绳梯只从堆叠中消耗一个物品.
 
 tile.openblocks.sprinkler.name=洒水器
 tile.openblocks.sprinkler.description=洒水器可以催生4x4格范围内的作物.只需要将它放置在装有水的容器上方即可开始洒水.你可以放入骨粉来加快它对作物的催生速度.\n洒水器也可以作为水源供给方块使用.
 
-tile.openblocks.paintmixer.name=调色器
-tile.openblocks.paintmixer.description=调色器可以调出任何你想要的颜色.\n在调色器最上方的格子中放入牛奶桶或任意颜料桶,在下方的四格中分别放入青色,品红色,黄色和黑色染料,然后点击按钮调色吧!
+tile.openblocks.paint_mixer.name=调色器
+tile.openblocks.paint_mixer.description=调色器可以调出任何你想要的颜色.\n在调色器最上方的格子中放入牛奶桶或任意颜料桶,在下方的四格中分别放入青色,品红色,黄色和黑色染料,然后点击按钮调色吧!
 
 tile.openblocks.canvas.name=画布
 tile.openblocks.canvas.description=画布是一种纯白色的方块,适合用作绘画.翻阅调色器的相关介绍来了解如何制作绘画所需的颜料桶.
@@ -237,51 +238,51 @@ tile.openblocks.target.description=靶子会根据玩家命中的环数多寡来
 tile.openblocks.path.name=铺路石
 tile.openblocks.path.description=铺路石没什么额外效果.不过看起来蛮漂亮的.
 
-tile.openblocks.itemdropper.name=物品投掷器
-tile.openblocks.itemdropper.description=物品投掷器类似于原版的投掷器,但它会把物品铅直地向下投掷.
+tile.openblocks.item_dropper.name=物品投掷器
+tile.openblocks.item_dropper.description=物品投掷器类似于原版的投掷器,但它会把物品铅直地向下投掷.
 
-tile.openblocks.bigbutton.name=大型按钮
-tile.openblocks.bigbutton.description=大型按钮可以放置在墙上.如果你空手Shift右键它就可以打开一个格子.你可以在格子中放入不同数量的物品来控制按钮被按下后发出的红石信号持续时间的长短-每放入一个物品能使红石信号持续时间增加1个tick.
+tile.openblocks.big_button.name=大型按钮
+tile.openblocks.big_button.description=大型按钮可以放置在墙上.如果你空手Shift右键它就可以打开一个格子.你可以在格子中放入不同数量的物品来控制按钮被按下后发出的红石信号持续时间的长短-每放入一个物品能使红石信号持续时间增加1个tick.
 
-tile.openblocks.xpdrain.name=经验地漏
-tile.openblocks.xpdrain.description=将经验地漏放置在蓄水槽上方,接着站上去.你的经验就会被抽入蓄水槽中,蓄水槽中存储的液态经验可以被用于自动附魔台或自动铁砧等设备.
+tile.openblocks.xp_drain.name=经验地漏
+tile.openblocks.xp_drain.description=将经验地漏放置在蓄水槽上方,接着站上去.你的经验就会被抽入蓄水槽中,蓄水槽中存储的液态经验可以被用于自动附魔台或自动铁砧等设备.
 
-tile.openblocks.vacuumhopper.name=虚空漏斗
-tile.openblocks.vacuumhopper.description=虚空漏斗会吸收附近的掉落物或经验球并存储.你可以通过操作界面右边的设定栏来调整虚空漏斗输出物品或经验的面.
+tile.openblocks.vacuum_hopper.name=虚空漏斗
+tile.openblocks.vacuum_hopper.description=虚空漏斗会吸收附近的掉落物或经验球并存储.你可以通过操作界面右边的设定栏来调整虚空漏斗输出物品或经验的面.
 
 tile.openblocks.village_highlighter.name=村庄高亮仪
 tile.openblocks.village_highlighter.description=将村庄高亮仪放置在村庄内,接着给予它一个红石信号.它就能显示出村庄边界的轮廓以及铁傀儡的刷新区域.它可以用于确认临近村庄的边界或帮助你建造铁傀儡农场.
 
-tile.openblocks.donationStation.name=捐助站
-tile.openblocks.donationStation.description=你是否很喜欢某个物品或是方块,并且想对它的作者表达感谢呢?\n你可以将那些物品放进捐助站,如果检测到了作者的捐助网页,我们会为你提供它的链接.
+tile.openblocks.donation_station.name=捐助站
+tile.openblocks.donation_station.description=你是否很喜欢某个物品或是方块,并且想对它的作者表达感谢呢?\n你可以将那些物品放进捐助站,如果检测到了作者的捐助网页,我们会为你提供它的链接.
 
-tile.openblocks.blockPlacer.name=方块放置器
-tile.openblocks.blockPlacer.description=为方块放置器通入红石信号,它就会在所朝的一格内放置它存储的方块.
+tile.openblocks.block_placer.name=方块放置器
+tile.openblocks.block_placer.description=为方块放置器通入红石信号,它就会在所朝的一格内放置它存储的方块.
 
-tile.openblocks.blockbreaker.name=方块采掘器
-tile.openblocks.blockbreaker.description=为方块采掘器通入红石信号,它就会挖掉面向的方块.
+tile.openblocks.block_breaker.name=方块采掘器
+tile.openblocks.block_breaker.description=为方块采掘器通入红石信号,它就会挖掉面向的方块.
 
 tile.openblocks.projector.name=高度图投影仪
 tile.openblocks.projector.description=用于显示由制图机器人制作的高度图.将高度图放入投影仪内,将在其上方显示3D的全息地图.
 #tile.openblocks.projector.working.name=Height Map Projector ## NEEDS TRANSLATION ##
 
-tile.openblocks.autoenchantmenttable.name=自动附魔台
-tile.openblocks.autoenchantmenttable.description=自动附魔台的使用方法类似于普通附魔台,但它可以通过消耗经验来自动工作.\n在操作界面右边的设定栏可以调整输入经验或工具的面.自动附魔台也需要书架来提升自己的附魔等级上限.
+tile.openblocks.auto_enchantment_table.name=自动附魔台
+tile.openblocks.auto_enchantment_table.description=自动附魔台的使用方法类似于普通附魔台,但它可以通过消耗经验来自动工作.\n在操作界面右边的设定栏可以调整输入经验或工具的面.自动附魔台也需要书架来提升自己的附魔等级上限.
 
-tile.openblocks.xpbottler.name=经验装瓶器
-tile.openblocks.xpbottler.description=向经验装瓶器中输入液态经验,接着放入空瓶就能让它制作经验瓶.
+tile.openblocks.xp_bottler.name=经验装瓶器
+tile.openblocks.xp_bottler.description=向经验装瓶器中输入液态经验,接着放入空瓶就能让它制作经验瓶.
 
-tile.openblocks.autoanvil.name=自动铁砧
-tile.openblocks.autoanvil.description=自动铁砧的使用方法类似于普通铁砧,但它可以通过消耗经验来自动工作.\n在操作界面右边的设定栏可以调整输入经验或工具的面.在设定栏上可以右键拖拽铁砧或左键设定输入/输出面.
+tile.openblocks.auto_anvil.name=自动铁砧
+tile.openblocks.auto_anvil.description=自动铁砧的使用方法类似于普通铁砧,但它可以通过消耗经验来自动工作.\n在操作界面右边的设定栏可以调整输入经验或工具的面.在设定栏上可以右键拖拽铁砧或左键设定输入/输出面.
 
-tile.openblocks.drawingtable.name=绘图桌
-tile.openblocks.drawingtable.description=绘图桌可以制作绘图时需要用到的模板.将空白模板放入绘图桌后通过箭头来选择你想要的模板.
+tile.openblocks.drawing_table.name=绘图桌
+tile.openblocks.drawing_table.description=绘图桌可以制作绘图时需要用到的模板.将空白模板放入绘图桌后通过箭头来选择你想要的模板.
 
 tile.openblocks.grave.name=墓碑
 tile.openblocks.trophy.name=纪念雕像
 tile.openblocks.trophy.entity.name=%s战利品
 tile.openblocks.canvasglass.name=透明画布
-tile.openblocks.paintcan.name=颜料罐
+tile.openblocks.paint_can.name=颜料罐
 
 tile.openblocks.sky.normal.name=天空方块
 tile.openblocks.sky.normal.description=只需要给它一个红石信号,天空方块可以让你在室内看到户外的天空.此外,我们还拥有反相天空方块.
@@ -290,38 +291,38 @@ tile.openblocks.sky.inverted.name=反相天空方块
 tile.openblocks.radio.name=收音机
 tile.openblocks.radio.description=收音机可以让你连接网络收音机.首先,你需要把调台水晶(搜索地牢箱子或与村民交易)放在收音机里,并用红石信号启动.红石强度可以控制收音机的音量.在服务端的配置文件中可以设置可接收的电台.
 
-tile.openblocks.xpshower.name=经验莲蓬头
-tile.openblocks.xpshower.description=将经验莲蓬头放置在存储液态经验的水槽上,它就能从中抽出经验并喷出经验球.这些喷出的经验球可以被经验地漏或MFR的排污机吸取.
+tile.openblocks.xp_shower.name=经验莲蓬头
+tile.openblocks.xp_shower.description=将经验莲蓬头放置在存储液态经验的水槽上,它就能从中抽出经验并喷出经验球.这些喷出的经验球可以被经验地漏或MFR的排污机吸取.
 
 tile.openblocks.scaffolding.name=脚手架
 tile.openblocks.scaffolding.description=你是否想过通过向脚下垫方块到达高处,但是不想遗留下难看的竹子?现在你可以做到了!用这些脚手架来搭柱子,它们会在一定时间后自动散架.
 
-tile.openblocks.goldenegg.name=金蛋
+tile.openblocks.golden_egg.name=金蛋
 
 tile.openblocks.digitalfuse.name=游标
 
 item.openblocks.cursor.name=游标
 item.openblocks.cursor.description=游标可以让你远程控制方块.手持游标Shift右键一个方块就可以建立连接,之后用游标右键空气就控制连接的方块.\n默认设置下,使用游标与方块远程互动会消耗你的经验,距离越远,消耗越多.
 
-item.openblocks.devnull.name=/dev/null
-item.openblocks.devnull.description=手持/dev/null可以打开它的操作界面.你可以向里面放入一种物品,比如泥土.这样一来,当你从地面上捡到到泥土后就会被传送到这个格子,溢出的泥土则会自动销毁.你可以直接手持/dev/null来放置其存储的方块.
+item.openblocks.dev_null.name=/dev/null
+item.openblocks.dev_null.description=手持/dev/null可以打开它的操作界面.你可以向里面放入一种物品,比如泥土.这样一来,当你从地面上捡到到泥土后就会被传送到这个格子,溢出的泥土则会自动销毁.你可以直接手持/dev/null来放置其存储的方块.
 
 item.openblocks.slimalyzer.name=史莱姆区块探测器
 item.openblocks.slimalyzer.description=带着史莱姆区块探测器到处跑,当你走进史莱姆区块时探测器上的灯会变为绿色.
 
-item.openblocks.hangglider.name=滑翔翼
-item.openblocks.hangglider.description=滑翔翼的用途不言而喻.手持滑翔翼右键就可以穿上.现在,大胆跳吧!\n你可以在滑翔时通过按Shift来提升速度,但是小心点,因为这会加快你下坠速度!
+item.openblocks.hang_glider.name=滑翔翼
+item.openblocks.hang_glider.description=滑翔翼的用途不言而喻.手持滑翔翼右键就可以穿上.现在,大胆跳吧!\n你可以在滑翔时通过按Shift来提升速度,但是小心点,因为这会加快你下坠速度!
 
-item.openblocks.gliderwing.name=滑翔翼
+item.openblocks.glider_wing.name=滑翔翼
 
-item.openblocks.sleepingbag.name=睡袋
-item.openblocks.sleepingbag.description=在户外使用睡袋可以快速的度过夜晚并且不会重置出生点.只需要手持睡袋右键即可使用它.
+item.openblocks.sleeping_bag.name=睡袋
+item.openblocks.sleeping_bag.description=在户外使用睡袋可以快速的度过夜晚并且不会重置出生点.只需要手持睡袋右键即可使用它.
 
 item.openblocks.luggage.name=行李箱
 item.openblocks.luggage.description=行李箱是你的新伙伴.无论你去哪它都会跟着你,并收集地面上的掉落物.嗷!嗷!嗷!\n只需要Shift右键它就可以让它变为物品形式,这样你就可以更方便的携带它.如果行李箱被闪电劈中,那么它将可以存储更多物品!
 
-item.openblocks.sonicglasses.name=音波眼镜
-item.openblocks.sonicglasses.description=请允许我向你们介绍炫酷的音波眼镜!\n由开放式方块公司研发出的高科技产品,戴上它后你能看见你所听到的一切东西!
+item.openblocks.sonic_glasses.name=音波眼镜
+item.openblocks.sonic_glasses.description=请允许我向你们介绍炫酷的音波眼镜!\n由开放式方块公司研发出的高科技产品,戴上它后你能看见你所听到的一切东西!
 
 item.openblocks.squeegee.name=刮刀
 item.openblocks.squeegee.description=刮刀可以从画布上刮除颜料.用它右键画布的任何一面即可刮除该面上的颜料颜料,或用它Shift右键画布来刮除所有面上的颜料颜料!
@@ -354,7 +355,7 @@ item.openblocks.beam.name=连杆
 item.openblocks.line.name=缆绳
 item.openblocks.miracle_magnet.name=§5奇迹磁铁§r
 item.openblocks.info_book.name=用开放式方块主宰世界
-item.openblocks.xpbucket.name=液态经验桶
+item.openblocks.xp_bucket.name=液态经验桶
 item.openblocks.height_map.name=高度图
 item.openblocks.empty_map.name=空白地图
 item.openblocks.map_controller.name=地图调节器模块
@@ -372,9 +373,9 @@ item.openblocks.wallpaper.name=墙纸
 
 itemGroup.tabOpenBlocks=OpenBlocks
 
-entity.OpenBlocks.Luggage.name=行李箱
-entity.OpenBlocks.Cartographer.name=制图机器人
-entity.OpenBlocks.Block.name=悬浮方块
-entity.OpenBlocks.MiniMe.name=迷你替身
+entity.openblocks.luggage.name=行李箱
+entity.openblocks.cartographer.name=制图机器人
+entity.openblocks.block.name=悬浮方块
+entity.openblocks.mini_me.name=迷你替身
 
-fluid.OpenBlocks.xpjuice=液态经验
+fluid.openblocks.xp_juice=液态经验

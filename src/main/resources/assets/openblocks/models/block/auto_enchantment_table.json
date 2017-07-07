@@ -1,9 +1,9 @@
 {   "parent": "block/block",
     "textures": {
-        "particle": "openblocks:blocks/autoenchantmenttable_top",
-        "bottom": "openblocks:blocks/autoenchantmenttable_bottom",
-        "top": "openblocks:blocks/autoenchantmenttable_top",
-        "side": "openblocks:blocks/autoenchantmenttable"
+        "particle": "openblocks:blocks/auto_enchantment_table_top",
+        "bottom": "openblocks:blocks/auto_enchantment_table_bottom",
+        "top": "openblocks:blocks/auto_enchantment_table_top",
+        "side": "openblocks:blocks/auto_enchantment_table"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

@@ -1,7 +1,7 @@
 {
     "textures": {
-        "all": "openblocks:blocks/xpdrain",
-        "particle": "openblocks:blocks/xpdrain"
+        "all": "openblocks:blocks/xp_drain",
+        "particle": "openblocks:blocks/xp_drain"
     },
     "elements": [
         {

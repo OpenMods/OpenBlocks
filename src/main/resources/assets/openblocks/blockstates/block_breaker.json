@@ -3,28 +3,27 @@
     "defaults" : {
         "model": "cube_bottom_top",
         "textures": {
-            "particle": "openblocks:blocks/blockbreaker_side",
-            "side": "openblocks:blocks/blockbreaker_side",
-            "bottom": "openblocks:blocks/blockbreaker_bottom"
+            "particle": "openblocks:blocks/block_breaker_side",
+            "side": "openblocks:blocks/block_breaker_side",
+            "bottom": "openblocks:blocks/block_breaker_back"
         },
         "transform": "forge:default-block"
     },
     "variants" : {
         "inventory" : [{
             "textures": {
-                "top": "openblocks:blocks/blockbreaker"
+                "top": "openblocks:blocks/block_breaker_inactive"
             }
         }],
         "powered" : {
             "true": {
                 "textures": {
-                    "top": "openblocks:blocks/blockbreaker"
+                    "top": "openblocks:blocks/block_breaker_active"
                 }
             },
             "false": {
-                "__comment": "'active' texture is actuall closed one, keeping for compatiblity",
                 "textures": {
-                    "top": "openblocks:blocks/blockbreaker_active"
+                    "top": "openblocks:blocks/block_breaker_inactive"
                 }
             }
         },

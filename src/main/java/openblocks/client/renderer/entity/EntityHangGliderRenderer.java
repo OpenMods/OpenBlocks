@@ -41,7 +41,7 @@ public class EntityHangGliderRenderer extends Render<EntityHangGlider> {
 		}
 	};
 
-	private static final ResourceLocation texture = OpenBlocks.location("textures/models/hangglider.png");
+	private static final ResourceLocation texture = OpenBlocks.location("textures/models/hang_glider.png");
 
 	public EntityHangGliderRenderer(RenderManager renderManager) {
 		super(renderManager);

@@ -8,11 +8,15 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks;
 import openblocks.client.model.ModelSonicGlasses;
 import openmods.infobook.BookDocumentation;
 
 @BookDocumentation
 public class ItemSonicGlasses extends ItemArmor {
+
+	private static final String TEXTURE = OpenBlocks.location("textures/models/glasses.png").toString();
+
 	public ItemSonicGlasses() {
 		super(ArmorMaterial.IRON, 2, EntityEquipmentSlot.HEAD);
 	}
@@ -38,7 +42,7 @@ public class ItemSonicGlasses extends ItemArmor {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		return "openblocks:textures/models/glasses.png";
+		return TEXTURE;
 	}
 
 }

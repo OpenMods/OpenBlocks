@@ -294,13 +294,13 @@ public class OpenBlocks {
 		@RegisterBlock(id = "cannon", tileEntity = TileEntityCannon.class)
 		public static BlockCannon cannon;
 
-		@RegisterBlock(id = "vacuumhopper", tileEntity = TileEntityVacuumHopper.class)
+		@RegisterBlock(id = "vacuum_hopper", tileEntity = TileEntityVacuumHopper.class, legacyIds = "vacuumhopper")
 		public static BlockVacuumHopper vacuumHopper;
 
 		@RegisterBlock(id = "sponge")
 		public static BlockSponge sponge;
 
-		@RegisterBlock(id = "bigbutton", tileEntity = TileEntityBigButton.class)
+		@RegisterBlock(id = "big_button", tileEntity = TileEntityBigButton.class, legacyIds = "bigbutton")
 		public static BlockBigButton bigButton;
 
 		@RegisterBlock(id = "imaginary", tileEntity = TileEntityImaginary.class, itemBlock = ItemImaginary.class, customItemModels = ItemImaginary.ModelProvider.class, registerDefaultItemModel = false)
@@ -309,7 +309,7 @@ public class OpenBlocks {
 		@RegisterBlock(id = "fan", tileEntity = TileEntityFan.class)
 		public static BlockFan fan;
 
-		@RegisterBlock(id = "xpbottler", tileEntity = TileEntityXPBottler.class)
+		@RegisterBlock(id = "xp_bottler", tileEntity = TileEntityXPBottler.class, legacyIds = "xpbottler")
 		public static BlockXPBottler xpBottler;
 
 		@RegisterBlock(id = "village_highlighter", tileEntity = TileEntityVillageHighlighter.class)
@@ -318,55 +318,55 @@ public class OpenBlocks {
 		@RegisterBlock(id = "path")
 		public static BlockPath path;
 
-		@RegisterBlock(id = "autoanvil", tileEntity = TileEntityAutoAnvil.class)
+		@RegisterBlock(id = "auto_anvil", tileEntity = TileEntityAutoAnvil.class, legacyIds = "autoanvil")
 		public static BlockAutoAnvil autoAnvil;
 
-		@RegisterBlock(id = "autoenchantmenttable", tileEntity = TileEntityAutoEnchantmentTable.class)
+		@RegisterBlock(id = "auto_enchantment_table", tileEntity = TileEntityAutoEnchantmentTable.class, legacyIds = "autoenchantmenttable")
 		public static BlockAutoEnchantmentTable autoEnchantmentTable;
 
-		@RegisterBlock(id = "xpdrain", tileEntity = TileEntityXPDrain.class)
+		@RegisterBlock(id = "xp_drain", tileEntity = TileEntityXPDrain.class, legacyIds = "xpdrain")
 		public static BlockXPDrain xpDrain;
 
-		@RegisterBlock(id = "blockbreaker", tileEntity = TileEntityBlockBreaker.class)
+		@RegisterBlock(id = "block_breaker", tileEntity = TileEntityBlockBreaker.class, legacyIds = "blockbreaker")
 		public static BlockBlockBreaker blockBreaker;
 
-		@RegisterBlock(id = "blockplacer", tileEntity = TileEntityBlockPlacer.class, legacyIds = "blockPlacer")
+		@RegisterBlock(id = "block_placer", tileEntity = TileEntityBlockPlacer.class, legacyIds = "blockPlacer")
 		public static BlockBlockPlacer blockPlacer;
 
-		@RegisterBlock(id = "itemdropper", tileEntity = TileEntityItemDropper.class, legacyIds = "itemDropper")
+		@RegisterBlock(id = "item_dropper", tileEntity = TileEntityItemDropper.class, legacyIds = "itemDropper")
 		public static BlockItemDropper itemDropper;
 
-		@RegisterBlock(id = "ropeladder")
+		@RegisterBlock(id = "rope_ladder", legacyIds = "ropeladder")
 		public static BlockRopeLadder ropeLadder;
 
-		@RegisterBlock(id = "donationStation", tileEntity = TileEntityDonationStation.class)
+		@RegisterBlock(id = "donation_station", tileEntity = TileEntityDonationStation.class, legacyIds = "donationStation")
 		public static BlockDonationStation donationStation;
 
-		@RegisterBlock(id = "paintmixer", tileEntity = TileEntityPaintMixer.class)
+		@RegisterBlock(id = "paint_mixer", tileEntity = TileEntityPaintMixer.class, legacyIds = "paintmixer")
 		public static BlockPaintMixer paintMixer;
 
 		@RegisterBlock(id = "canvas", tileEntity = TileEntityCanvas.class)
 		public static BlockCanvas canvas;
 
-		@RegisterBlock(id = "paintcan", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, registerDefaultItemModel = true)
+		@RegisterBlock(id = "paint_can", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, legacyIds = "paintcan")
 		public static BlockPaintCan paintCan;
 
-		@RegisterBlock(id = "canvasglass", tileEntity = TileEntityCanvas.class)
+		@RegisterBlock(id = "canvas_glass", tileEntity = TileEntityCanvas.class, legacyIds = "canvasglass")
 		public static BlockCanvasGlass canvasGlass;
 
 		@RegisterBlock(id = "projector", tileEntity = TileEntityProjector.class)
 		public static BlockProjector projector;
 
-		@RegisterBlock(id = "drawingtable", tileEntity = TileEntityDrawingTable.class)
+		@RegisterBlock(id = "drawing_table", tileEntity = TileEntityDrawingTable.class, legacyIds = "drawingtable")
 		public static BlockDrawingTable drawingTable;
 
 		@RegisterBlock(id = "sky", tileEntity = TileEntitySky.class, itemBlock = ItemSkyBlock.class, unlocalizedName = "sky.normal")
 		public static BlockSky sky;
 
-		@RegisterBlock(id = "xpshower", tileEntity = TileEntityXPShower.class)
+		@RegisterBlock(id = "xp_shower", tileEntity = TileEntityXPShower.class, legacyIds = "xpshower")
 		public static BlockXPShower xpShower;
 
-		@RegisterBlock(id = "goldenegg", tileEntity = TileEntityGoldenEgg.class)
+		@RegisterBlock(id = "golden_egg", tileEntity = TileEntityGoldenEgg.class, legacyIds = "goldenegg")
 		public static BlockGoldenEgg goldenEgg;
 
 		@RegisterBlock(id = "scaffolding")
@@ -375,7 +375,7 @@ public class OpenBlocks {
 
 	public static class Items implements ItemInstances {
 
-		@RegisterItem(id = "hangglider")
+		@RegisterItem(id = "hang_glider", legacyIds = "hangglider")
 		public static ItemHangGlider hangGlider;
 
 		@RegisterItem(id = "generic", isConfigurable = false, registerDefaultModel = false)
@@ -384,37 +384,37 @@ public class OpenBlocks {
 		@RegisterItem(id = "luggage")
 		public static ItemLuggage luggage;
 
-		@RegisterItem(id = "sonicglasses")
+		@RegisterItem(id = "sonic_glasses", legacyIds = "sonicglasses")
 		public static ItemSonicGlasses sonicGlasses;
 
-		@RegisterItem(id = "pencilGlasses", unlocalizedName = "glasses.pencil")
+		@RegisterItem(id = "pencil_glasses", unlocalizedName = "glasses.pencil", legacyIds = "pencilGlasses")
 		public static ItemImaginationGlasses pencilGlasses;
 
-		@RegisterItem(id = "crayonGlasses", unlocalizedName = "glasses.crayon")
+		@RegisterItem(id = "crayon_glasses", unlocalizedName = "glasses.crayon", legacyIds = "crayonGlasses")
 		public static ItemCrayonGlasses crayonGlasses;
 
-		@RegisterItem(id = "technicolorGlasses", unlocalizedName = "glasses.technicolor")
+		@RegisterItem(id = "technicolor_glasses", unlocalizedName = "glasses.technicolor", legacyIds = "technicolorGlasses")
 		public static ItemImaginationGlasses technicolorGlasses;
 
-		@RegisterItem(id = "seriousGlasses", unlocalizedName = "glasses.admin")
+		@RegisterItem(id = "serious_glasses", unlocalizedName = "glasses.admin", legacyIds = "seriousGlasses")
 		public static ItemImaginationGlasses seriousGlasses;
 
-		@RegisterItem(id = "craneControl", unlocalizedName = "crane_control")
+		@RegisterItem(id = "crane_control", legacyIds = "craneControl")
 		public static ItemCraneControl craneControl;
 
-		@RegisterItem(id = "craneBackpack", unlocalizedName = "crane_backpack")
+		@RegisterItem(id = "crane_backpack", legacyIds = "craneBackpack")
 		public static ItemCraneBackpack craneBackpack;
 
 		@RegisterItem(id = "slimalyzer")
 		public static ItemSlimalyzer slimalyzer;
 
-		@RegisterItem(id = "xpbucket", legacyIds = { "filledbucket" })
+		@RegisterItem(id = "xp_bucket", legacyIds = "filledbucket")
 		public static ItemXpBucket xpBucket;
 
-		@RegisterItem(id = "sleepingBag", unlocalizedName = "sleepingbag")
+		@RegisterItem(id = "sleeping_bag", legacyIds = "sleepingBag")
 		public static ItemSleepingBag sleepingBag;
 
-		@RegisterItem(id = "paintBrush", unlocalizedName = "paintbrush")
+		@RegisterItem(id = "paintbrush", legacyIds = "paintBrush")
 		public static ItemPaintBrush paintBrush;
 
 		@RegisterItem(id = "stencil", registerDefaultModel = false)
@@ -423,40 +423,40 @@ public class OpenBlocks {
 		@RegisterItem(id = "squeegee")
 		public static ItemSqueegee squeegee;
 
-		@RegisterItem(id = "heightMap", unlocalizedName = "height_map")
+		@RegisterItem(id = "height_map", legacyIds = "heightMap")
 		public static ItemHeightMap heightMap;
 
-		@RegisterItem(id = "emptyMap", unlocalizedName = "empty_map")
+		@RegisterItem(id = "empty_map", legacyIds = "emptyMap")
 		public static ItemEmptyMap emptyMap;
 
 		@RegisterItem(id = "cartographer")
 		public static ItemCartographer cartographer;
 
-		@RegisterItem(id = "tastyClay", unlocalizedName = "tasty_clay")
+		@RegisterItem(id = "tasty_clay", legacyIds = "tastyClay")
 		public static ItemTastyClay tastyClay;
 
-		@RegisterItem(id = "goldenEye", unlocalizedName = "golden_eye")
+		@RegisterItem(id = "golden_eye", legacyIds = "goldenEye")
 		public static ItemGoldenEye goldenEye;
 
-		@RegisterItem(id = "genericUnstackable", isConfigurable = false, registerDefaultModel = false)
+		@RegisterItem(id = "generic_unstackable", isConfigurable = false, registerDefaultModel = false, legacyIds = "genericUnstackable")
 		public static ItemOBGenericUnstackable genericUnstackable;
 
 		@RegisterItem(id = "cursor")
 		public static ItemCursor cursor;
 
-		@RegisterItem(id = "infoBook", unlocalizedName = "info_book")
+		@RegisterItem(id = "info_book", legacyIds = "infoBook")
 		public static ItemInfoBook infoBook;
 
-		@RegisterItem(id = "devnull")
+		@RegisterItem(id = "dev_null", legacyIds = "devnull")
 		public static ItemDevNull devNull;
 
-		@RegisterItem(id = "spongeonastick")
+		@RegisterItem(id = "sponge_on_a_stick", legacyIds = "spongeonastick")
 		public static ItemSpongeOnAStick spongeonastick;
 
 		@RegisterItem(id = "pedometer")
 		public static ItemPedometer pedometer;
 
-		@RegisterItem(id = "epicEraser", unlocalizedName = "epic_eraser")
+		@RegisterItem(id = "epic_eraser", legacyIds = "epicEraser")
 		public static ItemEpicEraser epicEraser;
 
 		@RegisterItem(id = "wrench")
@@ -473,11 +473,11 @@ public class OpenBlocks {
 		 * It may not be used as default fluid, so don't compare directly with other fluids.
 		 * FluidStacks created with this fluid should always be valid.
 		 */
-		public static final Fluid xpJuice = new Fluid("xpjuice", location("blocks/xpjuicestill"), location("blocks/xpjuiceflowing"))
+		public static final Fluid xpJuice = new Fluid("xpjuice", location("blocks/xp_juice_still"), location("blocks/xp_juice_flowing"))
 				.setLuminosity(10)
 				.setDensity(800)
 				.setViscosity(1500)
-				.setUnlocalizedName("OpenBlocks.xpjuice")
+				.setUnlocalizedName("openblocks.xp_juice")
 				.setEmptySound(SoundEvents.ENTITY_PLAYER_LEVELUP)
 				.setFillSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP);
 	}
@@ -624,21 +624,21 @@ public class OpenBlocks {
 
 		@Override
 		protected void setupItemFactory(FactoryRegistry<Item> itemFactory) {
-			itemFactory.registerFactory("pencilGlasses", new FactoryRegistry.Factory<Item>() {
+			itemFactory.registerFactory("pencil_glasses", new FactoryRegistry.Factory<Item>() {
 				@Override
 				public Item construct() {
 					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.PENCIL);
 				}
 			});
 
-			itemFactory.registerFactory("technicolorGlasses", new FactoryRegistry.Factory<Item>() {
+			itemFactory.registerFactory("technicolor_glasses", new FactoryRegistry.Factory<Item>() {
 				@Override
 				public Item construct() {
 					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.TECHNICOLOR);
 				}
 			});
 
-			itemFactory.registerFactory("seriousGlasses", new FactoryRegistry.Factory<Item>() {
+			itemFactory.registerFactory("serious_glasses", new FactoryRegistry.Factory<Item>() {
 				@Override
 				public Item construct() {
 					return new ItemImaginationGlasses(ItemImaginationGlasses.Type.BASTARD);
@@ -700,16 +700,16 @@ public class OpenBlocks {
 			// was: GuiOpenHandler: handler for PlayerOpenContainerEvent
 		}
 
-		EntityRegistry.registerModEntity(EntityLuggage.class, "Luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityXPOrbNoFly.class, "XPOrbNoFly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityHangGlider.class, "Hang Glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityMagnet.class, "Magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityMountedBlock.class, "MountedBlock", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "Player-Magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityCartographer.class, "Cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
-		EntityRegistry.registerModEntity(EntityItemProjectile.class, "EntityItemProjectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityGoldenEye.class, "GoldenEye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
-		EntityRegistry.registerModEntity(EntityMiniMe.class, "MiniMe", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityLuggage.class, "luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityXPOrbNoFly.class, "xp_orb_no_fly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityHangGlider.class, "hang_glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityMagnet.class, "magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityMountedBlock.class, "mounted_block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "player_magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityCartographer.class, "cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
+		EntityRegistry.registerModEntity(EntityItemProjectile.class, "item_projectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(EntityGoldenEye.class, "golden_eye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
+		EntityRegistry.registerModEntity(EntityMiniMe.class, "mini_me", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
 
 		MagnetWhitelists.instance.initTesters();
 
