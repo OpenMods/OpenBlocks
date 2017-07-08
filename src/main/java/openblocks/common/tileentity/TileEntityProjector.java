@@ -1,5 +1,6 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Set;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,10 +8,18 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.model.animation.Animation;
+import net.minecraftforge.common.animation.ITimeValue;
+import net.minecraftforge.common.animation.TimeValues.VariableValue;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.model.animation.CapabilityAnimation;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiProjector;
 import openblocks.common.HeightMapData;
 import openblocks.common.MapDataManager;
@@ -19,6 +28,7 @@ import openblocks.common.container.ContainerProjector;
 import openblocks.common.item.ItemEmptyMap;
 import openblocks.common.item.ItemHeightMap;
 import openblocks.rpc.IRotatable;
+import openmods.OpenMods;
 import openmods.api.IHasGui;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
@@ -84,10 +94,16 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 		}
 	};
 
+	private final IAnimationStateMachine asm;
+	private final VariableValue lastChange = new VariableValue(Float.NEGATIVE_INFINITY);
+
 	private SyncableByte rotation;
 	private SyncableInt mapId;
 
-	public TileEntityProjector() {}
+	public TileEntityProjector() {
+		this.asm = OpenMods.proxy.loadAsm(OpenBlocks.location("asms/block/projector.json"),
+				ImmutableMap.<String, ITimeValue> of("last_change", lastChange));
+	}
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
@@ -178,5 +194,41 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing side) {
+		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) { return true; }
+		return super.hasCapability(capability, side);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) { return CapabilityAnimation.ANIMATION_CAPABILITY.cast(asm); }
+		return super.getCapability(capability, side);
+	}
+
+	@Override
+	public void updateContainingBlockInfo() {
+		super.updateContainingBlockInfo();
+
+		if (asm != null && worldObj != null) {
+			final IBlockState state = worldObj.getBlockState(this.pos);
+			if (state.getValue(BlockProjector.ACTIVE)) {
+				if (asm.currentState().equals("default")) {
+					updateLastChangeTime();
+					asm.transition("starting");
+				}
+			} else {
+				if (asm.currentState().equals("moving")) {
+					updateLastChangeTime();
+					asm.transition("stopping");
+				}
+			}
+		}
+	}
+
+	private void updateLastChangeTime() {
+		lastChange.setValue(Animation.getWorldTime(getWorld(), Animation.getPartialTickTime()));
 	}
 }

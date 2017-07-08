@@ -9,6 +9,9 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import openblocks.Config;
 import openmods.block.OpenBlock;
 
@@ -31,7 +34,8 @@ public class BlockProjector extends OpenBlock {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), ACTIVE });
+		return new ExtendedBlockState(this, new IProperty[] { getPropertyOrientation(), ACTIVE },
+				new IUnlistedProperty[] { Properties.AnimationProperty });
 	}
 
 	@Override

@@ -1,16 +1,32 @@
 {
     "forge_marker" : 1,
     "defaults" : {
-        "model" : "half_slab",
-        "transform": "forge:default-block",
-        "textures": {
-            "bottom": "blocks/stone_slab_top",
-            "top": "blocks/stone_slab_top",
-            "side": "blocks/stone_slab_side"
-        }
+        "model": "openmods:with-dependencies",
+        "custom": {
+            "base": "openblocks:projector#main",
+            "dependencies": [
+                "openblocks:projector#spinner"
+            ]
+        },
+        "transform": "forge:default-block"
     },
     "variants" : {
-        "inventory": [{}],
+        "main": [{
+            "model" : "half_slab",
+            "transform": "forge:default-block",
+            "textures": {
+                "bottom": "blocks/stone_slab_top",
+                "top": "blocks/stone_slab_top",
+                "side": "blocks/stone_slab_side"
+            }
+        }],
+        "inventory": [{
+            "submodel": {
+                "spinner": {
+                     "model": "openblocks:projector_spinner"
+                }
+            }
+        }],
         "orientation" : {
             "xp_yp" : { "y" :   0 },
             "zp_yp" : { "y" :  90 },
@@ -27,6 +43,10 @@
                 }
             }
         },
+        "spinner": [{
+            "__comment": "hardcoded name",
+            "model": "openblocks:projector_spinner"
+        }],
         "base": [{}],
         "cone": [{
             "model": "openblocks:projector_cone"

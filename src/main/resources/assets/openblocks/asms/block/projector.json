@@ -1,0 +1,27 @@
+{
+    "parameters": {
+        "cycle_length": 4,
+        "world_to_cycle": [ "/", "#cycle_length" ],
+        "round_cycle": [ "compose", [ "R", "#cycle_length" ] , "#last_change" ],
+        "end_cycle": [ "-", "#round_cycle" ]
+    },
+    "clips": {
+        "default": "openblocks:block/projector_spinner@default",
+        "starting": [ "trigger_positive", "#default", "#end_cycle", "!transition:moving" ],
+        "moving": [ "apply", "openblocks:block/projector_spinner@moving", "#world_to_cycle" ],
+        "stopping": [ "trigger_positive", "#moving", "#end_cycle", "!transition:default" ]
+    },
+    "states": [
+        "default",
+        "starting",
+        "moving",
+        "stopping"
+    ],
+    "transitions": {
+        "default": "starting",
+        "starting": [ "moving" ],
+        "moving": "stopping",
+        "stopping": "default"
+    },
+    "start_state": "default"
+}

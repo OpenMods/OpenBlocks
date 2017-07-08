@@ -277,10 +277,16 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, SimpleModelTileEntityRenderer.create(new ModelPiggy(), OpenBlocks.location("textures/models/piggy.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, new TileEntityProjectorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPShower.class, SimpleModelTileEntityRenderer.create(new ModelXPShower(), OpenBlocks.location("textures/models/xp_shower.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
+
+		if (OpenBlocks.Blocks.projector != null) {
+			final ModelResourceLocation spinnerModel = new ModelResourceLocation(OpenBlocks.Blocks.projector.getRegistryName(), "spinner");
+			final TileEntityProjectorRenderer renderer = new TileEntityProjectorRenderer(spinnerModel);
+			ClientRegistry.bindTileEntitySpecialRenderer(TileEntityProjector.class, renderer);
+			MinecraftForge.EVENT_BUS.register(renderer);
+		}
 
 		tempHackRegisterTesrItemRenderers();
 
