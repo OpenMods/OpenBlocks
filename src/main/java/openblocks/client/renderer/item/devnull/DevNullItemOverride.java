@@ -251,7 +251,8 @@ public class DevNullItemOverride extends ItemOverrideList {
 			elementOffset += delta;
 		}
 
-		return new BakedQuad(outputVertexData, quad.getTintIndex() + tintDelta, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat());
+		final int tintIndex = quad.hasTintIndex()? quad.getTintIndex() + tintDelta : -1;
+		return new BakedQuad(outputVertexData, tintIndex, quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat());
 	}
 
 	private static Matrix4f scale2d(float scale) {

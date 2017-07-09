@@ -75,7 +75,7 @@ public class ItemDevNull extends Item {
 
 			final ItemStack nestedItem = contents.getLeft();
 			if (nestedItem == null) return NO_COLOR;
-			return itemColors.getColorFromItemstack(nestedItem, tintIndex + NESTED_ITEM_TINT_DELTA);
+			return itemColors.getColorFromItemstack(nestedItem, tintIndex - NESTED_ITEM_TINT_DELTA);
 		}
 
 	}
