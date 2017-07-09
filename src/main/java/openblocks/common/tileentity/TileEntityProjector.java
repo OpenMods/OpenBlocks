@@ -211,8 +211,17 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	@Override
 	public void updateContainingBlockInfo() {
 		super.updateContainingBlockInfo();
+		updateAsmState();
+	}
 
-		if (asm != null && worldObj != null) {
+	@Override
+	public void onLoad() {
+		super.onLoad();
+		updateAsmState();
+	}
+
+	private void updateAsmState() {
+		if (asm != null && worldObj != null && worldObj.isRemote) {
 			final IBlockState state = worldObj.getBlockState(this.pos);
 			if (state.getValue(BlockProjector.ACTIVE)) {
 				if (asm.currentState().equals("default")) {
