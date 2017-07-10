@@ -10,7 +10,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import openblocks.common.tileentity.TileEntitySprinkler;
 import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
@@ -43,21 +42,14 @@ public class BlockSprinkler extends OpenBlock.TwoDirections {
 		return false;
 	}
 
-	// TODO 1.10 orientation to block state?
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		TileEntitySprinkler sprinkler = getTileEntity(source, pos, TileEntitySprinkler.class);
-		if (sprinkler != null) {
-			final Orientation orientation = sprinkler.getOrientation();
-			return BlockSpaceTransform.instance.mapBlockToWorld(orientation, AABB);
-		}
-
-		return AABB;
+		final Orientation orientation = getOrientation(state);
+		return BlockSpaceTransform.instance.mapBlockToWorld(orientation, AABB);
 	}
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
-		// TODO 1.8.9 verify
 		return isOnTopOfSolidBlock(world, pos, side);
 	}
 
