@@ -122,7 +122,7 @@ public class ExplosiveEnchantmentsHandler {
 
 		final InventoryPlayer inventory = player.inventory;
 		int explosiveLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.explosive, armor);
-		if (explosiveLevel <= 0 || explosiveLevel >= LEVELS.length - 1) return null;
+		if (explosiveLevel <= 0 || explosiveLevel > LEVELS.length) return null;
 		EnchantmentLevel level = LEVELS[explosiveLevel - 1];
 
 		for (int i = 0; i < inventory.mainInventory.length; i++) {
@@ -151,7 +151,7 @@ public class ExplosiveEnchantmentsHandler {
 		if (evt.getDistance() > 4 && !e.isSneaking() && e instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)e;
 
-			EnchantmentLevel level = tryUseEnchantment(player, EntityEquipmentSlot.LEGS);
+			EnchantmentLevel level = tryUseEnchantment(player, EntityEquipmentSlot.FEET);
 			if (level == null) return;
 			JumpInfo boost = new JumpInfo(level, evt.getDistance());
 			level.createJumpExplosion(player);
