@@ -36,6 +36,7 @@ import openblocks.trophy.GuardianBehavior;
 import openblocks.trophy.ITrophyBehavior;
 import openblocks.trophy.ItemDropBehavior;
 import openblocks.trophy.MooshroomBehavior;
+import openblocks.trophy.ShulkerBehavior;
 import openblocks.trophy.SkeletonBehavior;
 import openblocks.trophy.SnowmanBehavior;
 import openblocks.trophy.SquidBehavior;
@@ -143,9 +144,10 @@ public class TrophyHandler {
 		Pig(new ItemDropBehavior(20000, new ItemStack(Items.PORKCHOP))),
 		Endermite(),
 		Guardian(new GuardianBehavior()),
-		Rabbit(new ItemDropBehavior(20000, new ItemStack(Items.CARROT)));
-		// Skipped: Horse (needs world in ctor), Wither (renders boss bar)
-		// TODO bear, shulker
+		Rabbit(new ItemDropBehavior(20000, new ItemStack(Items.CARROT))),
+		PolarBear(new ItemDropBehavior(20000, new ItemStack(Items.FISH))),
+		Shulker(new ShulkerBehavior());
+		// Skipped: Horse (needs non-null, world in ctor), Wither (renders boss bar)
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
