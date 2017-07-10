@@ -64,9 +64,7 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 					float pz = MathHelper.sin(phi) * rad;
 					wr.pos(vX + px * radius, vY + py * radius, vZ + pz * radius).color(r, g, b, 1.0f).endVertex();
 				}
-				t.draw();
 			}
-
 			t.draw();
 
 			wr.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
