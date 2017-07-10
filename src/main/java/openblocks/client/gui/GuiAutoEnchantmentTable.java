@@ -88,6 +88,7 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), new Function<FluidStack, FluidStack>() {
 			@Override
 			public FluidStack apply(FluidStack input) {
+				if (input == null) return null;
 				// display levels instead of actual xp fluid level
 				final FluidStack result = input.copy();
 				result.amount = EnchantmentUtils.getLevelForExperience(LiquidXpUtils.liquidToXpRatio(input.amount));
