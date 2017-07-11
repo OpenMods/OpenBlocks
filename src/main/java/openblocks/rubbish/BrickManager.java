@@ -15,7 +15,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -64,7 +64,7 @@ public class BrickManager {
 	@SubscribeEvent
 	public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
 		if (evt.getObject() instanceof EntityPlayer) {
-			evt.addCapability(CAPABILITY_KEY, new ICapabilityProvider() {
+			evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
 
 				private final BowelContents state = new BowelContents();
 
@@ -78,6 +78,16 @@ public class BrickManager {
 				public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 					if (capability == CAPABILITY) return (T)state;
 					return null;
+				}
+
+				@Override
+				public NBTTagInt serializeNBT() {
+					return new NBTTagInt(state.brickCount);
+				}
+
+				@Override
+				public void deserializeNBT(NBTTagInt nbt) {
+					state.brickCount = nbt.getInt();
 				}
 			});
 		}

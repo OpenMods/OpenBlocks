@@ -21,7 +21,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -81,7 +81,7 @@ public class FlimFlamEnchantmentsHandler {
 	@SubscribeEvent
 	public void attachCapability(AttachCapabilitiesEvent<Entity> evt) {
 		if (evt.getObject() instanceof EntityPlayer) {
-			evt.addCapability(CAPABILITY_KEY, new ICapabilityProvider() {
+			evt.addCapability(CAPABILITY_KEY, new ICapabilitySerializable<NBTTagInt>() {
 
 				private final Luck state = new Luck();
 
@@ -95,6 +95,16 @@ public class FlimFlamEnchantmentsHandler {
 				public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 					if (capability == CAPABILITY) return (T)state;
 					return null;
+				}
+
+				@Override
+				public NBTTagInt serializeNBT() {
+					return new NBTTagInt(state.luck);
+				}
+
+				@Override
+				public void deserializeNBT(NBTTagInt nbt) {
+					state.luck = nbt.getInt();
 				}
 			});
 		}
