@@ -1,52 +1,56 @@
 package openblocks.common.block;
 
+import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.block.OpenBlock;
-import openmods.colors.RGB;
+import openmods.colors.ColorMeta;
 import openmods.geometry.Orientation;
 
 public class BlockFlag extends OpenBlock.SixDirections {
 
-	public static final RGB[] COLORS = {
-			new RGB(20, 198, 0),
-			new RGB(41, 50, 156),
-			new RGB(221, 0, 0),
-			new RGB(255, 174, 201),
-			new RGB(185, 122, 87),
-			new RGB(181, 230, 29),
-			new RGB(0, 162, 232),
-			new RGB(128, 0, 64),
-			new RGB(255, 242, 0),
-			new RGB(255, 127, 39),
-			new RGB(255, 45, 45),
-			new RGB(255, 23, 151),
-			new RGB(195, 195, 195),
-			new RGB(163, 73, 164),
-			new RGB(0, 0, 0),
-			new RGB(255, 255, 255)
-	};
+	public static final ColorMeta DEFAULT_COLOR = ColorMeta.LIME;
+
+	public static final PropertyEnum<ColorMeta> COLOR = PropertyEnum.create("color", ColorMeta.class);
+
+	@SideOnly(Side.CLIENT)
+	public static class BlockColorHandler implements IBlockColor {
+		private static final int WHITE = 0xFFFFFFFF;
+
+		@Override
+		public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+			return tintIndex == 0? state.getValue(COLOR).rgb : WHITE;
+		}
+	}
 
 	public BlockFlag() {
 		super(Material.CIRCUITS);
-
 		setPlacementMode(BlockPlacementMode.SURFACE);
-		setInventoryRenderOrientation(Orientation.XN_YN);
+		setDefaultState(getDefaultState().withProperty(COLOR, DEFAULT_COLOR));
 	}
 
-	// TODO 1.8.9 Ehhh
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), COLOR });
 	}
 
 	@Override
@@ -90,9 +94,8 @@ public class BlockFlag extends OpenBlock.SixDirections {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
-		// TODO 1.8.9 verify
-		if (side == EnumFacing.UP) return false;
-		if (side == EnumFacing.DOWN) {
+		if (side == EnumFacing.DOWN) return false;
+		if (side == EnumFacing.UP) {
 			final BlockPos blockBelow = pos.down();
 			final Block belowBlock = world.getBlockState(blockBelow).getBlock();
 			if (belowBlock instanceof BlockFence) return true;
@@ -102,7 +105,7 @@ public class BlockFlag extends OpenBlock.SixDirections {
 			}
 		}
 
-		return isNeighborBlockSolid(world, pos, side);
+		return isNeighborBlockSolid(world, pos, side.getOpposite());
 	}
 
 	@Override
@@ -116,5 +119,26 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	@Override
 	public boolean canRotateWithTool() {
 		return false;
+	}
+
+	@Override
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+
+	private static ColorMeta getColorMeta(IBlockAccess world, BlockPos pos) {
+		final TileEntityFlag te = getTileEntity(world, pos, TileEntityFlag.class);
+		return te != null? te.getColor() : ColorMeta.WHITE;
+	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		final ColorMeta color = getColorMeta(world, pos);
+		return state.withProperty(COLOR, color);
+	}
+
+	@Override
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+		list.add(new ItemStack(itemIn, 1, DEFAULT_COLOR.vanillaBlockId));
 	}
 }

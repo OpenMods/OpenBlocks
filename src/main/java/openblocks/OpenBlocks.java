@@ -591,6 +591,11 @@ public class OpenBlocks {
 		}
 
 		@Override
+		public int getIconItemDamage() {
+			return OpenBlocks.Blocks.flag != null? BlockFlag.DEFAULT_COLOR.vanillaBlockId : 0;
+		}
+
+		@Override
 		@SideOnly(Side.CLIENT)
 		public void displayAllRelevantItems(List<ItemStack> result) {
 			super.displayAllRelevantItems(result);

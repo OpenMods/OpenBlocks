@@ -5,11 +5,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import openblocks.common.block.BlockFlag;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
-import openmods.colors.RGB;
-import openmods.sync.SyncableByte;
+import openmods.colors.ColorMeta;
+import openmods.sync.SyncableEnum;
 import openmods.sync.SyncableFloat;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.BlockUtils;
@@ -17,26 +16,18 @@ import openmods.utils.BlockUtils;
 public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile, IActivateAwareTile {
 
 	private SyncableFloat angle;
-	private SyncableByte colorIndex;
+	private SyncableEnum<ColorMeta> colorIndex;
 
 	public TileEntityFlag() {}
 
 	@Override
 	protected void createSyncedFields() {
 		angle = new SyncableFloat();
-		colorIndex = new SyncableByte();
+		colorIndex = SyncableEnum.create(ColorMeta.GREEN);
 	}
 
-	public void setColorIndex(byte index) {
-		colorIndex.set(index);
-	}
-
-	public void setAngle(float ang) {
-		angle.set(ang);
-	}
-
-	public RGB getColor() {
-		return BlockFlag.COLORS[colorIndex.get() & 0xF];
+	public ColorMeta getColor() {
+		return colorIndex.get();
 	}
 
 	public float getAngle() {
@@ -63,7 +54,7 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 		if (rotation != EnumFacing.DOWN) {
 			ang = -BlockUtils.getRotationFromDirection(rotation);
 		}
-		setAngle(ang);
-		setColorIndex((byte)(stack.getItemDamage() & 0xF));
+		angle.set(ang);
+		colorIndex.set(ColorMeta.fromBlockMeta(stack.getItemDamage() & 0xF));
 	}
 }

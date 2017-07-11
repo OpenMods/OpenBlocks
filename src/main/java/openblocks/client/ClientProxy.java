@@ -58,7 +58,6 @@ import openblocks.client.renderer.item.stencil.StencilTextureManager;
 import openblocks.client.renderer.tileentity.TileEntityAutoEnchantmentTableRenderer;
 import openblocks.client.renderer.tileentity.TileEntityCannonRenderer;
 import openblocks.client.renderer.tileentity.TileEntityFanRenderer;
-import openblocks.client.renderer.tileentity.TileEntityFlagRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGoldenEggRenderer;
 import openblocks.client.renderer.tileentity.TileEntityGraveRenderer;
 import openblocks.client.renderer.tileentity.TileEntityImaginaryRenderer;
@@ -74,6 +73,7 @@ import openblocks.common.StencilPattern;
 import openblocks.common.TrophyHandler.Trophy;
 import openblocks.common.block.BlockCanvas;
 import openblocks.common.block.BlockElevator;
+import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockPaintCan;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityGoldenEye;
@@ -83,6 +83,7 @@ import openblocks.common.entity.EntityMagnet;
 import openblocks.common.entity.EntityMiniMe;
 import openblocks.common.item.ItemDevNull;
 import openblocks.common.item.ItemElevator;
+import openblocks.common.item.ItemFlagBlock;
 import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
@@ -94,7 +95,6 @@ import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityCannon;
 import openblocks.common.tileentity.TileEntityDonationStation;
 import openblocks.common.tileentity.TileEntityFan;
-import openblocks.common.tileentity.TileEntityFlag;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openblocks.common.tileentity.TileEntityGrave;
 import openblocks.common.tileentity.TileEntityGuide;
@@ -234,6 +234,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Items.heightMap != null) {
 			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Items.heightMap);
 		}
+
+		if (OpenBlocks.Blocks.flag != null) {
+			ModelUtils.registerMetaInsensitiveModel(OpenBlocks.Blocks.flag);
+		}
 	}
 
 	@Override
@@ -264,7 +268,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGuide.class, new TileEntityGuideRenderer<TileEntityGuide>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBuilderGuide.class, new TileEntityBuilderGuideRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrave.class, new TileEntityGraveRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new TileEntityFlagRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTrophy.class, new TileEntityTrophyRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBearTrap.class, SimpleModelTileEntityRenderer.create(new ModelBearTrap(), OpenBlocks.location("textures/models/bear_trap.png")));
@@ -354,6 +357,11 @@ public class ClientProxy implements IOpenBlocksProxy {
 		if (OpenBlocks.Blocks.canvas != null) {
 			blockColors.registerBlockColorHandler(new BlockCanvas.InnerBlockColorHandler(blockColors), OpenBlocks.Blocks.canvas);
 		}
+
+		if (OpenBlocks.Blocks.flag != null) {
+			itemColors.registerItemColorHandler(new ItemFlagBlock.ItemColorHandler(), OpenBlocks.Blocks.flag);
+			blockColors.registerBlockColorHandler(new BlockFlag.BlockColorHandler(), OpenBlocks.Blocks.flag);
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -378,7 +386,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.cannon);
 		consumer.nom(OpenBlocks.Blocks.donationStation);
 		consumer.nom(OpenBlocks.Blocks.fan);
-		consumer.nom(OpenBlocks.Blocks.flag);
 		consumer.nom(OpenBlocks.Blocks.goldenEgg);
 		consumer.nom(OpenBlocks.Blocks.grave);
 		consumer.nom(OpenBlocks.Blocks.paintMixer);

@@ -1,0 +1,60 @@
+{
+    "textures": {
+        "flag": "openblocks:blocks/flag",
+        "pole": "openblocks:blocks/flagpole",
+        "particle": "openblocks:blocks/flag"
+    },
+    "elements": [
+        {
+            "name": "pole",
+            "from": [7.5, 3, 12.5],
+            "to": [8.5, 19, 13.5],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [0, 0, 1, 16], "texture": "#pole"},
+                "east": {"uv": [3, 0, 4, 16], "texture": "#pole"},
+                "south": {"uv": [2, 0, 3, 16], "texture": "#pole"},
+                "west": {"uv": [1, 0, 2, 16], "texture": "#pole"},
+                "up": {
+                    "uv": [4, 0, 5, 1],
+                    "texture": "#pole",
+                    "cullface": "up"
+                },
+                "down": {
+                    "uv": [5, 0, 6, 1],
+                    "texture": "#pole",
+                    "cullface": "down"
+                }
+            },
+            "rotation": {
+                "origin": [8, 11, 13],
+                "axis": "x",
+                "angle": -45
+            }
+        },
+        {
+            "name": "flag",
+            "from": [8, 9, 0],
+            "to": [8, 18, 13],
+            "shade": true,
+            "faces": {
+                "east": {
+                    "uv": [0, 1, 13, 10],
+                    "texture": "#flag",
+                    "tintindex": 0
+                },
+                "west": {
+                    "uv": [0, 1, 13, 10],
+                    "texture": "#flag",
+                    "tintindex": 0,
+                    "rotation": 180
+                }
+            },
+            "rotation": {
+                "origin": [8, 11, 13],
+                "axis": "x",
+                "angle": -45
+            }
+        }
+    ]
+}

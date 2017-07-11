@@ -1,0 +1,50 @@
+{
+    "textures": {
+        "flag": "openblocks:blocks/flag",
+        "pole": "openblocks:blocks/flagpole",
+        "particle": "openblocks:blocks/flag"
+    },
+    "elements": [
+        {
+            "name": "pole",
+            "from": [7.5, 0, 7.5],
+            "to": [8.5, 16, 8.5],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [0, 0, 1, 16], "texture": "#pole"},
+                "east": {"uv": [3, 0, 4, 16], "texture": "#pole"},
+                "south": {"uv": [2, 0, 3, 16], "texture": "#pole"},
+                "west": {"uv": [1, 0, 2, 16], "texture": "#pole"},
+                "up": {
+                    "uv": [4, 0, 5, 1],
+                    "texture": "#pole",
+                    "cullface": "up"
+                },
+                "down": {
+                    "uv": [5, 0, 6, 1],
+                    "texture": "#pole",
+                    "cullface": "down"
+                }
+            }
+        },
+        {
+            "name": "flag",
+            "from": [8, 6, -5],
+            "to": [8, 15, 8],
+            "shade": true,
+            "faces": {
+                "east": {
+                    "uv": [0, 1, 13, 10],
+                    "texture": "#flag",
+                    "tintindex": 0
+                },
+                "west": {
+                    "uv": [0, 1, 13, 10],
+                    "texture": "#flag",
+                    "tintindex": 0,
+                    "rotation": 180
+                }
+            }
+        }
+    ]
+}
