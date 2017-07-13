@@ -20,6 +20,7 @@ import openblocks.client.renderer.TextureUploader;
 import openblocks.client.renderer.TextureUploader.IUploadableTexture;
 import openblocks.common.IStencilPattern;
 import openmods.Log;
+import openmods.utils.io.BufferedResourceWrapper;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.input.CloseShieldInputStream;
 
@@ -62,8 +63,8 @@ public class StencilTextureManager {
 				IResource backgroundTexture = null;
 
 				try {
-					backgroundTexture = manager.getResource(resourceLocation);
-
+					// streams from folder packs are already buffered, but zip ones aren't
+					backgroundTexture = new BufferedResourceWrapper(manager.getResource(resourceLocation));
 					final InputStream is = backgroundTexture.getInputStream();
 					is.mark(0);
 					{
@@ -74,6 +75,7 @@ public class StencilTextureManager {
 
 					super.loadSpriteFrames(backgroundTexture, mipmapLevels + 1);
 				} catch (Exception e) {
+					Log.warn(e, "Failed to load stencil base texture: %s", resourceLocation);
 					FMLClientHandler.instance().trackMissingTexture(resourceLocation);
 					width = height = 16;
 					final int[][] mipmaps = new int[this.mipmapLevels + 1][];
