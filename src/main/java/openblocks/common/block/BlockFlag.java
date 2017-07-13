@@ -19,12 +19,16 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.tileentity.TileEntityFlag;
 import openmods.block.OpenBlock;
 import openmods.colors.ColorMeta;
 import openmods.geometry.Orientation;
+import openmods.model.eval.EvalModelState;
 
 public class BlockFlag extends OpenBlock.SixDirections {
 
@@ -50,7 +54,9 @@ public class BlockFlag extends OpenBlock.SixDirections {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), COLOR });
+		return new ExtendedBlockState(this,
+				new IProperty[] { getPropertyOrientation(), COLOR },
+				new IUnlistedProperty[] { EvalModelState.PROPERTY });
 	}
 
 	@Override
@@ -140,5 +146,14 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	@Override
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
 		list.add(new ItemStack(itemIn, 1, DEFAULT_COLOR.vanillaBlockId));
+	}
+
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		final TileEntityFlag te = getTileEntity(world, pos, TileEntityFlag.class);
+
+		return (te != null)
+				? ((IExtendedBlockState)state).withProperty(EvalModelState.PROPERTY, te.getRenderState())
+				: state;
 	}
 }

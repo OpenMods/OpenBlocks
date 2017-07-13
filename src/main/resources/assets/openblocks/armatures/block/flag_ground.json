@@ -1,0 +1,30 @@
+{
+    "joints": {
+        "flag": { "0": [ 1.0 ], "1": [ 1.0 ]}
+    },
+    "clips": {
+        "rotate": {
+            "loop": true,
+            "joint_clips": {
+                "flag": [
+                    {
+                        "variable": "axis_y",
+                        "type": "uniform",
+                        "interpolation": "nearest",
+                        "samples": [ 1 ]
+                    },
+                    {
+                        "variable": "angle",
+                        "type": "uniform",
+                        "interpolation": "linear",
+                        "samples": [
+                            0, 120, 240
+                        ]
+                    }
+                ]
+            },
+            "events": {}
+        }
+    }
+}
+

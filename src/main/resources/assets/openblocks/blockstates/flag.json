@@ -27,7 +27,15 @@
         },
 
         "orientation" : {
-            "xp_yp" : { "model": "openblocks:flag_ground" },
+            "xp_yp" : {
+                "model": "openmods:eval",
+                "custom": {
+                    "base": "openblocks:block/flag_ground",
+                    "transforms": [
+                        "rotate(rotation)"
+                    ]
+                }
+            },
             "xp_yn" : { "model": "openblocks:flag_ground" },
 
             "xp_zn" : { "y": 0 },
