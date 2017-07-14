@@ -1,0 +1,31 @@
+{
+    "textures": {
+        "all": "openblocks:blocks/xp_shower",
+        "particle": "openblocks:blocks/xp_shower"
+    },
+    "elements": [
+        {
+            "from": [7, 7, 7],
+            "to": [9, 8, 9],
+            "faces": {
+                "north": {"uv": [0, 12, 2, 13], "texture": "#all"},
+                "east": {"uv": [6, 12, 8, 13], "texture": "#all"},
+                "south": {"uv": [4, 12, 6, 13], "texture": "#all"},
+                "west": {"uv": [2, 12, 4, 13], "texture": "#all"},
+                "down": {"uv": [4, 13, 6, 15], "texture": "#all"}
+            }
+        },
+        {
+            "from": [7, 8, 0],
+            "to": [9, 9, 9],
+            "faces": {
+                "north": {"uv": [0, 0, 2, 1], "texture": "#all", "cullface": "north"},
+                "east": {"uv": [2, 1, 11, 2], "texture": "#all"},
+                "south": {"uv": [0, 1, 2, 2], "texture": "#all"},
+                "west": {"uv": [2, 0, 11, 1], "texture": "#all"},
+                "up": {"uv": [0, 2, 2, 11], "texture": "#all"},
+                "down": {"uv": [2, 2, 4, 11], "texture": "#all"}
+            }
+        }
+    ]
+}

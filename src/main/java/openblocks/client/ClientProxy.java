@@ -39,7 +39,6 @@ import openblocks.client.model.ModelBearTrap;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelPiggy;
 import openblocks.client.model.ModelSprinkler;
-import openblocks.client.model.ModelXPShower;
 import openblocks.client.renderer.SkyBlockRenderer;
 import openblocks.client.renderer.TextureUploader;
 import openblocks.client.renderer.block.PathModel;
@@ -106,7 +105,6 @@ import openblocks.common.tileentity.TileEntitySprinkler;
 import openblocks.common.tileentity.TileEntityTank;
 import openblocks.common.tileentity.TileEntityTrophy;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
-import openblocks.common.tileentity.TileEntityXPShower;
 import openblocks.enchantments.flimflams.LoreFlimFlam;
 import openmods.block.OpenBlock;
 import openmods.entity.EntityBlock;
@@ -281,7 +279,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, SimpleModelTileEntityRenderer.create(new ModelPiggy(), OpenBlocks.location("textures/models/piggy.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySky.class, new TileEntitySkyRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPShower.class, SimpleModelTileEntityRenderer.create(new ModelXPShower(), OpenBlocks.location("textures/models/xp_shower.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGoldenEgg.class, new TileEntityGoldenEggRenderer());
 
 		if (OpenBlocks.Blocks.projector != null) {
@@ -391,7 +388,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.paintMixer);
 		consumer.nom(OpenBlocks.Blocks.sprinkler);
 		consumer.nom(OpenBlocks.Blocks.villageHighlighter);
-		consumer.nom(OpenBlocks.Blocks.xpShower);
 	}
 
 	@SuppressWarnings("deprecation")

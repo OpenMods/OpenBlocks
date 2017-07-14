@@ -1,0 +1,13 @@
+{
+    "forge_marker" : 1,
+    "defaults" : { "model" : "openblocks:xp_shower" },
+    "variants" : {
+        "inventory": [{}],
+        "orientation" : {
+            "xp_yp" : { "y" : 180 },
+            "zp_yp" : { "y" : 270 },
+            "xn_yp" : { "y" :   0 },
+            "zn_yp" : { "y" :  90 }
+        }
+    }
+}

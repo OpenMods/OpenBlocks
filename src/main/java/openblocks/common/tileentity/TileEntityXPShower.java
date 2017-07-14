@@ -48,7 +48,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	private void trySpawnXpOrbs() {
 		boolean hasSpawnedParticle = false;
 		if (isOn.get() && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
-			bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getOrientation().north());
+			bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getBack());
 
 			int amountInTank = bufferTank.getFluidAmount();
 
@@ -63,7 +63,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 						int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
 						xpInTank -= xpAmount;
 						final BlockPos p = getPos();
-						worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, p.getX() + 0.5D, p.getY(), p.getZ() + 0.5D, xpAmount));
+						worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, p.getX() + 0.5, p.getY(), p.getZ() + 0.5, xpAmount));
 					}
 				}
 			}
