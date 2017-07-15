@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -272,12 +273,17 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumFacing direction, float hitX, float hitY, float hitZ) {
-		ItemStack usedItem = player.inventory.getCurrentItem();
-		if (usedItem != null) return tryEmptyItem(player, usedItem);
-		if (worldObj.isRemote) return false;
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (worldObj.isRemote) return true;
 
-		return tryDrainXp(player);
+		if (hand == EnumHand.MAIN_HAND) {
+			if (heldItem != null)
+				return tryEmptyItem(player, heldItem);
+			else
+				return tryDrainXp(player);
+		}
+
+		return false;
 	}
 
 	protected boolean tryDrainXp(EntityPlayer player) {

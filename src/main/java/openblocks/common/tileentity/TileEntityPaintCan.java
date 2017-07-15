@@ -5,6 +5,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
@@ -29,9 +30,8 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && amount.get() > 0) {
-			ItemStack heldStack = player.getHeldItemMainhand();
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!worldObj.isRemote && hand == EnumHand.MAIN_HAND && amount.get() > 0) {
 			if (heldStack != null && heldStack.getItem() instanceof ItemPaintBrush) {
 				ItemPaintBrush.setColor(heldStack, color.get());
 				heldStack.setItemDamage(0);

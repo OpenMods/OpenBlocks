@@ -111,10 +111,9 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 				final Hitbox clickBox = findClickBox(localHit);
 				if (clickBox != null) {
 					new GuideActionEvent(world.provider.getDimension(), pos, clickBox.name).sendToServer();
-					return true;
 				}
-				return false;
 			}
+			return true;
 		} else if (player instanceof EntityPlayerMP) {
 			final ItemStack heldStack = player.getHeldItemMainhand();
 			if (heldStack != null) {

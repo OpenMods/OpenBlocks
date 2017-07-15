@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -25,6 +26,7 @@ import openblocks.client.renderer.block.canvas.CanvasState;
 import openblocks.common.StencilPattern;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemSqueegee;
+import openblocks.common.item.ItemStencil;
 import openblocks.common.sync.SyncableBlockLayers;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomBreakDrops;
@@ -258,11 +260,13 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		ItemStack held = player.getHeldItemMainhand();
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (hand != EnumHand.MAIN_HAND) return false;
+
 		if (held != null) {
-			Item heldItem = held.getItem();
-			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem == OpenBlocks.Items.stencil) return false;
+			final Item heldItem = held.getItem();
+			// logic is placed on item side
+			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem instanceof ItemStencil) return false;
 		}
 
 		SyncableBlockLayers layer = getLayersForSide(side);

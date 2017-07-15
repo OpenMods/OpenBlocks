@@ -18,6 +18,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -174,15 +175,15 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (player.worldObj.isRemote) return false;
-		ItemStack held = player.getHeldItemMainhand();
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (player.worldObj.isRemote || hand != EnumHand.MAIN_HAND) return false;
+
 		if (held != null && held.getItem().getToolClasses(held).contains("shovel")) {
 			robGrave(player, held);
-			return true;
+		} else if (deathMessage != null) {
+			player.addChatMessage(deathMessage);
 		}
 
-		if (deathMessage != null) player.addChatMessage(deathMessage);
 		return true;
 	}
 

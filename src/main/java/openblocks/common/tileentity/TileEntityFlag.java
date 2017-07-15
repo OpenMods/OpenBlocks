@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import openmods.api.IActivateAwareTile;
 import openmods.api.IPlaceAwareTile;
@@ -55,16 +56,16 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (player != null && player.isSneaking()) { return true; }
-		if (!worldObj.isRemote) {
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!worldObj.isRemote && hand == EnumHand.MAIN_HAND) {
 			if (getOrientation().down() == EnumFacing.DOWN) {
-				angle.set(angle.get() + 10f);
+				angle.set(angle.get() + (player.isSneaking()? -10f : +10f));
 				sync();
-				return false;
+				return true;
 			}
 		}
-		return true;
+
+		return false;
 	}
 
 	@Override

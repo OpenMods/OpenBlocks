@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
 import openmods.api.ICustomHarvestDrops;
@@ -64,12 +65,11 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (worldObj.isRemote) return false;
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (worldObj.isRemote || hand != EnumHand.MAIN_HAND) return false;
 
-		ItemStack stack = player.getHeldItemMainhand();
-		if (stack != null) {
-			Set<ColorMeta> metas = ColorMeta.fromStack(stack);
+		if (heldItem != null) {
+			Set<ColorMeta> metas = ColorMeta.fromStack(heldItem);
 			if (!metas.isEmpty()) {
 				ColorMeta meta = CollectionUtils.getRandom(metas);
 				color.set(meta);
