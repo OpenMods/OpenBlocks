@@ -17,9 +17,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -30,6 +32,7 @@ import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -218,8 +221,11 @@ import openmods.config.game.RegisterItem;
 import openmods.config.properties.ConfigProcessing;
 import openmods.integration.Integration;
 import openmods.liquids.BucketFillHandler;
+import openmods.network.event.NetworkEventEntry;
 import openmods.network.event.NetworkEventManager;
+import openmods.network.rpc.MethodEntry;
 import openmods.network.rpc.RpcCallDispatcher;
+import openmods.sync.SyncableObjectType;
 import openmods.sync.SyncableObjectTypeRegistry;
 import openmods.utils.EnchantmentUtils;
 
@@ -658,6 +664,41 @@ public class OpenBlocks {
 		apiSetup.injectProvider();
 	}
 
+	@EventBusSubscriber
+	public static class RegistryEntries {
+
+		@SubscribeEvent
+		public static void registerSyncTypes(RegistryEvent.Register<SyncableObjectType> type) {
+			SyncableObjectTypeRegistry.startRegistration(type.getRegistry())
+					.register(MapJobs.class)
+					.register(SyncableBlockLayers.class);
+		}
+
+		@SubscribeEvent
+		public static void registerMethodTypes(RegistryEvent.Register<MethodEntry> evt) {
+			RpcCallDispatcher.startMethodRegistration(evt.getRegistry())
+					.registerInterface(IRotatable.class)
+					.registerInterface(IStencilCrafter.class)
+					.registerInterface(IColorChanger.class)
+					.registerInterface(ILevelChanger.class)
+					.registerInterface(ITriggerable.class)
+					.registerInterface(IGuideAnimationTrigger.class)
+					.registerInterface(IItemDropper.class);
+		}
+
+		@SubscribeEvent
+		public static void registerNetworkEvents(RegistryEvent.Register<NetworkEventEntry> evt) {
+			NetworkEventManager.startRegistration(evt.getRegistry())
+					.register(MapDataManager.MapDataRequestEvent.class)
+					.register(MapDataManager.MapDataResponseEvent.class)
+					.register(MapDataManager.MapUpdatesEvent.class)
+					.register(ElevatorActionEvent.class)
+					.register(PlayerActionEvent.class)
+					.register(GuideActionEvent.class)
+					.register(EntityMiniMe.OwnerChangeEvent.class);
+		}
+	}
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt) {
 		// needed first, to properly initialize delegates
@@ -667,27 +708,6 @@ public class OpenBlocks {
 		startupHelper.registerItemsHolder(OpenBlocks.Items.class);
 
 		startupHelper.preInit(evt.getSuggestedConfigurationFile());
-
-		SyncableObjectTypeRegistry.register(MapJobs.class);
-		SyncableObjectTypeRegistry.register(SyncableBlockLayers.class);
-
-		NetworkEventManager.INSTANCE
-				.register(MapDataManager.MapDataRequestEvent.class)
-				.register(MapDataManager.MapDataResponseEvent.class)
-				.register(MapDataManager.MapUpdatesEvent.class)
-				.register(ElevatorActionEvent.class)
-				.register(PlayerActionEvent.class)
-				.register(GuideActionEvent.class)
-				.register(EntityMiniMe.OwnerChangeEvent.class);
-
-		RpcCallDispatcher.INSTANCE
-				.registerInterface(IRotatable.class)
-				.registerInterface(IStencilCrafter.class)
-				.registerInterface(IColorChanger.class)
-				.registerInterface(ILevelChanger.class)
-				.registerInterface(ITriggerable.class)
-				.registerInterface(IGuideAnimationTrigger.class)
-				.registerInterface(IItemDropper.class);
 
 		Config.register();
 
