@@ -3,6 +3,7 @@ package openblocks.common.entity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -11,17 +12,22 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 
 	public EntityXPOrbNoFly(World world) {
 		super(world);
+		setSize(0.25f, 0.25f);
+		this.motionX = this.motionZ = 0;
+		this.motionY = -0.1f * world.rand.nextFloat();
 	}
 
 	public EntityXPOrbNoFly(World world, double x, double y, double z, int xp) {
 		super(world, x, y, z, xp);
+		setSize(0.25f, 0.25f);
+		setPosition(x, y, z);
+		this.motionX = this.motionZ = 0;
+		this.motionY = -0.1f * world.rand.nextFloat();
 	}
 
 	@Override
 	public void onUpdate() {
-		final double x = posX;
-		final double y = posY;
-		final double z = posZ;
+		final AxisAlignedBB aabb = getEntityBoundingBox();
 
 		final double vx = motionX;
 		final double vy = motionY;
@@ -33,9 +39,8 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 
 		// and then re-do motion calculations without player tracking
 
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
+		setEntityBoundingBox(aabb);
+		resetPositionToBB();
 
 		this.motionX = vx;
 		this.motionY = vy;

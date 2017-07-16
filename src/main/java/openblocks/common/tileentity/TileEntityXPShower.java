@@ -22,7 +22,9 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	private static final FluidStack XP_FLUID = new FluidStack(OpenBlocks.Fluids.xpJuice, 1);
 
-	private static final int DRAIN_PER_CYCLE = 50;
+	private static final int DRAIN_PER_CYCLE = 100;
+
+	private static final int ORB_SPAWN_FREQUENCY = 3;
 
 	private GenericTank bufferTank = new GenericTank(Fluid.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
 
@@ -47,24 +49,22 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	private void trySpawnXpOrbs() {
 		boolean hasSpawnedParticle = false;
-		if (isOn.get() && OpenMods.proxy.getTicks(worldObj) % 3 == 0) {
+		if (isOn.get() && OpenMods.proxy.getTicks(worldObj) % ORB_SPAWN_FREQUENCY == 0) {
 			bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getBack());
 
-			int amountInTank = bufferTank.getFluidAmount();
+			final int amountInTank = bufferTank.getFluidAmount();
 
 			if (amountInTank > 0) {
-				int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
-				int drainable = LiquidXpUtils.xpToLiquidRatio(xpInTank);
+				final int xpInTank = LiquidXpUtils.liquidToXpRatio(amountInTank);
+				final int xpInOrb = EntityXPOrb.getXPSplit(xpInTank);
+				final int toDrain = LiquidXpUtils.xpToLiquidRatio(xpInOrb);
 
-				if (drainable > 0) {
-					bufferTank.drain(drainable, true);
-					while (xpInTank > 0) {
-						hasSpawnedParticle = true;
-						int xpAmount = EntityXPOrb.getXPSplit(xpInTank);
-						xpInTank -= xpAmount;
-						final BlockPos p = getPos();
-						worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, p.getX() + 0.5, p.getY(), p.getZ() + 0.5, xpAmount));
-					}
+				if (toDrain > 0) {
+					bufferTank.drain(toDrain, true);
+					hasSpawnedParticle = true;
+
+					final BlockPos p = getPos();
+					worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, p.getX() + 0.5, p.getY() + 0.1, p.getZ() + 0.5, xpInOrb));
 				}
 			}
 		}
