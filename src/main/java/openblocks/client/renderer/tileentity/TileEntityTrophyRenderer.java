@@ -51,7 +51,6 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 	}
 
 	private void renderStaticPart(double x, double y, double z) {
-		GlStateManager.disableBlend();
 		final BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 		IBlockState state = Blocks.trophy.getDefaultState();
 
