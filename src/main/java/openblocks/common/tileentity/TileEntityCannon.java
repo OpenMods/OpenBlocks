@@ -225,8 +225,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		currentYaw = targetYaw.get();
 		currentPitch = targetPitch.get();
 
-		// Sync targets
-		sync();
+		trySync();
 	}
 
 	public void disableLineRender() {

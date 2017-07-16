@@ -590,7 +590,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 		if (!colors.isEmpty()) {
 			ColorMeta selected = CollectionUtils.getRandom(colors);
 			color.set(selected.rgb);
-			if (!worldObj.isRemote) sync();
+			trySync();
 			return true;
 		}
 

@@ -223,7 +223,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			hasChanged |= layers.isDirty();
 		}
 
-		if (!worldObj.isRemote) sync();
+		trySync();
 		return hasChanged;
 	}
 
@@ -248,14 +248,14 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			worldObj.setBlockState(pos, state);
 		}
 
-		if (!worldObj.isRemote) sync();
+		trySync();
 	}
 
 	public boolean useStencil(EnumFacing side, StencilPattern stencil) {
 		SyncableBlockLayers layer = getLayersForSide(side);
 		layer.putStencil(stencil);
 
-		if (!worldObj.isRemote) sync();
+		trySync();
 		return true;
 	}
 
@@ -285,7 +285,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			result = layer.rotateCover();
 		}
 
-		if (!worldObj.isRemote) sync();
+		trySync();
 		return result;
 	}
 
