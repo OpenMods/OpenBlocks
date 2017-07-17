@@ -180,8 +180,8 @@ public class GuiPaintMixer extends SyncedGuiContainer<ContainerPaintMixer> {
 				}
 			});
 
-			dispatcher().triggerAll();
 		}
 
 	}
+
 }

@@ -8,6 +8,7 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,7 @@ import openblocks.common.item.ItemSonicGlasses;
 import openmods.config.properties.ConfigurationChange;
 import openmods.renderer.ManualDisplayList;
 import openmods.renderer.ManualDisplayList.Renderer;
+import openmods.utils.TextureUtils;
 import openmods.utils.render.RenderUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -97,10 +99,15 @@ public class SoundEventsManager {
 	public void onSoundEvent(PlaySoundEvent evt) {
 		if (SoundEventsManager.isPlayerWearingGlasses()) {
 			final ISound sound = evt.getResultSound();
-			final IDrawableIcon icon = icons.getIcon(sound.getSoundLocation());
+			if (sound != null) {
+				// NOTE do not remove, otherwise sound.getVolume will throw NPE
+				if (sound.createAccessor(evt.getManager().sndHandler) != null) {
+					final IDrawableIcon icon = icons.getIcon(sound.getSoundLocation());
 
-			synchronized (events) {
-				events.add(new SoundEvent(sound, icon, Math.log(sound.getVolume() + 1), sound.getPitch()));
+					synchronized (events) {
+						events.add(new SoundEvent(sound, icon, Math.log(sound.getVolume() + 1), sound.getPitch()));
+					}
+				}
 			}
 		}
 	}
@@ -150,18 +157,10 @@ public class SoundEventsManager {
 					GL11.glLoadIdentity();
 					GL11.glOrtho(-1, 1, -1, 1, -1, 1);
 
-					GlStateManager.disableLighting();
-					GlStateManager.disableDepth();
-					GlStateManager.disableAlpha();
-					GlStateManager.enableBlend();
-					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
 					final float maxU = (float)mc.displayWidth / 1024;
 					final float maxV = (float)mc.displayHeight / 1024;
 
 					if (Config.sonicGlassesUseTexture) {
-						GlStateManager.color(1, 1, 1, (float)level);
-						tex.bindTexture(notPumpkin);
 						GL11.glBegin(GL11.GL_QUADS);
 
 						GL11.glTexCoord2f(0, 0);
@@ -177,21 +176,13 @@ public class SoundEventsManager {
 						GL11.glVertex3f(-1, +1, 0);
 						GL11.glEnd();
 					} else {
-						GlStateManager.disableTexture2D();
-						GlStateManager.color(0.085f, 0.074f, 0.129f, (float)level);
 						GL11.glBegin(GL11.GL_QUADS);
 						GL11.glVertex3f(-1, -1, 0);
 						GL11.glVertex3f(+1, -1, 0);
 						GL11.glVertex3f(+1, +1, 0);
 						GL11.glVertex3f(-1, +1, 0);
 						GL11.glEnd();
-						GlStateManager.enableTexture2D();
 					}
-
-					GlStateManager.disableBlend();
-					GlStateManager.enableDepth();
-					GlStateManager.enableAlpha();
-					GlStateManager.enableLighting();
 
 					GL11.glPopMatrix();
 					GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -200,7 +191,20 @@ public class SoundEventsManager {
 			});
 		}
 
+		GlStateManager.disableAlpha();
+
+		if (Config.sonicGlassesUseTexture) {
+			GlStateManager.enableTexture2D();
+			tex.bindTexture(notPumpkin);
+			GlStateManager.color(1, 1, 1, (float)level);
+		} else {
+			GlStateManager.disableTexture2D();
+			GlStateManager.color(0.085f, 0.074f, 0.129f, (float)level);
+		}
+
 		notPumpkinOverlay.render();
+
+		GlStateManager.enableAlpha();
 	}
 
 	@SubscribeEvent
@@ -212,8 +216,14 @@ public class SoundEventsManager {
 		final Entity rve = mc.getRenderViewEntity();
 		if (!isEntityWearingGlasses(rve)) return;
 
-		GL11.glDisable(GL11.GL_FOG);
-		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		GlStateManager.disableFog();
+
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepth();
+
 		dimWorld(tex, mc);
 
 		final float partialTicks = evt.getPartialTicks();
@@ -224,6 +234,8 @@ public class SoundEventsManager {
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.enableTexture2D();
+		TextureUtils.bindTextureToClient(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		synchronized (events) {
 			for (SoundEvent snd : events) {
 				final double px = snd.sound.getXPosF() - interpX;
@@ -239,5 +251,6 @@ public class SoundEventsManager {
 		}
 		GlStateManager.enableLighting();
 		GlStateManager.disableBlend();
+		GlStateManager.enableDepth();
 	}
 }
