@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -29,6 +28,7 @@ import openmods.item.ItemOpenBlock;
 import openmods.model.textureditem.IItemTexture;
 import openmods.model.textureditem.ItemTextureCapability;
 import openmods.utils.ItemUtils;
+import openmods.utils.MiscUtils;
 import openmods.utils.TranslationUtils;
 
 public class ItemTankBlock extends ItemOpenBlock {
@@ -201,21 +201,12 @@ public class ItemTankBlock extends ItemOpenBlock {
 		final String unlocalizedName = getUnlocalizedName();
 
 		if (fluidStack != null && fluidStack.amount > 0) {
-			final String fluidName = getFluidName(fluidStack);
-			return TranslationUtils.translateToLocalFormatted(unlocalizedName + ".filled.name", fluidName);
+			final String fluidName = MiscUtils.getTranslatedFluidName(fluidStack);
+			if (!Strings.isNullOrEmpty(fluidName))
+				return TranslationUtils.translateToLocalFormatted(unlocalizedName + ".filled.name", fluidName);
 		}
 
 		return super.getItemStackDisplayName(stack);
-	}
-
-	private static String getFluidName(FluidStack fluidStack) {
-		final Fluid fluid = fluidStack.getFluid();
-		String localizedName = fluid.getLocalizedName(fluidStack);
-		if (!Strings.isNullOrEmpty(localizedName) && !localizedName.equals(fluid.getUnlocalizedName())) {
-			return fluid.getRarity(fluidStack).rarityColor.toString() + localizedName;
-		} else {
-			return TextFormatting.OBFUSCATED + "LOLNOPE" + TextFormatting.RESET;
-		}
 	}
 
 	public static ItemStack createFilledTank(Fluid fluid) {

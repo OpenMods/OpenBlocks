@@ -48,7 +48,8 @@ import openmods.utils.bitmap.IWriteableBitMap;
 public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, IInventoryProvider, IConfigurableGuiSlots<AutoSlots>, INeighbourAwareTile, ITickable {
 
 	protected static final int TOTAL_COOLDOWN = 40;
-	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(45);
+	public static final int MAX_STORED_LEVELS = 45;
+	public static final int TANK_CAPACITY = LiquidXpUtils.getLiquidForLevel(MAX_STORED_LEVELS);
 
 	private int cooldown = 0;
 

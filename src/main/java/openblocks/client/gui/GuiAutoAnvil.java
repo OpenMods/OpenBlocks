@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoAnvil.AutoSlots;
@@ -29,8 +30,9 @@ public class GuiAutoAnvil extends GuiConfigurableSlots<TileEntityAutoAnvil, Cont
 		main.addComponent(new GuiComponentSprite(80, 34, GuiComponentSprite.Sprites.hammer));
 		main.addComponent(new GuiComponentSprite(36, 41, GuiComponentSprite.Sprites.plus));
 
-		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoAnvil.TANK_CAPACITY);
-		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver()));
+		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoAnvil.MAX_STORED_LEVELS);
+		tankLevel.setDisplayFluidNameInTooltip(false);
+		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), LiquidXpUtils.FLUID_TO_LEVELS));
 
 		main.addComponent(tankLevel);
 	}

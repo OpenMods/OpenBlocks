@@ -8,7 +8,6 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 import openblocks.common.LiquidXpUtils;
 import openblocks.common.container.ContainerAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
@@ -27,7 +26,6 @@ import openmods.gui.component.GuiComponentToggleButton;
 import openmods.gui.listener.IMouseDownListener;
 import openmods.gui.listener.IValueChangedListener;
 import openmods.gui.logic.ValueCopyAction;
-import openmods.utils.EnchantmentUtils;
 import openmods.utils.MiscUtils;
 import openmods.utils.TranslationUtils;
 import openmods.utils.VanillaEnchantLogic;
@@ -85,16 +83,8 @@ public class GuiAutoEnchantmentTable extends GuiConfigurableSlots<TileEntityAuto
 		root.addComponent(maxPower);
 
 		final GuiComponentTankLevel tankLevel = new GuiComponentTankLevel(140, 30, 17, 37, TileEntityAutoEnchantmentTable.MAX_STORED_LEVELS);
-		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), new Function<FluidStack, FluidStack>() {
-			@Override
-			public FluidStack apply(FluidStack input) {
-				if (input == null) return null;
-				// display levels instead of actual xp fluid level
-				final FluidStack result = input.copy();
-				result.amount = EnchantmentUtils.getLevelForExperience(LiquidXpUtils.liquidToXpRatio(input.amount));
-				return result;
-			}
-		}));
+		tankLevel.setDisplayFluidNameInTooltip(false);
+		addSyncUpdateListener(ValueCopyAction.create(te.getFluidProvider(), tankLevel.fluidReceiver(), LiquidXpUtils.FLUID_TO_LEVELS));
 		root.addComponent(tankLevel);
 
 		final GuiComponentToggleButton<VanillaEnchantLogic.Level> levelSelect = new GuiComponentToggleButton<VanillaEnchantLogic.Level>(16, 60, 0xFFFFFF, icons);
