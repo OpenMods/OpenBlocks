@@ -1,0 +1,13 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "model": "openblocks:auto_anvil"
+    },
+    "variants" : {
+        "inventory" : [{}],
+        "orientation": {
+            "xp_yp": {},
+            "zn_yp": {"y": 270}
+        }
+    }
+}

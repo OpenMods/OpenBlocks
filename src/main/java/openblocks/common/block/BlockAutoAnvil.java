@@ -3,7 +3,6 @@ package openblocks.common.block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -28,9 +27,4 @@ public class BlockAutoAnvil extends OpenBlock.TwoDirections {
 		return false;
 	}
 
-	// TODO 1.8.9 too trivial to live
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-	}
 }

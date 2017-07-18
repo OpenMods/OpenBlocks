@@ -1,0 +1,78 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "0": "openblocks:blocks/auto_anvil_long_side",
+        "1": "openblocks:blocks/auto_anvil_short_side",
+        "2": "openblocks:blocks/auto_anvil_bottom",
+        "3": "openblocks:blocks/auto_anvil_top",
+        "4": "openblocks:blocks/auto_anvil_up",
+        "5": "openblocks:blocks/auto_anvil_down",
+        "particle": "openblocks:blocks/auto_anvil_long_side"
+    },
+    "elements": [
+        {
+            "from": [2, 0, 2],
+            "to": [14, 4, 14],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [2, 12, 14, 16], "texture": "#1"},
+                "east": {"uv": [2, 12, 14, 16], "texture": "#0"},
+                "south": {"uv": [2, 12, 14, 16], "texture": "#1"},
+                "west": {"uv": [2, 12, 14, 16], "texture": "#0"},
+                "up": {"uv": [2, 2, 14, 14], "texture": "#5"},
+                "down": {
+                    "uv": [2, 2, 14, 14],
+                    "texture": "#2",
+                    "cullface": "down"
+                }
+            },
+            "__comment": "Anvil base"
+        },
+        {
+            "from": [4, 4, 3],
+            "to": [12, 5, 13],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [4, 11, 12, 12], "texture": "#1"},
+                "east": {"uv": [3, 11, 13, 12], "texture": "#0"},
+                "south": {"uv": [4, 11, 12, 12], "texture": "#1"},
+                "west": {"uv": [3, 11, 13, 12], "texture": "#0"},
+                "up": {"uv": [4, 3, 12, 13], "texture": "#5"}
+            },
+            "__comment": "Lower narrow portion"
+        },
+        {
+            "from": [6, 5, 4],
+            "to": [10, 10, 12],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [6, 6, 10, 11], "texture": "#1"},
+                "east": {"uv": [4, 6, 12, 11], "texture": "#0"},
+                "south": {"uv": [6, 6, 10, 11], "texture": "#1"},
+                "west": {"uv": [4, 6, 12, 11], "texture": "#0"}
+            },
+            "__comment": "Wider section beneath top portion"
+        },
+        {
+            "from": [3, 10, 0],
+            "to": [13, 16, 16],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [3, 0, 13, 6], "texture": "#1"},
+                "east": {"uv": [0, 0, 16, 6], "texture": "#0"},
+                "south": {"uv": [3, 0, 13, 6], "texture": "#1"},
+                "west": {"uv": [0, 0, 16, 6], "texture": "#0"},
+                "up": {"uv": [3, 0, 13, 16], "texture": "#3"},
+                "down": {"uv": [3, 0, 13, 16], "texture": "#4"}
+            },
+            "__comment": "Anvil top"
+        }
+    ],
+    "display": {
+        "fixed": {
+            "rotation": [0, 90, 0],
+            "translation": [0, 0, 0],
+            "scale": [0.5, 0.5, 0.5]
+        }
+    }
+}

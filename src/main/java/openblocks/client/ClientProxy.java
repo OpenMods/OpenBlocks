@@ -34,7 +34,6 @@ import openblocks.IOpenBlocksProxy;
 import openblocks.OpenBlocks;
 import openblocks.client.bindings.KeyInputHandler;
 import openblocks.client.fx.FXLiquidSpray;
-import openblocks.client.model.ModelAutoAnvil;
 import openblocks.client.model.ModelBearTrap;
 import openblocks.client.model.ModelCraneBackpack;
 import openblocks.client.model.ModelPiggy;
@@ -87,7 +86,6 @@ import openblocks.common.item.ItemImaginary;
 import openblocks.common.item.ItemImaginationGlasses;
 import openblocks.common.item.ItemPaintBrush;
 import openblocks.common.item.ItemPaintCan;
-import openblocks.common.tileentity.TileEntityAutoAnvil;
 import openblocks.common.tileentity.TileEntityAutoEnchantmentTable;
 import openblocks.common.tileentity.TileEntityBearTrap;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
@@ -274,7 +272,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityImaginary.class, new TileEntityImaginaryRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFan.class, new TileEntityFanRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVillageHighlighter.class, new TileEntityVillageHighlighterRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoAnvil.class, SimpleModelTileEntityRenderer.create(new ModelAutoAnvil(), OpenBlocks.location("textures/models/auto_anvil.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoEnchantmentTable.class, new TileEntityAutoEnchantmentTableRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDonationStation.class, SimpleModelTileEntityRenderer.create(new ModelPiggy(), OpenBlocks.location("textures/models/piggy.png")));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPaintMixer.class, new TileEntityPaintMixerRenderer());
@@ -378,7 +375,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 	// TODO kill it with fire!
 	// most of those blocks don't require TESR, but have complex models, that now can be done in data
 	private static void visitTempHackTesrBlocks(BlockConsumer consumer) {
-		consumer.nom(OpenBlocks.Blocks.autoAnvil);
 		consumer.nom(OpenBlocks.Blocks.bearTrap);
 		consumer.nom(OpenBlocks.Blocks.cannon);
 		consumer.nom(OpenBlocks.Blocks.donationStation);
