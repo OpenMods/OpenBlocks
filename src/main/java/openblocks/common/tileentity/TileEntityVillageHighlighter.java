@@ -3,6 +3,7 @@ package openblocks.common.tileentity;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import net.minecraft.block.Block;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -11,14 +12,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
 import openmods.OpenMods;
+import openmods.api.INeighbourAwareTile;
+import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityVillageHighlighter extends SyncedTileEntity implements ITickable {
+public class TileEntityVillageHighlighter extends SyncedTileEntity implements ITickable, INeighbourAwareTile {
 
 	public static int VALUES_PER_VILLAGE = 7;
 
-	public SyncableIntArray villageData;
+	private SyncableIntArray villageData;
+
+	private SyncableBoolean isEnabled;
 
 	private boolean previousBreedStatus = false;
 
@@ -27,6 +32,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	@Override
 	protected void createSyncedFields() {
 		villageData = new SyncableIntArray();
+		isEnabled = new SyncableBoolean();
 	}
 
 	public static int[] convertIntegers(List<Integer> integers) {
@@ -41,7 +47,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	@Override
 	public void update() {
 		if (!worldObj.isRemote) {
-			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
+			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0 && isEnabled.get()) {
 				List<Integer> tmpDataList = Lists.newArrayList();
 				for (Village village : worldObj.villageCollectionObj.getVillageList()) {
 					if (village.isBlockPosWithinSqVillageRadius(pos)) {
@@ -77,9 +83,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	}
 
 	public boolean isPowered() {
-		// TODO 1.8.9 - either state or sync
-		if (worldObj == null) return false;
-		return worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
+		return isEnabled.get();
 	}
 
 	@Override
@@ -102,6 +106,12 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 
 	public int getSignalStrength() {
 		return canVillagersBreed()? 15 : 0;
+	}
+
+	@Override
+	public void onNeighbourChanged(Block block) {
+		isEnabled.set(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
+		trySync();
 	}
 
 }

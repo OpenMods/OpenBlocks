@@ -23,7 +23,6 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 	private static float N = 1500;
 
-	// TODO 1.8.9 verify
 	@Override
 	public void renderTileEntityAt(TileEntityVillageHighlighter vh, double x, double y, double z, float partialTick, int destroyProcess) {
 		GL11.glPushMatrix();
@@ -44,7 +43,7 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 			wr.begin(GL11.GL_POINTS, DefaultVertexFormats.POSITION_COLOR);
 			for (int i = 0; i < data.length; i += TileEntityVillageHighlighter.VALUES_PER_VILLAGE) {
-				int radius = data[i];
+				int radius = data[i + 0];
 				int vX = data[i + 1];
 				int vY = data[i + 2];
 				int vZ = data[i + 3];
@@ -55,7 +54,6 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 				float g = (color >> 8 & 255) / 255.0f;
 				float b = (color & 255) / 255.0f;
 
-				// TODO 1.8.9 figure what's going on here
 				for (int j = 0; j < N; j++) {
 					float py = j * off - 1 + (off / 2);
 					float rad = (float)Math.sqrt(1 - py * py);
@@ -133,6 +131,11 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 		addVertex(wr, bb.minX, bb.minY, bb.maxZ);
 		addVertex(wr, bb.minX, bb.maxY, bb.maxZ);
+	}
+
+	@Override
+	public boolean isGlobalRenderer(TileEntityVillageHighlighter te) {
+		return te.isPowered();
 	}
 
 }
