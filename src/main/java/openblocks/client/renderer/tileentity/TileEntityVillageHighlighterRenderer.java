@@ -5,29 +5,24 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import openblocks.OpenBlocks;
-import openblocks.client.model.ModelVillage;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openmods.sync.SyncableIntArray;
-import openmods.utils.BlockUtils;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRenderer<TileEntityVillageHighlighter> {
 
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(-8, -3, -8, 8, 3, 8);
-	private ModelVillage model = new ModelVillage();
-	private static final ResourceLocation texture = OpenBlocks.location("textures/models/village.png");
 
 	private static float N = 1500;
 
 	@Override
 	public void renderTileEntityAt(TileEntityVillageHighlighter vh, double x, double y, double z, float partialTick, int destroyProcess) {
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
+
 		if (vh != null && vh.isPowered()) {
+			GL11.glPushMatrix();
+			GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 			Tessellator t = Tessellator.getInstance();
 			VertexBuffer wr = t.getBuffer();
 
@@ -78,14 +73,8 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 			t.draw();
 			GlStateManager.enableTexture2D();
+			GL11.glPopMatrix();
 		}
-
-		GlStateManager.color(1, 1, 1, 1);
-		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		if (vh != null) GL11.glRotatef(-BlockUtils.getRotationFromOrientation(vh.getOrientation()), 0, 1, 0);
-		bindTexture(texture);
-		model.render();
-		GL11.glPopMatrix();
 	}
 
 	private static void addVertex(VertexBuffer wr, double x, double y, double z) {

@@ -383,7 +383,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.grave);
 		consumer.nom(OpenBlocks.Blocks.paintMixer);
 		consumer.nom(OpenBlocks.Blocks.sprinkler);
-		consumer.nom(OpenBlocks.Blocks.villageHighlighter);
 	}
 
 	@SuppressWarnings("deprecation")
