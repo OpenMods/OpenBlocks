@@ -1,0 +1,44 @@
+{
+    "textures": {
+        "bottom": "openblocks:blocks/paint_can_bottom",
+        "front": "openblocks:blocks/paint_can_front",
+        "left": "openblocks:blocks/paint_can_left",
+        "side": "openblocks:blocks/paint_can_side",
+        "right": "openblocks:blocks/paint_can_right",
+        "spill": "openblocks:blocks/paint_can_side2",
+        "top": "openblocks:blocks/paint_can_top"
+    },
+    "elements": [
+        {
+            "name": "body",
+            "from": [5, 2, 7],
+            "to": [11, 10, 13],
+            "shade": true,
+            "faces": {
+                "north": {"uv": [4, 5, 12, 16], "texture": "#side"},
+                "east": {"uv": [4, 5, 12, 16], "texture": "#right"},
+                "south": {"uv": [4, 5, 12, 16], "texture": "#front"},
+                "west": {"uv": [4, 5, 12, 16], "texture": "#left"},
+                "down": {"uv": [4, 4, 12, 12], "texture": "#bottom"}
+            }
+        },
+        {
+            "name": "overlay",
+            "from": [5, 2, 7],
+            "to": [11, 10, 13],
+            "shade": true,
+            "faces": {
+                "north": {
+                    "uv": [4, 5, 12, 16],
+                    "texture": "#spill",
+                    "tintindex": 0
+                },
+                "up": {
+                    "uv": [4, 4, 12, 12],
+                    "texture": "#top",
+                    "tintindex": 0
+                }
+            }
+        }
+    ]
+}

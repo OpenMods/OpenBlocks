@@ -1,54 +1,58 @@
 package openblocks.client.renderer.tileentity;
 
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
-import openblocks.OpenBlocks;
-import openblocks.client.model.ModelPaintMixer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.animation.Animation;
+import net.minecraftforge.client.model.animation.FastTESR;
+import net.minecraftforge.common.animation.Event;
+import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.animation.CapabilityAnimation;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.Properties;
 import openblocks.common.tileentity.TileEntityPaintMixer;
-import openmods.colors.RGB;
-import openmods.utils.BlockUtils;
-import org.lwjgl.opengl.GL11;
+import org.apache.commons.lang3.tuple.Pair;
 
-public class TileEntityPaintMixerRenderer extends TileEntitySpecialRenderer<TileEntityPaintMixer> {
+public class TileEntityPaintMixerRenderer extends FastTESR<TileEntityPaintMixer> {
 
-	private ModelPaintMixer model = new ModelPaintMixer();
-	private static final ResourceLocation texture = OpenBlocks.location("textures/models/paint_mixer.png");
+	protected static BlockRendererDispatcher blockRenderer;
 
 	@Override
-	public void renderTileEntityAt(TileEntityPaintMixer mixer, double x, double y, double z, float partialTick, int destroyProgress) {
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
-		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		if (mixer != null) GL11.glRotatef(-BlockUtils.getRotationFromOrientation(mixer.getOrientation()), 0, 1, 0);
-		bindTexture(texture);
-		model.render(mixer, partialTick);
-		// The top of the paint can is rendering longer than the can. WHYY :(
-		// Fixed this, rotating the matrix and not using the stack :)
+	public void renderTileEntityFast(TileEntityPaintMixer te, double x, double y, double z, float partialTick, int breakStage, VertexBuffer renderer) {
+		if (te.hasPaint()) {
+			if (!te.hasCapability(CapabilityAnimation.ANIMATION_CAPABILITY, null)) { return; }
+			if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
 
-		if (mixer != null) {
-			GL11.glTranslated(0.05, 0.5, 0);
-			GL11.glRotated(150, 0, 0, -1);
-			GL11.glRotated(90, 0, 1, 0);
-			GL11.glScaled(0.8, 0.8, 0.8);
-			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			if (mixer.hasPaint()) {
-				if (mixer.isEnabled()) {
-					GL11.glTranslated(0, Math.random() * 0.2, 0);
+			final BlockPos pos = te.getPos();
+			final IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
+			IBlockState state = world.getBlockState(pos);
+
+			if (state.getPropertyNames().contains(Properties.StaticProperty)) {
+				state = state.withProperty(Properties.StaticProperty, false);
+			}
+
+			if (state instanceof IExtendedBlockState) {
+				state = state.getBlock().getExtendedState(state, world, pos); // difference between this and AnimationTESR
+
+				IExtendedBlockState exState = (IExtendedBlockState)state;
+				if (exState.getUnlistedNames().contains(Properties.AnimationProperty)) {
+					float time = Animation.getWorldTime(getWorld(), partialTick);
+					Pair<IModelState, Iterable<Event>> pair = te.getCapability(CapabilityAnimation.ANIMATION_CAPABILITY, null).apply(time);
+
+					IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(exState.getClean());
+					exState = exState.withProperty(Properties.AnimationProperty, pair.getLeft());
+
+					renderer.setTranslation(x - pos.getX(), y - pos.getY(), z - pos.getZ());
+
+					blockRenderer.getBlockModelRenderer().renderModel(world, model, exState, pos, renderer, false);
 				}
-				int secondPass = mixer.getCanColor();
-				if (mixer.isEnabled()) {
-					double progress = (double)mixer.getProgress().getValue() / TileEntityPaintMixer.PROGRESS_TICKS;
-					secondPass = calculateColorFade(secondPass, mixer.getColor().getValue(), progress);
-				}
-				// TODO 1.8.9 render can!
 			}
 		}
-		GL11.glPopMatrix();
-	}
-
-	private static int calculateColorFade(int a, int b, double magnitude) {
-		return new RGB(a).interpolate(new RGB(b), magnitude).getColor();
 	}
 
 }

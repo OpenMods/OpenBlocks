@@ -1,0 +1,19 @@
+{
+    "parameters": {
+        "speed": 4,
+        "world_to_cycle": [ "/", "#speed" ]
+    },
+    "clips": {
+        "idle": "openblocks:block/paint_mixer_can@idle",
+        "working": "openblocks:block/paint_mixer_can@working"
+    },
+    "states": [
+        "idle",
+        "working"
+    ],
+    "transitions": {
+        "idle": "working",
+        "working": "idle"
+    },
+    "start_state": "idle"
+}

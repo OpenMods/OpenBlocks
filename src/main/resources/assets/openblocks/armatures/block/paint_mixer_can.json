@@ -1,0 +1,41 @@
+{
+    "joints": {
+        "can": { "0": [ 1.0 ], "1": [ 1.0 ]}
+    },
+    "clips": {
+        "idle": {
+            "loop": true,
+            "joint_clips": {},
+            "events": {}
+        },
+        "working": {
+            "loop": true,
+            "joint_clips": {
+                "can": [
+                    {
+                        "variable": "axis_y",
+                        "type": "uniform",
+                        "interpolation": "nearest",
+                        "samples": [ 1 ]
+                    },
+                    {
+                        "variable": "angle",
+                        "type": "uniform",
+                        "interpolation": "linear",
+                        "samples": [ -10, 10 ]
+                    },
+                    {
+                        "variable": "offset_y",
+                        "type": "uniform",
+                        "interpolation": "linear",
+                        "samples": [
+                            0, 0.2, 0, 0.3, 0, 0.1, 0, 0.3, 0, 0.1, 0, 0.2
+                        ]
+                    }
+                ]
+            },
+            "events": {}
+        }
+    }
+}
+

@@ -1,19 +1,27 @@
 package openblocks.common.tileentity;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import java.util.EnumMap;
+import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.animation.ITimeValue;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.model.animation.CapabilityAnimation;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
 import openblocks.common.container.ContainerPaintMixer;
 import openblocks.common.item.ItemPaintCan;
 import openblocks.rpc.IColorChanger;
+import openmods.OpenMods;
 import openmods.api.IHasGui;
 import openmods.api.IInventoryCallback;
 import openmods.api.IValueProvider;
@@ -24,6 +32,9 @@ import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
+import openmods.sync.ISyncListener;
+import openmods.sync.ISyncableObject;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableFloat;
 import openmods.sync.SyncableInt;
@@ -36,6 +47,8 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 	private static final ItemStack PAINT_CAN = new ItemStack(OpenBlocks.Blocks.paintCan);
 	private static final ItemStack MILK_BUCKET = new ItemStack(Items.MILK_BUCKET);
 	public static final int PROGRESS_TICKS = 300;
+
+	private final IAnimationStateMachine asm;
 
 	public static enum Slots {
 		paint,
@@ -105,6 +118,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	public TileEntityPaintMixer() {
 		inventory.addCallback(this);
+		this.asm = OpenMods.proxy.loadAsm(OpenBlocks.location("asms/block/paint_mixer.json"), ImmutableMap.<String, ITimeValue> of());
 	}
 
 	@Override
@@ -214,6 +228,21 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 		lvlMagenta = new SyncableFloat();
 		lvlYellow = new SyncableFloat();
 		canColor = new SyncableInt(0xFFFFFF);
+	}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addUpdateListener(new ISyncListener() {
+
+			@Override
+			public void onSync(Set<ISyncableObject> changes) {
+				if (asm != null && changes.contains(progress)) {
+					final String expectedState = (progress.get() > 0)? "working" : "idle";
+					if (!asm.currentState().equals(expectedState))
+						asm.transition(expectedState);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -342,6 +371,18 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	public IColorChanger createRpcProxy() {
 		return createClientRpcProxy(IColorChanger.class);
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing side) {
+		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) { return true; }
+		return super.hasCapability(capability, side);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing side) {
+		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) { return CapabilityAnimation.ANIMATION_CAPABILITY.cast(asm); }
+		return super.getCapability(capability, side);
 	}
 
 }

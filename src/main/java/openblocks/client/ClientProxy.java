@@ -73,6 +73,7 @@ import openblocks.common.block.BlockCanvas;
 import openblocks.common.block.BlockElevator;
 import openblocks.common.block.BlockFlag;
 import openblocks.common.block.BlockPaintCan;
+import openblocks.common.block.BlockPaintMixer;
 import openblocks.common.entity.EntityCartographer;
 import openblocks.common.entity.EntityGoldenEye;
 import openblocks.common.entity.EntityHangGlider;
@@ -356,6 +357,10 @@ public class ClientProxy implements IOpenBlocksProxy {
 			itemColors.registerItemColorHandler(new ItemFlagBlock.ItemColorHandler(), OpenBlocks.Blocks.flag);
 			blockColors.registerBlockColorHandler(new BlockFlag.BlockColorHandler(), OpenBlocks.Blocks.flag);
 		}
+
+		if (OpenBlocks.Blocks.paintMixer != null) {
+			blockColors.registerBlockColorHandler(new BlockPaintMixer.BlockColorHandler(), OpenBlocks.Blocks.paintMixer);
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -381,7 +386,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.fan);
 		consumer.nom(OpenBlocks.Blocks.goldenEgg);
 		consumer.nom(OpenBlocks.Blocks.grave);
-		consumer.nom(OpenBlocks.Blocks.paintMixer);
 		consumer.nom(OpenBlocks.Blocks.sprinkler);
 	}
 
