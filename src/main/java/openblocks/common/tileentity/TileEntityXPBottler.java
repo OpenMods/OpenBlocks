@@ -29,8 +29,8 @@ import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
-import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidCapabilityWrapper;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableInt;
@@ -132,12 +132,14 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 				tank.fillFromSides(10, worldObj, pos, xpSides.getValue());
 			}
 
+			final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
+
 			if (shouldAutoOutput() && hasOutputStack()) {
-				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, xpBottleSides.getValue(), true);
+				mover.setSides(xpBottleSides.getValue()).pushFromSlot(inventory.getHandler(), Slots.output.ordinal());
 			}
 
 			if (shouldAutoInput() && !hasGlassInInput()) {
-				ItemDistribution.moveItemsFromOneOfSides(this, inventory, GLASS_BOTTLE, 1, Slots.input.ordinal(), glassSides.getValue(), true);
+				mover.setSides(glassSides.getValue()).pullToSlot(inventory.getHandler(), Slots.input.ordinal());
 			}
 
 			logic.checkWorkCondition(hasSpaceInOutput() && hasGlassInInput() && isTankFull());

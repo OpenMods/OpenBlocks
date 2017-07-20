@@ -28,7 +28,6 @@ import openmods.inventory.ItemInventory;
 import openmods.inventory.PlayerItemInventory;
 import openmods.inventory.StackEqualityTesterBuilder;
 import openmods.inventory.StackEqualityTesterBuilder.IEqualityTester;
-import openmods.inventory.legacy.ItemDistribution;
 import org.apache.commons.lang3.tuple.Pair;
 
 @BookDocumentation
@@ -170,7 +169,11 @@ public class ItemDevNull extends Item {
 				if (containedStack != null) {
 					final boolean isMatching = tester.isEqual(pickedStack, containedStack);
 					if (isMatching) {
-						ItemDistribution.tryInsertStack(inventory, 0, pickedStack, true);
+						final int totalItems = containedStack.stackSize + pickedStack.stackSize;
+						final int containedItems = Math.min(containedStack.getMaxStackSize(), totalItems);
+						containedStack.stackSize = containedItems;
+						pickedStack.stackSize = Math.max(totalItems - containedItems, 0);
+						inventory.setInventorySlotContents(0, containedStack);
 						if (pickedStack.stackSize == 0) return;
 						foundMatchingContainer = true;
 					}

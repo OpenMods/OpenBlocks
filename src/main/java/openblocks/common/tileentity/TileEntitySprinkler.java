@@ -32,7 +32,6 @@ import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.GenericFluidHandler;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
@@ -177,7 +176,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 			}
 
 			if (ticks % Config.sprinklerBonemealConsumeRate == 0) {
-				hasBonemeal = ItemDistribution.consumeFirstInventoryItem(inventory, BONEMEAL);
+				hasBonemeal = consumeFirstInventoryItem();
 			}
 
 			if (ticks % Config.sprinklerWaterConsumeRate == 0) {
@@ -194,6 +193,20 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 			if (worldObj.isRemote) sprayParticles();
 			else attemptFertilize();
 		}
+	}
+
+	private boolean consumeFirstInventoryItem() {
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack contents = inventory.getStackInSlot(i);
+			if (contents != null && BONEMEAL.isItemEqual(contents)) {
+				if (--contents.stackSize <= 0)
+					contents = null;
+
+				inventory.setInventorySlotContents(i, contents);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void setEnabled(boolean b) {

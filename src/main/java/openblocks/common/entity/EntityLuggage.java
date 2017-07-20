@@ -33,7 +33,7 @@ import openblocks.OpenBlocksGuiHandler;
 import openblocks.common.entity.ai.EntityAICollectItem;
 import openmods.api.VisibleForDocumentation;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.legacy.ItemDistribution;
+import openmods.utils.InventoryUtils;
 
 @VisibleForDocumentation
 public class EntityLuggage extends EntityTameable implements IEntityAdditionalSpawnData {
@@ -193,7 +193,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	public boolean canConsumeStackPartially(ItemStack stack) {
-		return ItemDistribution.testInventoryInsertion(inventory, stack) > 0;
+		return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
 	}
 
 	@Override

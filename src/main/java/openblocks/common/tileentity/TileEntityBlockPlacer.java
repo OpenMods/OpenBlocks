@@ -20,7 +20,6 @@ import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.utils.InventoryUtils;
 
 public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements IHasGui, IInventoryProvider {
 
@@ -30,7 +29,7 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 
 	@Override
 	protected boolean canWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
-		if (InventoryUtils.inventoryIsEmpty(inventory)) return false;
+		if (inventory.isEmpty()) return false;
 
 		final Block block = targetState.getBlock();
 		return block.isAir(targetState, worldObj, target) || block.isReplaceable(worldObj, target);

@@ -36,6 +36,8 @@ import net.minecraftforge.fml.common.eventhandler.IEventListener;
 import net.minecraftforge.fml.common.eventhandler.ListenerList;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.Config;
 import openblocks.OpenBlocks;
 import openblocks.api.GraveDropsEvent;
@@ -45,7 +47,6 @@ import openblocks.common.PlayerInventoryStore.ExtrasFiller;
 import openblocks.common.tileentity.TileEntityGrave;
 import openmods.Log;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.legacy.ItemDistribution;
 import openmods.utils.NbtUtils;
 import openmods.world.DelayedActionTickHandler;
 import org.apache.logging.log4j.Level;
@@ -207,10 +208,11 @@ public class PlayerDeathHandler {
 		}
 
 		protected IInventory getLoot() {
-			IInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
+			final GenericInventory loot = new GenericInventory("tmpplayer", false, this.loot.size());
+			final IItemHandler handler = loot.getHandler();
 			for (EntityItem entityItem : this.loot) {
 				ItemStack stack = entityItem.getEntityItem();
-				if (stack != null) ItemDistribution.insertItemIntoInventory(loot, stack.copy());
+				if (stack != null) ItemHandlerHelper.insertItemStacked(handler, stack, false);
 			}
 			return loot;
 		}

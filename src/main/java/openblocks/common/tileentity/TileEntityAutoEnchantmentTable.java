@@ -30,8 +30,8 @@ import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
-import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidCapabilityWrapper;
 import openmods.sync.SyncableEnum;
 import openmods.sync.SyncableFlags;
@@ -253,16 +253,18 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 				availablePower.set(power);
 			}
 
+			final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
+
 			if (shouldAutoOutput() && hasStack(Slots.output)) {
-				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue(), true);
+				mover.setSides(outputSides.getValue()).pushFromSlot(inventory.getHandler(), Slots.output.ordinal());
 			}
 
 			if (shouldAutoInputTool() && hasSpace(Slots.tool)) {
-				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.tool.ordinal(), inputSides.getValue(), true);
+				mover.setSides(inputSides.getValue()).pullToSlot(inventory.getHandler(), Slots.tool.ordinal());
 			}
 
 			if (shouldAutoInputLapis() && hasSpace(Slots.lapis)) {
-				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.lapis.ordinal(), lapisSides.getValue(), true);
+				mover.setSides(lapisSides.getValue()).pullToSlot(inventory.getHandler(), Slots.lapis.ordinal());
 			}
 
 			tryEnchantItem();

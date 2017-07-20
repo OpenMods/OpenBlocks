@@ -29,8 +29,8 @@ import openmods.include.IncludeInterface;
 import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
-import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableSides;
@@ -128,18 +128,19 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 				tank.fillFromSides(100, worldObj, getPos(), xpSides.getValue());
 			}
 
+			final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
+
 			if (shouldAutoOutput() && hasOutput()) {
-				ItemDistribution.moveItemsToOneOfSides(this, inventory, Slots.output.ordinal(), 1, outputSides.getValue(), true);
+				mover.setSides(outputSides.getValue()).pushFromSlot(inventory.getHandler(), Slots.output.ordinal());
 			}
 
-			// if we should auto input the tool and we don't currently have one
 			if (shouldAutoInputTool() && !hasTool()) {
-				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.tool.ordinal(), toolSides.getValue(), true);
+				mover.setSides(toolSides.getValue()).pullToSlot(inventory.getHandler(), Slots.tool.ordinal());
 			}
 
-			// if we should auto input the modifier
 			if (shouldAutoInputModifier()) {
-				ItemDistribution.moveItemsFromOneOfSides(this, inventory, 1, Slots.modifier.ordinal(), modifierSides.getValue(), true);
+				mover.setSides(modifierSides.getValue()).pullToSlot(inventory.getHandler(), Slots.modifier.ordinal());
+
 			}
 
 			if (cooldown-- < 0 && !hasOutput()) {

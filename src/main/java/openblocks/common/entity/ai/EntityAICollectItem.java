@@ -7,9 +7,10 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
 import openblocks.common.entity.EntityLuggage;
-import openmods.inventory.legacy.ItemDistribution;
+import openmods.utils.ItemUtils;
 
 public class EntityAICollectItem extends EntityAIBase {
 
@@ -76,20 +77,17 @@ public class EntityAICollectItem extends EntityAIBase {
 		super.updateTask();
 		if (!luggage.worldObj.isRemote) {
 			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
-				ItemStack stack = targetItem.getEntityItem();
-				int preEatSize = stack.stackSize;
-				ItemDistribution.insertItemIntoInventory(luggage.getChestInventory(), stack);
-				// Check that the size changed
-				if (preEatSize != stack.stackSize) {
+				final ItemStack toConsume = targetItem.getEntityItem();
+				final ItemStack leftovers = ItemHandlerHelper.insertItem(luggage.getChestInventory().getHandler(), toConsume, false);
+				if (leftovers == null || leftovers.stackSize < toConsume.stackSize) {
 					if (luggage.lastSound > 15) {
-						boolean isFood = stack.getItemUseAction() == EnumAction.EAT;
+						boolean isFood = toConsume.getItemUseAction() == EnumAction.EAT;
 						luggage.playSound(isFood? OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_FOOD : OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_ITEM,
 								0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
 						luggage.lastSound = 0;
 					}
-					if (stack.stackSize == 0) {
-						targetItem.setDead();
-					}
+
+					ItemUtils.setEntityItemStack(targetItem, leftovers);
 				}
 			}
 		}

@@ -8,15 +8,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import openmods.fakeplayer.BreakBlockAction;
 import openmods.fakeplayer.FakePlayerPool;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
-import openmods.inventory.legacy.ItemDistribution;
+import openmods.utils.InventoryUtils;
+import openmods.utils.ItemUtils;
 
 public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 
@@ -44,14 +46,13 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 		if (drops.isEmpty()) return;
 
 		final EnumFacing dropSide = direction.getOpposite();
-		final TileEntity targetInventory = getTileInDirection(dropSide);
+		final IItemHandler targetInventory = InventoryUtils.tryGetHandler(worldObj, pos.offset(dropSide), direction);
 		if (targetInventory == null) return;
 
 		for (EntityItem drop : drops) {
 			ItemStack stack = drop.getEntityItem();
-			ItemDistribution.insertItemInto(stack, targetInventory, direction, true);
-
-			if (stack.stackSize <= 0) drop.setDead();
+			final ItemStack leftovers = ItemHandlerHelper.insertItem(targetInventory, stack, false);
+			ItemUtils.setEntityItemStack(drop, leftovers);
 		}
 	}
 

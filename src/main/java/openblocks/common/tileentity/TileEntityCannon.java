@@ -2,7 +2,6 @@ package openblocks.common.tileentity;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
@@ -13,13 +12,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 import openblocks.OpenBlocks;
 import openblocks.api.IPointable;
 import openblocks.common.entity.EntityItemProjectile;
 import openblocks.rpc.ITriggerable;
 import openmods.Log;
 import openmods.api.ISurfaceAttachment;
-import openmods.inventory.legacy.ItemDistribution;
 import openmods.sync.SyncableDouble;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.InventoryUtils;
@@ -107,10 +106,12 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	private ItemStack findStack() {
 		for (EnumFacing direction : EnumFacing.VALUES) {
-			IInventory inventory = InventoryUtils.getInventory(worldObj, pos, direction);
+			final IItemHandler inventory = InventoryUtils.tryGetHandler(worldObj, pos.offset(direction), direction.getOpposite());
 			if (inventory != null) {
-				ItemStack stack = ItemDistribution.removeFromFirstNonEmptySlot(inventory);
-				if (stack != null) return stack;
+				for (int i = 0; i < inventory.getSlots(); i++) {
+					final ItemStack stack = inventory.extractItem(i, 64, false);
+					if (stack != null) return stack;
+				}
 			}
 		}
 

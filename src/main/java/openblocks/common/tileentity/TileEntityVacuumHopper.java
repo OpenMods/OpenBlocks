@@ -2,8 +2,6 @@ package openblocks.common.tileentity;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,13 +15,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
 import openblocks.common.LiquidXpUtils;
@@ -37,8 +35,8 @@ import openmods.api.IValueProvider;
 import openmods.include.IncludeInterface;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
+import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
-import openmods.inventory.legacy.ItemDistribution;
 import openmods.liquids.SidedFluidHandler;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
@@ -48,6 +46,8 @@ import openmods.sync.SyncableSides;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
+import openmods.utils.InventoryUtils;
+import openmods.utils.ItemUtils;
 import openmods.utils.SidedInventoryAdapter;
 import openmods.utils.bitmap.BitMapUtils;
 import openmods.utils.bitmap.IReadableBitMap;
@@ -153,7 +153,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 			if (entity instanceof EntityItem) {
 				ItemStack stack = ((EntityItem)entity).getEntityItem();
-				return ItemDistribution.testInventoryInsertion(inventory, stack) > 0;
+				return InventoryUtils.canInsertStack(inventory.getHandler(), stack);
 			}
 
 			if (entity instanceof EntityXPOrb) return tank.getSpace() > 0;
@@ -218,21 +218,13 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	private void autoInventoryOutput() {
+		final boolean outputSides = itemOutputs.getValue().isEmpty();
+		if (outputSides) return;
+		final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setSides(itemOutputs.getValue());
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (inventory.getStackInSlot(i) != null) {
-				getItemOutOfSlot(i);
-				break;
+				if (mover.pushFromSlot(inventory.getHandler(), i) > 0) break;
 			}
-		}
-	}
-
-	private void getItemOutOfSlot(int slot) {
-		final List<EnumFacing> outputSides = Lists.newArrayList(itemOutputs.getValue());
-		Collections.shuffle(outputSides);
-
-		for (EnumFacing output : outputSides) {
-			TileEntity tileOnSurface = getTileInDirection(output);
-			if (ItemDistribution.moveItemInto(inventory, slot, tileOnSurface, output, 64, true) > 0) return;
 		}
 	}
 
@@ -265,14 +257,10 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	public boolean onEntityCollidedWithBlock(Entity entity) {
 		if (!worldObj.isRemote) {
 			if (entity instanceof EntityItem && !entity.isDead) {
-				EntityItem item = (EntityItem)entity;
-				ItemStack stack = item.getEntityItem().copy();
-				ItemDistribution.insertItemIntoInventory(inventory, stack);
-				if (stack.stackSize == 0) {
-					item.setDead();
-				} else {
-					item.setEntityItemStack(stack);
-				}
+				final EntityItem item = (EntityItem)entity;
+				final ItemStack toConsume = item.getEntityItem().copy();
+				final ItemStack leftover = ItemHandlerHelper.insertItem(inventory.getHandler(), toConsume, false);
+				ItemUtils.setEntityItemStack(item, leftover);
 				return true;
 			} else if (entity instanceof EntityXPOrb) {
 				if (tank.getSpace() > 0) {
