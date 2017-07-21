@@ -1,15 +1,23 @@
 package openblocks.client.renderer.tileentity;
 
+import java.util.List;
 import java.util.Random;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import openblocks.OpenBlocks;
-import openblocks.client.model.ModelEgg;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.MinecraftForgeClient;
 import openblocks.common.tileentity.TileEntityGoldenEgg;
 import openblocks.common.tileentity.TileEntityGoldenEgg.State;
 import org.lwjgl.opengl.GL11;
@@ -18,39 +26,65 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 	private static final float PHANTOM_SCALE = 1.5f;
 
-	private final ModelEgg model = new ModelEgg();
-
 	private static final Random RANDOM = new Random(432L);
 
-	private static final ResourceLocation texture = OpenBlocks.location("textures/models/egg.png");
+	private static void renderEgg(IBakedModel model, IBlockState state) {
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer vertexbuffer = tessellator.getBuffer();
+
+		vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+		for (EnumFacing enumfacing : EnumFacing.values())
+			renderQuads(vertexbuffer, model.getQuads(state, enumfacing, 0L));
+
+		renderQuads(vertexbuffer, model.getQuads(state, (EnumFacing)null, 0L));
+		GL11.glPushMatrix();
+		GL11.glTranslated(-0.5, 0, -0.5);
+		tessellator.draw();
+		GL11.glPopMatrix();
+	}
+
+	private static void renderQuads(VertexBuffer vertexbuffer, List<BakedQuad> quads) {
+		for (BakedQuad quad : quads)
+			vertexbuffer.addVertexData(quad.getVertexData());
+	}
+
+	protected static BlockRendererDispatcher blockRenderer;
 
 	@Override
 	public void renderTileEntityAt(TileEntityGoldenEgg egg, double x, double y, double z, float partialTickTime, int destroyProgress) {
+		if (egg == null) return;
+
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
-		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+		GL11.glTranslated(x + 0.5, y, z + 0.5);
 
-		float rotation = egg != null? egg.getRotation(partialTickTime) : 0;
-		float progress = egg != null? egg.getProgress(partialTickTime) : 0;
-		float offset = egg != null? egg.getOffset(partialTickTime) : 0;
+		float rotation = egg.getRotation(partialTickTime);
+		float progress = egg.getProgress(partialTickTime);
+		float offset = egg.getOffset(partialTickTime);
 
-		GL11.glTranslatef(0, -offset, 0);
-
+		GL11.glTranslatef(0, offset, 0);
 		GL11.glRotatef(rotation, 0, 1, 0);
 
-		bindTexture(texture);
-		model.render();
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		if (egg != null) {
-			State state = egg.getState();
-			if (state.specialEffects) renderPhantom(rotation, progress, partialTickTime);
-			if (state.specialEffects) renderStar(rotation, progress, Tessellator.getInstance(), partialTickTime);
+		if (blockRenderer == null) blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
+		BlockPos pos = egg.getPos();
+		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(egg.getWorld(), pos);
+		IBlockState blockState = world.getBlockState(pos);
+
+		IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState(blockState);
+
+		renderEgg(model, blockState);
+
+		final State state = egg.getState();
+		if (state.specialEffects) {
+			renderPhantom(model, blockState, rotation, progress, partialTickTime);
+			renderStar(rotation, progress, Tessellator.getInstance(), partialTickTime);
 		}
 
 		GL11.glPopMatrix();
 	}
 
-	private void renderPhantom(float rotation, float progress, float partialTicks) {
+	private static void renderPhantom(IBakedModel model, IBlockState state, float rotation, float progress, float partialTicks) {
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
@@ -60,7 +94,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 		GL11.glTranslatef(0, -0.1f * progress, 0);
 		GL11.glScalef(scale, scale, scale);
-		model.render();
+		renderEgg(model, state);
 
 		GlStateManager.disableBlend();
 		RenderHelper.enableStandardItemLighting();
@@ -94,9 +128,7 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 		RANDOM.setSeed(432L);
 
-		// TODO 1.8.9 verify
 		VertexBuffer wr = tes.getBuffer();
-		wr.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 
 		final int alpha = (int)(MAX_OPACITY * (1.0F - f2));
 
@@ -110,6 +142,9 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 
 			final float f3 = RANDOM.nextFloat() * BEAM_END_DISTANCE + 5.0F + f2 * 10.0F;
 			final float f4 = RANDOM.nextFloat() * BEAM_START_DISTANCE + 1.0F + f2 * 2.0F;
+
+			wr.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+
 			wr.pos(0.0, 0.0, 0.0).color(255, 255, 255, alpha).endVertex();
 
 			wr.pos(0.0D, 0.0D, 0.0D).color(255, 255, 255, alpha).endVertex();
@@ -117,9 +152,8 @@ public class TileEntityGoldenEggRenderer extends TileEntitySpecialRenderer<TileE
 			wr.pos(0.866D * f4, f3, (-0.5F * f4)).color(255, 0, 255, 0).endVertex();
 			wr.pos(0.0D, f3, (1.0F * f4)).color(255, 0, 255, 0).endVertex();
 			wr.pos(-0.866D * f4, f3, (-0.5F * f4)).color(255, 0, 255, 0).endVertex();
+			tes.draw();
 		}
-
-		tes.draw();
 
 		GlStateManager.depthMask(true);
 		GlStateManager.disableCull();

@@ -384,7 +384,6 @@ public class ClientProxy implements IOpenBlocksProxy {
 		consumer.nom(OpenBlocks.Blocks.cannon);
 		consumer.nom(OpenBlocks.Blocks.donationStation);
 		consumer.nom(OpenBlocks.Blocks.fan);
-		consumer.nom(OpenBlocks.Blocks.goldenEgg);
 		consumer.nom(OpenBlocks.Blocks.grave);
 		consumer.nom(OpenBlocks.Blocks.sprinkler);
 	}
