@@ -1,7 +1,7 @@
 package openblocks.common.tileentity;
 
 import com.google.common.collect.Lists;
-import java.util.Iterator;
+import com.google.common.primitives.Ints;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.util.ITickable;
@@ -35,15 +35,6 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 		isEnabled = new SyncableBoolean();
 	}
 
-	public static int[] convertIntegers(List<Integer> integers) {
-		int[] ret = new int[integers.size()];
-		Iterator<Integer> iterator = integers.iterator();
-		for (int i = 0; i < ret.length; i++) {
-			ret[i] = iterator.next().intValue();
-		}
-		return ret;
-	}
-
 	@Override
 	public void update() {
 		if (!worldObj.isRemote) {
@@ -61,7 +52,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 						tmpDataList.add(System.identityHashCode(village));
 					}
 				}
-				villageData.setValue(convertIntegers(tmpDataList));
+				villageData.setValue(Ints.toArray(tmpDataList));
 				sync();
 				boolean canBreed = canVillagersBreed();
 				if (previousBreedStatus != canBreed) {
