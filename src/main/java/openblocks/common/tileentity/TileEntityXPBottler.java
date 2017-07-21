@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiXPBottler;
 import openblocks.common.LiquidXpUtils;
@@ -32,6 +33,7 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.SidedFluidCapabilityWrapper;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableInt;
 import openmods.sync.SyncableSides;
@@ -39,6 +41,7 @@ import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.SidedItemHandlerAdapter;
 import openmods.utils.bitmap.BitMapUtils;
 import openmods.utils.bitmap.IRpcDirectionBitMap;
 import openmods.utils.bitmap.IRpcIntBitMap;
@@ -76,6 +79,8 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);
 
+	private final SidedItemHandlerAdapter itemHandlerCapability = new SidedItemHandlerAdapter(inventory.getHandler());
+
 	private SyncableInt progress;
 	private SyncableSides glassSides;
 	private SyncableSides xpBottleSides;
@@ -97,15 +102,26 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
 	}
 
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addSyncListener(itemHandlerCapability.createSyncListener());
+	}
+
 	public TileEntityXPBottler() {
 		sided.registerSlot(Slots.input, glassSides, true, false);
 		sided.registerSlot(Slots.output, xpBottleSides, false, true);
+
+		itemHandlerCapability.registerSlot(Slots.input, glassSides, true, false);
+		itemHandlerCapability.registerSlot(Slots.output, xpBottleSides, false, true);
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return tankCapability.hasHandler(facing);
+
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return itemHandlerCapability.hasHandler(facing);
 
 		return super.hasCapability(capability, facing);
 	}
@@ -115,6 +131,9 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapability.getHandler(facing);
+
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return (T)itemHandlerCapability.getHandler(facing);
 
 		return super.getCapability(capability, facing);
 	}

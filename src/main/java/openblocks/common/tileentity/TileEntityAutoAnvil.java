@@ -12,9 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
 import openblocks.common.LiquidXpUtils;
@@ -32,6 +34,7 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.SidedFluidHandler;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableSides;
 import openmods.sync.SyncableTank;
@@ -39,6 +42,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.SidedItemHandlerAdapter;
 import openmods.utils.VanillaAnvilLogic;
 import openmods.utils.bitmap.BitMapUtils;
 import openmods.utils.bitmap.IRpcDirectionBitMap;
@@ -99,10 +103,16 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	@IncludeInterface
 	private final IFluidHandler tankWrapper = new SidedFluidHandler.Drain(xpSides, tank);
 
+	private final SidedItemHandlerAdapter itemHandlerCapability = new SidedItemHandlerAdapter(inventory.getHandler());
+
 	public TileEntityAutoAnvil() {
 		slotSides.registerSlot(Slots.tool, toolSides, true, false);
 		slotSides.registerSlot(Slots.modifier, modifierSides, true, false);
 		slotSides.registerSlot(Slots.output, outputSides, false, true);
+
+		itemHandlerCapability.registerSlot(Slots.tool, toolSides, true, false);
+		itemHandlerCapability.registerSlot(Slots.modifier, modifierSides, true, false);
+		itemHandlerCapability.registerSlot(Slots.output, outputSides, false, true);
 	}
 
 	@Override
@@ -113,6 +123,11 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		xpSides = new SyncableSides();
 		tank = new SyncableTank(TANK_CAPACITY, OpenBlocks.Fluids.xpJuice);
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
+	}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addSyncListener(itemHandlerCapability.createSyncListener());
 	}
 
 	@Override
@@ -294,4 +309,22 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	public void onNeighbourChanged(Block block) {
 		this.needsTankUpdate = true;
 	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return itemHandlerCapability.hasHandler(facing);
+
+		return super.hasCapability(capability, facing);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return (T)itemHandlerCapability.getHandler(facing);
+
+		return super.getCapability(capability, facing);
+	}
+
 }

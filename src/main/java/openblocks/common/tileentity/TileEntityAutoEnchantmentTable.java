@@ -15,6 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoEnchantmentTable;
@@ -33,6 +34,7 @@ import openmods.inventory.IInventoryProvider;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
 import openmods.liquids.SidedFluidCapabilityWrapper;
+import openmods.sync.SyncMap;
 import openmods.sync.SyncableEnum;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableInt;
@@ -42,6 +44,7 @@ import openmods.tileentity.SyncedTileEntity;
 import openmods.utils.EnchantmentUtils;
 import openmods.utils.MiscUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.SidedItemHandlerAdapter;
 import openmods.utils.VanillaEnchantLogic;
 import openmods.utils.VanillaEnchantLogic.Level;
 import openmods.utils.bitmap.BitMapUtils;
@@ -108,6 +111,8 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
 
 	private final SidedFluidCapabilityWrapper tankCapability = SidedFluidCapabilityWrapper.wrap(tank, xpSides, false, true);
+
+	private final SidedItemHandlerAdapter itemHandlerCapability = new SidedItemHandlerAdapter(inventory.getHandler());
 
 	private static final Random bookRand = new Random();
 
@@ -200,6 +205,10 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		slotSides.registerSlot(Slots.lapis, lapisSides, true, false);
 		slotSides.registerSlot(Slots.output, outputSides, false, true);
 
+		itemHandlerCapability.registerSlot(Slots.tool, inputSides, true, false);
+		itemHandlerCapability.registerSlot(Slots.lapis, lapisSides, true, false);
+		itemHandlerCapability.registerSlot(Slots.output, outputSides, false, true);
+
 		this.seed = seedGenerator.nextLong();
 	}
 
@@ -207,6 +216,9 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return tankCapability.hasHandler(facing);
+
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return itemHandlerCapability.hasHandler(facing);
 
 		return super.hasCapability(capability, facing);
 	}
@@ -216,6 +228,9 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapability.getHandler(facing);
+
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return (T)itemHandlerCapability.getHandler(facing);
 
 		return super.getCapability(capability, facing);
 	}
@@ -231,6 +246,11 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		availablePower = new SyncableInt();
 		selectedLevel = new SyncableEnum<VanillaEnchantLogic.Level>(VanillaEnchantLogic.Level.L1);
 		automaticSlots = SyncableFlags.create(AutoSlots.values().length);
+	}
+
+	@Override
+	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addSyncListener(itemHandlerCapability.createSyncListener());
 	}
 
 	@Override

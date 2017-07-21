@@ -19,8 +19,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiVacuumHopper;
@@ -49,6 +51,7 @@ import openmods.utils.EnchantmentUtils;
 import openmods.utils.InventoryUtils;
 import openmods.utils.ItemUtils;
 import openmods.utils.SidedInventoryAdapter;
+import openmods.utils.SidedItemHandlerAdapter;
 import openmods.utils.bitmap.BitMapUtils;
 import openmods.utils.bitmap.IReadableBitMap;
 import openmods.utils.bitmap.IRpcDirectionBitMap;
@@ -74,6 +77,8 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter sided = new SidedInventoryAdapter(inventory);
 
+	private final SidedItemHandlerAdapter itemHandlerCapability = new SidedItemHandlerAdapter(inventory.getHandler());
+
 	@IncludeInterface
 	private final IFluidHandler tankWrapper = new SidedFluidHandler.Source(xpOutputs, tank);
 
@@ -89,10 +94,14 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	public TileEntityVacuumHopper() {
 		sided.registerAllSlots(itemOutputs, false, true);
+
+		itemHandlerCapability.registerAllSlots(itemOutputs, false, true);
 	}
 
 	@Override
 	protected void onSyncMapCreate(SyncMap syncMap) {
+		syncMap.addSyncListener(itemHandlerCapability.createSyncListener());
+
 		syncMap.addUpdateListener(new ISyncListener() {
 			@Override
 			public void onSync(Set<ISyncableObject> changes) {
@@ -308,6 +317,23 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	public Map<String, String> getOutputState() {
 		return outputState;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return itemHandlerCapability.hasHandler(facing);
+
+		return super.hasCapability(capability, facing);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return (T)itemHandlerCapability.getHandler(facing);
+
+		return super.getCapability(capability, facing);
 	}
 
 }

@@ -5,6 +5,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.client.gui.GuiBigButton;
 import openblocks.common.container.ContainerBigButton;
 import openmods.api.IHasGui;
@@ -62,6 +64,21 @@ public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttac
 	@IncludeInterface
 	public IInventory getInventory() {
 		return inventory;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+				super.hasCapability(capability, facing);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return (T)inventory.getHandler();
+
+		return super.getCapability(capability, facing);
 	}
 
 }

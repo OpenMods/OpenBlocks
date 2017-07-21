@@ -15,6 +15,7 @@ import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiPaintMixer;
@@ -375,13 +376,20 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing side) {
-		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) { return true; }
-		return super.hasCapability(capability, side);
+		return capability == CapabilityAnimation.ANIMATION_CAPABILITY ||
+				capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+				super.hasCapability(capability, side);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T getCapability(Capability<T> capability, EnumFacing side) {
-		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) { return CapabilityAnimation.ANIMATION_CAPABILITY.cast(asm); }
+		if (capability == CapabilityAnimation.ANIMATION_CAPABILITY)
+			return (T)asm;
+
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			return (T)inventory.getHandler();
+
 		return super.getCapability(capability, side);
 	}
 
