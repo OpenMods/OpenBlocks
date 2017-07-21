@@ -502,7 +502,8 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+				|| super.hasCapability(capability, facing);
 	}
 
 	@Override
@@ -511,6 +512,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapabilityWrapper;
 
-		return null;
+		return super.getCapability(capability, facing);
 	}
 }

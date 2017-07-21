@@ -208,7 +208,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return tankCapability.hasHandler(facing);
 
-		return false;
+		return super.hasCapability(capability, facing);
 	}
 
 	@Override
@@ -217,7 +217,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T)tankCapability.getHandler(facing);
 
-		return null;
+		return super.getCapability(capability, facing);
 	}
 
 	@Override
