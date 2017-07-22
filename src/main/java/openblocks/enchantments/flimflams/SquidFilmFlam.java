@@ -30,7 +30,6 @@ public class SquidFilmFlam implements IFlimFlamAction {
 		squid.setCustomNameTag(names.get(selected));
 
 		target.worldObj.spawnEntityInWorld(squid);
-		squid.startRiding(target);
 		return true;
 	}
 

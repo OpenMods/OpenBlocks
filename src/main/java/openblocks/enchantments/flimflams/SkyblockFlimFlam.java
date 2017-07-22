@@ -30,9 +30,9 @@ public class SkyblockFlimFlam implements IFlimFlamAction {
 		final IBlockState state = Blocks.ICE.getDefaultState();
 
 		for (BlockPos pos : blocks)
-			world.setBlockState(pos, state);
+			if (!world.setBlockState(pos, state)) return false;
 
-		target.setPositionAndUpdate(trapCenter.getY() + 0.5, trapCenter.getY() + 1, trapCenter.getZ() + 0.5);
+		target.setPositionAndUpdate(trapCenter.getX() + 0.5, trapCenter.getY() + 1, trapCenter.getZ() + 0.5);
 		return true;
 	}
 }
