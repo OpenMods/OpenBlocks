@@ -18,11 +18,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.Config;
 import openblocks.common.entity.EntityGoldenEye;
-import openmods.Log;
 import openmods.utils.ItemUtils;
 import openmods.utils.TranslationUtils;
 import openmods.world.StructureRegistry;
@@ -39,7 +39,7 @@ public class ItemGoldenEye extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		if (world instanceof WorldServer && player instanceof EntityPlayerMP) {
+		if (hand == EnumHand.MAIN_HAND && world instanceof WorldServer && player instanceof EntityPlayerMP) {
 			EntityPlayerMP betterPlayer = (EntityPlayerMP)player;
 			if (player.isSneaking()) tryLearnStructure(stack, (WorldServer)world, betterPlayer);
 			else {
@@ -54,7 +54,7 @@ public class ItemGoldenEye extends Item {
 	private static void tryLearnStructure(ItemStack stack, WorldServer world, EntityPlayerMP player) {
 		Map<String, BlockPos> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, player.getPosition());
 
-		String structureName = "";
+		String newStructureName = "";
 		double max = Double.MAX_VALUE;
 
 		for (Map.Entry<String, BlockPos> e : nearbyStructures.entrySet()) {
@@ -66,14 +66,16 @@ public class ItemGoldenEye extends Item {
 
 			if (distSq < max) {
 				max = distSq;
-				structureName = e.getKey();
+				newStructureName = e.getKey();
 			}
 		}
 
-		if (!Strings.isNullOrEmpty(structureName)) {
-			Log.info("Learned structure %s, d = %f", structureName, Math.sqrt(max));
+		if (!Strings.isNullOrEmpty(newStructureName)) {
+			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.locked_on_structure", new TextComponentTranslation(StructureRegistry.structureNameLocalizationKey(newStructureName))));
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
-			tag.setString(TAG_STRUCTURE, structureName);
+			tag.setString(TAG_STRUCTURE, newStructureName);
+		} else {
+			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.no_nearby_structures"));
 		}
 	}
 
@@ -84,7 +86,10 @@ public class ItemGoldenEye extends Item {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		String structureName = tag.getString(TAG_STRUCTURE);
 
-		if (Strings.isNullOrEmpty(structureName)) return false;
+		if (Strings.isNullOrEmpty(structureName)) {
+			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.structure_not_locked"));
+			return false;
+		}
 
 		Map<String, BlockPos> nearbyStructures = StructureRegistry.instance.getNearestStructures(world, player.getPosition());
 
@@ -113,7 +118,11 @@ public class ItemGoldenEye extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
-		if (tag.hasKey(TAG_STRUCTURE)) result.add(TranslationUtils.translateToLocal("openblocks.misc.locked"));
+		if (tag.hasKey(TAG_STRUCTURE, Constants.NBT.TAG_STRING)) {
+			final String structure = tag.getString(TAG_STRUCTURE);
+			final String localizedStructure = TranslationUtils.translateToLocal(StructureRegistry.structureNameLocalizationKey(structure));
+			result.add(TranslationUtils.translateToLocalFormatted("openblocks.misc.locked_on_structure", localizedStructure));
+		}
 	}
 
 }
