@@ -100,69 +100,29 @@ public class SoundIconRegistry {
 		}
 	}
 
-	private static class MobIcons {
-		public final IDrawableIcon normalIcon;
-		public final IDrawableIcon hurtIcon;
-		public final IDrawableIcon deathIcon;
-
-		private MobIcons(IDrawableIcon normalIcon, IDrawableIcon hurtIcon, IDrawableIcon deathIcon) {
-			this.normalIcon = normalIcon;
-			this.hurtIcon = hurtIcon;
-			this.deathIcon = deathIcon;
-		}
-
-		private void registerIcons(TextureMap registry) {
-			normalIcon.registerIcons(registry);
-			hurtIcon.registerIcons(registry);
-			deathIcon.registerIcons(registry);
-		}
+	private static IDrawableIcon createMobIcon(ResourceLocation front, int primaryColor, int secondaryColor) {
+		IDrawableIcon frame = createIcon(ICON_FRAME, secondaryColor);
+		return makeFramedIcon(front, primaryColor, frame);
 	}
 
-	private static class MobSounds implements ISoundCategory {
-		private Map<String, MobIcons> mobs = Maps.newHashMap();
-		private MobIcons unknownMob;
+	private static void addMob(MappedCategory category, String soundId, String mobId, boolean isHostile) {
+		final EntityEggInfo mobInfo = EntityList.ENTITY_EGGS.get(mobId);
 
-		private static MobIcons createMobIcons(String innerIcon, int innerColor, int frameColor) {
-			IDrawableIcon frame = createIcon(ICON_FRAME, frameColor);
-			IDrawableIcon normal = makeFramedIcon(ob(innerIcon), innerColor, frame);
-			IDrawableIcon hurt = makeFramedIcon(ob("mob_hurt"), innerColor, frame);
-			IDrawableIcon death = makeFramedIcon(ob("mob_death"), innerColor, frame);
-			return new MobIcons(normal, hurt, death);
-		}
+		// TODO maybe some default colors for egg-less mobs?
+		if (mobInfo != null) addMob(category, soundId, isHostile, mobInfo.primaryColor, mobInfo.secondaryColor);
+		else addMob(category, soundId, isHostile, 0xFFFFFFFF, 0x00000000);
+	}
 
-		public MobSounds() {
-			unknownMob = createMobIcons("mob_unknown", DEFAULT_COLOR, DEFAULT_COLOR);
-		}
+	private static void addMob(MappedCategory category, String soundId, boolean isHostile, int primaryColor, int secondaryColor) {
+		final MappedCategory cat = category.add(soundId, new MappedCategory());
 
-		@Override
-		public IDrawableIcon getIcon(Iterator<String> path) {
-			String mobName = path.next();
-			String actionName = path.next();
+		final IDrawableIcon defaultIcon = createMobIcon(isHostile? ob("mob_hostile") : ob("mob_friendly"), primaryColor, secondaryColor);
+		cat.add("ambient", defaultIcon); // TODO maybe some specific icons?
+		cat.add("step", defaultIcon);
+		cat.add("death", createMobIcon(ob("mob_death"), primaryColor, secondaryColor));
+		cat.add("hurt", createMobIcon(ob("mob_hurt"), primaryColor, secondaryColor));
 
-			MobIcons mob = mobs.get(mobName);
-
-			if (mob == null) mob = unknownMob;
-
-			if (actionName.equals("hit")) return mob.hurtIcon;
-
-			if (actionName.equals("death")) return mob.deathIcon;
-
-			return mob.normalIcon;
-		}
-
-		@Override
-		public void registerIcons(TextureMap registry) {
-			unknownMob.registerIcons(registry);
-			for (MobIcons icons : mobs.values())
-				icons.registerIcons(registry);
-		}
-
-		public void addMob(String soundId, String mobId, boolean isHostile) {
-			EntityEggInfo mobInfo = EntityList.ENTITY_EGGS.get(mobId);
-
-			if (mobInfo != null) mobs.put(soundId, createMobIcons(isHostile? "mob_hostile" : "mob_friendly", mobInfo.primaryColor, mobInfo.secondaryColor));
-			else mobs.put(soundId, unknownMob);
-		}
+		cat.defaultIcon = defaultIcon;
 	}
 
 	public static class SkipPath implements ISoundCategory {
@@ -262,20 +222,47 @@ public class SoundIconRegistry {
 		return makeFramedIcon(innerIcon, 0xFFFFFF, frame);
 	}
 
-	private static IDrawableIcon makeIcon(ResourceLocation block, IDrawableIcon front, IDrawableIcon frame) {
-		IDrawableIcon back = createIcon(block);
-		return makeFramedIcon(makeLayeredIcon(front, back), frame);
+	private static void addForStandardBlock(MappedCategory cat, String name, ResourceLocation block) {
+		IDrawableIcon blockIcon = createIcon(block);
+
+		IDrawableIcon dig = createIcon(mc("items/diamond_shovel"));
+		IDrawableIcon step = createIcon(mc("items/diamond_boots"));
+		IDrawableIcon hurt = createIcon(ob("mob_hurt"));
+		IDrawableIcon br = createIcon(mc("blocks/destroy_stage_5"));
+		IDrawableIcon unknown = createIcon(ob("unknown"));
+
+		IDrawableIcon whiteFrame = createIcon(ICON_FRAME, 0xFFFFFF);
+
+		final MappedCategory blockCategory = cat.add(name, new MappedCategory());
+		blockCategory.add("break", makeFramedIcon(br, blockIcon, whiteFrame));
+		blockCategory.add("fall", makeFramedIcon(hurt, blockIcon, whiteFrame));
+		blockCategory.add("hit", makeFramedIcon(dig, blockIcon, whiteFrame));
+		blockCategory.add("place", makeFramedIcon(blockIcon, whiteFrame));
+		blockCategory.add("step", makeFramedIcon(step, blockIcon, whiteFrame));
+
+		blockCategory.defaultIcon = makeLayeredIcon(unknown, blockIcon);
 	}
 
-	private static void addBlocks(MappedCategory cat, IDrawableIcon front, IDrawableIcon frame) {
-		cat.add("cloth", makeIcon(mc("blocks/wool_colored_white"), front, frame));
-		cat.add("grass", makeIcon(mc("blocks/dirt"), front, frame));
-		cat.add("gravel", makeIcon(mc("blocks/gravel"), front, frame));
-		cat.add("sand", makeIcon(mc("blocks/sand"), front, frame));
-		cat.add("snow", makeIcon(mc("blocks/snow"), front, frame));
-		cat.add("stone", makeIcon(mc("blocks/stone"), front, frame));
-		cat.add("wood", makeIcon(mc("blocks/log_oak_top"), front, frame));
-		cat.add("ladder", makeIcon(mc("blocks/ladder"), front, frame));
+	public static MappedCategory createSingleIconCategory(ResourceLocation icon, boolean frame) {
+		final MappedCategory result = new MappedCategory();
+		result.defaultIcon = frame? makeFramedIcon(icon, createIcon(ICON_FRAME, 0xFFFFFF)) : createIcon(icon, 0xFFFFFFFF);
+		return result;
+	}
+
+	private static void addForBasicBlock(MappedCategory cat, String name, ResourceLocation block) {
+		IDrawableIcon blockIcon = createIcon(block);
+		IDrawableIcon whiteFrame = createIcon(ICON_FRAME, 0xFFFFFF);
+
+		final MappedCategory blockCategory = cat.add(name, new MappedCategory());
+		blockCategory.defaultIcon = makeFramedIcon(blockIcon, whiteFrame);
+	}
+
+	private static void addForBasicBlockAction(MappedCategory cat, String name, ResourceLocation block) {
+		IDrawableIcon blockIcon = createIcon(block);
+		IDrawableIcon action = createIcon(ob("click"), 0xFFFFFF);
+
+		final MappedCategory blockCategory = cat.add(name, new MappedCategory());
+		blockCategory.defaultIcon = makeLayeredIcon(action, blockIcon);
 	}
 
 	private MappedCategory createRoot(String id) {
@@ -285,16 +272,12 @@ public class SoundIconRegistry {
 	}
 
 	public void registerDefaults() {
-		// TODO 1.8.9 review vanilla sounds
 		// TODO 1.8.9 map sound categories for catch-all
-		IDrawableIcon frameWhite = createIcon(ICON_FRAME, 0xFFFFFF);
+		final IDrawableIcon whiteFrame = createIcon(ICON_FRAME, 0xFFFFFF);
+		final IDrawableIcon frame = whiteFrame;
+		IDrawableIcon frameWhite = frame;
 		IDrawableIcon frameRed = createIcon(ICON_FRAME, 0xFF0000);
-		IDrawableIcon frameGreen = createIcon(ICON_FRAME, 0x00FF00);
 		IDrawableIcon frameBlue = createIcon(ICON_FRAME, 0x0000FF);
-		IDrawableIcon frameYellow = createIcon(ICON_FRAME, 0xFFFF00);
-
-		IDrawableIcon shovel = createIcon(mc("items/diamond_shovel"));
-		IDrawableIcon boots = createIcon(mc("items/diamond_boots"));
 
 		defaultRoot.defaultIcon = unknownIcon;
 
@@ -303,79 +286,186 @@ public class SoundIconRegistry {
 			mcRoot.defaultIcon = unknownIcon;
 
 			{
-				MappedCategory ambient = mcRoot.add("ambient", new MappedCategory());
-				{
+				final MappedCategory blocks = mcRoot.add("block", new MappedCategory());
 
-					MappedCategory weather = ambient.add("weather", new MappedCategory());
-					weather.add("rain", simpleIcon("rain", 0x0000FF));
-					weather.add("thunder", genericIcon);
+				addForStandardBlock(blocks, "anvil", mc("blocks/anvil_base"));
+				addForStandardBlock(blocks, "cloth", mc("blocks/wool_colored_white"));
+				addForStandardBlock(blocks, "glass", mc("blocks/glass"));
+				addForStandardBlock(blocks, "grass", mc("blocks/dirt"));
+				addForStandardBlock(blocks, "gravel", mc("blocks/gravel"));
+				addForStandardBlock(blocks, "ladder", mc("blocks/ladder"));
+				addForStandardBlock(blocks, "metal", mc("blocks/iron_block"));
+				addForStandardBlock(blocks, "sand", mc("blocks/sand"));
+				addForStandardBlock(blocks, "slime", mc("blocks/slime"));
+				addForStandardBlock(blocks, "snow", mc("blocks/snow"));
+				addForStandardBlock(blocks, "stone", mc("blocks/stone"));
+				addForStandardBlock(blocks, "wood", mc("blocks/log_oak_top"));
+
+				addForBasicBlock(blocks, "brewing_stand", mc("blocks/brewing_stand"));
+				addForBasicBlock(blocks, "chest", mc("blocks/planks_oak"));
+				addForBasicBlock(blocks, "chorus_flower", mc("blocks/chorus_flower"));
+				addForBasicBlock(blocks, "comparator", mc("blocks/comparator_on"));
+				addForBasicBlock(blocks, "dispenser", mc("blocks/dispenser_front_horizontal"));
+				addForBasicBlock(blocks, "enchantment_table", mc("blocks/enchanting_table_top"));
+				addForBasicBlock(blocks, "end_gateway", mc("items/end_crystal"));
+				addForBasicBlock(blocks, "enderchest", mc("items/ender_eye"));
+				addForBasicBlock(blocks, "fence_gate", mc("blocks/planks_oak"));
+				addForBasicBlock(blocks, "fire", mc("blocks/fire_layer_0"));
+				addForBasicBlock(blocks, "furnace", mc("blocks/furnace_front_on"));
+				addForBasicBlock(blocks, "iron_door", mc("items/door_iron"));
+				addForBasicBlock(blocks, "iron_trapdoor", mc("blocks/iron_trapdoor"));
+				addForBasicBlock(blocks, "lava", mc("blocks/lava_flow"));
+				addForBasicBlock(blocks, "piston", mc("blocks/piston_side"));
+				addForBasicBlock(blocks, "portal", mc("blocks/portal"));
+				addForBasicBlock(blocks, "redstone_torch", mc("blocks/redstone_torch_on"));
+				addForBasicBlock(blocks, "tripwire", mc("blocks/trip_wire_source"));
+				addForBasicBlock(blocks, "water", mc("blocks/water_flow"));
+				addForBasicBlock(blocks, "waterlily", mc("blocks/waterlily"));
+				addForBasicBlock(blocks, "wooden_door", mc("items/door_wood"));
+				addForBasicBlock(blocks, "wooden_trapdoor", mc("blocks/trapdoor"));
+
+				addForBasicBlockAction(blocks, "metal_pressureplate", mc("blocks/iron_block"));
+				addForBasicBlockAction(blocks, "stone_button", mc("blocks/stone"));
+				addForBasicBlockAction(blocks, "stone_pressureplate", mc("blocks/stone"));
+				addForBasicBlockAction(blocks, "wood_button", mc("blocks/planks_oak"));
+				addForBasicBlockAction(blocks, "wood_pressureplate", mc("blocks/planks_oak"));
+				addForBasicBlockAction(blocks, "lever", mc("blocks/lever"));
+
+				{
+					TintedIconCategory note = blocks.add("note", new TintedIconCategory(ob("note")));
+					note.add("basedrum", 0x00FFFF);
+					note.add("bass", 0x0000FF);
+					note.add("harp", 0xFFFF00);
+					note.add("harp", 0xFF0000);
+					note.add("hat", 0x00FF00);
+					note.add("pling", 0xFF00FF);
+					note.add("snare", 0xFFFFFF);
 				}
 			}
 
 			{
+				MappedCategory entity = mcRoot.add("entity", new MappedCategory());
+				addMob(entity, "blaze", "Blaze", true);
+				addMob(entity, "creeper", "Creeper", true);
+				addMob(entity, "elder_guardian", "Guardian", true);
+				addMob(entity, "enderdragon", "EnderDragon", true);
+				addMob(entity, "endermen", "Enderman", true);
+				addMob(entity, "endermite", "Endermite", true);
+				addMob(entity, "ghast", "Ghast", true);
+				addMob(entity, "guardian", "Guardian", true);
+				addMob(entity, "hostile", "Monster", true);
+				addMob(entity, "husk", "Zombie", true);
+				addMob(entity, "magmacube", "LavaSlime", true);
+				addMob(entity, "shulker", "Shulker", true);
+				addMob(entity, "silverfish", "Silverfish", true);
+				addMob(entity, "skeleton", "Skeleton", true);
+				addMob(entity, "slime", "Slime", true);
+				addMob(entity, "small_magmacube", "LavaSlime", true);
+				addMob(entity, "small_slime", "Slime", true);
+				addMob(entity, "spider", "Spider", true);
+				addMob(entity, "stray", "Skeleton", true);
+				addMob(entity, "witch", "Witch", true);
+				addMob(entity, "wither", "WitherBoss", true);
+				addMob(entity, "wither_skeleton", "Skeleton", true);
+				addMob(entity, "zombie", "Zombie", true);
+				addMob(entity, "zombie_villager", "Zombie", true);
 
-				MappedCategory fire = mcRoot.add("fire", new MappedCategory());
-				fire.add("fire", makeFramedIcon(mc("blocks/fire_layer_0"), frameRed));
-				fire.add("ignite", makeFramedIcon(mc("items/flint_and_steel"), frameRed));
-
-			}
-
-			mcRoot.add("fireworks", makeFramedIcon(mc("items/fireworks"), frameRed));
-
-			addBlocks(mcRoot.add("dig", new MappedCategory()), shovel, frameYellow);
-			addBlocks(mcRoot.add("step", new MappedCategory()), boots, frameGreen);
-
-			{
-				TintedIconCategory liquid = mcRoot.add("liquid", new TintedIconCategory(ob("liquid")));
-				liquid.add("lava", makeFramedIcon(mc("blocks/lava_flow"), frameRed));
-				liquid.add("water", makeFramedIcon(mc("blocks/water_flow"), frameBlue));
-				liquid.add("lavapop", 0xFF0000);
-			}
-
-			{
-				IDrawableIcon hurt = makeFramedIcon(ob("mob_hurt"), 0xFFFFFF, frameWhite);
-				IDrawableIcon death = makeFramedIcon(ob("mob_death"), 0xFFFFFF, frameWhite);
-
-				MappedCategory game = mcRoot.add("game", new MappedCategory());
-
-				{
-					MappedCategory potion = game.add("potion", new MappedCategory());
-					potion.add("smash", makeFramedIcon(mc("items/potion_bottle_splash"), frameWhite));
-				}
-
-				{
-					MappedCategory potion = game.add("tnt", new MappedCategory());
-					potion.add("primed", makeFramedIcon(mc("blocks/tnt_side"), frameRed));
-				}
-
-				{
-					IDrawableIcon hostileBack = simpleIcon("mob_hostile", 0xFFFFFF);
-					MappedCategory hostile = game.add("hostile", new MappedCategory());
-
-					hostile.defaultIcon = makeFramedIcon(hostileBack, frameWhite);
-					hostile.add("die", makeFramedIcon(death, hostileBack, frameRed));
-					hostile.add("hurt", makeFramedIcon(hurt, hostileBack, frameRed));
-				}
-
-				{
-					IDrawableIcon neutralBack = simpleIcon("mob_friendly", 0xFFFFFF);
-					MappedCategory netural = game.add("neutral", new MappedCategory());
-					netural.defaultIcon = makeFramedIcon(neutralBack, frameWhite);
-					netural.add("die", makeFramedIcon(death, neutralBack, frameRed));
-					netural.add("hurt", makeFramedIcon(hurt, neutralBack, frameRed));
-				}
+				addMob(entity, "bat", "Bat", false);
+				addMob(entity, "cat", "Ozelot", false);
+				addMob(entity, "chicken", "Chicken", false);
+				addMob(entity, "cow", "Cow", false);
+				addMob(entity, "donkey", "EntityHorse", false);
+				addMob(entity, "horse", "EntityHorse", false);
+				addMob(entity, "irongolem", "VillagerGolem", false);
+				addMob(entity, "mooshroom", "MushroomCow", false);
+				addMob(entity, "mule", "EntityHorse", false);
+				addMob(entity, "pig", "Pig", false);
+				addMob(entity, "polar_bear", "PolarBear", false);
+				addMob(entity, "rabbit", "Rabbit", false);
+				addMob(entity, "sheep", "Sheep", false);
+				addMob(entity, "skeleton_horse", "EntityHorse", false);
+				addMob(entity, "snowman", "SnowMan", false);
+				addMob(entity, "squid", "Squid", false);
+				addMob(entity, "villager", "Villager", false);
+				addMob(entity, "wolf", "Wolf", false);
+				addMob(entity, "zombie_horse", "EntityHorse", false);
+				addMob(entity, "zombie_pig", "PigZombie", false); // YMMV
 
 				{
-					IDrawableIcon playerBack = createIcon(mc("skull_steve"), 0xFFFFFF); // TODO 1.8.9 find replacement
-					MappedCategory player = game.add("player", new MappedCategory());
+					final MappedCategory player = entity.add("player", new MappedCategory());
+
+					player.add("burp", makeFramedIcon(mc("items/potato_baked"), frameWhite));
+					player.add("levelup", makeFramedIcon(mc("items/experience_bottle"), frameWhite));
+
+					final IDrawableIcon playerBack = createIcon(ob("player"));
 					player.defaultIcon = makeFramedIcon(playerBack, frameWhite);
-					player.add("die", makeFramedIcon(hurt, playerBack, frameRed));
-					player.add("hurt", makeFramedIcon(hurt, playerBack, frameRed));
+					player.add("die", makeFramedIcon(makeFramedIcon(ob("mob_death"), 0xFFFFFF, frameWhite), playerBack, frameRed));
+					player.add("hurt", makeFramedIcon(makeFramedIcon(ob("mob_hurt"), 0xFFFFFF, frameWhite), playerBack, frameRed));
+				}
+
+				entity.add("experience_orb", createSingleIconCategory(mc("items/experience_bottle"), true));
+				entity.add("arrow", createSingleIconCategory(mc("items/arrow"), true));
+
+				entity.add("egg", createSingleIconCategory(mc("items/experience_bottle"), true));
+				entity.add("endereye", createSingleIconCategory(mc("items/ender_eye"), true));
+				entity.add("enderpearl", createSingleIconCategory(mc("items/ender_pearl"), true));
+				entity.add("experience_bottle", createSingleIconCategory(mc("items/experience_bottle"), true));
+				entity.add("firework", createSingleIconCategory(mc("items/fireworks"), true));
+				entity.add("item", createSingleIconCategory(ob("click"), false));
+				entity.add("itemframe", createSingleIconCategory(mc("items/item_frame"), true));
+				entity.add("leashknot", createSingleIconCategory(mc("items/lead"), true));
+				entity.add("lightning", createSingleIconCategory(ob("click"), false));
+				entity.add("lingeringpotion", createSingleIconCategory(mc("items/potion_bottle_lingering"), true));
+				entity.add("minecart", createSingleIconCategory(mc("items/minecart_normal"), true));
+				entity.add("painting", createSingleIconCategory(mc("items/painting"), true));
+				entity.add("snowball", createSingleIconCategory(mc("items/snowball"), true));
+				entity.add("splash_potion", createSingleIconCategory(mc("items/potion_bottle_splash"), true));
+				entity.add("tnt", createSingleIconCategory(mc("blocks/tnt_side"), true));
+				entity.add("armorstand", createSingleIconCategory(mc("items/wooden_armorstand"), true));
+				entity.add("bobber", createSingleIconCategory(mc("items/fishing_rod_cast"), true));
+
+				{
+					final MappedCategory generic = entity.add("generic", createSingleIconCategory(ob("generic"), false));
+
+					generic.add("burn", makeFramedIcon(mc("blocks/fire_layer_0"), whiteFrame));
+					generic.add("death", simpleIcon("mob_death", 0xFFFFFFFF));
+					generic.add("drink", makeFramedIcon(mc("items/potion_bottle_drinkable"), whiteFrame));
+					generic.add("eat", makeFramedIcon(mc("items/potato_baked"), whiteFrame));
+					generic.add("extinguish_fire", simpleIcon("fizz", 0xFFFFFFFF));
+					generic.add("hurt", simpleIcon("mob_hurt", 0xFFFFFFFF));
+					generic.add("small_fall", simpleIcon("mob_hurt", 0xFFFFFFFF));
+					generic.add("splash", simpleIcon("rain", 0xFFFFFFFF));
+					generic.add("swim", simpleIcon("fizz", 0xFFFFFFFF));
 				}
 			}
 
 			{
-				MappedCategory records = mcRoot.add("records", new MappedCategory());
+				MappedCategory item = mcRoot.add("item", new MappedCategory());
+
+				{
+					MappedCategory armor = item.add("armor", new MappedCategory());
+					armor.add("equip_chain", makeFramedIcon(mc("items/chainmail_chestplate"), whiteFrame));
+					armor.add("equip_diamond", makeFramedIcon(mc("items/diamond_chestplate"), whiteFrame));
+					armor.add("equip_gold", makeFramedIcon(mc("items/gold_chestplate"), whiteFrame));
+					armor.add("equip_iron", makeFramedIcon(mc("items/iron_chestplate"), whiteFrame));
+					armor.add("equip_leather", makeFramedIcon(mc("items/leather_chestplate"), whiteFrame));
+
+					armor.add("equip_generic", makeFramedIcon(mc("items/empty_armor_slot_chestplate"), whiteFrame));
+				}
+
+				item.add("bottle", createSingleIconCategory(mc("items/potion_bottle_empty"), true));
+				item.add("bucket", createSingleIconCategory(mc("items/bucket_empty"), true));
+				item.add("chorus_fruit", createSingleIconCategory(mc("items/chorus_fruit_popped"), true));
+				item.add("elytra", createSingleIconCategory(mc("items/elytra"), true));
+				item.add("firecharge", createSingleIconCategory(mc("items/fireball"), true));
+				item.add("flintandsteel", createSingleIconCategory(mc("items/flint_and_steel"), true));
+				item.add("hoe", createSingleIconCategory(mc("items/wood_hoe"), true));
+				item.add("shield", createSingleIconCategory(mc("items/empty_armor_slot_shield"), true));
+				item.add("shovel", createSingleIconCategory(mc("items/wood_shovel"), true));
+			}
+
+			{
+				MappedCategory records = mcRoot.add("record", new MappedCategory());
 				records.add("13", makeFramedIcon(mc("items/record_13"), frameBlue));
 				records.add("cat", makeFramedIcon(mc("items/record_cat"), frameBlue));
 				records.add("blocks", makeFramedIcon(mc("items/record_blocks"), frameBlue));
@@ -391,120 +481,22 @@ public class SoundIconRegistry {
 			}
 
 			{
-				// TODO 1.10 verify new additions
-				MobSounds mobs = mcRoot.add("mob", new MobSounds());
-				mobs.addMob("blaze", "Blaze", true);
-				mobs.addMob("creeper", "Creeper", true);
-				mobs.addMob("magmacube", "LavaSlime", true);
-				mobs.addMob("silverfish", "Silverfish", true);
-				mobs.addMob("skeleton", "Skeleton", true);
-				mobs.addMob("slime", "Slime", true);
-				mobs.addMob("spider", "Spider", true);
-				mobs.addMob("wither", "WitherBoss", true);
-				mobs.addMob("zombie", "Zombie", true);
-				mobs.addMob("enderdragon", "EnderDragon", true);
-				mobs.addMob("endermen", "Enderman", true);
-				mobs.addMob("ghast", "Ghast", true);
-				mobs.addMob("witch", "Witch", true);
-				mobs.addMob("cave_spider", "CaveSpider", true);
-				mobs.addMob("endermite", "Endermite", true);
-				mobs.addMob("guardian", "Guardian", true);
-				mobs.addMob("shulker", "Shulker", true);
-
-				mobs.addMob("bat", "Bat", false);
-				mobs.addMob("cat", "Ozelot", false);
-				mobs.addMob("chicken", "Chicken", false);
-				mobs.addMob("cow", "Cow", false);
-				mobs.addMob("horse", "EntityHorse", false);
-				mobs.addMob("irongolem", "VillagerGolem", false);
-				mobs.addMob("pig", "Pig", false);
-				mobs.addMob("sheep", "Sheep", false);
-				mobs.addMob("villager", "Villager", false);
-				mobs.addMob("zombiepig", "PigZombie", false); // YMMV
-				mobs.addMob("wolf", "Wolf", false);
-				mobs.addMob("squid", "Squid", false);
-				mobs.addMob("snowman", "SnowMan", false);
-				mobs.addMob("rabbit", "Rabbit", false);
-				mobs.addMob("polar_bear", "PolarBear", false);
+				MappedCategory weather = mcRoot.add("weather", new MappedCategory());
+				weather.add("rain", simpleIcon("rain", 0x0000FF));
 			}
 
 			{
-				TintedIconCategory note = mcRoot.add("note", new TintedIconCategory(ob("note")));
-				note.add("bass", 0x0000FF);
-				note.add("bassattack", 0xFFFF00);
-				note.add("bd", 0x00FFFF);
-				note.add("harp", 0xFF0000);
-				note.add("hat", 0x00FF00);
-				note.add("pling", 0xFF00FF);
-				note.add("snare", 0xFFFFFF);
+				mcRoot.add("ui", createSingleIconCategory(ob("click"), false));
 			}
-
-			mcRoot.add("portal", makeFramedIcon(mc("blocks/portal"), frameWhite));
-			mcRoot.add("minecart", makeFramedIcon(mc("items/minecart_normal"), frameWhite));
-
-			{
-				MappedCategory random = mcRoot.add("random", new MappedCategory());
-
-				IDrawableIcon anvil = makeFramedIcon(mc("blocks/anvil_base"), frameWhite);
-				random.add("anvil_land", anvil);
-				random.add("anvil_use", anvil);
-				random.add("anvil_break", anvil);
-
-				random.add("bow", makeFramedIcon(mc("items/bow_standby"), frameWhite));
-				random.add("bowhit", makeFramedIcon(mc("items/arrow"), frameWhite));
-
-				IDrawableIcon damage = makeFramedIcon(mc("blocks/destroy_stage_5"), frameWhite);
-				random.add("break", damage);
-
-				IDrawableIcon eat = makeFramedIcon(mc("items/potato_baked"), frameWhite);
-				random.add("eat", eat);
-				random.add("burp", eat);
-
-				IDrawableIcon chest = makeFramedIcon(mc("blocks/planks_oak"), frameWhite);
-				random.add("chestclosed", chest);
-				random.add("chestopen", chest);
-
-				IDrawableIcon click = simpleIcon("click", DEFAULT_COLOR);
-				random.add("click", click);
-				random.add("wood_click", click);
-				random.add("pop", click);
-
-				IDrawableIcon door = makeFramedIcon(mc("items/door_wood"), frameWhite);
-				random.add("door_close", door);
-				random.add("door_open", door);
-
-				IDrawableIcon drink = makeFramedIcon(mc("items/potion_bottle_drinkable"), frameWhite);
-				random.add("drink", drink);
-
-				IDrawableIcon tnt = makeFramedIcon(mc("blocks/tnt_side"), frameWhite);
-				random.add("explode", tnt);
-
-				random.add("fizz", simpleIcon("fizz", DEFAULT_COLOR));
-
-				IDrawableIcon exp = makeFramedIcon(mc("items/experience_bottle"), frameWhite);
-				random.add("levelup", exp);
-				random.add("orb", exp);
-
-				IDrawableIcon glass = makeFramedIcon(mc("blocks/glass"), frameWhite);
-				random.add("splash", glass);
-			}
-
-			{
-				MappedCategory tile = mcRoot.add("tile", new MappedCategory());
-				IDrawableIcon piston = makeFramedIcon(mc("blocks/piston_side"), frameWhite);
-				tile.add("piston", piston);
-			}
-
-			// TODO 1.8.9 find replacement
-			mcRoot.add("creeper", makeFramedIcon(mc("blocks/skull_creeper"), frameGreen));
 		}
 
-		IDrawableIcon potato = makeFramedIcon(mc("items/potato_baked"), frameWhite);
-		IDrawableIcon apple = makeFramedIcon(mc("items/apple"), frameWhite);
-		IDrawableIcon pearl = makeFramedIcon(mc("items/ender_pearl"), frameWhite);
-		IDrawableIcon write = makeFramedIcon(mc("items/book_writable"), frameWhite);
-
 		{
+
+			IDrawableIcon potato = makeFramedIcon(mc("items/potato_baked"), frameWhite);
+			IDrawableIcon apple = makeFramedIcon(mc("items/apple"), frameWhite);
+			IDrawableIcon pearl = makeFramedIcon(mc("items/ender_pearl"), frameWhite);
+			IDrawableIcon write = makeFramedIcon(mc("items/book_writable"), frameWhite);
+
 			MappedCategory openblocks = createRoot("openblocks");
 			openblocks.defaultIcon = genericIcon;
 
@@ -530,4 +522,5 @@ public class SoundIconRegistry {
 
 		}
 	}
+
 }
