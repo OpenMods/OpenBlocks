@@ -311,24 +311,8 @@ public class Config {
 	public static int projectorLightLevelValue = 10;
 
 	@OnLineModifiable
-	@ConfigProperty(category = "loot", name = "donationStation")
-	public static boolean donationStationLoot = false;
-
-	@OnLineModifiable
-	@ConfigProperty(category = "loot", name = "sonicGlasses")
-	public static boolean sonicGlassesLoot = false;
-
-	@OnLineModifiable
 	@ConfigProperty(category = "loot", name = "technicolorGlasses")
 	public static boolean technicolorGlassesLoot = true;
-
-	@OnLineModifiable
-	@ConfigProperty(category = "loot", name = "stencil")
-	public static boolean stencilLoot = false;
-
-	@OnLineModifiable
-	@ConfigProperty(category = "loot", name = "paintBrush")
-	public static boolean paintBrushLoot = false;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "features", name = "infoBook", comment = "Should every player get info book on first login")
@@ -527,7 +511,6 @@ public class Config {
 		}
 
 		if (OpenBlocks.Blocks.donationStation != null) {
-			// TODO 1.10 Loot tables
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Blocks.donationStation, "ppp", "pcp", "ppp", 'p', Items.PORKCHOP, 'c', "chestWood"));
 		}
 
@@ -587,10 +570,6 @@ public class Config {
 
 		if (OpenBlocks.Items.sonicGlasses != null) {
 			recipeList.add(new ShapedOreRecipe(OpenBlocks.Items.sonicGlasses, "ihi", "oso", "   ", 's', "stickWood", 'h', Items.IRON_HELMET, 'o', Blocks.OBSIDIAN, 'i', "ingotIron"));
-
-			if (sonicGlassesLoot) {
-				// TODO 1.10 Loot tables
-			}
 		}
 
 		if (OpenBlocks.Blocks.imaginary != null) {
@@ -604,10 +583,6 @@ public class Config {
 				recipeList.add(new CrayonGlassesRecipe());
 				// must be after pencil
 				RecipeSorter.register("openblocks:crayon_glasses", CrayonGlassesRecipe.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
-			}
-
-			if (technicolorGlassesLoot && OpenBlocks.Items.technicolorGlasses != null) {
-				// TODO 1.10 Loot tables
 			}
 		}
 
@@ -636,16 +611,6 @@ public class Config {
 			for (ColorMeta color : ColorMeta.getAllColors()) {
 				ItemStack brush = ItemPaintBrush.createStackWithColor(color.rgb);
 				recipeList.add(new ShapelessOreRecipe(brush, template, color.oreName));
-			}
-
-			if (paintBrushLoot) {
-				// TODO 1.10 Loot tables
-			}
-		}
-
-		if (OpenBlocks.Items.stencil != null) {
-			if (stencilLoot) {
-				// TODO 1.10 Loot tables
 			}
 		}
 

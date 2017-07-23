@@ -48,6 +48,7 @@ import openblocks.common.ElevatorBlockRules;
 import openblocks.common.EntityEventHandler;
 import openblocks.common.GameRuleManager;
 import openblocks.common.GuideActionHandler;
+import openblocks.common.LootHandler;
 import openblocks.common.LuggageDropHandler;
 import openblocks.common.MagnetWhitelists;
 import openblocks.common.MapDataManager;
@@ -788,6 +789,8 @@ public class OpenBlocks {
 		MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
 		MinecraftForge.EVENT_BUS.register(new GameRuleManager());
+
+		LootHandler.register();
 
 		proxy.preInit();
 	}

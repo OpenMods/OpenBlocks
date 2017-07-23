@@ -1,0 +1,17 @@
+{
+  "pools": [{
+    "name": "main",
+    "rolls": 1,
+    "entries": [
+      {
+        "type": "item",
+        "name": "openblocks:technicolor_glasses",
+        "weight": 20
+      },
+      {
+        "type": "empty",
+        "weight": 80
+      }
+    ]
+  }]
+}
