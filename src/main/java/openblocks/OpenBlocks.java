@@ -20,6 +20,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -771,8 +772,8 @@ public class OpenBlocks {
 			MinecraftForge.EVENT_BUS.register(new GuideActionHandler());
 		}
 
-		if (Blocks.tank != null) {
-			BucketFillHandler.instance.addToWhitelist(TileEntityTank.class);
+		if (Items.xpBucket != null) {
+			MinecraftForge.EVENT_BUS.register(new BucketFillHandler(new ItemStack(Items.xpBucket), new FluidStack(Fluids.xpJuice, Fluid.BUCKET_VOLUME)));
 		}
 
 		if (Items.pedometer != null) {
