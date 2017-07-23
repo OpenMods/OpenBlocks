@@ -1,30 +1,25 @@
 {
     "elevator.activate": {
-        "category": "block",
         "sounds": [
             "openblocks:teleport"
         ]
     },
     "cannon.activate": {
-        "category": "block",
         "sounds": [
             "openblocks:cannon"
         ]
     },
     "radio.activate": {
-        "category": "block",
         "sounds": [
             "openblocks:radio"
         ]
     },
     "bottler.signal": {
-        "category": "block",
         "sounds": [
             "openblocks:fill"
         ]
     },
     "crayon.place": {
-        "category": "block",
         "sounds": [
             "openblocks:draw1",
             "openblocks:draw2",
@@ -33,70 +28,57 @@
         ]
     },
     "target.open": {
-        "category": "block",
         "sounds": [
             "openblocks:open"
         ]
     },
     "target.close": {
-        "category": "block",
         "sounds": [
             "openblocks:close"
         ]
     },
     "beartrap.open": {
-        "category": "block",
         "sounds": [
             "openblocks:beartrapopen"
         ]
     },
     "beartrap.close": {
-        "category": "block",
         "sounds": [
             "openblocks:beartrapclose",
             "openblocks:beartrapcloseb"
         ]
     },
-
     "luggage.eat.item": {
-        "category": "neutral",
         "sounds": [
             "openblocks:chomp"
         ]
     },
     "luggage.eat.food": {
-        "category": "neutral",
         "sounds": [
             "openblocks:slowpokenom"
         ]
     },
     "luggage.walk": {
-        "category": "neutral",
         "sounds": [
             "openblocks:feet"
         ]
     },
-
     "slimalyzer.signal": {
-        "category": "player",
         "sounds": [
             "openblocks:beep"
         ]
     },
     "pedometer.use": {
-        "category": "player",
         "sounds": [
             "openblocks:beep"
         ]
     },
     "squeegee.use": {
-        "category": "player",
         "sounds": [
             "openblocks:wipe"
         ]
     },
     "best.feature.ever.fart": {
-        "category": "player",
         "sounds": [
             "openblocks:fart1",
             "openblocks:fart2",
@@ -104,33 +86,27 @@
             "openblocks:fart4"
         ]
     },
-
     "annoying.mosquito": {
-        "category": "master",
         "sounds": [
             "openblocks:mosquito"
         ]
     },
     "annoying.alarmclock": {
-        "category": "master",
         "sounds": [
             "openblocks:alarmclock"
         ]
     },
     "annoying.vibrate": {
-        "category": "master",
         "sounds": [
             "openblocks:vibrate"
         ]
     },
     "unused.mortar": {
-        "category": "master",
         "sounds": [
             "openblocks:mortar"
         ]
     },
     "grave.rob": {
-        "category": "block",
         "sounds": [
             "openblocks:bwv565"
         ]
