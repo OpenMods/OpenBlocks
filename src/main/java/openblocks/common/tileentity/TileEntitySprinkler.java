@@ -15,9 +15,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.Config;
 import openblocks.OpenBlocks;
@@ -30,11 +30,10 @@ import openmods.fakeplayer.FakePlayerPool;
 import openmods.fakeplayer.FakePlayerPool.PlayerUser;
 import openmods.fakeplayer.OpenModsFakePlayer;
 import openmods.include.IncludeInterface;
-import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.TileEntityInventory;
-import openmods.liquids.GenericFluidHandler;
+import openmods.liquids.GenericFluidCapabilityWrapper;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableTank;
 import openmods.tileentity.SyncedTileEntity;
@@ -68,8 +67,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 		}
 	});
 
-	@IncludeInterface
-	private final IFluidHandler tankWrapper = new GenericFluidHandler.Drain(tank);
+	private final IFluidHandler tankWrapper = new GenericFluidCapabilityWrapper.Drain(tank);
 
 	@Override
 	protected void createSyncedFields() {
@@ -234,11 +232,6 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 		return 0;
 	}
 
-	@IncludeOverride
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
 	@Override
 	@IncludeInterface
 	public IInventory getInventory() {
@@ -273,12 +266,16 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+				capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
 				super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return (T)tankWrapper;
+
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T)inventory.getHandler();
 

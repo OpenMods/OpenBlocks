@@ -21,7 +21,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import openblocks.OpenBlocks;
@@ -39,7 +39,7 @@ import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
-import openmods.liquids.SidedFluidHandler;
+import openmods.liquids.SidedFluidCapabilityWrapper;
 import openmods.sync.ISyncListener;
 import openmods.sync.ISyncableObject;
 import openmods.sync.SyncMap;
@@ -79,8 +79,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 	private final SidedItemHandlerAdapter itemHandlerCapability = new SidedItemHandlerAdapter(inventory.getHandler());
 
-	@IncludeInterface
-	private final IFluidHandler tankWrapper = new SidedFluidHandler.Source(xpOutputs, tank);
+	private final SidedFluidCapabilityWrapper tankCapability = SidedFluidCapabilityWrapper.wrap(tank, xpOutputs, true, false);
 
 	private Map<String, String> outputState = ImmutableMap.of();
 
@@ -324,12 +323,18 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return itemHandlerCapability.hasHandler(facing);
 
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return tankCapability.hasHandler(facing);
+
 		return super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return (T)tankCapability.getHandler(facing);
+
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T)itemHandlerCapability.getHandler(facing);
 

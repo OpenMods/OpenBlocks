@@ -13,9 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import openblocks.OpenBlocks;
 import openblocks.client.gui.GuiAutoAnvil;
@@ -28,12 +27,11 @@ import openmods.api.IValueProvider;
 import openmods.api.IValueReceiver;
 import openmods.gui.misc.IConfigurableGuiSlots;
 import openmods.include.IncludeInterface;
-import openmods.include.IncludeOverride;
 import openmods.inventory.GenericInventory;
 import openmods.inventory.IInventoryProvider;
 import openmods.inventory.ItemMover;
 import openmods.inventory.TileEntityInventory;
-import openmods.liquids.SidedFluidHandler;
+import openmods.liquids.SidedFluidCapabilityWrapper;
 import openmods.sync.SyncMap;
 import openmods.sync.SyncableFlags;
 import openmods.sync.SyncableSides;
@@ -100,8 +98,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	@IncludeInterface(ISidedInventory.class)
 	private final SidedInventoryAdapter slotSides = new SidedInventoryAdapter(inventory);
 
-	@IncludeInterface
-	private final IFluidHandler tankWrapper = new SidedFluidHandler.Drain(xpSides, tank);
+	private final SidedFluidCapabilityWrapper tankCapability = SidedFluidCapabilityWrapper.wrap(tank, xpSides, false, true);
 
 	private final SidedItemHandlerAdapter itemHandlerCapability = new SidedItemHandlerAdapter(inventory.getHandler());
 
@@ -239,11 +236,6 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		return inventory.getStackInSlot(2) != null;
 	}
 
-	@IncludeOverride
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
 	@Override
 	public IInventory getInventory() {
 		return slotSides;
@@ -312,6 +304,9 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return tankCapability.hasHandler(facing);
+
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return itemHandlerCapability.hasHandler(facing);
 
@@ -321,6 +316,9 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return (T)tankCapability.getHandler(facing);
+
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return (T)itemHandlerCapability.getHandler(facing);
 
