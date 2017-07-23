@@ -382,3 +382,5 @@ entity.openblocks.block.name=Floating Block
 entity.openblocks.mini_me.name=Mini Me
 
 fluid.openblocks.xp_juice=Liquid XP
+
+entity.Villager.audiophile=Audiophile

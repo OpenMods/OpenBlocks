@@ -37,8 +37,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
-import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
-import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -56,6 +54,7 @@ import openblocks.common.MapDataManager;
 import openblocks.common.PedometerHandler;
 import openblocks.common.PlayerDeathHandler;
 import openblocks.common.PlayerInventoryStore;
+import openblocks.common.RadioVillagerTrades;
 import openblocks.common.ServerTickHandler;
 import openblocks.common.block.BlockAutoAnvil;
 import openblocks.common.block.BlockAutoEnchantmentTable;
@@ -753,8 +752,8 @@ public class OpenBlocks {
 			MinecraftForge.EVENT_BUS.register(new ElevatorActionHandler());
 		}
 
-		if (Config.radioVillagerId > 0) {
-			registerUselessVillager();
+		if (Config.radioVillagerEnabled) {
+			RadioVillagerTrades.registerUselessVillager();
 		}
 
 		{
@@ -791,16 +790,6 @@ public class OpenBlocks {
 		MinecraftForge.EVENT_BUS.register(new GameRuleManager());
 
 		proxy.preInit();
-	}
-
-	@SuppressWarnings({ "unused" })
-	protected void registerUselessVillager() {
-		final VillagerProfession prof = GameRegistry.register(new VillagerProfession(
-				"openblocks:radio",
-				"openblocks:textures/models/king-ish.png",
-				"openblocks:textures/models/king-ish.png")); // TODO: zombie texture?
-
-		new VillagerCareer(prof, "basic"); // TODO re-add trades
 	}
 
 	@EventHandler

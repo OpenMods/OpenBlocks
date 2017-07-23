@@ -270,12 +270,8 @@ public class Config {
 	@ConfigProperty(category = "cartographer", name = "reportInvalidRequest", comment = "Should invalid height map request be always reported")
 	public static boolean alwaysReportInvalidMapRequests = false;
 
-	@ConfigProperty(category = "radio", name = "radioVillagerId", comment = "Music merchant id (-1 to disable)")
-	public static int radioVillagerId = 6156;
-
-	@OnLineModifiable
-	@ConfigProperty(category = "radio", name = "radioVillagerSellsRecords", comment = "Should tuned crystals sell records too")
-	public static boolean radioVillagerRecords = true;
+	@ConfigProperty(category = "radio", name = "radioVillagerEnabled", comment = "Should add radio villager profession")
+	public static boolean radioVillagerEnabled = true;
 
 	@OnLineModifiable
 	@ConfigProperty(category = "fan", name = "fanForce", comment = "Maximum force applied every tick to entities nearby (linear decay)")
