@@ -36,8 +36,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -490,6 +490,7 @@ public class OpenBlocks {
 	}
 
 	@ObjectHolder(MODID)
+	@EventBusSubscriber
 	public static class Sounds {
 		// TODO subtitles where sensible
 		// TODO remove categories from sounds.json
@@ -550,31 +551,33 @@ public class OpenBlocks {
 		@ObjectHolder("annoying.vibrate")
 		public static final SoundEvent MISC_VIBRATE = null;
 
-		public static void registerSounds() {
-			registerSound("elevator.activate");
-			registerSound("grave.rob");
-			registerSound("crayon.place");
-			registerSound("luggage.walk");
-			registerSound("luggage.eat.food");
-			registerSound("luggage.eat.item");
-			registerSound("pedometer.use");
-			registerSound("slimalyzer.signal");
-			registerSound("squeegee.use");
-			registerSound("best.feature.ever.fart");
-			registerSound("annoying.mosquito");
-			registerSound("annoying.alarmclock");
-			registerSound("annoying.vibrate");
-			registerSound("beartrap.open");
-			registerSound("beartrap.close");
-			registerSound("cannon.activate");
-			registerSound("target.open");
-			registerSound("target.close");
-			registerSound("bottler.signal");
+		@SubscribeEvent
+		public static void registerSounds(RegistryEvent.Register<SoundEvent> evt) {
+			final IForgeRegistry<SoundEvent> registry = evt.getRegistry();
+			registerSound(registry, "elevator.activate");
+			registerSound(registry, "grave.rob");
+			registerSound(registry, "crayon.place");
+			registerSound(registry, "luggage.walk");
+			registerSound(registry, "luggage.eat.food");
+			registerSound(registry, "luggage.eat.item");
+			registerSound(registry, "pedometer.use");
+			registerSound(registry, "slimalyzer.signal");
+			registerSound(registry, "squeegee.use");
+			registerSound(registry, "best.feature.ever.fart");
+			registerSound(registry, "annoying.mosquito");
+			registerSound(registry, "annoying.alarmclock");
+			registerSound(registry, "annoying.vibrate");
+			registerSound(registry, "beartrap.open");
+			registerSound(registry, "beartrap.close");
+			registerSound(registry, "cannon.activate");
+			registerSound(registry, "target.open");
+			registerSound(registry, "target.close");
+			registerSound(registry, "bottler.signal");
 		}
 
-		private static void registerSound(String id) {
+		private static void registerSound(IForgeRegistry<SoundEvent> registry, String id) {
 			final ResourceLocation resourceLocation = location(id);
-			GameRegistry.register(new SoundEvent(resourceLocation).setRegistryName(resourceLocation));
+			registry.register(new SoundEvent(resourceLocation).setRegistryName(resourceLocation));
 		}
 	}
 
@@ -711,8 +714,6 @@ public class OpenBlocks {
 		startupHelper.preInit(evt.getSuggestedConfigurationFile());
 
 		Config.register();
-
-		Sounds.registerSounds();
 
 		apiSetup.setupApis();
 		apiSetup.installHolderAccess(evt.getAsmData());
