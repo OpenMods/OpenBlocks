@@ -112,6 +112,8 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (hand != EnumHand.MAIN_HAND) return false;
+
 		if (!worldIn.isRemote) {
 			if (playerIn.isSneaking()) {
 				final TileEntityBigButton te = getTileEntity(worldIn, pos, TileEntityBigButton.class);

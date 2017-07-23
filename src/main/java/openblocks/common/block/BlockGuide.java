@@ -104,6 +104,8 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (hand != EnumHand.MAIN_HAND) return false;
+
 		if (world.isRemote) {
 			if (areButtonsActive(player)) {
 				final Orientation orientation = getOrientation(world, pos);
