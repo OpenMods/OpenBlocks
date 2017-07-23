@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-// TODO 1.8.9 verify changes in entity movement. Seems that 'setPosition' catches all, so other overrides were removed
 public abstract class EntitySmoothMove extends Entity {
 
 	public class MoveSmoother {

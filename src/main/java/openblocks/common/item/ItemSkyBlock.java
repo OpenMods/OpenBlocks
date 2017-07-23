@@ -31,8 +31,6 @@ public class ItemSkyBlock extends ItemBlock {
 		result.add(new ItemStack(this, 1, 1));
 	}
 
-	// TODO 1.10 item colors
-
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> result, boolean expanded) {
 		super.addInformation(stack, player, result, expanded);

@@ -93,7 +93,6 @@ public class ModelCraneBackpack extends ModelBiped {
 
 		if (magnet == null) return;
 
-		// TODO 1.8.9 check values (maybe 0?)
 		final float partialRenderTick = evt.getPartialRenderTick();
 		double playerX = interpolatePos(player.posX, player.lastTickPosX, partialRenderTick)
 				- TileEntityRendererDispatcher.staticPlayerX;

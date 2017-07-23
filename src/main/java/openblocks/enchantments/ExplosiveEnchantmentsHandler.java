@@ -161,7 +161,7 @@ public class ExplosiveEnchantmentsHandler {
 				// Loved By Everyone...
 				// Possibly Buggy
 				// TEEERRRRRIIIIBLE HAAAAAACK!
-				// TODO 1.10 maybe now stuff is betten?
+				// TODO 1.10 maybe now stuff is better?
 				KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), true);
 				// no, seriously, can't find better way to make jump
 				jumpBoosts.put(player, boost);

@@ -82,7 +82,6 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 
 	@Override
 	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		// TODO 1.8.9 verify colors
 		ColorMeta colorMeta = ColorMeta.fromBlockMeta(stack.getItemDamage());
 		color.set(colorMeta);
 	}

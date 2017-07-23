@@ -272,7 +272,7 @@ public class SoundIconRegistry {
 	}
 
 	public void registerDefaults() {
-		// TODO 1.8.9 map sound categories for catch-all
+		// TODO map sound categories for catch-all
 		final IDrawableIcon whiteFrame = createIcon(ICON_FRAME, 0xFFFFFF);
 		final IDrawableIcon frame = whiteFrame;
 		IDrawableIcon frameWhite = frame;

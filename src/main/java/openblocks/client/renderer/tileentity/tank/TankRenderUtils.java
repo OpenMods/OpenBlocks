@@ -59,7 +59,6 @@ public class TankRenderUtils {
 	}
 
 	public static TileEntity getTileEntitySafe(World world, BlockPos pos) {
-		// TODO 1.8.9 verify
 		if (world.isBlockLoaded(pos)) {
 			Chunk chunk = world.getChunkFromBlockCoords(pos);
 			return chunk.getTileEntity(pos, EnumCreateEntityType.CHECK);

@@ -126,8 +126,6 @@ public class ItemDevNull extends Item {
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
-	// TODO 1.10 removed onItemUseFirst, verify if it was needed?
-
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (hand == EnumHand.OFF_HAND) return EnumActionResult.PASS;

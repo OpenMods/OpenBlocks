@@ -133,7 +133,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 
 			final int offsetZ = blockYawRotation.getFrontOffsetZ();
 			final int offsetX = blockYawRotation.getFrontOffsetX();
-			// TODO 1.8.9 verify
+
 			final double forwardVelocityX = sprayForwardVelocity * offsetZ / -2;
 			final double forwardVelocityZ = sprayForwardVelocity * offsetX / 2;
 

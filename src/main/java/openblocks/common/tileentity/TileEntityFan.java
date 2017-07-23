@@ -72,7 +72,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	private Vec3d getConeBaseCenter(double angle) {
-		// TODO 1.8.9 this may be constant
+		// TODO this may be semi-constant
 		return new Vec3d(pos)
 				.addVector(
 						(Math.cos(angle) * Config.fanRange),

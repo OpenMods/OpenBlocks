@@ -22,7 +22,7 @@ import openmods.utils.NbtUtils;
 @BookDocumentation(hasVideo = true)
 public class ItemCursor extends Item {
 
-	// TODO 1.10 maybe allow offhand item use?
+	// TODO maybe allow off-hand item use?
 	public ItemCursor() {
 		setMaxStackSize(1);
 	}

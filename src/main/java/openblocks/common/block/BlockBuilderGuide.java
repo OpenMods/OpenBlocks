@@ -21,7 +21,6 @@ public class BlockBuilderGuide extends BlockGuide {
 
 	@Override
 	protected boolean areButtonsActive(EntityPlayer player) {
-		// TODO 1.10 verify, if it's correct item
 		final ItemStack heldItem = player.getHeldItemMainhand();
 		return heldItem == null || !(heldItem.getItem() instanceof ItemBlock);
 	}

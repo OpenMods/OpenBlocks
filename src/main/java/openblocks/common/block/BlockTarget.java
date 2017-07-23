@@ -136,7 +136,6 @@ public class BlockTarget extends OpenBlock.FourDirections {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
-		// TODO 1.8.9 verify
 		return isOnTopOfSolidBlock(world, pos, side);
 	}
 
@@ -166,7 +165,6 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	}
 
 	private static void dropArrowsAsItems(WorldServer world, BlockPos pos) {
-		// TODO 1.8.9 verify range
 		final AxisAlignedBB aabb = BlockUtils.aabbOffset(pos, -0.2, -0.2, -0.2, +1.2, +1.2, +1.2);
 
 		final List<EntityArrow> arrows = world.getEntitiesWithinAABB(EntityArrow.class, aabb);

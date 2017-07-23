@@ -76,7 +76,6 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	}
 
 	private void targetStructure(Entity owner, BlockPos target) {
-		// TODO 1.8.9 verify height
 		double playerY = owner.posY + owner.getEyeHeight();
 		double dx = target.getX() - owner.posX;
 		double dz = target.getZ() - owner.posZ;

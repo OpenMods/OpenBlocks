@@ -66,7 +66,6 @@ public class TileEntityTank extends SyncedTileEntity implements IActivateAwareTi
 			if (changes.contains(tank)) {
 				final FluidStack fluidStack = tank.getFluid();
 				if (!isSameFluid(fluidStack)) {
-					// TODO 1.10 - verify
 					worldObj.markBlockRangeForRenderUpdate(pos, pos);
 					prevFluidStack = fluidStack;
 

@@ -21,7 +21,6 @@ public class EntityLuggageRenderer extends RenderLiving<EntityLuggage> {
 
 	private class LayerCharge implements LayerRenderer<EntityLuggage> {
 
-		// TODO 1.8.9 verify if it works
 		@Override
 		public void doRenderLayer(EntityLuggage luggage, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale) {
 			if (luggage.isSpecial()) {

@@ -54,9 +54,6 @@ public class BlockSky extends OpenBlock {
 		return isPowered | isInverted;
 	}
 
-	// TODO 1.10 rendering!
-	// return RenderUtils.getFogColor().getColor();
-
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
 		if (!world.isRemote) {

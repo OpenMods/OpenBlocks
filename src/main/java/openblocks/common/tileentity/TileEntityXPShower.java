@@ -100,7 +100,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 	}
 
 	public void updateState() {
-		final int power = worldObj.isBlockIndirectlyGettingPowered(getPos()); // TODO 1.10 verify
+		final int power = worldObj.isBlockIndirectlyGettingPowered(getPos());
 		isOn.set(power > 0);
 	}
 

@@ -21,7 +21,7 @@ public class BlockDonationStation extends OpenBlock.FourDirections {
 		return AABB;
 	}
 
-	// TODO 1.8.9 almost forgot about you
+	// TODO Switch to block model
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;

@@ -218,7 +218,6 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	protected void fixSize() {
-		// TODO 1.10 verify
 		final List<Entity> passengers = getPassengers();
 		if (!passengers.isEmpty()) {
 			Entity passenger = passengers.get(0);
@@ -248,8 +247,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		if (!passengers.isEmpty()) {
 			final Entity passenger = passengers.get(0);
 
-			if (passenger instanceof IMagnetAware // TODO 1.10 there seems to be Forge event for that?
-					&& !((IMagnetAware)passenger).canRelease())
+			if (passenger instanceof IMagnetAware && !((IMagnetAware)passenger).canRelease())
 				return false;
 			// default unmount position is above entity and it
 			// looks strange, so we hack around that

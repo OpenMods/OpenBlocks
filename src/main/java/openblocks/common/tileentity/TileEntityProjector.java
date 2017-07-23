@@ -85,8 +85,6 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 					if (oldState != newState) {
 						worldObj.setBlockState(pos, newState, BlockNotifyFlags.ALL);
-						// TODO 1.10 verify is following is needed (seems to be already handled)
-						// worldObj.checkLight(pos);
 					}
 				}
 

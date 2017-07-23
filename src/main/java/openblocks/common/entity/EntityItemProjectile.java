@@ -29,7 +29,6 @@ public class EntityItemProjectile extends EntityItem {
 
 	@Override
 	public void onUpdate() {
-		// TODO 1.8.9 verify
 		final double x = posX;
 		final double y = posY;
 		final double z = posZ;
