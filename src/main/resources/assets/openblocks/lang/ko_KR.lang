@@ -97,6 +97,9 @@ openblocks.misc.oh_no_ceiling=이곳에서 잠들 수 없습니다. 윗부분의
 #openblocks.misc.oh_no_ground=You want to sleep on THAT!? ## NEEDS TRANSLATION ##
 #openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization ## NEEDS TRANSLATION ##
 #openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
+#openblocks.misc.structure_not_locked=Not locked on any structure! ## NEEDS TRANSLATION ##
+#openblocks.misc.locked_on_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
+#openblocks.misc.no_nearby_structures=Can't find any nearby structures ## NEEDS TRANSLATION ##
 
 #openblocks.misc.grave_msg=%s (day: %.1f) ## NEEDS TRANSLATION ##
 
@@ -379,3 +382,5 @@ entity.openblocks.block.name=떨어지는 블럭
 entity.openblocks.mini_me.name=미니미
 
 fluid.openblocks.xp_juice=액체 경험치
+
+#entity.Villager.audiophile=Audiophile ## NEEDS TRANSLATION ##

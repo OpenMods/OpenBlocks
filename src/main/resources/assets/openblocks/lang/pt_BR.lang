@@ -97,6 +97,9 @@ openblocks.misc.mode.inverted_stairs=Escadas invertidas
 #openblocks.misc.oh_no_ground=You want to sleep on THAT!? ## NEEDS TRANSLATION ##
 #openblocks.misc.sleeping_bag_broken=Item inactive due to failed initialization ## NEEDS TRANSLATION ##
 #openblocks.misc.inverted=Inverted ## NEEDS TRANSLATION ##
+#openblocks.misc.structure_not_locked=Not locked on any structure! ## NEEDS TRANSLATION ##
+#openblocks.misc.locked_on_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
+#openblocks.misc.no_nearby_structures=Can't find any nearby structures ## NEEDS TRANSLATION ##
 
 #openblocks.misc.grave_msg=%s (day: %.1f) ## NEEDS TRANSLATION ##
 
@@ -379,3 +382,5 @@ itemGroup.tabOpenBlocks=OpenBlocks
 #entity.openblocks.mini_me.name=Mini Me ## NEEDS TRANSLATION ##
 
 #fluid.openblocks.xp_juice=Liquid XP ## NEEDS TRANSLATION ##
+
+#entity.Villager.audiophile=Audiophile ## NEEDS TRANSLATION ##

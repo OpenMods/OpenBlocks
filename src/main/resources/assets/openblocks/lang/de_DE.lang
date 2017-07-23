@@ -97,6 +97,9 @@ openblocks.misc.oh_no_ceiling=Du kannst hier nicht schlafen. Die Decke beunruhig
 openblocks.misc.oh_no_ground=Auf DEM Ding willst du schlafen?!
 openblocks.misc.sleeping_bag_broken=Item inaktiv wegen fehlerhafter Initialisierung
 openblocks.misc.inverted=Invertiert
+#openblocks.misc.structure_not_locked=Not locked on any structure! ## NEEDS TRANSLATION ##
+#openblocks.misc.locked_on_structure=Locked on nearest %s ## NEEDS TRANSLATION ##
+#openblocks.misc.no_nearby_structures=Can't find any nearby structures ## NEEDS TRANSLATION ##
 
 openblocks.misc.grave_msg=%s (Tag: %.1f)
 
@@ -379,3 +382,5 @@ entity.openblocks.block.name=Schwebender Block
 entity.openblocks.mini_me.name=Mini-Me
 
 fluid.openblocks.xp_juice=Flüssige XP
+
+#entity.Villager.audiophile=Audiophile ## NEEDS TRANSLATION ##
