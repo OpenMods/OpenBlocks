@@ -25,6 +25,7 @@ public class BlockVillageHighlighter extends OpenBlock.FourDirections {
 	public BlockVillageHighlighter() {
 		super(Material.ROCK);
 		setDefaultState(getDefaultState().withProperty(POWERED, false));
+		setRequiresInitialization(true);
 	}
 
 	@Override

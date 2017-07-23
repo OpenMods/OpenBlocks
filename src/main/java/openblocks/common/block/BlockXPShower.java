@@ -25,6 +25,7 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 	public BlockXPShower() {
 		super(Material.ROCK);
 		setPlacementMode(BlockPlacementMode.SURFACE);
+		setRequiresInitialization(true);
 	}
 
 	public static final IProperty<Boolean> POWERED = PropertyBool.create("powered");

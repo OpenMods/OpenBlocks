@@ -62,6 +62,7 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	public BlockTarget() {
 		super(Material.ROCK);
 		setLightLevel(0.3f);
+		setRequiresInitialization(true);
 	}
 
 	@Override

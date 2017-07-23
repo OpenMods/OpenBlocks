@@ -32,6 +32,7 @@ public class BlockSky extends OpenBlock {
 	public BlockSky() {
 		super(Material.IRON);
 		setDefaultState(getDefaultState().withProperty(POWERED, false));
+		setRequiresInitialization(true);
 	}
 
 	@Override
@@ -55,7 +56,18 @@ public class BlockSky extends OpenBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
+	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour) {
+		updatePowerState(state, world, blockPos);
+		super.neighborChanged(state, world, blockPos, neighbour);
+	}
+
+	@Override
+	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, IBlockState state) {
+		updatePowerState(state, world, blockPos);
+		return super.onBlockAddedNextTick(world, blockPos, state);
+	}
+
+	private void updatePowerState(IBlockState state, World world, BlockPos pos) {
 		if (!world.isRemote) {
 			final boolean isPowered = world.isBlockIndirectlyGettingPowered(pos) > 0;
 			final boolean isActive = state.getValue(POWERED);
