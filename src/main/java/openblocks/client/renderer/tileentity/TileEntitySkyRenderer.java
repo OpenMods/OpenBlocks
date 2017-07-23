@@ -27,7 +27,7 @@ public class TileEntitySkyRenderer extends TileEntitySpecialRenderer<TileEntityS
 		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
 		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
 
-		if (!BlockSky.isActive(state)) return;
+		if (!(state.getBlock() instanceof BlockSky) || !BlockSky.isActive(state)) return;
 
 		SkyBlockRenderer.INSTANCE.incrementUsers();
 

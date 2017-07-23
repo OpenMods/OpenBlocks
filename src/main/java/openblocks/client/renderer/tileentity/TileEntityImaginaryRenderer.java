@@ -27,6 +27,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
+import openblocks.common.block.BlockImaginary;
 import openblocks.common.tileentity.TileEntityImaginary;
 import openblocks.common.tileentity.TileEntityImaginary.Property;
 
@@ -271,9 +272,11 @@ public class TileEntityImaginaryRenderer extends TileEntitySpecialRenderer<TileE
 		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
 		IBlockState state = world.getBlockState(pos).getActualState(world, pos);
 
-		final List<VertexWriter> vertexWriters = MODEL_CACHE.getUnchecked(state);
-		for (VertexWriter writer : vertexWriters)
-			writer.write(buffer, info);
+		if (state.getBlock() instanceof BlockImaginary) {
+			final List<VertexWriter> vertexWriters = MODEL_CACHE.getUnchecked(state);
+			for (VertexWriter writer : vertexWriters)
+				writer.write(buffer, info);
+		}
 	}
 
 }
