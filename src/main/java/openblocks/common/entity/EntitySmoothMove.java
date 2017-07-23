@@ -91,6 +91,7 @@ public abstract class EntitySmoothMove extends Entity {
 	@Override
 	public void setPosition(double x, double y, double z) {
 		if (smoother != null) smoother.setTarget(x, y, z);
+		else setPositionRaw(x, y, z);
 	}
 
 	protected void updatePrevPosition() {
