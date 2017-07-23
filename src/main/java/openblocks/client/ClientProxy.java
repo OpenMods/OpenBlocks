@@ -131,7 +131,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 				registerTrophyItemRenderer(trophyItem, trophy);
 		}
 
-		tempHackRegisterTesrStateMappers();
+		registerTesrStateMappers();
 
 		ModelLoaderRegistry.registerLoader(MappedModelLoader.builder()
 				.put("magic-devnull", DevNullModel.INSTANCE)
@@ -286,7 +286,7 @@ public class ClientProxy implements IOpenBlocksProxy {
 			MinecraftForge.EVENT_BUS.register(renderer);
 		}
 
-		tempHackRegisterTesrItemRenderers();
+		registerTesrItemRenderers();
 
 		if (OpenBlocks.Blocks.tank != null) {
 			MinecraftForge.EVENT_BUS.register(new FluidTextureRegisterListener());
@@ -377,20 +377,21 @@ public class ClientProxy implements IOpenBlocksProxy {
 		public void nom(OpenBlock block);
 	}
 
-	// TODO kill it with fire!
-	// most of those blocks don't require TESR, but have complex models, that now can be done in data
-	private static void visitTempHackTesrBlocks(BlockConsumer consumer) {
+	private static void visitTesrBlocks(BlockConsumer consumer) {
+		// TODO fully static, migrate to block models
+		consumer.nom(OpenBlocks.Blocks.grave);
+		consumer.nom(OpenBlocks.Blocks.donationStation);
+
+		// TODO migrate static parts to block models
 		consumer.nom(OpenBlocks.Blocks.bearTrap);
 		consumer.nom(OpenBlocks.Blocks.cannon);
-		consumer.nom(OpenBlocks.Blocks.donationStation);
 		consumer.nom(OpenBlocks.Blocks.fan);
-		consumer.nom(OpenBlocks.Blocks.grave);
 		consumer.nom(OpenBlocks.Blocks.sprinkler);
 	}
 
 	@SuppressWarnings("deprecation")
-	private static void tempHackRegisterTesrItemRenderers() {
-		visitTempHackTesrBlocks(new BlockConsumer() {
+	private static void registerTesrItemRenderers() {
+		visitTesrBlocks(new BlockConsumer() {
 			@Override
 			public void nom(OpenBlock block) {
 				Item item = Item.getItemFromBlock(block);
@@ -399,13 +400,12 @@ public class ClientProxy implements IOpenBlocksProxy {
 		});
 	}
 
-	private static void tempHackRegisterTesrStateMappers() {
-		// TODO differentiate models to get proper particles
-		final ModelResourceLocation location = new ModelResourceLocation(OpenBlocks.location("temp"), "dummy");
-		visitTempHackTesrBlocks(new BlockConsumer() {
+	private static void registerTesrStateMappers() {
+		visitTesrBlocks(new BlockConsumer() {
 			@Override
 			public void nom(OpenBlock block) {
 				ImmutableMap.Builder<IBlockState, ModelResourceLocation> statesBuilder = ImmutableMap.builder();
+				final ModelResourceLocation location = new ModelResourceLocation(block.getRegistryName(), "dummy");
 				for (IBlockState state : block.getBlockState().getValidStates())
 					statesBuilder.put(state, location);
 

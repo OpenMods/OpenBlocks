@@ -1,0 +1,11 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "textures": {
+            "particle": "openblocks:blocks/fan"
+        }
+    },
+    "variants": {
+        "dummy": { "model": "openblocks:tesr_empty" }
+    }
+}
