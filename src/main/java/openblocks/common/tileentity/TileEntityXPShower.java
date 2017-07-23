@@ -1,6 +1,6 @@
 package openblocks.common.tileentity;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
@@ -10,15 +10,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import openblocks.OpenBlocks;
 import openblocks.common.LiquidXpUtils;
+import openblocks.common.block.BlockXPShower;
 import openblocks.common.entity.EntityXPOrbNoFly;
 import openmods.OpenMods;
-import openmods.api.IAddAwareTile;
-import openmods.api.INeighbourAwareTile;
 import openmods.liquids.GenericTank;
 import openmods.sync.SyncableBoolean;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAwareTile, IAddAwareTile, ITickable {
+public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 
 	private static final FluidStack XP_FLUID = new FluidStack(OpenBlocks.Fluids.xpJuice, 1);
 
@@ -28,13 +27,11 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	private GenericTank bufferTank = new GenericTank(Fluid.BUCKET_VOLUME, OpenBlocks.Fluids.xpJuice);
 
-	private SyncableBoolean isOn;
 	private SyncableBoolean particleSpawnerActive;
 	private int particleSpawnTimer = 0;
 
 	@Override
 	protected void createSyncedFields() {
-		isOn = new SyncableBoolean();
 		particleSpawnerActive = new SyncableBoolean();
 	}
 
@@ -49,7 +46,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 
 	private void trySpawnXpOrbs() {
 		boolean hasSpawnedParticle = false;
-		if (isOn.get() && OpenMods.proxy.getTicks(worldObj) % ORB_SPAWN_FREQUENCY == 0) {
+		if (OpenMods.proxy.getTicks(worldObj) % ORB_SPAWN_FREQUENCY == 0 && isPowered()) {
 			bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getBack());
 
 			final int amountInTank = bufferTank.getFluidAmount();
@@ -73,6 +70,11 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 		sync();
 	}
 
+	private boolean isPowered() {
+		final IBlockState state = worldObj.getBlockState(pos);
+		return state.getBlock() instanceof BlockXPShower && state.getValue(BlockXPShower.POWERED);
+	}
+
 	private void trySpawnParticles() {
 		final int particleLevel = OpenBlocks.proxy.getParticleSettings();
 		if (particleLevel == 0 || (particleLevel == 1 && worldObj.rand.nextInt(3) == 0)) {
@@ -87,21 +89,6 @@ public class TileEntityXPShower extends SyncedTileEntity implements INeighbourAw
 				OpenBlocks.proxy.spawnLiquidSpray(worldObj, XP_FLUID, p.getX() + 0.5d, p.getY() + 0.4d, p.getZ() + 0.5d, 0.4f, 0.7f, vec);
 			}
 		}
-	}
-
-	@Override
-	public void onAdded() {
-		if (!worldObj.isRemote) updateState();
-	}
-
-	@Override
-	public void onNeighbourChanged(Block block) {
-		if (!worldObj.isRemote) updateState();
-	}
-
-	public void updateState() {
-		final int power = worldObj.isBlockIndirectlyGettingPowered(getPos());
-		isOn.set(power > 0);
 	}
 
 	@Override

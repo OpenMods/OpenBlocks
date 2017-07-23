@@ -6,6 +6,10 @@
     },
     "variants" : {
         "inventory": [{}],
+        "powered": {
+            "true": {},
+            "false": {}
+        },
         "orientation" : {
             "xp_yp" : { "y" : 180 },
             "zp_yp" : { "y" : 270 },

@@ -1,6 +1,10 @@
 package openblocks.common.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -11,6 +15,7 @@ import openmods.block.OpenBlock;
 import openmods.geometry.BlockSpaceTransform;
 import openmods.geometry.Orientation;
 import openmods.infobook.BookDocumentation;
+import openmods.utils.BlockNotifyFlags;
 
 @BookDocumentation
 public class BlockXPShower extends OpenBlock.FourDirections {
@@ -20,6 +25,26 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 	public BlockXPShower() {
 		super(Material.ROCK);
 		setPlacementMode(BlockPlacementMode.SURFACE);
+	}
+
+	public static final IProperty<Boolean> POWERED = PropertyBool.create("powered");
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { getPropertyOrientation(), POWERED });
+	}
+
+	private static final int MASK_POWERED = 0x8;
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return super.getStateFromMeta(meta)
+				.withProperty(POWERED, (meta & MASK_POWERED) != 0);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return super.getMetaFromState(state) | (state.getValue(POWERED)? MASK_POWERED : 0);
 	}
 
 	@Override
@@ -49,5 +74,24 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 			default:
 				return false;
 		}
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour) {
+		updateRedstone(world, blockPos, state);
+		super.neighborChanged(state, world, blockPos, neighbour);
+	}
+
+	@Override
+	protected boolean onBlockAddedNextTick(World world, BlockPos blockPos, IBlockState state) {
+		updateRedstone(world, blockPos, state);
+		return super.onBlockAddedNextTick(world, blockPos, state);
+	}
+
+	private static void updateRedstone(World world, BlockPos blockPos, IBlockState state) {
+		if (world.isRemote) return;
+		boolean isPowered = world.isBlockIndirectlyGettingPowered(blockPos) > 0;
+		final IBlockState newState = state.withProperty(POWERED, isPowered);
+		if (state != newState) world.setBlockState(blockPos, newState, BlockNotifyFlags.ALL);
 	}
 }
