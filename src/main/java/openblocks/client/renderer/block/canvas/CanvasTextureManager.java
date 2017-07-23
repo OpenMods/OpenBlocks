@@ -5,7 +5,9 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Table;
+import com.google.common.collect.Table.Cell;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -29,6 +31,8 @@ public class CanvasTextureManager {
 	public static final CanvasTextureManager INSTANCE = new CanvasTextureManager();
 
 	private int peakRejectedAllocations = 0;
+
+	private boolean textureLimitReached = false;
 
 	public int getPeakRejectedAllocations() {
 		return peakRejectedAllocations;
@@ -140,6 +144,7 @@ public class CanvasTextureManager {
 		freeTextures.clear();
 		usedTextures.clear();
 		peakRejectedAllocations = 0;
+		textureLimitReached = false;
 
 		CanvasSideState.onTextureReload();
 
@@ -164,8 +169,17 @@ public class CanvasTextureManager {
 
 		allocatedTexture = freeTextures.poll();
 		if (allocatedTexture == null) {
+			tryReclaimTextures();
+			allocatedTexture = freeTextures.poll();
+		}
+
+		if (allocatedTexture == null) {
 			// TODO pool's empty, clean unreferenced, suggest reload
 			peakRejectedAllocations++;
+			if (!textureLimitReached) {
+				textureLimitReached = true;
+				Log.warn("Reached limit of canvas textures, change canvasPoolSize and reload resources (F3+T)");
+			}
 			if (DEBUG) Log.info("Can't load texture [%08X:%s]", background, layers);
 			return White.LOCATION;
 		}
@@ -178,6 +192,21 @@ public class CanvasTextureManager {
 		if (DEBUG) Log.info("Loaded texture %s [%08X:%s]. counter = %d", allocatedTexture.location, background, layers, allocatedTexture.referenceCount);
 
 		return allocatedTexture.location;
+	}
+
+	private void tryReclaimTextures() {
+		final Iterator<Cell<Integer, List<CanvasLayer>, CanvasTexture>> cells = usedTextures.cellSet().iterator();
+		while (cells.hasNext()) {
+			final Cell<Integer, List<CanvasLayer>, CanvasTexture> cell = cells.next();
+			final CanvasTexture texture = cell.getValue();
+			if (texture.referenceCount <= 0) {
+				cells.remove();
+				texture.referenceCount = 0;
+				freeTextures.push(texture);
+				if (DEBUG) Log.info("Reclaiming texture %s [%08X:%s]", texture.location, cell.getRowKey(), cell.getColumnKey());
+			}
+		}
+
 	}
 
 	public void releaseTexture(int background, List<CanvasLayer> layers) {
