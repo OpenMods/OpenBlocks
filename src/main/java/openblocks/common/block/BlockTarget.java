@@ -143,6 +143,7 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour) {
 		updateRedstone(world, blockPos, state);
+		super.neighborChanged(state, world, blockPos, neighbour);
 	}
 
 	@Override

@@ -6,6 +6,15 @@
     },
     "variants" : {
         "inventory": [{}],
+        "powered" : {
+            "true": {
+                "textures": {
+                    "side": "openblocks:blocks/village_side_active",
+                    "back": "openblocks:blocks/village_back_active"
+                }
+            },
+            "false": {}
+        },
         "orientation" : {
             "xp_yp" : { "y" :   0 },
             "zp_yp" : { "y" :  90 },

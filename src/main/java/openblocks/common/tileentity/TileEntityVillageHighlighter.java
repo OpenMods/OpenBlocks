@@ -3,7 +3,7 @@ package openblocks.common.tileentity;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
 import java.util.List;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -11,19 +11,16 @@ import net.minecraft.village.Village;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
+import openblocks.common.block.BlockVillageHighlighter;
 import openmods.OpenMods;
-import openmods.api.INeighbourAwareTile;
-import openmods.sync.SyncableBoolean;
 import openmods.sync.SyncableIntArray;
 import openmods.tileentity.SyncedTileEntity;
 
-public class TileEntityVillageHighlighter extends SyncedTileEntity implements ITickable, INeighbourAwareTile {
+public class TileEntityVillageHighlighter extends SyncedTileEntity implements ITickable {
 
 	public static int VALUES_PER_VILLAGE = 7;
 
 	private SyncableIntArray villageData;
-
-	private SyncableBoolean isEnabled;
 
 	private boolean previousBreedStatus = false;
 
@@ -32,13 +29,12 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	@Override
 	protected void createSyncedFields() {
 		villageData = new SyncableIntArray();
-		isEnabled = new SyncableBoolean();
 	}
 
 	@Override
 	public void update() {
 		if (!worldObj.isRemote) {
-			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0 && isEnabled.get()) {
+			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0 && isEnabled()) {
 				List<Integer> tmpDataList = Lists.newArrayList();
 				for (Village village : worldObj.villageCollectionObj.getVillageList()) {
 					if (village.isBlockPosWithinSqVillageRadius(pos)) {
@@ -63,6 +59,11 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 		}
 	}
 
+	private boolean isEnabled() {
+		final IBlockState state = worldObj.getBlockState(pos);
+		return state.getBlock() instanceof BlockVillageHighlighter && state.getValue(BlockVillageHighlighter.POWERED);
+	}
+
 	public SyncableIntArray getVillageData() {
 		return villageData;
 	}
@@ -71,10 +72,6 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return super.getRenderBoundingBox().expand(200, 200, 200);
-	}
-
-	public boolean isPowered() {
-		return isEnabled.get();
 	}
 
 	@Override
@@ -97,12 +94,6 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 
 	public int getSignalStrength() {
 		return canVillagersBreed()? 15 : 0;
-	}
-
-	@Override
-	public void onNeighbourChanged(Block block) {
-		isEnabled.set(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
-		trySync();
 	}
 
 }

@@ -1,12 +1,17 @@
 package openblocks.client.renderer.tileentity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.MinecraftForgeClient;
+import openblocks.common.block.BlockVillageHighlighter;
 import openblocks.common.tileentity.TileEntityVillageHighlighter;
 import openmods.sync.SyncableIntArray;
 import org.lwjgl.opengl.GL11;
@@ -20,7 +25,7 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 	@Override
 	public void renderTileEntityAt(TileEntityVillageHighlighter vh, double x, double y, double z, float partialTick, int destroyProcess) {
 
-		if (vh != null && vh.isPowered()) {
+		if (canRender(vh)) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float)x + 0.5F, (float)y + 1.0f, (float)z + 0.5F);
 			Tessellator t = Tessellator.getInstance();
@@ -77,6 +82,16 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 		}
 	}
 
+	private static boolean canRender(TileEntityVillageHighlighter te) {
+		if (te == null) return false;
+
+		final BlockPos pos = te.getPos();
+		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(te.getWorld(), pos);
+		IBlockState state = world.getBlockState(pos);
+
+		return state.getBlock() instanceof BlockVillageHighlighter && state.getValue(BlockVillageHighlighter.POWERED);
+	}
+
 	private static void addVertex(VertexBuffer wr, double x, double y, double z) {
 		wr.pos(x, y, z).endVertex();
 	}
@@ -124,7 +139,7 @@ public class TileEntityVillageHighlighterRenderer extends TileEntitySpecialRende
 
 	@Override
 	public boolean isGlobalRenderer(TileEntityVillageHighlighter te) {
-		return te.isPowered();
+		return canRender(te);
 	}
 
 }
