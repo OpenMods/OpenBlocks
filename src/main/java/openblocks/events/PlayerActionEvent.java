@@ -4,7 +4,6 @@ import net.minecraft.network.PacketBuffer;
 import openmods.network.event.EventDirection;
 import openmods.network.event.NetworkEvent;
 import openmods.network.event.NetworkEventMeta;
-import openmods.utils.EnumUtils;
 
 @NetworkEventMeta(direction = EventDirection.C2S)
 public class PlayerActionEvent extends NetworkEvent {
@@ -22,13 +21,12 @@ public class PlayerActionEvent extends NetworkEvent {
 
 	@Override
 	protected void readFromStream(PacketBuffer input) {
-		int typeId = input.readVarIntFromBuffer();
-		type = EnumUtils.fromOrdinal(Type.class, typeId);
+		type = input.readEnumValue(Type.class);
 	}
 
 	@Override
 	protected void writeToStream(PacketBuffer output) {
-		output.writeVarIntToBuffer(type.ordinal());
+		output.writeEnumValue(type);
 	}
 
 }
