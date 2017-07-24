@@ -35,14 +35,14 @@ public class ItemPedometer extends Item {
 	}
 
 	private static void send(EntityPlayer player, String format, Object... args) {
-		player.addChatComponentMessage(new TextComponentTranslation(format, args));
+		player.sendMessage(new TextComponentTranslation(format, args));
 	}
 
 	private SpeedUnit speedUnit = SpeedUnit.M_PER_TICK;
 	private DistanceUnit distanceUnit = DistanceUnit.M;
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (world.isRemote) {
 			if (player.isSneaking()) {
 				PedometerHandler.getProperty(player).reset();
@@ -60,13 +60,13 @@ public class ItemPedometer extends Item {
 			world.playSound(null, player.getPosition(), OpenBlocks.Sounds.ITEM_PEDOMETER_USE, SoundCategory.PLAYERS, 1F, 1F);
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 
 	protected void showPedometerData(EntityPlayer player, PedometerState state) {
 		PedometerData result = state.getData();
 		if (result == null) return;
-		player.addChatComponentMessage(new TextComponentString(""));
+		player.sendMessage(new TextComponentString(""));
 		send(player, "openblocks.misc.pedometer.start_point", String.format("%.1f %.1f %.1f", result.startingPoint.xCoord, result.startingPoint.yCoord, result.startingPoint.zCoord));
 
 		send(player, "openblocks.misc.pedometer.speed", speedUnit.format(result.currentSpeed));

@@ -105,7 +105,7 @@ public class SoundIconRegistry {
 		return makeFramedIcon(front, primaryColor, frame);
 	}
 
-	private static void addMob(MappedCategory category, String soundId, String mobId, boolean isHostile) {
+	private static void addMob(MappedCategory category, String soundId, ResourceLocation mobId, boolean isHostile) {
 		final EntityEggInfo mobInfo = EntityList.ENTITY_EGGS.get(mobId);
 
 		// TODO maybe some default colors for egg-less mobs?
@@ -345,51 +345,55 @@ public class SoundIconRegistry {
 
 			{
 				MappedCategory entity = mcRoot.add("entity", new MappedCategory());
-				addMob(entity, "blaze", "Blaze", true);
-				addMob(entity, "creeper", "Creeper", true);
-				addMob(entity, "elder_guardian", "Guardian", true);
-				addMob(entity, "enderdragon", "EnderDragon", true);
-				addMob(entity, "endermen", "Enderman", true);
-				addMob(entity, "endermite", "Endermite", true);
-				addMob(entity, "ghast", "Ghast", true);
-				addMob(entity, "guardian", "Guardian", true);
-				addMob(entity, "hostile", "Monster", true);
-				addMob(entity, "husk", "Zombie", true);
-				addMob(entity, "magmacube", "LavaSlime", true);
-				addMob(entity, "shulker", "Shulker", true);
-				addMob(entity, "silverfish", "Silverfish", true);
-				addMob(entity, "skeleton", "Skeleton", true);
-				addMob(entity, "slime", "Slime", true);
-				addMob(entity, "small_magmacube", "LavaSlime", true);
-				addMob(entity, "small_slime", "Slime", true);
-				addMob(entity, "spider", "Spider", true);
-				addMob(entity, "stray", "Skeleton", true);
-				addMob(entity, "witch", "Witch", true);
-				addMob(entity, "wither", "WitherBoss", true);
-				addMob(entity, "wither_skeleton", "Skeleton", true);
-				addMob(entity, "zombie", "Zombie", true);
-				addMob(entity, "zombie_villager", "Zombie", true);
+				addMob(entity, "blaze", mc("blaze"), true);
+				addMob(entity, "creeper", mc("Creeper"), true);
+				addMob(entity, "elder_guardian", mc("elder_guardian"), true);
+				addMob(entity, "enderdragon", mc("ender_dragon"), true);
+				addMob(entity, "endermen", mc("enderman"), true);
+				addMob(entity, "endermite", mc("endermite"), true);
+				addMob(entity, "ghast", mc("ghast"), true);
+				addMob(entity, "guardian", mc("guardian"), true);
+				addMob(entity, "hostile", mc("dummy"), true); // TODO 1.11 review
+				addMob(entity, "husk", mc("husk"), true);
+				addMob(entity, "evocation_illager", mc("evocation_illager"), true);
+				addMob(entity, "magmacube", mc("magma_cube"), true);
+				addMob(entity, "shulker", mc("shulker"), true);
+				addMob(entity, "silverfish", mc("silverfish"), true);
+				addMob(entity, "skeleton", mc("skeleton"), true);
+				addMob(entity, "slime", mc("slime"), true);
+				addMob(entity, "small_magmacube", mc("magma_cube"), true);
+				addMob(entity, "small_slime", mc("slime"), true);
+				addMob(entity, "spider", mc("spider"), true);
+				addMob(entity, "stray", mc("stray"), true);
+				addMob(entity, "vex", mc("vex"), true);
+				addMob(entity, "vindication_illager", mc("vindication_illager"), true);
+				addMob(entity, "witch", mc("witch"), true);
+				addMob(entity, "wither", mc("wither"), true);
+				addMob(entity, "wither_skeleton", mc("wither_skeleton"), true);
+				addMob(entity, "zombie", mc("zombie"), true);
+				addMob(entity, "zombie_villager", mc("zombie_villager"), true);
 
-				addMob(entity, "bat", "Bat", false);
-				addMob(entity, "cat", "Ozelot", false);
-				addMob(entity, "chicken", "Chicken", false);
-				addMob(entity, "cow", "Cow", false);
-				addMob(entity, "donkey", "EntityHorse", false);
-				addMob(entity, "horse", "EntityHorse", false);
-				addMob(entity, "irongolem", "VillagerGolem", false);
-				addMob(entity, "mooshroom", "MushroomCow", false);
-				addMob(entity, "mule", "EntityHorse", false);
-				addMob(entity, "pig", "Pig", false);
-				addMob(entity, "polar_bear", "PolarBear", false);
-				addMob(entity, "rabbit", "Rabbit", false);
-				addMob(entity, "sheep", "Sheep", false);
-				addMob(entity, "skeleton_horse", "EntityHorse", false);
-				addMob(entity, "snowman", "SnowMan", false);
-				addMob(entity, "squid", "Squid", false);
-				addMob(entity, "villager", "Villager", false);
-				addMob(entity, "wolf", "Wolf", false);
-				addMob(entity, "zombie_horse", "EntityHorse", false);
-				addMob(entity, "zombie_pig", "PigZombie", false); // YMMV
+				addMob(entity, "bat", mc("bat"), false);
+				addMob(entity, "cat", mc("ocelot"), false);
+				addMob(entity, "chicken", mc("chicken"), false);
+				addMob(entity, "cow", mc("cow"), false);
+				addMob(entity, "donkey", mc("donkey"), false);
+				addMob(entity, "horse", mc("horse"), false);
+				addMob(entity, "irongolem", mc("villager_golem"), false);
+				addMob(entity, "llama", mc("llama"), false);
+				addMob(entity, "mooshroom", mc("mooshroom"), false);
+				addMob(entity, "mule", mc("mule"), false);
+				addMob(entity, "pig", mc("pig"), false);
+				addMob(entity, "polar_bear", mc("polar_bear"), false);
+				addMob(entity, "rabbit", mc("rabbit"), false);
+				addMob(entity, "sheep", mc("sheep"), false);
+				addMob(entity, "skeleton_horse", mc("skeleton_horse"), false);
+				addMob(entity, "snowman", mc("snowman"), false);
+				addMob(entity, "squid", mc("squid"), false);
+				addMob(entity, "villager", mc("villager"), false);
+				addMob(entity, "wolf", mc("wolf"), false);
+				addMob(entity, "zombie_horse", mc("zombie_horse"), false);
+				addMob(entity, "zombie_pig", mc("zombie_pigman"), false); // YMMV
 
 				{
 					final MappedCategory player = entity.add("player", new MappedCategory());
@@ -423,6 +427,9 @@ public class SoundIconRegistry {
 				entity.add("tnt", createSingleIconCategory(mc("blocks/tnt_side"), true));
 				entity.add("armorstand", createSingleIconCategory(mc("items/wooden_armorstand"), true));
 				entity.add("bobber", createSingleIconCategory(mc("items/fishing_rod_cast"), true));
+
+				// TODO
+				entity.add("evocation_fangs", createSingleIconCategory(mc("items/fishing_rod_cast"), true));
 
 				{
 					final MappedCategory generic = entity.add("generic", createSingleIconCategory(ob("generic"), false));

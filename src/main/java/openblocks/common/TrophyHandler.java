@@ -1,6 +1,5 @@
 package openblocks.common;
 
-import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -20,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -94,18 +94,22 @@ public class TrophyHandler {
 		return entity;
 	}
 
+	private static final ResourceLocation mc(String id) {
+		return new ResourceLocation("minecraft", id);
+	}
+
 	public enum Trophy {
-		Wolf(),
-		Chicken(new ItemDropBehavior(10000, new ItemStack(Items.EGG), SoundEvents.ENTITY_CHICKEN_EGG)),
-		Cow(new ItemDropBehavior(20000, new ItemStack(Items.LEATHER))),
-		Creeper(new CreeperBehavior()),
-		Skeleton(new SkeletonBehavior()),
-		PigZombie(new ItemDropBehavior(20000, new ItemStack(Items.GOLD_NUGGET))),
-		Bat(1.0, -0.3),
-		Zombie(),
-		Witch(0.35, new WitchBehavior()),
-		Villager(),
-		Ozelot() {
+		Wolf(mc("wolf")),
+		Chicken(mc("chicken"), new ItemDropBehavior(10000, new ItemStack(Items.EGG), SoundEvents.ENTITY_CHICKEN_EGG)),
+		Cow(mc("cow"), new ItemDropBehavior(20000, new ItemStack(Items.LEATHER))),
+		Creeper(mc("creeper"), new CreeperBehavior()),
+		Skeleton(mc("skeleton"), new SkeletonBehavior()),
+		PigZombie(mc("zombie_pigman"), new ItemDropBehavior(20000, new ItemStack(Items.GOLD_NUGGET))),
+		Bat(mc("bat"), 1.0, -0.3),
+		Zombie(mc("zombie")),
+		Witch(mc("witch"), 0.35, new WitchBehavior()),
+		Villager(mc("villager")),
+		Ozelot(mc("ocelot")) {
 			@Override
 			protected Entity createEntity() {
 				Entity entity = super.createEntity();
@@ -118,63 +122,70 @@ public class TrophyHandler {
 				return entity;
 			}
 		},
-		Sheep(),
-		Blaze(new BlazeBehavior()),
-		Silverfish(),
-		Spider(),
-		CaveSpider(new CaveSpiderBehavior()),
-		Slime(0.6) {
+		Sheep(mc("sheep")),
+		Blaze(mc("blaze"), new BlazeBehavior()),
+		Silverfish(mc("sliverfish")),
+		Spider(mc("spider")),
+		CaveSpider(mc("cave_spider"), new CaveSpiderBehavior()),
+		Slime(mc("slime"), 0.6) {
 			@Override
 			protected Entity createEntity() {
 				return setSlimeSize(super.createEntity(), 1);
 			}
 		},
-		Ghast(0.1, 0.3),
-		Enderman(0.3, new EndermanBehavior()),
-		LavaSlime(0.6) {
+		Ghast(mc("ghast"), 0.1, 0.3),
+		Enderman(mc("enderman"), 0.3, new EndermanBehavior()),
+		LavaSlime(mc("magma_cube"), 0.6) {
 			@Override
 			protected Entity createEntity() {
 				return setSlimeSize(super.createEntity(), 1);
 			}
 		},
-		Squid(0.3, 0.5, new SquidBehavior()),
-		MushroomCow(new MooshroomBehavior()),
-		VillagerGolem(0.3),
-		SnowMan(new SnowmanBehavior()),
-		Pig(new ItemDropBehavior(20000, new ItemStack(Items.PORKCHOP))),
-		Endermite(),
-		Guardian(new GuardianBehavior()),
-		Rabbit(new ItemDropBehavior(20000, new ItemStack(Items.CARROT))),
-		PolarBear(new ItemDropBehavior(20000, new ItemStack(Items.FISH))),
-		Shulker(new ShulkerBehavior());
+		Squid(mc("squid"), 0.3, 0.5, new SquidBehavior()),
+		MushroomCow(mc("mooshroom"), new MooshroomBehavior()),
+		VillagerGolem(mc("villager_golem"), 0.3),
+		SnowMan(mc("snowman"), new SnowmanBehavior()),
+		Pig(mc("pig"), new ItemDropBehavior(20000, new ItemStack(Items.PORKCHOP))),
+		Endermite(mc("endermite")),
+		Guardian(mc("guardian"), new GuardianBehavior()),
+		Rabbit(mc("rabbit"), new ItemDropBehavior(20000, new ItemStack(Items.CARROT))),
+		PolarBear(mc("polar_bear"), new ItemDropBehavior(20000, new ItemStack(Items.FISH))),
+		Shulker(mc("shulker"), new ShulkerBehavior());
 		// Skipped: Horse (needs non-null, world in ctor), Wither (renders boss bar)
+		// TODO add new stuff
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
 		private ITrophyBehavior behavior;
+		public final ResourceLocation id;
 
-		Trophy() {}
+		private Trophy(ResourceLocation id) {
+			this.id = id;
+		}
 
-		Trophy(ITrophyBehavior behavior) {
+		private Trophy(ResourceLocation id, ITrophyBehavior behavior) {
+			this(id);
 			this.behavior = behavior;
 		}
 
-		Trophy(double scale) {
+		private Trophy(ResourceLocation id, double scale) {
+			this(id);
 			this.scale = scale;
 		}
 
-		Trophy(double scale, ITrophyBehavior behavior) {
+		private Trophy(ResourceLocation id, double scale, ITrophyBehavior behavior) {
+			this(id);
 			this.scale = scale;
 			this.behavior = behavior;
 		}
 
-		Trophy(double scale, double verticalOffset) {
-			this(scale);
+		private Trophy(ResourceLocation id, double scale, double verticalOffset) {
+			this(id, scale);
 			this.verticalOffset = verticalOffset;
 		}
 
-		Trophy(double scale, double verticalOffset, ITrophyBehavior behavior) {
-			this(scale, verticalOffset);
+		private Trophy(ResourceLocation id, double scale, double verticalOffset, ITrophyBehavior behavior) {
+			this(id, scale, verticalOffset);
 			this.behavior = behavior;
 		}
 
@@ -204,9 +215,9 @@ public class TrophyHandler {
 				e.posZ = pos.getZ();
 
 				synchronized (e) {
-					e.worldObj = world;
+					e.world = world;
 					((EntityLiving)e).playLivingSound();
-					e.worldObj = null;
+					e.world = null;
 				}
 			}
 		}
@@ -221,20 +232,26 @@ public class TrophyHandler {
 		}
 
 		protected Entity createEntity() {
-			return EntityList.createEntityByName(name(), null);
+			return EntityList.createEntityByIDFromName(id, null);
 		}
 
 		static {
 
-			ImmutableMap.Builder<String, Trophy> builder = ImmutableMap.builder();
+			ImmutableMap.Builder<ResourceLocation, Trophy> byId = ImmutableMap.builder();
+			ImmutableMap.Builder<String, Trophy> byName = ImmutableMap.builder();
 
-			for (Trophy t : values())
-				builder.put(t.name(), t);
+			for (Trophy t : values()) {
+				byId.put(t.id, t);
+				byName.put(t.name(), t);
+			}
 
-			TYPES = builder.build();
+			TYPES_BY_ID = byId.build();
+			TYPES_BY_NAME = byName.build();
 		}
 
-		public final static Map<String, Trophy> TYPES;
+		public final static Map<String, Trophy> TYPES_BY_NAME;
+
+		public final static Map<ResourceLocation, Trophy> TYPES_BY_ID;
 
 		public final static Trophy[] VALUES = values();
 	}
@@ -260,11 +277,11 @@ public class TrophyHandler {
 					});
 
 			if (result > 0) {
-				final String entityName = EntityList.getEntityString(entity);
-				if (!Strings.isNullOrEmpty(entityName)) {
-					Trophy mobTrophy = Trophy.TYPES.get(entityName);
+				final ResourceLocation entityName = EntityList.getKey(entity.getClass());
+				if (entityName != null) {
+					Trophy mobTrophy = Trophy.TYPES_BY_ID.get(entityName);
 					if (mobTrophy != null) {
-						EntityItem drop = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
+						EntityItem drop = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, mobTrophy.getItemStack());
 						drop.setDefaultPickupDelay();
 						event.getDrops().add(drop);
 					}
@@ -274,7 +291,7 @@ public class TrophyHandler {
 	}
 
 	private static boolean canDrop(Entity entity) {
-		final World world = entity.worldObj;
+		final World world = entity.world;
 		return world != null && world.getGameRules().getBoolean("doMobLoot");
 	}
 

@@ -30,8 +30,8 @@ public class EntityAICollectItem extends EntityAIBase {
 	public boolean shouldExecute() {
 		if (!pathFinder.noPath()) return false;
 
-		if (luggage.worldObj != null) {
-			List<EntityItem> items = luggage.worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
+		if (luggage.world != null) {
+			List<EntityItem> items = luggage.world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(luggage.posX - 1, luggage.posY - 1, luggage.posZ - 1, luggage.posX + 1, luggage.posY + 1, luggage.posZ + 1).expand(10.0, 10.0, 10.0));
 			EntityItem closest = null;
 			double closestDistance = Double.MAX_VALUE;
 			for (EntityItem item : items) {
@@ -75,15 +75,15 @@ public class EntityAICollectItem extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if (!luggage.worldObj.isRemote) {
+		if (!luggage.world.isRemote) {
 			if (targetItem != null && luggage.getDistanceToEntity(targetItem) < 1.0) {
 				final ItemStack toConsume = targetItem.getEntityItem();
 				final ItemStack leftovers = ItemHandlerHelper.insertItem(luggage.getChestInventory().getHandler(), toConsume, false);
-				if (leftovers == null || leftovers.stackSize < toConsume.stackSize) {
+				if (leftovers.getCount() < toConsume.getCount()) {
 					if (luggage.lastSound > 15) {
 						boolean isFood = toConsume.getItemUseAction() == EnumAction.EAT;
 						luggage.playSound(isFood? OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_FOOD : OpenBlocks.Sounds.ENTITY_LUGGAGE_EAT_ITEM,
-								0.5f, 1.0f + (luggage.worldObj.rand.nextFloat() * 0.2f));
+								0.5f, 1.0f + (luggage.world.rand.nextFloat() * 0.2f));
 						luggage.lastSound = 0;
 					}
 

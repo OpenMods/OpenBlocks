@@ -55,14 +55,13 @@ public class ItemTankBlock extends ItemOpenBlock {
 		}
 
 		private FluidStack getFluid(FluidTank tank) {
-			if (tank == null) return null;
 			FluidStack result = tank.getFluid();
-			if (result != null) result.amount *= container.stackSize;
+			if (result != null) result.amount *= container.getCount();
 			return result;
 		}
 
 		private int getCapacity(FluidTank tank) {
-			return tank != null? tank.getCapacity() * container.stackSize : 0;
+			return tank != null? tank.getCapacity() * container.getCount() : 0;
 		}
 
 		@Override
@@ -78,7 +77,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 			FluidTank tank = readTank(container);
 			if (tank == null) return 0;
 
-			final int count = container.stackSize;
+			final int count = container.getCount();
 			if (count == 0) return 0;
 
 			final int amountPerTank = resource.amount / count;
@@ -115,7 +114,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 		}
 
 		private FluidStack drain(FluidTank tank, int maxDrain, boolean doDrain) {
-			final int count = container.stackSize;
+			final int count = container.getCount();
 			if (count == 0) return null;
 
 			final int amountPerTank = maxDrain / count;
@@ -212,7 +211,7 @@ public class ItemTankBlock extends ItemOpenBlock {
 	public static ItemStack createFilledTank(Fluid fluid) {
 		final int tankCapacity = TileEntityTank.getTankCapacity();
 		FluidStack stack = FluidRegistry.getFluidStack(fluid.getName(), tankCapacity);
-		if (stack == null) return null;
+		if (stack == null) return ItemStack.EMPTY;
 
 		FluidTank tank = new FluidTank(tankCapacity);
 		tank.setFluid(stack);

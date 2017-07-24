@@ -34,7 +34,7 @@ public class BlockCannon extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
 

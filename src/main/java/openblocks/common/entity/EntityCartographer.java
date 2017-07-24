@@ -3,7 +3,6 @@ package openblocks.common.entity;
 import com.google.common.collect.ImmutableSet;
 import java.util.Random;
 import java.util.Set;
-import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -57,13 +56,13 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 		@Override
 		public void readFromStream(PacketBuffer input) {
-			size = input.readVarIntFromBuffer();
+			size = input.readVarInt();
 			bits.readFromBuffer(input);
 		}
 
 		@Override
 		public void writeToStream(PacketBuffer output) {
-			output.writeVarIntToBuffer(size);
+			output.writeVarInt(size);
 			bits.writeToBuffer(output);
 		}
 
@@ -131,7 +130,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	public final SyncableBoolean isMapping = new SyncableBoolean(false);
 	public final MapJobs jobs = new MapJobs();
 
-	private ItemStack mapItem;
+	private ItemStack mapItem = ItemStack.EMPTY;
 	private int mappingDimension;
 
 	private int countdownToAction = MAP_JOB_DELAY;
@@ -170,7 +169,7 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 	@Override
 	public void onUpdate() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			float yaw = 0;
 			if (isMapping.get()) {
 				if (countdownToMove-- <= 0) {
@@ -189,9 +188,9 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 		super.onUpdate();
 
-		if (!worldObj.isRemote) {
-			if (worldObj.provider.getDimension() == mappingDimension && isMapping.get() && countdownToAction-- <= 0) {
-				jobs.runJob(worldObj, (int)posX, (int)posZ);
+		if (!world.isRemote) {
+			if (world.provider.getDimension() == mappingDimension && isMapping.get() && countdownToAction-- <= 0) {
+				jobs.runJob(world, (int)posX, (int)posZ);
 				countdownToAction = MAP_JOB_DELAY;
 			}
 
@@ -210,11 +209,11 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 
 		if (tag.hasKey("MapItem")) {
 			NBTTagCompound mapItem = tag.getCompoundTag("MapItem");
-			this.mapItem = ItemStack.loadItemStackFromNBT(mapItem);
+			this.mapItem = new ItemStack(mapItem);
 
-			if (this.mapItem != null && isMapping.get()) {
+			if (!this.mapItem.isEmpty() && isMapping.get()) {
 				int mapId = this.mapItem.getItemDamage();
-				jobs.resumeMapping(worldObj, mapId);
+				jobs.resumeMapping(world, mapId);
 			}
 			mappingDimension = tag.getInteger("Dimension");
 		}
@@ -245,28 +244,25 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack holding, EnumHand hand) {
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 		if (hand != EnumHand.MAIN_HAND) return true;
 
+		final ItemStack holding = player.getHeldItemMainhand();
 		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) {
-			if (holding == null && mapItem != null) {
+			if (holding.isEmpty() && !mapItem.isEmpty()) {
 				player.setHeldItem(hand, mapItem);
-				mapItem = null;
+				mapItem = ItemStack.EMPTY;
 				isMapping.toggle();
 				jobs.stopMapping();
-			} else if (holding != null && mapItem == null) {
+			} else if (!holding.isEmpty() && mapItem.isEmpty()) {
 				Item itemType = holding.getItem();
 				if (itemType instanceof ItemHeightMap || itemType instanceof ItemEmptyMap) {
-					ItemStack inserted = holding.splitStack(1);
-
-					if (holding.stackSize <= 0) player.setHeldItem(hand, null);
-
-					mapItem = inserted;
-					mappingDimension = worldObj.provider.getDimension();
+					mapItem = holding.splitStack(1);
+					mappingDimension = world.provider.getDimension();
 					isMapping.toggle();
-					mapItem = MapDataBuilder.upgradeToMap(worldObj, mapItem);
+					mapItem = MapDataBuilder.upgradeToMap(world, mapItem);
 					int mapId = mapItem.getItemDamage();
-					jobs.startMapping(worldObj, mapId, getNewMapCenterX(), getNewMapCenterZ());
+					jobs.startMapping(world, mapId, getNewMapCenterX(), getNewMapCenterZ());
 				}
 			}
 

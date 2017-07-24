@@ -40,23 +40,23 @@ public class CommandInventory implements ICommand {
 
 	@Override
 	public int compareTo(ICommand o) {
-		return NAME.compareTo(o.getCommandName());
+		return NAME.compareTo(o.getName());
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return NAME;
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender icommandsender) {
 		return NAME + " store <player> OR " +
 				NAME + " restore <player> <file without 'inventory-' and '.dat'> OR " +
 				NAME + " spawn <file without 'inventory-' and '.dat'> [<sub_inventory OR '" + ID_MAIN_INVENTORY + "'>,  [<index of item>]]";
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return Collections.emptyList();
 	}
 
@@ -80,7 +80,7 @@ public class CommandInventory implements ICommand {
 				throw new CommandException("openblocks.misc.cant_restore_player", playerName);
 			}
 
-			if (success) sender.addChatMessage(new TextComponentTranslation("openblocks.misc.restored_inventory", playerName));
+			if (success) sender.sendMessage(new TextComponentTranslation("openblocks.misc.restored_inventory", playerName));
 			else throw new CommandException("openblocks.misc.cant_restore_player", playerName);
 
 		} else if (subCommand.equalsIgnoreCase(COMMAND_STORE)) {
@@ -89,7 +89,7 @@ public class CommandInventory implements ICommand {
 			EntityPlayerMP player = CommandBase.getPlayer(server, sender, playerName);
 			try {
 				File result = PlayerInventoryStore.instance.storePlayerInventory(player, "command");
-				sender.addChatMessage(new TextComponentTranslation(
+				sender.sendMessage(new TextComponentTranslation(
 						"openblocks.misc.stored_inventory",
 						result.getAbsolutePath()));
 			} catch (Exception e) {
@@ -114,7 +114,7 @@ public class CommandInventory implements ICommand {
 				if (args.length == 4) {
 					final int item = getSlotId(args[3]);
 					final ItemStack stack = inventory.getStackInSlot(item);
-					if (stack == null) throw new CommandException("openblocks.misc.empty_slot");
+					if (stack.isEmpty()) throw new CommandException("openblocks.misc.empty_slot");
 					toRestore = Lists.newArrayList(stack);
 				} else {
 					toRestore = InventoryUtils.getInventoryContents(inventory);
@@ -126,7 +126,7 @@ public class CommandInventory implements ICommand {
 				if (args.length == 4) {
 					final int item = getSlotId(args[3]);
 					final ItemStack stack = inventory.getItemStack(item);
-					if (stack == null) throw new CommandException("openblocks.misc.empty_slot");
+					if (stack.isEmpty()) throw new CommandException("openblocks.misc.empty_slot");
 					toRestore = Lists.newArrayList(stack);
 				} else {
 					toRestore = Lists.newArrayList(inventory.asMap().values());
@@ -135,7 +135,7 @@ public class CommandInventory implements ICommand {
 
 			final BlockPos coords = sender.getPosition();
 			for (ItemStack stack : toRestore)
-				if (stack != null) BlockUtils.dropItemStackInWorld(sender.getEntityWorld(), coords, stack);
+				if (!stack.isEmpty()) BlockUtils.dropItemStackInWorld(sender.getEntityWorld(), coords, stack);
 
 		} else throw new SyntaxErrorException();
 	}
@@ -159,11 +159,11 @@ public class CommandInventory implements ICommand {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		return sender.canCommandSenderUseCommand(4, NAME);
+		return sender.canUseCommand(4, NAME);
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 		if (args.length == 0) return null;
 		if (args.length == 1) return filterPrefixes(args[0], SUB_COMMANDS);
 

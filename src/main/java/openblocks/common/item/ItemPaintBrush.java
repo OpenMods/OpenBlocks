@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -64,7 +65,7 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this));
 		for (ColorMeta color : ColorMeta.getAllColors()) {
 			list.add(createStackWithColor(color.rgb));
@@ -79,7 +80,10 @@ public class ItemPaintBrush extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (hand != EnumHand.MAIN_HAND) return EnumActionResult.PASS;
+
+		final ItemStack stack = player.getHeldItem(hand);
 		final Integer color = getColorFromStack(stack);
 		if (stack.getItemDamage() > MAX_USES || color == null) return EnumActionResult.FAIL;
 

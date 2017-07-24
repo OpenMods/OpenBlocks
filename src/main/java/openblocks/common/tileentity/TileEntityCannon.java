@@ -90,11 +90,11 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 		invalidateMotion();
 
-		if (!worldObj.isRemote) {
-			if (worldObj.getTotalWorldTime() % 20 == 0) {
-				if (worldObj.isBlockIndirectlyGettingPowered(pos) > 0) {
+		if (!world.isRemote) {
+			if (world.getTotalWorldTime() % 20 == 0) {
+				if (world.isBlockIndirectlyGettingPowered(pos) > 0) {
 					ItemStack stack = findStack();
-					if (stack != null) fireStack(stack);
+					if (!stack.isEmpty()) fireStack(stack);
 				}
 			}
 		} else {
@@ -106,16 +106,16 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	private ItemStack findStack() {
 		for (EnumFacing direction : EnumFacing.VALUES) {
-			final IItemHandler inventory = InventoryUtils.tryGetHandler(worldObj, pos.offset(direction), direction.getOpposite());
+			final IItemHandler inventory = InventoryUtils.tryGetHandler(world, pos.offset(direction), direction.getOpposite());
 			if (inventory != null) {
 				for (int i = 0; i < inventory.getSlots(); i++) {
 					final ItemStack stack = inventory.extractItem(i, 64, false);
-					if (stack != null) return stack;
+					if (!stack.isEmpty()) return stack;
 				}
 			}
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	private void fireStack(ItemStack stack) {
@@ -123,7 +123,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		rpc.trigger();
 
 		// projectileOrigin is not used here, it's used for the calculations below.
-		EntityItem item = new EntityItemProjectile(worldObj, pos.getX() + 0.5, pos.getY(), pos.getZ(), stack);
+		EntityItem item = new EntityItemProjectile(world, pos.getX() + 0.5, pos.getY(), pos.getZ(), stack);
 		item.setDefaultPickupDelay();
 
 		// Now that we generate vectors instead of eular angles, this should be revised.
@@ -131,7 +131,7 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		item.motionX = motion.xCoord;
 		item.motionY = motion.yCoord;
 		item.motionZ = motion.zCoord;
-		worldObj.spawnEntityInWorld(item);
+		world.spawnEntity(item);
 		playSoundAtBlock(OpenBlocks.Sounds.BLOCK_CANNON_ACTIVATE, 0.2f, 1.0f);
 	}
 
@@ -143,9 +143,9 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 		double z = -0.5 * Math.sin(pitchRad);
 		for (int i = 0; i < 20; i++) {
 			spawnParticle((i < 4? EnumParticleTypes.SMOKE_LARGE : EnumParticleTypes.SMOKE_NORMAL),
-					x + 0.3 + (worldObj.rand.nextDouble() * 0.4),
+					x + 0.3 + (world.rand.nextDouble() * 0.4),
 					0.7,
-					z + 0.3 + (worldObj.rand.nextDouble() * 0.4),
+					z + 0.3 + (world.rand.nextDouble() * 0.4),
 					0.0D, 0.0D, 0.0D);
 		}
 	}
@@ -235,12 +235,12 @@ public class TileEntityCannon extends SyncedTileEntity implements IPointable, IS
 
 	@Override
 	public void onPointingStart(ItemStack itemStack, EntityPlayer player) {
-		player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.selected_cannon"));
+		player.sendMessage(new TextComponentTranslation("openblocks.misc.selected_cannon"));
 	}
 
 	@Override
 	public void onPointingEnd(ItemStack itemStack, EntityPlayer player, BlockPos pos) {
-		player.addChatMessage(new TextComponentTranslation("openblocks.misc.pointed_cannon", pos.getX(), pos.getY(), pos.getZ()));
+		player.sendMessage(new TextComponentTranslation("openblocks.misc.pointed_cannon", pos.getX(), pos.getY(), pos.getZ()));
 		setTarget(pos);
 	}
 

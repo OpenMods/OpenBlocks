@@ -22,13 +22,13 @@ public class ElevatorActionEvent extends BlockEventPacket {
 	@Override
 	protected void readFromStream(PacketBuffer input) {
 		super.readFromStream(input);
-		final int typeId = input.readVarIntFromBuffer();
+		final int typeId = input.readVarInt();
 		type = PlayerMovementEvent.Type.VALUES[typeId];
 	}
 
 	@Override
 	protected void writeToStream(PacketBuffer output) {
 		super.writeToStream(output);
-		output.writeVarIntToBuffer(type.ordinal());
+		output.writeVarInt(type.ordinal());
 	}
 }

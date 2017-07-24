@@ -51,8 +51,8 @@ public class CraneRegistry {
 	}
 
 	private static EntityMagnet createMagnetForPlayer(EntityLivingBase player) {
-		EntityMagnet result = new EntityMagnet.PlayerBound(player.worldObj, player);
-		player.worldObj.spawnEntityInWorld(result);
+		EntityMagnet result = new EntityMagnet.PlayerBound(player.world, player);
+		player.world.spawnEntity(result);
 		return result;
 	}
 

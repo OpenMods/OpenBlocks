@@ -3,7 +3,6 @@ package openblocks.common.entity;
 import io.netty.buffer.ByteBuf;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
-import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -39,7 +38,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	public EntityPlayer findOwner() {
 		if (ownerId == null) return null;
 
-		EntityPlayer result = worldObj.getPlayerEntityByUUID(ownerId);
+		EntityPlayer result = world.getPlayerEntityByUUID(ownerId);
 
 		if (result != null) cachedOwner = new WeakReference<EntityPlayer>(result);
 
@@ -63,7 +62,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	public void onUpdate() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			EntityPlayer owner = cachedOwner.get();
 
 			if (owner == null) owner = findOwner();
@@ -84,7 +83,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
-		if (!isDead && !worldObj.isRemote) entityDropItem(toItemStack(), 0.5f);
+		if (!isDead && !world.isRemote) entityDropItem(toItemStack(), 0.5f);
 		setDead();
 		return true;
 	}
@@ -92,7 +91,7 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	public abstract ItemStack toItemStack();
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 		if (player instanceof EntityPlayerMP && player.isSneaking() && getDistanceToEntity(player) < 3) { return true; }
 		return false;
 	}
@@ -112,13 +111,13 @@ public abstract class EntityAssistant extends EntitySmoothMove implements IEntit
 	public void writeSpawnData(ByteBuf data) {
 		if (ownerId != null) {
 			data.writeBoolean(true);
-			new PacketBuffer(data).writeUuid(ownerId);
+			new PacketBuffer(data).writeUniqueId(ownerId);
 		} else data.writeBoolean(false);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		if (data.readBoolean()) ownerId = new PacketBuffer(data).readUuid();
+		if (data.readBoolean()) ownerId = new PacketBuffer(data).readUniqueId();
 		else ownerId = null;
 	}
 

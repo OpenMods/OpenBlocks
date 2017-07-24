@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -89,7 +90,8 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "autoanvil", true, 3) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			if (i == 0 && (!itemstack.getItem().isItemTool(itemstack) && itemstack.getItem() != Items.ENCHANTED_BOOK)) { return false; }
+			// TODO 1.11 verify - tool stuff
+			if (i == 0 && (!itemstack.getItem().getToolClasses(itemstack).isEmpty() && itemstack.getItem() != Items.ENCHANTED_BOOK)) { return false; }
 			if (i == 2) { return false; }
 			return super.isItemValidForSlot(i, itemstack);
 		}
@@ -129,18 +131,18 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			// if we should auto-drink liquid, do it!
 			if (automaticSlots.get(AutoSlots.xp)) {
 				if (needsTankUpdate) {
-					tank.updateNeighbours(worldObj, getPos());
+					tank.updateNeighbours(world, getPos());
 					needsTankUpdate = false;
 				}
 
-				tank.fillFromSides(100, worldObj, getPos(), xpSides.getValue());
+				tank.fillFromSides(100, world, getPos(), xpSides.getValue());
 			}
 
-			final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
+			final ItemMover mover = new ItemMover(world, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
 
 			if (shouldAutoOutput() && hasOutput()) {
 				mover.setSides(outputSides.getValue()).pushFromSlot(inventory.getHandler(), Slots.output.ordinal());
@@ -168,7 +170,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 		final VanillaAnvilLogic helper = new VanillaAnvilLogic(inventory.getStackInSlot(Slots.tool), inventory.getStackInSlot(Slots.modifier), false, Optional.<String> absent());
 
 		final ItemStack output = helper.getOutputStack();
-		if (output != null) {
+		if (!output.isEmpty()) {
 			int levelCost = helper.getLevelCost();
 			int xpCost = EnchantmentUtils.getExperienceForLevel(levelCost);
 			int liquidXpCost = LiquidXpUtils.xpToLiquidRatio(xpCost);
@@ -188,12 +190,10 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	private void removeModifiers(int modifierCost) {
 		if (modifierCost > 0) {
 			ItemStack modifierStack = inventory.getStackInSlot(Slots.modifier);
-			if (modifierStack != null) {
-				modifierStack.stackSize -= modifierCost;
-				if (modifierStack.stackSize <= 0) inventory.setInventorySlotContents(Slots.modifier.ordinal(), null);
+			if (!modifierStack.isEmpty()) {
+				modifierStack.shrink(modifierCost);
+				inventory.setInventorySlotContents(Slots.modifier.ordinal(), modifierStack);
 			}
-		} else {
-			inventory.setInventorySlotContents(Slots.modifier.ordinal(), null);
 		}
 	}
 
@@ -298,7 +298,7 @@ public class TileEntityAutoAnvil extends SyncedTileEntity implements IHasGui, II
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		this.needsTankUpdate = true;
 	}
 

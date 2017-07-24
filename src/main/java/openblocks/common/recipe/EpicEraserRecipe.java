@@ -31,7 +31,7 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 		boolean loreItemFound = false;
 
 		for (ItemStack itemStack : InventoryUtils.asIterable(inv)) {
-			if (itemStack != null) {
+			if (!itemStack.isEmpty()) {
 				if (itemStack.getItem() instanceof ItemEpicEraser) {
 					if (eraserFound) return false;
 					eraserFound = true;
@@ -47,22 +47,22 @@ public class EpicEraserRecipe extends CustomRecipeBase {
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
-		ItemStack targetItem = null;
+		ItemStack targetItem = ItemStack.EMPTY;
 		boolean eraserFound = false;
 
 		for (ItemStack itemStack : InventoryUtils.asIterable(inv)) {
-			if (itemStack != null) {
+			if (!itemStack.isEmpty()) {
 				if (itemStack.getItem() instanceof ItemEpicEraser) {
-					if (eraserFound) return null;
+					if (eraserFound) return ItemStack.EMPTY;
 					eraserFound = true;
 				} else if (hasLore(itemStack)) {
-					if (targetItem != null) return null;
+					if (!targetItem.isEmpty()) return ItemStack.EMPTY;
 					targetItem = itemStack;
-				} else return null;
+				} else return ItemStack.EMPTY;
 			}
 		}
 
-		if (!eraserFound || targetItem == null) return null;
+		if (!eraserFound || targetItem.isEmpty()) return ItemStack.EMPTY;
 
 		final ItemStack result = targetItem.copy();
 		final NBTTagCompound itemTag = result.getTagCompound();

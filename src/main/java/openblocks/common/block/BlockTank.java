@@ -1,6 +1,5 @@
 package openblocks.common.block;
 
-import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -10,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -94,21 +94,20 @@ public class BlockTank extends OpenBlock {
 		TileEntityTank tile = getTileEntity(world, pos, TileEntityTank.class);
 		double value = tile.getFluidRatio() * 15;
 		if (value == 0) return 0;
-		int trunc = MathHelper.floor_double(value);
+		int trunc = MathHelper.floor(value);
 		return Math.max(trunc, 1);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		result.add(new ItemStack(item));
 
 		if (tab == null && Config.displayAllFilledTanks) {
 			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values())
 				try {
 					final ItemStack tankStack = ItemTankBlock.createFilledTank(fluid);
-
-					if (tankStack != null) result.add(tankStack);
+					if (!tankStack.isEmpty()) result.add(tankStack);
 					else Log.debug("Failed to create filled tank stack for fluid '%s'. Not registered?", fluid.getName());
 				} catch (Throwable t) {
 					throw new RuntimeException(String.format("Failed to create item for fluid '%s'" +

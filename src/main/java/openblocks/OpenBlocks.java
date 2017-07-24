@@ -1,17 +1,14 @@
 package openblocks;
 
-import com.google.common.base.Objects;
-import java.util.List;
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityList;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatBasic;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -210,7 +207,6 @@ import openblocks.rpc.ITriggerable;
 import openblocks.rubbish.BrickManager;
 import openblocks.rubbish.CommandFlimFlam;
 import openblocks.rubbish.CommandLuck;
-import openmods.Mods;
 import openmods.OpenMods;
 import openmods.config.BlockInstances;
 import openmods.config.ItemInstances;
@@ -595,19 +591,17 @@ public class OpenBlocks {
 
 	public static CreativeTabs tabOpenBlocks = new CreativeTabs("tabOpenBlocks") {
 		@Override
-		public Item getTabIconItem() {
-			Block block = Objects.firstNonNull(OpenBlocks.Blocks.flag, net.minecraft.init.Blocks.SPONGE);
-			return Item.getItemFromBlock(block);
-		}
-
-		@Override
-		public int getIconItemDamage() {
-			return OpenBlocks.Blocks.flag != null? BlockFlag.DEFAULT_COLOR.vanillaBlockId : 0;
+		public ItemStack getTabIconItem() {
+			if (OpenBlocks.Blocks.flag != null) {
+				return new ItemStack(OpenBlocks.Blocks.flag, 1, BlockFlag.DEFAULT_COLOR.vanillaBlockId);
+			} else {
+				return new ItemStack(net.minecraft.init.Blocks.SPONGE, 0);
+			}
 		}
 
 		@Override
 		@SideOnly(Side.CLIENT)
-		public void displayAllRelevantItems(List<ItemStack> result) {
+		public void displayAllRelevantItems(NonNullList<ItemStack> result) {
 			super.displayAllRelevantItems(result);
 			if (Enchantments.explosive != null) EnchantmentUtils.addAllBooks(Enchantments.explosive, result);
 			if (Enchantments.lastStand != null) EnchantmentUtils.addAllBooks(Enchantments.lastStand, result);
@@ -727,16 +721,16 @@ public class OpenBlocks {
 			// was: GuiOpenHandler: handler for PlayerOpenContainerEvent
 		}
 
-		EntityRegistry.registerModEntity(EntityLuggage.class, "luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityXPOrbNoFly.class, "xp_orb_no_fly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityHangGlider.class, "hang_glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityMagnet.class, "magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityMountedBlock.class, "mounted_block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityMagnet.PlayerBound.class, "player_magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityCartographer.class, "cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
-		EntityRegistry.registerModEntity(EntityItemProjectile.class, "item_projectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
-		EntityRegistry.registerModEntity(EntityGoldenEye.class, "golden_eye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
-		EntityRegistry.registerModEntity(EntityMiniMe.class, "mini_me", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("luggage"), EntityLuggage.class, "luggage", ENTITY_LUGGAGE_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("xp_orb_no_fly"), EntityXPOrbNoFly.class, "xp_orb_no_fly", ENTITY_XP_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("hang_glider"), EntityHangGlider.class, "hang_glider", ENTITY_HANGGLIDER_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("magnet"), EntityMagnet.class, "magnet", ENTITY_MAGNET_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("mounted_block"), EntityMountedBlock.class, "mounted_block", ENTITY_BLOCK_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("player_magnet"), EntityMagnet.PlayerBound.class, "player_magnet", ENTITY_MAGNET_PLAYER_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("cartographer"), EntityCartographer.class, "cartographer", ENTITY_CARTOGRAPHER_ID, OpenBlocks.instance, 64, 8, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("item_projectile"), EntityItemProjectile.class, "item_projectile", ENTITY_CANON_ITEM_ID, OpenBlocks.instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("golden_eye"), EntityGoldenEye.class, "golden_eye", ENTITY_GOLDEN_EYE_ID, OpenBlocks.instance, 64, 8, true);
+		EntityRegistry.registerModEntity(OpenBlocks.location("mini_me"), EntityMiniMe.class, "mini_me", ENTITY_MINIME_ID, OpenBlocks.instance, 64, 1, true);
 
 		MagnetWhitelists.instance.initTesters();
 
@@ -760,9 +754,8 @@ public class OpenBlocks {
 		}
 
 		{
-			String luggageName = EntityList.getEntityStringFromClass(EntityLuggage.class);
-			// TODO 1.10 verify if it still works
-			FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", luggageName);
+			// TODO 1.11 MFR blocking
+			// FMLInterModComms.sendMessage(Mods.MFR, "registerAutoSpawnerBlacklist", "");
 		}
 
 		if (Items.luggage != null) {

@@ -228,8 +228,8 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	private void dropStackFromSide(ItemStack stack, EnumFacing side) {
-		if (worldObj.isRemote) return;
-		BlockUtils.dropItemStackInWorld(worldObj, pos.offset(side), stack);
+		if (world.isRemote) return;
+		BlockUtils.dropItemStackInWorld(world, pos.offset(side), stack);
 	}
 
 	public void removePaint(EnumFacing... sides) {
@@ -245,7 +245,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 
 		if (isBlockUnpainted() && !paintedBlockState.isAir()) {
 			final IBlockState state = paintedBlockState.getValue();
-			worldObj.setBlockState(pos, state);
+			world.setBlockState(pos, state);
 		}
 
 		trySync();
@@ -260,20 +260,19 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (hand != EnumHand.MAIN_HAND) return false;
 
-		if (held != null) {
-			final Item heldItem = held.getItem();
-			// logic is placed on item side
-			if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem instanceof ItemStencil) return false;
-		}
+		final ItemStack held = player.getHeldItemMainhand();
+		final Item heldItem = held.getItem();
+		// logic is placed on item side
+		if (heldItem instanceof ItemSqueegee || heldItem instanceof ItemPaintBrush || heldItem instanceof ItemStencil) return false;
 
 		SyncableBlockLayers layer = getLayersForSide(side);
 
 		boolean result = false;
 		if (player.isSneaking()) {
-			if (!worldObj.isRemote) {
+			if (!world.isRemote) {
 				final Optional<StencilPattern> stencil = layer.popStencil();
 				if (stencil.isPresent()) {
 					ItemStack dropStack = OpenBlocks.Items.stencil.createItemStack(stencil.get());
@@ -312,7 +311,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 			final IBlockState state = this.paintedBlockState.getValue();
 			final Block paintedBlock = state.getBlock();
 
-			final Random rand = worldObj.rand;
+			final Random rand = world.rand;
 
 			int count = paintedBlock.quantityDropped(state, fortune, rand);
 			int damageDropped = paintedBlock.damageDropped(state);
@@ -343,7 +342,7 @@ public class TileEntityCanvas extends SyncedTileEntity implements IActivateAware
 		final int newLightValue = paintedBlock.getLightValue(paintedBlockStatek);
 		final int newLightOpacity = paintedBlock.getLightOpacity(paintedBlockStatek);
 		if (newLightValue != prevLightValue || newLightOpacity != prevLightOpacity) {
-			worldObj.checkLight(pos);
+			world.checkLight(pos);
 			prevLightOpacity = newLightOpacity;
 			prevLightValue = newLightValue;
 		}

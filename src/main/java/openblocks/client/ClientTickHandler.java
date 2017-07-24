@@ -14,8 +14,8 @@ public class ClientTickHandler {
 
 	@SubscribeEvent
 	public void onRenderTickStart(TickEvent.RenderTickEvent evt) {
-		if (evt.phase == Phase.START && Minecraft.getMinecraft().theWorld != null) {
-			preRenderTick(Minecraft.getMinecraft(), Minecraft.getMinecraft().theWorld, evt.renderTickTime);
+		if (evt.phase == Phase.START && Minecraft.getMinecraft().world != null) {
+			preRenderTick(Minecraft.getMinecraft(), Minecraft.getMinecraft().world, evt.renderTickTime);
 		}
 	}
 

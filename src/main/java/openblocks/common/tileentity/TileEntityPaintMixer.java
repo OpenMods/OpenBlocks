@@ -109,7 +109,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 		@Override
 		public boolean isItemValidForSlot(int slotId, ItemStack stack) {
 			Slots[] values = Slots.values();
-			if (stack == null || slotId < 0 || slotId > values.length) return false;
+			if (stack.isEmpty() || slotId < 0 || slotId > values.length) return false;
 			Slots slot = values[slotId];
 
 			if (slot == Slots.paint) return PAINT_CAN.isItemEqual(stack) || MILK_BUCKET.isItemEqual(stack);
@@ -124,7 +124,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 
 			if (logic.isWorking()) {
 				if (!hasValidInput() || !hasSufficientInk()) {
@@ -214,7 +214,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	private static boolean isValidForSlot(Slots slot, ItemStack stack) {
 		Integer allowedColor = ALLOWED_COLORS.get(slot);
-		if (allowedColor == null || stack == null) return false;
+		if (allowedColor == null || stack.isEmpty()) return false;
 		int[] oreIds = OreDictionary.getOreIDs(stack);
 		return ArrayUtils.contains(oreIds, allowedColor);
 	}
@@ -263,7 +263,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	@Override
 	public void changeColor(int requestedColor) {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (logic.isWorking()) {
 				if (requestedColor != color.get()) logic.reset();
 				else return;
@@ -320,11 +320,11 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	@Override
 	public void onInventoryChanged(IInventory invent, int slotNumber) {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 
 			boolean hasPaint = false;
 			ItemStack can = inventory.getStackInSlot(Slots.paint);
-			if (can != null) {
+			if (!can.isEmpty()) {
 				Integer pickerColor = getColor(can, false);
 				if (pickerColor != null && !logic.isWorking()) {
 					color.set(pickerColor);
@@ -347,8 +347,7 @@ public class TileEntityPaintMixer extends DroppableTileEntity implements IInvent
 
 	private boolean hasStack(Slots slot, ItemStack stack) {
 		ItemStack gotStack = inventory.getStackInSlot(slot);
-		if (gotStack == null) { return false; }
-		return gotStack.isItemEqual(stack);
+		return !gotStack.isEmpty() && gotStack.isItemEqual(stack);
 	}
 
 	@Override

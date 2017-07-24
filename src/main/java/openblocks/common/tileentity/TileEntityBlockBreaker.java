@@ -38,17 +38,17 @@ public class TileEntityBlockBreaker extends TileEntityBlockManipulator {
 	@Override
 	protected boolean canWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
 		final Block block = targetState.getBlock();
-		return !block.isAir(targetState, worldObj, target) && block != Blocks.BEDROCK && targetState.getBlockHardness(worldObj, target) > -1.0F;
+		return !block.isAir(targetState, world, target) && block != Blocks.BEDROCK && targetState.getBlockHardness(world, target) > -1.0F;
 	}
 
 	@Override
 	protected void doWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
-		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new BreakBlockAction(worldObj, target));
+		final List<EntityItem> drops = FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, target));
 
 		if (drops.isEmpty()) return;
 
 		final EnumFacing dropSide = direction.getOpposite();
-		final IItemHandler targetInventory = InventoryUtils.tryGetHandler(worldObj, pos.offset(dropSide), direction);
+		final IItemHandler targetInventory = InventoryUtils.tryGetHandler(world, pos.offset(dropSide), direction);
 		if (targetInventory == null) return;
 
 		for (EntityItem drop : drops) {

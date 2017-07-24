@@ -25,8 +25,8 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 		if (minime.getPickupCooldown() > 0) return false;
 		if (!pathFinder.noPath()) return false;
 
-		if (!minime.worldObj.isRemote) {
-			List<EntityPlayer> players = minime.worldObj.getEntitiesWithinAABB(EntityPlayer.class, minime.getEntityBoundingBox().expand(10, 10, 10));
+		if (!minime.world.isRemote) {
+			List<EntityPlayer> players = minime.world.getEntitiesWithinAABB(EntityPlayer.class, minime.getEntityBoundingBox().expand(10, 10, 10));
 			for (EntityPlayer player : players) {
 				if (canRidePlayer(player)) {
 					targetPlayer = player;
@@ -60,7 +60,7 @@ public class EntityAIPickupPlayer extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		World world = minime.worldObj;
+		World world = minime.world;
 		if (!world.isRemote && canRidePlayer(targetPlayer)) {
 			if (minime.getDistanceToEntity(targetPlayer) < 1.0) {
 				targetPlayer.startRiding(minime);

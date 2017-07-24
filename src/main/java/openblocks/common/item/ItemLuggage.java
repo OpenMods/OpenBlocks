@@ -37,7 +37,8 @@ public class ItemLuggage extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack stack = player.getHeldItem(hand);
 		if (!world.isRemote) {
 			Vec3d vec3 = new Vec3d(player.posX, player.posY, player.posZ);
 			Vec3d vec31 = player.getLook(1.0f);
@@ -45,14 +46,14 @@ public class ItemLuggage extends Item {
 			EntityLuggage luggage = new EntityLuggage(world);
 			luggage.setPositionAndRotation(0.5 + vec32.xCoord, vec3.yCoord, 0.5 + vec32.zCoord, 0, 0);
 			luggage.setOwnerId(player.getGameProfile().getId());
-			luggage.restoreFromStack(itemStack);
+			luggage.restoreFromStack(stack);
 
-			world.spawnEntityInWorld(luggage);
-			itemStack.stackSize--;
+			world.spawnEntity(luggage);
+			stack.shrink(1);
 
 		}
 
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 
 	private static int getInventorySize(ItemStack stack) {

@@ -140,18 +140,18 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 
 			if (automaticSlots.get(AutoSlots.xp)) {
 				if (needsTankUpdate) {
-					tank.updateNeighbours(worldObj, pos);
+					tank.updateNeighbours(world, pos);
 					needsTankUpdate = false;
 				}
 
-				tank.fillFromSides(10, worldObj, pos, xpSides.getValue());
+				tank.fillFromSides(10, world, pos, xpSides.getValue());
 			}
 
-			final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
+			final ItemMover mover = new ItemMover(world, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
 
 			if (shouldAutoOutput() && hasOutputStack()) {
 				mover.setSides(xpBottleSides.getValue()).pushFromSlot(inventory.getHandler(), Slots.output.ordinal());
@@ -170,10 +170,10 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 				ItemStack outputStack = inventory.getStackInSlot(Slots.output.ordinal());
 
-				if (outputStack == null) {
+				if (outputStack.isEmpty()) {
 					inventory.setInventorySlotContents(Slots.output.ordinal(), XP_BOTTLE.copy());
 				} else {
-					outputStack.stackSize++;
+					outputStack.grow(1);
 				}
 
 				inventory.onInventoryChanged(Slots.output.ordinal());
@@ -204,7 +204,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	public boolean hasOutputStack() {
 		ItemStack outputStack = inventory.getStackInSlot(1);
-		return outputStack != null && outputStack.stackSize > 0;
+		return !outputStack.isEmpty();
 	}
 
 	public boolean shouldAutoInput() {
@@ -217,13 +217,12 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 
 	public boolean hasGlassInInput() {
 		ItemStack inputStack = inventory.getStackInSlot(Slots.input.ordinal());
-		return inputStack != null && inputStack.isItemEqual(GLASS_BOTTLE);
+		return !inputStack.isEmpty() && inputStack.isItemEqual(GLASS_BOTTLE);
 	}
 
 	public boolean hasSpaceInOutput() {
 		ItemStack outputStack = inventory.getStackInSlot(Slots.output.ordinal());
-		return outputStack == null
-				|| (outputStack.isItemEqual(XP_BOTTLE) && outputStack.stackSize < outputStack.getMaxStackSize());
+		return outputStack.isItemEqual(XP_BOTTLE) && outputStack.getCount() < outputStack.getMaxStackSize();
 	}
 
 	public boolean isTankFull() {
@@ -294,7 +293,7 @@ public class TileEntityXPBottler extends SyncedTileEntity implements IInventoryP
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		this.needsTankUpdate = true;
 	}
 

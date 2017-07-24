@@ -62,7 +62,7 @@ public class PedometerHandler {
 			Vec3d deltaSinceLastUpdate = currentPosition.subtract(prevTickPos);
 			prevTickPos = currentPosition;
 
-			long currentTime = OpenMods.proxy.getTicks(entity.worldObj);
+			long currentTime = OpenMods.proxy.getTicks(entity.world);
 			double ticksSinceLastUpdate = currentTime - prevTickTime;
 			prevTickTime = currentTime;
 

@@ -20,9 +20,8 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 		int count = 0;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if (stack == null) continue;
-			if (!(stack.getItem() instanceof ItemImaginary)
-					|| !ItemImaginary.isCrayon(stack))
+			if (stack.isEmpty()) continue;
+			if (!(stack.getItem() instanceof ItemImaginary) || !ItemImaginary.isCrayon(stack))
 				return false;
 			if (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) continue;
 			count++;
@@ -37,11 +36,11 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 		Multiset<ItemImaginary.PlacementMode> modes = HashMultiset.create();
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if (stack == null || (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST)) continue;
+			if (stack.isEmpty() || (ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST)) continue;
 
 			final NBTTagCompound tag = stack.getTagCompound();
 			if (tag != null) {
-				if (!tag.hasKey(ItemImaginary.TAG_COLOR, Constants.NBT.TAG_INT)) return null;
+				if (!tag.hasKey(ItemImaginary.TAG_COLOR, Constants.NBT.TAG_INT)) return ItemStack.EMPTY;
 
 				count++;
 				final int color = tag.getInteger(ItemImaginary.TAG_COLOR);
@@ -54,7 +53,7 @@ public class CrayonMixingRecipe extends CustomRecipeBase {
 			}
 		}
 
-		if (count < 2) return null;
+		if (count < 2) return ItemStack.EMPTY;
 
 		int color = (int)(r / count);
 		color = (color << 8) + (int)(g / count);

@@ -114,7 +114,7 @@ public class FlimFlamEnchantmentsHandler {
 	public void onDamage(LivingHurtEvent e) {
 		final EntityLivingBase entityLiving = e.getEntityLiving();
 		if (!(entityLiving instanceof EntityPlayer)) return;
-		if (entityLiving.worldObj.isRemote) return;
+		if (entityLiving.world.isRemote) return;
 
 		final EntityPlayer targetPlayer = (EntityPlayer)entityLiving;
 
@@ -194,7 +194,7 @@ public class FlimFlamEnchantmentsHandler {
 						if (effectMeta.action().execute(player)) {
 							property.luck -= effectMeta.cost();
 							Log.debug("Player %s flim-flammed with %s, current luck: %s", player, effectMeta.name(), property.luck);
-							if (!effectMeta.isSilent()) player.addChatMessage(new TextComponentTranslation("openblocks.flim_flammed"));
+							if (!effectMeta.isSilent()) player.sendMessage(new TextComponentTranslation("openblocks.flim_flammed"));
 							return;
 						}
 					} catch (Throwable t) {

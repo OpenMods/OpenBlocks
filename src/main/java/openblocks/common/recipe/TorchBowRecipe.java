@@ -16,46 +16,45 @@ public class TorchBowRecipe extends CustomRecipeBase {
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inventorycrafting) {
-		ItemStack bowStack = null;
-		ItemStack flintStack = null;
-		ItemStack boneStack = null;
+		ItemStack bowStack = ItemStack.EMPTY;
+		ItemStack flintStack = ItemStack.EMPTY;
+		ItemStack boneStack = ItemStack.EMPTY;
 		for (int i = 0; i < inventorycrafting.getSizeInventory(); i++) {
 			ItemStack stack = inventorycrafting.getStackInSlot(i);
-			if (stack != null) {
-				if (stack.getItem() == Items.BOW && bowStack == null) {
+			if (!stack.isEmpty()) {
+				if (stack.getItem() == Items.BOW && bowStack.isEmpty()) {
 					bowStack = stack;
 					continue;
-				} else if (stack.getItem() == Items.FLINT && flintStack == null) {
+				} else if (stack.getItem() == Items.FLINT && flintStack.isEmpty()) {
 					flintStack = stack;
 					continue;
-				} else if (stack.getItem() == Items.BONE && boneStack == null) {
+				} else if (stack.getItem() == Items.BONE && boneStack.isEmpty()) {
 					boneStack = stack;
 					continue;
 				}
-				return null;
+				return ItemStack.EMPTY;
 			}
 		}
 
-		if (bowStack != null) {
+		if (!bowStack.isEmpty()) {
 			ItemStack clone = bowStack.copy();
 			NBTTagCompound tag = clone.getTagCompound();
 			if (tag == null) {
 				tag = new NBTTagCompound();
 			}
-			if (flintStack == null && boneStack == null) { return null; }
-			if (flintStack == null) {
-				// System.out.println("clear torch mode");
+			if (flintStack.isEmpty() && boneStack.isEmpty()) return ItemStack.EMPTY;
+
+			if (flintStack.isEmpty()) {
 				tag.setBoolean("openblocks_torchmode", false);
 				clone.setTagCompound(tag);
 				return clone;
-			} else if (boneStack == null) {
-				// System.out.println("torch mode");
+			} else if (boneStack.isEmpty()) {
 				tag.setBoolean("openblocks_torchmode", true);
 				clone.setTagCompound(tag);
 				return clone;
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

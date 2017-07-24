@@ -31,8 +31,9 @@ public class ItemHangGlider extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote && player != null) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack stack = player.getHeldItem(hand);
+		if (!world.isRemote) {
 			EntityHangGlider glider = spawnedGlidersMap.get(player);
 			if (glider != null) despawnGlider(player, glider);
 			else spawnGlider(player);
@@ -49,9 +50,9 @@ public class ItemHangGlider extends Item {
 	}
 
 	private static void spawnGlider(EntityPlayer player) {
-		EntityHangGlider glider = new EntityHangGlider(player.worldObj, player);
+		EntityHangGlider glider = new EntityHangGlider(player.world, player);
 		glider.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationPitch, player.rotationYaw);
-		player.worldObj.spawnEntityInWorld(glider);
+		player.world.spawnEntity(glider);
 		spawnedGlidersMap.put(player, glider);
 	}
 }

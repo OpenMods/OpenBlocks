@@ -12,7 +12,7 @@ public class EntityMountedBlock extends EntityBlock implements IMagnetAware {
 
 	@Override
 	protected boolean shouldPlaceBlock() {
-		return !isRiding() && !worldObj.isRemote;
+		return !isRiding() && !world.isRemote;
 	}
 
 	@Override
@@ -22,6 +22,6 @@ public class EntityMountedBlock extends EntityBlock implements IMagnetAware {
 
 	@Override
 	public boolean canRelease() {
-		return worldObj.isAirBlock(getPosition());
+		return world.isAirBlock(getPosition());
 	}
 }

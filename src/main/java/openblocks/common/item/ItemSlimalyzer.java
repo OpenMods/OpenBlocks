@@ -64,7 +64,7 @@ public class ItemSlimalyzer extends Item {
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		final World world = entityItem.worldObj;
+		final World world = entityItem.world;
 
 		if (!world.isRemote) {
 			final ItemStack stack = entityItem.getEntityItem();

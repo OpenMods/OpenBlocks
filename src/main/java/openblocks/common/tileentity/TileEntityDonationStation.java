@@ -66,7 +66,7 @@ public class TileEntityDonationStation extends OpenTileEntity implements IHasGui
 
 	private ModContainer identifyDonationItem() {
 		ItemStack stack = inventory.getStackInSlot(Slots.input);
-		if (stack == null) return null;
+		if (stack.isEmpty()) return null;
 
 		return ModIdentifier.INSTANCE.getModItemStack(stack);
 	}

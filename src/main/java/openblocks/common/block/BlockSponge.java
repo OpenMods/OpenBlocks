@@ -29,7 +29,7 @@ public class BlockSponge extends OpenBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour, BlockPos neigbourPos) {
 		clearupLiquid(world, pos);
 	}
 

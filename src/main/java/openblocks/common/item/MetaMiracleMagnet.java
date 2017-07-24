@@ -1,8 +1,8 @@
 package openblocks.common.item;
 
-import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import openblocks.Config;
 import openblocks.integration.TurtleIds;
 import openblocks.integration.TurtleUtils;
@@ -18,7 +18,7 @@ public class MetaMiracleMagnet extends MetaGeneric {
 	}
 
 	@Override
-	public void addToCreativeList(Item item, int meta, List<ItemStack> result) {
+	public void addToCreativeList(Item item, int meta, NonNullList<ItemStack> result) {
 		super.addToCreativeList(item, meta, result);
 
 		if (Config.enableCraneTurtles && Config.showCraneTurtles) {

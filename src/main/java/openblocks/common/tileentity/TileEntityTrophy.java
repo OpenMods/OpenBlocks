@@ -39,7 +39,7 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			Trophy trophy = getTrophy();
 			if (trophy != null) trophy.executeTickBehavior(this);
 			if (cooldown > 0) cooldown--;
@@ -47,11 +47,11 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && hand == EnumHand.MAIN_HAND) {
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
 			Trophy trophyType = getTrophy();
 			if (trophyType != null) {
-				trophyType.playSound(worldObj, pos);
+				trophyType.playSound(world, pos);
 				if (cooldown <= 0) cooldown = trophyType.executeActivateBehavior(this, player);
 			}
 		}
@@ -96,13 +96,13 @@ public class TileEntityTrophy extends SyncedTileEntity implements IPlaceAwareTil
 			return stack;
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public void addHarvestDrops(EntityPlayer player, List<ItemStack> drops, IBlockState blockState, int fortune, boolean isSilkTouch) {
 		ItemStack stack = getAsItem();
-		if (stack != null) drops.add(stack);
+		if (!stack.isEmpty()) drops.add(stack);
 	}
 
 	@Override

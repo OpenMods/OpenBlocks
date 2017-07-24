@@ -10,6 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -63,15 +64,15 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 	private static final Vector3f DROP_V = new Vector3f(0.0f, -1.0f, 0.0f);
 
 	private void dropItem(float speedMultiplier) {
-		if (!(worldObj instanceof WorldServer)) return;
+		if (!(world instanceof WorldServer)) return;
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null || stack.stackSize <= 0) continue;
+			if (stack.isEmpty()) continue;
 
 			final ItemStack dropped = stack.splitStack(1);
+			inventory.setInventorySlotContents(i, dropped);
 
-			if (stack.stackSize <= 0) inventory.setInventorySlotContents(i, null);
 			final Orientation orientation = getOrientation();
 
 			final Vector4f worldDrop = new Vector4f();
@@ -93,16 +94,16 @@ public class TileEntityItemDropper extends SyncedTileEntity implements INeighbou
 			final double worldDropZ = pos.getZ() + worldDrop.z;
 
 			final DropItemAction action = new DropItemAction(dropped, worldDropX, worldDropY, worldDropZ, worldVel.x, worldVel.y, worldVel.z);
-			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, action);
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)world, action);
 
 			break;
 		}
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
-		if (!worldObj.isRemote) {
-			setRedstoneSignal(worldObj.isBlockIndirectlyGettingPowered(pos));
+	public void onNeighbourChanged(BlockPos pos, Block block) {
+		if (!world.isRemote) {
+			setRedstoneSignal(world.isBlockIndirectlyGettingPowered(pos));
 		}
 	}
 

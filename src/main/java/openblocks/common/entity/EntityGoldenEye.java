@@ -14,7 +14,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 
 	private static final int TTL = 60;
 	private int timeToLive;
-	private ItemStack spawningStack;
+	private ItemStack spawningStack = ItemStack.EMPTY;
 
 	public EntityGoldenEye(World world, ItemStack spawningStack, Entity owner, BlockPos target) {
 		super(world);
@@ -36,7 +36,7 @@ public class EntityGoldenEye extends EntitySmoothMove {
 	protected void readEntityFromNBT(NBTTagCompound tag) {
 		if (tag.hasKey("SpawningItem")) {
 			NBTTagCompound item = tag.getCompoundTag("SpawningItem");
-			spawningStack = ItemStack.loadItemStackFromNBT(item);
+			spawningStack = new ItemStack(item);
 		}
 	}
 
@@ -54,11 +54,11 @@ public class EntityGoldenEye extends EntitySmoothMove {
 
 	@Override
 	public void onUpdate() {
-		if (!worldObj.isRemote && timeToLive-- < 0) {
+		if (!world.isRemote && timeToLive-- < 0) {
 			setDead();
 			if (spawningStack != null) {
-				EntityItem dropped = new EntityItem(worldObj, posX, posY, posZ, spawningStack);
-				worldObj.spawnEntityInWorld(dropped);
+				EntityItem dropped = new EntityItem(world, posX, posY, posZ, spawningStack);
+				world.spawnEntity(dropped);
 			}
 			return;
 		}
@@ -66,8 +66,8 @@ public class EntityGoldenEye extends EntitySmoothMove {
 		updatePrevPosition();
 		smoother.update();
 
-		if (worldObj.isRemote) {
-			worldObj.spawnParticle(EnumParticleTypes.PORTAL,
+		if (world.isRemote) {
+			world.spawnParticle(EnumParticleTypes.PORTAL,
 					posX + rand.nextGaussian() * 0.3 - 0.15,
 					posY - 0.5 + rand.nextGaussian() * 0.3 - 0.15,
 					posZ - rand.nextGaussian() * 0.3 - 0.15,

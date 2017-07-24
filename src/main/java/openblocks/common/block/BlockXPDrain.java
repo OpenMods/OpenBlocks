@@ -24,7 +24,7 @@ public class BlockXPDrain extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public boolean canRenderInLayer(BlockRenderLayer layer) {
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.CUTOUT;
 	}
 

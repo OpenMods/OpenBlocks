@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.common.block.BlockSky;
@@ -26,7 +27,7 @@ public class ItemSkyBlock extends ItemBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		result.add(new ItemStack(this, 1, 0));
 		result.add(new ItemStack(this, 1, 1));
 	}

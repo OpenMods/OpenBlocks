@@ -94,8 +94,8 @@ public class ExplosiveEnchantmentsHandler {
 	}
 
 	public static void createExplosionForEntity(Entity entity, float power, boolean isDestructive) {
-		if (!entity.worldObj.isRemote) {
-			entity.worldObj.createExplosion(entity, entity.posX, entity.getEntityBoundingBox().minY, entity.posZ, power, isDestructive);
+		if (!entity.world.isRemote) {
+			entity.world.createExplosion(entity, entity.posX, entity.getEntityBoundingBox().minY, entity.posZ, power, isDestructive);
 		}
 	}
 
@@ -103,32 +103,27 @@ public class ExplosiveEnchantmentsHandler {
 
 	private static final ItemStack gunpowder = new ItemStack(Items.GUNPOWDER);
 
-	private static void useItems(EntityPlayer player, int gunpowderSlot, EntityEquipmentSlot armorSlot, int gunpowderAmout) {
+	private static void useItems(EntityPlayer player, ItemStack resource, EntityEquipmentSlot armorSlot, int gunpowderAmout) {
 		if (player.capabilities.isCreativeMode) return;
 
 		ItemStack armor = player.getItemStackFromSlot(armorSlot);
 		armor.damageItem(1, player);
-		if (armor.stackSize <= 0) player.setItemStackToSlot(armorSlot, null);
 
-		final InventoryPlayer inventory = player.inventory;
-		ItemStack resource = inventory.mainInventory[gunpowderSlot];
-		resource.stackSize -= gunpowderAmout;
-		if (resource.stackSize <= 0) inventory.mainInventory[gunpowderSlot] = null;
+		resource.shrink(gunpowderAmout);
 	}
 
 	private static EnchantmentLevel tryUseEnchantment(EntityPlayer player, EntityEquipmentSlot slot) {
 		ItemStack armor = player.getItemStackFromSlot(slot);
-		if (armor == null || !(armor.getItem() instanceof ItemArmor)) return null;
+		if (armor.isEmpty() || !(armor.getItem() instanceof ItemArmor)) return null;
 
 		final InventoryPlayer inventory = player.inventory;
 		int explosiveLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.explosive, armor);
 		if (explosiveLevel <= 0 || explosiveLevel > LEVELS.length) return null;
 		EnchantmentLevel level = LEVELS[explosiveLevel - 1];
 
-		for (int i = 0; i < inventory.mainInventory.length; i++) {
-			ItemStack stack = inventory.mainInventory[i];
-			if (stack != null && gunpowder.isItemEqual(stack) && stack.stackSize >= level.gunpowderNeeded) {
-				useItems(player, i, slot, level.gunpowderNeeded);
+		for (ItemStack stack : inventory.mainInventory) { // TODO 1.11 verify
+			if (gunpowder.isItemEqual(stack) && stack.getCount() >= level.gunpowderNeeded) {
+				useItems(player, stack, slot, level.gunpowderNeeded);
 				return level;
 			}
 		}

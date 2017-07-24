@@ -141,9 +141,9 @@ public class BlockTarget extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour) {
+	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
 		updateRedstone(world, blockPos, state);
-		super.neighborChanged(state, world, blockPos, neighbour);
+		super.neighborChanged(state, world, blockPos, neighbour, neigbourPos);
 	}
 
 	@Override
@@ -194,7 +194,7 @@ public class BlockTarget extends OpenBlock.FourDirections {
 				IInventory inventory = fakePlayer.inventory;
 				for (int i = 0; i < inventory.getSizeInventory(); i++) {
 					ItemStack stack = inventory.getStackInSlot(i);
-					if (stack != null) {
+					if (!stack.isEmpty()) {
 						drops.add(stack);
 						inventory.setInventorySlotContents(i, null);
 					}

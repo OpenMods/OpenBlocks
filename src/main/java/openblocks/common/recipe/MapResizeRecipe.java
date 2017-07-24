@@ -29,14 +29,14 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 		for (int i = 0; i < 3; i++) {
 			ItemStack left = inventory.getStackInRowAndColumn(0, i);
 
-			if (left == null || !MetasGeneric.mapMemory.isA(left)) continue;
+			if (left.isEmpty() || !MetasGeneric.mapMemory.isA(left)) continue;
 
 			ItemStack right = inventory.getStackInRowAndColumn(2, i);
-			if (right == null || !MetasGeneric.mapMemory.isA(right)) continue;
+			if (right.isEmpty() || !MetasGeneric.mapMemory.isA(right)) continue;
 
 			ItemStack middle = inventory.getStackInRowAndColumn(1, i);
 
-			if (middle != null && middle.getItem() instanceof ItemEmptyMap) {
+			if (!middle.isEmpty() && middle.getItem() instanceof ItemEmptyMap) {
 				NBTTagCompound tag = ItemUtils.getItemTag(middle);
 				int scale = tag.getByte(ItemEmptyMap.TAG_SCALE);
 				return scale < ItemEmptyMap.MAX_SCALE;
@@ -51,9 +51,9 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 		for (int i = 0; i < 3; i++) {
 			ItemStack middle = inventory.getStackInRowAndColumn(1, i);
 
-			if (middle != null && middle.getItem() instanceof ItemEmptyMap) {
+			if (!middle.isEmpty() && middle.getItem() instanceof ItemEmptyMap) {
 				ItemStack result = middle.copy();
-				result.stackSize = 1;
+				result.setCount(1);
 				NBTTagCompound tag = ItemUtils.getItemTag(result);
 				byte currentScale = tag.getByte(ItemEmptyMap.TAG_SCALE);
 				tag.setByte(ItemEmptyMap.TAG_SCALE, (byte)Math.min(currentScale + 1, ItemEmptyMap.MAX_SCALE));
@@ -61,7 +61,7 @@ public class MapResizeRecipe extends ShapedOreRecipe {
 			}
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 }

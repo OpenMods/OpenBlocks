@@ -1,6 +1,7 @@
 package openblocks.common.entity;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -55,12 +56,12 @@ public class EntityItemProjectile extends EntityItem {
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.03999999910593033D;
 
-		moveEntity(this.motionX, this.motionY, this.motionZ);
+		move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
 		boolean hasMoved = (int)this.prevPosX != (int)this.posX || (int)this.prevPosY != (int)this.posY || (int)this.prevPosZ != (int)this.posZ;
 
 		if (hasMoved || this.ticksExisted % 25 == 0) {
-			if (this.worldObj.getBlockState(new BlockPos(this)).getMaterial() == Material.LAVA) {
+			if (this.world.getBlockState(new BlockPos(this)).getMaterial() == Material.LAVA) {
 				this.motionY = 0.20000000298023224D;
 				this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 				this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
@@ -73,7 +74,11 @@ public class EntityItemProjectile extends EntityItem {
 
 		// Keep ground friction
 		if (this.onGround) {
-			f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.98F;
+			f = this.world.getBlockState(
+					new BlockPos(MathHelper.floor(this.posX),
+							MathHelper.floor(getEntityBoundingBox().minY) - 1,
+							MathHelper.floor(this.posZ)))
+					.getBlock().slipperiness * 0.98F;
 		}
 
 		this.motionX *= f;

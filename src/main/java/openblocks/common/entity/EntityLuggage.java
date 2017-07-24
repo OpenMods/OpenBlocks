@@ -2,7 +2,6 @@ package openblocks.common.entity;
 
 import com.google.common.base.Strings;
 import io.netty.buffer.ByteBuf;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
@@ -53,7 +52,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	private GenericInventory createInventory(int size) {
 		return new GenericInventory("luggage", false, size) {
 			@Override
-			public boolean isUseableByPlayer(EntityPlayer player) {
+			public boolean isUsableByPlayer(EntityPlayer player) {
 				return !isDead && player.getDistanceSqToEntity(EntityLuggage.this) < 64;
 			}
 		};
@@ -80,7 +79,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	protected PathNavigate getNewNavigator(World worldIn) {
+	protected PathNavigate createNavigator(World worldIn) {
 		final PathNavigateGround navigator = new PathNavigateGround(this, worldIn);
 		navigator.setCanSwim(true);
 		return navigator;
@@ -96,14 +95,14 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	public boolean isSpecial() {
-		if (worldObj.isRemote) { return inventory.getSizeInventory() > SIZE_NORMAL; }
+		if (world.isRemote) { return inventory.getSizeInventory() > SIZE_NORMAL; }
 		return special;
 	}
 
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			int inventorySize = getDataManager().get(PROPERTY_INV_SIZE);
 			if (inventory.getSizeInventory() != inventorySize) {
 				inventory = createInventory(inventorySize);
@@ -127,21 +126,22 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if (!isDead) {
-			if (heldItem != null && heldItem.getItem() instanceof ItemNameTag) return false;
+			final ItemStack heldItem = player.getHeldItemMainhand();
+			if (heldItem.getItem() instanceof ItemNameTag) return false;
 
-			if (worldObj.isRemote) {
+			if (world.isRemote) {
 				if (player.isSneaking()) spawnPickupParticles();
 			} else {
 				if (player.isSneaking()) {
 					ItemStack luggageItem = convertToItem();
 					if (player.inventory.addItemStackToInventory(luggageItem)) setDead();
-					playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
+					playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.5f, world.rand.nextFloat() * 0.1f + 0.9f);
 
 				} else {
-					playSound(SoundEvents.BLOCK_CHEST_OPEN, 0.5f, worldObj.rand.nextFloat() * 0.1f + 0.9f);
-					player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.worldObj, getEntityId(), 0, 0);
+					playSound(SoundEvents.BLOCK_CHEST_OPEN, 0.5f, world.rand.nextFloat() * 0.1f + 0.9f);
+					player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.luggage.ordinal(), player.world, getEntityId(), 0, 0);
 				}
 			}
 		}
@@ -160,7 +160,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 			double vz = rand.nextGaussian() * 0.02D;
 			double px = this.posX + this.width * this.rand.nextFloat();
 			double pz = this.posZ + this.width * this.rand.nextFloat();
-			this.worldObj.spawnParticle(EnumParticleTypes.PORTAL, px, py, pz, vx, -1, vz);
+			this.world.spawnParticle(EnumParticleTypes.PORTAL, px, py, pz, vx, -1, vz);
 		}
 	}
 
@@ -198,7 +198,7 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		playSound(OpenBlocks.Sounds.ENTITY_LUGGAGE_WALK, 0.3F, 0.7F + (worldObj.rand.nextFloat() * 0.5f));
+		playSound(OpenBlocks.Sounds.ENTITY_LUGGAGE_WALK, 0.3F, 0.7F + (world.rand.nextFloat() * 0.5f));
 	}
 
 	public void storeItemTag(NBTTagCompound itemTag) {

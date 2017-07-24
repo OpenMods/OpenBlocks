@@ -38,7 +38,7 @@ public class TileEntityBigButton extends OpenTileEntity implements ISurfaceAttac
 
 	public int getTickTime() {
 		ItemStack stack = inventory.getStackInSlot(0);
-		return stack == null? 1 : stack.stackSize;
+		return Math.max(stack.getCount(), 1);
 	}
 
 	@Override

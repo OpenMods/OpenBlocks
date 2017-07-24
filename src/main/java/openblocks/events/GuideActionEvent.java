@@ -21,7 +21,7 @@ public class GuideActionEvent extends BlockEventPacket {
 	@Override
 	protected void readFromStream(PacketBuffer input) {
 		super.readFromStream(input);
-		this.command = input.readStringFromBuffer(0xFFFF);
+		this.command = input.readString(Short.MAX_VALUE);
 	}
 
 	@Override

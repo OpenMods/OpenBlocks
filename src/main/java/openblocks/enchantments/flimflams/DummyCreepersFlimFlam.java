@@ -20,7 +20,7 @@ public class DummyCreepersFlimFlam implements IFlimFlamAction {
 	public boolean execute(EntityPlayerMP target) {
 
 		for (int i = 0; i < 15; i++) {
-			EntityCreeper creeper = new EntityCreeper(target.worldObj);
+			EntityCreeper creeper = new EntityCreeper(target.world);
 			try {
 				EXPLOSION_RADIUS.set(creeper, 0);
 				EntityDataManager watcher = creeper.getDataManager();
@@ -32,7 +32,7 @@ public class DummyCreepersFlimFlam implements IFlimFlamAction {
 			creeper.setPosition(target.posX + 20 * (random.nextFloat() - 0.5),
 					target.posY + 5 * (1 + random.nextFloat()),
 					target.posZ + 20 * (random.nextFloat() - 0.5));
-			target.worldObj.spawnEntityInWorld(creeper);
+			target.world.spawnEntity(creeper);
 		}
 		return true;
 	}

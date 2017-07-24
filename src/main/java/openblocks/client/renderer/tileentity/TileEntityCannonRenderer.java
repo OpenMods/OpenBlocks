@@ -68,7 +68,7 @@ public class TileEntityCannonRenderer extends TileEntitySpecialRenderer<TileEnti
 		EntityPlayer player = OpenMods.proxy.getThePlayer();
 		if (player == null) return false;
 		ItemStack held = player.getHeldItemMainhand();
-		return held != null && MetasGenericUnstackable.pointer.isA(held);
+		return !held.isEmpty() && MetasGenericUnstackable.pointer.isA(held);
 	}
 
 }

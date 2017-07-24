@@ -37,7 +37,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			trySpawnXpOrbs();
 		} else {
 			trySpawnParticles();
@@ -46,8 +46,8 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 
 	private void trySpawnXpOrbs() {
 		boolean hasSpawnedParticle = false;
-		if (OpenMods.proxy.getTicks(worldObj) % ORB_SPAWN_FREQUENCY == 0 && isPowered()) {
-			bufferTank.fillFromSide(DRAIN_PER_CYCLE, worldObj, pos, getBack());
+		if (OpenMods.proxy.getTicks(world) % ORB_SPAWN_FREQUENCY == 0 && isPowered()) {
+			bufferTank.fillFromSide(DRAIN_PER_CYCLE, world, pos, getBack());
 
 			final int amountInTank = bufferTank.getFluidAmount();
 
@@ -61,7 +61,7 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 					hasSpawnedParticle = true;
 
 					final BlockPos p = getPos();
-					worldObj.spawnEntityInWorld(new EntityXPOrbNoFly(worldObj, p.getX() + 0.5, p.getY() + 0.1, p.getZ() + 0.5, xpInOrb));
+					world.spawnEntity(new EntityXPOrbNoFly(world, p.getX() + 0.5, p.getY() + 0.1, p.getZ() + 0.5, xpInOrb));
 				}
 			}
 		}
@@ -71,22 +71,22 @@ public class TileEntityXPShower extends SyncedTileEntity implements ITickable {
 	}
 
 	private boolean isPowered() {
-		final IBlockState state = worldObj.getBlockState(pos);
+		final IBlockState state = world.getBlockState(pos);
 		return state.getBlock() instanceof BlockXPShower && state.getValue(BlockXPShower.POWERED);
 	}
 
 	private void trySpawnParticles() {
 		final int particleLevel = OpenBlocks.proxy.getParticleSettings();
-		if (particleLevel == 0 || (particleLevel == 1 && worldObj.rand.nextInt(3) == 0)) {
+		if (particleLevel == 0 || (particleLevel == 1 && world.rand.nextInt(3) == 0)) {
 			particleSpawnTimer = particleSpawnerActive.get()? 10 : particleSpawnTimer - 1;
 
 			if (particleSpawnTimer > 0) {
 				final BlockPos p = getPos();
 				Vec3d vec = new Vec3d(
-						(worldObj.rand.nextDouble() - 0.5) * 0.05,
+						(world.rand.nextDouble() - 0.5) * 0.05,
 						0,
-						(worldObj.rand.nextDouble() - 0.5) * 0.05);
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, XP_FLUID, p.getX() + 0.5d, p.getY() + 0.4d, p.getZ() + 0.5d, 0.4f, 0.7f, vec);
+						(world.rand.nextDouble() - 0.5) * 0.05);
+				OpenBlocks.proxy.spawnLiquidSpray(world, XP_FLUID, p.getX() + 0.5d, p.getY() + 0.4d, p.getZ() + 0.5d, 0.4f, 0.7f, vec);
 			}
 		}
 	}

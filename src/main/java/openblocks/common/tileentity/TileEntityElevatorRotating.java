@@ -65,10 +65,11 @@ public class TileEntityElevatorRotating extends SyncedTileEntity implements IPla
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (worldObj.isRemote || hand != EnumHand.MAIN_HAND) return false;
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (world.isRemote || hand != EnumHand.MAIN_HAND) return false;
 
-		if (heldItem != null) {
+		final ItemStack heldItem = player.getHeldItemMainhand();
+		if (!heldItem.isEmpty()) {
 			Set<ColorMeta> metas = ColorMeta.fromStack(heldItem);
 			if (!metas.isEmpty()) {
 				ColorMeta meta = CollectionUtils.getRandom(metas);

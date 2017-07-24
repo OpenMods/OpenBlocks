@@ -25,7 +25,7 @@ public class ItemDropFlimFlam implements IFlimFlamAction {
 	protected boolean tryDropStack(EntityPlayerMP target, int slot) {
 		final InventoryPlayer inv = target.inventory;
 		ItemStack stack = inv.getStackInSlot(slot);
-		if (stack == null || random.nextFloat() > 0.5f) return false;
+		if (stack.isEmpty() || random.nextFloat() > 0.5f) return false;
 
 		target.dropItem(inv.decrStackSize(slot, 1), true);
 		return true;

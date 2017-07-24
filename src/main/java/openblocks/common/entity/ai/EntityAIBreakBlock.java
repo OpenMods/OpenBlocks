@@ -34,8 +34,8 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		if (!pathFinder.noPath()) return false;
-		boolean hasTicked = (OpenMods.proxy.getTicks(entity.worldObj) + tickOffset) % 4 == 0;
-		if (hasTicked && entity.worldObj != null && !entity.worldObj.isRemote) {
+		boolean hasTicked = (OpenMods.proxy.getTicks(entity.world) + tickOffset) % 4 == 0;
+		if (hasTicked && entity.world != null && !entity.world.isRemote) {
 			for (int i = 0; i < 20; i++) {
 				int x = rand.nextInt(16) - 8;
 				int y = rand.nextInt(3) - 1;
@@ -77,7 +77,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		final World world = entity.worldObj;
+		final World world = entity.world;
 		if ((world instanceof WorldServer) && blockCoord != null && canHarvestBlock(blockCoord)) {
 			if (entity.getDistanceSqToCenter(blockCoord) < 1.0) {
 				FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new BreakBlockAction(world, blockCoord).setStackToUse(null));
@@ -87,7 +87,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 	}
 
 	public boolean canHarvestBlock(BlockPos coord) {
-		final Block block = entity.worldObj.getBlockState(coord).getBlock();
+		final Block block = entity.world.getBlockState(coord).getBlock();
 		return block instanceof BlockFlower ||
 				block == Blocks.TORCH;
 	}

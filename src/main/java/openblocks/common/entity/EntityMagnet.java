@@ -65,7 +65,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		public boolean isValid(EntityMagnet magnet) {
 			EntityLivingBase player = owner.get();
 			if (player == null || player.isDead) return false;
-			if (magnet.worldObj != player.worldObj) return false;
+			if (magnet.world != player.world) return false;
 			return ItemCraneBackpack.isWearingCrane(player);
 		}
 
@@ -117,7 +117,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 		public void readSpawnData(ByteBuf data) {
 			super.readSpawnData(data);
 			int entityId = data.readInt();
-			if (entityId >= 0) DelayedEntityLoadManager.instance.registerLoadListener(worldObj, this, entityId);
+			if (entityId >= 0) DelayedEntityLoadManager.instance.registerLoadListener(world, this, entityId);
 		}
 
 		@Override
@@ -193,7 +193,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	public void onUpdate() {
 		fixSize();
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (owner == null || !owner.isValid(this)) {
 				setDead();
 				return;
@@ -209,7 +209,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		isAboveTarget = !detectEntityTargets().isEmpty();
 
-		if (isMagic && worldObj.isRemote && RANDOM.nextDouble() < 0.2) worldObj.spawnParticle(EnumParticleTypes.PORTAL,
+		if (isMagic && world.isRemote && RANDOM.nextDouble() < 0.2) world.spawnParticle(EnumParticleTypes.PORTAL,
 				posX + RANDOM.nextDouble() * 0.1,
 				posY - RANDOM.nextDouble() * 0.2, posZ + RANDOM.nextDouble() * 0.1,
 				RANDOM.nextGaussian(),
@@ -255,7 +255,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 			removePassengers();
 			passenger.setPosition(passenger.posX, tmpPosY, passenger.posZ);
 			return true;
-		} else if (!worldObj.isRemote) {
+		} else if (!world.isRemote) {
 			Entity target = null;
 
 			if (Config.canMagnetPickEntities) target = findEntityToPick();
@@ -280,7 +280,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	protected List<Entity> detectEntityTargets() {
 		// TODO 1.8.9 verify addCoord usage
 		AxisAlignedBB aabb = getEntityBoundingBox().expand(0.25, 0, 0.25).addCoord(0, -1, 0);
-		return worldObj.getEntitiesInAABBexcluding(this, aabb, createPickTargetPredicate());
+		return world.getEntitiesInAABBexcluding(this, aabb, createPickTargetPredicate());
 	}
 
 	protected Predicate<Entity> createPickTargetPredicate() {
@@ -288,21 +288,21 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 	}
 
 	private Entity createBlockEntity() {
-		final int x = MathHelper.floor_double(posX);
-		final int y = MathHelper.floor_double(posY - 0.5);
-		final int z = MathHelper.floor_double(posZ);
+		final int x = MathHelper.floor(posX);
+		final int y = MathHelper.floor(posY - 0.5);
+		final int z = MathHelper.floor(posZ);
 
 		final BlockPos pos = new BlockPos(x, y, z);
 
-		if (!worldObj.isBlockLoaded(pos) || worldObj.isAirBlock(pos)) return null;
+		if (!world.isBlockLoaded(pos) || world.isAirBlock(pos)) return null;
 
 		Entity result = null;
 
-		if (MagnetWhitelists.instance.testBlock(worldObj, pos)) {
+		if (MagnetWhitelists.instance.testBlock(world, pos)) {
 			result = owner.createByPlayer(new IEntityBlockFactory() {
 				@Override
 				public EntityBlock create(EntityLivingBase player) {
-					return EntityBlock.create(player, worldObj, pos, new EntityFactory() {
+					return EntityBlock.create(player, world, pos, new EntityFactory() {
 						@Override
 						public EntityBlock create(World world) {
 							return new EntityMountedBlock(world);
@@ -314,7 +314,7 @@ public class EntityMagnet extends EntitySmoothMove implements IEntityAdditionalS
 
 		if (result != null) {
 			result.setPosition(posX, posY + getMountedYOffset(result), posZ);
-			worldObj.spawnEntityInWorld(result);
+			world.spawnEntity(result);
 		}
 
 		return result;

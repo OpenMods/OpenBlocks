@@ -17,7 +17,7 @@ public class SheepDyeFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
-		World world = target.worldObj;
+		World world = target.world;
 		AxisAlignedBB around = target.getEntityBoundingBox().expand(20, 20, 20);
 		List<EntitySheep> sheeps = world.getEntitiesWithinAABB(EntitySheep.class, around);
 		if (sheeps.isEmpty()) return false;

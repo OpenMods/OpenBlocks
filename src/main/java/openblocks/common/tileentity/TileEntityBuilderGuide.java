@@ -52,15 +52,15 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 	@Override
 	public void update() {
 		super.update();
-		if (worldObj.isRemote) ticks++;
+		if (world.isRemote) ticks++;
 	}
 
 	private void creativeReplaceBlocks(EntityPlayerMP player, ItemStack heldStack, Block block, int blockMeta, EnumFacing side, float hitX, float hitY, float hitZ) {
 		// TODO verify
 		for (BlockPos coord : getShapeSafe().getCoords()) {
 			final BlockPos clickPos = pos.add(coord);
-			final IBlockState state = block.getStateForPlacement(worldObj, clickPos, side, hitX, hitY, hitZ, blockMeta, player, heldStack);
-			worldObj.setBlockState(clickPos, state);
+			final IBlockState state = block.getStateForPlacement(world, clickPos, side, hitX, hitY, hitZ, blockMeta, player, EnumHand.MAIN_HAND);
+			world.setBlockState(clickPos, state);
 		}
 	}
 
@@ -73,11 +73,11 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 	private boolean survivalPlaceBlocks(EntityPlayerMP player, ItemStack heldItem, Block block, int blockMeta, EnumFacing side, float hitX, float hitY, float hitZ) {
 		for (BlockPos relCoord : getShapeSafe().getCoords()) {
 			BlockPos absPos = pos.add(relCoord);
-			if (worldObj.isBlockLoaded(absPos) && worldObj.isAirBlock(absPos) && absPos.getY() >= 0 && absPos.getY() < 256) {
-				final EnumActionResult placeResult = player.interactionManager.processRightClickBlock(player, worldObj, heldItem, EnumHand.MAIN_HAND, absPos, side, hitX, hitY, hitZ);
+			if (world.isBlockLoaded(absPos) && world.isAirBlock(absPos) && absPos.getY() >= 0 && absPos.getY() < 256) {
+				final EnumActionResult placeResult = player.interactionManager.processRightClickBlock(player, world, heldItem, EnumHand.MAIN_HAND, absPos, side, hitX, hitY, hitZ);
 
 				if (placeResult == EnumActionResult.SUCCESS) {
-					final int stateId = Block.getStateId(worldObj.getBlockState(absPos));
+					final int stateId = Block.getStateId(world.getBlockState(absPos));
 					createServerRpcProxy(IGuideAnimationTrigger.class).trigger(absPos, stateId);
 					return true;
 				}
@@ -89,7 +89,7 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 	}
 
 	private boolean isInFillMode() {
-		return worldObj.getBlockState(pos.up()).getBlock() == Blocks.OBSIDIAN;
+		return world.getBlockState(pos.up()).getBlock() == Blocks.OBSIDIAN;
 	}
 
 	public float getTicks() {
@@ -108,8 +108,8 @@ public class TileEntityBuilderGuide extends TileEntityGuide implements IGuideAni
 					double px = dx + 0.3 * RANDOM.nextFloat();
 					double py = dy + 0.3 * RANDOM.nextFloat();
 					double pz = dz + 0.3 * RANDOM.nextFloat();
-					worldObj.spawnParticle(EnumParticleTypes.PORTAL, px, py, pz, 0, 0, 0);
-					worldObj.spawnParticle(EnumParticleTypes.BLOCK_DUST, px, py, pz, 0, 0, 0, stateId);
+					world.spawnParticle(EnumParticleTypes.PORTAL, px, py, pz, 0, 0, 0);
+					world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px, py, pz, 0, 0, 0, stateId);
 				}
 			}
 		});

@@ -6,10 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import openblocks.OpenBlocks;
 import openmods.api.IActivateAwareTile;
@@ -57,7 +57,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 		if (cachedEntity != null && uuid.equals(cachedEntity.getUniqueID())) return cachedEntity;
 
-		for (Entity entity : worldObj.loadedEntityList)
+		for (Entity entity : world.loadedEntityList)
 			if (uuid.equals(entity.getUniqueID())) {
 				cachedEntity = entity;
 				return entity;
@@ -78,7 +78,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	@Override
 	public void update() {
 		tickSinceOpened++;
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			immobilizeEntity();
 			sync();
 		}
@@ -116,7 +116,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	public void onEntityCollided(Entity entity) {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (entity instanceof EntityCreature && !isLocked.get() && tickSinceOpened > OPENING_ANIMATION_TIME) {
 				close(entity);
 			}
@@ -129,7 +129,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 
 	public int getComparatorLevel() {
 		final Entity e = getEntity();
-		return e != null? MathHelper.ceiling_double_int(e.getEntityBoundingBox().getAverageEdgeLength() / 16.0) : 0;
+		return e != null? MathHelper.ceil(e.getEntityBoundingBox().getAverageEdgeLength() / 16.0) : 0;
 	}
 
 	public int ticksSinceOpened() {
@@ -137,8 +137,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote) open();
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote) open();
 		return true;
 	}
 
@@ -147,7 +147,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 			flags.on(Flags.isShut);
 			trappedEntity.setValue(trapped.getUniqueID());
 			playSoundAtBlock(OpenBlocks.Sounds.BLOCK_BEARTRAP_CLOSE, 0.5F, 1.0F);
-			worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
+			world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 			flags.off(Flags.isShut);
 			trappedEntity.clear();
 			playSoundAtBlock(OpenBlocks.Sounds.BLOCK_BEARTRAP_OPEN, 0.5F, 1.0F);
-			worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
+			world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		updateRedstone();
 	}
 
@@ -176,8 +176,8 @@ public class TileEntityBearTrap extends SyncedTileEntity implements IActivateAwa
 	}
 
 	private void updateRedstone() {
-		if (!worldObj.isRemote) {
-			boolean isLocked = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
+		if (!world.isRemote) {
+			boolean isLocked = world.isBlockIndirectlyGettingPowered(pos) > 0;
 			this.isLocked.set(isLocked);
 			if (isLocked) open();
 		}

@@ -383,7 +383,7 @@ public class DevNullItemOverride extends ItemOverrideList {
 
 		final int modelId = depth - 1;
 		final ItemStack innerStack = r.getLeft();
-		if (innerStack == null)
+		if (innerStack.isEmpty())
 			return emptyFrameModels2d.get(modelId);
 
 		final IBakedModel innerModel = getItemModel(innerStack);

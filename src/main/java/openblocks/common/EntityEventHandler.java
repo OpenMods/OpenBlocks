@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import openblocks.Config;
@@ -28,18 +29,13 @@ public class EntityEventHandler {
 		if (entityBlacklist == null) {
 			entityBlacklist = Sets.newIdentityHashSet();
 
-			Set<String> unknownNames = Sets.newHashSet();
+			Set<ResourceLocation> unknownNames = Sets.newHashSet();
 			for (String name : Config.disableMobNames) {
+				final ResourceLocation location = new ResourceLocation(name);
 
-				Class<? extends Entity> cls = EntityList.NAME_TO_CLASS.get(name);
+				Class<? extends Entity> cls = EntityList.getClass(location);
 				if (cls != null) entityBlacklist.add(cls);
-				else unknownNames.add(name);
-			}
-
-			// using Class.forName is unsafe
-			for (Class<? extends Entity> cls : EntityList.CLASS_TO_NAME.keySet()) {
-				if (unknownNames.isEmpty()) break;
-				if (unknownNames.remove(cls.getName())) entityBlacklist.add(cls);
+				else unknownNames.add(location);
 			}
 
 			if (!unknownNames.isEmpty()) Log.warn("Can't identify mobs for blacklist: %s", unknownNames);
@@ -78,7 +74,7 @@ public class EntityEventHandler {
 			if (shouldGiveManual) {
 				ItemStack manual = new ItemStack(OpenBlocks.Items.infoBook);
 				if (!player.inventory.addItemStackToInventory(manual)) {
-					BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, manual);
+					BlockUtils.dropItemStackInWorld(player.world, player.posX, player.posY, player.posZ, manual);
 				}
 				persistTag.setBoolean(GIVEN_MANUAL_TAG, true);
 			}

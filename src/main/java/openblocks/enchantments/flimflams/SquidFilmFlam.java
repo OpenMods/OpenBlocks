@@ -3,6 +3,7 @@ package openblocks.enchantments.flimflams;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Random;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayerMP;
 import openblocks.api.IFlimFlamAction;
@@ -23,13 +24,13 @@ public class SquidFilmFlam implements IFlimFlamAction {
 	public boolean execute(EntityPlayerMP target) {
 		if (target.isBeingRidden()) return false;
 
-		EntitySquid squid = new EntitySquid(target.worldObj);
-		squid.moveEntity(target.posX, target.getEntityBoundingBox().minY, target.posZ);
+		EntitySquid squid = new EntitySquid(target.world);
+		squid.move(MoverType.SELF, target.posX, target.getEntityBoundingBox().minY, target.posZ);
 
 		int selected = random.nextInt(names.size());
 		squid.setCustomNameTag(names.get(selected));
 
-		target.worldObj.spawnEntityInWorld(squid);
+		target.world.spawnEntity(squid);
 		return true;
 	}
 

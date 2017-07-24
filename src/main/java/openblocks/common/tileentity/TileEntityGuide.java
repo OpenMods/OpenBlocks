@@ -381,11 +381,11 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private void displayModeChange(EntityPlayer player) {
-		player.addChatMessage(new TextComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
+		player.sendMessage(new TextComponentTranslation("openblocks.misc.change_mode", getCurrentMode().getLocalizedName()));
 	}
 
 	private void displayBlockCount(EntityPlayer player) {
-		player.addChatMessage(new TextComponentTranslation("openblocks.misc.total_blocks", shape.size()));
+		player.sendMessage(new TextComponentTranslation("openblocks.misc.total_blocks", shape.size()));
 	}
 
 	public boolean shouldRender() {
@@ -394,7 +394,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	@Override
 	public void update() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			if (timeSinceChange < 1.0) {
 				timeSinceChange = (float)Math.min(1.0f, timeSinceChange + 0.1);
 			}
@@ -463,7 +463,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	public void updateContainingBlockInfo() {
 		super.updateContainingBlockInfo();
 		// remote world will be updated by desctiption packet from block rotate
-		if (!worldObj.isRemote) recreateShape();
+		if (!world.isRemote) recreateShape();
 	}
 
 	@Override
@@ -534,7 +534,7 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 	}
 
 	private void notifyPlayer(EntityPlayer player) {
-		player.addChatMessage(new TextComponentTranslation("openblocks.misc.change_box_size",
+		player.sendMessage(new TextComponentTranslation("openblocks.misc.change_box_size",
 				-negX.get(), -negY.get(), -negZ.get(),
 				+posX.get(), +posY.get(), +posZ.get()));
 		displayBlockCount(player);
@@ -564,14 +564,14 @@ public class TileEntityGuide extends DroppableTileEntity implements ISyncListene
 
 	private void updateRedstone() {
 		if (Config.guideRedstone != 0) {
-			boolean redstoneState = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
+			boolean redstoneState = world.isBlockIndirectlyGettingPowered(pos) > 0;
 			active.set(redstoneState);
 			sync();
 		}
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		updateRedstone();
 	}
 

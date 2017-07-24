@@ -55,18 +55,19 @@ public class ItemSleepingBag extends ItemArmor {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack heldStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack heldStack = player.getHeldItem(hand);
 		if (!world.isRemote) {
 			ItemStack currentArmor = getChestpieceSlot(player);
-			if (currentArmor != null) currentArmor = currentArmor.copy();
+			if (!currentArmor.isEmpty()) currentArmor = currentArmor.copy();
 			final ItemStack sleepingBagCopy = heldStack.copy();
 
 			NBTTagCompound tag = ItemUtils.getItemTag(sleepingBagCopy);
 			tag.setInteger(TAG_SLOT, player.inventory.currentItem);
 
 			setChestpieceSlot(player, sleepingBagCopy);
-			if (currentArmor != null) return ActionResult.newResult(EnumActionResult.SUCCESS, currentArmor);
-			heldStack.stackSize = 0;
+			if (!currentArmor.isEmpty()) return ActionResult.newResult(EnumActionResult.SUCCESS, currentArmor);
+			heldStack.setCount(0);
 		}
 
 		return ActionResult.newResult(EnumActionResult.SUCCESS, heldStack);
@@ -101,7 +102,7 @@ public class ItemSleepingBag extends ItemArmor {
 		final BlockPos pos = player.getPosition();
 
 		if (!isNotSuffocating(world, pos) || !isSolidEnough(world, pos.down())) {
-			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.oh_no_ground"));
+			player.sendMessage(new TextComponentTranslation("openblocks.misc.oh_no_ground"));
 			return false;
 		}
 
@@ -111,10 +112,10 @@ public class ItemSleepingBag extends ItemArmor {
 
 		switch (sleepResult) {
 			case NOT_POSSIBLE_NOW:
-				player.addChatComponentMessage(new TextComponentTranslation("tile.bed.noSleep"));
+				player.sendMessage(new TextComponentTranslation("tile.bed.noSleep"));
 				break;
 			case NOT_SAFE:
-				player.addChatComponentMessage(new TextComponentTranslation("tile.bed.notSafe"));
+				player.sendMessage(new TextComponentTranslation("tile.bed.notSafe"));
 				break;
 			default:
 				break;
@@ -153,16 +154,16 @@ public class ItemSleepingBag extends ItemArmor {
 		final Integer returnSlot = getReturnSlot(tag);
 		tag.removeTag(TAG_SLOT);
 		if (returnSlot == null) {
-			setChestpieceSlot(player, null);
+			setChestpieceSlot(player, ItemStack.EMPTY);
 			return false;
 		}
 
-		final ItemStack possiblyArmor = player.inventory.mainInventory[returnSlot];
+		final ItemStack possiblyArmor = player.inventory.mainInventory.get(returnSlot);
 		if (isChestplate(possiblyArmor)) {
 			setChestpieceSlot(player, possiblyArmor);
 		} else {
-			setChestpieceSlot(player, null);
-			if (possiblyArmor != null) return false;
+			setChestpieceSlot(player, ItemStack.EMPTY);
+			if (!possiblyArmor.isEmpty()) return false;
 		}
 
 		player.inventory.setInventorySlotContents(returnSlot, sleepingBag);
@@ -174,7 +175,7 @@ public class ItemSleepingBag extends ItemArmor {
 		if (isSleepingBag(stack)) {
 			if (!tryReturnToSlot(player, stack)) {
 				if (!player.inventory.addItemStackToInventory(stack)) {
-					BlockUtils.dropItemStackInWorld(player.worldObj, player.posX, player.posY, player.posZ, stack);
+					BlockUtils.dropItemStackInWorld(player.world, player.posX, player.posY, player.posZ, stack);
 				}
 			}
 		}
@@ -194,7 +195,7 @@ public class ItemSleepingBag extends ItemArmor {
 	}
 
 	private static boolean isSleepingBag(ItemStack armor) {
-		return armor != null && armor.getItem() instanceof ItemSleepingBag;
+		return !armor.isEmpty() && armor.getItem() instanceof ItemSleepingBag;
 	}
 
 	private static ItemStack setChestpieceSlot(EntityPlayer player, ItemStack chestpiece) {
@@ -207,7 +208,7 @@ public class ItemSleepingBag extends ItemArmor {
 	}
 
 	private static boolean isChestplate(ItemStack stack) {
-		if (stack == null) return false;
+		if (stack.isEmpty()) return false;
 		Item item = stack.getItem();
 		if (item instanceof ItemSleepingBag) return false;
 

@@ -3,7 +3,6 @@ package openblocks.common.block;
 import com.google.common.base.Supplier;
 import java.util.List;
 import java.util.Random;
-import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -103,7 +102,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (hand != EnumHand.MAIN_HAND) return false;
 
 		if (world.isRemote) {
@@ -118,7 +117,7 @@ public class BlockGuide extends OpenBlock implements ISelectionAware {
 			return true;
 		} else if (player instanceof EntityPlayerMP) {
 			final ItemStack heldStack = player.getHeldItemMainhand();
-			if (heldStack != null) {
+			if (!heldStack.isEmpty()) {
 				TileEntityGuide guide = getTileEntity(world, pos, TileEntityGuide.class);
 				if (guide.onItemUse((EntityPlayerMP)player, heldStack, side, hitX, hitY, hitZ)) return true;
 			}

@@ -16,7 +16,7 @@ public class ContainerProjector extends ContainerInventoryProvider<TileEntityPro
 
 	public Integer getMapId() {
 		ItemStack map = inventory.getStackInSlot(0);
-		if (map != null && map.getItem() instanceof ItemHeightMap) return map.getItemDamage();
+		if (!map.isEmpty() && map.getItem() instanceof ItemHeightMap) return map.getItemDamage();
 
 		return null;
 	}

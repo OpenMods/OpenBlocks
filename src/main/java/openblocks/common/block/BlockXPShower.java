@@ -78,9 +78,9 @@ public class BlockXPShower extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour) {
+	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
 		updateRedstone(world, blockPos, state);
-		super.neighborChanged(state, world, blockPos, neighbour);
+		super.neighborChanged(state, world, blockPos, neighbour, neigbourPos);
 	}
 
 	@Override

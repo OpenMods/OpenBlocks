@@ -11,7 +11,7 @@ public class WitchBehavior implements ITrophyBehavior {
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {
 		player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 70, 1));
-		player.addChatMessage(new TextComponentTranslation("openblocks.misc.get_witched"));
+		player.sendMessage(new TextComponentTranslation("openblocks.misc.get_witched"));
 		return 0;
 	}
 

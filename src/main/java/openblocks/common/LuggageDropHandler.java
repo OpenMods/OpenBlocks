@@ -13,9 +13,7 @@ public class LuggageDropHandler {
 
 	private static boolean shouldPreventDespawn(EntityItem entity) {
 		ItemStack stack = entity.getEntityItem();
-
-		if (stack == null) return false;
-		return stack.getItem() instanceof ItemLuggage && stack.hasTagCompound();
+		return !stack.isEmpty() && stack.getItem() instanceof ItemLuggage && stack.hasTagCompound();
 	}
 
 	@SubscribeEvent

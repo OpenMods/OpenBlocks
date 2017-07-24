@@ -1,7 +1,6 @@
 package openblocks.common.block;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -9,7 +8,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -105,13 +103,13 @@ public class BlockBigButton extends OpenBlock.SixDirections {
 		final IBlockState state = world.getBlockState(pos);
 		world.setBlockState(pos, state.withProperty(BlockBigButton.POWERED, isPowered), BlockNotifyFlags.ALL);
 
-		world.notifyNeighborsOfStateChange(pos, this);
+		world.notifyNeighborsOfStateChange(pos, this, false);
 		final EnumFacing rot = getBack(state);
-		world.notifyNeighborsOfStateChange(pos.offset(rot), this);
+		world.notifyNeighborsOfStateChange(pos.offset(rot), this, false);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (hand != EnumHand.MAIN_HAND) return false;
 
 		if (!worldIn.isRemote) {

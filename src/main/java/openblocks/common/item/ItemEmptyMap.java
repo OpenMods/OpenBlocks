@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +38,7 @@ public class ItemEmptyMap extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		for (int scale = 0; scale < ItemEmptyMap.MAX_SCALE; scale++)
 			result.add(OpenBlocks.Items.emptyMap.createMap(scale));
 	}

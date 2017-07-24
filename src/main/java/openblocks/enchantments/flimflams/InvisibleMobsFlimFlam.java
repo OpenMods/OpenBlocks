@@ -18,7 +18,7 @@ public class InvisibleMobsFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
-		final World world = target.worldObj;
+		final World world = target.world;
 
 		AxisAlignedBB around = target.getEntityBoundingBox().expand(20, 20, 20);
 		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, around, WorldUtils.NON_PLAYER);

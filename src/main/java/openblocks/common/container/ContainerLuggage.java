@@ -15,6 +15,6 @@ public class ContainerLuggage extends ContainerBase<EntityLuggage> {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return inventory.isUseableByPlayer(entityplayer) && !getOwner().isDead;
+		return inventory.isUsableByPlayer(entityplayer) && !getOwner().isDead;
 	}
 }

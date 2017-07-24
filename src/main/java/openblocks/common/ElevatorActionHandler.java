@@ -46,7 +46,7 @@ public class ElevatorActionHandler {
 	private static boolean canTeleportPlayer(EntityPlayer entity, World world, BlockPos pos) {
 		final AxisAlignedBB aabb = entity.getEntityBoundingBox();
 		double height = Math.abs(aabb.maxY - aabb.minY);
-		int blockHeight = Math.max(1, MathHelper.ceiling_double_int(height));
+		int blockHeight = Math.max(1, MathHelper.ceil(height));
 
 		for (int dy = 0; dy < blockHeight; dy++)
 			if (!canTeleportPlayer(world, pos.up(dy))) return false;
@@ -133,7 +133,7 @@ public class ElevatorActionHandler {
 		if (Config.elevatorXpDrainRatio == 0 || player.capabilities.isCreativeMode) return true;
 
 		int playerXP = EnchantmentUtils.getPlayerXP(player);
-		int neededXP = MathHelper.ceiling_double_int(Config.elevatorXpDrainRatio * distance);
+		int neededXP = MathHelper.ceil(Config.elevatorXpDrainRatio * distance);
 		if (playerXP >= neededXP) {
 			EnchantmentUtils.addPlayerXP(player, -neededXP);
 			return true;
@@ -169,12 +169,12 @@ public class ElevatorActionHandler {
 		final EntityPlayer player = evt.getEntityPlayer();
 		if (player == null) return;
 
-		final World world = player.worldObj;
+		final World world = player.world;
 		if (world == null) return;
 
-		final int x = MathHelper.floor_double(player.posX);
-		final int y = MathHelper.floor_double(player.getEntityBoundingBox().minY) - 1;
-		final int z = MathHelper.floor_double(player.posZ);
+		final int x = MathHelper.floor(player.posX);
+		final int y = MathHelper.floor(player.getEntityBoundingBox().minY) - 1;
+		final int z = MathHelper.floor(player.posZ);
 		final BlockPos pos = new BlockPos(x, y, z);
 		final Block block = world.getBlockState(pos).getBlock();
 

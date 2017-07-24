@@ -22,13 +22,13 @@ public class PlayerActionEvent extends NetworkEvent {
 
 	@Override
 	protected void readFromStream(PacketBuffer input) {
-		int typeId = input.readVarIntFromBuffer();
+		int typeId = input.readVarInt();
 		type = EnumUtils.fromOrdinal(Type.class, typeId);
 	}
 
 	@Override
 	protected void writeToStream(PacketBuffer output) {
-		output.writeVarIntToBuffer(type.ordinal());
+		output.writeVarInt(type.ordinal());
 	}
 
 }

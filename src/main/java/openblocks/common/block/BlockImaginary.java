@@ -180,12 +180,12 @@ public class BlockImaginary extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean something) {
 		TileEntityImaginary te = getTileEntity(world, pos, TileEntityImaginary.class);
 		if (te != null && te.is(Property.SOLID, entity)) {
 			final Orientation orientation = state.getValue(getPropertyOrientation());

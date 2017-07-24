@@ -35,13 +35,12 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				if (stack.getItem() instanceof ItemImaginary) {
 					if (gotCrayon || ItemImaginary.getUses(stack) < ItemImaginary.CRAFTING_COST) return false;
 					gotCrayon = true;
 				} else if (stack.getItem() == Items.PAPER) {
 					if (gotPaper) return false;
-
 					gotPaper = true;
 				} else return false;
 			}
@@ -54,14 +53,14 @@ public class CrayonGlassesRecipe extends ShapelessRecipes {
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if (stack != null && stack.getItem() instanceof ItemImaginary) {
+			if (!stack.isEmpty() && stack.getItem() instanceof ItemImaginary) {
 				NBTTagCompound tag = ItemUtils.getItemTag(stack);
 				int color = tag.getInteger(ItemImaginary.TAG_COLOR);
 				return OpenBlocks.Items.crayonGlasses.createCrayonGlasses(color);
 			}
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

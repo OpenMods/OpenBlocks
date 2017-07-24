@@ -47,26 +47,26 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote && !EXTRA_PROJECTILE_CLASSES.isEmpty()) predictOtherProjectiles();
+		if (!world.isRemote && !EXTRA_PROJECTILE_CLASSES.isEmpty()) predictOtherProjectiles();
 
 		tickCounter--;
 		if (tickCounter == 0) {
 			tickCounter = -1;
 			strength = 0;
-			worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.target);
+			world.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.target, false);
 		}
 	}
 
 	private void predictOtherProjectiles() {
-		final List<Entity> projectiles = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
+		final List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, getBB().expand(10, 10, 10), PROJECTILE_SELECTOR);
 
 		IBlockState state = null;
 
 		for (Entity projectile : projectiles) {
 			RayTraceResult hit = EntityUtils.raytraceEntity(projectile);
 			if (hit.typeOfHit == Type.BLOCK && pos.equals(hit.getBlockPos())) {
-				if (state == null) state = worldObj.getBlockState(getPos());
-				Blocks.target.onTargetHit(worldObj, pos, state, hit.hitVec);
+				if (state == null) state = world.getBlockState(getPos());
+				Blocks.target.onTargetHit(world, pos, state, hit.hitVec);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ public class TileEntityTarget extends OpenTileEntity implements ISurfaceAttachme
 	public void setRedstoneStrength(int strength) {
 		this.strength = strength;
 		tickCounter = 10;
-		worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.target);
+		world.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.target, false);
 	}
 
 	@Override

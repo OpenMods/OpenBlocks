@@ -56,8 +56,8 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && hand == EnumHand.MAIN_HAND) {
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == EnumHand.MAIN_HAND) {
 			if (getOrientation().down() == EnumFacing.DOWN) {
 				angle.set(angle.get() + (player.isSneaking()? -10f : +10f));
 				sync();
@@ -73,7 +73,7 @@ public class TileEntityFlag extends SyncedTileEntity implements IPlaceAwareTile,
 		final EnumFacing rotation = getOrientation().up();
 		if (rotation == EnumFacing.UP) {
 			final float playerAngle = placer.rotationYawHead;
-			final int angle = MathHelper.floor_float(playerAngle / 10) * 10;
+			final int angle = MathHelper.floor(playerAngle / 10) * 10;
 			this.angle.set(angle);
 			setStateAngle(angle);
 		}

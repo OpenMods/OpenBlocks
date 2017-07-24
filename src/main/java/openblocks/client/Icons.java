@@ -45,7 +45,7 @@ public class Icons {
 		@Override
 		public void draw(double alpha, double scale) {
 			Preconditions.checkNotNull(icon);
-			GlStateManager.color(r, g, b, MathHelper.floor_double(255 * alpha));
+			GlStateManager.color(r, g, b, MathHelper.floor(255 * alpha));
 			final Tessellator tes = Tessellator.getInstance();
 			final VertexBuffer wr = tes.getBuffer();
 			wr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

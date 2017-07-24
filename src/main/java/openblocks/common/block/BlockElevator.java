@@ -85,12 +85,15 @@ public class BlockElevator extends OpenBlock implements IElevatorBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (hand == EnumHand.MAIN_HAND && heldItem != null) {
-			Set<ColorMeta> metas = ColorMeta.fromStack(heldItem);
-			if (!metas.isEmpty()) {
-				final ColorMeta meta = CollectionUtils.getRandom(metas);
-				return world.setBlockState(pos, state.withProperty(COLOR, meta));
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (hand == EnumHand.MAIN_HAND) {
+			final ItemStack heldItem = player.getHeldItemMainhand();
+			if (!heldItem.isEmpty()) {
+				Set<ColorMeta> metas = ColorMeta.fromStack(heldItem);
+				if (!metas.isEmpty()) {
+					final ColorMeta meta = CollectionUtils.getRandom(metas);
+					return world.setBlockState(pos, state.withProperty(COLOR, meta));
+				}
 			}
 		}
 		return false;

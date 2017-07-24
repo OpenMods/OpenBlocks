@@ -322,10 +322,10 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 
 	@Override
 	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		return getPaintedBlockProperty(worldIn, blockState, pos, new IWorldBlockPropertyGetter<AxisAlignedBB>() {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		return getPaintedBlockProperty(worldIn, blockState, pos, new IBlockPropertyGetter<AxisAlignedBB>() {
 			@Override
-			public AxisAlignedBB get(IBlockState state, World world, BlockPos pos) {
+			public AxisAlignedBB get(IBlockState state, IBlockAccess world, BlockPos pos) {
 				return state.getCollisionBoundingBox(world, pos);
 			}
 		}, FULL_BLOCK_AABB);
@@ -342,11 +342,11 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, final @Nullable Entity entityIn) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, final AxisAlignedBB entityBox, final List<AxisAlignedBB> collidingBoxes, final @Nullable Entity entityIn, final boolean p_185477_7_) {
 		getPaintedBlockProperty(worldIn, state, pos, new IWorldBlockPropertyGetter<Void>() {
 			@Override
 			public Void get(IBlockState state, World world, BlockPos pos) {
-				state.addCollisionBoxToList(world, pos, entityBox, collidingBoxes, entityIn);
+				state.addCollisionBoxToList(world, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
 				return null;
 			}
 		}, new IWorldBlockPropertyGetter<Void>() {
@@ -453,7 +453,7 @@ public class BlockCanvas extends OpenBlock implements IPaintableBlock {
 			public Float get(IBlockState state, World world, BlockPos pos) {
 				return state.getBlock().getExplosionResistance(world, pos, exploder, explosion);
 			}
-		}, super.getExplosionResistance(exploder));
+		}, super.getExplosionResistance(world, pos, exploder, explosion));
 	}
 
 	@Override

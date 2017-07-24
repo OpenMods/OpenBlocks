@@ -46,7 +46,7 @@ public class BlockPath extends OpenBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
 
@@ -56,8 +56,8 @@ public class BlockPath extends OpenBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
-		if (!world.isRemote && !isNeighborBlockSolid(world, pos, EnumFacing.DOWN)) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour, BlockPos neighbourPos) {
+		if (!world.isRemote && neighbourPos.equals(pos.down()) && !isNeighborBlockSolid(world, pos, EnumFacing.DOWN)) { // TODO 1.11 verify
 			world.destroyBlock(pos, true);
 		}
 	}

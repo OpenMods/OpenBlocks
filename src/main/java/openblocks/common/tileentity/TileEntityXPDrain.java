@@ -22,15 +22,15 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			final List<EntityXPOrb> xpOrbsOnGrid = getXPOrbsOnGrid();
 			final List<EntityPlayer> playersOnGrid = getPlayersOnGrid();
 
 			if (!xpOrbsOnGrid.isEmpty() || !playersOnGrid.isEmpty()) {
 				final BlockPos down = getPos().down();
 
-				if (worldObj.isBlockLoaded(down)) {
-					final TileEntity te = worldObj.getTileEntity(down);
+				if (world.isBlockLoaded(down)) {
+					final TileEntity te = world.getTileEntity(down);
 
 					if (te != null && !te.isInvalid()) {
 						final IFluidHandler maybeHandler = CompatibilityUtils.getFluidHandler(te, EnumFacing.UP);
@@ -68,8 +68,8 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 
 		if (finallyAcceptedLiquid <= 0) return;
 
-		if (OpenMods.proxy.getTicks(worldObj) % 4 == 0) {
-			playSoundAtBlock(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.1F, 0.5F * ((worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.7F + 1.8F));
+		if (OpenMods.proxy.getTicks(world) % 4 == 0) {
+			playSoundAtBlock(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 0.1F, 0.5F * ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.8F));
 		}
 
 		EnchantmentUtils.addPlayerXP(player, -acceptedXP);
@@ -88,11 +88,11 @@ public class TileEntityXPDrain extends OpenTileEntity implements ITickable {
 	}
 
 	protected List<EntityPlayer> getPlayersOnGrid() {
-		return worldObj.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.singleBlock(pos));
+		return world.getEntitiesWithinAABB(EntityPlayer.class, BlockUtils.singleBlock(pos));
 	}
 
 	protected List<EntityXPOrb> getXPOrbsOnGrid() {
-		return worldObj.getEntitiesWithinAABB(EntityXPOrb.class, BlockUtils.aabbOffset(pos, 0, 0, 0, 1, 0.3, 1));
+		return world.getEntitiesWithinAABB(EntityXPOrb.class, BlockUtils.aabbOffset(pos, 0, 0, 0, 1, 0.3, 1));
 	}
 
 }

@@ -133,7 +133,7 @@ public class HeightMapData extends WorldSavedData {
 		centerX = input.readInt();
 		centerZ = input.readInt();
 		scale = input.readByte();
-		final int length = input.readVarIntFromBuffer();
+		final int length = input.readVarInt();
 		layers = new LayerData[length];
 		for (int i = 0; i < length; i++) {
 			LayerData layer = new LayerData();
@@ -147,7 +147,7 @@ public class HeightMapData extends WorldSavedData {
 		output.writeInt(centerX);
 		output.writeInt(centerZ);
 		output.writeByte(scale);
-		output.writeVarIntToBuffer(layers.length);
+		output.writeVarInt(layers.length);
 		for (LayerData data : layers)
 			data.writeToStream(output);
 	}

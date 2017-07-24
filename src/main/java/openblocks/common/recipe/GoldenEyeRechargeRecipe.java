@@ -20,12 +20,12 @@ public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
-		ItemStack golden = null;
+		ItemStack golden = ItemStack.EMPTY;
 		int enderCount = 0;
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null) continue;
+			if (stack.isEmpty()) continue;
 
 			Item item = stack.getItem();
 			if (item instanceof ItemGoldenEye) golden = stack;
@@ -33,24 +33,24 @@ public class GoldenEyeRechargeRecipe extends ShapelessOreRecipe {
 			else return false;
 		}
 
-		return golden != null && enderCount > 0 && golden.getItemDamage() - enderCount * PEARL_RECHARGE >= 0;
+		return !golden.isEmpty() && enderCount > 0 && golden.getItemDamage() - enderCount * PEARL_RECHARGE >= 0;
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inventory) {
-		ItemStack golden = null;
+		ItemStack golden = ItemStack.EMPTY;
 		int enderCount = 0;
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null) continue;
+			if (stack.isEmpty()) continue;
 
 			Item item = stack.getItem();
 			if (item instanceof ItemGoldenEye) golden = stack;
 			else if (item instanceof ItemEnderPearl) enderCount++;
 		}
 
-		if (golden == null) return null;
+		if (golden.isEmpty()) return ItemStack.EMPTY;
 
 		ItemStack result = golden.copy();
 		result.setItemDamage(golden.getItemDamage() - enderCount * PEARL_RECHARGE);

@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -106,7 +107,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 			public void onSync(Set<ISyncableObject> changes) {
 				if (changes.contains(xpOutputs) || changes.contains(itemOutputs)) {
 					updateOutputStates();
-					worldObj.markBlockRangeForRenderUpdate(pos, pos);
+					world.markBlockRangeForRenderUpdate(pos, pos);
 				}
 			}
 
@@ -175,11 +176,11 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 		if (vacuumDisabled.get()) return;
 
-		if (worldObj.isRemote) {
-			spawnParticle(EnumParticleTypes.PORTAL, worldObj.rand.nextDouble() - 0.5, worldObj.rand.nextDouble() - 1.0, worldObj.rand.nextDouble() - 0.5);
+		if (world.isRemote) {
+			spawnParticle(EnumParticleTypes.PORTAL, world.rand.nextDouble() - 0.5, world.rand.nextDouble() - 1.0, world.rand.nextDouble() - 0.5);
 		}
 
-		List<Entity> interestingItems = worldObj.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3), entitySelector);
+		List<Entity> interestingItems = world.getEntitiesWithinAABB(Entity.class, getBB().expand(3, 3, 3), entitySelector);
 
 		boolean needsSync = false;
 
@@ -204,20 +205,20 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 
 		}
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			needsSync |= outputToNeighbors();
 			if (needsSync) sync();
 		}
 	}
 
 	private boolean outputToNeighbors() {
-		if (OpenMods.proxy.getTicks(worldObj) % 10 == 0) {
+		if (OpenMods.proxy.getTicks(world) % 10 == 0) {
 			if (needsTankUpdate) {
-				tank.updateNeighbours(worldObj, pos);
+				tank.updateNeighbours(world, pos);
 				needsTankUpdate = false;
 			}
 
-			tank.distributeToSides(50, worldObj, pos, xpOutputs.getValue());
+			tank.distributeToSides(50, world, pos, xpOutputs.getValue());
 			autoInventoryOutput();
 			return true;
 		}
@@ -228,7 +229,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	private void autoInventoryOutput() {
 		final boolean outputSides = itemOutputs.getValue().isEmpty();
 		if (outputSides) return;
-		final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setSides(itemOutputs.getValue());
+		final ItemMover mover = new ItemMover(world, pos).breakAfterFirstTry().randomizeSides().setSides(itemOutputs.getValue());
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (inventory.getStackInSlot(i) != null) {
 				if (mover.pushFromSlot(inventory.getHandler(), i) > 0) break;
@@ -252,9 +253,9 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && hand == EnumHand.MAIN_HAND && player.isSneaking()) {
-			if (heldItem == null) {
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == EnumHand.MAIN_HAND && player.isSneaking()) {
+			if (player.getHeldItemMainhand().isEmpty()) {
 				vacuumDisabled.toggle();
 				return true;
 			}
@@ -263,7 +264,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	public boolean onEntityCollidedWithBlock(Entity entity) {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (entity instanceof EntityItem && !entity.isDead) {
 				final EntityItem item = (EntityItem)entity;
 				final ItemStack toConsume = item.getEntityItem().copy();
@@ -310,7 +311,7 @@ public class TileEntityVacuumHopper extends SyncedTileEntity implements IInvento
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		this.needsTankUpdate = true;
 	}
 

@@ -41,7 +41,7 @@ public class EntitySelectionHandler {
 			final Entity target = mc.objectMouseOver.entityHit;
 			if (target instanceof ISelectAware) {
 				ISelectionRenderer<Entity> renderer = registry.get(mc.objectMouseOver.entityHit.getClass());
-				if (renderer != null) renderer.render(target, mc.thePlayer, evt.getContext(), evt.getPartialTicks());
+				if (renderer != null) renderer.render(target, mc.player, evt.getContext(), evt.getPartialTicks());
 			}
 		}
 	}

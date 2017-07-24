@@ -198,13 +198,13 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 			@Override
 			public void usePlayer(OpenModsFakePlayer fakePlayer) {
-				EntityBlock block = EntityBlock.create(fakePlayer, worldObj, pos);
+				EntityBlock block = EntityBlock.create(fakePlayer, world, pos);
 				if (block != null) {
 					block.setHasAirResistance(false);
 					block.setHasGravity(false);
 					block.motionY = 0.1;
 					blocks.add(block);
-					world.spawnEntityInWorld(block);
+					world.spawnEntity(block);
 				}
 			}
 		});
@@ -221,11 +221,11 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	}
 
 	private void explode() {
-		worldObj.setBlockToAir(pos);
-		worldObj.createExplosion(null, 0.5 + pos.getX(), 0.5 + pos.getY(), 0.5 + pos.getZ(), 2, true);
-		EntityMiniMe miniMe = new EntityMiniMe(worldObj, Objects.firstNonNull(owner, MR_GLITCH));
+		world.setBlockToAir(pos);
+		world.createExplosion(null, 0.5 + pos.getX(), 0.5 + pos.getY(), 0.5 + pos.getZ(), 2, true);
+		EntityMiniMe miniMe = new EntityMiniMe(world, Objects.firstNonNull(owner, MR_GLITCH));
 		miniMe.setPositionAndRotation(0.5 + pos.getX(), 0.5 + pos.getY(), 0.5 + pos.getZ(), 0, 0);
-		worldObj.spawnEntityInWorld(miniMe);
+		world.spawnEntity(miniMe);
 	}
 
 	public State getState() {
@@ -236,14 +236,14 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 	public void update() {
 		State state = getState();
 
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			rotationSpeed = (1 - SPEED_CHANGE_RATE) * rotationSpeed + SPEED_CHANGE_RATE * state.rotationSpeed;
 			rotation += rotationSpeed;
 
 			progressSpeed = (1 - SPEED_CHANGE_RATE) * progressSpeed + SPEED_CHANGE_RATE * state.progressSpeed;
 			progress += progressSpeed;
 		} else {
-			if (worldObj instanceof WorldServer) state.onServerTick(this, (WorldServer)worldObj);
+			if (world instanceof WorldServer) state.onServerTick(this, (WorldServer)world);
 
 			State nextState = state.getNextState(this);
 			if (nextState != null) {
@@ -296,7 +296,7 @@ public class TileEntityGoldenEgg extends SyncedTileEntity implements IPlaceAware
 
 	@Override
 	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if (!worldObj.isRemote && placer instanceof EntityPlayer) {
+		if (!world.isRemote && placer instanceof EntityPlayer) {
 			this.owner = ((EntityPlayer)placer).getGameProfile();
 		}
 	}

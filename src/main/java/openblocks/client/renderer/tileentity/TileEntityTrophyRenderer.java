@@ -97,9 +97,9 @@ public class TileEntityTrophyRenderer extends TileEntitySpecialRenderer<TileEnti
 					GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
 					synchronized (entity) {
-						entity.worldObj = renderWorld;
+						entity.world = renderWorld;
 						renderer.doRender(entity, 0, 0, 0, 0, 0);
-						entity.worldObj = null;
+						entity.world = null;
 					}
 
 					GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);

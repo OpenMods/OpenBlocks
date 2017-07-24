@@ -33,10 +33,10 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
-			if (OpenMods.proxy.getTicks(worldObj) % 10 == 0 && isEnabled()) {
+		if (!world.isRemote) {
+			if (OpenMods.proxy.getTicks(world) % 10 == 0 && isEnabled()) {
 				List<Integer> tmpDataList = Lists.newArrayList();
-				for (Village village : worldObj.villageCollectionObj.getVillageList()) {
+				for (Village village : world.villageCollectionObj.getVillageList()) {
 					if (village.isBlockPosWithinSqVillageRadius(pos)) {
 						tmpDataList.add(village.getVillageRadius());
 						BlockPos d = village.getCenter().subtract(pos);
@@ -52,7 +52,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 				sync();
 				boolean canBreed = canVillagersBreed();
 				if (previousBreedStatus != canBreed) {
-					worldObj.notifyBlockOfStateChange(pos, OpenBlocks.Blocks.villageHighlighter);
+					world.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.villageHighlighter, false);
 					previousBreedStatus = canBreed;
 				}
 			}
@@ -60,7 +60,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	}
 
 	private boolean isEnabled() {
-		final IBlockState state = worldObj.getBlockState(pos);
+		final IBlockState state = world.getBlockState(pos);
 		return state.getBlock() instanceof BlockVillageHighlighter && state.getValue(BlockVillageHighlighter.POWERED);
 	}
 
@@ -81,9 +81,9 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 	}
 
 	public boolean canVillagersBreed() {
-		if (worldObj.isRemote) return false;
+		if (world.isRemote) return false;
 
-		for (Village village : worldObj.villageCollectionObj.getVillageList()) {
+		for (Village village : world.villageCollectionObj.getVillageList()) {
 			if (village.isBlockPosWithinSqVillageRadius(pos)) {
 				int i = (int)(village.getNumVillageDoors() * 0.35D);
 				if (village.getNumVillagers() < i) { return true; }

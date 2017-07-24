@@ -3,6 +3,7 @@ package openblocks.rubbish;
 import java.util.concurrent.Callable;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -95,7 +96,7 @@ public class BrickManager {
 
 	@SubscribeEvent
 	public void onEntityDeath(LivingDropsEvent evt) {
-		if (evt.getEntity().worldObj.isRemote) return;
+		if (evt.getEntity().world.isRemote) return;
 
 		BowelContents tag = getProperty(evt.getEntity());
 
@@ -123,12 +124,12 @@ public class BrickManager {
 	public void onPlayerScared(PlayerActionEvent evt) {
 		if (evt.type == Type.BOO && evt.sender != null) {
 			final EntityPlayer player = evt.sender;
-			player.worldObj.playSound(null, player.getPosition(), OpenBlocks.Sounds.PLAYER_WHOOPS, SoundCategory.PLAYERS, 1, 1);
+			player.world.playSound(null, player.getPosition(), OpenBlocks.Sounds.PLAYER_WHOOPS, SoundCategory.PLAYERS, 1, 1);
 
 			if (tryDecrementBrick(player)) {
 				EntityItem drop = createBrick(player);
 				drop.setDefaultPickupDelay();
-				player.worldObj.spawnEntityInWorld(drop);
+				player.world.spawnEntity(drop);
 				player.addStat(OpenBlocks.brickAchievement);
 				player.addStat(OpenBlocks.brickStat, 1);
 			}
@@ -142,7 +143,7 @@ public class BrickManager {
 		double dx = Math.cos(rotation);
 		double dz = Math.sin(rotation);
 
-		drop.moveEntity(0.75 * dx, 0.5, 0.75 * dz);
+		drop.move(MoverType.SELF, 0.75 * dx, 0.5, 0.75 * dz);
 
 		drop.motionX = 0.5 * dx;
 		drop.motionY = 0.2;

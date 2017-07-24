@@ -64,20 +64,20 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	}
 
 	private static boolean isItemHangglider(ItemStack stack) {
-		return stack != null && stack.getItem() instanceof ItemHangGlider;
+		return !stack.isEmpty() && stack.getItem() instanceof ItemHangGlider;
 	}
 
 	private static boolean isGliderValid(EntityPlayer player, EntityHangGlider glider) {
 		if (player == null || player.isDead || glider == null || glider.isDead) return false;
 
 		if (!isItemHangglider(player.getHeldItemMainhand()) && !isItemHangglider(player.getHeldItemOffhand())) return false;
-		if (player.worldObj.provider.getDimension() != glider.worldObj.provider.getDimension()) return false;
+		if (player.world.provider.getDimension() != glider.world.provider.getDimension()) return false;
 		if (player.isElytraFlying() || player.isSpectator()) return false;
 		return true;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void updateGliders(World worldObj) {
+	public static void updateGliders(World world) {
 		for (Map.Entry<EntityPlayer, EntityHangGlider> e : gliderMap.entrySet()) {
 			EntityPlayer player = e.getKey();
 			EntityHangGlider glider = e.getValue();
@@ -106,7 +106,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 	public void readSpawnData(ByteBuf data) {
 		int playerId = data.readInt();
 
-		Entity e = worldObj.getEntityByID(playerId);
+		Entity e = world.getEntityByID(playerId);
 
 		if (e instanceof EntityPlayer) {
 			player = (EntityPlayer)e;
@@ -154,7 +154,7 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 
 		boolean isDeployed = !player.onGround && !player.isInWater() && !player.isPlayerSleeping();
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			this.dataManager.set(PROPERTY_DEPLOYED, isDeployed);
 			fixPositions(player, false);
 		}
@@ -228,18 +228,18 @@ public class EntityHangGlider extends Entity implements IEntityAdditionalSpawnDa
 		final boolean strong = (noise > 0.7? true : false);
 		final int bonus = (strong? THERMAL_STRONG_BONUS_HEIGTH : 0);
 		final BlockPos pos = player.getPosition();
-		final float biomeRain = worldObj.getBiomeForCoordsBody(pos).getRainfall();
+		final float biomeRain = world.getBiomeForCoordsBody(pos).getRainfall();
 
 		noise *= Math.min((Math.max((player.posY - THERMAL_HEIGTH_MIN), 0d) / (THERMAL_HEIGTH_OPT - THERMAL_HEIGTH_MIN)), 1d);
 		noise *= Math.min((Math.max((THERMAL_HEIGTH_MAX + bonus - player.posY), 0d) / (THERMAL_HEIGTH_MAX - THERMAL_HEIGTH_OPT + bonus / 4)), 1d);
 
-		int worldTime = (int)(worldObj.getWorldTime() % 24000);
+		int worldTime = (int)(world.getWorldTime() % 24000);
 		noise *= Math.min((worldTime / 1000d), 1);
 		noise *= Math.min((Math.max((12000 - worldTime), 0) / 1000d), 1);
 
 		if (player.dimension != 0)
 			noise = 0;
-		else if (worldObj.isRaining() && !strong)
+		else if (world.isRaining() && !strong)
 			noise = (biomeRain > 0? -0.5 : 0);
 		return noise;
 	}

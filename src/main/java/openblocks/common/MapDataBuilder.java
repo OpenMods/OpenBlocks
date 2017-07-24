@@ -246,8 +246,8 @@ public class MapDataBuilder {
 
 		for (ChunkJob job : jobs) {
 			ChunkPos chunk = job.chunk;
-			double dx = chunk.getCenterXPos() - x;
-			double dz = chunk.getCenterZPosition() - z;
+			double dx = chunk.getXStart() + 7.5 - x;
+			double dz = chunk.getZStart() + 7.5 - z;
 			distances.add(new JobDistance(dx * dx + dz * dz, job));
 		}
 

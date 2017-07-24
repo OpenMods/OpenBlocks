@@ -22,7 +22,7 @@ public class MountFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
-		final World world = target.worldObj;
+		final World world = target.world;
 
 		AxisAlignedBB around = target.getEntityBoundingBox().expand(40, 40, 40);
 		List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, around, SAFE_SELECTOR);

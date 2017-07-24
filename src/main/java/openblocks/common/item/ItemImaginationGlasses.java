@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openblocks.OpenBlocks;
@@ -45,7 +46,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 		}
 
 		@Override
-		public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+		public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 			for (ColorMeta color : ColorMeta.getAllColors())
 				result.add(createCrayonGlasses(color.rgb));
 		}
@@ -134,7 +135,7 @@ public class ItemImaginationGlasses extends ItemArmor {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		result.add(new ItemStack(this));
 	}
 }

@@ -36,26 +36,22 @@ public class TileEntityDrawingTable extends SyncedTileEntity implements IHasGui,
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "drawingtable", true, 2) {
 		@Override
 		public boolean isItemValidForSlot(int slotId, ItemStack itemstack) {
-			return itemstack == null || (slotId == SLOT_INPUT && MetasGeneric.unpreparedStencil.isA(itemstack));
+			return itemstack.isEmpty() || (slotId == SLOT_INPUT && MetasGeneric.unpreparedStencil.isA(itemstack));
 		}
 
 		@Override
 		public void onInventoryChanged(int slotNumber) {
 			if (slotNumber == SLOT_INPUT) {
-				final ItemStack input = inventoryContents[SLOT_INPUT];
-				if (input != null && MetasGeneric.unpreparedStencil.isA(input)) {
-					final ItemStack output = new ItemStack(OpenBlocks.Items.stencil, input.stackSize, selectedPattern.get().ordinal());
-					inventoryContents[SLOT_OUTPUT] = output;
-				} else {
-					inventoryContents[SLOT_OUTPUT] = null;
+				final ItemStack input = inventoryContents.get(SLOT_INPUT);
+				if (MetasGeneric.unpreparedStencil.isA(input)) {
+					final ItemStack output = new ItemStack(OpenBlocks.Items.stencil, input.getCount(), selectedPattern.get().ordinal());
+					inventoryContents.set(SLOT_OUTPUT, output);
 				}
 			} else if (slotNumber == SLOT_OUTPUT) {
-				final ItemStack output = inventoryContents[SLOT_OUTPUT];
-				if (output != null && output.getItem() instanceof ItemStencil) {
-					final ItemStack input = MetasGeneric.unpreparedStencil.newItemStack(output.stackSize);
-					inventoryContents[SLOT_INPUT] = input;
-				} else {
-					inventoryContents[SLOT_INPUT] = null;
+				final ItemStack output = inventoryContents.get(SLOT_OUTPUT);
+				if (output.getItem() instanceof ItemStencil) {
+					final ItemStack input = MetasGeneric.unpreparedStencil.newItemStack(output.getCount());
+					inventoryContents.set(SLOT_INPUT, input);
 				}
 			}
 

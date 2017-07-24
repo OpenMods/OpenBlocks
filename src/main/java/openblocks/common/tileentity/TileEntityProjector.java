@@ -49,7 +49,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	private final GenericInventory inventory = new TileEntityInventory(this, "openblocks.projector", false, 1) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack stack) {
-			if (stack == null) return false;
+			if (stack.isEmpty()) return false;
 			Item item = stack.getItem();
 			return item instanceof ItemHeightMap || item instanceof ItemEmptyMap;
 		}
@@ -64,15 +64,15 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 			super.onInventoryChanged(slotNumber);
 
 			if (!isInvalid()) {
-				if (!worldObj.isRemote) {
+				if (!world.isRemote) {
 					ItemStack stack = getStackInSlot(slotNumber);
-					if (stack != null && stack.stackSize == 1) {
+					if (stack.getCount() == 1) {
 						Item item = stack.getItem();
 						if (item instanceof ItemHeightMap) {
 							int mapId = stack.getItemDamage();
 							TileEntityProjector.this.mapId.set(mapId);
-						} else if (item instanceof ItemEmptyMap && worldObj != null) {
-							ItemStack newStack = ItemEmptyMap.upgradeToMap(worldObj, stack);
+						} else if (item instanceof ItemEmptyMap && world != null) {
+							ItemStack newStack = ItemEmptyMap.upgradeToMap(world, stack);
 							setInventorySlotContents(slotNumber, newStack);
 						} else TileEntityProjector.this.mapId.set(-1);
 					} else TileEntityProjector.this.mapId.set(-1);
@@ -80,11 +80,11 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 					final boolean isActive = TileEntityProjector.this.mapId() >= 0;
 					final BlockPos pos = getPos();
-					final IBlockState oldState = worldObj.getBlockState(pos);
+					final IBlockState oldState = world.getBlockState(pos);
 					final IBlockState newState = oldState.withProperty(BlockProjector.ACTIVE, isActive);
 
 					if (oldState != newState) {
-						worldObj.setBlockState(pos, newState, BlockNotifyFlags.ALL);
+						world.setBlockState(pos, newState, BlockNotifyFlags.ALL);
 					}
 				}
 
@@ -158,7 +158,7 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	public void onSync(Set<ISyncableObject> changes) {
 		if (changes.contains(mapId)) {
 			int mapId = this.mapId.get();
-			if (mapId >= 0 && MapDataManager.getMapData(worldObj, mapId).isEmpty()) MapDataManager.requestMapData(worldObj, mapId);
+			if (mapId >= 0 && MapDataManager.getMapData(world, mapId).isEmpty()) MapDataManager.requestMapData(world, mapId);
 		}
 	}
 
@@ -179,14 +179,14 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 
 	public HeightMapData getMap() {
 		int mapId = this.mapId.get();
-		if (worldObj == null || mapId < 0) return null;
+		if (world == null || mapId < 0) return null;
 
-		return MapDataManager.getMapData(worldObj, mapId);
+		return MapDataManager.getMapData(world, mapId);
 	}
 
 	public void markMapDirty() {
 		int mapId = this.mapId.get();
-		if (worldObj != null || mapId < 0) MapDataManager.instance.markDataUpdated(worldObj, mapId);
+		if (world != null || mapId < 0) MapDataManager.instance.markDataUpdated(world, mapId);
 	}
 
 	@Override
@@ -227,8 +227,8 @@ public class TileEntityProjector extends SyncedTileEntity implements IHasGui, II
 	}
 
 	private void updateAsmState() {
-		if (asm != null && worldObj != null && worldObj.isRemote) {
-			final IBlockState state = worldObj.getBlockState(this.pos);
+		if (asm != null && world != null && world.isRemote) {
+			final IBlockState state = world.getBlockState(this.pos);
 			if (state.getValue(BlockProjector.ACTIVE)) {
 				if (asm.currentState().equals("default")) {
 					updateLastChangeTime();

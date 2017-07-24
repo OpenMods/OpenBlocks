@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -212,7 +213,7 @@ public class PlayerDeathHandler {
 			final IItemHandler handler = loot.getHandler();
 			for (EntityItem entityItem : this.loot) {
 				ItemStack stack = entityItem.getEntityItem();
-				if (stack != null) ItemHandlerHelper.insertItemStacked(handler, stack, false);
+				if (!stack.isEmpty()) ItemHandlerHelper.insertItemStacked(handler, stack, false);
 			}
 			return loot;
 		}
@@ -311,7 +312,7 @@ public class PlayerDeathHandler {
 				}
 
 				for (EntityItem drop : loot)
-					world.spawnEntityInWorld(drop);
+					world.spawnEntity(drop);
 			}
 		}
 	}
@@ -322,7 +323,7 @@ public class PlayerDeathHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
 	public void onPlayerDrops(PlayerDropsEvent event) {
-		World world = event.getEntityPlayer().worldObj;
+		World world = event.getEntityPlayer().world;
 		if (world.isRemote) return;
 
 		if (Config.debugGraves) dumpDebugInfo(event);
@@ -405,17 +406,15 @@ public class PlayerDeathHandler {
 		if (!Config.requiresGraveInInv || player.capabilities.isCreativeMode) return true;
 
 		final Item graveItem = Item.getItemFromBlock(OpenBlocks.Blocks.grave);
-		if (graveItem == null) return true;
+		if (graveItem == Items.AIR) return true;
 
 		final Iterator<EntityItem> lootIter = graveLoot.iterator();
 		while (lootIter.hasNext()) {
 			final EntityItem drop = lootIter.next();
 			final ItemStack itemStack = drop.getEntityItem();
-			if (itemStack != null &&
-					itemStack.getItem() == graveItem &&
-					itemStack.stackSize > 0) {
-
-				if (--itemStack.stackSize <= 0) {
+			if (itemStack.getItem() == graveItem && !itemStack.isEmpty()) {
+				itemStack.shrink(1);
+				if (itemStack.isEmpty()) {
 					lootIter.remove();
 				} else {
 					drop.setEntityItemStack(itemStack);

@@ -22,6 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.storage.WorldInfo;
@@ -68,17 +69,17 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
-			if (Config.spawnSkeletons && worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && worldObj.rand.nextDouble() < Config.skeletonSpawnRate) {
+		if (!world.isRemote) {
+			if (Config.spawnSkeletons && world.getDifficulty() != EnumDifficulty.PEACEFUL && world.rand.nextDouble() < Config.skeletonSpawnRate) {
 
-				List<EntityLiving> mobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, getBB().expand(7, 7, 7), IS_MOB);
+				List<EntityLiving> mobs = world.getEntitiesWithinAABB(EntityLiving.class, getBB().expand(7, 7, 7), IS_MOB);
 
 				if (mobs.size() < 5) {
-					double chance = worldObj.rand.nextDouble();
-					EntityLiving living = chance < 0.5? new EntitySkeleton(worldObj) : new EntityBat(worldObj);
-					living.setPositionAndRotation(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, worldObj.rand.nextFloat() * 360, 0);
+					double chance = world.rand.nextDouble();
+					EntityLiving living = chance < 0.5? new EntitySkeleton(world) : new EntityBat(world);
+					living.setPositionAndRotation(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, world.rand.nextFloat() * 360, 0);
 					if (living.getCanSpawnHere()) {
-						worldObj.spawnEntityInWorld(living);
+						world.spawnEntity(living);
 					}
 				}
 			}
@@ -108,7 +109,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 
 	@Override
 	public void onBlockPlacedBy(IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if ((placer instanceof EntityPlayer) && !(placer instanceof FakePlayer)) {
 				EntityPlayer player = (EntityPlayer)placer;
 
@@ -152,7 +153,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	protected void updateBlockBelow() {
-		IBlockState block = worldObj.getBlockState(pos.down());
+		IBlockState block = world.getBlockState(pos.down());
 		final Material material = block.getMaterial();
 		onSoil.set(material == Material.GRASS || material == Material.GROUND);
 	}
@@ -163,7 +164,7 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		updateBlockBelow();
 		sync();
 	}
@@ -175,13 +176,14 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (player.worldObj.isRemote || hand != EnumHand.MAIN_HAND) return false;
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (player.world.isRemote || hand != EnumHand.MAIN_HAND) return false;
 
-		if (held != null && held.getItem().getToolClasses(held).contains("shovel")) {
+		final ItemStack held = player.getHeldItemMainhand();
+		if (!held.isEmpty() && held.getItem().getToolClasses(held).contains("shovel")) {
 			robGrave(player, held);
 		} else if (deathMessage != null) {
-			player.addChatMessage(deathMessage);
+			player.sendMessage(deathMessage);
 		}
 
 		return true;
@@ -191,25 +193,25 @@ public class TileEntityGrave extends SyncedTileEntity implements IPlaceAwareTile
 		boolean dropped = false;
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			final ItemStack stack = inventory.getStackInSlot(i);
-			if (stack != null) {
+			if (!stack.isEmpty()) {
 				dropped = true;
-				BlockUtils.dropItemStackInWorld(worldObj, pos, stack);
+				BlockUtils.dropItemStackInWorld(world, pos, stack);
 			}
 		}
 
 		inventory.clearAndSetSlotCount(0);
 
 		if (dropped) {
-			worldObj.playEvent(null, 2001, pos, Block.getIdFromBlock(Blocks.DIRT));
-			if (worldObj.rand.nextDouble() < Config.graveSpecialAction) ohNoes(player);
+			world.playEvent(null, 2001, pos, Block.getIdFromBlock(Blocks.DIRT));
+			if (world.rand.nextDouble() < Config.graveSpecialAction) ohNoes(player);
 			held.damageItem(2, player);
 		}
 	}
 
 	private void ohNoes(EntityPlayer player) {
-		worldObj.playSound(null, player.getPosition(), OpenBlocks.Sounds.BLOCK_GRAVE_ROB, SoundCategory.BLOCKS, 1, 1);
+		world.playSound(null, player.getPosition(), OpenBlocks.Sounds.BLOCK_GRAVE_ROB, SoundCategory.BLOCKS, 1, 1);
 
-		final WorldInfo worldInfo = worldObj.getWorldInfo();
+		final WorldInfo worldInfo = world.getWorldInfo();
 		worldInfo.setThunderTime(35 * 20);
 		worldInfo.setRainTime(35 * 20);
 		worldInfo.setThundering(true);

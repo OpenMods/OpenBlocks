@@ -22,6 +22,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -189,22 +190,23 @@ public class ItemImaginary extends ItemOpenBlock {
 			float uses = Math.max(getUses(tag) - mode.cost, 0);
 			tag.setFloat(TAG_USES, uses);
 
-			if (uses <= 0) stack.stackSize = 0;
+			if (uses <= 0) stack.setCount(0);
 		}
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		final ItemStack stack = player.getHeldItem(hand);
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		float uses = getUses(tag);
 		if (uses <= 0) {
-			stack.stackSize = 0;
+			stack.setCount(0);
 			return EnumActionResult.FAIL;
 		}
 
 		if (uses < getMode(tag).cost) return EnumActionResult.FAIL;
 
-		return super.onItemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
 	@Override
@@ -234,7 +236,7 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		result.add(setupValues(new ItemStack(this, 1, DAMAGE_PENCIL), null, PlacementMode.BLOCK));
 		for (ColorMeta color : ColorMeta.getAllColors())
 			result.add(setupValues(new ItemStack(this, 1, DAMAGE_CRAYON), color.rgb, PlacementMode.BLOCK));
@@ -258,10 +260,11 @@ public class ItemImaginary extends ItemOpenBlock {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack stack = player.getHeldItem(hand);
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		if (getUses(tag) <= 0) {
-			stack.stackSize = 0;
+			stack.setCount(0);
 		} else if (player.isSneaking()) {
 			byte modeId = tag.getByte(TAG_MODE);
 			modeId = (byte)((modeId + 1) % PlacementMode.VALUES.length);
@@ -270,7 +273,7 @@ public class ItemImaginary extends ItemOpenBlock {
 			if (world.isRemote) {
 				PlacementMode mode = PlacementMode.VALUES[modeId];
 				TextComponentTranslation modeName = new TextComponentTranslation(mode.name);
-				player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.mode", modeName));
+				player.sendMessage(new TextComponentTranslation("openblocks.misc.mode", modeName));
 			}
 		}
 

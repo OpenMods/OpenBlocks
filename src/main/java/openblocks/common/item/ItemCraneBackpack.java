@@ -80,6 +80,6 @@ public class ItemCraneBackpack extends ItemArmor {
 
 	public static boolean isWearingCrane(EntityLivingBase player) {
 		ItemStack armor = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-		return armor != null && armor.getItem() instanceof ItemCraneBackpack;
+		return !armor.isEmpty() && armor.getItem() instanceof ItemCraneBackpack;
 	}
 }

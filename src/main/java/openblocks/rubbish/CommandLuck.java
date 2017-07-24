@@ -21,21 +21,21 @@ public class CommandLuck implements ICommand {
 
 	@Override
 	public int compareTo(ICommand o) {
-		return NAME.compareTo(o.getCommandName());
+		return NAME.compareTo(o.getName());
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return NAME;
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
+	public String getUsage(ICommandSender icommandsender) {
 		return NAME + " <player> [<amount>]";
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 		return Collections.emptyList();
 	}
 
@@ -64,11 +64,11 @@ public class CommandLuck implements ICommand {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		return sender.canCommandSenderUseCommand(4, NAME); // OP
+		return sender.canUseCommand(4, NAME); // OP
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] params, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] params, BlockPos pos) {
 		if (params.length == 1) {
 			String playerPrefix = params[0];
 			return fiterPlayerNames(playerPrefix);

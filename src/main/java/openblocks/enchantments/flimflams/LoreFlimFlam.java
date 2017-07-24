@@ -78,7 +78,7 @@ public class LoreFlimFlam implements IFlimFlamAction {
 	private static boolean tryAddLore(EntityPlayer target, EntityEquipmentSlot slot) {
 		final ItemStack item = target.getItemStackFromSlot(slot);
 
-		if (item == null) return false;
+		if (item.isEmpty()) return false;
 
 		final NBTTagCompound tag = ItemUtils.getItemTag(item);
 

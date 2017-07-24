@@ -56,9 +56,9 @@ public class BlockSky extends OpenBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour) {
+	public void neighborChanged(IBlockState state, World world, BlockPos blockPos, Block neighbour, BlockPos neigbourPos) {
 		updatePowerState(state, world, blockPos);
-		super.neighborChanged(state, world, blockPos, neighbour);
+		super.neighborChanged(state, world, blockPos, neighbour, neigbourPos);
 	}
 
 	@Override

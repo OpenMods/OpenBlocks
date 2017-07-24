@@ -1,11 +1,11 @@
 package openblocks.common.item;
 
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import openmods.colors.ColorMeta;
@@ -31,7 +31,7 @@ public class ItemElevator extends ItemOpenBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		for (int i = 0; i < 16; i++)
 			result.add(new ItemStack(this, 1, i));
 	}

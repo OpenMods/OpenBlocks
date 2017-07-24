@@ -21,7 +21,7 @@ public class MapCloneRecipe extends CustomRecipeBase {
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null) continue;
+			if (stack.isEmpty()) continue;
 
 			Item item = stack.getItem();
 			if (item instanceof ItemEmptyMap) {
@@ -47,14 +47,14 @@ public class MapCloneRecipe extends CustomRecipeBase {
 	public ItemStack getCraftingResult(InventoryCrafting inventory) {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack item = inventory.getStackInSlot(i);
-			if (item != null && (item.getItem() instanceof ItemHeightMap)) {
+			if (!item.isEmpty() && (item.getItem() instanceof ItemHeightMap)) {
 				ItemStack result = item.copy();
-				result.stackSize = 2;
+				result.setCount(2);
 				return result;
 			}
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

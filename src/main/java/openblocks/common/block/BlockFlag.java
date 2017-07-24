@@ -1,6 +1,5 @@
 package openblocks.common.block;
 
-import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
@@ -15,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -70,7 +70,7 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
 
@@ -115,8 +115,8 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
-		super.neighborChanged(state, world, pos, block);
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos neigbour) {
+		super.neighborChanged(state, world, pos, block, neigbour);
 
 		final Orientation orientation = getOrientation(state);
 		if (!isNeighborBlockSolid(world, pos, orientation.down())) world.destroyBlock(pos, true);
@@ -144,7 +144,7 @@ public class BlockFlag extends OpenBlock.SixDirections {
 	}
 
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(itemIn, 1, DEFAULT_COLOR.vanillaBlockId));
 	}
 

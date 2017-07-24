@@ -17,7 +17,7 @@ public class EndermanBehavior implements ITrophyBehavior {
 		e.motionX = world.rand.nextGaussian();
 		e.motionY = 1;
 		e.motionZ = world.rand.nextGaussian();
-		world.spawnEntityInWorld(e);
+		world.spawnEntity(e);
 		return 10;
 	}
 

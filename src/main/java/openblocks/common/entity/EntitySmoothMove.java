@@ -1,6 +1,7 @@
 package openblocks.common.entity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -67,7 +68,8 @@ public abstract class EntitySmoothMove extends Entity {
 					dy *= scale;
 					dz *= scale;
 				}
-				moveEntity(motionX + dx * damp, motionY + dy * damp, motionZ + dz * damp);
+				// TODO 1.11 validate. again
+				move(MoverType.SELF, motionX + dx * damp, motionY + dy * damp, motionZ + dz * damp);
 			}
 		}
 	}

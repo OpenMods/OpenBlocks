@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -137,7 +138,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		public void handleBookRotation() {
 			this.bookSpreadPrev = this.bookSpread;
 			this.bookRotationPrev = this.bookRotation;
-			EntityPlayer entityplayer = worldObj.getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D, false);
+			EntityPlayer entityplayer = world.getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D, false);
 
 			if (entityplayer != null) {
 				double d0 = entityplayer.posX - (pos.getX() + 0.5F);
@@ -188,11 +189,11 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 			}
 
 			this.bookRotation += f2 * 0.4F;
-			this.bookSpread = MathHelper.clamp_float(this.bookSpread, 0.0F, 1.0F);
+			this.bookSpread = MathHelper.clamp(this.bookSpread, 0.0F, 1.0F);
 			++this.tickCount;
 			this.pageFlipPrev = this.pageFlip;
 			float f = (this.flipT - this.pageFlip) * 0.4F;
-			f = MathHelper.clamp_float(f, -0.2F, 0.2F);
+			f = MathHelper.clamp(f, -0.2F, 0.2F);
 			this.flipA += (f - this.flipA) * 0.9F;
 			this.pageFlip += this.flipA;
 		}
@@ -257,23 +258,23 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	public void update() {
 		bookState.handleBookRotation();
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (automaticSlots.get(AutoSlots.xp)) {
 				if (needsTankUpdate) {
-					tank.updateNeighbours(worldObj, pos);
+					tank.updateNeighbours(world, pos);
 					needsTankUpdate = false;
 				}
 
-				tank.fillFromSides(80, worldObj, pos, xpSides.getValue());
+				tank.fillFromSides(80, world, pos, xpSides.getValue());
 			}
 
 			if (powerCheckCountdown-- <= 0) {
 				powerCheckCountdown = POWER_CHECK_PERIOD;
-				final int power = (int)EnchantmentUtils.getPower(worldObj, getPos());
+				final int power = (int)EnchantmentUtils.getPower(world, getPos());
 				availablePower.set(power);
 			}
 
-			final ItemMover mover = new ItemMover(worldObj, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
+			final ItemMover mover = new ItemMover(world, pos).breakAfterFirstTry().randomizeSides().setMaxSize(1);
 
 			if (shouldAutoOutput() && hasStack(Slots.output)) {
 				mover.setSides(outputSides.getValue()).pushFromSlot(inventory.getHandler(), Slots.output.ordinal());
@@ -295,10 +296,10 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	private void tryEnchantItem() {
 		final ItemStack tool = getStack(Slots.tool);
-		if (tool == null || !tool.isItemEnchantable()) return;
+		if (tool.isEmpty() || !tool.isItemEnchantable()) return;
 
 		final ItemStack lapis = getStack(Slots.lapis);
-		if (lapis == null) return;
+		if (lapis.isEmpty()) return;
 
 		if (hasStack(Slots.output)) return;
 
@@ -308,7 +309,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 		final VanillaEnchantLogic logic = new VanillaEnchantLogic(seed);
 		if (!logic.setup(tool, selectedLevel.get(), power)) return;
 
-		if (lapis.stackSize < logic.getLapisCost()) return;
+		if (lapis.getCount() < logic.getLapisCost()) return;
 
 		final int levelsRequirement = logic.getLevelRequirement();
 		final int availableXp = LiquidXpUtils.liquidToXpRatio(tank.getFluidAmount());
@@ -322,7 +323,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 		setStack(Slots.output, logic.enchant());
 
-		setStack(Slots.tool, null);
+		setStack(Slots.tool, ItemStack.EMPTY);
 		decrementStack(Slots.lapis, logic.getLapisCost());
 		tank.drain(liquidXpCost, true);
 
@@ -347,7 +348,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	private boolean hasSpace(Slots slot) {
 		final ItemStack stackInSlot = getStack(slot);
-		return stackInSlot == null || stackInSlot.stackSize < stackInSlot.getMaxStackSize();
+		return stackInSlot.getCount() < stackInSlot.getMaxStackSize();
 	}
 
 	public void setStack(Slots slot, ItemStack stack) {
@@ -356,10 +357,8 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 
 	private void decrementStack(Slots slot, int amount) {
 		ItemStack stack = getStack(slot);
-		stack.stackSize -= amount;
-		if (stack.stackSize <= 0)
-			stack = null;
-		setStack(slot, stack);
+		stack.shrink(amount);
+		markDirty();
 	}
 
 	private ItemStack getStack(Slots slot) {
@@ -473,7 +472,7 @@ public class TileEntityAutoEnchantmentTable extends SyncedTileEntity implements 
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		this.needsTankUpdate = true;
 	}
 

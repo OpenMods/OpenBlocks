@@ -22,7 +22,7 @@ public class BlockBuilderGuide extends BlockGuide {
 	@Override
 	protected boolean areButtonsActive(EntityPlayer player) {
 		final ItemStack heldItem = player.getHeldItemMainhand();
-		return heldItem == null || !(heldItem.getItem() instanceof ItemBlock);
+		return heldItem.isEmpty() || !(heldItem.getItem() instanceof ItemBlock);
 	}
 
 	@Override

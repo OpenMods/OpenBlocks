@@ -12,14 +12,14 @@ public class SnowballsFlimFlam implements IFlimFlamAction {
 
 	@Override
 	public boolean execute(EntityPlayerMP target) {
-		final World world = target.worldObj;
+		final World world = target.world;
 		for (int i = 0; i < 200; i++) {
 			EntitySnowball snowball = new EntitySnowball(world, target.posX, target.posY + 4, target.posZ);
 			snowball.motionX = RANDOM.nextGaussian() * 0.05;
 			snowball.motionY = 1;
 			snowball.motionZ = RANDOM.nextGaussian() * 0.05;
 
-			world.spawnEntityInWorld(snowball);
+			world.spawnEntity(snowball);
 		}
 
 		return true;

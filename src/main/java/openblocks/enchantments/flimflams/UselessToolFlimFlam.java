@@ -112,7 +112,7 @@ public class UselessToolFlimFlam implements IFlimFlamAction {
 
 		dropped.addEnchantment(data.enchantmentobj, random.nextInt(data.enchantmentLevel) + 1);
 		dropped.setItemDamage(dropped.getMaxDamage());
-		BlockUtils.dropItemStackInWorld(target.worldObj, target.posX, target.posY, target.posZ, dropped);
+		BlockUtils.dropItemStackInWorld(target.world, target.posX, target.posY, target.posZ, dropped);
 
 		return true;
 	}

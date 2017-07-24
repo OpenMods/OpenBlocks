@@ -22,13 +22,15 @@ public class ItemSpongeOnAStick extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		final ItemStack stack = player.getHeldItem(hand);
 		return soakUp(world, pos, player, stack)? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
 
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack stack = player.getHeldItem(hand);
 		boolean result = soakUp(world, player.getPosition(), player, stack);
 		return ActionResult.newResult(result? EnumActionResult.SUCCESS : EnumActionResult.FAIL, stack);
 	}
@@ -56,13 +58,12 @@ public class ItemSpongeOnAStick extends Item {
 		}
 
 		if (hitLava) {
-			stack.stackSize = 0;
+			stack.setCount(0);
 			player.setFire(6);
 		}
 
 		if (absorbedAnything) {
-			if (damage >= Config.spongeMaxDamage) stack.stackSize = 0;
-			else stack.setItemDamage(damage);
+			stack.damageItem(1, player);
 			return true;
 		}
 

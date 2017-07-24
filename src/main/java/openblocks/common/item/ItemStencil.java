@@ -1,7 +1,6 @@
 package openblocks.common.item;
 
 import com.google.common.base.Optional;
-import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -10,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import openblocks.OpenBlocks;
@@ -27,7 +27,7 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List<ItemStack> list) {
+	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, NonNullList<ItemStack> list) {
 		for (StencilPattern stencil : StencilPattern.values())
 			list.add(createItemStack(stencil));
 	}
@@ -46,7 +46,7 @@ public class ItemStencil extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
 		if (CanvasReplaceBlacklist.instance.isAllowedToReplace(world, pos)) {
 			BlockCanvas.replaceBlock(world, pos);
@@ -55,6 +55,7 @@ public class ItemStencil extends Item {
 		final TileEntity te = world.getTileEntity(pos);
 
 		if (te instanceof TileEntityCanvas) {
+			final ItemStack stack = player.getHeldItem(hand);
 			TileEntityCanvas canvas = (TileEntityCanvas)te;
 			int stencilId = stack.getItemDamage();
 			StencilPattern stencil;
@@ -65,7 +66,7 @@ public class ItemStencil extends Item {
 			}
 
 			if (canvas.useStencil(facing, stencil)) {
-				stack.stackSize--;
+				stack.shrink(1);
 				return EnumActionResult.SUCCESS;
 			}
 		}

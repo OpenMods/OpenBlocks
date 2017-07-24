@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -38,13 +39,14 @@ public class ItemGoldenEye extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack stack = player.getHeldItem(hand);
 		if (hand == EnumHand.MAIN_HAND && world instanceof WorldServer && player instanceof EntityPlayerMP) {
-			EntityPlayerMP betterPlayer = (EntityPlayerMP)player;
-			if (player.isSneaking()) tryLearnStructure(stack, (WorldServer)world, betterPlayer);
-			else {
-				if (trySpawnEntity(stack, (WorldServer)world, betterPlayer)) stack.stackSize = 0;
-			}
+			final EntityPlayerMP betterPlayer = (EntityPlayerMP)player;
+			final WorldServer betterWorld = (WorldServer)world;
+			if (player.isSneaking()) tryLearnStructure(stack, betterWorld, betterPlayer);
+			else if (trySpawnEntity(stack, betterWorld, betterPlayer)) stack.setCount(0);
+
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 		}
 
@@ -59,7 +61,7 @@ public class ItemGoldenEye extends Item {
 
 		for (Map.Entry<String, BlockPos> e : nearbyStructures.entrySet()) {
 			BlockPos pos = e.getValue();
-			if (Config.eyeDebug) player.addChatMessage(new TextComponentTranslation(
+			if (Config.eyeDebug) player.sendMessage(new TextComponentTranslation(
 					"openblocks.misc.structure_pos", e.getKey(), pos.getX(), pos.getY(), pos.getZ()));
 
 			double distSq = player.getDistanceSqToCenter(pos);
@@ -71,11 +73,11 @@ public class ItemGoldenEye extends Item {
 		}
 
 		if (!Strings.isNullOrEmpty(newStructureName)) {
-			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.locked_on_structure", new TextComponentTranslation(StructureRegistry.structureNameLocalizationKey(newStructureName))));
+			player.sendMessage(new TextComponentTranslation("openblocks.misc.locked_on_structure", new TextComponentTranslation(StructureRegistry.structureNameLocalizationKey(newStructureName))));
 			NBTTagCompound tag = ItemUtils.getItemTag(stack);
 			tag.setString(TAG_STRUCTURE, newStructureName);
 		} else {
-			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.no_nearby_structures"));
+			player.sendMessage(new TextComponentTranslation("openblocks.misc.no_nearby_structures"));
 		}
 	}
 
@@ -87,7 +89,7 @@ public class ItemGoldenEye extends Item {
 		String structureName = tag.getString(TAG_STRUCTURE);
 
 		if (Strings.isNullOrEmpty(structureName)) {
-			player.addChatComponentMessage(new TextComponentTranslation("openblocks.misc.structure_not_locked"));
+			player.sendMessage(new TextComponentTranslation("openblocks.misc.structure_not_locked"));
 			return false;
 		}
 
@@ -95,12 +97,12 @@ public class ItemGoldenEye extends Item {
 
 		BlockPos structurePos = nearbyStructures.get(structureName);
 		if (structurePos != null) {
-			if (Config.eyeDebug) player.addChatComponentMessage(new TextComponentTranslation(
+			if (Config.eyeDebug) player.sendMessage(new TextComponentTranslation(
 					"openblocks.misc.structure_pos", structureName, structurePos.getX(), structurePos.getY(), structurePos.getZ()));
 
 			stack.setItemDamage(damage + 1);
 			EntityGoldenEye eye = new EntityGoldenEye(world, stack, player, structurePos);
-			world.spawnEntityInWorld(eye);
+			world.spawnEntity(eye);
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDEREYE_LAUNCH, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 			return true;
 		}
@@ -109,7 +111,7 @@ public class ItemGoldenEye extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		result.add(new ItemStack(item, 1, 0));
 		result.add(new ItemStack(item, 1, MAX_DAMAGE));
 	}

@@ -34,7 +34,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	private static final Map<EntityLivingBase, Long> debouncerTime = new MapMaker().weakKeys().makeMap();
 
 	private static boolean hasClicked(EntityLivingBase entity) {
-		long currentTime = OpenMods.proxy.getTicks(entity.worldObj);
+		long currentTime = OpenMods.proxy.getTicks(entity.world);
 		Long lastClick = debouncerTime.get(entity);
 		if (lastClick == null || currentTime - lastClick > 5) {
 			debouncerTime.put(entity, currentTime);
@@ -61,7 +61,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		CraneRegistry.Data data = CraneRegistry.instance.getData(player, false);
 
 		if (data != null) {
@@ -69,7 +69,7 @@ public class ItemCraneControl extends Item implements IStateItem {
 		}
 
 		player.setActiveHand(hand);
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 
 	@Override

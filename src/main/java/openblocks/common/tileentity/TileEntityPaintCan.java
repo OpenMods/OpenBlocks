@@ -30,21 +30,22 @@ public class TileEntityPaintCan extends DroppableTileEntity implements IActivate
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, ItemStack heldStack, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldObj.isRemote && hand == EnumHand.MAIN_HAND && amount.get() > 0) {
-			if (heldStack != null && heldStack.getItem() instanceof ItemPaintBrush) {
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && hand == EnumHand.MAIN_HAND && amount.get() > 0) {
+			final ItemStack heldStack = player.getHeldItemMainhand();
+			if (!heldStack.isEmpty() && heldStack.getItem() instanceof ItemPaintBrush) {
 				ItemPaintBrush.setColor(heldStack, color.get());
 				heldStack.setItemDamage(0);
 				amount.modify(-1);
 
 				if (amount.get() <= 0) {
 					ItemStack item = new ItemStack(Items.BUCKET);
-					BlockUtils.dropItemStackInWorld(worldObj, pos, item);
-					worldObj.setBlockToAir(pos);
+					BlockUtils.dropItemStackInWorld(world, pos, item);
+					world.setBlockToAir(pos);
 				} else {
 					sync();
 				}
-				worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 1.2F);
+				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.1F, 1.2F);
 				return true;
 			}
 		}

@@ -65,14 +65,14 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean something) {
 		if (entity instanceof EntityLivingBase) {
 			EnumFacing playerRotation = ((EntityLivingBase)entity).getHorizontalFacing();
 			if (getFront(state) == playerRotation.getOpposite()) {
-				super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity);
+				super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity, something);
 			}
 		} else {
-			super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity);
+			super.addCollisionBoxToList(state, world, pos, entityBox, collidingBoxes, entity, something);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbour, BlockPos neigbourPos) {
 		final EnumFacing dir = getBack(state);
 
 		if (world.isAirBlock(pos.offset(dir))) {
@@ -126,7 +126,7 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		Orientation orientation = calculateOrientationAfterPlace(pos, facing, placer);
 		if (orientation == null) orientation = findValidBlock(world, pos);
 		if (orientation == null) orientation = tryCloneState(world, pos, facing);
@@ -163,11 +163,11 @@ public class BlockRopeLadder extends OpenBlock.FourDirections {
 			final Orientation orientation = getOrientation(state);
 
 			BlockPos placePos = pos.down();
-			while (placePos.getY() > 0 && (Config.infiniteLadder || stack.stackSize > 1)) {
+			while (placePos.getY() > 0 && (Config.infiniteLadder || stack.getCount() > 1)) {
 				final BlockManipulator manipulator = new BlockManipulator(world, player, placePos);
 
 				if (world.isAirBlock(placePos) && manipulator.place(state, orientation.north(), EnumHand.MAIN_HAND)) {
-					if (!Config.infiniteLadder) stack.stackSize--;
+					if (!Config.infiniteLadder) stack.shrink(1);
 				} else return;
 
 				placePos = placePos.down();

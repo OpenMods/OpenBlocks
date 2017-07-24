@@ -58,7 +58,7 @@ public class SoundEventsManager {
 			this.icon = icon;
 			this.size = size;
 
-			this.TTL = MathHelper.floor_double(20 * TTL);
+			this.TTL = MathHelper.floor(20 * TTL);
 		}
 
 		public void update(SoundHandler handler) {
@@ -83,8 +83,7 @@ public class SoundEventsManager {
 	public static boolean isEntityWearingGlasses(Entity e) {
 		if (e instanceof EntityPlayer) {
 			ItemStack helmet = ((EntityPlayer)e).inventory.armorItemInSlot(3);
-			return helmet != null
-					&& helmet.getItem() instanceof ItemSonicGlasses;
+			return !helmet.isEmpty() && helmet.getItem() instanceof ItemSonicGlasses;
 		}
 
 		return false;

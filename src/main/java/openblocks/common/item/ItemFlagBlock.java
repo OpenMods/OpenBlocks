@@ -33,16 +33,22 @@ public class ItemFlagBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player.isSneaking()) return EnumActionResult.PASS;
 
-		return super.onItemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		stack.setItemDamage((stack.getItemDamage() + 1) % ColorMeta.values().length);
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		final ItemStack stack = player.getHeldItem(hand);
+		if (hand == EnumHand.MAIN_HAND) {
+			stack.setItemDamage((stack.getItemDamage() + 1) % ColorMeta.values().length);
+			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		} else {
+			return ActionResult.newResult(EnumActionResult.PASS, stack);
+		}
+
 	}
 
 }

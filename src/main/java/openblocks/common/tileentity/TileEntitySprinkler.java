@@ -9,6 +9,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -63,7 +64,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	private final GenericInventory inventory = registerInventoryCallback(new TileEntityInventory(this, "sprinkler", true, 9) {
 		@Override
 		public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-			return itemstack != null && itemstack.isItemEqual(BONEMEAL);
+			return !itemstack.isEmpty() && itemstack.isItemEqual(BONEMEAL);
 		}
 	});
 
@@ -80,10 +81,10 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	}
 
 	private void attemptFertilize() {
-		if (!(worldObj instanceof WorldServer)) return;
+		if (!(world instanceof WorldServer)) return;
 		final int fertilizerChance = hasBonemeal? Config.sprinklerBonemealFertizizeChance : Config.sprinklerFertilizeChance;
 		if (RANDOM.nextDouble() < 1.0 / fertilizerChance) {
-			FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new PlayerUser() {
+			FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new PlayerUser() {
 				@Override
 				public void usePlayer(OpenModsFakePlayer fakePlayer) {
 					final int x = selectFromRange(Config.sprinklerEffectiveRange);
@@ -92,7 +93,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 					for (int y = -1; y <= 1; y++) {
 						BlockPos target = pos.add(x, y, z);
 
-						if (ItemDye.applyBonemeal(BONEMEAL.copy(), worldObj, target, fakePlayer))
+						if (ItemDye.applyBonemeal(BONEMEAL.copy(), world, target, fakePlayer, EnumHand.MAIN_HAND))
 							break;
 
 					}
@@ -151,7 +152,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 						0.35,
 						forwardVelocityZ + sideVelocityZ);
 
-				OpenBlocks.proxy.spawnLiquidSpray(worldObj, tank.getFluid(),
+				OpenBlocks.proxy.spawnLiquidSpray(world, tank.getFluid(),
 						pos.getX() + 0.5 + (outletPosition * 0.6 * offsetX),
 						pos.getY() + 0.2,
 						pos.getZ() + 0.5 + (outletPosition * 0.6 * offsetZ),
@@ -164,15 +165,15 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 
 			if (tank.getFluidAmount() <= 0) {
 				if (needsTankUpdate) {
-					tank.updateNeighbours(worldObj, pos);
+					tank.updateNeighbours(world, pos);
 					needsTankUpdate = false;
 				}
 
-				tank.fillFromSide(worldObj, pos, EnumFacing.DOWN);
+				tank.fillFromSide(world, pos, EnumFacing.DOWN);
 			}
 
 			if (ticks % Config.sprinklerBonemealConsumeRate == 0) {
@@ -188,9 +189,9 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 		ticks++;
 
 		// simplified this action because only one of these will execute
-		// depending on worldObj.isRemote
+		// depending on world.isRemote
 		if (isEnabled()) {
-			if (worldObj.isRemote) sprayParticles();
+			if (world.isRemote) sprayParticles();
 			else attemptFertilize();
 		}
 	}
@@ -198,10 +199,8 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	private boolean consumeFirstInventoryItem() {
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack contents = inventory.getStackInSlot(i);
-			if (contents != null && BONEMEAL.isItemEqual(contents)) {
-				if (--contents.stackSize <= 0)
-					contents = null;
-
+			if (!contents.isEmpty() && BONEMEAL.isItemEqual(contents)) {
+				contents.shrink(1);
 				inventory.setInventorySlotContents(i, contents);
 				return true;
 			}
@@ -259,7 +258,7 @@ public class TileEntitySprinkler extends SyncedTileEntity implements ISurfaceAtt
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		this.needsTankUpdate = true;
 	}
 

@@ -1,6 +1,7 @@
 package openblocks.common.entity;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -52,7 +53,7 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		this.motionY -= 0.029999999329447746D;
 
 		final BlockPos pos = new BlockPos(this);
-		if (this.worldObj.getBlockState(pos).getMaterial() == Material.LAVA) {
+		if (this.world.getBlockState(pos).getMaterial() == Material.LAVA) {
 			this.motionY = 0.20000000298023224D;
 			this.motionX = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 			this.motionZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
@@ -61,12 +62,12 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 
 		pushOutOfBlocks(this.posX, (getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D, this.posZ);
 
-		moveEntity(this.motionX, this.motionY, this.motionZ);
+		move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 		final float f;
 
 		if (this.onGround) {
-			final BlockPos posUnder = new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ));
-			f = this.worldObj.getBlockState(posUnder).getBlock().slipperiness * 0.98F;
+			final BlockPos posUnder = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+			f = this.world.getBlockState(posUnder).getBlock().slipperiness * 0.98F;
 		} else {
 			f = 0.98F;
 		}

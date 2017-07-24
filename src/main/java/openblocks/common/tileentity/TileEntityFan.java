@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import openblocks.Config;
 import openmods.api.IAddAwareTile;
@@ -45,7 +46,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 		final double maxForce = Config.fanForce * redstonePower;
 		if (maxForce <= 0) return;
 
-		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
+		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, getEntitySearchBoundingBox());
 		if (entities.isEmpty()) return;
 
 		double angle = Math.toRadians(getAngle() - 90);
@@ -112,7 +113,7 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
+	public void onNeighbourChanged(BlockPos pos, Block block) {
 		updateRedstone();
 	}
 
@@ -122,8 +123,8 @@ public class TileEntityFan extends SyncedTileEntity implements IPlaceAwareTile, 
 	}
 
 	private void updateRedstone() {
-		if (!worldObj.isRemote) {
-			int power = Config.redstoneActivatedFan? worldObj.isBlockIndirectlyGettingPowered(pos) : 15;
+		if (!world.isRemote) {
+			int power = Config.redstoneActivatedFan? world.isBlockIndirectlyGettingPowered(pos) : 15;
 			this.power.set((byte)power);
 			sync();
 		}

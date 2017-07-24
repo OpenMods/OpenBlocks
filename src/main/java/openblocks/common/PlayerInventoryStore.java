@@ -102,7 +102,7 @@ public class PlayerInventoryStore {
 		MinecraftForge.EVENT_BUS.post(evt);
 
 		final GameProfile profile = player.getGameProfile();
-		return storeInventory(player.inventory, profile.getName(), type, player.worldObj,
+		return storeInventory(player.inventory, profile.getName(), type, player.world,
 				createExtrasFiller(profile, player.posX, player.posY, player.posZ, evt.getSubInventories()));
 
 	}
@@ -123,7 +123,7 @@ public class PlayerInventoryStore {
 
 					for (Map.Entry<Integer, ItemStack> ie : e.getValue().asMap().entrySet()) {
 						ItemStack stack = ie.getValue();
-						if (stack != null) {
+						if (!stack.isEmpty()) {
 							NBTTagCompound stacktag = new NBTTagCompound();
 							stack.writeToNBT(stacktag);
 							stacktag.setInteger(TAG_SLOT, ie.getKey());
@@ -195,8 +195,8 @@ public class PlayerInventoryStore {
 
 			if (!itemTag.hasNoTags()) {
 				int slot = itemTag.getInteger(TAG_SLOT);
-				ItemStack stack = ItemStack.loadItemStackFromNBT(itemTag);
-				if (stack != null) result.addItemStack(slot, stack);
+				final ItemStack stack = new ItemStack(itemTag);
+				if (!stack.isEmpty()) result.addItemStack(slot, stack);
 			}
 		}
 
@@ -275,7 +275,7 @@ public class PlayerInventoryStore {
 	}
 
 	public boolean restoreInventory(EntityPlayer player, String fileId) {
-		final LoadedInventories inventories = loadInventories(player.worldObj, fileId);
+		final LoadedInventories inventories = loadInventories(player.world, fileId);
 		if (inventories == null) return false;
 
 		final IInventory main = inventories.mainInventory;

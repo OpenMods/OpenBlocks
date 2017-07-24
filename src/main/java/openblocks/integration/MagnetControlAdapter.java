@@ -137,7 +137,7 @@ public class MagnetControlAdapter implements ITickingTurtle, IWorldProvider, IAt
 		magnetOwner = new Owner();
 		magnetOwner.setTargetPosition(0, side == TurtleSide.Left? -1 : 1, 0);
 		magnet = new EntityMagnet(world, magnetOwner, true);
-		world.spawnEntityInWorld(magnet);
+		world.spawnEntity(magnet);
 
 		magnet.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
 		this.magnet = new WeakReference<EntityMagnet>(magnet);

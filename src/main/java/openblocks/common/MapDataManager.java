@@ -31,18 +31,18 @@ public class MapDataManager {
 
 		@Override
 		protected void readFromStream(PacketBuffer input) {
-			final int length = input.readVarIntFromBuffer();
+			final int length = input.readVarInt();
 			for (int i = 0; i < length; i++) {
-				final int id = input.readVarIntFromBuffer();
+				final int id = input.readVarInt();
 				mapIds.add(id);
 			}
 		}
 
 		@Override
 		protected void writeToStream(PacketBuffer output) {
-			output.writeVarIntToBuffer(mapIds.size());
+			output.writeVarInt(mapIds.size());
 			for (Integer id : mapIds)
-				output.writeVarIntToBuffer(id);
+				output.writeVarInt(id);
 		}
 	}
 
@@ -58,9 +58,9 @@ public class MapDataManager {
 
 		@Override
 		protected void readFromStream(PacketBuffer input) {
-			final int length = input.readVarIntFromBuffer();
+			final int length = input.readVarInt();
 			for (int i = 0; i < length; i++) {
-				final int id = input.readVarIntFromBuffer();
+				final int id = input.readVarInt();
 				HeightMapData data = new HeightMapData(id, false);
 				data.readFromStream(input);
 				maps.put(id, data);
@@ -73,11 +73,11 @@ public class MapDataManager {
 			for (HeightMapData data : maps.values())
 				if (data.isValid()) size++;
 
-			output.writeVarIntToBuffer(size);
+			output.writeVarInt(size);
 			for (Map.Entry<Integer, HeightMapData> e : maps.entrySet()) {
 				HeightMapData map = e.getValue();
 				if (map.isValid()) {
-					output.writeVarIntToBuffer(e.getKey());
+					output.writeVarInt(e.getKey());
 					map.writeToStream(output);
 				} else Log.debug("Trying to propagate invalid map data %d", e.getKey());
 			}
@@ -95,7 +95,7 @@ public class MapDataManager {
 		HeightMapData data = new HeightMapData(id, false);
 		data.scale = scale;
 		data.markDirty();
-		world.setItemData(data.mapName, data);
+		world.setData(data.mapName, data);
 		return id;
 	}
 
@@ -103,18 +103,18 @@ public class MapDataManager {
 		if (mapId < 0) return HeightMapData.INVALID;
 
 		String name = HeightMapData.getMapName(mapId);
-		HeightMapData result = (HeightMapData)world.loadItemData(HeightMapData.class, name);
+		HeightMapData result = (HeightMapData)world.loadData(HeightMapData.class, name);
 
 		return result != null? result : HeightMapData.EMPTY;
 	}
 
 	public static void setMapData(World world, HeightMapData data) {
-		world.setItemData(data.mapName, data);
+		world.setData(data.mapName, data);
 	}
 
 	@SubscribeEvent
 	public void onMapDataRequest(MapDataRequestEvent evt) {
-		World world = evt.sender.worldObj;
+		World world = evt.sender.world;
 
 		final MapDataResponseEvent response = new MapDataResponseEvent();
 		final TIntSet missingMaps = new TIntHashSet();
@@ -141,17 +141,17 @@ public class MapDataManager {
 
 	@SubscribeEvent
 	public void onMapDataResponse(MapDataResponseEvent evt) {
-		World world = evt.sender.worldObj;
+		World world = evt.sender.world;
 
 		for (Map.Entry<Integer, HeightMapData> e : evt.maps.entrySet()) {
 			HeightMapData mapData = e.getValue();
-			world.setItemData(mapData.mapName, mapData);
+			world.setData(mapData.mapName, mapData);
 		}
 	}
 
 	@SubscribeEvent
 	public void onMapUpdates(MapUpdatesEvent evt) {
-		World world = evt.sender.worldObj;
+		World world = evt.sender.world;
 
 		Set<Integer> mapsToUpdate = Sets.newHashSet();
 		for (Integer mapId : evt.mapIds) {
@@ -189,7 +189,7 @@ public class MapDataManager {
 			evt.sendToServer();
 
 			HeightMapData stub = new HeightMapData(mapId, true);
-			world.setItemData(stub.mapName, stub);
+			world.setData(stub.mapName, stub);
 		}
 	}
 

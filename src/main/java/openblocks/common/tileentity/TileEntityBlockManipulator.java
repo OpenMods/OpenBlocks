@@ -18,16 +18,16 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 	public TileEntityBlockManipulator() {}
 
 	@Override
-	public void onNeighbourChanged(Block block) {
-		if (!worldObj.isRemote) {
-			final IBlockState state = worldObj.getBlockState(getPos());
+	public void onNeighbourChanged(BlockPos pos, Block block) {
+		if (!world.isRemote) {
+			final IBlockState state = world.getBlockState(getPos());
 			if (state.getBlock() == getBlockType()) {
-				final boolean isPowered = worldObj.isBlockIndirectlyGettingPowered(pos) > 0;
+				final boolean isPowered = world.isBlockIndirectlyGettingPowered(pos) > 0;
 
 				final IBlockState newState = state.withProperty(BlockBlockManpulatorBase.POWERED, isPowered);
 				if (newState != state) {
-					worldObj.setBlockState(getPos(), newState, BlockNotifyFlags.SEND_TO_CLIENTS);
-					playSoundAtBlock(isPowered? SoundEvents.BLOCK_PISTON_EXTEND : SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, worldObj.rand.nextFloat() * 0.15F + 0.6F);
+					world.setBlockState(getPos(), newState, BlockNotifyFlags.SEND_TO_CLIENTS);
+					playSoundAtBlock(isPowered? SoundEvents.BLOCK_PISTON_EXTEND : SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, world.rand.nextFloat() * 0.15F + 0.6F);
 				}
 
 				if (isPowered)
@@ -40,8 +40,8 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 		final EnumFacing direction = getFront(newState);
 		final BlockPos target = pos.offset(direction);
 
-		if (worldObj.isBlockLoaded(target)) {
-			final IBlockState targetState = worldObj.getBlockState(target);
+		if (world.isBlockLoaded(target)) {
+			final IBlockState targetState = world.getBlockState(target);
 			if (canWork(targetState, target, direction)) sendBlockEvent(EVENT_ACTIVATE, 0);
 		}
 	}
@@ -57,12 +57,12 @@ public abstract class TileEntityBlockManipulator extends OpenTileEntity implemen
 	}
 
 	private void doWork() {
-		if (worldObj instanceof WorldServer) {
+		if (world instanceof WorldServer) {
 			final EnumFacing direction = getFront();
 			final BlockPos target = pos.offset(direction);
 
-			if (worldObj.isBlockLoaded(target)) {
-				final IBlockState targetState = worldObj.getBlockState(target);
+			if (world.isBlockLoaded(target)) {
+				final IBlockState targetState = world.getBlockState(target);
 				if (canWork(targetState, target, direction))
 					doWork(targetState, target, direction);
 			}

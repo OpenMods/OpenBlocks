@@ -34,27 +34,27 @@ public class TileEntityBlockPlacer extends TileEntityBlockManipulator implements
 		if (inventory.isEmpty()) return false;
 
 		final Block block = targetState.getBlock();
-		return block.isAir(targetState, worldObj, target) || block.isReplaceable(worldObj, target);
+		return block.isAir(targetState, world, target) || block.isReplaceable(world, target);
 	}
 
 	@Override
 	protected void doWork(IBlockState targetState, BlockPos target, EnumFacing direction) {
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY;
 		int slotId = 0;
 
 		for (slotId = 0; slotId < inventory.getSizeInventory(); slotId++) {
 			stack = inventory.getStackInSlot(slotId);
-			if (stack != null && stack.stackSize > 0) break;
+			if (!stack.isEmpty()) break;
 		}
 
-		if (stack == null) return;
+		if (stack.isEmpty()) return;
 
 		// this logic is tuned for vanilla blocks (like pistons), which places blocks with front facing player
 		// so to place object pointing in the same direction as placer, we need configuration player-target-placer
 		// * 2, since some blocks may take into account player height, so distance must be greater than that
 		final BlockPos playerPos = target.offset(direction, 2);
 
-		final ItemStack result = FakePlayerPool.instance.executeOnPlayer((WorldServer)worldObj, new UseItemAction(
+		final ItemStack result = FakePlayerPool.instance.executeOnPlayer((WorldServer)world, new UseItemAction(
 				stack,
 				new Vec3d(playerPos),
 				new Vec3d(target),

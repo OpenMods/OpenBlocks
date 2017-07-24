@@ -46,12 +46,12 @@ public class ItemDevNull extends Item {
 			int depth = 0;
 
 			while (depth < STACK_LIMIT) {
-				if (stack == null || !(stack.getItem() instanceof ItemDevNull)) return Pair.of(stack, depth);
+				if (stack.isEmpty() || !(stack.getItem() instanceof ItemDevNull)) return Pair.of(stack, depth);
 				stack = new ItemInventory(stack, 1).getStackInSlot(0);
 				depth++;
 			}
 
-			return Pair.of(null, depth);
+			return Pair.of(ItemStack.EMPTY, depth);
 		}
 	});
 
@@ -73,7 +73,7 @@ public class ItemDevNull extends Item {
 			if (contents.getRight() > STACK_LIMIT) return NO_COLOR;
 
 			final ItemStack nestedItem = contents.getLeft();
-			if (nestedItem == null) return NO_COLOR;
+			if (nestedItem.isEmpty()) return NO_COLOR;
 			return itemColors.getColorFromItemstack(nestedItem, tintIndex - NESTED_ITEM_TINT_DELTA);
 		}
 
@@ -95,7 +95,7 @@ public class ItemDevNull extends Item {
 		@Override
 		public void onInventoryChanged(int slotNumber) {
 			super.onInventoryChanged(slotNumber);
-			if (!player.worldObj.isRemote && slotNumber == 0) {
+			if (!player.world.isRemote && slotNumber == 0) {
 				checkStack(containerStack);
 			}
 		}
@@ -116,32 +116,30 @@ public class ItemDevNull extends Item {
 	}
 
 	public static Pair<ItemStack, Integer> getContents(ItemStack container) {
-		if (container == null) return Pair.of(null, 0);
+		if (container.isEmpty()) return Pair.of(ItemStack.EMPTY, 0);
 		return cache.getUnchecked(container);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote && (!Config.devNullSneakGui || player.isSneaking())) player.openGui(OpenBlocks.instance, OpenBlocksGuiHandler.GuiId.devNull.ordinal(), world, player.inventory.currentItem, 0, 0);
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (hand == EnumHand.OFF_HAND) return EnumActionResult.PASS;
-
-		PlayerItemInventory inventory = new PlayerItemInventory(player, 1);
+		// TODO 1.11 verify
+		final ItemStack containerStack = player.getHeldItem(hand);
+		final ItemInventory inventory = new ItemInventory(containerStack, 1);
 		ItemStack containedStack = inventory.getStackInSlot(0);
-		if (containedStack != null) {
-			Item item = containedStack.getItem();
-			if (item instanceof ItemBlock) {
-				EnumActionResult response = item.onItemUse(containedStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
-				if (containedStack.stackSize == 0) {
-					inventory.setInventorySlotContents(0, null);
-				}
-				inventory.markDirty();
-				return response;
-			}
+		if (!containedStack.isEmpty() && containedStack.getItem() instanceof ItemBlock) {
+			player.setHeldItem(hand, containedStack);
+			EnumActionResult response = containedStack.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+			containedStack = player.getHeldItem(hand);
+			inventory.setInventorySlotContents(0, containedStack);
+			player.setHeldItem(hand, containerStack);
+			return response;
 		}
 		return EnumActionResult.PASS;
 	}
@@ -154,7 +152,7 @@ public class ItemDevNull extends Item {
 		final EntityPlayer player = evt.getEntityPlayer();
 		final ItemStack pickedStack = evt.getItem().getEntityItem();
 
-		if (pickedStack == null || player == null) return;
+		if (pickedStack.isEmpty() || player == null) return;
 
 		boolean foundMatchingContainer = false;
 
@@ -164,34 +162,34 @@ public class ItemDevNull extends Item {
 			if (stack != null && stack.getItem() == this) {
 				final ItemInventory inventory = new ItemInventory(stack, 1);
 				final ItemStack containedStack = inventory.getStackInSlot(0);
-				if (containedStack != null) {
+				if (!containedStack.isEmpty()) {
 					final boolean isMatching = tester.isEqual(pickedStack, containedStack);
 					if (isMatching) {
-						final int totalItems = containedStack.stackSize + pickedStack.stackSize;
+						final int totalItems = containedStack.getCount() + pickedStack.getCount();
 						final int containedItems = Math.min(containedStack.getMaxStackSize(), totalItems);
-						containedStack.stackSize = containedItems;
-						pickedStack.stackSize = Math.max(totalItems - containedItems, 0);
+						containedStack.setCount(containedItems);
+						pickedStack.setCount(Math.max(totalItems - containedItems, 0));
 						inventory.setInventorySlotContents(0, containedStack);
-						if (pickedStack.stackSize == 0) return;
+						if (pickedStack.getCount() == 0) return;
 						foundMatchingContainer = true;
 					}
 				}
 			}
 		}
 
-		if (foundMatchingContainer) pickedStack.stackSize = 0;
+		if (foundMatchingContainer) pickedStack.setCount(0);
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
 		final Pair<ItemStack, Integer> contents = getContents(stack);
 		final ItemStack containedStack = contents.getLeft();
-		if (containedStack != null) {
+		if (!containedStack.isEmpty()) {
 			final List<String> innerTooltip = containedStack.getTooltip(playerIn, advanced);
 			if (innerTooltip.isEmpty()) {
-				tooltip.add(containedStack.stackSize + " * " + containedStack.getDisplayName());
+				tooltip.add(containedStack.getCount() + " * " + containedStack.getDisplayName());
 			} else {
-				innerTooltip.set(0, containedStack.stackSize + " * " + innerTooltip.get(0));
+				innerTooltip.set(0, containedStack.getCount() + " * " + innerTooltip.get(0));
 				box(tooltip, innerTooltip);
 			}
 		} else if (contents.getRight() >= STACK_LIMIT) {

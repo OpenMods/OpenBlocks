@@ -57,7 +57,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 		@Override
 		protected void readFromStream(PacketBuffer input) {
-			this.entityId = input.readVarIntFromBuffer();
+			this.entityId = input.readVarInt();
 			if (input.readBoolean()) {
 				profile = GameProfileSerializer.read(input);
 			}
@@ -65,7 +65,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 
 		@Override
 		protected void writeToStream(PacketBuffer output) {
-			output.writeVarIntToBuffer(entityId);
+			output.writeVarInt(entityId);
 
 			if (profile != null) {
 				output.writeBoolean(true);
@@ -80,7 +80,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	public static class OwnerChangeHandler {
 		@SubscribeEvent
 		public void onProfileChange(OwnerChangeEvent evt) {
-			final World world = evt.sender.worldObj;
+			final World world = evt.sender.world;
 
 			Entity e = world.getEntityByID(evt.entityId);
 
@@ -118,7 +118,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	}
 
 	@Override
-	protected PathNavigate getNewNavigator(World worldIn) {
+	protected PathNavigate createNavigator(World worldIn) {
 		final PathNavigateGround navigator = new PathNavigateGround(this, worldIn);
 		setPathPriority(PathNodeType.WATER, -1.0F);
 		navigator.setCanSwim(true);
@@ -161,7 +161,7 @@ public class EntityMiniMe extends EntityCreature implements IEntityAdditionalSpa
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (name != null && (owner == null || !name.equalsIgnoreCase(owner.getName()))) {
 				try {
 					this.owner = TileEntitySkull.updateGameprofile(new GameProfile(null, name));

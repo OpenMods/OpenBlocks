@@ -1,11 +1,13 @@
 package openblocks.common.item;
 
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 import openblocks.common.TrophyHandler.Trophy;
 import openmods.item.ItemOpenBlock;
 import openmods.utils.ItemUtils;
@@ -15,6 +17,8 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 
 	private static final String TAG_ENTITY = "entity";
 
+	private static final String TAG_ENTITY_ID = "entity_id";
+
 	public ItemTrophyBlock(Block block) {
 		super(block);
 	}
@@ -22,9 +26,14 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	public static Trophy getTrophy(ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			NBTTagCompound tag = stack.getTagCompound();
+			if (tag.hasKey(TAG_ENTITY_ID, Constants.NBT.TAG_STRING)) {
+				ResourceLocation id = new ResourceLocation(tag.getString(TAG_ENTITY_ID));
+				return Trophy.TYPES_BY_ID.get(id);
+			}
+
 			if (tag.hasKey(TAG_ENTITY)) {
 				String entityKey = tag.getString(TAG_ENTITY);
-				return Trophy.TYPES.get(entityKey);
+				return Trophy.TYPES_BY_NAME.get(entityKey);
 			}
 		}
 
@@ -40,7 +49,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 
 	public static ItemStack putMetadata(ItemStack stack, Trophy trophy) {
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
-		tag.setString(TAG_ENTITY, trophy.name());
+		tag.setString(TAG_ENTITY_ID, trophy.id.toString());
 		return stack;
 	}
 
@@ -56,7 +65,7 @@ public class ItemTrophyBlock extends ItemOpenBlock {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> result) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> result) {
 		for (Trophy trophy : Trophy.VALUES) {
 			result.add(putMetadata(new ItemStack(this), trophy));
 		}

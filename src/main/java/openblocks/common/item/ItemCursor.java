@@ -1,6 +1,5 @@
 package openblocks.common.item;
 
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,7 +32,8 @@ public class ItemCursor extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		final ItemStack stack = player.getHeldItem(hand);
 		NBTTagCompound tag = ItemUtils.getItemTag(stack);
 		tag.setInteger("dimension", world.provider.getDimension());
 		NbtUtils.store(tag, pos);
@@ -42,35 +42,35 @@ public class ItemCursor extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote) {
-			NBTTagCompound tag = stack.getTagCompound();
+			NBTTagCompound tag = player.getHeldItem(hand).getTagCompound();
 			if (tag != null && NbtUtils.hasCoordinates(tag) && tag.hasKey("dimension")) {
 				final int dimension = tag.getInteger("dimension");
 
 				final BlockPos pos = NbtUtils.readBlockPos(tag);
 				if (world.provider.getDimension() == dimension && world.isBlockLoaded(pos)) {
 					final EnumFacing side = NbtUtils.readEnum(tag, "side", EnumFacing.UP);
-					clickBlock(world, player, hand, stack, pos, side);
+					clickBlock(world, player, hand, pos, side);
 				}
 			}
 		}
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 
-	private static void clickBlock(World world, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, BlockPos pos, EnumFacing side) {
+	private static void clickBlock(World world, EntityPlayer player, EnumHand hand, BlockPos pos, EnumFacing side) {
 		if (!world.isAirBlock(pos)) {
 			final IBlockState state = world.getBlockState(pos);
 			final double distanceToLinkedBlock = player.getDistanceSq(pos);
 			if (distanceToLinkedBlock < Config.cursorDistanceLimit) {
 				final Block block = state.getBlock();
 				if (player.capabilities.isCreativeMode) {
-					block.onBlockActivated(world, pos, state, player, hand, heldItem, side, 0, 0, 0);
+					block.onBlockActivated(world, pos, state, player, hand, side, 0, 0, 0);
 				} else {
 					final int cost = (int)Math.max(0, distanceToLinkedBlock - 10);
 					final int playerExperience = EnchantmentUtils.getPlayerXP(player);
 					if (cost <= playerExperience) {
-						block.onBlockActivated(world, pos, state, player, hand, heldItem, side, 0, 0, 0);
+						block.onBlockActivated(world, pos, state, player, hand, side, 0, 0, 0);
 						EnchantmentUtils.addPlayerXP(player, -cost);
 					}
 				}
