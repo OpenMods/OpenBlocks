@@ -128,6 +128,8 @@ public class EntityLuggage extends EntityTameable implements IEntityAdditionalSp
 
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem) {
+		if (hand != EnumHand.MAIN_HAND) return true;
+
 		if (!isDead) {
 			if (heldItem != null && heldItem.getItem() instanceof ItemNameTag) return false;
 
