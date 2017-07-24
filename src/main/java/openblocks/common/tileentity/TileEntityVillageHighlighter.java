@@ -52,7 +52,7 @@ public class TileEntityVillageHighlighter extends SyncedTileEntity implements IT
 				sync();
 				boolean canBreed = canVillagersBreed();
 				if (previousBreedStatus != canBreed) {
-					worldObj.notifyBlockOfStateChange(pos, OpenBlocks.Blocks.villageHighlighter);
+					worldObj.notifyNeighborsOfStateChange(pos, OpenBlocks.Blocks.villageHighlighter);
 					previousBreedStatus = canBreed;
 				}
 			}
