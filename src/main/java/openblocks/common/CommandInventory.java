@@ -164,7 +164,7 @@ public class CommandInventory implements ICommand {
 
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
-		if (args.length == 0) return null;
+		if (args.length == 0) return Collections.emptyList();
 		if (args.length == 1) return filterPrefixes(args[0], SUB_COMMANDS);
 
 		final String subCommand = args[0];
@@ -176,7 +176,7 @@ public class CommandInventory implements ICommand {
 				final String fileId = args[1];
 				try {
 					LoadedInventories inventories = PlayerInventoryStore.instance.loadInventories(sender.getEntityWorld(), fileId);
-					if (inventories == null) return null;
+					if (inventories == null) return Collections.emptyList();
 					List<String> result = Lists.newArrayList(ID_MAIN_INVENTORY);
 					result.addAll(inventories.subInventories.keySet());
 					return filterPrefixes(args[2], result);
@@ -193,7 +193,7 @@ public class CommandInventory implements ICommand {
 			}
 		}
 
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class EntityXPOrbNoFly extends EntityXPOrb {
 		final double vz = motionZ;
 
 		// let original update run
-		super.onEntityUpdate();
+		super.onUpdate();
 		if (isDead) return;
 
 		// and then re-do motion calculations without player tracking

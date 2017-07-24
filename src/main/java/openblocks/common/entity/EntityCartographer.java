@@ -226,7 +226,8 @@ public class EntityCartographer extends EntityAssistant implements ISelectAware,
 	}
 
 	private void writeOwnDataToNBT(NBTTagCompound tag) {
-		syncMap.write(tag);
+		// some mods may call it on client side, see #834
+		syncMap.safeWrite(tag);
 
 		if (mapItem != null) {
 			NBTTagCompound mapItem = this.mapItem.writeToNBT(new NBTTagCompound());
