@@ -61,8 +61,7 @@ public class ItemSpongeOnAStick extends Item {
 		}
 
 		if (absorbedAnything) {
-			if (damage >= Config.spongeMaxDamage) stack.stackSize = 0;
-			else stack.setItemDamage(damage);
+			stack.damageItem(1, player);
 			return true;
 		}
 

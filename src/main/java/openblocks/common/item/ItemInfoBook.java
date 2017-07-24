@@ -16,7 +16,7 @@ public class ItemInfoBook extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		if (world.isRemote) FMLCommonHandler.instance().showGuiScreen(new GuiInfoBook());
+		if (world.isRemote && hand == EnumHand.MAIN_HAND) FMLCommonHandler.instance().showGuiScreen(new GuiInfoBook());
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 }
