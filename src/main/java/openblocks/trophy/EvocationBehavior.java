@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketEntityStatus;
 import openblocks.common.tileentity.TileEntityTrophy;
 
-public class EvocationBehaviour implements ITrophyBehavior {
+public class EvocationBehavior implements ITrophyBehavior {
 
 	@Override
 	public int executeActivateBehavior(TileEntityTrophy tile, EntityPlayer player) {

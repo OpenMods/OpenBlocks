@@ -32,10 +32,11 @@ import openblocks.trophy.BlazeBehavior;
 import openblocks.trophy.CaveSpiderBehavior;
 import openblocks.trophy.CreeperBehavior;
 import openblocks.trophy.EndermanBehavior;
-import openblocks.trophy.EvocationBehaviour;
+import openblocks.trophy.EvocationBehavior;
 import openblocks.trophy.GuardianBehavior;
 import openblocks.trophy.ITrophyBehavior;
 import openblocks.trophy.ItemDropBehavior;
+import openblocks.trophy.LlamaBehavior;
 import openblocks.trophy.MooshroomBehavior;
 import openblocks.trophy.ShulkerBehavior;
 import openblocks.trophy.SkeletonBehavior;
@@ -44,6 +45,7 @@ import openblocks.trophy.SquidBehavior;
 import openblocks.trophy.WitchBehavior;
 import openmods.Log;
 import openmods.config.properties.ConfigurationChange;
+import openmods.core.fixes.HorseNullFix;
 import openmods.reflection.ReflectionHelper;
 
 public class TrophyHandler {
@@ -88,7 +90,7 @@ public class TrophyHandler {
 
 	private static Entity setSlimeSize(Entity entity, int size) {
 		try {
-			ReflectionHelper.call(entity, new String[] { "func_70799_a", "setSlimeSize" }, ReflectionHelper.primitive(size));
+			ReflectionHelper.call(entity, new String[] { "func_70799_a", "setSlimeSize" }, ReflectionHelper.primitive(size), ReflectionHelper.primitive(false));
 		} catch (Exception e) {
 			Log.warn(e, "Can't update slime size");
 		}
@@ -152,15 +154,51 @@ public class TrophyHandler {
 		Rabbit(mc("rabbit"), new ItemDropBehavior(20000, new ItemStack(Items.CARROT))),
 		PolarBear(mc("polar_bear"), new ItemDropBehavior(20000, new ItemStack(Items.FISH))),
 		Shulker(mc("shulker"), new ShulkerBehavior()),
+		EntityHorse(mc("horse"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.WHEAT))) {
+			@Override
+			protected boolean canInstantiate() {
+				return HorseNullFix.isWorking();
+			}
+		},
+		SkeletonHorse(mc("skeleton_horse"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.BONE))) {
+			@Override
+			protected boolean canInstantiate() {
+				return HorseNullFix.isWorking();
+			}
+		},
+		ZombieHorse(mc("zombie_horse"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.ROTTEN_FLESH))) {
+			@Override
+			protected boolean canInstantiate() {
+				return HorseNullFix.isWorking();
+			}
+		},
+		Donkey(mc("donkey"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.WHEAT))) {
+			@Override
+			protected boolean canInstantiate() {
+				return HorseNullFix.isWorking();
+			}
+		},
+		Mule(mc("mule"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.WHEAT))) {
+			@Override
+			protected boolean canInstantiate() {
+				return HorseNullFix.isWorking();
+			}
+		},
+		Llama(mc("llama"), 0.35, new LlamaBehavior()) {
+			@Override
+			protected boolean canInstantiate() {
+				return HorseNullFix.isWorking();
+			}
+		},
 		ElderGuardian(mc("elder_guardian"), 0.2, 0.3, new GuardianBehavior()),
 		WitherSkeleton(mc("wither_skeleton"), new ItemDropBehavior(50000, new ItemStack(Items.SKULL, 1, 1))),
 		Stray(mc("stray"), new SkeletonBehavior()),
 		Husk(mc("husk"), new ItemDropBehavior(20000, new ItemStack(Items.FEATHER))),
 		ZombieVillager(mc("zombie_villager")),
-		EvocationIllager(mc("evocation_illager"), new EvocationBehaviour()),
+		EvocationIllager(mc("evocation_illager"), new EvocationBehavior()),
 		Vex(mc("vex")),
 		VindicationIllager(mc("vindication_illager"), new ItemDropBehavior(20000, new ItemStack(Items.IRON_AXE)));
-		// Skipped: Horse (needs non-null, world in ctor), Wither (renders boss bar)
+		// Skipped: Wither (renders boss bar), EnderDragon
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
@@ -213,6 +251,12 @@ public class TrophyHandler {
 			return ItemTrophyBlock.putMetadata(new ItemStack(OpenBlocks.Blocks.trophy), this);
 		}
 
+		protected boolean canInstantiate() {
+			return true;
+		}
+
+		private boolean instantiationFailed;
+
 		public void playSound(World world, BlockPos pos) {
 			if (world == null) return;
 
@@ -240,7 +284,15 @@ public class TrophyHandler {
 		}
 
 		protected Entity createEntity() {
-			return EntityList.createEntityByIDFromName(id, null);
+			if (!instantiationFailed && canInstantiate()) {
+				try {
+					return EntityList.createEntityByIDFromName(id, null);
+				} catch (Throwable t) {
+					Log.warn(t, "Failed to create instance of %s", name());
+					instantiationFailed = true;
+				}
+			}
+			return null;
 		}
 
 		static {
