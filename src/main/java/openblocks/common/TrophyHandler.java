@@ -157,37 +157,37 @@ public class TrophyHandler {
 		EntityHorse(mc("horse"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.WHEAT))) {
 			@Override
 			protected boolean canInstantiate() {
-				return HorseNullFix.isWorking();
+				return HorseNullFix.Base.isWorking() && HorseNullFix.Horse.isWorking();
 			}
 		},
 		SkeletonHorse(mc("skeleton_horse"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.BONE))) {
 			@Override
 			protected boolean canInstantiate() {
-				return HorseNullFix.isWorking();
+				return HorseNullFix.Base.isWorking();
 			}
 		},
 		ZombieHorse(mc("zombie_horse"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.ROTTEN_FLESH))) {
 			@Override
 			protected boolean canInstantiate() {
-				return HorseNullFix.isWorking();
+				return HorseNullFix.Base.isWorking();
 			}
 		},
 		Donkey(mc("donkey"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.WHEAT))) {
 			@Override
 			protected boolean canInstantiate() {
-				return HorseNullFix.isWorking();
+				return HorseNullFix.Base.isWorking();
 			}
 		},
 		Mule(mc("mule"), 0.35, new ItemDropBehavior(20000, new ItemStack(Items.WHEAT))) {
 			@Override
 			protected boolean canInstantiate() {
-				return HorseNullFix.isWorking();
+				return HorseNullFix.Base.isWorking();
 			}
 		},
 		Llama(mc("llama"), 0.35, new LlamaBehavior()) {
 			@Override
 			protected boolean canInstantiate() {
-				return HorseNullFix.isWorking();
+				return HorseNullFix.Base.isWorking() || HorseNullFix.Llama.isWorking();
 			}
 		},
 		ElderGuardian(mc("elder_guardian"), 0.2, 0.3, new GuardianBehavior()),
