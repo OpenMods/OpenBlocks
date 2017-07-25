@@ -150,6 +150,7 @@ import openblocks.common.tileentity.TileEntityBlockPlacer;
 import openblocks.common.tileentity.TileEntityBuilderGuide;
 import openblocks.common.tileentity.TileEntityCannon;
 import openblocks.common.tileentity.TileEntityCanvas;
+import openblocks.common.tileentity.TileEntityCanvasGlass;
 import openblocks.common.tileentity.TileEntityDonationStation;
 import openblocks.common.tileentity.TileEntityDrawingTable;
 import openblocks.common.tileentity.TileEntityElevatorRotating;
@@ -354,7 +355,7 @@ public class OpenBlocks {
 		@RegisterBlock(id = "paint_can", tileEntity = TileEntityPaintCan.class, itemBlock = ItemPaintCan.class, legacyIds = "paintcan")
 		public static BlockPaintCan paintCan;
 
-		@RegisterBlock(id = "canvas_glass", tileEntity = TileEntityCanvas.class, legacyIds = "canvasglass")
+		@RegisterBlock(id = "canvas_glass", tileEntity = TileEntityCanvasGlass.class, legacyIds = "canvasglass")
 		public static BlockCanvasGlass canvasGlass;
 
 		@RegisterBlock(id = "projector", tileEntity = TileEntityProjector.class)
