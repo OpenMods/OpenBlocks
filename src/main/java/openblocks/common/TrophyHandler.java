@@ -32,6 +32,7 @@ import openblocks.trophy.BlazeBehavior;
 import openblocks.trophy.CaveSpiderBehavior;
 import openblocks.trophy.CreeperBehavior;
 import openblocks.trophy.EndermanBehavior;
+import openblocks.trophy.EvocationBehaviour;
 import openblocks.trophy.GuardianBehavior;
 import openblocks.trophy.ITrophyBehavior;
 import openblocks.trophy.ItemDropBehavior;
@@ -150,9 +151,16 @@ public class TrophyHandler {
 		Guardian(mc("guardian"), new GuardianBehavior()),
 		Rabbit(mc("rabbit"), new ItemDropBehavior(20000, new ItemStack(Items.CARROT))),
 		PolarBear(mc("polar_bear"), new ItemDropBehavior(20000, new ItemStack(Items.FISH))),
-		Shulker(mc("shulker"), new ShulkerBehavior());
+		Shulker(mc("shulker"), new ShulkerBehavior()),
+		ElderGuardian(mc("elder_guardian"), 0.2, 0.3, new GuardianBehavior()),
+		WitherSkeleton(mc("wither_skeleton"), new ItemDropBehavior(50000, new ItemStack(Items.SKULL, 1, 1))),
+		Stray(mc("stray"), new SkeletonBehavior()),
+		Husk(mc("husk"), new ItemDropBehavior(20000, new ItemStack(Items.FEATHER))),
+		ZombieVillager(mc("zombie_villager")),
+		EvocationIllager(mc("evocation_illager"), new EvocationBehaviour()),
+		Vex(mc("vex")),
+		VindicationIllager(mc("vindication_illager"), new ItemDropBehavior(20000, new ItemStack(Items.IRON_AXE)));
 		// Skipped: Horse (needs non-null, world in ctor), Wither (renders boss bar)
-		// TODO add new stuff
 
 		private double scale = 0.4;
 		private double verticalOffset = 0.0;
